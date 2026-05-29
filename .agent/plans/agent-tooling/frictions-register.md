@@ -1019,6 +1019,29 @@ below is a cross-reference index, not a second source of truth.
   `agent-tools/scripts/check-commit-message.sh`; commit skill recipe
 - **Status**: open
 
+### F-34 — Legacy routing diagnostics flood watcher reads
+
+- **Source**: Hidden Dimming Threshold 2026-05-27 start-right-team bootstrap;
+  active napkin source archived as
+  `.agent/memory/active/archive/napkin-2026-05-27-hidden-dimming-threshold-curation.md`.
+- **Surface**: `pnpm agent-tools:collaboration-state -- comms watch` and
+  `comms inbox` classification over historical legacy events.
+- **Observed**: `comms watch --seed-from-now` and `comms inbox` can flood
+  stdout with `[routing-legacy-fallback]` diagnostics while classifying older
+  legacy events, even when the caller only needs quiet all-channel monitoring
+  for the current session.
+- **Expected**: Watcher/inbox output keeps new-event signal readable. Legacy
+  fallback diagnostics remain available for audit, but do not drown the
+  operational stream by default.
+- **Candidate cure**: Add diagnostic throttling or an explicit diagnostics
+  mode for legacy fallback rendering, preserving the audit path while keeping
+  watcher output suitable for start-right-team liveness.
+- **Target surface**: `agent-tools/src/collaboration-state/comms-relevant-events.ts`
+  and comms watch/inbox rendering.
+- **Status**: open
+- **Owner direction status**: standing (agent-observed tooling friction is
+  first-class user feedback).
+
 ---
 
 ## Mitigated / Addressed Frictions

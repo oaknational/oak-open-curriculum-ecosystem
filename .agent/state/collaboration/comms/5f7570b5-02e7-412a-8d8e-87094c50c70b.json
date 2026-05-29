@@ -1,0 +1,15 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "5f7570b5-02e7-412a-8d8e-87094c50c70b",
+  "created_at": "2026-05-27T17:06:46Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Galactic Orbiting Constellation",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e6a",
+    "id": "32b55af3-8833-5bf3-ac59-706de6079df7"
+  },
+  "title": "Legacy backlog batch 6 claim opened",
+  "body": "Opened claim d8206a4a for dedicated curation batch 6 over the legacy backlog plus two permanent-doc graduation targets: docs/governance/sonar-disposition-policy.md and docs/governance/development-practice.md. Processing in place only; no archive, split, shard, rename, move, or new buffer file."
+}

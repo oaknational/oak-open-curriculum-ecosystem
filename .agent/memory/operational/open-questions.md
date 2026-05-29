@@ -3,120 +3,36 @@ fitness_line_target: 180
 fitness_line_limit: 240
 fitness_char_limit: 14000
 fitness_line_length: 100
-split_strategy: >-
+drain_strategy: >-
   Surface owner-decision items during consolidate-docs; move answered or
   withdrawn entries to an archive when the register needs rotation.
 merge_class: mostly-append-register
 fitness_content_role: drainable-buffer
 ---
 
-# Open Questions - Substrate
+## Q-001 — gate-1a EEF tool: whole-graph selection vs data-supported narrowing
 
-**Purpose**: Persistent log of questions surfaced during work that cannot be
-answered within current context or a reasonable amount of time or effort.
-Consolidation drains this register by answering, surfacing to the owner,
-withdrawing, or leaving an entry open with a falsifiable constraint.
-
-**Owner**: shared - any agent appends; the consolidator drains.
-
-**Archive pointer**: the pre-rotation source window is preserved at
-`archive/open-questions-archive-2026-05-26-thermal-critical-curation.md`.
-
-## Protocol
-
-### Entry Shape
-
-Each active entry should stay compact:
-
-```text
-### Q-<NNN>: <one-line question>
-- Raised by: <agent_name> (<session_id_prefix>) @ <UTC timestamp>
-- Context: <short framing>
-- Why still open: <named constraint and falsifiability check>
-- Suggested resolution path: <plan / ADR / PDR / consolidation / owner direction>
-- Status: open | answered-in-place | surfaced-to-owner | withdrawn
-- Linked: <evidence references>
-```
-
-### Lifecycle
-
-1. Open at append time.
-2. Mid-life updates append under the entry with agent and UTC timestamp.
-3. Consolidation applies one of four dispositions:
-   answered-in-place, surfaced-to-owner, withdrawn, or open with constraint.
-4. Accumulation above roughly ten open entries signals consolidation cadence
-   drift and should be surfaced to the owner.
-
-## Open
-
-### Q-003: Does start-right-team need a closeout-only reduced-bootstrap mode?
-
-- Raised by: Stormy Surfing Dock (`2a7b65`) @ 2026-05-25T13:15Z.
-- Context: full `start-right-team` bootstrap is mandatory for participating
-  agents, but late closeout-only participation may need a smaller contract.
-- Why still open: the second observed late-join instance, Quiet Whispering
-  Veil, was substantive curation work rather than closeout-only work. The
-  falsifiability check is a second closeout-only late-join case.
-- Suggested resolution path: if that second closeout-only instance appears,
-  amend `start-right-team` with a named exemption or minimum-coordination mode.
-- Status: open.
-- Linked: archived source Q-003, `start-right-team` sections 0, 0.5, and 1,
-  PDR-082, and the n=2 coordination-efficiency program plan.
-
-### Q-005: When should live collaboration state leave version control?
-
-- Raised by: Feathered Flying Cloud (`019e65`) @ 2026-05-26T17:47Z.
-- Context: cross-platform memory sweep recovered the owner-stated future
-  direction that `.agent/memory/` remains shared/versioned while `.agent/state/`
-  may become local-only or externally backed when contributor count grows.
-  ADR-165 now records the planned pressure; PDR-050 names the portable substrate
-  contract every state/memory surface must retain.
-- Why still open: the architectural direction is known, but the migration
-  trigger and replacement read-model contract are not yet chosen. The
-  falsifiability check is the first sustained contributor window where
-  collaboration-state churn creates merge pressure that semantic union cannot
-  keep cheap.
-- Suggested resolution path: when that trigger fires, amend ADR-165 with the
-  selected host instance, keep durable evidence flowing into `.agent/memory/`,
-  and ensure the local/external state surface still satisfies PDR-050.
-- Status: open.
-- Linked: ADR-165, PDR-050, and curator pass
-  `2026-05-26-feathered-flying-cloud.md`.
-
-## Surfaced To Owner
-
-### Q-004: Should the B2 body-length gate apply to resolved body-file content?
-
-- Raised by: Torrid Firing Spark (`5054f8`) @ 2026-05-26T06:38Z.
-- Context: B2 landed the plan-directed gate for `--body` argv over 1500 chars;
-  `--body-file` remains an escape hatch for shell quoting hazards.
-- Owner decision needed: whether substrate scannability should limit the
-  resolved body regardless of source, or whether the gate intentionally applies
-  only to inline argv.
-- Suggested resolution path: if owner chooses both paths, gate the resolved
-  `resolveCommsBody` value; if argv-only, document that scope explicitly.
-- Status: surfaced-to-owner during the 2026-05-26 consolidation pass.
-- Linked: commit `66e77d73`; n=2 plan section B2; `resolveCommsBody` in
-  `agent-tools/src/collaboration-state/cli-comms-commands.ts`; archived
-  source Q-004 for the full assumptions-expert rationale.
-
-## Answered In Place
-
-### Q-001: What is the long-term home for comms-substrate failure-mode cures?
-
-- Raised by: Wooded Flowering Leaf (`f03dbd`) @ 2026-05-25T06:18Z.
-- Answer: the home is the n=2 coordination-efficiency program plus the PDRs and
-  rules it amends, not a separate R4 graft. PDR-078 absorbed the heartbeat
-  substrate-category cure; the remaining work is tracked by WS0, WS1, and WS4
-  in the scoped-down program plan.
-- Status: answered-in-place by the 2026-05-26 plan rewrite and continuity
-  refresh.
-- Linked: archived source Q-001; commits `3ca71a40`, `29ebda41`, `66e77d73`,
-  `fd951164`, and `467074c7`; current n=2 coordination-efficiency plan.
-
-### Q-002: Should consolidate-docs explicitly reference this file?
-
-- Raised by: Wooded Flowering Leaf (`f03dbd`) @ 2026-05-25T06:25Z.
-- Answer: yes; `consolidate-docs` now names `open-questions.md` in step 7b.1.
-- Status: answered-in-place before this rotation; preserved in the archive.
-- Linked: archived source Q-002 and `.agent/skills/consolidate-docs/`.
+- **Captured**: 2026-05-27 (Galactic Dancing Constellation / `claude` / `7efeec`)
+- **Question**: At gate-1a, `eef-explore-evidence-for-context` returns the whole
+  connected EEF graph (all 30 strands + 37 edges) and lets the model select
+  contextual fit. Is whole-graph the right teacher experience, or should a
+  later stage add narrowing — and if so, on what signal?
+- **Why it shapes future work**: determines the scope and trigger of the gate-1b
+  t5 ranking/scoring engine (relevance selection is explicitly deferred there).
+- **Why not answerable cheaply now**: needs real teacher-usage signal; the
+  corpus tag vocabulary does not support reliable server-side narrowing today
+  (verified: focus-enum→tag mapping mostly empty; only 16/30 strands carry a
+  phase tag, so phase-narrowing would suppress ~14 phase-general strands).
+- **Owning artefact / discussion home**: PR #121 top section (Starless flagged
+  for owner discussion). Does not block the current cycle — PR #121 is
+  mergeable as whole-graph.
+- **Status**: withdrawn 2026-05-28 (Sylvan Whispering Fern) — framing superseded.
+- **Disposition (2026-05-28)**: the gate-1a/1b split and the
+  `eef-explore-evidence-for-context` whole-graph tool this question assumes were
+  diagnosed as the wrong foundation and discarded; the EEF work was rebuilt from
+  foundations. The underlying substance — the selection / scoping strategy for a
+  graph-shaped tool — is preserved and is now the central open design question
+  (GOAL 1) of the rebuild, owned by
+  `plans/sector-engagement/eef/current/graph-tooling-rebuild-foundation-2026-05-28.md`
+  and its plan. No substance lost; this entry is retired to avoid a stale second
+  home in dead gate-1a/1b vocabulary.

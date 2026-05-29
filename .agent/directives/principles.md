@@ -47,7 +47,9 @@ defences:
   [ADR-172][adr-172] for the host adoption and the portable form
   at PDR-043. The hedging-vocabulary trip-list itself lives in the
   innate-immunity hook (`.agent/hooks/policy.json`); cataloguing
-  it in this file would duplicate it.
+  it in this file would duplicate it. Cue 2 is intent-based: a
+  proposed structure that means "the rule does not apply here"
+  triggers the check even when it avoids the trip-list vocabulary.
 - **Doctrine-authoring discipline** — at the moment a rule,
   principle, ADR, PDR, or governance document is authored or
   amended, the three tests of PDR-047 (substance / vocabulary /

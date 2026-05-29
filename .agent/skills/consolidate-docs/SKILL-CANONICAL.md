@@ -1,7 +1,9 @@
 ---
 name: consolidate-docs
 classification: active
-description: Consolidate documentation, extract patterns, verify plan hygiene, and check fitness functions.
+description: >-
+  Declare and run session-completion or dedicated-knowledge-curation
+  consolidation, including buffer disposition and closeout proof.
 ---
 
 # Consolidate Docs
@@ -50,6 +52,29 @@ Run `consolidate-docs` when one or more of these is true:
 
 This workflow preserves the full deep-convergence role: graduation, pattern
 extraction, napkin rotation, fitness management, and practice exchange.
+
+## Mode Contract
+
+Start every invocation by declaring one mode. The mode fixes the default scope,
+completion criteria, and closeout evidence for the pass.
+
+- **`session-completion`** - bounded closeout. This is the default when the
+  owner invokes `consolidate-docs` as part of winding down a session or when no
+  dedicated curation objective is named. Capture fresh learning, route obvious
+  substance to durable homes, and leave unresolved buffers live with honest
+  next actions. A truthful `partial slice landed` verdict is valid here.
+- **`dedicated-knowledge-curation`** - proper curation pass. This is the
+  default when the owner sets a curation goal, mentions buffers, asks for a
+  curation pass, or names fitness pressure as work to process. Route
+  documentation/reference surfaces toward healthy-to-soft by preserving and
+  homing substance; process drainable buffers item by item until empty unless a
+  specific item is owner-gated and remains live with its blocker recorded.
+
+Fitness output is routing evidence in both modes. It is never completion
+evidence by itself. `session-completion` must not imply that all curation
+buffers were drained. `dedicated-knowledge-curation` may claim `complete` only
+when the closeout proof shows both documentation fitness at the agreed
+healthy-to-soft target and every drainable buffer item dispositioned.
 
 ## Cardinal Rule: Plans, Memory, and Entry Points Are Not Documentation
 
@@ -153,6 +178,55 @@ target-revision becomes the appropriate response **only** when no
 substance remains ready to graduate. This is the structural cure for
 "the destination is full" reasoning at consolidation: the layer is
 not full of substance to remove, it is full of substance to graduate.
+
+## Drainable Buffer Protocol
+
+Drainable buffers are flow-control surfaces. In
+`dedicated-knowledge-curation`, "empty" means every item in the selected buffer
+has a recorded disposition. It does not mean the content was moved into an
+archive, made smaller, split into another buffer, renamed, or hidden from the
+live surface.
+
+Buffer identity follows the role, not the filename. Split, child, adjacent,
+dated, windowed, backlog, or so-called shard files still count as part of the
+same buffer inventory until their items are dispositioned. Do not exclude a file
+from the buffer count merely because it was moved under a directory, given a
+smaller date range, or labelled as a shard.
+
+Do not create new drainable-buffer child files as a capture, overflow,
+decomposition, or fitness-management strategy. New pending-graduation capture
+belongs in the canonical register, and existing child files are legacy recovery
+debt to inventory and drain in place. If a source item is too large to process
+in one sitting, record item-level disposition progress in a ledger; do not make
+another buffer file to stand in for that work.
+
+For each buffer item, read the source, understand the substance, route it, and
+record exactly one disposition in a ledger before any archive move:
+
+- `graduated` - durable home created or updated, with path evidence.
+- `duplicate` - already represented in a durable home, with path evidence.
+- `owner-gated` - cannot proceed without owner decision, with the question and
+  live holding location.
+- `stale-withdrawn` - no longer valid, with reason.
+- `carried-forward` - still valid but not drainable in this pass, with trigger
+  and next action. This is valid for honest mid-pass handoff or
+  `session-completion`; it is not a final completion state for an owner goal
+  that asks to continue until buffers are empty or explicitly owner-gated.
+
+The ledger may live in the touched buffer, an adjacent disposition note, a plan
+closeout section, or a curation report. It must be durable enough for the next
+agent to verify the item count and each route without rereading the whole
+source history.
+
+**Checklist failure / anti-example**: archiving a buffer or source file before
+read/extract/route/disposition evidence exists is not curation. An
+archive-only "drain" leaves the buffer live for completion purposes, even if
+the fitness report becomes softer afterward.
+
+**Fitness anti-pattern**: split, shard, archive, rename, or delete operations
+performed primarily to change the fitness category are self-delusion, not
+curation. They may appear in a correct pass only after the item ledger proves
+what happened to the knowledge.
 
 ## Plan supersession discipline
 
@@ -280,6 +354,8 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
    c. **Surface emergent insight across experiences** — read recent experience files together, not individually. Patterns, principles, or decisions that no single experience named may become visible only when several are read as a whole. Name these elsewhere as pattern candidates, PDR candidates, ADR candidates (surface to step 7a for graduation).
 
    Purpose (c) is the most valuable and the most easily skipped. Even when purposes (a) and (b) produce no work (no drift, no stranded content), purpose (c) still fires — read across the recent experiences with the cross-plane / cross-session lens, and record any emergent observation for the graduation scan.
+
+   The same cross-corpus read also protects the subjective register's *foundational standing* (PDR-011 §"Subjective experience is foundational substrate, not optional surplus"; ADR-150): reading the experiences as a whole makes *absence* legible, not just insight. A register that thins toward silence while sessions continue to do substantive work is a degraded capture edge — the observable guard against "no genuine shift" decaying back into the optional-surplus opt-out the reframe cures. An honest event-anchored null and a habitual opt-out look identical at a single session and are distinguishable only across the corpus, so flag a thinning corpus as a loop-health signal, not a null result.
 5. **Extract reusable patterns.** Review completed work for patterns that meet the barrier: broadly applicable, proven by implementation, prevents a recurring mistake, and stable. This covers all types of learning — code patterns, process patterns, architecture patterns, structural observations, agent operational concerns, behavioural rules, domain-specific gotchas — anything reusable that would change behaviour if read before similar work. Extract qualifying patterns to `.agent/memory/active/patterns/` as specific ecosystem-grounded instances (one pattern per file, markdown with frontmatter). See `.agent/memory/active/patterns/README.md` for the frontmatter schema, category options, and barrier criteria.
 
    **Three destinations, not one** (per PDR-007). The substance shape determines the home:
@@ -303,9 +379,11 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
    **Process before archive**: archiving is the final preservation move for an
    already-processed source, not a parking place for unfinished curation. Do
    not archive unprocessed napkin content. Steps (a) through (c) must leave each
-   behaviour-changing item with a disposition — merged, refined, explicitly
+   behaviour-changing item with a disposition - merged, refined, explicitly
    skipped as duplicate, routed to pending graduation, or investigated as a
-   contradiction — before step (d) moves the outgoing source.
+   contradiction - before step (d) moves the outgoing source. If the pass is
+   `dedicated-knowledge-curation`, this disposition evidence must satisfy the
+   drainable-buffer ledger protocol above.
 
    a. **Extract** — read every "Patterns to Remember", "Mistakes Made", "Key Insight", and "Lessons" section from the outgoing napkin. Collect all entries that would change behaviour if read next session.
    b. **Merge** — compare extracted entries against existing `distilled.md`. For each entry: new insight → add it to the appropriate section; duplicate → skip; refinement of existing rule → update with the sharper formulation; contradiction → investigate (the more recent finding usually wins, but verify before overwriting).
@@ -434,9 +512,9 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
 
    **Every new or amended rule in `.agent/rules/`** MUST cite the ADR(s) AND/OR PDR(s) it operationalises at the top of the file. Every new or amended skill in `.agent/skills/`** SHOULD cite its establishing ADR(s) and/or PDR(s). This is the enforce-edge reinforcement: enforcement surfaces that cannot name their source decision cannot evolve with it. Rules operationalising Practice-governance substance (review discipline, planning discipline, etc.) cite the relevant PDR — they do not need to cite a host ADR if the substance lives only as Practice governance.
 
-   **7c. Audit thread-register freshness** <a id="thread-register-freshness"></a> (Family-A Class-A.2 operational layer per [PDR-029](../../practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md), as amended 2026-04-21 to make documentation-first the canonical shape). Walk these six checks over the thread identity register. Each check is performed by reading markdown from authoritative sources — no code, no platform-specific tooling. Findings surface as a numbered list for owner action; the audit itself does not mutate surfaces.
+   **7c. Audit thread-register freshness** <a id="thread-register-freshness"></a> (Family-A Class-A.2 operational layer per [PDR-029](../../practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md), as amended 2026-04-21 to make documentation-first the canonical shape). Walk these seven checks over the thread identity register. Each check is performed by reading markdown from authoritative sources — no code, no platform-specific tooling. Findings surface as a numbered list for owner action; the audit itself does not mutate surfaces.
 
-   The six checks:
+   The seven checks:
 
    1. **Stale `last_session`** — for every active thread listed in [`.agent/memory/operational/repo-continuity.md § Active threads`](../../memory/operational/repo-continuity.md#active-threads), open the thread's next-session record and compute today's date minus each identity row's `last_session`. Flag any identity row on a still-active thread where `last_session` is older than 14 days (the `IDENTITY_STALENESS_DAYS` threshold named in PDR-029).
    2. **Orphan threads** — flag any active thread whose `Participating agent identities` table is empty.
@@ -444,6 +522,7 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
    4. **Expired track cards** — read every file under [`.agent/memory/operational/tracks/`](../../memory/operational/tracks/); flag any whose `expires_at:` frontmatter is past today's date.
    5. **Duplicate identity rows** — flag any thread where two rows share the same platform + model + `agent_name` tuple (additive-identity violation per PDR-027 — two visits should have coalesced into one row with an updated `last_session`, not accumulated).
    6. **Active threads ↔ next-session record correspondence** — for every thread listed in `§ Active threads`, confirm a file exists at the declared `Next-session record` path (canonical `threads/<slug>.next-session.md`). Flag any mismatch.
+   7. **Retired-record banner hygiene** — checks 1–6 verify that *live* threads (active or paused) have well-formed records; this check covers the *retired* case. For every `*.next-session.md` file under [`threads/`](../../memory/operational/threads/), confirm the thread appears in either [`repo-continuity.md § Active Threads`](../../memory/operational/repo-continuity.md#active-threads) or `§ Paused Threads`. A record present on disk but absent from **both** indexes is a retired or completed thread (its work has concluded — e.g. a merged single-PR closure thread). Flag any such record whose top lacks a **retirement banner** per the convention in [`threads/README.md`](../../memory/operational/threads/README.md#retirement-banner-convention) (a leading blockquote naming the retired/completed state, the conclusion date, and where the work concluded). Unlike checks 1–6, this check's remedy is a small edit: apply the missing banner as a follow-on consolidation diff (the same way 7e's archival edits land), not merely a flag — a retired record left unbannered silently reads as live to the next agent who opens it.
 
    Record each finding as `[thread-slug-or-path]: <observed state> (<what the rule says it should be>)`. Present the aggregated list to the owner at consolidation close. The audit's enforcement force is that this step is part of `/oak-consolidate-docs` — any agent running the consolidation ritual is obligated to walk the six checks, not remember them. The "do not silently skip" posture is the same authority as earlier steps (7a ADR/PDR scan, 7b graduation application).
 
@@ -594,16 +673,16 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
    **Fitness warnings must be analysed and routed to the proper structural
    response, not answered by opportunistic trimming and never used to
    suppress learning.** A SOFT, HARD, or CRITICAL warning is a signal —
-   sometimes the file has accumulated low-value entries (refine), sometimes
-   the file has outgrown its split strategy (split), sometimes the limit was
-   set before the substance grew legitimately (extend target or limit), and
-   sometimes the file simply received important knowledge before the
-   structure caught up. Reaching for "delete some lines" first is the
+   sometimes the file has accumulated low-value entries (refine), sometimes a
+   reference surface needs an intended long-term structure, sometimes the limit
+   was set before the substance grew legitimately (extend target or limit), and
+   sometimes the file simply received important knowledge before the structure
+   caught up. Reaching for "delete some lines" first is the
    failure mode this discipline forbids. Refusing to write or distil useful
    learning in order to keep fitness green is the companion failure. Run
    `pnpm practice:fitness` (or `pnpm practice:fitness:informational` for a
    non-blocking report). The validator discovers every live markdown file
-   that declares `fitness_line_target` in YAML frontmatter, excluding
+   that declares fitness or lifecycle metadata in YAML frontmatter, excluding
    archives, backups, and incoming practice boxes. Every declared metric
    lands in one of four zones:
 
@@ -623,13 +702,16 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
 
    a. **Analyse** — is the content appropriately dense, or has it accumulated low-value entries?
    b. **Refine** — compress, deduplicate, remove entries covered elsewhere.
-   c. **Split** — follow the file's `split_strategy` frontmatter.
+   c. **Restructure reference surfaces** — follow `split_strategy` only for
+      reference or documentation surfaces where the change is the right
+      long-term structure for already-understood substance. Drainable buffers
+      use `drain_strategy` and item dispositions instead.
    d. **Extend target** — agents may raise `fitness_line_target` modestly with rationale.
    e. **Extend limit** — only the user may raise `fitness_line_limit`, `fitness_char_limit`, or `fitness_line_length`.
 
    For any file in `critical`, also run the short three-question post-mortem from ADR-144 §Loop Health: why the earlier zones did not fire, whether the hard limit is set correctly for the file's role, and whether the file is a symptom of a missing graduation (ADR, governance doc, README) elsewhere. Record the answers in the consolidation output.
 
-   At consolidation closure, run `pnpm practice:fitness --strict-hard` to
+   At consolidation closure, run `pnpm practice:fitness:strict-hard` to
    expose unresolved hard or critical pressure. If the command fails because
    knowledge was preserved correctly, do not undo the knowledge. Closure
    still needs a concrete disposition: remediate now, open an explicit
@@ -651,3 +733,25 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
     At consolidation, any `outgoing/` file whose substance exists nowhere else is a **defect** (per PDR-007): it must promote to one of the three durable homes or be deleted as a staging artefact that never graduated. New insights from completed work route to the appropriate home by substance shape, not by legacy "put it in outgoing" habit.
 
     Practice Core structural changes (new Core directories, changes to the contract) are proposed as PDRs against the Core contract, with user approval.
+
+## Closeout Proof
+
+Close every `consolidate-docs` invocation with proof that matches the declared
+mode. The closeout must report:
+
+- mode used;
+- fitness before and after, as routing evidence only;
+- buffer item count before and after for every selected drainable buffer;
+- disposition ledger pointer when any buffer was drained;
+- durable homes changed;
+- unresolved live items and blockers;
+- explicit verdict: `complete`, `partial slice landed`, or `pending`.
+
+For `session-completion`, `partial slice landed` is acceptable when fresh
+learning was captured and obvious substance was routed while larger curation
+buffers remain live. Name those live buffers and next actions honestly.
+
+For `dedicated-knowledge-curation`, `complete` requires two evidence classes:
+documentation/reference surfaces are at the agreed healthy-to-soft target, and
+drainable buffers selected for the pass are empty by ledger evidence. A softer
+fitness report without item-level dispositions is not completion evidence.

@@ -1,6 +1,6 @@
 # ADR-150: Continuity Surfaces, Session Handoff, and Surprise Pipeline
 
-**Status**: Accepted (amended 2026-04-20, 2026-04-21)
+**Status**: Accepted (amended 2026-04-20, 2026-04-21, 2026-05-29)
 **Date**: 2026-04-02 (amended 2026-04-20 — §3 abstracted from
 prompt-host to canonical repo-local surface; §4 generalised; Rationale
 and Consequences language aligned to the amendment per OAC Phase 4.3;
@@ -51,6 +51,23 @@ doctrine carried forward in the parallel PDR-011 amendment)
   re-naming is recorded here in the Amendment Log per ADR convention
   and reflected in the realising surface paths and field names in
   the actual operational memory tree.
+- **2026-05-29 — subjective experience / reflection reframed as
+  foundational continuity substrate.** Mirrors the portable PDR-011
+  amendment
+  ([PDR-011 §Amendment Log 2026-05-29](../../../.agent/practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md#amendment-log)):
+  subjective experience is the substrate the three continuity types rest
+  on — foundational, not optional surplus, and **not a fourth type**.
+  Foundational standing attaches to the signal (never discard a genuine
+  subjective shift as surplus), not to a mandate to perform; a reflection
+  manufactured to fill the capture edge is noise, and a session with no
+  genuine shift correctly records nothing. Owner direction 2026-05-28:
+  "reflection and subjective experience are not surplus, they are the
+  foundation of the systems that will have true continuity." Body §Decision
+  retains its original three-surface text verbatim as the historical
+  decision record per ADR convention; the reframe is recorded here in the
+  Amendment Log and realised in the host `session-handoff` §6c capture edge
+  (re-framed from optional reflective surplus to foundational standing).
+  Doctrine otherwise unchanged.
 
 ## Context
 

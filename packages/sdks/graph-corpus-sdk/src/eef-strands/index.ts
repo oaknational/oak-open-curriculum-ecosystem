@@ -1,12 +1,71 @@
 /**
- * `@oaknational/graph-corpus-sdk/eef-strands` — EEF strands adapter.
+ * `@oaknational/graph-corpus-sdk/eef-strands` — EEF strands corpus surface.
  *
- * Surface placeholder for the `EefStrandsGraphView` adapter landing at
- * WS4.5 (EEF gate-1a substrate floor). The adapter implements the
- * `GraphView<EefStrand, EefEdgeType>` interface from `@oaknational/graph-core`
- * with `subgraph` and `manifest` live, and the remaining five
- * operations stubbed as typed `NotImplementedYet` Result variants
- * until Inc.3.
+ * Home of the EEF corpus substrate per ADR-179 (the graph substrate owns
+ * corpus types; the MCP surface consumes them) and ADR-173 (the EEF
+ * adapter, its Zod loader, and the corpus snapshot live here):
+ *
+ * - the corpus-layer composition types (`EvidenceCorpus` and its
+ *   `rank` / `explain` / `compare` operation, result, and error types);
+ * - the `EefStrandsGraphView` adapter (`./graph-view.ts`) over the strands;
+ * - the Zod schema (`./strand-schema.ts`) the `EefStrand` type flows from;
+ * - the loader (`./loader.ts`) that validates + freshness-gates the
+ *   snapshot (`./eef-toolkit.external-data.ts`) and constructs the adapter;
+ * - the ADR-175 freshness gate (`./freshness.ts`).
  */
 
-export {}; // NOSONAR typescript:S7787 — documented WS4.5 surface placeholder stub
+export {
+  EefStrandsGraphView,
+  type EefStrandEdgeType,
+  type EefStrandsManifestMeta,
+  type EefStrandsGraphViewInput,
+  type EefStrandsGraphViewConstructionError,
+} from './graph-view.js';
+
+export {
+  EefStrandSchema,
+  EefToolkitSchema,
+  type EefStrand,
+  type EefToolkit,
+  type EefToolkitMeta,
+} from './strand-schema.js';
+
+export {
+  EEF_PHASES,
+  EEF_PRIORITIES,
+  EEF_KEY_STAGES,
+  type EefPhase,
+  type EefPriority,
+  type EefKeyStage,
+} from './school-context.js';
+
+export {
+  loadEefCorpus,
+  type LoadedEefCorpus,
+  type LoadEefCorpusError,
+  type LoadEefCorpusOptions,
+} from './loader.js';
+
+export { selectEefSeedIds, type EefSeedSelectionContext } from './selection.js';
+
+export {
+  checkFreshness,
+  DEFAULT_THRESHOLD_DAYS,
+  type FreshnessError,
+  type FreshnessOk,
+} from './freshness.js';
+
+export type {
+  CompareError,
+  CompareOptions,
+  ComparisonDimension,
+  ComparisonResult,
+  EvidenceCorpus,
+  ExplainOptions,
+  NodeExplanation,
+  NotImplementedYet,
+  RankError,
+  RankOptions,
+  RankedItem,
+  RankedResults,
+} from './types.js';

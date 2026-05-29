@@ -1,0 +1,8 @@
+# Experiment workspaces: ignore transient working files, but keep the durable
+# record tracked — this .gitignore plus the ARC AnGels channel README.
+# Note: a re-include cannot reach a file whose parent dir is excluded, so the
+# directory must be re-included before the file (a leading "./" is invalid here).
+*
+!.gitignore
+!agent-rapid-communication-and-gellings/
+!agent-rapid-communication-and-gellings/README.md

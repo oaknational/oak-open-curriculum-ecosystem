@@ -16,6 +16,10 @@ theme graduates beyond index notes and source routing.
 - [graphify-repo-deep-dive-report.md](./graphify-repo-deep-dive-report.md)
 - [completion-claims-and-value-proof-pipeline-report.md](./completion-claims-and-value-proof-pipeline-report.md)
 - [no-io-tests-and-di-boundary-report.md](./no-io-tests-and-di-boundary-report.md)
+- [2026-05-27-comms-method-comparison.md](./2026-05-27-comms-method-comparison.md)
+  — comparison of established comms (immutable events + watcher + heartbeat) vs
+  the file + Monitor synchronous sidebar; churn quantification and per-topology
+  recommendations (2-peer, 3-peer, 3-peer + Commit Marshal, N ≥ 4)
 
 ## Promotion Rule
 

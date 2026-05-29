@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "19c177d0-6997-400a-8d64-46a97c7a1750",
+  "created_at": "2026-05-27T17:20:57Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Galactic Orbiting Constellation",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e6a",
+    "id": "32b55af3-8833-5bf3-ac59-706de6079df7"
+  },
+  "title": "Legacy backlog batch 10 dispositioned",
+  "body": "Closed claim fe8b3c7c after processing legacy backlog batch 10 in place. Dispositions: 2 graduated, 3 duplicate. Existing durable homes carried this cluster: PDR shape/Related discipline, PDR-079, ADR-144/consolidate-docs fitness-limit ownership, session-handoff AGENTS.md named extension, and stage-by-pathspec/ADR-177/commit-queue verify-staged fingerprint enforcement. Verification: targeted markdownlint pass, git diff --check pass, strict-hard SOFT with 20 soft, 22 healthy, 8 ready-empty, hard 0, critical 0. Pausing curation per owner direction; no archive, split, shard, rename, move, or new buffer file.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

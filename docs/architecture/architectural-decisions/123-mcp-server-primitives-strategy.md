@@ -22,12 +22,19 @@ This ADR fills that gap: it documents which curriculum capabilities are exposed 
 
 ### Tools (model-controlled)
 
-35 curriculum tools: 24 generated from the OpenAPI schema plus 11 aggregated
+36 tools: 24 generated from the OpenAPI schema plus 12 aggregated
 tools. The model decides when to call them based on the user's question and
 the tool visibility metadata exposed through the MCP contract.
 
 - **Generated tools** (24) are produced at SDK compile time from the OpenAPI schema. When the upstream API changes, `pnpm sdk-codegen` updates the tool definitions automatically.
-- **Aggregated tools** (11) are hand-authored compositions that orchestrate API calls, search, reference data, and MCP App entry points. These include `search`, `fetch`, `browse-curriculum`, `explore-topic`, `get-thread-progressions`, `get-prior-knowledge-graph`, `get-misconception-graph`, `get-curriculum-model` (domain ontology and tool usage guidance), `download-asset`, `user-search`, and `user-search-query`.
+- **Aggregated tools** (12) are hand-authored compositions that orchestrate API calls, search, reference data, and MCP App entry points. These include `search`, `fetch`, `browse-curriculum`, `explore-topic`, `get-thread-progressions`, `get-prior-knowledge-graph`, `get-misconception-graph`, `get-curriculum-model` (domain ontology and tool usage guidance), `download-asset`, `user-search`, and `user-search-query`.
+- One aggregated tool draws on an external evidence corpus rather than the Oak curriculum API: `eef-explore-evidence-for-context` returns a typed subgraph of EEF Teaching and Learning Toolkit strands (with structural citations and caveats) for a lesson context. It composes the `GraphView` substrate per [ADR-179](179-transport-agnostic-graph-substrate.md) and carries `eef-*` namespacing + source attribution per [ADR-157](157-multi-source-open-education-integration.md).
+
+> **Maintenance note**: the tool counts and the aggregated-tool list above are
+> hand-maintained and drift from the code as tools are added (this entry is the
+> first external-corpus tool). Before a second evidence corpus lands, replace
+> the prose enumeration with a generated table sourced from `AGGREGATED_TOOL_DEFS`
+> and `MCP_PROMPTS` so the ADR cannot fall out of sync.
 
 **Intent**: Let AI assistants search, browse, and fetch curriculum data autonomously.
 
@@ -62,16 +69,17 @@ See [ADR-058](058-context-grounding-for-ai-agents.md) for the dual-exposure rati
 
 ### Prompts (user-controlled)
 
-Four parameterised workflow templates that the user explicitly invokes (slash commands, UI buttons):
+Five parameterised workflow templates that the user explicitly invokes (slash commands, UI buttons):
 
-| Prompt                 | Arguments        | Workflow                                           |
-| ---------------------- | ---------------- | -------------------------------------------------- |
-| `find-lessons`         | topic, keyStage? | Search lessons, summarise top results              |
-| `lesson-planning`      | topic, yearGroup | Search, get summary/transcript/quiz/assets         |
-| `explore-curriculum`   | topic, subject?  | Broad parallel search across lessons/units/threads |
-| `learning-progression` | concept, subject | Search threads, map progression, identify gaps     |
+| Prompt                              | Arguments                        | Workflow                                                            |
+| ----------------------------------- | -------------------------------- | ------------------------------------------------------------------- |
+| `find-lessons`                      | topic, keyStage?                 | Search lessons, summarise top results                               |
+| `lesson-planning`                   | topic, yearGroup                 | Search, get summary/transcript/quiz/assets                          |
+| `explore-curriculum`                | topic, subject?                  | Broad parallel search across lessons/units/threads                  |
+| `learning-progression`              | concept, subject                 | Search threads, map progression, identify gaps                      |
+| `eef-evidence-grounded-lesson-plan` | subject, keyStage, topic, focus? | Explore EEF evidence (subgraph), select strands by fit, plan lesson |
 
-Each prompt's first instruction tells the model to call `get-curriculum-model` for orientation.
+The four curriculum prompts open by calling `get-curriculum-model` for orientation; `eef-evidence-grounded-lesson-plan` instead opens by calling `eef-explore-evidence-for-context`, since its orientation is the EEF evidence base rather than the Oak curriculum domain model.
 
 **Intent**: Structure common teacher workflows so the model follows a proven multi-step recipe instead of improvising.
 

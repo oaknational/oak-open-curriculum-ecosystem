@@ -27,7 +27,7 @@ export type FitnessZone = 'healthy' | 'soft' | 'hard' | 'critical';
 
 export type FitnessCeilingZone = Exclude<FitnessZone, 'soft'>;
 
-type FitnessMetric = 'lines' | 'chars' | 'prose' | 'tokens' | 'content-role';
+type FitnessMetric = 'lines' | 'chars' | 'prose' | 'tokens' | 'content-role' | 'lifecycle';
 
 export type FitnessContentRole = 'reference' | 'drainable-buffer';
 

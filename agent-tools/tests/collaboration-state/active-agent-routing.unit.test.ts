@@ -1,149 +1,108 @@
-import { afterEach, describe, expect, it } from 'vitest';
-import { z } from 'zod';
+import { describe, expect, it } from 'vitest';
 
 import {
+  formatRoutingKey,
   routingKeyFor,
-  setLegacyFallbackWriter,
+  sameAgentRoutingKey,
+  sameIdentity,
 } from '../../src/collaboration-state/active-agent-routing';
-import { deriveCollaborationIdentity } from '../../src/collaboration-state/identity';
+import { deriveOverrideCollaborationIdentity } from '../../src/collaboration-state/identity';
 import { type CollaborationAgentId } from '../../src/collaboration-state/types';
 
-// Restore the module-level writer between tests so capture state in one
-// test never leaks into the next. The setter returns a restore function
-// that snapshots the previous writer; afterEach drains the per-test
-// override added inside that test.
-let restoreWriter: (() => void) | undefined;
-afterEach(() => {
-  if (restoreWriter !== undefined) {
-    restoreWriter();
-    restoreWriter = undefined;
-  }
+// Two distinct id-bearing identities, derived through the production override
+// path so each id is a valid UUID v5 without coupling the test to the v5
+// namespace constant. The id seeds from `${agent_name}|${session_id_prefix}`,
+// so distinct name/prefix pairs yield distinct ids.
+const galactic: CollaborationAgentId = deriveOverrideCollaborationIdentity({
+  agent_name: 'Galactic Transiting Orbit',
+  platform: 'codex',
+  model: 'GPT-5',
+  session_id_prefix: '019e18',
 });
 
-function captureWriter(): { lines: string[]; writer: (line: string) => void } {
-  const lines: string[] = [];
-  return {
-    lines,
-    writer: (line) => {
-      lines.push(line);
-    },
-  };
-}
+const verdant: CollaborationAgentId = deriveOverrideCollaborationIdentity({
+  agent_name: 'Verdant Climbing Vine',
+  platform: 'claude',
+  model: 'claude-opus-4-8',
+  session_id_prefix: 'f9d588',
+});
 
-const diagnosticPayloadSchema = z
-  .object({
-    event: z.literal('routing-legacy-fallback'),
-    agent_name: z.string(),
-    platform: z.string(),
-    model: z.string(),
-    session_id_prefix: z.string(),
-  })
-  .strict();
-
-const legacyAgent: CollaborationAgentId = {
+// An id-less identity stands in for the pre-PDR-076a historical comms rows
+// (~90% of the preserved comms archive). Strict routing never lifts these into
+// a routing key and never treats them as the same live target as an id-bearing
+// identity — the cure for the 2026-05-28 watcher runaway, where every
+// historical id-less author emitted a diagnostic on every poll.
+const idLess: CollaborationAgentId = {
   agent_name: 'Foamy Charting Fjord',
   platform: 'codex',
   model: 'GPT-5',
   session_id_prefix: '019e1f',
 };
 
-// Derived via the same code path the production CLI uses so the id is a
-// valid UUID v5 without coupling the test to the v5 namespace constant.
-const idKeyedAgent: CollaborationAgentId = deriveCollaborationIdentity({
-  platform: 'codex',
-  model: 'GPT-5',
-  env: {
-    OAK_AGENT_IDENTITY_OVERRIDE: 'Galactic Transiting Orbit',
-    CODEX_THREAD_ID: '019e1867-a0a8-7c11-aae3-1bc48533a585',
-  },
-}).agentId;
-
-describe('routingKeyFor — id-keyed and legacy branches', () => {
-  it('returns kind: "id-keyed" when the input identity carries a UUID v5 id', () => {
-    const capture = captureWriter();
-    restoreWriter = setLegacyFallbackWriter(capture.writer);
-
-    const key = routingKeyFor(idKeyedAgent);
-
-    expect(key).toStrictEqual({
-      kind: 'id-keyed',
-      agent_name: idKeyedAgent.agent_name,
-      id: idKeyedAgent.id,
+describe('routingKeyFor — strict id-keyed routing (PDR-076a sunset)', () => {
+  it('lifts an id-bearing identity to its (agent_name, id) routing key', () => {
+    expect(routingKeyFor(galactic)).toStrictEqual({
+      agent_name: galactic.agent_name,
+      id: galactic.id,
     });
-    expect(capture.lines).toStrictEqual([]);
   });
 
-  it('returns kind: "legacy" and emits the diagnostic when the input identity lacks an id', () => {
-    const capture = captureWriter();
-    restoreWriter = setLegacyFallbackWriter(capture.writer);
-
-    const key = routingKeyFor(legacyAgent);
-
-    expect(key).toStrictEqual({
-      kind: 'legacy',
-      agent_name: legacyAgent.agent_name,
-      session_id_prefix: legacyAgent.session_id_prefix,
-    });
-    expect(capture.lines).toHaveLength(1);
+  it('fails fast on an id-less identity rather than falling back', () => {
+    expect(() => routingKeyFor(idLess)).toThrow(/id-bearing/);
   });
 });
 
-describe('routingKeyFor — legacy-fallback diagnostic payload (PDR-076a Phase 3 audit signal)', () => {
-  it('emits a line prefixed with [routing-legacy-fallback] when lifting a legacy identity', () => {
-    const capture = captureWriter();
-    restoreWriter = setLegacyFallbackWriter(capture.writer);
-
-    routingKeyFor(legacyAgent);
-
-    expect(capture.lines[0]).toMatch(/^\[routing-legacy-fallback] /);
-  });
-
-  it('emits a JSON payload carrying agent_name, platform, model, and session_id_prefix', () => {
-    const capture = captureWriter();
-    restoreWriter = setLegacyFallbackWriter(capture.writer);
-
-    routingKeyFor(legacyAgent);
-
-    const jsonText = capture.lines[0]?.replace(/^\[routing-legacy-fallback] /, '') ?? '{}';
-    const payload = diagnosticPayloadSchema.parse(JSON.parse(jsonText));
-
-    expect(payload).toStrictEqual({
-      event: 'routing-legacy-fallback',
-      agent_name: legacyAgent.agent_name,
-      platform: legacyAgent.platform,
-      model: legacyAgent.model,
-      session_id_prefix: legacyAgent.session_id_prefix,
+describe('sameAgentRoutingKey — id equality with id-less short-circuit', () => {
+  it('is true for two identities sharing the same id', () => {
+    const sameSeed = deriveOverrideCollaborationIdentity({
+      agent_name: 'Galactic Transiting Orbit',
+      platform: 'codex',
+      model: 'GPT-5',
+      session_id_prefix: '019e18',
     });
+
+    expect(sameAgentRoutingKey(galactic, sameSeed)).toBe(true);
   });
 
-  it('emits one diagnostic per legacy lift, so audit aggregation can count distinct events', () => {
-    const capture = captureWriter();
-    restoreWriter = setLegacyFallbackWriter(capture.writer);
+  it('is false for two distinct id-bearing identities', () => {
+    expect(sameAgentRoutingKey(galactic, verdant)).toBe(false);
+  });
 
-    routingKeyFor(legacyAgent);
-    routingKeyFor(legacyAgent);
-    routingKeyFor(idKeyedAgent);
-    routingKeyFor(legacyAgent);
-
-    expect(capture.lines).toHaveLength(3);
+  it('is false when either side is id-less, without throwing (runaway cure)', () => {
+    expect(sameAgentRoutingKey(idLess, galactic)).toBe(false);
+    expect(sameAgentRoutingKey(galactic, idLess)).toBe(false);
+    expect(sameAgentRoutingKey(idLess, idLess)).toBe(false);
   });
 });
 
-describe('setLegacyFallbackWriter — DI seam', () => {
-  it('returns a restore function that reverts the writer to the previous binding', () => {
-    const firstCapture = captureWriter();
-    const restoreFirst = setLegacyFallbackWriter(firstCapture.writer);
-    const secondCapture = captureWriter();
-    const restoreSecond = setLegacyFallbackWriter(secondCapture.writer);
+describe('sameIdentity — routing key plus model', () => {
+  it('is true when routing key and model both match', () => {
+    const sameSeed = deriveOverrideCollaborationIdentity({
+      agent_name: 'Galactic Transiting Orbit',
+      platform: 'codex',
+      model: 'GPT-5',
+      session_id_prefix: '019e18',
+    });
 
-    routingKeyFor(legacyAgent);
-    expect(secondCapture.lines).toHaveLength(1);
-    expect(firstCapture.lines).toStrictEqual([]);
+    expect(sameIdentity(galactic, sameSeed)).toBe(true);
+  });
 
-    restoreSecond();
-    routingKeyFor(legacyAgent);
-    expect(firstCapture.lines).toHaveLength(1);
+  it('is false when the routing key matches but the model differs', () => {
+    const sameKeyDifferentModel = deriveOverrideCollaborationIdentity({
+      agent_name: 'Galactic Transiting Orbit',
+      platform: 'codex',
+      model: 'GPT-5-Codex',
+      session_id_prefix: '019e18',
+    });
 
-    restoreFirst();
+    expect(sameIdentity(galactic, sameKeyDifferentModel)).toBe(false);
+  });
+});
+
+describe('formatRoutingKey — human-readable id-keyed form', () => {
+  it('renders agent_name and id', () => {
+    expect(formatRoutingKey(routingKeyFor(galactic))).toBe(
+      `${galactic.agent_name} / id:${galactic.id}`,
+    );
   });
 });

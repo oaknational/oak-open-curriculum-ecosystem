@@ -3,7 +3,7 @@ fitness_line_target: 120
 fitness_line_limit: 180
 fitness_char_limit: 12000
 fitness_line_length: 100
-split_strategy: "Extract settled entries to permanent docs (ADRs, PDRs, governance, READMEs)"
+drain_strategy: "Extract settled entries to permanent docs (ADRs, PDRs, governance, READMEs)"
 merge_class: curated-learning-register
 fitness_content_role: drainable-buffer
 fitness_rationale: >-
@@ -17,205 +17,237 @@ fitness_rationale: >-
   substance rather than trimming the lesson.
 ---
 
-# Distilled Learnings
+## 2026-05-28 — a forced conclusion is executed, not offered; deference can be a hedge
 
-Refined cross-session learning extracted from session capture. Read this
-before every session. Every entry earned its place by changing behaviour and
-has not yet reached, or no longer needs, a more permanent home.
+When your own analysis forces a conclusion (the remaining options are expedient
+anti-shapes), executing it IS the answer — offering to execute it, or asking
+permission to act on a determination you were asked to make, is
+responsibility-passback, not diligence. The subtle trap: dressing the deferral as
+deference by misapplying a real owner-decision principle (e.g.
+`feedback_feature_shaping_is_owner_decision`) as cover for not finishing. That
+principle governs product/feature forks; authoring an internal artefact you just
+proved is needed is task completion, not a fork. Owner corrected this twice in one
+session ("just author it"). Reserve questions for genuine owner-only forks,
+irreversible/risky actions, and evidence-undecidable choices. Extends
+`present-verdicts-not-menus`, `feedback_no_responsibility_passback`, PDR-058
+(stop-inventing-optionality), and the escape-hatch 'menu' reflex below.
 
-**Source**: Distilled from archived napkins
-`napkin-2026-02-16.md` through `napkin-2026-05-10.md`
-(sessions 2026-02-10 to 2026-05-10).
+Source: 2026-05-28 deferral/non-goal audit + closeout (Kilned Brazing Bellows).
 
-**Knowledge-conservation role**: `napkin.md` captures session observations;
-this file conserves behaviour-changing lessons across sessions while they
-ripen; permanent docs, ADRs, PDRs, rules, and patterns take over when the
-lesson is stable and has a natural enforcement or reference home. Always
-graduate useful understanding — fitness management handles the consequences.
-What remains here is repo/domain-specific context with no natural permanent
-home, plus entries explicitly held pending validation.
+## 2026-05-28 — a verification/audit artefact is itself a claim; verify the auditor
 
-**Earlier graduations audit-trail archived (2026-05-22)**: the
-2026-05-06, 2026-05-09 (Woodland Sheltering Glade), 2026-05-10
-(Quiet Lurking Mask), and 2026-05-11 (Verdict-not-menu Flamebright
-Burning Lava) graduation blocks moved to
-[`archive/distilled-graduations-log-2026-05-14.md`](archive/distilled-graduations-log-2026-05-14.md)
-§ "Backfill rotation 2026-05-22 — earlier graduations blocks moved
-from distilled.md". Substance lives at named permanent homes
-(PDR-057, PDR-058, PDR-018 amendment, PDR-026 amendment,
-`agent-collaboration.md` directive amendments,
-`.agent/rules/present-verdicts-not-menus.md`,
-`.agent/rules/practice-core-portability.md`,
-`.agent/rules/directive-file-context-budget.md`,
-`.agent/rules/validators-must-recompute-not-just-record.md`,
-`.agent/rules/re-apply-first-question-at-elaboration-boundaries.md`,
-`.agent/rules/no-moving-targets-in-permanent-docs.md`,
-`docs/governance/development-practice.md` § Documentation Practice,
-`.agent/memory/operational/collaboration-state-lifecycle.md`).
+A read-only verification sub-agent, commissioned to check "is X already covered?"
+across ~51 register items, produced a report with a ~50% false-negative rate in
+spot-checks: it searched the wrong file or a different phrasing and reported "not
+found" over substance that existed (a clause present at `agent-collaboration.md`
+line 196; a doctrine named in a pattern the report never opened). Never mass-act
+on a verification sub-agent's findings; re-verify against the repo before any
+irreversible disposition. This extends `feedback_validate_specialist_findings_before_acting`
+(specialists over-escalate severity) to the distinct failure of factual
+false-negatives in a search/verification report. Curation corollary: "drain an
+owner-gated register" means evaluate each item on substance and attach a verdict,
+not empty the buffer — removal is owner ratification.
 
-**Meta-observation (2026-05-09 historical-napkin-synthesis)**: the
-fitness-as-trim impulse is doctrine-resistant under context
-pressure. Three independent corrections in 2026-05-06 → 2026-05-09
-on the same shape — agents reflexively trimming substance when
-fitness signals fire. Two structural cures captured as
-pending-graduations entries: lifecycle-aware fitness model and
-active inline discipline-reminder text in fitness-validator output
-at non-healthy zones. Source: §F1 of the synthesis report under
-`research/agentic-engineering/continuity-memory-and-knowledge-flow/`.
+Source: 2026-05-28 pending-graduations drain (Sunlit Waxing Moon); ledger
+`curator-passes/2026-05-28-sunlit-waxing-moon.md`.
 
-**Verified distilled homes archived (2026-05-24)**: Phase 3 of the
-memory-surface critical-drain plan removed entries whose durable homes were
-verified first. Audit trail lives in
-[`archive/distilled-graduations-log-2026-05-14.md`](archive/distilled-graduations-log-2026-05-14.md)
-§ "Backfill rotation 2026-05-24 — verified distilled homes".
+## 2026-05-28 — Cursor statusline: delegate shim to Claude adapter
 
-**Verified distilled homes archived (2026-05-25)**: the gate-stack
-diagnostic lesson and 2026-05-14 coordination / commit / continuation
-lessons graduated to
-[`gates/SKILL-CANONICAL.md`](../../skills/gates/SKILL-CANONICAL.md)
-and related team, commit, CLI, continuity, and agent-entry surfaces.
-Audit trail lives in
-[`archive/distilled-graduations-log-2026-05-14.md`](archive/distilled-graduations-log-2026-05-14.md)
-§ "Backfill rotation 2026-05-25 — distilled processing pass".
+For Cursor CLI statusline, the repo shim can target
+`agent-tools/dist/src/claude/statusline-identity.js` — the Claude stdin parser
+already accepts `session_id`, `cwd`, and `workspace.current_dir`. Lane A is
+wiring + install helper + docs; retire `agent-tools/src/cursor/statusline*` in a
+follow-on lane only after smoke proof. Activation stays global
+(`pnpm agent-tools:install-cursor-statusline` → `~/.cursor/cli-config.json`).
 
----
+Source: Stratospheric Hovering Gale session 2026-05-28, commit `59d50265`.
 
-## Reviewer-derived session sizing is not session sizing
+## 2026-05-28 — the EEF wrong-shape episode (graph≠list; hold-open; build-don't-stub)
 
-**Captured 2026-05-26** — Open Streaming Updraft Phase 0A + 0B Cycle 1 session.
+The EEF explore tool was built, three-reviewer-approved, and committed — and was
+the wrong shape. Three behaviour-changing lessons:
 
-When a reviewer estimates the session-shape of remaining work, that estimate
-is typically derived from owned-surface file counts or touch-point counts.
-File-count is not cycle-count. Most touch points are mechanical translations
-of a small number of structural moves (a single schema split surfaces all
-identity-construction sites at compile time; a single discriminated union
-narrows all routing comparators by construction).
+1. **A graph is not a list.** Slice/cap/truncate/field-project are list-ops,
+   categorically wrong for graphs. Reduce by a COMPLETE subgraph (contiguous or
+   sparse): relationships always represented, no evidence without its
+   uncertainty, referenced-but-absent nodes reachable. Budget is a DESIGN signal
+   (scope the subgraph), never a runtime cap.
+2. **Premature crystallisation.** Architectural warning-signals (bypassing a
+   contract param, working around a stub, adding a cap, dropping data for budget)
+   are a VERDICT that the shape is wrong, not patches. Specialist review
+   validates correctness WITHIN a frame; only "is this the right thing at all"
+   catches a wrong frame. Hold open foundational design.
+3. **Build the required tools; don't soft-stub.** `Result.err(NotImplementedYet)`
+   masks a hole as handled and breeds list-shaped workarounds. Build, or throw.
+4. **Escape hatches dodge the complete build — and re-skin per situation.**
+   Defer (a "later gate"), menu (offer a forced conclusion as A/B), list-op
+   (rank-and-cut a graph), and suppress-the-signal (exclude a path from a check,
+   raise a threshold, mark a hotspot safe without review) are one reflex: make
+   the friction vanish without the complete correct fix. The screen is
+   GENERATIVE, not a catalogue — *would this make a valid signal/requirement go
+   away without doing the complete correct thing?* If yes, strike it and state
+   the single valid cure as a verdict; never surface a cheap cure as co-equal
+   (that surfacing is itself the failure). Owner-caught 4× in ONE session (menu,
+   deferral, rank-and-cut, exclude-from-Sonar); knowing the rules
+   (`never-disable-checks`, `no-warning-toleration`) did not immunise — the cure
+   is the pre-output screen.
 
-Before baking a reviewer's session estimate into permanent plan-body
-doctrine, stress-test it with explicit TDD-cycle enumeration: list each
-red→green pair, count the substantive product changes, distinguish
-mechanical follow-on from substantive cycle. The realistic count is often
-substantially smaller than the file-touch count suggests.
+Source: EEF graph-tooling rebuild. Full diagnosis:
+`plans/sector-engagement/eef/current/graph-tooling-rebuild-foundation-2026-05-28.md`.
+Graduation candidates: graph-tool-category ADR/PDR, self-correcting-deliverables
+planning methodology (PDR + oak-plan), Definition-of-Delivery refinement
+(PDR-085), 'working with graphs' skill — all in `pending-graduations.md`.
 
-**Failure mode**: accepting reviewer estimates as gospel produces conservative
-session-partitioning that paying gate-and-context-warmup tax across more
-sessions than the work shape requires.
+## 2026-05-28 — a `tail -F | grep` watcher re-emits its whole history on rewrite
 
-**Worked instance**: 2026-05-26, the
-`collaboration-identity-doctrine-enforcement-remediation` plan accepted
-assumptions-expert's "Phase 0A/0B/0C are each session-sized" framing,
-derived from 13+4+2 owned-surface files for Phase 0B and 7+ for Phase 0C.
-Owner challenged the assumption mid-session via `/oak-metacognition`.
-First-principles decomposition showed ~4 cycles for 0B and ~5 cycles for
-0C (~10 cycles total, one focused implementer session for both). Plan body
-was corrected at `3ca77972`; Phase 0A + Phase 0B Cycle 1 landed in the same
-session as the metacognition correction. Doctrine: cycle-decomposition is
-the authoritative sizing proxy; file-counts are at best a ceiling.
+A raw `tail -n 0 -F <file> | grep` over an append-only coordination file
+re-emits *every* matched historical line whenever the file is rewritten — and an
+Edit-tool append rewrites the file, so your own append fires a false "new" batch.
+Cure: a dedup poll that diffs the current matched-line set against a baseline and
+filters your own prefix, emitting only genuinely new lines. Two instances
+(2026-05-27, 2026-05-28). Distinct from `use-monitor-for-event-driven-wake`,
+which is about Monitor vs Bash-background, not this re-emit.
 
-**Routing**: if a second worked-instance occurs, graduate to a rule or PDR
-amendment under planning-discipline. Until then, this lesson lives here as
-session-readable cross-session guidance.
+## 2026-05-27 — read git merge/divergence risk from content, not raw name-status
 
----
+Never predict merge risk from a raw `HEAD..origin` name-status diff: it counts
+branch-local additions as "deletes from the other side" and overstates the
+conflict set. Make the local bundle durable first, then let the merge algorithm
+prove the real conflicts. A rebase-without-force-push reads as "ahead N /
+behind M+1" where the +1 is a dropped merge commit; confirm it is benign with
+`git diff HEAD origin/<branch>` (empty tree = identical content; the divergence
+is a pure structural SHA rewrite).
 
-## Reviewer "follow-on cycle" verdicts are information, not authority
+## 2026-05-27 — generated adapters are never hand-written (owner-corrected)
 
-**Captured 2026-05-26** — Airy Whirling Current Phase 0C Cycles 9+10+11
-session.
+Platform skill/agent adapter files (`.claude/`, `.cursor/`, `.codex/`) are
+generated from the `.agent/` canonical by the codegen tools. If generation fails
+(e.g. a sandbox permission error), fix the generator invocation/permissions and
+rerun it — never hand-create adapter stubs. Stubs mask the toolchain fault and
+drift from canonical. This is the action corollary of "the generator is the
+source of truth".
 
-When a code-expert or type-expert review returns a finding marked
-"follow-on cycle" or "not blocking, queue for later", that verdict is
-INFORMATION about the reviewer's scope assumptions, not AUTHORITY over
-the implementer's landing decision. Reviewers see the diff in isolation;
-the implementer sees the cure surface in full.
+## 2026-05-27 — treat session-opener fitness as stale until you rerun it
 
-Before deferring a "follow-on" finding, apply this test: **"Does landing
-this finding NOW complete the same cure I am claiming to deliver in this
-session?"** If yes, land it as part of the same arc — the reviewer's
-verdict is shaping by what they were asked to look at, not by what
-architectural completeness requires.
+The fitness report read at session open is stale: a parallel slice, or a later
+edit this session, may have pushed a file over a limit since. Rerun the validator
+before trusting it, and cure a freshly-HARD file by narrow structural routing of
+its substance to a durable home — not by score-chasing trims.
 
-**Failure mode**: authority-deference. Accepting reviewer-deferral
-verdicts without first-principles check leaves type-safety holes, brand
-drops, or invariant gaps inside the claimed cure. The next session
-inherits a "completed" surface that still has the failure mode the cure
-was supposed to close.
+## 2026-05-27 — collaboration state is source, not storage
 
-**Worked instance**: 2026-05-26, the Phase 0C cycle 9+10 reviewer
-dispatch returned type-expert flagging the brand-drop at
-`createDirectedCommsMessage` with verdict "follow-on cycle". Deferred
-citing reviewer guidance + plan-scope locking. Owner Q2 ("why has
-anything been deferred?") surfaced the authority-deference. The change
-was small, completed the same routing-cure surface, and matched the
-architectural-excellence directive. Landed as Cycle 11 (`597b0945`)
-within the same session.
+Collaboration state files may be temporarily preserved for the bounded
+comms/coordination research plan, but state files are not long-term knowledge
+storage. Outside an explicit preservation window, process them as potential
+knowledge sources, route useful substance into memory/docs/plans, then delete
+the state files. Source session: Solar Illuminating Dawn temp/state-file
+curation.
 
-**Routing**: if a second worked-instance occurs, graduate to a rule
-under reviewer-dispatch discipline (e.g. `reviewer-verdicts-are-information-not-authority`).
-Until then, this lesson lives here as session-readable cross-session
-guidance. Related but distinct from `no-analysis-responsibility-passback`
-and `reviewer-briefs-respect-decided-scope` user-memory entries — both
-deal with what reviewers should NOT be asked to do; this lesson deals
-with how to absorb what reviewers DO return.
+## 2026-05-27 — supersession must refresh the auto-surfaced continuity chain
 
----
+When superseding a direction, the SAME pass must refresh the continuity chain a
+fresh session reads first — the thread-record top entry AND
+`repo-continuity § Next Safe Steps` — not just plan bodies. A fresh session
+boots with no conversation memory; a stale next-safe-step silently propagates
+the superseded frame. (EEF whole-graph → selection restructure: the thread top
+and repo-continuity still said "whole-graph flagged for discussion" after the
+plan bodies were corrected.) Candidate PDR-011 / PDR-026 amendment.
 
-## Structural cure delivered ≠ operationally exercised cure
+## 2026-05-27 — production-reachability is verified at the deployed registration path
 
-**Captured 2026-05-26** — Airy Whirling Current Phase 0C Cycles 9+10+11
-session.
+A surface is "live in production" only if the DEPLOYED app registers it — never
+inferred from SDK definition/routing. An SDK-defined-but-app-unregistered
+surface (e.g. a prompt in `MCP_PROMPTS` absent from the app's
+`PROMPT_REGISTRATIONS`) is LATENT dead code, not live. Verify-don't-trust
+applies to your own claims, not just others': I asserted the EEF prompt was live
+in prod; checking the app registration path showed it was not.
 
-When claiming "measurable value delivered" for a behavioural-cure
-landing, distinguish STRUCTURAL evidence from OPERATIONAL evidence.
-Tests + types proving the cure at the code boundary are STRUCTURAL.
-The cure actually preventing the named failure mode in real production
-use is OPERATIONAL. The first does not imply the second.
+## 2026-05-27 — delegate by judgment-load, not by "parallelise everything"
 
-For inter-agent or multi-system cures, operational evidence often
-requires an arranged scenario (two-same-name peers running concurrently;
-two services with overlapping configuration; etc.) that the
-implementer alone cannot manufacture — it requires owner orchestration
-or a real-world incident.
+When delegating edits to subagents, split by judgment-load: parallelise
+mechanical/contained edits, but KEEP edits carrying a subtle correctness
+boundary. A subagent applying a known pattern (e.g. a retraction banner) can
+plant a NEW false claim at a boundary it doesn't grasp (selection-vs-ranking:
+the scoring engine + recommend/explain/compare tools are correctly gate-1b;
+only seed-selection moves to gate-1a). Brief delegated edits with the exact
+boundary, and keep the boundary-sensitive ones yourself.
 
-**Failure mode**: framing structural completion as operational success.
-Subsequent agents inherit the impression that "the failure mode is
-gone" when it has only been "made unreachable in code"; the first
-operational test may surface adjacent gaps (e.g. legacy data on disk
-still cross-kind-fails; the cure protects new writes but not stored
-state).
+## 2026-05-14..28 — declarative capture ≠ procedural inhibition (rule-traction gap)
 
-**Worked instance**: 2026-05-26, Owner Q1 ("is the measurable value of
-Phase 0 delivered?") forced honest separation: 707 tests prove the
-PDR-076a cure structurally; no inter-agent comms event was sent through
-the new `--to-id` path in the same session that landed it. The
-operational proof is pending. The honest framing surfaced an adjacent
-gap: legacy events already on disk still classify as `observed` rather
-than `directed` post-cure (not a regression — those events were never
-routable by id — but the cure does not retroactively rescue them).
+An agent can hold a rule in working memory — *having just written it* — and walk
+straight into the named failure mode seconds later. Four independent instances
+across four sessions (Brazen gate-verify; Riverine cheap-cure; Mistbound
+portability in 3/4 PDRs; Woodland escape-hatch tripped 4× same session). The cure
+is NOT "know the rule harder" — it is a **structural interrupt at the moment of
+action**: a generative pre-output screen, a mandatory pre-action pause, a
+per-decision checklist. A rule with no enforcement mechanism at the moment of
+action has no traction on in-flight reflexes. Same mechanism as the
+`feedback_metacognition_impact_test` pre-action ratification of the action→impact
+bridge — treat them as one discipline. Source: cross-corpus synthesis
+2026-05-29 (`historical-napkin-synthesis-2026-05-29.md` A1).
 
-**Routing**: this is closeout-framing discipline, not architectural
-doctrine. Lives here until a recurring pattern of "claimed
-operationally / proven structurally only" gaps surfaces in continuity
-audits.
+## 2026-05-25..26 — substrate encodes outcome; prose cannot override it
 
----
+Agent behaviour follows what the substrate structurally encodes, not what
+doctrine says. Four Opus agents shipped zero merged deliverables for 90 min
+because heartbeat + Done-When measured coordination-liveness, not delivery-to-live
+(Misty); curator agents chased fitness-score reduction because the SKILL named it
+as the success signal (Thermal/Feathered). The owner's one-line reframe shifted
+behaviour *immediately* — substrate alignment is the real lever. When you catch a
+doubt or a signal, route it **inward and downward into the substrate** (the
+Done-When field, the heartbeat template, the SKILL success criterion, the rule
+that fires at action-time), not outward to a chat message — "the artefact has
+gravity; a conversation does not." Source: synthesis 2026-05-29 (A2);
+`experience/2026-05-29-substrate-not-surface`.
 
-## Held Pending Validation
+## 2026-05-22..25 — `.git/COMMIT_EDITMSG` is single-writer (multi-agent commit hazard)
 
-### Hypothesis-Layer Routing for Multi-Agent Cures → `hypothesis.md` family
+`.git/COMMIT_EDITMSG` is one shared file; concurrent `cp <draft> COMMIT_EDITMSG`
+across agents produces *wrong-attribution commits*. 4 instances May 2026; the
+emergent cure is intent-scoped message files (`.git/.commit-queue/<intent>.msg`),
+not yet built into the commit-queue CLI as the default. Related live P0:
+commit-queue `record-staged` fingerprints the FULL git index, not `intent.files`,
+so peer-staged content rides into your commit (cure plan:
+`commit-queue-intent-scope-discipline.plan.md`). Until the CLI cures it: use
+explicit per-intent paths and verify no peer rewrote `COMMIT_EDITMSG` between your
+`cp` and `git commit`. Source: synthesis 2026-05-29 (B1/B2).
 
-Multi-agent collaboration cures route through the hypothesis layer
-before graduating to doctrine. Substance lives at
-[`hypothesis.md`][n-agent-hypothesis] (per-primitive coordination
-cures), [`falsification-criteria.md`][n-agent-falsify]
-(per-primitive falsifiability), and [`experiments.md`][n-agent-experiments]
-(empirical validation at N≥3). Capture → hypothesis → empirical
-validation → graduate. Treated-as-hypothesis they get tested;
-shipped-as-design they get defended. Substrate validated at N=2;
-not yet at N≥3.
+## 2026-05-25 — repo-wide auto-fix is a multi-agent sweep footgun
 
-[n-agent-hypothesis]: ../../prompts/agentic-engineering/collaboration/hypothesis.md
-[n-agent-falsify]: ../../prompts/agentic-engineering/collaboration/falsification-criteria.md
-[n-agent-experiments]: ../../prompts/agentic-engineering/collaboration/experiments.md
+`pnpm markdownlint:root` / `pnpm format:root` (any repo-wide auto-fix) in a
+multi-agent dirty tree makes husky pre-commit promote auto-fix output into the
+staged set, sweeping peer-owned files into your commit. Single-agent: correct.
+Multi-agent: an incident (Hushed swept 4 Stormy-owned files). Before any
+repo-wide auto-fix in a multi-agent window: `git status --short`, enumerate
+peer-owned dirty files, confirm before fixing. Source: synthesis 2026-05-29 (B3).
 
----
+## 2026-05-26 — `git apply --cached` for surgical cross-lane staging
+
+In a multi-agent tree, stage only your hunk without disturbing peer WIP:
+`git diff HEAD -- <file> > f.patch` then `git apply --cached f.patch`. Index gets
+your change; working tree keeps peer WIP. Worked: Torrid committed a 3-line cure
+while 351 lines of peer WIP stayed untouched. Source: synthesis 2026-05-29 (B4).
+
+## 2026-05-27 (Codex) — re-run `git status` after long gate runs
+
+A `pnpm check` (>~30s) can widen the diff surface while it runs (parallel agents,
+formatter side-effects, generated files). Cleanliness/handoff claims from a
+pre-gate status are a recurring false-clean assertion. Re-run `git status --short`
+after any long gate before claiming tree-clean or filing a handoff. Source: Codex
+MEMORY.md §Failures 2026-05-27 (cross-platform); synthesis 2026-05-29 (B5).
+
+## 2026-05-27 (Codex) — closeout verdicts require live plan-acceptance evidence
+
+Documentation closeout, handoff wording, or "a useful slice was delivered" is NOT
+proof a workstream is complete. Use explicit verdicts: `complete` (live plan
+acceptance matches), `partial slice landed` (named slice in named lane only), or
+`pending` (blocked/deferred/no progress). The anti-pattern is homed
+(`feel-state-of-completion-preceding-evidence-of-completion.md`); this is the
+positive prescription. Source: Codex MEMORY.md 2026-05-27; synthesis 2026-05-29 (D2).
+
+## 2026-05-25 — ADR Status must match implementation maturity
+
+Landing an ADR `Accepted` when the paired PDR is still `Candidate` AND
+implementation is explicitly deferred is a maturity mismatch: future agents read
+`Accepted` as decided-and-validated. Correct status is `Proposed` when either
+holds. Two reviewers surfaced this simultaneously. Source: synthesis 2026-05-29 (D3).

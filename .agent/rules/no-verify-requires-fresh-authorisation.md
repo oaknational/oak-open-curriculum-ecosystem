@@ -15,19 +15,29 @@ NEVER skip Git hooks. The prohibition is on the **act of skipping hooks**, not o
 
 If the repo's hook policy refuses one mechanism (e.g. blocks `--no-verify`), **that refusal is a second signal to stop and surface**, not an obstacle to route around with a different mechanism. Reaching for a less-named workaround after a named one is refused reproduces the exact failure mode this rule blocks.
 
-**Authorisation is per-invocation AND per-mechanism, not per-session.** A prior owner approval to skip hooks does not authorise the next skip. Owner authorisation binds to *this commit, with hooks skipped* — the syntax used to achieve the skip is the agent's responsibility, and any mechanism above counts as a skip whether the owner's authorisation language named that specific spelling or not.
+**Authorisation is owner-initiated, per-invocation, and per-mechanism, not
+per-session.** A prior owner approval to skip hooks does not authorise the next
+skip. Owner authorisation binds to *this commit, with hooks skipped* — the
+syntax used to achieve the skip is the agent's responsibility, and any mechanism
+above counts as a skip whether the owner's authorisation language named that
+specific spelling or not.
 
 If a hook is failing:
 
 1. **Fix the cause.** The hook is failing because something is wrong. Find what.
 2. **If the hook itself is wrong**, fix the hook (or the upstream config). Do not bypass it.
-3. **If you genuinely cannot fix the cause now**, surface the failure to the owner with a named reason and ask for a per-invocation authorisation. Do not invent a "this one is fine" exception.
+3. **If you genuinely cannot fix the cause now**, surface the failure to the
+   owner with a named reason, the hook output, and the current tree state. Then
+   stop the commit attempt or continue with non-commit work. Do not propose,
+   request, offer, or frame hook bypass as an option. Only the owner may
+   initiate a bypass instruction; if that happens, record the exact instruction
+   and treat it as per-invocation, per-mechanism authorisation.
 
 The point of pre-commit hooks is precisely to be unskippable by the agent. Skipping them silently re-introduces the failure mode the hook was installed to prevent.
 
 ## Why this rule exists
 
-Quality-gate hooks are the operational arm of the principles in `.agent/directives/principles.md` § Code Quality. The principle prohibits `--no-verify` in foundational language. This rule converts the prohibition from passive guidance into a per-invocation gate: the agent has no implicit authority to skip a hook, regardless of how confident it is that the skip is harmless.
+Quality-gate hooks are the operational arm of the principles in `.agent/directives/principles.md` § Code Quality. The principle prohibits `--no-verify` in foundational language. This rule converts the prohibition from passive guidance into an owner-initiated per-invocation gate: the agent has no authority to skip a hook or solicit a skip, regardless of how confident it is that the skip is harmless.
 
 The pattern this rule blocks: agent encounters a hook failure, judges the failure low-stakes, skips the hook, commits anyway. Even when each individual judgement is defensible, the cumulative effect is that hooks become advisory rather than blocking. Per-invocation owner authorisation forces the friction back into the loop, which is the whole point.
 

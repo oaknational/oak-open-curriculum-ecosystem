@@ -837,13 +837,15 @@ Adjacent:
     plan — should be coordinated
   - triage model redesign can be drafted independently of the rename
 
-### Adjacent — Canonical-First Skill Pack Ingestion Tooling (CSPI)
+### Adjacent — Agent Artefact Lifecycle CLI
 
 - Strategic plan:
-  [canonical-first-skill-pack-ingestion-tooling.plan.md](../agent-tooling/future/canonical-first-skill-pack-ingestion-tooling.plan.md)
+  [agent-artefact-lifecycle-cli.plan.md](../agent-tooling/current/agent-artefact-lifecycle-cli.plan.md)
 - Goal:
-  - vendor-agnostic CLI under `agent-tools/` that ingests any external skill
-    pack into the canonical-first three-layer model
+  - single `agent-tools artefacts` lifecycle surface for skills, rules,
+    commands, hooks, sub-agents, and plugins
+  - vendor-agnostic ingestion subset that wraps external skill packs into the
+    canonical-first three-layer model
   - closes the unbuilt mitigation option 1 of the portability-remediation
     plan (`pnpm agent-tools:canonicalise-vendor-skills`, never built)
   - validator-enforced rule that no vendor-specific code paths appear in tool
@@ -851,13 +853,14 @@ Adjacent:
     only at Layer 2
   - lock-hash drift detection on vendored canonical skills as a new validator
     surface
-- Status: 📋 Strategic (future/) — promotion gated on deep sub-agent reviews
+- Status: ⏭️ Decision-complete (current/) — successor to the narrower CSPI plan;
+  predecessor archives during the lifecycle CLI archive phase
 - Notes:
   - illustrative source ecosystems include but are never targeted as
     deliverables: Anthropic, Vercel, Cloudflare, Clerk, ModelContextProtocol,
     Cursor, Codex, future packs not yet authored
-  - complementary to AGN below (internal wrappers via manifest) — both
-    populate the same Layer-2 directories without overlapping concerns
+  - complementary to AGN below (internal wrappers via manifest) while also
+    absorbing the older CSPI external-pack ingestion scope
   - reviewer set: `assumptions-expert`,
     `architecture-expert-fred|betty|barney|wilma`
 

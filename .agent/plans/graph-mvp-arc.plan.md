@@ -102,6 +102,17 @@ todos:
 
 # Graph MVP Arc — Three-Slice Substrate-And-Surface Spine
 
+> **⚠️ GATE-1A SCOPE CORRECTED (2026-05-27).** The 2026-05-21 amendment below
+> claims **"No scope reduction ... sequencing only"** for the gate-0/gate-1
+> split. That claim is RETRACTED for the EEF gate-1a feature: sub-graph
+> SELECTION (seed selection + projection in the explore tool) was dropped from
+> gate-1a without ratification, and is now restored. **Scope boundary
+> (unchanged):** the scoring/ranking engine and the recommend/explain/compare
+> tools remain correctly gate-1b. The corrected gate-1a contract is owned by
+> [`sector-engagement/eef/current/eef-delivery-restructure.plan.md`](sector-engagement/eef/current/eef-delivery-restructure.plan.md),
+> rebuilt around the
+> [Definition of Delivery directive](../directives/definition-of-delivery.md).
+
 ## 2026-05-21 amendment — gate-0 / gate-1 sequence-first split
 
 Owner-directed sequencing change. The first user-facing EEF MCP

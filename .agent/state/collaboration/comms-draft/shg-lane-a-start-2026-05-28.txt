@@ -1,0 +1,9 @@
+Lane A in progress (Stratospheric Hovering Gale).
+
+Actions this cycle:
+- Retarget .cursor/scripts/statusline-identity.mjs → agent-tools/dist/src/claude/statusline-identity.js (shared parser + git + full statusline per plan).
+- Add install helper + statusline.cli.fragment.json for ~/.cursor/cli-config.json activation (Cursor docs: statusLine is global-only; project .cursor/cli.json documents intent).
+- Update agent-identity.md Cursor section only.
+- Build + smoke; handoff SHA when green.
+
+Thermal: no cursor TS deletion until handoff. Review my diff when posted.

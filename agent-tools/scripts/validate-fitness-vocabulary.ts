@@ -50,7 +50,7 @@ const FORBIDDEN_PHRASES = [
 const EXCLUDED_DIRECTORY_NAMES = new Set(['.git', 'coverage', 'dist', 'node_modules']);
 const EXCLUDED_PATH_PREFIXES = ['.agent/practice-core-backup-', '.agent/practice-core/incoming/'];
 const EXCLUDED_PATH_SEGMENTS = ['/archive/'];
-const EXCLUDED_PATH_PREFIXES_EXTRA = ['.agent/experience/'];
+const EXCLUDED_PATH_PREFIXES_EXTRA = ['.agent/experience/', '.remember/'];
 
 /**
  * Files where the retired vocabulary is permitted by design (because they

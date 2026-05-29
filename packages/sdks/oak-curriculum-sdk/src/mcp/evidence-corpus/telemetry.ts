@@ -45,9 +45,12 @@ export type EvidenceCorpusSpanName = 'evidence_corpus.explore';
  *
  * Captures the seed context that drove `t6a-explore-tool`'s subgraph
  * query (phase / subject / key_stage / optional focus) plus runtime
- * observables (result_count / latency_ms). The phase literal union
- * matches `RankOptions.context.phase` from `evidence-corpus/types.ts`
- * so consumer narrowings line up across the two surfaces.
+ * observables (result_count / latency_ms). The phase set here includes
+ * `early_years` for instrumentation; the corpus-side
+ * `RankOptions.context.phase` now lives in
+ * `@oaknational/graph-corpus-sdk/eef-strands`. The two phase sets are
+ * reconciled at the EEF loader cycle, where the strand schema defines the
+ * authoritative phase set.
  *
  * At gate-1b additional spans add their own attribute interfaces
  * (e.g., `RecommendSpanAttrs` for `evidence_corpus.recommend`); each

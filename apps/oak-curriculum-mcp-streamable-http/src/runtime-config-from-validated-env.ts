@@ -36,6 +36,7 @@ function resolveSharedRuntimeFields(env: Env): Result<SharedRuntimeFields, Confi
 
   return ok({
     useStubTools: toBooleanFlag(env.OAK_CURRICULUM_MCP_USE_STUB_TOOLS),
+    eefEnabled: toBooleanFlag(env.OAK_CURRICULUM_MCP_EEF_ENABLED),
     version: versionResult.value.value,
     versionSource: versionResult.value.source,
     ...(gitShaResult.value

@@ -144,8 +144,9 @@ Use these links by trigger:
 - Core practice: [Development Practice][development],
   [User Collaboration Practice](./user-collaboration.md),
   [Agent Collaboration Practice](./agent-collaboration.md),
-  [Testing Strategy](testing-strategy.md), [TypeScript Practice][typescript],
-  [Safety and Security][security]
+  [Testing Strategy](testing-strategy.md),
+  [Definition of Delivery](./definition-of-delivery.md),
+  [TypeScript Practice][typescript], [Safety and Security][security]
 - Architecture and schema: [Architecture][architecture], [ADR index][adr-index],
   [ADR-029][adr-029], [ADR-030][adr-030], [ADR-031][adr-031],
   [Schema-First MCP Execution](./schema-first-execution.md),

@@ -22,7 +22,22 @@ const thisDir = dirname(fileURLToPath(import.meta.url));
 
 const config = defineConfigArray(
   {
-    ignores: [...ignores, 'dist/**', 'coverage/**', '*.log', '.turbo/**'],
+    ignores: [
+      ...ignores,
+      'dist/**',
+      'coverage/**',
+      '*.log',
+      '.turbo/**',
+      // External-data file convention (`*.external-data.ts`): a faithful
+      // snapshot of an external source, not authored code. Code-quality rules
+      // such as max-lines are a category error for it; the loader validates it
+      // strictly through `EefToolkitSchema` at the boundary, and type-check +
+      // prettier still apply. Matched by pattern (not path) so it survives file
+      // moves; see the external-data convention in
+      // docs/governance/sonar-disposition-policy.md §Duplications.
+      // Aligned to the sonar.cpd.exclusions glob exactly so the two never drift.
+      '**/*.external-data.ts',
+    ],
   },
 
   configs.strict,

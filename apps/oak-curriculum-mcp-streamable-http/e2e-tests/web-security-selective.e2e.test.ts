@@ -20,6 +20,7 @@ const mockRuntimeConfig: RuntimeConfig = {
   },
   dangerouslyDisableAuth: false,
   useStubTools: false,
+  eefEnabled: false,
   version: '0.0.0-test',
   versionSource: 'APP_VERSION_OVERRIDE',
   vercelHostnames: [],

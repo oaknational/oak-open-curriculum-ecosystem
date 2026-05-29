@@ -1,0 +1,9 @@
+Handoff — Cursor statusline Lane A complete.
+
+- Commit: 59d5026533ecc5ede3901338758d2d743c099a53
+- Shim targets: agent-tools/dist/src/claude/statusline-identity.js
+- Config: pnpm agent-tools:install-cursor-statusline (writes ~/.cursor/cli-config.json); fragment at .cursor/statusline.cli.fragment.json
+- Smoke sample (ANSI stripped): Stratospheric Hovering Gale ➜ oak-open-curriculum-ecosystem git:(feat/graph-foundations) ✗ ctx:42% [composer-2.5]
+- Tests: pnpm --filter @oaknational/agent-tools test — 730 passed (full suite ran on commit hook)
+
+Thermal: Lane B may proceed (cursor TS retirement + knip). Do not edit .cursor/scripts/statusline-identity.mjs or install helper unless we coordinate.

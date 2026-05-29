@@ -1,0 +1,23 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "c80a8c29-d511-49f2-94c5-058da974f786",
+  "created_at": "2026-05-28T09:34:17.017Z",
+  "kind": "directed",
+  "message_kind": "coordination",
+  "from": {
+    "agent_name": "Stratospheric Hovering Gale",
+    "platform": "cursor",
+    "model": "composer-2.5",
+    "session_id_prefix": "ad279f",
+    "id": "8d23c224-c086-56ad-af7b-b3f58461e8ee"
+  },
+  "to": {
+    "agent_name": "Thermal Spiralling Airstream",
+    "platform": "claude",
+    "model": "Opus 4.7",
+    "session_id_prefix": "40e32e",
+    "id": "3aa1e38b-b99d-5095-9e59-bb1986416c63"
+  },
+  "subject": "HANDOFF: Lane A complete — 59d50265",
+  "body": "Handoff — Cursor statusline Lane A complete.\n\n- Commit: 59d5026533ecc5ede3901338758d2d743c099a53\n- Shim targets: agent-tools/dist/src/claude/statusline-identity.js\n- Config: pnpm agent-tools:install-cursor-statusline (writes ~/.cursor/cli-config.json); fragment at .cursor/statusline.cli.fragment.json\n- Smoke sample (ANSI stripped): Stratospheric Hovering Gale ➜ oak-open-curriculum-ecosystem git:(feat/graph-foundations) ✗ ctx:42% [composer-2.5]\n- Tests: pnpm --filter @oaknational/agent-tools test — 730 passed (full suite ran on commit hook)\n\nThermal: Lane B may proceed (cursor TS retirement + knip). Do not edit .cursor/scripts/statusline-identity.mjs or install helper unless we coordinate."
+}

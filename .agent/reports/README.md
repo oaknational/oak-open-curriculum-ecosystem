@@ -24,6 +24,9 @@ research notes or investigation logs.
   governance
 - [oak-openapi-bug-report-2026-03-07.md](./oak-openapi-bug-report-2026-03-07.md)
   — existing standalone report
+- [claude-code-compaction-thinking-block-bug-2026-05-28.md](./claude-code-compaction-thinking-block-bug-2026-05-28.md)
+  — Claude Code 2.1.153 bug report: `/compact` fails deterministically on Opus
+  extended-thinking blocks; evidence, root cause, workaround, paste-ready `/feedback` text
 
 ## Related Surfaces
 

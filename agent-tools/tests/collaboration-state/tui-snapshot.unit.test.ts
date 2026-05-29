@@ -3,7 +3,6 @@ import { describe, expect, it } from 'vitest';
 import {
   buildCollaborationTuiSnapshot,
   type ClosedClaimsArchive,
-  type CollaborationAgentId,
   type CollaborationClaim,
   type CollaborationCommitQueueEntry,
   type CollaborationRegistry,
@@ -11,22 +10,23 @@ import {
   type LifecycleCommsEvent,
   type NarrativeCommsEvent,
 } from '../../src/collaboration-state';
+import { deriveOverrideCollaborationIdentity } from '../../src/collaboration-state/identity';
 
 const nowIso = '2026-05-12T14:00:00Z';
 
-const codexAgent: CollaborationAgentId = {
+const codexAgent = deriveOverrideCollaborationIdentity({
   agent_name: 'Shadowed Dimming Veil',
   platform: 'codex',
   model: 'GPT-5',
   session_id_prefix: '019e1c',
-};
+});
 
-const cursorAgent: CollaborationAgentId = {
+const cursorAgent = deriveOverrideCollaborationIdentity({
   agent_name: 'Moonlit Transiting Prism',
   platform: 'cursor',
   model: 'GPT-5.5',
   session_id_prefix: 'e86710',
-};
+});
 
 describe('buildCollaborationTuiSnapshot', () => {
   it('projects collaboration state into stable panes for the TUI', () => {
@@ -88,20 +88,20 @@ describe('buildCollaborationTuiSnapshot', () => {
     expect(snapshot.directed).toMatchObject([
       {
         id: 'directed-1',
-        from: 'Shadowed Dimming Veil / codex / GPT-5 / 019e1c',
-        to: 'Moonlit Transiting Prism / cursor / GPT-5.5 / e86710',
+        from: `Shadowed Dimming Veil / codex / GPT-5 / 019e1c / id:${codexAgent.id}`,
+        to: `Moonlit Transiting Prism / cursor / GPT-5.5 / e86710 / id:${cursorAgent.id}`,
       },
     ]);
-    // PDR-076a §Decision item 2: routing key drops `platform` (not a routing
-    // weight). Legacy identities (no id) render as `agent_name / prefix`.
+    // PDR-076a §Decision item 2: the routing key is `(agent_name, id)` —
+    // `platform`, `model`, and `session_id_prefix` are not routing weights.
     expect(snapshot.agents).toMatchObject([
       {
-        routing_key: 'Moonlit Transiting Prism / e86710',
+        routing_key: `Moonlit Transiting Prism / id:${cursorAgent.id}`,
         visibility_status: 'active',
         queue_count: 1,
       },
       {
-        routing_key: 'Shadowed Dimming Veil / 019e1c',
+        routing_key: `Shadowed Dimming Veil / id:${codexAgent.id}`,
         visibility_status: 'active',
         claim_count: 1,
         queue_count: 1,
@@ -116,12 +116,12 @@ describe('buildCollaborationTuiSnapshot', () => {
   });
 
   it('keeps closed-only inactive agents visible in the operator surface', () => {
-    const closedOnlyAgent: CollaborationAgentId = {
+    const closedOnlyAgent = deriveOverrideCollaborationIdentity({
       agent_name: 'Hushed Resting Signal',
       platform: 'codex',
       model: 'GPT-5',
       session_id_prefix: '019e1b',
-    };
+    });
 
     const snapshot = buildCollaborationTuiSnapshot({
       registry: { schema_version: '1.3.0', claims: [], commit_queue: [] },
@@ -135,7 +135,7 @@ describe('buildCollaborationTuiSnapshot', () => {
 
     expect(snapshot.agents).toStrictEqual([
       {
-        routing_key: 'Hushed Resting Signal / 019e1b',
+        routing_key: `Hushed Resting Signal / id:${closedOnlyAgent.id}`,
         visibility_status: 'inactive',
         collision_status: 'clear',
         claim_count: 0,
@@ -146,28 +146,30 @@ describe('buildCollaborationTuiSnapshot', () => {
   });
 
   it('summarises live operator-value signals without reading raw state', () => {
-    const staleAgent: CollaborationAgentId = {
+    const staleAgent = deriveOverrideCollaborationIdentity({
       agent_name: 'Dim Pausing Signal',
       platform: 'codex',
       model: 'GPT-5',
       session_id_prefix: '019e1d',
-    };
-    const conflictingAgentA: CollaborationAgentId = {
+    });
+    const conflictingAgentA = deriveOverrideCollaborationIdentity({
       agent_name: 'Pearly Drifting Jetty',
       platform: 'codex',
       model: 'GPT-5',
       session_id_prefix: '019e22',
-    };
-    const conflictingAgentB: CollaborationAgentId = {
+    });
+    // Same name+prefix as A → same derived id (same routing key), different
+    // model → sameIdentity false but sameAgentRoutingKey true: the collision.
+    const conflictingAgentB = {
       ...conflictingAgentA,
       model: 'GPT-5.1',
     };
-    const closedOnlyAgent: CollaborationAgentId = {
+    const closedOnlyAgent = deriveOverrideCollaborationIdentity({
       agent_name: 'Hushed Resting Signal',
       platform: 'codex',
       model: 'GPT-5',
       session_id_prefix: '019e1b',
-    };
+    });
 
     const snapshot = buildCollaborationTuiSnapshot({
       registry: {
@@ -277,35 +279,39 @@ describe('buildCollaborationTuiSnapshot', () => {
   });
 
   it('pluralises needs-attention summaries for human-readable text output', () => {
-    const staleAgentA: CollaborationAgentId = {
+    const staleAgentA = deriveOverrideCollaborationIdentity({
       agent_name: 'Dim Pausing Signal',
       platform: 'codex',
       model: 'GPT-5',
       session_id_prefix: '019e1d',
-    };
-    const staleAgentB: CollaborationAgentId = {
+    });
+    const staleAgentB = deriveOverrideCollaborationIdentity({
       agent_name: 'Quiet Pausing Signal',
       platform: 'codex',
       model: 'GPT-5',
       session_id_prefix: '019e1e',
-    };
-    const conflictingAgentA: CollaborationAgentId = {
+    });
+    const conflictingAgentA = deriveOverrideCollaborationIdentity({
       agent_name: 'Pearly Drifting Jetty',
       platform: 'codex',
       model: 'GPT-5',
       session_id_prefix: '019e22',
-    };
-    const conflictingAgentB: CollaborationAgentId = {
+    });
+    // Same name+prefix as A → same derived id (same routing key), different
+    // model → sameIdentity false but sameAgentRoutingKey true: the collision.
+    const conflictingAgentB = {
       ...conflictingAgentA,
       model: 'GPT-5.1',
     };
-    const secondConflictingAgentA: CollaborationAgentId = {
+    const secondConflictingAgentA = deriveOverrideCollaborationIdentity({
       agent_name: 'Pearly Gliding Jetty',
       platform: 'codex',
       model: 'GPT-5',
       session_id_prefix: '019e23',
-    };
-    const secondConflictingAgentB: CollaborationAgentId = {
+    });
+    // Same name+prefix as second-A → same derived id (same routing key),
+    // different model: a second, independent routing collision.
+    const secondConflictingAgentB = {
       ...secondConflictingAgentA,
       model: 'GPT-5.1',
     };

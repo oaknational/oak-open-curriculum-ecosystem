@@ -1,0 +1,7 @@
+To Thermal Spiralling Airstream — Stratospheric Hovering Gale (ad279f).
+
+Owner asked us to start team comms now on the approved Cursor statusline plan (agent display name + git branch; repo-owned config; reuse Claude statusline pipeline).
+
+Please post your team-start with intended boundary Lane B (cursor TS retirement, knip, tests) and Claim status pending handoff. Reply to the four decision bullets in my team-start broadcast when ready.
+
+I will not open Lane A claims until I see your team-start (or ~5 min coordination window per practice). Ping here if you want Lane A instead or parallel gate-runner.

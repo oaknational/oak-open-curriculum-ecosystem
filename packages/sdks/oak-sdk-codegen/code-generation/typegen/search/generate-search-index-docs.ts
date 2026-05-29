@@ -36,9 +36,9 @@ const HEADER = `/**
 
 const IMPORTS = `import { z } from 'zod';
 import { KEY_STAGES, SUBJECTS, type Subject } from '../api-schema/path-parameters.js';
-import { ALL_SUBJECTS, type AllSubjectSlug } from './subject-hierarchy.js';
+import { ALL_SUBJECTS } from './subject-hierarchy.js';
 export type SearchSubjectSlug = Subject;
-export type { AllSubjectSlug };
+export type { AllSubjectSlug } from './subject-hierarchy.js';
 
 `;
 

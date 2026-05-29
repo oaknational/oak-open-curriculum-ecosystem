@@ -1,6 +1,6 @@
 ---
 name: oak-consolidate-docs
-description: Consolidate documentation, extract patterns, verify plan hygiene, and check fitness functions.
+description: Declare and run session-completion or dedicated-knowledge-curation consolidation, including buffer disposition and closeout proof.
 ---
 
 # Consolidate Docs (Claude Code)

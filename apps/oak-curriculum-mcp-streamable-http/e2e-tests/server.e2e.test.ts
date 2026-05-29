@@ -15,9 +15,10 @@ import {
 const ACCEPT = 'application/json, text/event-stream';
 const SHARED_ALLOWED_HOSTS = 'localhost,127.0.0.1,::1';
 
-async function createBypassedApp() {
+async function createBypassedApp(eefEnabled = false) {
   const runtimeConfig = createMockRuntimeConfig({
     dangerouslyDisableAuth: true,
+    eefEnabled,
     env: { ALLOWED_HOSTS: SHARED_ALLOWED_HOSTS },
   });
   const observability = createMockObservability(runtimeConfig);
@@ -48,6 +49,12 @@ const ToolListItemSchema = z.looseObject({ name: z.string() });
 
 const ToolListResultSchema = z.object({
   tools: z.array(ToolListItemSchema),
+});
+
+const PromptListItemSchema = z.looseObject({ name: z.string() });
+
+const PromptListResultSchema = z.object({
+  prompts: z.array(PromptListItemSchema),
 });
 
 const InitCapabilitiesResultSchema = z.object({
@@ -122,6 +129,9 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     const containsMethodField = toolListResult.tools.some((t) => 'method' in t);
     expect(containsMethodField).toBe(false);
     const baseToolNames = [...toolNames];
+    // The EEF tool is co-gated behind OAK_CURRICULUM_MCP_EEF_ENABLED (default
+    // OFF), so it is intentionally absent from the served set here. Its
+    // flag-ON presence is asserted in the dedicated test below.
     const aggregatedTools = [
       'browse-curriculum',
       'download-asset',
@@ -139,6 +149,38 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     expect(names.toSorted((a, b) => a.localeCompare(b))).toEqual(
       expectedToolNames.toSorted((a, b) => a.localeCompare(b)),
     );
+    // Default OFF: the EEF tool is not served.
+    expect(names).not.toContain('eef-explore-evidence-for-context');
+  });
+
+  it('serves the EEF tool over HTTP only when the EEF flag is enabled', async () => {
+    const app = await createBypassedApp(true);
+    const res = await request(app)
+      .post('/mcp')
+      .set('Accept', ACCEPT)
+      .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
+    expect(res.status).toBe(200);
+
+    const envelope = parseSseEnvelope(res.text);
+    const toolListResult = ToolListResultSchema.parse(envelope.result);
+    const names = toolListResult.tools.map((t) => t.name);
+    expect(names).toContain('eef-explore-evidence-for-context');
+  });
+
+  it('serves the EEF prompt over HTTP only when the EEF flag is enabled', async () => {
+    const listPromptNames = async (eefEnabled: boolean) => {
+      const app = await createBypassedApp(eefEnabled);
+      const res = await request(app)
+        .post('/mcp')
+        .set('Accept', ACCEPT)
+        .send({ jsonrpc: '2.0', id: '1', method: 'prompts/list' });
+      expect(res.status).toBe(200);
+      const promptListResult = PromptListResultSchema.parse(parseSseEnvelope(res.text).result);
+      return promptListResult.prompts.map((p) => p.name);
+    };
+
+    expect(await listPromptNames(false)).not.toContain('eef-evidence-grounded-lesson-plan');
+    expect(await listPromptNames(true)).toContain('eef-evidence-grounded-lesson-plan');
   });
 
   it('rejects missing Accept header with 406', async () => {

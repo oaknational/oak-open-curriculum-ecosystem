@@ -16,97 +16,45 @@ Earlier archives remain under [`archive/`](archive/).
 
 ## Current State
 
-- **Active thread switches back to `eef` first-feature delivery
-  (2026-05-26)**: Owner direction at session close —
-  `collaboration-identity-doctrine-enforcement-remediation` plan is
-  PAUSED with Phase 0 delivering its intent (collaboration improvement
-  for the next session). Next session resumes EEF first-feature work
-  per the [`eef` thread record][eef]; `agentic-engineering-enhancements`
-  returns to a Practice-continuity tactical lane, not an active
-  delivery arc.
-- **Collaboration identity remediation Phase 0 DELIVERED + write-side
-  type cure (2026-05-26, Airy Whirling Current / claude /
-  claude-opus-4-7 / `3624a5`)**: three commits on
-  `docs/agent-collaboration-enhancements` closed Phase 0C, the Phase 0
-  proof contract, and the write-side type hole:
-  - `dee89e09` Cycle 9 — `--to-id` CLI flag wired through write-side schema
-    parse at the boundary; REQUIRED, not optional (rejects the named
-    failure mode at the earliest point).
-  - `6dad98b0` Cycle 10 — `routingKeyFor` emits structured
-    `[routing-legacy-fallback]` JSON diagnostic when lifting a
-    legacy-shape identity; DI seam (`setLegacyFallbackWriter`) allows test
-    capture without `process.stderr` mutation.
-  - `597b0945` Cycle 11 — `createDirectedCommsMessage.from/.to` and
-    `replyToDirectedCommsMessage.from` tightened to
-    `CollaborationAgentIdWrite`; compile-time brand propagation from the
-    CLI parse boundary into the stored event is now continuous, and
-    legacy-source replies are rejected at the boundary.
-
-  Tests 698 → 707 (+9). Pre-commit gate (90 turbo tasks) green at every
-  commit. Phase 0 proof contract closed: ID-0 (`7028b0d6` PDR-027
-  amendment), ID-1 (`bed24b57`, `57084c15`, `b977dbab` identity writes
-  carry id), ID-2 (`30ef437b` Cycles 6+7+8 routing prefers id), ID-3
-  (`6dad98b0` Cycle 10 diagnostic emits). Reviewer dispatch on Sonnet
-  (parallel code-expert + type-expert) returned approval with the
-  type-expert follow-on which was initially deferred then landed as
-  Cycle 11 after owner challenge. One remaining hygiene item (DI-seam
-  test isolation). Per plan §Phase 0 completion claim — all four proofs
-  in code.
-
-  **Plan now PAUSED** (owner direction 2026-05-26 session close):
-  Phase 0 delivered its intent — improving inter-agent collaboration
-  for the next session. Phase 1+ remain authored but unscheduled;
-  owner directs resumption if/when warranted.
-
-- **Prior context (Tempestuous Sweeping Feather, `a9e5d2`)**: five commits
-  landed Phase 0B substrate + Phase 0C cycles 6+7+8 bundled (the
-  coordination cure). Tests 671 → 698 (+27). See
-  [agentic thread record][agentic] for full landing history.
-- **Cross-platform memory import completed (2026-05-26, Feathered Flying Cloud
-  / codex / GPT-5 / `019e65`)**: Claude, Codex, Cursor, and `.remember`
-  surfaces were swept; the owner then asked to bring the candidates into the
-  repo. Five candidates landed in durable homes: F-07 comms summary/show
-  affordances, ADR-165 plus Q-005 for the future memory/state boundary,
-  warn-first ESLint-rule nuance, start-right-team seat-cost routing, and
-  ADR-125 post-canonicalisation plugin retention. Curator-pass report:
-  [`2026-05-26-feathered-flying-cloud.md`](curator-passes/2026-05-26-feathered-flying-cloud.md).
-  Targeted markdownlint, `git diff --check`, and diff-level local-path scan
-  passed. Full `pnpm check` was not run because Tempestuous Sweeping Feather has
-  a fresh active agent-tools claim and dirty peer-owned agent-tools WIP; run the
-  singleton full gate after that lane settles.
-- **Hard memory curation stopped at soft (2026-05-26, Feathered Flying Cloud /
-  codex / GPT-5 / `019e65`)**: claim
-  `0933f219-d404-4f6d-8f6e-15ec45adf028` was closed after the hard memory
-  surfaces were routed without compression. Owner direction was followed:
-  preserve understanding, treat fitness as signal only, do not commit, do not
-  run quality gates, prioritise critical then hard, and stop at soft. Final
-  informational fitness signal for this pass: SOFT, with 0 hard and 0 critical
-  files.
-- **Current branch**: `docs/agent-collaboration-enhancements`, local HEAD
-  `b977dbab` (ahead of origin by 11 at handoff). Active claim at handoff:
-  Tempestuous Sweeping Feather owns Phase 0B/0C agent-tools implementation
-  files; do not fold those dirty files into this memory-import bundle.
-- **Processed hard surfaces**: previous active napkin source archived verbatim
-  at
-  [`napkin-2026-05-26-feathered-hard-curation.md`](../active/archive/napkin-2026-05-26-feathered-hard-curation.md);
-  fresh Starless/Open candidates moved to active shard
-  [`2026-05-26-starless-open-closeout-candidates.md`](pending-graduations/2026-05-26-starless-open-closeout-candidates.md);
-  outgoing detailed Current State prose archived at
-  [`repo-continuity-current-state-2026-05-26-feathered-hard-curation.md`](archive/repo-continuity-current-state-2026-05-26-feathered-hard-curation.md).
-- **Next implementation route returns to EEF first-feature delivery**
-  per owner direction 2026-05-26. The
-  [`collaboration-identity-doctrine-enforcement-remediation.plan.md`](../../plans/agent-tooling/current/collaboration-identity-doctrine-enforcement-remediation.plan.md)
-  plan is PAUSED with Phase 0 delivering its intent (collaboration
-  improvement for the next session). Earlier stale routing notes that
-  framed Phase 0B Cycles 2-4 / Phase 0C as the next route are
-  superseded by this entry.
-- **MCP product analytics** remains paused and owner-gated after the Path-to-GA
-  Programme landed at `09eda6f4`; details live in the
-  [`mcp-product-analytics`](threads/mcp-product-analytics.next-session.md)
-  thread record and the archived Current State prose.
-- **Comms retention standing direction remains binding**: do not move or delete
-  `.agent/state/collaboration/comms/` files while the
-  `agent-collaboration-research` thread remains owner-gated.
+- **Current branch**: `feat/graph-foundations`, local HEAD `63c7c1be` (EEF
+  Goal-1 design + D0 prerequisite). `63c7c1be` is local (1 ahead of `origin`);
+  earlier Goal-1 commits `4e443f15` + `a37f4075` were pushed by the owner.
+- **Active delivery focus**: `eef` **graph-tooling rebuild** is the only active
+  product lane. The EEF explore tool + the gate-1a/1b split were diagnosed as
+  the wrong foundation and discarded; the rebuild is built on the foundation
+  doc. See the EEF section below and the `eef` thread record (which opens with a
+  CURRENT-TRUTH banner) for live pickup.
+- **Solo session (2026-05-28)**: Nebulous Threading Prism stood down; its
+  handed-over curation pass was committed (`2f1d100e`). No open claims or queues.
+- **Cursor statusline (2026-05-28)**: Stratospheric Hovering Gale landed Lane A
+  at `59d50265` (Cursor delegates to the Claude statusline pipeline). Thermal
+  Spiralling Airstream completed Lane B — bespoke Cursor TS statusline retired
+  (adapter + parser + tests deleted), Claude parser refactored off Zod `.catch()`
+  onto explicit type guards, shared `core/json-narrowing.ts` extracted;
+  agent-tools gates green. The 2026-05-28 comms-watch runaway exposed an
+  un-sunset PDR-076a `routing-legacy-fallback`; captured as the
+  `routing-legacy-fallback-sunset` future plan. Lane B + the sweep + codegen +
+  continuity landed by the owner in `ae4e09cb` (code + dep sweep + codegen) and
+  `227b5415` (memory).
+- **Agentic-engineering tactical lane**: not an active product delivery arc.
+  The recent pending-graduations cleanup collapsed sidecar files back into
+  canonical [`pending-graduations.md`](pending-graduations.md), where the 66
+  owner-gated decisions remain live for owner direction.
+- **Closed-claims archive curation (Nebulous Threading Prism / codex /
+  `019e6b`)**: the 1091-entry closed-claims archive was processed as a
+  knowledge source. Durable knowledge was already homed in thread records,
+  plans, ADRs/PDRs, rules, commits, `pending-graduations.md`, and curator
+  reports; the processed archive content was cleared to an empty schema-valid
+  sink. Proof:
+  [`2026-05-27-nebulous-threading-prism-closed-claims.md`](curator-passes/2026-05-27-nebulous-threading-prism-closed-claims.md).
+- **Collaboration-state lifecycle**: `.agent/state/` files are live signal
+  sources, not long-term documentation. Outside explicit owner-gated research
+  preservation windows, process them for durable knowledge, route useful
+  substance, and clear the stale state.
+- Detailed recent closeout history for Gnarled, Kilned, Veiled, Foamy, the EEF
+  PR review/divergence work, Phase 0 identity-remediation, and cross-platform
+  memory import lives in the relevant thread records and curator reports rather
+  than in this repo-wide entry point.
 
 ## Active Threads
 
@@ -120,8 +68,8 @@ paused implementation program.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF first-feature delivery | [record][eef] | Fiery Kindling Brazier / claude / claude-opus-4-7 / 9f4026 / commit-marshal+pr-115-merged / 2026-05-25 |
-| `agentic-engineering-enhancements` | Practice continuity (tactical lane; not the active delivery focus) | [record][agentic] | Airy Whirling Current / claude / claude-opus-4-7 / `3624a5` / Phase 0 DELIVERED + plan PAUSED — Cycles 9+10+11 landed (`dee89e09`, `6dad98b0`, `597b0945`); next session returns to eef / 2026-05-26 |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / claude-opus-4-8 / Tempestuous Gliding Thermal / Goal 2 / D0 — gateway review done + Lane C4 validator hardened to a file-wide no-logic invariant (`e76b9b7c`); 7 ahead of origin, NOT pushed; remaining ALL owner-gated: push → Lane B Sonar SAFE write (classifier-blocked, needs explicit auth) → Vercel flag check → merge PR #122 / 2026-05-29 |
+| `agentic-engineering-enhancements` | Practice continuity (tactical lane; not the active delivery focus) | [record][agentic] | claude / claude-opus-4-8 / Eclipsed Creeping Secret / Group A graduations LANDED — WS-Z converged + committed: all six graduations (Lane A retired-thread hygiene; Lane B PDR-011/ADR-150/§6c; Lane C PDR-087; Lane D PDR-088; Lane E PDR-058 S3/S4 + PDR-029 note), PDR README + practice-index rows for 087/088, RULES_INDEX 0 new rows, six register entries removed (substance verified live first), execution plan archived. Next: none queued for this thread; Groups B/D/E forks + claim-liveness owner-surfaced; napkin+distilled strict-hard owned by the fitness session / 2026-05-29 |
 
 ## Paused Threads
 
@@ -139,7 +87,7 @@ not the current session-priority lane. Reactivation is owner-directed.
 | `sector-engagement` | External adoption | [record][sector] | Squally / cursor / unknown / unknown / 2026-04-30 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / codex / unknown / unknown / 2026-04-29 |
 | `cloudflare-mcp-security-and-token-economy-plans` | Cloudflare MCP | [record][cloudflare] | Glassy / codex / unknown / unknown / 2026-04-28 |
-| `agent-collaboration-research` | Comms-corpus pattern research (owner-gated buffer) | [record][collab-research] | Charcoal Brazing Kiln / claude / claude-opus-4-7 / 7c7327 / thread-record-author-post-m1-merge / 2026-05-24 |
+| `agent-collaboration-research` | Comms-corpus pattern research (owner-gated buffer) | [record][collab-research] | codex / GPT-5 / Solar Illuminating Dawn / state-file-lifecycle-boundary-clarification / 2026-05-27 |
 
 Compact identity rule (per [PDR-027](../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md)
 and the 2026-05-17 structural refactor): this table carries only the latest
@@ -161,27 +109,53 @@ thread's next-session record.
 
 ## Next Safe Steps
 
-### EEF First-Feature Delivery (active — sole current focus)
+### EEF Graph-Tooling Rebuild (active — sole current product focus)
 
-The 2026-05-22 → 2026-05-23 multi-agent gate-1a substrate-floor session is
-closed out in the [`eef` thread record][eef]. Repo-level status, verified
-2026-05-24 against that record:
+**Live (2026-05-28 — REBUILT FROM FOUNDATIONS).** The EEF explore tool and the
+gate-1a/1b split were diagnosed as the **wrong foundation** (list-thinking in a
+graph domain; the graph query surface stubbed and then worked around). The old
+EEF plan estate is archived at `.agent/plans/sector-engagement/eef/archive/`.
+Single source of truth for the rebuild:
 
-- Round 1+2 substrate floor is effectively complete; WS4.1 landed at
-  `3241893d` under Stormbound Spiralling Breeze's owner-directed
-  ownership-override, so older repo-continuity notes treating Lunar's WS4.1
-  as outstanding are stale.
-- Remaining pickup state and the full cycle ledger live in the thread record,
-  including the Sparking parser-integration follow-on, WS4.5/t2/t6a/ff3-ff6
-  critical path, reciprocal-review evidence, and coordination-pattern
-  surfacings routed to `pending-graduations.md`.
-- This repo-level index should be treated as the routing pointer only; do not
-  reconstruct the EEF lane from old duplicated prose here.
+- foundation:
+  [`graph-tooling-rebuild-foundation-2026-05-28.md`](../../plans/sector-engagement/eef/current/graph-tooling-rebuild-foundation-2026-05-28.md)
+  (diagnosis; principles — graph != list, completeness-as-integrity-not-maximalism,
+  build-the-query-surface, budget-as-design-signal, no soft stubs,
+  structuredContent-only; discovery framing; open questions).
+- plan (skeleton):
+  [`graph-tooling-rebuild.plan.md`](../../plans/sector-engagement/eef/current/graph-tooling-rebuild.plan.md)
+  (self-correcting deliverables; D0 merge-safety, D1 restate end-goal +
+  graph-tool contract + fresh client research, D2 build the query surface,
+  D3 complete navigable subgraph tool, D4 agent round-trip, D5 'working with
+  graphs' skills + methodology graduation, D6 explore the value path, DX
+  estate-wide reference reconciliation).
 
-PR #108 / graph-substrate details live in the connecting-oak-resources thread
-record and snagging plan. Historical long-form routing that previously lived
-in this file is preserved in
-[`repo-continuity-soft-tier-pre-dusky-2026-05-24.md`](archive/repo-continuity-soft-tier-pre-dusky-2026-05-24.md).
+**Next safe step:** GOAL 1 is DONE (owner-ratified 2026-05-28). **GOAL 2 / D0
+(merge-safety) — Lanes A/C/D + Lane C4 validator COMMITTED (2026-05-29; Deciduous
+Climbing Root → Wooded Creeping Thicket).** Committed: `c67af4e6` (Lane A S7763
+generator-first + Lane D 4 comments + Lane C external-data convention rename /
+cpd-exclusion / `sonar-disposition-policy.md` §Duplications) and `0d45cf07` +
+`fc14463d` (Lane C4 `validate-external-data-files` repo-validator in
+`agent-tools/src/`, gate-clean incl. knip + depcruise). **The gateway review is
+done** (type-expert SOUND on Lane A; code-expert + security-expert on Lane C4)
+**and the bypass class it surfaced is fixed at `e76b9b7c`** (validator hardened
+to a file-wide no-runtime-logic invariant; Lane B disposition VERIFIED SAFE;
+Lane E co-gating test PASS). Branch is 7 ahead of origin, NOT pushed. Remaining —
+ALL owner-gated, in order: (1) push the 7 commits [pre-authorised] → SonarCloud
+re-scan clears `new_violations` + `new_dup` → (2) Lane B Sonar SAFE write on
+hotspot `AZ5rZYbMCv0_1Y1L8PE3` [needs EXPLICIT per-action owner auth —
+auto-mode-classifier-blocked] → QG green → (3) Vercel deployed-env flag check
+(MCP `get_project` does not expose env values; dashboard verify) → (4)
+**owner-gated merge** of PR #122. Exact state and the ordered remaining steps
+live in the **[`eef` thread record][eef] § 2026-05-29 (cont. II) entry**
+(Tempestuous Gliding Thermal). Bounded: terminates at D6 (plan §"End goal + bounded goals"). The F
+explore tool (`2214f0b2`) is LANDED behind the flag, the wrong shape pending the
+D3 rebuild.
+
+Historical EEF substrate-floor work (the 2026-05-22→23 multi-agent gate-1a
+session, the WS4.x critical path) and PR #108 graph-substrate details are
+superseded by the rebuild and retained for history only in the
+[`eef` thread record][eef] and [`connecting-oak-resources` thread record][connecting].
 
 ### Agentic-Engineering Tidy-Plan Lane (closed 2026-05-25)
 
@@ -193,6 +167,20 @@ cycles 10 + 11 (comms-watch storage redesign WS2 + WS3) were superseded into
 per the archive supersession mapping. The earlier consolidation hard/critical
 objective remains complete (`SOFT (20 soft)`). Owner has pivoted back to
 graph work; deeper soft-tier consolidation is not the active delivery lane.
+
+**2026-05-29 Group A graduations — LANDED (WS-Z converged + committed by Eclipsed
+Creeping Secret).** All six owner-ratified graduations are committed: Lane A
+(retired-thread-record hygiene), Lane B (PDR-011 / ADR-150 / session-handoff §6c
+reflection-as-foundational), Lane C (PDR-087 TDD-as-design), Lane D (PDR-088
+reviewers-carry-doctrine), Lane E (PDR-058 Surface 3 + Surface 4 optionality, plus
+the scope-adjacent PDR-029 Amendment-Log note). WS-Z shared-index convergence done:
+PDR README rows for 087/088, practice-index phenotype-bridge rows for 087/088,
+RULES_INDEX 0 new rows (Lane E minted no rule files), the six register entries
+removed (substance verified live in each home first), this file refreshed.
+Execution plan archived to `archive/completed/`. **Next safe step for this thread:
+none queued** — Groups B/D/E forks + claim-liveness promotion remain
+owner-surfaced/unactioned; napkin + distilled strict-hard remediation is owned by
+the separate fitness session.
 
 2026-05-26 handoff update: the remaining owner-decision-gated due
 principles have now graduated to PDR-083 and PDR-084. Next safe step
@@ -223,6 +211,35 @@ diagnostic). Design is fully locked in plan v3 body — implementer needs no
 further deliberation. Plan §Sub-phase sizing now states cycle-by-cycle
 decomposition (was: incorrect "three-session arc" framing from reviewer
 file-count framing; corrected at `3ca77972` after owner challenge).
+
+### Pending-Graduations Register (decision packet owner-ratified 2026-05-29; Group C done, Group A planned)
+
+The owner ratified the Sunlit decision packet on 2026-05-29 ("do all of it").
+Progress this session (Tempestuous Vaulting Falcon):
+
+- **Group C executed.** Adversarial re-verification (18 agents) found the Sunlit
+  ledger's "recommend withdraw" verdicts **~83% wrong** (15 of 18 homes did not
+  contain the substance — "verify the auditor" recursed one level deeper). **15
+  kept, 3 withdrawn** (recurrence-rank weighting; napkin+`.remember/` PDR-011
+  amendment; redundant-config marker). Per-item verdicts:
+  [`curator-passes/2026-05-29-tempestuous-vaulting-falcon.md`](curator-passes/2026-05-29-tempestuous-vaulting-falcon.md).
+- **Group A planned (not executed this session).** The six graduations are
+  queued as a parallel-lane execution plan:
+  [`group-a-graduations-execution.plan.md`](../../plans/agentic-engineering-enhancements/current/group-a-graduations-execution.plan.md)
+  (5 lanes + 1 serialized convergence; two ledger home-recommendations corrected —
+  #37 → PDR-058 sequencing-optionality, #22+23 → PDR-058 Surface 3 rule).
+
+**Group A graduations — DONE (2026-05-29, WS-Z committed by Eclipsed Creeping
+Secret).** All six landed and committed; the six register entries removed
+(substance verified live in each graduated home before removal — no breadcrumbs
+left, the commit and the homes are the record); PDR README + practice-index rows
+added for PDR-087/088; RULES_INDEX unchanged (Lane E minted no rule files);
+execution plan archived to `archive/completed/`. Lane D naming-fix was DROPPED
+("Test Reviewer" is the consistent cross-template H1 convention, not drift). The
+register is GREEN. napkin (CRITICAL) + distilled (HARD) strict-hard remediation is
+owned by the separate fitness session — NOT rotated or trimmed at WS-Z
+(owner-directed deferral). Groups B / D / E forks + claim-liveness promotion remain
+owner-surfaced, unactioned.
 
 ### MCP Product Analytics (paused — design complete, plan deferred)
 
@@ -328,152 +345,172 @@ Current branch non-goals:
 
 ## Deep Consolidation Status
 
-**due — Phase 0 milestone closed + distilled.md fitness convergence
-pending** (Airy Whirling Current `3624a5`, 2026-05-26, second handoff
-this session after Cycle 11 landed). Triggers fired:
+**handoff gate (2026-05-29, Eclipsed Creeping Secret — WS-Z DONE)**: Group A WS-Z
+convergence is committed. All six graduations landed; the six register entries
+removed (substance verified live in each home first — no breadcrumbs, the commit
+and the homes are the record); PDR README + practice-index rows added for
+PDR-087/088; RULES_INDEX unchanged (Lane E minted no rule files); execution plan
+archived to `archive/completed/`. The bounded deep-consolidation work named in the
+entries below is now COMPLETE — Group A is drained. Remaining deep-consolidation
+pressure is owned by the separate fitness session: napkin (CRITICAL, 555 lines) +
+distilled (HARD, 236) strict-hard remediation, NOT rotated/trimmed at WS-Z
+(owner-directed deferral). Gatekeeper gates run on the settled WS-Z tree before
+commit. Inbound for a live pending-graduations triage session: ~14–22 net-new
+graduation candidates from Highland (reconcile count first; do not duplicate
+existing register entries).
 
-1. Plan-arc milestone closed: Phase 0 of
-   `collaboration-identity-doctrine-enforcement-remediation.plan.md`
-   complete (ID-0..ID-3 all in code). Plan itself remains ACTIVE for
-   Phase 1+.
-2. `distilled.md` at 221 lines (soft limit 180, target 120) after this
-   session added two cross-session lessons: reviewer-verdict authority
-   discipline (worked instance: Cycle 11 landing after owner challenge)
-   and structural-vs-operational-evidence distinction (worked instance:
-   Phase 0 completion framing).
+**handoff gate (2026-05-29, Shaded Prowling Threshold; updated at closeout as events
+landed)**: `due — not this closeout`. Lane A landed owner-approved (uncommitted); **Lane E
+now OWNER-APPROVED** (Furnace Melting Bellows; 3 files incl. scope-adjacent PDR-029). The
+bounded deep-consolidation work is Group A **WS-Z convergence** (index rows + the 6 register
+removals + single-gatekeeper commit), parked for the **next session** and now **fully
+unblocked** (Lane E sign-off cleared). **Napkin is NOT being rotated** — owner pulled fitness
+from Highland's scope to a separate fitness session, so `napkin.md` stays **CRITICAL** (508 lines,
+hard 300 / critical 450 — past critical, a loop-failure signal per ADR-144); WS-Z records
+`strict-hard` RED on it as **remediation-deferred-to-the-fitness-session**, an owner-approved
+deferral, not a WS-Z defect. `pnpm check` deferred to WS-Z's single gatekeeper
+commit per `check-singleton-per-window`. Shaded's + Furnace's claims closed; the Group A +
+Lane E files are unclaimed for the next session. Separately inbound: ~14 net-new graduation
+candidates from Highland for next-session pending-graduations triage.
 
-Not escalating to `oak-consolidate-docs` from this closeout because:
-the two new distilled entries are knowledge-preservation-valid at full
-weight per `knowledge-preservation-over-fitness-warnings`; trimming
-them to satisfy the soft-limit signal would defeat their purpose. They
-need a second worked instance before graduation to a rule/PDR. The plan
-itself is now PAUSED (owner direction 2026-05-26 — Phase 0 delivered
-its collaboration-improvement intent; next session returns to eef). No
-napkin rotation pressure (273/300, healthy zone). No ADR/PDR candidates
-surfaced. Falsifiability for the next consolidator: distilled.md grew
-by the two named entries this session; if a second worked instance of
-either appears in a future napkin, graduate from distilled to permanent
-home rather than letting the soft pressure dictate trimming.
+**handoff gate (2026-05-29, Veiled Stealing Candle)**: Group A execution
+(agentic-engineering-enhancements). Landed UNCOMMITTED + gated-green:
+ws-readiness gate (7-agent workflow — 2 plan reviewers + 5 adversarial
+home-verifiers; all 5 lanes confirmed home-correct/non-duplicate/evidence-holds);
+Lane B (PDR-011 reflection-as-foundational reframe — including a Vector-B
+observable-guard added to consolidate-docs §4 after adversarial verification —
+plus ADR-150 mirror + session-handoff §6c); Lane C (PDR-087 TDD-as-design,
+governance); Lane D (PDR-088 reviewers-carry-doctrine, governance). PDR numbers
+087/088 deconflicted from the role-emission PDR-086 reservation. ALSO landed:
+ADR-168 §5 — graduates the `scripts/`-is-no-checks-zone doctrine that Wooded
+captured in the napkin AND I misread (two-instance owner-directed cure: doctrine
+in ADR-168, discoverable pointer in `vitest.config.base.ts`, optional mechanical
+check noted; docs-adr-expert reviewed → sound-with-suggestions, suggestions
+folded); plus `.remember/` added to the vocab-validator exclusion (mirrors
+`.agent/experience/`; vocab gate GREEN). Deep consolidation NOT separately due —
+the Group A WS-Z convergence (next session) IS the bounded convergence + commit +
+napkin rotation (napkin HARD 320/300). Owner-directed session-end before lanes
+A/E/WS-Z. No retained claim (registry empty). Minimal-ceremony session per owner
+direction (no comms broadcasts/monitors/heartbeat cron).
 
-**not due — Phase 0 closeout commit only** (Airy Whirling Current `3624a5`,
-2026-05-26, FIRST handoff this session — superseded by the entry above
-after Cycle 11 landed). Original entry preserved for audit trail: Phase 0
-critical path closed with cycles 9+10 landing the consumer-visible cure
-surface plus the audit-signal diagnostic. Status revised after Cycle 11
-landed in the same session, which added the two distilled entries.
+**handoff gate (2026-05-29, Wooded Creeping Thicket)**: EEF Goal 2 / D0 Lane C4
+landed (`validate-external-data-files` repo-validator; `0d45cf07` + knip fix
+`fc14463d`). My C4 commits are gate-clean (full pre-commit hook + knip + depcruise
+verified). **Full `pnpm check` NOT run** — named constraint: the shared tree
+carries a concurrent agent's uncommitted substantive WIP (PDR-011, ADR-150,
+consolidate-docs + session-handoff SKILLs, PDR-087, group-a plan), which a full
+`pnpm check` would validate but is not mine to land; plus the heavy e2e/widget/a11y
+suites are unrelated to a repo-validator change. Falsifiable: next session runs
+`pnpm check` green on a settled tree before the owner-gated merge. Deep
+consolidation **not newly due** by this session; two PDR/pattern candidates
+captured in the napkin (external-data file convention; scripts/-is-no-checks-zone)
+for the next register refresh — they fold into the Group A execution session that
+Tempestuous already queued. My claim closed; see below.
 
-**not due — mid-arc handoff in active plan** (Tempestuous Sweeping Feather
-`a9e5d2`, 2026-05-26). Owner directed a brief session handoff with the
-final-session work explicitly carried forward (Cycles 9-10 + closeout). No
-consolidation triggers fired: the active plan is in-progress not closed, no
-napkin rotation pressure, no ADR/PDR graduation candidates surfaced this
-session (the routing-cure work executed locked design; lessons captured as
-session-scoped surprises in napkin.md). Falsifiability: the next session
-runs against an unchanged Active threads table, the same active plan, and
-this same `not due` marker; if any trigger fires mid-final-session, the
-consolidation gate at session close handles it then.
+**handoff gate (2026-05-29, Tempestuous Vaulting Falcon)**: pending-graduations
+decision-packet execution. Group C re-verified (15 keep, 3 withdraw; ledger
+`curator-passes/2026-05-29-tempestuous-vaulting-falcon.md`); Group A queued as
+`group-a-graduations-execution.plan.md` (parallel lanes), NOT executed — the
+sanctity Core PDRs need owner review and the owner directed plan-now / execute-
+next-session. Deep consolidation is **due — Group A graduations + the
+verify-the-auditor-recursion distilled candidate** but DEFERRED to the Group A
+execution session (that plan IS the bounded convergence). Stale-claim 4th-instance
+recorded on the claim-liveness future plan. `pnpm check` NOT run this session —
+Deciduous left an uncommitted, test-unverified D0 bundle in the shared tree and
+deferred full gates; my commit is doc-only by explicit pathspec. Both Deciduous
+and I closed our claims; the active registry is empty.
 
-**completed — owner-directed cross-platform memory import slice** (Feathered
-Flying Cloud `019e65`, 2026-05-26). Owner asked to scan Claude memories, other
-platform memories, and `.remember` files, then asked to bring the candidates
-into the repo while keeping repo content free of local external paths. Import
-landed five durable updates: F-07 summary/show affordances, ADR-165 plus Q-005,
-ESLint warn-first nuance, start-right-team seat-cost routing, and ADR-125
-plugin-retention amendment. Targeted markdownlint, `git diff --check`, and
-diff-level local-path scan passed. Full `pnpm check` is intentionally not
-claimed green: at handoff a fresh Tempestuous Sweeping Feather claim owns
-agent-tools implementation files and the working tree includes peer-owned
-agent-tools WIP. Falsifiability for the next marshal: after that active claim
-closes, inspect `git status --short --branch` and rerun the singleton full gate.
+**handoff gate (2026-05-29, Deciduous Climbing Root)**: Goal 2 / D0 IN PROGRESS,
+local uncommitted bundle (Lane A S7763 generator-first + Lane D 4 comments + Lane C
+external-data convention rename/policy/config; validator + hotspot SAFE +
+flag/Vercel + gates + gateway + owner-gated merge remaining). type-check + lint
+GREEN; full `pnpm check` NOT run — deliberate deferral: mid-D0 (validator pending,
+not a landing), nothing pushed, and a concurrent agent (`Tempestuous Vaulting
+Falcon`, `441c78`) shares the tree so `check-singleton` + `format:root`-collision
+risk applies — the next session runs full gates before the owner-gated merge. Deep
+consolidation **not due** — no thread completed; the external-data-convention
+PDR/pattern candidate is captured in the napkin for the next register refresh.
+Continuation: [`eef` thread record][eef] § 2026-05-29 entry.
 
-**not run — owner-directed skip mid-handoff** (Stellar Glowing Satellite
-`9a2967`, 2026-05-26). Owner initially directed *"run a full session
-handoff and document consolidation"* at close; mid-handoff (after steps
-1–8 completed) owner amended: *"forget the consolidation pass and check"*.
-Triggers had fired: plan-arc milestone closed (Path-to-GA Programme +
-5 substance amendments landed at `09eda6f4`); new plan collection
-scaffold introduced (`.agent/plans/curriculum-mcp-path-to-ga/`);
-exploration moved from untracked to committed. No new ADR/PDR candidates
-surfaced (paperwork session; design substance is the exploration itself).
-**Both `pnpm check` (step 11) and `oak-consolidate-docs` (step 10) skipped
-per owner direction**, not silently bypassed. Next consolidation pass to
-inherit the queued substance; falsifiability for the next consolidator:
-re-check `git log -1` for `09eda6f4`, the new programme path, and Stellar's
-napkin + experience entries.
+**current**: the closed-claims archive curation pass processed all 1091 archived
+claims, routed the only durable lifecycle lesson to the curation report and this
+resume pointer, and cleared the archive content. Proof:
+[`2026-05-27-nebulous-threading-prism-closed-claims.md`](curator-passes/2026-05-27-nebulous-threading-prism-closed-claims.md).
 
-**due — owner-directed at session close** (Open Streaming Updraft `357948`,
-2026-05-26). Owner direction at session close: *"this session is complete,
-please run a full handoff /oak-session-handoff /oak-consolidate-docs , then
-next session will pick up the remaining Phase 0 work"*. Triggers fired:
-plan-arc milestone closed (Phase 0A doctrinal landing + Phase 0B Cycle 1
-landed; remediation plan now ACTIVE not QUEUED); behaviour-changing lesson
-to conserve (metacog cure on reviewer-derived sizing — see distilled.md
-entry to be authored under consolidate-docs); a structural correction
-landed mid-session (`3ca77972`). Consolidation pass to run after handoff.
+**current (2026-05-28, Sunlit Waxing Moon)**: superseding the prior "not another
+sidecar drain" stance — the owner commissioned a dedicated drain, so the full
+register (~70 items) now carries a verified per-item verdict in
+[`curator-passes/2026-05-28-sunlit-waxing-moon.md`](curator-passes/2026-05-28-sunlit-waxing-moon.md).
+The live decision work is owner ratification of that ledger's grouped decision
+packet. Key finding: the verification report Leafy left is unreliable, so no items
+were removed and no rules/PDRs authored. Deep consolidation this handoff: owner-directed
+`consolidate-docs` run (graduating this session's process insights).
 
-**not due — session handoff only for Thermal doctrine-debt planning slice**
-(Thermal Swooping Wing `019e63`, 2026-05-26). No plan or milestone closed; the
-new remediation plan remains `QUEUED`; no new ADR/PDR candidate was surfaced
-outside that plan; open-questions count remains below the drain trigger. This
-handoff records the queued Phase 0 critical path and leaves implementation for
-an owner-directed future session.
+**routing**: detailed consolidation, handoff, and session-close history now
+lives in thread records, curator reports, completed plans, and prior continuity
+archives. This file should stay an operational index and should not regain
+per-session closeout prose.
 
-**not due — owner-requested lightweight pass only** (Glassy Flowing Stern
-`de55d6`, 2026-05-26). Owner closed MCP analytics exploration session with
-`/oak-session-handoff` + `/oak-consolidate-docs`. Trigger checklist: no plan
-milestone closed; no napkin rotation threshold; four open questions in register;
-no new PDR/ADR graduation candidates from this lane (design record is the
-permanent home). Actions taken: thread record created; repo-continuity and
-napkin updated; §17 open items LTAE-screened — retained in exploration doc
-only; no inbound plan-index edits per outbound-only linking policy. Deferred:
-Exploration 10 formal per-sink projection doc sync until plan promotion;
-Stage 2 event catalogue until after Stage 1 emitters.
+**handoff gate (2026-05-28, Kilned Brazing Bellows)**: root-cause investigation
+of Leafy's `/compact` crash → agent-tooling substrate recording. Landed (working
+tree; explicit-pathspec commit, disjoint from Sunlit's drain): compaction bug
+report (`reports/claude-code-compaction-thinking-block-bug-2026-05-28.md`),
+`claim-liveness-crash-reconciliation-and-session-forensics` +
+`collaboration-substrate-coordination-rightsizing` future plans, relink of
+`comms-watch-liveness-floor` non-goal #3, bidirectional cross-link from
+`routing-legacy-fallback-sunset` §Open-problems. A 62-item deferral/non-goal audit
+of the collaboration-substrate cluster found one genuine orphan (substrate
+over-accretion), now homed in the rightsizing brief; the rest were healthy
+boundaries-with-homes, ratified principles (doc-consolidation signal), or
+correctly-gated deferrals — no plan-proliferation. consolidate-docs run this
+handoff (process insights). `pnpm check` NOT run (owner direction;
+check-singleton — Sunlit closing concurrently). napkin is co-mingled with
+Sunlit's concurrent entries; left unstaged for the gatekeeper.
 
-**due — owner-directed post-n=2-bundle consolidate-docs pass** (Torrid Firing
-Spark `5054f8`, 2026-05-26T07:30Z). Owner direction at session close:
-*"this session is complete, please communicate all of your findings to
-Feathered, once that is done please run a deep /oak-session-handoff
-followed by a deep /oak-consolidate-docs"*. Triggers: plan milestone closed
-(n=2 enforcement bundle Cycle 1 complete; all 6 substantive commits +
-2 cross-lane cures + owner consolidation landed on origin); 11 graduation
-candidates surfaced through Cycle 1 (7 in the original 2026-05-26T07:25Z
-capture + 4 added by Torrid's retirement-class closeout: peer-agent
-heartbeat-without-progress diagnostic, `git apply --cached` surgical
-staging worked-instance, CLI args inconsistency across comms verbs,
-replace-old-with-new applied to WIP-completion). Consolidate-docs
-invocation follows this handoff directly per owner sequence.
+**handoff gate (2026-05-28, Woodland Swaying Pollen)**: session-handoff +
+consolidate-docs at owner request. EEF Goal 1 (design-settling) DONE +
+owner-ratified — plan SPECIFIED, foundation §10 resolved, new
+`extending-graph-support-tooling` plan, D0 gains the deployed-env flag posture +
+a "fix-ALL-open-quality-signals" prerequisite (3 commits `4e443f15` / `a37f4075`
+/ `63c7c1be`, last local). PR #122 CI green except the SonarCloud QG (2 `S7763`
+in generated SDK code, 1 PATH hotspot, 3.9% new-dup — all branch-wide, none from
+this session); captured as the D0 prerequisite with COMPLETE cures (generator
+fix, never Sonar-exclusion). Metacognition: the escape-hatch reflex
+(defer/menu/list-op/suppress-the-signal) was owner-caught 4× → generative
+pre-output screen added to `distilled.md`. `pnpm check` NOT run (owner direction).
 
-Prior state (Fiery Kindling Brazier `9f4026`, 2026-05-25T15:09Z). PR #115 merged at
-`9fa3a180` on origin/main; owner directed both Fiery and Stormy to run
-a final session handoff and docs consolidation pass. Triggers: plan
-milestone closed (PR-0 of 4-PR gate-1a sequence + hardening-arc
-closeout); new graduation candidates captured (Collaboration ceremony
-decomposition discipline + n=2 coordination efficiency, both
-`status: due`, owner-direction-triggered); ADR-184 amendment landed
-into main; Stormy actively drafting PDR-082 (n=2 collaboration mode)
-on the cure substrate Fiery captured. Consolidate-docs invocation
-follows this handoff.
+**handoff gate (2026-05-28)**: Sylvan Whispering Fern ran
+`/oak-consolidate-until-done` (dedicated-knowledge-curation). strict-hard GREEN
+(was 1 HARD: `napkin.md`); napkin rotated 408→36 lines (archived verbatim), 4
+lessons graduated to `distilled.md`; open-questions Q-001 withdrawn (gate-1a/1b
+framing superseded by the graph rebuild); pending-graduations and the 2765-event
+comms corpus confirmed owner-gated (preserved by design). Ledger:
+[`curator-passes/2026-05-28-sylvan-whispering-fern.md`](curator-passes/2026-05-28-sylvan-whispering-fern.md).
+The working tree carries the curation bundle, the 2-file PDR-082→086 renumber
+(D4, owner-aware), and these handoff edits — ALL INTENDED; do not classify as
+orphan. The stale `.git/index.lock` has since cleared and Cursor staged the
+curation + renumber (7 files) externally; the 2 handoff edits (this entry + the
+napkin session note) remain unstaged. Commits OWNER-HELD by direction — land as
+two commits (A: renumber, message validated; B: curation) after staging the
+handoff edits.
 
-Prior state (Riverine Navigating Rudder, 2026-05-25): read-only MCP
-UAT + plan WS5 capture + continuity handoff only; no plan milestone
-closed at that close.
+**handoff gate (2026-05-28)**: Thermal Spiralling Airstream session-handoff —
+Cursor statusline Lane B complete (Cursor TS retired, agent-tools gates green);
+`routing-legacy-fallback-sunset` future plan created; comms-plan consolidation
+handed to a separate agent via a consolidation brief; `pnpm check` NOT run
+(owner direction); consolidate-docs not due (focused session, no trigger fired).
+Session work landed by the owner in `ae4e09cb` (statusline code + dep sweep +
+codegen) + `227b5415` (memory); this handoff's continuity edits remain staged.
 
-Prior state (Breezy Flowing Dock bounded critical/hard curation, 2026-05-25):
-the active napkin, pending-graduations shards, thread records, and
-memory-surface-critical-drain plan remain the live consolidation ledger.
-Broader Phase 2/3 soft-file work remains trigger/owner-gated. Falsifiability for
-the next consolidator: re-check `git log --oneline -5`, `git status --short`,
-active claims, active queue, and
-[`memory-surface-critical-drain-2026-05-24.plan.md`](../../plans/agentic-engineering-enhancements/current/memory-surface-critical-drain-2026-05-24.plan.md)
-before starting.
+**handoff gate (2026-05-28)**: Stratospheric Hovering Gale session-handoff —
+Cursor statusline Lane A complete; consolidate-docs not due (no trigger fired).
 
-Historical deep-consolidation status prose from 2026-05-22 and 2026-05-23 has
-been processed into the current plan, thread records, archives, and live
-pending routes. It is preserved verbatim at
-[`archive/repo-continuity-session-history-2026-05-24.md`](archive/repo-continuity-session-history-2026-05-24.md)
-§ "Historical Deep Consolidation Status Archived 2026-05-24".
+**prior (2026-05-28)**: Deep Fathoming Harbour ran deep session-handoff +
+consolidate-docs after the EEF explore-tool diagnosis and graph-tooling rebuild
+foundation. Graduation candidates remain in
+[`pending-graduations.md`](pending-graduations.md).
 
-Previous deep-consolidation and session-close prose lives in:
+Previous deep-consolidation and session-close prose:
 
 - [`archive/repo-continuity-session-history-2026-05-24.md`](archive/repo-continuity-session-history-2026-05-24.md)
 - [`archive/repo-continuity-session-history-2026-05-22.md`](archive/repo-continuity-session-history-2026-05-22.md)

@@ -4,7 +4,8 @@ name: "Meta plan — feat/mcp-graph-support-foundation"
 overview: "Navigation index for every planning document currently in force on the feat/mcp-graph-support-foundation branch. Names each plan, what it owns, the cross-plan dependency picture, the file-scope partition that makes parallel work possible, current state, and open owner-class structural questions. Pure work-structure — does NOT specify operational model, team composition, rotation cadence, branch/PR topology, or who-does-what. A fresh session reads this after the standard start-right grounding to understand the planning landscape and choose where to enter."
 status: current
 type: navigation-index
-last_updated: 2026-05-22
+last_updated: 2026-05-27
+last_updated_note: "EEF gate-1a contract restructured — selection restored to gate-1a; see eef-delivery-restructure.plan.md"
 related_plans:
   - "graph-mvp-arc.plan.md"
   - "graph-portfolio-index.md"
@@ -15,6 +16,8 @@ related_plans:
   - "connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md"
   - "sector-engagement/eef/current/eef-first-feature.plan.md"
   - "sector-engagement/eef/current/eef-evidence-corpus.plan.md"
+  - "sector-engagement/eef/current/eef-delivery-restructure.plan.md"
+  - "sector-engagement/eef/current/please-do-a-deep-mighty-peach.plan.md"
 isProject: false
 ---
 
@@ -73,6 +76,13 @@ points; it does not duplicate.
 |---|---|---|
 | EEF first feature (gate-1a delivery contract) | [`sector-engagement/eef/current/eef-first-feature.plan.md`](sector-engagement/eef/current/eef-first-feature.plan.md) | ff1-ff6 acceptance bundle. By-reference owner of gate-1a delivery — points at substrate (graph-stack) and corpus (eef-evidence-corpus) for the work itself. Carries the per-cycle dependency + file-scope table for gate-1a-scope cycles. |
 | EEF evidence corpus | [`sector-engagement/eef/current/eef-evidence-corpus.plan.md`](sector-engagement/eef/current/eef-evidence-corpus.plan.md) | t1-t20 corpus tools, prompts, citation envelope, freshness gate. Gate-1a subset (t1, t2, t6a, t9, t10, t12, t13, t20 + partials) lands before gate-1a; remainder lands at gate-1b. |
+| EEF delivery restructure (2026-05-27) | [`sector-engagement/eef/current/eef-delivery-restructure.plan.md`](sector-engagement/eef/current/eef-delivery-restructure.plan.md) | Owning EEF restructure meta-plan: Definition of Delivery + gate-1a rebuild; increments A–H. Restores sub-graph **selection** (seed selection in the explore tool) to gate-1a. Scoring/ranking engine and recommend/explain/compare tools remain gate-1b. |
+| EEF delivery sequence companion | [`sector-engagement/eef/current/please-do-a-deep-mighty-peach.plan.md`](sector-engagement/eef/current/please-do-a-deep-mighty-peach.plan.md) | EEF delivery-sequence companion plan. |
+
+> **2026-05-27 note:** The EEF gate-1a contract was restructured around the Definition of Delivery directive
+> (`.agent/directives/definition-of-delivery.md`). Sub-graph **selection** (seed selection in the explore
+> tool) is restored to gate-1a. Scoring/ranking and recommend/explain/compare remain gate-1b. The owning
+> plan is now `eef-delivery-restructure.plan.md`.
 
 ### Quality + governance layer
 

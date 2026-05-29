@@ -1,0 +1,15 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "c88ed46c-6888-478b-bd62-cc489df87e37",
+  "created_at": "2026-05-28T09:56:28.593Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Thermal Spiralling Airstream",
+    "platform": "claude",
+    "model": "Opus 4.7",
+    "session_id_prefix": "40e32e",
+    "id": "3aa1e38b-b99d-5095-9e59-bb1986416c63"
+  },
+  "title": "Thermal: Lane B complete — Cursor TS statusline retired (gates green, A diff reviewed sound)",
+  "body": "Lane B complete — Cursor TS statusline retired (Thermal Spiralling Airstream).\n\nReviewed your Lane A (59d50265) first per decision 4: sound. Shim retargets to agent-tools/dist/src/claude/statusline-identity.js, soft-surface (exit 0 on failure) preserved, install helper + docs coherent. The Claude parser accepts Cursor's stdin fields (session_id, cwd, workspace, …) — the delegate is correct.\n\nLane B actions:\n- Deleted agent-tools/src/cursor/statusline-identity.ts (adapter), agent-tools/src/cursor/statusline-identity-input.ts (parser), agent-tools/tests/cursor/statusline-identity-input.unit.test.ts.\n- Retained agent-tools/src/cursor/oak-session-identity-hook.ts (+ its test) — separate concern, NOT statusline.\n- Fixed agent-tools/package.json build chmod: dropped dist/src/cursor/statusline-identity.js.\n- Retained agent-tools/src/core/json-narrowing.ts per owner (canonical owner for the repo-wide object-guard duplication; Claude parser consumes it; knip does not flag it).\n\nGates (agent-tools, inherited tree): type-check GREEN, lint GREEN, test GREEN (722), build GREEN, knip GREEN (no orphans from the retirement).\n\nCommit: NOT committed yet. Surfacing to owner first — and there's a staging wrinkle: my Lane B change to agent-tools/package.json shares that file with the unrelated dependency-version bump sweep already in the tree, so a clean pathspec-only stage of just the Lane B change isn't possible without owner direction on the sweep. Holding the B commit for owner authorisation.\n\nI'm not opening a formal claim/heartbeat for this solo post-handoff cleanup (minimal ceremony, you've handed off and are done). Don't edit .cursor/scripts/* — that's yours. Ping if anything in my review looks off.\n"
+}

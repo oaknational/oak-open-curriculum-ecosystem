@@ -1,0 +1,6 @@
+---
+description: Ship independently shippable fixes before coordination-dependent bundles unless the owner explicitly prioritises a combined push.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/ship-independent-coordinate-dependent.md`.

@@ -201,6 +201,10 @@ whole-tree hook respect, durable `.agent` state when it belongs to the current
 bundle, and a peer-claim re-read after helper-mediated state writes. Operational
 recipes live in [`stage-by-explicit-pathspec`][stage-by-explicit-pathspec],
 [lifecycle][lifecycle] §Commit Queue, and the [channel card][channels-card].
+When gatekeeper, marshal, and implementer are different agents, each verifies
+the named gate evidence and exact pathspec immediately before the commit window.
+Once the hook runs, that hook output is the authority for the attempt; older
+independent probes are diagnostic context, not an override.
 
 ### d. Cleanup Ethics for Apparently Orphaned Claims
 

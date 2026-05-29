@@ -9,63 +9,73 @@ import {
   type CollaborationCommitQueueEntry,
   type CollaborationRegistry,
 } from '../../src/collaboration-state';
+import { deriveOverrideCollaborationIdentity } from '../../src/collaboration-state/identity';
 
 const nowIso = '2026-04-28T09:37:11Z';
 
-const woodland: CollaborationAgentId = {
+// Id-bearing identities derived through the production override path. Under
+// PDR-076a strict id-keyed routing (the 2026-05-29 sunset), the `id` is the
+// only routing weight — `platform`, `model`, and `session_id_prefix` are not.
+// Distinct name/prefix seeds yield distinct ids and therefore distinct routing
+// groups.
+const woodland: CollaborationAgentId = deriveOverrideCollaborationIdentity({
   agent_name: 'Woodland Creeping Petal',
   platform: 'codex',
   model: 'GPT-5',
   session_id_prefix: '019dd3',
-};
+});
+
+const moonlit: CollaborationAgentId = deriveOverrideCollaborationIdentity({
+  agent_name: 'Moonlit Transiting Prism',
+  platform: 'cursor',
+  model: 'GPT-5.5',
+  session_id_prefix: 'e86710',
+});
+
+const driftwood: CollaborationAgentId = deriveOverrideCollaborationIdentity({
+  agent_name: 'Driftwood Settling Bank',
+  platform: 'codex',
+  model: 'GPT-5',
+  session_id_prefix: 'stale1',
+});
 
 describe('activeAgentReports', () => {
-  it('reports active agents by routing tuple and flags live model collisions', () => {
+  it('groups agents by id-keyed routing key and flags live model collisions', () => {
+    // Same id as woodland (id is the routing weight), different model — a
+    // genuine routing collision within one group.
     const colliding: CollaborationAgentId = { ...woodland, model: 'GPT-5.1' };
     const registry: CollaborationRegistry = {
       schema_version: '1.3.0',
-      commit_queue: [
-        queueEntry({
-          agent_id: {
-            agent_name: 'Moonlit Transiting Prism',
-            platform: 'cursor',
-            model: 'GPT-5.5',
-            session_id_prefix: 'e86710',
-          },
-        }),
-      ],
+      commit_queue: [queueEntry({ agent_id: moonlit })],
       claims: [
         claim({ claim_id: 'fresh-claim', agent_id: woodland }),
         claim({ claim_id: 'collision-claim', agent_id: colliding }),
         claim({
           claim_id: 'stale-claim',
-          agent_id: { ...woodland, session_id_prefix: 'stale1' },
+          agent_id: driftwood,
           claimed_at: '2026-04-28T08:00:00Z',
           freshness_seconds: 60,
         }),
       ],
     };
 
-    // Routing key is the PDR-076a discriminated union; legacy-shape identities
-    // (no id) produce {kind: 'legacy', agent_name, session_id_prefix}.
-    // Platform is no longer a routing weight (PDR-076a §Decision item 2).
+    // Reports sort by formatRoutingKey ("name / id:..."): Driftwood, Moonlit,
+    // Woodland.
     expect(activeAgentReports(registry, nowIso)).toMatchObject([
       {
-        routing_key: {
-          kind: 'legacy',
-          agent_name: 'Moonlit Transiting Prism',
-          session_id_prefix: 'e86710',
-        },
+        routing_key: { agent_name: 'Driftwood Settling Bank', id: driftwood.id },
+        collision_status: 'clear',
+        visibility_status: 'stale',
+        claims: [{ claim_id: 'stale-claim', freshness_status: 'stale' }],
+      },
+      {
+        routing_key: { agent_name: 'Moonlit Transiting Prism', id: moonlit.id },
         collision_status: 'clear',
         visibility_status: 'active',
         commit_queue: [{ intent_id: 'queued-intent', queue_status: 'active' }],
       },
       {
-        routing_key: {
-          kind: 'legacy',
-          agent_name: 'Woodland Creeping Petal',
-          session_id_prefix: '019dd3',
-        },
+        routing_key: { agent_name: 'Woodland Creeping Petal', id: woodland.id },
         collision_status: 'collision',
         visibility_status: 'uncertain',
         identities: [woodland, colliding],
@@ -73,16 +83,6 @@ describe('activeAgentReports', () => {
           { claim_id: 'collision-claim', freshness_status: 'fresh' },
           { claim_id: 'fresh-claim', freshness_status: 'fresh' },
         ],
-      },
-      {
-        routing_key: {
-          kind: 'legacy',
-          agent_name: 'Woodland Creeping Petal',
-          session_id_prefix: 'stale1',
-        },
-        collision_status: 'clear',
-        visibility_status: 'stale',
-        claims: [{ claim_id: 'stale-claim', freshness_status: 'stale' }],
       },
     ]);
   });
@@ -111,11 +111,7 @@ describe('activeAgentReports', () => {
 
     expect(activeAgentReports(registry, nowIso, closedArchive)).toMatchObject([
       {
-        routing_key: {
-          kind: 'legacy',
-          agent_name: 'Woodland Creeping Petal',
-          session_id_prefix: '019dd3',
-        },
+        routing_key: { agent_name: 'Woodland Creeping Petal', id: woodland.id },
         collision_status: 'clear',
         visibility_status: 'inactive',
         closed_claims: [
@@ -134,10 +130,13 @@ describe('activeAgentReports', () => {
       schema_version: '1.3.0',
       commit_queue: [],
       claims: [
+        // Live: same routing id as woodland, different model.
         claim({ agent_id: { ...woodland, model: 'GPT-5.1' } }),
+        // Stale: shares driftwood's routing id, so opening as driftwood would
+        // match it — but it is stale, so it must be ignored.
         claim({
           claim_id: 'stale-claim',
-          agent_id: { ...woodland, session_id_prefix: 'stale1', model: 'GPT-5.1' },
+          agent_id: { ...driftwood, model: 'GPT-5.1' },
           claimed_at: '2026-04-28T08:00:00Z',
           freshness_seconds: 60,
         }),
@@ -152,14 +151,15 @@ describe('activeAgentReports', () => {
         surface: 'claims open',
       }),
     ).toThrow(
-      'claims open identity route Woodland Creeping Petal / 019dd3 collides with live identity Woodland Creeping Petal / codex / GPT-5.1 / 019dd3',
+      `claims open identity route Woodland Creeping Petal / id:${woodland.id} ` +
+        `collides with live identity Woodland Creeping Petal / codex / GPT-5.1 / 019dd3 / id:${woodland.id}`,
     );
 
     expect(() =>
       assertNoLiveIdentityRoutingCollision({
         registry,
         nowIso,
-        agentId: { ...woodland, session_id_prefix: 'stale1' },
+        agentId: driftwood,
         surface: 'claims open',
       }),
     ).not.toThrow();

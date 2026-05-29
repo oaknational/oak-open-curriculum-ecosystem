@@ -1,5 +1,13 @@
 # EEF Teaching and Learning Toolkit
 
+> **2026-05-28 — single source of truth has moved.** The gate-1a/1b EEF plan
+> estate was diagnosed as the wrong foundation and is archived in
+> [`archive/`](archive/). Current work is the **graph-tooling rebuild**:
+> read [`current/graph-tooling-rebuild-foundation-2026-05-28.md`](current/graph-tooling-rebuild-foundation-2026-05-28.md)
+> (diagnosis + principles + intent) and
+> [`current/graph-tooling-rebuild.plan.md`](current/graph-tooling-rebuild.plan.md)
+> (the new plan). The Status line below is historical.
+
 Dedicated subthread for integrating the [Education Endowment Foundation
 Teaching and Learning Toolkit](https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit)
 as an **evidence corpus** (composition: graph foundation + ranking
@@ -75,7 +83,8 @@ feature-layer journey orchestration — see table below) live in
 
 | Path | Type | Purpose |
 |---|---|---|
-| [current/eef-evidence-corpus.plan.md](current/eef-evidence-corpus.plan.md) | Executable plan (CURRENT) | Restructured successor to the original `eef-evidence-mcp-surface.plan.md`. 20 todos covering corpus shape, ranking engine, three tools, two prompts, structural citation enforcement, refresh gate, telemetry, negative-space documentation, and load-bearing credits to John Roberts. WS-3 of [`open-education-knowledge-surfaces.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md). |
+| [current/eef-delivery-restructure.plan.md](current/eef-delivery-restructure.plan.md) | Owning meta-plan (CURRENT) | **Owning restructure plan (2026-05-27).** Rebuilds the EEF First Feature around the new Definition of Delivery doctrine: restores sub-graph selection as a gate-1a requirement, sets a 10k output budget, adds a basic feature flag co-gating the tool+prompt, and corrects every plan/ADR surface. Decomposed into delivery increments A–H (A landed at `27956bb6`). Supersedes the gate-1a contract in `eef-first-feature.plan.md`. |
+| [current/eef-evidence-corpus.plan.md](current/eef-evidence-corpus.plan.md) | Executable plan (CURRENT) | Restructured successor to the original `eef-evidence-mcp-surface.plan.md`. 20 todos covering corpus shape, ranking engine, three tools, two prompts, structural citation enforcement, refresh gate, telemetry, negative-space documentation, and load-bearing credits to John Roberts. WS-3 of [`open-education-knowledge-surfaces.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md). **Gate-grouping table pending restructure correction (selection was wrongly deferred to gate-1b) — see the meta-plan §Part 5.** |
 | [reference/conservation-map.md](reference/conservation-map.md) | **Semantic preservation map** | Agent-judged mapping of every concept/requirement/credit/todo from the predecessor to its new home, with a verification log. Load-bearing artefact for "nothing lost". The predecessor itself is recoverable via `git show e2796757:.agent/plans/exploring-open-education-resources/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md` (see conservation map § Recovery path). |
 | [future/evidence-integration-strategy.md](future/evidence-integration-strategy.md) | Strategic brief | Three-layer architecture, R1–R8 impact-preserving requirements, four integration levels (1–3 independently deliverable; 4/4b need formal ontology). |
 | [reference/oak-eef-technical-comparison.md](reference/oak-eef-technical-comparison.md) | Technical reference | Side-by-side comparison of the EEF Python prototype stack and Oak's HTTP MCP stack. |

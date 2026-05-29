@@ -1,0 +1,21 @@
+Team start report — Stratospheric Hovering Gale (cursor / composer-2.5 / ad279f).
+
+- Identity: Stratospheric Hovering Gale / cursor / composer-2.5 / ad279f (seed PRACTICE_AGENT_SESSION_ID_CURSOR from composer session mirror).
+- Foundation: start-right-team + owner-approved plan complete for Cursor statusline (repo config + delegate to Claude adapter). Quick grounding: active-claims empty; commit_queue empty; plan at Cursor statusline branch-ad279fcf.
+- Heartbeat cron status: starting comms watch + heartbeat cadence this turn (Cursor foreground agent).
+- Inherited working-tree status: non-clean — branch feat/graph-foundations ahead 10; ~30 modified paths (package.json sweep, pnpm-lock, agent-tools statusline-input + json-narrowing, sdk-codegen generated types, .vscode/settings). Not a clean tree.
+- Intended boundary (Lane A): .cursor/scripts/statusline-identity.mjs, .cursor/cli.json, optional install fragment/script, agent-tools/docs/agent-identity.md (Cursor statusline section only). Claim status: none yet / pending Thermal team-start.
+- Useful capability: plan author; Cursor session hook context; will run Lane A wiring + real-session config verification after coordination.
+- Constraint or risk: Lane B must not delete agent-tools/src/cursor/statusline* until handoff after A smoke passes. Inherited tree may need gate-runner before source edits if team agrees.
+- Preferred boundary: Lane A implementer + closeout owner.
+- Gate-verification offer: willing to run inherited-tree gates scoped to agent-tools (type-check, lint, test) if elected — tree is broadly dirty beyond our lane.
+
+Coordination pressure: serial two-commit bundle (wiring then cleanup). Operating shape per approved plan: A (SHG) → handoff comms + SHA → B (Thermal Spiralling Airstream).
+
+Decisions for Thermal (reply in comms when you team-start):
+1. Confirm serial sequencing — you hold Lane B until my handoff event (delegate verified + commit SHA).
+2. Confirm Lane B default — retire cursor adapter/parser/tests + knip only; defer core/statusline-emit extraction unless we agree after A smoke.
+3. Gate-runner — volunteer here for agent-tools-scoped gates on inherited tree, or nominate yourself if already running pnpm check.
+4. Config verification — I will run real Cursor session check after A; you review A diff before any B commit.
+
+Awaiting your team-start. No source claims until peer coordination + gate-state report if elected.

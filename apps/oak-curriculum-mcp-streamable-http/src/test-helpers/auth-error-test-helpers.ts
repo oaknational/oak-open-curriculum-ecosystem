@@ -37,6 +37,12 @@ interface MockRuntimeConfigOverrides {
    * When true, returns an `AuthDisabledRuntimeConfig` (Clerk keys omitted).
    */
   readonly dangerouslyDisableAuth?: boolean;
+  /**
+   * EEF feature flag. Defaults to `false` (matching the production default —
+   * the EEF tool + prompt are co-gated OFF). Set `true` to exercise the
+   * enabled path.
+   */
+  readonly eefEnabled?: boolean;
 }
 
 const BASE_MOCK_ENV = {
@@ -80,6 +86,7 @@ export function createMockRuntimeConfig(
     return {
       env: { ...BASE_MOCK_ENV, ...overrides.env },
       ...BASE_SHARED_FIELDS,
+      eefEnabled: overrides.eefEnabled ?? false,
       dangerouslyDisableAuth: true,
     } satisfies AuthDisabledRuntimeConfig;
   }
@@ -87,6 +94,7 @@ export function createMockRuntimeConfig(
   return {
     env: { ...BASE_MOCK_ENV, ...BASE_CLERK_KEYS, ...overrides.env },
     ...BASE_SHARED_FIELDS,
+    eefEnabled: overrides.eefEnabled ?? false,
     dangerouslyDisableAuth: false,
   } satisfies AuthEnabledRuntimeConfig;
 }

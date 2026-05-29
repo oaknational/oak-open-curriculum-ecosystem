@@ -78,11 +78,11 @@ word slots. The override alone does not satisfy the seed requirement.
 
 ## Platform Wrapper Status
 
-| Platform    | Status                                                                     | Wiring / next action                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| ----------- | -------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Claude Code | Wired (statusline + SessionStart)                                          | Two hooks. (1) **Statusline**: `.claude/settings.json` runs `node .claude/scripts/statusline-identity.mjs` → `agent-tools/dist/src/claude/statusline-identity.js`; the adapter parses stdin JSON `session_id` and prints the display name. (2) **`SessionStart` hook**: `.claude/hooks/practice-session-identity.mjs` → `agent-tools/dist/src/bin/claude-session-identity-hook.js`; the adapter appends `PRACTICE_AGENT_SESSION_ID_CLAUDE` and the session-level `OAK_AGENT_IDENTITY_OVERRIDE` cache to `$CLAUDE_ENV_FILE` (per the [Claude Code hooks docs](https://code.claude.com/docs/en/hooks)) and emits `additionalContext` carrying the identity row plus a non-binding `/rename <name> - <intent>` suggestion. Title-setting is **not** automated — `SessionStart` cannot set the title, and we deliberately do not run a `UserPromptSubmit` hook for a one-shot effect. |
-| Cursor      | Wired (sessionStart + statusline implementation; user CLI config required) | Project `sessionStart` hook `.cursor/hooks/oak-session-identity.mjs` sets `env.PRACTICE_AGENT_SESSION_ID_CURSOR` and the session-level `OAK_AGENT_IDENTITY_OVERRIDE` cache from the composer `session_id`, then injects derived display name + PDR-027 `session_id_prefix` via `additional_context` (requires `agent-tools` build for the name line). The repo-owned status-line shim `.cursor/scripts/statusline-identity.mjs` delegates to `agent-tools/dist/src/cursor/statusline-identity.js`, but Cursor CLI loads `statusLine` from user-level `~/.cursor/cli-config.json`, so activation requires the one-time config documented below. Terminal may not inherit hook `env`; use injected context for registration when needed.                                                                                                                                            |
-| Codex       | Wired (SessionStart context + thread id fallback)                          | Project `SessionStart` hook `.codex/hooks/practice-session-identity.mjs` delegates to `agent-tools/dist/src/bin/codex-session-identity-hook.js`. The adapter parses Codex stdin `session_id` and emits `hookSpecificOutput.additionalContext` with the PDR-027 identity block plus the canonical preflight command. Codex shell commands also receive `CODEX_THREAD_ID`; `agent-identity` consumes it as a fallback when no `PRACTICE_AGENT_SESSION_ID_*` is set. Title/statusline text remains optional display convenience, not identity correctness.                                                                                                                                                                                                                                                                                                                           |
+| Platform    | Status                                                   | Wiring / next action                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| ----------- | -------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Claude Code | Wired (statusline + SessionStart)                        | Two hooks. (1) **Statusline**: `.claude/settings.json` runs `node .claude/scripts/statusline-identity.mjs` → `agent-tools/dist/src/claude/statusline-identity.js`; the adapter parses stdin JSON `session_id` and prints the display name. (2) **`SessionStart` hook**: `.claude/hooks/practice-session-identity.mjs` → `agent-tools/dist/src/bin/claude-session-identity-hook.js`; the adapter appends `PRACTICE_AGENT_SESSION_ID_CLAUDE` and the session-level `OAK_AGENT_IDENTITY_OVERRIDE` cache to `$CLAUDE_ENV_FILE` (per the [Claude Code hooks docs](https://code.claude.com/docs/en/hooks)) and emits `additionalContext` carrying the identity row plus a non-binding `/rename <name> - <intent>` suggestion. Title-setting is **not** automated — `SessionStart` cannot set the title, and we deliberately do not run a `UserPromptSubmit` hook for a one-shot effect. |
+| Cursor      | Wired (sessionStart + statusline; global CLI activation) | Project `sessionStart` hook `.cursor/hooks/oak-session-identity.mjs` sets `env.PRACTICE_AGENT_SESSION_ID_CURSOR` and the session-level `OAK_AGENT_IDENTITY_OVERRIDE` cache from the composer `session_id`, then injects derived display name + PDR-027 `session_id_prefix` via `additional_context` (requires `agent-tools` build for the name line). The repo-owned status-line shim `.cursor/scripts/statusline-identity.mjs` delegates to `agent-tools/dist/src/claude/statusline-identity.js` (same pipeline as Claude Code: identity, git branch, dirty/worktree, context %, model). Activate with `pnpm agent-tools:install-cursor-statusline` (writes `statusLine` into `~/.cursor/cli-config.json`) or merge `.cursor/statusline.cli.fragment.json` manually. Terminal may not inherit hook `env`; use injected context for registration when needed.                     |
+| Codex       | Wired (SessionStart context + thread id fallback)        | Project `SessionStart` hook `.codex/hooks/practice-session-identity.mjs` delegates to `agent-tools/dist/src/bin/codex-session-identity-hook.js`. The adapter parses Codex stdin `session_id` and emits `hookSpecificOutput.additionalContext` with the PDR-027 identity block plus the canonical preflight command. Codex shell commands also receive `CODEX_THREAD_ID`; `agent-identity` consumes it as a fallback when no `PRACTICE_AGENT_SESSION_ID_*` is set. Title/statusline text remains optional display convenience, not identity correctness.                                                                                                                                                                                                                                                                                                                           |
 
 ### Cursor `sessionStart` wiring
 
@@ -106,32 +106,33 @@ For OS-level or editor-level title surfaces, parity with Codex’s `terminal_tit
 
 ### Cursor CLI status-line wiring
 
-The Cursor CLI status line is a user-level setting. The repo owns the command
-implementation, but activation belongs in `~/.cursor/cli-config.json` on the
-machine running Cursor CLI:
+Cursor documents `statusLine` as a **global** CLI setting (`~/.cursor/cli-config.json`);
+project `.cursor/cli.json` holds permissions only. The repo owns the command and
+an install helper so activation stays reproducible across checkouts.
 
-```json
-{
-  "statusLine": {
-    "type": "command",
-    "command": "node /absolute/path/to/oak-open-curriculum-ecosystem/.cursor/scripts/statusline-identity.mjs",
-    "padding": 2
-  }
-}
+**One-time activation (from repo root, after `pnpm agent-tools:build`):**
+
+```bash
+pnpm agent-tools:install-cursor-statusline
 ```
+
+That runs `node .cursor/scripts/install-statusline-cli-config.mjs`, which merges
+`statusLine` into `~/.cursor/cli-config.json` with an absolute path to the shim.
+Alternatively, copy the `statusLine` block from `.cursor/statusline.cli.fragment.json`
+and replace the command path with your checkout root.
 
 The wiring after activation is:
 
 1. `~/.cursor/cli-config.json` points `statusLine.command` at the repo shim.
-2. `.cursor/scripts/statusline-identity.mjs` resolves the built adapter path
-   under `agent-tools/dist/src/cursor/`. If the build artefact is missing it
-   exits 0 silently rather than disrupting the session.
-3. `agent-tools/dist/src/cursor/statusline-identity.js` (built from
-   `agent-tools/src/cursor/statusline-identity.ts`) parses the stdin JSON,
-   extracts `session_id`, and synchronously invokes the built `agent-identity`
-   CLI with `--seed <session_id> --format display`.
-4. The CLI prints the deterministic name to stdout, which Cursor CLI renders in
-   the status line.
+2. `.cursor/scripts/statusline-identity.mjs` resolves the built adapter under
+   `agent-tools/dist/src/claude/`. If the build artefact is missing it exits 0
+   silently rather than disrupting the session.
+3. `agent-tools/dist/src/claude/statusline-identity.js` (built from
+   `agent-tools/src/claude/statusline-identity.ts`) parses the stdin JSON
+   (`session_id`, `cwd` / `workspace.current_dir`, `model`, `context_window`, …),
+   derives the PDR-027 display name, gathers git state from the working directory,
+   and prints one line via `renderStatusline` (same shape as Claude Code).
+4. Cursor CLI renders that line in the status bar.
 
 The adapter is a soft surface: missing input, missing build artefact,
 unparseable JSON, or any spawn failure exits 0 with empty stdout. The

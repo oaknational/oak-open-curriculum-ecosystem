@@ -3,30 +3,34 @@ import { describe, expect, it } from 'vitest';
 import {
   runCollaborationStateCli,
   type ClosedClaimsArchive,
-  type CollaborationAgentId,
   type CollaborationClaim,
   type CollaborationCommitQueueEntry,
   type CollaborationRegistry,
   type NarrativeCommsEvent,
 } from '../src/collaboration-state';
+import { deriveOverrideCollaborationIdentity } from '../src/collaboration-state/identity';
 import { createFakeCollaborationRuntime } from '../tests/collaboration-state/fake-collaboration-runtime';
 
 const repoRoot = '/workspace';
 const defaultCommsDir = `${repoRoot}/.agent/state/collaboration/comms`;
 
-const activeAgent: CollaborationAgentId = {
+// Id-bearing identities (PDR-076a Phase 3 sunset, 2026-05-29): claims, queue
+// entries, and closed claims are structured routing-bearing state, always
+// written with an `id`. The operator surface renders them by their id-keyed
+// routing key.
+const activeAgent = deriveOverrideCollaborationIdentity({
   agent_name: 'Mossy Blossoming Canopy',
   platform: 'codex',
   model: 'GPT-5',
   session_id_prefix: '019e22',
-};
+});
 
-const inactiveAgent: CollaborationAgentId = {
+const inactiveAgent = deriveOverrideCollaborationIdentity({
   agent_name: 'Luminous Quiet Harbor',
   platform: 'claude',
   model: 'Sonnet',
   session_id_prefix: '019e20',
-};
+});
 
 describe('collaboration TUI E2E', () => {
   it('presents live collaboration value signals from the public CLI surface', async () => {
@@ -67,9 +71,14 @@ describe('collaboration TUI E2E', () => {
     expect(result.stderr).toBe('');
     expect(result.stdout).toContain('Collaboration TUI Snapshot');
     expect(result.stdout).toContain('P8 live collaboration TUI is observable');
-    // PDR-076a §Decision item 2: routing key drops `platform` (not a routing weight).
-    expect(result.stdout).toContain('Mossy Blossoming Canopy / 019e22 [active/clear]');
-    expect(result.stdout).toContain('Luminous Quiet Harbor / 019e20 [inactive/clear]');
+    // PDR-076a §Decision item 2: the routing key is `(agent_name, id)`; the
+    // operator surface renders it as `name / id:<uuid>`.
+    expect(result.stdout).toContain(
+      `Mossy Blossoming Canopy / id:${activeAgent.id} [active/clear]`,
+    );
+    expect(result.stdout).toContain(
+      `Luminous Quiet Harbor / id:${inactiveAgent.id} [inactive/clear]`,
+    );
     expect(result.stdout).toContain('p8-live-tui [active/queued] feat(agent-tools): add live TUI');
   });
 });

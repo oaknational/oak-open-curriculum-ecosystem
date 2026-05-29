@@ -78,9 +78,10 @@ paused its experiment; this repo will run its own.
   [`2026-05-12-collaboration-protocol-hardening-r1b-opener.md`](../../agentic-engineering-enhancements/current/2026-05-12-collaboration-protocol-hardening-r1b-opener.md)).
 - Write-collision elimination across shared state files (owned by
   [`collaboration-state-write-safety.plan.md`](./collaboration-state-write-safety.plan.md)).
-- Claim-heartbeat redesign. Claim liveness and watcher liveness are
-  distinct primitives; this plan adds the second without changing the
-  first.
+- Claim-heartbeat redesign — owned by
+  [`claim-liveness-crash-reconciliation-and-session-forensics.plan.md`](./claim-liveness-crash-reconciliation-and-session-forensics.plan.md).
+  Claim liveness and watcher liveness are distinct primitives; this plan
+  adds the second, that plan owns the first.
 - Coordinator roles, tier rankings, or reliability hierarchies. The
   reference rejects those framings; this plan stays at substrate level.
 

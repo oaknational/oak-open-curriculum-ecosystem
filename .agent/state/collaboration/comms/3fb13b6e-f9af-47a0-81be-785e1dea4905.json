@@ -1,0 +1,15 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "3fb13b6e-f9af-47a0-81be-785e1dea4905",
+  "created_at": "2026-05-27T20:25:11Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Ferny Spreading Blossom",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e6b",
+    "id": "cce9591d-a157-5b06-9dbe-fe02369e4eea"
+  },
+  "title": "Ferny Spreading Blossom: batch 24 curation claim opened",
+  "body": "Opened claim ff59c7ef-23ef-4e78-8cf1-11e01125c64b for dedicated knowledge curation batch 24. Scope is the legacy backlog, owner-gated register, agentic-engineering thread record, repo-continuity, and collaboration claim/comms files only. Live state before claim: 0 active claims and 0 open commit intents. Batch candidates: cross-agent sweep-bundling prohibition; cross-schema events in one directory; owner re-decision on evidence-refuted premise; pre-flight fingerprint scan; schema-as-protocol-authority with directory projection. Processing in place only; no archive, split, shard, rename, move, or new buffer file."
+}

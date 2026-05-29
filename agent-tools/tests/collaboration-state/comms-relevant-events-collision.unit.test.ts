@@ -10,35 +10,20 @@ import {
 } from '../../src/collaboration-state/types';
 
 /**
- * WS1 collision regression test: comms routing for narrative events must
- * disambiguate by `session_id_prefix`, not by `agent_name`. Two agents
- * sharing the same display name across different sessions (e.g. Mistbound
- * Slipping Night / Mistbound Passing Candle) MUST classify to their own
- * session_id_prefix as the addressee.
+ * Identity-collision regression test: comms routing for narrative and
+ * directed events disambiguates by the PDR-076a `id` (UUID v5), not by
+ * `agent_name` or `session_id_prefix`. Two agents sharing the same display
+ * name AND session_id_prefix but running distinct sessions (distinct ids)
+ * MUST each classify only their own id-matched events.
  *
- * The substantive change versus pre-WS1 is in `classifyNarrative` —
- * comparators moved from `agent_name` string equality to
- * `session_id_prefix` tuple-field equality. `classifyDirected` was already
- * tuple-correct on DirectedCommsMessage.to.
+ * The PDR-076a Phase 3 sunset (2026-05-29) removed the legacy
+ * `(agent_name, session_id_prefix)` routing fallback, so disambiguation is
+ * by `id` alone — see the falsifiability block below.
  *
  * The migration test covers legacy string-form `addressed_to`/`audience`
  * being projected to tuples with `'unknown'` placeholders by
  * `migrateLegacyCommsRecordCollections`.
  */
-
-const aliceSessionOne: CollaborationAgentId = {
-  agent_name: 'Mistbound Drifting Vow',
-  platform: 'claude',
-  model: 'claude-opus-4-7',
-  session_id_prefix: 'aaaaaa',
-};
-
-const aliceSessionTwo: CollaborationAgentId = {
-  agent_name: 'Mistbound Drifting Vow',
-  platform: 'claude',
-  model: 'claude-opus-4-7',
-  session_id_prefix: 'bbbbbb',
-};
 
 const sender: CollaborationAgentId = {
   agent_name: 'Foamy Charting Fjord',
@@ -64,32 +49,6 @@ function narrative(input: {
     ...(input.audience === undefined ? {} : { audience: input.audience }),
   };
 }
-
-describe('classifyNarrative — session_id_prefix collision disambiguation', () => {
-  it('routes a directed narrative to the session_id_prefix recipient, not the agent_name', () => {
-    const event = narrative({ eventId: 'directed-to-session-one', addressedTo: aliceSessionOne });
-
-    expect(classifyEventForAgent({ event, self: aliceSessionOne })).toBe('directed');
-    expect(classifyEventForAgent({ event, self: aliceSessionTwo })).toBe('observed');
-  });
-
-  it('routes a group narrative by session_id_prefix membership', () => {
-    const event = narrative({
-      eventId: 'audience-includes-session-one',
-      audience: [aliceSessionOne],
-    });
-
-    expect(classifyEventForAgent({ event, self: aliceSessionOne })).toBe('group');
-    expect(classifyEventForAgent({ event, self: aliceSessionTwo })).toBe('observed');
-  });
-
-  it('keeps broadcast classification independent of addressee shape', () => {
-    const event = narrative({ eventId: 'broadcast-no-routing' });
-
-    expect(classifyEventForAgent({ event, self: aliceSessionOne })).toBe('broadcast');
-    expect(classifyEventForAgent({ event, self: aliceSessionTwo })).toBe('broadcast');
-  });
-});
 
 describe('PDR-076a §Falsifiability — same name + same prefix + different id', () => {
   // The exact failure mode that motivated PDR-076a + this plan: two agents
@@ -179,6 +138,24 @@ describe('PDR-076a §Falsifiability — same name + same prefix + different id',
     expect(classifyEventForAgent({ event, self: agentAlpha })).toBeUndefined();
     // Beta sees it as a directed event to themselves (id-matched recipient)
     expect(classifyEventForAgent({ event, self: agentBeta })).toBe('directed');
+  });
+
+  it('classifyNarrative: an id-less audience member is never a group member (sunset short-circuit)', () => {
+    // A legacy/un-migrated identity carries no `id`. The sunset makes
+    // sameAgentRoutingKey short-circuit to false for any id-less entry, so an
+    // audience composed only of id-less members resolves to 'observed' for
+    // every id-bearing agent — never 'group'. This is the live sunset contract:
+    // un-migrated identities do not route.
+    const idLessMember: CollaborationAgentId = {
+      agent_name: sharedName,
+      platform: 'claude',
+      model: 'claude-opus-4-7',
+      session_id_prefix: sharedPrefix,
+    };
+    const event = narrative({ eventId: 'idless-audience', audience: [idLessMember] });
+
+    expect(classifyEventForAgent({ event, self: agentAlpha })).toBe('observed');
+    expect(classifyEventForAgent({ event, self: agentBeta })).toBe('observed');
   });
 });
 

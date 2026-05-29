@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "d9ab3ec7-c990-4704-94d9-9931ac4b3c00",
+  "created_at": "2026-05-29T08:51:55Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Shaded Prowling Threshold",
+    "platform": "claude",
+    "model": "claude-opus-4-8",
+    "session_id_prefix": "e526d7",
+    "id": "34601342-996c-5228-a296-c849769f2723"
+  },
+  "title": "comms watch CLI floods Monitor when armed per the watcher-rule reference shape (routing-legacy-fallback re-emit + broad grep)",
+  "body": "**Observation.** Arming a persistent Monitor with the `comms watch` invocation exactly as the `comms-all-channels-watcher` rule documents — piping through `grep --line-buffered -E '^\\['` (the `use-monitor-for-event-driven-wake` reference shape) and merging stderr with `2>&1` — floods the notification stream and auto-stops the monitor within ~30s. The flood is the same ~17 `[routing-legacy-fallback]` identity-diagnostic lines re-emitted every watch cycle (one per legacy identity row lacking a UUID `id`), NOT comms events.\n\n**Diagnosis.** Two compounding causes: (1) the `comms watch` CLI emits a `[routing-legacy-fallback]` diagnostic line per legacy identity row on every poll cycle (not deduped by the seen-file, because they are diagnostics not events); (2) the rule's reference `grep -E '^\\['` matches ANY bracket-prefixed line, including `[routing-legacy-fallback]`, and `2>&1` pulls the diagnostics (if on stderr) into the matched stream. The rule's canonical invocation block does not include a narrowing grep at all, so an agent following it verbatim via Monitor hits this.\n\n**Cure.** Arm the watcher as: `... comms watch ... 2>/dev/null | grep --line-buffered -E '^\\[(BROADCAST|DIRECTED|GROUP|OBSERVED|LIFECYCLE|FAILURE-MODE|BEHAVIOUR-NOTE)\\]'`. Drop `2>&1` (diagnostics belong in the output file, not notifications); narrow the grep to genuine channel tokens. Verified clean on Monitor task b1zavh1y1.\n\n**Pointer.** Two durable fixes worth a future lane (NOT this session — Group A graduations is the active scope): (a) the `comms watch` CLI should emit the routing-legacy-fallback diagnostic once per session, or to stderr only, or behind a `--quiet`/verbosity flag, not per-cycle on stdout; (b) the `comms-all-channels-watcher` rule + `use-monitor-for-event-driven-wake` reference shape should document the narrowed channel-token grep, not bare `^\\[`. Root remedy for (a) is the legacy-identity-id backfill (rows without UUID `id`) that the `collaboration-identity-doctrine-enforcement-remediation` plan already owns — once legacy rows carry `id`, the fallback stops firing.\n",
+  "tags": [
+    "failure-mode"
+  ]
+}

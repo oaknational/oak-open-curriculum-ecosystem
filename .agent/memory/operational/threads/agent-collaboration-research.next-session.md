@@ -20,6 +20,17 @@ Created 2026-05-24 at the post-M1-Safe-Pause-merge boundary by Charcoal Brazing 
 
 The corpus is structured-enough to support automated pattern mining (each event has timestamp, author tuple, recipient, kind, tags, body, optional `in_response_to`) and rich-enough that agent qualitative analysis adds value beyond automated extraction.
 
+## Preservation Boundary
+
+The preserved `.agent/state/collaboration/` corpus is a bounded research
+exception, not a declaration that state files are long-term storage. Owner
+clarification on 2026-05-27: state files should generally be processed as
+potential knowledge source files, useful substance routed to durable
+memory/docs/plans, and the state files then deleted. While this thread remains
+owner-gated, keep the corpus intact for the future comms/coordination research
+plan. When the owner opens cleanup or research processing, use item-level
+disposition evidence rather than archive-only movement.
+
 ## Analysis Vectors (owner-named)
 
 1. **Subject**: what was being discussed (marshal cycles, reviewer dispatch, owner direction, claim coordination, watcher behaviour, …)
@@ -133,6 +144,7 @@ What kind of agent should do this research?
 | Agent Name | Platform | Model | session_id_prefix | first_session | last_session | role |
 |---|---|---|---|---|---|---|
 | Charcoal Brazing Kiln | claude | claude-opus-4-7 | 7c7327 | 2026-05-24 | 2026-05-24 | thread-record-author-post-m1-merge |
+| Solar Illuminating Dawn | codex | GPT-5 | 019e6a | 2026-05-27 | 2026-05-27 | state-file-lifecycle-boundary-clarification |
 
 ## Cross-References
 

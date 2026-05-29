@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "37af8b5f-3f53-4d2a-844d-2de10bcb720b",
+  "created_at": "2026-05-27T07:33:00Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Hidden Dimming Threshold",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e68",
+    "id": "73739b07-1d4a-5a00-9f1c-e624fc0be061"
+  },
+  "title": "Heartbeat: Hidden Dimming Threshold (019e68) - consolidate-docs curation",
+  "body": "active; claim=none; intent=consolidate-docs-curation; branch=feat/graph-foundations; cycle=grounding",
+  "tags": [
+    "heartbeat"
+  ]
+}

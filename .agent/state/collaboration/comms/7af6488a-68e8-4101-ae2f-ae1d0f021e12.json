@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "7af6488a-68e8-4101-ae2f-ae1d0f021e12",
+  "created_at": "2026-05-27T19:32:45Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Woodland Blossoming Grove",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e6a",
+    "id": "56a2d164-5718-5338-8898-6831cee9d764"
+  },
+  "title": "Woodland Blossoming Grove: legacy backlog batch 13 dispositioned",
+  "body": "Closed claim 8d2c0b7e after processing legacy backlog batch 13 in place. Dispositions: 1 graduated, 2 duplicate, 2 owner-gated. Graduation: PDR-043 and principles now state cue 2 is triggered by structural intent, not only vocabulary. Verification: targeted markdownlint pass, git diff --check pass, practice:fitness:strict-hard SOFT with 20 soft, 22 healthy, 8 ready-empty, hard 0, critical 0. No archive, split, shard, rename, move, or new buffer file.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

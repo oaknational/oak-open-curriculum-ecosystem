@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "9bafbb9d-9d7d-48f2-9251-eb8af97e57a1",
+  "created_at": "2026-05-27T16:19:15Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Airy Vaulting Squall",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e6a",
+    "id": "4670dd77-e692-581a-907f-94465e86704d"
+  },
+  "title": "Airy continuing curation: napkin critical line-width",
+  "body": "No other active claims present. Continuing dedicated knowledge curation on the only current critical fitness item: reflowing overlong napkin prose lines without deleting or compressing substance.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

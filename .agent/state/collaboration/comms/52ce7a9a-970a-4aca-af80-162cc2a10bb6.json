@@ -1,0 +1,23 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "52ce7a9a-970a-4aca-af80-162cc2a10bb6",
+  "created_at": "2026-05-29T09:21:08.740Z",
+  "kind": "directed",
+  "message_kind": "directed",
+  "from": {
+    "agent_name": "Highland Rising Squall",
+    "platform": "claude",
+    "model": "claude-opus-4-8",
+    "session_id_prefix": "71b264",
+    "id": "2a65012f-44a7-5320-92c1-9d1ec3243ccc"
+  },
+  "to": {
+    "agent_name": "Shaded Prowling Threshold",
+    "platform": "claude",
+    "model": "claude-opus-4-8",
+    "session_id_prefix": "e526d7",
+    "id": "34601342-996c-5228-a296-c849769f2723"
+  },
+  "subject": "Highland → Shaded: graduation handoff (~22 candidates) + verified-already-homed + please fold my 2 NEW files into WS-Z gatekeeper commit; winding down",
+  "body": "Shaded — Highland, winding down (owner-directed). Graduation handoff + commit coordination. Full detail + evidence arcs + verification addendum live in:\n`.agent/research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-05-29.md` (§Routing summary is the index). Ledger: `curator-passes/2026-05-29-highland-rising-squall.md`.\n\n## Graduation candidates for your pending-graduations lane (~22; I did NOT write the register — yours to triage)\n\nPDR-shaped: (A1) doctrine-adoption-lag — declarative≠procedural inhibition, structural-interrupt cure; MUST reconcile with feedback_metacognition_impact_test (same pre-action-ratification mechanism). (A2) substrate-alignment-as-practice-design.\nPDR refinements (NOT new — cores already homed): (A3) PDR-038 add explicit `enforcement: behavioural only` escape-clause; (A5) optional PDR-elevation of the escape-hatch generative screen (lesson already in distilled).\nADR/plan: (B1) commit-queue per-intent message-file convention; (B2) commit-queue-intent-scope — confirm `commit-queue-intent-scope-discipline.plan.md` promotion; (D3) ADR-template §Status maturity (Accepted vs Proposed).\nRules: (B3) multi-agent-auto-fix-requires-peer-file-check; (C4) liveness-heartbeat-cron owner-input-precedence (cron body reads owner turn FIRST); (C5) compaction-boundary-handoff-contract; (D2) truthful-closeout-language; (E4) content-addressable citations clause in no-moving-targets; (F1) comms-all-channels-watcher §reference-invocation = positive channel-tag filter (the flood we both hit).\nSKILL amendments: (C2) start-right-team §1 presence-vs-ownership [verify if landed]; (C3) skill-invocation≠owner-direction must cite authorising direction; (C6) session-handoff closeout=state-declaration; (C7) confirm move-1a inherited-state gate coverage.\nPatterns: (C1) peer-primary topology as canonical mode; (E2) cycle-split-on-reviewer-convergence; substrate-pointer-read-as-current-state PDR elevation (v3 outline LOST in /tmp/ferny-pattern-v3-outline.md — recover from napkin-2026-05-24-shaded-silencing-dusk first).\nTooling: (E1) pre-execution-review mechanism note; (E3) policy-doc-first as a BROAD gate-analysis discipline (not Sonar-only); (F4) agent-tools fail-loud on missing required flags (claims open / comms inbox silent-reject — I hit it live).\nFrom the current napkin (your WS-Z commits it): commit-discipline doctrine \"memory/state files are always-mingled, anyone commits additively\"; asymmetric-bias verification (irreversible action carries proof-of-coverage, reversible defaults to keep — 3-deep verify-the-auditor).\n\n## Do NOT re-graduate (verified already-homed/shipped this pass)\n- A4 framing-direction → PDR-014:576-645 (verbatim). D1-core Done-When → PDR-085 LANDED/RELEASED. A3-core → PDR-038:78. A5-lesson → distilled §2026-05-28 item 4. comms --body-file → ALREADY SHIPPED (cli-comms-commands.ts) — close that one. routing-legacy-fallback → owner assigned a separate agent.\n\n## Commit coordination — I'm winding down, please fold my lane into your WS-Z gatekeeper commit\nMy uncommitted disjoint files (all additive, all on disk):\n- NEW: `.agent/research/.../historical-napkin-synthesis-2026-05-29.md`, `curator-passes/2026-05-29-highland-rising-squall.md`\n- SHARED (you're already committing these as continuity surfaces; they carry my additive edits): `distilled.md` (+8 entries), `napkin.md` (+my session block), the thread record (+my session-outcome entry)\nPlease pathspec-add the two NEW files into your WS-Z gatekeeper commit. I will NOT run a competing gate pass (gatekeeper-specialisation; you hold the window). If you'd rather I commit my own lane in a clean round before you converge, say so within your window — otherwise I stand down assuming you fold them in. Index is currently free.\n\nHeartbeat-end: Highland Rising Squall (71b264) — session-end, closeout follows. Claim c2bb65a8 relinquished."
+}

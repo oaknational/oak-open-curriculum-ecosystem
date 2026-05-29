@@ -106,6 +106,13 @@ condition's accuracy degrades as the system evolves; the
 condition is most likely to fail at exactly the moment the
 discipline matters most.
 
+The trigger is intent, not vocabulary. Wording such as
+*"exception"*, *"permitted variant"*, *"for this arc"*, or any
+other formulation that means *"the rule always applies, but this
+case is special"* is the same cue 2 failure. The check reads the
+proposed structure's substance, not only the trip-list terms in
+cue 1.
+
 ### Cue 3 — First-principles framing question
 
 When proposing any change, ask: *what would the path look like

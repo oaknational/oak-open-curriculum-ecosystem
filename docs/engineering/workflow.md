@@ -226,13 +226,14 @@ are co-edited, never independent.
 
 ### Growth-Axis Metadata Is Live Doctrine
 
-When a graduation lands a new entry in a long directive, audit the
-file's `split_strategy` frontmatter (or equivalent growth-axis metadata)
-against the axis the graduation just introduced. The growth axis is the
-basis for the next split decision; if the new entry establishes a new
-axis (a new concern, a new lifecycle stage, a new failure mode), the
-split-strategy line must record that before the file grows further on
-the wrong axis.
+When a graduation lands a new entry in a long reference or documentation
+surface, audit the file's `split_strategy` frontmatter (or equivalent
+growth-axis metadata) against the axis the graduation just introduced. The
+growth axis is the basis for any future reference-surface restructure; if the
+new entry establishes a new axis (a new concern, a new lifecycle stage, a new
+failure mode), the split-strategy line must record that before the file grows
+further on the wrong axis. Drainable buffers use `drain_strategy` and item
+dispositions instead; do not split them to change fitness.
 
 ### Shell Loops Over Multi-line Command Output Are Unsafe In Deletion Paths
 

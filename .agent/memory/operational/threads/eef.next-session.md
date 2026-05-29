@@ -1,9 +1,430 @@
 # Next-Session Record — `eef` thread
 
-**Last refreshed**: 2026-05-25 (Stormy Surfing Dock / `claude` /
-claude-opus-4-7 / `2a7b65` — solo session; PR-0 plan-freshness pass landed
-for the 4-PR gate-1a closure sequence in
-`../../../plans/sector-engagement/eef/current/please-do-a-deep-mighty-peach.plan.md`).
+> **CURRENT TRUTH — RESUME HERE (2026-05-29). Everything below this banner is
+> SUPERSEDED HISTORY — do not resume it.**
+>
+> The EEF explore tool and the gate-1a / gate-1b split were diagnosed as the
+> **wrong foundation** (list-thinking in a graph domain; a query surface that
+> was stubbed and then worked around). They are discarded. The old EEF plans are
+> archived at `.agent/plans/sector-engagement/eef/archive/`.
+>
+> **GOAL 1 (fix the plan) is DONE — owner-ratified 2026-05-28.** The one open
+> design question (selection / scoping) is resolved: **membership, full nodes
+> (one axis)** — context-matched seeds ∪ their bounded traversal neighbourhood +
+> all `related_strand` edges among members; every node full; the out-of-subgraph
+> frontier reachable via the query surface. Graded "per-hop disclosure" is *not*
+> a helpful lever here (whole corpus ~21k tokens < ~25k agent ceiling, so full
+> nodes always fit). Settled outcomes folded in: encoding = `structuredContent`
+> only; agent-facing, no UI; capability boundary = graph **delivery** (analytical
+> ops rank/explain/compare → the new `extending-graph-support-tooling` plan).
+>
+> **Read, in order:**
+>
+> 1. `.agent/plans/sector-engagement/eef/current/graph-tooling-rebuild-foundation-2026-05-28.md`
+>    — the single source of truth (diagnosis, principles, intent; §10 now resolved).
+> 2. `.agent/plans/sector-engagement/eef/current/graph-tooling-rebuild.plan.md`
+>    — the SPECIFIED plan (resolved design + self-correcting D0–D6 + DX).
+>
+> **Next session = continue GOAL 2 / D0.** D0 merge-safety (PR #122) is now
+> mostly committed: Lanes A/C/D + plan + PDR README at `c67af4e6`; Lane C4
+> (the `validate-external-data-files` repo-validator) at `0d45cf07` + knip
+> follow-up `fc14463d`; **gateway review done + Lane C4 validator hardened at
+> `e76b9b7c`.** **Remaining — ALL OWNER-GATED: (1) push the 7 commits
+> [pre-authorised; held for wind-down]; (2) Lane B Sonar SAFE write [needs
+> EXPLICIT per-action owner auth — auto-mode-classifier-blocked]; (3) Vercel
+> deployed-env flag check; (4) merge PR #122.** See the **2026-05-29 (cont. II)
+> entry below** (Tempestuous Gliding Thermal) for exact state and the ordered
+> remaining steps. After D0: D1 contract ADR → D2 query
+> surface (un-stub the GraphView ops; selection → `enumerateNodes` filter) →
+> D3 thin delivery tool (full-node subgraph, `structuredContent`-only) →
+> D4 navigation round-trip → D5 skills + methodology graduation → D6 explore
+> value → DX estate reconciliation. Bounded — terminates at D6 (plan §"End
+> goal + bounded goals").
+>
+> Do NOT resume the increments B–H / gate-1a/1b framing below. Detailed prior
+> session history remains in git. The full clean rewrite of this surface is plan
+> deliverable DX (estate-wide reference reconciliation).
+
+## Session 2026-05-29 (cont. II) — Goal 2 / D0 gateway review + validator hardening landed (Tempestuous Gliding Thermal / `3e5d88`)
+
+**RESUME HERE for D0.** The D0 gateway review (the last remaining D0 *work*
+step) is complete and the one defect it surfaced is fixed and committed.
+Everything else remaining is owner-gated.
+
+**Landed this session:**
+
+- **Gateway review** (via a background workflow + sub-agents): type-expert
+  **SOUND** on the Lane A S7763 generator fix; code-expert + security-expert on
+  the Lane C4 `*.external-data.ts` validator surfaced a real logic-smuggling
+  bypass class.
+- **Lane B (S4036) disposition VERIFIED SAFE** — matches `sonar-disposition-policy`
+  §S4036 (all three criteria: agent-tooling site / project-required `git`
+  toolchain / dev-CI trust boundary; the second `spawnSync` uses `process.execPath`
+  and does not trigger S4036). Hotspot key `AZ5rZYbMCv0_1Y1L8PE3`; ready-to-write
+  REVIEWED/SAFE comment text is in the session log. The Sonar write is owner-gated
+  AND was **BLOCKED by the auto-mode classifier** ("yes to all" judged too vague
+  for a specific external security-disposition write) — needs EXPLICIT per-action
+  owner authorisation (or a settings permission rule).
+- **Lane E co-gating integration test PASS** (8/8: OFF→neither tool nor prompt,
+  ON→both, base prompts always). Flag is fail-safe — `toBooleanFlag = value ===
+  'true'`, so unset/malformed → OFF.
+- **SonarCloud QG** maps 1:1 to the three D0 lanes: `new_violations`=2 (Lane A
+  S7763 — `fixtures.ts:155` + `index-documents.ts:10`; fixed → awaits push),
+  `new_duplicated_lines_density`=3.9% (Lane C — cpd-excluded → awaits push),
+  `new_security_hotspots_reviewed`=0% (Lane B — awaits the SAFE write). The PR's
+  SonarCloud check is STALE (scans origin, 7 commits behind). The 4 Copilot
+  comments are advisory (`COMMENTED`); each maps to a Lane D fix in the bundle.
+- **Commit `e76b9b7c`** — hardened the `*.external-data.ts` validator from
+  "no *exported* logic" to a **file-wide "no runtime logic anywhere"** invariant.
+  The cpd-exclusion is file-level, so a namespace, a function nested in the data
+  literal, a non-exported helper, a value re-export, an `import = require`, or an
+  `export default` could ship duplicable logic past the gate. Now caught by a
+  recursive whole-file scan (ambient `declare` blocks excluded — they erase at
+  emit). AST classification split into `external-data-logic.ts`; the
+  graph-corpus-sdk eslint ignore glob aligned to the sonar cpd glob
+  (`**/*.external-data.ts`). Gate-clean (type-check, lint, 766 tests, knip,
+  depcruise, real-repo validator OK) + in-cycle reviewed (test-expert
+  `toStrictEqual` tightening + code-expert ambient-`declare` exclusion both
+  absorbed; the reviewers' `new`/call-expression "gap" was REJECTED with
+  grounding — an imported call has no in-file duplicable body, a local one is
+  already caught, and catching bare calls would false-positive on
+  `Object.freeze({...})`). **Owner-directed strictness**: this deliberately
+  REVERSED the validator author's tested *"does not over-reach: nested function
+  in data is allowed"* decision — a faithful snapshot is serialisable data, so
+  the stricter rule has no false-positive cost on a genuine corpus file (the one
+  real `*.external-data.ts` file still passes).
+
+**Branch state:** `feat/graph-foundations` is **7 ahead of origin, NOT pushed.**
+
+**Remaining D0 — fresh session, ALL owner-gated, in order:**
+
+1. **Push the 7 commits** — PRE-AUTHORISED by owner ("yes to all"); held this
+   session so the SonarCloud re-scan is watched in a live session. `git push`
+   (no force) → re-scan clears `new_violations` (S7763 fixed) +
+   `new_duplicated_lines_density` (cpd-exclusion).
+2. **Lane B Sonar SAFE write** — needs EXPLICIT per-action owner auth (the
+   auto-mode classifier blocks it). `change_security_hotspot_status`
+   REVIEWED/SAFE on `AZ5rZYbMCv0_1Y1L8PE3` with the §S4036 comment. Clears
+   `new_security_hotspots_reviewed` → **QG green.**
+3. **Vercel deployed-env check** — the project Vercel MCP `get_project` does NOT
+   expose env-var values; verify `OAK_CURRICULUM_MCP_EEF_ENABLED` unset/`false`
+   in preview + production via the Vercel dashboard (or an env-listing path the
+   MCP does not currently expose). Strong evidence it is OFF: fail-safe default +
+   nothing in-repo sets it `true` + plan documents OFF (`true` is a documented
+   FUTURE release step).
+4. **Merge PR #122** — HARD owner-gate, only after QG green + flag proven OFF +
+   Copilot comments confirmed resolved on push.
+
+Then D1 → … → DX per `graph-tooling-rebuild.plan.md` (bounded; ends D6+DX).
+
+**Full `pnpm check` on a settled tree** remains the standing deferred D0 item —
+it cannot run clean while the shared tree carries concurrent agents' uncommitted
+WIP, and the mutating gate would touch their files. Commit `e76b9b7c` passed the
+full pre-commit hook (91 turbo tasks green), so the D0 source is verified clean.
+
+**Tooling note:** the `comms watch` CLI has a known `routing-legacy-fallback`
+runaway defect (floods on legacy-identity events that never dedupe into the
+seen-file). Leafy Regrowing Petal owns the permanent fix. Workaround used this
+session: a raw-file watcher reading `.agent/state/collaboration/comms/*.json`
+directly (`/tmp/tempestuous-comms-watch.sh`).
+
+**Tree note:** concurrent `agentic-engineering-enhancements` agents (Highland
+Rising Squall, Shaded Prowling Threshold, Furnace Melting Bellows, coordinator
+Prismatic Twinkling Nebula) all closed out clean this session; their
+PDR/ADR/skill/memory WIP in the tree is headed for a separate WS-Z gatekeeper
+commit — NOT this thread's to land. My continuity writes (this entry, the
+experience file) are committed; `repo-continuity.md` + `napkin.md` touches are
+left additively in the mingled working tree for that gatekeeper commit.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Tempestuous Gliding Thermal` | `claude` | `claude-opus-4-8` | `3e5d88` | `goal-2-d0-gateway-review-and-validator-hardening` | 2026-05-29 | 2026-05-29 |
+
+## Session 2026-05-29 (cont.) — Goal 2 / D0 Lane C4 validator landed (Wooded Creeping Thicket / `d7d671`)
+
+**Continued Deciduous's D0.** The owner committed the parked D0 bundle (Lanes
+A/C/D + plan + PDR README + this thread record) at `c67af4e6`. This session built
+and landed the remaining **Lane C4 — the `validate-external-data-files`
+repo-validator** (the anti-abuse contract that makes the `*.external-data.ts`
+cpd-exclusion safe — it would otherwise be a gate-dodge hole). Committed at
+`0d45cf07`, knip follow-up `fc14463d`.
+
+**Architecture (owner-directed placement).** `scripts/` is the deliberate
+no-checks zone (excluded from tsconfig/eslint/vitest), so the validator lives in
+`agent-tools/src/` — pure AST contract (`external-data/external-data-contract.ts`)
+with DI-injected fs discovery (`external-data/external-data-discovery.ts`), both
+unit-tested under the standard gate; thin import-safe runner at
+`src/bin/validate-external-data-files.ts`; wired into root `repo-validators:check`.
+`typescript` moved devDeps→deps (it is a runtime library here, not a build-time
+devtool). Contract enforced: a `*.external-data.ts` file MUST export `: unknown`
+data, MUST carry a provenance docstring, MUST NOT export logic
+(function/class/enum/arrow-const). **Gate-clean:** type-check, lint, 29 tests,
+prettier, markdownlint, repo-validators (incl. the new one), knip, depcruise.
+In-cycle code-expert + test-expert review absorbed (5 fixes; 2 over-escalations
+rejected with grounding — incl. the `.unit`→`.integration` rename, refuted by the
+committed `paths.unit.test.ts` precedent + the touches-real-IO doctrine).
+
+**Latent finding (flagged, not fixed):** the existing `scripts/` validators
+(`validate-no-stale-script-invocations`, `validate-portability`,
+`validate-subagents`, `validate-fitness-vocabulary`) ship `*.unit.test.ts` helper
+tests that NEVER run (`scripts/` is excluded from vitest) — mis-placed by the
+owner's principle; a separate cleanup (move logic to `src/`).
+
+**Remaining D0 (next session, ordered — all owner-gated or owner-surface):**
+
+1. **Lane B** — PATH hotspot SAFE disposition at
+   `agent-tools/src/claude/statusline-identity.ts:112` per `sonar-disposition-policy`
+   §S4036 (documented class: agent-tooling + `git` + dev-workstation; NOT a code
+   fix — `no-machine-local-paths` forbids absolute-pathing git). Surface to owner
+   BEFORE the Sonar `change_security_hotspot_status` REVIEWED/SAFE write.
+2. **Lane E** — run the already-existing co-gating integration test
+   (`apps/oak-curriculum-mcp-streamable-http/src/handlers-tool-registration.integration.test.ts`
+   describe `'EEF feature-flag co-gating'`: OFF→neither, ON→both), THEN verify
+   `OAK_CURRICULUM_MCP_EEF_ENABLED` unset/false in preview + production via the
+   project Vercel MCP (NOT the CLI). D0 acceptance #2 + #3.
+3. **Full gates** (`pnpm check`) — deferred this session (see Deep Consolidation
+   note: concurrent uncommitted WIP in the shared tree); my C4 commits are
+   gate-clean via the full pre-commit hook + knip + depcruise.
+4. **Gateway review** — type-expert on the Lane A S7763 generator change + a final
+   code-expert pass over the whole D0 bundle (the C4 validator is already
+   in-cycle-reviewed).
+5. **Merge PR #122 — HARD OWNER-GATE** — only after the SonarCloud QG is green,
+   reviews resolved, and the flag is proven OFF in every deployed environment.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Wooded Creeping Thicket` | `claude` | `claude-opus-4-8` | `d7d671` | `goal-2-d0-lane-c4-validator-implementer` | 2026-05-29 | 2026-05-29 |
+
+## Session 2026-05-29 — Goal 2 / D0 in progress: PR #122 signals + external-data convention (Deciduous Climbing Root / `42226f`)
+
+**Goal 2 / D0 (merge-safety) — PARTIALLY LANDED, uncommitted in the working
+tree.** All work is local (nothing pushed/committed); the merge is owner-gated.
+Verified the live PR #122 signal set against SonarCloud + GitHub at session open
+(matched the plan exactly: 2× S7763, 1 PATH hotspot, 3.9% new-dup, 4 Copilot
+comments). **type-check + lint GREEN on the bundle.**
+
+DONE:
+
+- **Lane A — S7763 (generator-first).** Fixed both emitters:
+  `oak-sdk-codegen/code-generation/typegen/search/generate-search-index-docs.ts`
+  (IMPORTS template: `AllSubjectSlug` → `export type … from`; kept the
+  `ALL_SUBJECTS` value import) and `…/generate-search-fixtures.ts` (the four
+  pure re-export types `Search{Lesson,Unit,Sequence}Result` + `SearchMultiScopeBucket`
+  → `export type … from`; `*Response` types stay imported+re-exported, used
+  in-file). Ran `pnpm sdk-codegen` → regenerated `generated/search/{fixtures,index-documents}.ts`
+  verified. No test broken. Sonar confirms post-push.
+- **Lane D — 4 review comments.** `.gitignore` `_temp-*`→`_tmp-*`; PDR-085 README
+  `Proposed`→`Accepted` (PDR header verified Accepted); `execution.ts:83` dropped
+  `${error.kind}` from the user string (kind still logged at the call site);
+  `prompt-schemas.ts` docstring softened (focus is a free-text MCP arg; the tool
+  enforces EEF_PRIORITIES).
+- **Lane C (duplication) — reshaped to the EXTERNAL-DATA FILE CONVENTION
+  (owner-decided).** The 3.9% dup is entirely in the EEF corpus data file, an
+  EXTERNAL EEF snapshot — DRY would destroy source fidelity. Owner authorised a
+  filename convention `*.external-data.ts` matched by a cpd-exclusion **pattern**
+  (robust to file moves). Done: renamed `eef-toolkit.ts` →
+  `eef-toolkit.external-data.ts` + all 6 refs (import; eslint ignore path→pattern
+  `src/**/*.external-data.ts`; 4 docstrings; left `types.ts:75` conceptual
+  `eef-toolkit.json` ref); added `**/*.external-data.ts` to `sonar.cpd.exclusions`
+  in BOTH `sonar-project.properties` + `.sonarcloud.properties`; amended
+  `docs/governance/sonar-disposition-policy.md` §Duplications (new class +
+  contract).
+
+REMAINING (next session, in order):
+
+1. **Lane C4 — the enforcing validator (ships in D0, owner-decided).** Build
+   `agent-tools/scripts/validate-external-data-files.ts` (+ `-helpers.ts` +
+   `-helpers.unit.test.ts`), wire into the `repo-validators:check` root script.
+   Contract: a `*.external-data.ts` file MUST export `: unknown` data, MUST carry
+   a provenance docstring, MUST NOT export logic (function/class/enum). Copy the
+   idiom from `agent-tools/scripts/validate-no-stale-script-invocations.ts`.
+   Without it the suffix is a gate-dodge hole.
+2. **Lane B — PATH hotspot.** Dispose SAFE per `sonar-disposition-policy` §S4036
+   (agent-tools + `git` + dev-workstation — exact documented-class match; NOT a
+   code fix — `no-machine-local-paths` forbids absolute-pathing git). Apply via
+   Sonar `change_security_hotspot_status` REVIEWED/SAFE; comment: "SAFE per Sonar
+   Disposition Policy §S4036: agent-tools/src/claude/statusline-identity.ts:112 —
+   dev/CI tooling; standard developer toolchain binary; host owns PATH integrity;
+   not a production-server runtime." Surface to owner before the Sonar write.
+3. **Lane E — flag.** The co-gating test ALREADY EXISTS + is correct
+   (`apps/oak-curriculum-mcp-streamable-http/src/handlers-tool-registration.integration.test.ts`
+   describe('EEF feature-flag co-gating'): OFF→neither, ON→both, base prompts
+   still register). Just run it. THEN verify `OAK_CURRICULUM_MCP_EEF_ENABLED`
+   unset/false in preview + production via the project Vercel MCP (NOT the CLI) —
+   D0 acceptance #3.
+4. **Full gates** — only type-check + lint were run this session. Run build, test,
+   markdownlint, format, repo-validators, sdk-codegen (or `pnpm check`).
+5. **Gateway review** (code-expert architectural + type-expert on the generator
+   change + test-expert on the validator) before merge — task tracked.
+6. **Merge PR #122 — OWNER-GATED.** Only after the SonarCloud QG is green (push
+   triggers re-scan), reviews resolved, flag proven OFF in every deployed env.
+   Merging is the sole hard owner-gate.
+
+**Commit hygiene (concurrent agent in the tree):** `Tempestuous Vaulting Falcon`
+(`441c78`, claude-opus-4-8) is concurrently executing the pending-graduations
+packet on `agentic-engineering-enhancements` — DISJOINT areas; it explicitly
+defers the PDR README index to me. At commit, stage ONLY the D0 files by explicit
+pathspec (the two generators + two generated search files; `execution.ts`;
+`prompt-schemas.ts`; `.gitignore`; `decision-records/README.md`;
+`sonar-disposition-policy.md`; `sonar-project.properties`; `.sonarcloud.properties`;
+the renamed `eef-toolkit.external-data.ts` + its 4 importer files + `eslint.config.ts`;
+and — when built — the validator + root `package.json` wiring). Do NOT stage
+Tempestuous's `claim-liveness-…plan.md`; the shared state
+(active-claims/closed-claims/napkin) carries both sessions' writes — handle
+additively.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Deciduous Climbing Root` | `claude` | `claude-opus-4-8` | `42226f` | `goal-2-d0-implementer` | 2026-05-29 | 2026-05-29 |
+
+## Session 2026-05-28 (later) — Goal 1 design settled + plan specified (Woodland Swaying Pollen / `073489`)
+
+Goal 1 (fix the plan) completed and owner-ratified. The selection/scoping
+strategy is resolved to **membership, full nodes (one axis)** via worked examples
+on the real 30-strand corpus — the decisive fact being that the whole corpus
+(~21k tokens) sits under the ~25k agent ceiling, so full nodes always fit and
+graded "per-hop disclosure" is not a helpful lever. Two owner corrections
+reshaped the resolution mid-session: (1) a forced conclusion must be *stated*,
+not posed as an A/B menu; (2) the explicit goal is to *remove* the 1a/1b
+deferral framing — zero deferral decisions had been made. Both, plus a near-miss
+"rank-and-cut" (a list-op), were diagnosed as one root: F's *process* (escape
+hatches that dodge the complete build) re-enacted at the design layer — captured
+in foundation §9 and the napkin.
+
+Folded in: `graph-tooling-rebuild.plan.md` → SPECIFIED (D0–D6 + DX, each with
+(a)/(b)/(c)); foundation §10 resolved, §7 finalised, §9 escape-hatch
+anti-pattern added, §11 seed aligned; new
+`extending-graph-support-tooling.plan.md` homes rank/explain/compare + future
+candidates (indexed in the KG-integration README). assumptions-expert reviewed
+the plan (no residual escape hatch; verified fixes folded). Next = Goal 2
+(D0 → DX).
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Woodland Swaying Pollen` | `claude` | `claude-opus-4-7` | `073489` | `goal-1-design-settling-plan-author` | 2026-05-28 | 2026-05-28 |
+
+## Session 2026-05-28 — EEF wrong-shape diagnosis + graph-tooling rebuild (Deep Fathoming Harbour / `cef0b8`)
+
+The EEF explore tool (increment F) was completed, three-reviewer-approved, and
+committed — then diagnosed (with the owner) as the WRONG SHAPE: list-thinking in
+a graph domain (selection/projection/cap hand-rolled around a stubbed graph query
+surface). Established the graph-tooling rebuild on a new foundation. Landed on
+`feat/graph-foundations`: foundation doc + new plan skeleton + archived old
+estate (`d8ce706a`); Nebulous Threading Prism's handed-over curation pass
+(`2f1d100e`). Resume via the CURRENT-TRUTH banner above → foundation → plan → Goal 1.
+
+**Continuation pass (2026-05-28, same session):** a strict + LTAE lens pass over
+the foundation's six open questions narrowed the open *design* surface to one
+seam — the **selection / scoping strategy** (one axis or two: relevance vs
+per-hop disclosure depth) — to be resolved by worked examples on the real corpus.
+Q4 (client read-behaviour) was RESOLVED via Tidal Drifting Hull's research
+(`.agent/research/mcp-client-tool-result-consumption-2026-05-28.md`):
+`structuredContent`-only is correct in our standard-MCP-App regime; drop
+`oakContextHint`. A "human-via-widget second audience" reframe was raised and
+**owner-retracted as invented optionality** — the tool is agent-facing, no UI.
+Work is now bounded as Goal 1 (fix the plan) → Goal 2 (implement); see the plan's
+"End goal + bounded goals" section.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Deep Fathoming Harbour` | `claude` | `claude-opus-4-7` | `cef0b8` | `eef-graph-tooling-rebuild-foundation-author` | 2026-05-28 | 2026-05-28 |
+
+---
+
+**Last refreshed**: 2026-05-27 (Starless Prowling Mask / `claude` /
+claude-opus-4-7 / `13c7d5` — Definition of Delivery doctrine + EEF
+delivery-restructure LANDED; the gate-1a whole-graph approach was RETRACTED and
+selection restored; next = increments B–H per the meta-plan).
+
+## Session 2026-05-27 (late) — Definition of Delivery + restructure (Starless Prowling Mask / `13c7d5`)
+
+**Landed (`feat/graph-foundations`):** Increment A — Definition of Delivery
+doctrine (`27956bb6`: directive `definition-of-delivery.md` + PDR-085 +
+indexes); meta-plan into repo + `eef-first-feature` gate-1a contract superseded
+(`a60b51ce`); forward restructure retracting false-delivery claims across the
+EEF plan estate (`cc3fad3c`); handoff (`8217082a`, refreshed `89ea5ce0`).
+
+**The frame changed:** the gate-1a "whole-graph" approach (flagged below by
+Galactic for owner discussion) was RETRACTED. Sub-graph SELECTION (seed
+selection + projection in the explore tool, under a 10k output budget) was
+always a gate-1a requirement and is restored; the scoring engine + recommend/
+explain/compare tools stay gate-1b. PR #121 as-is (whole-graph, no flag, no
+co-registered prompt) is NOT mergeable — it is the basis for increment F.
+
+**Resume here (fresh session):** read the handoff
+`.agent/state/collaboration/handoffs/2026-05-27-starless-eef-restructure-handoff.md`,
+then the owning meta-plan
+`.agent/plans/sector-engagement/eef/current/eef-delivery-restructure.plan.md`.
+Next = increments B → C → D → E → F → G → H. Branch coordination: doctrine +
+plans on `feat/graph-foundations`; EEF code in the `oak-wt-eef` worktree
+(`feat/eef-explore-evidence`).
+
+## Session 2026-05-27 — value-PR review + PR #121 open (Galactic Dancing Constellation / `7efeec`)
+
+**Role**: reviewer (peer to Starless Prowling Mask / `13c7d5`, who drove
+`oak-wt-eef`). n=2 worktree-per-agent, ARC AnGels coordination channel.
+
+**Landed**: the EEF gate-1a value-PR is **OPEN as PR #121**
+(`feat/eef-explore-evidence` → main, 7 commits): type relocation → adapter →
+loader/freshness → substrate hardening → `eef-explore-evidence-for-context`
+tool + universal-tools wire-up + ADR-123. Each commit reviewed in-cycle; a full
+PR-boundary panel (mcp-expert + security-expert + type-expert + test-expert) on
+commit 4 returned **SOUND**, all findings verified against the real repo before
+relaying (one betty false-positive rejected: `by_phase.impact_months` is
+preserved in the open `school_context_relevance` record). Register ledger lives
+in the PR #121 body.
+
+**Key design decision (peer-settled, owner-flagged)**: gate-1a returns the
+**whole connected EEF graph**; the model selects contextual fit; server-side
+narrowing is deferred to the gate-1b t5 ranking engine. Grounded against the
+corpus: focus-enum→tag mapping is mostly empty and only 16/30 strands carry a
+phase tag, so phase-narrowing would suppress ~14 phase-general strands. Seed
+ids exposed via `loadEefCorpus → { view, strandIds }` as removable gate-1a
+scaffolding (swaps to `enumerateNodes()` when Inc.3 un-stubs it). Open for owner
+discussion — see [`open-questions.md` Q-001](../open-questions.md).
+
+**Next safe step**: owner-gated — (1) the whole-graph semantics discussion
+(Q-001); (2) merge PR #121 to main. Named follow-ons in the PR body: F3
+`schemaHash`=schema_version (gate-1b refresh-script), telemetry app-wiring.
+
+**Evidence**: PR #121; commits on `feat/eef-explore-evidence`
+(`a6e8efc7`..`49317312`); `pnpm check` green (exit 0) at handoff. Adjacent: the
+`feat/graph-foundations` rebase-without-force-push divergence was diagnosed and
+resolved (owner force-with-lease; trees were byte-identical); `oak-wt-cure`
+worktree + merged branch removed; stray `/tmp` worktree pruned.
+
+## Session 2026-05-27 — value-PR coordination state (Foamy Lapping Harbour / `019e68`)
+
+**Session boundary**: owner asked to commit paused agent files and then merge
+main. The EEF contribution in this shared tree was documentation and
+coordination-state only; source implementation for the value PR remained in
+the separate EEF worktree lane.
+
+**Landed**:
+
+- `544b2f4e` — `docs(eef): record value-pr coordination state`.
+- Captured value-PR coordination artefacts:
+  - `eef-value-pr-review-register.md`
+  - `eef-value-path-reflection-2026-05-27.md`
+  - `please-do-a-deep-mighty-peach.plan.md` corrections
+  - comms-method comparison report and README update
+  - EEF PR1 sidebar backup and collaboration-state claim closure.
+
+**Evidence**:
+
+- Full pre-commit hook passed 90/90 turbo tasks for the commit.
+- Later same-session merge of `origin/main` landed at `3c136e9d`; focused
+  agent-tools type-check, lint, and tests stayed green after the merge.
+
+**Current state**: EEF remains the active product thread. The value-PR shape is
+the owner-approved teacher-value slice: boundary/type relocation, WS4.5
+adapter, loader/freshness, and EEF explore tool, with the coordination register
+recording review findings and ownership.
+
+**Next safe step**: continue the actual EEF value-PR implementation in the
+dedicated EEF worktree/branch lane; use the review register and corrected
+`please-do-a-deep-mighty-peach.plan.md` as coordination evidence rather than
+reconstructing the plan from older stale 4-PR prose.
 
 **Previous refresh**: 2026-05-23 (Secret Vanishing Wisp / `claude` /
 claude-opus-4-7 / `981cbe` first-out closeout-authored; Sparking Melting
@@ -305,6 +726,19 @@ my session ran with the cascade already resolved. Graph
 implementation work is no longer cascade-blocked. This session's
 amendments are planning-only and do not touch SDK codegen output.
 
+> **RETRACTION ANNOTATION (2026-05-27):** The framing above treated the removal of
+> sub-graph SELECTION from gate-1a as "sequencing only, not a scope reduction". That
+> framing was an UNRATIFIED scope reduction. Per owner direction 2026-05-27,
+> sub-graph selection for large graphs (the EEF graph is large) was ALWAYS a
+> gate-1a requirement and is RESTORED to gate-1a. The gate-1a contract is now
+> owned by `.agent/plans/sector-engagement/eef/current/eef-delivery-restructure.plan.md`,
+> rebuilt around the Definition of Delivery directive
+> (`.agent/directives/definition-of-delivery.md`). Scope boundary: the
+> SCORING/ranking engine and the recommend/explain/compare tools remain gate-1b;
+> only the explore tool's seed-SELECTION + projection are restored to gate-1a.
+> Current resume state: handoff
+> `.agent/state/collaboration/handoffs/2026-05-27-starless-eef-restructure-handoff.md`.
+
 **Prior refresh**: 2026-05-10 (Fragrant Regrowing Root / codex / GPT-5 /
 `019e12` — EEF source-authority clarification. The repository-held
 `eef-toolkit.json` snapshot is now treated as the canonical implementation
@@ -372,6 +806,8 @@ under the ≥2-of-3 rule (`neighbours × misconception`,
 | `Mistbound Slipping Night` | `claude` | `claude-opus-4-7` | `a1cb64` | `t12-citation-shape-cycle-author-with-stormbound-commit-handoff` | 2026-05-22 | 2026-05-22 |
 | `Stormy Surfing Dock` | `claude` | `claude-opus-4-7` | `2a7b65` | `pr-0-plan-freshness-author+pr-115-watcher+adr-184-amendment` | 2026-05-25 | 2026-05-25 |
 | `Fiery Kindling Brazier` | `claude` | `claude-opus-4-7` | `9f4026` | `commit-marshal+pr-115-stewardship+merge-landed` | 2026-05-25 | 2026-05-25 |
+| `Foamy Lapping Harbour` | `codex` | `GPT-5` | `019e68` | `value-pr-coordination-state-committer; review-register-and-value-path-reflection-preserved; shared-tree-main-merge-verifier` | 2026-05-27 | 2026-05-27 |
+| `Galactic Dancing Constellation` | `claude` | `claude-opus-4-7` | `7efeec` | `eef-value-pr-reviewer (commits 2-4 + hardening; full PR-boundary panel); whole-graph-design-peer; graph-foundations-divergence-diagnosis; worktree-cleanup` | 2026-05-27 | 2026-05-27 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
