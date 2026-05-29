@@ -8,6 +8,7 @@
 import { describe, it, expect } from 'vitest';
 
 import { renderToolsSection } from './render-tools-section.js';
+import { EEF_TOOL_NAME } from '../eef-surface.js';
 
 const AGGREGATED_TOOL_NAMES = [
   'search',
@@ -27,7 +28,15 @@ const SAMPLE_GENERATED_TOOL_NAMES = [
 ] as const;
 
 describe('renderToolsSection', () => {
-  const html = renderToolsSection();
+  const html = renderToolsSection(false);
+
+  it('omits the co-gated EEF tool when the flag is off', () => {
+    expect(html).not.toContain(EEF_TOOL_NAME);
+  });
+
+  it('includes the co-gated EEF tool when the flag is on', () => {
+    expect(renderToolsSection(true)).toContain(EEF_TOOL_NAME);
+  });
 
   it('includes all aggregated tool names in the rendered HTML', () => {
     for (const name of AGGREGATED_TOOL_NAMES) {

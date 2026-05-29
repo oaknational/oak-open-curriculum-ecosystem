@@ -27,6 +27,7 @@ import {
   learningProgressionArgsSchema,
   eefEvidenceGroundedLessonPlanArgsSchema,
 } from './prompt-schemas.js';
+import { EEF_PROMPT_NAME } from './eef-surface.js';
 
 /**
  * The EEF prompt registration — co-gated with the
@@ -35,7 +36,7 @@ import {
  * one delivery unit (Definition of Delivery, criterion 4).
  */
 const EEF_PROMPT_REGISTRATION = {
-  name: 'eef-evidence-grounded-lesson-plan',
+  name: EEF_PROMPT_NAME,
   title: 'EEF Evidence-Grounded Lesson Plan',
   description:
     'Design a lesson plan grounded in EEF Toolkit evidence: combines 2-3 evidence-backed approaches drawn from a typed subgraph of EEF strands, with caveats and implementation guidance, into a structured pedagogical sequence.',

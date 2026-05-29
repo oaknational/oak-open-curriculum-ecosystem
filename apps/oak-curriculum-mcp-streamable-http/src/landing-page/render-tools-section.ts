@@ -16,6 +16,7 @@ import {
   isAggregatedToolName,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
+import { EEF_TOOL_NAME } from '../eef-surface.js';
 import { escapeHtml } from './escape-html.js';
 import type { UniversalToolListEntry } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
@@ -108,10 +109,17 @@ function sortAggregatedTools(tools: UniversalToolListEntry[]): UniversalToolList
  * in content. Long descriptions split by first paragraph (summary +
  * collapsible "How to use").
  *
+ * The EEF tool ({@link EEF_TOOL_NAME}) is co-gated behind
+ * `OAK_CURRICULUM_MCP_EEF_ENABLED`: it is listed only when `eefEnabled` is
+ * true, mirroring the MCP `tools/list` response so the advertised set never
+ * drifts from the served set.
+ *
+ * @param eefEnabled - when true, include the co-gated EEF tool in the list
  * @returns HTML string for the tools section
  */
-export function renderToolsSection(): string {
-  const tools = listUniversalTools(generatedToolRegistry);
+export function renderToolsSection(eefEnabled: boolean): string {
+  const allTools = listUniversalTools(generatedToolRegistry);
+  const tools = eefEnabled ? allTools : allTools.filter((tool) => tool.name !== EEF_TOOL_NAME);
   const toolCount = tools.length;
 
   const aggregated = sortAggregatedTools(tools.filter((t) => isAggregatedToolName(t.name)));

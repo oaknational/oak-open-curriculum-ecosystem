@@ -12,6 +12,7 @@ import { registerAppTool } from '@modelcontextprotocol/ext-apps/server';
 import type { Logger } from '@oaknational/logger';
 import type { RuntimeConfig } from './runtime-config.js';
 import type { HttpObservability } from './observability/http-observability.js';
+import { EEF_TOOL_NAME } from './eef-surface.js';
 import {
   createOakPathBasedClient,
   executeToolCall,
@@ -150,14 +151,12 @@ export function registerHandlers(
 }
 
 /**
- * The EEF evidence tool is co-gated with its prompt behind
- * `OAK_CURRICULUM_MCP_EEF_ENABLED`. It is filtered out of registration when the
- * flag is off so a partial EEF surface can never reach a client.
+ * The EEF evidence tool ({@link EEF_TOOL_NAME}) is co-gated with its prompt
+ * behind `OAK_CURRICULUM_MCP_EEF_ENABLED`. It is filtered out of registration
+ * when the flag is off so a partial EEF surface can never reach a client.
  * Registration-gating is distinct from `useStubTools`, which only swaps the
  * executor for already-registered tools.
  */
-const EEF_FLAG_GATED_TOOL = 'eef-explore-evidence-for-context';
-
 /** Iterates over universal tools and registers each with the server. */
 function registerTools(
   server: Pick<McpServer, 'registerTool'>,
@@ -165,7 +164,7 @@ function registerTools(
   options: RegisterHandlersOptions,
 ): void {
   for (const tool of listUniversalTools(generatedToolRegistry)) {
-    if (!options.runtimeConfig.eefEnabled && tool.name === EEF_FLAG_GATED_TOOL) {
+    if (!options.runtimeConfig.eefEnabled && tool.name === EEF_TOOL_NAME) {
       continue;
     }
 
