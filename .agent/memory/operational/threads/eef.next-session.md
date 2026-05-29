@@ -22,8 +22,10 @@
 >
 > 1. `.agent/plans/sector-engagement/eef/current/graph-tooling-rebuild-foundation-2026-05-28.md`
 >    — the single source of truth (diagnosis, principles, intent; §10 now resolved).
-> 2. `.agent/plans/sector-engagement/eef/current/graph-tooling-rebuild.plan.md`
->    — the SPECIFIED plan (resolved design + self-correcting D0–D6 + DX).
+> 2. `.agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md`
+>    — the LIVE execution plan (S1–S4; supersedes the D1–D6 + DX spine of
+>    `graph-tooling-rebuild.plan.md`, which — with the foundation — remains the
+>    design record).
 >
 > **GOAL 2 / D0 (merge-safety) is COMPLETE — PR #122 MERGED to `main` at
 > `29fc29e4` (2026-05-29, Quiet Hiding Hush).** The EEF graph foundation ships
@@ -32,37 +34,75 @@
 > flag OFF in preview & production; QG green. See the **2026-05-29 (cont. III)
 > entry below** (Quiet Hiding Hush) for the full close.
 >
-> **Next session = GOAL 2 / D1 — author the graph-tool contract ADR.**
-> Crystallise the ratified design as the permanent contract D2–D4 build to:
-> `structuredContent`-only; full-node, membership-scoped, complete-within-itself
-> subgraph; integrity floor; navigable frontier via the query surface;
-> budget-as-design-signal (never a runtime cap); no list-ops — precise enough
-> that D3's worked-example acceptance tests (contexts A/B/C) are derivable from
-> it. Then D2 query surface (un-stub the GraphView ops; selection →
-> `enumerateNodes` filter) → D3 thin delivery tool (full-node subgraph,
-> `structuredContent`-only) → D4 navigation round-trip → D5 skills + methodology
-> graduation → D6 explore value → DX estate reconciliation. Bounded — terminates
-> at D6 (plan §"End goal + bounded goals").
+> **Next session = CLOSE THE EEF WORK** by executing the simple, linear finishing
+> plan
+> [`eef-graph-tool-completion.plan.md`](../../../plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md):
+> S1 contract ADR → S2 query surface (un-stub the 5 `NotImplementedYet` GraphView
+> ops; `selectEefSeedIds` → an `enumerateNodes` `NodeFilter`; remove the type-only
+> rank/explain/compare) → S3 thin formatter (remove `capForBudget` +
+> `projectExploreNode`; full-node membership-scoped `structuredContent`-only
+> subgraph) → S4 navigation round-trip. That plan **supersedes** the old
+> D1–D6 + DX spine of `graph-tooling-rebuild.plan.md` (foundation + resolved
+> design preserved and cited).
 >
-> **Owner-directed next-session scope (2026-05-29), three items:**
+> **Forward sequence (owner-directed 2026-05-29 — Pelagic Sailing Sextant, planning session):**
 >
-> 1. **Write the ADR** (D1 — the graph-tool contract, as above).
-> 2. **Review the user-facing impact of the tools we built** — boot a local MCP
->    server with the new EEF features ON (`OAK_CURRICULUM_MCP_EEF_ENABLED=true`;
->    e.g. `prod:harness` or `dev`, or the `oak-local-dev`/`oak-preview` MCP
->    connection) and evaluate the EEF tool + prompt's usefulness **in relation to
->    the other curriculum tools** (search, browse-curriculum, explore-topic,
->    the graph tools). This is the foundation's "us-able-to-explore" discovery
->    lens (connects to D6 explore-value) — does the wrong-shape explore tool earn
->    its place, or does the evaluation sharpen what D3 should rebuild?
-> 3. **Review the plan estate** — the EEF plans (`sector-engagement/eef/`:
->    foundation, `graph-tooling-rebuild.plan.md`, `extending-graph-support-tooling`)
->    and the graph plans (`connecting-oak-resources/knowledge-graph-integration/`),
->    for coherence, drift, and sequencing against the post-D0 reality.
+> 1. **Next session:** execute the finishing plan to close the EEF work, then merge.
+> 2. **After merge:** start a **team session** for (a) evaluating the tool **in
+>    context** — its usefulness against the other curriculum tools (the discovery
+>    lens) — and (b) the graph + EEF **plan-estate consolidation**, briefed by
+>    [`graph-estate-consolidation.plan.md`](../../../plans/connecting-oak-resources/knowledge-graph-integration/current/graph-estate-consolidation.plan.md)
+>    (which also authors the value-evaluation plan, superseding
+>    `eef-outcome-evaluation-infrastructure.plan.md`).
+>
+> The earlier "three items" next-session scope is **superseded** by this planning
+> session: the ADR is now S1 of the finishing plan; the tool-in-context
+> evaluation and the plan-estate consolidation move to the post-merge team
+> session. The estate is mostly superseded gate-1a/1b / five-increment framing —
+> the consolidation brief carries the verified disposition map so that session
+> starts grounded.
 >
 > Do NOT resume the increments B–H / gate-1a/1b framing below. Detailed prior
 > session history remains in git. The full clean rewrite of this surface is plan
 > deliverable DX (estate-wide reference reconciliation).
+
+## Session 2026-05-29 (cont. IV) — EEF completion + consolidation PLANS authored (Pelagic Sailing Sextant / `606a0e`)
+
+**Planning-only session (owner-directed; zero code).** Verified true state
+against code + git via a 6-agent workflow (not records): D0 done/merged (PR #122,
+origin/main `5405f576` v1.15.0; tool ships **dark** behind the flag); D1–D6 + DX
+**not started**; the tool is real but **F-shape** (`capForBudget` slice-to-12 +
+`projectExploreNode` field-mask + dual `content[]`); **5 of 7** GraphView ops are
+`NotImplementedYet` stubs; the substrate (graph-core, graph-corpus-sdk
+eef-strands, 30-strand/37-edge corpus, 53 tests) is built. Owner correction
+absorbed: the five live curriculum graph tools are the **naive first-pass** tools
+the EEF tool is the **pathfinder** to replace — the wider graph work is undefined
+until this first proper graph tool is finished.
+
+**Authored (working tree → committed this session):**
+
+- **Finishing plan** —
+  [`current/eef-graph-tool-completion.plan.md`](../../../plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md):
+  simple/linear/explicit, S1 contract ADR → S2 query surface → S3 thin formatter
+  → S4 navigation round-trip; supersedes the rebuild plan's D1–D6 + DX spine.
+  assumptions-expert reviewed (scope proportionate, supersession sound, linear
+  chain legitimate); D5 doctrine-graduation made an explicit out-of-scope
+  follow-on; S4 telemetry framed as completing the existing `recordSpan` seam.
+- **Consolidation brief** —
+  [`knowledge-graph-integration/current/graph-estate-consolidation.plan.md`](../../../plans/connecting-oak-resources/knowledge-graph-integration/current/graph-estate-consolidation.plan.md):
+  fresh-session plan carrying the verified estate map + disposition proposal +
+  the value-evaluation-plan authoring (t6, supersedes
+  `eef-outcome-evaluation-infrastructure.plan.md`). Review caught 3 unclassified
+  live-lane files (`oak-kg-threads-surface`, `oak-misconceptions-subgraph-mcp-surface`,
+  `open-education-knowledge-surfaces`) → added to t1 verify-first.
+
+**Forward:** next session executes the finishing plan to close EEF → merge →
+team session for tool-in-context evaluation + plan-estate consolidation (see the
+banner).
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Pelagic Sailing Sextant` | `claude` | `claude-opus-4-8` | `606a0e` | `eef-completion-and-consolidation-planning` | 2026-05-29 | 2026-05-29 |
 
 ## Session 2026-05-29 (cont. III) — Goal 2 / D0 COMPLETE: PR #122 merged (Quiet Hiding Hush / `457189`)
 
