@@ -1,3 +1,34 @@
+# [1.15.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.14.2...v1.15.0) (2026-05-29)
+
+
+### Bug Fixes
+
+* **agent-tools:** harden external-data validator to a file-wide no-logic invariant ([e76b9b7](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/e76b9b7c24c234099070deff570de2850701bafe))
+* **agent-tools:** keep internal external-data symbols unexported (knip) ([fc14463](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/fc14463d32d697d412585b14804ae087c26049f4))
+* **agent-tools:** prevent buffer split lifecycle escape ([a4c4c04](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/a4c4c0479f13f919b3e8dfe7b2070c4d79899650))
+* **agent-tools:** resolve S4624 nested template literal in external-data formatter ([90714ea](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/90714ea5a037aa9921514c64eeccf675a239a5b0)), closes [#122](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/122)
+* **collab:** reword retired-vocab line; refresh gate-debt handoff ([66f5987](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/66f59872f176cdce2f2e8b9d53d2a3f39bdcfd8e))
+* Commit 1 - Fully fix AZ5rZYZQCv0_1Y1L8PEv, AZ5rZYZQCv0_1Y1L8PEw, AZ5rZYZQCv0_1Y1L8PEx, AZ5rZYZQCv0_1Y1L8PEy, AZ5rZYZQCv0_1Y1L8PEz, AZ5rZYZQCv0_1Y1L8PE0, AZ5rZYZQCv0_1Y1L8PE1, AZ5rZYZQCv0_1Y1L8PE2 ([ccd8b2b](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/ccd8b2bd2b164c0bfa50e0c705e5f6a0d6cb1031))
+* Commit 2 - Fully fix AZ5rZYY6Cv0_1Y1L8PEt, AZ5rZYY6Cv0_1Y1L8PEu ([68c9a96](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/68c9a9610fe07a33b034efde61d7035a0dda33ad))
+* Commit 3 - Fully fix AZ5rZYYkCv0_1Y1L8PEs ([05e3cd7](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/05e3cd7fc995617344438cf45e5b2f902f7e9711))
+* Commit 4 - Fully fix AZ5rZYXfCv0_1Y1L8PEr ([0fc762c](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/0fc762ced3953ed088a62669f8d2ced840f3e094))
+* Commit 5 - Fully fix AZ5tQ3DneB431-anZeC6 ([625ffd5](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/625ffd5b1b341be7f6a65d70fd2fd10b3261c75c))
+* **graph-corpus-sdk:** harden eef substrate freshness gate and schema fidelity ([6823848](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/6823848d7f3abfa10b0c84568861d8ece4b6fc4e))
+* **mcp:** co-gate the EEF landing-page listing behind the feature flag ([28bb7ac](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/28bb7ace4ce9abe0a59762be59bb3f482604851e))
+
+
+### Features
+
+* **agent-tools:** enforce the external-data file convention with a repo-validator ([0d45cf0](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/0d45cf07f9c73117a003c40815dfb6d48f38cea2))
+* **agent-tools:** expand Claude statusline rendering ([0911a0d](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/0911a0db215739c4c170bd0918005bcf09bc92f5))
+* **curriculum-sdk:** add eef-explore-evidence-for-context evidence tool ([8a44fd4](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/8a44fd445a94eb537bf5632c710f2c0daf273418))
+* **cursor:** delegate statusline shim to Claude pipeline ([59d5026](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/59d5026533ecc5ede3901338758d2d743c099a53))
+* **eef:** deliver contextual, budget-bounded EEF explore tool ([2214f0b](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/2214f0b2b4fcd903672dd78f6f4cf06030d717a0))
+* **eef:** model school-context vocabulary and add seed selection ([9f6eb21](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/9f6eb21528201ca7ec16407e12f43945156eb0c6))
+* **graph-corpus-sdk:** add eef strands graphview adapter with live subgraph and manifest ([aa7cb96](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/aa7cb964985f41c545237fb82fa556985f7dfee3))
+* **graph-corpus-sdk:** load and validate the real EEF corpus with freshness gating ([afdaa99](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/afdaa9909315040bba0287e6bb906524644169ef))
+* **mcp:** co-gate EEF tool and prompt behind OAK_CURRICULUM_MCP_EEF_ENABLED ([9554ffb](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/9554ffbcbb88305f9ec29a1bbea95a7dfd26131f))
+
 ## [1.14.2](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.14.1...v1.14.2) (2026-05-27)
 
 
