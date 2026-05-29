@@ -18,10 +18,10 @@ import type { ScannedFile } from './external-data-contract.js';
  */
 
 /** Filename suffix that marks a faithful external-data snapshot module. */
-export const EXTERNAL_DATA_SUFFIX = '.external-data.ts';
+const EXTERNAL_DATA_SUFFIX = '.external-data.ts';
 
 /** Directory names skipped during discovery (never contain authored snapshots). */
-export const EXCLUDED_DIRECTORY_NAMES: ReadonlySet<string> = new Set([
+const EXCLUDED_DIRECTORY_NAMES: ReadonlySet<string> = new Set([
   'node_modules',
   'dist',
   'build',
@@ -59,7 +59,7 @@ export interface ExternalDataFileSystem {
 }
 
 /** Production adapter binding {@link ExternalDataFileSystem} to `node:fs`. */
-export const nodeExternalDataFileSystem: ExternalDataFileSystem = {
+const nodeExternalDataFileSystem: ExternalDataFileSystem = {
   readdir: (absoluteDir) => fs.readdir(absoluteDir, { withFileTypes: true }),
   readFile: (absolutePath) => fs.readFile(absolutePath, 'utf8'),
 };

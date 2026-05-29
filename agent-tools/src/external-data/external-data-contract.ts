@@ -35,7 +35,7 @@ import {
  */
 
 /** A specific clause of the external-data contract that a file can violate. */
-export type ExternalDataRule =
+type ExternalDataRule =
   | 'missing-provenance-docstring'
   | 'no-unknown-data-export'
   | 'data-export-must-be-unknown'
