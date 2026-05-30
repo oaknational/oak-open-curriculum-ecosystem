@@ -68,10 +68,10 @@ export function transformZodV3ToV4(zodV3Output: string): string {
   result = result.replace(/\bZodSchema\b/g, 'ZodType');
 
   // 3. Transform deprecated z.string().url() → z.url() (Zod 4 standalone type)
-  result = result.replace(/z\.string\(\)\.url\(\)/g, 'z.url()');
+  result = result.replaceAll('z.string().url()', 'z.url()');
 
   // 4. Remove .passthrough() — strict validation only, not loose parsing
-  result = result.replace(/\.passthrough\(\)/g, '');
+  result = result.replaceAll('.passthrough()', '');
 
   // 5. Fix allOf/intersection strict conflict: remove .strict() from .and() sides
   result = result.replace(/\.strict\(\)(\s*\.and\()/g, '$1');

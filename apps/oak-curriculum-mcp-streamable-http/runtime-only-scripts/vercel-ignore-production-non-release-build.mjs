@@ -114,7 +114,7 @@ function isLessThanOrEqual(currentVersion, previousVersion) {
 
 function trimToUndefined(value) {
   const trimmed = value?.trim();
-  return trimmed ? trimmed : undefined;
+  return trimmed || undefined;
 }
 
 // ---------------------------------------------------------------------------
