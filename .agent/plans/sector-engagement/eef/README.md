@@ -1,12 +1,11 @@
 # EEF Teaching and Learning Toolkit
 
-> **2026-05-28 — single source of truth has moved.** The gate-1a/1b EEF plan
-> estate was diagnosed as the wrong foundation and is archived in
-> [`archive/`](archive/). Current work is the **graph-tooling rebuild**:
-> read [`current/graph-tooling-rebuild-foundation-2026-05-28.md`](current/graph-tooling-rebuild-foundation-2026-05-28.md)
-> (diagnosis + principles + intent) and
-> [`current/graph-tooling-rebuild.plan.md`](current/graph-tooling-rebuild.plan.md)
-> (the new plan). The Status line below is historical.
+> **2026-05-30 — one live plan.** The ONLY EEF plan is
+> [`current/eef-graph-tool-completion.plan.md`](current/eef-graph-tool-completion.plan.md)
+> (impact-led D0–D7, decision-complete). The earlier gate-1a/1b estate AND the
+> 2026-05-28 graph-tooling-rebuild design docs were **quarantined** to
+> [`archive/`](archive/) as superseded broken-concept work — do not resume or cite
+> them. The Status line below is historical.
 
 Dedicated subthread for integrating the [Education Endowment Foundation
 Teaching and Learning Toolkit](https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit)

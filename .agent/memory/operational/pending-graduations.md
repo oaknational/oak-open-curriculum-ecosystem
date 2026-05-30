@@ -40,19 +40,19 @@ pseudo-shards that hide the true buffer state.
 ## 2026-05-28 captures — EEF graph-tooling rebuild
 
 Surfaced by Deep Fathoming Harbour (claude / claude-opus-4-7) during the EEF
-wrong-shape diagnosis + rebuild. Full context:
-`plans/sector-engagement/eef/current/graph-tooling-rebuild-foundation-2026-05-28.md`.
+wrong-shape diagnosis. (The originating design docs were quarantined to `archive/`
+2026-05-30 as superseded broken-concept work; the substance to graduate is captured
+below, independent of them.)
 
 - **Graph-tool category + graph-delivery doctrine.**
   - captured-date: 2026-05-28
-  - source-surface: graph-tooling-rebuild foundation §2 + plan D1
   - graduation-target: ADR (host architecture) and/or PDR — "graph tools are a
     first-class tool category: complete-within-itself subgraphs (contiguous or
     sparse), navigable links, structuredContent-only, no context hint, budget as
     a design signal; the graph/corpus is smart and the tool is a thin formatter"
-  - trigger-condition: plan D1 ratifies the graph-tool contract (becomes settled
-    and reusable across adapters)
-  - status: pending (owner-directed rebuild; graduate at D1)
+  - trigger-condition: the live EEF plan ratifies the graph-tool / MCP contract
+    (D3/D4 — becomes settled and reusable across adapters)
+  - status: pending (graduate when the live EEF plan's D3/D4 contract is ratified)
 - **Self-correcting measurable deliverables (planning methodology).**
   - captured-date: 2026-05-28
   - source-surface: foundation §5 + this rebuild plan (first instance)

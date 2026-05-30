@@ -1,12 +1,18 @@
 ---
 title: Graph-tooling rebuild — plan (SPECIFIED)
-status: specified (Goal 1 design settled + owner-ratified 2026-05-28; ready for Goal 2)
+status: QUARANTINED 2026-05-30 — superseded broken-concept work; not live
 date: 2026-05-28
 foundation: ./graph-tooling-rebuild-foundation-2026-05-28.md (single source of truth — read first)
 supersedes: ../archive/* (the gate-1a/1b EEF plan estate)
 ---
 
 # Graph-tooling rebuild — plan (SPECIFIED)
+
+> **QUARANTINED 2026-05-30 — DO NOT RESUME, CITE, OR BUILD ON THIS.**
+> A symptom of the superseded broken concept (gate-1a/1b, the list-shaped tool,
+> Zod-over-corpus, freshness). Preserved as historical record only. The ONLY live
+> EEF plan is
+> `.agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md`.
 
 **Read the foundation first:**
 [`graph-tooling-rebuild-foundation-2026-05-28.md`](./graph-tooling-rebuild-foundation-2026-05-28.md).

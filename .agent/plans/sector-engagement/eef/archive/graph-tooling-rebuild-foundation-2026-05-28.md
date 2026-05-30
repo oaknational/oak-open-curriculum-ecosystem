@@ -1,12 +1,18 @@
 ---
 title: Graph-tooling rebuild — foundation, diagnosis, and intent
-status: evolving-understanding (NOT frozen — deepens across passes)
+status: QUARANTINED 2026-05-30 — superseded broken-concept work; not live
 date: 2026-05-28
 supersedes: tmp/first-pass-eef-tooling-feedback.md (initial pass — do not over-anchor)
 provenance: owner feedback (16-point first pass + 2-point boundary refinement + next-steps direction) and this session's metacognitive reflections, 2026-05-28
 ---
 
 # Graph-tooling rebuild — foundation, diagnosis, and intent
+
+> **QUARANTINED 2026-05-30 — DO NOT RESUME, CITE, OR BUILD ON THIS.**
+> A symptom of the broken concept (external-origin data treated as unknown-shape
+> data) that the live plan remediates. Preserved as historical record only. The
+> ONLY live EEF plan is
+> `.agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md`.
 
 This is the foundation the **new** EEF/graph-tooling plan is built on. It exists
 because the EEF explore tool shipped in commits `9f6eb215` + `2214f0b2`

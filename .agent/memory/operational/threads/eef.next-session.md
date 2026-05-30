@@ -1,7 +1,118 @@
 # Next-Session Record — `eef` thread
 
-> **CURRENT TRUTH — RESUME HERE (2026-05-29). Everything below this banner is
-> SUPERSEDED HISTORY — do not resume it.**
+> **CURRENT TRUTH — RESUME HERE (2026-05-30). Everything below this banner is
+> SUPERSEDED HISTORY — do not resume it (including the 2026-05-29 S1–S5 banner).**
+>
+> The finishing plan `eef-graph-tool-completion.plan.md` was **restructured again
+> across 2026-05-30** (begun by Misty Washing Lagoon, deepened by Igneous Flaring
+> Spark under a full owner-metacognition session). It is now an **impact-led,
+> value-first D0–D7 plan**, **decision-complete**, with remaining exploration named
+> as explicit steps (D1 value, D3 MCP, D4 graph). The S1–S5 framing is superseded.
+>
+> **The plan now opens with a Remediation Context section.** This is remediation
+> for compounded mistakes-on-mistakes: one root error — external-origin data ≡
+> unknown-shape data — is repeated across the corpus typing, a Zod strand-schema, a
+> Zod freshness loader, the `validate-external-data-files` validator, and ADRs
+> 157/173/175/032/003. The dominant risk is **drift** into re-stating the mistake;
+> the default move on every inherited shape is to **replace it, never soften/preserve/
+> hold-open**.
+>
+> **Owner-ratified decisions baked into the plan:**
+>
+> 1. **Axis = KNOWN vs UNKNOWN, not external vs internal.** Known data is derived
+>    from; unknown-*structure* data is narrowed at its boundary. A clarification, not
+>    a contest.
+> 2. **No Zod anywhere in the EEF work EXCEPT the single MCP tool output schema**
+>    (a Zod-4 declaration derived directly from the fixed EEF data; the installed
+>    SDK accepts only Zod for `outputSchema` and validates `structuredContent`
+>    against it). Tool input is predicate-narrowed, no Zod. Remove strand-schema,
+>    school-context Zod + drift-guard, loader `safeParse`, MCP
+>    tool-definition/validation/citation-shape Zod.
+> 3. **Expunge the validator's `data-export-must-be-unknown` + `no-unknown-data-export`
+>    rules entirely** (not soften). Keep `logic-export-forbidden` + provenance. Exactly
+>    one `.external-data.ts` file → zero blast radius.
+> 4. **Node type CLOSED**: `EefStrand = (typeof EEF_TOOLKIT_DATA.strands)[number]`; the
+>    only unknown is the key, narrowed by `isValidStrandKey`; no hand-normalized
+>    interface (the `z.infer<EefStrandSchema>` one is removed).
+> 5. **graph-core is input to be RESHAPED, not a fixed foundation.** Its 7-op stubbed
+>    `GraphView` (2 live — manifest/subgraph; 5 `NotImplementedYet`) is premature
+>    generalization; reshape (kept domain-generic) to the concrete ops the MCP
+>    surface consumes — after verifying graph-ingest/graph-project consumer impact
+>    (shared RDF substrate stays; the threads adapter is an empty stub → blast
+>    radius zero).
+> 6. **Budget cap removed unconditionally** (list-era remnant; subgraph scope is the
+>    bound).
+> 7. **ADR-038 generalised, not duplicated** — it already is the compile-time
+>    umbrella; extend it to any fully-known `as const` constant (grounded in the
+>    `unknown-is-type-destruction` rule + ADR-034).
+> 8. **ADR-175 WITHDRAWN** (added 2026-05-30 PM). It was a little-used
+>    plan-promotion safeguard, mis-implemented as a freshness *gate* in code:
+>    tighten-then-withdraw the ADR and delete the freshness apparatus + all refs.
+> 9. **Estate decontamination is a deliverable** (added 2026-05-30 PM). The
+>    discarded positions (`data-export-must-be-unknown`, `gate-1a`/`gate-1b`,
+>    freshness/ADR-175, Zod-over-corpus, the response cap) are written across ADRs,
+>    plans, and code comments; D0 sweeps + corrects/deletes every LIVE reference.
+>
+> **The `repo-validators` gate is RED right now** (3 violations on
+> `eef-toolkit.external-data.ts`): 2× `data-export-must-be-unknown` (the erroneous
+> rule → expunge in D0) + 1× `logic-export-forbidden` (`strandById` → relocate in D2).
+> **D0 greens it and is the FIRST execution step.** Never satisfy by retyping the
+> corpus `unknown`.
+>
+> **Read:** `.agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md`
+> — the LIVE plan and the **ONLY** EEF plan (D0–D7, decision-complete; Remediation
+> Context + Ratified Decisions at the top). The old `graph-tooling-rebuild*` design
+> docs were **quarantined** to `archive/` (2026-05-30) — symptoms of the superseded
+> broken concept; do not resume, cite, or build on them.
+>
+> **Next session = execute D0** (doctrine ADRs: generalise 038, correct 157/173
+> in-record, WITHDRAW 175, ground 153/028 + `unknown-is-type-destruction`/034, note
+> 032/003; EXPUNGE the two validator rules + all references; run the estate
+> decontamination sweep → greens the gate), then **D1 (value, owner-ratified) ∥ D2
+> (typed foundation)**, then D3→D7. Readiness reviewers (`assumptions-expert`, `mcp-expert`, `type-expert`, +
+> an architecture reviewer for the graph-core reshape) before execution moves past
+> D4.
+>
+> Two generalised cross-session lessons captured this session (platform memory +
+> napkin): **existence-is-not-correctness / default-replace-in-remediation** and
+> **ground-convenient-claims**.
+
+## Session 2026-05-30 (cont.) — impact-led D0–D7 restructure under full owner metacognition (Igneous Flaring Spark / `6e055a`)
+
+**Planning-only session (owner-directed; zero product code).** Opened to "read +
+reflect on `eef-graph-tool-completion.plan.md`". Inherited the day's earlier
+impact-led restructure (Misty Washing Lagoon) and deepened it through several owner
+correction passes into the current **D0–D7, decision-complete** plan. The seven
+ratified decisions are in the banner above and in the plan's Ratified Decisions
+section.
+
+**Process arc (mine, owner-caught — the session's central lesson): a
+conservation reflex fired four times** — I kept reaching for the smallest edit that
+preserved a wrong inherited shape (softening the validator rule instead of deleting
+it; preserving a Zod role in a system with no unknown-shape data; treating the
+committed `graph-core` interface as fixed; holding the list-era cap as an open
+question). Root: **existence/commitment is zero evidence of correctness; in
+remediation the default verb is REPLACE.** Also caught grounding two convenient ADR
+claims (032 over-claim, 157 "supersede in spirit") without verifying them, one step
+after grounding ADR-173 correctly — discipline drops where a claim fits the thesis.
+Both captured to platform memory + napkin + distilled.
+
+**State:** plan rewritten + 2 memory entries; no commits, no claim opened (nothing
+to close). `repo-validators` gate RED (pre-existing external-data-validator
+conflation — the exact thing D0 fixes; surfaced to owner repeatedly; owner directed
+planning + compaction with it red). Readiness reviewers NOT dispatched (plan queued,
+not yet owner-moved to execution; the plan body changed materially this session, so
+the next owner-move toward execution should dispatch them).
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Igneous Flaring Spark` | `claude` | `claude-opus-4-8` | `6e055a` | `eef-impact-led-D0-D7-restructure-under-metacognition` | 2026-05-30 | 2026-05-30 |
+
+---
+
+> **SUPERSEDED 2026-05-30 (was CURRENT TRUTH at 2026-05-29). The S1–S5 framing
+> below is replaced by the 2026-05-30 D0–D7 restructure in the banner above — read
+> it for history only. Everything below this banner is SUPERSEDED HISTORY.**
 >
 > The EEF explore tool and the gate-1a / gate-1b split were diagnosed as the
 > **wrong foundation** (list-thinking in a graph domain; a query surface that

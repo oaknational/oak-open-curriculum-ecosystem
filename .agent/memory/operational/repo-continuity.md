@@ -16,6 +16,17 @@ Earlier archives remain under [`archive/`](archive/).
 
 ## Current State
 
+- **EEF finishing plan (2026-05-30, Igneous Flaring Spark — supersedes the
+  2026-05-29 Radiant S1–S5 bullet below)**: `eef-graph-tool-completion.plan.md`
+  is now an **impact-led D0–D7, decision-complete** plan opening with a
+  **Remediation Context** section (compounded mistakes-on-mistakes; root error =
+  external-origin ≡ unknown-shape, repeated across the corpus typing / Zod schema /
+  Zod loader / validator / ADRs 157/173/175/032/003). Ratified: axis = KNOWN vs
+  UNKNOWN; **no Zod anywhere**; **expunge** the validator `data-export-must-be-unknown`
+  rule; node type = `(typeof EEF_TOOLKIT_DATA.strands)[number]`; **graph-core query
+  contract reshaped, not treated as fixed**; cap removed; ADR-038 generalised. The
+  `repo-validators` gate is **RED** (pre-existing external-data-validator conflation
+  — D0 fixes it, first execution step). Resume via the `eef` thread record banner.
 - **Current branch**: `feat/graph-tooling-tidyup` (post-merge tidyup branch).
   **EEF Goal 2 / D0 is COMPLETE — PR #122 (`feat/graph-foundations` → `main`)
   MERGED at `29fc29e4` (2026-05-29, Quiet Hiding Hush).** The EEF graph
@@ -90,7 +101,7 @@ paused implementation program.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / claude-opus-4-8 / Radiant Glimmering Aurora / **finishing plan REWRITTEN under deeper owner critique (uncommitted): `eef-graph-tool-completion.plan.md` now S1–S5 with three deepened directives baked in — (1) the fixed `as const` corpus IS its own authority, derive types from it, DELETE the Zod/freshness/runtime-validation ingest layer; (2) NO stubs anywhere (delete the 5 `NotImplementedYet` ops from adapter AND interface); (3) EXTEND the generic `NodeFilter` to nested paths (settled).** D0 done/merged (`29fc29e4`, v1.15.0, dark). Next = execute the rewritten plan (S1 ADR first; readiness reviewers dispatch when owner moves toward execution). Owner's in-progress S2 edits (as-const data + loader.ts) in the tree / 2026-05-29 |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / claude-opus-4-8 / Igneous Flaring Spark / **finishing plan RESTRUCTURED 2026-05-30 to impact-led D0–D7, decision-complete (begun Misty Washing Lagoon, deepened this session under full owner metacognition). Axis = KNOWN vs UNKNOWN (no Zod anywhere); EXPUNGE the validator `data-export-must-be-unknown` rule (not soften); node type = `(typeof EEF_TOOLKIT_DATA.strands)[number]`; graph-core query contract RESHAPED, not fixed; cap removed; ADR-038 generalised. `repo-validators` gate RED — D0 fixes it (first execution step). D0 merge-safety done earlier (`29fc29e4`, dark). No commits this session.** / 2026-05-30 |
 | `agentic-engineering-enhancements` | Practice continuity (tactical lane; not the active delivery focus) | [record][agentic] | claude / claude-opus-4-8 / Eclipsed Creeping Secret / Group A graduations LANDED — WS-Z converged + committed: all six graduations (Lane A retired-thread hygiene; Lane B PDR-011/ADR-150/§6c; Lane C PDR-087; Lane D PDR-088; Lane E PDR-058 S3/S4 + PDR-029 note), PDR README + practice-index rows for 087/088, RULES_INDEX 0 new rows, six register entries removed (substance verified live first), execution plan archived. Next: none queued for this thread; Groups B/D/E forks + claim-liveness owner-surfaced; napkin+distilled strict-hard owned by the fitness session / 2026-05-29 |
 
 ## Paused Threads
@@ -133,19 +144,28 @@ thread's next-session record.
 
 ### EEF Graph-Tooling Rebuild (active — sole current product focus)
 
+> **UPDATED 2026-05-30 (Igneous Flaring Spark).** The S1–S5 detail below is
+> SUPERSEDED. The finishing plan is now **impact-led D0–D7, decision-complete**.
+> Next session = **execute D0** (doctrine ADRs + expunge the two erroneous
+> external-data validator rules → greens the RED `repo-validators` gate), then
+> **D1 (value, owner-ratified) ∥ D2 (typed foundation)**, then D3→D7. Authority =
+> the `eef` thread record CURRENT-TRUTH banner + the plan's Remediation Context +
+> Ratified Decisions sections. Do not resume the S1–S5 framing below.
+
 **Live (2026-05-28 — REBUILT FROM FOUNDATIONS).** The EEF explore tool and the
 gate-1a/1b split were diagnosed as the **wrong foundation** (list-thinking in a
 graph domain; the graph query surface stubbed and then worked around). The old
 EEF plan estate is archived at `.agent/plans/sector-engagement/eef/archive/`.
-Single source of truth for the rebuild:
+Superseded rebuild design docs (QUARANTINED 2026-05-30 to `eef/archive/`; the live
+plan `eef/current/eef-graph-tool-completion.plan.md` is the single EEF plan):
 
-- foundation:
-  [`graph-tooling-rebuild-foundation-2026-05-28.md`](../../plans/sector-engagement/eef/current/graph-tooling-rebuild-foundation-2026-05-28.md)
+- foundation (diagnosis carried into the live plan):
+  `graph-tooling-rebuild-foundation-2026-05-28.md`
   (diagnosis; principles — graph != list, completeness-as-integrity-not-maximalism,
   build-the-query-surface, budget-as-design-signal, no soft stubs,
   structuredContent-only; discovery framing; open questions).
-- plan (skeleton):
-  [`graph-tooling-rebuild.plan.md`](../../plans/sector-engagement/eef/current/graph-tooling-rebuild.plan.md)
+- plan (superseded by the live plan):
+  `graph-tooling-rebuild.plan.md`
   (self-correcting deliverables; D0 merge-safety, D1 restate end-goal +
   graph-tool contract + fresh client research, D2 build the query surface,
   D3 complete navigable subgraph tool, D4 agent round-trip, D5 'working with
@@ -176,8 +196,8 @@ every unbuilt op from adapter AND interface → S4 thin tool (delete
 in:** (1) the fixed `as const` corpus IS its own authority — derive types from it,
 NEVER validate it (no Zod/freshness/integrity check; only the inbound request is
 validated); (2) NO stubs anywhere; (3) EXTEND the generic filter to nested paths
-(settled). That plan **supersedes** the `graph-tooling-rebuild.plan.md` D1–D6 + DX
-spine (the foundation + resolved design are preserved and cited). **Forward
+(settled). That plan is now the single EEF plan; the earlier rebuild design docs
+were quarantined to `archive/` (2026-05-30) as superseded broken-concept work. **Forward
 sequence (owner-directed 2026-05-29):** next session executes the finishing plan →
 merge → a **team session** for (a) tool-in-context evaluation (usefulness vs the
 other curriculum tools) and (b) the graph + EEF plan-estate consolidation, briefed
@@ -382,6 +402,21 @@ Current branch non-goals:
   acceptance work.
 
 ## Deep Consolidation Status
+
+**handoff gate (2026-05-30, Igneous Flaring Spark — EEF finishing plan RESTRUCTURED to impact-led D0–D7)**:
+`not due as a fresh trigger — owner-requested session-handoff + consolidate-docs
+(session-completion mode) before compaction.` Planning-only session, zero product
+code. Deepened the day's earlier impact-led restructure (Misty Washing Lagoon) into
+a decision-complete D0–D7 plan under several owner correction passes; captured two
+generalised cross-session lessons (existence-is-not-correctness / default-replace;
+ground-convenient-claims) to platform memory + napkin + distilled. No commits, no
+claim opened. **`pnpm check` is RED** on the pre-existing external-data-validator
+conflation (`data-export-must-be-unknown` on the `as const` corpus) — the exact
+defect D0 expunges; surfaced to owner repeatedly; owner directed planning +
+compaction with it red (named constraint: the gate fix IS the plan's first step;
+falsifiable — next session's D0 greens it). Fitness explicitly out of scope per
+owner; napkin/distilled written at full weight, pressure owned by the separate
+fitness session.
 
 **handoff gate (2026-05-29, Radiant Glimmering Aurora — EEF finishing plan REWRITTEN under deeper owner critique)**:
 `not due — planning-only session; no thread completed, no fitness trigger newly

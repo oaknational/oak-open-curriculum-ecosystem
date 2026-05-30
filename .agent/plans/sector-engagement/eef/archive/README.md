@@ -6,15 +6,16 @@ resume them.
 They encode the **gate-1a / gate-1b split** and a thick-tool / thin-graph shape
 that was diagnosed (2026-05-28) as the wrong foundation — list-thinking imported
 into a graph domain, with the required graph query surface stubbed and worked
-around. See the diagnosis and the new foundation in:
+around.
 
-- `../current/graph-tooling-rebuild-foundation-2026-05-28.md` — the single source
-  of truth for the rebuild (diagnosis, principles, intent, open questions).
-- the new plan in `../current/` (built on that foundation).
+The two 2026-05-28 design docs that diagnosed that wrong shape —
+`graph-tooling-rebuild-foundation-2026-05-28.md` and `graph-tooling-rebuild.plan.md`
+— were themselves **quarantined here (2026-05-30)** as superseded broken-concept
+work: their still-valid graph-not-list diagnosis is carried into the live plan, and
+their planning-methodology learnings are tracked in `pending-graduations.md`.
 
-The learning behind these plans is preserved in the foundation doc and in git
-history. Filenames are unchanged so prior inbound references still resolve to the
-content (now under `archive/`).
+The ONLY live EEF plan is `../current/eef-graph-tool-completion.plan.md`. The
+learning behind everything here is preserved in these files and in git history.
 
 | Archived plan | Was |
 | --- | --- |

@@ -17,6 +17,19 @@ fitness_rationale: >-
   substance rather than trimming the lesson.
 ---
 
+## 2026-05-30 — existence is not correctness; in remediation, default-replace
+
+When remediating fundamentally wrong inherited decisions, the default move on any
+inherited shape (plan, ADR, validator rule, interface, type, list-era remnant) is
+REPLACE — never soften a wrong rule, preserve a wrong interface as a "fixed
+foundation," or hold a wrong remnant as an open question. Existence / commitment /
+established-doctrine is zero evidence of correctness; "decision-complete" is not a
+licence for minimal change. Root reflex = frame-capture (captured by the inherited
+plan, or by my own crystallized thesis, then conserving it). Companion: ground every
+claim against the artefact before asserting it, most strictly when it conveniently
+supports the thesis. Caught 4× in one session (EEF D0–D7 restructure). Platform
+memory: `existence-is-not-correctness-default-replace`, `ground-convenient-claims`.
+
 ## 2026-05-29 — a recorded verdict is a claim to test, not a frame to adopt
 
 When the task is to *evaluate* or *re-assess* X, the continuity records' recorded
@@ -108,8 +121,8 @@ the wrong shape. Three behaviour-changing lessons:
    (`never-disable-checks`, `no-warning-toleration`) did not immunise — the cure
    is the pre-output screen.
 
-Source: EEF graph-tooling rebuild. Full diagnosis:
-`plans/sector-engagement/eef/current/graph-tooling-rebuild-foundation-2026-05-28.md`.
+Source: EEF graph-tooling work (the originating design docs were quarantined to
+`eef/archive/` 2026-05-30; the lesson stands on its own).
 Graduation candidates: graph-tool-category ADR/PDR, self-correcting-deliverables
 planning methodology (PDR + oak-plan), Definition-of-Delivery refinement
 (PDR-085), 'working with graphs' skill — all in `pending-graduations.md`.

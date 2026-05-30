@@ -31,8 +31,8 @@ fitness_content_role: drainable-buffer
   `eef-explore-evidence-for-context` whole-graph tool this question assumes were
   diagnosed as the wrong foundation and discarded; the EEF work was rebuilt from
   foundations. The underlying substance — the selection / scoping strategy for a
-  graph-shaped tool — is preserved and is now the central open design question
-  (GOAL 1) of the rebuild, owned by
-  `plans/sector-engagement/eef/current/graph-tooling-rebuild-foundation-2026-05-28.md`
-  and its plan. No substance lost; this entry is retired to avoid a stale second
+  graph-shaped tool — is preserved and was carried into the live EEF plan
+  (`plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md`); the
+  2026-05-28 design docs that first explored it were quarantined to `archive/`
+  (2026-05-30). No substance lost; this entry is retired to avoid a stale second
   home in dead gate-1a/1b vocabulary.
