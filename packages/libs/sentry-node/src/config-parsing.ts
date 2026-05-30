@@ -3,7 +3,7 @@ import type { ObservabilityConfigError, SentryBooleanFlagName } from './types.js
 
 export function trimToUndefined(value: string | undefined): string | undefined {
   const trimmed = value?.trim();
-  return trimmed ? trimmed : undefined;
+  return trimmed || undefined;
 }
 
 export function parseOptionalBooleanFlag(
