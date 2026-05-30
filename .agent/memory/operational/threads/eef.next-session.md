@@ -23,9 +23,9 @@
 > 1. `.agent/plans/sector-engagement/eef/current/graph-tooling-rebuild-foundation-2026-05-28.md`
 >    — the single source of truth (diagnosis, principles, intent; §10 now resolved).
 > 2. `.agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md`
->    — the LIVE execution plan (S1–S4; supersedes the D1–D6 + DX spine of
->    `graph-tooling-rebuild.plan.md`, which — with the foundation — remains the
->    design record).
+>    — the LIVE execution plan (S1–S5, rewritten 2026-05-29; supersedes the
+>    D1–D6 + DX spine of `graph-tooling-rebuild.plan.md`, which — with the
+>    foundation — remains the design record).
 >
 > **GOAL 2 / D0 (merge-safety) is COMPLETE — PR #122 MERGED to `main` at
 > `29fc29e4` (2026-05-29, Quiet Hiding Hush).** The EEF graph foundation ships
@@ -34,16 +34,39 @@
 > flag OFF in preview & production; QG green. See the **2026-05-29 (cont. III)
 > entry below** (Quiet Hiding Hush) for the full close.
 >
-> **Next session = CLOSE THE EEF WORK** by executing the simple, linear finishing
-> plan
-> [`eef-graph-tool-completion.plan.md`](../../../plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md):
-> S1 contract ADR → S2 query surface (un-stub the 5 `NotImplementedYet` GraphView
-> ops; `selectEefSeedIds` → an `enumerateNodes` `NodeFilter`; remove the type-only
-> rank/explain/compare) → S3 thin formatter (remove `capForBudget` +
-> `projectExploreNode`; full-node membership-scoped `structuredContent`-only
-> subgraph) → S4 navigation round-trip. That plan **supersedes** the old
-> D1–D6 + DX spine of `graph-tooling-rebuild.plan.md` (foundation + resolved
-> design preserved and cited).
+> **Next session = CLOSE THE EEF WORK** by executing the finishing plan
+> [`eef-graph-tool-completion.plan.md`](../../../plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md),
+> **REWRITTEN 2026-05-29 (Radiant Glimmering Aurora) under a deeper owner critique
+> pass** — S1 contract ADR → S2 corpus-is-its-own-typed-source (derive
+> `EefStrand`/vocab from the `as const` `EEF_TOOLKIT_DATA`; DELETE the Zod
+> `EefToolkitSchema`, `freshness.ts`, the drift-guard; collapse `loader.ts` to an
+> infallible adapter) → S3 extend `graph-core` `NodeFilter` to nested paths +
+> build ONLY the ops the tool consumes (`enumerateNodes`/`getNode`/`subgraph`) and
+> **DELETE every unbuilt op** from adapter AND interface → S4 thin tool (delete
+> `projection.ts`/`response-budget.ts`; `structuredContent`-only + derived
+> `outputSchema`) → S5 navigation round-trip.
+>
+> **Three deepened owner directives now baked into the plan (they SUPERSEDE the
+> foundation §7 "salvage the Zod loader + freshness" line — the foundation is
+> explicitly evolving, not frozen):**
+>
+> 1. **The fixed `as const` corpus IS its own authority** — derive types FROM it,
+>    NEVER validate it. No Zod, no freshness gate, no runtime/build integrity
+>    check. The only validation in the system is the inbound tool request (the one
+>    trust boundary). Validating fixed known data is strictness-DESTRUCTION (Zod
+>    widens the exact literals), not rigor.
+> 2. **No stub operations, anywhere** — an op is built or it does not exist. The
+>    5 `NotImplementedYet` ops are DELETED from the adapter AND the generic
+>    `GraphView` interface (which declares only built ops; it grows by real
+>    implementation when a second adapter needs more).
+> 3. **The generic `NodeFilter` is EXTENDED to nested paths** (symmetric with
+>    `NodeProjection`'s `DeepKeyPath`) — settled LTAE solution, serves the
+>    misconceptions / prerequisites / KG roadmap; not an option.
+>
+> The corpus is delivered as a context-scoped **subgraph** (too large to hand over
+> whole), full nodes within it, navigable frontier. `outputSchema` is the DERIVED
+> published output contract (data → type → schema), not a runtime gate. Supersedes
+> the rebuild D1–D6 + DX spine (foundation + resolved design preserved and cited).
 >
 > **Forward sequence (owner-directed 2026-05-29 — Pelagic Sailing Sextant, planning session):**
 >
@@ -65,6 +88,55 @@
 > Do NOT resume the increments B–H / gate-1a/1b framing below. Detailed prior
 > session history remains in git. The full clean rewrite of this surface is plan
 > deliverable DX (estate-wide reference reconciliation).
+
+## Session 2026-05-29 (cont. V) — finishing plan REWRITTEN under deeper owner critique (Radiant Glimmering Aurora / `c23958`)
+
+**Planning-only session (owner-directed; zero code — implementation explicitly
+held).** Opened to "read + reflect on the finishing plan, report, then stop"; the
+owner then delivered several escalating critique passes that deepened the
+foundation and exposed the plan (and my reasoning) as still carrying rejected
+shapes. Outcome: `eef-graph-tool-completion.plan.md` **rewritten** S1–S5; the
+superseded plan-mode scratch file removed.
+
+**What the critique surfaced (and corrected):**
+
+- **The corpus is now `as const`** (owner-set; `eef-toolkit.external-data.ts` ends
+  `} as const`, exports `EefToolkitData = typeof …`, `strands`, `strandIds`). This
+  OBSOLETES the entire Zod-parse / freshness / runtime-integrity ingest layer the
+  prior plan meant to *salvage*. Types DERIVE from the const; the corpus is its own
+  authority and is NEVER validated. The prior `unknown` typing + Zod re-parse was
+  strictness-DESTRUCTION (Zod widens the exact literals).
+- **No stubs, ever** (owner, absolute) — the 5 `NotImplementedYet` ops are DELETED
+  from the adapter AND the generic `GraphView` interface; build only what the tool
+  consumes (`enumerateNodes`/`getNode`/`subgraph`); the interface declares only
+  built ops and grows by real implementation.
+- **Extend the generic `NodeFilter` to nested paths** (settled LTAE solution, not
+  an option) — the multi-corpus roadmap (misconceptions, prerequisites, KGs)
+  justifies the generic query surface; EEF is its first reference adapter; subgraphs
+  are the real size mechanism (corpus too large to hand over whole).
+- **No freshness** — the 180-day gate is invented/incorrect/damaging; deleted.
+  Verify ADR-175 and retract if it mandates it; reconcile ADR-173 (Zod loader).
+
+**Process lesson (mine, owner-caught repeatedly): the verify-reflex regenerated in
+six costumes** (Zod parse → MCP `outputSchema`-as-defense → cross-host-encoding
+worry → `satisfies` contract → build-time integrity test) and I twice re-served
+SETTLED decisions as A/B choices ("invented optionality even when you claim
+otherwise"). Also over-corrected the opposite way — briefly called the generic
+layer + subgraphs "premature" by theorising instead of reading the foundation that
+already justifies them. Root rule taken: **fixed canonical data is its own
+authority — derive, never verify; read the primary artefact before reasoning about
+the machinery around it** (the answer — `as const` on the file's last line — was
+there the whole time while I circled it). Captured in napkin + distilled.
+
+**Next session = execute the rewritten plan** (S1 ADR first; readiness reviewers —
+assumptions-expert on the chain, type-expert at S3, mcp-expert at S4 — dispatch
+when the owner moves it toward execution). Working tree carries the owner's
+in-progress S2 edits (`eef-toolkit.external-data.ts` as-const, `loader.ts`) — the
+Zod removal is S2 work, not yet done.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Radiant Glimmering Aurora` | `claude` | `claude-opus-4-8` | `c23958` | `eef-finishing-plan-rewrite-under-deeper-critique` | 2026-05-29 | 2026-05-29 |
 
 ## Session 2026-05-29 (cont. IV) — EEF completion + consolidation PLANS authored (Pelagic Sailing Sextant / `606a0e`)
 

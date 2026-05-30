@@ -706,6 +706,135 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "5d3204bd-690d-47c2-8eeb-526ade26537e",
+      "agent_id": {
+        "agent_name": "Lanternlit Creeping Shade",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e74",
+        "id": "762a2ad5-af36-5f2c-aaa1-56d15db7ea4d"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-30T07:15:07Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Restructure EEF graph tool completion plan around teacher impact, layered end state, MCP graph surface, deliverables, and done criteria",
+      "archived_at": "2026-05-30",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-30T07:17:34Z",
+        "closed_by": {
+          "agent_name": "Lanternlit Creeping Shade",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e74",
+          "id": "762a2ad5-af36-5f2c-aaa1-56d15db7ea4d"
+        },
+        "summary": "Restructured the EEF graph completion plan around teacher impact, typed graph construction, MCP graph factory, EEF MCP tool suite, and deliverable definitions of done. Validation: focused markdownlint, Prettier check, and git diff --check passed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "5d3204bd-690d-47c2-8eeb-526ade26537e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "8e1342e5-bf91-4d90-9928-318e57b055fc",
+      "agent_id": {
+        "agent_name": "Lanternlit Creeping Shade",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e74",
+        "id": "762a2ad5-af36-5f2c-aaa1-56d15db7ea4d"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-30T07:18:53Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Owner follow-up: refine EEF graph completion plan so exploration starts from value and MCP tool/resource design before graph-layer construction.",
+      "archived_at": "2026-05-30",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-30T07:20:07Z",
+        "closed_by": {
+          "agent_name": "Lanternlit Creeping Shade",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e74",
+          "id": "762a2ad5-af36-5f2c-aaa1-56d15db7ea4d"
+        },
+        "summary": "Refined the EEF graph completion plan so the next session starts with value and impact, then MCP tools/resources, then graph capability and typed ingest. Validation: focused markdownlint, Prettier check, and git diff --check passed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8e1342e5-bf91-4d90-9928-318e57b055fc",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "d940ec43-d1f8-414c-891b-0411f3795003",
+      "agent_id": {
+        "agent_name": "Lanternlit Creeping Shade",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e74",
+        "id": "762a2ad5-af36-5f2c-aaa1-56d15db7ea4d"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-30T07:24:01Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Apply documentation and code reviewer findings to the EEF graph completion plan; plan-only edits.",
+      "archived_at": "2026-05-30",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-30T07:24:49Z",
+        "closed_by": {
+          "agent_name": "Lanternlit Creeping Shade",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e74",
+          "id": "762a2ad5-af36-5f2c-aaa1-56d15db7ea4d"
+        },
+        "summary": "Applied docs/code reviewer findings to the EEF graph completion plan: ADR-175 disposition gate, D2 owner/MCP SDK verification, graph-core boundary split, schema derivation drift guard, envelope metadata additive wording, and narrowed non-goal around fixed-corpus validation vs required tests. Validation: focused markdownlint, Prettier check, and git diff --check passed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "d940ec43-d1f8-414c-891b-0411f3795003",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

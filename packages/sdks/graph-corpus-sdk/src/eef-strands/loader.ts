@@ -2,9 +2,9 @@
  * EEF corpus loader (gate-1a, t2) — the validation + freshness boundary.
  *
  * `loadEefCorpus` is the single entry point that turns the repository-held
- * snapshot (`./eef-toolkit.external-data.ts`, typed `unknown`) into a live
- * `EefStrandsGraphView`. It enforces three boundaries in order, failing
- * fast with a discriminated error:
+ * snapshot (`./eef-toolkit.external-data.ts`, a fully-typed `as const` literal)
+ * into a live `EefStrandsGraphView`. It enforces three boundaries in order,
+ * failing fast with a discriminated error:
  *
  * 1. **Shape** — the snapshot is parsed through `EefToolkitSchema`
  *    (schema-first; the strand type flows from this schema via `z.infer`).
@@ -20,13 +20,22 @@
  *
  * The success type is the `GraphView` interface — consumers compose against
  * the polymorphic contract (ADR-179), never the concrete adapter.
+ *
+ * Direction: boundaries 1 (Shape) and 2 (Freshness) are redundant for this
+ * fixed, fully-known `as const` corpus — they re-validate information the type
+ * already carries. The constant in `./eef-toolkit.external-data.ts` is the type
+ * authority (schema-first applies to the upstream OpenAPI surface, not this
+ * fixed corpus, where the data is the schema), and this Zod/freshness loader is
+ * under active removal (see
+ * `.agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md`,
+ * exploratory). Do not extend this path or add `unknown` / type assertions here.
  */
 
 import { ok, err, type Result } from '@oaknational/result';
 import type { z } from 'zod';
 import type { GraphView } from '@oaknational/graph-core/graph-view';
 
-import { EEF_TOOLKIT_RAW } from './eef-toolkit.external-data.js';
+import { EEF_TOOLKIT_DATA } from './eef-toolkit.external-data.js';
 import { EefToolkitSchema, type EefStrand } from './strand-schema.js';
 import { checkFreshness, DEFAULT_THRESHOLD_DAYS, type FreshnessError } from './freshness.js';
 import {
@@ -89,7 +98,7 @@ export interface LoadEefCorpusOptions {
 export function loadEefCorpus(
   options: LoadEefCorpusOptions,
 ): Result<LoadedEefCorpus, LoadEefCorpusError> {
-  const parsed = EefToolkitSchema.safeParse(EEF_TOOLKIT_RAW);
+  const parsed = EefToolkitSchema.safeParse(EEF_TOOLKIT_DATA);
   if (!parsed.success) {
     return err({ kind: 'invalid-corpus-data', issues: parsed.error.issues });
   }

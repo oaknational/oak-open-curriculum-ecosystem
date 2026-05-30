@@ -1,11 +1,16 @@
 /**
  * Zod schema for the EEF Teaching and Learning Toolkit corpus (gate-1a, t2).
  *
- * Schema-first execution: the strand type flows from this schema via
- * `z.infer`, replacing the gate-1a `EefStrand` skeleton (review-register
- * items F + J). The schema is the strict validation boundary for the
- * external snapshot in `./eef-toolkit.external-data.ts`; the loader (`./loader.ts`)
- * parses `unknown` through it before any consumer sees a strand.
+ * Direction: for this fixed, fully-known corpus the `as const` constant in
+ * `./eef-toolkit.external-data.ts` is the type authority — `EefStrand` should
+ * derive from it (`typeof` + indexed access), not from `z.infer` of this schema.
+ * Schema-first derivation is the discipline for the upstream OpenAPI surface,
+ * not for a corpus where the data is the schema. This Zod schema and the runtime
+ * parse it backs (`./loader.ts`) are redundant re-validation of compile-time-
+ * known data and are under active removal (see
+ * `.agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md`,
+ * exploratory). It currently still types `EefStrand` via `z.infer`; do not build
+ * new consumers on that path.
  *
  * Modelling fidelity is grounded in the real 30-strand corpus:
  *

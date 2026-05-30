@@ -6,16 +6,31 @@
  * a raw .json so it survives the SDK build (`bundle: false`, ADR-010) without
  * a separate asset-copy step.
  *
- * Typed `unknown` deliberately: this is external input and MUST be validated
- * through `EefToolkitSchema` (./strand-schema.ts) before use — never consumed
- * directly. See ./loader.ts for the validation + freshness boundary.
+ * Exported `as const`: this is known, fixed data carrying fully-precise
+ * literal types, so it is consumed directly with full type precision —
+ * {@link EefToolkitData} and {@link strandById} read it with no cast and no
+ * runtime parse.
+ *
+ * This `as const` constant is the type authority for the EEF corpus: downstream
+ * types are derived from it (`typeof` + indexed access), never re-established.
+ * Schema-first derivation (Zod / `z.infer`) is the discipline for the upstream
+ * OpenAPI surface, not for this fixed, fully-known corpus — here the data is the
+ * schema.
+ *
+ * Direction: `./loader.ts` currently still runs a Zod parse and a freshness gate
+ * over this constant. For a fixed, compile-time-known corpus that is redundant
+ * re-validation of information the type already carries, and that path is under
+ * active removal (see
+ * `.agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md`,
+ * exploratory). Do not add Zod parsing, freshness gating, `unknown`, or type
+ * assertions at this boundary.
  *
  * Provenance: the acquisition path is not yet confirmed in-repo (see
  * `meta.licence.attribution_note`); until EEF clarifies refresh mechanics this
  * repository copy is the definitive implementation source. The gate-1b refresh
  * script regenerates this module from a reviewed replacement.
  */
-export const EEF_TOOLKIT_RAW: unknown = {
+export const EEF_TOOLKIT_DATA = {
   meta: {
     schema_version: '0.1.0',
     data_version: '0.2.0',
@@ -1949,4 +1964,104 @@ export const EEF_TOOLKIT_RAW: unknown = {
       },
     },
   },
+} as const;
+
+/** The whole toolkit snapshot's static type, inferred from the literal. */
+export type EefToolkitData = typeof EEF_TOOLKIT_DATA;
+
+/**
+ * One EEF Teaching and Learning Toolkit strand, narrowed to its *exact*
+ * literal shape.
+ *
+ * Indexing an `as const` tuple with `[number]` yields a union whose members are
+ * the individual strand object literals — each keeping its literal `id` and
+ * field values — rather than a single widened `{ id: string; ... }`. That
+ * per-member precision is the foundation that lets {@link StrandByStrandId} and
+ * {@link strandById} hand back one known strand instead of the union of all of
+ * them. Lose the `as const` on {@link EEF_TOOLKIT_DATA} and this collapses to a
+ * widened shape, taking the precision of everything below it with it.
+ */
+type Strand = (typeof EEF_TOOLKIT_DATA.strands)[number];
+
+/**
+ * Precisely-keyed lookup from a strand `id` literal to *that* strand's exact
+ * type — never a union over all strands.
+ *
+ * `StrandByStrandId['eef-tl-arts-participation']` resolves to the single
+ * arts-participation strand object type, with every literal field intact.
+ *
+ * @remarks
+ * Reusable pattern — **"keyed lookup over a fixed tuple"**. To build the same
+ * precise lookup for any other fully-known `as const` sub-structure:
+ *
+ * 1. Derive the element union: `type T = (typeof DATA.items)[number]`. The
+ *    `as const` on the source is mandatory; without it the literal keys and
+ *    values widen to `string`/primitives and the precision is gone.
+ * 2. Remap the union to a lookup by its discriminant key (here `id`):
+ *    `type ByKey = { [E in T as E['key']]: E }`. The key-remapping `as` clause
+ *    distributes over each union member, so member `E` stays narrowed to one
+ *    element on *both* the key and value sides — that distribution is exactly
+ *    what stops the value side from collapsing back into the union.
+ *
+ * The discriminant must be unique per element (strand `id`s are); a shared key
+ * would merge those entries into one.
+ *
+ * @see {@link strandById} for the runtime counterpart of this type.
+ */
+type StrandByStrandId = {
+  [S in Strand as S['id']]: S;
 };
+
+/**
+ * Look up a strand by `id` and get back its *exact* shape, never the union.
+ *
+ * @typeParam Id - The literal strand id being looked up, inferred from the
+ *   argument. The `const Id extends Strand['id']` constraint both rejects
+ *   unknown ids at compile time and pins `Id` to the exact literal passed, so
+ *   the return type narrows to the single matching strand.
+ * @param id - A known strand id (autocompletes to the real ids).
+ * @returns The one strand whose `id` equals `id`, typed through
+ *   {@link StrandByStrandId} so callers see its full literal shape.
+ * @throws Error if `id` matches no strand. Unreachable for well-typed callers
+ *   — the constraint forbids unknown ids — but guards erased-type callers where
+ *   a `string` reaches this boundary from a JS edge.
+ *
+ * @example
+ * ```ts
+ * const arts = strandById('eef-tl-arts-participation');
+ * arts.headline.impact_months; // typed as the literal 3 — exact, not a union
+ * ```
+ *
+ * @remarks
+ * Reusable pattern — **"assertion-free precise accessor"**. The precision is
+ * achieved without a single `as` cast:
+ *
+ * - The return type `StrandByStrandId[Id]` indexes the keyed lookup
+ *   ({@link StrandByStrandId}) by the caller's literal id.
+ * - Narrowing inside `.find` uses a type *predicate*
+ *   (`strand is StrandByStrandId[Id]`), which is not a type assertion. A
+ *   predicate is the one spot the compiler trusts rather than proves, but the
+ *   claim is backed by the runtime `strand.id === id` check, so it is sound:
+ *   equal ids genuinely mean `strand` is that member.
+ *
+ * To apply elsewhere, pair a `ByKey` lookup type (see {@link StrandByStrandId})
+ * with a generic accessor of the form
+ * `fn<const K extends T['key']>(k: K): ByKey[K]`, find with the predicate
+ * `(e): e is ByKey[K] => e.key === k`, and throw on miss.
+ */
+export function strandById<const Id extends Strand['id']>(
+  id: Id,
+): StrandByStrandId[Id] {
+  const found = EEF_TOOLKIT_DATA.strands.find(
+    (strand): strand is StrandByStrandId[Id] => strand.id === id,
+  );
+  if (found === undefined) {
+    throw new Error(`Unknown EEF strand id: ${id}`);
+  }
+  return found;
+}
+
+
+
+/** Snapshot freshness marker: the `meta.last_updated` literal from the corpus. */
+export const lastUpdated = EEF_TOOLKIT_DATA.meta.last_updated;

@@ -283,3 +283,35 @@ actually ships; boot the real server with the real env var in both states. A gre
 QG and a passing review are necessary but not sufficient for a dark-shipped feature
 — prove it runs. Source: EEF D0 (Quiet Hiding Hush), `28bb7ace`; `candidate:`
 flag-gating-covers-all-surfaces.
+
+## 2026-05-29 — fixed canonical data is its own authority: derive, never verify
+
+Three coupled lessons from the EEF finishing-plan rewrite (Radiant Glimmering
+Aurora), each owner-caught:
+
+1. **Fixed canonical data (an `as const` constant, a committed corpus) IS its own
+   source of truth — derive types FROM it (`typeof`, indexed access), NEVER validate
+   it.** Zod-parsing / freshness-gating / integrity-checking known fixed data is not
+   rigour; it is strictness-DESTRUCTION (a Zod parse widens the exact literal types
+   the const already carries). Validation is only for **untrusted input crossing a
+   trust boundary** — a compile-time constant crosses none. The verify-reflex
+   regenerates under new names when stripped (Zod parse → MCP `outputSchema`-as-gate
+   → `satisfies` contract → build-time integrity test); name it and stop it. The
+   legitimate survivors near such data: inbound-request validation (real boundary)
+   and a DERIVED published `outputSchema` (data → type → schema, a contract, not a
+   gate).
+
+2. **Read the primary artefact before reasoning about the machinery around it, and
+   before soliciting any reviewer.** The decisive fact (the data's `} as const`) sat
+   on the file's last line while three explore agents, three specialist reviewers,
+   and two over-corrections circled it — because the reasoning was grounded in the
+   *framing* (comments, plans, reviewer reports), not the artefact. Reviewer
+   thoroughness validates *within* a frame and cannot catch a wrong frame.
+
+3. **A choice that is forced by LTAE/strictness must be stated as a verdict, not
+   surfaced as an A/B menu** — and the opposite over-correction (calling justified,
+   roadmap-backed architecture "premature" by theorising) is the same failure of
+   grounding. Discriminate by reading the plan estate, not by reasoning in a vacuum.
+
+Source: EEF finishing-plan rewrite (Radiant Glimmering Aurora), `c23958`;
+`candidate:` derive-dont-verify-fixed-data, read-primary-artefact-first.
