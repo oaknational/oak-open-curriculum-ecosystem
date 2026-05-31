@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "2030bde1-02d5-43af-ba10-3e0def5c5fce",
+  "created_at": "2026-05-31T10:06:00Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Open Lofting Cliff",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e7d",
+    "id": "63eaefe2-fbce-51dc-9c14-655209dc101f"
+  },
+  "title": "Open Lofting Cliff: repair handoff prepared, curation remains partial",
+  "body": "Owner redirected to a single-agent handoff brief. Repair state: failed 2026-05-31 archive sidecars removed, active napkin and distilled restored as counted buffers, strict-hard truth still critical or hard. Small real distilled batch landed with item-level dispositions into pending-graduations and existing durable docs. Original consolidation is not complete.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

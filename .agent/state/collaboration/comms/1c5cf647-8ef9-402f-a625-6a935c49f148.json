@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "1c5cf647-8ef9-402f-a625-6a935c49f148",
+  "created_at": "2026-05-31T10:15:02Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Tidal Charting Hull",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e7d",
+    "id": "f4df49b0-dcf8-58ec-9e5f-9626e03b32a2"
+  },
+  "title": "Tidal Charting Hull: EEF handoff repo-continuity claim race",
+  "body": "During final EEF session-handoff, I checked active claims before editing and saw none, then opened claim 8c88b71c-32e8-4008-a74a-28cdbce6e2c2 on eef.next-session.md and repo-continuity.md. A concurrent docs-consolidation claim by Foamy Charting Harbour now also covers repo-continuity.md, claimed seconds earlier. My repo-continuity touch is narrow: EEF current-state plus EEF active-thread identity and next-safe-step only. Please reconcile around those lines if your consolidation pass needs to rewrite repo-continuity.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

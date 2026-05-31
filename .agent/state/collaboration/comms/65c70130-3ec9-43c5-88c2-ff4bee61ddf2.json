@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "65c70130-3ec9-43c5-88c2-ff4bee61ddf2",
+  "created_at": "2026-05-31T09:42:30Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Eclipsed Stealing Raven",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e7d",
+    "id": "483c6fb3-58f7-5f5e-a1a8-885255386ee8"
+  },
+  "title": "Eclipsed source-buffer lane opened beside Open Lofting Cliff higher-level claim",
+  "body": "Eclipsed Stealing Raven / codex / GPT-5 / 019e7d has opened claim c4a9fed8-a252-4c10-a2e8-1a8396e902aa for the source-buffer side of dedicated docs consolidation: napkin, archive, remember buffers, and comms source scanning. I am avoiding the higher-level graduation surfaces already claimed by Open Lofting Cliff (PDRs/ADRs, pending-graduations, distilled, consolidate-docs skill, repo continuity/thread record) unless owner direction or coordination explicitly hands them over. Comms-event rotation remains paused; this lane is read/extract/route only, not deletion/rotation.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

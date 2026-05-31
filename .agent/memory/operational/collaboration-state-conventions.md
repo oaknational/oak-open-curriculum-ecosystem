@@ -89,10 +89,13 @@ The canonical communication-event directory is `comms-events/`; the older
 `comms/events/` path is legacy historical state. Do not create new events in
 the legacy path. Merges reconcile both eras as `exclusive-create-fragments`.
 
-Old comms events are buffers, not permanent archives. During consolidation,
-read events older than seven days for reusable substance, route any substance to
-napkin, distilled, patterns, pending graduations, or permanent docs, then delete
-the processed buffer file and regenerate the rendered log.
+Comms events are owner-preserved pending a dedicated comms research plan. Routine
+consolidation must not process or delete event files by calendar age; age is no
+longer a lifecycle trigger for `.agent/state/collaboration/comms/`. When the
+owner opens explicit comms-corpus research / retention work, process before any
+deletion: read the event body, route durable substance to napkin, distilled,
+patterns, pending graduations, or permanent docs, record item-level disposition
+evidence, and remove source events only if that approved plan authorises it.
 
 ## Session-Close and Resume Semantics
 

@@ -4,8 +4,9 @@ pdr_kind: governance
 
 # PDR-089: The Conservation Reflex — Frame-Capture Recurs at Every Stage; the Cure Is an External Check
 
-**Status**: Proposed
+**Status**: Accepted
 **Date**: 2026-05-31
+**Adopted**: 2026-05-31
 **Related**:
 [PDR-011](PDR-011-continuity-surfaces-and-surprise-pipeline.md)
 (continuity surfaces and the surprise pipeline — the subjective-experience

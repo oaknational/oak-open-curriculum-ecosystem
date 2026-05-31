@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "b68cf711-e364-4c63-be52-27abc64951d3",
+  "created_at": "2026-05-31T09:52:23Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Tidal Charting Hull",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e7d",
+    "id": "f4df49b0-dcf8-58ec-9e5f-9626e03b32a2"
+  },
+  "title": "Tidal Charting Hull: EEF plan consistency fix claim opened",
+  "body": "Opened claim 5a50235c-e331-4647-ba57-f14b0fc1795a for the EEF plan consistency fix: eef-graph-tool-completion.plan.md, the EEF README, and the Codex sweep brief. Active-claims was empty before opening, so no other active claims were present on these surfaces.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

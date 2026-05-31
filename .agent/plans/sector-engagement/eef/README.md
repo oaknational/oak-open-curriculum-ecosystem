@@ -10,14 +10,13 @@
 
 Dedicated subthread for integrating the [Education Endowment Foundation
 Teaching and Learning Toolkit](https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit)
-as an **evidence corpus** (composition: graph foundation + ranking
-engine) on Oak's MCP server.
+as a typed **evidence graph** on Oak's MCP server.
 
 **Status**: One decision-complete plan in execution
 ([`current/eef-graph-tool-completion.plan.md`](current/eef-graph-tool-completion.plan.md),
 D0–D7). The EEF corpus substrate lives in `packages/sdks/graph-corpus-sdk`
-(`eef-strands`); the typed foundation, recommendation tool, prompt, ranking,
-citation discipline, and telemetry are sequenced in the live plan.
+(`eef-strands`); the typed foundation, graph tool/resource surface, prompt,
+evidence-preservation obligations, and telemetry are sequenced in the live plan.
 **Originating session branch**: `feat/eef_exploration`.
 **Conservation evidence**: semantic preservation map at
 [`reference/conservation-map.md`](reference/conservation-map.md) — a historical
@@ -45,8 +44,8 @@ In scope:
 - the EEF Teaching and Learning Toolkit dataset snapshot;
 - strategic and technical reference material describing how Oak should
   integrate that data;
-- the executable plan to expose EEF resources, a recommendation tool, and a
-  prompt through Oak's MCP server.
+- the executable plan to expose EEF graph tools/resources and prompt support
+  through Oak's MCP server.
 
 Out of scope:
 
@@ -68,8 +67,8 @@ end:
   — impact-led D0–D7, decision-complete. D0 corrects the known-vs-unknown data
   doctrine and the corpus substrate (the EEF snapshot is a fully-known `as
   const` constant; its types are derived from it, not validated against a
-  schema); D1–D7 deliver the typed foundation, the recommendation tool and
-  prompt, ranking, structural citation discipline, and telemetry.
+  schema); D1–D7 deliver the typed foundation, graph tool/resource surface,
+  prompt, evidence-preservation obligations, and telemetry.
 
 The broader increment context (graph-query foundation, cross-corpus
 combinatorial primitives, cross-source journeys) lives in the
@@ -153,8 +152,13 @@ and the generalised ADR-038.
 
 ## Status of the Live Plan
 
-The live plan is decision-complete and in execution (D0 in progress). Before any
-refreshed EEF data is copied into the SDK:
+The live plan is decision-complete and in execution. D0 is complete and committed
+at `ce9745c7`; the post-repair reviewer pass from
+`current/eef-plan-reviewers.codex-brief.md` has been run and its findings are
+folded into the live plan. The next implementation step is D1 value/impact
+exploration in parallel with D2 typed raw-corpus foundation work.
+
+Before any refreshed EEF data is copied into the SDK:
 
 1. re-validate the snapshot against current upstream EEF data;
 2. re-apply the plan-body first-principles check to test shapes, file landing

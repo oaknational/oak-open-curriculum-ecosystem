@@ -1,5 +1,37 @@
 {
   "schema_version": "1.3.0",
   "commit_queue": [],
-  "claims": []
+  "claims": [
+    {
+      "claim_id": "74d3d9ab-c14e-4a88-82b9-d4be2c55f99a",
+      "agent_id": {
+        "agent_name": "Blooming Twining Grove",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "31580294-82bd-5777-9d9e-b5ba2f0821b4"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/research/agentic-engineering/continuity-memory-and-knowledge-flow/longitudinal-napkin-review-2026-05-31.md",
+            ".agent/memory/operational/curator-passes/2026-05-31-codex-napkin-longitudinal-review.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/comms/*.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T10:30:19Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Run dedicated longitudinal napkin review over current plus twenty archived napkins; produce research report, curator ledger, and justified owner-gated updates."
+    }
+  ]
 }

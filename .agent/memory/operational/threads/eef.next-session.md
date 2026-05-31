@@ -1,7 +1,49 @@
 # Next-Session Record — `eef` thread
 
-> **D0 COMPLETE + INTENT-VS-LETTER AUDITED — RESUME HERE (2026-05-31, Opalescent
-> Transiting Prism / `73491c`; owner-confirmed).** Both Commit 1 (code) and Commit
+> **REVIEWER FINDINGS APPLIED + ARCHITECTURE BRIEF READY (2026-05-31,
+> Hearthlit Roasting Caldera / `019e7d`; owner-confirmed light handoff).** This
+> session ran the Codex reviewer brief at
+> `eef/current/eef-plan-reviewers.codex-brief.md`: `docs-adr-expert`, a general
+> `type-expert`, and a special type-preservation `type-expert`. Findings were
+> synthesised, then the owner widened scope to apply all findings and polish. The
+> live plan and EEF README now state the controlling doctrine clearly: raw
+> `EEF_TOOLKIT_DATA as const` is definitively **not** the graph contract; the graph
+> is derived from the raw data; exact raw-derived typing must be preserved through
+> the graph-native view, graph operations, MCP schema declarations,
+> `structuredContent`, and the teacher-facing value proof. The plan no longer
+> leaves an "identical raw/graph shape" revisit path. The next-session Codex brief
+> for all four architecture reviewers is now
+> `eef/current/eef-plan-architecture-reviewers.codex-brief.md`; run
+> `architecture-expert-barney`, `architecture-expert-betty`,
+> `architecture-expert-fred`, and `architecture-expert-wilma`, then synthesize.
+> This session did **not** run `pnpm check` by explicit owner direction. Targeted
+> checks for the touched plan/brief files passed: `git diff --check`,
+> `pnpm markdownlint-check:root ...`, and `pnpm exec prettier --check ...`.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Hearthlit Roasting Caldera` | `codex` | `GPT-5` | `019e7d` | `eef-reviewer-synthesis-plan-repair-architecture-brief` | 2026-05-31 | 2026-05-31 |
+>
+> **PLAN REPAIR + REVIEWER BRIEF COMPLETE — RESUME HERE (2026-05-31, Tidal
+> Charting Hull / `019e7d`; owner-confirmed handoff).** The EEF live plan was
+> repaired after the D0 completion audit: D0 stale-state residue was swept; the
+> MCP input/output schema rule now says each schema is derived by a single Zod call
+> on the appropriate subset of the constructed graph-native EEF view; and the raw
+> EEF corpus is explicitly the source snapshot and type source, not automatically
+> the graph contract. D5 now owns an explicit pure graph-native
+> construction/adaptation boundary; if no distinct graph-native shape adds value,
+> the identical raw/graph-native shape requires owner ratification before
+> implementation proceeds. The EEF README was reframed around graph tools/resources
+> and evidence-preservation obligations. A next Codex reviewer-session brief now
+> exists at `eef/current/eef-plan-reviewers.codex-brief.md`; run it next. It
+> requires `docs-adr-expert`, a general `type-expert`, and a separate special
+> `type-expert` pass tracing `EEF_TOOLKIT_DATA as const` through raw corpus ->
+> typed raw foundation -> graph-native view -> graph ops -> MCP schemas/results ->
+> teacher value proof. Targeted markdownlint/Prettier and root Prettier were green;
+> `pnpm check` was not run in the final handoff by explicit owner direction.
+>
+> **D0 COMPLETE + INTENT-VS-LETTER AUDITED (2026-05-31, Opalescent Transiting
+> Prism / `73491c`; owner-confirmed).** Both Commit 1 (code) and Commit
 > 2 (docs/decontamination) are DONE and verified in the working tree. A
 > 4-dimension adversarial audit (letter / intent / conservation-reflex /
 > cross-session coherence) confirmed the intent is met — the gate was greened by
@@ -15,12 +57,19 @@
 > superseded-in-place. The decontamination ledger
 > (`eef/current/eef-d0-decontamination-ledger.md`) is complete. **Full `pnpm
 > check` is GREEN (exit 0** — build/e2e/a11y/widget/type-check/lint/test/knip/
-> depcruise/markdownlint/prettier). **The whole D0 bundle is UNCOMMITTED — the
-> owner-gated commit (Commit 1 code + Commit 2 docs) is the one remaining D0
-> landing action; the owner has not yet asked to commit.** Next after the commit:
-> D1 (value, owner-ratified) ∥ D2 (typed foundation), then D3→D7. The detailed
-> Commit-1/Commit-2 record below remains accurate; the plan-finalisation banner
-> further below remains the authority for D1–D7 scope.
+> depcruise/markdownlint/prettier). **The whole D0 bundle is committed at
+> `ce9745c7`** (2026-05-31, one owner-directed commit including the non-EEF
+> `discovery/` plan collection and draft PDR-089; pre-commit hook green; 7 ahead
+> of origin, NOT pushed). **Next sessions: (1) a Codex EEF plan-consistency /
+> residue sweep — brief at
+> `eef/current/eef-plan-consistency-sweep.codex-brief.md` (hunts the D1–D7 and
+> cross-cutting sections for the same reshape-propagation residue D0's audit
+> caught and PDR-089 names) is now complete; then (2) run the Codex reviewer
+> session brief named above; then (3) D1 (value, owner-ratified) ∥ D2 (typed raw
+> foundation), then D3→D7.** The detailed Commit-1/Commit-2 record below remains
+> accurate; the plan-finalisation banner further below remains the authority for
+> D1–D7 scope. (A small continuity SHA-stamp delta — this update — is the only
+> thing uncommitted on top of `ce9745c7`.)
 >
 > ---
 >

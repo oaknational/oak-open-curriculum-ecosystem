@@ -1,5 +1,110 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-31 — Foamy Charting Harbour / codex / GPT-5 / `019e7d`, longitudinal napkin-review brief + light handoff)
+
+**Brief landed; curation review remains the next-session work.** The owner asked
+for the next Codex session to process the current napkin plus the last twenty
+archived napkins, looking for missed content and long-timescale patterns. This
+session authored the paste-ready brief at
+`codex-napkin-longitudinal-review.brief.md`, including the recompute-the-corpus
+instruction, prior synthesis reads, candidate disposition rules, expected
+research report and curator ledger, and a completion-verdict contract. The brief
+also preserves the active boundary that comms-event rotation remains paused and
+EEF plan files should not be touched without re-checking claims.
+
+**Validation:** targeted `markdownlint` and `git diff --check` passed for the
+new brief. The narrow brief-authoring claim was closed explicitly. Full
+longitudinal review was not run in this session; the next agent should treat the
+brief as the controlling pickup artefact.
+
+**Next safe step:** start a single Codex `/goal` session from
+`codex-napkin-longitudinal-review.brief.md`, recompute the archive corpus at
+session start, then produce the research report plus curator-pass ledger named
+there. Use `codex-docs-consolidation.brief.md` only if the owner asks for the
+ordinary docs-consolidation continuation instead.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Foamy Charting Harbour` | `codex` | `GPT-5` | `019e7d` | `longitudinal-napkin-review-brief` | 2026-05-31 | 2026-05-31 |
+| `Blooming Twining Grove` | `codex` | `GPT-5` | `019e7d` | `longitudinal-napkin-review` | 2026-05-31 | 2026-05-31 |
+
+## Session Outcome (2026-05-31 — Open Lofting Cliff / codex / GPT-5 / `019e7d`, consolidation repair and handoff brief)
+
+**Partial repair landed; original consolidation remains pending.** After owner
+correction, Open Lofting Cliff repaired the failed archive-only consolidation
+pattern by restoring active `napkin.md` and `distilled.md` to counted live
+buffers, removing the failed 2026-05-31 archive sidecars, and amending the
+curator ledgers so archive relocation is not described as completion evidence.
+The 2026-05-31 consolidation reports now say the bad source-buffer pass was
+repaired to live-buffer state, not completed.
+
+**Real curation batch landed before handoff.** PDR-089 acceptance/index drift was
+processed; several `distilled.md` entries were removed only after durable
+disposition evidence existed: PDR-089 coverage, explicit owner-gated entries in
+`pending-graduations.md`, or duplicate permanent homes. Ledger:
+`curator-passes/2026-05-31-open-lofting-cliff-docs-consolidation.md`.
+
+**Next safe step:** start one single-agent `/goal` session from
+`codex-docs-consolidation.brief.md` and continue item-by-item. Do not spawn
+parallel repair agents. Do not archive, split, shard, rename, or pointer-replace
+live buffer content to improve fitness. Last repair-state fitness truth had
+`napkin.md` critical, `distilled.md` hard, and `repo-continuity.md` hard; rerun
+`pnpm practice:fitness:strict-hard` before acting. Full `pnpm check` was not run
+for this handoff; this is a handoff/briefing stop, not a completed consolidation.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Open Lofting Cliff` | `codex` | `GPT-5` | `019e7d` | `consolidation-repair-handoff` | 2026-05-31 | 2026-05-31 |
+
+## Session Outcome (2026-05-31 — Evergreen Foraging Stamen / codex / GPT-5 / `019e7d`, owner-gated graduation question 1)
+
+**Owner-gated graduation slice landed; session stopped by owner direction.**
+The owner accepted PDR-089, so the conservation-reflex pending-graduation gate
+was processed normally: PDR-089 now says `Accepted`, the PDR index and
+`practice-index.md` were updated, the live pending-graduations item was removed,
+`distilled.md` no longer describes PDR-089 as owner-gated, and the 2026-05-31
+curator ledger records the disposition. Focused validation passed:
+`markdownlint` on the touched docs was clean, and
+`pnpm practice:fitness:strict-hard` exited 0 with SOFT only (19 soft, 27
+healthy, 0 hard, 0 critical) immediately after the PDR-089 slice.
+
+The next high-impact owner gate was surfaced and explicitly declined for this
+session: do **not** open or route the dedicated comms research plan now. The
+comms-event lifecycle and watcher/filter-loss candidate therefore remain
+owner-gated for a later session. Falsifiability: future pickup should find
+`pending-graduations.md` still carrying the watcher/filter-loss item with trigger
+`comms research plan opens or owner direction`, and repo-continuity still saying
+comms-log rotation is paused until that plan exists.
+
+Handoff boundary: repo-continuity refresh is currently owned by Open Lofting
+Cliff's active claim `eddac957-4833-4ba3-a34b-79426c14f5b7` ("repair invalid
+archive-only consolidation in Open Lofting non-source lane"), so this handoff did
+not edit `repo-continuity.md`. A handoff rerun of
+`pnpm practice:fitness:strict-hard` is now HARD on `repo-continuity.md` only
+(740 lines / 52,172 characters), matching that active repair claim. Full
+`pnpm check` was not run in this stop-slice.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Evergreen Foraging Stamen` | `codex` | `GPT-5` | `019e7d` | `owner-gated-curation-slice` | 2026-05-31 | 2026-05-31 |
+
+## Session Outcome (2026-05-31 — Open Lofting Cliff / codex / GPT-5 / `019e7d`, dedicated docs consolidation)
+
+**Dedicated documentation consolidation partial slice landed.** Owner-directed
+order applied: draft ADRs and PDRs first, pending graduations second, distilled
+third. Landed: PDR-075 added to the PDR index; PDR-078 stale Candidate wording
+corrected in the PDR index and Practice bridge; PDR-089 reviewed as existing,
+indexed, and owner-gated for acceptance; pending-graduations and distilled now
+point to the curation ledger; `consolidate-docs` and collaboration-state
+conventions now state comms-event rotation is paused pending a dedicated comms
+research plan. Ledger:
+`curator-passes/2026-05-31-open-lofting-cliff-docs-consolidation.md`.
+Active claim: `74ded4c9-4379-4e8c-b65b-81a52b653c26` (closing at session end).
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Open Lofting Cliff` | `codex` | `GPT-5` | `019e7d` | `dedicated-docs-consolidation` | 2026-05-31 | 2026-05-31 |
+
 ## Session Outcome (2026-05-29 — Eclipsed Creeping Secret / claude / claude-opus-4-8 / `1d950c`, Group A WS-Z convergence — DONE; content committed, finish bookkeeping uncommitted)
 
 **WS-Z (shared-index convergence) complete.** The six owner-approved Group A

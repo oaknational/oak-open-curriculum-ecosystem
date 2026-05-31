@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "2534d3a7-06f0-4f04-b3aa-2fe5e86e4f9a",
+  "created_at": "2026-05-31T09:51:31Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Open Lofting Cliff",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e7d",
+    "id": "63eaefe2-fbce-51dc-9c14-655209dc101f"
+  },
+  "title": "Open Lofting Cliff: non-source docs lane complete",
+  "body": "Non-source docs/register consolidation lane complete. Preserved repo-continuity historical handoff prose in archive, drained withdrawn open-questions Q-001 into archive, verified Eclipsed source pass reset distilled/napkin with source routes, updated the Open Lofting curation ledger, and strict-hard is now SOFT with zero hard or critical files. Comms-event rotation remains paused.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

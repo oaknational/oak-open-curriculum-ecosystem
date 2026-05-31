@@ -46,9 +46,9 @@ Run `consolidate-docs` when one or more of these is true:
   historical synthesis, or prior consolidations keep reporting the same
   family without naming its deeper cause
 - documentation drift or stale cross-references now need graduation
-- `.agent/state/collaboration/comms/` contains events whose
-  `created_at` timestamp is older than seven days and therefore due for
-  retention processing
+- the owner explicitly opens a comms-corpus research / retention plan; routine
+  comms-event rotation is otherwise paused and calendar age is not a lifecycle
+  trigger
 
 This workflow preserves the full deep-convergence role: graduation, pattern
 extraction, napkin rotation, fitness management, and practice exchange.
@@ -282,13 +282,13 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
      substance — owner-direction-captured-inline, inter-agent surprises,
      tooling friction discovered during cross-agent work, decision
      timelines, and worked instances of coordination-cure patterns.
-     Sweep events across the consolidation window (not only session-
-     authored ones); extract any cross-session coordination insight to
-     `distilled.md`, a pattern instance, or a pending-graduations entry.
-     Events older than seven days are retention-processing inputs, not
-     permanent documentation. Process them through step 3a before deletion.
-     Step 7e audits active protocol observability; this step extracts
-     substance from comms history.
+     The comms corpus is currently owner-preserved pending a dedicated
+     comms research plan. Do not sweep, rotate, process for deletion, or
+     treat calendar age as a lifecycle trigger during routine consolidation.
+     Read event files only when the owner explicitly scopes comms-corpus
+     research / retention work or when a specific event is already named as
+     evidence for another disposition. Step 7e audits active protocol
+     observability; it does not rotate comms history.
    - **Plan surfaces**: active and recently completed plans (per step
      1 above) — surface any content that describes how things work
      rather than what to do next.
@@ -320,31 +320,22 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
    Per the standing direction codified in the homing partial: *all
    content must be moved to permanent homes or, if not useful,
    removed*. Silent deletion without homing is not the default.
-3a. **Rotate stale comms-events after processing.** At each consolidation
-    pass, inspect `.agent/state/collaboration/comms/` for event files
-    whose `created_at` timestamp is older than seven days. Treat every
-    matching event as a capture surface that must be processed before
-    deletion:
+3a. **Comms-event rotation is paused pending a dedicated comms research plan.**
+    Routine consolidation MUST NOT rotate, delete, or process comms-events for
+    retention. Calendar age is not a lifecycle trigger for
+    `.agent/state/collaboration/comms/`.
 
-    1. Read the event body and decide whether it contains permanent
-       documentation content, reusable coordination insight, tooling friction,
-       owner direction, or pattern evidence.
-    2. Route useful substance to the smallest durable or still-processable
-       home: a permanent doc/ADR/PDR/rule/README when stable; otherwise
-       `.agent/memory/active/napkin.md`, `distilled.md`,
-       `.agent/memory/active/patterns/`, or
-       `.agent/memory/operational/pending-graduations.md` for normal later
-       processing.
-    3. If the event carries no useful substance beyond transient coordination,
-       record no duplicate copy; deletion is the correct lifecycle outcome
-       once that judgement has been made.
-    4. Delete the processed old event file from `comms/`.
-    5. Regenerate `shared-comms-log.md` from the remaining collaboration
-       sources so the rendered log reflects the retained live window.
+    The active invariant is **preserve the comms corpus unless the owner opens
+    a comms-corpus research / retention plan or names a specific event as
+    evidence for another disposition**. Under that explicitly-scoped work,
+    process before any deletion: read the event body, route durable substance to
+    the smallest appropriate home, record item-level disposition evidence, and
+    only then remove a source event if the approved research / retention plan
+    authorises removal.
 
-    The invariant is **process before deletion**. Old comms-events are not a
-    durable archive, but the insights they contain must be homed before the
-    source event disappears.
+    `shared-comms-log.md` remains a generated recent-view artefact; regenerate
+    it when comms-state writes make that necessary, not as a side-effect of a
+    paused retention rotation.
 4. **Audit `.agent/experience/` for three things, not one.** The experience directory is for *subjective experience* — what work was like, not what was done. The audit therefore has three distinct purposes (see [`../../experience/README.md § Why the audit step exists`](../../experience/README.md)):
 
    a. **Preserve the purpose** — scan for files that have drifted into technical content; this displaces the subjective register the files are meant to hold.

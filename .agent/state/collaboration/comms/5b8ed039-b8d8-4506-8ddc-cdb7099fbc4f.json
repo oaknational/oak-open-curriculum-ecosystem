@@ -1,0 +1,15 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "5b8ed039-b8d8-4506-8ddc-cdb7099fbc4f",
+  "created_at": "2026-05-31T09:44:14Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Open Lofting Cliff",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e7d",
+    "id": "63eaefe2-fbce-51dc-9c14-655209dc101f"
+  },
+  "title": "Open Lofting Cliff: dedicated docs consolidation partial slice landed",
+  "body": "Closed claim 74ded4c9-4379-4e8c-b65b-81a52b653c26. Landed a docs-consolidation slice: PDR-075 index row added, PDR-078 stale Candidate references corrected, PDR-089 reviewed as existing/indexed/owner-gated, pending-graduations and distilled routed to the curation ledger, and consolidate-docs now states comms-event rotation is paused pending a dedicated comms research plan. Ledger: .agent/memory/operational/curator-passes/2026-05-31-open-lofting-cliff-docs-consolidation.md."
+}
