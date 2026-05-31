@@ -1,5 +1,69 @@
 # Next-Session Record — `eef` thread
 
+> **VALUE REFRAME LANDED + PLAN/REPORT RESYNCED (2026-05-31, Fruited Regrowing
+> Copse / `abec59`, `claude-opus-4-8`; owner-directed, no commit).** The owner
+> reframed the EEF value model and the plan + detail-layer report were resynced to
+> it. **The reframe:** EEF is evidence about teaching strategies and decisions, not
+> topic-indexed content; relevance is a function of the *pedagogical move* on EEF's
+> own finite axes (approach / priority / key-stage-phase / impact-cost), and the
+> value intersects Oak's tools at the *workflow* level — Oak's misconception and
+> prior-knowledge graphs (plus the quiz/text) raise the signal, the agent names the
+> move, the EEF tool returns the evidence on it. The EEF tool takes only the
+> corpus's finite keys; subject/topic are Oak's domain and are simply not EEF
+> inputs (stated by absence, not as a guarded prohibition — per the owner's
+> no-tombstones correction). **Done this session:** `## Value And Impact` rewritten
+> (new "What EEF is, and how relevance works"); D1/D3/D4/D5/D6/D7 bodies + Fully
+> Specified End State + Non-Goals resynced natively (reframe-consequence banners
+> removed, not kept as warnings); the graph layer reaffirmed as deliberate
+> multi-source foundation (EEF first, then misconceptions / prerequisites / Oak
+> ontology — owner direction); SLT strands split to
+> `future/eef-school-leadership-evidence.plan.md`; EEF-only-workflow value captured
+> in `future/eef-standalone-evidence-workflows.plan.md`; inline report-detail
+> pointers added per deliverable. Gaps 2–4 from the holistic pass also cleared
+> (D3→D4→D6 schema hand-off; D7↔observability matrix; D1 ratification-status note).
+> Targeted checks green (Prettier, markdownlint, git diff --check) on every touched
+> doc. **No commit, no `pnpm check`.** **Next session = the user-value trace**
+> ([`eef/current/eef-value-trace.codex-brief.md`](../../../plans/sector-engagement/eef/current/eef-value-trace.codex-brief.md)):
+> walk the value path end to end and confirm the corpus supports each step before
+> D1/D2 execution resumes. Two cross-session lessons captured to platform memory:
+> no-tombstones-for-removed-ideas and trace-user-value-before-tool-design.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Fruited Regrowing Copse` | `claude` | `claude-opus-4-8` | `abec59` | `eef-value-reframe-plan-report-resync` | 2026-05-31 | 2026-05-31 |
+>
+> ---
+>
+> **D2 / REPORT / PRINCIPLES NO-ESCAPE-HATCHES CORRECTION APPLIED (2026-05-31,
+> Prismatic Shimmering Constellation / `019e7e`; owner-requested tight handoff,
+> no commit, no new check).** This session repaired the D2 plan/report alignment
+> after owner correction: the fixed `EEF_TOOLKIT_DATA` object is the only source
+> of truth for EEF finite values; no separate maintained key/value/vocabulary
+> lists, no glue/crosswalk layer, and no compatibility/fallback path is allowed.
+> Any proposed EEF tool input that cannot map directly to fixed known data is a
+> D1/D3 architectural misalignment, not D2 adapter work. The EEF plan and report
+> now say free-form teacher language is interpreted before the deterministic tool
+> call, not accepted as an EEF tool-input category. Adjacent D3/D6 wording was
+> tightened from "replacement/fallback after verification" to hard proof
+> requirements: failure means the contract/foundation is wrong and must be
+> corrected. `.agent/directives/principles.md` now explicitly bans fallbacks,
+> compatibility layers, preserving proven-wrong ideas, "just in case" branches,
+> and hedged plan options. Code and docs reviewers re-checked the final wording
+> and both returned PASS. Final checks before the handoff request had passed
+> (Prettier, markdownlint, `git diff --check`, and targeted stale-phrase guards),
+> but no additional check and no commit were run by explicit owner direction.
+> **Next safe step:** continue from
+> `eef/current/eef-graph-tool-completion.plan.md` D2 with the single-source rule
+> as controlling doctrine, or proceed to the D3 MCP contract / SDK-app
+> verification record if the owner chooses that lane; do not resurrect old-list,
+> free-text, fallback, or compatibility paths.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Prismatic Shimmering Constellation` | `codex` | `GPT-5` | `019e7e` | `eef-d2-no-escape-hatches-plan-report-principles-repair` | 2026-05-31 | 2026-05-31 |
+>
+> ---
+>
 > **PRE-DECISION REPORT FIXED + REVIEWER POLISH APPLIED (2026-05-31, Deep
 > Drifting Anchor / `019e7e`; owner-requested tight handoff, no additional check,
 > no commit).** This session read
@@ -27,6 +91,7 @@
 > | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 > | --- | --- | --- | --- | --- | --- | --- |
 > | `Deep Drifting Anchor` | `codex` | `GPT-5` | `019e7e` | `eef-predecision-report-repair-review-synthesis` | 2026-05-31 | 2026-05-31 |
+> | `Prismatic Shimmering Constellation` | `codex` | `GPT-5` | `019e7e` | `eef-d2-plan-repair-review-synthesis` | 2026-05-31 | 2026-05-31 |
 >
 > ---
 >

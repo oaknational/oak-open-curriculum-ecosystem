@@ -21,8 +21,11 @@ but bring real critical thinking to the question each time.
 **Strict and complete, everywhere, all the time.** Prefer explicit, strict,
 total, fully checked systems over permissive, partial, or hand-wavy
 ones. Do not invent optionality, fallback options, or implied
-enforcement. Type precision is one of the clearest concrete
-expressions of this tenet.
+enforcement. Do not preserve proven-wrong ideas behind compatibility
+layers, adapters, soft migrations, "just in case" branches, or fallback
+menus. A disproven design is removed or replaced with the correct design;
+it is never kept alive as an option. Type precision is one of the clearest
+concrete expressions of this tenet.
 
 ## Architectural Excellence Over Expediency
 
@@ -169,6 +172,11 @@ this way produces cleaner boundaries and simpler classification.
   functioning of the system depends on acknowledging and embracing
   those restrictions, and the valuing insights offered by the type
   system.
+- **No escape hatches** - no fallbacks, no compatibility layers, no
+  preserving proven wrong ideas, no "just in case" branches, and no
+  hedged plan options. When evidence disproves a shape, delete or replace
+  it at the owning architectural level. Do not keep it reachable as a
+  runtime option, migration bridge, alternate path, or executor choice.
 - **Pure functions first** - Use TDD to design (_test first_, red,
   green, refactor), no side effects, no I/O
 - **Consistent Naming** - Use consistent naming conventions for

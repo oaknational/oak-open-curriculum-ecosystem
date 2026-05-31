@@ -1,13 +1,15 @@
 # EEF graph pre-decision research report
 
-> **Status: `pre-decision research`.** Nothing here ratifies graph structure,
-> graph-core operations, the graph-native EEF view shape, MCP tool/resource
-> names, or node/edge policy. Those are owned by D1 (value), D3 (MCP surface),
-> and D4 (graph capability) of
-> [`eef-graph-tool-completion.plan.md`](eef-graph-tool-completion.plan.md). This
-> report maps the decision space so those deliverables start with more
-> information; every suggested action below is a criterion or an option, not a
-> decision.
+> **Status: detail layer for the plan.** This report supplies the code-grounded
+> detail beneath
+> [`eef-graph-tool-completion.plan.md`](eef-graph-tool-completion.plan.md): the
+> current-code seams, the candidate forms, the considerations, and the file/line
+> evidence each deliverable starts from. The plan owns and makes every contract
+> decision (D1 value, D3 MCP surface, D4 graph capability); this report makes
+> none of its own. Where the owner has already settled a decision in the plan,
+> this report now **reflects** it as settled and details what sits beneath it;
+> where a deliverable-level question is still genuinely open, this report surfaces
+> the option space and the considerations without choosing.
 
 **Authored**: 2026-05-31 (Vining Ripening Fern, session `870a40`) against the
 research instruction set in
@@ -19,8 +21,36 @@ references verified this session against `HEAD` (`90af56ef`; D0 committed at
 
 **Follow-up provenance note**: 2026-05-31 review found this report useful but
 unsafe as handoff material until its evidence references and inherited-code
-wording were tightened. This revision applies those reviewer findings without
-adding a new decision; it keeps the report as pre-decision research for D1/D3/D4.
+wording were tightened. That revision applied the reviewer findings without
+adding a new decision.
+
+**Synthesis note (2026-05-31, holistic pass)**: the report was first written
+before the owner settled the remaining D3 decisions in the plan. This pass folds
+those settled decisions in so the report reflects current truth — the
+practical-small three-primitive MCP surface (one deterministic tool, one
+interpretation resource/template, one user-facing prompt), the deterministic
+input boundary (the invoking agent interprets free-form teacher language *before*
+the tool call; the tool receives only finite fixed inputs), and the two D3
+products (a written MCP contract artefact and an SDK/app verification record).
+Items that were open at first draft and are now settled are marked **SETTLED (by
+the plan)**; the report still makes no decision of its own. Code observations
+remain verified against `90af56ef` (D0 at `ce9745c7`); the holistic pass
+re-confirmed the load-bearing `handlers.ts`, `universal-tool-shared.ts`,
+`projection.ts`, and `tool-definition.ts` citations still resolve at the current
+HEAD.
+
+> **Value model (read the report through this lens).** EEF is evidence about
+> teaching strategies and decisions; relevance is a function of the **pedagogical
+> move**, on EEF's own finite axes (pedagogical approach / strand id, EEF priority,
+> key stage / phase, impact-cost leverage). The value intersects Oak's tools at the
+> *workflow* level: Oak's misconception and prior-knowledge graphs (and the
+> lesson's quiz / text) raise the pedagogical signal, the agent names the move, the
+> EEF tool returns the evidence on it. The EEF tool's inputs are the corpus's finite
+> keys. The school-policy / school-leadership strands are owned by a separate
+> follow-on plan
+> ([`../future/eef-school-leadership-evidence.plan.md`](../future/eef-school-leadership-evidence.plan.md)).
+> The sections below describe current code as evidence of what is being replaced;
+> read them as that, with the value model above as the target.
 
 ---
 
@@ -156,21 +186,22 @@ they are **not** open for D3/D4 to re-litigate.
   surface target, but current shared formatting still emits a two-item
   `content` array plus `structuredContent`
   (`packages/sdks/oak-curriculum-sdk/src/mcp/universal-tool-shared.ts:196-220`).
-  D6 owns replacing, bypassing, or deleting that dual-content path for the EEF
+  D6 owns replacing or deleting that dual-content path for the EEF
   graph surface; this report does not ratify the final MCP shape. D3/D6 must
   also re-check the live MCP tools specification before landing an empty-content
   result shape, because current structured-content guidance says tools should
-  include serialized JSON text content for backwards compatibility.
+  include serialized JSON text content alongside `structuredContent`.
 - **C9 — The old list implementation is evidence only for what to delete.** No
   preserving, repairing, wrapping, consulting, or targeting its outputs. Any
   overlap with old output is acceptable only as an incidental re-derivation.
 
 ---
 
-## 3. Open questions for D1/D3/D4
+## 3. Decisions for D1/D3/D4 — settled and still-open
 
-Separated by owner, so each lands with the right deliverable. **None is answered
-here.**
+Separated by owner, so each lands with the right deliverable. Items the owner has
+since settled in the plan are marked **SETTLED (by the plan)** and detailed here;
+the rest are genuinely open and this report still answers none of them.
 
 ### 3a. Owner / value (D1) — and the value detail D3 is blocked on
 
@@ -200,21 +231,36 @@ here.**
 
 ### 3b. MCP surface (D3)
 
-- **M1 — Tool/resource suite.** Ratified practical-small D3 direction: one
-  preferred function-dispatched EEF MCP tool for lesson-context evidence and
-  strand inspection, plus corpus metadata; a graph-forward MCP collection is a
-  follow-on plan, not this D3-D6 target (controlling plan §MCP Surface). D3 still
-  decides the exact tool/resource boundary and verifies whether the preferred
-  single-tool shape holds under schema clarity, host UX, and output-schema
-  validation.
-- **M2 — Field classification.** Every externally supplied field classified as
-  strand-key predicate, finite-vocabulary predicate, Oak-derived vocabulary, or
-  ratified free text (Plan D3). Today: `focus` is finite-vocabulary
-  (`EEF_PRIORITIES`,
-  `packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/tools/eef-explore-evidence-for-context/tool-definition.ts:100-113`);
-  `subject`/`key_stage`/`topic` are free text feeding fuzzy `selection.ts`
-  matching — D3 must decide whether that free-text intake survives or is replaced
-  by key/vocabulary predicates.
+- **M1 — Practical-small three-primitive surface. SETTLED (by the plan).** The
+  owner has settled the D3 surface as three complementary primitives: one
+  deterministic, function-dispatched EEF query/fetch **tool** (lesson-context
+  evidence + strand inspection + corpus metadata); one EEF interpretation
+  **resource/resource-template** for how to interpret and apply the evidence
+  (methodology, caveats, ontology keys); and one user-facing **prompt** that a
+  teacher invokes to start the evidence-grounded adaptation workflow. A
+  graph-forward MCP collection is a follow-on plan, not this D3-D6 target. The
+  remaining D3 *detail* is proof that this settled shape holds under schema
+  clarity, host UX, and output-schema validation; that proof is required for D3
+  completion (controlling plan §D3 / §MCP Surface).
+- **M1b — Deterministic input boundary. SETTLED (by the plan).** Free-form
+  teacher language is interpreted by the invoking agent (optionally guided by the
+  prompt) *before* any EEF tool call; the deterministic tool receives only finite
+  fixed inputs derived from Oak/EEF data. The prompt may help the agent convert
+  free-form language into fixed inputs, but it never relaxes the boundary. This is
+  the frame for the still-open field-classification detail in M2.
+- **M2 — Field classification.** Every externally supplied tool field is
+  classified as a strand-key predicate, finite-vocabulary predicate, or
+  Oak-derived vocabulary before it crosses into graph code (Plan D3). Free-form
+  teacher language may be analysed by the invoking agent or prompt, but it is not
+  an EEF tool-input category. Today the old tool's `focus` surface flows through
+  the hand-authored `EEF_PRIORITIES` tuple
+  (`packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/tools/eef-explore-evidence-for-context/tool-definition.ts:100-113`);
+  that tuple is evidence of the source-of-truth defect, not a target. D2/D3 must
+  derive finite values directly from `EEF_TOOLKIT_DATA`, and any proposed input
+  that cannot point at the fixed EEF data structure is an architectural
+  misalignment. `subject`/`key_stage`/`topic` are free text feeding fuzzy
+  `selection.ts` matching today; D3 must delete or replace that intake with
+  fixed-data-derived inputs before the tool boundary.
 - **M3 — Output-schema subset.** The single Zod call's source subset, typed from
   the graph-native view, root `type: object`, `satisfies`-tied to
   `structuredContent` (Plan Decision 2). Depends on V1 and the view shape (§4).
@@ -252,19 +298,26 @@ here.**
 
 ### 3d. EEF / Oak binding (D4/D5)
 
-- **B1 — Node kind policy.** Today one node kind (strand). `related_guidance_reports`
-  are deliberately **not** graph nodes — they ride the citation envelope at the
-  tool boundary (`packages/sdks/graph-corpus-sdk/src/eef-strands/graph-view.ts:24-31`).
-  When the list tool's citation envelope is deleted (D6), where do guidance
-  reports go: frontier nodes, a second node kind, or additive provenance?
-  **Open.**
+- **B1 — Node kind policy, including guidance reports.** Today one node kind
+  (strand). `related_guidance_reports` are deliberately **not** graph nodes — they
+  ride the citation envelope at the tool boundary
+  (`packages/sdks/graph-corpus-sdk/src/eef-strands/graph-view.ts:24-31`). The plan
+  now carries an **explicit D4 requirement** (plan §D4) to dispose of
+  `related_guidance_reports` so they cannot vanish silently when D6 deletes the
+  citation envelope; the option space — frontier reference, a second node kind,
+  additive provenance, or a D1-decided drop — is the input to that D4 decision.
+  Which option is chosen remains **open**.
 - **B2 — Edge type policy.** Today one edge type `related_strand`
   (`packages/sdks/graph-corpus-sdk/src/eef-strands/eef-graph-model.ts:17-23`).
   A guidance-report edge type is additive if B1 makes them nodes.
-- **B3 — Oak lesson-context → EEF mapping.** Lives in the curriculum consumer
-  layer / D6, never in `graph-core` and never as hidden logic in a tool body.
-  The current `selectEefSeedIds` (`selection.ts`) is that mapping today, in
-  list-tool shape — D3/D4 decide its replacement.
+- **B3 — Mapping a lesson situation to EEF.** The mapping is
+  **pedagogical-signal → pedagogical-move → EEF-native query**, done by the
+  invoking agent / prompt at the workflow level: Oak's misconception and
+  prior-knowledge graphs (and the lesson's quiz / text) raise the signal, the agent
+  names the pedagogical move, then queries EEF by approach / priority / phase. Any
+  deterministic helper for this lives in the curriculum consumer layer / D6, never
+  in `graph-core` and never as hidden logic in a tool body. (The current
+  `selectEefSeedIds` matcher in `selection.ts` is list-tool code being deleted.)
 
 ### 3e. Type / proof (D4/D5)
 
@@ -332,12 +385,12 @@ From raw foundation up to MCP composition, with current home and target home:
 | Layer | Responsibility | Current location | Target home |
 |---|---|---|---|
 | **Raw corpus** | the `as const` snapshot, type authority | `eef-toolkit.external-data.ts` (pure data post-D0) | unchanged |
-| **Typed raw foundation** | `Strand`, `StrandByStrandId`, `strandById`, `EefStrandId`, vocab tuples, `related_strand` edge facts, `isValidStrandKey` | partial: `strand-lookup.ts` (D0) + `school-context.ts` tuples; vocab still wrapped in Zod | D2 completes in `graph-corpus-sdk/eef-strands` |
+| **Typed raw foundation** | `Strand`, `StrandByStrandId`, `strandById`, `EefStrandId`, vocabulary projections derived from `EEF_TOOLKIT_DATA`, `related_strand` edge facts, `isValidStrandKey` | partial: `strand-lookup.ts` (D0) + `school-context.ts` hand-authored tuples and Zod schemas | D2 completes in `graph-corpus-sdk/eef-strands` |
 | **Graph-native EEF view** | explicit typed projection: nodes (`EefStrandId`-keyed), typed edges, frontier, provenance envelope | does not exist as a named boundary; `eef-graph-model.ts` is the nearest, over widened types | D5 constructs (form per §4); `graph-corpus-sdk` |
 | **graph-core primitives** | domain-generic `GraphView<TNode, TNodeId, TEdgeType>`: `getNode`/`subgraph`/`manifest` (+ only what D3 needs); result/error carry `TNodeId` | `graph-view/{interface,types}.ts`, 7 ops broad-`string` ids | D4 reshapes; `packages/core/graph-core` |
 | **EEF/Oak binding** | EEF evidence query, EEF-native ops, `TNodeId = EefStrandId`; the EEF schema-builder values D3/D6 consume | `graph-view.ts` adapter (over Zod `EefStrand`) + speculative `EvidenceCorpus` | D4/D5; `graph-corpus-sdk/eef-strands` |
 | **Oak lesson-context mapping** | teacher lesson context → strand seeds | `selection.ts` (list-tool shape, free-text fuzzy match) | D3/D4 decide replacement; curriculum consumer layer |
-| **MCP composition** | tool/resource defs, single-Zod input + output schemas over view subsets, `isError`/`structuredContent` formatting, telemetry, flag gating | `evidence-corpus/tools/eef-explore-evidence-for-context/*` + `eef-surface.ts` + `handlers.ts` | D6 rebuilds; `oak-curriculum-sdk` + the app |
+| **MCP composition** | tool + interpretation resource/template + user-facing prompt defs, single-Zod input + output schemas over view subsets, `isError`/`structuredContent` formatting, telemetry, flag co-gating of all three primitives | `evidence-corpus/tools/eef-explore-evidence-for-context/*` + `eef-surface.ts` + `handlers.ts` + `register-prompts.ts` | D6 rebuilds; `oak-curriculum-sdk` + the app |
 
 Boundary invariants (C7): `graph-core` imports no `graph-corpus-sdk`; substrate
 imports no MCP types; the Oak lesson-context mapping never lives inside
@@ -355,10 +408,10 @@ imports no MCP types; the Oak lesson-context mapping never lives inside
 | R4 | **Stale list-era coupling pulling execution back** | `packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/tools/eef-explore-evidence-for-context/execution.ts:20-43` imports `loadEefCorpus`, `selectEefSeedIds`, `capForBudget`, `projectExploreNode`, `buildCitations`, `CitationsSchema`; barrel re-exports loader/freshness/selection/`EvidenceCorpus`/`EefToolkitSchema` (`packages/sdks/graph-corpus-sdk/src/eef-strands/index.ts:50-79`) | D5/D6 co-land or delete the list tool first; prune the barrel in the same landing (Plan deletion-ordering rule) |
 | R5 | **Deletion ordering → red tree** | `loader.ts` + `index.ts` import `EefToolkitSchema`/`EefStrand` from `strand-schema.ts` (`packages/sdks/graph-corpus-sdk/src/eef-strands/index.ts:25-31`); `graph-view.ts` + `eef-graph-model.ts` import the Zod `EefStrand` (`packages/sdks/graph-corpus-sdk/src/eef-strands/graph-view.ts:64`, `packages/sdks/graph-corpus-sdk/src/eef-strands/eef-graph-model.ts:15`); `types.ts` and `selection.ts` also import the Zod type (`packages/sdks/graph-corpus-sdk/src/eef-strands/types.ts:56`, `packages/sdks/graph-corpus-sdk/src/eef-strands/selection.ts:24`); the old MCP tool consumes the public list-era barrel (`packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/tools/eef-explore-evidence-for-context/execution.ts:20-43`) | `strand-schema.ts` physical delete deferred D2→D5 to co-land with loader removal and any old-list deletion; every deliverable ends `type-check` green (Plan §Risk) |
 | R6 | **`outputSchema` never reaches the SDK** | `apps/oak-curriculum-mcp-streamable-http/src/handlers.ts:185-196` config carries no `outputSchema`; current tool declares none | D3 specifies the path extension; D6 proves the configured schema reaches `registerTool`/`registerAppTool` and runtime-validates `structuredContent`; the tool also uses `registerAppTool` from `@modelcontextprotocol/ext-apps/server` (`apps/oak-curriculum-mcp-streamable-http/src/handlers.ts:10-11`, `apps/oak-curriculum-mcp-streamable-http/src/handlers.ts:192-195`) — verify *both* paths carry it |
-| R7 | **Under-classified external input** | `subject`/`key_stage`/`topic` free text → fuzzy `selection.ts` matching (`packages/sdks/graph-corpus-sdk/src/eef-strands/selection.ts:47-115`) | D3 classifies every field (M2); decide whether free-text intake survives or becomes key/vocabulary predicates |
+| R7 | **Under-classified external input** | `subject`/`key_stage`/`topic` free text → fuzzy `selection.ts` matching (`packages/sdks/graph-corpus-sdk/src/eef-strands/selection.ts:47-115`) | D3 classifies every field (M2); free-text intake is deleted or replaced by fixed-data-derived inputs before the tool boundary |
 | R8 | **Guidance-report modelling gap** | `related_guidance_reports` excluded from the graph, carried only by the to-be-deleted citation envelope (`packages/sdks/graph-corpus-sdk/src/eef-strands/graph-view.ts:24-31`, `packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/citation-shape.ts`) | D4 ratifies B1: frontier node, second node kind, or additive provenance — they must not silently vanish with the citation envelope |
 | R9 | **SDK schema registration drift (ADR-179)** | the `eef-strands` barrel describes and exports loader/freshness plus corpus-operation surfaces (`packages/sdks/graph-corpus-sdk/src/eef-strands/index.ts:1-14`, `packages/sdks/graph-corpus-sdk/src/eef-strands/index.ts:66-79`); `EvidenceCorpus` holds a `GraphView` while adding corpus ops (`packages/sdks/graph-corpus-sdk/src/eef-strands/types.ts:195-202`) | D6 keeps MCP types out of substrate (explicit acceptance check); the single Zod call lives in the composition module, not the substrate |
-| R10 | **`EefPhase` derived from the wrong source** | `packages/sdks/graph-corpus-sdk/src/eef-strands/school-context.ts:23` `EEF_PHASES` is a hand-authored tuple; Plan D2 wants `EefPhase` derived from strand `by_phase` keys, not the wider `school_context_schema` phase enum | D2 derives from `by_phase`; D3/D4 schema-builder values consume the derived type, not the hand-authored tuple |
+| R10 | **Vocabulary values derived from a second source of truth** | `packages/sdks/graph-corpus-sdk/src/eef-strands/school-context.ts:23` `EEF_PHASES` is a hand-authored tuple; `EEF_PRIORITIES` and `EEF_KEY_STAGES` are hand-authored tuples in the same file. The fixed `EEF_TOOLKIT_DATA` object is the only source of truth for phase, key-stage, priority, and any other EEF finite values. | D2 deletes the hand-authored tuples and derives finite values from `EEF_TOOLKIT_DATA` itself. Any proposed tool input whose value space cannot be derived directly from the fixed EEF data structure is a D1/D3 architectural misalignment, not a D2 crosswalk/glue task. |
 
 ---
 
@@ -380,18 +433,20 @@ they are not new decisions.
    functionality; those list-era operations are deleted. Any later
    teacher-replacing selection behaviour would need a separate owner decision
    after the graph surface proves teacher value, not a design target for D1-D6.
-3. **(D3) The field classification (M2) and practical-small MCP surface (M1).**
-   Considerations the research surfaces: the controlling plan has ratified one
-   preferred function-dispatched EEF MCP tool for lesson-context evidence and
-   strand inspection, plus corpus metadata, with graph-forward MCP collection
-   deferred; D3 still verifies the exact tool/resource boundary and fallback
-   shape. The current surface takes three
-   free-text fields (`subject`/`key_stage`/`topic`) feeding fuzzy matching
+3. **(D3) The field classification (M2). The MCP surface (M1) is SETTLED.** The
+   owner has settled the surface as the three-primitive practical-small shape
+   (deterministic function-dispatched tool + interpretation resource/template +
+   user-facing prompt; graph-forward collection deferred) and the deterministic
+   input boundary (M1/M1b). What remains for D3 is the *detail*: classify every
+   externally supplied tool field and prove the settled shape. The current
+   list-era surface takes three free-text fields
+   (`subject`/`key_stage`/`topic`) feeding fuzzy matching
    (`packages/sdks/graph-corpus-sdk/src/eef-strands/selection.ts:47-115`), so
    "only the key is unknown" (C3) is not yet true of it. The decision for each
-   field is free text (explicitly ratified) versus a key/finite-vocabulary
-   predicate; the trade-off is intake flexibility against the boundary-narrowing
-   the known-vs-unknown doctrine asks for.
+   field is which fixed-data-derived predicate owns it, or else a D1/D3 contract
+   correction that removes the field from the tool boundary. The now-settled rule
+   is that free-form teacher language is converted to fixed inputs before the tool
+   call.
 4. **(D3) Specify the output-schema subset (M3) and the registration-path
    extension (M4/R6).** Criterion: one Zod call over a named graph-native subset
    typed from the view; the config at
@@ -400,15 +455,16 @@ they are not new decisions.
    `registerTool` *and* `registerAppTool` paths verified. Current shared
    formatting emits dual `content` plus `structuredContent`
    (`packages/sdks/oak-curriculum-sdk/src/mcp/universal-tool-shared.ts:196-220`);
-   D6 owns replacing, bypassing, or deleting that path for the EEF graph surface.
-   D3/D6 should explicitly re-check the empty-`content` target against the live
-   MCP structured-content compatibility guidance before landing the replacement.
+   D6 owns replacing or deleting that path for the EEF graph surface.
+   D3/D6 must explicitly re-check the empty-`content` target against the live MCP
+   structured-content protocol guidance before landing the replacement.
 5. **(D4) The minimal generic op set (G1) and `TNodeId` threading (G3).**
    Considerations the research surfaces: the current contract has 7 ops, 5
    stubbed (`packages/core/graph-core/src/graph-view/interface.ts:77-111`); only
    `manifest` + `subgraph` are exercised today, and `getNode` is a
-   plausible-but-unbuilt strand-inspection primitive. Which ops survive depends
-   on the M1 surface. The `TNodeId`-threading itself is a settled plan requirement
+   plausible-but-unbuilt strand-inspection primitive. The operation set is derived
+   from the settled M1 surface. The `TNodeId`-threading itself is a settled plan
+   requirement
    (Decision 6 / D4), not an open choice, and covers query inputs as well as
    results and errors.
 6. **(D4) The construction-error split (G2).** Considerations the research

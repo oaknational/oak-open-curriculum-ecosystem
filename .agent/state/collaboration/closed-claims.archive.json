@@ -3640,6 +3640,223 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "88EC5C8F-89C2-4700-AB0F-B3BB65B0E794",
+      "agent_id": {
+        "agent_name": "Prismatic Shimmering Constellation",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7e",
+        "id": "b413af66-5a3e-5e24-84a8-28ec2ed3f132"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/threads/eef.next-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T15:59:22Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Add PDR-027 identity row for EEF D2 plan repair/reviewer session.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T16:04:30Z",
+        "closed_by": {
+          "agent_name": "Prismatic Shimmering Constellation",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7e",
+          "id": "b413af66-5a3e-5e24-84a8-28ec2ed3f132"
+        },
+        "summary": "Added EEF thread identity row for D2 plan repair/reviewer session.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "88EC5C8F-89C2-4700-AB0F-B3BB65B0E794",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "69A96288-2863-4A2B-B9CC-2CD8477435F7",
+      "agent_id": {
+        "agent_name": "Prismatic Shimmering Constellation",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7e",
+        "id": "b413af66-5a3e-5e24-84a8-28ec2ed3f132"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T15:59:05Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Apply owner-corrected D2 fixed-data-shape repair and run code/docs reviewer passes over the full D2 section.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T16:04:30Z",
+        "closed_by": {
+          "agent_name": "Prismatic Shimmering Constellation",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7e",
+          "id": "b413af66-5a3e-5e24-84a8-28ec2ed3f132"
+        },
+        "summary": "Applied owner-corrected D2 fixed-data-shape wording and ran code/docs reviewer passes; synthesis reports follow in chat.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "69A96288-2863-4A2B-B9CC-2CD8477435F7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "A8D3443E-C94D-4979-8342-86F617310037",
+      "agent_id": {
+        "agent_name": "Prismatic Shimmering Constellation",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7e",
+        "id": "b413af66-5a3e-5e24-84a8-28ec2ed3f132"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T16:01:30Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Record repeated shell-quoting miss from D2 review session.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T16:04:30Z",
+        "closed_by": {
+          "agent_name": "Prismatic Shimmering Constellation",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7e",
+          "id": "b413af66-5a3e-5e24-84a8-28ec2ed3f132"
+        },
+        "summary": "Recorded repeated shell-quoting miss in active napkin.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "A8D3443E-C94D-4979-8342-86F617310037",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "B61A19D6-D5B2-4B68-9CC0-E8CAFE68CC31",
+      "agent_id": {
+        "agent_name": "Prismatic Shimmering Constellation",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7e",
+        "id": "b413af66-5a3e-5e24-84a8-28ec2ed3f132"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md",
+            ".agent/plans/sector-engagement/eef/current/eef-graph-predecision-research.report.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T16:13:48Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Apply owner-corrected D2/report fixed-data single-source repair: no escape hatches, no maintained key/value lists.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T16:15:42Z",
+        "closed_by": {
+          "agent_name": "Prismatic Shimmering Constellation",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7e",
+          "id": "b413af66-5a3e-5e24-84a8-28ec2ed3f132"
+        },
+        "summary": "Applied owner-corrected D2/report fixed-data single-source repair: removed escape hatches and aligned report/plan.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "B61A19D6-D5B2-4B68-9CC0-E8CAFE68CC31",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "76C71DBE-40B4-482A-88DA-E9938190DBF1",
+      "agent_id": {
+        "agent_name": "Prismatic Shimmering Constellation",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7e",
+        "id": "b413af66-5a3e-5e24-84a8-28ec2ed3f132"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md",
+            ".agent/plans/sector-engagement/eef/current/eef-graph-predecision-research.report.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T16:18:19Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Patch D2 reviewer findings: remove remaining report free-text/fallback escape hatches and align plan/report wording.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T16:24:24Z",
+        "closed_by": {
+          "agent_name": "Prismatic Shimmering Constellation",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7e",
+          "id": "b413af66-5a3e-5e24-84a8-28ec2ed3f132"
+        },
+        "summary": "Applied no-escape-hatches correction across principles, D2 plan, and EEF report; reviewers passed final re-check.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "76C71DBE-40B4-482A-88DA-E9938190DBF1",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

@@ -84,6 +84,8 @@ not owned here.
 | [`reference/eef-toolkit.json`](reference/eef-toolkit.json) | Data snapshot | EEF dataset v0.2.0 (last_updated 2026-04-02). 30 strands, 9 caveats, 17/30 with school-context relevance. Source for the in-repo `as const` corpus. |
 | [`reference/conservation-map.md`](reference/conservation-map.md) | Historical preservation map | Record of the 2026-04-30 restructure (since superseded). Retained for the "nothing lost" audit trail. |
 | [`future/eef-outcome-evaluation-infrastructure.plan.md`](future/eef-outcome-evaluation-infrastructure.plan.md) | Future plan | EEF outcome-evaluation infrastructure (deferred). |
+| [`future/eef-school-leadership-evidence.plan.md`](future/eef-school-leadership-evidence.plan.md) | Seed plan | School-leadership / SLT EEF strands, split out of the teacher plan 2026-05-31; gated on establishing clear school-leader value before any design. |
+| [`future/eef-standalone-evidence-workflows.plan.md`](future/eef-standalone-evidence-workflows.plan.md) | Seed plan | EEF-only MCP-app workflows that deliver value without intersecting Oak's tools; captured 2026-05-31, gated on establishing standalone teacher value. |
 | [`archive/`](archive/) | Superseded | The quarantined list-era estate and graph-tooling-rebuild design docs. Do not resume or cite. |
 
 ## Read Order
@@ -153,10 +155,14 @@ and the generalised ADR-038.
 ## Status of the Live Plan
 
 The live plan is decision-complete and in execution. D0 is complete and committed
-at `ce9745c7`; the post-repair reviewer pass from
-`current/eef-plan-reviewers.codex-brief.md` has been run and its findings are
-folded into the live plan. The next implementation step is D1 value/impact
-exploration in parallel with D2 typed raw-corpus foundation work.
+at `ce9745c7`. On 2026-05-31 the value model was reframed: EEF is evidence about
+teaching strategies and decisions, and relevance is a function of the pedagogical
+move (on EEF's own finite axes), with the value intersecting Oak's tools — the
+misconception and prior-knowledge graphs — at the workflow level. The plan and the
+detail-layer report are resynced to that frame. The next session is the
+**user-value trace** ([`current/eef-value-trace.codex-brief.md`](current/eef-value-trace.codex-brief.md)),
+which walks the value path end to end and confirms the corpus supports each step
+before D1/D2 execution resumes.
 
 Two next-session Codex briefs are staged in [`current/`](current/) to de-risk the
 post-D1 graph/MCP decisions; neither ratifies graph shape:

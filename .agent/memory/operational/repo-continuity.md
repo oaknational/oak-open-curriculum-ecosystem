@@ -19,6 +19,25 @@ surface.
 
 ## Current State
 
+- **EEF value reframe landed + plan/report resynced (2026-05-31, Fruited
+  Regrowing Copse / `abec59`)**: the owner reframed the EEF value model — EEF is
+  evidence about teaching strategies/decisions, relevance is a function of the
+  pedagogical move on EEF-native finite axes, and the value intersects Oak's tools
+  (misconception + prior-knowledge graphs) at the workflow level. The live plan and
+  the detail-layer report are resynced to that frame natively (no reframe-banners,
+  no tombstones for the discarded subject/topic idea). The graph layer is
+  reaffirmed as deliberate multi-source foundation. SLT strands and EEF-only
+  workflows are split to two `future/` seed plans. Next EEF move is the user-value
+  trace (`eef/current/eef-value-trace.codex-brief.md`). No commit until this
+  session's closeout commit.
+- **EEF D2/report no-escape-hatches correction applied (2026-05-31, Prismatic
+  Shimmering Constellation / `019e7e`)**: the live EEF plan, pre-decision report,
+  and `.agent/directives/principles.md` now agree that `EEF_TOOLKIT_DATA` is the
+  only source of truth for EEF finite values. No separate key/value/vocabulary
+  lists, glue/crosswalks, fallback paths, compatibility layers, or preserved
+  proven-wrong ideas are allowed. Code and docs reviewers re-checked the final
+  wording and both returned PASS. No commit and no new check were run by explicit
+  owner direction.
 - **Longitudinal napkin review complete (2026-05-31, Blooming Twining Grove /
   `019e7d`)**: the owner-directed current-plus-twenty napkin review landed in
   commit `b19a382a`. The report is
@@ -60,7 +79,7 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | codex / GPT-5 / Deep Drifting Anchor / predecision report repair + reviewer synthesis / 2026-05-31 |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / claude-opus-4-8 / Fruited Regrowing Copse / value-reframe plan-report resync / 2026-05-31 |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | codex / GPT-5 / Blooming Twining Grove / longitudinal napkin review + deep handoff / 2026-05-31 |
 
 ## Paused Threads
@@ -86,13 +105,19 @@ not the current session-priority lane. Reactivation is owner-directed.
 ### EEF Graph-Tooling Rebuild
 
 1. Re-ground in the `eef` thread banner and current git state.
-2. Use `eef/current/eef-graph-predecision-research.report.md` as fixed
-   pre-decision research material. If not superseded by owner direction, run
-   `eef/current/eef-plan-holistic-pass.codex-brief.md` to review the whole live
-   plan for coherence, cohesion, completeness, accuracy, and freshness after the
-   D1/D3 owner-question resolution and report repair.
-3. Then proceed to the written D3 MCP contract artefact and SDK/app verification
-   record, or owner-directed D4+ planning, depending on the holistic-pass outcome.
+2. Run the **user-value trace** (`eef/current/eef-value-trace.codex-brief.md`):
+   walk the value path end to end and confirm the corpus supports each step. This
+   precedes D1/D2 execution per owner direction — tracing value first is the guard
+   against building tools the data cannot support.
+3. Treat the value reframe as controlling: EEF relevance is by pedagogical move on
+   EEF-native finite axes; the EEF tool takes the corpus's finite keys; the value
+   intersects Oak's misconception/prior-knowledge tools at the workflow level. The
+   D2 no-escape-hatches correction still holds: `EEF_TOOLKIT_DATA` is the only
+   source of truth; no separate vocab/key/value lists, glue, fallback paths, or
+   compatibility layers.
+4. After the value trace, continue from
+   `eef/current/eef-graph-tool-completion.plan.md` D2, or the written D3 MCP
+   contract artefact, as the owner directs.
 
 ### Agentic-Engineering Curation
 
@@ -157,10 +182,12 @@ authority.
 
 ## Deep Consolidation Status
 
-**session-completion closeout (2026-05-31, Deep Drifting Anchor — EEF
-pre-decision report repair)**: `not due — owner requested a tight handoff only,
-with no check and no commit; no new cross-session doctrine, ADR/PDR candidate, or
-open question surfaced beyond the repaired EEF report and thread-state updates`.
+**session-completion closeout (2026-05-31, Prismatic Shimmering Constellation —
+EEF D2/report/principles no-escape-hatches repair)**: `not due — owner requested
+a tight handoff only, with no check and no commit; the behaviour-changing lesson
+was captured directly in principles.md, the EEF plan/report, the eef thread
+record, and napkin; no additional ADR/PDR candidate or non-urgent open question
+was surfaced`.
 
 **prior history**: detailed 2026-05-28 to 2026-05-31 handoff-gate prose is
 preserved in

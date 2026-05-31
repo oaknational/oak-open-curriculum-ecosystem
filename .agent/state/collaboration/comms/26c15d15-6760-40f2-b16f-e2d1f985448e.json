@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "26c15d15-6760-40f2-b16f-e2d1f985448e",
+  "created_at": "2026-05-31T15:59:05Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Prismatic Shimmering Constellation",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e7e",
+    "id": "b413af66-5a3e-5e24-84a8-28ec2ed3f132"
+  },
+  "title": "Prismatic Shimmering Constellation: no other agents present; opening EEF D2 plan fix",
+  "body": "No other active claims present in active-claims.json. Opening an EEF plan claim to apply the owner-corrected D2 vocabulary/fixed-data-shape repair and run code/docs reviewer passes over the full D2 section.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

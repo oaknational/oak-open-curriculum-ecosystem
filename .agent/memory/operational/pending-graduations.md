@@ -37,6 +37,29 @@ substance that still needed a live queue home is preserved below. Processed
 source files were deleted after extraction so the repository does not carry
 pseudo-shards that hide the true buffer state.
 
+## 2026-05-31 captures — EEF value reframe (Fruited Regrowing Copse)
+
+Captured by Fruited Regrowing Copse (claude / Opus 4.8 / `abec59`) during the EEF
+value reframe. Capture-only; graduation deferred to a future consolidation when
+triggers fire.
+
+- **No tombstones for removed ideas.** `[captured: 2026-05-31 | source:
+  distilled.md + feedback_no_tombstones_for_removed_ideas | target:
+  pdr-or-rule:no-tombstones-for-removed-ideas | trigger: owner flagged it recurring
+  this session; graduate on the next independent instance or owner direction |
+  size: S | status: pending]` When an idea is wrong, describe the correct design
+  and stop; do not keep it alive as a labelled prohibition. Sibling of the
+  graduated `existence-is-not-correctness / default-replace` rule (memorialise vs
+  preserve), so the natural home is alongside it.
+
+- **Trace user value before tool design.** `[captured: 2026-05-31 | source:
+  distilled.md + feedback_trace_user_value_before_tool_design | target:
+  pdr-or-directive:value-trace-before-tool-design | trigger: second instance of a
+  built/designed tool the data could not support, or owner direction | size: S |
+  status: pending]` Trace the user journey + value end to end and check
+  data-support at each hop before designing/building. The EEF tools-as-envisioned
+  were impossible because the data never supported the subject/topic join.
+
 ## 2026-05-31 captures — agent-tools PreToolUse hooks + scripts→src migration
 
 Captured by Ethereal Weaving Constellation (claude / Opus 4.8 / `1d6645`) during
