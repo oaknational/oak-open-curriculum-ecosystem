@@ -1,7 +1,15 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
-export const CLAUDE_HOOK_COMMAND = 'pnpm agent-tools:check-blocked-patterns';
+export const CLAUDE_HOOK_COMMAND =
+  'node "${CLAUDE_PROJECT_DIR}/agent-tools/dist/src/hook-policy/check-blocked-patterns.js"';
+/**
+ * Stable, quote- and expansion-free substring uniquely identifying the Bash
+ * blocked-pattern hook in `.claude/settings.json` and the surface matrix. Used
+ * for wiring assertions because the full command embeds `${CLAUDE_PROJECT_DIR}`
+ * and JSON-escaped quotes that a literal match would have to reproduce exactly.
+ */
+export const CLAUDE_HOOK_ARTEFACT = 'agent-tools/dist/src/hook-policy/check-blocked-patterns.js';
 export const CURSOR_AGENTS_DIR = '.cursor/agents';
 export const CLAUDE_AGENTS_DIR = '.claude/agents';
 export const CODEX_AGENTS_DIR = '.codex/agents';

@@ -15,7 +15,8 @@ const wiredClaudeSettingsText = JSON.stringify({
         hooks: [
           {
             type: 'command',
-            command: 'pnpm agent-tools:check-blocked-patterns',
+            command:
+              'node "${CLAUDE_PROJECT_DIR}/agent-tools/dist/src/hook-policy/check-blocked-patterns.js"',
           },
         ],
       },
@@ -25,7 +26,7 @@ const wiredClaudeSettingsText = JSON.stringify({
 
 const documentedSurfaceMatrix = [
   '.agent/hooks/policy.json',
-  'pnpm agent-tools:check-blocked-patterns',
+  'agent-tools/dist/src/hook-policy/check-blocked-patterns.js',
   'Policy Spine',
   'override prune block',
 ].join('\n');

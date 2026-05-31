@@ -3,7 +3,9 @@
 **Status**: Accepted; amended 2026-05-10 to separate the current base config
 from stricter compiler options that remain deferred; amended 2026-05-29 to add
 the test/unit-check-surface boundary rule (§5 — scripts are outside the
-unit-test surface; complexity requiring unit tests forces promotion to `src/`).
+unit-test surface; complexity requiring unit tests forces promotion to `src/`);
+amended 2026-05-31 to record the dissolution of `agent-tools/scripts/` — the
+§5 forcing function applied to completion (§5a).
 **Date**: 2026-04-29
 **Related**:
 [ADR-150](150-continuity-surfaces-session-handoff-and-surprise-pipeline.md) —
@@ -226,6 +228,35 @@ Consequences:
 - Existing `*.test.ts` files under `scripts/` are pre-existing promote-to-`src/`
   debt, addressed when the script is next touched substantively — not a reason
   to widen the include.
+
+### 5a. Limit case: `agent-tools/scripts/` is dissolved
+
+The `@oaknational/agent-tools` workspace has **no `scripts/` directory**. Every
+executable it owns — the PreToolUse hook guards, the commit advisories, the CI
+reporters, and the `validate-*` / `repo-check` gates — lives in `src/` as typed,
+lint-covered, unit-tested modules, invoked through the stable
+`pnpm agent-tools:<name>` namespace whose targets point at `src/`.
+
+This is §5's forcing function taken to its conclusion, not a new rule. Those
+executables had already accreted the signals §5 names — `*.test.ts` files
+sitting unrun under `scripts/`, multi-function validators with real parsing
+logic — so promotion was overdue. The promotion also closed a latent safety
+gap: the Bash blocked-pattern hook guard shipped `*.test.ts` files that never
+ran (scripts are outside the vitest surface) and carried complexity-cap
+violations that were never linted; both surfaced and were fixed the moment the
+guard moved into `src/`.
+
+Consequences and boundaries:
+
+- A workspace `scripts/` directory is not forbidden in general — §3 and §5 still
+  govern any that exist — but in `agent-tools` its reappearance is a regression
+  signal: substantial tooling belongs in `src/`.
+- The shell wrapper formerly at `agent-tools/scripts/check-commit-message.sh`
+  was **ported to TypeScript** under §3 (workspace scripts are `.ts`; the only
+  `.sh` exception is the Husky entry points below), not relocated as shell.
+- The `runtime-only-scripts/` category (§4) and the Husky `.sh` entry points
+  (below) are unaffected — they remain recognised tiers in the workspaces that
+  need them. Only `agent-tools/scripts/` is dissolved.
 
 ### Pre-existing exception: Husky entry points
 

@@ -48,12 +48,34 @@ const config: KnipConfig = {
     'agent-tools': {
       // Platform adapters (src/claude/, future src/codex/, src/cursor/) are
       // entry points: the built JS is invoked via spawn from the platform's
-      // own thin shim (e.g. `.claude/scripts/statusline-identity.mjs`), which
-      // knip cannot trace as a TS import.
-      // scripts/**/*.ts are tsx-invoked entry points from package.json scripts
-      // (validate-practice-fitness, validate-subagents, repo-check, etc.).
-      entry: ['src/bin/**/*.ts', 'src/claude/**/*.ts', 'src/cursor/**/*.ts', 'scripts/**/*.ts'],
-      project: ['src/**/*.{ts,tsx}', 'scripts/**/*.ts'],
+      // own thin shim (e.g. `.claude/hooks/practice-session-identity.mjs`),
+      // which knip cannot trace as a TS import.
+      //
+      // The remaining entries are the tsx-invoked executables wired into
+      // `package.json` scripts (and, for the hook guards, invoked directly with
+      // `node` on the built dist from `.claude/settings.json`). Promoted out of
+      // the former `scripts/` directory into `src/` under ADR-168 §5a, each is
+      // listed explicitly so knip traces the dependency graph from the real
+      // entry rather than reporting the whole chain as unused.
+      entry: [
+        'src/bin/**/*.ts',
+        'src/claude/**/*.ts',
+        'src/cursor/**/*.ts',
+        'src/hook-policy/check-blocked-patterns.ts',
+        'src/hook-policy/check-blocked-content.ts',
+        'src/repo-check/repo-check.ts',
+        'src/commit-advisories/check-commit-message.ts',
+        'src/commit-advisories/check-commit-skill-advisories.ts',
+        'src/version-guard/prevent-accidental-major-version.ts',
+        'src/validators/fitness-vocabulary/validate-fitness-vocabulary.ts',
+        'src/validators/stale-script-invocations/validate-no-stale-script-invocations.ts',
+        'src/validators/portability/validate-portability.ts',
+        'src/validators/subagents/validate-subagents.ts',
+        'src/practice-fitness/validate-practice-fitness.ts',
+        'src/ci/ci-schema-drift-check.ts',
+        'src/ci/ci-turbo-report.ts',
+      ],
+      project: ['src/**/*.{ts,tsx}'],
     },
     'apps/oak-curriculum-mcp-streamable-http': {
       entry: [

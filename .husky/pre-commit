@@ -31,9 +31,9 @@ if ! pnpm lint:shell; then
   exit 1
 fi
 
-echo "🧪 Running type-check, lint, and unit tests..."
-if ! pnpm turbo run --continue --output-logs=errors-only type-check lint test; then
-  echo "❌ Type-check, lint, or unit tests failed!"
+echo "🧪 Running build, type-check, lint, and unit tests..."
+if ! pnpm turbo run --continue --output-logs=errors-only build type-check lint test; then
+  echo "❌ Build, type-check, lint, or unit tests failed!"
   exit 1
 fi
 

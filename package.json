@@ -96,6 +96,7 @@
     "app:search": "pnpm run dev --filter=@oaknational/search-cli",
     "app:mcp": "pnpm run dev --filter=@oaknational/oak-curriculum-mcp-streamable-http",
     "prepare": "husky",
+    "postinstall": "turbo run build --filter=@oaknational/agent-tools",
     "publish:dry": "pnpm -r publish --dry-run",
     "publish:packages": "pnpm -r publish",
     "outdated": "pnpm outdated -r",

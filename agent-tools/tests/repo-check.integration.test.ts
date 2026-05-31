@@ -10,7 +10,7 @@ import {
   runMarkdownlintStaged,
   runPrettierStaged,
   type RepoCheckRuntime,
-} from '../scripts/repo-check';
+} from '../src/repo-check/repo-check';
 
 interface CommandCall {
   readonly command: string;
@@ -48,7 +48,7 @@ describe('repo-check staged scanners', () => {
   it('runs Prettier only on cached staged paths so unrelated ambient files are ignored', async () => {
     const ambientDirtyFile = 'docs/ambient-dirty.md';
     const { capturedCalls, inheritedCalls, runtime } = stagedRuntime({
-      stagedStdout: 'docs/staged-clean.md\nagent-tools/scripts/repo-check.ts\n',
+      stagedStdout: 'docs/staged-clean.md\nagent-tools/src/repo-check/repo-check.ts\n',
     });
 
     await expect(runPrettierStaged(runtime)).resolves.toBe(0);
@@ -68,7 +68,7 @@ describe('repo-check staged scanners', () => {
           '--check',
           '--ignore-unknown',
           'docs/staged-clean.md',
-          'agent-tools/scripts/repo-check.ts',
+          'agent-tools/src/repo-check/repo-check.ts',
         ],
       },
     ]);
@@ -104,7 +104,7 @@ describe('repo-check staged scanners', () => {
   it('runs Markdownlint only on cached staged Markdown paths', async () => {
     const ambientDirtyFile = 'docs/ambient-dirty.md';
     const { capturedCalls, inheritedCalls, runtime } = stagedRuntime({
-      stagedStdout: 'docs/staged-clean.md\nagent-tools/scripts/repo-check.ts\n',
+      stagedStdout: 'docs/staged-clean.md\nagent-tools/src/repo-check/repo-check.ts\n',
     });
 
     await expect(runMarkdownlintStaged(runtime)).resolves.toBe(0);
@@ -126,7 +126,7 @@ describe('repo-check staged scanners', () => {
 
   it('does not run Markdownlint when only non-Markdown files are staged', async () => {
     const { inheritedCalls, runtime } = stagedRuntime({
-      stagedStdout: 'agent-tools/scripts/repo-check.ts\n',
+      stagedStdout: 'agent-tools/src/repo-check/repo-check.ts\n',
     });
 
     await expect(runMarkdownlintStaged(runtime)).resolves.toBe(0);

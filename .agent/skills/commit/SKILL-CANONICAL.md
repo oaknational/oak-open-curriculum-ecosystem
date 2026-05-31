@@ -113,9 +113,10 @@ Run these steps **before** formulating the commit message.
    | `footer-leading-blank` | Footer must be preceded by a blank line |
 
 5. **Surface any repo-specific extra hooks** flagged by `.husky/commit-msg`. In
-   this repo at the time of writing, `scripts/prevent-accidental-major-version.ts`
-   runs **before** commitlint and blocks accidental major-version bumps in
-   commit headers — factor that into the message draft if the change touches
+   this repo at the time of writing, `pnpm agent-tools:prevent-accidental-major-version`
+   (`agent-tools/src/version-guard/prevent-accidental-major-version.ts`) runs
+   **before** commitlint and blocks accidental major-version bumps in commit
+   headers — factor that into the message draft if the change touches
    version-bearing files.
 
 ## Commit Queue And Window Protocol
