@@ -1,5 +1,35 @@
 # Next-Session Record — `eef` thread
 
+> **PRE-DECISION REPORT FIXED + REVIEWER POLISH APPLIED (2026-05-31, Deep
+> Drifting Anchor / `019e7e`; owner-requested tight handoff, no additional check,
+> no commit).** This session read
+> `eef/current/eef-graph-predecision-report-fix.codex-brief.md`, applied the
+> required fixes to
+> `eef/current/eef-graph-predecision-research.report.md`, then dispatched a
+> read-only reviewer set (`code-expert`, `docs-adr-expert`, `type-expert`,
+> `mcp-expert`, `assumptions-expert`, and `architecture-expert-wilma`). Reviewer
+> synthesis found one real blocker: the report covered broad-`string`
+> result/error IDs but under-specified graph query inputs. The follow-up polish
+> now explicitly threads `TNodeId` through query inputs as well as outputs,
+> labels `EefStrandId` / `isValidStrandKey` as planned D2 work rather than
+> current D0 code, aligns M1 with the practical-small D3 MCP direction, fixes
+> `listUniversalTools` provenance, expands deletion-ordering evidence, separates
+> corpus-op deletion from graph-core contract-test updates, and adds the MCP
+> structured-content compatibility caveat. Targeted report validation before
+> this handoff passed: Prettier, `git diff --check`, markdownlint, and the
+> brief's targeted `rg` guard. **No new handoff check and no commit by explicit
+> owner direction.** **Next safe step:** resume the EEF lane with the fixed
+> pre-decision report as handoff-safe research material; run the live holistic
+> plan pass brief if that review has not been superseded by owner direction, then
+> proceed to the written D3 MCP contract artefact and SDK/app verification record
+> or owner-directed D4+ planning.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Deep Drifting Anchor` | `codex` | `GPT-5` | `019e7e` | `eef-predecision-report-repair-review-synthesis` | 2026-05-31 | 2026-05-31 |
+>
+> ---
+>
 > **OWNER QUESTIONS ANSWERED + D3 TIGHTENED; HOLISTIC PASS BRIEF READY
 > (2026-05-31, Estuarine Rolling Harbour / `019e7d`; owner-requested tight
 > handoff, no commit, no `pnpm check`).** This session applied the remaining D1/D3

@@ -34,6 +34,13 @@ surface.
   prompt. D3 now names two remaining products: a written MCP contract artefact
   and a separate SDK/app verification record. The next EEF move is the holistic
   live-plan pass brief at `eef/current/eef-plan-holistic-pass.codex-brief.md`.
+- **EEF pre-decision report fixed and reviewer-polished (2026-05-31, Deep
+  Drifting Anchor / `019e7e`)**: the graph pre-decision research report was
+  repaired from `eef/current/eef-graph-predecision-report-fix.codex-brief.md`,
+  reviewed by six specialist reviewers, and then polished to close the real
+  blocker around input-side `TNodeId` threading. Treat
+  `eef/current/eef-graph-predecision-research.report.md` as handoff-safe
+  pre-decision research, not a decision surface.
 - **EEF D0 complete and audited (2026-05-31, Opalescent Transiting Prism /
   `73491c`)**: validator deletion, data relocation, ADR/decontamination work, and
   the intent-vs-letter audit are recorded in the `eef` thread banner. The thread
@@ -53,7 +60,7 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | codex / GPT-5 / Estuarine Rolling Harbour / D1-D3 owner-question resolution + holistic pass brief / 2026-05-31 |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | codex / GPT-5 / Deep Drifting Anchor / predecision report repair + reviewer synthesis / 2026-05-31 |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | codex / GPT-5 / Blooming Twining Grove / longitudinal napkin review + deep handoff / 2026-05-31 |
 
 ## Paused Threads
@@ -79,9 +86,11 @@ not the current session-priority lane. Reactivation is owner-directed.
 ### EEF Graph-Tooling Rebuild
 
 1. Re-ground in the `eef` thread banner and current git state.
-2. Run `eef/current/eef-plan-holistic-pass.codex-brief.md` to review the whole
-   live plan for coherence, cohesion, completeness, accuracy, and freshness after
-   the D1/D3 owner-question resolution.
+2. Use `eef/current/eef-graph-predecision-research.report.md` as fixed
+   pre-decision research material. If not superseded by owner direction, run
+   `eef/current/eef-plan-holistic-pass.codex-brief.md` to review the whole live
+   plan for coherence, cohesion, completeness, accuracy, and freshness after the
+   D1/D3 owner-question resolution and report repair.
 3. Then proceed to the written D3 MCP contract artefact and SDK/app verification
    record, or owner-directed D4+ planning, depending on the holistic-pass outcome.
 
@@ -148,14 +157,10 @@ authority.
 
 ## Deep Consolidation Status
 
-**session-completion closeout (2026-05-31, Blooming Twining Grove —
-longitudinal napkin review + deep handoff)**: `complete for the named
-longitudinal review; partial slice landed for broader docs consolidation`.
-Commit `b19a382a` carries the longitudinal report and curator ledger. Larger
-drainable buffers remain live only through their explicit owner-gated entries in
-`pending-graduations.md`; no archive, split, shard, rename, or pointer
-replacement was used as completion evidence. Owner explicitly requested no
-`pnpm check` and no commit for this handoff/consolidation closeout.
+**session-completion closeout (2026-05-31, Deep Drifting Anchor — EEF
+pre-decision report repair)**: `not due — owner requested a tight handoff only,
+with no check and no commit; no new cross-session doctrine, ADR/PDR candidate, or
+open question surfaced beyond the repaired EEF report and thread-state updates`.
 
 **prior history**: detailed 2026-05-28 to 2026-05-31 handoff-gate prose is
 preserved in

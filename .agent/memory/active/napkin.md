@@ -197,3 +197,23 @@ characters before running it.
   into two explicit products: the written MCP contract and the SDK/app
   verification record. Do not let `mcp-expert` sign-off wording imply it already
   happened before the verification pass.
+- For the next EEF holistic pass, review the live plan and predecision research
+  report together but keep their authority distinct: the plan owns the current
+  contract, sequencing, and acceptance; the report supplies evidence, cautions,
+  and decision-space grounding. A useful report finding should be adopted into
+  the plan deliberately; an outdated report claim should be amended or
+  superseded, not left as parallel guidance.
+
+## Session: 2026-05-31 — EEF report reviewer synthesis (Deep Drifting Anchor / `019e7e`)
+
+### Patterns to Remember
+
+- In type-preservation reviews, do not stop at result/error IDs. If the plan says
+  a narrowed domain id must carry through the graph boundary, check query inputs,
+  lookup arguments, roots, frontier refs, edge endpoints, and errors together.
+  The first repaired EEF report still under-specified broad-string query inputs
+  until the type reviewer forced that wider proof scope.
+- When a report cites a registration adapter, verify the cited line proves the
+  actual projection/type surface, not just an app-side docstring. The EEF report's
+  `listUniversalTools` note needed SDK `list-tools.ts` and `types.ts` anchors,
+  not only the streamable-http handler comments.

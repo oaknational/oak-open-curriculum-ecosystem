@@ -3597,6 +3597,49 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "ED37A5C2-7E1A-4484-AEE2-F91C97565A60",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T15:18:46Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Record final EEF plan-report handoff insight",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T15:19:35Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Recorded final EEF plan/report authority distinction insight in napkin.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "ED37A5C2-7E1A-4484-AEE2-F91C97565A60",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
