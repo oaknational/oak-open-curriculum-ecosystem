@@ -19,17 +19,24 @@ surface.
 
 ## Current State
 
+- **EEF D1 complete + ancillary reports archived (2026-05-31, Kilned Crackling
+  Ember / `019e7f`, committed at `a6ec6766`)**: D1 is ratified and complete in
+  the live plan. EEF concepts, payload fields, resources, and schemas are
+  deterministic type-strict projections of the graph form of the fixed EEF data,
+  with provenance visible back to that data. Stale working briefs/reports,
+  including value-trace and pre-decision artefacts, are archived after their
+  useful substance was folded directly into the plan. Treat
+  `eef/current/eef-graph-tool-completion.plan.md` as the live contract; archived
+  reports/briefs are historical scratch artefacts only.
 - **EEF value reframe landed + plan/report resynced (2026-05-31, Fruited
   Regrowing Copse / `abec59`)**: the owner reframed the EEF value model — EEF is
   evidence about teaching strategies/decisions, relevance is a function of the
   pedagogical move on EEF-native finite axes, and the value intersects Oak's tools
   (misconception + prior-knowledge graphs) at the workflow level. The live plan is
   resynced to that frame natively (no reframe-banners, no tombstones for the
-  discarded subject/topic idea). The graph layer is
-  reaffirmed as deliberate multi-source foundation. SLT strands and EEF-only
-  workflows are split to two `future/` seed plans. The user-value trace has now
-  been folded directly into the live plan and its brief/report are archived as
-  historical scratch artefacts. No commit until this session's closeout commit.
+  discarded subject/topic idea). The graph layer is reaffirmed as deliberate
+  multi-source foundation. SLT strands and EEF-only workflows are split to two
+  `future/` seed plans.
 - **EEF D2/report no-escape-hatches correction applied (2026-05-31, Prismatic
   Shimmering Constellation / `019e7e`)**: the live EEF plan, pre-decision report,
   and `.agent/directives/principles.md` now agree that `EEF_TOOLKIT_DATA` is the
@@ -77,7 +84,7 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / claude-opus-4-8 / Fruited Regrowing Copse / value-reframe plan-report resync / 2026-05-31 |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | codex / GPT-5 / Kilned Crackling Ember / D1 completion plan-archive closeout / 2026-05-31 |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | codex / GPT-5 / Blooming Twining Grove / longitudinal napkin review + deep handoff / 2026-05-31 |
 
 ## Paused Threads
@@ -115,7 +122,7 @@ not the current session-priority lane. Reactivation is owner-directed.
    compatibility layers.
 4. Continue from `eef/current/eef-graph-tool-completion.plan.md` D2, or the
    written D3 MCP contract artefact and SDK/app verification record, as the owner
-   directs.
+   directs. Do not use archived reports/briefs as live authority.
 
 ### Agentic-Engineering Curation
 
@@ -179,6 +186,21 @@ authority.
 - Shared memory/state files are always writable and commit-includable when dirty.
 
 ## Deep Consolidation Status
+
+**session-completion closeout (2026-05-31, Kilned Crackling Ember — EEF D1
+completion + archive closeout)**: `completed this handoff — owner explicitly
+requested oak-consolidate-docs after session handoff. D1 is complete and
+committed at a6ec6766; stale EEF working briefs/reports have already had their
+useful substance folded into the live plan and are archived as historical scratch
+artefacts. No further permanent-doc extraction was required in this bounded pass:
+the D1 value/provenance/schema contract intentionally remains in the live
+implementation plan until D2-D7 either implement it or promote it to durable
+reference. Entry-point sweep found AGENTS.md in canonical pointer shape.
+Open-questions sweep found no open EEF question to drain; Q-001 is already
+withdrawn. Napkin is below rotation threshold (386 lines), distilled.md has no
+newly stable item from this closeout that is not already represented in the live
+plan, and active claims / commit queue are empty. pnpm check was not run by
+explicit owner instruction for this closeout`.
 
 **session-completion closeout (2026-05-31, Fruited Regrowing Copse — EEF value
 reframe)**: `completed this handoff — owner ran /oak-consolidate-docs in

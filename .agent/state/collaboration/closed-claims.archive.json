@@ -4302,6 +4302,50 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "f5ccfa22-2f02-471f-b87f-00d2693759b3",
+      "agent_id": {
+        "agent_name": "Kilned Crackling Ember",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7f",
+        "id": "154dc156-665c-5952-af19-e4b039aafe43"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T20:41:57Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Commit EEF handoff and consolidation closeout bundle.",
+      "intent_to_commit": "2da6a474-46b8-478a-8ac6-d11d32b390b8",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T20:42:35Z",
+        "closed_by": {
+          "agent_name": "Kilned Crackling Ember",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7f",
+          "id": "154dc156-665c-5952-af19-e4b039aafe43"
+        },
+        "summary": "Closed in same collaboration-state commit for EEF handoff closeout.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f5ccfa22-2f02-471f-b87f-00d2693759b3",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

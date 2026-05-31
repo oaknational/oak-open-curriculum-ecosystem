@@ -1,5 +1,34 @@
 # Next-Session Record — `eef` thread
 
+> **D1 COMPLETE + ANCILLARY REPORTS ARCHIVED (2026-05-31, Kilned Crackling
+> Ember / `019e7f`; committed at `a6ec6766`; no `pnpm check` by explicit owner
+> direction).** Double-checked the settled D0/D1 content after owner ratification.
+> D1 is complete in the live plan: EEF concepts, payload fields, resources, and
+> schemas are deterministic type-strict projections of the graph form of the fixed
+> EEF data, with provenance visible back to that data; no separate evidence-term
+> list, externally maintained vocabulary, crosswalk, fallback, or
+> data-justification layer remains live. Reviewed the rest of the plan against
+> that settled frame and fixed
+> the plan accordingly: D3 now writes and validates the MCP contract; D4/D6 own the
+> graph-native Zod schema path; D2/D5 deletion ordering is coherent; EEF tool
+> inputs use fixed finite ids; Oak subject/topic context is workflow context, not
+> an EEF input. Per owner direction, stale ancillary reports/briefs were archived
+> after their useful substance was folded directly into the plan. The only live
+> files under `eef/current/` are now the D0 decontamination ledger and the graph
+> tool completion plan. Targeted validation before the commit was green:
+> Prettier, markdownlint, `git diff --check`, and stale-language `rg` guards.
+> **Next safe step:** resume from D2 or D3 in
+> `eef/current/eef-graph-tool-completion.plan.md` as the owner directs; treat the
+> live plan as the authority and the archived reports/briefs as historical scratch
+> artefacts only. Session-handoff collaboration check found active claims empty,
+> commit queue empty, and no relevant EEF conversation/escalation handoff needed.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Kilned Crackling Ember` | `codex` | `GPT-5` | `019e7f` | `eef-d1-completion-plan-archive-closeout` | 2026-05-31 | 2026-05-31 |
+>
+> ---
+>
 > **VALUE REFRAME LANDED + PLAN RESYNCED (2026-05-31, Fruited Regrowing
 > Copse / `abec59`, `claude-opus-4-8`; owner-directed, no commit).** The owner
 > reframed the EEF value model and the plan was resynced to it. **The reframe:**

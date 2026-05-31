@@ -384,3 +384,25 @@ most important.
   field is a deterministic type-strict transform/projection of the EEF data.
   Behaviour change: never author a parallel teacher-facing evidence vocabulary for
   EEF. Surface concepts from the corpus and make provenance visible.
+
+## Session: 2026-05-31 — Kilned commit and closeout
+
+### Practice/tooling feedback
+
+- `commit-queue enqueue` and `commit-queue guard` currently require the stable
+  agent `--id` even though the help text I read listed the name/platform/model
+  fields and omitted `--id`. Behaviour change: when using commit-queue helpers,
+  carry the full PDR-027 identity tuple from preflight, including the stable id,
+  not just the human-readable name and session prefix.
+- When a staged bundle already contains a deletion, retrying `git add -- <deleted
+  path>` can fail because the file no longer exists in the working tree. If the
+  deletion is already staged, restage the live paths and collaboration-state files
+  explicitly, then verify `git diff --cached --name-status`; do not fight the
+  missing old path unless the deletion itself has been lost.
+
+### Pattern to Remember
+
+- An owner instruction of "no `pnpm check`" at closeout means do not run the
+  explicit session-handoff full gate. It does not imply bypassing git hooks for a
+  requested commit; the normal `git commit` hook chain may still run its own
+  staged formatting, markdownlint, validators, shell lint, and turbo tasks.
