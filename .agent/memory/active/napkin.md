@@ -48,6 +48,20 @@ characters before running it.
   claim was written. Behaviour change: quote every claim `--area-pattern` that
   contains `*`, `?`, brackets, backticks, or other shell-significant characters;
   globs are claim metadata, not shell input.
+- During final commit, I trusted `commit-queue --help` when it omitted the
+  required `--id` option for `enqueue`; the canonical skill was correct and the
+  helper rejected the first enqueue. Behaviour change: for commit-queue identity
+  fields, trust the canonical commit skill and pass the preflight UUID even when
+  short help output is stale.
+
+### Patterns to Remember
+
+- When the owner asks for deep `session-handoff` plus deep `consolidate-docs`
+  but explicitly says "no `pnpm check`, no commit", honour that as the validation
+  and lifecycle boundary. Use session-completion consolidation, run narrower
+  relevant checks such as fitness/markdown/format only if useful, and name the
+  aggregate check as intentionally skipped rather than treating the workflow as
+  blocked.
 
 ## Session: 2026-05-31 — Foamy longitudinal brief handoff
 
@@ -76,3 +90,14 @@ characters before running it.
 - **Behaviour change**: use `behaviour-note` for free-form coordination notices,
   or provide the heartbeat-specific typed args when the event is a real heartbeat.
 - **Source plane**: `operational`
+
+## Session: 2026-05-31 — EEF plan old-list correction
+
+### Patterns to Remember
+
+- When the owner says an old implementation is wrong, do not frame the next plan
+  as preserving compatibility with it. The old implementation is evidence only
+  for what to delete. Any overlap with old outputs is acceptable only as an
+  incidental result independently derived from the new ratified value, surface,
+  and architecture; the old code must not be kept, repaired, wrapped, consulted,
+  or used as the source of expected behaviour.

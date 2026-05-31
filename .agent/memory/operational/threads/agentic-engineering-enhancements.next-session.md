@@ -1,5 +1,38 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-31 — Blooming Twining Grove / codex / GPT-5 / `019e7d`, longitudinal napkin review + deep handoff)
+
+**Named longitudinal review complete.** The owner-directed
+current-plus-twenty napkin review ran from
+`codex-napkin-longitudinal-review.brief.md` and landed in commit `b19a382a`.
+Durable outputs:
+
+- `research/agentic-engineering/continuity-memory-and-knowledge-flow/longitudinal-napkin-review-2026-05-31.md`
+- `curator-passes/2026-05-31-codex-napkin-longitudinal-review.md`
+
+**Routing result:** the pass found two non-duplicate forward routes and added
+them as owner-gated entries in `pending-graduations.md`: active-buffer
+pre-replacement proof, and shell-significant collaboration CLI affordance. The
+review left archived napkins as read-only evidence and did not process the
+paused comms-event corpus.
+
+**Deep closeout boundary:** the owner then requested deep session handoff plus
+deep `consolidate-docs`, with no `pnpm check` and no commit. The closeout mode
+is `session-completion`: the named review is complete, while broader docs
+consolidation remains live only by explicit owner-gated register items. Current
+validation evidence for the named review is in the curator ledger; this handoff
+does not rerun aggregate `pnpm check`.
+
+**Next safe step:** no immediate agentic-engineering curation work is queued.
+If the owner reopens ordinary docs consolidation, start from the canonical
+pending-graduations register and the existing continuation brief, not from a
+new archive/pointer replacement. Comms-event rotation remains paused until a
+dedicated comms research plan exists.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Blooming Twining Grove` | `codex` | `GPT-5` | `019e7d` | `longitudinal-napkin-review+deep-handoff` | 2026-05-31 | 2026-05-31 |
+
 ## Session Outcome (2026-05-31 — Foamy Charting Harbour / codex / GPT-5 / `019e7d`, longitudinal napkin-review brief + light handoff)
 
 **Brief landed; curation review remains the next-session work.** The owner asked
@@ -2227,7 +2260,7 @@ itself.
 
 **Landed outcome**: Cycle 8a (ADR-187, Claude self-modification authz cure-shape, WS-8) landed at HEAD `7f7ad862` via Hushed marshal after pre-format cure on prettier-mangled state. Cycle 8a was the trailing-task closeout of Misty's pre-compaction Implementer claim `e097d5a1` (now resolved). Option B plan-file markdownlint cure also landed at `26f8e7cb` via Hushed marshal (Eclipsed-authored).
 
-**Director coordination outcome**: routed ~90 min of team activity. Eclipsed Cycle 9 mid-flight via PDR-063 pickup from Eclipsed (compaction-prep); Wooded ONBOARDING.md disavowed by owner mid-session (false-provenance failure-mode owned); Twilit open-questions memory system completed; Shadowed napkin hard-width cure completed. Owner reset team's delivery frame at 06:45Z: "delivering means implemented, pushed, fixed, merged and live". Closeout plan `/Users/jim/.claude/plans/vast-chasing-iverson.md` authored and approved by owner.
+**Director coordination outcome**: routed ~90 min of team activity. Eclipsed Cycle 9 mid-flight via PDR-063 pickup from Eclipsed (compaction-prep); Wooded ONBOARDING.md disavowed by owner mid-session (false-provenance failure-mode owned); Twilit open-questions memory system completed; Shadowed napkin hard-width cure completed. Owner reset team's delivery frame at 06:45Z: "delivering means implemented, pushed, fixed, merged and live". External Claude plan path `~/.claude/plans/vast-chasing-iverson.md` authored and approved by owner.
 
 **Failure-modes surfaced (10 distinct; all in napkin)**:
 

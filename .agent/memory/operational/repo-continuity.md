@@ -19,17 +19,14 @@ surface.
 
 ## Current State
 
-- **Docs consolidation repair + longitudinal brief handed off (2026-05-31,
-  Foamy Charting Harbour / `019e7d`)**: the invalid archive-only consolidation
-  was repaired into real item dispositions. `distilled.md` is drained to a
-  repair note; `napkin.md` is rotated after preserving the verbatim source and
-  ledgering the source-buffer items; `pending-graduations.md` carries the
-  remaining owner-gated doctrine. The immediate owner-directed next session is
-  the longitudinal current-plus-twenty napkin review brief at
-  [`codex-napkin-longitudinal-review.brief.md`](codex-napkin-longitudinal-review.brief.md).
-  The broader continuation brief remains available at
-  [`codex-docs-consolidation.brief.md`](codex-docs-consolidation.brief.md) for a
-  later ordinary docs-consolidation continuation.
+- **Longitudinal napkin review complete (2026-05-31, Blooming Twining Grove /
+  `019e7d`)**: the owner-directed current-plus-twenty napkin review landed in
+  commit `b19a382a`. The report is
+  [`longitudinal-napkin-review-2026-05-31.md`](../../research/agentic-engineering/continuity-memory-and-knowledge-flow/longitudinal-napkin-review-2026-05-31.md)
+  and the ledger is
+  [`curator-passes/2026-05-31-codex-napkin-longitudinal-review.md`](curator-passes/2026-05-31-codex-napkin-longitudinal-review.md).
+  Two owner-gated items were added to `pending-graduations.md`; the review did
+  not reopen archive processing or comms-event rotation.
 - **EEF reviewer findings applied + architecture brief ready (2026-05-31,
   Hearthlit Roasting Caldera / `019e7d`)**: the docs/type reviewer pass ran, the
   owner widened scope, and the live plan/README were repaired. Raw
@@ -58,7 +55,7 @@ each thread record; this table is the repo-level index.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `eef` | EEF graph-tooling rebuild | [record][eef] | codex / GPT-5 / Hearthlit Roasting Caldera / reviewer findings applied + architecture brief ready / 2026-05-31 |
-| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | codex / GPT-5 / Foamy Charting Harbour / longitudinal napkin-review brief + light handoff / 2026-05-31 |
+| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | codex / GPT-5 / Blooming Twining Grove / longitudinal napkin review + deep handoff / 2026-05-31 |
 
 ## Paused Threads
 
@@ -92,16 +89,15 @@ not the current session-priority lane. Reactivation is owner-directed.
 
 ### Agentic-Engineering Curation
 
-1. Start the owner-directed longitudinal napkin-review session from
-   [`codex-napkin-longitudinal-review.brief.md`](codex-napkin-longitudinal-review.brief.md):
-   current active napkin plus the recomputed last twenty archived napkins.
-2. Re-run `pnpm practice:fitness:strict-hard` before acting.
-3. Treat fitness as routing evidence only; do not archive, split, shard, rename,
-   pointer-replace, or move unprocessed content to improve scores.
-4. Continue item-level dispositions from active buffers and the canonical
-   [`pending-graduations.md`](pending-graduations.md) only when the owner route or
-   a trigger asks for ordinary docs consolidation.
-5. Comms-event rotation remains paused until a dedicated comms research plan
+1. No immediate next curation action is required for the longitudinal review;
+   commit `b19a382a` contains the report and ledger.
+2. The two new longitudinal findings are owner-gated in
+   [`pending-graduations.md`](pending-graduations.md): active-buffer
+   pre-replacement proof and shell-significant collaboration CLI affordance.
+3. Continue item-level dispositions from active buffers and the canonical
+   `pending-graduations.md` only when the owner route or a trigger asks for
+   ordinary docs consolidation.
+4. Comms-event rotation remains paused until a dedicated comms research plan
    exists.
 
 ### Docs Consolidation Repair
@@ -154,12 +150,14 @@ authority.
 
 ## Deep Consolidation Status
 
-**handoff gate (2026-05-31, Foamy Charting Harbour — longitudinal napkin
-review)**: `due — owner explicitly requested a dedicated current-plus-twenty
-napkin review for the next Codex session`. The route is
-[`codex-napkin-longitudinal-review.brief.md`](codex-napkin-longitudinal-review.brief.md).
-This light handoff did not run that review or claim the original consolidation
-complete.
+**session-completion closeout (2026-05-31, Blooming Twining Grove —
+longitudinal napkin review + deep handoff)**: `complete for the named
+longitudinal review; partial slice landed for broader docs consolidation`.
+Commit `b19a382a` carries the longitudinal report and curator ledger. Larger
+drainable buffers remain live only through their explicit owner-gated entries in
+`pending-graduations.md`; no archive, split, shard, rename, or pointer
+replacement was used as completion evidence. Owner explicitly requested no
+`pnpm check` and no commit for this handoff/consolidation closeout.
 
 **prior history**: detailed 2026-05-28 to 2026-05-31 handoff-gate prose is
 preserved in

@@ -1885,6 +1885,149 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "74d3d9ab-c14e-4a88-82b9-d4be2c55f99a",
+      "agent_id": {
+        "agent_name": "Blooming Twining Grove",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "31580294-82bd-5777-9d9e-b5ba2f0821b4"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/research/agentic-engineering/continuity-memory-and-knowledge-flow/longitudinal-napkin-review-2026-05-31.md",
+            ".agent/memory/operational/curator-passes/2026-05-31-codex-napkin-longitudinal-review.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/comms/*.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T10:30:19Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Run dedicated longitudinal napkin review over current plus twenty archived napkins; produce research report, curator ledger, and justified owner-gated updates.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T10:37:32Z",
+        "closed_by": {
+          "agent_name": "Blooming Twining Grove",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "31580294-82bd-5777-9d9e-b5ba2f0821b4"
+        },
+        "summary": "Completed longitudinal napkin review: report and curator ledger written, two owner-gated routes added, archives left read-only, strict-hard/markdown/prettier validation green.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "74d3d9ab-c14e-4a88-82b9-d4be2c55f99a",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "692cdf55-36d0-4c7d-9da1-5582f9f17701",
+      "agent_id": {
+        "agent_name": "Blooming Twining Grove",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "31580294-82bd-5777-9d9e-b5ba2f0821b4"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/comms/*.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T10:42:27Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Run owner-requested deep session handoff and session-completion consolidate-docs closeout with no pnpm check and no commit.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T10:43:40Z",
+        "closed_by": {
+          "agent_name": "Blooming Twining Grove",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "31580294-82bd-5777-9d9e-b5ba2f0821b4"
+        },
+        "summary": "Completed owner-requested deep session handoff and session-completion consolidate-docs closeout without pnpm check or commit; repo-continuity and thread state now reflect longitudinal review completion.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "692cdf55-36d0-4c7d-9da1-5582f9f17701",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f36b5b81-ecba-401f-a606-2550c541612b",
+      "agent_id": {
+        "agent_name": "Blooming Twining Grove",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "31580294-82bd-5777-9d9e-b5ba2f0821b4"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T10:47:32Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit all current files for final session closeout.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T10:49:10Z",
+        "closed_by": {
+          "agent_name": "Blooming Twining Grove",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "31580294-82bd-5777-9d9e-b5ba2f0821b4"
+        },
+        "summary": "closed in same collaboration-state commit: docs: close longitudinal review and EEF handoff",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f36b5b81-ecba-401f-a606-2550c541612b",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
