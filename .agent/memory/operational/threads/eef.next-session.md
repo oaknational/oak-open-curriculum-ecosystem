@@ -1,9 +1,9 @@
 # Next-Session Record — `eef` thread
 
-> **VALUE REFRAME LANDED + PLAN/REPORT RESYNCED (2026-05-31, Fruited Regrowing
+> **VALUE REFRAME LANDED + PLAN RESYNCED (2026-05-31, Fruited Regrowing
 > Copse / `abec59`, `claude-opus-4-8`; owner-directed, no commit).** The owner
-> reframed the EEF value model and the plan + detail-layer report were resynced to
-> it. **The reframe:** EEF is evidence about teaching strategies and decisions, not
+> reframed the EEF value model and the plan was resynced to it. **The reframe:**
+> EEF is evidence about teaching strategies and decisions, not
 > topic-indexed content; relevance is a function of the *pedagogical move* on EEF's
 > own finite axes (approach / priority / key-stage-phase / impact-cost), and the
 > value intersects Oak's tools at the *workflow* level — Oak's misconception and
@@ -18,15 +18,17 @@
 > multi-source foundation (EEF first, then misconceptions / prerequisites / Oak
 > ontology — owner direction); SLT strands split to
 > `future/eef-school-leadership-evidence.plan.md`; EEF-only-workflow value captured
-> in `future/eef-standalone-evidence-workflows.plan.md`; inline report-detail
-> pointers added per deliverable. Gaps 2–4 from the holistic pass also cleared
+> in `future/eef-standalone-evidence-workflows.plan.md`; research/reviewer detail
+> folded into the live plan. Gaps 2–4 from the holistic pass also cleared
 > (D3→D4→D6 schema hand-off; D7↔observability matrix; D1 ratification-status note).
 > Targeted checks green (Prettier, markdownlint, git diff --check) on every touched
-> doc. **No commit, no `pnpm check`.** **Next session = the user-value trace**
-> ([`eef/current/eef-value-trace.codex-brief.md`](../../../plans/sector-engagement/eef/current/eef-value-trace.codex-brief.md)):
-> walk the value path end to end and confirm the corpus supports each step before
-> D1/D2 execution resumes. Two cross-session lessons captured to platform memory:
-> no-tombstones-for-removed-ideas and trace-user-value-before-tool-design.
+> doc. **No commit, no `pnpm check`.** The user-value trace and graph predecision
+> research/reviewer artefacts have since been folded directly into the live plan;
+> their briefs/reports are archived as historical scratch artefacts and are not
+> live sources. D0 and D1 are complete; resume at D2 or D3's written MCP contract /
+> SDK-app verification record as the owner directs. Two cross-session lessons
+> captured to platform memory: no-tombstones-for-removed-ideas and
+> trace-user-value-before-tool-design.
 >
 > | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 > | --- | --- | --- | --- | --- | --- | --- |

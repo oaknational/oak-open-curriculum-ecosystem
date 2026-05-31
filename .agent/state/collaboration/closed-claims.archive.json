@@ -3857,6 +3857,451 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "2859a501-dc70-4415-b110-f0af3a08db75",
+      "agent_id": {
+        "agent_name": "Kilned Crackling Ember",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7f",
+        "id": "154dc156-665c-5952-af19-e4b039aafe43"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md",
+            ".agent/reports/eef-value-trace.report.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T19:53:17Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Fix D3 workflow mapping and resolved value-trace report findings for D1 review",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T19:54:24Z",
+        "closed_by": {
+          "agent_name": "Kilned Crackling Ember",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7f",
+          "id": "154dc156-665c-5952-af19-e4b039aafe43"
+        },
+        "summary": "Fixed D3 workflow mapping to real EEF strand ids and marked value-trace report findings resolved where folded into the live plan.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "2859a501-dc70-4415-b110-f0af3a08db75",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "082a4229-292a-4062-a95b-1f497927f66c",
+      "agent_id": {
+        "agent_name": "Kilned Crackling Ember",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7f",
+        "id": "154dc156-665c-5952-af19-e4b039aafe43"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T19:57:07Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Fold evidence-standard finding into D1 value contract",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T19:58:09Z",
+        "closed_by": {
+          "agent_name": "Kilned Crackling Ember",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7f",
+          "id": "154dc156-665c-5952-af19-e4b039aafe43"
+        },
+        "summary": "Folded faithful-evidence-transmission standard into D1 value contract, D1 acceptance, and D7 proof.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "082a4229-292a-4062-a95b-1f497927f66c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "95f5a571-7df6-43fb-bb29-6f0101e3786d",
+      "agent_id": {
+        "agent_name": "Kilned Crackling Ember",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7f",
+        "id": "154dc156-665c-5952-af19-e4b039aafe43"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T20:07:14Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Replace D1 evidence-term-list framing with corpus-derived projection/provenance framing",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T20:08:50Z",
+        "closed_by": {
+          "agent_name": "Kilned Crackling Ember",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7f",
+          "id": "154dc156-665c-5952-af19-e4b039aafe43"
+        },
+        "summary": "Replaced D1 evidence-term-list framing with corpus-derived projection/provenance contract and schema projection invariant.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "95f5a571-7df6-43fb-bb29-6f0101e3786d",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "3f29c853-1806-44e1-808d-360d85f7545a",
+      "agent_id": {
+        "agent_name": "Kilned Crackling Ember",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7f",
+        "id": "154dc156-665c-5952-af19-e4b039aafe43"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T20:10:52Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Clarify MCP schemas derive from graph-native EEF view, not raw EEF data directly",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T20:11:56Z",
+        "closed_by": {
+          "agent_name": "Kilned Crackling Ember",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7f",
+          "id": "154dc156-665c-5952-af19-e4b039aafe43"
+        },
+        "summary": "Clarified MCP schemas derive from named graph-native EEF view subsets, while graph form derives from raw EEF data with provenance preserved.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "3f29c853-1806-44e1-808d-360d85f7545a",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "85be541f-8caf-477e-b498-0d8252f37e77",
+      "agent_id": {
+        "agent_name": "Kilned Crackling Ember",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7f",
+        "id": "154dc156-665c-5952-af19-e4b039aafe43"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T20:14:25Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Mark D1 value-impact contract complete after owner ratification",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T20:15:14Z",
+        "closed_by": {
+          "agent_name": "Kilned Crackling Ember",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7f",
+          "id": "154dc156-665c-5952-af19-e4b039aafe43"
+        },
+        "summary": "Marked D1 value-impact contract complete after owner ratification and updated ratification status text.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "85be541f-8caf-477e-b498-0d8252f37e77",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "8e39ea13-b55a-494b-8cd1-43bfca33ca49",
+      "agent_id": {
+        "agent_name": "Kilned Crackling Ember",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7f",
+        "id": "154dc156-665c-5952-af19-e4b039aafe43"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T20:22:07Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Capture napkin note for EEF D1/D0 plan review tooling friction",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T20:22:53Z",
+        "closed_by": {
+          "agent_name": "Kilned Crackling Ember",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7f",
+          "id": "154dc156-665c-5952-af19-e4b039aafe43"
+        },
+        "summary": "Captured napkin note for claims list CLI flag friction during D1/D0 plan review.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8e39ea13-b55a-494b-8cd1-43bfca33ca49",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1b187984-83d0-425f-b533-84da6785cf11",
+      "agent_id": {
+        "agent_name": "Kilned Crackling Ember",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7f",
+        "id": "154dc156-665c-5952-af19-e4b039aafe43"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md",
+            ".agent/plans/sector-engagement/eef/current/eef-value-trace.codex-brief.md",
+            ".agent/reports/eef-value-trace.report.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T20:26:23Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Archive ancillary EEF value-trace artefacts and fix D0/D1-aligned plan language",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T20:33:26Z",
+        "closed_by": {
+          "agent_name": "Kilned Crackling Ember",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7f",
+          "id": "154dc156-665c-5952-af19-e4b039aafe43"
+        },
+        "summary": "Archived EEF value-trace brief/report and fixed D0/D1-aligned plan language.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1b187984-83d0-425f-b533-84da6785cf11",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "25b64b83-465b-4e5a-9cb8-0d0df1c01300",
+      "agent_id": {
+        "agent_name": "Kilned Crackling Ember",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7f",
+        "id": "154dc156-665c-5952-af19-e4b039aafe43"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/README.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/eef.next-session.md",
+            ".agent/plans/sector-engagement/eef/archive/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T20:27:11Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Update EEF routing surfaces after archiving value-trace artefacts",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T20:33:26Z",
+        "closed_by": {
+          "agent_name": "Kilned Crackling Ember",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7f",
+          "id": "154dc156-665c-5952-af19-e4b039aafe43"
+        },
+        "summary": "Updated EEF README, continuity, thread, and archive index after archiving working artefacts.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "25b64b83-465b-4e5a-9cb8-0d0df1c01300",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "60da5ca5-166f-47ea-b748-656fa389dbe3",
+      "agent_id": {
+        "agent_name": "Kilned Crackling Ember",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7f",
+        "id": "154dc156-665c-5952-af19-e4b039aafe43"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-d1-reviewers.codex-brief.md",
+            ".agent/plans/sector-engagement/eef/current/eef-graph-predecision-report-fix.codex-brief.md",
+            ".agent/plans/sector-engagement/eef/current/eef-graph-predecision-research.codex-brief.md",
+            ".agent/plans/sector-engagement/eef/current/eef-graph-predecision-research.report.md",
+            ".agent/plans/sector-engagement/eef/current/eef-plan-architecture-reviewers.codex-brief.md",
+            ".agent/plans/sector-engagement/eef/current/eef-plan-consistency-sweep.codex-brief.md",
+            ".agent/plans/sector-engagement/eef/current/eef-plan-holistic-pass.codex-brief.md",
+            ".agent/plans/sector-engagement/eef/current/eef-plan-reviewers.codex-brief.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T20:28:49Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Archive stale EEF current briefs and predecision report after folding substance into plan",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T20:33:26Z",
+        "closed_by": {
+          "agent_name": "Kilned Crackling Ember",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7f",
+          "id": "154dc156-665c-5952-af19-e4b039aafe43"
+        },
+        "summary": "Archived stale EEF current briefs and predecision report after folding substance into the live plan.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "60da5ca5-166f-47ea-b748-656fa389dbe3",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "0349dac8-ffce-4685-a4c4-2ccce6711908",
+      "agent_id": {
+        "agent_name": "Kilned Crackling Ember",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7f",
+        "id": "154dc156-665c-5952-af19-e4b039aafe43"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T20:36:43Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Commit EEF plan/archive staged bundle.",
+      "intent_to_commit": "09577d1d-d9a5-45c1-928c-db1fb50b9ed2",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T20:38:05Z",
+        "closed_by": {
+          "agent_name": "Kilned Crackling Ember",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7f",
+          "id": "154dc156-665c-5952-af19-e4b039aafe43"
+        },
+        "summary": "Closed in same collaboration-state commit for EEF plan/archive bundle.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "0349dac8-ffce-4685-a4c4-2ccce6711908",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

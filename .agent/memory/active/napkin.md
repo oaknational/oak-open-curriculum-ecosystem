@@ -217,3 +217,170 @@ characters before running it.
   actual projection/type surface, not just an app-side docstring. The EEF report's
   `listUniversalTools` note needed SDK `list-tools.ts` and `types.ts` anchors,
   not only the streamable-http handler comments.
+
+## Session: 2026-05-31 — EEF D1/D0 plan review
+
+### Practice/tooling feedback
+
+- **Surface**: `agent-tools:collaboration-state`
+- **Signal**: friction
+- **Observation**: I reached for `claims list --json`, but the built CLI shape is
+  `claims list --active <path>` with no `--json` flag. The command failed before
+  any state changed.
+- **Behaviour change / candidate follow-up**: Check `--help` before assuming
+  JSON-output flags on collaboration subcommands; the list output is already JSON
+  in current built tooling.
+  Source plane: `operational`
+
+### Mistakes Made
+
+- I ran two `git mv` commands in parallel while archiving EEF value-trace
+  artefacts. One move succeeded and the other hit `.git/index.lock`. Git index
+  writes are serial state, so never parallelise staging/index-mutating commands
+  even when the file moves look independent.
+
+### Patterns to Remember
+
+- For EEF planning, working reports and Codex briefs are not live authority once
+  their useful substance is folded into the plan. Archive stale ancillary
+  artefacts instead of maintaining parallel source-of-truth language.
+
+## Session: 2026-05-31 — EEF D2 metacognition correction
+
+### Mistakes Made
+
+- While reviewing D2 vocabulary derivation, I framed a mismatch between planned
+  tool/context inputs and fixed corpus values as something to manage by naming
+  separate "declared" and "observed" vocabularies. Owner correction: for this EEF
+  lane the fixed data shape is fully specified; if a tool input does not map
+  directly to the fixed known data, that is an architectural misalignment to fix
+  at the foundation, not a reason to introduce glue, crosswalks, or parallel
+  vocabularies.
+
+### Behaviour Change
+
+- For EEF D2/D3 reviews, treat every input vocabulary as derived directly from
+  the fixed corpus shape. If a proposed input cannot be derived without a bridge,
+  mark the surface wrong and push the correction upstream into the data contract,
+  value contract, or MCP contract. Do not solve it by preserving a second
+  vocabulary layer.
+- I repeated the earlier shell-quoting miss by running an `rg` pattern with
+  backticks unquoted, causing `zsh` to attempt command substitution for
+  `by_phase`. This was already recorded as a behaviour change above; recurrence
+  means I need to quote all `rg` patterns containing backticks or shell-significant
+  characters before pressing enter, not just recognise the rule afterwards.
+- I initially softened the D2/report repair by replacing "fallback" with
+  "owner-ratified replacement after verification". Owner correction: that still
+  preserves an escape hatch. The correct pattern is a hard proof requirement: if
+  the settled shape cannot be proven, the contract/foundation is wrong and must be
+  corrected; do not keep fallback menus, compatibility layers, alternate paths,
+  or "just in case" branches alive in the plan.
+
+## Session: 2026-05-31 — EEF value reframe (Fruited Regrowing Copse, `abec59`)
+
+What started as a holistic plan/report review became, over four owner reframes, a
+rebuild of the EEF plan's centre of gravity. Three insights, the last being the
+most important.
+
+- **The tombstone reflex (owner-caught).** I removed the wrong subject/topic idea
+  but kept memorialising it — "rejected, not reclassified", "the original category
+  error", VALUE-REFRAME-CONSEQUENCE banners. Owner: "no more than we reject bananas
+  or kittens." The warning *is* the gravity; a removed idea earns no sentence.
+  Correct pattern: describe what is, stop. (→ `feedback_no_tombstones_for_removed_ideas`,
+  `distilled.md`.) I committed the anti-pattern *in the very edits documenting the
+  reframe* — I can write the lesson and breach it in the same paragraph.
+
+- **Value-trace-first (owner-named).** The EEF tools as first envisioned were never
+  possible: they keyed on curriculum subject/topic, but EEF strands carry no such
+  axis. Months of data-shape engineering went into an impossible join — the
+  data-shape work was the tail wagging the dog. Tracing the user journey + value
+  end-to-end first would have caught it. (→ `feedback_trace_user_value_before_tool_design`,
+  the seeded `eef-value-trace.codex-brief.md`.)
+
+- **EMERGENT loop-health alarm (cross-experience read, consolidate-docs step 4c).**
+  The five most recent experience files are all one family — conservation /
+  frame-capture reflex — across four different agents (Igneous, Evergreen,
+  Opalescent, me) and four session types on the EEF thread. This family keeps
+  generating fresh lessons *despite* `existence-is-not-correctness` already being a
+  graduated rule, and despite a prior session explicitly noting "the cure is an
+  execution-time default-flip, not another distilled entry" — yet I wrote two more
+  entries this session. The signal: the enforce edge is not firing for this family
+  under EEF-remediation pressure. The capture→distil→graduate pipeline is producing
+  entries that do not change the execution-time default. The real cure is not more
+  lessons; it is a structural / execution-time intervention, or an admission that
+  the EEF remediation context itself is the inducer and the fix is finishing the
+  remediation. Flagging as a loop-health observation for owner attention, not
+  another lesson to file. (napkin write pushes this buffer into soft zone ~270/220;
+  preserved at full weight per learning-preservation-overrides-fitness; route to
+  step-9 refinement at next consolidation, do not trim.)
+
+## Session: 2026-05-31 — EEF value-trace inverted frame (Leafy Ripening Meadow / `423e98`)
+
+### Mistake Made
+
+- Tasked with the EEF value-trace, I built the instrument with the polarity
+  **inverted**: an all-Opus Ground→Trace workflow that asked "does the EEF data
+  support the plan's value claim?" with a `GAP` verdict and a `value_gaps` array —
+  treating the plan's expectations as the fixed reference and the data as the
+  thing that must measure up. I launched ~20 Opus agents on that frame before
+  locking the direction. Owner interrupted; I stopped the workflow.
+- Owner correction (their words): **the EEF data is the source of truth and has no
+  gaps in it; the plan is the map for surfacing the value of that truth into our
+  user-facing tools; we do not twist the data to fit the plan, we correct the plan
+  to surface the value the data provides.** Direction of correction is one-way,
+  toward the plan, always.
+- This is the SAME conservation / frame-capture family the entry directly above
+  flagged as a loop-health alarm — one meta-level up. The original fatal flaw
+  twisted the data to fit a topic-indexed tool; my gap-hunting frame would twist
+  the *analysis* to fit a "does-the-data-comply" audit. `existence-is-not-correctness`
+  is graduated and `value-trace-first` was seeded, yet I still inverted the frame
+  on the very session meant to trace value. The enforce edge did not fire. Cost:
+  eroded owner trust ("can't trust you to get the job done"). The "again" is the
+  real signal.
+
+### Fix Attempted
+
+- Rewrote `eef-value-trace.codex-brief.md` so the frame cannot be lost: a
+  "governing frame — read this first" section at the top; the one-way rule as a
+  blockquote (correct the plan to surface the data's value, never twist the data);
+  an explicit name-and-forbid of the inversion ("if you write 'the data lacks X',
+  turn the sentence around"); two and only two finding shapes, both correcting the
+  plan — *over-claim* (plan assumes value the data does not provide → correct the
+  plan down) and *under-surface* (a tool/schema drops value the data does provide →
+  correct the tool up); the six questions re-polarised from "does the data support"
+  to "how does the value the data holds reach the user"; output defined as plan
+  corrections, never data flags.
+
+### Honest Note (do not oversell the fix)
+
+- The brief rewrite is a clearer instruction for the NEXT agent — but it is another
+  doc-patch, exactly the kind the loop-health alarm above said does not change the
+  execution-time default. The recurring cure is structural / finishing the EEF
+  remediation, not a better brief. Recorded as owner-directed; not claimed as the
+  cure.
+
+## Session: 2026-05-31 — Kilned D3/report repair
+
+### Surprise
+
+- **Expected**: `claims close` would accept the active registry and claim id,
+  mirroring the minimal open command shape.
+- **Actual**: the helper requires `--closed`, `--summary`, `--platform`, and
+  `--model`; omitting `--closed` produced a usage error and left the claim open.
+- **Why expectation failed**: I inferred close-command shape from open-command
+  muscle memory instead of checking the specific close help first.
+- **Behaviour change**: before closing claims manually, run or recall
+  `claims close --help`; pass both `.agent/state/collaboration/active-claims.json`
+  and `.agent/state/collaboration/closed-claims.archive.json`.
+  Source plane: `operational`
+
+### Mistake Made
+
+- I reframed the remaining EEF D1 work as an "evidence term contract" with a list
+  of terms to justify from the data. Owner correction: all phrases/concepts come
+  from the fixed EEF data, methodology, and provenance surfaces; any separate list
+  is made up. The right contract is corpus-derived projection plus visible
+  provenance: every surfaced concept, payload field, resource field, and schema
+  field is a deterministic type-strict transform/projection of the EEF data.
+  Behaviour change: never author a parallel teacher-facing evidence vocabulary for
+  EEF. Surface concepts from the corpus and make provenance visible.

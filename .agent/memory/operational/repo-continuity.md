@@ -23,13 +23,13 @@ surface.
   Regrowing Copse / `abec59`)**: the owner reframed the EEF value model — EEF is
   evidence about teaching strategies/decisions, relevance is a function of the
   pedagogical move on EEF-native finite axes, and the value intersects Oak's tools
-  (misconception + prior-knowledge graphs) at the workflow level. The live plan and
-  the detail-layer report are resynced to that frame natively (no reframe-banners,
-  no tombstones for the discarded subject/topic idea). The graph layer is
+  (misconception + prior-knowledge graphs) at the workflow level. The live plan is
+  resynced to that frame natively (no reframe-banners, no tombstones for the
+  discarded subject/topic idea). The graph layer is
   reaffirmed as deliberate multi-source foundation. SLT strands and EEF-only
-  workflows are split to two `future/` seed plans. Next EEF move is the user-value
-  trace (`eef/current/eef-value-trace.codex-brief.md`). No commit until this
-  session's closeout commit.
+  workflows are split to two `future/` seed plans. The user-value trace has now
+  been folded directly into the live plan and its brief/report are archived as
+  historical scratch artefacts. No commit until this session's closeout commit.
 - **EEF D2/report no-escape-hatches correction applied (2026-05-31, Prismatic
   Shimmering Constellation / `019e7e`)**: the live EEF plan, pre-decision report,
   and `.agent/directives/principles.md` now agree that `EEF_TOOLKIT_DATA` is the
@@ -51,15 +51,13 @@ surface.
   the live plan. The settled practical-small MCP surface is one deterministic EEF
   query/fetch tool, one interpretation resource/template, and one user-facing
   prompt. D3 now names two remaining products: a written MCP contract artefact
-  and a separate SDK/app verification record. The next EEF move is the holistic
-  live-plan pass brief at `eef/current/eef-plan-holistic-pass.codex-brief.md`.
-- **EEF pre-decision report fixed and reviewer-polished (2026-05-31, Deep
-  Drifting Anchor / `019e7e`)**: the graph pre-decision research report was
-  repaired from `eef/current/eef-graph-predecision-report-fix.codex-brief.md`,
-  reviewed by six specialist reviewers, and then polished to close the real
-  blocker around input-side `TNodeId` threading. Treat
-  `eef/current/eef-graph-predecision-research.report.md` as handoff-safe
-  pre-decision research, not a decision surface.
+  and a separate SDK/app verification record.
+- **EEF pre-decision research and reviewer findings folded into plan (2026-05-31,
+  Deep Drifting Anchor / `019e7e` and later passes)**: the graph pre-decision
+  research and reviewer briefs are now archived as historical scratch artefacts;
+  their useful substance is folded into
+  `eef/current/eef-graph-tool-completion.plan.md`. Treat the live plan as the
+  contract, not the archived reports or briefs.
 - **EEF D0 complete and audited (2026-05-31, Opalescent Transiting Prism /
   `73491c`)**: validator deletion, data relocation, ADR/decontamination work, and
   the intent-vs-letter audit are recorded in the `eef` thread banner. The thread
@@ -105,19 +103,19 @@ not the current session-priority lane. Reactivation is owner-directed.
 ### EEF Graph-Tooling Rebuild
 
 1. Re-ground in the `eef` thread banner and current git state.
-2. Run the **user-value trace** (`eef/current/eef-value-trace.codex-brief.md`):
-   walk the value path end to end and confirm the corpus supports each step. This
-   precedes D1/D2 execution per owner direction — tracing value first is the guard
-   against building tools the data cannot support.
+2. Treat D0 and D1 as complete in the live plan: D0 fixed the known-data doctrine,
+   validator deletion, and estate decontamination; D1 ratified the value,
+   evidence-transmission, provenance, schema-derivation, and value-proof
+   contracts.
 3. Treat the value reframe as controlling: EEF relevance is by pedagogical move on
    EEF-native finite axes; the EEF tool takes the corpus's finite keys; the value
    intersects Oak's misconception/prior-knowledge tools at the workflow level. The
    D2 no-escape-hatches correction still holds: `EEF_TOOLKIT_DATA` is the only
    source of truth; no separate vocab/key/value lists, glue, fallback paths, or
    compatibility layers.
-4. After the value trace, continue from
-   `eef/current/eef-graph-tool-completion.plan.md` D2, or the written D3 MCP
-   contract artefact, as the owner directs.
+4. Continue from `eef/current/eef-graph-tool-completion.plan.md` D2, or the
+   written D3 MCP contract artefact and SDK/app verification record, as the owner
+   directs.
 
 ### Agentic-Engineering Curation
 
@@ -182,12 +180,21 @@ authority.
 
 ## Deep Consolidation Status
 
-**session-completion closeout (2026-05-31, Prismatic Shimmering Constellation —
-EEF D2/report/principles no-escape-hatches repair)**: `not due — owner requested
-a tight handoff only, with no check and no commit; the behaviour-changing lesson
-was captured directly in principles.md, the EEF plan/report, the eef thread
-record, and napkin; no additional ADR/PDR candidate or non-urgent open question
-was surfaced`.
+**session-completion closeout (2026-05-31, Fruited Regrowing Copse — EEF value
+reframe)**: `completed this handoff — owner ran /oak-consolidate-docs in
+session-completion mode. Fresh learning homed (two lessons → distilled.md +
+platform memory + pending-graduations candidates); experience file written; EEF
+plan/report/seeds committed at ac429831. Emergent cross-experience finding
+surfaced: five consecutive experience files across four agents on the eef thread
+are all the conservation/frame-capture family, recurring despite a graduated rule
+— a loop-health signal that the enforce edge is not firing for this family under
+EEF-remediation pressure (recorded in napkin for owner attention). Drainable
+buffers not fully drained (session-completion, not dedicated curation); napkin in
+soft zone (~288/220) by preservation, route to refinement next consolidation`.
+
+**prior closeout (2026-05-31, Prismatic Shimmering Constellation — EEF
+D2/report/principles no-escape-hatches repair)**: `not due — owner requested a
+tight handoff only`.
 
 **prior history**: detailed 2026-05-28 to 2026-05-31 handoff-gate prose is
 preserved in

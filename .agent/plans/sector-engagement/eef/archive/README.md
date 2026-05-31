@@ -26,3 +26,21 @@ learning behind everything here is preserved in these files and in git history.
 | `eef-value-delivery-discipline-2026-05-27.md` | F-era value-delivery reflection |
 | `eef-value-path-reflection-2026-05-27.md` | F-era value-path reflection |
 | `eef-value-pr-review-register.md` | F-era PR review register |
+
+## Archived Working Artefacts
+
+These artefacts were useful working material but are not live sources. Their
+settled substance is folded into the live plan.
+
+| Archived artefact | Was |
+| --- | --- |
+| `eef-d1-reviewers.codex-brief.md` | D1 reviewer instruction set |
+| `eef-graph-predecision-report-fix.codex-brief.md` | predecision report repair instruction set |
+| `eef-graph-predecision-research.codex-brief.md` | graph predecision research instruction set |
+| `eef-graph-predecision-research.report.md` | graph predecision working report |
+| `eef-plan-architecture-reviewers.codex-brief.md` | architecture-reviewer instruction set |
+| `eef-plan-consistency-sweep.codex-brief.md` | plan-consistency sweep instruction set |
+| `eef-plan-holistic-pass.codex-brief.md` | holistic live-plan pass instruction set |
+| `eef-plan-reviewers.codex-brief.md` | reviewer synthesis instruction set |
+| `eef-value-trace.codex-brief.md` | value-trace instruction set |
+| `eef-value-trace.report.md` | value-trace working report |

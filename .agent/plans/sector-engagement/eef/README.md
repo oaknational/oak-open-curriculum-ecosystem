@@ -155,31 +155,18 @@ and the generalised ADR-038.
 ## Status of the Live Plan
 
 The live plan is decision-complete and in execution. D0 is complete and committed
-at `ce9745c7`. On 2026-05-31 the value model was reframed: EEF is evidence about
-teaching strategies and decisions, and relevance is a function of the pedagogical
-move (on EEF's own finite axes), with the value intersecting Oak's tools — the
-misconception and prior-knowledge graphs — at the workflow level. The plan and the
-detail-layer report are resynced to that frame. The next session is the
-**user-value trace** ([`current/eef-value-trace.codex-brief.md`](current/eef-value-trace.codex-brief.md)),
-which walks the value path end to end and confirms the corpus supports each step
-before D1/D2 execution resumes.
+at `ce9745c7`; D1 is complete and owner-ratified in the live plan. On 2026-05-31
+the value model was reframed: EEF is evidence about teaching strategies and
+decisions, and relevance is a function of the pedagogical move (on EEF's own
+finite axes), with the value intersecting Oak's tools — the misconception and
+prior-knowledge graphs — at the workflow level. The user-value trace has been
+folded into the live plan; its brief/report are archived as historical scratch
+artefacts. The next implementation move is D2, or D3's written MCP contract and
+SDK/app verification record if the owner chooses that lane.
 
-Two next-session Codex briefs are staged in [`current/`](current/) to de-risk the
-post-D1 graph/MCP decisions; neither ratifies graph shape:
-
-- [`current/eef-graph-predecision-research.codex-brief.md`](current/eef-graph-predecision-research.codex-brief.md)
-  — read-only graph pre-decision research, run D1-parallel, preparing the D3/D4
-  decision space without ratifying graph-native structure or graph-core
-  operations. **Delivered:**
-  [`current/eef-graph-predecision-research.report.md`](current/eef-graph-predecision-research.report.md)
-  — the file/line-grounded research report (known constraints, open D1/D3/D4
-  questions, candidate graph-native view options, layer split, risk register,
-  and the suggested D3/D4 decision agenda). Labelled `pre-decision research`;
-  ratifies nothing.
-- [`current/eef-d1-reviewers.codex-brief.md`](current/eef-d1-reviewers.codex-brief.md)
-  — a D1-only reviewer pass (four architecture reviewers plus the documentation
-  and type reviewers) stress-testing the D1 value contract before D1
-  implementation.
+The working Codex briefs and reports that de-risked D1/D3/D4 are archived as
+historical scratch artefacts. Their useful substance is folded into the live plan;
+do not resume or cite them as live sources.
 
 Before any refreshed EEF data is copied into the SDK:
 
