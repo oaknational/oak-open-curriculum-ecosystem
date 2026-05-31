@@ -1842,6 +1842,49 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "6910d496-0622-4942-b7ef-8739a85492c9",
+      "agent_id": {
+        "agent_name": "Foamy Charting Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "6f87bd6a-c046-5a86-b6e4-dc50d278a872"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T10:36:44Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit late-arriving longitudinal napkin review report outputs per owner request.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T10:36:57Z",
+        "closed_by": {
+          "agent_name": "Foamy Charting Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "6f87bd6a-c046-5a86-b6e4-dc50d278a872"
+        },
+        "summary": "closed in same collaboration-state commit: docs(agentic): add longitudinal napkin review outputs",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "6910d496-0622-4942-b7ef-8739a85492c9",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
