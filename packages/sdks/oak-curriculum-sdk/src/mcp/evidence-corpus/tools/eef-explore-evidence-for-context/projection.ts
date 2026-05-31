@@ -1,5 +1,6 @@
 /**
- * Node projection for `eef-explore-evidence-for-context` (gate-1a t6a).
+ * Node projection for the current transitional
+ * `eef-explore-evidence-for-context` evidence-context tool.
  *
  * Projects a full {@link EefStrand} to the tight shape emitted in the
  * response's `data.nodes`. Full strands cost ~16k tokens for the whole corpus;
@@ -22,11 +23,10 @@
  * strength), tags, and the relevant priorities. The heavier prose
  * (`definition.full`, `effectiveness`, `behind_the_average`, `implementation`,
  * `update_history`) AND the `key_findings` bullets are dropped — selection
- * needs breadth and selectability, not depth; the per-strand findings are a
- * gate-1b `explain` concern. Measurement is decisive here: with the mandatory
- * dual-emit and the citation envelope, keeping `key_findings` made even a
- * modest result set exceed the 10k output budget. `eef_url` and the evidence
- * caveats live in the citation envelope (correlated by `id`), not here.
+ * needs breadth and selectability, not depth. Measurement is decisive here: with
+ * the mandatory dual-emit and the citation envelope, keeping `key_findings` made
+ * even a modest result set exceed the 10k output budget. `eef_url` and the
+ * evidence caveats live in the citation envelope (correlated by `id`), not here.
  */
 
 import { type EefStrand, type EefPriority } from '@oaknational/graph-corpus-sdk/eef-strands';

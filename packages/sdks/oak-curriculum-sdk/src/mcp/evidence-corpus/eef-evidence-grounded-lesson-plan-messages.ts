@@ -13,18 +13,11 @@
  * when the prompt name matches `eef-evidence-grounded-lesson-plan`.
  *
  * @remarks
- * The prompt body adapts the predecessor T10 design (preserved at the
- * predecessor plan location recoverable through git history; the live
- * adaptation rationale lives in the current `eef-evidence-corpus.plan.md`
- * §Phase E T10 narrative) for the 2026-05-21 gate-1a / gate-1b split:
- * where the predecessor
- * orchestrated a ranked-list response from `recommend-evidence-for-context`
- * (gate-1b), this gate-1a version orchestrates a subgraph response from
- * `eef-explore-evidence-for-context` (gate-1a, t6a). The 5-step
- * orchestration spine and the F8 / F9 / F10 resolutions from the
- * predecessor are preserved; step 2's selection criterion adapts from
- * rank-ordering to contextual-fit-from-the-subgraph because the t6a
- * response is a typed subgraph, not a sorted list.
+ * The prompt body is a transitional evidence-corpus prompt until the graph-native
+ * MCP surface lands. It may call the currently registered evidence context tool,
+ * but it must not encode the old list-shaped implementation as a target
+ * behaviour. The assistant uses EEF evidence as decision support and preserves
+ * caveats, uncertainty, and professional judgement.
  *
  * Key Stage to Phase mapping (F9 resolution; inline in the prompt body
  * per the predecessor's deliberate choice — the LLM does the mapping
@@ -36,7 +29,7 @@
  * - KS3, KS4 → secondary
  * - KS5 → secondary (EEF coverage is primarily up to age 16)
  *
- * Focus enum (F10 resolution; closed set matching `RankOptions.context.focus`):
+ * Focus enum (closed set drawn from the EEF priority vocabulary):
  * `closing_disadvantage_gap`, `metacognition`, `literacy`, `numeracy`,
  * `behaviour`, `feedback`. The generator does not validate the value;
  * MCP-protocol schema validation is the boundary check.
@@ -79,12 +72,12 @@ Please:
 
 1. Call eef-explore-evidence-for-context to surface EEF Toolkit strands matching the lesson context:
    eef-explore-evidence-for-context({ subject: "${subject}", key_stage: "${keyStage}", topic: "${topic}"${focusClause} })
-2. The response is a typed subgraph of EEF strands (not a ranked list). Select 2-3 strands whose evidence and implementation requirements fit the lesson context; use the subgraph's strand-to-strand connections as a signal for pedagogically related approaches.
-3. For each selected strand, extract the implementation guidance carried on the strand's record: CPD intensity, time to embed, key staff roles involved. If a strand's implementation fields are not present in the default projection, note this honestly and proceed with the fields that are available.
-4. Design a lesson plan that integrates the selected approaches, preserving every caveat verbatim from the citations alongside the approach it modifies.
+2. Treat the response as evidence context for options and trade-offs. Use only the evidence needed for that context, preserve relationships that matter, and do not force a fixed number of strands or one correct answer.
+3. For each evidence item you use, preserve the implementation guidance and caveats that are present. If the transitional response lacks an evidence field needed for teacher judgement, state that limitation honestly rather than filling the gap.
+4. Design a lesson plan that integrates the evidence-informed options and trade-offs, preserving every caveat verbatim from the citations alongside the approach it modifies.
 5. Structure the lesson pedagogically: starter → main → practice → plenary, with a metacognitive reflection at plenary.
 
-Return the lesson plan with the strand citations + caveats attached to each approach, and a brief summary of the evidence strength + implementation considerations for the teacher's professional judgement.`,
+Return the lesson plan with the strand citations + caveats attached to each approach, and a brief summary of the evidence strength, trade-offs, and implementation considerations for the teacher's professional judgement.`,
       },
     },
   ];

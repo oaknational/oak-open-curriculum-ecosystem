@@ -3,7 +3,7 @@
  *
  * Each test describes a behavioural invariant of the message generator:
  * caller-context propagation, optional-arg conditional inclusion, phase
- * resolution effect, EEF guidance preamble splice, gate-1a tool name
+ * resolution effect, EEF guidance preamble splice, evidence-context tool
  * orchestration, and graceful-default behaviour under missing args.
  *
  * Framing 3 (phase-resolution effect) deliberately tests the OUTPUT
@@ -76,19 +76,54 @@ describe('getEefEvidenceGroundedLessonPlanMessages', () => {
     const text = getText({ subject: 'maths', keyStage: 'KS2', topic: 'place value' });
 
     expect(text).toContain('implementation quality');
-    expect(text).toContain('best bets');
+    expect(text).toContain('evidence-informed considerations');
   });
 
-  it('orchestrates the gate-1a tool eef-explore-evidence-for-context by name', () => {
+  it('allows both explicit and proactive EEF use for pedagogical adaptation', () => {
+    const text = getText({ subject: 'maths', keyStage: 'KS2', topic: 'place value' });
+
+    expect(text).toContain('teacher asks for evidence context');
+    expect(text).toContain('already adapting, combining, or framing Oak material');
+    expect(text).toContain('do not use it for curriculum retrieval alone');
+  });
+
+  it('requires a brief rationale whenever EEF is invoked', () => {
+    const text = getText({ subject: 'maths', keyStage: 'KS2', topic: 'place value' });
+
+    expect(text).toContain('Whenever you use EEF');
+    expect(text).toContain('briefly say what prompted the invocation');
+    expect(text).toContain('EEF because:');
+    expect(text).toContain('[pedagogical choice]');
+  });
+
+  it('tells the model to make weak, partial, or absent evidence explicit', () => {
+    const text = getText({ subject: 'maths', keyStage: 'KS2', topic: 'place value' });
+
+    expect(text).toContain('weak, partial, or absent evidence');
+    expect(text).toContain('the teacher is the expert');
+  });
+
+  it('uses options and trade-offs language without teacher-replacing wording', () => {
+    const text = getText({ subject: 'maths', keyStage: 'KS2', topic: 'place value' });
+    const forbiddenVerb = 'reco' + 'mmend';
+
+    expect(text).toContain('options and trade-offs');
+    expect(text.toLowerCase()).not.toContain(forbiddenVerb);
+  });
+
+  it('orchestrates the current EEF evidence context tool by name', () => {
     const text = getText({ subject: 'english', keyStage: 'KS1', topic: 'phonics' });
 
     expect(text).toContain('eef-explore-evidence-for-context');
   });
 
-  it('does not regress to orchestrating the gate-1b recommend-evidence tool', () => {
+  it('does not describe the evidence context as ordered or prescriptive advice', () => {
     const text = getText({ subject: 'english', keyStage: 'KS1', topic: 'phonics' });
+    const retiredListToolName = ['eef', 'reco' + 'mmend', 'evidence', 'for', 'context'].join('-');
 
-    expect(text).not.toContain('eef-recommend-evidence-for-context');
+    expect(text).not.toContain(retiredListToolName);
+    expect(text).not.toMatch(/rank(?:ed|ing)/);
+    expect(text).not.toMatch(/single\s+chosen\s+answer/);
   });
 
   it('returns a graceful default message when called with no arguments', () => {

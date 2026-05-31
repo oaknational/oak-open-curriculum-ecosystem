@@ -27,14 +27,13 @@ surface.
   [`curator-passes/2026-05-31-codex-napkin-longitudinal-review.md`](curator-passes/2026-05-31-codex-napkin-longitudinal-review.md).
   Two owner-gated items were added to `pending-graduations.md`; the review did
   not reopen archive processing or comms-event rotation.
-- **EEF reviewer findings applied + architecture brief ready (2026-05-31,
-  Hearthlit Roasting Caldera / `019e7d`)**: the docs/type reviewer pass ran, the
-  owner widened scope, and the live plan/README were repaired. Raw
-  `EEF_TOOLKIT_DATA as const` is definitively not the graph contract; the graph
-  is derived from the raw data and must preserve exact raw-derived typing. The
-  next EEF move is the architecture-reviewer Codex brief at
-  `eef/current/eef-plan-architecture-reviewers.codex-brief.md`, then owner
-  disposition of any architecture findings before D1 value + D2 typed foundation.
+- **EEF owner questions answered + D3 tightened (2026-05-31, Estuarine Rolling
+  Harbour / `019e7d`)**: D1/D3 value and MCP-surface questions are recorded in
+  the live plan. The settled practical-small MCP surface is one deterministic EEF
+  query/fetch tool, one interpretation resource/template, and one user-facing
+  prompt. D3 now names two remaining products: a written MCP contract artefact
+  and a separate SDK/app verification record. The next EEF move is the holistic
+  live-plan pass brief at `eef/current/eef-plan-holistic-pass.codex-brief.md`.
 - **EEF D0 complete and audited (2026-05-31, Opalescent Transiting Prism /
   `73491c`)**: validator deletion, data relocation, ADR/decontamination work, and
   the intent-vs-letter audit are recorded in the `eef` thread banner. The thread
@@ -54,7 +53,7 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | codex / GPT-5 / Hearthlit Roasting Caldera / reviewer findings applied + architecture brief ready / 2026-05-31 |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | codex / GPT-5 / Estuarine Rolling Harbour / D1-D3 owner-question resolution + holistic pass brief / 2026-05-31 |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | codex / GPT-5 / Blooming Twining Grove / longitudinal napkin review + deep handoff / 2026-05-31 |
 
 ## Paused Threads
@@ -80,12 +79,11 @@ not the current session-priority lane. Reactivation is owner-directed.
 ### EEF Graph-Tooling Rebuild
 
 1. Re-ground in the `eef` thread banner and current git state.
-2. Run `eef/current/eef-plan-architecture-reviewers.codex-brief.md`: all four
-   architecture reviewers (`barney`, `betty`, `fred`, `wilma`) over the repaired
-   live plan.
-3. If architecture findings require repair, ask the owner before editing; if the
-   plan is architecture-ready, continue with D1 value and D2 typed foundation,
-   then D3-D7, unless the owner changes the route.
+2. Run `eef/current/eef-plan-holistic-pass.codex-brief.md` to review the whole
+   live plan for coherence, cohesion, completeness, accuracy, and freshness after
+   the D1/D3 owner-question resolution.
+3. Then proceed to the written D3 MCP contract artefact and SDK/app verification
+   record, or owner-directed D4+ planning, depending on the holistic-pass outcome.
 
 ### Agentic-Engineering Curation
 

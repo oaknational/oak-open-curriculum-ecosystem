@@ -1,5 +1,89 @@
 # Next-Session Record — `eef` thread
 
+> **OWNER QUESTIONS ANSWERED + D3 TIGHTENED; HOLISTIC PASS BRIEF READY
+> (2026-05-31, Estuarine Rolling Harbour / `019e7d`; owner-requested tight
+> handoff, no commit, no `pnpm check`).** This session applied the remaining D1/D3
+> fixes and polish, answered the owner-facing open questions, and recorded the
+> settled D3 MCP surface: one deterministic EEF query/fetch tool, one EEF
+> interpretation resource/template for applying evidence, and one user-facing
+> prompt for starting the teacher workflow. The plan now states that free-form
+> teacher language is interpreted by the invoking agent before any EEF tool call;
+> the deterministic tool receives only finite fixed inputs derived from Oak/EEF
+> data. D3 is now tightened into two remaining products: a written MCP contract
+> artefact and a separate SDK/app verification record; `mcp-expert` sign-off is
+> still pending. EEF-specific docs now include the value of EEF evidence and the
+> Sunday-night cover example as illustrative, not exhaustive. **Next safe step:**
+> run the new holistic plan pass brief at
+> `eef/current/eef-plan-holistic-pass.codex-brief.md` to review the entire live
+> plan for coherence, cohesion, completeness, accuracy, and freshness before D4+
+> execution proceeds. Targeted checks run this session for touched docs:
+> `git diff --check`, Prettier, markdownlint. No commit and no full `pnpm check`
+> by explicit owner direction.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Estuarine Rolling Harbour` | `codex` | `GPT-5` | `019e7d` | `eef-d1-d3-owner-question-resolution` | 2026-05-31 | 2026-05-31 |
+>
+> ---
+>
+> **REPORT REVIEWED; FIX BRIEF READY (2026-05-31, Codex GPT-5; owner-requested
+> short handoff, no gates, no commit).** This session created the D1-parallel
+> pre-decision research brief at
+> `eef/current/eef-graph-predecision-research.codex-brief.md`, the D1 reviewer
+> brief at `eef/current/eef-d1-reviewers.codex-brief.md`, monitored the
+> delivered graph research report, swept SDK/plan/report language away from
+> list-era/ranking/recommendation concepts, improved the report once, then ran
+> code / architecture / docs reviewer passes on the report. Reviewer synthesis:
+> the report is useful but **not yet safe as D3/D4/D5 handoff material**. It must
+> first fix traversal-reuse wording, current-code-vs-plan-target wording for
+> `structuredContent`, construction-integrity overclaims, shorthand file/line
+> refs, process self-certification, and small projection/schema line-shape
+> inaccuracies. A dedicated follow-up brief now exists:
+> `eef/current/eef-graph-predecision-report-fix.codex-brief.md`. **Next safe
+> step:** run that brief before using
+> `eef/current/eef-graph-predecision-research.report.md` to guide D3/D4/D5. No
+> gates run and no commit made by explicit owner direction.
+>
+> ---
+>
+> **PRE-DECISION GRAPH RESEARCH DELIVERED (2026-05-31, Vining Ripening Fern /
+> `870a40`, `claude-opus-4-8`; owner-directed read-only research session).** Ran
+> the research instruction set in
+> `eef/current/eef-graph-predecision-research.codex-brief.md` and delivered the
+> report at **`eef/current/eef-graph-predecision-research.report.md`** — the
+> file/line-grounded map of the graph decision space (executive summary, known
+> constraints C1–C9, open D1/D3/D4 questions, three candidate graph-native view
+> forms with pros/risks/proof needs, layer-split map, risk register R1–R10, and
+> the D3/D4 decision agenda). The `eef/README.md` "Status of the Live Plan"
+> section now points at it. It is labelled `pre-decision research` and **ratifies
+> nothing** — it names the decisions D1/D3/D4 own and surfaces considerations,
+> it does not make or recommend them (owner-corrected mid-session: "research, not
+> decision making").
+>
+> Concrete findings the report grounds for D3/D4: (1) the clean `as const`
+> foundation (`strand-lookup.ts`) exists but the graph layer still types nodes as
+> the Zod-inferred `EefStrand` keyed by broad `string` — D5 is mainly a
+> re-pointing, the BFS traversal in `eef-graph-model.ts` is reusable once re-keyed
+> on `EefStrandId`; (2) type erasure is concentrated at two named seams
+> (`graph-core` broad-`string` result/error ids; the EEF adapter's
+> `ReadonlyMap<string, EefStrand>`); (3) the MCP registration config at
+> `handlers.ts:185-196` carries **no `outputSchema`** today, and both
+> `registerTool` and `registerAppTool` paths exist — D6 must extend the config +
+> the `listUniversalTools` projection; (4) `rank`/`explain`/`compare` are
+> type-only, barrel-exported — corroborates the zero-external-blast-radius
+> finding; (5) **D3's output schema cannot be settled before D1 ratifies the
+> teacher-facing evidence field set** (the old `projection.ts` field set was sized
+> by the deleted response cap, so it is not a neutral baseline — V1–V4 in §3a).
+>
+> **Tree state**: the report + the `eef/README.md` pointer are uncommitted
+> working-tree edits. **No commit and no `pnpm check`** by explicit owner
+> direction. Other agent present this session: Codex `Estuarine Rolling Harbour`,
+> claim scoped to `napkin.md` only — no overlap. **Next step unchanged**: D1
+> (value, owner-ratified) ∥ D2 (typed raw foundation), then D3→D7; the report
+> feeds D3/D4.
+>
+> ---
+>
 > **REVIEWER FINDINGS APPLIED + ARCHITECTURE BRIEF READY (2026-05-31,
 > Hearthlit Roasting Caldera / `019e7d`; owner-confirmed light handoff).** This
 > session ran the Codex reviewer brief at

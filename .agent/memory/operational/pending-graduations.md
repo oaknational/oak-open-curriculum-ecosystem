@@ -37,6 +37,40 @@ substance that still needed a live queue home is preserved below. Processed
 source files were deleted after extraction so the repository does not carry
 pseudo-shards that hide the true buffer state.
 
+## 2026-05-31 captures — agent-tools PreToolUse hooks + scripts→src migration
+
+Captured by Ethereal Weaving Constellation (claude / Opus 4.8 / `1d6645`) during
+the hook-fail-open fix + `agent-tools/scripts/` dissolution (commit `1851eed`).
+Capture-only; graduation deferred to a future consolidation when triggers fire.
+
+- **PreToolUse safety hooks must run prebuilt artefacts, not `pnpm exec tsx`.**
+  `[captured: 2026-05-31 | source: this-session commit 1851eed | target:
+  adr:hook-execution-from-prebuilt-artefacts | trigger: second per-tool-call hook
+  instance, a new PreToolUse hook, or owner direction | size: S | status: pending]`
+  Per-call TS recompile (~1-2s) blows the 5s hook timeout under concurrent load
+  and the guard then fails OPEN. Cure: invoke `node dist/...` directly; guarantee
+  dist via the install lifecycle (postinstall + pre-commit build).
+
+- **Sub-agent verification briefs must mandate the full gate set, not eslint
+  alone — "lintClean ≠ gate-clean".**
+  `[captured: 2026-05-31 | source: this-session split-workflow agents | target:
+  rule-or-pdr:subagent-brief-mandates-full-gate-set (extends
+  validate-specialist-findings-before-acting) | trigger: second instance of an
+  agent passing one gate while failing another, or owner direction | size: S |
+  status: pending]`
+  Split agents wrote compact code that passed eslint but failed Prettier; the
+  format pass then un-compacted it over `max-lines`. The cure for over-cap is
+  responsibility-based splitting, never compaction.
+
+- **Relocating tsx-invoked entry points silently breaks knip's entry config.**
+  `[captured: 2026-05-31 | source: this-session knip failure | target:
+  pattern:knip-entry-config-tracks-entry-point-moves | trigger: second
+  entry-point relocation that breaks knip, or owner direction | size: S |
+  status: pending]`
+  knip `entry` globs pointed at the old `scripts/`; moving entries to `src/` made
+  the whole dependency graph read as unused. Update `knip.config.ts` entry list
+  on any entry-point relocation.
+
 ## 2026-05-31 captures — source-buffer gates from napkin/distilled processing
 
 Captured by Eclipsed Stealing Raven (codex / GPT-5 / `019e7d`) during the

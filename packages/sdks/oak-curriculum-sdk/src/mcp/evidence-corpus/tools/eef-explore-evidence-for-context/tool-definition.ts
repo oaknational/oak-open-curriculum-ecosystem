@@ -1,14 +1,13 @@
 /**
  * Tool definition and input schema for `eef-explore-evidence-for-context`
- * (gate-1a t6a — the first EEF evidence-corpus tool).
+ * (the current transitional EEF evidence-context tool).
  *
  * The tool surfaces a typed subgraph of EEF Teaching and Learning Toolkit
  * strands for a teacher's lesson context (subject + key stage + topic, with
  * an optional pedagogical focus). The response is the connected evidence
- * graph, NOT a ranked list — the strand-to-strand relationships are the
- * pedagogically meaningful signal. Relevance ranking is a gate-1b concern
- * (the t5 scoring engine); at gate-1a the model selects contextual fit from
- * the subgraph (see the `eef-evidence-grounded-lesson-plan` prompt).
+ * graph; the strand-to-strand relationships are the pedagogically meaningful
+ * signal. The model uses the graph as evidence context, not as ordered advice
+ * or a teacher-replacing choice.
  *
  * Citation discipline is structural at this boundary (`../../citation-shape.ts`):
  * every response carries a non-empty tuple of citations, each with a
@@ -31,10 +30,8 @@ import { AGGREGATED_EEF_EVIDENCE_GUIDANCE } from '../../eef-evidence-guidance.js
  * Pedagogical focus a teacher may pass — an EEF priority drawn from the
  * corpus's own controlled vocabulary ({@link EEF_PRIORITIES}, the snapshot's
  * `school_context_schema.priorities.enum`). Schema-first and data-derived: the
- * value space is the data's, not an invented enum. At gate-1a the focus drives
- * seed selection (it narrows the subgraph to strands whose
- * `most_relevant_priorities` include it); the same value space is the gate-1b
- * `RankOptions.context.focus`.
+ * value space is the data's, not an invented enum. The focus narrows the
+ * evidence-context query to strands whose `most_relevant_priorities` include it.
  */
 export type EefExploreFocus = EefPriority;
 
@@ -56,16 +53,17 @@ export const EEF_EXPLORE_TOOL_DEF = {
 
 ${AGGREGATED_EEF_EVIDENCE_GUIDANCE}
 
-Returns a typed subgraph of EEF strands (evidence-based teaching approaches) and the relationships between them — NOT a ranked list. The connections between strands are pedagogically meaningful: related approaches often combine well. Select the strands whose evidence and implementation requirements fit the lesson context.
+Returns a typed subgraph of EEF strands (evidence-based teaching approaches) and the relationships between them. The connections between strands are pedagogically meaningful: related approaches often combine well. Use the strands whose evidence and implementation requirements fit the lesson context.
 
 Use this when:
-- A teacher wants evidence-based approaches for a lesson, unit, or topic
-- You are assembling an evidence-grounded lesson plan (see the eef-evidence-grounded-lesson-plan prompt)
+- A teacher explicitly asks for evidence context for a lesson, unit, or topic
+- You are already adapting, combining, or framing Oak material pedagogically
 - You need the EEF evidence base with its caveats attached for honest framing
 
 Do NOT use for:
 - Oak curriculum content (lessons, units, threads) — use search / explore-topic
-- A single ranked "best approach" recommendation — relevance ranking is not available at this stage
+- EEF invocations where you cannot briefly say what prompted the evidence context
+- Teacher-facing advice that chooses a single approach or tells the teacher what to do
 
 Every strand in the response carries citations with caveats that MUST be preserved verbatim in any teacher-facing output.`,
   securitySchemes: [{ type: 'oauth2', scopes: [...SCOPES_SUPPORTED] }] as const,

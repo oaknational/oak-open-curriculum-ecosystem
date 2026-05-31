@@ -4,7 +4,7 @@
 > [`current/eef-graph-tool-completion.plan.md`](current/eef-graph-tool-completion.plan.md)
 > (impact-led D0–D7, decision-complete, in execution). The earlier
 > `eef-evidence-corpus` / `eef-delivery-restructure` / `eef-first-feature`
-> gate-1a/1b estate and the 2026-05-28 graph-tooling-rebuild design docs were
+> list-era estate and the 2026-05-28 graph-tooling-rebuild design docs were
 > **quarantined** to [`archive/`](archive/) as superseded broken-concept work —
 > do not resume or cite them.
 
@@ -84,7 +84,7 @@ not owned here.
 | [`reference/eef-toolkit.json`](reference/eef-toolkit.json) | Data snapshot | EEF dataset v0.2.0 (last_updated 2026-04-02). 30 strands, 9 caveats, 17/30 with school-context relevance. Source for the in-repo `as const` corpus. |
 | [`reference/conservation-map.md`](reference/conservation-map.md) | Historical preservation map | Record of the 2026-04-30 restructure (since superseded). Retained for the "nothing lost" audit trail. |
 | [`future/eef-outcome-evaluation-infrastructure.plan.md`](future/eef-outcome-evaluation-infrastructure.plan.md) | Future plan | EEF outcome-evaluation infrastructure (deferred). |
-| [`archive/`](archive/) | Superseded | The quarantined gate-1a/1b estate and graph-tooling-rebuild design docs. Do not resume or cite. |
+| [`archive/`](archive/) | Superseded | The quarantined list-era estate and graph-tooling-rebuild design docs. Do not resume or cite. |
 
 ## Read Order
 
@@ -157,6 +157,23 @@ at `ce9745c7`; the post-repair reviewer pass from
 `current/eef-plan-reviewers.codex-brief.md` has been run and its findings are
 folded into the live plan. The next implementation step is D1 value/impact
 exploration in parallel with D2 typed raw-corpus foundation work.
+
+Two next-session Codex briefs are staged in [`current/`](current/) to de-risk the
+post-D1 graph/MCP decisions; neither ratifies graph shape:
+
+- [`current/eef-graph-predecision-research.codex-brief.md`](current/eef-graph-predecision-research.codex-brief.md)
+  — read-only graph pre-decision research, run D1-parallel, preparing the D3/D4
+  decision space without ratifying graph-native structure or graph-core
+  operations. **Delivered:**
+  [`current/eef-graph-predecision-research.report.md`](current/eef-graph-predecision-research.report.md)
+  — the file/line-grounded research report (known constraints, open D1/D3/D4
+  questions, candidate graph-native view options, layer split, risk register,
+  and the suggested D3/D4 decision agenda). Labelled `pre-decision research`;
+  ratifies nothing.
+- [`current/eef-d1-reviewers.codex-brief.md`](current/eef-d1-reviewers.codex-brief.md)
+  — a D1-only reviewer pass (four architecture reviewers plus the documentation
+  and type reviewers) stress-testing the D1 value contract before D1
+  implementation.
 
 Before any refreshed EEF data is copied into the SDK:
 

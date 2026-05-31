@@ -1,5 +1,5 @@
 /**
- * `eef-explore-evidence-for-context` tool (gate-1a t6a) — barrel.
+ * `eef-explore-evidence-for-context` transitional evidence-context tool — barrel.
  *
  * Surfaces a connected subgraph of EEF Teaching and Learning Toolkit strands
  * for a teacher's lesson context, with structural citations + caveats.

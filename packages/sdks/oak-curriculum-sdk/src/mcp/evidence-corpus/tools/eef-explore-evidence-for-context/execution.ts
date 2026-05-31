@@ -1,14 +1,15 @@
 /**
- * Execution for `eef-explore-evidence-for-context` (gate-1a t6a).
+ * Execution for the current transitional `eef-explore-evidence-for-context`
+ * evidence-context tool.
  *
  * Loads the freshness-gated EEF corpus, selects the strands relevant to the
  * teacher's lesson context (`selectEefSeedIds`), runs a `subgraph` traversal
  * from those seeds, builds the structural citation envelope from the full
  * strands, and emits the topology as tight projected nodes. Selection narrows
  * for relevance and projection caps raw size, so the whole `CallToolResult`
- * stays within the MCP-client output budget. Relevance *ordering* among the
- * selected strands remains a gate-1b ranking concern; the model selects
- * contextual fit from the returned topology.
+ * stays within the MCP-client output budget. The model uses the returned
+ * topology as evidence context, not as ordered advice or a teacher-replacing
+ * choice.
  *
  * Telemetry: an {@link EvidenceCorpusSpanConfig} is constructed inline and
  * handed to the optional `recordSpan` sink. Per `../../telemetry.ts`, the
@@ -209,7 +210,7 @@ export function runEefExploreTool(args: EefExploreArgs, deps: EefExploreToolDeps
  * runtime deps. Constructs the freshness reference time (`new Date()`) here
  * so the execution fn stays deterministically testable. The Sentry telemetry
  * sink is wired by the consuming app (follow-on per `../../telemetry.ts`), so
- * `recordSpan` is omitted at gate-1a.
+ * `recordSpan` is omitted from the current transitional tool.
  */
 export function handleEefExploreTool(
   input: unknown,

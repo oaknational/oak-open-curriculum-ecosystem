@@ -6,8 +6,9 @@
  * shows the 30-strand corpus at ~26k tokens. The response is therefore capped:
  * when selection plus traversal yields more than {@link MAX_RESPONSE_STRANDS},
  * the first N (subgraph order — seeds before their neighbours) are kept and the
- * caller discloses the total. Relevance ordering within the cap is a gate-1b
- * ranking concern.
+ * caller discloses the total. This file is part of the superseded list-era
+ * implementation and is deleted by the graph-surface plan; it must not be used
+ * as a target for future graph behaviour.
  */
 
 import type { SubgraphResult } from '@oaknational/graph-core/graph-view';
