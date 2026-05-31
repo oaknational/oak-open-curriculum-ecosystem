@@ -4,6 +4,61 @@
 
 Accepted and Implemented
 
+## Amendment Log
+
+- **2026-05-30 amendment — generalisation to all compile-time-known
+  constants** (Opalescent Transiting Prism / `claude-code`; eef thread).
+  The original record framed compile-time embedding around the
+  OpenAPI-schema-derived tool files (the worked example in §The Pattern).
+  The underlying principle is wider and is generalised here: **any value
+  whose exact shape is fully known at compile time — annotated `as
+const` — carries its types by derivation from the value, not by
+  runtime re-discovery of a shape that is already statically present.**
+  This covers OpenAPI-derived tool files _and_ repository-held fixed
+  corpora (for example, a frozen snapshot of an external dataset).
+
+  **The operative axis is known-vs-unknown, not external-vs-internal.**
+  "External" describes _provenance_ — the data originated outside this
+  repository. "Unknown" is a _type-theoretic_ claim — the shape is not
+  known at compile time. These are independent axes. A repository-held
+  snapshot of an external dataset, frozen `as const`, is external in
+  provenance but fully **known** in type: its types are derived with
+  `typeof` and indexed-access, and membership in its value sets is checked
+  with the constant-type-predicate pattern (ADR-153 — a `value is T`
+  predicate backed by the `as const` constant). Typing such a constant
+  `unknown`, or running a runtime parse over it to "discover" a shape the
+  source file already fixes, is **type destruction**, not validation.
+
+  This destruction prohibition is carried by the always-on
+  `unknown-is-type-destruction` rule
+  (`.agent/rules/unknown-is-type-destruction.md`): it forbids replacing a
+  recoverable concrete type with `unknown`, and it explicitly records
+  that `as const` and `satisfies` narrow at compile time _without_
+  widening — they are off-topic for the rule, not instances of it. That
+  rule operationalises ADR-034 (System Boundaries and Type Assertions);
+  the destruction framing is the rule's, not a quotation from ADR-034.
+
+  Runtime schema validation (Zod) stays correct at a genuine `unknown`
+  boundary — third-party input whose shape is not yet established. ADR-028
+  (Deferring Zod Validation) is corroborating prior art only: a pragmatic
+  MVP deferral with explicit reconsideration triggers, not a categorical
+  ruling. The known-vs-unknown axis draws the line: Zod over genuinely
+  unknown incoming data is validation; Zod over a compile-time-known `as
+const` constant re-derives a shape the compiler already holds and
+  destroys the literal types in the process.
+
+  **Worked instance.** The EEF Teaching & Learning Toolkit corpus
+  (`packages/sdks/graph-corpus-sdk`, `eef-strands`) is a repository-held
+  fixed snapshot held `as const`. Under this doctrine its strand,
+  strand-id, key-stage, and phase types are derived directly from the
+  constant (`typeof` / indexed-access), with zero hand-maintained type
+  declarations and zero type assertions: the corpus foundation module
+  already derives its types this way, and the corpus's remaining
+  Zod-inferred types are migrating onto it. The constant _is_ the schema,
+  so there is nothing to validate the constant against and no runtime
+  "schema drift" check to run; the snapshot's external provenance does not
+  make its shape unknown.
+
 ## Context
 
 Previous attempts to eliminate type assertions in the MCP server revealed fundamental TypeScript limitations with dynamic dispatch and union types. ADR-037 documented how accessing `client[path][method]` with dynamic lookups created uncallable union types.
@@ -144,6 +199,11 @@ const result = await tool.getExecutorFromGenericRequestParams(client, params);
 - **Extends**: ADR-031 (Generation-Time Extraction) - takes it to the extreme
 - **Implements**: ADR-035 (Unified SDK-MCP) - achieves the goal differently
 - **Preserves**: ADR-034 (No Type Assertions) - successfully maintains this principle
+- **Composes with**: ADR-153 (Constant-Type-Predicate Pattern) - the
+  constant-type-predicate (`value is T`) over an `as const` constant that the
+  2026-05-30 generalisation relies on
+- **Corroborated by**: ADR-028 (Deferring Zod Validation) - pragmatic Zod deferral,
+  prior art for the known-vs-unknown line drawn in the 2026-05-30 amendment
 
 ## Key Insights
 

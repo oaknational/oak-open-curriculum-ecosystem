@@ -16,6 +16,38 @@ Earlier archives remain under [`archive/`](archive/).
 
 ## Current State
 
+- **EEF D0 COMPLETE + intent-vs-letter audited (2026-05-31, Opalescent Transiting
+  Prism / `73491c`)**: the whole `validate-external-data-files` validator DELETED
+  (owner: the right tool to keep one data file logic-free is to LOOK at it);
+  `strandById`/`Strand`/`StrandByStrandId`/`lastUpdated`/`EefToolkitData` relocated
+  to the checked module `eef-strands/strand-lookup.ts`; `.external-data.ts` pure
+  data (suffix, Sonar cpd-exclusion, ESLint ignore KEPT). Doctrine ADRs corrected
+  in-record: ADR-038 generalised to all `as const`-known constants; ADR-157/173 no
+  longer designate an EEF Zod loader; ADR-175 WITHDRAWN, deleted, inbound refs
+  removed, `Withdrawn` lifecycle vocab added; `sonar-disposition-policy.md`
+  corrected. EEF estate decontaminated (eef/README reframed to one live plan;
+  conservation-map marked historical; ledger at
+  `eef/current/eef-d0-decontamination-ledger.md`). A 4-dimension adversarial audit
+  confirmed the intent is met — the gate was greened by DELETION (not by retyping
+  the corpus to `unknown`), the corpus is typed by derivation, the doctrine is
+  coherent — and closed the one residue (the reshape recorded only in the EXECUTION
+  STATUS note, not propagated: a shipped-code `gate-1b` line plus stale "keep two
+  rules" plan text, both fixed). **Full `pnpm check` GREEN (exit 0** —
+  build/e2e/a11y/widget/type-check/lint/test/knip/depcruise/markdownlint/prettier);
+  D0's full DoD acceptance is satisfied. **UNCOMMITTED** — commit owner-gated, not
+  yet asked. Full record: the `eef` thread record EXECUTION UPDATE banner + the
+  decontamination ledger.
+- **EEF plan FINALISED (2026-05-30 PM, Evergreen Bending Thicket / `d4da14`)**:
+  `eef-graph-tool-completion.plan.md` is decision-complete + validated, scoped to the
+  EEF work. ADR-175 WITHDRAWN; Zod only for the single MCP tool output schema; the
+  `data-export-must-be-unknown` validator rule is the core defect (D0 deletes it + all
+  refs, greening the RED `repo-validators` gate). The 2 broken-concept design docs are
+  **quarantined** to `eef/archive/`; all live links severed. The wider graph
+  consolidation/decontamination/rewriting is nominated to
+  `graph-estate-consolidation.plan.md` (master). Substantive work **committed at
+  `2e8d5455`**; session-close continuity staged on top (uncommitted); `pnpm check`
+  skipped by owner (RED only on the D0-target validator). **Next safe step: execute
+  D0** of the EEF plan. Resume via the `eef` thread banner.
 - **EEF finishing plan (2026-05-30, Igneous Flaring Spark — supersedes the
   2026-05-29 Radiant S1–S5 bullet below)**: `eef-graph-tool-completion.plan.md`
   is now an **impact-led D0–D7, decision-complete** plan opening with a
@@ -32,13 +64,11 @@ Earlier archives remain under [`archive/`](archive/).
   MERGED at `29fc29e4` (2026-05-29, Quiet Hiding Hush).** The EEF graph
   foundation now ships **dark** behind `OAK_CURRICULUM_MCP_EEF_ENABLED` (proven
   OFF in every deployed environment). Next EEF step: **execute the finishing
-  plan to close the tool** — `eef-graph-tool-completion.plan.md`, **rewritten
-  2026-05-29 (Radiant Glimmering Aurora) under a deeper owner critique** to S1–S5
-  with three baked-in directives: (1) the fixed `as const` corpus IS its own
-  authority — derive types from it, DELETE the Zod/freshness/runtime-validation
-  ingest layer; (2) NO stubs anywhere; (3) EXTEND the generic `NodeFilter` to
-  nested paths. Then merge. The plan-estate consolidation + value-evaluation are a
-  post-merge **team session**.
+  plan to close the tool** — `eef-graph-tool-completion.plan.md`, now an **impact-led
+  D0–D7 plan finalised 2026-05-30 PM** (see the fresh bullet above: ADR-175 withdrawn;
+  no Zod except the single MCP output schema; no gates). The wider graph
+  consolidation/decontamination/rewriting is nominated to
+  `graph-estate-consolidation.plan.md`.
 - **Active delivery focus**: `eef` **graph-tooling rebuild** is the only active
   product lane. The EEF explore tool + the gate-1a/1b split were diagnosed as
   the wrong foundation and discarded; the rebuild is built on the foundation
@@ -101,7 +131,7 @@ paused implementation program.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / claude-opus-4-8 / Igneous Flaring Spark / **finishing plan RESTRUCTURED 2026-05-30 to impact-led D0–D7, decision-complete (begun Misty Washing Lagoon, deepened this session under full owner metacognition). Axis = KNOWN vs UNKNOWN (no Zod anywhere); EXPUNGE the validator `data-export-must-be-unknown` rule (not soften); node type = `(typeof EEF_TOOLKIT_DATA.strands)[number]`; graph-core query contract RESHAPED, not fixed; cap removed; ADR-038 generalised. `repo-validators` gate RED — D0 fixes it (first execution step). D0 merge-safety done earlier (`29fc29e4`, dark). No commits this session.** / 2026-05-30 |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / claude-opus-4-8 / Opalescent Transiting Prism / `eef-d0-completion-and-intent-audit` / **D0 COMPLETE + intent-vs-letter audited (2026-05-31): validator DELETED, exemplars→`strand-lookup.ts`, doctrine ADRs corrected (038 generalised to all `as const`-known constants; 157/173 de-Zod'd; 175 WITHDRAWN+deleted+`Withdrawn` lifecycle added), EEF estate decontaminated, ledger complete. 4-dimension adversarial audit confirmed intent met (gate greened by DELETION not unknown-retyping; corpus typed by derivation; doctrine coherent) and closed the reshape-propagation residue (a shipped `gate-1b` line + stale "keep two rules" plan text). Full `pnpm check` green (exit 0). UNCOMMITTED (commit owner-gated). Next: owner-gated commit of the D0 bundle, then D1∥D2.** / 2026-05-31 |
 | `agentic-engineering-enhancements` | Practice continuity (tactical lane; not the active delivery focus) | [record][agentic] | claude / claude-opus-4-8 / Eclipsed Creeping Secret / Group A graduations LANDED — WS-Z converged + committed: all six graduations (Lane A retired-thread hygiene; Lane B PDR-011/ADR-150/§6c; Lane C PDR-087; Lane D PDR-088; Lane E PDR-058 S3/S4 + PDR-029 note), PDR README + practice-index rows for 087/088, RULES_INDEX 0 new rows, six register entries removed (substance verified live first), execution plan archived. Next: none queued for this thread; Groups B/D/E forks + claim-liveness owner-surfaced; napkin+distilled strict-hard owned by the fitness session / 2026-05-29 |
 
 ## Paused Threads
@@ -144,13 +174,22 @@ thread's next-session record.
 
 ### EEF Graph-Tooling Rebuild (active — sole current product focus)
 
-> **UPDATED 2026-05-30 (Igneous Flaring Spark).** The S1–S5 detail below is
-> SUPERSEDED. The finishing plan is now **impact-led D0–D7, decision-complete**.
-> Next session = **execute D0** (doctrine ADRs + expunge the two erroneous
-> external-data validator rules → greens the RED `repo-validators` gate), then
-> **D1 (value, owner-ratified) ∥ D2 (typed foundation)**, then D3→D7. Authority =
-> the `eef` thread record CURRENT-TRUTH banner + the plan's Remediation Context +
-> Ratified Decisions sections. Do not resume the S1–S5 framing below.
+> **UPDATED 2026-05-31 (Opalescent Transiting Prism).** The S1–S5 detail below is
+> SUPERSEDED. The finishing plan is **impact-led D0–D7, decision-complete**, and
+> **D0 is COMPLETE + intent-vs-letter audited** (owner-confirmed 2026-05-31). The
+> whole `validate-external-data-files` validator is DELETED (not "expunge two
+> rules"); corpus exemplars relocated to the checked `strand-lookup.ts`; the
+> `.external-data.ts` file is pure data; the doctrine ADRs are corrected in-record
+> (038 generalised to all `as const`-known constants; 157/173 de-Zod'd; 175
+> WITHDRAWN + deleted + inbound refs removed + `Withdrawn` lifecycle vocab added);
+> the EEF estate is decontaminated and the ledger is complete. **Full `pnpm check`
+> is GREEN (exit 0).** The whole D0 bundle (Commit 1 code + Commit 2 docs) is
+> **UNCOMMITTED — the owner-gated commit is the one remaining D0 landing action.**
+> **Next safe step: owner-gated commit of the D0 bundle, then D1 (value,
+> owner-ratified) ∥ D2 (typed foundation), then D3→D7.** Authority = the `eef`
+> thread record EXECUTION UPDATE banner + the plan's Remediation Context +
+> Ratified Decisions sections + the decontamination ledger. Do not resume the
+> S1–S5 framing below.
 
 **Live (2026-05-28 — REBUILT FROM FOUNDATIONS).** The EEF explore tool and the
 gate-1a/1b split were diagnosed as the **wrong foundation** (list-thinking in a
@@ -402,6 +441,40 @@ Current branch non-goals:
   acceptance work.
 
 ## Deep Consolidation Status
+
+**handoff gate (2026-05-31, Opalescent Transiting Prism — D0 COMPLETE + intent-vs-letter audited; session end)**:
+`completed this handoff (consolidate-docs, session-completion mode) — owner-invoked.`
+D0 is complete + audited; the audit's residue (a shipped `gate-1b` docstring line
+plus stale "keep two rules" plan text — the validator-deletion reshape recorded in
+one place, not propagated) is closed; the decontamination ledger is complete.
+**Consolidation outcome (session-completion):** the conservation-reflex doctrine
+is surfaced as a DUE PDR candidate (pending-graduations 2026-05-31 entry) — six
+experience files across three agents, and the step-9 post-mortem identifies it as
+the missing-graduation root of the CRITICAL fitness on `napkin.md` (997/300) and
+`distilled.md` (332/180); the cure is graduation (owner-gated), not compression
+(per PDR-046 + owner "do not worry about fitness limits"). Deferred (dedicated-
+curation scale, not session-completion): napkin rotation (1005 lines), comms-event
+retention (2787 events > 7 days), full 7c/7e register audits — falsifiable: those
+buffers remain at the stated sizes until a dedicated pass runs. Q-001 already
+withdrawn; incoming/outgoing empty; active-claims/commit-queue empty. **`pnpm check` (full) GREEN —
+exit 0** (build, e2e, a11y, widget, type-check, lint, test, knip, depcruise 2334
+modules no violations, markdownlint, prettier all pass) at working tree over HEAD
+`2e8d5455`; D0's full DoD acceptance is satisfied. The D0 bundle is UNCOMMITTED
+(commit owner-gated, not yet asked). No claim (solo, empty registry).
+
+**handoff gate (2026-05-30 PM, Opalescent Transiting Prism — D0 EXECUTION begun; compaction prep)**:
+`not due — mid-arc D0 execution; no thread completed; the conservation-reflex
+lesson already lives in distilled.md / feedback_existence_is_not_correctness_default_replace,
+this session's instance captured in napkin + experience.` Commit 1 (validator
+DELETED + exemplars relocated to `strand-lookup.ts`) done + verified green in the
+working tree (repo-validators exit 0; both packages type-check + tests; knip/lint/
+format clean); UNCOMMITTED. **`pnpm check` (full) NOT run** — named constraint:
+mid-arc, Commit 2 (ADR/doc decontamination) is not done AND the owner's ADR-175
+record deletion leaves inbound links dangling, so a full check is RED on link
+integrity *by design* until Commit 2; the heavy suites (build/e2e/widget/a11y) are
+unaffected by a validator deletion + type relocation. Falsifiable: next session
+completes Commit 2, then `pnpm check` green before committing. Owner directed the
+compaction-prep pause. No claim (solo, empty registry).
 
 **handoff gate (2026-05-30, Igneous Flaring Spark — EEF finishing plan RESTRUCTURED to impact-led D0–D7)**:
 `not due as a fresh trigger — owner-requested session-handoff + consolidate-docs

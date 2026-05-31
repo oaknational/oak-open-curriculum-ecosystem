@@ -441,6 +441,7 @@ Strategic architecture remains anchored in:
 | `developer-experience/` | SDK publishing, generated docs, tooling | 📋 M1-M3 mixed lanes | [active/README.md](developer-experience/active/README.md) |
 | `connecting-oak-resources/knowledge-graph-integration/` | Internal Oak KG integration, ontology repo/workspace decisions, search projections, graph serving | 🔄 M2-M3 mixed lanes | [connecting-oak-resources/knowledge-graph-integration/README.md](connecting-oak-resources/knowledge-graph-integration/README.md) |
 | `sector-engagement/` | External data sources, upstream coordination, partner review threads, and adoption support for Oak resources | 📋 Reference | [sector-engagement/README.md](sector-engagement/README.md) |
+| `discovery/` | Web-native discovery of Oak's public machine surfaces (MCP Server Cards, `.well-known` metadata) by external clients, registries, crawlers, and IDEs | 📋 Reference / tracking | [discovery/README.md](discovery/README.md) |
 | `archive/` | Historical completed/superseded plans | ✅ Reference | [archive/](archive/) |
 
 ---

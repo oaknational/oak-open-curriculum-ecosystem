@@ -1,7 +1,127 @@
 # Next-Session Record — `eef` thread
 
-> **CURRENT TRUTH — RESUME HERE (2026-05-30). Everything below this banner is
-> SUPERSEDED HISTORY — do not resume it (including the 2026-05-29 S1–S5 banner).**
+> **D0 COMPLETE + INTENT-VS-LETTER AUDITED — RESUME HERE (2026-05-31, Opalescent
+> Transiting Prism / `73491c`; owner-confirmed).** Both Commit 1 (code) and Commit
+> 2 (docs/decontamination) are DONE and verified in the working tree. A
+> 4-dimension adversarial audit (letter / intent / conservation-reflex /
+> cross-session coherence) confirmed the intent is met — the gate was greened by
+> DELETION (not by retyping the corpus to `unknown`), the corpus is typed by
+> derivation, the doctrine is coherent across ADR-038/157/173/175 — and closed the
+> one residue: the validator-deletion reshape had been recorded only in this
+> banner, not propagated, so a shipped-code `gate-1b` line in
+> `eef-toolkit.external-data.ts` and the stale "keep two rules" framing in the
+> plan (Ratified Decision 3, frontmatter step 7, "Do — validator expunge", the
+> "Done when" criterion + Proof) were left live; all now corrected /
+> superseded-in-place. The decontamination ledger
+> (`eef/current/eef-d0-decontamination-ledger.md`) is complete. **Full `pnpm
+> check` is GREEN (exit 0** — build/e2e/a11y/widget/type-check/lint/test/knip/
+> depcruise/markdownlint/prettier). **The whole D0 bundle is UNCOMMITTED — the
+> owner-gated commit (Commit 1 code + Commit 2 docs) is the one remaining D0
+> landing action; the owner has not yet asked to commit.** Next after the commit:
+> D1 (value, owner-ratified) ∥ D2 (typed foundation), then D3→D7. The detailed
+> Commit-1/Commit-2 record below remains accurate; the plan-finalisation banner
+> further below remains the authority for D1–D7 scope.
+>
+> ---
+>
+> **Commit 1 (D0 code) is DONE and verified green in the WORKING TREE
+> (UNCOMMITTED):**
+>
+> - The ENTIRE `validate-external-data-files` validator is **DELETED** —
+>   owner-directed: the right tool to keep one external-data file logic-free is to
+>   LOOK at it, not an AST validator + test suite. This **SUPERSEDES** the plan's
+>   Ratified Decision 3 / D0 "expunge two rules, keep two" — that framing was
+>   itself the conservation reflex the whole plan exists to remedy. Deleted:
+>   `agent-tools/src/external-data/{external-data-contract, external-data-contract.unit.test, external-data-discovery, external-data-discovery.unit.test, external-data-logic}.ts`
+>   plus `agent-tools/src/bin/validate-external-data-files.ts`, the
+>   `validate-external-data-files` script (agent-tools `package.json`), and its
+>   segment in root `repo-validators:check`. **KEPT** (the real duplication-gate
+>   mechanism, untouched): the `.external-data.ts` suffix, the Sonar
+>   `cpd.exclusions` pattern, and the ESLint ignore glob.
+> - `strandById`, `Strand`, `StrandByStrandId`, `lastUpdated`, AND `EefToolkitData`
+>   relocated from `eef-toolkit.external-data.ts` into a NEW checked module
+>   `packages/sdks/graph-corpus-sdk/src/eef-strands/strand-lookup.ts`,
+>   barrel-exported via `eef-strands/index.ts`. The `.external-data.ts` file is now
+>   PURE DATA (`EEF_TOOLKIT_DATA as const` + provenance docstring only).
+> - Gates green: `repo-validators:check` **exit 0** (the RED gate is gone);
+>   graph-corpus-sdk type-check + **53/53** tests; agent-tools type-check +
+>   **722/722** tests; `knip` clean; lint + format clean. `pnpm check` (full) NOT
+>   run — mid-arc, Commit 2 docs pending; the heavy suites (build/e2e/widget/a11y)
+>   are unaffected by a validator deletion + type relocation.
+>
+> **⚠ TREE STATE: the owner DELETED the ADR-175 record file this session.** Its
+> inbound links (ADR-157 ×2, the 3 README index entries) are NOT yet cleaned —
+> that is Commit 2. **`pnpm check` will be RED on link integrity until Commit 2
+> lands.** This is known/expected, not a regression.
+>
+> **Commit 2 (D0 docs) is PENDING — next session, then `pnpm check` green + commit:**
+>
+> - **ADR-038** generalise in-record to any fully-known `as const` constant. Cite
+>   the **`unknown-is-type-destruction` RULE** as the primary linchpin (it is the
+>   artefact that forbids `unknown` over known data and names `as const` as
+>   non-destruction); ADR-034 is the ADR it operationalises — do NOT attribute
+>   those exact words to ADR-034 directly (verified this session). No Amendment Log
+>   exists on ADR-038; add a dated note (model ADR-153's convention).
+> - **ADR-157** surgical (status "Proposed (was Accepted; demoted 2026-04-30)"):
+>   Typing Discipline EEF bullet (l.115–119, BOTH sentences), Trade-offs sentence
+>   (l.281–283), and REMOVE both ADR-175 refs — the Related link (l.16–17) and the
+>   Status Amendment Note "binding" paragraph (l.42–45). Do NOT mark the whole ADR
+>   superseded.
+> - **ADR-173** Zod-loader designation in all FOUR locations (l.46–50 amendment
+>   summary, l.256–261 First-wave ingestion item, l.318–323 Consequences bullet,
+>   and the §Typing Discipline cross-ref inside l.256–261) → typed direct-load.
+> - **ADR-175 inbound cleanup**: README index entries
+>   (`architectural-decisions/README.md` l.226–229 + l.284–285;
+>   `docs/architecture/README.md` l.74–75) + add **WITHDRAWN** to the lifecycle
+>   vocabulary (`architectural-decisions/README.md` l.418–423, currently
+>   Proposed/Accepted/Superseded/Deprecated). The ADR file is ALREADY deleted.
+> - **`docs/governance/sonar-disposition-policy.md`** lines **357** and **450** —
+>   drop the "MUST export its data typed `unknown`" clause AND the "enforced by the
+>   `validate-external-data-files` repo-validator" clause; the convention is now
+>   verified by review/inspection (no validator, no unknown requirement).
+> - **Estate decontamination ledger** (EEF plans + non-plan docs only). Grounded
+>   facts from this session's sweep: `gate-1a/1b` = **69 hits / 22 files**, ALL in
+>   delete-bound CODE (covered by D2/D5/D6, not corrected individually); the LIVE
+>   non-plan-doc hits needing correction are the ADR-175 inbound refs above + this
+>   thread record's banner + repo-continuity's quarantined-rebuild pointers + the
+>   `eef/README.md` + `eef/reference/conservation-map.md`. NON-EEF plans
+>   (`graph-mvp-arc` etc.) are OUT of scope → `graph-estate-consolidation.plan.md`.
+>   History/archive/comms/napkin = `history-retained`, NOT touched.
+>
+> **SESSION META-LESSON (curated — the reason this session was slow):** the
+> conservation reflex recurred ~5× DURING EXECUTION (not just planning): I
+> re-litigated the owner-deleted ADR-175; framed "zero importers" of the
+> `strandById`/`StrandByStrandId` EXEMPLARS as a finding (they are the worked
+> demonstration of the derive-from-`as const` doctrine — no consumers is by
+> design); TDD-ed a validator that should not exist; framed the validator deletion
+> as "superseding the approved plan" when deleting it was always the intent; and
+> left `EefToolkitData` fossilised in the data file. Root: **in remediation the
+> default verb is DELETE/REPLACE the mistaken status quo — and even a ratified plan
+> clause (Decision 3) can carry the reflex.** The cure is an execution-time
+> default-flip, NOT another `distilled.md` entry (the lesson already lives in
+> `feedback_existence_is_not_correctness_default_replace` + the escape-hatch
+> screen). Captured in napkin + an experience file this session.
+>
+> ---
+>
+> **CURRENT TRUTH — PLAN FINALISATION BANNER (2026-05-30; planning complete, D0 now
+> executing per the block above). Everything below this banner is SUPERSEDED
+> HISTORY — do not resume it (including the 2026-05-29 S1–S5 banner).**
+>
+> **PM UPDATE (Evergreen Bending Thicket / `d4da14`).** The plan was reviewed (an
+> 11-agent readiness workflow), then **finalised** under owner direction: it is
+> decision-complete + validated (frontmatter parses, markdownlint clean), scoped to
+> the EEF work. The two broken-concept design docs
+> (`graph-tooling-rebuild-foundation-2026-05-28.md`, `graph-tooling-rebuild.plan.md`)
+> were **QUARANTINED** to `archive/` and every live link severed estate-wide. The
+> wider graph consolidation/decontamination/rewriting — gate-1a/1b everywhere, the
+> `graph-mvp-arc`/`graph-portfolio-index`/`graph-combinatorial-arc` disposition — is
+> nominated to **`graph-estate-consolidation.plan.md`** (the master plan). This
+> session's substantive work is **committed at `2e8d5455`** (the owner ran the
+> `--no-verify` commit). The session-close continuity writes (this banner, the session
+> entry below, repo-continuity, napkin, experience) are staged on top, uncommitted.
+> `pnpm check` skipped by owner direction; it is RED only on the pre-existing
+> `data-export-must-be-unknown` validator — the exact gate D0 greens.
 >
 > The finishing plan `eef-graph-tool-completion.plan.md` was **restructured again
 > across 2026-05-30** (begun by Misty Washing Lagoon, deepened by Igneous Flaring
@@ -76,6 +196,70 @@
 > Two generalised cross-session lessons captured this session (platform memory +
 > napkin): **existence-is-not-correctness / default-replace-in-remediation** and
 > **ground-convenient-claims**.
+
+## Session 2026-05-30 (PM, cont.) — D0 execution begun: validator DELETED + exemplars relocated (Opalescent Transiting Prism / `73491c`)
+
+**Execution session (owner-directed; D0 of the EEF plan).** Took D0 from
+plan-approved to **Commit 1 done + verified green in the working tree** (full
+state in the EXECUTION UPDATE banner at the top). Headline: the entire
+`validate-external-data-files` validator DELETED (owner: "the right tool to not
+export logic from external data files is to look at them"); the
+`strandById`/`Strand`/`StrandByStrandId`/`lastUpdated`/`EefToolkitData` exemplars
+relocated to a checked `strand-lookup.ts`; `.external-data.ts` now pure data;
+`repo-validators:check` exit 0; both touched packages' type-check + tests green;
+knip/lint/format clean. Commit 2 (ADR/doc decontamination) pending; the owner
+deleted the ADR-175 record (inbound links dangling until Commit 2). No commit, no
+claim (solo, empty registry). `pnpm check` not run (mid-arc; compaction prep).
+
+**Process (owner-caught ~5×, the session's primary artefact):** the conservation
+reflex recurred throughout EXECUTION — re-litigating the owner-deleted ADR-175,
+framing the exemplars' zero consumers as a finding, TDD-ing a doomed validator,
+framing a planned deletion as a deviation, fossilising `EefToolkitData`. Root:
+in remediation the default verb is DELETE/REPLACE; even a ratified plan clause
+can carry the reflex. Curated to napkin + experience file.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Opalescent Transiting Prism` | `claude` | `claude-opus-4-8` | `73491c` | `eef-d0-execution-validator-deletion-relocation-decontamination-and-intent-audit` | 2026-05-30 | 2026-05-31 |
+
+## Session 2026-05-30 (PM) — readiness review → plan finalisation + estate decontamination (Evergreen Bending Thicket / `d4da14`)
+
+**Planning/docs session (owner-directed; zero product code).** Opened to review
+`eef-graph-tool-completion.plan.md` via an 11-agent readiness workflow (2 ground-truth
+verifiers + 9 specialist/drift/starting-statement reviewers), contamination-reframed
+after the owner's note that ADRs/docs may themselves be wrong. Synthesised + grounded
+the findings, then applied them plus owner directives:
+
+- ADR-175 tightened-then-WITHDRAWN; freshness apparatus + all refs removed. Zod ONLY
+  for the single MCP tool output schema (Zod-4, derived from the fixed EEF data);
+  input predicate-narrowed. `data-export-must-be-unknown` named the core defect;
+  deleted with all references. GraphView corrected 6→7 ops. Escape hatches removed.
+  EEF-scoped estate-decontamination deliverable + ledger added.
+- **Quarantined** the 2 design docs to `archive/` (banners + status flipped); severed
+  EVERY live link across ~8 files (plans, READMEs, memory, research); audited + fixed
+  `extending-graph-support-tooling.plan.md`.
+- **Nominated `graph-estate-consolidation.plan.md`** as the master consolidation/
+  decontamination/rewriting plan for ALL graph materials (added the structural
+  gate-based plans — `graph-mvp-arc` et al. — to its disposition map; named the
+  corrected doctrine as the rewrite standard).
+
+**Process (mine, owner-caught — echoing Igneous's conservation reflex one layer up):**
+I kept trying to LIMIT/CONSERVE while the owner kept EXPANDING — (1) argued to KEEP
+`checkFreshness` off a STALE `gate-1b` comment in `freshness.ts` (gate-1b removed
+sessions ago; I took a dead comment as a live obligation); (2) under-reported the link
+surface because my first sweep piped through `rg -v "current/graph-tooling-rebuild"`,
+silently hiding the hard-links (the exact target class); (3) drew an artificial
+EEF/graph scope boundary, owner-corrected. Same frame-capture as Igneous, now in
+verification + scoping. Captured to napkin + distilled.
+
+**State:** plan finalised + validated; substantive work **committed at `2e8d5455`**;
+session-close continuity staged on top (uncommitted); `pnpm check` skipped by owner
+(RED only on the pre-existing validator D0 greens). No claim opened (solo; bootstrap).
+Next session = execute D0.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Evergreen Bending Thicket` | `claude` | `claude-opus-4-8` | `d4da14` | `eef-readiness-review-plan-finalisation-estate-decontamination` | 2026-05-30 | 2026-05-30 |
 
 ## Session 2026-05-30 (cont.) — impact-led D0–D7 restructure under full owner metacognition (Igneous Flaring Spark / `6e055a`)
 

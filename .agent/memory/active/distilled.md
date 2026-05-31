@@ -17,6 +17,25 @@ fitness_rationale: >-
   substance rather than trimming the lesson.
 ---
 
+## 2026-05-31 — a reshaped decision is done only when PROPAGATED, not when recorded once
+
+When a decision is changed mid-execution (a reshape, correction, or owner
+override), building the new shape and recording the change in ONE place is NOT
+completion. The old framing keeps asserting itself live everywhere the change was
+not swept — other plan sections, sibling docs, shipped code comments — and a
+letter-only review passes straight over it. This is the conservation reflex one
+level up: not "preserve the wrong shape" but "fail to propagate the right
+correction". Cure: on any mid-execution reshape, `rg` the old framing across the
+whole estate and replace or supersede EVERY instance — the same sweep-and-replace
+verb used to decontaminate an inherited wrong shape, now applied to the correction
+itself. Only an intent-vs-letter audit catches the residue; a letter pass cannot.
+Caught on EEF D0 — the validator-deletion reshape was recorded only in the plan's
+EXECUTION STATUS note, leaving stale "keep two rules" text live in Ratified
+Decision 3 plus four other plan locations and a `gate-1b` line in the shipped
+corpus file. Source: 2026-05-31 EEF D0 completion audit. Routing: refinement of the
+conservation-reflex / `existence-is-not-correctness-default-replace` family; held
+here until a second instance or a clear permanent home.
+
 ## 2026-05-30 — existence is not correctness; in remediation, default-replace
 
 When remediating fundamentally wrong inherited decisions, the default move on any

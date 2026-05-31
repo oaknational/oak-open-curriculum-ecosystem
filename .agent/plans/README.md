@@ -28,6 +28,7 @@ Strategic and tactical planning documents for the Oak Open Curriculum Ecosystem.
 | [icebox/](icebox/) | Deferred/low priority | ⏸ Deferred |
 | [connecting-oak-resources/](connecting-oak-resources/) | Connecting Oak's own resources into this repo — internal Oak knowledge-graph work plus external Oak-repo references (ontology, Aila, moderation patterns) | 🔄 Active |
 | [exploring-open-education-resources/](exploring-open-education-resources/) | Third-party / non-Oak knowledge sources Oak applications consume — education skills, public curriculum APIs, future external KG ingestion | 📋 Planned |
+| [discovery/](discovery/) | How external clients, registries, crawlers, and IDEs discover Oak's public machine surfaces — web-native discovery specs (MCP Server Cards) and `.well-known` metadata | 📋 Reference / tracking |
 | [archive/](archive/) | Completed/superseded plans | ✅ Complete |
 | [templates/](templates/) | Plan templates | 📚 Reference |
 

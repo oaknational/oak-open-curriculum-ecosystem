@@ -40,6 +40,14 @@ export {
 } from './school-context.js';
 
 export {
+  strandById,
+  lastUpdated,
+  type Strand,
+  type StrandByStrandId,
+  type EefToolkitData,
+} from './strand-lookup.js';
+
+export {
   loadEefCorpus,
   type LoadedEefCorpus,
   type LoadEefCorpusError,

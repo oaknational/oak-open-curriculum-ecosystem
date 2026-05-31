@@ -32,7 +32,6 @@
     "check-commit-message": "cd .. && bash agent-tools/scripts/check-commit-message.sh",
     "check-commit-skill-advisories": "cd .. && pnpm exec tsx agent-tools/scripts/check-commit-skill-advisories.ts",
     "prevent-accidental-major-version": "cd .. && pnpm exec tsx agent-tools/scripts/prevent-accidental-major-version.ts",
-    "validate-external-data-files": "cd .. && pnpm exec tsx agent-tools/src/bin/validate-external-data-files.ts",
     "validate-fitness-vocabulary": "cd .. && pnpm exec tsx agent-tools/scripts/validate-fitness-vocabulary.ts",
     "validate-no-stale-script-invocations": "cd .. && pnpm exec tsx agent-tools/scripts/validate-no-stale-script-invocations.ts",
     "validate-portability": "cd .. && pnpm exec tsx agent-tools/scripts/validate-portability.ts",

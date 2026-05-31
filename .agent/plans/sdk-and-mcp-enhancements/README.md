@@ -44,6 +44,7 @@ education and technology teams to build with.
 | [../connecting-oak-resources/knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md](../connecting-oak-resources/knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md) | Future cross-boundary plan | Test direct ontology use as the control case before any Neo4j, Stardog, or hybrid serving decision is promoted |
 | [future/mcp-protocol-adoption-roadmap.plan.md](future/mcp-protocol-adoption-roadmap.plan.md) | Future plan | Resource templates, prompt completion, curriculum downloads, per-primitive icons |
 | [future/mcp-tool-token-economy-and-progressive-discovery.plan.md](future/mcp-tool-token-economy-and-progressive-discovery.plan.md) | Future strategic brief | Cloudflare/Anthropic Code Mode research, token-footprint measurement, progressive discovery, and Oak MCP applicability |
+| [../discovery/future/mcp-server-cards.plan.md](../discovery/future/mcp-server-cards.plan.md) | Future cross-collection brief | MCP Server Cards (SEP-2127) `.well-known` discovery tracking for Oak's public remote MCP server — owned by the [discovery/](../discovery/README.md) collection; how the server is *found*, complementary to what it *does* here |
 | [future/README.md](future/README.md) | Future index | Deferred/later plans |
 
 ## Read Order

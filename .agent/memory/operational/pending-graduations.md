@@ -37,6 +37,40 @@ substance that still needed a live queue home is preserved below. Processed
 source files were deleted after extraction so the repository does not carry
 pseudo-shards that hide the true buffer state.
 
+## 2026-05-31 captures — conservation-reflex doctrine (PDR candidate; missing-graduation root of critical fitness)
+
+Surfaced by Opalescent Transiting Prism (claude / claude-opus-4-8 / `73491c`) at
+the EEF D0 completion consolidation. The intent-vs-letter audit plus a
+cross-experience read of six consecutive experience files (2026-05-29 → 05-31,
+agents Igneous Flaring Spark / Evergreen Bending Thicket / Opalescent Transiting
+Prism) converge on one stable, cross-agent doctrine.
+
+- captured-date: 2026-05-31
+- source-surface: `distilled.md` (2026-05-30 + 2026-05-31 entries); `napkin.md`
+  (2026-05-30/05-31); six `.agent/experience/` files (2026-05-29 → 05-31);
+  memory `feedback_existence_is_not_correctness_default_replace` /
+  `feedback_premature_crystallization` / `feedback_ground_convenient_claims`
+- graduation-target: PDR (Practice-governance — remediation + review discipline),
+  authored fresh by synthesis with the instance files staying in
+  `experience/` + `memory/`. Substance: (1) the conservation / frame-capture
+  reflex recurs at EVERY lifecycle stage — planning, restructure, review,
+  execution, correction — and is invisible from inside the frame because it wears
+  the clothes of the virtue most trusted in the moment (prudence, grounding,
+  thoroughness, scoping discipline, diligence); (2) naming or understanding it
+  does NOT inoculate — the structural cure is an EXTERNAL adversarial check (owner
+  or adversarial review), not more care; (3) refinement: a reshaped or corrected
+  decision is done only when PROPAGATED to every reference, not when built and
+  recorded once, or the old framing stays live wherever the sweep did not reach.
+- trigger-condition: DUE NOW — six instances across three agents and three days is
+  well past the repeats bar, and it is the missing-graduation root of the critical
+  fitness on `distilled.md` (332/180) and `napkin.md` (997/300) per the step-9
+  post-mortem: graduating the doctrine to a PDR relieves both buffers (PDR-046 —
+  address a layer's pressure by processing the next layer up, not by compression).
+- status: drafted 2026-05-31 as **PDR-089** (Proposed) on owner direction at this
+  consolidation close; awaiting owner review/acceptance. Graduates `due` →
+  `graduated` when PDR-089 is Accepted; until then the critical fitness on
+  `napkin.md` / `distilled.md` remains flagged (the graduation is its cure).
+
 ## 2026-05-28 captures — EEF graph-tooling rebuild
 
 Surfaced by Deep Fathoming Harbour (claude / claude-opus-4-7) during the EEF

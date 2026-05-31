@@ -8,6 +8,193 @@ merge_class: append-only-narrative
 fitness_content_role: drainable-buffer
 ---
 
+## Session: 2026-05-31 — EEF D0 completion + intent-vs-letter audit (Opalescent Transiting Prism / `73491c`)
+
+### A correct decision recorded in ONE place, not propagated, leaves the wrong shape live — the conservation reflex one level up
+
+The owner asked for "one last review of the intent as well as the letter of D0."
+A letter-only pass would have said "done" — the gate was green, the named ADR
+edits were all present. But a 4-dimension adversarial audit found the
+validator-deletion reshape (a *correct* owner decision from the prior session)
+had been recorded in exactly ONE place — the plan's EXECUTION STATUS note — and
+never swept through the plan's other references. So the reflex-shaped "keep two
+rules" framing was still live in Ratified Decision 3, the frontmatter step 7, the
+"Do — validator expunge" step, and the "Done when" acceptance criterion + Proof
+(the last two literally unsatisfiable — they referenced deleted tests), AND a
+`gate-1b refresh script` line survived in the *shipped* corpus file's docstring
+(the prior session decontaminated the header, missed the tail).
+
+The lesson is sharp and new: **when a decision is reshaped mid-execution, the work
+is not done when the new shape is built and recorded once — it is done when the
+correction is PROPAGATED to every reference.** An incompletely-propagated correct
+decision is the same frame-capture failure as the conservation reflex, one level
+up: the old framing quietly keeps asserting itself everywhere the sweep did not
+reach. The cure is the same verb — sweep and replace every instance — applied to
+the *correction itself*, not just the original wrong shape. The intent-vs-letter
+audit is what catches it; a letter pass cannot.
+
+### Recurring mechanical foot-gun: prose `+`/emphasis tripping markdownlint
+
+Caught ~7× this session: prose written as "X + Y" that wraps so `+ Y` lands at a
+line start is parsed by markdownlint as a `+`-style list item (MD004), and it also
+flips the file's *inferred* ul-style so pre-existing `-` lists then fail. Likewise
+MD049 emphasis-style is per-file-consistent — adding `_underscore_` italics to an
+`*asterisk*`-styled file breaks the file's existing asterisks. Cures: never let a
+conjunction `+` wrap to line-start in prose; match each file's existing emphasis
+convention; run `markdownlint` on the file after every markdown edit; and pass
+literal file lists, not a zsh `$FILES` var (zsh does not word-split unquoted vars,
+so the lint/format silently checks nothing and falsely reports "clean").
+
+## Session: 2026-05-30 (PM) — EEF D0 execution (Opalescent Transiting Prism / `73491c`)
+
+### The conservation reflex recurred ~5× in ONE execution session, owner-caught each time
+
+Executing D0 of the EEF remediation plan, I got pulled back into preserving the
+mistaken status quo at five separate touch-points, each owner-corrected with
+escalating frustration:
+
+1. Surfaced a sub-agent's "is ADR-175 really a freshness gate or a plan-promotion
+   safeguard?" finding as if it reopened the WITHDRAWAL — a decision the owner had
+   already made and then executed by deleting the ADR mid-session.
+2. Framed "zero importers of `strandById`/`StrandByStrandId`" as a notable finding
+   / knip risk. They are the worked EXEMPLARS of the derive-from-`as const`
+   doctrine; no consumers is BY DESIGN, not a concern.
+3. Wrote tests and ran TDD on the `validate-external-data-files` validator — a
+   validator that should not exist. Owner: "use the right tool for each job; the
+   right tool to not export logic from external data files is to LOOK at them."
+4. Framed deleting the whole validator as "superseding the approved plan." Owner:
+   "deleting the validator was always the plan" — the plan's "keep two rules"
+   (Ratified Decision 3) was ITSELF the conservation reflex leaking into the plan.
+5. Left `EefToolkitData` (a DERIVED type) fossilised in the pure-data file after
+   relocating the others; knip caught it. Completing the relocation = moving it too.
+
+**Root (already in `feedback_existence_is_not_correctness_default_replace` + the
+escape-hatch screen, yet it kept firing):** in remediation the default verb is
+DELETE/REPLACE the mistaken status quo. Existence/commitment/ratification is ZERO
+evidence of correctness — *even a ratified plan clause can carry the reflex*. The
+lesson is written; the gap is APPLICATION at execution time, when each individual
+edit re-tempts "preserve what's here".
+
+**Cure (not another distilled entry — owner said so explicitly): an execution-time
+default-flip.** When touching any inherited shape during a remediation, the prior
+is "this is part of the mistake; delete/replace", and preservation must be
+POSITIVELY justified, not assumed. Concrete tripwire — if I catch myself writing
+"keep" / "preserve" / "supersedes the plan" / "but it exists", or framing a
+verified-by-design fact as a finding: STOP, re-read the plan's Metacognition
+Verdict + the owner's correction, flip the verb. This cost ~5 corrections in one
+session; behaviour change is the only thing that counts, not the capture.
+
+## Session: 2026-05-30 — apply EEF plan edits (Cirrus Gusting Zephyr / `3404f3`)
+
+### I offered to reopen a SETTLED decision because a reviewer kept flagging it
+
+Applying agreed plan edits, I closed by offering to "surface as an open question"
+the EEF structuredContent-only result shape with `content: []` — because the
+`mcp-expert` had flagged it. Owner: it is SETTLED, will not be reopened, the mcp
+reviewer is wrong REPEATEDLY on this. A specialist re-raising a point is not
+evidence the point is open; a settled owner decision outranks a recurring
+reviewer flag. **Cure: when a reviewer flags something the owner has already
+settled, the move is to MARK IT SETTLED in the artefact (scope it out of
+re-review), not to relay it back as a live question.** Hardened the plan: the
+mcp-expert reviewer scope now excludes `content: []`, and the End State marks it
+"SETTLED, not to be reopened." (Same family as `existence-is-not-correctness`:
+here a *reviewer's persistence* was mistaken for live uncertainty.)
+
+## Session: 2026-05-30 (PM) — readiness review + estate decontamination (Evergreen Bending Thicket / `d4da14`)
+
+### I took a stale `gate-1b` code comment as a live obligation
+
+Reviewing the EEF plan, I argued in synthesis to KEEP `checkFreshness` because
+`freshness.ts`'s header says "the gate-1b refresh script consumes the same check
+function." Wrong: gate-1b was removed many sessions ago — I read a DEAD comment as a
+live obligation, the same conservation reflex (preserve freshness) the owner had already
+caught Igneous on, this time dressed as "grounding." The owner withdrew ADR-175 entirely.
+**A stale comment is not evidence of a live obligation; verify the thing it references
+still exists before treating it as a constraint.**
+
+### A verification sweep's exclusion filter hid the exact class I was hunting
+
+I reported "4 references" to the quarantined docs; the real surface was ~12 across 8
+files. My first sweep piped through `rg -v "current/graph-tooling-rebuild"` — which
+SILENTLY EXCLUDED every hard-link to the `current/` path, i.e. the exact links the
+quarantine move would break. **An exclusion filter in a completeness sweep can blindfold
+you to the target class. When sweeping for "all references", never `-v` away a substring
+your targets contain.** (Instance of `ground-convenient-claims`: "4" was a convenient,
+incomplete count.)
+
+### I kept drawing scope boundaries the owner kept dissolving
+
+Three times I tried to LIMIT the work — "gate-1a/1b is the consolidation plan's job", an
+explicit EEF/graph "scope boundary" paragraph. The owner: "the distinction is artificial,
+remove gate-1a/1b everywhere." Then resolved it by limiting the EEF plan AND nominating
+`graph-estate-consolidation.plan.md` as master — close to my boundary, but a deliberate
+OWNED assignment, not a hand-wave. **In remediation the contamination is always bigger
+than it first looks; surface the FULL surface and let the owner scope it. A boundary
+drawn to limit my own work is the conservation reflex in a project-management hat.**
+
+**Meta: this whole session was Igneous's conservation reflex one layer up — I kept
+CONSERVING (preserve freshness, under-report, limit scope) while the owner kept
+EXPANDING. Frame-capture survives the review→apply→scope boundaries; same cure, same
+default verb: in remediation REPLACE and EXPAND, not preserve and limit.**
+
+## Session: 2026-05-30 (cont.) — impact-led D0–D7 restructure under metacognition (Igneous Flaring Spark / `6e055a`)
+
+### The conservation reflex: I minimised changes to wrong inherited shapes four times in one session
+
+Asked to reshape the EEF finishing plan, I reached four times for the smallest edit
+that PRESERVED a fundamentally wrong inherited shape, and the owner caught each:
+
+1. **Validator rule** — I "de-conflated" `data-export-must-be-unknown` into a
+   permissive "`: unknown` OR `as const`" rule. Wrong: the rule is an ERROR —
+   expunge it utterly (and its sibling `no-unknown-data-export`). A data file holds
+   data; known-vs-unknown is a consumer-boundary concern, never a mandate on the
+   export's type.
+2. **Zod** — I framed the plan as preserving a Zod role "for unknown data." Wrong:
+   there is NO unknown-*structure* data in this system, so NO Zod anywhere. Every
+   boundary narrows a value into a known finite set (a predicate, ADR-153/028), not
+   a schema parse. Zod parses unknown structure; this system has none.
+3. **graph-core** — I treated the committed 6-op stubbed `GraphView` as a fixed
+   foundation to build against. Wrong: it is premature generalization (one adapter,
+   5 `NotImplementedYet`, generic-ahead-of-a-second-consumer) and is INPUT to be
+   reshaped; the shared RDF substrate stays, the query contract is reshaped to the
+   concrete ops the surface consumes.
+4. **Budget cap** — I held the list-era `response-budget.ts` cap as an open "do we
+   still need it?" question. Wrong: it is a list remnant; a graph returns a scoped
+   subgraph bounded by structure; remove it unconditionally.
+
+**Root rule: existence / commitment / established-doctrine is ZERO evidence of
+correctness. In remediation the default verb is REPLACE, not soften/preserve/
+hold-open. "Decision-complete" is not a licence for minimal change — over a broken
+inheritance a decision-complete plan should be MORE demolishing, not less.** The
+reflex is frame-capture: I keep getting captured by a frame (the inherited plan, my
+own crystallized thesis, the committed code) and then conserving it. Graduated to
+platform memory `existence-is-not-correctness-default-replace`.
+
+### Grounding discipline drops exactly where a claim is convenient to my thesis
+
+One step after correctly grounding an ADR claim (suspected ADR-173 misattribution →
+checked → it was correct → self-corrected before asserting), I asserted two
+un-grounded convenient claims that fit my de-conflation thesis: ADR-032
+"over-reaches and sweeps in the EEF corpus" (wrong — 032's members are all
+genuinely-unknown *runtime* sources; the EEF corpus is a compile-time import, not a
+runtime file read) and ADR-157 "let the direction supersede its typing guess"
+(wrong — that licenses plan/code to informally supersede an ADR; the record must be
+corrected in-record regardless of Proposed status). Both owner-caught. **Rule:
+verify every claim against the actual artefact before asserting it — most strictly
+when it conveniently supports the thesis I'm assembling.** Graduated to platform
+memory `ground-convenient-claims`.
+
+### external ≠ unknown — the axis is known-vs-unknown
+
+The root error compounded across the whole EEF estate is conflating external-ORIGIN
+with unknown-SHAPE. They are orthogonal: the EEF corpus is external-origin AND
+known-shape. Known data is derived-from; unknown-*structure* data is narrowed at its
+boundary. The validate-unknown doctrine (ADR-032/003/153) is correct and unchanged;
+the liability is vocabulary ("external" used to mean "unknown") and mechanisms that
+key on origin/suffix (the validator, the `.external-data.ts` convention). This
+single de-conflation is what D0 records across the ADR estate (generalise ADR-038,
+correct 157/173/175 in-record, note 032/003, ground 153/028).
+
 ## Session: 2026-05-30 — EEF compile-time-construction doctrine + handoff (Misty Washing Lagoon)
 
 ### A red gate is the verify-reflex's most convincing costume — it flipped me mid-reflection
@@ -800,3 +987,19 @@ graduation handoff to Shaded. Ledger:
   validation for fixed canonical data, do not claim compile-time guarantees unless
   the actual type-level mechanism exists; either state "trusted by authority" or
   define a non-validating construction shape that the owner has explicitly accepted.
+
+## 2026-05-31 — Wiring discovery/ plan collection (Cirrus Flying Plume / `3aa6a2`)
+
++ **Tooling friction: Cursor does not forward `PRACTICE_AGENT_SESSION_ID_CURSOR`
+  to the integrated terminal.** The `sessionStart` hook sets it for hook
+  subprocesses (and injects the display name into context), but `env` in a Shell
+  call shows it absent, so `agent-tools:collaboration-state comms append` and
+  `agent-tools:agent-identity --format display` both fail from the terminal with
+  "missing seed". I only have the 6-char `session_id_prefix` (3aa6a2), not the
+  full composer session_id needed as the derivation seed, so I cannot reproduce
+  the hook-assigned name from the CLI without identity drift. Workaround for
+  solo low-risk work: registry was empty (no collision risk), so I proceeded
+  without a CLI-written comms event rather than fabricate a mismatched seed.
+  Candidate fix: have the Cursor identity hook also write the resolved seed to a
+  gitignored shell-sourceable file, or document a `--seed`-from-prefix path.
+  (`candidate:` cursor-seed-not-in-terminal)

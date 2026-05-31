@@ -1,5 +1,14 @@
 # Conservation Map (Agent-Judged Semantic Preservation)
 
+> **Historical record (do not action).** This map documents the 2026-04-30
+> restructure of `eef-evidence-mcp-surface.plan.md`. That estate has itself
+> since been superseded — the only live EEF plan is now
+> [`../current/eef-graph-tool-completion.plan.md`](../current/eef-graph-tool-completion.plan.md)
+> (see the [subthread README](../README.md)). This file is retained as the
+> "nothing lost" audit trail for that earlier restructure; its references to
+> `eef-evidence-corpus` / `eef-first-feature` and gate-1a/1b framing are the
+> historical record, not current guidance.
+
 **Purpose**: prove that every concept, requirement, credit, todo, and
 decision in the predecessor `eef-evidence-mcp-surface.plan.md` has a
 home in the restructured plan tree — and where the restructure

@@ -223,10 +223,6 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   (dependency vulnerability triage, blocking/disposition policy,
   Dependabot/override governance, and relationship to quality gates;
   Accepted 2026-05-10)
-- [ADR-175: External Evidence Corpus Freshness Governance](175-external-evidence-corpus-freshness-governance.md)
-  (freshness metadata, ownership, threshold, stale-data behaviour, and
-  attribution requirements for EEF and future external evidence corpora;
-  Accepted 2026-05-10)
 - [ADR-176: Commit-Skill Advisory Orchestrator Naming](176-commit-skill-advisory-orchestrator-naming.md)
   (commit-skill remains advisory, stages by explicit pathspec, and treats
   commit queue / index facts as coordination signals; Accepted 2026-05-11)
@@ -281,7 +277,6 @@ For understanding our API integration approach:
 - **[ADR-030](030-sdk-single-source-truth.md)** - SDK as single source of truth for API contracts
 - **[ADR-141](141-mcp-apps-standard-primary.md)** - MCP Apps standard as the only UI surface (supersedes ChatGPT-specific coupling)
 - **[ADR-157](157-multi-source-open-education-integration.md)** - Proposed multi-source open education knowledge integration across API, ontology, EEF, MCP, and graph surfaces
-- **[ADR-175](175-external-evidence-corpus-freshness-governance.md)** - Accepted freshness governance for EEF and future external evidence corpora
 - **[ADR-066](066-sdk-response-caching.md)** - SDK response caching with Redis
 - **[ADR-070](070-sdk-rate-limiting-and-retry.md)** - SDK rate limiting and exponential backoff retry
 - **[ADR-063](063-sdk-domain-synonyms-source-of-truth.md)** - SDK as single source of truth for domain synonyms
@@ -420,6 +415,12 @@ Include migration impact if replacing a prior approach.}
 - **Superseded**: replaced by a newer ADR. Keep the file; update status
   and link to the successor.
 - **Deprecated**: no longer applicable (e.g. workspace removed).
+- **Withdrawn**: created and then removed entirely because the decision
+  should not have existed — distinct from Superseded and Deprecated,
+  which keep the file and only update its status. The record file is
+  deleted; the number is retired and never reused, so a gap in the ADR
+  sequence indicates a withdrawal. The withdrawal and its rationale are
+  recoverable from version control; no tombstone is kept in this index.
 
 ### Creating an ADR
 

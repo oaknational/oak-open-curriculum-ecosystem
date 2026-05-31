@@ -82,6 +82,39 @@ disposition turns on a detail.
   rebuild. Consolidation = archive that framing and shrink the estate to a clean
   minimal set, not add documents.
 
+## Inbound from EEF D0 completion (2026-05-31)
+
+EEF D0 (`eef-graph-tool-completion.plan.md`) is **complete and intent-vs-letter
+audited**. This narrows and feeds this plan:
+
+- **The corrected doctrine is now landed in-record, not just planned.** ADR-038
+  is generalised to all `as const`-known constants; ADR-157 and ADR-173 no longer
+  designate an EEF Zod loader; ADR-175 is WITHDRAWN and deleted (lifecycle
+  vocabulary updated). The "corrected doctrine in the live EEF plan's Ratified
+  Decisions" this plan references is now also the ADR estate's current truth.
+- **The EEF-stack decontamination is done.** The validator is deleted; the EEF
+  corpus file, `eef/README.md`, `conservation-map.md`, the EEF thread-record
+  banner, `sonar-disposition-policy.md`, and `repo-continuity.md` are corrected;
+  the disposition ledger is at `eef/current/eef-d0-decontamination-ledger.md`.
+  This completes the **EEF half of t5** — the EEF README is already rewritten to
+  the one-live-plan frame, so t5 narrows to the `knowledge-graph-integration`
+  README only.
+- **Hand-offs into this plan's todos** (surfaced by the D0 audit, out of D0
+  scope):
+  - *t2 / t7*: the archived EEF plans (`eef-evidence-corpus`,
+    `eef-first-feature`, `eef-delivery-restructure`) still have **inbound links
+    from live non-EEF surfaces** — e.g. `sdk-and-mcp-enhancements/active/README.md`
+    links `eef-evidence-corpus.plan.md` as "WS-3". Reconcile these when adding
+    supersession pointers.
+  - *t7*: ADR-173 (`graph-stack-topology`) carries **stale promotion-gate
+    sections** — §"Notes for future revision" and §"Open questions to resolve
+    before promotion" still read "Before promotion to Accepted" although the ADR
+    was Accepted 2026-05-11. A graph-topology-ADR hygiene item.
+- **Code-level `gate-1a`/`gate-1b` comments in surviving EEF SDK files** (e.g.
+  `types.ts`, `freshness.ts`) remain — owned by the EEF plan's later deliverables
+  (D2/D4/D5/D6) that rewrite/delete those files, per the D0 ledger, not by this
+  plan.
+
 ## End goal
 
 A clean, minimal, accurate graph plan estate: one live finishing plan, one

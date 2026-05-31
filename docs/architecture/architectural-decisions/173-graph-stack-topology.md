@@ -47,8 +47,8 @@ earlier without scope reduction):
 - §First-wave ingestion scope amended to record two concurrent
   attached corpora with disjoint ingestion paths: Threads via
   `graph-ingest` Turtle/SHACL from the pinned ontology raw import,
-  EEF strands via a corpus-local Zod loader inside `graph-corpus-sdk`
-  with no `graph-ingest` participation.
+  EEF strands via a corpus-local typed direct-load inside
+  `graph-corpus-sdk` with no `graph-ingest` participation.
 - The topology of seven active workspaces plus one deferred is
   unchanged. Increment activation for the EEF adapter shifts forward;
   no workspace is added, no boundary moves, no transport rule
@@ -243,7 +243,7 @@ The foundation wave targets two end-to-end attached corpora, each
 with its own ingestion path. Both are first-wave; neither is a
 follow-on. The corpora share no ingestion machinery — Threads
 exercises the substrate Turtle/SHACL path; EEF strands exercises a
-corpus-local Zod loader without `graph-ingest` participation.
+corpus-local typed direct-load without `graph-ingest` participation.
 
 1. **Oak Curriculum Ontology Threads graph** — Turtle + SHACL, ingested
    from the source-of-truth `oaknational/oak-curriculum-ontology` GitHub
@@ -254,11 +254,12 @@ corpus-local Zod loader without `graph-ingest` participation.
    parsing; `graph-enhance` owns derived graph enrichments and IRI/link records;
    `graph-corpus-sdk` owns the `curric:Thread` enumeration and
    `curric:includesThread` inverse-edge typed adapter.
-2. **EEF strands corpus** — corpus-local JSON snapshot, ingested via
-   a Zod-validated loader inside `graph-corpus-sdk` against the
-   repository-held canonical snapshot. `graph-ingest` does not
-   participate in this path; the loader carries its own schema and
-   typing discipline (consistent with §Typing Discipline of
+2. **EEF strands corpus** — corpus-local snapshot held `as const`,
+   loaded by typed direct construction inside `graph-corpus-sdk`
+   against the repository-held canonical snapshot. `graph-ingest` does
+   not participate in this path; the corpus types are derived directly
+   from the `as const` snapshot via `typeof`/indexed-access (consistent
+   with §Typing Discipline of
    [ADR-157](157-multi-source-open-education-integration.md)). Source
    authority is governed by §Corpus source authority below: the
    repository-held snapshot is canonical until EEF clarifies refresh
@@ -317,7 +318,7 @@ that work separately.
   Curriculum Ontology Threads corpus is imported as full straight-copy
   Turtle/SHACL source files, proving ontology IRI identity and generic
   Turtle/SKOS parsing against real Oak ontology data; the EEF strands corpus
-  is ingested through a corpus-local Zod-validated loader inside
+  is loaded by typed direct construction from its `as const` snapshot inside
   `graph-corpus-sdk`, proving the substrate composes with a corpus-native
   identity scheme through a path independent of `graph-ingest`.
 - The API/bulk/ontology split prevents a new graph adapter from becoming a
