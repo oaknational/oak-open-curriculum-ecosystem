@@ -19,6 +19,13 @@ surface.
 
 ## Current State
 
+- **Graph-estate-consolidation plan made post-D2 accurate + crystal-clear, and
+  `graph-ingest` decontaminated (2026-06-01, Coppery Warming Flame / `9a5cc3`,
+  claude / Opus 4.8)** — full detail in the `eef` thread banner and the plan's new
+  `## Execution sequence` (t1's six dispositions are unconfirmed proposals → t1 +
+  `assumptions-expert` first; do-now subset = all but D7-gated t6); see item 7
+  below. Two `graph-ingest` `gate-1a` comments removed → zero gate-1a/1b/Inc.3 code
+  residue. Gate-green, uncommitted on `feat/graph-tooling-tidyup`.
 - **Dedicated knowledge-curation pass (2026-06-01, Moonless Lurking Dusk /
   `0641a3`, claude / Opus 4.8)**: ran `oak-consolidate-until-done` +
   `oak-consolidate-docs`. **Two rules graduated**: `eef-corpus-grounding`
@@ -209,7 +216,7 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Lunar Transiting Eclipse / D2 implementation + contamination correction / 2026-06-01 |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Coppery Warming Flame / consolidation-plan currency + graph-ingest decontamination / 2026-06-01, claude / Opus 4.8 / Dawnlit Dancing Satellite / EEF plan + D3 review, currency fixes, projection back-out / 2026-06-01 |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | codex / GPT-5 / Umbral Whispering Silhouette / promotion-and-root-docs-author / 2026-06-01 |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 / Moonless Lurking Dusk / dedicated knowledge-curation pass / 2026-06-01 |
 
@@ -283,6 +290,21 @@ not the current session-priority lane. Reactivation is owner-directed.
 6. **D3 (MCP tool/resource/prompt contract) is the next plan deliverable** —
    owner-ratified, `mcp-expert` SDK-registration verification pending. The D3/D4
    PENDING reviewers fire against the ratified D3/D4 outputs once those exist.
+   **This session (2026-06-01, Dawnlit Dancing Satellite)** reviewed the whole plan
+   and D3 with every corpus claim grounded against `EEF_TOOLKIT_DATA` (all
+   cardinalities, the phase/key-stage independence, and the divergence verified
+   exact; no fabrication). Applied post-D2 currency truth-fixes to the plan (D2
+   `completed`; the never-built `EefKeyStage`/`EefPriority` replaced with the real
+   projection inventory; already-removed surfaces corrected) and added the missing
+   attribution rows to the source-path table. A session-built `field-cardinality.ts`
+   projection was **backed out** (owner-directed) as a zero-consumer surface
+   restating an inherent type fact — the floor/sparse split **is** `keyof EefStrand`,
+   carried by the corpus type, derived at D6 from the graph-native view via the
+   `satisfies` tie; there is no separate structure to build. The thread banner now
+   carries an explicit GOOD/GREAT quality bar. **Next session starts with a full
+   whole-plan review, then a full D3 review** (one recorded-but-unapplied D3 edit:
+   state the declared-only filter exclusions — `KS5`/`post_16`/`all_through`/
+   `special`/`improving_attendance`/`teacher_retention` are not valid filter inputs).
 7. **Graph-estate-consolidation: currency update DONE; t1-t8 execution pending**
    (2026-06-01). The contamination-remediation master plan at
    `connecting-oak-resources/knowledge-graph-integration/current/graph-estate-consolidation.plan.md`
@@ -291,7 +313,10 @@ not the current session-priority lane. Reactivation is owner-directed.
    gate-1a/1b/Inc.3 residue — D2 deleted the eef-strands files, and the two
    `graph-ingest` comments were cleaned this session. t7 sweeps the remaining gate
    concept references across the `.agent` estate only (source-file reconciliation
-   is the finishing plan's, not t7's). Remaining remediation: t1-t8 pending (~1-2
+   is the finishing plan's, not t7's). The plan now carries an explicit
+   `## Execution sequence`: t1's six dispositions are unconfirmed proposals, so
+   t1 + `assumptions-expert` run first; the do-now subset is everything except the
+   D7-gated t6. Remaining remediation: t1-t8 pending (~1-2
    focused doc-consolidation sessions; t7 largest; t6 deferred until finishing-plan
    D7).
 8. The seam-mapping taxonomy + "seams compose" law is a candidate for a reusable
@@ -486,6 +511,21 @@ soft zone (~288/220) by preservation, route to refinement next consolidation`.
 **prior closeout (2026-05-31, Prismatic Shimmering Constellation — EEF
 D2/report/principles no-escape-hatches repair)**: `not due — owner requested a
 tight handoff only`.
+
+**session-handoff (2026-06-01, Dawnlit Dancing Satellite — EEF plan + D3 review,
+currency fixes, projection back-out)**: `not due — no trigger fired: napkin is
+healthy (Moonless rotated it today), no thread completed, no milestone. This
+session's change set is docs-only (EEF plan, source-path table, eef thread record,
+napkin, repo-continuity) plus a net-zero code revert (field-cardinality.ts +
+test removed; index.ts barrel restored exactly to HEAD — graph-corpus-sdk back to
+committed-D2 state, type-check + lint + 15 tests green). Aggregate pnpm check NOT
+run: the tree carries several concurrent sessions' uncommitted work (principles,
+distilled, graph-ingest, new rules), so the full-repo gate is the check-singleton
+owner's to run for this multi-agent window; my scoped contribution is verified
+clean and nothing is committed or pushed (falsifiable via git show --stat: no
+workspace src/build/test surface changed net of the revert). No claim of mine in
+active-claims; no open conversation/escalation of mine; entry points clean (no
+drift).`
 
 **prior history**: detailed 2026-05-28 to 2026-05-31 handoff-gate prose is
 preserved in
