@@ -23,6 +23,11 @@ evidence-preservation obligations, and telemetry are sequenced in the live plan.
 record of the 2026-04-30 restructure, itself since superseded. Predecessor
 plans are recoverable from git history.
 
+**Authoring discipline**: when writing any document or code that claims something
+about the EEF corpus, follow the cite-or-tag rule at
+[`reference/eef-corpus-grounding.md`](reference/eef-corpus-grounding.md) — every
+corpus claim cites an `EEF_TOOLKIT_DATA` source path or is tagged agent-side.
+
 ---
 
 ## Why This Subthread Exists
