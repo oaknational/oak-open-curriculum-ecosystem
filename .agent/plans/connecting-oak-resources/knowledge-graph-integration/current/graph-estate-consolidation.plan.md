@@ -71,13 +71,11 @@ disposition turns on a detail.
   (D0–D7; impact-led, decision-complete). The wider
   graph work is **undefined until that tool is finished** (owner direction).
 - **The substrate is built and on `main`** (PRs #93/#108/#115/#122; v1.15.0):
-  `graph-core`, `graph-ingest`, `graph-project`, and `graph-corpus-sdk`
-  eef-strands (the `EefStrandsGraphView` adapter exposes `manifest` + `subgraph`;
-  the `loadEefCorpus`/`selectEefSeedIds`/freshness path is the finishing plan's
-  deletion target). The five `NotImplementedYet` stub ops, the speculative
-  `recommend`/`explain`/`compare` ops, and the `threads` placeholder are deleted
-  (2026-06-01). The EEF tool ships **dark** behind
-  `OAK_CURRICULUM_MCP_EEF_ENABLED` (default OFF; nothing sets it true).
+  `graph-core`, `graph-ingest`, `graph-project`, and `graph-corpus-sdk`. On this
+  branch (`feat/graph-tooling-tidyup`), EEF D2 has built the typed raw-corpus
+  foundation in `graph-corpus-sdk/eef-strands` (commit `9019bb86`) — see
+  §"Inbound from EEF D2 (2026-06-01)" below. `OAK_CURRICULUM_MCP_EEF_ENABLED` is
+  a dormant seam awaiting D6.
 - **The estate is mostly superseded framing**: gate-1a/1b, the five-increment
   architecture, the 7-operation polymorphic query layer with mandatory
   projection, and `recommend/explain/compare` tools — all discarded by the
@@ -117,10 +115,31 @@ EEF D0 (`eef-graph-tool-completion.plan.md`) code + ADR-doctrine work is
     sections** — §"Notes for future revision" and §"Open questions to resolve
     before promotion" still read "Before promotion to Accepted" although the ADR
     was Accepted 2026-05-11. A graph-topology-ADR hygiene item.
-- **Code-level `gate-1a`/`gate-1b` comments in surviving EEF SDK files** (e.g.
-  `types.ts`, `freshness.ts`) remain — owned by the EEF plan's later deliverables
-  (D2/D4/D5/D6) that rewrite/delete those files, per the D0 ledger, not by this
-  plan.
+
+## Inbound from EEF D2 (2026-06-01)
+
+EEF D2 (`eef-graph-tool-completion.plan.md`) — the typed raw-corpus foundation —
+is **complete and committed** (`9019bb86`, on `feat/graph-tooling-tidyup`), green
+and reviewed (code/type/test experts). This feeds this plan:
+
+- **The typed raw foundation is built in `graph-corpus-sdk/eef-strands`.**
+  `EefStrand`/`EefStrandId`/`EefStrandById`/`isValidStrandKey` derive from the
+  `as const` corpus (`strand-lookup.ts`); the raw declared and observed vocab
+  domains, the declared-vs-observed divergence record, and the related-strand
+  edges derive in `raw-domains.ts`; corpus provenance and methodology in
+  `corpus-meta.ts`. The corpus citation surface is the source-path table with its
+  per-field cardinality column
+  ([`eef-d2-source-path-table.md`](../../../sector-engagement/eef/current/eef-d2-source-path-table.md)).
+- **The EEF surface is now the typed foundation only.** D2 removed the old
+  list-shaped EEF surface and the EEF-local graph adapter across three workspaces
+  (`graph-corpus-sdk`, `oak-curriculum-sdk`, and the streamable-http app).
+  `OAK_CURRICULUM_MCP_EEF_ENABLED` is a dormant seam awaiting D6.
+- **Hand-off into this plan's todos.** t7 sweeps gate-1a/1b/Inc.3 **concept**
+  references across the `.agent` estate only; source-file reconciliation is the
+  finishing plan's, not t7's. Code now carries no gate-1a/1b/Inc.3 residue: D2
+  deleted the eef-strands files that held it, and the two `graph-ingest` comments
+  were cleaned (2026-06-01). t7's surviving scope is the contaminated/pending
+  `.agent` files (the openers, `graph-query-layer`, the `future/oak-*` surfaces).
 
 ## Inbound from spine quarantine (2026-06-01)
 
@@ -180,6 +199,35 @@ one read.
 1. **Archive the entire superseded gate-1a/1b estate** (moved, never deleted, each with a pointer). *Recommended: yes.*
 2. **Park the ~9 speculative graph-surface future plans** with an explicit block-on-EEF condition rather than leaving them reading as live. *Recommended: yes.*
 3. **Consolidate the 5 `oak-misconceptions-*` future plans into one** parked plan. *Recommended: yes — they are variations on one undefined-until-EEF idea.*
+
+## Execution sequence
+
+t1's dispositions are proposals awaiting confirmation — `t1` is `pending`, all
+six files still sit in their original lanes, and the disposition map and judgment
+calls are marked "confirm at execution". Execution is therefore strictly ordered:
+
+1. **Decide — `t1` + readiness review (first, always).** Read the six
+   unclassified files, assign each a confirmed disposition, then run
+   `assumptions-expert` on the archive/park split. Three of the six (the
+   `open-education-knowledge-surfaces` umbrella → archive; `oak-kg-threads-surface`
+   and `oak-misconceptions-subgraph-mcp-surface` → park) enter t2/t4's scope only
+   once t1 confirms them. This step decision-completes the rest and commits to
+   nothing downstream.
+2. **Remove + restore (one unit) — `t2` + `t3` + `t4`, then `t5` + `t7`.**
+   Archive superseded (t2) and completed (t3) plans; park the speculative future
+   plans blocked-on-EEF and consolidate the five `oak-misconceptions-*` into one
+   (t4); rewrite the `knowledge-graph-integration` README (t5) and sweep the
+   surviving gate-1a/1b/Inc.3 concept references across the `.agent` estate (t7).
+   These ship as one unit so the estate never carries a dangling pointer between
+   an archived file and its referrers.
+3. **Verify — scoped `t8`.** Confirm the estate reads clean for steps 1–2: no
+   broken links, READMEs accurate, every archived plan has a pointer, every
+   parked plan states its block condition, markdownlint + relevant gates green.
+
+**Deferred until finishing-plan D7 is green:** `t6` (the value-evaluation plan,
+promotion trigger = D7 green) and t8's t6/value-plan acceptance criterion. These
+are the only graph-estate items gated on the EEF tool finishing — t1–t5 and t7
+proceed independently of it.
 
 ## Mechanism / acceptance
 
