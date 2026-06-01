@@ -1267,7 +1267,9 @@ deleted, and the ADR-179 boundary that keeps MCP types out of substrate packages
   subset, one Zod-call-derived object output schema over the appropriate
   graph-native EEF view subset (each root `type: object`), `isError: true` on
   error returns so the SDK skips output validation, structuredContent-only tool
-  formatting, resource formatting, prompt formatting, and telemetry wiring. The
+  formatting, resource formatting, prompt formatting, and telemetry wiring via the
+  repo-standard Sentry tooling (consult `sentry-expert` at D6/D7 per
+  `.agent/rules/invoke-sentry-expert.md`). The
   graph-native subset/schema-builder value consumed by each Zod call must itself
   be typed from the graph-native view, with `satisfies` or an equivalent
   compile-time proof tying the declared schema to the corresponding
@@ -1446,31 +1448,6 @@ Artefacts already in the tree, so the next session does not rediscover them:
   `citation-shape.ts` lives one level up at `evidence-corpus/citation-shape.ts`;
   D2 deletes it when it has no non-list importer, otherwise D6 deletes the
   remaining citation-only residue while registering the graph surface.
-- The `evidence-corpus/` directory's three non-tool files are **deleted in D2 as
-  part of the full old-surface removal** (owner-decided 2026-06-01: D2 removes the
-  whole old evidence-corpus surface as a unit, keeping only the
-  `OAK_CURRICULUM_MCP_EEF_ENABLED` flag seam). Their substance is preserved in its
-  durable homes before deletion, so nothing is orphaned and no superseded shape is
-  carried forward:
-  - `telemetry.ts` (the old bespoke Sentry typed-config seam) is **not** revived.
-    The D6 tools take **repo-standard Sentry telemetry**; `sentry-expert` is
-    consulted at D6/D7 per `.agent/rules/invoke-sentry-expert.md`.
-  - `eef-evidence-guidance.ts`'s R1/R7 framing (surface evidence strength with
-    impact, name the population-average caveat, name implementation quality as the
-    moderator, frame as decision support not policy) is already durably recorded in
-    the ratified D1 `## Value And Impact` non-claims and in the strategy doc
-    `../future/evidence-integration-strategy.md`. That framing is the candidate
-    content for the D3 interpretation resource (Decision 10's reasoning scaffold);
-    D3 draws it from those homes, not from the deleted constant.
-  - `eef-evidence-grounded-lesson-plan-messages.ts`'s transitional 5-step prompt is
-    superseded by the ratified D3 default calling-agent workflow above; D6 authors
-    the new prompt from D3. The one concrete artefact worth carrying is the
-    **agent-side key-stage → phase mapping** (EYFS → early_years; KS1/KS2 →
-    primary; KS3/KS4 → secondary; KS5 → secondary, since EEF coverage is primarily
-    to age 16): per Decision 10 the agent does this mapping, and it is consistent
-    with D2's declared-vs-observed divergence record (KS5 is a declared enum value
-    with no backing strand). D3 carries this mapping in the prompt/interpretation
-    resource.
 
 ## Fully Specified End State
 
