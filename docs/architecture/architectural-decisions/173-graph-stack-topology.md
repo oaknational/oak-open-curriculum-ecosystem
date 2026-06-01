@@ -7,7 +7,8 @@ assumptions-expert, and architecture-expert-barney
 PROMOTION-READY verdict on `graph-stack.plan.md`). Skeleton 2026-05-07;
 NC-boundary amendment 2026-05-10; reviewer-absorption amendment
 2026-05-11; EEF concurrent-tenant amendment 2026-05-21; graph-query-layer
-correction 2026-06-01.
+correction 2026-06-01; post-acceptance hygiene 2026-06-01 (stale
+pre-promotion sections cleared; Inc.3 adapter-sequencing retired).
 
 **Date**: 2026-05-07; amended 2026-05-10; amended 2026-05-11; amended 2026-05-21;
 amended 2026-06-01
@@ -82,6 +83,21 @@ owner-directed during the EEF graph-tool work):
   arrangement above; the Threads adapter placeholder is removed.
 - The RDF substrate (term/dataset/jsonld/canon/data-factory), genuinely
   multi-consumer, is unchanged.
+
+**2026-06-01 amendment summary (post-acceptance hygiene)** — clears
+residue left after the ADR reached Accepted (2026-05-11):
+
+- **Increment-numbered adapter sequencing retired.** The 2026-05-21
+  summary's "Prerequisite and misconception adapters remain at Inc.3"
+  no longer holds: per the graph-query-layer correction above, every
+  corpus adapter (Oak Curriculum Ontology Threads, prerequisite,
+  misconception) is built when its consumer exists, not at a numbered
+  increment. "Inc.3" has no live referent. The substrate-workspace
+  standup increments in §Topology (Inc.1/Inc.2/Inc.4) are unaffected —
+  they remain the legitimate foundation-build order.
+- **Stale pre-promotion framing cleared** in §"Open questions" and
+  §"Notes for future revision" (both formerly read "before promotion"
+  though the ADR has been Accepted since 2026-05-11).
 
 **Related**:
 [ADR-123](123-mcp-server-primitives-strategy.md) — MCP server primitives
@@ -416,7 +432,10 @@ sweep.**
   preserves migration headroom. Property-graph is exposed as an ergonomic
   view, not the canonical truth.
 
-## Open questions to resolve before promotion
+## Open questions
+
+The ADR is **Accepted** (2026-05-11); these are tracked open items, not
+promotion blockers. Q1 and Q2 are resolved (history retained); Q3 remains open.
 
 1. ~~Confirm the workspace path conventions~~ **Resolved 2026-05-11**:
    the workspace path conventions
@@ -439,8 +458,9 @@ sweep.**
 
 ## Notes for future revision
 
-Before promotion to Accepted, this ADR must be reviewed for workspace path
-conventions, author attribution, and whether the MCP-agnostic principle
-belongs here or in a separate ADR. Promotion requires owner approval of the
-topology and confirmation that the proposed workspaces match repository
-workspace policy.
+The pre-promotion review this section once gated is complete: workspace path
+conventions are matrix-recorded in
+[ADR-041](041-workspace-structure-option-a.md); the transport-agnostic principle
+moved to [ADR-179](179-transport-agnostic-graph-substrate.md); the topology was
+owner-approved at acceptance (2026-05-11). Author attribution (Mark Hodierne)
+is the one tracked open item — see §Open questions Q3.

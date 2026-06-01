@@ -5187,6 +5187,49 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "e349d6d5-fc62-4a63-879f-d1018ef9defe",
+      "agent_id": {
+        "agent_name": "Coppery Warming Flame",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "9a5cc3",
+        "id": "39b6fef7-c18a-524f-94ab-831cff061240"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T16:54:34Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit graph-estate plan currency + graph-ingest gate-1a decontamination.",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T16:55:58Z",
+        "closed_by": {
+          "agent_name": "Coppery Warming Flame",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "9a5cc3",
+          "id": "39b6fef7-c18a-524f-94ab-831cff061240"
+        },
+        "summary": "commit 623c4d5b: docs(eef) graph-estate plan currency + graph-ingest gate-1a decontamination",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "e349d6d5-fc62-4a63-879f-d1018ef9defe",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

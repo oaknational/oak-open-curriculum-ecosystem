@@ -10,7 +10,7 @@ related:
   - "../../../sector-engagement/eef/current/eef-graph-tool-completion.plan.md (the keystone: the single EEF plan)"
 todos:
   - id: t1-verify-unclassified
-    content: "Verify the 6 not-yet-examined live-lane files and assign each a disposition (status vs code reality, staleness, keep/archive/park): active/agent-guidance-consolidation.plan.md; current/kg-alignment-audit.execution.plan.md; current/kg-integration-quick-wins.plan.md; active/open-education-knowledge-surfaces.plan.md (historical umbrella — likely archive); current/oak-kg-threads-surface.plan.md + current/oak-misconceptions-subgraph-mcp-surface.plan.md (gate-1a-framed speculative surfaces in the wrong lane — likely park-as-future, blocked-on-EEF)."
+    content: "Grounded reading DONE 2026-06-01 (six files read against content, substance-loss lens first); dispositions proposed in the disposition map's 't1 grounded findings' block: agent-guidance-consolidation → update-in-place (live MCP-DX debt, EEF-independent); kg-alignment-audit + kg-integration-quick-wins → keep — independent (NOT EEF-gated); open-education-knowledge-surfaces → archive — superseded; oak-kg-threads-surface + oak-misconceptions-subgraph-mcp-surface → park — blocked-on-EEF (MVP-arc scaffold retired). Remaining gate: assumptions-expert ratification before any file moves. Status pending until ratified."
     status: pending
   - id: t2-archive-superseded
     content: "Archive the superseded-framing plans to archive/completed/ with a supersession pointer to the finishing plan; add completed-plans index entries. NEVER delete (knowledge-preservation)."
@@ -19,17 +19,17 @@ todos:
     content: "Archive the genuinely-DONE plans (graph-resource-factory, misconception-graph-mcp-surface, graph-stack-ws1.6-vocab-prep) to archive/completed/ with outcomes + SHAs."
     status: pending
   - id: t4-park-future-blocked
-    content: "Reframe the speculative graph-surface future plans as explicitly blocked-on-EEF-first-proper-graph-tool-completion; consolidate the 5 oak-misconceptions-* future plans into one; move nc-knowledge-taxonomy-surface from active/ to future/."
+    content: "Park the speculative graph-surface future plans with the precise block condition: wider graph work is undefined until the first proper graph tool (EEF) ships — NOT a technical EEF-gate dependency (oak-kg-threads / oak-misconceptions-subgraph depend technically on graph-stack Inc.1b, whose MVP-arc spine is quarantined). State 'spine scaffold retired' in each. Consolidate the 5 oak-misconceptions-* future plans into one that KEEPS each distinct problem as a named section (do not flatten to a summary). Move nc-knowledge-taxonomy-surface from active/ to future/. At the park move, each header must preserve carry-forward substance with no other home: oak-kg-threads — the inverse-edge query primitive + spine-locked tool names; oak-misconceptions-subgraph — the bounded-traversal contract, fixture-manifest scheme, and _meta legacy-disclosure discipline, with maxResponseTokens=16000 marked retired."
     status: pending
   - id: t5-rewrite-readmes
-    content: "Rewrite the EEF README and the knowledge-graph-integration README to the corrected reality (drop five-increment/gate-1a-1b/7-op-polymorphic/recommend-explain-compare framing; fix broken current/<->active/ links; point to the finishing plan only — the foundation doc is quarantined)."
+    content: "Rewrite the knowledge-graph-integration README to the corrected reality (drop five-increment/gate-1a-1b/7-op-polymorphic/recommend-explain-compare framing; fix broken current/<->active/ links; remove the eef-evidence-corpus link in the graph-query-layer row; point to the finishing plan only). The EEF README half is DONE (already one-live-plan frame); t5 is now the KG README only."
     status: pending
   - id: t6-author-value-plan
     content: "Author future/eef-graph-tool-value-evaluation.plan.md (strategic), superseding future/eef-outcome-evaluation-infrastructure.plan.md, evaluating the FINISHED tool's value (structural fidelity; the discovery questions; usefulness vs the other curriculum tools). Promotion trigger: finishing-plan D7 green. ALSO decide the home for the post-completion 'working with graphs' doctrine graduation (old D5): fold into this value plan or a named follow-on."
     status: pending
     depends_on: [t1-verify-unclassified]
   - id: t7-reconcile-references
-    content: "Reconcile remaining gate-1a/1b/Inc.3 references across the live .agent estate (the old DX): graph-portfolio-index.md, oak-misconceptions-eef-cross-corpus-surface.plan.md, graph-stack.plan.md, graph-query-layer references, repo-continuity.md (coordinate, do not edit unilaterally). Source docstring reconciliation in files the finishing plan rewrites is owned by the finishing plan, NOT here."
+    content: "Reconcile remaining gate-1a/1b/Inc.3 references across the live .agent estate ONLY (the old DX): oak-misconceptions-eef-cross-corpus-surface.plan.md, graph-stack.plan.md, graph-query-layer references, repo-continuity.md (coordinate, do not edit unilaterally). graph-portfolio-index.md is now quarantined (not a live target). ADR-173 was decontaminated 2026-06-01 (done). The one remaining source-tree Inc.3 (graph-corpus-sdk/README:6) is OUTSIDE this .agent-only sweep — finishing-plan scope; see the residue-position note."
     status: pending
     depends_on: [t2-archive-superseded, t5-rewrite-readmes]
   - id: t8-verify-clean
@@ -58,120 +58,91 @@ todos:
 > written in a superseded framing. Doing this in a cluttered context risks
 > mis-archiving live work. Start fresh, ground on this brief + the two cited
 > truth sources, then execute.
+>
+> **Single current-state, no re-stratification.** This plan holds exactly one
+> derived current-state section (§"Current state (verified ground truth)").
+> Session hand-offs that affect it land in the `eef` thread record and
+> `completed-plans.md`, **never as new dated "Inbound from …" sections here** — a
+> plan whose job is to de-stratify the estate must not re-grow a changelog at its
+> own head.
 
-## Verified state to inherit (do not re-derive)
+## Current state (verified ground truth)
 
-Established 2026-05-29 by a 6-agent verification pass against code + git
-(not plan prose). Treat as ground truth at session open; re-verify only if a
-disposition turns on a detail.
+Verified 2026-06-01 against code, ADRs, and git (not plan prose). This section
+is the **single derived current-state for the estate**. Session hand-offs that
+affect this plan land in the `eef` thread record (and durable outcomes in
+`completed-plans.md`), **not as new dated "Inbound from …" sections here** — that
+discipline is what stops this consolidation plan from re-growing the stratified
+narrative it exists to remove. Re-verify a fact only if a disposition turns on it.
 
-- **The first proper graph tool is NOT finished.** Its completion is the live
+- **The first proper graph tool is not finished.** Its completion is the live
   execution plan
   [`eef-graph-tool-completion.plan.md`](../../../sector-engagement/eef/current/eef-graph-tool-completion.plan.md)
-  (D0–D7; impact-led, decision-complete). The wider
-  graph work is **undefined until that tool is finished** (owner direction).
-- **The substrate is built and on `main`** (PRs #93/#108/#115/#122; v1.15.0):
-  `graph-core`, `graph-ingest`, `graph-project`, and `graph-corpus-sdk`. On this
-  branch (`feat/graph-tooling-tidyup`), EEF D2 has built the typed raw-corpus
-  foundation in `graph-corpus-sdk/eef-strands` (commit `9019bb86`) — see
-  §"Inbound from EEF D2 (2026-06-01)" below. `OAK_CURRICULUM_MCP_EEF_ENABLED` is
-  a dormant seam awaiting D6.
-- **The estate is mostly superseded framing**: gate-1a/1b, the five-increment
-  architecture, the 7-operation polymorphic query layer with mandatory
-  projection, and `recommend/explain/compare` tools — all discarded by the
-  rebuild. Consolidation = archive that framing and shrink the estate to a clean
-  minimal set, not add documents.
-
-## Inbound from EEF D0 completion (2026-05-31)
-
-EEF D0 (`eef-graph-tool-completion.plan.md`) code + ADR-doctrine work is
-**complete and intent-vs-letter audited**; its decontamination **re-opened
-2026-06-01** (below). This narrows and feeds this plan:
-
-- **The corrected doctrine is now landed in-record, not just planned.** ADR-038
-  is generalised to all `as const`-known constants; ADR-157 and ADR-173 no longer
-  designate an EEF Zod loader; ADR-175 is WITHDRAWN and deleted (lifecycle
-  vocabulary updated). The "corrected doctrine in the live EEF plan's Ratified
-  Decisions" this plan references is now also the ADR estate's current truth.
-- **The EEF-stack code/doctrine decontamination landed, then re-opened
-  2026-06-01.** The validator is deleted; the EEF corpus file, `eef/README.md`,
-  `conservation-map.md`, the EEF thread-record banner, `sonar-disposition-policy.md`,
-  and `repo-continuity.md` are corrected; the ledger is at
-  `eef/current/eef-d0-decontamination-ledger.md`. It re-opened when the sweep-token
-  list was found to omit the stub/adapter/Inc.3/EvidenceCorpus framing — ADR-173
-  carried live contamination, corrected 2026-06-01. The extended-token estate sweep
-  across the graph plans is this plan's job.
-  This completes the **EEF half of t5** — the EEF README is already rewritten to
-  the one-live-plan frame, so t5 narrows to the `knowledge-graph-integration`
-  README only.
-- **Hand-offs into this plan's todos** (surfaced by the D0 audit, out of D0
-  scope):
-  - *t2 / t7*: the archived EEF plans (`eef-evidence-corpus`,
-    `eef-first-feature`, `eef-delivery-restructure`) still have **inbound links
-    from live non-EEF surfaces** — e.g. `sdk-and-mcp-enhancements/active/README.md`
-    links `eef-evidence-corpus.plan.md` as "WS-3". Reconcile these when adding
-    supersession pointers.
-  - *t7*: ADR-173 (`graph-stack-topology`) carries **stale promotion-gate
-    sections** — §"Notes for future revision" and §"Open questions to resolve
-    before promotion" still read "Before promotion to Accepted" although the ADR
-    was Accepted 2026-05-11. A graph-topology-ADR hygiene item.
-
-## Inbound from EEF D2 (2026-06-01)
-
-EEF D2 (`eef-graph-tool-completion.plan.md`) — the typed raw-corpus foundation —
-is **complete and committed** (`9019bb86`, on `feat/graph-tooling-tidyup`), green
-and reviewed (code/type/test experts). This feeds this plan:
-
-- **The typed raw foundation is built in `graph-corpus-sdk/eef-strands`.**
-  `EefStrand`/`EefStrandId`/`EefStrandById`/`isValidStrandKey` derive from the
-  `as const` corpus (`strand-lookup.ts`); the raw declared and observed vocab
-  domains, the declared-vs-observed divergence record, and the related-strand
-  edges derive in `raw-domains.ts`; corpus provenance and methodology in
-  `corpus-meta.ts`. The corpus citation surface is the source-path table with its
-  per-field cardinality column
+  (D0–D7; impact-led, decision-complete). D0 and D2 are landed; D3 is the next
+  deliverable. The wider graph work is **undefined until that tool finishes**
+  (owner direction) — so this plan archives/parks the estate around it rather
+  than adding documents.
+- **The substrate and the typed EEF foundation are built.** `graph-core`,
+  `graph-ingest`, `graph-project`, and `graph-corpus-sdk` are on `main`
+  (PRs #93/#108/#115/#122; v1.15.0). On this branch (`feat/graph-tooling-tidyup`),
+  EEF D2 built the typed raw-corpus foundation in `graph-corpus-sdk/eef-strands`
+  (`EefStrand`/`EefStrandId`/`EefStrandById`/`isValidStrandKey` from the `as const`
+  corpus; declared/observed vocab domains + divergence record; related-strand
+  edges; corpus provenance) and removed the old list-shaped EEF surface + the
+  EEF-local graph adapter across three workspaces. The corpus citation surface is
+  the source-path table
   ([`eef-d2-source-path-table.md`](../../../sector-engagement/eef/current/eef-d2-source-path-table.md)).
-- **The EEF surface is now the typed foundation only.** D2 removed the old
-  list-shaped EEF surface and the EEF-local graph adapter across three workspaces
-  (`graph-corpus-sdk`, `oak-curriculum-sdk`, and the streamable-http app).
   `OAK_CURRICULUM_MCP_EEF_ENABLED` is a dormant seam awaiting D6.
-- **Hand-off into this plan's todos.** t7 sweeps gate-1a/1b/Inc.3 **concept**
-  references across the `.agent` estate only; source-file reconciliation is the
-  finishing plan's, not t7's. Code now carries no gate-1a/1b/Inc.3 residue: D2
-  deleted the eef-strands files that held it, and the two `graph-ingest` comments
-  were cleaned (2026-06-01). t7's surviving scope is the contaminated/pending
-  `.agent` files (the openers, `graph-query-layer`, the `future/oak-*` surfaces).
+- **The corrected doctrine is landed in-record.** ADR-038 is generalised to all
+  `as const`-known constants; ADR-157/ADR-173 no longer designate an EEF Zod
+  loader; ADR-175 is withdrawn and deleted. The EEF-stack decontamination landed
+  (validator deleted; `eef/README.md`, `conservation-map.md`, the EEF thread
+  banner, `sonar-disposition-policy.md`, `repo-continuity.md` corrected; ledger at
+  `eef/current/eef-d0-decontamination-ledger.md`). **The EEF half of t5 is
+  therefore done** — `eef/README.md` already reads to the one-live-plan frame, so
+  t5 narrows to the `knowledge-graph-integration` README only.
+- **The four root graph coordination spines are quarantined**
+  (`graph-portfolio-index.md`, `graph-mvp-arc.plan.md`,
+  `graph-combinatorial-arc.plan.md`, `feat-mcp-graph-support-foundation-meta.md`)
+  to `archive/completed/` with one-line supersession banners; the single
+  where-did-they-go record is in `completed-plans.md`. Owner-directed quarantine,
+  not rewrite — a rewritten-live spine would be fresh speculative contamination
+  while wider graph work is undefined. **Verified:** no live
+  `graph_portfolio_index:` / `spine_plan:` frontmatter pointer keys remain, and no
+  `parent_plan:` pointer targets the four files; remaining live mentions of the
+  spine filenames are de-linked plain-text prose or history/comms (correct).
+- **The estate is otherwise mostly superseded framing**: gate-1a/1b, the
+  five-increment architecture, the 7-operation polymorphic query layer with
+  mandatory projection, the `recommend/explain/compare` tools, and the response
+  budget cap — all discarded by the rebuild. Consolidation = archive that framing
+  and shrink the estate to a clean minimal set.
 
-## Inbound from spine quarantine (2026-06-01)
+**Residue position (verified, point-precise):**
 
-Owner-directed (this session): the four root-level graph coordination spines —
-`graph-portfolio-index.md`, `graph-mvp-arc.plan.md`,
-`graph-combinatorial-arc.plan.md`, and `feat-mcp-graph-support-foundation-meta.md`
-— were **quarantined** (not rewritten) to `archive/completed/`. Rewrite was
-rejected because it has no live target: wider graph work is undefined until the
-EEF tool ships, so a rewritten-live spine would be fresh speculative contamination.
+- **Code source comments carry no `gate-1a`/`gate-1b`/`Inc.3` residue** — D2
+  deleted the eef-strands files that held it; the two `graph-ingest` comments were
+  cleaned (2026-06-01).
+- **ADR-173 was decontaminated 2026-06-01** (post-acceptance hygiene amendment):
+  the stale pre-promotion sections were cleared (the ADR is Accepted 2026-05-11)
+  and the `Inc.3` adapter-sequencing was explicitly retired — the only surviving
+  `Inc.3` mention is the dated 2026-05-21 amendment-summary line, now marked
+  superseded (history-retained, correct).
+- **One source-tree doc surface still carries `Inc.3` framing**:
+  `packages/sdks/graph-corpus-sdk/README.md:6` ("adapters following in Increment
+  3"). It lives outside `.agent/`, so it is **outside t7's `.agent`-only concept
+  sweep** — source-tree scope owned by the finishing plan. `CHANGELOG.md` carries
+  one historical `gate-1a` line — generated history, left untouched.
 
-Done this pass:
+**Live inbound links into the quarantined EEF plans** (t2/t7 — reconcile when
+adding supersession pointers): `sdk-and-mcp-enhancements/active/README.md` links
+`eef-evidence-corpus.plan.md` as "WS-3", and the `knowledge-graph-integration`
+README (the t5 target) links it from the `graph-query-layer` row.
 
-- Four files moved to `archive/completed/`, each with a one-line supersession
-  banner pointing at the live homes (EEF plan + KG hub + this plan).
-- One note in `completed-plans.md` (§"Graph Coordination Spines (Superseded
-  Framing)") — the single where-did-they-go record. **No live→archive redirects**:
-  archived means archived.
-- Dead `graph_portfolio_index:` / `spine_plan:` / `parent_plan:` / related-plan
-  pointers to the four files removed estate-wide; prose markdown links to them
-  de-linked to plain text (no repoint into archive, no broken link, no prose
-  rewrite — the contaminated narrative is left for each file's own disposition).
-- The live surviving navigation estate (root `README.md`, `high-level-plan.md`,
-  `knowledge-graph-integration/README.md`, `curriculum-mcp-path-to-ga/roadmap.md`,
-  `plan-index-reachability-remediation.plan.md`) reframed to point at the stable
-  collection homes, never at archive.
-
-Still owned here (unchanged scope): the gate-1a/1b/Inc.3 **concept** references
-inside the contaminated/pending files (the openers, `graph-query-layer`,
-`gate-1a-delivery-parallel-execution-addendum`, the `future/oak-*` surfaces) are
-de-linked but their narratives remain — cleaned when each file is
-archived/parked/rewritten under t1–t7. t7 narrows to the concept sweep now that
-the spine-file link reconciliation is done.
+**t7's surviving scope** is the `gate-1a`/`gate-1b`/`Inc.3` **concept** references
+inside the contaminated/pending `.agent` files (the openers, `graph-query-layer`,
+`gate-1a-delivery-parallel-execution-addendum`, the `future/oak-*` surfaces): they
+are de-linked from the quarantined spines but their narratives remain, cleaned
+when each file is archived/parked/rewritten under t1–t7.
 
 ## End goal
 
@@ -186,32 +157,85 @@ one read.
 | Disposition | Files | Action |
 |---|---|---|
 | **Archive — superseded framing** | `eef/archive/graph-tooling-rebuild.plan.md` (quarantined 2026-05-30); `kg/current/graph-query-layer.plan.md` (old 7-op layer → S2); `kg/current/gate-1a-delivery-parallel-execution-addendum.plan.md`; `kg/current/2026-05-08-graph-mvp-arc-specialist-review-opener.md`; `kg/current/2026-05-08-pr102-graph-decision-complete-closeout.plan.md`; `kg/current/2026-05-11-graph-execution-prep-opener.md`; `kg/current/pr-108-sonar-live-issues-2026-05-24.md` | move to `archive/completed/` + supersession pointer + index entry |
-| **Quarantine — DONE 2026-06-01** | `graph-mvp-arc.plan.md`; `graph-portfolio-index.md`; `graph-combinatorial-arc.plan.md`; **`feat-mcp-graph-support-foundation-meta.md`** (branch-scoped, never merged) | Owner-directed quarantine — *not* rewrite: rewrite has no live target while wider graph work is undefined until the EEF tool ships, so a rewritten-live spine would be fresh speculative contamination. All four moved to `archive/completed/` with a one-line supersession banner each; one note in `completed-plans.md`; references removed from the live surviving estate and de-linked to plain text in contaminated/pending files. The deeper gate-1a/1b/Inc.3 **concept** decontamination of those contaminated files remains per their own disposition (t1–t7). See §"Inbound from spine quarantine (2026-06-01)". |
+| **Quarantine — DONE 2026-06-01** | `graph-mvp-arc.plan.md`; `graph-portfolio-index.md`; `graph-combinatorial-arc.plan.md`; **`feat-mcp-graph-support-foundation-meta.md`** (branch-scoped, never merged) | Owner-directed quarantine — *not* rewrite: rewrite has no live target while wider graph work is undefined until the EEF tool ships, so a rewritten-live spine would be fresh speculative contamination. All four moved to `archive/completed/` with a one-line supersession banner each; one note in `completed-plans.md`; references removed from the live surviving estate and de-linked to plain text in contaminated/pending files. The deeper gate-1a/1b/Inc.3 **concept** decontamination of those contaminated files remains per their own disposition (t1–t7). See §"Current state (verified ground truth)". |
 | **Update in place — stale but live** | `eef/README.md`; `kg/README.md`; `kg/active/graph-stack.plan.md` (flip landed WS statuses, fix the active/↔current/ link mismatch) | edit |
 | **Archive — completed** | `kg/active/graph-resource-factory.plan.md`; `kg/active/misconception-graph-mcp-surface.plan.md`; `kg/active/graph-stack-ws1.6-vocab-prep.md` | move to `archive/completed/` |
 | **Park as `future/`, blocked-on-EEF** | `kg/active/nc-knowledge-taxonomy-surface.plan.md`; the `future/oak-kg-*` (iri-traverser, programme-navigator, schema-browser, lesson-graph-surface) + `future/oak-misconceptions-*` (cross-corpus, extended-contexts, substrate-migration, topic-extraction) + `future/cross-source-journeys.plan.md` | mark *"undefined until the first proper graph tool is finished"*; consolidate the 5 misconceptions-* into one |
 | **Replace — value** | `eef/future/eef-outcome-evaluation-infrastructure.plan.md` | superseded by the new value-evaluation plan (t6) |
 | **Keep — reference/independent** | `eef/reference/*`, `eef/archive/*`; `kg/future/ontology-*` (4), `kg/research/*`, `kg/oak-ontology-graph-opportunities.strategy.md`; `kg/future/extending-graph-support-tooling.plan.md` (the named candidate buffer) | leave |
-| **Verify first (t1)** | `kg/active/agent-guidance-consolidation.plan.md`; `kg/current/kg-alignment-audit.execution.plan.md`; `kg/current/kg-integration-quick-wins.plan.md`; `kg/active/open-education-knowledge-surfaces.plan.md` (historical umbrella — likely archive); `kg/current/oak-kg-threads-surface.plan.md` + `kg/current/oak-misconceptions-subgraph-mcp-surface.plan.md` (gate-framed speculative surfaces in the wrong lane — likely park-as-future) | read + assign |
+| **t1 — grounded reading done 2026-06-01 (assumptions-expert ratification pending)** | `kg/active/agent-guidance-consolidation.plan.md` → **update-in-place**; `kg/current/kg-alignment-audit.execution.plan.md` + `kg/current/kg-integration-quick-wins.plan.md` → **keep — independent (NOT EEF-gated)**; `kg/active/open-education-knowledge-surfaces.plan.md` → **archive — superseded**; `kg/current/oak-kg-threads-surface.plan.md` + `kg/current/oak-misconceptions-subgraph-mcp-surface.plan.md` → **park — blocked-on-EEF** | per-file: see the grounded findings below |
+
+### t1 grounded findings (2026-06-01) — the substance-loss check, executed
+
+The plan's blanket frame — "archive the superseded estate, park the rest
+blocked-on-EEF" — is correct for the MVP-arc slices and the historical umbrella,
+but **three of the six t1 files carry live, EEF-independent substance and must
+not be archived or parked-blocked-on-EEF**. That mis-categorisation is exactly
+the failure the `assumptions-expert` gate exists to catch; the grounded read
+below is its input, not a substitute for it.
+
+- **`agent-guidance-consolidation.plan.md` → update-in-place (keep live).** Live
+  MCP-DX debt about the **existing** tool surface (search/browse/explore/fetch/
+  misconception guidance is scattered, partly stale, not DRY → one generated
+  `tool-catalogue.ts`). EEF-independent. Only the stale `recommend`/`compare`
+  workflow refs and the `eef-evidence-corpus` sibling link need scrubbing; its
+  `parent_plan` pointer to `open-education-knowledge-surfaces` needs re-pointing
+  when that umbrella is archived. **Not** archive, **not** park-on-EEF.
+- **`kg-alignment-audit.execution.plan.md` + `kg-integration-quick-wins.plan.md`
+  → keep — independent.** Ontology↔search alignment and Neo4j/ES integration
+  quick wins. Uncontaminated by gate-1a/MVP-arc framing; orthogonal to the EEF
+  evidence tool. Their promotion trigger is the KG README's existing
+  "Direct ontology work" trigger, **not** the EEF tool finishing. Parking them
+  blocked-on-EEF would be a category error that loses real, independent work.
+- **`open-education-knowledge-surfaces.plan.md` → archive — superseded.**
+  Historical multi-source umbrella: WS-0/1/2 done (committed `1eb302e8`), WS-3
+  (EEF recommend-tool) superseded by the rebuild, WS-4/5/6 owned by their own
+  plans. Re-point the child plans (`agent-guidance-consolidation`,
+  `nc-knowledge-taxonomy-surface`, `graph-resource-factory`,
+  `misconception-graph-mcp-surface`) before/at archival.
+- **`oak-kg-threads-surface.plan.md` + `oak-misconceptions-subgraph-mcp-surface.plan.md`
+  → park.** The underlying surface ideas (Oak KG Threads resource/tool; bounded
+  misconception sub-graph extraction) are live future value, but each is an
+  orphaned slice of the **quarantined** MVP-arc spine. **Precise block condition
+  (assumptions-expert):** these are *not* technically EEF-gated — their own
+  `Dependencies` name `graph-stack Inc.1b` (not the EEF gates) as the substrate
+  floor. The block is "wider graph work is undefined until the first proper graph
+  tool (EEF) ships, and the MVP-arc spine that scaffolded these slices is
+  quarantined"; revisit after finishing-plan D7. The
+  `spine_slice`/`gate-2`/`gate-3a`/`Inc.1b`/`Inc.3` scaffold — and, in the
+  misconceptions plan, the discarded `maxResponseTokens = 16000` response-budget
+  cap — are retired framing. **Substance to preserve at the park move** (no other
+  home — write into each parked header, do not defer): for `oak-kg-threads`, the
+  inverse-edge query primitive insight + the spine-locked tool names
+  (`curriculum://oak-kg-threads`, `oak-kg-get-thread-content`); for
+  `oak-misconceptions-subgraph`, the bounded-traversal contract, the 20-context
+  fixture-manifest selection scheme, and the `_meta` legacy-substrate disclosure
+  discipline — all stripped of the retired token-budget framing.
 
 ## Judgment calls (owner-surface at execution; recommended verdicts)
 
 1. **Archive the entire superseded gate-1a/1b estate** (moved, never deleted, each with a pointer). *Recommended: yes.*
 2. **Park the ~9 speculative graph-surface future plans** with an explicit block-on-EEF condition rather than leaving them reading as live. *Recommended: yes.*
-3. **Consolidate the 5 `oak-misconceptions-*` future plans into one** parked plan. *Recommended: yes — they are variations on one undefined-until-EEF idea.*
+3. **Consolidate the 5 `oak-misconceptions-*` future plans into one** parked plan. *Recommended: yes, with a condition (assumptions-expert): the consolidated plan must KEEP each distinct problem as a named section (cross-corpus composition, substrate migration, topic extraction, extended contexts, bounded sub-graph extraction) — they are variations on one undefined-until-EEF theme but not one problem. A single summary paragraph that loses the bounded-extraction contract is the failure mode to avoid.*
 
 ## Execution sequence
 
-t1's dispositions are proposals awaiting confirmation — `t1` is `pending`, all
-six files still sit in their original lanes, and the disposition map and judgment
-calls are marked "confirm at execution". Execution is therefore strictly ordered:
+t1's grounded reading is **done** (2026-06-01 — all six files read against their
+content, not the pre-stated verdicts; findings in the disposition map's "t1
+grounded findings" block). No file has moved — all six still sit in their
+original lanes. `assumptions-expert` ratification is the **only remaining gate**
+before the dispositions are confirmed and t2+ proceed. Execution is strictly
+ordered:
 
-1. **Decide — `t1` + readiness review (first, always).** Read the six
-   unclassified files, assign each a confirmed disposition, then run
-   `assumptions-expert` on the archive/park split. Three of the six (the
-   `open-education-knowledge-surfaces` umbrella → archive; `oak-kg-threads-surface`
-   and `oak-misconceptions-subgraph-mcp-surface` → park) enter t2/t4's scope only
-   once t1 confirms them. This step decision-completes the rest and commits to
+1. **Decide — `t1` + readiness review (first, always).** The grounded reading is
+   complete; the **substance-loss question — does any "superseded" file actually
+   carry live unique substance? — is the primary lens, and it already changed the
+   answer**: `kg-alignment-audit`, `kg-integration-quick-wins`, and
+   `agent-guidance-consolidation` are independent live work, **not** archive/park
+   fodder. Run `assumptions-expert` on the resulting archive/park/keep split with
+   that substance question first; only then do `open-education-knowledge-surfaces`
+   → archive and `oak-kg-threads-surface` / `oak-misconceptions-subgraph-mcp-surface`
+   → park enter t2/t4 scope. This step decision-completes the rest and commits to
    nothing downstream.
 2. **Remove + restore (one unit) — `t2` + `t3` + `t4`, then `t5` + `t7`.**
    Archive superseded (t2) and completed (t3) plans; park the speculative future
@@ -257,6 +281,9 @@ knowledge-preservation, no-moving-targets),
 
 ## Readiness reviewers
 
-Before READY FOR EXECUTION: `assumptions-expert` (is the archive/park split
-proportionate; are any "superseded" plans actually carrying live unique
-substance). Run at the fresh session's start, after t1.
+Before READY FOR EXECUTION: `assumptions-expert`, briefed substance-first —
+**are any "superseded" plans actually carrying live unique substance** (the t1
+grounded reading says three are: `kg-alignment-audit`, `kg-integration-quick-wins`,
+`agent-guidance-consolidation`), and only then: is the archive/park/keep split
+proportionate. Run after t1's grounded reading (now done) and before any file
+moves.
