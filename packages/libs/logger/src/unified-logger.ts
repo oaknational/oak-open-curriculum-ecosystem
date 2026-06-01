@@ -86,7 +86,7 @@ export class UnifiedLogger implements Logger {
   private redactStringValue(value: string): string {
     const redactedValue = redactTelemetryValue(value);
     if (typeof redactedValue !== 'string') {
-      throw new Error('Telemetry redaction returned a non-string for string input.');
+      throw new TypeError('Telemetry redaction returned a non-string for string input.');
     }
 
     return redactedValue;

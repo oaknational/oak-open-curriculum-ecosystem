@@ -41,8 +41,8 @@ function redactRequestEventData(
   return {
     ...request,
     ...(request.url ? { url: redactText(request.url) } : {}),
-    ...(request.data !== undefined ? { data: redactUnknownValue(request.data, 'data') } : {}),
-    ...(queryString !== undefined ? { query_string: queryString } : {}),
+    ...(request.data === undefined ? {} : { data: redactUnknownValue(request.data, 'data') }),
+    ...(queryString === undefined ? {} : { query_string: queryString }),
     ...(cookies ? { cookies } : {}),
     ...(env ? { env } : {}),
     ...(headers ? { headers } : {}),

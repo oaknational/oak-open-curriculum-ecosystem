@@ -7,7 +7,7 @@
  * @see https://opentelemetry.io/docs/specs/otel/logs/data-model/
  */
 
-import { createHash } from 'crypto';
+import { createHash } from 'node:crypto';
 import type { ActiveSpanContextSnapshot } from '@oaknational/observability';
 import type { LogLevel } from './log-levels';
 import type { LogContext, NormalizedError, OtelLogRecord, ResourceAttributes } from './types';
