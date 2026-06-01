@@ -19,6 +19,26 @@ surface.
 
 ## Current State
 
+- **EEF D2 landed + corpus-contamination correction arc (2026-06-01, Lunar
+  Transiting Eclipse / `9cde59`, claude / Opus 4.8)**: D2 built the typed
+  raw-corpus foundation in `graph-corpus-sdk` (`EefStrand` / `EefStrandId` /
+  `EefStrandById` / `isValidStrandKey`, raw domains, declared-vs-observed
+  divergence, related-strand edges, corpus provenance) and removed the old
+  list-shaped EEF surface across three workspaces — green + reviewed
+  (code/type/test experts), commit `9019bb86`. Owner then caught a fabricated
+  key-stage→phase concept carried into the canonical plan from a deleted prompt;
+  the corrective arc removed it, ran an independent grounding audit, and
+  completed a tombstone disposition pass (commits `fb7ad234`, `70ccbef8`,
+  `75b0734a`). Lesson captured in agent memory
+  (`harvest-from-deleted-is-contamination-vector`).
+  **NEXT-SESSION ACTION — make a real rule.** The cite-or-tag corpus-grounding
+  discipline currently lives as a stopgap doc at
+  [`sector-engagement/eef/reference/eef-corpus-grounding.md`](../../plans/sector-engagement/eef/reference/eef-corpus-grounding.md);
+  this is not a properly-created rule. Re-create it through the real
+  rule-creation path (graduation / `.agent/rules/` + cross-platform loaders /
+  `new-rule-vs-pdr-clause`), reconciling the owner requirement that it be
+  EEF-scoped and NOT always-on — so it does not sit in the always-loaded rules
+  tier. Retire the stopgap doc once the real rule exists.
 - **Comms-event write-integrity implemented (2026-06-01, Tempestuous Gliding
   Falcon / `019e83`, codex / GPT-5)**: owner-directed fix for the comms-CLI
   corruption bug is complete in the working tree and committed in this session.
@@ -34,23 +54,27 @@ surface.
   `addressed-in-working-tree-2026-06-01`. Focused gates were run before closeout
   and are recorded in the plan; no quality gates were run during this handoff per
   owner direction.
-- **Agentic mechanisms discovery planning (2026-06-01, Luminous Dancing Aurora /
-  `019e82`, codex / GPT-5)**: researched Cloudflare Agent Skills Discovery
-  against live official MCP/A2A/skills discovery standards context, wrote the
-  discovery future-planning bundle, and aligned the existing MCP Server Cards
-  plan into the same parent/sibling structure. New thread record:
+- **Agent-readiness discovery promoted + root planning docs refreshed
+  (2026-06-01, Umbral Whispering Silhouette / `019e83`, codex / GPT-5)**: the
+  Oak ticket was re-verified against live standards and public Oak endpoints,
+  then Phase 1 was promoted to
+  [`discovery/current/agent-readiness-discovery-hub.plan.md`](../../plans/discovery/current/agent-readiness-discovery-hub.plan.md)
+  with evidence in
+  [`discovery/current/standards-verification-2026-06-01.report.md`](../../plans/discovery/current/standards-verification-2026-06-01.report.md).
+  DNS-AID, Aila A2A, WebMCP, and Web Bot Auth now have gated future child
+  plans; Web Bot Auth is first-class in discovery with security-and-privacy as
+  the enforcement/evidence cross-link; `robots.txt` and sitemaps are recorded
+  as general requirements for every official Oak web app. Root
+  [`high-level-plan.md`](../../plans/high-level-plan.md) and
+  [`plans/README.md`](../../plans/README.md) were overhauled so discovery is
+  reachable from both strategic and operational planning entry points. Thread
+  record:
   [`agentic-mechanisms-discovery.next-session.md`](threads/agentic-mechanisms-discovery.next-session.md).
   Controlling parent plan:
   [`agentic-mechanisms-discovery.plan.md`](../../plans/discovery/future/agentic-mechanisms-discovery.plan.md).
-  Child lanes:
-  [`agent-skills-discovery.plan.md`](../../plans/discovery/future/agent-skills-discovery.plan.md)
-  and
-  [`mcp-server-cards.plan.md`](../../plans/discovery/future/mcp-server-cards.plan.md).
-  This is strategic tracking only: no endpoint implementation, no skill
-  publication, and no standards-derived runtime change until a future plan is
-  promoted to `current`. Targeted markdownlint and Prettier passed for the three
-  discovery plans after alignment; no commit and no aggregate `pnpm check` by
-  explicit owner direction.
+  Next safe step is `ar1-refresh-standards-and-live-estate`; no endpoint
+  implementation, no commit, and no gates were run during the owner-requested
+  light handoff.
 - **EEF plan seam-mapping + grounded review corrections (2026-06-01, Windswept
   Floating Summit / `d8560c`, claude / Opus 4.8)**: ran the two owner-requested
   reviews (whole-plan + D2) of the live EEF plan, grounding every claim directly
@@ -176,7 +200,7 @@ each thread record; this table is the repo-level index.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Windswept Floating Summit / plan seam-mapping + grounded review corrections / 2026-06-01 |
-| `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | codex / GPT-5 / Luminous Dancing Aurora / research-and-plan-author / 2026-06-01 |
+| `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | codex / GPT-5 / Umbral Whispering Silhouette / promotion-and-root-docs-author / 2026-06-01 |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | codex / GPT-5 / Blooming Twining Grove / longitudinal napkin review + deep handoff / 2026-05-31 |
 
 ## Paused Threads
@@ -205,14 +229,13 @@ not the current session-priority lane. Reactivation is owner-directed.
    [`agentic-mechanisms-discovery.plan.md`](../../plans/discovery/future/agentic-mechanisms-discovery.plan.md)
    as the layer map for skills, MCP Server Cards, MCP runtime discovery, A2A,
    registry metadata, and generic AI discovery proposals.
-2. Do not implement discovery endpoints from `future/` plans. Promotion to
-   `current/` must produce executable TDD cycles, acceptance criteria, proof
-   contracts, and validation commands.
-3. The likely first promotion candidate is Agent Skills Discovery, but only
-   after Oak ratifies the first skill catalogue, trust model, public domain, and
-   live data/tool routes.
-4. Keep MCP Server Cards as spec tracking until the SEP and Oak public remote
-   MCP server publication posture are stable.
+2. Resume executable work from
+   [`agent-readiness-discovery-hub.plan.md`](../../plans/discovery/current/agent-readiness-discovery-hub.plan.md),
+   starting with `ar1-refresh-standards-and-live-estate`.
+3. Keep Web Bot Auth in Phase 1 as a decision-ledger and security-evidence
+   bridge; the future child plan owns any later enabled-control rollout.
+4. Do not implement gated `future/` endpoints or metadata until the owner
+   explicitly promotes the relevant child plan.
 
 ### EEF Graph-Tooling Rebuild
 
@@ -331,7 +354,19 @@ pending-graduations as a reusable plan-template/archetype candidate
 discovery future plans and was editing them at session close; the owner directed
 committing everything in this session's bundle, so those plans were included and
 the peer was notified via a directed comms event (their later edits land as a
-delta). Active-claims has no entry of mine.`
+delta). Active-claims has no entry of mine. **Session continued:** repaired three
+truncated comms-event JSONs and validated`comms render` (exit 0); authored the
+queued `agent-tooling/current/comms-event-write-integrity.plan.md` (one-time repair
+
+- absolute prevention; owner rejected read-side `--skip-malformed`); the owner
+pushed the branch and **PR #131** is open against `main` (green by the full
+pre-push gate — a successful push proves all gates green). Additional insights
+captured to the napkin: opening-statements-teach-by-form (write destination +
+present truth, not session-recap); "one law, three faces" (derive-from-source /
+seams-compose / state-what-is are one principle); and the push-proves-gates-green
+correction (platform memory `feedback_successful_push_proves_gates_green`). This
+final docs-only handoff is owner-directed: no commit, no checks — continuity edits
+are working-tree on `feat/graph-tooling-tidyup`.`
 
 **session-completion closeout (2026-06-01, Twilit Threading Satellite — EEF plan
 positive recast + D0 complete + no-exceptions rule)**: `due — one trigger stands,
