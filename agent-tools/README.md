@@ -41,7 +41,7 @@ domain-specific flows:
 agent-tools/
 ├─ src/bin/      # CLI entrypoints
 ├─ src/core/     # Shared runtime/session helpers
-├─ tests/        # Shared test fakes and legacy co-located coverage
+├─ tests/        # Shared test fakes and existing co-located coverage
 ├─ e2e-tests/    # E2E suites
 └─ smoke-tests/  # Local running-command smoke checks
 ```
@@ -262,6 +262,10 @@ OAK_AGENT_IDENTITY_OVERRIDE="Frolicking Toast" pnpm agent-tools agent-identity -
   `event_path`, and `shared_log_path` so agents can verify the write target.
   Comms writes check the active-claims registry and refuse live identity-route
   collisions on `(agent_name, platform, session_id_prefix)`.
+- `comms validate` — parse and schema-check the true-JSON collaboration-state
+  estate, including active claims, closed claims, comms events, conversations,
+  and escalations. Malformed or schema-nonconforming files fail loudly with the
+  offending path named.
 - `comms inbox` / `comms watch` / `comms direct` / `comms reply` — read the
   canonical comms event stream, keep a long-lived watcher open, author
   first-strike directed messages, and reply to an existing directed message
@@ -272,7 +276,7 @@ OAK_AGENT_IDENTITY_OVERRIDE="Frolicking Toast" pnpm agent-tools agent-identity -
   surfaced with self-exclusion only (by full identity tuple). Each emitted
   event is tagged `[BROADCAST]`, `[GROUP]`, `[DIRECTED]`, or `[LIFECYCLE]` on
   its first line so the agent knows the channel at a glance. Pass
-  `--only-directed` to narrow to the legacy directed-to-me view. Identity
+  `--only-directed` to narrow to directed messages addressed to this agent. Identity
   defaults to the platform-derived Practice session id (matching `comms send`
   / `comms direct`); explicit `--agent-name` + optional `--session-prefix` is
   available for admin/test overrides, with `--agent-name '*'` matching all
@@ -354,6 +358,7 @@ pnpm agent-tools collaboration-state comms watch \
   --seen-file .agent/state/collaboration/comms-seen/penumbral-veiling-raven.txt \
   --platform codex \
   --model GPT-5
+pnpm agent-tools collaboration-state comms validate
 # default: all-channels — broadcast, group, directed, lifecycle
 # add --only-directed to narrow to directed-to-me events
 pnpm agent-tools commit-queue status

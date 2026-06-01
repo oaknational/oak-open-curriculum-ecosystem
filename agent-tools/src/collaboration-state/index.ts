@@ -6,7 +6,7 @@ export { archiveStaleClaims } from './claims.js';
 export { runCollaborationStateCli } from './cli.js';
 export { buildCollaborationTuiSnapshot, type CollaborationTuiSnapshot } from './tui/snapshot.js';
 export { formatCollaborationTuiText } from './tui/text.js';
-export { updateJsonFileWithRetry, updateJsonStateWithRetry } from './transaction.js';
+export { updateJsonFileWithRetry } from './transaction.js';
 export type {
   ClosedClaimsArchive,
   CollaborationAgentId,

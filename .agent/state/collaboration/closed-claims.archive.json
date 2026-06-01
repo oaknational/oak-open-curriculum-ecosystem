@@ -634,7 +634,7 @@
       "freshness_seconds": 14400,
       "sidebar_open": false,
       "intent": "Routing-legacy-fallback sunset (owner-directed). Strict single-path id-keyed routing; cures the 2026-05-28 watcher runaway.",
-      "archived_at": "2026-05-29T12:06:42Z",
+      "archived_at": "2026-05-29",
       "closure": {
         "kind": "explicit",
         "closed_at": "2026-05-29T12:06:42Z",
@@ -4648,6 +4648,313 @@
           {
             "kind": "claim",
             "ref": "1c5499f8-1fad-4a77-82b7-8c08331c7bf3",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "9b0f0050-cf39-4561-ba53-7cd50b0ee2ab",
+      "agent_id": {
+        "agent_name": "Umbral Whispering Silhouette",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e83",
+        "id": "b1c594cd-046d-57f3-8e90-87f8cbb2125b"
+      },
+      "thread": "agentic-mechanisms-discovery",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/discovery/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T13:26:44Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Promote discovery agent-readiness work to current plans and add missing Oak-ticket child plans",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T13:33:11Z",
+        "closed_by": {
+          "agent_name": "Umbral Whispering Silhouette",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e83",
+          "id": "b1c594cd-046d-57f3-8e90-87f8cbb2125b"
+        },
+        "summary": "Promoted agent-readiness Phase 1 to discovery/current, added verification report, and added DNS-AID/Aila A2A/WebMCP future plans",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "9b0f0050-cf39-4561-ba53-7cd50b0ee2ab",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "0f0c9221-fd69-4371-91d0-d94692651ad3",
+      "agent_id": {
+        "agent_name": "Tempestuous Gliding Falcon",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e83",
+        "id": "ef26f73b-a755-55c7-a101-430ef929bf07"
+      },
+      "thread": "agent-tooling",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/**",
+            "agent-tools/tests/collaboration-state/**",
+            "agent-tools/package.json",
+            "package.json",
+            ".agent/plans/agent-tooling/current/comms-event-write-integrity.plan.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T13:00:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Implement comms-event write-integrity plan with validated atomic writes, hard-fail reads, validator, and gate wiring",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T12:30:00Z",
+        "closed_by": {
+          "agent_name": "Tempestuous Gliding Falcon",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e83",
+          "id": "ef26f73b-a755-55c7-a101-430ef929bf07"
+        },
+        "summary": "Implemented comms-event write integrity: validated atomic JSON writes, loud path-named reads, true-JSON estate validator, gate wiring, docs, tests, and reviewer-requested hardening.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "0f0c9221-fd69-4371-91d0-d94692651ad3",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "56bf6c30-9b5d-4d3d-9032-a23967531694",
+      "agent_id": {
+        "agent_name": "Tempestuous Gliding Falcon",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e83",
+        "id": "ef26f73b-a755-55c7-a101-430ef929bf07"
+      },
+      "thread": "agent-tooling",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agent-tooling/frictions-register.md",
+            "agent-tools/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T12:00:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Close F-05 and document comms validate after comms-event write integrity implementation.",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T12:31:00Z",
+        "closed_by": {
+          "agent_name": "Tempestuous Gliding Falcon",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e83",
+          "id": "ef26f73b-a755-55c7-a101-430ef929bf07"
+        },
+        "summary": "Closed F-05 against the implemented write-integrity plan and documented comms validate in the agent-tools README.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "56bf6c30-9b5d-4d3d-9032-a23967531694",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "9cad410a-f2c2-44dd-8eae-0f6f520a5a5c",
+      "agent_id": {
+        "agent_name": "Tempestuous Gliding Falcon",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e83",
+        "id": "ef26f73b-a755-55c7-a101-430ef929bf07"
+      },
+      "thread": "agent-tooling",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "knip.config.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T12:05:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Add collaboration-state validator entrypoint to Knip after gate failure.",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T12:32:00Z",
+        "closed_by": {
+          "agent_name": "Tempestuous Gliding Falcon",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e83",
+          "id": "ef26f73b-a755-55c7-a101-430ef929bf07"
+        },
+        "summary": "Added the collaboration-state validator entrypoint to Knip after the root gate exposed it as an untraced script.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "9cad410a-f2c2-44dd-8eae-0f6f520a5a5c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "7513933b-dd6c-4b2b-9b9c-a877d42d02c0",
+      "agent_id": {
+        "agent_name": "Tempestuous Gliding Falcon",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e83",
+        "id": "ef26f73b-a755-55c7-a101-430ef929bf07"
+      },
+      "thread": "agent-tooling",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/directives/principles.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T12:10:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Record owner doctrine: no legacy collaboration dirs or fallback legacy surfaces.",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T12:33:00Z",
+        "closed_by": {
+          "agent_name": "Tempestuous Gliding Falcon",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e83",
+          "id": "ef26f73b-a755-55c7-a101-430ef929bf07"
+        },
+        "summary": "Recorded owner doctrine in principles.md: no legacy directories, old-path fallbacks, compatibility writers, or quiet missing canonical surfaces.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "7513933b-dd6c-4b2b-9b9c-a877d42d02c0",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "232196f8-9eca-42a9-a72f-15b8fdcdb70e",
+      "agent_id": {
+        "agent_name": "Tempestuous Gliding Falcon",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e83",
+        "id": "ef26f73b-a755-55c7-a101-430ef929bf07"
+      },
+      "thread": "agent-tooling",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/state/collaboration/closed-claims.archive.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T12:15:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Repair schema-format invalid archived_at surfaced by collaboration-state validator.",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T12:34:00Z",
+        "closed_by": {
+          "agent_name": "Tempestuous Gliding Falcon",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e83",
+          "id": "ef26f73b-a755-55c7-a101-430ef929bf07"
+        },
+        "summary": "Repaired a closed-claim archived_at value surfaced by schema format validation so the real collaboration estate validates cleanly.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "232196f8-9eca-42a9-a72f-15b8fdcdb70e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f9ec1686-e96f-447a-988b-b113623b141d",
+      "agent_id": {
+        "agent_name": "Tempestuous Gliding Falcon",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e83",
+        "id": "ef26f73b-a755-55c7-a101-430ef929bf07"
+      },
+      "thread": "agent-tooling",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T14:43:55Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit comms-event write-integrity implementation and session handoff.",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T14:47:30Z",
+        "closed_by": {
+          "agent_name": "Tempestuous Gliding Falcon",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e83",
+          "id": "ef26f73b-a755-55c7-a101-430ef929bf07"
+        },
+        "summary": "Commit-window claim closed after staging/commit coordination; no quality gates run during handoff per owner direction.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f9ec1686-e96f-447a-988b-b113623b141d",
             "summary": "Claim explicitly closed by owning session."
           }
         ]

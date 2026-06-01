@@ -1,5 +1,7 @@
-import { randomUUID } from 'node:crypto';
-import { mkdir, readFile, rename, rm, writeFile } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
+
+import { writeTextAtomically } from './atomic-file.js';
+import { acquireFileTransactionLock } from './transaction-lock.js';
 
 const DEFAULT_LOCK_STALE_MS = 30000;
 const DEFAULT_LOCK_ATTEMPTS = 100;
@@ -12,6 +14,7 @@ export async function updateJsonStateWithRetry<T>(input: {
   readonly readText: () => string | Promise<string>;
   readonly writeText: (text: string) => void | Promise<void>;
   readonly parseText: (text: string) => T;
+  readonly validateText: (text: string) => void | Promise<void>;
   readonly transform: (value: T) => T;
   readonly maxAttempts: number;
 }): Promise<{ readonly attempts: number }> {
@@ -24,7 +27,12 @@ export async function updateJsonStateWithRetry<T>(input: {
       continue;
     }
 
-    await input.writeText(`${JSON.stringify(nextValue, null, 2)}\n`);
+    await input.writeText(
+      await serializeJson(nextValue, async (text) => {
+        input.parseText(text);
+        await input.validateText(text);
+      }),
+    );
     return { attempts: attempt };
   }
 
@@ -64,6 +72,7 @@ export async function runJsonStateTransaction<T>(input: {
 export async function writeJsonFileAtomically(input: {
   readonly filePath: string;
   readonly value: unknown;
+  readonly validateText: (text: string) => void | Promise<void>;
 }): Promise<void> {
   await runJsonStateTransaction({
     filePaths: [input.filePath],
@@ -77,8 +86,30 @@ export async function writeJsonFileAtomically(input: {
 export async function writeJsonFileWithinTransaction(input: {
   readonly filePath: string;
   readonly value: unknown;
+  readonly validateText: (text: string) => void | Promise<void>;
 }): Promise<void> {
-  await writeJsonTextAtomically(input.filePath, `${JSON.stringify(input.value, null, 2)}\n`);
+  await writeJsonTextAtomically(
+    input.filePath,
+    await serializeJson(input.value, input.validateText),
+  );
+}
+
+/**
+ * Exclusively create a JSON file through validated serialization and an atomic
+ * same-directory temp-file publish. The target path is never overwritten.
+ */
+export async function createJsonFileAtomically(input: {
+  readonly filePath: string;
+  readonly value: unknown;
+  readonly validateText: (text: string) => void | Promise<void>;
+}): Promise<void> {
+  await writeJsonTextAtomically(
+    input.filePath,
+    await serializeJson(input.value, input.validateText),
+    {
+      exclusiveCreate: true,
+    },
+  );
 }
 
 /**
@@ -97,6 +128,7 @@ export async function writeTextFileAtomically(input: {
 export async function updateJsonFileWithRetry<T>(input: {
   readonly filePath: string;
   readonly parseText: (text: string) => T;
+  readonly validateText: (text: string) => void | Promise<void>;
   readonly transform: (value: T) => T;
   readonly maxAttempts: number;
 }): Promise<{ readonly attempts: number }> {
@@ -107,68 +139,11 @@ export async function updateJsonFileWithRetry<T>(input: {
         readText: () => readFile(input.filePath, 'utf8'),
         writeText: (text) => writeJsonTextAtomically(input.filePath, text),
         parseText: input.parseText,
+        validateText: input.validateText,
         transform: input.transform,
         maxAttempts: input.maxAttempts,
       }),
   });
-}
-
-async function acquireFileTransactionLock(input: {
-  readonly filePath: string;
-  readonly staleMs: number;
-  readonly attempts: number;
-}): Promise<() => Promise<void>> {
-  const lockDir = `${input.filePath}.transaction`;
-  for (let attempt = 1; attempt <= input.attempts; attempt += 1) {
-    if (await tryCreateLock(lockDir)) {
-      return () => rm(lockDir, { recursive: true, force: true });
-    }
-    await removeStaleLock(lockDir, input.staleMs);
-    await delay(Math.min(attempt * 10, 100));
-  }
-
-  throw new Error(`could not acquire state transaction for ${input.filePath}`);
-}
-
-async function tryCreateLock(lockDir: string): Promise<boolean> {
-  try {
-    await mkdir(lockDir);
-    await writeFile(`${lockDir}/owner.json`, `${JSON.stringify(lockMetadata(), null, 2)}\n`);
-    return true;
-  } catch (error) {
-    if (isFileExistsError(error)) {
-      return false;
-    }
-    throw error;
-  }
-}
-
-async function removeStaleLock(lockDir: string, staleMs: number): Promise<void> {
-  const metadata = await readLockMetadata(lockDir);
-  if (metadata === undefined) {
-    return;
-  }
-  if (Date.now() - Date.parse(metadata.created_at) > staleMs) {
-    await rm(lockDir, { recursive: true, force: true });
-  }
-}
-
-async function readLockMetadata(
-  lockDir: string,
-): Promise<{ readonly created_at: string } | undefined> {
-  try {
-    const parsed: unknown = JSON.parse(await readFile(`${lockDir}/owner.json`, 'utf8'));
-    return isLockMetadata(parsed) ? parsed : undefined;
-  } catch {
-    return undefined;
-  }
-}
-
-function lockMetadata(): { readonly owner_id: string; readonly created_at: string } {
-  return {
-    owner_id: randomUUID(),
-    created_at: new Date().toISOString(),
-  };
 }
 
 async function releaseLocks(releases: readonly (() => Promise<void>)[]): Promise<void> {
@@ -181,31 +156,21 @@ function uniqueSortedPaths(filePaths: readonly string[]): readonly string[] {
   return Array.from(new Set(filePaths)).toSorted((a, b) => a.localeCompare(b));
 }
 
-async function writeJsonTextAtomically(filePath: string, text: string): Promise<void> {
-  await writeTextAtomically(filePath, text);
+async function writeJsonTextAtomically(
+  filePath: string,
+  text: string,
+  options: { readonly exclusiveCreate?: boolean } = {},
+): Promise<void> {
+  JSON.parse(text);
+  await writeTextAtomically(filePath, text, options);
 }
 
-async function writeTextAtomically(filePath: string, text: string): Promise<void> {
-  const tmpPath = `${filePath}.tmp-${randomUUID()}`;
-  await writeFile(tmpPath, text);
-  await rename(tmpPath, filePath);
-}
-
-function delay(milliseconds: number): Promise<void> {
-  return new Promise((resolve) => {
-    setTimeout(resolve, milliseconds);
-  });
-}
-
-function isLockMetadata(value: unknown): value is { readonly created_at: string } {
-  return (
-    typeof value === 'object' &&
-    value !== null &&
-    'created_at' in value &&
-    typeof value.created_at === 'string'
-  );
-}
-
-function isFileExistsError(error: unknown): error is Error & { readonly code: 'EEXIST' } {
-  return error instanceof Error && 'code' in error && error.code === 'EEXIST';
+async function serializeJson(
+  value: unknown,
+  validateText: (text: string) => void | Promise<void>,
+): Promise<string> {
+  const text = `${JSON.stringify(value, null, 2)}\n`;
+  JSON.parse(text);
+  await validateText(text);
+  return text;
 }

@@ -19,16 +19,21 @@ surface.
 
 ## Current State
 
-- **Comms-event write-integrity plan authored (2026-06-01, Windswept Floating
-  Summit / `d8560c`)**: owner-directed fix for the comms-CLI corruption bug (three
-  events had bodies truncated into unterminated JSON; one aborts `comms render`
-  repo-wide). New queued executable plan
-  [`agent-tooling/current/comms-event-write-integrity.plan.md`](../../plans/agent-tooling/current/comms-event-write-integrity.plan.md):
-  one-time repair + absolute prevention (serialize via `JSON.stringify` only,
-  validate round-trip + schema, atomic temp+rename write), loud hard-fail on read,
-  gate-wired regression guard. Owner rejected the read-side `--skip-malformed`
-  tolerance; frictions-register F-05 updated to `addressed-in-plan`. Not started
-  (the active lane is EEF D2); awaits readiness reviewers + owner scheduling.
+- **Comms-event write-integrity implemented (2026-06-01, Tempestuous Gliding
+  Falcon / `019e83`, codex / GPT-5)**: owner-directed fix for the comms-CLI
+  corruption bug is complete in the working tree and committed in this session.
+  The plan
+  [`agent-tooling/current/comms-event-write-integrity.plan.md`](../../plans/agent-tooling/current/comms-event-write-integrity.plan.md)
+  now records D1-D5 complete: collaboration JSON writes validate serialized text
+  before publish, immutable comms events use synced same-directory atomic create
+  with no overwrite, readers hard-fail with the bad path named, `comms validate`
+  scans true-JSON collaboration state, and `repo-validators:check` includes the
+  validator. Owner correction landed in `principles.md`: no legacy directories,
+  legacy shapes, fallback readers, or migration paths; canonical surfaces fail
+  loudly when absent or invalid. F-05 is closed as
+  `addressed-in-working-tree-2026-06-01`. Focused gates were run before closeout
+  and are recorded in the plan; no quality gates were run during this handoff per
+  owner direction.
 - **Agentic mechanisms discovery planning (2026-06-01, Luminous Dancing Aurora /
   `019e82`, codex / GPT-5)**: researched Cloudflare Agent Skills Discovery
   against live official MCP/A2A/skills discovery standards context, wrote the

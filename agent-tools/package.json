@@ -33,6 +33,7 @@
     "check-commit-skill-advisories": "cd .. && pnpm exec tsx agent-tools/src/commit-advisories/check-commit-skill-advisories.ts",
     "prevent-accidental-major-version": "cd .. && pnpm exec tsx agent-tools/src/version-guard/prevent-accidental-major-version.ts",
     "validate-fitness-vocabulary": "cd .. && pnpm exec tsx agent-tools/src/validators/fitness-vocabulary/validate-fitness-vocabulary.ts",
+    "validate-collaboration-state": "cd .. && pnpm exec tsx agent-tools/src/validators/collaboration-state/validate-collaboration-state.ts",
     "validate-no-stale-script-invocations": "cd .. && pnpm exec tsx agent-tools/src/validators/stale-script-invocations/validate-no-stale-script-invocations.ts",
     "validate-portability": "cd .. && pnpm exec tsx agent-tools/src/validators/portability/validate-portability.ts",
     "validate-portability:fix": "cd .. && pnpm exec tsx agent-tools/src/validators/portability/validate-portability.ts --fix",

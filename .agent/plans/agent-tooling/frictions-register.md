@@ -152,10 +152,13 @@ below is a cross-reference index, not a second source of truth.
   guard.
 - **Target surface**: `agent-tools/src/collaboration-state/state-io.ts` (write
   path) and `cli-comms-commands.ts` (render/read).
-- **Status**: addressed-in-plan —
+- **Status**: addressed-in-working-tree-2026-06-01 —
   [`agent-tooling/current/comms-event-write-integrity.plan.md`](current/comms-event-write-integrity.plan.md)
-  (one-time repair + absolute prevention + loud read + gate guard). Three corrupt
-  events were repaired by hand 2026-06-01; the plan removes the fault class.
+  (one-time repair + absolute prevention + loud read + gate guard). Comms event
+  writes now parse-back, schema-validate, and publish via a synced same-directory
+  atomic writer before the target file appears; readers hard-fail with the bad
+  path named; `comms validate` scans true-JSON collaboration state; and
+  `repo-validators:check` runs the same validator.
 - **Review 2026-05-10**: still open. `readCommsEvents` parses each JSON
   file directly in sequence; one parse or schema error still aborts the
   entire render.
@@ -183,6 +186,12 @@ below is a cross-reference index, not a second source of truth.
   write never leaves a malformed event behind. `--body-file` (shipped) is the
   operator-side cure for shell-quoting hazards but does not by itself guarantee
   validated, atomic persistence.
+- **Implementation review 2026-06-01** (Tempestuous Gliding Falcon): implemented
+  the revised owner-directed cure. The live validator reports
+  `collaboration-state validate: OK (2824 JSON file(s) checked)`, and the root
+  repo validator now includes that check. The older `skip + report` expected shape
+  above is retained only as historical capture; the current accepted contract is
+  prevention at write plus loud, path-named failure on any external corruption.
 - **Severity**: high (substrate-wide blocker when triggered)
 - **Related shape**: 2026-05-06 (Hidden Slipping Moth, `4be7b5`) —
   `comms send` succeeded in writing the new event but then failed

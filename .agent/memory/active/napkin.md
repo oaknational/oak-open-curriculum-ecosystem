@@ -662,3 +662,26 @@ most important.
   artefact directly, and treat my *own* intermediate conclusions (especially negative
   existence claims from a single narrow command) with the same suspicion as a
   subagent's — one `ls` of one directory is not "does not exist".
+
+### 2026-06-01 — comms-event write-integrity implementation notes
+
+- Implemented `comms-event-write-integrity`: comms event writes now validate the
+  serialized JSON before publishing, use same-directory synced atomic publish, and
+  the new `comms validate` / repo validator catches malformed or schema-invalid
+  true-JSON collaboration files by path.
+- First focused test run caught a real miss: I had added an `exclusiveCreate`
+  option but had not threaded it through the lower helper, so immutable event
+  creation would not have preserved no-overwrite semantics. The failing test was
+  useful design pressure; fixed before broad gates.
+- Lint caught test-surface hygiene that is easy to forget in this repo: direct
+  test imports from `fs/promises` and `process.cwd()` are not acceptable in normal
+  unit tests. Moving real filesystem setup into a test helper and deriving the
+  repo root from `import.meta.url` fit the existing rule shape.
+- Specialist review caught that I had implemented the comms-event slice more
+  strongly than before, but not the full plan contract: mutable collaboration
+  state writes still had optional validation, JSON Schema formats were disabled,
+  and missing canonical directories were treated as empty scans. Fixed by making
+  collaboration JSON write validation required, enforcing schema formats, and
+  making missing canonical directories loud failures. Owner correction added to
+  `principles.md`: no old-path/fallback/migration-shaped surfaces; repair or
+  replace the canonical surface instead.

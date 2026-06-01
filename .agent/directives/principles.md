@@ -177,6 +177,13 @@ this way produces cleaner boundaries and simpler classification.
   hedged plan options. When evidence disproves a shape, delete or replace
   it at the owning architectural level. Do not keep it reachable as a
   runtime option, migration bridge, alternate path, or executor choice.
+- **No legacy surfaces** - do not preserve legacy directories, legacy
+  data shapes, legacy commands, fallback readers, compatibility writers,
+  or optional old paths. Repair historical data in place or replace the
+  owning surface completely. A validator, reader, writer, or operator
+  command MUST target the canonical surface and fail loudly when that
+  surface is absent or invalid; it must not quietly scan an old location,
+  skip a missing canonical directory, or keep a migration path alive.
 - **Pure functions first** - Use TDD to design (_test first_, red,
   green, refactor), no side effects, no I/O
 - **Consistent Naming** - Use consistent naming conventions for

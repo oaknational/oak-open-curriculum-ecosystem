@@ -9,6 +9,7 @@ import {
 import { appendComms, migrateComms, renderComms, sendComms } from './cli-comms-commands.js';
 import { inboxComms } from './cli-comms-inbox.js';
 import { directComms, replyComms } from './cli-comms-messages.js';
+import { validateComms } from './cli-comms-validate.js';
 import { watchComms } from './cli-comms-watch.js';
 import { preflightIdentity } from './cli-identity.js';
 import { auditIdentity } from './cli-identity-audit.js';
@@ -94,6 +95,11 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
     options: ['events-dir', 'lifecycle-dir', 'messages-dir', 'comms-dir'],
     handler: migrateComms,
   }),
+  'comms:validate': commandSpec({
+    help: 'comms validate [--repo-root <path>]',
+    options: ['repo-root'],
+    handler: (options) => validateComms(options),
+  }),
   'comms:inbox': commandSpec({
     help:
       'comms inbox --comms-dir <dir> --seen-file <path> ' +
@@ -116,7 +122,7 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
       'with self-exclusion only; heartbeat-file is the FM-2 cure liveness surface, default interval 30000ms; ' +
       'auto-seed-on-empty default seeds the seen-file with current events so a fresh ' +
       'watcher starts forward from now rather than replaying full history; ' +
-      'pass --no-auto-seed for legacy replay-on-empty behaviour; ' +
+      'pass --no-auto-seed to replay the full event history on an empty seen-file; ' +
       'pass --seed-from-now to force a seed regardless of existing seen-file content)',
     options: commsWatchOptions,
     handler: watchComms,

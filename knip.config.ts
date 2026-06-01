@@ -68,6 +68,7 @@ const config: KnipConfig = {
         'src/commit-advisories/check-commit-skill-advisories.ts',
         'src/version-guard/prevent-accidental-major-version.ts',
         'src/validators/fitness-vocabulary/validate-fitness-vocabulary.ts',
+        'src/validators/collaboration-state/validate-collaboration-state.ts',
         'src/validators/stale-script-invocations/validate-no-stale-script-invocations.ts',
         'src/validators/portability/validate-portability.ts',
         'src/validators/subagents/validate-subagents.ts',
