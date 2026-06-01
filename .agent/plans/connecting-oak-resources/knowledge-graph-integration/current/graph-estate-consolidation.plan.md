@@ -10,8 +10,8 @@ related:
   - "../../../sector-engagement/eef/current/eef-graph-tool-completion.plan.md (the keystone: the single EEF plan)"
 todos:
   - id: t1-verify-unclassified
-    content: "Grounded reading DONE 2026-06-01 (six files read against content, substance-loss lens first); dispositions proposed in the disposition map's 't1 grounded findings' block: agent-guidance-consolidation → update-in-place (live MCP-DX debt, EEF-independent); kg-alignment-audit + kg-integration-quick-wins → keep — independent (NOT EEF-gated); open-education-knowledge-surfaces → archive — superseded; oak-kg-threads-surface + oak-misconceptions-subgraph-mcp-surface → park — blocked-on-EEF (MVP-arc scaffold retired). Remaining gate: assumptions-expert ratification before any file moves. Status pending until ratified."
-    status: pending
+    content: "Grounded reading DONE 2026-06-01 (six files read against content, substance-loss lens first); dispositions proposed in the disposition map's 't1 grounded findings' block: agent-guidance-consolidation → update-in-place (live MCP-DX debt, EEF-independent); kg-alignment-audit + kg-integration-quick-wins → keep — independent (NOT EEF-gated); open-education-knowledge-surfaces → archive — superseded; oak-kg-threads-surface + oak-misconceptions-subgraph-mcp-surface → park — blocked-on-EEF (MVP-arc scaffold retired). assumptions-expert ratified READY 2026-06-01 (agrees 6/6, no false-keep; two park-header substance-preservation conditions apply at the t4 move). Decision complete; the file moves are t2–t4."
+    status: completed
   - id: t2-archive-superseded
     content: "Archive the superseded-framing plans to archive/completed/ with a supersession pointer to the finishing plan; add completed-plans index entries. NEVER delete (knowledge-preservation)."
     status: pending
@@ -163,7 +163,7 @@ one read.
 | **Park as `future/`, blocked-on-EEF** | `kg/active/nc-knowledge-taxonomy-surface.plan.md`; the `future/oak-kg-*` (iri-traverser, programme-navigator, schema-browser, lesson-graph-surface) + `future/oak-misconceptions-*` (cross-corpus, extended-contexts, substrate-migration, topic-extraction) + `future/cross-source-journeys.plan.md` | mark *"undefined until the first proper graph tool is finished"*; consolidate the 5 misconceptions-* into one |
 | **Replace — value** | `eef/future/eef-outcome-evaluation-infrastructure.plan.md` | superseded by the new value-evaluation plan (t6) |
 | **Keep — reference/independent** | `eef/reference/*`, `eef/archive/*`; `kg/future/ontology-*` (4), `kg/research/*`, `kg/oak-ontology-graph-opportunities.strategy.md`; `kg/future/extending-graph-support-tooling.plan.md` (the named candidate buffer) | leave |
-| **t1 — grounded reading done 2026-06-01 (assumptions-expert ratification pending)** | `kg/active/agent-guidance-consolidation.plan.md` → **update-in-place**; `kg/current/kg-alignment-audit.execution.plan.md` + `kg/current/kg-integration-quick-wins.plan.md` → **keep — independent (NOT EEF-gated)**; `kg/active/open-education-knowledge-surfaces.plan.md` → **archive — superseded**; `kg/current/oak-kg-threads-surface.plan.md` + `kg/current/oak-misconceptions-subgraph-mcp-surface.plan.md` → **park — blocked-on-EEF** | per-file: see the grounded findings below |
+| **t1 — DONE 2026-06-01 (grounded reading + assumptions-expert ratified READY)** | `kg/active/agent-guidance-consolidation.plan.md` → **update-in-place**; `kg/current/kg-alignment-audit.execution.plan.md` + `kg/current/kg-integration-quick-wins.plan.md` → **keep — independent (NOT EEF-gated)**; `kg/active/open-education-knowledge-surfaces.plan.md` → **archive — superseded**; `kg/current/oak-kg-threads-surface.plan.md` + `kg/current/oak-misconceptions-subgraph-mcp-surface.plan.md` → **park — blocked-on-EEF** | per-file: see the grounded findings below |
 
 ### t1 grounded findings (2026-06-01) — the substance-loss check, executed
 
@@ -220,23 +220,21 @@ below is its input, not a substitute for it.
 
 ## Execution sequence
 
-t1's grounded reading is **done** (2026-06-01 — all six files read against their
-content, not the pre-stated verdicts; findings in the disposition map's "t1
-grounded findings" block). No file has moved — all six still sit in their
-original lanes. `assumptions-expert` ratification is the **only remaining gate**
-before the dispositions are confirmed and t2+ proceed. Execution is strictly
-ordered:
+**t1 (decide) is DONE (2026-06-01)** — grounded reading complete and
+`assumptions-expert` ratified READY. No file has moved; all six still sit in their
+original lanes, so the *execution* of the dispositions (t2–t5, t7) has not begun.
+Owner direction: take the plan up after the EEF work finishes. Execution is
+strictly ordered:
 
-1. **Decide — `t1` + readiness review (first, always).** The grounded reading is
-   complete; the **substance-loss question — does any "superseded" file actually
-   carry live unique substance? — is the primary lens, and it already changed the
-   answer**: `kg-alignment-audit`, `kg-integration-quick-wins`, and
+1. ~~**Decide — `t1` + readiness review.**~~ **DONE 2026-06-01.** The grounded
+   reading ran the **substance-loss question — does any "superseded" file actually
+   carry live unique substance? — as the primary lens, and it changed the answer**:
+   `kg-alignment-audit`, `kg-integration-quick-wins`, and
    `agent-guidance-consolidation` are independent live work, **not** archive/park
-   fodder. Run `assumptions-expert` on the resulting archive/park/keep split with
-   that substance question first; only then do `open-education-knowledge-surfaces`
-   → archive and `oak-kg-threads-surface` / `oak-misconceptions-subgraph-mcp-surface`
-   → park enter t2/t4 scope. This step decision-completes the rest and commits to
-   nothing downstream.
+   fodder. `assumptions-expert` ratified READY (agrees 6/6, no false-keep), with
+   two park-header substance-preservation conditions to honour at the t4 move.
+   `open-education-knowledge-surfaces` → archive and `oak-kg-threads-surface` /
+   `oak-misconceptions-subgraph-mcp-surface` → park are confirmed.
 2. **Remove + restore (one unit) — `t2` + `t3` + `t4`, then `t5` + `t7`.**
    Archive superseded (t2) and completed (t3) plans; park the speculative future
    plans blocked-on-EEF and consolidate the five `oak-misconceptions-*` into one
@@ -281,9 +279,15 @@ knowledge-preservation, no-moving-targets),
 
 ## Readiness reviewers
 
-Before READY FOR EXECUTION: `assumptions-expert`, briefed substance-first —
-**are any "superseded" plans actually carrying live unique substance** (the t1
-grounded reading says three are: `kg-alignment-audit`, `kg-integration-quick-wins`,
-`agent-guidance-consolidation`), and only then: is the archive/park/keep split
-proportionate. Run after t1's grounded reading (now done) and before any file
-moves.
+`assumptions-expert` **ran 2026-06-01 and returned READY** (briefed
+substance-first — **do any "superseded" plans carry live unique substance**:
+yes, three do — `kg-alignment-audit`, `kg-integration-quick-wins`,
+`agent-guidance-consolidation` — keep/update-in-place, not archive/park; the
+archive/park split for the other three is proportionate). Two conditions to honour
+at the **t4 park move** (header-authoring at move time, not new work): (1) the
+consolidated `oak-misconceptions-*` plan keeps each distinct problem as a named
+section; (2) the `oak-kg-threads` / `oak-misconceptions-subgraph` parked headers
+preserve their carry-forward substance (inverse-edge primitive + spine-locked
+names; bounded-traversal contract + `_meta` discipline, `maxResponseTokens=16000`
+marked retired). No further readiness review is required before the t2–t5/t7
+execution unit.

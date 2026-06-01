@@ -216,7 +216,7 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Coppery Warming Flame / consolidation-plan currency + graph-ingest decontamination / 2026-06-01, claude / Opus 4.8 / Dawnlit Dancing Satellite / EEF plan + D3 review, currency fixes, projection back-out / 2026-06-01 |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Dawnlit Dancing Satellite / EEF plan + D3 review, currency fixes, projection back-out / 2026-06-01, claude / Opus 4.8 / Glittering Soaring Meteor / graph-estate points 1/2/3 + ADR-173 decontamination + t1 ratified / 2026-06-01 |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | codex / GPT-5 / Umbral Whispering Silhouette / promotion-and-root-docs-author / 2026-06-01 |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 / Moonless Lurking Dusk / dedicated knowledge-curation pass / 2026-06-01 |
 
@@ -305,20 +305,24 @@ not the current session-priority lane. Reactivation is owner-directed.
    whole-plan review, then a full D3 review** (one recorded-but-unapplied D3 edit:
    state the declared-only filter exclusions — `KS5`/`post_16`/`all_through`/
    `special`/`improving_attendance`/`teacher_retention` are not valid filter inputs).
-7. **Graph-estate-consolidation: currency update DONE; t1-t8 execution pending**
-   (2026-06-01). The contamination-remediation master plan at
+7. **Graph-estate-consolidation: t1 DONE + ratified; t2-t5/t7 execution pending,
+   to be taken up AFTER the EEF work** (2026-06-01, Glittering Soaring Meteor).
+   The contamination-remediation master plan at
    `connecting-oak-resources/knowledge-graph-integration/current/graph-estate-consolidation.plan.md`
-   is refreshed to post-D2 reality: the "Verified state to inherit" section is
-   corrected and an "Inbound from EEF D2" section added. Code now carries no
-   gate-1a/1b/Inc.3 residue — D2 deleted the eef-strands files, and the two
-   `graph-ingest` comments were cleaned this session. t7 sweeps the remaining gate
-   concept references across the `.agent` estate only (source-file reconciliation
-   is the finishing plan's, not t7's). The plan now carries an explicit
-   `## Execution sequence`: t1's six dispositions are unconfirmed proposals, so
-   t1 + `assumptions-expert` run first; the do-now subset is everything except the
-   D7-gated t6. Remaining remediation: t1-t8 pending (~1-2
-   focused doc-consolidation sessions; t7 largest; t6 deferred until finishing-plan
-   D7).
+   was flattened (four stratified "Inbound from …" sections → one verified
+   `## Current state` + an anti-restratification rule), the residue position was
+   grounded point-precise, and **t1 is complete**: the six unclassified files were
+   read against content (substance-loss lens first) and `assumptions-expert`
+   ratified READY. The substance-loss catch: `kg-alignment-audit`,
+   `kg-integration-quick-wins`, and `agent-guidance-consolidation` are independent
+   live work, NOT archive/park-blocked-on-EEF. `ADR-173` was decontaminated
+   (post-acceptance hygiene: stale pre-promotion sections cleared, `Inc.3`
+   adapter-sequencing retired). Remaining: the t2+t3+t4 then t5+t7 execution unit
+   (decision-complete, unexecuted — no file has moved; honour the two
+   assumptions-expert park-header conditions at the t4 move); t6 + final t8
+   criterion D7-gated. The one source-tree `Inc.3` left (`graph-corpus-sdk/README.md:6`)
+   is finishing-plan scope. Owner direction: take this up after the EEF work
+   finishes.
 8. The seam-mapping taxonomy + "seams compose" law is a candidate for a reusable
    plan template/archetype (owner-confirmed intent); tracked in
    [`pending-graduations.md`](pending-graduations.md).

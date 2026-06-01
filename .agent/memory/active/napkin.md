@@ -137,3 +137,43 @@ guard. Pairs with `ground-convenient-claims` and the
   "Construct all useful projections" (owner) and "absent until a real consumer needs
   it" (plan) tension out to: the durable fact (floor = `keyof EefStrand`) is true
   regardless, but exporting the module ahead of D6 is a candidate, not settled.
+
+## Session: 2026-06-01 — graph-estate + ADR-173 (Glittering Soaring Meteor / `9d9b06`)
+
+Addressed three reflection points on the graph-estate-consolidation plan (flatten,
+t1 ratification, claim-verification), ran 3 reviewers, fixed ADR-173, flipped t1.
+
+- **"Archive the superseded estate" is a frame that invites mechanical sweeping;
+  the real discipline is reading each file for live-unique-substance FIRST.** The
+  grounded read of the six t1 files caught that 3 of 6 (`kg-alignment-audit`,
+  `kg-integration-quick-wins`, `agent-guidance-consolidation`) carry independent,
+  EEF-independent live work a "park the rest blocked-on-EEF" sweep would have lost.
+  The catch was not hypothetical. The plan's pre-stated "likely archive/park"
+  verdicts are exactly what turns the substance-check into a rubber-stamp; the cure
+  is to run the substance-loss question as the *primary* lens, not a closing clause.
+  **Candidate** (curation/consolidation discipline).
+- **A plan whose job is to de-stratify must not re-stratify itself.** The
+  consolidation plan had grown four dated "Inbound from …" sections — the exact
+  stratified-narrative shape it exists to remove from the estate. The structural cure
+  is not a one-time flatten (it re-grows on the next deliverable) but a stated rule:
+  one derived current-state section; session hand-offs land in the thread record, not
+  new plan sections. **Candidate** (plan-hygiene doctrine; PDR-shaped).
+- **History-vs-residue in decontamination.** ADR-173's "Inc.3" sat in a *dated
+  amendment-summary* — history-retained, not live residue. The fix is to make the
+  supersession explicit (a new dated amendment that retires the concept), NOT to
+  rewrite the historical log. Decontamination targets live current-tense claims;
+  dated amendment-logs and changelogs (CHANGELOG.md's one `gate-1a` line) are history,
+  left intact. Same "history-retained" classification the napkin-rotation disposition
+  uses.
+- **My own prior reflection is inherited shape too — re-ratify it, don't execute it.**
+  Handed my own three reflection points back as work, the trap was treating them as
+  ratified truth. The metacognition pass recalibrated point 2 *down* (it was "execute
+  the safeguard well," not "fix a design flaw") and sharpened point 1 *up* (into the
+  structural anti-restratification rule). Doctrine-by-analogy applies to one's own
+  words, not just inherited code.
+- **A concurrent sweep-commit absorbed my in-progress work mid-session.** The owner
+  committed my uncommitted ADR-173 + graph-estate + continuity into `3f01a5e8` while
+  I worked; a provisional file (`field-cardinality.ts`) appeared then vanished as a
+  parallel back-out executed. Nothing lost, but the git picture went stale twice.
+  When a file appears/disappears unexpectedly, re-ground `git status` + HEAD before
+  acting — do not trust the session-start snapshot in a live multi-agent window.

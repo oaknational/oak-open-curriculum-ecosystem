@@ -1,5 +1,60 @@
 # Next-Session Record — `eef` thread
 
+> **GRAPH-ESTATE CONSOLIDATION PLAN — POINTS 1/2/3 ADDRESSED + ADR-173
+> DECONTAMINATED + t1 RATIFIED & FLIPPED (2026-06-01, Glittering Soaring Meteor /
+> `9d9b06`; claude / Opus 4.8; owner-directed).** Owner asked to reflect on
+> `connecting-oak-resources/knowledge-graph-integration/current/graph-estate-consolidation.plan.md`,
+> then to address three of the reflection points, run reviewers, and apply. Done:
+>
+> + **Point 3 (verify convenient claims):** grep-grounded the plan's "already
+>   done/removed" claims. Spine-pointer removal + EEF-README-done **verified true**;
+>   the blanket "zero `Inc.3` residue" was **false for docs** — ADR-173 +
+>   `graph-corpus-sdk/README.md:6` carried `Inc.3`. Corrected to a point-precise
+>   residue position.
+> + **Point 2 (t1 ratification risk → executed for real):** read all six t1 files;
+>   the substance-loss lens caught that **`kg-alignment-audit`,
+>   `kg-integration-quick-wins`, `agent-guidance-consolidation` are independent
+>   live work, NOT archive/park-blocked-on-EEF** (a mechanical sweep would have lost
+>   them). `open-education-knowledge-surfaces` → archive; `oak-kg-threads-surface` +
+>   `oak-misconceptions-subgraph` → park (MVP-arc scaffold retired). `assumptions-expert`
+>   ratified READY (agrees 6/6, no false-keep).
+> + **Point 1 (flatten):** four stratified "Inbound from …" sections collapsed into
+>   one verified `## Current state`, with an anti-restratification rule (hand-offs
+>   land in this thread record, not new plan sections) — in the section and the
+>   opening blockquote.
+> + **Reviewers:** code-expert (4/4 residue claims confirmed; caught an ADR-173/t7
+>   scope inconsistency), docs-adr-expert (flatten lossless; fixed a dead anchor +
+>   two stale frontmatter todos), assumptions-expert (READY). All findings
+>   critically assessed against live files, then applied.
+> + **ADR-173 fixed (committed in the concurrent sweep `3f01a5e8`):** post-acceptance
+>   hygiene amendment — stale "before promotion" sections cleared (Accepted
+>   2026-05-11), `Inc.3` adapter-sequencing retired (no live referent; substrate
+>   Inc.1/2/4 untouched).
+> + **t1 flipped to `completed`** (decision ratified). The remaining source-tree
+>   `Inc.3` (`graph-corpus-sdk/README.md:6`) is finishing-plan scope — owner-decision
+>   for when it's cleaned.
+>
+> **Current state:** t1 (decide) DONE; the entire execution unit (t2–t5, t7) is
+> decision-complete but **unexecuted** — no file has moved. t6 + final t8 criterion
+> are D7-gated.
+>
+> **Next safe step (owner-directed):** take up the graph-estate plan **after the EEF
+> work finishes**. Then execute t2+t3+t4 then t5+t7 as one ship-unit (the plan's
+> `## Execution sequence`), honouring the two assumptions-expert park-header
+> conditions at the t4 move. Two reviewer sonnet transcripts are in this session's
+> subagents dir if their detail is needed.
+>
+> Concurrent context: a sweep-commit (`3f01a5e8`, owner) absorbed this session's
+> ADR-173 edits + prior continuity + the field-cardinality back-out during the
+> session; my graph-estate-plan delta is the only uncommitted file. Active-claims
+> empty.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Glittering Soaring Meteor` | `claude` | `Opus 4.8` | `9d9b06` | `graph-estate-points-1-2-3-and-adr-173-decontamination` | 2026-06-01 | 2026-06-01 |
+>
+> ---
+>
 > **EEF PLAN + D3 REVIEW (grounded) + PLAN/​TABLE CURRENCY FIXES + A PROCESS
 > MISSTEP (2026-06-01, Dawnlit Dancing Satellite / `b91f7b`; claude / Opus 4.8;
 > owner-directed; HEAD `604ec53`; no commit).** Ran the owner-requested whole-plan
