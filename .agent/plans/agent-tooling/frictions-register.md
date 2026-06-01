@@ -143,11 +143,19 @@ below is a cross-reference index, not a second source of truth.
 - **Expected**: Per-file recovery — log the malformed file, skip it, and
   render the rest; emit a non-zero exit with a clear error summary so the
   fault is visible without blocking the substrate.
-- **Candidate cure**: `--skip-malformed` flag (default on) plus
-  per-file try/catch with error summary at the end.
-- **Target surface**: `agent-tools/src/collaboration-state/cli-comms-commands.ts`
-- **Status**: open — legacy optional-field compatibility partially fixed;
-  malformed-file skip/reporting remains
+- **Candidate cure** (revised 2026-06-01, owner direction): the original
+  `--skip-malformed` direction is **rejected** — tolerating corruption on read is
+  not a fix. The cure is prevention at the write (serialize via `JSON.stringify`
+  only, validate the serialized string round-trips and conforms, write atomically
+  via temp + rename) plus a loud, hard read-side failure that names the offending
+  file, plus a one-time repair of existing corruption and a gate-wired regression
+  guard.
+- **Target surface**: `agent-tools/src/collaboration-state/state-io.ts` (write
+  path) and `cli-comms-commands.ts` (render/read).
+- **Status**: addressed-in-plan —
+  [`agent-tooling/current/comms-event-write-integrity.plan.md`](current/comms-event-write-integrity.plan.md)
+  (one-time repair + absolute prevention + loud read + gate guard). Three corrupt
+  events were repaired by hand 2026-06-01; the plan removes the fault class.
 - **Review 2026-05-10**: still open. `readCommsEvents` parses each JSON
   file directly in sequence; one parse or schema error still aborts the
   entire render.
@@ -183,10 +191,11 @@ below is a cross-reference index, not a second source of truth.
   identity fields instead of the current `author` object shape. This
   is the *legacy-schema* sibling of the malformed-JSON case: the
   file parses as JSON but does not conform to the current event
-  schema. The `--skip-malformed` cure should extend to schema-shape
-  mismatches, not only parse failures, with a migration warning
-  surfacing the offending event path. Manual repair of the legacy
-  event file unblocked this instance.
+  schema. The plan's validation covers both — parse failures and
+  schema-shape mismatches are caught at the write (rejected before
+  the file is created) and surfaced loudly at read, with the
+  offending event path named. Manual repair of the legacy event file
+  unblocked this instance.
 
 ### F-06 — Build-on-each-CLI-invocation causes identity drift mid-session
 

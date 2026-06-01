@@ -19,6 +19,16 @@ surface.
 
 ## Current State
 
+- **Comms-event write-integrity plan authored (2026-06-01, Windswept Floating
+  Summit / `d8560c`)**: owner-directed fix for the comms-CLI corruption bug (three
+  events had bodies truncated into unterminated JSON; one aborts `comms render`
+  repo-wide). New queued executable plan
+  [`agent-tooling/current/comms-event-write-integrity.plan.md`](../../plans/agent-tooling/current/comms-event-write-integrity.plan.md):
+  one-time repair + absolute prevention (serialize via `JSON.stringify` only,
+  validate round-trip + schema, atomic temp+rename write), loud hard-fail on read,
+  gate-wired regression guard. Owner rejected the read-side `--skip-malformed`
+  tolerance; frictions-register F-05 updated to `addressed-in-plan`. Not started
+  (the active lane is EEF D2); awaits readiness reviewers + owner scheduling.
 - **Agentic mechanisms discovery planning (2026-06-01, Luminous Dancing Aurora /
   `019e82`, codex / GPT-5)**: researched Cloudflare Agent Skills Discovery
   against live official MCP/A2A/skills discovery standards context, wrote the
