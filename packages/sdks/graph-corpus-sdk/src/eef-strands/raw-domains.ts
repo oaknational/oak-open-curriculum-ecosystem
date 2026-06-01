@@ -3,20 +3,19 @@
  * headline-metric domains, and edge facts the downstream graph and MCP layers
  * narrow against.
  *
- * Two distinct domain families, read from two named source paths of one corpus,
- * never reconciled into a single hand-authored vocabulary:
+ * Two distinct domain families, each read from its own named source path in the
+ * one corpus:
  *
  * - **Observed applicability domains** — the phase/key-stage/priority values
  *   strands actually carry in `school_context_relevance`. These are the values a
  *   graph filter can match a strand on.
  * - **Declared metadata domains** — the enums the corpus *declares* in
- *   `school_context_schema`. Typed raw metadata only; a declared value becomes a
- *   D3 filter input only if D3 ratifies it and {@link declaredVsObservedDivergence}
- *   shows it yields a non-empty result.
+ *   `school_context_schema`. Typed raw metadata; D3 adopts a declared value as a
+ *   filter input after ratification confirms, via {@link declaredVsObservedDivergence},
+ *   that it yields a non-empty result.
  *
  * Everything here derives from {@link EEF_TOOLKIT_DATA} by `typeof`/indexed
- * access and deterministic projection; no array of keys, values, labels, or
- * thresholds is hand-maintained.
+ * access and deterministic projection.
  */
 import { EEF_TOOLKIT_DATA } from './eef-toolkit.external-data.js';
 import type { EefStrand, EefStrandId } from './strand-lookup.js';
@@ -105,10 +104,10 @@ function deriveObservedDomains(): {
 const OBSERVED = deriveObservedDomains();
 
 /**
- * Declared enum values that no strand carries, derived (not asserted) by
- * comparing each `school_context_schema` enum against the observed domains. A
- * declared value listed here yields an empty-but-valid filter result, so D3
- * must not adopt it as a filter input without ratification.
+ * Declared enum values that no strand carries, computed by comparing each
+ * `school_context_schema` enum against the observed domains. A declared value
+ * listed here yields an empty-but-valid filter result, so D3 adopts it as a
+ * filter input only after ratification.
  */
 export const declaredVsObservedDivergence: DeclaredVsObservedDivergence = {
   phase: EEF_TOOLKIT_DATA.school_context_schema.properties.phase.enum.filter(

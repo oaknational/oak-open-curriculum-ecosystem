@@ -1,14 +1,14 @@
 # EEF D2 source-path table
 
 The cross-cutting ledger the EEF graph-tool plan refers to as "the source-path
-table". It audits every data-derivation seam at once: each row maps a raw
+table". It audits every source path D2 currently projects: each row maps a raw
 `EEF_TOOLKIT_DATA` source path to the D2 projection that exposes it, the corpus
-cardinality (derived from the constant, not asserted), and the proof test.
+cardinality (computed from the constant), and the proof test.
 
 D2 derives these **exhaustively from what the corpus structurally holds**, ahead
-of D3. A row with no current D3 consumer is **retained, not trimmed**: D3 selects
-its subset from this table later, and D6's output schema marks every non-floor
-field optional to match the cardinality recorded here.
+of D3. Every row is retained for D3 to select its subset from later, and D6's
+output schema marks every non-floor field optional to match the cardinality
+recorded here.
 
 Cardinality legend: `N/30` = present on N of the 30 strands; `corpus-level` = a
 single corpus-wide value. All counts verified against
@@ -36,8 +36,8 @@ single corpus-wide value. All counts verified against
 
 ## Corpus-sparse per-strand evidence (project as optional downstream)
 
-These rows have no bound D3 consumer yet (D3 not ratified); they are retained so
-D3 can select from them and D6 can mark them optional to match presence.
+These rows are retained for D3 to select from and for D6 to mark optional to
+match presence; D3 binds its consumer subset when it is ratified.
 
 | Raw source path | D2 projection | Cardinality | Proof test |
 | --- | --- | --- | --- |

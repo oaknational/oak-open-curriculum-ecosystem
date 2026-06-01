@@ -193,8 +193,8 @@ exploration is isolated to D3 and D4 and is named there as explicit steps.
 
 2. **Zod appears only at the MCP tool input and output schemas.** Zod's job is
    parsing unknown *structure*. The corpus is a known constant, and every semantic
-   input is a *value drawn from a known finite vocabulary* (a strand key, a key
-   stage / phase, an EEF priority), narrowed by membership *predicate*
+   input is a *value drawn from a known finite vocabulary* (a strand key, a
+   phase value, a key-stage value, an EEF priority), narrowed by membership *predicate*
    (`value is T`, the ADR-153 house pattern; ADR-028 corroborating). The repo's
    validate-unknown doctrine (ADR-032/003) governs genuinely-unknown *structure*
    elsewhere. At the MCP protocol boundary the installed SDK
@@ -257,8 +257,7 @@ exploration is isolated to D3 and D4 and is named there as explicit steps.
 
 7. **Graph scope is the bound.** A graph returns a scoped subgraph bounded by graph
    structure (rootIds, depth, membership); an oversized result is a scoping bug
-   fixed by correcting the scope. D5 removes the `response-budget.ts` cap (rank
-   everything, cut to 12 strands for a token budget).
+   fixed by correcting the scope. D5 removes the `response-budget.ts` cap.
 
 8. **Fixed `as const` constants are compile-time constructed (ADR-038).** ADR-038
    (Compilation-Time Revolution) covers any fully-known compile-time constant,
@@ -328,11 +327,12 @@ answers *what to teach*.
 
 EEF relevance is a function of the **pedagogical move**, expressed through EEF's
 own axes: the approach itself (a strand), the EEF priority (e.g. closing the
-disadvantage gap, improving reading), the key stage / phase, and the
-impact/cost/evidence-strength leverage lens that answers the cover-lesson
-teacher's real question — *what is high-impact for low effort here.* Every one of
-these axes is a finite value drawn from the fixed EEF data, so each input the EEF
-tool accepts is a known key from the corpus.
+disadvantage gap, improving reading), the phase and the key stage, and the
+headline metric values (impact months, cost, evidence strength). Each of these is
+a finite value drawn from the fixed EEF data, so each input the EEF tool accepts
+is a known key from the corpus. Weighing those metrics for leverage — what is
+high-impact for low effort — is the invoking agent's reasoning (Decision 10), not
+a tool input.
 
 **Where the value intersects Oak's tools (the workflow).** The value surfaces
 while the assistant is adapting an Oak lesson, at the moment Oak's *own* tools
@@ -462,11 +462,10 @@ It should not bring EEF in for curriculum retrieval alone.
 logging. They are not teacher-facing evidence context and do not create a
 freshness obligation in the value contract.
 
-The D1 value criteria are implementation-independent. They are not satisfied by
-old capped-list behaviour, preservation of the old list output, or output parity
-with the old tool. Any overlap with old output is
-acceptable only as an incidental result independently re-derived from ratified
-D1 value, D3 MCP surface, and D4/D5 graph structure.
+The D1 value criteria are implementation-independent: they are defined by teacher
+value, the ratified evidence contract, and the D7 proof obligations. An
+implementation satisfies them only by genuine derivation from ratified D1 value,
+the D3 MCP surface, and D4/D5 graph structure.
 
 ### Teacher-facing evidence field set (V1)
 
@@ -481,7 +480,7 @@ strand carries them: `effectiveness.{summary, mechanisms}` (7 of 30 strands),
 `implementation.common_pitfalls` (`implementation` on 4 of 30, `common_pitfalls`
 on 2 of 30), `school_context_relevance` (17 of 30) — and, nested under
 `school_context_relevance` where present, `behind_the_average_by_phase` and
-`applications`, so the evidence answers *at which key stage* (for example
+`applications`, so the evidence answers *at which phase* (for example
 `eef-tl-feedback` primary 7 / secondary 5; oral 7 / written 5) —
 `related_strands` (17 of 30), and the strand's `related_guidance_reports`
 (7 of 30, surfaced per the D4 disposition). The corpus-level `meta.caveats` are
@@ -514,7 +513,7 @@ particular.
 
 The corollary that holds for this system specifically: **every semantic boundary
 here narrows a value into a KNOWN FINITE SET** - a strand key, an EEF priority, a
-key stage / phase value, or a raw headline metric value/label present in the fixed
+phase value, a key-stage value, or a raw headline metric value/label present in the fixed
 EEF data (`impact_months`, `cost_rating`, `cost_label`,
 `evidence_strength_rating`, `evidence_strength_label`). Subject and topic are Oak
 workflow context. Narrowing into a known set is a type-guard predicate
@@ -847,7 +846,8 @@ structuredContent-only, not dual-content output.
   graph tools it composes. The MCP surface composes graph tools as it needs.
 - The EEF tool's inputs are the finite keys of the fixed EEF data: an
   `EefStrandId` selected by the invoking agent, an observed graph-projectable EEF
-  priority, an observed graph-projectable key-stage / phase value, and exact-value
+  priority, an observed graph-projectable phase value, an observed
+  graph-projectable key-stage value, and exact-value
   filters over graph-projected raw headline metric domains (`impact_months`,
   `cost_rating`, `cost_label`, `evidence_strength_rating`,
   `evidence_strength_label`). Every input is a known value from the corpus or a
@@ -1106,11 +1106,10 @@ primitives.
   contract is replaced (the live `graph-view` contract is replaced fresh in D5). The existing non-EEF empty stub is consumer-impact evidence
   only; it is not a model for the EEF graph-tool surface and does not authorise
   any new stub. A type may be named `SubgraphResult` only if D4 freshly defines
-  that name and structure from the new graph contract. The old list implementation
-  has been deleted by D2 and is never preserved, repaired, wrapped, consulted, or
-  used as a behaviour target. Record the consumer-impact finding as a named
-  artefact and have an architecture reviewer sign it off before the interface
-  change lands in D5.
+  that name and structure from the new graph contract. The D4 contract derives
+  solely from the D3 consumer requirements and the D2 raw foundation. Record the
+  consumer-impact finding as a named artefact and have an architecture reviewer
+  sign it off before the interface change lands in D5.
 - Specify the deletion of the speculative `EvidenceCorpus` `rank`/`explain`/
   `compare` ops and their `NotImplementedYet` (D5 executes; the `graph-corpus-sdk`
   barrel re-exports these types and is pruned in the same landing).
@@ -1206,17 +1205,12 @@ real corpus with the typed id/payload relationship asserted.
   their own typed evidence fields. Whether `data_version`/`last_updated` are
   surfaced is the D1 value-contract's call - they carry no governance or freshness
   semantics here.
-- Verify the D2-deleted load/list/Zod/freshness path remains absent:
-  no `loader.ts`, `loadEefCorpus`, `freshness.ts`, `checkFreshness`,
-  `DEFAULT_THRESHOLD_DAYS`, `Freshness*` types, loader/freshness tests,
-  list-shaped EEF tool, package re-export, or ADR-175 code reference is
-  reintroduced. The graph constructor/adaptor is the only ingest path from the D2
-  raw foundation to the D4 graph projection.
-- Verify the deleted stub ops and the `rank`/`explain`/`compare` (EvidenceCorpus)
-  ops stay absent, and delete any remaining response-cap artefact. The EEF binding
-  derives its operations from the D4 contract and the D2 raw foundation; each
-  D4-ratified operation is implemented with logic and tests, or it is unexported
-  (the single invariant, Decision 6).
+- The graph constructor/adaptor is the only ingest path from the D2 raw
+  foundation to the D4 graph projection; a module-import graph from the D2
+  foundation confirms it.
+- The EEF binding derives its operations from the D4 contract and the D2 raw
+  foundation; each D4-ratified operation is implemented with real graph-derived
+  logic and tests, or it is unexported (the single invariant, Decision 6).
 
 **Done when (acceptance):**
 
@@ -1225,21 +1219,17 @@ real corpus with the typed id/payload relationship asserted.
 - Worked contexts return complete full-node members and all member edges, pinned
   as literal id sets from the committed corpus.
 - Frontier references are present when related strands sit outside the members.
-- The freshness apparatus is gone: no `freshness.ts`, `checkFreshness`,
-  `DEFAULT_THRESHOLD_DAYS`, `Freshness*` type, loader binding, or freshness test
-  remains, and the package re-exports are removed.
-- No corpus `safeParse`, `EefToolkitSchema`, `strand-schema.ts`, fixed-corpus
-  `unknown` path, response cap, or rank-and-cut code remains; no type assertion
-  recovers corpus shape.
+- All corpus access in the graph-corpus-sdk EEF stack is direct typed projection
+  from `EEF_TOOLKIT_DATA` through the graph constructor; the ingest is total and
+  infallible for data-shape purposes.
 - A graph-constructor unit test over the real corpus proves the graph-native
   construction/adaptation boundary and a provenance-on-envelope test co-lands with
   the construction code. The test must include the typed id/payload relationship
   and derived literal edge endpoints, not only runtime shape presence.
 - Compile-time proof covers graph-core public result/error types preserving
   `TNodeId` and the EEF binding instantiating them with `EefStrandId`.
-- The old list tool remains absent.
-- No replacement surface is registered or exported unless it is backed by real
-  graph-derived behaviour and tests in the same landing.
+- Every registered or exported surface is backed by real graph-derived behaviour
+  and tests in the same landing.
 
 **Proof:** `unit` + `integration` over the real corpus. Command:
 `pnpm --filter @oaknational/graph-corpus-sdk test` +
@@ -1295,14 +1285,10 @@ deleted, and the ADR-179 boundary that keeps MCP types out of substrate packages
 - Update the EEF prompt, interpretation resource/template, and tool descriptions
   for cover-lesson preparation: evidence use, caveat preservation, and when not
   to use EEF.
-- Verify the superseded list-shaped `eef-explore-evidence-for-context`
-  implementation deleted in D2 remains absent while implementing the graph surface
-  from the ratified D3-D5 structure. `projection.ts`, `response-budget.ts`, dual
-  content output, citation revalidation, tool-level Zod validation, and
-  `evidence-corpus/citation-shape.ts` do not return. Re-express any genuine
-  citation-envelope invariant (non-empty caveats, valid `eef_url`) as a TypeScript
-  tuple type (`readonly [T, ...T[]]`), not Zod. The old list implementation is
-  never preserved, repaired, wrapped, consulted, or used as a behaviour target.
+- Implement the EEF MCP surface exclusively from the ratified D3-D5 graph
+  contract, deriving tool/resource/prompt behaviour from the graph-native EEF
+  view. Express any genuine citation-envelope invariant (non-empty caveats, valid
+  `eef_url`) as a TypeScript tuple type (`readonly [T, ...T[]]`).
 
 **Done when (acceptance):**
 
@@ -1330,10 +1316,9 @@ deleted, and the ADR-179 boundary that keeps MCP types out of substrate packages
   schema and `isError: true` error payloads skip output validation. Boundary
   tests cover non-object envelopes, unknown properties, invalid ids, invalid
   finite-vocabulary values, and error responses.
-- The old list-shaped tool implementation and its projection, validation, cap,
-  citation-revalidation, and dual-content logic are gone. Any identical output
-  produced by the new surface is acceptable only when it follows from the ratified
-  D3-D5 structure and tests, not from preserving the old implementation.
+- The registered EEF MCP surface is derived from the ratified D3-D5 graph
+  contract and tested against the real corpus; every output it produces follows
+  from graph-derived logic and co-landed tests.
 
 **Proof:** `integration` (registration + flag co-gating + structuredContent).
 Command: `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test`.

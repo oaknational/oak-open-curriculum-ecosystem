@@ -5,10 +5,8 @@
  * These are the worked exemplars of the corpus-is-its-own-type-authority
  * doctrine: every type and the runtime lookup derive from
  * {@link EEF_TOOLKIT_DATA} by `typeof` + indexed access and a runtime
- * type-predicate — zero hand-maintained parallel types, zero type assertions,
- * no runtime parse. They live in this gate-checked module (not the
- * duplication-excluded `*.external-data.ts` snapshot) precisely because they
- * are logic and derived types, not raw data.
+ * type-predicate. They live in this gate-checked module as derived logic; the
+ * raw data lives in the duplication-excluded `*.external-data.ts` snapshot.
  */
 import { EEF_TOOLKIT_DATA } from './eef-toolkit.external-data.js';
 

@@ -6,8 +6,7 @@
  * licence/attribution, coverage, caveats, and the impact/cost/evidence-strength
  * methodology. They travel once per envelope as provenance (D5) and seed the
  * interpretation resource's reasoning scaffold (D3). Every value derives by
- * direct reference or `typeof` from {@link EEF_TOOLKIT_DATA}; nothing is
- * hand-maintained or re-described beside the data.
+ * direct reference or `typeof` from {@link EEF_TOOLKIT_DATA}.
  */
 import { EEF_TOOLKIT_DATA } from './eef-toolkit.external-data.js';
 
