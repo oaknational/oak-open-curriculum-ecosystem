@@ -1,5 +1,49 @@
 # Next-Session Record — `eef` thread
 
+> **EEF D2 LANDED + CONTAMINATION-CORRECTION ARC (2026-06-01, Lunar Transiting
+> Eclipse / `9cde59`; claude / Opus 4.8; owner-directed).** D2 (the typed
+> raw-corpus foundation) is COMPLETE and committed `9019bb86`, green + reviewed
+> (code/type/test experts): `EefStrand`/`EefStrandId`/`EefStrandById` derived from
+> the `as const` corpus (the `z.infer` name repointed), `isValidStrandKey`, the
+> observed/declared domains + the declared-vs-observed divergence (phase:
+> post_16/all_through/special; keyStage: KS5; priority:
+> improving_attendance/teacher_retention), related-strand edges, corpus
+> provenance, and the source-path table with its cardinality column
+> (`eef/current/eef-d2-source-path-table.md`). The old list-shaped EEF surface was
+> removed across three workspaces (graph-corpus-sdk + oak-curriculum-sdk + the
+> streamable-http app); `OAK_CURRICULUM_MCP_EEF_ENABLED` is a dormant seam for D6.
+> Clean green atomic removal — no red window needed.
+>
+> **Contamination correction (owner-caught).** A fabricated key-stage→phase
+> mapping — the corpus holds phase and key-stage as two independent fields with no
+> correspondence — had been carried into the canonical plan from a deleted prompt.
+> Removed it; ran an independent 4-lane grounding audit against `EEF_TOOLKIT_DATA`
+> (which caught a second grounding error — `behind_the_average_by_phase` "at which
+> key stage" → "at which phase" — and the "key stage / phase" composite-axis
+> shorthand); completed a tombstone disposition pass over the plan (commits
+> `fb7ad234`, `70ccbef8`, `75b0734a`, `6d0fbbfd`). Lesson in Claude auto-memory:
+> `harvest-from-deleted-is-contamination-vector` — deleting failed content, save
+> nothing by default; anything carried must cite a corpus path or be tagged
+> agent-side.
+>
+> **Next safe steps.**
+>
+> 1. **Make a real rule.** The cite-or-tag corpus-grounding discipline landed as a
+>    stopgap doc (`eef/reference/eef-corpus-grounding.md`), NOT via the real
+>    rule-creation path. Recreate it properly (graduation / `.agent/rules/` +
+>    loaders / `new-rule-vs-pdr-clause`), EEF-scoped and NOT always-on; retire the
+>    stopgap.
+> 2. **D3** (MCP tool/resource/prompt contract) is the next plan deliverable —
+>    owner-ratified, `mcp-expert` SDK-registration verification pending.
+> 3. **Graph-estate-consolidation plan needs a currency update + execution**: its
+>    "Verified state to inherit" presents D2-deleted surfaces as live; refresh it
+>    and add an "Inbound from EEF D2" section first, then execute t1–t8 (mostly
+>    pending; ~1–2 focused sessions; t7 largest; t6 deferred until D7).
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Lunar Transiting Eclipse` | `claude` | `Opus 4.8` | `9cde59` | `eef-d2-implementation-and-contamination-correction` | 2026-06-01 | 2026-06-01 |
+>
 > **EEF PLAN SEAM-MAPPING + GROUNDED REVIEW CORRECTIONS (2026-06-01, Windswept
 > Floating Summit / `d8560c`; claude / Opus 4.8; owner-directed, no pnpm check,
 > commit).** Ran the two owner-requested reviews of the live plan — whole-plan

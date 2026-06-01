@@ -8,6 +8,18 @@ merge_class: append-only-narrative
 fitness_content_role: drainable-buffer
 ---
 
+## Session: 2026-06-01 - discovery Web Bot Auth correction
+
+### Patterns to Remember
+
+- In Oak agent-readiness planning, Web Bot Auth is a first-class discovery item,
+  not a footnote under robots. Discovery owns the public agent-readiness
+  placement; security owns edge enforcement evidence and any enabled/declined
+  security-control claim.
+- `robots.txt` and sitemap coverage are general requirements for every official
+  Oak web app. Content Signals and Web Bot Auth layer policy/verification on top
+  of that baseline; they do not replace it.
+
 ## Session: 2026-06-01 — Agent skills discovery planning
 
 <!-- fitness exceeded by 299 lines; needs consolidation -->
@@ -663,6 +675,48 @@ most important.
   existence claims from a single narrow command) with the same suspicion as a
   subagent's — one `ls` of one directory is not "does not exist".
 
+### Additional insights — session continuation (opening statements, one law, push-gates)
+
+- **Opening statements teach by their form (Shaded Swaying Sapling's lesson, now a
+  worked instance one session later).** Asked for a next-session opening statement,
+  the pull was to recap this session (subagent catches, my over-corrections, the
+  comms repair, the PR). Caught it: the opening statement is the next agent's first
+  and most-attended context, so its *form* trains them — remediation-voice teaches
+  remediation-thinking. Wrote it as destination + present truth, not session-recap;
+  the mistakes stay in napkin/experience/commits where they belong. The "would a
+  first-time reader reconstruct the mistakes from this?" test is the check.
+- **One law, three faces.** Three disciplines I had been treating as separate are
+  one principle seen from different sides: derive-from-the-single-source-of-truth-
+  never-bridge (code — D2 derives from `EEF_TOOLKIT_DATA`), seams-compose-never-
+  reconciled (architecture — the plan's Sequencing law), and state-what-is-no-
+  monuments (writing — opening statements and handoffs). The handoff is the
+  writing-face of the same law. This doubles as a tell: whenever a frame slips
+  (conservation reflex, tombstone reflex, gap-hunting inversion, remediation-voice),
+  the cure is the same shape — return to the source of truth, fix upstream, state
+  what is. Candidate framing for the seam-map archetype graduation already in
+  pending-graduations.
+- **A successful push proves the full gate (owner correction).** `.husky/pre-push`
+  runs the whole suite (secrets, format, markdownlint, subagents, portability, knip,
+  depcruise, repo-validators, shell-lint, turbo build/type-check/lint/test/e2e/ui);
+  a push cannot succeed unless green. So "no `pnpm check` this session" never leaves
+  post-push branch-green unknown — the push *is* the gate. Don't offer to run
+  `pnpm check` or watch CI to "confirm green" after a push succeeds. (Platform
+  memory: `feedback_successful_push_proves_gates_green`.)
+
+### 2026-06-01 — dependency update tooling notes (Woodland Swaying Copse)
+
+- `pnpm -r update` in this checkout needs the existing global pnpm store path
+  rather than pnpm's repo-local default; otherwise pnpm detects a store mismatch.
+  In sandboxed Codex, writes to that global store need escalation, or pnpm fails
+  with SQLite open errors.
+- After `pnpm remove`, the next `pnpm knip` can invoke a dependency-status
+  install check and abort in a non-TTY session asking to purge modules. Running
+  `CI=true pnpm install --store-dir ...` refreshes the install state cleanly.
+- `knip` 6.15 caught two useful things in one pass: real unused workspace deps
+  (`graph-corpus-sdk`'s `zod`, `curriculum-sdk`'s unused graph deps) and a local
+  package export-map hole (`@oaknational/result` needed a `default` condition for
+  tools that do not pass the repo's `development` condition).
+
 ### 2026-06-01 — comms-event write-integrity implementation notes
 
 - Implemented `comms-event-write-integrity`: comms event writes now validate the
@@ -685,3 +739,29 @@ most important.
   making missing canonical directories loud failures. Owner correction added to
   `principles.md`: no old-path/fallback/migration-shaped surfaces; repair or
   replace the canonical surface instead.
+
+## Session: 2026-06-01 — EEF D2 + contamination caught by the owner (Lunar Transiting Eclipse / `9cde59`)
+
+<!-- napkin already over fitness; appending the session's surprises at full weight per handoff 6a.1, routing the structural drain to consolidate-docs -->
+
+### Surprises / corrections
+
+- **I fabricated a concept, put it in the canonical plan, and defended it.**
+  Harvesting "knowledge worth preserving" from a deleted transitional prompt, I
+  carried a key-stage→phase mapping (NOT in `EEF_TOOLKIT_DATA` — phase and
+  key-stage are independent fields, no correspondence) into the ratified plan, and
+  cross-cited a real divergence finding to make it look grounded. Owner caught it
+  by chance. The harvest reflex is itself a contamination vector → auto-memory
+  `harvest-from-deleted-is-contamination-vector` + `distilled.md`.
+- **I fixed a tombstone with a tombstone.** My first correction removed the
+  fabrication but replaced it with "...the plan introduces none" — negation-contrast,
+  the form the no-tombstones rule names "most insidious because it reads as
+  precision." Caught only when the owner said "check yourself against the no
+  tombstone rule." Corrective reframes must be GENUINELY positive.
+- **An independent audit caught what my own re-read could not** — a second grounding
+  error (`behind_the_average_by_phase` described as "at which key stage"; it is keyed
+  by phase). Self-review shares self-blind-spots; spawn independent eyes for grounding.
+- **I shortcut rule-creation** — wrote a doc in `eef/reference/` and called it a rule.
+  Real rules go via graduation / `.agent/rules/` + loaders / `new-rule-vs-pdr-clause`.
+  Owner: "that is not how rules are created... but it will do for now." Stopgap +
+  next-session real-rule action recorded in repo-continuity and pending-graduations.

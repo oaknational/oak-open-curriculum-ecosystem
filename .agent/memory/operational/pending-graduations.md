@@ -1546,3 +1546,24 @@ agent comms events total (vs the 6+ this cycle used).
 feedback (sidebar shape is the lightest); composes with `coordinator-role-threshold`
 (n≤3 is peer-collaboration default; n=2 is the lightest case); composes with PDR-082
 (n=2 collaboration mode, drafted by Stormy Surfing Dock 2026-05-25 on this substrate).
+
+## EEF cite-or-tag corpus-grounding discipline → real rule
+
+- **captured-date**: 2026-06-01
+- **source-surface**: `eef` thread; stopgap doc `eef/reference/eef-corpus-grounding.md`
+- **graduation-target**: a properly-created rule via the real path (graduation /
+  `.agent/rules/` + cross-platform loaders / `new-rule-vs-pdr-clause`), **EEF-scoped
+  and NOT always-on**
+- **trigger-condition**: next session picking up the EEF thread (owner-directed
+  2026-06-01: "that is not how rules are created... make a real rule")
+- **status**: due — owner-directed; the discipline exists only as a stopgap doc and
+  must be recreated through the real rule path, then the stopgap retired
+- **substance**: every claim about `EEF_TOOLKIT_DATA` cites a real source path or is
+  tagged agent-side; pairs with `no-tombstones-for-removed-ideas`; both enforced by a
+  human/agent **disposition pass** at EEF-doc-change time (a regex detector was
+  rejected — it cannot distinguish a genuine tombstone from a legitimate
+  delete-instruction). Origin: a fabricated key-stage→phase concept reached the
+  canonical plan; see auto-memory `harvest-from-deleted-is-contamination-vector`.
+- **open question folded in**: how does a *not-always-on, domain-scoped* rule live,
+  given the `.agent/rules/` tier is always-on by construction? Resolve the
+  scoped-rule home as part of the graduation.

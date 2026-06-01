@@ -17,6 +17,20 @@ fitness_rationale: >-
   substance rather than trimming the lesson.
 ---
 
+## 2026-06-01 — archived means archived: remove references, don't repoint (Hearthlit Stoking Cinder)
+
+When quarantining a plan/doc to `archive/`, the live estate must STOP referencing
+it — remove the references (delete frontmatter pointers; de-link prose to plain
+text), never repoint them into the archive. Repointing N live references at the
+archived copy is the "no redirects" anti-pattern: it keeps the archive
+load-bearing in live navigation and dissolves the live/archived boundary. The
+single sanctioned inbound pointer is ONE archive-index note (`completed-plans.md`)
+recording where it went and what supersedes it. Caught mid-execution this session
+(owner: "archived means archived … not a bunch of links that dissolve the meaning
+of /archive/") after I had planned a uniform repoint. May merit a rule or PDR
+("archive is a terminal sink; one index note; no live→archive redirects"). Source:
+graph-spine quarantine, commit `5063456a`.
+
 ## 2026-05-31 — repair of invalid active-distilled archive move
 
 The prior source-buffer pass moved this active register into
@@ -38,3 +52,14 @@ could not deliver value: the data-shape work was the tail wagging the dog. Cure:
 front-load the value/user-journey trace as a standing design-time guard (live
 instance: `eef-value-trace.codex-brief.md`). Platform-memory mirror:
 `feedback_trace_user_value_before_tool_design`.
+
+**Deleting failed content is a contamination vector (2026-06-01, eef thread).**
+When archiving or removing wrong/superseded work, default to saving NOTHING from
+it; anything carried into a live doc must independently re-ground — cite a real
+source-of-truth path, or be tagged agent-side — never trusted because it was in
+the old artefact. A fabricated key-stage→phase concept rode out of a deleted EEF
+prompt into the ratified plan, cross-cited to a real finding to look grounded,
+caught only by chance. Pairs with no-tombstones: the corrective reframe must be
+genuinely positive, not a negation of the removed thing (caught fixing a tombstone
+with a tombstone this session). Auto-memory mirror:
+`harvest-from-deleted-is-contamination-vector`.

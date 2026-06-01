@@ -199,7 +199,7 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Windswept Floating Summit / plan seam-mapping + grounded review corrections / 2026-06-01 |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Lunar Transiting Eclipse / D2 implementation + contamination correction / 2026-06-01 |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | codex / GPT-5 / Umbral Whispering Silhouette / promotion-and-root-docs-author / 2026-06-01 |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | codex / GPT-5 / Blooming Twining Grove / longitudinal napkin review + deep handoff / 2026-05-31 |
 
@@ -254,20 +254,37 @@ not the current session-priority lane. Reactivation is owner-directed.
    cardinalities, Decision 10 (deterministic data; the agent is the only reasoner),
    and a rewritten `## Sequencing` carrying the seam taxonomy + the "seams compose,
    never reconciled" law.
-4. **Owner decision (2026-06-01): the next session does ONE more D2 review, then
-   implements D2.** D2 is the typed raw-data ingestion foundation per the live
-   plan's D2 Do/Done-when — derive `EefStrand`/`EefStrandId`/`EefStrandById` from
-   the `as const` corpus, implement `isValidStrandKey`, build the source-path table
-   (with the corpus-cardinality column added this session), and delete the old
-   load/list/Zod/freshness path outright (the plan's intentional in-flight red
-   window). TDD cycles; test and product code co-land. Begin implementation once
-   the D2 review confirms readiness. This is the first product-code execution on the
-   thread since D0 — `code-expert` (and the specialists it flags) run in the normal
-   loop after edits.
-5. The plan's D3/D4 PENDING reviewers fire later against the ratified D3/D4
-   outputs once those exist (unchanged trigger; the plan-body edits this session
-   were owner-directed corrections reviewed inline, not new ratified contracts).
-6. The seam-mapping taxonomy + "seams compose" law is a candidate for a reusable
+4. **D2 IS COMPLETE (2026-06-01, Lunar Transiting Eclipse, commit `9019bb86`,
+   green + reviewed by code/type/test experts).** The typed raw-corpus foundation
+   is built in `graph-corpus-sdk` (`EefStrand`/`EefStrandId`/`EefStrandById`/
+   `isValidStrandKey`, raw domains, declared-vs-observed divergence, related-strand
+   edges, corpus provenance); the old list-shaped EEF surface was removed across
+   three workspaces; `OAK_CURRICULUM_MCP_EEF_ENABLED` is a dormant seam for D6. The
+   source-path table is at `eef/current/eef-d2-source-path-table.md`.
+5. **Contamination-correction arc (2026-06-01, commits `fb7ad234`, `70ccbef8`,
+   `75b0734a`).** A fabricated key-stage→phase concept (the corpus holds phase and
+   key-stage as two independent fields with no mapping) reached the canonical plan
+   from a deleted prompt and was caught by the owner; removed, then an independent
+   grounding audit + tombstone disposition pass cleared it. Lesson in Claude
+   auto-memory (`harvest-from-deleted-is-contamination-vector`). **Next-session
+   action — make a real rule:** the cite-or-tag corpus-grounding discipline is a
+   stopgap doc at `eef/reference/eef-corpus-grounding.md`; recreate it via the real
+   rule path (graduation / `.agent/rules/` + loaders / `new-rule-vs-pdr-clause`),
+   EEF-scoped and NOT always-on; retire the stopgap.
+6. **D3 (MCP tool/resource/prompt contract) is the next plan deliverable** —
+   owner-ratified, `mcp-expert` SDK-registration verification pending. The D3/D4
+   PENDING reviewers fire against the ratified D3/D4 outputs once those exist.
+7. **Graph-estate-consolidation needs a currency update + execution**
+   (owner-flagged 2026-06-01). The contamination-remediation master plan at
+   `connecting-oak-resources/knowledge-graph-integration/current/graph-estate-consolidation.plan.md`
+   has a stale "Verified state to inherit": it presents D2-deleted surfaces
+   (`EefStrandsGraphView`, the `loadEefCorpus`/`selectEefSeedIds`/freshness path,
+   the EEF tool "shipping dark") as live/pending. First step: refresh that section
+   to post-D2 reality + add an "Inbound from EEF D2" section (this narrows t7's
+   concept sweep — the D2-deleted files no longer need it). Remaining remediation:
+   t1-t8 mostly pending (~1-2 focused doc-consolidation sessions; t7 largest; t6
+   deferred until finishing-plan D7).
+8. The seam-mapping taxonomy + "seams compose" law is a candidate for a reusable
    plan template/archetype (owner-confirmed intent); tracked in
    [`pending-graduations.md`](pending-graduations.md).
 
@@ -333,6 +350,21 @@ authority.
 - Shared memory/state files are always writable and commit-includable when dirty.
 
 ## Deep Consolidation Status
+
+**deep session handoff (2026-06-01, Lunar Transiting Eclipse — EEF D2 +
+contamination correction)**: `due — napkin.md is over its fitness limit and this
+session appended a full surprise block at weight; a consolidate-docs pass should
+rotate the napkin and graduate the cite-or-tag corpus-grounding discipline into a
+real rule (now in pending-graduations, status due). Deferred, not escalated this
+handoff: the consolidation is not well-bounded for this closeout and the owner
+asked for a deep handoff, not a consolidation pass. New capture this session:`
+`harvest-from-deleted-is-contamination-vector` (Claude auto-memory + distilled.md)
+and the cite-or-tag→real-rule graduation candidate. `pnpm check` cleanliness gate:
+the full aggregate check was NOT run this handoff; D2's three workspaces
+(`graph-corpus-sdk`, `curriculum-sdk`, the streamable-http app) were each verified
+green this session (test + type-check + lint) and every commit passed the
+`.husky/pre-commit` gate; the branch `feat/graph-tooling-tidyup` is unpushed, so
+the full pre-push gate is the next gate to clear.
 
 **light session handoff (2026-06-01, Luminous Dancing Aurora — agentic mechanisms
 discovery planning)**: `due — napkin.md remains above its fitness limit and the
