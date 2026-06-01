@@ -4346,6 +4346,136 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "1e1f48ce-df62-4566-9041-a9862069ca44",
+      "agent_id": {
+        "agent_name": "Solar Drifting Nebula",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7f",
+        "id": "8363f2c5-b624-5be5-90e4-e1b02e4bc1f7"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T20:56:52Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Correct D2 plan wording and re-review whole EEF graph-tool plan",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T21:01:05Z",
+        "closed_by": {
+          "agent_name": "Solar Drifting Nebula",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7f",
+          "id": "8363f2c5-b624-5be5-90e4-e1b02e4bc1f7"
+        },
+        "summary": "Corrected D2 plan wording and re-reviewed whole EEF plan; targeted markdown/prettier/diff checks green",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1e1f48ce-df62-4566-9041-a9862069ca44",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "8f26914a-2482-43ea-87c8-fa1f5e5113d8",
+      "agent_id": {
+        "agent_name": "Evergreen Budding Copse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7f",
+        "id": "89be843b-aff3-5563-a519-34caa6629f13"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T05:08:56Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Apply D2/D3 architecture reviewer fixes to EEF graph-tool completion plan",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T05:21:32Z",
+        "closed_by": {
+          "agent_name": "Evergreen Budding Copse",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7f",
+          "id": "89be843b-aff3-5563-a519-34caa6629f13"
+        },
+        "summary": "Applied EEF plan fixes from architecture review and owner correction: D2 deletes old load/list/Zod/freshness path outright, D3 requires source-path/no-crosswalk, D5 ingests raw foundation into graph projection, D6 registers only graph-derived surfaces; napkin updated.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8f26914a-2482-43ea-87c8-fa1f5e5113d8",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "43e16c3b-d000-40f1-ac5d-c3ccd91cc41e",
+      "agent_id": {
+        "agent_name": "Evergreen Budding Copse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7f",
+        "id": "89be843b-aff3-5563-a519-34caa6629f13"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T05:25:44Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit EEF replacement-plan handoff.",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T05:26:06Z",
+        "closed_by": {
+          "agent_name": "Evergreen Budding Copse",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7f",
+          "id": "89be843b-aff3-5563-a519-34caa6629f13"
+        },
+        "summary": "closed in same collaboration-state commit: docs(agent): update eef replacement handoff",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "43e16c3b-d000-40f1-ac5d-c3ccd91cc41e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

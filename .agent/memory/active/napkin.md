@@ -198,6 +198,33 @@ characters before running it.
   verification record. Do not let `mcp-expert` sign-off wording imply it already
   happened before the verification pass.
 - For the next EEF holistic pass, review the live plan and predecision research
+
+## Session: 2026-05-31 — Solar static-check correction
+
+### Mistakes Made
+
+- I repeated an already-known shell quoting error: ran an `rg` pattern containing
+  backticks around `EEF_TOOLKIT_DATA` inside double quotes, so `zsh` attempted
+  command substitution and printed `command not found`. No files changed from the
+  command. Behaviour change: for any `rg` pattern containing backticks, use single
+  quotes immediately; do not rely on memory that "I already know this" as a
+  substitute for the concrete shell-safe habit.
+- I reviewed EEF D2 and initially treated the current `school-context.ts` ->
+  `strand-schema.ts` dependency as evidence that deleting the hand-maintained
+  school-context lists/Zod in D2 might be wrong or should be deferred. Owner
+  correction: the fixed EEF data is the source of truth, and any list or
+  definition that is not a deterministic projection of that data is a failure to
+  remove. Behaviour change: review D2 through maximum user value, the D1 value
+  structure, and long-term architectural excellence. The right answer is not to
+  conserve current compile dependencies; it is to name the correct co-land or
+  refactor that removes non-source-of-truth surfaces while keeping the tree green.
+- Follow-up correction: "deterministic projection of the data" is not permission
+  to project MCP payloads/schemas directly from the raw corpus. D1's chain is raw
+  EEF data -> typed raw foundation -> graph-native EEF view -> named graph-view
+  subset/schema-builder -> single Zod call -> MCP schema. Behaviour change: keep
+  D2 as the raw foundation only; D3/D4/D5 must own the graph form and D6 projects
+  MCP schemas/payloads from that graph form, with traceability back to the raw
+  corpus.
   report together but keep their authority distinct: the plan owns the current
   contract, sequencing, and acceptance; the report supplies evidence, cautions,
   and decision-space grounding. A useful report finding should be adopted into
@@ -406,3 +433,54 @@ most important.
   explicit session-handoff full gate. It does not imply bypassing git hooks for a
   requested commit; the normal `git commit` hook chain may still run its own
   staged formatting, markdownlint, validators, shell lint, and turbo tasks.
+
+## Session: 2026-05-31 — Solar D2 review correction
+
+### Mistake Made
+
+- I accepted a reviewer suggestion to add a static no-survivor check for banned
+  EEF list/Zod names. Owner correction: that asserts negatives with the wrong
+  tool and builds a monument to the mistake. The right move is to look at the
+  files, remove or repoint the wrong surfaces, make sure the touched imports and
+  exports no longer keep them live, run normal gates, and move on. Behaviour
+  change: do not add permanent anti-mistake audit harnesses for deleted EEF
+  scaffolding unless there is a genuine recurring runtime boundary to protect.
+
+## Session: 2026-05-31 — Evergreen EEF D2 architecture review
+
+### Patterns to Remember
+
+- Four-way architecture review on EEF D2/D3 converged on one structural defect:
+  hard-coded Oak-signal-to-EEF-strand examples are a crosswalk, not a deterministic
+  transform of `EEF_TOOLKIT_DATA`. Even when the target values are real strand ids,
+  the mapping itself is a second data structure unless it is derived from corpus
+  fields by a named graph/tool operation.
+- D2/D3 alignment needs a source-path table mindset: every D3 finite input,
+  output field, interpretation field, and graph annotation must trace through
+  graph-native subset -> raw EEF source path -> proof. `methodology` and
+  `meta.caveats` are raw data too; do not leave them implicit when D3 consumes
+  interpretation/resource content.
+
+### Practice/tooling feedback
+
+- `pnpm agent-tools:collaboration-state -- claims list --active <path>` currently
+  rejected the documented positional path form with `No number after minus sign in
+  JSON at position 1`. Raw `active-claims.json` inspection showed no claims/queue.
+  Behaviour change: if claim-list parsing fails, inspect the registry directly and
+  record the helper friction rather than assuming overlap state.
+
+## Session: 2026-06-01 — EEF replacement discipline correction
+
+### Patterns to Remember
+
+- For the EEF graph plan, D2 deletes the wrong load/list/Zod/freshness path
+  outright. Do not defer deletion to preserve old imports, keep a compatibility
+  wrapper, or use the old list implementation as an expected-output target. The
+  raw EEF corpus is already complete in memory as `EEF_TOOLKIT_DATA`; D2 derives
+  typed raw facts from that fixed object graph, D5 ingests those facts into the
+  deterministic graph projection, and D6 registers only graph-derived MCP
+  surfaces.
+- During a fundamental replacement, a temporary red tree is acceptable only as a
+  named in-flight D2-D6 replacement state. The cure is the completed replacement
+  chain, not an alias, shim, fallback, side-by-side registration, or preserved
+  old-path barrel.

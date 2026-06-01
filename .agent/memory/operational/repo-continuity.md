@@ -19,6 +19,17 @@ surface.
 
 ## Current State
 
+- **EEF D2/D3-D6 replacement-plan correction applied (2026-06-01, Evergreen
+  Budding Copse / `019e7f`)**: the live EEF plan now incorporates the four
+  architecture-reviewer findings and the owner correction that there are no
+  wrappers, no compatibility layers, no remnants of the old list/load/Zod shape,
+  and no requirement to keep the tree green while the fundamental D2-D6
+  replacement is in flight. D2 is a typed raw-data ingestion foundation over the
+  complete in-memory `EEF_TOOLKIT_DATA` constant and deletes the old
+  load/list/Zod/freshness path outright. D3 requires a source-path table and no
+  Oak-signal/pedagogical-move crosswalk. D5 ingests the D2 raw foundation into the
+  D4-ratified deterministic graph-native EEF projection. D6 registers only
+  graph-derived MCP surfaces. Treat the live plan as the sole authority.
 - **EEF D1 complete + ancillary reports archived (2026-05-31, Kilned Crackling
   Ember / `019e7f`, committed at `a6ec6766`)**: D1 is ratified and complete in
   the live plan. EEF concepts, payload fields, resources, and schemas are
@@ -84,7 +95,7 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | codex / GPT-5 / Kilned Crackling Ember / D1 completion plan-archive closeout / 2026-05-31 |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | codex / GPT-5 / Evergreen Budding Copse / EEF D2-D6 replacement-plan correction + handoff / 2026-06-01 |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | codex / GPT-5 / Blooming Twining Grove / longitudinal napkin review + deep handoff / 2026-05-31 |
 
 ## Paused Threads
@@ -115,14 +126,19 @@ not the current session-priority lane. Reactivation is owner-directed.
    evidence-transmission, provenance, schema-derivation, and value-proof
    contracts.
 3. Treat the value reframe as controlling: EEF relevance is by pedagogical move on
-   EEF-native finite axes; the EEF tool takes the corpus's finite keys; the value
-   intersects Oak's misconception/prior-knowledge tools at the workflow level. The
-   D2 no-escape-hatches correction still holds: `EEF_TOOLKIT_DATA` is the only
-   source of truth; no separate vocab/key/value lists, glue, fallback paths, or
-   compatibility layers.
-4. Continue from `eef/current/eef-graph-tool-completion.plan.md` D2, or the
-   written D3 MCP contract artefact and SDK/app verification record, as the owner
-   directs. Do not use archived reports/briefs as live authority.
+   EEF-native finite axes; the EEF tool takes corpus-derived finite values; the
+   value intersects Oak's misconception/prior-knowledge tools at the workflow
+   level. The D2 no-escape-hatches correction still holds:
+   `EEF_TOOLKIT_DATA` is the only source of truth; no separate vocab/key/value
+   lists, glue, fallback paths, compatibility layers, or permanent
+   negative-audit monuments.
+4. Continue from `eef/current/eef-graph-tool-completion.plan.md` D2. D2's next
+   landing is definite: derive the typed raw-data ingestion foundation from the
+   complete in-memory `EEF_TOOLKIT_DATA` constant, record the D3 source-path table,
+   and delete the old school-context/strand-schema/load/list/Zod/freshness
+   surfaces outright. Do not reduce `loader.ts` to a wrapper, keep an old-path
+   barrel, preserve list output parity, or use archived reports/briefs as live
+   authority.
 
 ### Agentic-Engineering Curation
 
@@ -186,6 +202,14 @@ authority.
 - Shared memory/state files are always writable and commit-includable when dirty.
 
 ## Deep Consolidation Status
+
+**session-completion closeout (2026-06-01, Evergreen Budding Copse — EEF
+replacement-plan correction + handoff)**: `not due — owner explicitly requested
+session handoff, no pnpm check, no quality gates beyond the commit hook, and a
+commit of all files. Session work stayed inside the live EEF plan, EEF
+continuity, napkin capture, and collaboration-state closure; no new ADR/PDR/open
+question/deep-consolidation trigger was opened. Active claims and commit queue
+were empty before the handoff commit window`.
 
 **session-completion closeout (2026-05-31, Kilned Crackling Ember — EEF D1
 completion + archive closeout)**: `completed this handoff — owner explicitly

@@ -31,18 +31,21 @@ owner_scope: >-
   provenance-preserving projection from the raw EEF data. The schema is therefore
   derived from graph form, not raw data directly and not a plan-authored
   vocabulary. Failing that proof means the contract is wrong and must be corrected
-  at the owning architectural level. No secondary path is authorised. No Zod call
-  parses the corpus. ADR-175 (a
+  at the owning architectural level. No secondary path is authorised. No stub path
+  is authorised either: every exposed EEF tool, resource, prompt, graph operation,
+  and handler is implemented with real graph-derived logic and tests, or it is
+  absent. No Zod call parses the corpus. No runtime load path preserves the old
+  shape while the graph projection is built. ADR-175 (a
   little-used plan-promotion
   safeguard, mis-implemented as a freshness gate in code) is withdrawn (a
   newly-defined ADR lifecycle state) and its record deleted; its code is removed
-  in D5 with the loader/freshness deletion. The plan also decontaminates EEF
+  in D2 with the load/list/Zod/freshness deletion. The plan also decontaminates EEF
   plans and non-plan documentation of references to the discarded positions, with
   non-EEF plans left to their owning estate plans. Implementation must preserve
   the corpus's `as const` type information end to end.
 todos:
   - id: d0-fixed-data-doctrine
-    content: "DOCTRINE + VALIDATOR/GATE FIX + ESTATE DECONTAMINATION. D0 is COMPLETE and committed at `ce9745c7`: ADR-038 was generalised in-record to fully-known `as const` constants; ADR-157/173 were corrected away from the EEF Zod loader; ADR-175 was withdrawn and deleted with inbound references removed; the entire `validate-external-data-files` validator was DELETED (not trimmed to two rules); `strandById`/`StrandByStrandId`/`Strand`/`lastUpdated`/`EefToolkitData` were moved out of `.external-data.ts` into the checked foundation module; the EEF estate decontamination ledger was completed; full `pnpm check` was green. The red repo-validators gate was greened by deleting the obsolete validator, never by retyping the corpus to `unknown`. Freshness CODE removal lands later in D5 with the loader/freshness deletion."
+    content: "DOCTRINE + VALIDATOR/GATE FIX + ESTATE DECONTAMINATION. D0 is COMPLETE and committed at `ce9745c7`: ADR-038 was generalised in-record to fully-known `as const` constants; ADR-157/173 were corrected away from the EEF Zod loader; ADR-175 was withdrawn and deleted with inbound references removed; the entire `validate-external-data-files` validator was DELETED (not trimmed to two rules); `strandById`/`StrandByStrandId`/`Strand`/`lastUpdated`/`EefToolkitData` were moved out of `.external-data.ts` into the checked foundation module; the EEF estate decontamination ledger was completed; full `pnpm check` was green. The red repo-validators gate was greened by deleting the obsolete validator, never by retyping the corpus to `unknown`. Freshness CODE removal belongs to D2's deletion of the load/list/Zod/freshness path, not to a compatibility-preserving loader phase."
     status: completed
     depends_on: []
   - id: d1-value-impact-contract
@@ -50,23 +53,23 @@ todos:
     status: completed
     depends_on: []
   - id: d2-typed-raw-corpus-foundation
-    content: "Build the typed raw-corpus foundation from EEF_TOOLKIT_DATA: derive EefStrand (= (typeof EEF_TOOLKIT_DATA.strands)[number]), EefStrandId, EefToolkitData, and every phase/key-stage/priority vocabulary directly from the fixed object graph via typeof/indexed-access and derived projection helpers. The EEF data structure is the only source of truth: do not maintain separate lists of keys, values, field names, phases, priorities, key stages, or 'known vocab' constants. Any proposed tool input that cannot point directly at fixed known corpus data is an architectural misalignment, not D2 glue work. Complete the raw id-to-strand lookup, the related_strand edge facts, and metadata on top of the D0-relocated `StrandByStrandId`/`Strand`/`strandById` foundation. D2 does NOT settle the graph-native representation; D5 owns the explicit construction/adaptation boundary from this raw foundation into the graph-native EEF view. Implement isValidStrandKey backed by the id-to-strand lookup, with a named unit test (true for every real corpus id; false for a typo'd id, empty string, and a non-string). From school-context.ts delete ONLY the Zod schemas + drift guard; delete retained `EEF_PHASES`/`EEF_PRIORITIES`/`EEF_KEY_STAGES` tuples instead of proving or repairing them. Re-home EefStrand to the foundation and repoint every importer, but do NOT physically delete strand-schema.ts in D2 — loader.ts still imports EefToolkitSchema and index.ts re-exports it, so the file's deletion CO-LANDS with the loader/freshness removal in D5 (deletion-ordering rule: the tree must never go red). selection.ts/projection.ts/list-tool code is not a D2 product surface to preserve: if exact-union typing breaks that old implementation, remove or co-land the old list surface instead of repairing its behaviour. Test migration is SPLIT: structural-traversal tests keep synthetic purpose-built fixtures (real corpus ids are unique, so DuplicateStrandId cannot fire through the typed API and pinning corpus literals creates change-detectors); only corpus-grounded tests (key membership, vocabulary) use real members. `pnpm type-check` must be green immediately after D2 lands without preserving old list semantics (see the deletion-ordering rule). Brought forward; depends only on D0 and the corpus."
+    content: "Build the typed raw-data ingestion foundation from EEF_TOOLKIT_DATA: canonicalise the raw strand type as EefStrand (= (typeof EEF_TOOLKIT_DATA.strands)[number]), derive EefStrandId, EefStrandById, EefToolkitData, raw related_strand facts, corpus metadata, methodology/caveat/provenance facts, observed graph-filter domains, declared metadata domains, and raw headline metric domains directly from named source paths in the fixed raw object graph via typeof/indexed-access and deterministic raw projection helpers. The EEF data structure is the only source of truth: do not maintain separate lists of keys, values, field names, phases, priorities, key stages, metric values, metric labels, caveat classes, interpretation labels, crosswalks, or known-vocab constants. Any proposed tool input that cannot point directly at fixed known corpus data is an architectural misalignment, not D2 glue work. D2 is raw-foundation work only: it does not author teacher-facing payload fields, MCP input/output schemas, graph-native subsets, ranking/selection behaviour, output parity with the old tool, or the deterministic graph projection. D5 owns ingesting this raw foundation into the graph-native EEF projection, and D6 derives MCP schemas/payloads from named graph-view subsets, not raw data directly. Implement isValidStrandKey(value: unknown): value is EefStrandId backed by the id-to-strand lookup, with a named unit test. Delete every non-source-of-truth raw vocabulary/list/Zod/load/freshness surface outright: school-context tuples/Zod/drift guards, strand-schema, loader/loadEefCorpus, freshness, old-list selection/projection/tool code, old-list MCP registration, and package exports that keep any of them live. There is no compatibility wrapper, no bridge, no side-by-side path, and no obligation to keep the tree green while this fundamental replacement is in flight; the settlement proof comes from the completed D2-D6 chain. Test migration is split only by behaviour: structural graph tests may keep synthetic purpose-built fixtures; corpus-grounded tests use real corpus members and the source-path table. Brought forward; depends only on D0 and the corpus."
     status: pending
     depends_on: [d0-fixed-data-doctrine]
   - id: d3-mcp-tool-resource-contract
-    content: "Write and verify the owner-ratified D3 MCP surface from the D1 value contract, expressed through D2's raw-corpus types and the intended graph-native EEF view that D4 ratifies and D5 constructs/adapts. The practical-small surface is one deterministic EEF query/fetch tool with function/options dispatch, one EEF interpretation resource/template for applying the evidence, and one user-facing prompt for starting the teacher workflow. Classify every externally supplied tool field as a strand-key predicate or finite EEF-corpus-vocabulary predicate before D4 proceeds; if a value originates from Oak context, D3 must name the deterministic projection into an EEF corpus value before the tool boundary. Free-form teacher language is interpreted by the invoking agent before the tool call and never crosses into the deterministic tool. Subject/topic never become EEF tool inputs. The tool schema rule: the MCP tool INPUT schema and OUTPUT schema are each derived by a SINGLE Zod call on a named subset/schema-builder value typed from the graph-native EEF view — a deterministic, type-strict projection of graph form, with graph form itself derived from the raw EEF data; the schema is not a direct raw-data transform, hand-maintained parallel shape, plan-authored vocabulary, or corpus parser. Use `satisfies` or equivalent compile-time proof tying declarations to `structuredContent`. The schema root must serialise to an object (`type: object`, ruling out a root-level union). Confirm the installed MCP SDK + curriculum MCP app registration shapes in a separate D3 verification record: inputSchema/outputSchema are Zod-compatible, isError:true skips output validation, resources/resource templates and prompts register behind the flag, structuredContent-only results are valid, and the actual universal-tools/registerTool path can carry `outputSchema` directly. D3 is complete when the intended single-Zod-call graph-subset contract is specified, the named subset/schema-builder values are handed to D4, and SDK/app registration feasibility is verified; D4 ratifies the graph-native view and D6 implements the actual Zod calls."
+    content: "Write and verify the owner-ratified D3 MCP surface from the D1 value contract, expressed through D2's raw-corpus types and the intended graph-native EEF view that D4 ratifies and D5 constructs/adapts. The practical-small surface is one deterministic EEF query/fetch tool with function/options dispatch, one EEF interpretation resource/template for applying the evidence, and one user-facing prompt for starting the teacher workflow. D3 specifies only real surfaces D6 can implement end to end: no stub tools, placeholder resources, fake prompts, migration bridges, or deferred handlers enter the contract. Classify every externally supplied tool field as a strand-key predicate, finite EEF-corpus-vocabulary predicate, or graph-projected raw headline metric predicate before D4 proceeds; every field must trace through `contract field -> graph-native subset -> raw EEF source path -> proof test`. Free-form teacher language and Oak context are interpreted by the invoking agent before the tool call and never cross into the deterministic tool as raw semantics; D6 implements no hidden Oak-signal-category, pedagogical-move, misconception, prerequisite, quiz, text, subject, or topic mapping to EEF strand ids. Subject/topic never become EEF tool inputs. The tool schema rule: the MCP tool INPUT schema and OUTPUT schema are each derived by a SINGLE Zod call on a named subset/schema-builder value typed from the graph-native EEF view — a deterministic, type-strict projection of graph form, with graph form itself derived from the raw EEF data; the schema is not a direct raw-data transform, hand-maintained parallel shape, plan-authored vocabulary, or corpus parser. Use `satisfies` or equivalent compile-time proof tying declarations to `structuredContent`. The schema root must serialise to an object (`type: object`, ruling out a root-level union). Confirm the installed MCP SDK + curriculum MCP app registration shapes in a separate D3 verification record: inputSchema/outputSchema are Zod-compatible, isError:true skips output validation, resources/resource templates and prompts register behind the flag, structuredContent-only results are valid, and the actual universal-tools/registerTool path can carry `outputSchema` directly. D3 is complete when the intended single-Zod-call graph-subset contract is specified, the named subset/schema-builder values are handed to D4, and SDK/app registration feasibility is verified; D4 ratifies the graph-native view and D6 implements the actual Zod calls."
     status: pending
     depends_on: [d1-value-impact-contract, d2-typed-raw-corpus-foundation]
   - id: d4-graph-capability-contract
-    content: "RATIFY (non-code) the correct graph capability shape from D3, treating the existing graph-core GraphView query contract (7 ops: manifest + 6 fallible; 2 live, 5 NotImplementedYet) as input to be reshaped, NOT a fixed foundation. Split the target contract into graph-core primitives (domain-generic lookup/subgraph/frontier/result/error surfaces) and EEF/Oak binding operations (for example pedagogical-move evidence), so no EEF- or MCP-specific method lands in shared graph-core. Ratify the minimal graph-native EEF view contract before D5: owner package, node id/kind policy, edge/frontier shape, payload/provenance policy, and named schema-subset/schema-builder surfaces for D3/D6. Define the target domain-generic graph-core contract parameterised over TNode, TNodeId extends string, and TEdgeType; public graph-core result and error types must carry TNodeId, so the EEF binding carries EefStrandId through subgraph roots, edge endpoints, frontier refs, strand lookup inputs, and root-not-found errors after boundary narrowing. The actual graph-core reshape, deletion of the 5 NotImplementedYet ops, and deletion of the speculative rank/explain/compare corpus ops are CODE and land in D5/D6 TDD cycles, not here. Record the consumer-impact finding as a HARD gate before interface changes land: verified ZERO external-consumer blast radius (graph-ingest/graph-project use only the RDF substrate, the threads adapter is an empty stub), but bounded IN-PACKAGE edits are required - graph-core's own `src/index.ts` barrel re-exports the query types, `graph-view/index.unit.test.ts` hard-encodes the 7-op contract + NotImplementedYet, and the soon-deleted list tool imports the full old list surface (`SubgraphResult`, `loadEefCorpus`, `LoadEefCorpusError`, `selectEefSeedIds`, `capForBudget`, projection, validation, citations). An architecture reviewer signs off the operation set + consumer-impact record. Enumerate which graph-view exports are deleted/renamed/freshly defined by the new contract; a result type may keep the old name `SubgraphResult` only if D4 freshly ratifies that name and structure from the new graph contract. If D4 deletes/renames any old-list dependency, D5/D6 co-land or the old list tool is deleted first; nothing in the old list implementation is preserved or used as a source of truth."
+    content: "RATIFY (non-code) the correct graph capability shape from D3, treating the existing graph-core GraphView query contract (7 ops: manifest + 6 fallible; 2 live, 5 NotImplementedYet) as input to be reshaped, NOT a fixed foundation. Split the target contract into graph-core primitives (domain-generic lookup/subgraph/frontier/result/error surfaces) and EEF/Oak binding operations, so no EEF- or MCP-specific method lands in shared graph-core. Ratify the minimal graph-native EEF view contract before D5: owner package, node id/kind policy, edge/frontier shape, payload/provenance policy, and named schema-subset/schema-builder surfaces for D3/D6. Define the target domain-generic graph-core contract parameterised over TNode, TNodeId extends string, and TEdgeType; public graph-core result and error types must carry TNodeId, so the EEF binding carries EefStrandId through subgraph roots, edge endpoints, frontier refs, strand lookup inputs, and root-not-found errors after boundary narrowing. The actual graph-core reshape and deletion of the speculative rank/explain/compare corpus ops are CODE and land in D5 TDD cycles; no placeholder, future hook, fake implementation, new stub operation, old-list dependency, or Oak-signal-to-strand mapping may be specified. Record the consumer-impact finding as a HARD gate before interface changes land: verified ZERO external-consumer blast radius, with bounded IN-PACKAGE graph-core edits named. The old list tool is already gone from the D2 path and is not consumer-impact evidence to preserve. An architecture reviewer signs off the operation set + consumer-impact record. Enumerate which graph-view exports are deleted/renamed/freshly defined by the new contract; a result type may keep the old name `SubgraphResult` only if D4 freshly ratifies that name and structure from the new graph contract."
     status: pending
     depends_on: [d3-mcp-tool-resource-contract]
   - id: d5-graph-construction-methods
-    content: "Construct the D4-ratified graph-native EEF view from D2's raw-corpus foundation and implement the D4-ratified graph operations. The construction/adaptation boundary is explicit and pure: it may materialise a standardised graph-native shape or expose a lazy view, but it must exist so graph operations, MCP schemas, traversal semantics, and provenance derive from the graph-native view rather than scattered assumptions about the raw corpus. The raw data is definitively not the graph contract, even where a graph-native projection retains raw fields verbatim; the graph-native view must be a typed projection from Strand, StrandByStrandId, EefStrandId, and derived edge facts, preserving exact ids and per-strand payload relationships. Implement graph-core public result/error types with TNodeId so EEF roots, edge endpoints, frontier refs, lookup inputs, and root-not-found errors are EefStrandId, not broad string. Replace loadEefCorpus with the pure infallible graph constructor/adaptor and remove the loader path entirely. WITHDRAW the freshness apparatus in full: delete freshness.ts, checkFreshness, DEFAULT_THRESHOLD_DAYS, the Freshness* types, freshness.unit.test.ts, the loader.ts binding + freshness tests, the package index re-exports, and every ADR-175 code reference. Delete every NotImplementedYet stub and the list-era response cap unconditionally. If deleting loader/freshness/cap/projection surfaces would break the still-live old list tool, D5 and D6 co-land and the list tool is removed in the same atomic tranche; do not keep, repair, wrap, or consult list-based logic. Surface source attribution and caveats as additive provenance on the subgraph envelope (teacher value, not a freshness obligation) without flattening per-strand evidence fields unless the graph-native projection preserves a named type-level link to the raw source strand; whether last_updated is shown is the D1 value-contract's call. Co-land replacement tests: a graph-constructor test over the real corpus, typed-id/result compile-time proof, and a provenance-on-envelope test."
+    content: "Ingest D2's typed raw-data foundation into the D4-ratified deterministic graph-native EEF projection and implement the D4-ratified graph operations. The construction/adaptation boundary is explicit and pure: it may materialise a standardised graph-native shape or expose a lazy view, but graph operations, MCP schemas, traversal semantics, and provenance derive from the graph-native view rather than scattered assumptions about the raw corpus. The raw data is definitively not the graph contract, even where a graph-native projection retains raw fields verbatim; the graph-native view must be a typed projection from EefStrand, EefStrandById, EefStrandId, and derived edge facts, preserving exact ids and per-strand payload relationships. Implement graph-core public result/error types with TNodeId so EEF roots, edge endpoints, frontier refs, lookup inputs, and root-not-found errors are EefStrandId, not broad string. Verify the D2-deleted load/list/Zod/freshness path remains absent; do not recreate loadEefCorpus, loader.ts, freshness, list logic, response caps, NotImplementedYet stubs, rank/explain/compare placeholders, wrappers, or fake graph methods. Surface source attribution and caveats as additive provenance on the subgraph envelope without flattening per-strand evidence fields unless the graph-native projection preserves a named type-level link to the raw source strand. Co-land replacement tests: a graph-constructor test over the real corpus, typed-id/result compile-time proof, and a provenance-on-envelope test."
     status: pending
     depends_on: [d2-typed-raw-corpus-foundation, d4-graph-capability-contract]
   - id: d6-mcp-composition-eef-surface
-    content: "Build the EEF-specific MCP composition module in the curriculum consumer layer and register the ratified EEF tool/resource/prompt surface behind OAK_CURRICULUM_MCP_EEF_ENABLED with structuredContent-only tool results. Do not extract a generic corpus-tool factory until a real second consumer exists. The tool INPUT schema and OUTPUT schema are each derived by a SINGLE Zod call on a named subset/schema-builder value typed from the graph-native EEF view (a deterministic, type-strict projection of graph form, with graph form itself derived from the raw EEF data; not a direct raw-data transform, hand-maintained parallel shape, or plan-authored vocabulary; root `type: object`); use `satisfies` or equivalent compile-time proof tying declarations to `structuredContent`. These are the only Zod schemas in the EEF graph stack (Decision 2). Error returns use isError:true so the SDK skips output validation. Ensure `outputSchema` reaches the actual `server.registerTool`/`registerAppTool` call by replacing any current universal-tools segment that cannot carry it. Implement the EEF interpretation resource/template and update the user-facing EEF prompt; delete the superseded list-shaped eef-explore-evidence-for-context implementation (projection.ts, response-budget.ts, dual content, citation revalidation, and the hand-authored parallel Zod schemas in tool-definition.ts/validation.ts) and implement the graph surface from the ratified D3-D5 structure; delete citation-shape.ts at evidence-corpus/citation-shape.ts (one level above the tool dir - verify no other tool imports it first). If D5 deletes a surface imported by this old list tool, D5/D6 co-land; the old implementation is evidence only for what to delete and is never preserved, repaired, wrapped, consulted, or used as a behaviour target. The module must not import MCP types into substrate packages (ADR-179) - an explicit acceptance check. Preserve flag co-gating of tool, resource, and prompt. D6 is not complete until the single-Zod-call graph-subset rule is implemented exactly; failure blocks D6 and requires correction of the D3/D4 contract."
+    content: "Build the EEF-specific MCP composition module in the curriculum consumer layer and register the ratified EEF tool/resource/prompt surface behind OAK_CURRICULUM_MCP_EEF_ENABLED with structuredContent-only tool results. Do not extract a generic corpus-tool factory until a real second consumer exists. The tool INPUT schema and OUTPUT schema are each derived by a SINGLE Zod call on a named subset/schema-builder value typed from the graph-native EEF view (a deterministic, type-strict projection of graph form, with graph form itself derived from the raw EEF data; not a direct raw-data transform, hand-maintained parallel shape, or plan-authored vocabulary; root `type: object`); use `satisfies` or equivalent compile-time proof tying declarations to `structuredContent`. These are the only Zod schemas in the EEF graph stack (Decision 2). Error returns use isError:true so the SDK skips output validation. Ensure `outputSchema` reaches the actual `server.registerTool`/`registerAppTool` call by replacing any current universal-tools segment that cannot carry it. Implement the EEF interpretation resource/template and update the user-facing EEF prompt from the ratified D3-D5 graph surface. The superseded list-shaped `eef-explore-evidence-for-context` implementation and its projection/response-budget/dual-content/citation-revalidation/tool-level Zod path were already deleted by D2 and must remain absent; D6 does not recreate them, compare against them, wrap them, or use them as a behaviour target. Delete citation-shape.ts at evidence-corpus/citation-shape.ts if it survived D2 (one level above the tool dir - verify no other tool imports it first). Registration is only for real implemented surfaces: no empty tools, placeholder handlers, fake resources, prompt shells, or deferred implementations may appear behind the flag. The module must not import MCP types into substrate packages (ADR-179) - an explicit acceptance check. Preserve flag co-gating of tool, resource, and prompt. D6 is not complete until the single-Zod-call graph-subset rule is implemented exactly; failure blocks D6 and requires correction of the D3/D4 contract."
     status: pending
     depends_on: [d4-graph-capability-contract, d5-graph-construction-methods]
   - id: d7-teacher-value-round-trip
@@ -149,7 +152,7 @@ design / runtime path:  teacher -> AI host -> MCP tool/resource/prompt surface -
 ```
 
 ```text
-execution path:         fixed corpus + doctrine fix -> typed raw foundation -> graph-native construction/adaptation -> MCP surface -> teacher value
+execution path:         D0 doctrine fix + D1 value contract -> D2 typed raw foundation -> D3 MCP contract -> D4 graph contract -> D5 graph-native construction/adaptation -> D6 MCP composition -> D7 teacher value proof
 ```
 
 The design narrative is value-first: value is the root that justifies the MCP
@@ -224,7 +227,7 @@ isolated to D1, D3, and D4 and is named there as explicit steps.
    construction/adaptation boundary from that raw foundation into the graph-native
    EEF view. The graph is absolutely derived from the raw EEF data, and its types
    must preserve the exact raw relationships: a known `EefStrandId` still indexes
-   the corresponding `StrandByStrandId[Id]`, edge endpoints remain derived literal
+   the corresponding `EefStrandById[Id]`, edge endpoints remain derived literal
    ids, and any graph-native payload/reference policy keeps a named type-level link
    to the raw source strand or a named derived projection of it. The graph-native
    view may wrap, project, index, or otherwise standardise the raw data if doing so
@@ -236,17 +239,19 @@ isolated to D1, D3, and D4 and is named there as explicit steps.
    as the graph contract.
 
 5. **The only unknown in the whole system is the key.** A key may arrive as an
-   arbitrary external string. `isValidStrandKey(value): value is EefStrandId`
-   (ADR-153 house pattern, backed by raw id-to-strand membership) is the single
-   narrowing in the system. A known literal key indexes `StrandByStrandId[Id]`
-   to its exact single strand; the keyed lookup is total over the fixed key space
-   and cannot miss. The union appears only as the residual static type of a
-   validated-but-not-yet-pinned key, handed straight back, never widened or
-   normalized. One unknown - the key; one narrowing - the key; everything
-   downstream of a known key is exact.
+   arbitrary external value. `isValidStrandKey(value: unknown): value is
+   EefStrandId` (ADR-153 house pattern, backed by raw id-to-strand membership) is
+   the single narrowing in the system: non-strings return false, real corpus ids
+   narrow, and all other strings fail membership. A known literal key indexes
+   `EefStrandById[Id]` to its exact single strand; the keyed lookup is total over
+   the fixed key space and cannot miss. The union appears only as the residual
+   static type of a validated-but-not-yet-pinned key, handed straight back, never
+   widened or normalized. One unknown - the key; one narrowing - the key;
+   everything downstream of a known key is exact.
 
 6. **The existing `graph-core` query contract is input to be reshaped, not a
-   fixed foundation.** Its committed `GraphView<TNode, TEdgeType>` - 7 ops
+   fixed foundation; build real logic or nothing.** Its committed
+   `GraphView<TNode, TEdgeType>` - 7 ops
    (manifest + 6 fallible); 2 live (manifest, subgraph), 5 returning
    `NotImplementedYet`, polymorphic ahead of a second consumer - is premature
    generalization (PDR-058: a shape opened to a second consumer before one
@@ -256,7 +261,13 @@ isolated to D1, D3, and D4 and is named there as explicit steps.
    shape from the ratified MCP surface and reshapes graph-core to it. graph-core's
    shared RDF substrate (term/dataset/jsonld/canon) is genuinely multi-consumer
    and is not in question; only the stubbed query contract is reshaped, after
-   recording the consumer-impact finding.
+   recording the consumer-impact finding. This is also the global EEF graph-tool
+   rule: no stub tools, placeholder handlers, fake registrations,
+   `NotImplementedYet` fallbacks, empty registered tools/resources/prompts, or
+   exported operations that are not implemented end to end. A capability is either
+   implemented with real graph-derived logic and tests, or it is absent. Existing
+   non-EEF empty stubs are consumer-impact evidence only; they do not authorise
+   preserving current EEF stubs or building new ones.
 
 7. **There is no response cap; graph scope is the bound.** The
    `response-budget.ts` cap (rank everything, cut to 12 strands for a token
@@ -319,7 +330,7 @@ the cover-lesson job without hiding uncertainty or inventing evidence.
 This section is the canonical D1 value-contract surface. D1 updates this section
 with stable subheadings for the ratified scenario, teacher job/value claim,
 assistant role, corpus-derived evidence/provenance contract, non-claims/use
-limits, smallest success criteria, and D3/D4 questions left open. The value
+limits, smallest success criteria, and the D1 handoff boundary to D3/D4. The value
 contract may be extracted from the plan into documentation later; for D1 it lives
 here. Do not create an ADR for the D1 scenario or value artefact itself unless the
 owner ratifies a reusable evidence-use policy beyond this EEF surface.
@@ -522,15 +533,17 @@ particular.
 - **Unknown data** - shape not known until runtime; narrowed at its boundary.
 
 The corollary that holds for this system specifically: **every semantic boundary
-here narrows a value into a KNOWN FINITE SET** - a strand key, an EEF priority,
-or a key stage / phase value present in the fixed EEF data. Subject and topic are
-Oak workflow context, not EEF tool inputs. Narrowing into a known set is a
-type-guard predicate (`value is T`, ADR-153), not a schema parse. The MCP
-protocol still receives an unknown argument envelope, so each MCP tool input
-schema and output schema is derived by a single Zod call on the appropriate subset
-of the graph-native EEF view (Decision 2's controlling definition), and the SDK
-validates the tool's `structuredContent` against the output schema. No Zod schema
-parses the corpus, and no hand-authored parallel schema describes it.
+here narrows a value into a KNOWN FINITE SET** - a strand key, an EEF priority, a
+key stage / phase value, or a raw headline metric value/label present in the fixed
+EEF data (`impact_months`, `cost_rating`, `cost_label`,
+`evidence_strength_rating`, `evidence_strength_label`). Subject and topic are Oak
+workflow context, not EEF tool inputs. Narrowing into a known set is a type-guard
+predicate (`value is T`, ADR-153), not a schema parse. The MCP protocol still
+receives an unknown argument envelope, so each MCP tool input schema and output
+schema is derived by a single Zod call on the appropriate subset of the
+graph-native EEF view (Decision 2's controlling definition), and the SDK validates
+the tool's `structuredContent` against the output schema. No Zod schema parses the
+corpus, and no hand-authored parallel schema describes it.
 
 Schema-first scoping: schema-first derivation (`z.infer` from the OpenAPI schema)
 governs the **unknown** upstream API surface elsewhere in the repo. For this
@@ -576,11 +589,13 @@ or recorded in the D0 ledger.
   plans is owned by
   graph-estate-consolidation.plan.md, not this plan.
 - `freshness`, `checkFreshness`, `DEFAULT_THRESHOLD_DAYS`, `ADR-175`, `180-day` -
-  freshness apparatus + ADR-175 (code deleted in D5; ADR/doc refs completed in D0)
+  freshness apparatus + ADR-175 (code deleted in D2 with the load/list/Zod path;
+  ADR/doc refs completed in D0)
 - `EefStrandSchema`, `EefToolkitSchema`, `z.infer<...Strand`, `strand-schema` -
-  Zod-over-corpus (D2 deletes school-context Zod and re-homes the raw type; D5
-  deletes `strand-schema.ts` with the loader/freshness removal so the tree stays
-  green)
+  Zod-over-corpus (D2 deletes every non-source-of-truth raw vocabulary, school-context
+  Zod consumer, `strand-schema.ts`, loader, freshness, and old-list surface while
+  re-homing the raw type; D5 consumes the D2 raw foundation and verifies the deleted
+  path stays absent)
 - `response-budget`, `capForBudget`, `projectExploreNode` - list-era cap (D5/D6)
 - the speculative `EvidenceCorpus` `rank`/`explain`/`compare` ops (D4)
 - stale STRUCTURAL references to the quarantined design docs - their deliverable
@@ -591,8 +606,10 @@ or recorded in the D0 ledger.
   D4). A concept-token sweep alone misses these; adjacent plans need a content read.
 
 **Surface -> owning deliverable.** Code in files slated for deletion is covered by
-its deliverable (D2 school-context Zod; D5 strand-schema/freshness/loader/cap; D6
-list-tool/citation-shape; D4 EvidenceCorpus ops). Surviving code with contaminated
+its deliverable (D2 school-context Zod, strand-schema, loader, freshness, old-list
+tool, list-era cap, citation-shape where it has no non-list consumer, and every
+required consumer repoint/removal; D4 EvidenceCorpus ops; D5 graph projection and
+operation implementation; D6 graph MCP composition). Surviving code with contaminated
 comments is corrected by the deliverable that owns the file. D0 has already
 corrected the non-code surfaces it owned: the ADRs;
 `docs/governance/sonar-disposition-policy.md`; `sector-engagement/roadmap.md`;
@@ -859,7 +876,12 @@ is cap-sized, not a neutral baseline.
 - Name the corpus-derived values D7 must preserve verbatim through the typed
   raw/graph-native/MCP chain without choosing graph representation: at minimum a
   known strand's caveat text, attribution, evidence strength, cost, and impact.
-- Record D3/D4 questions left open separately from D1-ratified value claims.
+- Record the D1 handoff boundary: D3 owns MCP names, schemas, resource/template
+  URIs, prompt arguments, SDK/app registration verification, and host feasibility;
+  D4 owns the graph-native view, node/edge policy, graph-core operation contract,
+  and consumer-impact record. Neither D3 nor D4 may alter D1's teacher-value
+  claims, evidence-preservation obligations, or non-claims without returning to
+  owner ratification.
 
 **Done when (acceptance):**
 
@@ -891,12 +913,14 @@ is cap-sized, not a neutral baseline.
 **Proof:** `non-code` (owner ratification recorded in the canonical D1 value
 contract surface).
 
-### D2 - Typed raw-corpus foundation (brought forward)
+### D2 - Typed raw-data ingestion foundation (brought forward)
 
-**Purpose:** build the typed raw-corpus foundation - everything derivable from the
-`as const` constant alone. Depends only on D0 and the corpus. This is the source
-snapshot and type source, not the final graph-native contract; D5 owns the
-construction/adaptation boundary into the graph-native EEF view.
+**Purpose:** build the typed raw-data ingestion foundation - everything derivable
+from the in-memory `as const` constant alone. Depends only on D0 and the corpus.
+This is the source snapshot and type source, not the final graph-native contract;
+D5 owns the construction/adaptation boundary that ingests this raw foundation into
+the deterministic graph-native EEF projection. There is no runtime corpus load,
+parse, freshness check, compatibility wrapper, or old-list bridge.
 
 **Folded detail:** the typed-raw-foundation finding grounds the `as const`
 derivation, and the `EefPhase` wrong-source hazard is resolved by the
@@ -904,46 +928,74 @@ owner-corrected rule here: the fixed EEF data structure is the authority and the
 correct answer is whatever that structure contains. D2 derives vocabulary values
 by projecting from `EEF_TOOLKIT_DATA` itself, never from hand-authored tuples,
 maintained key lists, or a glue layer between a proposed input and the data.
+D2's projections are raw-foundation projections only. Teacher-facing payloads,
+MCP schemas, graph-native subsets, and graph-operation semantics depend on the
+graph-native EEF view ratified and built in D3-D6; D2 supplies exact raw facts to
+that chain and does not skip it. D2 is also the deletion point for the old
+load/list/Zod/freshness path: a wrong source-of-truth surface is removed, not
+kept alive until the graph projection is ready.
 
 **Do (TDD cycles; each cycle test+code co-land):**
 
 - Derive `EefStrand = (typeof EEF_TOOLKIT_DATA.strands)[number]`, `EefStrandId`,
-  and `EefToolkitData` via `typeof`/indexed access. Derive every phase, key-stage,
-  and priority vocabulary from `EEF_TOOLKIT_DATA` itself. The implementation may
-  add derived projection helpers over the object graph, but it must not author or
-  retain separate arrays of keys, values, field names, or vocabulary constants.
-  For `EefPhase`, the correct value space is the union of phase values/keys
-  present in the fixed EEF data structure; it is not a maintained `EEF_PHASES`
-  tuple and not the wider schema enum unless the data structure itself proves that
-  enum is the right field for the consuming contract. If a proposed tool input
-  needs a value space that cannot be derived directly from `EEF_TOOLKIT_DATA`,
-  stop for the owning D1/D3 contract correction.
-- Build the `StrandByStrandId` keyed lookup type and the runtime raw id-to-strand
-  lookup (built once; the single runtime raw-id surface).
-- Implement `isValidStrandKey(value): value is EefStrandId` backed by raw
-  id-to-strand membership (ADR-153 pattern).
-- Build the typed `related_strand` edge facts and metadata derived from
-  `EEF_TOOLKIT_DATA.meta`; D5 decides how those raw facts become graph-native
-  nodes, edges, indexes, and envelopes.
-- Re-home `EefStrand` to this checked foundation and repoint every importer. Do
-  NOT physically delete `strand-schema.ts` in D2: `loader.ts` still imports
-  `EefToolkitSchema` from it and `index.ts` re-exports it, so deleting the file
-  here turns `type-check` red until D5. The file's deletion CO-LANDS with the
-  loader/freshness removal in D5 (deletion-ordering rule: the tree never goes red).
-  From `school-context.ts` delete ONLY the Zod schemas and drift guard. Delete any
-  retained `EEF_PHASES`/`EEF_PRIORITIES`/`EEF_KEY_STAGES` runtime tuples; proving a
-  hand-authored tuple exact is still a second source of truth. Predicates and MCP
-  schema declarations consume values/types derived from `EEF_TOOLKIT_DATA`
-  directly. If a proposed input cannot map directly to fixed known corpus data,
-  that is a D1/D3 architectural misalignment, not a D2 adapter concern.
+  `EefStrandById`, and `EefToolkitData` via `typeof`/indexed access. Canonicalise
+  the raw strand type name as `EefStrand`; the D0 `Strand` name is absorbed or
+  renamed so the raw strand has one name everywhere. Derive named raw domains from
+  explicit source paths in `EEF_TOOLKIT_DATA`, not from maintained tuples:
+  - D3 graph-filter input domains come from observed strand applicability facts:
+    `school_context_relevance.most_relevant_phases`,
+    `school_context_relevance.most_relevant_key_stages`,
+    `school_context_relevance.most_relevant_priorities`, and any
+    graph-ratified `behind_the_average.by_phase` keys;
+  - declared `school_context_schema` enums are typed raw metadata only, not D3
+    filter domains, unless D3 explicitly ratifies a declared-domain input and D4
+    proves the graph can operate on it without empty-but-valid values;
+  - raw headline metric domains come from strand `headline` fields:
+    `impact_months` (including `null` in the raw domain), `cost_rating`,
+    `cost_label`, `evidence_strength_rating`, and `evidence_strength_label`;
+  - interpretation-resource raw facts include `EEF_TOOLKIT_DATA.methodology`,
+    `meta.caveats`, `meta.source`, `meta.licence`, `meta.coverage`, and any other
+    corpus-level provenance or methodology field D3 names.
+  The implementation may add derived projection helpers over the raw object graph,
+  but it must not author or retain separate arrays of keys, values, field names,
+  metric thresholds, metric labels, vocabulary constants, caveat classes,
+  interpretation labels, or crosswalks. If a proposed tool input needs a value
+  space that cannot be derived directly from a named `EEF_TOOLKIT_DATA` source
+  path, stop for the owning D1/D3 contract correction.
+- Build the `EefStrandById` keyed lookup type and the runtime raw id-to-strand
+  lookup (built once; the single runtime raw-id surface). Remove the old
+  `StrandByStrandId` naming or turn it into the renamed canonical type, never a
+  parallel alias.
+- Implement `isValidStrandKey(value: unknown): value is EefStrandId` backed by
+  raw id-to-strand membership (ADR-153 pattern); non-string inputs return false.
+- Build the typed `related_strand` raw edge facts from each strand's
+  `related_strands`; derive corpus metadata, caveats, methodology, source,
+  licence, and coverage facts from `EEF_TOOLKIT_DATA.meta` and
+  `EEF_TOOLKIT_DATA.methodology`. D5 decides how those raw facts become
+  graph-native nodes, edges, indexes, and envelopes.
+- Re-home `EefStrand` to this checked foundation and repoint every importer. D2
+  deletes every non-source-of-truth raw vocabulary/list/Zod/load/freshness surface
+  outright. The definite D2 landing state is:
+  `school-context.ts`, `school-context.unit.test.ts`, `strand-schema.ts`,
+  `strand-schema.unit.test.ts`, `loader.ts`, `freshness.ts`, the loader/freshness
+  tests, and the list-shaped `eef-explore-evidence-for-context` implementation are
+  deleted; `index.ts` re-exports only the raw foundation surfaces; no `loadEefCorpus`
+  API, compatibility wrapper, old-list MCP registration, Zod parser, freshness
+  gate, or old-list product path remains. Predicates consume raw foundation
+  values/types derived from `EEF_TOOLKIT_DATA`; MCP schema declarations later
+  consume named graph-view subsets. If a proposed input cannot map directly to
+  fixed known corpus data, that is a D1/D3 architectural misalignment, not a D2
+  adapter concern.
 - The old list implementation (`selection.ts`, `projection.ts`, and the
-  `eef-explore-evidence-for-context` path) is not a D2 product surface to
-  preserve. If exact-union typing makes those files red before D5/D6, the cure is
-  to remove or co-land the old list surface, not to repair its behaviour. The
-  corresponding vocabulary-boundary proof belongs in the new raw foundation or
-  graph-native path, not in the failed list implementation.
+  `eef-explore-evidence-for-context` path) is deleted as part of D2 because it is
+  the consuming old idea, not a product surface to keep alive during replacement.
+  D6 later registers the graph-derived EEF MCP surface from the D3-D5 contract;
+  no old-list output parity, fallback, wrapper, or side-by-side registration is
+  authorised in the interim.
 - Build on D0's relocated `strandById`, `StrandByStrandId`, `Strand`, and
-  `lastUpdated` foundation; D2 extends it into the full typed raw foundation that
+  `lastUpdated` foundation by canonicalising that surface to the D2 names
+  (`strandById`, `EefStrandById`, `EefStrand`, `EefStrandId`, raw metadata, and
+  raw related-strand facts). D2 extends it into the full typed raw foundation that
   D5 consumes.
 - Test migration is SPLIT, not blanket: structural-traversal tests
   (`graph-view.unit.test.ts` BFS / depth / cycle / sparse-root / error-path) KEEP
@@ -958,27 +1010,46 @@ maintained key lists, or a glue layer between a proposed input and the data.
 
 **Done when (acceptance):**
 
-- `EefStrand`, `EefPhase`, and all EEF vocabularies derive from
-  `EEF_TOOLKIT_DATA`; no `z.infer`-normalized node type, no Zod schema, no
-  maintained key/value list, no glue vocabulary, and no hand-authored crosswalk
-  remain in the foundation.
+- `EefStrand`, observed graph-filter domains, declared metadata domains, all EEF
+  vocabularies D3 consumes, all raw headline metric domains, methodology/caveat
+  facts, provenance facts, and raw related-strand facts derive from named
+  `EEF_TOOLKIT_DATA` source paths; no `z.infer`-normalized node type, no Zod
+  schema, no maintained key/value list, no maintained metric list, no glue
+  vocabulary, no caveat class list, no interpretation ontology, and no
+  hand-authored crosswalk remain in the foundation.
 - `strandById('<literal>')` type-checks to the exact single strand;
-  `isValidStrandKey` narrows an arbitrary string to `EefStrandId`, proven by a unit
-  test (true for every real corpus id; false for a typo'd id, empty string, and a
-  non-string input).
+  `isValidStrandKey` narrows an arbitrary value to `EefStrandId`, proven by a
+  unit test (true for every real corpus id; false for a typo'd id, empty string,
+  and a non-string input).
 - `eef-toolkit.external-data.ts` still contains no logic after D2 extends the D0
   foundation; the foundation module is under standard quality gates; live
-  consumers of the new typed foundation resolve vocabulary imports against
-  derived projections of `EEF_TOOLKIT_DATA`. If an old-list consumer is the
-  failing import path, it is removed or co-landed with its replacement rather than
-  repaired.
-- `pnpm type-check` is green immediately after D2 lands (no broken imports).
-- Raw-foundation construction from the real corpus is proven by unit test;
-  consumers type-check against the derived types.
+  consumers of the new typed foundation resolve vocabulary, observed-domain,
+  methodology/caveat, provenance, and metric-domain imports against deterministic
+  raw projection helpers derived from `EEF_TOOLKIT_DATA`. No teacher-facing
+  payload, MCP schema, graph-native subset, ranking/selection behaviour, or
+  output-parity target is introduced in D2. No `loader.ts`, `loadEefCorpus`,
+  `freshness.ts`, old list tool, old list projection, or old list selection path
+  remains.
+- D2 records any broken-import/type-check fallout from deleting the wrong path as
+  named in-flight D3-D6 replacement work; it does not add a wrapper, alias, old-path
+  barrel, or compatibility module to make the old imports compile.
+- Raw-foundation construction from the real corpus is proven by unit test,
+  including key membership, observed-vocabulary derivation, declared-metadata
+  domain derivation, headline metric-domain derivation, methodology/caveat and
+  provenance derivation, raw lookup, raw related-strand facts, and metadata;
+  consumers type-check against the derived types. D2 records a source-path table
+  for every finite domain or corpus-level field D3 consumes:
+  `D3 field -> raw source path -> raw projection helper -> proof test`. The
+  executor verifies removal by reading the touched files/imports during the change
+  and running the normal gates; D2 does not add a permanent negative-audit checker
+  for the deleted mistakes.
 
-**Proof:** `unit` (substrate + predicate + keyed-lookup over the real corpus) +
-type-check. Command: `pnpm --filter @oaknational/graph-corpus-sdk test` +
-`pnpm type-check`.
+**Proof:** `unit` (raw substrate, predicate, keyed lookup, observed and declared
+domain derivation, headline metric-domain derivation, methodology/caveat and
+provenance derivation, raw related-strand facts, and metadata over the real
+corpus) + source-path table + file/import inspection during the edit. Command:
+`pnpm --filter @oaknational/graph-corpus-sdk test`. Full type-check proof belongs
+to the settled D2-D6 replacement chain, not to D2 compatibility preservation.
 
 ### D3 - MCP tool/resource contract (exploration; owner-ratified, mcp-expert verification pending)
 
@@ -1002,22 +1073,33 @@ structuredContent-only, not dual-content output.
   inspection, and corpus metadata. A graph-forward collection is a follow-on plan.
   Keep two surfaces distinct: the agent-facing MCP surface and the underlying
   graph tools it composes. The MCP surface composes graph tools as it needs.
-- The EEF tool's inputs are the finite keys of the fixed EEF data: a pedagogical
-  approach (`EefStrandId`; display names/slugs are corpus output fields, not
-  matching inputs), an EEF priority, a key stage / phase value present in the
-  corpus, and the impact/cost/evidence-strength leverage selectors. Every input is
-  a known value from the corpus, narrowed by predicate at the boundary. Subject and
-  topic stay in the Oak workflow before the EEF call; they are not EEF inputs.
+- The EEF tool's inputs are the finite keys of the fixed EEF data: an
+  `EefStrandId` selected by the invoking agent, an observed graph-projectable EEF
+  priority, an observed graph-projectable key-stage / phase value, and exact-value
+  filters over graph-projected raw headline metric domains (`impact_months`,
+  `cost_rating`, `cost_label`, `evidence_strength_rating`,
+  `evidence_strength_label`). Every input is a known value from the corpus or a
+  graph-derived subset of those raw metric domains, narrowed by predicate at the
+  boundary and cited in the D3 source-path table. D3 does not invent labels such as
+  "high-impact" or "low-effort", metric buckets, threshold cut-offs, ranking
+  weights, or comparator semantics as tool inputs. The calling agent may reason in
+  those words, but the deterministic tool receives only exact corpus values or
+  graph-ratified exact subsets. Subject and topic stay in the Oak workflow before
+  the EEF call; they are not EEF inputs.
 - Build one EEF MCP tool with a function/options shape, like a multitool CLI
   (`name -> function -> options`), not separate top-level MCP tools. D3 verifies
   the installed SDK/app registration and host discoverability as proof that this
   shape is executable, not as permission to preserve a second tool layout.
+- Specify only real surfaces that D6 can implement end to end. D3 must not record
+  placeholder tools, stub resources, fake prompts, migration bridges, or deferred
+  handlers. If a proposed capability lacks a D1 value path, graph-derived
+  behaviour, and an implementation/test route, it stays absent from the contract.
 - Settled D3 MCP surface shape (2026-05-31 owner answer): expose three
   complementary surfaces by intention:
   - a deterministic EEF tool that queries/fetches the appropriate fixed EEF data;
   - an EEF interpretation resource/resource-template for "how to interpret and
-    apply this data", including methodology, caveats, ontology keys, and other
-    useful context;
+    apply this data", including corpus methodology, caveats, source,
+    attribution/provenance, and graph-structural field/edge names only;
   - a user-facing prompt that a teacher/user can invoke to start the
     evidence-grounded adaptation workflow.
 - Use this as the default calling-agent workflow, while allowing D3 to specify
@@ -1026,14 +1108,14 @@ structuredContent-only, not dual-content output.
   2. Use Oak API/search tools to identify the curriculum material, and Oak's
      misconception and prior-knowledge graphs (plus the lesson's quiz and text) to
      surface the pedagogical signals in it.
-  3. Name the pedagogical move each signal calls for, then resolve that move to
-     real corpus keys before the tool call: a misconception → `eef-tl-feedback`
-     and `eef-tl-metacognition-and-self-regulation`; a weak prerequisite →
-     `eef-tl-mastery-learning` and `eef-tl-oral-language-interventions`; a quiz
-     → `eef-tl-feedback` and `eef-tl-metacognition-and-self-regulation`. Terms
-     such as "explicit instruction" and "retrieval practice" are agent-side move
-     vocabulary, not EEF keys; only strand ids, priorities, phases, and the
-     impact/cost/evidence-strength selectors cross into the deterministic tool.
+  3. Name the pedagogical move the signal raises, then select real corpus keys by
+     inspecting corpus-derived strand names, definitions, key findings, tags,
+     applicability facts, and graph relations through the Oak/EEF workflow. No
+     server-side or plan-authored mapping from Oak signal category to
+     `EefStrandId` is part of this plan. Terms such as "explicit instruction" and
+     "retrieval practice" are agent-side move vocabulary, not EEF keys; only strand
+     ids, observed priorities/phases/key stages, and graph-projected raw headline
+     metric domains cross into the deterministic tool.
   4. Inspect a strand only when more detail, caveats, or evidence-shape
      explanation is needed.
   5. Produce teacher-facing output with Oak material, EEF options and
@@ -1041,17 +1123,18 @@ structuredContent-only, not dual-content output.
 - Target MCP primitives by intention, per the official MCP server/client
   concepts and specification docs:
   - **Tool:** model-controlled executable surface for the one deterministic,
-    function-dispatched EEF query/fetch call. Use it for pedagogical-move evidence
-    and strand inspection because the calling agent must decide when to invoke
-    evidence.
+    function-dispatched EEF query/fetch call. Use it for corpus-derived evidence
+    options and strand inspection because the calling agent must decide when to
+    invoke evidence and must pass only finite EEF values/strand ids.
   - **Resource/resource template:** application-driven read context for corpus
     metadata, attribution shape, stable caveat vocabulary, and other context the
     host may browse, attach, or inject without the model choosing an action.
     Define the EEF interpretation resource/template here, deriving it first from
     the corpus methodology/caveats where the dataset already explains impact,
-    cost, evidence strength, and conversion notes; supplement only where D3/D5
-    add graph/tool semantics such as matched ontology keys, caveat classes, or
-    adaptation trade-off concepts.
+    cost, evidence strength, and conversion notes. Supplement only with
+    graph-structural names ratified by D4/D5, such as field names, edge types,
+    provenance-envelope fields, and schema-subset names. These structural names
+    are not evidence categories, caveat classes, or adaptation concepts.
   - **Prompt:** user-controlled workflow template for teacher-invoked flows,
     such as evidence-grounded lesson adaptation or the cover-lesson example,
     that orchestrate Oak API/search plus the EEF tool. Prompts may help the
@@ -1081,22 +1164,24 @@ structuredContent-only, not dual-content output.
   capable of carrying the schema declarations. D4 ratifies the graph-native view;
   D6 implements the actual Zod calls.
 - Classify every externally supplied field before it crosses into graph code:
-  strand-key predicates or finite EEF-corpus-vocabulary predicates. If a value
-  originates from Oak context, such as a key stage, D3 must name the deterministic
-  projection into an EEF corpus value before the tool boundary. The invoking agent
-  may semantically analyse free-form user input, but the MCP tool does not: by the
-  time data reaches the tool it must be converted into fixed inputs from the finite
-  allowed sets ultimately specified by fixed EEF data. Subject/topic context is
-  consumed by Oak retrieval and agent workflow reasoning, not by the EEF tool.
+  strand-key predicates, observed finite EEF-corpus-vocabulary predicates, or
+  graph-projected raw headline metric predicates. If a value originates from Oak
+  context, such as a key stage, D3 must name the deterministic projection into the
+  observed EEF corpus domain the graph can operate on before the tool boundary.
+  The invoking agent may semantically analyse free-form user input, but the MCP
+  tool does not: by the time data reaches the tool it must be converted into fixed
+  inputs from the finite allowed sets ultimately specified by fixed EEF data.
+  Subject/topic context is consumed by Oak retrieval and agent workflow reasoning,
+  not by the EEF tool.
   "Only unknown is the key" is not sufficient unless the D3 surface really has no
   other externally supplied values.
 - Keep routine tool results compact. The tool output is context for an invoking
   agent, not teacher-facing prose and not a carrier for repeated interpretive
   boilerplate. It may return deterministic graph facts, selected fixed inputs,
-  matched ontology keys, citations, caveats, and compact context needed for
+  graph edge/field names, citations, caveats, and compact context needed for
   synthesis. Reusable interpretation guidance belongs in the EEF interpretation
-  resource/template that the agent fetches only when needed. D3 checks the EEF
-  corpus methodology before inventing any new interpretation ontology.
+  resource/template that the agent fetches only when needed. D3 projects EEF
+  corpus methodology and caveats; it does not invent interpretation ontology.
 - Record the default calling-agent workflow and any additional D3 workflows as
   contract, not as open questions. Each workflow names which primitive it uses:
   the deterministic EEF tool for query/fetch, the interpretation
@@ -1123,6 +1208,18 @@ structuredContent-only, not dual-content output.
   rule, and use/avoid condition; and records the verification outcome for the
   function-dispatched tool. No second tool layout, migration bridge, or parallel
   route is recorded.
+- The D3 contract contains a source-path table for every finite input and output
+  field:
+  `contract field -> graph-native subset -> raw EEF source path -> proof test`.
+  If any field, label, metric predicate, schema key, output key, or workflow
+  mapping cannot trace through that table, D3 is not complete.
+- The D3 workflow contains no plan-authored or server-side Oak-signal-category to
+  `EefStrandId` crosswalk. The invoking agent selects real corpus ids from
+  corpus-derived evidence; D6 implements no hidden semantic mapping from
+  misconception/prerequisite/quiz/text categories to strand ids.
+- The contract contains no stub tool, placeholder resource/template, fake prompt,
+  deferred handler, or other surface whose real graph-derived behaviour is left
+  for a later plan.
 - Input and output schemas are specified as the intended single-Zod-call shape:
   D3 NAMES the graph-native EEF view subset/schema-builder values each schema is
   derived from and the compile-time tie to the corresponding payload type (root
@@ -1131,16 +1228,21 @@ structuredContent-only, not dual-content output.
   subset values and D6 implements the actual single Zod call. D3 is complete when
   the intended shape and the named values are specified, not when the Zod call
   exists.
-- Every externally supplied field is explicitly classified and narrowed at the
-  boundary before it reaches graph code.
+- Every externally supplied field is explicitly classified as a strand key,
+  observed finite EEF-corpus vocabulary value, or graph-projected raw headline
+  metric value and narrowed at the boundary before it reaches graph code. Metric
+  inputs are exact corpus values or graph-ratified exact subsets only; no bucket
+  label, threshold cut-off, ranking weight, or comparator semantics is introduced
+  in D3.
 - No free-form teacher or pedagogical context crosses into the EEF MCP tool; any
   natural-language interpretation is done by the invoking agent before the tool
   call, and the tool receives only finite fixed inputs.
 - Tool outputs stay compact and deterministic; any reusable explanation
-  scaffolding is represented as ontology keys and the EEF interpretation
-  resource/template, not boilerplate appended to every response. The user-facing
-  prompt starts the workflow; it is not the default interpretation carrier for
-  routine tool calls.
+  scaffolding is represented by corpus methodology/caveat/provenance fields,
+  graph-structural edge/field names, and the EEF interpretation resource/template,
+  not boilerplate appended to every response and not invented ontology. The
+  user-facing prompt starts the workflow; it is not the default interpretation
+  carrier for routine tool calls.
 - The user-facing prompt is specified as an invocation surface for teachers/users
   to start the evidence-grounded workflow; it is not treated as a model-controlled
   or agent-invoked tool.
@@ -1174,18 +1276,19 @@ investment that opens those sources up; EEF is the first consumer and pathfinder
 The discipline is to keep the contract domain-generic and to ship only operations
 a consumer uses (no stubs), not to skip the foundation. EEF's own operations are
 modest — fetch a strand by id, filter strands by EEF-native axis (priority, key
-stage / phase, impact/cost), and follow `related_strands` one hop — and D4
-specifies exactly those against the shared primitives.
+stage / phase, and graph-projected headline metric domains), and follow
+`related_strands` one hop — and D4 specifies exactly those against the shared
+primitives.
 
 **Do:**
 
 - Define the graph operations D3 consumes, split into two layers. The shared
   graph-core contract contains only domain-generic primitives. The EEF/Oak
-  binding names the pedagogical-move evidence query, the EEF-specific lookups, and
+  binding names the corpus-derived evidence query, the EEF-specific lookups, and
   any EEF-specific view/schema-builder values. Non-contractual examples (names
-  settled here, not before): an evidence query for a pedagogical move in the
-  binding layer, a total strand-by-id lookup after boundary narrowing, and a
-  bounded subgraph-around-strands traversal over graph-core primitives.
+  settled here, not before): an evidence query over D3-ratified finite EEF values
+  in the binding layer, a total strand-by-id lookup after boundary narrowing, and
+  a bounded subgraph-around-strands traversal over graph-core primitives.
 - SPECIFY (this is a non-code ratification deliverable; D5 executes the reshape as
   TDD cycles) the reshaped graph-core query surface: the concrete operations
   replacing the 7-op stubbed polymorphic `GraphView` (2 live, 5 `NotImplementedYet`),
@@ -1198,7 +1301,10 @@ specifies exactly those against the shared primitives.
   `string`. Public graph-core result/error types must carry `TNodeId` all the way
   out; broad string result/error ids are not the generic contract. Reintroduce
   broader generality only when a real second consumer exists (PDR-058: the
-  contract was opened to a second consumer before one existed).
+  contract was opened to a second consumer before one existed). No operation may
+  be specified as a placeholder, future hook, fake implementation, or
+  `NotImplementedYet` branch; graph-core exposes real primitives or exposes
+  nothing.
 - Ratify the minimal graph-native EEF view contract before D5: owner package,
   node id/kind policy, edge/frontier shape, payload/reference policy, provenance
   envelope policy, and the named schema-subset/schema-builder values D3/D6 consume.
@@ -1217,18 +1323,17 @@ specifies exactly those against the shared primitives.
   RDF substrate (term/dataset/jsonld/data-factory), and the threads adapter is an
   empty export-nothing stub - so EXTERNAL-consumer blast radius is ZERO. But the
   reshape requires bounded IN-PACKAGE edits the record MUST name: graph-core's own
-  `src/index.ts` barrel re-exports the query types, `graph-view/index.unit.test.ts`
-  hard-encodes the 7-op contract + `NotImplementedYet`, and the soon-deleted old
-  list tool imports list-era surfaces (`SubgraphResult`, `loadEefCorpus`,
-  `LoadEefCorpusError`, `selectEefSeedIds`, `capForBudget`, projection,
-  validation, citations). The shared RDF substrate stays; only the query contract
-  is reshaped (in D5). A type may be named `SubgraphResult` only if D4 freshly
-  defines that name and structure from the new graph contract. If D4 deletes or
-  renames any old-list dependency, D5 and D6 co-land or the old list tool is
-  deleted first. The old list implementation is evidence only for what to delete
-  and is never preserved, repaired, wrapped, consulted, or used as a behaviour
-  target. Record the consumer-impact finding as a named artefact and have an
-  architecture reviewer sign it off before the interface change lands in D5.
+  `src/index.ts` barrel re-exports the query types and
+  `graph-view/index.unit.test.ts` hard-encodes the 7-op contract +
+  `NotImplementedYet`. The shared RDF substrate stays; only the query contract is
+  reshaped (in D5). The existing non-EEF empty stub is consumer-impact evidence
+  only; it is not a model for the EEF graph-tool surface and does not authorise
+  any new stub. A type may be named `SubgraphResult` only if D4 freshly defines
+  that name and structure from the new graph contract. The old list implementation
+  has been deleted by D2 and is never preserved, repaired, wrapped, consulted, or
+  used as a behaviour target. Record the consumer-impact finding as a named
+  artefact and have an architecture reviewer sign it off before the interface
+  change lands in D5.
 - Specify the deletion of the speculative `EvidenceCorpus` `rank`/`explain`/
   `compare` ops and their `NotImplementedYet` (D5 executes; the `graph-corpus-sdk`
   barrel re-exports these types and is pruned in the same landing).
@@ -1239,22 +1344,22 @@ specifies exactly those against the shared primitives.
 - Enumerate which `graph-view` exports are deleted, renamed, or freshly defined by
   the new contract. A surviving export with an old name must be justified from the
   new D4 contract alone, not inherited from the old list tool.
-- Name the layer split: shared graph-core substrate; EEF raw-corpus foundation;
-  explicit graph-native construction/adaptation boundary; EEF/Oak binding
-  operations; the pedagogical-move-to-EEF-query mapping (the calling agent's
-  workflow, guided by the prompt; any deterministic helper for it lives in the
-  curriculum consumer layer, never in graph-core and never hidden in a tool body);
-  EEF-specific MCP composition module (separate from substrate packages;
-  substrate never imports MCP types).
+- Name the layer split: shared graph-core substrate; EEF raw-data foundation;
+  explicit deterministic graph projection boundary; EEF/Oak binding operations;
+  invoking-agent workflow that selects real corpus ids before the tool call; and
+  EEF-specific MCP composition module (separate from substrate packages; substrate
+  never imports MCP types). There is no server-side or plan-authored
+  pedagogical-move-to-EEF-query mapping in this plan.
 
 **Done when (acceptance):**
 
-- The target operation set serves every D3 tool/resource and specifies no unbuilt
-  or unused operation (the no-`NotImplementedYet` end state is executed in D5).
+- The target operation set serves every D3 tool/resource and specifies no unbuilt,
+  unused, placeholder, stubbed, or future-hook operation (the no-`NotImplementedYet`
+  end state is executed in D5).
 - The consumer-impact finding is recorded and names BOTH the zero external blast
-  radius AND the in-package edits (graph-core barrel + the 7-op contract test + the
-  old list tool's full import surface), with the D5/D6 atomic deletion/co-land rule
-  for any deleted old-list dependency.
+  radius AND the in-package edits (graph-core barrel + the 7-op contract test).
+  The old list-shaped EEF tool is already absent from the D2 path and is not a
+  consumer to preserve.
 - Graph-core primitives and EEF/Oak binding operations are separated; the minimal
   graph-native EEF view contract is ratified before D5 starts.
 - `related_guidance_reports` are modelled as a `guidance_report` node kind with a
@@ -1271,21 +1376,21 @@ specifies exactly those against the shared primitives.
 of the operation set, the domain-generic no-stub contract, and the consumer-impact
 finding).
 
-### D5 - Graph construction + operation implementation + loader removal
+### D5 - Deterministic graph projection + operation implementation
 
-**Purpose:** construct/adapt the graph-native EEF view from D2's raw-corpus
-foundation, implement the D4 operations, and remove the validation-layer ingest
-and the list-era remnants.
+**Purpose:** ingest D2's typed raw-data foundation into the graph-native EEF
+projection and implement the D4 operations. D2 has already deleted the
+validation-layer load/list/Zod/freshness path; D5 does not preserve or replace it
+with another runtime load path.
 
 **Folded detail:** D5 carries the chosen view form's proof needs, the two
-type-erasure seams to re-key on `EefStrandId`, the deletion-ordering red-tree
-hazard, and the runtime proof over the real corpus with the typed id/payload
-relationship asserted.
+type-erasure seams to re-key on `EefStrandId`, and the runtime proof over the
+real corpus with the typed id/payload relationship asserted.
 
 **Do (TDD cycles):**
 
-- Construct/adapt the D4-ratified graph-native EEF view from the D2 raw-corpus
-  foundation. The boundary must be explicit and pure: it may materialise a
+- Ingest the D4-ratified graph-native EEF view from the D2 raw-data foundation.
+  The boundary must be explicit and pure: it may materialise a
   standardised graph structure or expose a lazy view, but graph operations,
   traversal semantics, provenance envelopes, and MCP schema derivation must depend
   on this graph-native view rather than on scattered assumptions about raw
@@ -1296,18 +1401,18 @@ relationship asserted.
 - Implement the ratified graph-native shape: node ids and kinds, edge types, node
   payload/reference policy, indexes, metadata, provenance envelope shape, and which
   raw literal values are retained verbatim for teacher evidence. Any graph-native
-  wrap/project/index must be typed as a direct projection over `Strand`,
-  `StrandByStrandId`, `EefStrandId`, and derived edge facts. Full-node payloads
-  preserve either `StrandByStrandId[Id]` or a named derived projection of it; edge
+  wrap/project/index must be typed as a direct projection over `EefStrand`,
+  `EefStrandById`, `EefStrandId`, and derived edge facts. Full-node payloads
+  preserve either `EefStrandById[Id]` or a named derived projection of it; edge
   endpoints remain derived literal ids; graph-core public result/error types carry
   `TNodeId`; broad `string` ids, generic graph-node payloads, JSON-like records,
   and later EEF re-narrowing are forbidden.
 - Implement the D4-ratified graph operations.
-- Expose EEF-native graph operations in the EEF binding layer. Any deterministic
-  helper that maps a pedagogical move to EEF queries belongs in the curriculum
-  consumer adapter/D6, not in shared graph-core and not as hidden logic inside a
-  tool body; the semantic mapping from a teacher's situation to the move is the
-  calling agent's workflow.
+- Expose EEF-native graph operations in the EEF binding layer. No operation maps an
+  Oak signal category or agent-side pedagogical move to EEF queries. The semantic
+  mapping from a teacher's situation to a pedagogical move is the calling agent's
+  workflow, and the EEF tool receives only finite corpus keys selected before the
+  call.
 - Build the EEF evidence subgraph envelope: complete full-node members, all
   member edges, frontier references for related strands outside the members.
 - Attach corpus-level caveats and attribution once per envelope as **additive**
@@ -1315,24 +1420,22 @@ relationship asserted.
   their own typed evidence fields. Whether `data_version`/`last_updated` are
   surfaced is the D1 value-contract's call - they carry no governance or freshness
   semantics here.
-- Remove the loader path entirely and WITHDRAW the freshness apparatus in full:
-  delete `freshness.ts`, `checkFreshness`, `DEFAULT_THRESHOLD_DAYS`, the
-  `Freshness*` types, `freshness.unit.test.ts`, the `loader.ts`
-  `safeParse`/fallible variants and its freshness binding + tests, the
-  `graph-corpus-sdk` index re-exports, and every ADR-175 code reference. Delete
-  `strand-schema.ts` here too - its physical deletion is DEFERRED from D2 to
-  co-land with the loader removal so the tree never goes red (D2 re-homed
-  `EefStrand`; D5 removes the file once `loader.ts`'s `EefToolkitSchema`/`EefStrand`
-  imports and the `index.ts` re-exports are gone). Replace `loadEefCorpus` with the
-  pure infallible graph constructor/adaptor.
-- Delete every `NotImplementedYet`, the `rank`/`explain`/`compare` ops, and the
-  `response-budget.ts` cap. If those deletions would break the old list tool, D5
-  and D6 co-land and the old list tool is removed in the same atomic tranche; do
-  not keep, repair, wrap, or consult list-based logic.
+- Verify the D2-deleted load/list/Zod/freshness path remains absent:
+  no `loader.ts`, `loadEefCorpus`, `freshness.ts`, `checkFreshness`,
+  `DEFAULT_THRESHOLD_DAYS`, `Freshness*` types, loader/freshness tests,
+  list-shaped EEF tool, package re-export, or ADR-175 code reference is
+  reintroduced. The graph constructor/adaptor is the only ingest path from the D2
+  raw foundation to the D4 graph projection.
+- Delete every `NotImplementedYet`, the `rank`/`explain`/`compare` ops, and any
+  remaining response-cap artefact. Do not keep, repair, wrap, or consult
+  list-based logic. Do not replace deleted stubs with new placeholders, shims,
+  fake graph methods, or exported operations whose behaviour is deferred; implement
+  the D4-ratified operation with tests or leave it unexported.
 
 **Done when (acceptance):**
 
-- The interface contains no unbuilt operation and no `NotImplementedYet`.
+- The interface contains no unbuilt operation, placeholder, shim, stub branch,
+  fake graph method, or `NotImplementedYet`.
 - Worked contexts return complete full-node members and all member edges, pinned
   as literal id sets from the committed corpus.
 - Frontier references are present when related strands sit outside the members.
@@ -1348,9 +1451,10 @@ relationship asserted.
   and derived literal edge endpoints, not only runtime shape presence.
 - Compile-time proof covers graph-core public result/error types preserving
   `TNodeId` and the EEF binding instantiating them with `EefStrandId`.
-- If D5 deletes any old-list dependency, the same landing removes the old list
-  tool or co-lands D6 so no shim preserves, repairs, wraps, or
-  consults list logic.
+- The old list tool remains absent; no shim preserves, repairs, wraps, or consults
+  list logic.
+- No replacement surface is registered or exported unless it is backed by real
+  graph-derived behaviour and tests in the same landing.
 
 **Proof:** `unit` + `integration` over the real corpus. Command:
 `pnpm --filter @oaknational/graph-corpus-sdk test` +
@@ -1394,21 +1498,20 @@ deleted, and the ADR-179 boundary that keeps MCP types out of substrate packages
   D3/D4 contract is wrong and must be corrected.
 - Register the ratified EEF surface behind `OAK_CURRICULUM_MCP_EEF_ENABLED`
   alongside the Oak curriculum tools; co-gate tool, resource, and prompt
-  (`eef-surface.ts`, `handlers.ts`, `register-prompts.ts`).
+  (`eef-surface.ts`, `handlers.ts`, `register-prompts.ts`). Registration is only
+  for implemented surfaces: no empty tools, placeholder handlers, fake resources,
+  prompt shells, or "coming later" entries may appear behind the flag.
 - Update the EEF prompt, interpretation resource/template, and tool descriptions
   for cover-lesson preparation: evidence use, caveat preservation, and when not
   to use EEF.
-- Delete the superseded list-shaped `eef-explore-evidence-for-context`
-  implementation and implement the graph surface from the ratified D3-D5
-  structure: remove `projection.ts`,
-  `response-budget.ts`, dual content output, citation revalidation, and the Zod
-  schemas in `tool-definition.ts`/`validation.ts`. Delete `citation-shape.ts` at
-  `evidence-corpus/citation-shape.ts` (one level ABOVE the tool dir - verify no
-  other evidence-corpus tool imports it first). Re-express any genuine
+- Verify the superseded list-shaped `eef-explore-evidence-for-context`
+  implementation deleted in D2 remains absent while implementing the graph surface
+  from the ratified D3-D5 structure. `projection.ts`, `response-budget.ts`, dual
+  content output, citation revalidation, tool-level Zod validation, and
+  `evidence-corpus/citation-shape.ts` do not return. Re-express any genuine
   citation-envelope invariant (non-empty caveats, valid `eef_url`) as a TypeScript
-  tuple type (`readonly [T, ...T[]]`), not Zod. This replacement deletes the old
-  list implementation; it is evidence only for what to delete and is never
-  preserved, repaired, wrapped, consulted, or used as a behaviour target.
+  tuple type (`readonly [T, ...T[]]`), not Zod. The old list implementation is
+  never preserved, repaired, wrapped, consulted, or used as a behaviour target.
 
 **Done when (acceptance):**
 
@@ -1420,7 +1523,9 @@ deleted, and the ADR-179 boundary that keeps MCP types out of substrate packages
   reaches the actual `server.registerTool`/
   `registerAppTool` path so the SDK validates `structuredContent` against it;
   tools return `structuredContent` only with `content: []`; error returns use
-  `isError: true`.
+  `isError: true`; every registered tool/resource/prompt has real graph-derived
+  behaviour and tests, with no placeholder handler, stub response, fake
+  registration, or deferred implementation.
 - Flag off: no EEF tool, resource, or prompt appears in registration or the
   landing page.
 - Resource payloads match the ratified contract; descriptions explain evidence
@@ -1512,10 +1617,12 @@ Artefacts already in the tree, so the next session does not rediscover them:
 - D0 relocated `strandById`, `Strand`, `StrandByStrandId`, `lastUpdated`, and
   `EefToolkitData` into
   `packages/sdks/graph-corpus-sdk/src/eef-strands/strand-lookup.ts`. The corpus
-  file `eef-toolkit.external-data.ts` is pure data.
-- Direction notes in the headers of `eef-toolkit.external-data.ts`, `loader.ts`,
-  and `strand-schema.ts` mark the Zod/freshness path as redundant and under
-  removal. They describe current behaviour honestly and point to this plan.
+  file `eef-toolkit.external-data.ts` is pure data. D2 canonicalises the raw type
+  names from that starting point to `EefStrand` / `EefStrandById` / `EefStrandId`.
+- Pre-D2 direction notes in the headers of `eef-toolkit.external-data.ts`,
+  `loader.ts`, and `strand-schema.ts` mark the Zod/freshness path as redundant.
+  D2 replaces those notes by deleting `loader.ts` and `strand-schema.ts` and
+  keeping `eef-toolkit.external-data.ts` pure data.
 - The old runtime `strands` Set was removed. D2's raw id-to-strand lookup is the
   single runtime raw-id surface and backs `isValidStrandKey`.
 - The `validate-external-data-files` repo-validator no longer exists and
@@ -1526,19 +1633,21 @@ Artefacts already in the tree, so the next session does not rediscover them:
   live, 5 `NotImplementedYet`). Its RDF substrate is used by `graph-ingest` and
   `graph-project`; the `threads` adapter is an empty stub - so the query-contract
   reshape (D4 specifies, D5 executes) has zero EXTERNAL-consumer blast radius, with
-  bounded in-package edits remaining (graph-core's own barrel, the `graph-view`
-  contract test, and the old list tool's imports of `SubgraphResult`,
-  `loadEefCorpus`, `LoadEefCorpusError`, `selectEefSeedIds`, `capForBudget`,
-  projection, validation, and citations). The speculative `EvidenceCorpus`
+  bounded in-package edits remaining (graph-core's own barrel and the `graph-view`
+  contract test). Old list imports of `SubgraphResult`, `loadEefCorpus`,
+  `LoadEefCorpusError`, `selectEefSeedIds`, `capForBudget`, projection,
+  validation, and citations are D2 deletion evidence, not graph-core consumer
+  evidence. The speculative `EvidenceCorpus`
   `rank`/`explain`/`compare` ops live (type-only) in
   `graph-corpus-sdk/src/eef-strands/types.ts`.
 - The current EEF MCP tool is the list-shaped `eef-explore-evidence-for-context`
   in `oak-curriculum-sdk/src/mcp/evidence-corpus/tools/`, registered by
   `apps/oak-curriculum-mcp-streamable-http` behind `OAK_CURRICULUM_MCP_EEF_ENABLED`,
   with `projection.ts`, `response-budget.ts`, and Zod schemas
-  (`tool-definition.ts`/`validation.ts`) as the superseded shape. `citation-shape.ts`
-  lives one level up at `evidence-corpus/citation-shape.ts` (D6 deletes it after
-  verifying no other importer).
+  (`tool-definition.ts`/`validation.ts`) as the superseded shape deleted by D2.
+  `citation-shape.ts` lives one level up at `evidence-corpus/citation-shape.ts`;
+  D2 deletes it when it has no non-list importer, otherwise D6 deletes the
+  remaining citation-only residue while registering the graph surface.
 
 ## Fully Specified End State
 
@@ -1554,14 +1663,15 @@ Artefacts already in the tree, so the next session does not rediscover them:
 ### MCP Surface
 
 - Ratified practical-small tool/resource boundary: one function-dispatched EEF MCP
-  tool for pedagogical-move evidence and strand inspection, plus corpus metadata. A
-  graph-forward MCP collection is a follow-on plan, not this D3-D6 target.
+  tool for corpus-derived evidence options and strand inspection, plus corpus
+  metadata. A graph-forward MCP collection is a follow-on plan, not this D3-D6
+  target.
 - The MCP surface includes a default workflow: understand the teacher task, use
-  Oak API/search for the curriculum material and Oak's misconception and
-  prior-knowledge graphs for the pedagogical signals in it, name the pedagogical
-  move and query EEF for the evidence on it, inspect strands only when extra
-  caveat/detail is needed, then return teacher-facing options, trade-offs, caveats,
-  and a short EEF rationale.
+  Oak API/search for the curriculum material, let the invoking agent interpret
+  teacher/Oak context outside the deterministic tool, select finite EEF values or
+  strand ids that trace through the D3 source-path table, inspect strands only when
+  extra caveat/detail is needed, then return teacher-facing options, trade-offs,
+  caveats, and a short EEF rationale.
 - D3 may specify multiple workflows, but each workflow must target MCP
   primitives by intention: model-controlled tools for EEF action, application-
   driven resources/templates for corpus context, user-controlled prompts for
@@ -1575,12 +1685,11 @@ Artefacts already in the tree, so the next session does not rediscover them:
   prompt-specified workflow, but every EEF tool call receives only finite, fixed
   inputs derived from Oak/EEF data.
 - Tool outputs provide compact structured context for the invoking agent. They do
-  not attach repeated explanation boilerplate to every result. If the EEF corpus
-  methodology already explains a concept, D3/D5 expose that fixed-data
-  explanation rather than inventing a parallel one; if graph/tool-specific
-  interpretation is missing, D3/D5 add the smallest necessary fixed-data
-  ontology and expose it through the EEF interpretation resource/template so
-  agents can fetch interpretation help only when needed.
+  not attach repeated explanation boilerplate to every result. D3/D5 expose fixed
+  corpus methodology/caveats/source/provenance and graph-structural field/edge
+  names derived from the D4/D5 graph contract; they do not invent a parallel
+  interpretation ontology, caveat taxonomy, adaptation taxonomy, or tool-specific
+  evidence vocabulary.
 - Descriptions explain the cover-lesson value path and evidence-preservation
   obligations.
 - Each tool has semantic input narrowing backed by fixed-data predicates, plus a
@@ -1596,6 +1705,9 @@ Artefacts already in the tree, so the next session does not rediscover them:
 - The only Zod on the MCP side is the input/output schema declarations; nothing
   parses the corpus.
 - With the flag off, no EEF tool, resource, or prompt appears.
+- With the flag on, every registered EEF tool, resource/template, and prompt is
+  implemented end to end; no placeholder, stub response, fake registration, or
+  deferred handler appears anywhere in the MCP surface.
 - Every externally supplied field is narrowed by its classified boundary rule
   before graph code sees it.
 - The configured `outputSchema` reaches the actual MCP registration path; tests
@@ -1605,17 +1717,19 @@ Artefacts already in the tree, so the next session does not rediscover them:
 ### Graph Layer
 
 - graph-core's query contract is reshaped to the concrete operations the MCP
-  surface consumes; no stubbed polymorphic ops and no `NotImplementedYet` remain.
+  surface consumes; no stubbed polymorphic ops, placeholder operations, future
+  hooks, fake implementations, or `NotImplementedYet` remain.
 - Graph-core public result/error types carry the associated `TNodeId`, and the EEF
   binding instantiates that id as `EefStrandId`.
 - The raw EEF corpus is not the graph contract. D5 owns an explicit graph-native
   construction/adaptation boundary from the D2 raw foundation; the result may be
   materialised or lazy, but graph operations and MCP schemas consume that
   graph-native view. The graph is derived from the raw data and preserves exact
-  `EefStrandId`/`StrandByStrandId[Id]`/edge endpoint relationships; it is never
+  `EefStrandId`/`EefStrandById[Id]`/edge endpoint relationships; it is never
   recovered later from broad strings or generic JSON-like payloads.
-- Shared graph-core primitives, the EEF/Oak binding, the pedagogical-move-to-EEF
-  mapping, and the EEF-specific MCP composition module remain separate layers.
+- Shared graph-core primitives, the EEF/Oak binding, and the EEF-specific MCP
+  composition module remain separate layers; no separate pedagogical-move-to-EEF
+  mapping is introduced.
 - Operations are tested on the real corpus.
 - Returned subgraphs contain full nodes, member edges, and frontier references,
   bounded by graph scope, never by a cap.
@@ -1627,8 +1741,8 @@ Artefacts already in the tree, so the next session does not rediscover them:
 
 - `EEF_TOOLKIT_DATA` remains the only fixed corpus source, typed `as const`.
 - `EefToolkitData`, `EefStrand` (= `(typeof EEF_TOOLKIT_DATA.strands)[number]`),
-  `EefStrandId`, `EefKeyStage`, `EefPriority` derive from the constant as the raw
-  corpus foundation.
+  `EefStrandId`, `EefStrandById`, `EefKeyStage`, and `EefPriority` derive from the
+  constant as the raw corpus foundation.
 - No consumer accepts the corpus as `unknown`; no Zod parses or validates the
   corpus (the sole Zod calls are the MCP input/output declarations); no freshness
   apparatus exists (ADR-175 withdrawn and deleted); no type assertion
@@ -1656,8 +1770,8 @@ The plan is done when D0-D7 are complete and:
   narrowed at the boundary;
 - graph-core's query contract is reshaped to only the operations the ratified MCP
   surface consumes, graph-core public result/error types preserve `TNodeId`, and
-  consumer impact on graph-ingest/graph-project/threads plus the old list tool's
-  full import surface is recorded;
+  consumer impact on graph-ingest/graph-project/threads is recorded; D2 separately
+  records the old list tool's import surface as deletion evidence;
 - the corpus's `as const` type information flows into the graph-native EEF view
   and MCP outputs without being thrown away and re-established;
 - the graph construction/adaptation boundary is explicit, pure, and infallible for
@@ -1665,12 +1779,18 @@ The plan is done when D0-D7 are complete and:
   graph contract, but the graph is derived from it and preserves exact raw id,
   payload, and edge relationships; the freshness apparatus is fully removed
   (ADR-175 withdrawn and deleted); no response cap or rank-and-cut remains;
-- D5/D6 atomically remove the old list-shaped EEF tool whenever D5 deletes a
-  list-era dependency; list-based logic is never preserved, repaired, wrapped, or
-  used as the source of expected behaviour. The old implementation is evidence
-  only for what to delete. Any overlap with old outputs is acceptable only as an
-  incidental result independently derived from the ratified D1 value contract, D3
-  MCP surface, and D4/D5 graph structure;
+- in the EEF graph-tool stack, no stub tool/resource/prompt, placeholder handler,
+  fake registration, future hook, shimmed graph method, or `NotImplementedYet`
+  remains or is newly built; a capability is implemented with real graph-derived
+  logic and same-landing tests, or it is absent. Existing non-EEF stub-mode
+  surfaces elsewhere in the repo are outside this plan's ownership and do not
+  authorise EEF stubs;
+- D2 removes the old list-shaped EEF tool and its load/list/Zod/freshness path
+  outright; D5/D6 verify that deleted path remains absent while implementing the
+  graph projection and MCP surface. List-based logic is never preserved, repaired,
+  wrapped, consulted, or used as the source of expected behaviour. Any overlap with
+  old outputs is acceptable only as an incidental result independently derived from
+  the ratified D1 value contract, D3 MCP surface, and D4/D5 graph structure;
 - ADR-038 covers fixed `as const` constants, grounded in the
   `unknown-is-type-destruction` rule and operationalising ADR-034's
   system-boundary doctrine for known in-repo constants; ADR-157's two EEF Zod
@@ -1701,7 +1821,7 @@ The plan is done when D0-D7 are complete and:
 - Keeping a response cap, rank-and-cut, or field-mask-for-budget on graph
   results.
 - Keeping, repairing, wrapping, or deriving expected behaviour from the old
-  list-based EEF tool logic after D5 deletes list-era dependencies.
+  list-based EEF tool logic after D2 deletes it.
 - Treating the existing `graph-core` `GraphView` query contract as fixed, or
   conversely demolishing graph-core's shared RDF substrate that other consumers
   depend on.
@@ -1738,9 +1858,10 @@ The plan is done when D0-D7 are complete and:
   RDF substrate. Mitigation: D4 records the consumer-impact finding (verified:
   graph-ingest/graph-project use only the RDF substrate; the threads adapter is an
   empty stub - ZERO external-consumer blast radius); bounded IN-PACKAGE edits
-  remain (graph-core's own `src/index.ts` barrel, the `graph-view` 7-op contract
-  test, and the old list tool's full import surface), enumerated in D4 and executed
-  in D5/D6; a `SubgraphResult` name is kept only if freshly ratified from the new
+  remain (graph-core's own `src/index.ts` barrel and the `graph-view` 7-op contract
+  test), enumerated in D4 and executed in D5; the old list tool's import surface is
+  deletion evidence already owned by D2, not a compatibility target. A
+  `SubgraphResult` name is kept only if freshly ratified from the new
   graph contract, not as a holdover; the shared RDF substrate is out
   of scope for the reshape; an `architecture` reviewer and `type-expert` sign off
   before the interface change lands.
@@ -1760,17 +1881,14 @@ The plan is done when D0-D7 are complete and:
   reintroducing a normalized node. Any further concrete, named compile-time cost is
   a fresh `type-expert` decision at that point, still never a normalized-shape
   hatch.
-- **Intermediate red-tree window (deletion ordering).** Deleting `strand-schema.ts`
-  in D2 while `loader.ts`/`index.ts` still import it, or deleting loader/cap/
-  projection/citation surfaces in D5 while the old list tool still consumes them,
-  would leave `pnpm type-check` red across later deliverables. Mitigation:
-  `strand-schema.ts` deletion is deferred to co-land with the `loader.ts`/
-  `freshness.ts` removal in D5; if D5 deletes any dependency imported by the old
-  list tool, D5 and D6 co-land or the old tool is deleted first. The list logic is
-  not preserved, repaired, wrapped, or used as the expected-output source. D2
-  re-homes `EefStrand`; any red old-list compile path is resolved by removing or
-  co-landing that old path, not by preserving it. Every deliverable ends with
-  `pnpm type-check` green.
+- **Intentional in-flight red-tree window.** Deleting the old
+  load/list/Zod/freshness path before the graph projection and MCP surface are
+  fully rebuilt may leave compile errors while D2-D6 are in flight. That is
+  acceptable because preserving a wrapper or compatibility surface would keep the
+  wrong idea alive. Mitigation: D2 deletes the wrong path outright; D5 ingests the
+  D2 raw foundation into the deterministic graph projection; D6 registers the new
+  graph-derived MCP surface. The tree is validated once the replacement chain is
+  complete, not by carrying old contracts through the middle.
 - **MCP schema declaration not reaching runtime validation.** The universal-tools
   registration path may not carry `outputSchema` to the SDK even when local
   declarations exist. Mitigation: D3 verifies the live SDK/app path, D6 proves the
@@ -1855,7 +1973,8 @@ findings are folded in above. A post-repair reviewer pass against the tightened
 raw-data -> graph-native-boundary and single-Zod-call wording was run on
 2026-05-31 from now-archived reviewer briefs; its findings are folded in above. A
 four-architecture-reviewer pass was also run on 2026-05-31; its findings,
-including the D5/D6 old-list atomic deletion requirement, are folded in above.
+including the D2 old-list/load/Zod/freshness deletion requirement and the D3
+source-path/no-crosswalk requirement, are folded in above.
 Implementation may proceed only from this folded-in plan body. The reviewers below
 still fire at execution time against the *ratified D3/D4 outputs*, which did not
 exist at review time:

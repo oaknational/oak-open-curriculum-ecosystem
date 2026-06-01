@@ -1,5 +1,33 @@
 # Next-Session Record — `eef` thread
 
+> **D2-D6 REPLACEMENT-PLAN CORRECTION APPLIED (2026-06-01, Evergreen Budding
+> Copse / `019e7f`; owner requested handoff, no pnpm check, commit all files).**
+> This session read D2, ran four architecture reviewers, critically synthesised
+> their findings, then applied the owner correction: no wrappers, no compromises,
+> no remnant of the old shape, and no requirement to keep the tree green while the
+> fundamental replacement is in flight. The live plan now states: D2 builds the
+> typed raw-data ingestion foundation from the complete in-memory
+> `EEF_TOOLKIT_DATA` constant; D2 deletes the old school-context/strand-schema/
+> load/list/Zod/freshness path outright; D3 requires
+> `contract field -> graph-native subset -> raw EEF source path -> proof test`;
+> D3/D6 contain no Oak-signal-category, pedagogical-move, misconception,
+> prerequisite, quiz, text, subject, or topic crosswalk to `EefStrandId`; D5
+> ingests the D2 raw foundation into the D4-ratified deterministic graph-native
+> EEF projection; and D6 registers only graph-derived MCP surfaces. The old list
+> implementation is deletion evidence only, never a behaviour target. Napkin
+> captures the correction. Collaboration claim
+> `8f26914a-2482-43ea-87c8-fa1f5e5113d8` is closed. **Next safe step:** implement
+> D2 exactly as written in
+> `eef/current/eef-graph-tool-completion.plan.md`; do not introduce selector lists,
+> compatibility fallbacks, raw-foundation wrappers, static no-survivor audit
+> harnesses, stub tools, or old-list behaviour repairs.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Evergreen Budding Copse` | `codex` | `GPT-5` | `019e7f` | `eef-d2-d6-replacement-plan-correction` | 2026-06-01 | 2026-06-01 |
+>
+> ---
+>
 > **D1 COMPLETE + ANCILLARY REPORTS ARCHIVED (2026-05-31, Kilned Crackling
 > Ember / `019e7f`; committed at `a6ec6766`; no `pnpm check` by explicit owner
 > direction).** Double-checked the settled D0/D1 content after owner ratification.
