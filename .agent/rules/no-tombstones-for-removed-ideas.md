@@ -20,15 +20,30 @@ diligence rather than as preservation.
 
 ## Rule
 
-When removing a wrong idea from a plan, ADR, PDR, governance doc, rule,
-README, or code comment:
+This rule is about prose that describes the present design — a plan, ADR, PDR,
+governance doc, rule, README, or code comment stating what the system *is* and
+*does*. When you remove a wrong idea from such prose:
 
 1. State the correct design in the positive: what the system *is* and *does*.
-2. Delete the wrong idea's description rather than relabelling it.
+2. State the design that replaces the wrong idea; its description goes with it.
 3. Read the result as a first-time reader. If the dead idea is still
    reconstructable from the prose, it is not yet removed.
 
-## Forbidden
+Two things you write carry their own subject — an action, or a change — and
+read positively on their own terms:
+
+- **An instruction to act** — "delete `loader.ts`", "remove the response
+  cap" — states what to do. Removing code is ordinary development; the
+  instruction describes the work and goes once the work is done.
+- **A history record** — an ADR amendment log, a dated continuity note, the
+  napkin, `.agent/experience/` — has a change as its subject: "on 2026-06-01
+  the query layer became real-operations-only." It states what changed and
+  when.
+
+So: when the present design is what you are writing, state it and stop. When
+the story of a change matters, record it where change is the subject.
+
+## Recognising the failure mode
 
 - Rejection labels: "rejected", "to avoid", "the original X error",
   "X was wrong", reframe-consequence banners.
@@ -40,18 +55,6 @@ README, or code comment:
   compatibility layer, no …") where a single positive invariant carries the
   same force ("every operation is implemented with real logic and tests, or
   it is absent").
-
-## Allowed Exception
-
-Instructions to delete real code or files that still exist are deletion
-discipline, not monuments: "delete `loader.ts`", "remove the response cap".
-These are permitted until the code is gone; once it is gone, the instruction
-goes with it. Git history carries the evolution.
-
-The sanctioned history surfaces — ADR amendment logs, dated continuity
-records, the napkin, `.agent/experience/` — legitimately record what changed
-and why. Recording an evolution there is not a monument; the monument is the
-dead idea re-stated as live-document guidance.
 
 ## Why This Rule Is Strict
 
@@ -72,8 +75,12 @@ increment is tracked in
 
 ## Related
 
+- [`rules-have-no-exceptions`](rules-have-no-exceptions.md) — a rule stated by
+  where it stops holding is the same negation pattern; this rule carries no
+  exception clause for that reason.
 - [`replace-dont-bridge.md`](replace-dont-bridge.md) — the code-surface
-  sibling (don't preserve a wrong shape; here, don't memorialise one).
+  sibling: keep a wrong shape out of the code as this keeps it out of the
+  writing.
 - [`no-hedging-vocabulary.md`](no-hedging-vocabulary.md) — adjacent
   write-time language discipline on doctrine surfaces.
 - [`no-moving-targets-in-permanent-docs.md`](no-moving-targets-in-permanent-docs.md)

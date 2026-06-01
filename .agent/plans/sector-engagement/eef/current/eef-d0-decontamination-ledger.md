@@ -131,6 +131,45 @@ only in the EXECUTION STATUS note and not propagated:
 - **Ledger completeness** — the `sector-engagement/roadmap.md` swept-clean
   disposition was added (row above).
 
+## Re-open dispositions (2026-06-01)
+
+D0's decontamination was re-opened because the original sweep-token list omitted
+the stub / adapter / `Inc.3` / `EvidenceCorpus` framing, so live contamination
+survived the first sweep. The Estate Decontamination sweep tokens in the live
+plan were extended to cover these concepts, and the estate was re-swept.
+
+| Target | Hit | Disposition |
+|---|---|---|
+| `…/173-graph-stack-topology.md` | the 2026-05-21 amendment's "Threads adapter + EEF strands adapter concurrent tenants in Inc.1; prerequisite/misconception at Inc.3" arrangement read as live topology after the placeholder was deleted in code | **Corrected** by a dated **2026-06-01 amendment**: the shared graph-core query layer ships real operations only (a query operation is implemented with real graph-derived logic and tests, or it is absent); the EEF strands corpus is the active first corpus consumer; further corpus adapters and cross-corpus join primitives are built when their consumers exist; this supersedes the 2026-05-21 concurrent-tenant arrangement and the Threads adapter placeholder is removed. The §First-wave body carries inline 2026-06-01 amendment markers. The RDF substrate is unchanged. The 2026-05-21 amendment summary is preserved as the dated amendment log (sanctioned history). |
+| `…/157-multi-source-open-education-integration.md` | the `EvidenceCorpus`-modelled-as-composition-over-`GraphView` note | **Stands** as demoted, self-disclaimed speculation. ADR-157 is Proposed (demoted), and the note is explicitly framed as speculative direction, not a settled decision. Demoted speculation is the preserved record, not live current-truth guidance. |
+| `packages/libs/graph-project/src/adjacency/index.ts` | adjacency-surface docstring (the `graph-project` comment named in the re-open) | **Current** (corrected in `50df209f`): describes the node→node traversal primitives and the conceptual seam against `DatasetCore.match()` in positive form, with no stub/adapter/`Inc.3` contamination. Verified clean this sweep. |
+| `.agent/plans/sector-engagement/eef/README.md` (currency note) | a surviving freshness monument ("There is no freshness gate over the corpus … an automated stale-data gate … was withdrawn") | **Corrected** to positive form: a fresh upstream check is taken before the corpus is copied into the SDK; the snapshot is a fully-known `as const` constant and types derive from it. Caught by the extended-token re-sweep (`no-tombstones-for-removed-ideas`). |
+| EEF estate-wide graph-plan sweep (`graph-mvp-arc`, `graph-portfolio-index`, `graph-combinatorial-arc`, `connecting-oak-resources/*`) | the `Inc.3` / adapter-roadmap framing across non-EEF graph plans | **Out of scope** for EEF D0 — owned by `graph-estate-consolidation.plan.md`. |
+
+### Re-open acceptance sweep (2026-06-01)
+
+Extended-token sweep (`NotImplementedYet`, `EvidenceCorpus`, `Inc.3`,
+`concurrent tenant`, `Threads adapter`, plus the original tokens) over EEF plans
+and non-plan documentation, excluding `archive/`, comms/napkin/distilled history,
+CHANGELOG, code (owned by D2/D5/D6), and non-EEF plans (owned by
+`graph-estate-consolidation`):
+
+- **Live current-truth references to the discarded concepts: zero.** The single
+  surviving live monument (the README freshness note) was corrected in this sweep.
+- **Preserved record (not contamination):** `conservation-map.md` (marked
+  "Historical record (do not action)" at the top); ADR-173's dated amendment log
+  and superseded 2026-05-21 arrangement; ADR-157's demoted speculation; the live
+  plan's own Estate Decontamination sweep-token list; the plan's dated
+  Carried-Context continuity record; the ledger's own narrative.
+- **Deletion discipline (sanctioned until the code is gone):** the plan's D2/D5/D6
+  instructions to delete `loader.ts`, `strand-schema.ts`, `school-context.ts`, the
+  old list tool, and the type-only `EvidenceCorpus` ops in
+  `graph-corpus-sdk/src/eef-strands/types.ts`.
+
+D0 decontamination is complete: the estate carries only the current design, with
+dated history, ADR amendment logs, and demoted speculation as the preserved
+record.
+
 ## Observations for follow-on (NOT actioned in D0 — out of scope)
 
 - **ADR-173 §"Notes for future revision" / "Open questions" are stale** (the ADR

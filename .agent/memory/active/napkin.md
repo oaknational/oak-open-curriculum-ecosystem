@@ -562,3 +562,24 @@ most important.
   a real detector (owner-agreed), rather than jamming in a broken hook to claim the
   structural cure is done. Naming "the cure needs more design" beat shipping a
   cure-shaped thing that doesn't work.
+
+### Opening statements (and handoff artefacts) teach by their form
+
+- An opening statement is the next agent's first and most-attended context, so its
+  *form* teaches, not just its content. Written in avoidance / remediation voice
+  ("D0 re-opened because the sweep was wrong", "most deliverables still carry 'no
+  stub, no fallback' lists", "do not expand scope"), it teaches the next agent to
+  write and think that way. Written as positive construction — the present truth and
+  the destination — it teaches that. My first opening statement was itself a
+  monument: it recited this session's mistakes, quoted the dead negation-lists, and
+  ran in don't-voice, while telling the next agent to "apply the no-tombstones rule."
+- Behaviour change: handoff / continuity artefacts (opening statements, thread
+  records, repo-continuity, plan banners) are the **highest-leverage place to live
+  no-tombstones first**, because they are loaded before anything else. State what is
+  true and done, and the next forward goal; let the history (why something re-opened,
+  what went wrong) stay in the napkin, ledger, and commit, where it is record rather
+  than live instruction. The destination is the content; the hazards are not.
+- Generative-metacognition note: applying a just-graduated rule to the very artefact
+  *about* that rule is where the recursion shows — writing the opening statement was
+  the test of whether I had actually internalised the rule or just documented it. The
+  artefact about the discipline must be a worked example of the discipline.

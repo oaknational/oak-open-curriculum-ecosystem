@@ -122,10 +122,9 @@ Currency note: the snapshot was 28 days old at relocation. The EEF Toolkit is a
 "living systematic review" updated roughly twice per year; caveat #8 inside the
 JSON records that the data reflects "May 2025 and October 2025 living systematic
 review updates where available." A fresh upstream check is taken before the
-corpus is copied into the SDK. There is **no freshness gate over the corpus**:
-the snapshot is a fully-known `as const` constant, and an automated stale-data
-gate over repo-held known data was withdrawn — see the live plan's D0 doctrine
-and the generalised ADR-038.
+corpus is copied into the SDK. The snapshot is a fully-known `as const` constant
+and types derive from it — see the live plan's D0 doctrine and the generalised
+ADR-038.
 
 ## Parent and Sibling Relationships
 

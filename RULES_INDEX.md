@@ -126,6 +126,7 @@ without proportional value.
 | `.agent/rules/register-identity-on-thread-join.md`                         | always-on      | —                                                                                                |
 | `.agent/rules/replace-dont-bridge.md`                                      | always-on      | —                                                                                                |
 | `.agent/rules/respect-active-agent-claims.md`                              | always-on      | —                                                                                                |
+| `.agent/rules/rules-have-no-exceptions.md`                                 | always-on      | —                                                                                                |
 | `.agent/rules/sha-prefix-in-collaboration-content.md`                      | always-on      | —                                                                                                |
 | `.agent/rules/ship-independent-coordinate-dependent.md`                    | always-on      | —                                                                                                |
 | `.agent/rules/sonarqube-mcp-instructions.md`                               | trigger-loaded | SonarQube MCP server usage                                                                       |

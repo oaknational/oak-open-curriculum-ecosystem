@@ -23,9 +23,8 @@
  * this with the type system; documentation is the load-bearing
  * surface.
  *
- * The contract is `manifest()` + `subgraph()`: real graph-derived
- * operations only. No stub / `NotImplementedYet` operations exist — a
- * capability is implemented with real logic and tests, or it is absent.
+ * The contract is `manifest()` + `subgraph()`: every operation is
+ * implemented with real graph-derived logic and tests, or it is absent.
  *
  * @example
  * ```typescript

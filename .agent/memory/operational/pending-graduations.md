@@ -37,6 +37,17 @@ substance that still needed a live queue home is preserved below. Processed
 source files were deleted after extraction so the repository does not carry
 pseudo-shards that hide the true buffer state.
 
+## 2026-06-01 capture — cross-platform rules generator (Twilit Threading Satellite)
+
+- **No generator exists for the rules' cross-platform forms; one was intended,
+  for consistency.** Each canonical `.agent/rules/<name>.md` is hand-mirrored
+  into `.claude/rules/`, `.cursor/rules/<name>.mdc`, `.agents/rules/`, and a
+  `RULES_INDEX.md` row, with `portability:check` validating alignment after the
+  fact. A generator would author every form from the canonical file so the forms
+  cannot drift and the index stays in lockstep. (The index header already drifted:
+  it says "three on-disk forms" while listing four.)
+  `[captured: 2026-06-01 | source: rules-have-no-exceptions authoring | target: agent-tools:rules-cross-platform-generator | trigger: owner-direction-or-next-rule-authoring | size: M | status: pending]`
+
 ## 2026-05-31 captures — EEF value reframe (Fruited Regrowing Copse)
 
 Captured by Fruited Regrowing Copse (claude / Opus 4.8 / `abec59`) during the EEF
