@@ -8,6 +8,31 @@ merge_class: append-only-narrative
 fitness_content_role: drainable-buffer
 ---
 
+## Session: 2026-06-01 — Agent skills discovery planning
+
+<!-- fitness exceeded by 299 lines; needs consolidation -->
+
+### What Was Done
+
+- Researched Cloudflare Agent Skills Discovery against live official agent
+  standards context, wrote the discovery research report, created the Agent
+  Skills Discovery child plan, created the Agentic Mechanisms Discovery parent
+  plan, aligned the existing MCP Server Cards plan to the parent/sibling
+  structure, and completed a light session handoff with no commit and no
+  aggregate check by owner direction.
+
+### Surprise
+
+- **Expected**: `collaboration-state comms append` would either write the
+  event and exit cleanly, or fail without creating the event.
+- **Actual**: the event file was written, but the command still exited non-zero
+  with `Bad control character in string literal...` while printing usage.
+- **Why expectation failed**: the append path appears to write the event before a
+  later parse/render step over shared collaboration state; the late step can fail
+  independently of the event write.
+- **Behaviour change**: after a comms append failure, inspect the new comms file
+  and active-claims state before retrying, to avoid duplicate events.
+
 ## Session: 2026-05-31 — Foamy docs-consolidation rotation
 
 The prior archive-only source-buffer replacement was invalid because active
@@ -583,3 +608,57 @@ most important.
   *about* that rule is where the recursion shows — writing the opening statement was
   the test of whether I had actually internalised the rule or just documented it. The
   artefact about the discipline must be a worked example of the discipline.
+
+## Session: 2026-06-01 — EEF seam taxonomy + plan enhancements (Windswept Floating Summit / d8560c)
+
+### Reusable pattern (graduate to a plan template/archetype later — owner-confirmed intent)
+
+- **Seam-mapping for fully planning a complex feature.** A deliverable chain is not
+  the linear Dn-1/Dn handoff it reads as; it is a DAG with named seam *kinds*, and
+  the adjacent handoffs are the least important. The taxonomy that fell out of the
+  EEF plan and is worth templating:
+  - **Fan-out seams** — one producer, two consumers, *different artifacts* (EEF: D2
+    gives D3 a source-path table but D5 the raw data; D4 gives D5 a view contract but
+    D6 schema-subsets). Failure mode: an output tuned for one consumer shortchanges
+    the other.
+  - **Confluence seams** — one consumer, non-adjacent producers (EEF: D5 <- D2 raw
+    data *skipping D3/D4* + D4 contract). The skip-level input is usually the deepest
+    seam, and the linear view hides it.
+  - **Closure arc** — the first contract deliverable to the last proof deliverable
+    (EEF: D1 ==> D7). The most important seam is the arc across the whole DAG, not any
+    link in it; nothing adjacent guards it.
+  - **Orthogonal runtime axis** — the design/runtime path crosses the execution DAG
+    perpendicularly; its seams (human->agent, agent->deterministic-tool, schema->SDK)
+    are not Dn-to-Dn.
+  - **Layering anti-seams** — boundaries held by *nothing crossing them* (ADR-179
+    substrate/MCP, import direction).
+  - **Cross-cutting ledger** — one artifact (the source-path table) that audits every
+    data-derivation seam at once.
+  - **Temporal seam** — an intentional red-tree window is a seam in time.
+- **The law that makes the taxonomy safe: seams compose, they are never reconciled.**
+  Because every junction input is a projection of one source of truth (here the
+  `as const` corpus), junctions compose by construction. Friction at a junction — a
+  field massaged to fit, a shape that "almost" matches, an awkward case to handle — is
+  the signal that an input has drifted from the root, to be fixed *upstream at the
+  source*, never bridged at the seam (`replace-dont-bridge`, `rules-have-no-exceptions`:
+  a misfit is evidence, not a task). Owner framing, verbatim intent: "no sections
+  should need 'reconciling'; an architectural tension is a signal we have misaligned a
+  fundamental concept, not a legitimate hard thing to match up." The EEF optionality
+  fix is the worked example (V1 claimed fields the corpus carries only sometimes →
+  cured at D2 cardinality + optional schema, not handled awkwardly at D5/D6).
+
+### Behaviour change — verify subagent claims *and my own corrections* before relaying/editing
+
+- Two Explore subagents this session produced confident, false structural facts I
+  nearly built on: one asserted "graph-project imports the RDF substrate, confirmed it
+  does NOT import graph-view" describing package contents that — at that path — didn't
+  exist; both gave `~N/30` corpus cardinalities that were wrong in both directions
+  (real: effectiveness 7/30, implementation 4/30, not "most"). The owner reminder
+  ("always critically assess responses from subagents") caught it before the wrong
+  numbers reached a plan edit.
+- Then I over-corrected: concluded "graph-ingest/graph-project don't exist" from a too
+  narrow `ls packages/core/` — they live in `packages/libs/`. Re-verifying my own
+  correction caught it. Behaviour change: ground every load-bearing claim against the
+  artefact directly, and treat my *own* intermediate conclusions (especially negative
+  existence claims from a single narrow command) with the same suspicion as a
+  subagent's — one `ls` of one directory is not "does not exist".

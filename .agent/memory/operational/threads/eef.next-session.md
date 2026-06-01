@@ -1,5 +1,109 @@
 # Next-Session Record — `eef` thread
 
+> **EEF PLAN SEAM-MAPPING + GROUNDED REVIEW CORRECTIONS (2026-06-01, Windswept
+> Floating Summit / `d8560c`; claude / Opus 4.8; owner-directed, no pnpm check,
+> commit).** Ran the two owner-requested reviews of the live plan — whole-plan
+> coherence and a D2-specific review — grounding every claim directly against
+> `EEF_TOOLKIT_DATA` and the repo. Two Explore subagents returned a fabricated
+> `graph-project` import fact and wrong `~N/30` cardinalities; both were caught by
+> direct verification before reaching any edit (and my own narrow-`ls`
+> over-correction — "graph-ingest/graph-project don't exist" — was caught too; they
+> live in `packages/libs/`). **Corrections + enhancements applied to the live
+> plan:**
+>
+> - **Status truth:** the claim that the `graph-view` query contract was "already
+>   removed in code" is false — `graph-core/src/graph-view/` (interface/types/index/
+>   contract test) and the EEF-local adapter are LIVE. Reworded: D2 deletes the
+>   adapter + old list tool (the contract's only consumers), D5 replaces the
+>   contract; `graph-ingest`/`graph-project` (in `packages/libs/`) consume only the
+>   RDF substrate, so zero external blast radius. The RDF substrate is genuinely
+>   multi-consumer.
+> - **V1 source-path fixes:** `behind_the_average_by_phase` and `applications` sit
+>   under `school_context_relevance` (not under `behind_the_average`); `meta.caveats`
+>   is corpus-level (one global block), not a per-strand field.
+> - **Optionality first-class (verified cardinalities over 30 strands):** universal
+>   floor `headline`/`definition`/`key_findings`/`tags` 30/30; sparse/optional
+>   `effectiveness` 7/30, `behind_the_average` 6/30, `implementation` 4/30,
+>   `common_pitfalls` 2/30, `school_context_relevance` 17/30, `related_strands`
+>   17/30, `related_guidance_reports` 7/30. D2 source-path table gains a corpus-
+>   cardinality column; D6 output schema marks non-floor fields optional; D7 proves
+>   graceful collapse on a floor-only strand.
+> - **Decision 10 added:** the system is deterministic data; the consuming agent is
+>   the only reasoner. Every surface is a deterministic projection of the static
+>   corpus; relevance/ranking/move→strand mapping belong to the agent; the static
+>   interpretation resource scaffolds its reasoning. This is the positive rationale
+>   for the no-server-side-crosswalk boundary. `EefStrand` is currently a
+>   `z.infer` type in the to-be-deleted `strand-schema.ts`; D2 repoints the name to
+>   the `as const` derivation. Three existing EEF-MCP files (`telemetry.ts`,
+>   `eef-evidence-grounded-lesson-plan-messages.ts`, `eef-evidence-guidance.ts`) now
+>   have a stated disposition; the R1/R7 guidance is corpus-grounded and is candidate
+>   D3-interpretation-resource content.
+> - **`## Sequencing` rewritten** as the exemplar seam map: three axes (execution
+>   schedule / dependency DAG / runtime path) + the value closure arc, then a seam
+>   taxonomy — fan-out (D1/D2/D4), confluence (D3/D5/D6, the D2→D5 skip-level
+>   construction boundary the deepest), closure arc (D1⇒D7), orthogonal runtime axis,
+>   layering anti-seams, the source-path-table ledger, the temporal red-tree seam —
+>   and the law **seams compose, they are never reconciled** (friction at a junction
+>   = an input drifted from the single corpus root; fix upstream, never bridge). D7
+>   gains an obligation to exercise the Oak/EEF workflow seam on more than one signal.
+>
+> **Next safe step:** the two reviews are COMPLETE; whether and when D2 is
+> implemented is an owner decision (next-steps discussion was pending at session
+> close). The D3/D4 PENDING reviewers fire later against ratified D3/D4 outputs. The
+> seam-mapping taxonomy + "seams compose" law is captured in
+> `pending-graduations.md` as a reusable plan-template/archetype candidate
+> (owner-confirmed intent). A live peer (Luminous Dancing Aurora, codex/GPT-5/
+> `019e82`) held an active claim on the `discovery/future/` plans and was editing
+> them at session close; the owner directed committing everything in this session's
+> bundle, so those plans were included (peer notified via a directed comms event;
+> their later edits land as a delta). This session's continuity + EEF-plan + napkin
+> edits are committed on `feat/graph-tooling-tidyup`; active-claims has no entry of
+> mine.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Windswept Floating Summit` | `claude` | `Opus 4.8` | `d8560c` | `eef-plan-seam-mapping-grounded-review-corrections` | 2026-06-01 | 2026-06-01 |
+>
+> ---
+>
+> **EEF PLAN RECAST AS POSITIVE DESIGN + D0 COMPLETE + NO-EXCEPTIONS RULE
+> (2026-06-01, Twilit Threading Satellite / `435b98`; claude / Opus 4.8;
+> committed `f8548985`; owner-directed, no pnpm check).** The live EEF plan now
+> reads as positive design throughout: it states what the system is and builds,
+> carried by one invariant — every tool, resource, prompt, graph operation, and
+> handler is implemented with real graph-derived logic and tests, or it is
+> absent. **D0** (fixed-data doctrine + validator removal + estate
+> decontamination) and **D1** (teacher value contract) are complete; D0 is
+> verified against its acceptance criteria and the repo: `repo-validators:check`
+> green, ADR-038/153/157/173 doctrine set, ADR-175 withdrawn, the `as const`
+> corpus types derived in `graph-corpus-sdk/src/eef-strands/strand-lookup.ts`,
+> and the decontamination ledger complete with a clean extended-token acceptance
+> sweep. Two rules now hold: **`rules-have-no-exceptions`** (a rule holds in
+> every case it governs; a misfit improves the rule) and the now exception-free
+> **`no-tombstones-for-removed-ideas`** (framed as a domain statement: removing
+> code is ordinary work, and a history record's subject is the change). How the
+> plan reached this shape lives in the napkin, the ledger, and commit
+> `f8548985`.
+>
+> **Next safe step:** two reviews, in order, held against the teacher value the
+> work serves (EEF evidence enriching Oak lesson adaptation, with strength, cost,
+> impact, caveats, and uncertainty preserved). (1) A whole-of-plan review of
+> `eef/current/eef-graph-tool-completion.plan.md`: does it cohere as one design in
+> service of that value — value contract → MCP surface → graph layer → raw corpus?
+> (2) A D2-specific review: is the typed raw-data foundation the right foundation —
+> does what it derives from `EEF_TOOLKIT_DATA` support the evidence the teacher
+> needs downstream, and is its boundary with D5/D3/D6 clean? These are reviews;
+> whether and when D2 is implemented is an owner decision after they land. The
+> plan's D3/D4 PENDING reviewers fire later, against the ratified D3/D4 outputs
+> once those exist. Continuity writes this session are working-tree (uncommitted)
+> on `feat/graph-tooling-tidyup`; active-claims empty.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Twilit Threading Satellite` | `claude` | `Opus 4.8` | `435b98` | `eef-plan-positive-recast-d0-complete-no-exceptions-rule` | 2026-06-01 | 2026-06-01 |
+>
+> ---
+>
 > **EEF GRAPH-TOOL RE-REVIEW + STUB DELETION + DECONTAMINATION (2026-06-01,
 > Shaded Swaying Sapling / `d37ba7`; claude / Opus 4.8; owner requested handoff,
 > no pnpm check, no commit).** Re-reviewed the live EEF plan for total old-shape

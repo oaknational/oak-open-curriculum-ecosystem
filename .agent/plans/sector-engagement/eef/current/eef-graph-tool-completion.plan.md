@@ -59,21 +59,127 @@ todos:
 
 ## Sequencing
 
-Two orderings are both true:
+This plan runs on three axes, and they are three views of one design, not three
+competing plans. The **execution schedule** is the order work lands; the
+**dependency structure** is what actually feeds what (the schedule is a flattening
+of it); and the **design / runtime path** is how value flows once it is built. A
+fourth thing — the **value closure arc** — runs across the whole structure.
+
+**Design / runtime path** (how value flows at runtime):
 
 ```text
-design / runtime path:  teacher -> AI host -> MCP tool/resource/prompt surface -> graph methods -> graph-native EEF view -> raw corpus
+teacher -> AI host (the reasoner) -> MCP tool/resource/prompt surface
+        -> graph methods -> graph-native EEF view -> raw corpus
 ```
+
+**Execution schedule** (the order work lands):
 
 ```text
-execution path:         D0 doctrine + D1 value contract -> D2 typed raw foundation -> D3 MCP contract -> D4 graph contract -> D5 graph-native construction -> D6 MCP composition -> D7 teacher value proof
+D0 doctrine + D1 value -> D2 typed raw foundation -> D3 MCP contract
+  -> D4 graph contract -> D5 graph-native construction -> D6 MCP composition
+  -> D7 teacher-value proof
 ```
 
-Value is the design root: it justifies the MCP surface, which justifies the
-graph methods. Execution runs in dependency order: the doctrine work and the
-typed raw-corpus foundation depend only on the fixed `as const` corpus, so they
-run first and in parallel with value exploration; the graph-native construction
-boundary follows the value-shaped MCP surface and the D4 operation contract.
+**Dependency structure** (what feeds what; the schedule flattens this):
+
+```text
+D0 -> D2
+D1 -> D3          D2 -> D3            (D3 <- D1 value + D2 foundation)
+D3 -> D4
+D2 -> D5          D4 -> D5            (D5 <- D2 raw data + D4 view contract)
+D4 -> D6          D5 -> D6            (D6 <- D4 binding + D5 graph impl)
+D6 -> D7
+D1 ==> D7                            (closure arc: D1 defines what D7 proves)
+```
+
+Value is the design root: it justifies the MCP surface, which justifies the graph
+methods. D0 doctrine and the D2 typed raw foundation depend only on the fixed
+`as const` corpus, so they run first and in parallel with D1 value exploration.
+
+### Seams
+
+The adjacent Dn-1/Dn handoffs are the least of it; they are ordinary passes of one
+deliverable's output to the next. The seams that decide whether the design holds
+are these.
+
+**Fan-out seams — one producer, two consumers, different artifacts.** A producer
+at a fan-out serves two masters; an output tuned for one consumer that shortchanges
+the other is the failure mode.
+
+- **D1 -> {D3, D7}**: the value contract is the design root for the D3 MCP surface
+  and the proof oracle for D7.
+- **D2 -> {D3, D5}**: the **source-path table** goes to D3 (field selection); the
+  **typed raw data** goes to D5 (construction). Two distinct deliverables.
+- **D4 -> {D5, D6}**: the **graph-native view contract** to D5; the **named
+  schema-subset/builder values and graph-core result types** to D6.
+
+**Confluence seams — one consumer, non-adjacent producers.** D3, D5, and D6 are
+junctions, not links:
+
+- **D3 <- {D1 value, D2 foundation}**: every field the surface names must both
+  carry D1 value and trace through D2 to a corpus path.
+- **D5 <- {D2 raw data, D4 view contract}**: the raw input arrives from D2
+  *skipping D3 and D4*; the shape arrives from D4. This is the raw-corpus ->
+  graph-native construction boundary, the deepest seam in the plan.
+- **D6 <- {D4 binding, D5 graph impl}**: D6 implements the single Zod call D3
+  specified and D4 bound, over the view D5 built.
+
+**The closure arc — D1 ==> D7.** The most important seam is not between two
+deliverables; it is the arc across the whole structure. D7 proves *exactly* the
+value, verbatim-preservation set, and non-claims D1 defined. Every link between
+exists to close this arc, and nothing adjacent guards it, so it is guarded here and
+at both ends.
+
+**The orthogonal runtime axis.** Perpendicular to the execution structure, the
+runtime path has its own seams, none of them Dn-to-Dn: teacher-language -> agent
+(where all reasoning lives, Decision 10), agent -> tool determinism boundary (only
+finite corpus keys cross), and MCP schema -> `structuredContent` (SDK output
+validation).
+
+**The Oak/EEF workflow seam.** Value exists only where the EEF tool intersects
+Oak's own tools (misconception / prior-knowledge graph, quiz, text -> pedagogical
+move -> strand). This composition is agent-mediated by design (Decision 10); the
+prompt and the interpretation resource are its only shaping artifacts, and D7
+exercises it.
+
+**Layering boundaries that stay closed.** substrate / MCP types (ADR-179),
+graph-core-generic / EEF-binding (`TNode`/`TNodeId`/`TEdgeType`, no EEF name in the
+substrate), and import direction (ADR-041). These seams are held by nothing
+crossing them.
+
+**The cross-cutting ledger.** The **source-path table** is not a seam; it is the
+instrument that audits every data-derivation seam at once
+(`contract field -> graph-native subset -> raw source path -> corpus cardinality
+-> proof test`), spanning D2 through D7.
+
+**The temporal seam.** D2 removes the old path before D5/D6 build the new one, so
+the tree is red across the D2-D6 window — a seam in time, not structure. The chain
+is validated green once the replacement completes.
+
+### Seams compose; they are never reconciled
+
+Every input to every junction is a projection of one source — the `as const`
+`EEF_TOOLKIT_DATA` corpus. That single root is what makes the confluences
+composition points: at D5, D2's raw data and D4's view contract fit because both
+are projections of the same constant; at D3, a field carries value *and* traces to
+a corpus path because D1's value was defined against what the corpus actually holds.
+
+So a junction never needs *reconciling*. Friction at a junction — a field massaged
+to fit, a shape that "almost" matches, an input handled as an awkward case — is not
+integration work to grind through. It is the signal that one input has drifted from
+the corpus root: a list maintained beside the data, a `z.infer` normalisation, a
+value space the corpus does not hold, a V1 field claimed present that the corpus
+carries only sometimes. The fix realigns that input upstream at the source
+(`replace-dont-bridge`); it is never a bridge built at the junction.
+
+The optionality correction is the worked example. D1's V1 field set named richer
+evidence fields — `effectiveness`, `implementation`, `behind_the_average` — that
+the corpus carries on a minority of strands. Unaligned, that would surface
+downstream as D5 and D6 "having to handle" sometimes-missing fields: friction at a
+confluence. The fix is upstream, at the source — D2's table records each field's
+corpus cardinality, D1 marks the non-floor fields optional, and D6's schema
+projects them as optional. With the inputs realigned to the corpus, D5 and D6
+compose, with nothing to reconcile.
 
 ## Ratified Decisions (decision-complete; do not re-open in execution)
 
@@ -138,11 +244,14 @@ exploration is isolated to D3 and D4 and is named there as explicit steps.
    substrate stays.** D4 ratifies the graph query shape the MCP surface needs,
    parameterised over `TNode`, `TNodeId extends string`, and `TEdgeType` (PDR-058:
    a contract carries only what a real consumer uses); D5 builds the domain-generic
-   graph-core query layer with real graph-derived operations and tests. The old
-   graph-view query-contract files (interface, types, index, contract test) and the
-   EEF-local adapter are deleted; graph-ingest and graph-project consume only the
-   RDF substrate. graph-core's shared RDF substrate (term/dataset/jsonld/canon) is
-   multi-consumer and stays. The global EEF graph-tool rule: every tool, handler,
+   graph-core query layer with real graph-derived operations and tests. The live
+   `graph-view` query-contract files (interface, types, index, contract test) and
+   the EEF-local adapter are still in the tree; the contract's only consumers are
+   the EEF-local adapter and the old list tool, both deleted by D2, after which D5
+   replaces the graph-core query contract itself. graph-ingest and graph-project
+   (in `packages/libs/`) consume only the RDF substrate, so the replacement has
+   zero external-consumer blast radius. graph-core's shared RDF substrate
+   (term/dataset/jsonld/canon) is multi-consumer and stays. The global EEF graph-tool rule: every tool, handler,
    resource, prompt, registration, and graph operation is implemented with real
    graph-derived logic and tests, or it is absent.
 
@@ -167,6 +276,21 @@ exploration is isolated to D3 and D4 and is named there as explicit steps.
    unknown key) can fail, at the request boundary. Source attribution and caveats
    travel with the evidence as teacher value (D1); whether `last_updated` is
    surfaced is a D1/D3 value-contract choice.
+
+10. **The system is deterministic data; the consuming agent is the only reasoner.**
+   Every surface this plan builds — the typed raw foundation, the graph-native
+   view, the MCP tool, and its schemas — is a deterministic projection of the
+   static `EEF_TOOLKIT_DATA`: it returns exactly what the corpus holds for the
+   finite keys it is given. Relevance judgement, ranking, and the mapping from a
+   teacher's situation to a pedagogical move and then to a strand belong to the
+   consuming agent, the only part of the system capable of reason. The plan's job
+   is to surface the static evidence in easy-to-digest graph form and to provide a
+   static interpretation resource that scaffolds the agent's reasoning paths. The
+   tool hands back exact corpus facts on keys the agent has already chosen; the
+   interpretation resource gives the agent the corpus's own methodology and caveats
+   to reason well; the agent does the reasoning. This is the design root of the
+   agent-side move selection in D3 and of the system carrying no server-side
+   crosswalk.
 
 ## Value And Impact
 
@@ -347,20 +471,30 @@ D1 value, D3 MCP surface, and D4/D5 graph structure.
 ### Teacher-facing evidence field set (V1)
 
 The teacher-facing payload surfaces, per strand, the value the corpus already
-holds: `headline` (impact months, cost rating/label, evidence-strength
-rating/label, headline summary), `definition`, `key_findings`,
-`effectiveness.{summary, mechanisms}`, `behind_the_average` — including
-`behind_the_average_by_phase` and `applications` where present, so the evidence
-answers *at which key stage* (for example `eef-tl-feedback` primary 7 / secondary
-5; oral 7 / written 5) — `implementation.{key_considerations, common_pitfalls}`,
-the relevant `school_context_relevance`, `related_strands`, the strand's
-`related_guidance_reports` (surfaced per the D4 disposition), and the applicable
-`meta.caveats`. Honest insufficiency is first-class value: a strand with
+holds. A universal floor is present on all 30 strands — `headline` (impact
+months, cost rating/label, evidence-strength rating/label, headline summary),
+`definition`, `key_findings`, and `tags` — so the cover-lesson
+impact/cost/evidence leverage lens works across the whole corpus. The richer
+evidence fields are corpus-sparse and project as optional, present only where the
+strand carries them: `effectiveness.{summary, mechanisms}` (7 of 30 strands),
+`behind_the_average` (6 of 30), `implementation.key_considerations` /
+`implementation.common_pitfalls` (`implementation` on 4 of 30, `common_pitfalls`
+on 2 of 30), `school_context_relevance` (17 of 30) — and, nested under
+`school_context_relevance` where present, `behind_the_average_by_phase` and
+`applications`, so the evidence answers *at which key stage* (for example
+`eef-tl-feedback` primary 7 / secondary 5; oral 7 / written 5) —
+`related_strands` (17 of 30), and the strand's `related_guidance_reports`
+(7 of 30, surfaced per the D4 disposition). The corpus-level `meta.caveats` are
+global and travel once per envelope as provenance, not as a per-strand field.
+Honest insufficiency and honest absence are both first-class value: a strand with
 `impact_months: null` / `evidence_strength_label: 'Insufficient'` (for example
 `eef-tl-aspiration-interventions`, `eef-tl-learning-styles`) surfaces that finding
-so the teacher does not waste effort. This is the canonical V1 answer; the D3/D6
-output schema is the typed subset of the graph-native view over exactly this set.
-The owner ratified this set on 2026-05-31.
+so the teacher does not waste effort, and a strand that carries only the floor
+surfaces the floor with the absent richer fields simply omitted, never
+fabricated. This is the canonical V1 answer; the D3/D6 output schema is the typed
+subset of the graph-native view over exactly this set, with every non-floor field
+declared optional to match corpus presence. The owner ratified this set on
+2026-05-31.
 
 The impact/cost/evidence leverage lens ("high-impact for low effort") surfaces
 these as comparable **facts and options**, never as a ranked recommendation or a
@@ -667,7 +801,11 @@ kept alive until the graph projection is ready.
   consumers type-check against the derived types. D2 records a source-path table
   keyed by raw source path, one row per finite domain and corpus-level field
   the constant structurally holds:
-  `raw source path -> raw projection helper -> proof test`. Each row may note a
+  `raw source path -> raw projection helper -> corpus cardinality (present in N
+  of 30 strands, or corpus-level) -> proof test`. The cardinality column is
+  derived from the constant, not asserted, and records how many strands carry
+  each field, so the downstream schema marks non-universal fields optional and
+  the value of honest absence survives the projection. Each row may note a
   candidate D3 field, but that note is provisional at D2 time because D3 is not
   yet ratified: a row with no current D3 consumer is retained, not dropped, and
   D3 later selects its subset from this table rather than the table being
@@ -730,9 +868,10 @@ structuredContent-only, not dual-content output.
 - Settled D3 MCP surface shape (2026-05-31 owner answer): expose three
   complementary surfaces by intention:
   - a deterministic EEF tool that queries/fetches the appropriate fixed EEF data;
-  - an EEF interpretation resource/resource-template for "how to interpret and
-    apply this data", including corpus methodology, caveats, source,
-    attribution/provenance, and graph-structural field/edge names only;
+  - an EEF interpretation resource/resource-template — the static reasoning
+    scaffold of Decision 10 — for "how to interpret and apply this data",
+    including corpus methodology, caveats, source, attribution/provenance, and
+    graph-structural field/edge names only;
   - a user-facing prompt that a teacher/user can invoke to start the
     evidence-grounded adaptation workflow.
 - Use this as the default calling-agent workflow, while allowing D3 to specify
@@ -898,8 +1037,8 @@ SDK/app verification record, and `mcp-expert` sign-off).
 ### D4 - Graph capability shape (exploration; derived from D3; replaces the graph-core query contract)
 
 **Purpose:** derive the correct graph operations from the ratified MCP surface
-and define the new graph-core query layer for them. D5 builds it fresh; the old
-graph-view query-contract files are deleted.
+and define the new graph-core query layer for them. D5 builds it fresh, replacing
+the live graph-view query-contract files.
 
 **Folded detail:** D4 carries the minimal operation set, `TNodeId` threading,
 guidance-report disposition, edge types, graph-native view choice, and
@@ -929,7 +1068,8 @@ primitives.
   a bounded subgraph-around-strands traversal over graph-core primitives.
 - SPECIFY (this is a non-code ratification deliverable; D5 builds the new layer as
   TDD cycles) the new graph-core query surface that replaces the old
-  `GraphView` contract (already removed in code). The new contract MUST stay
+  `GraphView` contract (still live in `graph-core/src/graph-view/`; D5 builds the
+  replacement fresh). The new contract MUST stay
   domain-generic (parameterised over `TNode`, an associated `TNodeId extends
   string`, and `TEdgeType`; no EEF- or MCP-specific type names) - EEF-specific
   shapes live in `graph-corpus-sdk`, never in the substrate. The EEF binding uses
@@ -961,7 +1101,7 @@ primitives.
   own `src/index.ts` barrel re-exports the query types and
   `graph-view/index.unit.test.ts` carries the contract test (its 5-stub-op
   assertions are already removed). The shared RDF substrate stays; only the query
-  contract is replaced (old contract deleted now; rebuilt fresh in D5). The existing non-EEF empty stub is consumer-impact evidence
+  contract is replaced (the live `graph-view` contract is replaced fresh in D5). The existing non-EEF empty stub is consumer-impact evidence
   only; it is not a model for the EEF graph-tool surface and does not authorise
   any new stub. A type may be named `SubgraphResult` only if D4 freshly defines
   that name and structure from the new graph contract. The old list implementation
@@ -1130,7 +1270,10 @@ deleted, and the ADR-179 boundary that keeps MCP types out of substrate packages
   be typed from the graph-native view, with `satisfies` or an equivalent
   compile-time proof tying the declared schema to the corresponding
   `structuredContent` type. These two declarations are the only Zod in the
-  system. The composition module does not validate the fixed corpus and does not
+  system. Fields the corpus carries on only some strands (every non-floor V1
+  field) are declared optional in the output schema, so the schema is an exact
+  projection of corpus presence rather than an assertion that every strand is
+  fully populated. The composition module does not validate the fixed corpus and does not
   require substrate packages to import MCP types (ADR-179 - an explicit
   acceptance check). Do not extract a generic factory until a real second consumer
   exists. Confirm the registry path (direct `server.registerTool`/`registerAppTool`
@@ -1223,6 +1366,10 @@ the typed raw/graph-native chain, not duplicated fixture text.
 
 - The e2e round trip proves graph retrieval, node/resource lookup, and subgraph
   expansion through MCP.
+- The proof exercises the Oak/EEF workflow seam on more than one signal type (for
+  example a misconception-graph signal and a prior-knowledge-graph signal), so the
+  agent's move -> strand selection is shown to generalise rather than ride one
+  hard-coded path.
 - The scenario proof shows Oak material and EEF evidence used together; the final
   assistant-facing payload contains the known strand's VERBATIM corpus attribution,
   caveats, evidence strength, impact, and cost (the independent-ground-truth check),
@@ -1232,7 +1379,11 @@ the typed raw/graph-native chain, not duplicated fixture text.
   `eef-tl-aspiration-interventions` or `eef-tl-learning-styles`): its honest
   "insufficient evidence / little-to-no impact" finding reaches the teacher
   verbatim, and the assistant-facing output is asserted to contain no
-  teacher-replacing or single-answer selection language (the V3 non-claim).
+  teacher-replacing or single-answer selection language (the V3 non-claim). The
+  same proof asserts graceful collapse: for a floor-only strand (such as
+  `eef-tl-learning-styles`, which carries no `effectiveness`, `implementation`, or
+  `school_context_relevance`) the payload returns the universal floor with the
+  absent richer fields omitted, not emitted empty or fabricated.
 - The proof asserts the evidence standard: the output frames EEF as
   population-level evidence that may inform teacher judgement, and does not claim
   or imply guaranteed local efficacy for the specific class, pupil, or adaptation.
@@ -1262,6 +1413,11 @@ Artefacts already in the tree, so the next session does not rediscover them:
   `packages/sdks/graph-corpus-sdk/src/eef-strands/strand-lookup.ts`. The corpus
   file `eef-toolkit.external-data.ts` is pure data. D2 canonicalises the raw type
   names from that starting point to `EefStrand` / `EefStrandById` / `EefStrandId`.
+  The name `EefStrand` is currently bound to a different, Zod-inferred type
+  (`z.infer<typeof EefStrandSchema>`) in the `strand-schema.ts` that D2 deletes,
+  and `EefStrandId` / `EefStrandById` do not exist yet: D2 repoints `EefStrand`
+  to the `as const` derivation (`(typeof EEF_TOOLKIT_DATA.strands)[number]`) and
+  creates the two keyed names fresh, leaving no Zod-inferred strand type behind.
 - Pre-D2 direction notes in the headers of `eef-toolkit.external-data.ts`,
   `loader.ts`, and `strand-schema.ts` mark the Zod/freshness path as redundant.
   D2 replaces those notes by deleting `loader.ts` and `strand-schema.ts` and
@@ -1288,6 +1444,19 @@ Artefacts already in the tree, so the next session does not rediscover them:
   `citation-shape.ts` lives one level up at `evidence-corpus/citation-shape.ts`;
   D2 deletes it when it has no non-list importer, otherwise D6 deletes the
   remaining citation-only residue while registering the graph surface.
+- The `evidence-corpus/` directory also carries three non-tool files the
+  deliverables must place: `telemetry.ts` (a Sentry typed-config seam, not
+  list-tool-specific, available to the D6/D7 telemetry wiring);
+  `eef-evidence-grounded-lesson-plan-messages.ts` (the current prompt message
+  generator, self-described as transitional — D6 rewrites it from the ratified
+  D3 prompt); and `eef-evidence-guidance.ts` (constant R1/R7 framing: surface
+  evidence strength with impact, name the population-average caveat, name
+  implementation quality as the moderator, frame as decision support not policy).
+  That framing is corpus-grounded — it restates `evidence_strength_label`,
+  `meta.caveats`, and the methodology — and overlaps the already-ratified D1
+  non-claims, so it is candidate content for the D3 interpretation resource
+  (Decision 10's reasoning scaffold). D3 decides whether to carry it as-is or
+  reshape it; it is named here so the file is not orphaned.
 
 ## Fully Specified End State
 

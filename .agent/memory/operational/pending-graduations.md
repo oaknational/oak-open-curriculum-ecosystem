@@ -37,6 +37,29 @@ substance that still needed a live queue home is preserved below. Processed
 source files were deleted after extraction so the repository does not carry
 pseudo-shards that hide the true buffer state.
 
+## 2026-06-01 capture — seam-mapping plan template/archetype (Windswept Floating Summit)
+
+- **A reusable "seam map" archetype for fully planning complex features, with the
+  law that seams compose and are never reconciled.** Worked out on the EEF plan
+  (`## Sequencing`) and owner-confirmed as intended for a plan template/archetype.
+  A deliverable chain is a DAG, not the linear Dn-1/Dn handoff it reads as, and the
+  adjacent handoffs are the least important. The taxonomy to template: **fan-out
+  seams** (one producer, two consumers, different artifacts), **confluence seams**
+  (one consumer, non-adjacent producers — the skip-level input is usually the
+  deepest), **closure arc** (first-contract deliverable ⇒ last-proof deliverable —
+  the seam across the whole DAG, guarded by nothing adjacent), **orthogonal runtime
+  axis** (design/runtime path crossing the execution DAG perpendicularly),
+  **layering anti-seams** (boundaries held by nothing crossing them), **cross-cutting
+  ledger** (one artifact auditing every data-derivation seam at once), and
+  **temporal seam** (an intentional red-tree window). The governing law: because
+  every junction input is a projection of one source of truth, junctions compose by
+  construction; friction at a junction is the signal that an input has drifted from
+  the root, fixed upstream at the source, never bridged at the seam
+  (`replace-dont-bridge`, `rules-have-no-exceptions`). Owner framing: "no sections
+  should need reconciling; an architectural tension is a signal we have misaligned a
+  fundamental concept, not a legitimate hard thing to match up."
+  `[captured: 2026-06-01 | source: EEF plan Sequencing rewrite + owner direction | target: plan-template-or-archetype:seam-map (.agent/plans/templates/components/) + possible oak-plan skill amendment | trigger: owner-direction to author the template, or next complex-feature plan | size: M | status: pending — owner-confirmed intent to create later]`
+
 ## 2026-06-01 capture — cross-platform rules generator (Twilit Threading Satellite)
 
 - **No generator exists for the rules' cross-platform forms; one was intended,

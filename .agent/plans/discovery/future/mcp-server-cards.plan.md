@@ -1,9 +1,10 @@
 ---
-name: "MCP Server Cards — discovery tracking and implementation brief"
+name: "MCP Server Cards - discovery tracking and implementation brief"
 collection: discovery
 lane: future
 status: strategic-tracking
-last_updated: 2026-05-31
+last_updated: 2026-06-01
+parent_plan: agentic-mechanisms-discovery.plan.md
 ---
 
 # MCP Server Cards discovery and implementation plan
@@ -20,6 +21,13 @@ last_updated: 2026-05-31
 Track the emerging MCP Server Cards specification and prepare Oak to publish a discoverable server card for any public HTTP-based MCP server we operate once the specification is released.
 
 The goal is to keep implementation low-risk until the spec stabilises: document the current best estimate, monitor official sources, and define clear triggers for revisiting this plan or implementing it.
+
+Parent and sibling planning context:
+
+- Parent plan:
+  [agentic-mechanisms-discovery.plan.md](agentic-mechanisms-discovery.plan.md)
+- Sibling skills lane:
+  [agent-skills-discovery.plan.md](agent-skills-discovery.plan.md)
 
 ## Problem, end goal, mechanism, and means
 
@@ -54,6 +62,21 @@ The goal is to keep implementation low-risk until the spec stabilises: document 
   `server.json` surface.
 - Treating the card as an authorisation, safety, or capability source of truth.
 
+## Relationship To Sibling Discovery Plans
+
+This plan answers: "where is the Oak MCP server and how do I connect?"
+
+The sibling [Agent Skills Discovery plan](agent-skills-discovery.plan.md)
+answers: "which Oak-authored workflows can I load?"
+
+The parent [Agentic Mechanisms Discovery plan](agentic-mechanisms-discovery.plan.md)
+keeps the layer map coherent across MCP Server Cards, Agent Skills Discovery,
+A2A Agent Cards, registry metadata, and generic agent-discovery proposals.
+
+This plan does not own workflow skills, A2A Agent Cards, or the runtime MCP
+tools/resources/prompts catalogue. Runtime capability discovery remains in MCP
+initialisation and tool/resource/prompt listing.
+
 ## Strategic acceptance criteria and success signals
 
 This brief is **successful as a tracking artefact** when:
@@ -64,8 +87,9 @@ This brief is **successful as a tracking artefact** when:
   conformant external client purely from the published `.well-known` card, with
   zero sensitive fields and a schema-valid document (verified in CI).
 
-These are outcome signals, not activity logs; the implementation checklist near
-the end of this brief is the execution-time proof contract drafted at promotion.
+These are outcome signals, not activity logs; the promotion seed checklist near
+the end of this brief is reference material for the execution-time proof
+contract drafted at promotion.
 
 ## Current status as of 2026-05-31
 
@@ -315,7 +339,11 @@ Beneficial prerequisites (improve the result but do not block; state the minimum
 - **`beneficial`** — An official JSON Schema is hosted. *Without it:* validate locally against the SEP's normative field list and pin the draft `$schema` URL, flipping to the hosted schema when it lands (the draft `$schema` URL currently 404s pending merge).
 - **`beneficial`** — Product / engineering sign-off that the server should be externally discoverable. *Without explicit sign-off:* keep the card prepared but unpublished (the recommended default below).
 
-## Implementation checklist once released
+## Promotion seed checklist once released
+
+This checklist is reference context for the future executable plan. Promotion
+to `current` must convert it into TDD cycles, acceptance criteria, proof
+contracts, and deterministic validation commands.
 
 - [ ] Re-read official docs and PR/SEP final text.
 - [ ] Update this plan with final endpoint, schema URL, and required fields.

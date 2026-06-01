@@ -4476,6 +4476,182 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "3cad6208-f3a5-4e21-94b2-a3beb05e5119",
+      "agent_id": {
+        "agent_name": "Luminous Dancing Aurora",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e82",
+        "id": "db9722cc-9721-5cdc-bd11-59ce426d9e87"
+      },
+      "thread": "discovery",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/discovery/future/*.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T11:10:29Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Author skills-discovery research report and future plans for agentic mechanism discovery",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T11:14:49Z",
+        "closed_by": {
+          "agent_name": "Luminous Dancing Aurora",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e82",
+          "id": "db9722cc-9721-5cdc-bd11-59ce426d9e87"
+        },
+        "summary": "Authored Agent Skills Discovery research report, child strategic plan, parent discovery-mechanisms plan, and discovery indexes; no implementation work started.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "3cad6208-f3a5-4e21-94b2-a3beb05e5119",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "683126c5-61ab-4e06-a577-e94b0fccdbef",
+      "agent_id": {
+        "agent_name": "Luminous Dancing Aurora",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e82",
+        "id": "db9722cc-9721-5cdc-bd11-59ce426d9e87"
+      },
+      "thread": "discovery",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T11:15:10Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Record collaboration-state comms append tool surprise from discovery planning session",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T11:15:24Z",
+        "closed_by": {
+          "agent_name": "Luminous Dancing Aurora",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e82",
+          "id": "db9722cc-9721-5cdc-bd11-59ce426d9e87"
+        },
+        "summary": "Recorded comms append late-failure surprise in napkin.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "683126c5-61ab-4e06-a577-e94b0fccdbef",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "3a6fe2fc-320f-4506-8bd0-17096eae07c6",
+      "agent_id": {
+        "agent_name": "Luminous Dancing Aurora",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e82",
+        "id": "db9722cc-9721-5cdc-bd11-59ce426d9e87"
+      },
+      "thread": "discovery-agentic-mechanisms",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/discovery/future/mcp-server-cards.plan.md",
+            ".agent/plans/discovery/future/agentic-mechanisms-discovery.plan.md",
+            ".agent/plans/discovery/future/agent-skills-discovery.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T11:31:28Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Align discovery future plans by adding parent and sibling references plus lifecycle wording.",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T11:32:42Z",
+        "closed_by": {
+          "agent_name": "Luminous Dancing Aurora",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e82",
+          "id": "db9722cc-9721-5cdc-bd11-59ce426d9e87"
+        },
+        "summary": "Aligned discovery future plans: MCP plan now links to parent/sibling lanes, parent plan uses baseline readiness wording, and MCP release checklist is labelled as promotion seed context. Validated markdownlint and Prettier for the three plans.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "3a6fe2fc-320f-4506-8bd0-17096eae07c6",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1c5499f8-1fad-4a77-82b7-8c08331c7bf3",
+      "agent_id": {
+        "agent_name": "Luminous Dancing Aurora",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e82",
+        "id": "db9722cc-9721-5cdc-bd11-59ce426d9e87"
+      },
+      "thread": "agentic-mechanisms-discovery",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-mechanisms-discovery.next-session.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T11:37:30Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Light session handoff for agentic mechanisms discovery work; no commit and no check by owner direction.",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T11:38:29Z",
+        "closed_by": {
+          "agent_name": "Luminous Dancing Aurora",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e82",
+          "id": "db9722cc-9721-5cdc-bd11-59ce426d9e87"
+        },
+        "summary": "Light handoff complete for agentic mechanisms discovery: created thread record, refreshed repo-continuity, and added napkin closeout note. No commit and no aggregate check by owner direction.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1c5499f8-1fad-4a77-82b7-8c08331c7bf3",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

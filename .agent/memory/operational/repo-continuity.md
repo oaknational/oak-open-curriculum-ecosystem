@@ -19,6 +19,50 @@ surface.
 
 ## Current State
 
+- **Agentic mechanisms discovery planning (2026-06-01, Luminous Dancing Aurora /
+  `019e82`, codex / GPT-5)**: researched Cloudflare Agent Skills Discovery
+  against live official MCP/A2A/skills discovery standards context, wrote the
+  discovery future-planning bundle, and aligned the existing MCP Server Cards
+  plan into the same parent/sibling structure. New thread record:
+  [`agentic-mechanisms-discovery.next-session.md`](threads/agentic-mechanisms-discovery.next-session.md).
+  Controlling parent plan:
+  [`agentic-mechanisms-discovery.plan.md`](../../plans/discovery/future/agentic-mechanisms-discovery.plan.md).
+  Child lanes:
+  [`agent-skills-discovery.plan.md`](../../plans/discovery/future/agent-skills-discovery.plan.md)
+  and
+  [`mcp-server-cards.plan.md`](../../plans/discovery/future/mcp-server-cards.plan.md).
+  This is strategic tracking only: no endpoint implementation, no skill
+  publication, and no standards-derived runtime change until a future plan is
+  promoted to `current`. Targeted markdownlint and Prettier passed for the three
+  discovery plans after alignment; no commit and no aggregate `pnpm check` by
+  explicit owner direction.
+- **EEF plan seam-mapping + grounded review corrections (2026-06-01, Windswept
+  Floating Summit / `d8560c`, claude / Opus 4.8)**: ran the two owner-requested
+  reviews (whole-plan + D2) of the live EEF plan, grounding every claim directly
+  against `EEF_TOOLKIT_DATA` and the repo rather than trusting subagent output
+  (two Explore agents returned a fabricated `graph-project` import fact and wrong
+  `~N/30` cardinalities, caught before they reached edits). Applied grounded
+  corrections + enhancements to `eef-graph-tool-completion.plan.md`: fixed a false
+  "graph-view contract already removed in code" status (the
+  `graph-core/src/graph-view/` contract + EEF-local adapter are live; D2 deletes
+  the adapter, D5 replaces the contract; `graph-ingest`/`graph-project` in
+  `packages/libs/` consume only the RDF substrate, so zero external blast radius);
+  corrected V1 source paths (`behind_the_average_by_phase`/`applications` sit under
+  `school_context_relevance`; `meta.caveats` is corpus-level); made field
+  optionality first-class with verified cardinalities (floor
+  `headline`/`definition`/`key_findings`/`tags` 30/30; `effectiveness` 7/30,
+  `behind_the_average` 6/30, `implementation` 4/30, `school_context_relevance`
+  17/30, `related_strands` 17/30, `related_guidance_reports` 7/30); added
+  **Decision 10** (the system is deterministic data; the consuming agent is the
+  only reasoner — the static interpretation resource scaffolds its reasoning); and
+  rewrote `## Sequencing` with a full seam taxonomy (fan-out / confluence /
+  closure-arc / orthogonal runtime axis / layering anti-seams / cross-cutting
+  ledger / temporal) plus the law **seams compose, they are never reconciled**
+  (friction at a junction means an input drifted from the corpus root; fix upstream
+  at the source, never bridge at the seam). The two reviews are complete; whether
+  and when D2 is implemented is an owner decision. The seam-mapping taxonomy is
+  captured for graduation to a plan template/archetype (`pending-graduations.md`,
+  owner-confirmed intent). No `pnpm check` (owner direction).
 - **EEF graph-tool re-review + stub deletion + decontamination (2026-06-01,
   Shaded Swaying Sapling / `d37ba7`, claude / Opus 4.8)**: re-reviewed the live EEF
   plan for total old-shape removal and settled the D2 union-vs-binding test
@@ -116,7 +160,8 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Shaded Swaying Sapling / EEF re-review + stub deletion + decontamination / 2026-06-01 |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Windswept Floating Summit / plan seam-mapping + grounded review corrections / 2026-06-01 |
+| `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | codex / GPT-5 / Luminous Dancing Aurora / research-and-plan-author / 2026-06-01 |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | codex / GPT-5 / Blooming Twining Grove / longitudinal napkin review + deep handoff / 2026-05-31 |
 
 ## Paused Threads
@@ -139,33 +184,45 @@ not the current session-priority lane. Reactivation is owner-directed.
 
 ## Next Safe Steps
 
+### Agentic Mechanisms Discovery
+
+1. Treat the parent plan
+   [`agentic-mechanisms-discovery.plan.md`](../../plans/discovery/future/agentic-mechanisms-discovery.plan.md)
+   as the layer map for skills, MCP Server Cards, MCP runtime discovery, A2A,
+   registry metadata, and generic AI discovery proposals.
+2. Do not implement discovery endpoints from `future/` plans. Promotion to
+   `current/` must produce executable TDD cycles, acceptance criteria, proof
+   contracts, and validation commands.
+3. The likely first promotion candidate is Agent Skills Discovery, but only
+   after Oak ratifies the first skill catalogue, trust model, public domain, and
+   live data/tool routes.
+4. Keep MCP Server Cards as spec tracking until the SEP and Oak public remote
+   MCP server publication posture are stable.
+
 ### EEF Graph-Tooling Rebuild
 
 1. Re-ground in the `eef` thread banner and current git state.
-2. D1 is complete in the live plan (value, evidence-transmission, provenance,
-   schema-derivation, value-proof contracts ratified). D0's code + ADR-doctrine
-   work is complete and committed at `ce9745c7`, but **D0 is RE-OPENED for
-   decontamination only** (2026-06-01): the sweep-token list omitted the
-   stub/adapter/Inc.3/EvidenceCorpus framing, so live contamination survived in
-   ADR-173 (corrected) and a `graph-project` comment (corrected). To re-close D0,
-   update `eef-d0-decontamination-ledger.md` with the new-token dispositions and
-   run the extended-token acceptance sweep over EEF plans + non-plan docs (proving
-   zero live references). The stub tools (`NotImplementedYet` ops, `EvidenceCorpus`,
-   threads placeholder) are already deleted in code and green across all consumers.
-3. Treat the value reframe as controlling: EEF relevance is by pedagogical move on
-   EEF-native finite axes; the EEF tool takes corpus-derived finite values; the
-   value intersects Oak's misconception/prior-knowledge tools at the workflow
-   level. The D2 no-escape-hatches correction still holds:
-   `EEF_TOOLKIT_DATA` is the only source of truth; no separate vocab/key/value
-   lists, glue, fallback paths, compatibility layers, or permanent
-   negative-audit monuments.
-4. Continue from `eef/current/eef-graph-tool-completion.plan.md` D2. D2's next
-   landing is definite: derive the typed raw-data ingestion foundation from the
-   complete in-memory `EEF_TOOLKIT_DATA` constant, record the D3 source-path table,
-   and delete the old school-context/strand-schema/load/list/Zod/freshness
-   surfaces outright. Do not reduce `loader.ts` to a wrapper, keep an old-path
-   barrel, preserve list output parity, or use archived reports/briefs as live
-   authority.
+2. D0 (fixed-data doctrine + validator removal + estate decontamination) and D1
+   (teacher value contract) are complete and committed (`ce9745c7`, `f8548985`).
+   The live plan reads as positive design, carried by one invariant: every tool,
+   resource, prompt, graph operation, and handler is implemented with real
+   graph-derived logic and tests, or it is absent. `EEF_TOOLKIT_DATA` is the only
+   source of truth; relevance is by pedagogical move on EEF-native finite axes,
+   and the value intersects Oak's misconception/prior-knowledge tools at the
+   workflow level.
+3. The two reviews (whole-plan + D2) are COMPLETE (2026-06-01, Windswept Floating
+   Summit). The plan was corrected and enhanced: graph-view status truth, V1
+   source-path fixes, optionality made first-class with verified corpus
+   cardinalities, Decision 10 (deterministic data; the agent is the only reasoner),
+   and a rewritten `## Sequencing` carrying the seam taxonomy + the "seams compose,
+   never reconciled" law. Whether and when D2 is implemented is now an owner
+   decision; next-steps discussion was pending at session close.
+4. The plan's D3/D4 PENDING reviewers fire later against the ratified D3/D4
+   outputs once those exist (unchanged trigger; the plan-body edits this session
+   were owner-directed corrections reviewed inline, not new ratified contracts).
+5. The seam-mapping taxonomy + "seams compose" law is a candidate for a reusable
+   plan template/archetype (owner-confirmed intent); tracked in
+   [`pending-graduations.md`](pending-graduations.md).
 
 ### Agentic-Engineering Curation
 
@@ -229,6 +286,41 @@ authority.
 - Shared memory/state files are always writable and commit-includable when dirty.
 
 ## Deep Consolidation Status
+
+**light session handoff (2026-06-01, Luminous Dancing Aurora — agentic mechanisms
+discovery planning)**: `due — napkin.md remains above its fitness limit and the
+session produced a new strategic discovery thread record plus uncommitted
+planning docs. No deep consolidation, no commit, and no aggregate pnpm check were
+run by explicit owner direction. No new ADR/PDR candidate or non-urgent open
+question was added outside the owning future plans; future implementation waits
+on plan promotion.`
+
+**session-completion closeout (2026-06-01, Windswept Floating Summit — EEF plan
+seam-mapping + grounded review corrections)**: `due — napkin.md remains over its
+fitness limit (~660 lines vs 300 target) and is due for rotation; routed to a
+future deliberate consolidate-docs pass per owner lightweight-handoff direction
+(session handoff + commit; no pnpm check). New capture this session: the
+seam-mapping taxonomy + "seams compose, never reconciled" law is added to
+pending-graduations as a reusable plan-template/archetype candidate
+(owner-confirmed intent). No new ADR/PDR/open-question trigger opened. A live peer
+(Luminous Dancing Aurora, codex/GPT-5/019e82) held an active claim on the
+discovery future plans and was editing them at session close; the owner directed
+committing everything in this session's bundle, so those plans were included and
+the peer was notified via a directed comms event (their later edits land as a
+delta). Active-claims has no entry of mine.`
+
+**session-completion closeout (2026-06-01, Twilit Threading Satellite — EEF plan
+positive recast + D0 complete + no-exceptions rule)**: `due — one trigger stands,
+deferred to a future deliberate consolidate-docs pass per owner lightweight-handoff
+direction (session handoff + opening statement only; no pnpm check; no
+consolidation run). (1) napkin.md remains over its fitness limit (~566 lines vs 300
+target) and is due for rotation. The no-tombstones graduation that was due last
+session has landed: rules-have-no-exceptions is live and no-tombstones is now
+exception-free (committed f8548985); its remaining write-time-enforcement increment
+(policy.json structural detector) stays tracked in pending-graduations, and the
+newly-captured cross-platform rules generator is tracked there too. Active-claims
+empty; continuity writes this session are working-tree on
+feat/graph-tooling-tidyup.`
 
 **session-completion closeout (2026-06-01, Shaded Swaying Sapling — EEF re-review,
 decontamination, handoff)**: `due — two triggers fired but neither is well-bounded
@@ -294,5 +386,6 @@ and older archive files under [`archive/`](archive/).
 [cloudflare]: threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md
 [sector]: threads/sector-engagement.next-session.md
 [eef]: threads/eef.next-session.md
+[agentic-mechanisms-discovery]: threads/agentic-mechanisms-discovery.next-session.md
 [collab-research]: threads/agent-collaboration-research.next-session.md
 [branch-fitness]: threads/branch-fitness-and-push-cadence.next-session.md

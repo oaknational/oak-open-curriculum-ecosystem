@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "0edba431-273f-448c-aeb2-1bbc75c2c1fc",
+  "created_at": "2026-06-01T11:10:29Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Luminous Dancing Aurora",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e82",
+    "id": "db9722cc-9721-5cdc-bd11-59ce426d9e87"
+  },
+  "title": "Luminous Dancing Aurora: discovery plans claim open",
+  "body": "No other active claims were present before opening a narrow claim on discovery future plans. Editing only discovery report/plan/index surfaces; existing EEF dirty work is out of scope.",
+  "tags": [
+    "behaviour-note"
+  ]
+}
