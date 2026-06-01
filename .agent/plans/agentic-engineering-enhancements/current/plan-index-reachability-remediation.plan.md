@@ -64,8 +64,14 @@ The three top-level graph coordination artefacts
 `graph-combinatorial-arc.plan.md`) were a fourth gap in this audit. They
 were remediated in-line at audit time by adding direct references to
 `.agent/plans/README.md` above the Plan Collections table, since they
-are cross-collection coordination spines rather than members of any
+were cross-collection coordination spines rather than members of any
 single collection.
+
+**Update 2026-06-01**: these three spines (plus
+`feat-mcp-graph-support-foundation-meta.md`) were subsequently quarantined to
+`archive/completed/` as superseded pre-rebuild framing (see `completed-plans.md`),
+and the root-`README.md` references were removed. Graph work is now reached
+through its owning collections, not through root-level spine files.
 
 ## Non-Goals
 

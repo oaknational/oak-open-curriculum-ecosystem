@@ -5136,7 +5136,7 @@ remains on disk with its framing amendments — read for the Phase 4
 four-probe matrix spec and the OD-1/2/3 + ORD-1/2 rationale.
 
 Demand side: see
-[`graph-mvp-arc.plan.md`](../../../plans/graph-mvp-arc.plan.md) §
+`graph-mvp-arc.plan.md` §
 Team-of-Agents Execution + the corresponding
 [`graph execution-prep opener`](../../../plans/connecting-oak-resources/knowledge-graph-integration/current/2026-05-11-graph-execution-prep-opener.md)
 which routes step 4 here.

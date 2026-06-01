@@ -3,7 +3,6 @@ name: "Oak KG Schema Browser"
 overview: "Future schema/class browser for Oak ontology classes and properties, sequenced after direct Thread value is delivered."
 status: future
 graph_layer: oak-graph-surface
-graph_portfolio_index: "../../../graph-portfolio-index.md"
 parent_plan: "../current/oak-kg-threads-surface.plan.md"
 isProject: false
 todos:

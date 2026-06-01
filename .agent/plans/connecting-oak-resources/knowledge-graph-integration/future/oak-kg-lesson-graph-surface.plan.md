@@ -3,7 +3,6 @@ name: "Oak KG Lesson Graph Surface"
 overview: "Future MCP surface for lesson-level graph projection once the Thread surface has shipped and lesson graph demand is concrete."
 status: future
 graph_layer: oak-graph-surface
-graph_portfolio_index: "../../../graph-portfolio-index.md"
 parent_plan: "../current/oak-kg-threads-surface.plan.md"
 isProject: false
 todos:

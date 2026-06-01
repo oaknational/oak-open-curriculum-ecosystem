@@ -122,6 +122,38 @@ EEF D0 (`eef-graph-tool-completion.plan.md`) code + ADR-doctrine work is
   (D2/D4/D5/D6) that rewrite/delete those files, per the D0 ledger, not by this
   plan.
 
+## Inbound from spine quarantine (2026-06-01)
+
+Owner-directed (this session): the four root-level graph coordination spines —
+`graph-portfolio-index.md`, `graph-mvp-arc.plan.md`,
+`graph-combinatorial-arc.plan.md`, and `feat-mcp-graph-support-foundation-meta.md`
+— were **quarantined** (not rewritten) to `archive/completed/`. Rewrite was
+rejected because it has no live target: wider graph work is undefined until the
+EEF tool ships, so a rewritten-live spine would be fresh speculative contamination.
+
+Done this pass:
+
+- Four files moved to `archive/completed/`, each with a one-line supersession
+  banner pointing at the live homes (EEF plan + KG hub + this plan).
+- One note in `completed-plans.md` (§"Graph Coordination Spines (Superseded
+  Framing)") — the single where-did-they-go record. **No live→archive redirects**:
+  archived means archived.
+- Dead `graph_portfolio_index:` / `spine_plan:` / `parent_plan:` / related-plan
+  pointers to the four files removed estate-wide; prose markdown links to them
+  de-linked to plain text (no repoint into archive, no broken link, no prose
+  rewrite — the contaminated narrative is left for each file's own disposition).
+- The live surviving navigation estate (root `README.md`, `high-level-plan.md`,
+  `knowledge-graph-integration/README.md`, `curriculum-mcp-path-to-ga/roadmap.md`,
+  `plan-index-reachability-remediation.plan.md`) reframed to point at the stable
+  collection homes, never at archive.
+
+Still owned here (unchanged scope): the gate-1a/1b/Inc.3 **concept** references
+inside the contaminated/pending files (the openers, `graph-query-layer`,
+`gate-1a-delivery-parallel-execution-addendum`, the `future/oak-*` surfaces) are
+de-linked but their narratives remain — cleaned when each file is
+archived/parked/rewritten under t1–t7. t7 narrows to the concept sweep now that
+the spine-file link reconciliation is done.
+
 ## End goal
 
 A clean, minimal, accurate graph plan estate: one live finishing plan, one
@@ -135,7 +167,7 @@ one read.
 | Disposition | Files | Action |
 |---|---|---|
 | **Archive — superseded framing** | `eef/archive/graph-tooling-rebuild.plan.md` (quarantined 2026-05-30); `kg/current/graph-query-layer.plan.md` (old 7-op layer → S2); `kg/current/gate-1a-delivery-parallel-execution-addendum.plan.md`; `kg/current/2026-05-08-graph-mvp-arc-specialist-review-opener.md`; `kg/current/2026-05-08-pr102-graph-decision-complete-closeout.plan.md`; `kg/current/2026-05-11-graph-execution-prep-opener.md`; `kg/current/pr-108-sonar-live-issues-2026-05-24.md` | move to `archive/completed/` + supersession pointer + index entry |
-| **Quarantine or rewrite — structurally gate-based + fully contaminated** | `graph-mvp-arc.plan.md`; `graph-portfolio-index.md`; `graph-combinatorial-arc.plan.md` | their todos/acceptance/dependency-graphs ARE the gates, and they carry the full discarded stack (corpus-local Zod loader, ADR-175 freshness CI gate, `NotImplementedYet` stubs, `t5-scoring`/`t6-recommend`/`t7-explain`/`t8-compare`); `last_updated` 2026-05-11, predating every correction. Decide quarantine (archive + pointer) vs rewrite around the corrected doctrine — a mechanical gate-name removal would break them and leave the rest of the contamination |
+| **Quarantine — DONE 2026-06-01** | `graph-mvp-arc.plan.md`; `graph-portfolio-index.md`; `graph-combinatorial-arc.plan.md`; **`feat-mcp-graph-support-foundation-meta.md`** (branch-scoped, never merged) | Owner-directed quarantine — *not* rewrite: rewrite has no live target while wider graph work is undefined until the EEF tool ships, so a rewritten-live spine would be fresh speculative contamination. All four moved to `archive/completed/` with a one-line supersession banner each; one note in `completed-plans.md`; references removed from the live surviving estate and de-linked to plain text in contaminated/pending files. The deeper gate-1a/1b/Inc.3 **concept** decontamination of those contaminated files remains per their own disposition (t1–t7). See §"Inbound from spine quarantine (2026-06-01)". |
 | **Update in place — stale but live** | `eef/README.md`; `kg/README.md`; `kg/active/graph-stack.plan.md` (flip landed WS statuses, fix the active/↔current/ link mismatch) | edit |
 | **Archive — completed** | `kg/active/graph-resource-factory.plan.md`; `kg/active/misconception-graph-mcp-surface.plan.md`; `kg/active/graph-stack-ws1.6-vocab-prep.md` | move to `archive/completed/` |
 | **Park as `future/`, blocked-on-EEF** | `kg/active/nc-knowledge-taxonomy-surface.plan.md`; the `future/oak-kg-*` (iri-traverser, programme-navigator, schema-browser, lesson-graph-surface) + `future/oak-misconceptions-*` (cross-corpus, extended-contexts, substrate-migration, topic-extraction) + `future/cross-source-journeys.plan.md` | mark *"undefined until the first proper graph tool is finished"*; consolidate the 5 misconceptions-* into one |

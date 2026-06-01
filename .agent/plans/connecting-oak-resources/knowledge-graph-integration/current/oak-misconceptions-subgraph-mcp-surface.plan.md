@@ -5,7 +5,6 @@ plan_id: oak-misconceptions-subgraph-mcp-surface
 type: feature-workstream
 status: current
 graph_layer: oak-graph-surface
-spine_plan: ".agent/plans/graph-mvp-arc.plan.md"
 spine_slice: 3a
 namespace: "oak-misconceptions-*"
 substrate_path: "bulk-derived legacy misconception graph factory (interim) + graph-stack Inc.1 Thread-to-Unit lookup"
@@ -16,7 +15,6 @@ substrate_floor:
 sequencing_gate: "PARALLEL-SAFE with slice 2 (gate-2) and slice 1 (gate-1a + gate-1b) after graph-stack Inc.1b (Thread → Unit lookup) lands. Per the 2026-05-21 gate-split amendment: gate-3a does not depend on the slice-1 EEF gates and the EEF gates do not depend on Inc.1b — substrate streams are co-primary. Thread IRI input requires Inc.1b Thread → Unit lookup; misconception traversal remains on the legacy factory until graph-stack Inc.3's misconception adapter ships."
 last_updated: 2026-05-11
 related_indices:
-  - ".agent/plans/graph-portfolio-index.md"
   - ".agent/plans/connecting-oak-resources/knowledge-graph-integration/README.md"
 adr_amendments_required:
   - "ADR-123: record `oak-misconceptions-subgraph-for-thread` (and `-for-unit` if shipped), recalculate primitive counts, and capture `_meta` legacy-substrate disclosure as non-contractual metadata"
@@ -85,7 +83,7 @@ todos:
 **Status**: 🟡 PLANNING (current/) — pending graph-stack Inc.1b
 (Thread → Unit lookup). PARALLEL-SAFE with slice 2 (gate-2) and slice 1 (gate-1a + gate-1b) — different substrate paths, different namespaces, different files. Per the 2026-05-21 gate-split amendment, the previous "pending gate-1-eef-ships" framing no longer applies: substrate streams are co-primary and slice 3a does not depend on the slice-1 EEF gates.
 **Scope**: Slice 3a of the
-[`graph-mvp-arc.plan.md`](../../../graph-mvp-arc.plan.md) — author and
+`graph-mvp-arc.plan.md` — author and
 ship `oak-misconceptions-subgraph-for-thread` (and optionally
 `-for-unit`) on the **bulk-derived legacy graph factory** path. Bounded
 sub-graph
@@ -99,7 +97,7 @@ requires the ability to query sub-graphs as the misconception graph is
 too large to use without using an impractical amount of context."* The
 sub-graph query primitive is the BLOCKING problem to fix; cross-corpus
 composition (now in the follow-on
-[`graph-combinatorial-arc.plan.md`](../../../graph-combinatorial-arc.plan.md))
+`graph-combinatorial-arc.plan.md`)
 will consume the bounded-sub-graph response shape this slice establishes.
 This slice solves the blocking problem on the substrate available
 **today** (bulk-derived legacy graph factory), with the
@@ -174,7 +172,7 @@ contract is named, and the migration is sequenced.
    is named in the MVP-arc spine. Renaming requires a spine amendment,
    not just this plan. Note: the combinatorial-arc cross-corpus tool
    (formerly slice 3b, now in
-   [`graph-combinatorial-arc.plan.md`](../../../graph-combinatorial-arc.plan.md))
+   `graph-combinatorial-arc.plan.md`)
    does NOT call this tool at runtime — that tool reaches misconception
    data through `graph-corpus-sdk` directly once graph-stack Inc.3 has
    replatformed the misconception substrate. Slice 3a's contribution to
@@ -204,7 +202,7 @@ contract is named, and the migration is sequenced.
   `oak-misconceptions-topic-extraction.plan.md`).
 - Cross-corpus composition with EEF (combinatorial arc;
   [`../future/oak-misconceptions-eef-cross-corpus-surface.plan.md`](../future/oak-misconceptions-eef-cross-corpus-surface.plan.md),
-  spine [`graph-combinatorial-arc.plan.md`](../../../graph-combinatorial-arc.plan.md)).
+  spine `graph-combinatorial-arc.plan.md`).
 
 ## Acceptance Criteria (inherited from spine §"Acceptance — Slice 3a")
 
@@ -348,7 +346,7 @@ Dispatch:
 ### WS7 — Spine gate-3a close + migration follow-up plan
 
 1. Update spine
-   [`graph-mvp-arc.plan.md`](../../../graph-mvp-arc.plan.md)
+   `graph-mvp-arc.plan.md`
    `gate-3a-mcg-subgraph-ships` todo to `completed`; record evidence.
 2. Refresh/verify the existing
    [`oak-misconceptions-substrate-migration.plan.md`](../future/oak-misconceptions-substrate-migration.plan.md)
@@ -413,7 +411,7 @@ Dispatch:
 
 **Related plans**:
 
-- [`graph-mvp-arc.plan.md`](../../../graph-mvp-arc.plan.md) — coordination
+- `graph-mvp-arc.plan.md` — coordination
   spine.
 - `misconception-graph-mcp-surface.plan.md` — already-shipped per-IRI
   lookup; slice-3a is the bounded sub-graph follow-up.

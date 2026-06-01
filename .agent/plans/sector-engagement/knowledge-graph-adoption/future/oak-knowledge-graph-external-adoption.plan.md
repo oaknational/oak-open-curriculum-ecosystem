@@ -3,7 +3,6 @@ name: "Oak Knowledge Graph External Adoption"
 overview: "Define how external organisations can use Oak's ontology, graph exports, SDKs, MCP resources, and search projections responsibly in their own projects."
 status: future
 graph_layer: feature
-graph_portfolio_index: "../../../graph-portfolio-index.md"
 related_plans:
   - "../../../connecting-oak-resources/knowledge-graph-integration/README.md"
   - "../../../connecting-oak-resources/knowledge-graph-integration/future/oak-curriculum-ontology-workspace-reassessment.plan.md"

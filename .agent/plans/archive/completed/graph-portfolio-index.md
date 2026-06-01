@@ -16,6 +16,14 @@ sibling_index: "high-level-plan.md"
 
 # Graph Portfolio — Index
 
+> **⛔ SUPERSEDED — QUARANTINED 2026-06-01.** This plan encodes the pre-rebuild graph
+> architecture (gate-1a/1b, the 7-method `GraphView`, the withdrawn ADR-175 freshness
+> gate, `recommend`/`explain`/`compare`, the Inc.3 cross-corpus join) that the EEF
+> graph-tooling rebuild discarded. Do not resume or cite it as live. Live graph work:
+> [`eef-graph-tool-completion.plan.md`](../../sector-engagement/eef/current/eef-graph-tool-completion.plan.md)
+> and [`knowledge-graph-integration/`](../../connecting-oak-resources/knowledge-graph-integration/README.md).
+> Quarantine record: [`graph-estate-consolidation.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/current/graph-estate-consolidation.plan.md).
+
 Single index for **every plan and research artefact related to graphs**,
 spanning all six collections that touch graph work. Designed to make
 consolidation cheap when the time comes.

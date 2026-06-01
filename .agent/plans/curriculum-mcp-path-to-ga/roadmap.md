@@ -125,7 +125,7 @@ Cross-axis index: [`.agent/plans/observability/high-level-observability-plan.md`
 
 ### Cross-cutting threads (from repo-wide index)
 
-- Knowledge Graph thread — see [`.agent/plans/graph-portfolio-index.md`](../graph-portfolio-index.md). KG alignment audit feeds M2/M3 gates.
+- Knowledge Graph thread — see [`connecting-oak-resources/knowledge-graph-integration/`](../connecting-oak-resources/knowledge-graph-integration/README.md). KG alignment audit feeds M2/M3 gates.
 - EEF Evidence thread — see [`.agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md`](../sector-engagement/eef/current/eef-evidence-corpus.plan.md). Sector-engagement story, M3+.
 
 ---

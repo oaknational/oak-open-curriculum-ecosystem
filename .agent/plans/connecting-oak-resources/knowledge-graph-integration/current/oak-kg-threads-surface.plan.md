@@ -5,7 +5,6 @@ plan_id: oak-kg-threads-surface
 type: feature-workstream
 status: current
 graph_layer: oak-graph-surface
-spine_plan: ".agent/plans/graph-mvp-arc.plan.md"
 spine_slice: 2
 namespace: "oak-kg-*"
 substrate_floor:
@@ -13,7 +12,6 @@ substrate_floor:
 sequencing_gate: "PARALLEL-SAFE with slice 3a (gate-3a) and slice 1's gates (gate-1a + gate-1b) after graph-stack Inc.1b lands. Per the 2026-05-21 gate-split amendment: gate-2 (Threads slice) does not depend on the slice-1 EEF gates because the Threads adapter does not consume the GraphView<TNode, TEdgeType> interface (different adapter shape: ontology-IRI enumeration + inverse-edge resolution); substrate-floor for gate-2 is Inc.1b alone, not the broader MVP-arc gate-0a/gate-0b path."
 last_updated: 2026-05-11
 related_indices:
-  - ".agent/plans/graph-portfolio-index.md"
   - ".agent/plans/connecting-oak-resources/knowledge-graph-integration/README.md"
 adr_amendments_required:
   - "ADR-123: record `curriculum://oak-kg-threads` resource + `oak-kg-get-thread-content` tool"
@@ -80,7 +78,7 @@ todos:
 **Status**: 🟡 PLANNING (current/) — pending substrate floor (graph-stack
 Inc.1b Oak Curriculum Ontology Threads adapter). Per the 2026-05-21 gate-split amendment, gate-2 (this slice) is parallel-safe with gate-1a/gate-1b (slice 1 EEF) and gate-3a (slice 3a misconception) — it does not depend on the slice-1 EEF gates.
 **Scope**: Slice 2 of the
-[`graph-mvp-arc.plan.md`](../../../graph-mvp-arc.plan.md) — author and
+`graph-mvp-arc.plan.md` — author and
 ship the `curriculum://oak-kg-threads` resource + `oak-kg-get-thread-content`
 tool via the `graph-corpus-sdk` Oak Curriculum Ontology adapter, with
 inverse-edge query primitive verified end-to-end.
@@ -107,7 +105,7 @@ Tool/resource names are **locked** by the spine — they're named in
 the MVP-arc spine and any rename requires a spine amendment, not just
 this plan. Note: the combinatorial-arc cross-corpus tool (formerly MVP
 slice 3b, now in
-[`graph-combinatorial-arc.plan.md`](../../../graph-combinatorial-arc.plan.md))
+`graph-combinatorial-arc.plan.md`)
 does **not** consume this slice's tool at runtime (see "Consumed by"
 below); the lock is a spine-naming discipline, not a downstream-composition
 dependency.
@@ -306,7 +304,7 @@ Dispatch:
 ### WS7 — Spine gate-2 close
 
 Update spine
-[`graph-mvp-arc.plan.md`](../../../graph-mvp-arc.plan.md)
+`graph-mvp-arc.plan.md`
 `gate-2-threads-ships` todo to `completed`; record acceptance evidence
 (including the shape-understanding paragraph required by the MVP-arc
 gate-2 acceptance criterion); refresh
@@ -368,7 +366,7 @@ composes EEF and misconceptions only.
 
 **Related plans**:
 
-- [`graph-mvp-arc.plan.md`](../../../graph-mvp-arc.plan.md) — coordination
+- `graph-mvp-arc.plan.md` — coordination
   spine.
 - [`graph-stack.plan.md`](graph-stack.plan.md) — substrate plan.
 - [`graph-query-layer.plan.md`](graph-query-layer.plan.md) — related query

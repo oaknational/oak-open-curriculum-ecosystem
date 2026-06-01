@@ -3,7 +3,6 @@ name: "Graphify and Graph Memory Exploration"
 overview: "Strategic option-space brief for a derived graph layer over Oak's memory estate (napkin, distilled, patterns, plans, ADRs, code), informed by Graphify, with the practice-graph-payoff-peak-pilot.plan.md as the promoted executable slice."
 status: future
 graph_layer: feature
-graph_portfolio_index: "../../graph-portfolio-index.md"
 ---
 
 # Graphify and Graph Memory Exploration — Strategic Plan

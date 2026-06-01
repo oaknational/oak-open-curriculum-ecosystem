@@ -1087,7 +1087,7 @@ naming the four definite steps before graph execution begins (D-4
 topology BLOCKERs; Inc.1 decomposition; EEF WS restructure;
 collaboration-protocol Workstreams 2–5). Parallelisability findings and
 open decisions D-1 through D-7 are discoverable in
-[`graph-mvp-arc.plan.md`](../../../plans/graph-mvp-arc.plan.md) §
+`graph-mvp-arc.plan.md` §
 Team-of-Agents Execution. Separate
 [`collaboration-protocol hardening opener`](../../../plans/agent-tooling/current/2026-05-11-collaboration-protocol-hardening-opener.md)
 authored for the agentic-engineering-enhancements thread to address the
@@ -1099,7 +1099,7 @@ surfacing-exploration; teacher value is downstream of AI-client
 adoption. Four-dimension value model (substrate / shape-understanding /
 surfacing-exploration / partnership-or-combinatorial) replaces the
 per-slice "user value triplet" framing. Slice 3b moves OUT of MVP arc;
-new [`graph-combinatorial-arc.plan.md`](../../../plans/graph-combinatorial-arc.plan.md)
+new `graph-combinatorial-arc.plan.md`
 authored in `current/` owns substrate-layer cross-corpus composition;
 its promotion trigger fires on MVP arc gate-1 + gate-3a shipped +
 graph-stack Inc.3 design-stable. Slice-3b executable plan migrated from
@@ -1259,7 +1259,7 @@ the 2026-05-08 structural-only EEF decision. NO slice execution; NO
 graph-stack ACTIVE promotion; NO ADR-173 ratification.
 **Prior**: 2026-05-07 — Windward Darting Horizon / cursor /
 claude-opus-4.7 / `dd084d` — authored
-[`graph-mvp-arc.plan.md`](../../../plans/graph-mvp-arc.plan.md) at
+`graph-mvp-arc.plan.md` at
 top-level as a cross-collection coordination spine sequencing three
 vertical slices: (1) EEF evidence corpus MCP surface; (2) Oak ontology
 Threads MCP surface; (3) misconception sub-graph queries +
@@ -1268,7 +1268,7 @@ landed: ADR-157 namespace table extended (`oak-misconceptions-*` +
 compound prefix + explicit-source-attribution discipline);
 [`eef-evidence-corpus.plan.md`](../../../plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md)
 tool/prompt names re-prefixed `eef-*` (19 occurrences via 5
-replace-alls); [`graph-portfolio-index.md`](../../../plans/graph-portfolio-index.md)
+replace-alls); `graph-portfolio-index.md`
 gained `## Vertical-slice arc` section pointing at the spine;
 [`high-level-plan.md`](../../../plans/high-level-plan.md) cross-links
 the spine from the Cross-cutting Threads section. **Course

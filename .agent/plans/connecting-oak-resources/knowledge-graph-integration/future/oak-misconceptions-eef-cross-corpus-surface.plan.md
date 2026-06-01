@@ -5,7 +5,6 @@ plan_id: oak-misconceptions-eef-cross-corpus-surface
 type: feature-workstream
 status: future
 graph_layer: oak-graph-surface
-spine_plan: ".agent/plans/graph-combinatorial-arc.plan.md"
 namespace: "oak-misconceptions-eef-*"
 substrate_path: "graph-corpus-sdk EEF + misconception adapters via graph-stack Inc.3 cross-corpus join primitive"
 substrate_floor:
@@ -15,7 +14,6 @@ substrate_floor:
 sequencing_gate: "graph-combinatorial-arc promotion trigger: MVP-arc gate-1a + gate-3a shipped + graph-stack Inc.3 design stable (per 2026-05-21 gate-split amendment). Slice 2 (Oak Threads) is NOT a dependency."
 last_updated: 2026-05-11
 related_indices:
-  - ".agent/plans/graph-portfolio-index.md"
   - ".agent/plans/connecting-oak-resources/knowledge-graph-integration/README.md"
 adr_amendments_required:
   - "ADR-123: record `oak-misconceptions-eef-recommend-for-thread` (compound-prefix tool)"
@@ -79,19 +77,19 @@ todos:
 
 **Last Updated**: 2026-05-21 (gate-name references aligned with the 2026-05-21 gate-split amendment; previous: 2026-05-11).
 **Status**: 🟡 PLANNING (future/) — queued behind the
-[`graph-combinatorial-arc.plan.md`](../../../graph-combinatorial-arc.plan.md)
+`graph-combinatorial-arc.plan.md`
 promotion trigger: MVP-arc gate-1a + gate-3a shipped + graph-stack Inc.3
 design stable (per 2026-05-21 gate-split amendment: gate-1a is the
 locking-in point for EEF surface stability; gate-1b's recommend/explain/
 compare surface is not a precursor for cross-corpus composition).
 **Scope**: First concrete combinatorial exploration of the
-[`graph-combinatorial-arc.plan.md`](../../../graph-combinatorial-arc.plan.md)
+`graph-combinatorial-arc.plan.md`
 — author and ship `oak-misconceptions-eef-recommend-for-thread`, the
 cross-corpus tool that composes EEF evidence strands and the bounded
 misconception sub-graph for a Thread IRI into a single structured response.
 
 **Reshape note (2026-05-11)**: this plan was formerly Slice 3b of the
-[`graph-mvp-arc.plan.md`](../../../graph-mvp-arc.plan.md). The MVP arc
+`graph-mvp-arc.plan.md`. The MVP arc
 reshape moved it out of the MVP scope and into the follow-on
 combinatorial arc, on the principle that substrate-for-three-sources
 must establish before combinatorial exploration begins. TDD cycles,
@@ -112,7 +110,7 @@ ADR-157 explicit-source-attribution discipline).
 > body-prose references to "slice 3b" / "the spine" reflect this plan's
 > authoring history as Slice 3b of the MVP arc. After the 2026-05-11
 > reshape this plan is the **first concrete exploration** of the
-> [`graph-combinatorial-arc`](../../../graph-combinatorial-arc.plan.md).
+> `graph-combinatorial-arc`.
 > The executable detail (TDD cycles, file scopes, reviewer briefs) is
 > unchanged.
 
@@ -374,7 +372,7 @@ Structural enforcement gates at WS5:
 ### WS6 — Spine gate-3b close + MVP-arc archive trigger
 
 1. Update spine
-   [`graph-mvp-arc.plan.md`](../../../graph-mvp-arc.plan.md)
+   `graph-mvp-arc.plan.md`
    `gate-3b-cross-corpus-ships` todo to `completed`; record evidence.
 2. Per spine `learning-loop` todo: run `/jc-consolidate-docs` after
    this gate.
@@ -433,7 +431,7 @@ Structural enforcement gates at WS5:
 
 **Related plans**:
 
-- [`graph-mvp-arc.plan.md`](../../../graph-mvp-arc.plan.md) — coordination
+- `graph-mvp-arc.plan.md` — coordination
   spine.
 - [`graph-stack.plan.md`](graph-stack.plan.md) — substrate plan
   (cross-corpus join primitive lives in Inc.3).

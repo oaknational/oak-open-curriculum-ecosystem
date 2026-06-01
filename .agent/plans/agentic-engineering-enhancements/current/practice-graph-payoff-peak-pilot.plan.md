@@ -2,7 +2,6 @@
 name: "Practice Graph Payoff-Peak Pilot"
 overview: "Queued executable slice: build the highest-value derived Practice graph with a bounded TypeScript + esbuild workspace cluster, explicit-edge extraction, and read-only local navigation surfaces."
 graph_layer: oak-graph-surface
-graph_portfolio_index: "../../graph-portfolio-index.md"
 todos:
   - id: phase-0-red-baseline
     content: "Phase 0 (RED): Lock the pilot corpus, workspace-boundary gate, output contract, and failing tests."

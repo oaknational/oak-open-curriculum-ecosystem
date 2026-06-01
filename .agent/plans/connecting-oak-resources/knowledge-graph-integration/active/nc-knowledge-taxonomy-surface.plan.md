@@ -2,7 +2,6 @@
 name: "Oak KG Knowledge Taxonomy MCP Surface"
 overview: "Extract the NC-aligned SKOS knowledge taxonomy from the Oak Curriculum Ontology and expose it as an oak-kg-namespaced MCP resource + tool — the smallest meaningful integration of the formal knowledge graph."
 graph_layer: oak-graph-surface
-graph_portfolio_index: "../../../graph-portfolio-index.md"
 promotion_trigger: "demand-tripwire — promotes from PENDING to executing when documented external/internal demand surfaces for SKOS Discipline/Strand/SubStrand/ContentDescriptor traversal that the Oak Threads MCP surface cannot answer"
 parent_plan: "open-education-knowledge-surfaces.plan.md"
 sibling_plans:

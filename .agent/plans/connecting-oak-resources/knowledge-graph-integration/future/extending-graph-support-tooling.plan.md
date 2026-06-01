@@ -2,7 +2,6 @@
 name: "Extending Graph Support Tooling"
 overview: "Home for candidate enhancements to the graph-delivery capability, discovered while building the EEF graph tooling. Each candidate is an explicit owner decision when it arises (build-now, or add here). This plan is NOT a deferral gate: it exists so removed-but-worth-keeping ideas (the type-only rank/explain/compare ops) and exploration findings have a durable home instead of becoming soft stubs or ambient follow-ons."
 graph_layer: feature
-graph_portfolio_index: "../../../graph-portfolio-index.md"
 parent_plan: "../../../sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
 sibling_plans:
   - "../current/graph-query-layer.plan.md"

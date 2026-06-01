@@ -1844,7 +1844,7 @@ tools ls --format json` BEFORE declaring Sonar unavailable.
 **Branch-state pickup pointer (2026-05-22 final shape)**: any
 session picking up this thread on `feat/mcp-graph-support-foundation`
 MUST first read
-[`feat-mcp-graph-support-foundation-meta.md`](../../../plans/feat-mcp-graph-support-foundation-meta.md)
+`feat-mcp-graph-support-foundation-meta.md`
 — the top-level meta plan naming every plan currently in force on
 the branch, the cross-plan dependency picture, the file-scope
 partition (work-structure, not team-structure), current state of

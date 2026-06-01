@@ -1,9 +1,11 @@
 # Knowledge Graph Integration
 
-> **Cross-collection index**: the full graph portfolio — substrate, Oak graph
-> surfaces, features, and the EEF cross-cutting thread — is indexed at
-> [`../../graph-portfolio-index.md`](../../graph-portfolio-index.md).
-> This README covers the **internal Oak KG integration** subset in more depth.
+> **Graph hub**: this README is the index for Oak-owned knowledge-graph work —
+> substrate, Oak graph surfaces, and features. The EEF evidence tool (the live
+> first proper graph tool) is owned under
+> [`sector-engagement/eef/`](../../sector-engagement/eef/README.md); wider graph
+> coordination is undefined until it ships — estate clean-up is owned by
+> [`graph-estate-consolidation.plan.md`](current/graph-estate-consolidation.plan.md).
 
 Internal engineering hub for Oak-owned knowledge graph work: integrating the
 Oak Curriculum Ontology and Oak-derived graphs into the MCP server, semantic

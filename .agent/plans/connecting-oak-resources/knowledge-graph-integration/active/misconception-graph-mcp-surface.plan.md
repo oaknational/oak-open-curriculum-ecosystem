@@ -2,7 +2,6 @@
 name: "Misconception Graph MCP Surface"
 overview: "Expose the existing misconception graph data as both an MCP resource and an aggregated tool, following the established prior-knowledge-graph pattern."
 graph_layer: oak-graph-surface
-graph_portfolio_index: "../../../graph-portfolio-index.md"
 parent_plan: "open-education-knowledge-surfaces.plan.md"
 specialist_reviewer: "mcp-expert, code-expert, test-expert"
 isProject: false

@@ -102,6 +102,14 @@ todos:
 
 # Graph MVP Arc — Three-Slice Substrate-And-Surface Spine
 
+> **⛔ SUPERSEDED — QUARANTINED 2026-06-01.** This plan encodes the pre-rebuild graph
+> architecture (gate-1a/1b, the 7-method `GraphView`, the withdrawn ADR-175 freshness
+> gate, `recommend`/`explain`/`compare`, the Inc.3 cross-corpus join) that the EEF
+> graph-tooling rebuild discarded. Do not resume or cite it as live. Live graph work:
+> [`eef-graph-tool-completion.plan.md`](../../sector-engagement/eef/current/eef-graph-tool-completion.plan.md)
+> and [`knowledge-graph-integration/`](../../connecting-oak-resources/knowledge-graph-integration/README.md).
+> Quarantine record: [`graph-estate-consolidation.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/current/graph-estate-consolidation.plan.md).
+
 > **⚠️ GATE-1A SCOPE CORRECTED (2026-05-27).** The 2026-05-21 amendment below
 > claims **"No scope reduction ... sequencing only"** for the gate-0/gate-1
 > split. That claim is RETRACTED for the EEF gate-1a feature: sub-graph

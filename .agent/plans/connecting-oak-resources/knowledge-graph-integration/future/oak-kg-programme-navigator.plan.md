@@ -3,7 +3,6 @@ name: "Oak KG Programme Navigator"
 overview: "Future programme/unit navigation surface over the Oak curriculum graph, sequenced after the Thread surface proves the adapter path."
 status: future
 graph_layer: oak-graph-surface
-graph_portfolio_index: "../../../graph-portfolio-index.md"
 parent_plan: "../current/oak-kg-threads-surface.plan.md"
 isProject: false
 todos:

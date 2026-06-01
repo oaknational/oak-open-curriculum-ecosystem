@@ -23,6 +23,13 @@ isProject: false
 
 # Meta plan — `feat/mcp-graph-support-foundation`
 
+> **⛔ SUPERSEDED — QUARANTINED 2026-06-01.** Branch-scoped navigation index for a
+> branch that never merged; two branches stale, and its referenced EEF plans are all
+> archived. Do not use it to orient. Live graph work:
+> [`eef-graph-tool-completion.plan.md`](../../sector-engagement/eef/current/eef-graph-tool-completion.plan.md)
+> and [`knowledge-graph-integration/`](../../connecting-oak-resources/knowledge-graph-integration/README.md).
+> Quarantine record: [`graph-estate-consolidation.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/current/graph-estate-consolidation.plan.md).
+
 ## Purpose
 
 This document is a **navigation index** for the planning surface that

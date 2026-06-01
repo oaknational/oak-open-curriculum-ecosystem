@@ -3,7 +3,6 @@ name: "Oak Misconceptions EEF Extended Contexts"
 overview: "Future extension of the EEF x misconceptions cross-corpus surface beyond Thread IRI context, for unit, lesson, or descriptor-driven sequencing."
 status: future
 graph_layer: oak-graph-surface
-graph_portfolio_index: "../../../graph-portfolio-index.md"
 parent_plan: "./oak-misconceptions-eef-cross-corpus-surface.plan.md"
 isProject: false
 todos:

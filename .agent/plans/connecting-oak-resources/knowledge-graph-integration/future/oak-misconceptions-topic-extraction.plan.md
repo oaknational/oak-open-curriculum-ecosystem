@@ -3,7 +3,6 @@ name: "Oak Misconceptions Topic Extraction"
 overview: "Future topic-string to misconception-subgraph extraction, sequenced after the Thread IRI surface proves bounded extraction."
 status: future
 graph_layer: oak-graph-surface
-graph_portfolio_index: "../../../graph-portfolio-index.md"
 parent_plan: "../current/oak-misconceptions-subgraph-mcp-surface.plan.md"
 isProject: false
 todos:

@@ -259,7 +259,7 @@ restructure:
   EEF strands becomes a `GraphView` adapter (T5 of that plan).
 - **Cross-source primitives + journeys** — split across two layers:
   substrate-layer cross-corpus primitives in
-  [`../../../graph-combinatorial-arc.plan.md`](../../../graph-combinatorial-arc.plan.md)
+  `../../../graph-combinatorial-arc.plan.md`
   (first concrete tool: EEF × Oak misconceptions for a Thread IRI);
   feature-layer journey orchestration in
   [`../../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md)
@@ -289,7 +289,7 @@ restructure:
   in git history.
 - [`../current/eef-evidence-corpus.plan.md`](../current/eef-evidence-corpus.plan.md) — successor
 - [`../../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md) — Increment 1 (foundation)
-- [`../../../graph-combinatorial-arc.plan.md`](../../../graph-combinatorial-arc.plan.md) — Increment 3 substrate-layer cross-corpus primitives (combinatorial arc, authored 2026-05-11)
+- `../../../graph-combinatorial-arc.plan.md` — Increment 3 substrate-layer cross-corpus primitives (combinatorial arc, authored 2026-05-11)
 - [`../../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md) — Increment 3b feature-layer journey orchestration
 - [`../../../../memory/active/napkin.md` § 2026-04-30 EEF graph-and-corpus architecture session](../../../../memory/active/napkin.md) — full session insight
 
@@ -354,6 +354,6 @@ authoring home. No item was relocated, duplicated, or lost.
 **Cross-references for the extraction**:
 
 - [`../current/eef-first-feature.plan.md`](../current/eef-first-feature.plan.md) — new owning plan for gate-1a (CURRENT, 2026-05-21)
-- [`../../../graph-mvp-arc.plan.md`](../../../graph-mvp-arc.plan.md) — gate-0a/gate-1a vs gate-0b/gate-1b definitions
+- `../../../graph-mvp-arc.plan.md` — gate-0a/gate-1a vs gate-0b/gate-1b definitions
 - [`../../../connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md) — substrate todos (WS4.4 + WS4.5)
-- [`../../../graph-portfolio-index.md`](../../../graph-portfolio-index.md) — slice 1a / 1b portfolio rows (split applied 2026-05-21)
+- `../../../graph-portfolio-index.md` — slice 1a / 1b portfolio rows (split applied 2026-05-21)
