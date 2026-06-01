@@ -2,8 +2,8 @@
   "schema_version": "1.3.0",
   "commit_queue": [
     {
-      "intent_id": "bafb88ea-5903-4280-b3a5-a2e7413dae68",
-      "claim_id": "78f1bb3b-7012-4e60-83c6-214799bc7ee0",
+      "intent_id": "af1f738f-3e7d-412b-8a90-d445cafd95d0",
+      "claim_id": "c67d820a-3306-4194-acef-5b20e97d6d33",
       "agent_id": {
         "agent_name": "Woodland Swaying Copse",
         "platform": "codex",
@@ -12,87 +12,17 @@
         "id": "5d23c0d8-d6a3-5601-aec3-29d504db6c42"
       },
       "files": [
-        ".agent/plans/discovery/active/README.md",
-        ".agent/plans/discovery/current/README.md",
-        ".agent/plans/discovery/current/agent-readiness-discovery-hub.plan.md",
-        ".agent/plans/discovery/current/standards-verification-2026-06-01.report.md",
-        ".agent/plans/discovery/future/aila-a2a-agent-card.plan.md",
-        ".agent/plans/discovery/future/dns-aid-discovery.plan.md",
-        ".agent/plans/discovery/future/web-bot-auth-agent-verification.plan.md",
-        ".agent/plans/discovery/future/webmcp-human-site-operability.plan.md",
-        ".agent/state/collaboration/comms/325d9fd3-bf7d-412e-a9fd-8932bc47cc75.json",
-        ".agent/state/collaboration/comms/9ba92d4a-0b5a-410d-b72c-22db33d0a885.json",
-        ".agent/state/collaboration/comms/ef0c18a1-8da7-46bd-bb68-f8c11820a9da.json",
-        ".agent/memory/operational/threads/agentic-mechanisms-discovery.next-session.md",
-        ".agent/memory/operational/threads/connecting-oak-resources.next-session.md",
-        ".agent/plans/discovery/README.md",
-        ".agent/plans/discovery/future/README.md",
-        ".agent/plans/discovery/future/agentic-mechanisms-discovery.plan.md",
-        ".agent/plans/discovery/future/mcp-server-cards.plan.md",
-        ".agent/plans/security-and-privacy/README.md",
-        ".agent/plans/security-and-privacy/roadmap.md",
+        ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-estate-consolidation.plan.md",
         ".agent/state/collaboration/active-claims.json",
-        ".agent/state/collaboration/closed-claims.archive.json",
-        "agent-tools/package.json",
-        "apps/oak-curriculum-mcp-streamable-http/package.json",
-        "apps/oak-search-cli/package.json",
-        "package.json",
-        "packages/core/build-metadata/package.json",
-        "packages/core/env/package.json",
-        "packages/core/graph-core/package.json",
-        "packages/core/oak-eslint/package.json",
-        "packages/core/observability/package.json",
-        "packages/core/openapi-zod-client-adapter/package.json",
-        "packages/core/result/package.json",
-        "packages/core/type-helpers/package.json",
-        "packages/design/design-tokens-core/package.json",
-        "packages/design/oak-design-ink/package.json",
-        "packages/design/oak-design-tokens/package.json",
-        "packages/libs/env-resolution/package.json",
-        "packages/libs/graph-ingest/package.json",
-        "packages/libs/graph-project/package.json",
-        "packages/libs/logger/package.json",
-        "packages/libs/search-contracts/package.json",
-        "packages/libs/sentry-node/package.json",
-        "packages/sdks/graph-corpus-sdk/package.json",
-        "packages/sdks/oak-curriculum-sdk/package.json",
-        "packages/sdks/oak-sdk-codegen/package.json",
-        "packages/sdks/oak-search-sdk/package.json",
-        "pnpm-lock.yaml"
+        ".agent/state/collaboration/closed-claims.archive.json"
       ],
-      "commit_subject": "chore(agentic): commit dependency and discovery updates",
-      "queued_at": "2026-06-01T15:53:25.476Z",
-      "updated_at": "2026-06-01T15:54:44.320Z",
-      "expires_at": "2026-06-01T16:08:25.476Z",
-      "phase": "pre_commit",
-      "staged_name_status": "M\t.agent/memory/operational/threads/agentic-mechanisms-discovery.next-session.md\nM\t.agent/memory/operational/threads/connecting-oak-resources.next-session.md\nM\t.agent/plans/discovery/README.md\nA\t.agent/plans/discovery/active/README.md\nA\t.agent/plans/discovery/current/README.md\nA\t.agent/plans/discovery/current/agent-readiness-discovery-hub.plan.md\nA\t.agent/plans/discovery/current/standards-verification-2026-06-01.report.md\nM\t.agent/plans/discovery/future/README.md\nM\t.agent/plans/discovery/future/agentic-mechanisms-discovery.plan.md\nA\t.agent/plans/discovery/future/aila-a2a-agent-card.plan.md\nA\t.agent/plans/discovery/future/dns-aid-discovery.plan.md\nM\t.agent/plans/discovery/future/mcp-server-cards.plan.md\nA\t.agent/plans/discovery/future/web-bot-auth-agent-verification.plan.md\nA\t.agent/plans/discovery/future/webmcp-human-site-operability.plan.md\nM\t.agent/plans/security-and-privacy/README.md\nM\t.agent/plans/security-and-privacy/roadmap.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\nA\t.agent/state/collaboration/comms/325d9fd3-bf7d-412e-a9fd-8932bc47cc75.json\nA\t.agent/state/collaboration/comms/9ba92d4a-0b5a-410d-b72c-22db33d0a885.json\nA\t.agent/state/collaboration/comms/ef0c18a1-8da7-46bd-bb68-f8c11820a9da.json\nM\tagent-tools/package.json\nM\tapps/oak-curriculum-mcp-streamable-http/package.json\nM\tapps/oak-search-cli/package.json\nM\tpackage.json\nM\tpackages/core/build-metadata/package.json\nM\tpackages/core/env/package.json\nM\tpackages/core/graph-core/package.json\nM\tpackages/core/oak-eslint/package.json\nM\tpackages/core/observability/package.json\nM\tpackages/core/openapi-zod-client-adapter/package.json\nM\tpackages/core/result/package.json\nM\tpackages/core/type-helpers/package.json\nM\tpackages/design/design-tokens-core/package.json\nM\tpackages/design/oak-design-ink/package.json\nM\tpackages/design/oak-design-tokens/package.json\nM\tpackages/libs/env-resolution/package.json\nM\tpackages/libs/graph-ingest/package.json\nM\tpackages/libs/graph-project/package.json\nM\tpackages/libs/logger/package.json\nM\tpackages/libs/search-contracts/package.json\nM\tpackages/libs/sentry-node/package.json\nM\tpackages/sdks/graph-corpus-sdk/package.json\nM\tpackages/sdks/oak-curriculum-sdk/package.json\nM\tpackages/sdks/oak-sdk-codegen/package.json\nM\tpackages/sdks/oak-search-sdk/package.json\nM\tpnpm-lock.yaml\n",
-      "staged_bundle_fingerprint": "572ea5afb62d86992d7dda66aefa51fb6dc9568053ecc8322941e5fd94f7df0f"
+      "commit_subject": "chore(agentic): close remaining commit residue",
+      "queued_at": "2026-06-01T15:56:57.918Z",
+      "updated_at": "2026-06-01T15:57:35.616Z",
+      "expires_at": "2026-06-01T16:11:57.918Z",
+      "phase": "abandoned",
+      "notes": "Owner narrowed follow-up commit to files present when commit request started; leave late-arriving plan file uncommitted."
     }
   ],
-  "claims": [
-    {
-      "claim_id": "78f1bb3b-7012-4e60-83c6-214799bc7ee0",
-      "agent_id": {
-        "agent_name": "Woodland Swaying Copse",
-        "platform": "codex",
-        "model": "GPT-5",
-        "session_id_prefix": "019e83",
-        "id": "5d23c0d8-d6a3-5601-aec3-29d504db6c42"
-      },
-      "thread": "dependency-maintenance",
-      "areas": [
-        {
-          "kind": "git",
-          "patterns": [
-            "index/head"
-          ]
-        }
-      ],
-      "claimed_at": "2026-06-01T15:50:00Z",
-      "freshness_seconds": 900,
-      "sidebar_open": false,
-      "intent": "Stage and commit all remaining working-tree files.",
-      "intent_to_commit": "bafb88ea-5903-4280-b3a5-a2e7413dae68"
-    }
-  ]
+  "claims": []
 }

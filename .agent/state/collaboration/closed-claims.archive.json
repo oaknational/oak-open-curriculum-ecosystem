@@ -5056,6 +5056,137 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "78f1bb3b-7012-4e60-83c6-214799bc7ee0",
+      "agent_id": {
+        "agent_name": "Woodland Swaying Copse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e83",
+        "id": "5d23c0d8-d6a3-5601-aec3-29d504db6c42"
+      },
+      "thread": "dependency-maintenance",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T15:50:00Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit all remaining working-tree files.",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T15:54:59Z",
+        "closed_by": {
+          "agent_name": "Woodland Swaying Copse",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e83",
+          "id": "5d23c0d8-d6a3-5601-aec3-29d504db6c42"
+        },
+        "summary": "commit 70f06de955d42d63fad00daf8424224a0d717e14: chore(agentic): commit dependency and discovery updates",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "78f1bb3b-7012-4e60-83c6-214799bc7ee0",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "77a4780f-24b3-422a-be59-8cbf83e622b9",
+      "agent_id": {
+        "agent_name": "Woodland Swaying Copse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e83",
+        "id": "5d23c0d8-d6a3-5601-aec3-29d504db6c42"
+      },
+      "thread": "dependency-maintenance",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T15:55:36Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Commit collaboration lifecycle residue from the all-files commit.",
+      "intent_to_commit": "a6972a65-ab5c-48b4-8026-02a7eb5cb73c",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T15:56:16Z",
+        "closed_by": {
+          "agent_name": "Woodland Swaying Copse",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e83",
+          "id": "5d23c0d8-d6a3-5601-aec3-29d504db6c42"
+        },
+        "summary": "closed in same collaboration-state commit: chore(agentic): close commit lifecycle residue",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "77a4780f-24b3-422a-be59-8cbf83e622b9",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "c67d820a-3306-4194-acef-5b20e97d6d33",
+      "agent_id": {
+        "agent_name": "Woodland Swaying Copse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e83",
+        "id": "5d23c0d8-d6a3-5601-aec3-29d504db6c42"
+      },
+      "thread": "dependency-maintenance",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T15:56:47Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Commit remaining lifecycle residue and late-arriving plan file.",
+      "intent_to_commit": "af1f738f-3e7d-412b-8a90-d445cafd95d0",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T15:57:30Z",
+        "closed_by": {
+          "agent_name": "Woodland Swaying Copse",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e83",
+          "id": "5d23c0d8-d6a3-5601-aec3-29d504db6c42"
+        },
+        "summary": "abandoned widened residue intent after owner narrowed scope; late-arriving plan left uncommitted",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "c67d820a-3306-4194-acef-5b20e97d6d33",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
