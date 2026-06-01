@@ -125,8 +125,6 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
-    "@oaknational/graph-core": "workspace:*",
-    "@oaknational/graph-corpus-sdk": "workspace:*",
     "@oaknational/logger": "workspace:*",
     "@oaknational/result": "workspace:*",
     "@oaknational/sdk-codegen": "workspace:*",
@@ -139,7 +137,7 @@
     "@elastic/elasticsearch": "^9.4.2",
     "@oaknational/eslint-plugin-standards": "workspace:*",
     "@types/node": "^25.9.1",
-    "eslint": "^10.4.0",
+    "eslint": "^10.4.1",
     "tsup": "^8.5.1",
     "typedoc": "^0.28.19",
     "typedoc-plugin-markdown": "^4.11.0",

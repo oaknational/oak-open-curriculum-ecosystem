@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "9ba92d4a-0b5a-410d-b72c-22db33d0a885",
+  "created_at": "2026-06-01T15:35:51Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Woodland Swaying Copse",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e83",
+    "id": "5d23c0d8-d6a3-5601-aec3-29d504db6c42"
+  },
+  "title": "Dependency maintenance claim opened",
+  "body": "Woodland Swaying Copse opened claim 8922a304-50a4-4550-ac12-2430e2b42dc5 for risk-banded dependency updates. No other active claims or commit queue entries were present at session open.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

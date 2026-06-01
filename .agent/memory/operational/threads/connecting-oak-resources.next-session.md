@@ -1,5 +1,34 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
+## 2026-06-01 — Hearthlit Stoking Cinder / claude / claude-opus-4-8 / `4c1eeb` — graph-spine quarantine
+
+**Landed**: Quarantined the four superseded root-level graph coordination spines
+(`graph-portfolio-index`, `graph-mvp-arc`, `graph-combinatorial-arc`,
+`feat-mcp-graph-support-foundation-meta`) to `archive/completed/` — commit
+`5063456a` (51 files, full pre-commit gate green).
+
+**Shape**: archived-means-archived — one `completed-plans.md` note plus a one-line
+supersession banner per file; dead frontmatter pointers removed and prose links
+de-linked to plain text estate-wide (no live→archive redirects); live navigation
+surfaces (root README, high-level-plan, kg README, curriculum-mcp roadmap)
+reframed to stable collection homes. Disposition recorded in
+`graph-estate-consolidation.plan.md`.
+
+**Next safe step**: run `graph-estate-consolidation.plan.md` t1–t7 — the deeper
+gate-1a/1b/Inc.3 *concept* decontamination of the contaminated/pending plan files
+(de-linked this session, but their narratives are intact) — in a fresh session,
+as owner-deferred.
+
+**Blocker (not mine)**: `repo-continuity.md` carries a pre-existing markdownlint
+failure (MD038/MD004/MD032, lines 338–340) from another session's in-flight edit;
+it blocks any push (`pre-push` runs full markdownlint) until its owner fixes it.
+Left untouched (held + flagged coordinate-don't-edit).
+
+**Commits**: `5063456a`. Working tree retains other agents' unrelated in-flight
+work (discovery, security, eef plan, `env.ts`) untouched.
+
+---
+
 ## 2026-05-25 — Riverine Navigating Rudder / cursor / Composer / `27d9af` — oak-preview-1 full manual UAT + suggest URL WS5
 
 **Landed**: Full black-box UAT against education-evidence preview via Cursor

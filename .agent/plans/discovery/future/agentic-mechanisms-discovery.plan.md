@@ -47,6 +47,10 @@ runtime tools, remote agents, registries, or generic service-discovery drafts.
 | [mcp-server-cards.plan.md](mcp-server-cards.plan.md) | Pre-connection metadata for public remote MCP servers | Strategic tracking | Discovers the server endpoint; runtime capabilities remain MCP |
 | [agent-skills-discovery.plan.md](agent-skills-discovery.plan.md) | Oak-authored workflow skills and skills index | Strategic tracking | Discovers workflow artifacts; live facts remain MCP/SDK/search/graph |
 | [agent-skills-discovery-research.report.md](agent-skills-discovery-research.report.md) | Research synthesis for skills discovery direction | Research report | Evidence base for the skills child plan |
+| [dns-aid-discovery.plan.md](dns-aid-discovery.plan.md) | Optional DNS-layer discovery entry point | Strategic tracking | DNS accelerator only; apex catalog remains source of truth |
+| [aila-a2a-agent-card.plan.md](aila-a2a-agent-card.plan.md) | Conditional Aila remote-agent discovery | Strategic tracking | Only relevant if Aila becomes an A2A server |
+| [webmcp-human-site-operability.plan.md](webmcp-human-site-operability.plan.md) | Optional browser-native page actions | Strategic tracking | Human-site operability, not headless MCP |
+| [web-bot-auth-agent-verification.plan.md](web-bot-auth-agent-verification.plan.md) | Signed-agent verification posture for inbound automated access | Strategic tracking | Discovery owns placement; security owns enforcement evidence |
 
 Future child lanes may be added for:
 
@@ -57,6 +61,9 @@ Future child lanes may be added for:
   server-card work.
 - Agent readiness or partner-discovery bundles that link multiple standards.
 
+The current promoted implementation slice is
+[../current/agent-readiness-discovery-hub.plan.md](../current/agent-readiness-discovery-hub.plan.md).
+
 ## Layer Map
 
 | Layer | Oak Use | Standard / Proposal Family | Parent Verdict |
@@ -66,6 +73,9 @@ Future child lanes may be added for:
 | Pre-connection server metadata | Let clients find public remote Oak MCP servers | MCP Server Cards, MCP Registry metadata | Track until spec and server publication are ready |
 | Remote agent delegation | Delegate stateful curriculum tasks to Oak-hosted agents | A2A Agent Cards and A2A runtime | Future only; requires a real Oak remote agent |
 | Generic service action discovery | Describe invocable web service capabilities | AI discovery endpoint / `agent.json` family | Watch; adopt only if it serves a distinct audience/value |
+| DNS discovery accelerator | Let agents find Oak's discovery hub before HTTP fetch | DNS-AID | Future only; prefer hub-only to avoid catalog drift |
+| Browser-native page actions | Let in-browser agents use selected human-site actions | WebMCP / Web Model Context API | Optional; requires product decision |
+| Signed-agent verification | Decide whether official Oak web apps recognise cryptographically signed automated agents | Web Bot Auth / signed agents | First-class discovery lane with security evidence cross-link |
 | Partner readiness bundle | Explain how all public machine surfaces compose | Oak-authored docs plus selected standards | Likely valuable after first two child lanes mature |
 
 ## Domain Boundaries
@@ -187,6 +197,12 @@ conditions holds:
   partner documentation.
 - A2A or a generic AI discovery standard becomes relevant because Oak has a real
   public remote agent or service-action surface to advertise.
+- DNS-AID becomes worth adopting because Oak chooses a DNS-layer discovery
+  posture and the draft/final spec is stable enough.
+- WebMCP becomes worth adopting because Oak chooses browser-native agent
+  operability for the human site.
+- Web Bot Auth becomes worth enabling or formally declining because Oak chooses
+  a signed-agent verification posture for official web apps.
 - Discovery metadata starts to duplicate across plans or docs and needs an
   executable consolidation slice.
 

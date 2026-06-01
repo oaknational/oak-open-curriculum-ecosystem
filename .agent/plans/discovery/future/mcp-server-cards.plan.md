@@ -20,6 +20,13 @@ parent_plan: agentic-mechanisms-discovery.plan.md
 
 Track the emerging MCP Server Cards specification and prepare Oak to publish a discoverable server card for any public HTTP-based MCP server we operate once the specification is released.
 
+**2026-06-01 re-verification note:** the Oak agent-readiness ticket cites the
+older SEP-1649 shape and `/.well-known/mcp/server-card.json`. Live MCP sources
+now name the Server Card Working Group's active work item as SEP-2127, and the
+checked SEP-2127 draft branch says the current `.well-known` location is
+`/.well-known/mcp-server-card`. Treat SEP-1649 as historical context only unless
+the Working Group explicitly revives that path/schema.
+
 The goal is to keep implementation low-risk until the spec stabilises: document the current best estimate, monitor official sources, and define clear triggers for revisiting this plan or implementing it.
 
 Parent and sibling planning context:
@@ -314,6 +321,9 @@ Update this plan when any of the following happens:
 - A stable official Server Cards documentation page appears on `modelcontextprotocol.io`.
 - A stable JSON Schema for Server Cards is published under `static.modelcontextprotocol.io` or committed to the official repo.
 - The draft endpoint path changes again.
+- The active SEP changes back toward the older SEP-1649
+  `/.well-known/mcp/server-card.json` shape, or confirms the current SEP-2127
+  `/.well-known/mcp-server-card` shape.
 - The draft adds or removes required fields.
 - The draft changes whether cards may include capabilities, auth metadata, tools, resources, or prompts.
 - The draft changes guidance on CORS, caching, content type, or HTTPS requirements.

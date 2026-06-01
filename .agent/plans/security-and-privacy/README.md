@@ -17,6 +17,7 @@ reduce unsupported security claims first, then enforce evidence-backed delivery.
 | `future/phase-2-evidence-merge-readiness-rules.md` | Future artefact | Phase 2 evidence merge-readiness rules target |
 | `future/phase-3-baseline-control-cut-list.md` | Future artefact | Phase 3 baseline control cut list target |
 | `future/cloudflare-mcp-public-beta-security-gate.plan.md` | Future strategic brief | Cloudflare MCP security gate, Practice deltas, and product threat-model enhancements before public beta |
+| `../discovery/future/web-bot-auth-agent-verification.plan.md` | Cross-linked discovery brief | First-class Web Bot Auth / signed-agent verification posture; security owns enforcement evidence for enabled claims |
 | `documentation-sync-log.md` | Tracking log | Per-phase record of required ADR/directive/reference-doc and README updates |
 | `developing-secure-mcp-servers.research.md` | Research | Hardening evidence base and control backlog |
 | `evidence-bundle.template.md` | Template | Claim/evidence artefact format for non-trivial security claims |
@@ -46,6 +47,11 @@ reduce unsupported security claims first, then enforce evidence-backed delivery.
 - Security-specific claim classes and merge-readiness rules are scoped to MCP
   security controls and must remain consistent with the global claim/evidence
   contract.
+- Web Bot Auth is tracked first-class in
+  [`discovery`](../discovery/future/web-bot-auth-agent-verification.plan.md)
+  because it affects public agent access to official Oak web apps. This
+  collection owns any edge enforcement evidence, risk disposition, and
+  security-control claim language if Web Bot Auth is enabled or declined.
 
 ## Document Roles (DRY)
 
@@ -66,7 +72,7 @@ No phase is complete until update handling is recorded for:
 3. any additionally impacted ADRs, `/docs/` pages, and README files
 
 Also apply:
-[`jc-consolidate-docs`](../../../.cursor/commands/jc-consolidate-docs.md)
+[`consolidate-docs`](../../skills/consolidate-docs/SKILL-CANONICAL.md)
 
 ## Milestone Alignment
 
