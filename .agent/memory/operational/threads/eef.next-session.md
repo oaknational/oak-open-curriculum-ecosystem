@@ -47,12 +47,23 @@
 >   = an input drifted from the single corpus root; fix upstream, never bridge). D7
 >   gains an obligation to exercise the Oak/EEF workflow seam on more than one signal.
 >
-> **Next safe step:** the two reviews are COMPLETE; whether and when D2 is
-> implemented is an owner decision (next-steps discussion was pending at session
-> close). The D3/D4 PENDING reviewers fire later against ratified D3/D4 outputs. The
-> seam-mapping taxonomy + "seams compose" law is captured in
-> `pending-graduations.md` as a reusable plan-template/archetype candidate
-> (owner-confirmed intent). A live peer (Luminous Dancing Aurora, codex/GPT-5/
+> **Next safe step (owner-directed 2026-06-01): do ONE more D2 review, then
+> implement D2.** D2 is the typed raw-data ingestion foundation in
+> `eef-graph-tool-completion.plan.md` (see its D2 Do/Done-when): derive
+> `EefStrand`/`EefStrandId`/`EefStrandById` from the `as const` corpus, implement
+> `isValidStrandKey`, build the source-path table (with the corpus-cardinality
+> column), derive the observed/declared vocab domains + the declared-vs-observed
+> divergence record, and delete the old school-context/strand-schema/load/list/Zod/
+> freshness path and the EEF-local graph adapter outright — the plan's intentional
+> in-flight red window, cured by the completed D2-D6 chain, not by any
+> wrapper/shim/fallback. TDD cycles; test and product code co-land. Note `EefStrand`
+> is currently the `z.infer` type in the to-be-deleted `strand-schema.ts` — repoint
+> the name to the `as const` derivation, leaving no Zod-inferred strand type. This is
+> the first product-code execution since D0, so `code-expert` (and the specialists it
+> flags) run in the normal loop after edits. The D3/D4 PENDING reviewers fire later
+> against ratified D3/D4 outputs. The seam-mapping taxonomy + "seams compose" law is
+> captured in `pending-graduations.md` as a reusable plan-template/archetype
+> candidate (owner-confirmed intent). A live peer (Luminous Dancing Aurora, codex/GPT-5/
 > `019e82`) held an active claim on the `discovery/future/` plans and was editing
 > them at session close; the owner directed committing everything in this session's
 > bundle, so those plans were included (peer notified via a directed comms event;

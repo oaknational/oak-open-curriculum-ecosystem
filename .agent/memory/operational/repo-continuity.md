@@ -215,12 +215,21 @@ not the current session-priority lane. Reactivation is owner-directed.
    source-path fixes, optionality made first-class with verified corpus
    cardinalities, Decision 10 (deterministic data; the agent is the only reasoner),
    and a rewritten `## Sequencing` carrying the seam taxonomy + the "seams compose,
-   never reconciled" law. Whether and when D2 is implemented is now an owner
-   decision; next-steps discussion was pending at session close.
-4. The plan's D3/D4 PENDING reviewers fire later against the ratified D3/D4
+   never reconciled" law.
+4. **Owner decision (2026-06-01): the next session does ONE more D2 review, then
+   implements D2.** D2 is the typed raw-data ingestion foundation per the live
+   plan's D2 Do/Done-when — derive `EefStrand`/`EefStrandId`/`EefStrandById` from
+   the `as const` corpus, implement `isValidStrandKey`, build the source-path table
+   (with the corpus-cardinality column added this session), and delete the old
+   load/list/Zod/freshness path outright (the plan's intentional in-flight red
+   window). TDD cycles; test and product code co-land. Begin implementation once
+   the D2 review confirms readiness. This is the first product-code execution on the
+   thread since D0 — `code-expert` (and the specialists it flags) run in the normal
+   loop after edits.
+5. The plan's D3/D4 PENDING reviewers fire later against the ratified D3/D4
    outputs once those exist (unchanged trigger; the plan-body edits this session
    were owner-directed corrections reviewed inline, not new ratified contracts).
-5. The seam-mapping taxonomy + "seams compose" law is a candidate for a reusable
+6. The seam-mapping taxonomy + "seams compose" law is a candidate for a reusable
    plan template/archetype (owner-confirmed intent); tracked in
    [`pending-graduations.md`](pending-graduations.md).
 
