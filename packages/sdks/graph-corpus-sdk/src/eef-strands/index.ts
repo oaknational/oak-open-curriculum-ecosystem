@@ -1,62 +1,48 @@
 /**
- * `@oaknational/graph-corpus-sdk/eef-strands` — EEF strands corpus surface.
+ * `@oaknational/graph-corpus-sdk/eef-strands` — EEF strands corpus foundation.
  *
- * Home of the EEF corpus substrate per ADR-179 (the graph substrate owns
- * corpus types; the MCP surface consumes them) and ADR-173 (the EEF
- * adapter, its Zod loader, and the corpus snapshot live here):
- *
- * - the `EefStrandsGraphView` adapter (`./graph-view.ts`) over the strands;
- * - the Zod schema (`./strand-schema.ts`) the `EefStrand` type flows from;
- * - the loader (`./loader.ts`) that validates + freshness-gates the
- *   snapshot (`./eef-toolkit.external-data.ts`) and constructs the adapter;
- * - the ADR-175 freshness gate (`./freshness.ts`).
+ * The typed raw-data foundation derived directly from the fixed `as const`
+ * corpus snapshot (`./eef-toolkit.external-data.ts`, ADR-173): strand identity
+ * and lookup, the finite raw domains, the declared-vs-observed divergence, raw
+ * related-strand edge facts, and corpus-level provenance/methodology. Per
+ * ADR-179 the substrate owns these corpus types; the MCP surface consumes them.
+ * The graph-native projection and MCP schemas are built downstream (D5/D6), not
+ * here.
  */
 
 export {
-  EefStrandsGraphView,
-  type EefStrandEdgeType,
-  type EefStrandsManifestMeta,
-  type EefStrandsGraphViewInput,
-  type EefStrandsGraphViewConstructionError,
-} from './graph-view.js';
-
-export {
-  EefStrandSchema,
-  EefToolkitSchema,
-  type EefStrand,
-  type EefToolkit,
-  type EefToolkitMeta,
-} from './strand-schema.js';
-
-export {
-  EEF_PHASES,
-  EEF_PRIORITIES,
-  EEF_KEY_STAGES,
-  type EefPhase,
-  type EefPriority,
-  type EefKeyStage,
-} from './school-context.js';
-
-export {
   strandById,
-  lastUpdated,
-  type Strand,
-  type StrandByStrandId,
+  isValidStrandKey,
   type EefToolkitData,
+  type EefStrand,
+  type EefStrandId,
+  type EefStrandById,
 } from './strand-lookup.js';
 
 export {
-  loadEefCorpus,
-  type LoadedEefCorpus,
-  type LoadEefCorpusError,
-  type LoadEefCorpusOptions,
-} from './loader.js';
-
-export { selectEefSeedIds, type EefSeedSelectionContext } from './selection.js';
+  declaredVsObservedDivergence,
+  relatedStrandEdges,
+  type DeclaredPhase,
+  type DeclaredKeyStage,
+  type DeclaredPriority,
+  type ObservedPhase,
+  type ObservedKeyStage,
+  type ObservedPriority,
+  type HeadlineImpactMonths,
+  type HeadlineCostRating,
+  type HeadlineCostLabel,
+  type HeadlineEvidenceStrengthRating,
+  type HeadlineEvidenceStrengthLabel,
+  type DeclaredVsObservedDivergence,
+  type RelatedStrandEdge,
+} from './raw-domains.js';
 
 export {
-  checkFreshness,
-  DEFAULT_THRESHOLD_DAYS,
-  type FreshnessError,
-  type FreshnessOk,
-} from './freshness.js';
+  corpusMeta,
+  corpusCaveats,
+  corpusMethodology,
+  lastUpdated,
+  type CorpusMeta,
+  type CorpusCaveat,
+  type CorpusMethodology,
+} from './corpus-meta.js';

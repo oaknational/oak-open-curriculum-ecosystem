@@ -46,18 +46,13 @@ function findRegisteredConfig(calls: readonly (readonly unknown[])[], toolName: 
  * (module replacement). The McpServer is passed as an argument to
  * registerHandlers(), making this DI-compliant per ADR-078.
  */
-/**
- * Default `eefEnabled = true` so the structural registration tests below see
- * the full universal-tool set. The co-gating tests pass the flag explicitly to
- * exercise both the OFF (production default) and ON paths.
- */
-function registerAndCapture(eefEnabled = true) {
+function registerAndCapture() {
   const server = new McpServer({ name: 'test-server', version: '0.0.0' });
   const registerToolSpy = vi.spyOn(server, 'registerTool');
   const registerPromptSpy = vi.spyOn(server, 'registerPrompt');
 
   registerHandlers(server, {
-    runtimeConfig: createMockRuntimeConfig({ eefEnabled }),
+    runtimeConfig: createMockRuntimeConfig(),
     logger: createFakeLogger(),
     observability: createFakeHttpObservability(),
     searchRetrieval: createFakeSearchRetrieval(),
@@ -135,41 +130,5 @@ describe('Tool Registration (Integration)', () => {
     expect(config).toHaveProperty('inputSchema', modelTool?.inputSchema);
     expect(config).toHaveProperty('inputSchema', {});
     expect(modelTool?.inputSchema).toEqual({});
-  });
-});
-
-describe('EEF feature-flag co-gating (Integration)', () => {
-  const EEF_TOOL = 'eef-explore-evidence-for-context';
-  const EEF_PROMPT = 'eef-evidence-grounded-lesson-plan';
-  const BASE_PROMPTS = [
-    'find-lessons',
-    'lesson-planning',
-    'explore-curriculum',
-    'learning-progression',
-  ];
-
-  const wasRegistered = (calls: readonly (readonly unknown[])[], name: string): boolean =>
-    calls.some((call) => call[0] === name);
-
-  it('flag OFF: neither the EEF tool nor the EEF prompt is registered', () => {
-    const { registerToolSpy, registerPromptSpy } = registerAndCapture(false);
-
-    expect(wasRegistered(registerToolSpy.mock.calls, EEF_TOOL)).toBe(false);
-    expect(wasRegistered(registerPromptSpy.mock.calls, EEF_PROMPT)).toBe(false);
-  });
-
-  it('flag ON: both the EEF tool and the EEF prompt are registered', () => {
-    const { registerToolSpy, registerPromptSpy } = registerAndCapture(true);
-
-    expect(wasRegistered(registerToolSpy.mock.calls, EEF_TOOL)).toBe(true);
-    expect(wasRegistered(registerPromptSpy.mock.calls, EEF_PROMPT)).toBe(true);
-  });
-
-  it('flag OFF: the four base prompts are still registered', () => {
-    const { registerPromptSpy } = registerAndCapture(false);
-
-    for (const name of BASE_PROMPTS) {
-      expect(wasRegistered(registerPromptSpy.mock.calls, name)).toBe(true);
-    }
   });
 });

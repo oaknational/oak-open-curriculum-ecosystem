@@ -41,10 +41,6 @@ function renderHtmlHead(appVersion: string | undefined): string {
  *   When provided, the config snippet uses HTTPS with this host.
  *   When absent, defaults to localhost for development.
  * @param appVersion - Optional app build identity for HTML metadata.
- * @param eefEnabled - When true, the tools and prompts sections include the
- *   co-gated EEF surfaces, mirroring the MCP `tools/list` / `prompts/list`
- *   responses. Defaults to `false` (fail-safe — the EEF surfaces are omitted
- *   unless explicitly enabled).
  * @returns Complete HTML string for the landing page
  *
  * @example
@@ -56,13 +52,9 @@ function renderHtmlHead(appVersion: string | undefined): string {
  * const devHtml = renderLandingPageHtml();
  * ```
  */
-export function renderLandingPageHtml(
-  vercelHost?: string,
-  appVersion?: string,
-  eefEnabled = false,
-): string {
-  const toolsSection = renderToolsSection(eefEnabled);
-  const promptsSection = renderPromptsSection(eefEnabled);
+export function renderLandingPageHtml(vercelHost?: string, appVersion?: string): string {
+  const toolsSection = renderToolsSection();
+  const promptsSection = renderPromptsSection();
   const resourcesSection = renderResourcesSection();
 
   return `${renderHtmlHead(appVersion)}

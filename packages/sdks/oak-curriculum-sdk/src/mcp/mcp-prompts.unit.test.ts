@@ -21,8 +21,8 @@ describe('MCP_PROMPTS', () => {
     expect(prompt?.description).toContain('plan');
   });
 
-  it('has exactly 5 prompts', () => {
-    expect(MCP_PROMPTS).toHaveLength(5);
+  it('has exactly 4 prompts', () => {
+    expect(MCP_PROMPTS).toHaveLength(4);
   });
 
   it('has explore-curriculum prompt', () => {
@@ -56,12 +56,6 @@ describe('MCP_PROMPTS', () => {
     const argNames = prompt?.arguments?.map((a) => a.name) ?? [];
     expect(argNames).toContain('topic');
     expect(argNames).toContain('yearGroup');
-  });
-
-  it('has eef-evidence-grounded-lesson-plan prompt registered for client discovery', () => {
-    const prompt = MCP_PROMPTS.find((p) => p.name === 'eef-evidence-grounded-lesson-plan');
-
-    expect(prompt).toBeDefined();
   });
 });
 
@@ -185,34 +179,6 @@ describe('getPromptMessages', () => {
       const content = messages.map((m) => m.content.text).join(' ');
       expect(content).toContain('get-thread-progressions');
       expect(content).toContain('get-prior-knowledge-graph');
-    });
-  });
-
-  describe('eef-evidence-grounded-lesson-plan prompt', () => {
-    it('routes to the eef-evidence-grounded-lesson-plan generator when called by name', () => {
-      const messages = getPromptMessages('eef-evidence-grounded-lesson-plan', {
-        subject: 'mathematics',
-        keyStage: 'KS3',
-        topic: 'fractions',
-      });
-
-      expect(messages.length).toBeGreaterThan(0);
-
-      const content = messages.map((m) => m.content.text).join(' ');
-      expect(content).toContain('mathematics');
-      expect(content).toContain('KS3');
-      expect(content).toContain('fractions');
-    });
-
-    it('references the gate-1a eef-explore-evidence-for-context tool via the dispatcher', () => {
-      const messages = getPromptMessages('eef-evidence-grounded-lesson-plan', {
-        subject: 'english',
-        keyStage: 'KS2',
-        topic: 'phonics',
-      });
-
-      const content = messages.map((m) => m.content.text).join(' ');
-      expect(content).toContain('eef-explore-evidence-for-context');
     });
   });
 

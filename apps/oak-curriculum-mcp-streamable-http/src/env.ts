@@ -38,12 +38,12 @@ const BaseEnvSchema = OakApiKeyEnvSchema.extend(ElasticsearchEnvSchema.shape)
     DANGEROUSLY_DISABLE_AUTH: z.enum(['true', 'false']).optional(),
     OAK_CURRICULUM_MCP_USE_STUB_TOOLS: z.enum(['true', 'false']).optional(),
     /**
-     * Feature flag co-gating the EEF evidence surface. When `'true'`, the
-     * `eef-explore-evidence-for-context` tool AND the
-     * `eef-evidence-grounded-lesson-plan` prompt are registered together; when
-     * absent or `'false'`, neither is served. The two form one delivery unit
-     * (Definition of Delivery, criterion 4); the flag is the LANDED↔RELEASED
-     * seam. Default OFF — production exposure is an owner-timed flip.
+     * Feature flag reserved for the EEF evidence surface. The graph-derived EEF
+     * tool, resource, and prompt are rebuilt in a later deliverable and will
+     * register behind this flag (LANDED↔RELEASED seam). The flag is parsed into
+     * `runtimeConfig.eefEnabled` and kept live as that seam; no surface consumes
+     * it yet (the prior list-shaped EEF surface was removed). Default OFF —
+     * production exposure is an owner-timed flip.
      */
     OAK_CURRICULUM_MCP_EEF_ENABLED: z.enum(['true', 'false']).optional(),
     ALLOWED_HOSTS: z.string().optional(),

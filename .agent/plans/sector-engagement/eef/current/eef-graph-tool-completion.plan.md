@@ -817,7 +817,9 @@ kept alive until the graph projection is ready.
 domain derivation, the declared-vs-observed divergence record, headline
 metric-domain derivation, methodology/caveat and
 provenance derivation, raw related-strand facts, and metadata over the real
-corpus) + source-path table + file/import inspection during the edit. Command:
+corpus) + the source-path table
+([`eef-d2-source-path-table.md`](eef-d2-source-path-table.md)) + file/import
+inspection during the edit. Command:
 `pnpm --filter @oaknational/graph-corpus-sdk test`. Full type-check proof belongs
 to the settled D2-D6 replacement chain, not to D2 compatibility preservation.
 
@@ -1444,19 +1446,31 @@ Artefacts already in the tree, so the next session does not rediscover them:
   `citation-shape.ts` lives one level up at `evidence-corpus/citation-shape.ts`;
   D2 deletes it when it has no non-list importer, otherwise D6 deletes the
   remaining citation-only residue while registering the graph surface.
-- The `evidence-corpus/` directory also carries three non-tool files the
-  deliverables must place: `telemetry.ts` (a Sentry typed-config seam, not
-  list-tool-specific, available to the D6/D7 telemetry wiring);
-  `eef-evidence-grounded-lesson-plan-messages.ts` (the current prompt message
-  generator, self-described as transitional — D6 rewrites it from the ratified
-  D3 prompt); and `eef-evidence-guidance.ts` (constant R1/R7 framing: surface
-  evidence strength with impact, name the population-average caveat, name
-  implementation quality as the moderator, frame as decision support not policy).
-  That framing is corpus-grounded — it restates `evidence_strength_label`,
-  `meta.caveats`, and the methodology — and overlaps the already-ratified D1
-  non-claims, so it is candidate content for the D3 interpretation resource
-  (Decision 10's reasoning scaffold). D3 decides whether to carry it as-is or
-  reshape it; it is named here so the file is not orphaned.
+- The `evidence-corpus/` directory's three non-tool files are **deleted in D2 as
+  part of the full old-surface removal** (owner-decided 2026-06-01: D2 removes the
+  whole old evidence-corpus surface as a unit, keeping only the
+  `OAK_CURRICULUM_MCP_EEF_ENABLED` flag seam). Their substance is preserved in its
+  durable homes before deletion, so nothing is orphaned and no superseded shape is
+  carried forward:
+  - `telemetry.ts` (the old bespoke Sentry typed-config seam) is **not** revived.
+    The D6 tools take **repo-standard Sentry telemetry**; `sentry-expert` is
+    consulted at D6/D7 per `.agent/rules/invoke-sentry-expert.md`.
+  - `eef-evidence-guidance.ts`'s R1/R7 framing (surface evidence strength with
+    impact, name the population-average caveat, name implementation quality as the
+    moderator, frame as decision support not policy) is already durably recorded in
+    the ratified D1 `## Value And Impact` non-claims and in the strategy doc
+    `../future/evidence-integration-strategy.md`. That framing is the candidate
+    content for the D3 interpretation resource (Decision 10's reasoning scaffold);
+    D3 draws it from those homes, not from the deleted constant.
+  - `eef-evidence-grounded-lesson-plan-messages.ts`'s transitional 5-step prompt is
+    superseded by the ratified D3 default calling-agent workflow above; D6 authors
+    the new prompt from D3. The one concrete artefact worth carrying is the
+    **agent-side key-stage → phase mapping** (EYFS → early_years; KS1/KS2 →
+    primary; KS3/KS4 → secondary; KS5 → secondary, since EEF coverage is primarily
+    to age 16): per Decision 10 the agent does this mapping, and it is consistent
+    with D2's declared-vs-observed divergence record (KS5 is a declared enum value
+    with no backing strand). D3 carries this mapping in the prompt/interpretation
+    resource.
 
 ## Fully Specified End State
 

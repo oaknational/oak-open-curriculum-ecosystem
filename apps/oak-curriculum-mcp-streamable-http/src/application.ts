@@ -119,7 +119,6 @@ function setupPostAuthPhases(deps: SetupPostAuthPhasesDeps): void {
     app,
     dnsRebindingMiddleware,
     log,
-    options.runtimeConfig.eefEnabled,
     options.runtimeConfig.displayHostname,
     options.runtimeConfig.version,
   );

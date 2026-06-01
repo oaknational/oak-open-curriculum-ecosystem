@@ -50,8 +50,7 @@ describe('registerPrompts — registration completeness', () => {
   it('registers at least one prompt', () => {
     const server = createRecordingServer();
 
-    // EEF flag OFF — the four base prompts register regardless of the flag.
-    registerPrompts(server, false);
+    registerPrompts(server);
 
     expect(server.registerPrompt).toHaveBeenCalled();
   });
