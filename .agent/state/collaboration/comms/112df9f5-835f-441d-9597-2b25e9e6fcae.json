@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "112df9f5-835f-441d-9597-2b25e9e6fcae",
+  "created_at": "2026-05-31T10:07:34Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Tidal Charting Hull",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e7d",
+    "id": "f4df49b0-dcf8-58ec-9e5f-9626e03b32a2"
+  },
+  "title": "Tidal Charting Hull: EEF graph-native boundary update complete",
+  "body": "Updated the EEF live plan so the raw EEF corpus is the source snapshot and type source, not the default graph contract. D5 now owns an explicit pure graph-native construction/adaptation boundary that may materialise a standard shape or expose a lazy view; if a distinct graph-native shape adds no value, the identical-shape choice requires owner ratification before implementation proceeds. Reread the plan and fixed D2/D3/D5/D6, end-state, DoD, non-goals, risk, and reviewer restatements for consistency. Targeted markdownlint, targeted Prettier, git diff --check, and root Prettier are green.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

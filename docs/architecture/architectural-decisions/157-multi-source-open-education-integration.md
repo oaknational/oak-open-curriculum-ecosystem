@@ -13,8 +13,6 @@ extended + explicit-source-attribution discipline added 2026-05-07)
 Oak API types; non-API data sources have their own typing disciplines),
 [ADR-030](030-sdk-single-source-truth.md) — SDK as single source of truth,
 [ADR-123](123-mcp-server-primitives-strategy.md) — MCP server primitives,
-[ADR-175](175-external-evidence-corpus-freshness-governance.md) — accepted
-freshness governance for external evidence corpora,
 [ADR-154](154-separate-framework-from-consumer.md) — separate framework from
 consumer (the graph resource factory follows this pattern),
 [ADR-173](173-graph-stack-topology.md) — graph stack topology (proposed)
@@ -38,11 +36,6 @@ still operating assumptions for the in-flight work but should be
 re-evaluated when the corpus extension lands. Until then, this ADR
 is **proposed**, not **accepted** — it documents a direction, not a
 constraint.
-
-ADR-175 is narrower and accepted: external evidence corpora such as EEF need
-freshness metadata, ownership, and stale-data behaviour before user-facing
-surfaces ship. That freshness decision is binding even while this broader
-multi-source integration ADR remains Proposed.
 
 ## Context
 
@@ -112,11 +105,18 @@ discipline is:
   structure at build time. Oak ontology source files are taken from the
   source-of-truth Oak Curriculum Ontology GitHub repository. Changes to `.ttl`
   files require re-extraction.
-- **EEF data**: Typed interfaces with Zod validation at load time.
-  The repository-held EEF JSON snapshot is static, versioned, and canonical for
-  implementation until EEF clarifies whether Oak should refresh from a public
-  download/API endpoint or direct supply. Zod validation catches schema drift
-  between the file and the declared types.
+- **EEF data**: Types derived directly from the repository-held snapshot
+  held `as const` — `typeof` and indexed-access types, with membership
+  checks using the constant-type-predicate pattern (ADR-153), no
+  hand-maintained type declarations, and no type assertions (the generalised
+  compile-time discipline of ADR-038). The snapshot is static, versioned, and canonical
+  for implementation until EEF clarifies whether Oak should refresh from a
+  public download/API endpoint or direct supply. Its external provenance
+  does not make its shape unknown: the constant _is_ the schema, so there
+  is no separate schema to validate it against and no runtime drift check
+  to run. Typing it `unknown` or parsing it with Zod to re-derive a shape
+  the file already fixes would be type destruction (the
+  `unknown-is-type-destruction` rule), not validation.
 - **Oak misconception data**: The misconception graph is constructed in this
   repository from Oak bulk data as part of bulk-data processing. It is
   graph-shaped API-derived data, not a separate external raw corpus.
@@ -279,9 +279,11 @@ the future graph alignment path binding.
 ### Trade-offs
 
 - Each new data source adds a maintenance surface: the typed interfaces
-  must be kept aligned with the upstream data as it evolves. Zod
-  validation at load time mitigates this for static data (EEF); build-time
-  extraction mitigates it for ontology data.
+  must be kept aligned with the upstream data as it evolves. For static
+  data (EEF) the snapshot is held `as const` and its types are derived
+  from it, so the types cannot drift from the data they describe —
+  refreshing the snapshot is the single maintenance action. Build-time
+  extraction mitigates the same concern for ontology data.
 - The cardinal rule (ADR-029) applies strictly to Oak API types. Non-API
   data sources have their own typing disciplines documented above. This
   is a conscious scope boundary, not an exception.

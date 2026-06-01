@@ -3,7 +3,6 @@ name: "Oak Misconceptions Substrate Migration"
 overview: "Migrate the slice-3a misconception sub-graph surface from the legacy graph factory onto graph-corpus-sdk and GraphView after graph-stack Inc.3 lands the misconception adapter."
 status: future
 graph_layer: oak-graph-surface
-graph_portfolio_index: "../../../graph-portfolio-index.md"
 parent_plan: "../current/oak-misconceptions-subgraph-mcp-surface.plan.md"
 isProject: false
 todos:

@@ -607,6 +607,4629 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "14b484d6-1f0e-44da-ad36-787066a53a52",
+      "agent_id": {
+        "agent_name": "Leafy Regrowing Petal",
+        "platform": "claude",
+        "model": "claude-opus-4-8",
+        "session_id_prefix": "f9d588",
+        "id": "1f104be3-b0aa-5253-9cb4-7907c830e27e"
+      },
+      "thread": "agent-collaboration-research",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/active-agent-routing.ts",
+            "agent-tools/src/collaboration-state/active-agents.ts",
+            "agent-tools/tests/collaboration-state/active-agent-routing.unit.test.ts",
+            "agent-tools/tests/collaboration-state/active-agents.unit.test.ts",
+            ".agent/practice-core/decision-records/PDR-076a-agent-identity-tuple-name-and-uuid.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-29T10:23:41Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Routing-legacy-fallback sunset (owner-directed). Strict single-path id-keyed routing; cures the 2026-05-28 watcher runaway.",
+      "archived_at": "2026-05-29",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-29T12:06:42Z",
+        "closed_by": {
+          "agent_name": "Twilit Orbiting Satellite",
+          "platform": "claude",
+          "model": "claude-opus-4-8",
+          "session_id_prefix": "263042",
+          "id": "782cb4b3-1355-5995-9379-dedcf7960a17"
+        },
+        "summary": "Picked up Leafy's retained handoff claim and completed the routing-legacy-fallback sunset: greened the 10 RED unit tests plus a previously-unlisted e2e failure, finished the doctrine removal (PDR-076a sunset note, register-identity reconciled to (name,id), coordinator-name strip, claim-reports comment), verification grep clean, full pnpm check green.",
+        "evidence": [
+          {
+            "kind": "commit",
+            "ref": "d9225d5b",
+            "summary": "Sunset: strict id-keyed routing; legacy arm + fallback writer + diagnostic deleted; fail-fast on id-less; tests green; doctrine removal."
+          },
+          {
+            "kind": "commit",
+            "ref": "d1525f55",
+            "summary": "Plan-hygiene: sunset plan marked complete/landed; comms-coordination cluster cross-linked + overlap map; rightsizing activation record reconciled."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "c7a0c3bb-9021-4f1a-9c77-3cfe846c7f56",
+      "agent_id": {
+        "agent_name": "Eclipsed Creeping Secret",
+        "platform": "claude",
+        "model": "claude-opus-4-8",
+        "session_id_prefix": "1d950c",
+        "id": "40ba7729-65f6-5def-a6df-eec9a3e1cebf"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/decision-records/README.md",
+            ".agent/practice-index.md",
+            "RULES_INDEX.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/repo-continuity.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-29T10:26:24Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "WS-Z single-writer shared-index convergence + gatekeeper commit for the owner-approved Group A graduations (Lanes A/B/C/D/E). Writes: PDR README rows (087/088 + PDR-058 status), practice-index phenotype-bridge rows, 0 RULES_INDEX rows, remove 6 graduated register entries with provenance, refresh repo-continuity Next Safe Steps. Holds the commit window this round (gatekeeper-specialisation). Disjoint from Leafy (rightsizing plan, M1).",
+      "archived_at": "2026-05-29",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-29T12:22:09Z",
+        "closed_by": {
+          "agent_name": "Eclipsed Creeping Secret",
+          "platform": "claude",
+          "model": "claude-opus-4-8",
+          "session_id_prefix": "1d950c",
+          "id": "40ba7729-65f6-5def-a6df-eec9a3e1cebf"
+        },
+        "summary": "WS-Z Group A convergence complete. Content committed (in owner sweep 9317cdcd); shared indices + register removals + repo-continuity refreshed; 6-dim review CLEAN; plan archived to archive/completed/. Finish bookkeeping left uncommitted per owner (no commit this session).",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "c7a0c3bb-9021-4f1a-9c77-3cfe846c7f56",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "5d3204bd-690d-47c2-8eeb-526ade26537e",
+      "agent_id": {
+        "agent_name": "Lanternlit Creeping Shade",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e74",
+        "id": "762a2ad5-af36-5f2c-aaa1-56d15db7ea4d"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-30T07:15:07Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Restructure EEF graph tool completion plan around teacher impact, layered end state, MCP graph surface, deliverables, and done criteria",
+      "archived_at": "2026-05-30",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-30T07:17:34Z",
+        "closed_by": {
+          "agent_name": "Lanternlit Creeping Shade",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e74",
+          "id": "762a2ad5-af36-5f2c-aaa1-56d15db7ea4d"
+        },
+        "summary": "Restructured the EEF graph completion plan around teacher impact, typed graph construction, MCP graph factory, EEF MCP tool suite, and deliverable definitions of done. Validation: focused markdownlint, Prettier check, and git diff --check passed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "5d3204bd-690d-47c2-8eeb-526ade26537e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "8e1342e5-bf91-4d90-9928-318e57b055fc",
+      "agent_id": {
+        "agent_name": "Lanternlit Creeping Shade",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e74",
+        "id": "762a2ad5-af36-5f2c-aaa1-56d15db7ea4d"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-30T07:18:53Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Owner follow-up: refine EEF graph completion plan so exploration starts from value and MCP tool/resource design before graph-layer construction.",
+      "archived_at": "2026-05-30",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-30T07:20:07Z",
+        "closed_by": {
+          "agent_name": "Lanternlit Creeping Shade",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e74",
+          "id": "762a2ad5-af36-5f2c-aaa1-56d15db7ea4d"
+        },
+        "summary": "Refined the EEF graph completion plan so the next session starts with value and impact, then MCP tools/resources, then graph capability and typed ingest. Validation: focused markdownlint, Prettier check, and git diff --check passed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8e1342e5-bf91-4d90-9928-318e57b055fc",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "d940ec43-d1f8-414c-891b-0411f3795003",
+      "agent_id": {
+        "agent_name": "Lanternlit Creeping Shade",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e74",
+        "id": "762a2ad5-af36-5f2c-aaa1-56d15db7ea4d"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-30T07:24:01Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Apply documentation and code reviewer findings to the EEF graph completion plan; plan-only edits.",
+      "archived_at": "2026-05-30",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-30T07:24:49Z",
+        "closed_by": {
+          "agent_name": "Lanternlit Creeping Shade",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e74",
+          "id": "762a2ad5-af36-5f2c-aaa1-56d15db7ea4d"
+        },
+        "summary": "Applied docs/code reviewer findings to the EEF graph completion plan: ADR-175 disposition gate, D2 owner/MCP SDK verification, graph-core boundary split, schema derivation drift guard, envelope metadata additive wording, and narrowed non-goal around fixed-corpus validation vs required tests. Validation: focused markdownlint, Prettier check, and git diff --check passed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "d940ec43-d1f8-414c-891b-0411f3795003",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "c4a9fed8-a252-4c10-a2e8-1a8396e902aa",
+      "agent_id": {
+        "agent_name": "Eclipsed Stealing Raven",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "483c6fb3-58f7-5f5e-a1a8-885255386ee8"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/archive/**",
+            ".remember/now.md",
+            ".remember/recent.md",
+            ".remember/today-2026-05-31.md",
+            ".remember/today-2026-05-30.md",
+            ".agent/state/collaboration/comms/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T09:41:41Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "dedicated docs consolidation source-buffer lane: mine napkin, remember buffers, and comms events for durable insights while avoiding higher-level graduation surfaces claimed by Open Lofting Cliff",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T09:43:42Z",
+        "closed_by": {
+          "agent_name": "Eclipsed Stealing Raven",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "483c6fb3-58f7-5f5e-a1a8-885255386ee8"
+        },
+        "summary": "source-buffer docs consolidation lane complete: napkin/remember/comms sources inventoried, zsh glob foot-gun captured in napkin, source disposition ledger written, no comms rotation or higher-level surface edits",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "c4a9fed8-a252-4c10-a2e8-1a8396e902aa",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "e2108f59-2e77-4b05-a95c-3f8542cbd018",
+      "agent_id": {
+        "agent_name": "Eclipsed Stealing Raven",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "483c6fb3-58f7-5f5e-a1a8-885255386ee8"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/curator-passes/2026-05-31-eclipsed-source-buffer-consolidation.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T09:43:20Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "write source-buffer disposition ledger for dedicated docs consolidation without editing higher-level graduation surfaces claimed by Open Lofting Cliff",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T09:43:42Z",
+        "closed_by": {
+          "agent_name": "Eclipsed Stealing Raven",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "483c6fb3-58f7-5f5e-a1a8-885255386ee8"
+        },
+        "summary": "source-buffer disposition ledger written at .agent/memory/operational/curator-passes/2026-05-31-eclipsed-source-buffer-consolidation.md and validated with narrow markdownlint",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "e2108f59-2e77-4b05-a95c-3f8542cbd018",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "74ded4c9-4379-4e8c-b65b-81a52b653c26",
+      "agent_id": {
+        "agent_name": "Open Lofting Cliff",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "63eaefe2-fbce-51dc-9c14-655209dc101f"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/decision-records/**",
+            "docs/architecture/architectural-decisions/**",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/skills/consolidate-docs/SKILL-CANONICAL.md",
+            ".agents/skills/oak-consolidate-docs/SKILL.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T09:40:35Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "dedicated docs consolidation: draft ADR/PDR review, pending-graduations disposition, distilled graduation, and stale consolidate-docs comms-rotation doctrine correction",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T09:44:14Z",
+        "closed_by": {
+          "agent_name": "Open Lofting Cliff",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "63eaefe2-fbce-51dc-9c14-655209dc101f"
+        },
+        "summary": "Dedicated docs consolidation partial slice landed: draft-record index drift fixed, PDR-089 and pending-graduations dispositions recorded, distilled routed to PDR-089, and stale comms-rotation doctrine corrected pending comms research plan.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "74ded4c9-4379-4e8c-b65b-81a52b653c26",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "3c156b6d-5169-41a4-b30e-3ae0d6227060",
+      "agent_id": {
+        "agent_name": "Eclipsed Stealing Raven",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "483c6fb3-58f7-5f5e-a1a8-885255386ee8"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/active/archive/**",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/open-questions.md",
+            ".agent/memory/operational/curator-passes/**",
+            ".agent/state/collaboration/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T09:46:59Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "oak-consolidate-until-done: process live curation buffers item-by-item until hard/critical fitness is resolved or explicitly owner-gated",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T09:54:00Z",
+        "closed_by": {
+          "agent_name": "Eclipsed Stealing Raven",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "483c6fb3-58f7-5f5e-a1a8-885255386ee8"
+        },
+        "summary": "Source-buffer consolidation complete: napkin/distilled archived verbatim, active files reset to route pointers, unresolved items owner-gated in pending-graduations, strict-hard soft-only.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "3c156b6d-5169-41a4-b30e-3ae0d6227060",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "33630ddc-be97-42bd-9a56-9f12b2ec3310",
+      "agent_id": {
+        "agent_name": "Open Lofting Cliff",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "63eaefe2-fbce-51dc-9c14-655209dc101f"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/decision-records/**",
+            "docs/architecture/architectural-decisions/**",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/open-questions.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/operational/curator-passes/2026-05-31-open-lofting-cliff-docs-consolidation.md",
+            ".agent/skills/consolidate-docs/SKILL-CANONICAL.md",
+            ".agent/skills/consolidate-until-done/SKILL-CANONICAL.md",
+            ".agent/practice-index.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T09:48:31Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "oak-consolidate-until-done non-source docs/register consolidation lane; source buffers remain with Eclipsed",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T09:51:31Z",
+        "closed_by": {
+          "agent_name": "Open Lofting Cliff",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "63eaefe2-fbce-51dc-9c14-655209dc101f"
+        },
+        "summary": "Completed non-source docs/register consolidation: repo-continuity history archived, open-questions drained, source-pass distilled reset verified, ledger updated, strict-hard SOFT with zero hard/critical.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "33630ddc-be97-42bd-9a56-9f12b2ec3310",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "16d1b90b-9dae-4ccd-acd5-dc3abbed1ff7",
+      "agent_id": {
+        "agent_name": "Evergreen Foraging Stamen",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "c3458767-d95d-5d18-8af6-5681c223cf60"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/decision-records/PDR-089-conservation-reflex-external-check.md",
+            ".agent/practice-core/decision-records/README.md",
+            ".agent/practice-index.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/operational/curator-passes/2026-05-31-open-lofting-cliff-docs-consolidation.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T09:52:48Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "accept owner-ratified PDR-089 and graduate the matching pending-graduations gate",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T09:53:58Z",
+        "closed_by": {
+          "agent_name": "Evergreen Foraging Stamen",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "c3458767-d95d-5d18-8af6-5681c223cf60"
+        },
+        "summary": "Accepted owner-ratified PDR-089, removed its live pending-graduations gate, and verified strict-hard is SOFT",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "16d1b90b-9dae-4ccd-acd5-dc3abbed1ff7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "5a50235c-e331-4647-ba57-f14b0fc1795a",
+      "agent_id": {
+        "agent_name": "Tidal Charting Hull",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "f4df49b0-dcf8-58ec-9e5f-9626e03b32a2"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md",
+            ".agent/plans/sector-engagement/eef/README.md",
+            ".agent/plans/sector-engagement/eef/current/eef-plan-consistency-sweep.codex-brief.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T09:52:23Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "fix EEF plan and README consistency after owner direction: MCP input/output schemas derive from single Zod call on EEF graph subset, and clear stale D0 status residue",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T09:55:42Z",
+        "closed_by": {
+          "agent_name": "Tidal Charting Hull",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "f4df49b0-dcf8-58ec-9e5f-9626e03b32a2"
+        },
+        "summary": "EEF plan and README consistency fixes landed; schema rule now requires single Zod call on the appropriate EEF graph subset with owner-conversation fallback.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "5a50235c-e331-4647-ba57-f14b0fc1795a",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "59da36ec-a62c-4408-ac09-a3a755da0995",
+      "agent_id": {
+        "agent_name": "Evergreen Foraging Stamen",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "c3458767-d95d-5d18-8af6-5681c223cf60"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T09:56:31Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "session-handoff for Evergreen PDR-089 owner-gate slice; update thread record and napkin only",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T09:57:07Z",
+        "closed_by": {
+          "agent_name": "Evergreen Foraging Stamen",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "c3458767-d95d-5d18-8af6-5681c223cf60"
+        },
+        "summary": "Session handoff recorded for Evergreen PDR-089 owner-gate slice; repo-continuity left to active Open Lofting repair claim",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "59da36ec-a62c-4408-ac09-a3a755da0995",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "eddac957-4833-4ba3-a34b-79426c14f5b7",
+      "agent_id": {
+        "agent_name": "Open Lofting Cliff",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "63eaefe2-fbce-51dc-9c14-655209dc101f"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/open-questions.md",
+            ".agent/memory/operational/archive/repo-continuity-session-history-2026-05-31.md",
+            ".agent/memory/operational/archive/open-questions-archive-2026-05-31-open-lofting-cliff.md",
+            ".agent/memory/operational/curator-passes/2026-05-31-open-lofting-cliff-docs-consolidation.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T09:55:53Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "repair invalid archive-only consolidation in Open Lofting non-source lane",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T09:57:14Z",
+        "closed_by": {
+          "agent_name": "Open Lofting Cliff",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "63eaefe2-fbce-51dc-9c14-655209dc101f"
+        },
+        "summary": "Repaired Open Lofting invalid archive-only non-source move: restored repo-continuity/open-questions content, removed fresh sidecar archives, corrected ledger, verified markdownlint/diff-check; strict-hard truthfully HARD on repo-continuity.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "eddac957-4833-4ba3-a34b-79426c14f5b7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "27a8aa98-af6e-440c-9426-3aa7b010a195",
+      "agent_id": {
+        "agent_name": "Evergreen Foraging Stamen",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "c3458767-d95d-5d18-8af6-5681c223cf60"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T09:57:19Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "correct Evergreen handoff validation wording after final strict-hard recheck",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T09:57:28Z",
+        "closed_by": {
+          "agent_name": "Evergreen Foraging Stamen",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "c3458767-d95d-5d18-8af6-5681c223cf60"
+        },
+        "summary": "Corrected Evergreen handoff validation wording after final strict-hard recheck showed repo-continuity hard under Open Lofting repair claim",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "27a8aa98-af6e-440c-9426-3aa7b010a195",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "8fdb1320-e6b0-4adb-bb75-7b1e17391cb6",
+      "agent_id": {
+        "agent_name": "Open Lofting Cliff",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "63eaefe2-fbce-51dc-9c14-655209dc101f"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/active/archive/*2026-05-31*",
+            ".agent/memory/operational/curator-passes/2026-05-31-eclipsed-source-buffer-consolidation.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T10:01:06Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "bookkeep source-buffer archive repair after owner correction",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T10:06:05Z",
+        "closed_by": {
+          "agent_name": "Open Lofting Cliff",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "63eaefe2-fbce-51dc-9c14-655209dc101f"
+        },
+        "summary": "Source-buffer archive repair bookkeeping closed after preparing owner-requested single-agent handoff. Active napkin and distilled remain restored to live counted buffers. Original consolidation remains partial.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8fdb1320-e6b0-4adb-bb75-7b1e17391cb6",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "288e7027-3f7b-421d-a6af-9b2d709cd55c",
+      "agent_id": {
+        "agent_name": "Open Lofting Cliff",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "63eaefe2-fbce-51dc-9c14-655209dc101f"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/curator-passes/2026-05-31-open-lofting-cliff-docs-consolidation.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T10:05:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "continue item-level distilled repair processing without archive moves",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T10:06:10Z",
+        "closed_by": {
+          "agent_name": "Open Lofting Cliff",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "63eaefe2-fbce-51dc-9c14-655209dc101f"
+        },
+        "summary": "Distilled item-level repair batch closed for handoff. Removed only entries with proven duplicate homes or explicit pending-graduations owner gates. Remaining curation is pending.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "288e7027-3f7b-421d-a6af-9b2d709cd55c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "838e0226-2e1a-4586-873d-eac07fdecf9b",
+      "agent_id": {
+        "agent_name": "Tidal Charting Hull",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "f4df49b0-dcf8-58ec-9e5f-9626e03b32a2"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T10:04:16Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "make EEF graph construction/adaptation boundary explicit and re-read plan consistency",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T10:07:34Z",
+        "closed_by": {
+          "agent_name": "Tidal Charting Hull",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "f4df49b0-dcf8-58ec-9e5f-9626e03b32a2"
+        },
+        "summary": "Updated EEF live plan to make the raw-corpus versus graph-native construction/adaptation boundary explicit; reread and fixed consistency snags across D2/D3/D5/D6, end state, DoD, non-goals, risks, and reviewers.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "838e0226-2e1a-4586-873d-eac07fdecf9b",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "61deda74-8056-4a37-a4a0-8fc2bdde1bcb",
+      "agent_id": {
+        "agent_name": "Open Lofting Cliff",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "63eaefe2-fbce-51dc-9c14-655209dc101f"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/codex-docs-consolidation.brief.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T10:11:00Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "session handoff for consolidation repair brief",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T10:11:09Z",
+        "closed_by": {
+          "agent_name": "Open Lofting Cliff",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "63eaefe2-fbce-51dc-9c14-655209dc101f"
+        },
+        "summary": "Updated consolidation repair handoff brief, thread, repo-continuity, and napkin; focused gates green; full pnpm check red with exit 137 at search-cli e2e; strict-hard fitness remains critical/hard pending real consolidation.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "61deda74-8056-4a37-a4a0-8fc2bdde1bcb",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "8b76d2b2-cad8-4618-8da9-5bbc43bd93e4",
+      "agent_id": {
+        "agent_name": "Tidal Charting Hull",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "f4df49b0-dcf8-58ec-9e5f-9626e03b32a2"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-reviewer-session.codex-brief.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T10:10:51Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "create next Codex reviewer-session brief for EEF plan document/type/type-preservation review",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T10:11:54Z",
+        "closed_by": {
+          "agent_name": "Tidal Charting Hull",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "f4df49b0-dcf8-58ec-9e5f-9626e03b32a2"
+        },
+        "summary": "Created EEF next-session Codex reviewer brief for docs-adr-expert, general type-expert, and special type-preservation type-expert passes.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8b76d2b2-cad8-4618-8da9-5bbc43bd93e4",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "8c88b71c-32e8-4008-a74a-28cdbce6e2c2",
+      "agent_id": {
+        "agent_name": "Tidal Charting Hull",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "f4df49b0-dcf8-58ec-9e5f-9626e03b32a2"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/threads/eef.next-session.md",
+            ".agent/memory/operational/repo-continuity.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T10:13:23Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "session handoff continuity update for EEF plan review brief and graph-native boundary repair",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T10:15:12Z",
+        "closed_by": {
+          "agent_name": "Tidal Charting Hull",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "f4df49b0-dcf8-58ec-9e5f-9626e03b32a2"
+        },
+        "summary": "Session handoff continuity updated for EEF plan repair and reviewer brief; pnpm check intentionally skipped by owner direction.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8c88b71c-32e8-4008-a74a-28cdbce6e2c2",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "bb4343ba-c403-4bea-8629-654e39481a24",
+      "agent_id": {
+        "agent_name": "Foamy Charting Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "6f87bd6a-c046-5a86-b6e4-dc50d278a872"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/codex-docs-consolidation.brief.md",
+            ".agent/memory/operational/curator-passes/2026-05-31-open-lofting-cliff-docs-consolidation.md",
+            ".agent/memory/operational/curator-passes/2026-05-31-eclipsed-source-buffer-consolidation.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/open-questions.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/practice-core/decision-records/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T10:13:09Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Continue the dedicated docs-consolidation repair by item-dispositioning live buffers without archive-only fitness cures.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T10:21:05Z",
+        "closed_by": {
+          "agent_name": "Foamy Charting Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "6f87bd6a-c046-5a86-b6e4-dc50d278a872"
+        },
+        "summary": "Dedicated docs consolidation repair continuation completed: distilled drained to explicit dispositions, napkin rotated with verbatim source archive after source-buffer ledger verification, repo-continuity compacted to operational index with prior source archived, pending-graduations carries remaining owner gates; targeted markdownlint/diff/vocabulary passed; strict-hard now SOFT only with 0 hard and 0 critical.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "bb4343ba-c403-4bea-8629-654e39481a24",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "ab64548b-d638-4003-99d6-f6a24b90e1df",
+      "agent_id": {
+        "agent_name": "Hearthlit Roasting Caldera",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "cfa8ff57-2e4c-5f8b-9734-c85d73f94cc8"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md",
+            ".agent/plans/sector-engagement/eef/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T10:22:49Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Apply EEF reviewer findings to live plan and README after owner widened scope",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T10:26:20Z",
+        "closed_by": {
+          "agent_name": "Hearthlit Roasting Caldera",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "cfa8ff57-2e4c-5f8b-9734-c85d73f94cc8"
+        },
+        "summary": "Applied EEF reviewer findings to live plan and README; raw data is not graph contract; graph preserves exact raw-derived typing",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "ab64548b-d638-4003-99d6-f6a24b90e1df",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "0be18c6f-7be1-4e57-a171-58f401215fe3",
+      "agent_id": {
+        "agent_name": "Foamy Charting Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "6f87bd6a-c046-5a86-b6e4-dc50d278a872"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/codex-napkin-longitudinal-review.brief.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T10:31:00Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Author next-session Codex brief for longitudinal review of current plus last twenty napkins",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T10:26:27Z",
+        "closed_by": {
+          "agent_name": "Foamy Charting Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "6f87bd6a-c046-5a86-b6e4-dc50d278a872"
+        },
+        "summary": "Authored Codex next-session brief for longitudinal review of current plus last twenty napkins; markdownlint and diff-check passed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "0be18c6f-7be1-4e57-a171-58f401215fe3",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "0adad4ac-b7ea-4f4f-827a-6e87a65c66a0",
+      "agent_id": {
+        "agent_name": "Hearthlit Roasting Caldera",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "cfa8ff57-2e4c-5f8b-9734-c85d73f94cc8"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-plan-architecture-reviewers.codex-brief.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T10:27:35Z",
+      "freshness_seconds": 1200,
+      "sidebar_open": false,
+      "intent": "Write next-session Codex brief for four architecture reviewers over EEF plan",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T10:28:45Z",
+        "closed_by": {
+          "agent_name": "Hearthlit Roasting Caldera",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "cfa8ff57-2e4c-5f8b-9734-c85d73f94cc8"
+        },
+        "summary": "Wrote next-session EEF Codex brief for Barney/Betty/Fred/Wilma architecture review pass",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "0adad4ac-b7ea-4f4f-827a-6e87a65c66a0",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "74ee2190-d328-4ee2-bf0a-38132afee32b",
+      "agent_id": {
+        "agent_name": "Hearthlit Roasting Caldera",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "cfa8ff57-2e4c-5f8b-9734-c85d73f94cc8"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/eef.next-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T10:30:49Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Light EEF session handoff: refresh repo-continuity and eef thread record only",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T10:32:03Z",
+        "closed_by": {
+          "agent_name": "Hearthlit Roasting Caldera",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "cfa8ff57-2e4c-5f8b-9734-c85d73f94cc8"
+        },
+        "summary": "Light EEF handoff complete; repo-continuity and eef thread route next session to architecture reviewer brief",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "74ee2190-d328-4ee2-bf0a-38132afee32b",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "bce959c5-382b-47ec-a6c0-f8d177dfaa9c",
+      "agent_id": {
+        "agent_name": "Foamy Charting Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "6f87bd6a-c046-5a86-b6e4-dc50d278a872"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T10:34:06Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit all current working tree files per owner request.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T10:35:04Z",
+        "closed_by": {
+          "agent_name": "Foamy Charting Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "6f87bd6a-c046-5a86-b6e4-dc50d278a872"
+        },
+        "summary": "closed in same collaboration-state commit: docs(agentic): land curation and EEF planning handoff",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "bce959c5-382b-47ec-a6c0-f8d177dfaa9c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "6910d496-0622-4942-b7ef-8739a85492c9",
+      "agent_id": {
+        "agent_name": "Foamy Charting Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "6f87bd6a-c046-5a86-b6e4-dc50d278a872"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T10:36:44Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit late-arriving longitudinal napkin review report outputs per owner request.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T10:36:57Z",
+        "closed_by": {
+          "agent_name": "Foamy Charting Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "6f87bd6a-c046-5a86-b6e4-dc50d278a872"
+        },
+        "summary": "closed in same collaboration-state commit: docs(agentic): add longitudinal napkin review outputs",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "6910d496-0622-4942-b7ef-8739a85492c9",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "74d3d9ab-c14e-4a88-82b9-d4be2c55f99a",
+      "agent_id": {
+        "agent_name": "Blooming Twining Grove",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "31580294-82bd-5777-9d9e-b5ba2f0821b4"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/research/agentic-engineering/continuity-memory-and-knowledge-flow/longitudinal-napkin-review-2026-05-31.md",
+            ".agent/memory/operational/curator-passes/2026-05-31-codex-napkin-longitudinal-review.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/comms/*.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T10:30:19Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Run dedicated longitudinal napkin review over current plus twenty archived napkins; produce research report, curator ledger, and justified owner-gated updates.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T10:37:32Z",
+        "closed_by": {
+          "agent_name": "Blooming Twining Grove",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "31580294-82bd-5777-9d9e-b5ba2f0821b4"
+        },
+        "summary": "Completed longitudinal napkin review: report and curator ledger written, two owner-gated routes added, archives left read-only, strict-hard/markdown/prettier validation green.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "74d3d9ab-c14e-4a88-82b9-d4be2c55f99a",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "692cdf55-36d0-4c7d-9da1-5582f9f17701",
+      "agent_id": {
+        "agent_name": "Blooming Twining Grove",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "31580294-82bd-5777-9d9e-b5ba2f0821b4"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/comms/*.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T10:42:27Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Run owner-requested deep session handoff and session-completion consolidate-docs closeout with no pnpm check and no commit.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T10:43:40Z",
+        "closed_by": {
+          "agent_name": "Blooming Twining Grove",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "31580294-82bd-5777-9d9e-b5ba2f0821b4"
+        },
+        "summary": "Completed owner-requested deep session handoff and session-completion consolidate-docs closeout without pnpm check or commit; repo-continuity and thread state now reflect longitudinal review completion.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "692cdf55-36d0-4c7d-9da1-5582f9f17701",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f36b5b81-ecba-401f-a606-2550c541612b",
+      "agent_id": {
+        "agent_name": "Blooming Twining Grove",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "31580294-82bd-5777-9d9e-b5ba2f0821b4"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T10:47:32Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit all current files for final session closeout.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T10:49:10Z",
+        "closed_by": {
+          "agent_name": "Blooming Twining Grove",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "31580294-82bd-5777-9d9e-b5ba2f0821b4"
+        },
+        "summary": "closed in same collaboration-state commit: docs: close longitudinal review and EEF handoff",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f36b5b81-ecba-401f-a606-2550c541612b",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "3a114588-711c-4751-bb61-a14ee936fbb2",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T11:16:27Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Apply D1 reviewer fixes and polish to the EEF value-contract plan section.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T11:17:48Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Applied D1 reviewer fixes and polish to the EEF value-contract plan section; validation green: git diff --check, targeted markdownlint, Prettier check.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "3a114588-711c-4751-bb61-a14ee936fbb2",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "9b499283-c86f-4b30-9d42-8a7f725e3b83",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T11:19:31Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Record owner answer that D1 value contract lives in Value And Impact until later docs extraction.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T11:20:19Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Recorded owner answer: D1 value contract lives in Value And Impact for now and may be extracted to documentation later; validation green.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "9b499283-c86f-4b30-9d42-8a7f725e3b83",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "3fe7ec0e-e0ce-4e73-a391-841c5024f1b7",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T11:22:40Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Record owner answer that D1 scenario must support all subjects, key stages, topics, and lesson contexts.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T11:23:31Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Recorded owner answer: D1 scenario must support all applicable subjects, key stages, topics, and lesson contexts; examples must not narrow the contract. Validation green.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "3fe7ec0e-e0ce-4e73-a391-841c5024f1b7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "09a371b1-0c30-4232-b682-5928f95a7de7",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T11:24:23Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Record owner answer that data_version and last_updated are internal metadata for debugging and logging.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T11:25:09Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Recorded owner answer: data_version and last_updated are internal metadata for debugging/logging, not teacher-facing evidence context or freshness governance. Validation green.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "09a371b1-0c30-4232-b682-5928f95a7de7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "50e35fdf-d6db-4d57-897d-581f9a63d092",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T11:32:31Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Record owner-ratified D1 EEF value claim and illustrative example.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T11:33:58Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Recorded owner-ratified D1 value claim and illustrative example. Example is explicitly not the only future use case. Validation green.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "50e35fdf-d6db-4d57-897d-581f9a63d092",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "01BC2316-97D6-4626-B289-B710344C89C4",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T11:34:33Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Record EEF D1 value-contract learning from owner correction.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T11:35:21Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Recorded EEF D1 value-contract learning in napkin. Validation green.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "01BC2316-97D6-4626-B289-B710344C89C4",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "8BADF8AC-E264-409C-BDA5-E60F835DA2C1",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/README.md",
+            "packages/sdks/oak-curriculum-sdk/docs/mcp/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T11:36:41Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Document EEF data value at MCP EEF tool surfaces.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T11:37:38Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Documented EEF data value in evidence-corpus README and linked from MCP tools docs. Validation green.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8BADF8AC-E264-409C-BDA5-E60F835DA2C1",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "FA88072B-CB78-4B92-B4FC-3E8A868EA13B",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md",
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/README.md",
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/eef-evidence-guidance.ts",
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/eef-evidence-grounded-lesson-plan-messages.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T11:38:08Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Ratify explicit teacher-facing weak partial absent EEF evidence framing.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T11:39:07Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Ratified weak/partial/absent EEF evidence as explicit teacher-facing framing in plan, docs, runtime guidance, and prompt test. Validation green.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "FA88072B-CB78-4B92-B4FC-3E8A868EA13B",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "9D269A49-4F50-4651-8250-CB541584DA71",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T11:39:17Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Record owner preference on weak partial absent EEF evidence framing.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T11:39:57Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Recorded owner preference on explicit weak/partial/absent EEF evidence framing. Validation green.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "9D269A49-4F50-4651-8250-CB541584DA71",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "3E842B40-BD80-4780-B1BB-327F64819765",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md",
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/README.md",
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/eef-evidence-guidance.ts",
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/eef-evidence-grounded-lesson-plan-messages.ts",
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/eef-evidence-grounded-lesson-plan-messages.unit.test.ts",
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/tools/eef-explore-evidence-for-context/tool-definition.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T11:46:45Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Ratify options and trade-offs language instead of EEF recommendations.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T11:49:21Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Ratified EEF options/trade-offs language instead of teacher-replacing selection language across plan, docs, tool guidance, prompt, and tests. Validation green.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "3E842B40-BD80-4780-B1BB-327F64819765",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "DFDE8FC9-10D7-4431-A095-B8C5A01A5D3A",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T11:49:31Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Record EEF options and trade-offs language preference.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T11:50:26Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Recorded EEF options/trade-offs language preference in napkin. Validation green.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "DFDE8FC9-10D7-4431-A095-B8C5A01A5D3A",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "3E4A3BBA-1C62-4C33-8B49-0DE900836C9A",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md",
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/README.md",
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/eef-evidence-guidance.ts",
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/eef-evidence-grounded-lesson-plan-messages.unit.test.ts",
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/tools/eef-explore-evidence-for-context/tool-definition.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T12:46:43Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Ratify both explicit and proactive EEF invocation policy.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T12:48:03Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Ratified both explicit and proactive EEF invocation policy in plan, README, model guidance, tool description, and prompt test. Validation green.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "3E4A3BBA-1C62-4C33-8B49-0DE900836C9A",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "3A2BD80B-D842-4663-91D2-F7EB294B5A8D",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T12:48:17Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Record EEF explicit and proactive invocation preference.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T12:49:07Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Recorded explicit and proactive EEF invocation preference in napkin. Validation green.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "3A2BD80B-D842-4663-91D2-F7EB294B5A8D",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "52DCFE15-0E30-412C-B660-799CA724F72A",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md",
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/README.md",
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/eef-evidence-guidance.ts",
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/eef-evidence-grounded-lesson-plan-messages.unit.test.ts",
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/tools/eef-explore-evidence-for-context/tool-definition.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T12:50:19Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Ratify brief proactive EEF invocation rationale.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T12:51:16Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Ratified brief proactive EEF invocation rationale in plan, README, model guidance, tool description, and prompt test. Validation green.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "52DCFE15-0E30-412C-B660-799CA724F72A",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "80816757-C812-4A1A-B28A-E4DD53002E64",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T12:51:24Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Record brief proactive EEF invocation rationale preference.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T12:52:09Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Recorded brief proactive EEF invocation rationale preference in napkin. Validation green.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "80816757-C812-4A1A-B28A-E4DD53002E64",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "944D394A-3D2D-4214-BA46-52582B6246E2",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md",
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/README.md",
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/eef-evidence-guidance.ts",
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/eef-evidence-grounded-lesson-plan-messages.unit.test.ts",
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/tools/eef-explore-evidence-for-context/tool-definition.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T13:08:13Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Ratify flexible calling-agent pattern for proactive EEF invocation rationale.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T13:09:10Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Ratified flexible calling-agent pattern for proactive EEF invocation rationale. Validation green.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "944D394A-3D2D-4214-BA46-52582B6246E2",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "ACB0CF35-48DA-43DC-9807-9E6773439402",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T13:09:17Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Record flexible calling-agent EEF rationale pattern preference.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T13:10:01Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Recorded flexible calling-agent EEF rationale pattern preference in napkin. Validation green.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "ACB0CF35-48DA-43DC-9807-9E6773439402",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "4DFAB7E7-D291-4BF8-AC9E-CFB32F0A3F11",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T13:14:03Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Record always-on short EEF rationale pattern preference.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T13:14:54Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Recorded always-on short flexible EEF rationale pattern in napkin. Validation green.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "4DFAB7E7-D291-4BF8-AC9E-CFB32F0A3F11",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "79643988-EFEF-4D62-A553-5E7757E0A345",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T13:24:11Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Record D3 MCP surface shape answer.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T13:25:07Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Recorded D3 practical-small MCP surface direction and preferred function-dispatched EEF MCP tool shape. Validation green.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "79643988-EFEF-4D62-A553-5E7757E0A345",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "D9794702-B8A3-4988-8E38-3DB2D101875B",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T13:25:17Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Record D3 MCP surface shape preference.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T13:26:03Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Recorded D3 MCP surface shape preference in napkin. Validation green.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "D9794702-B8A3-4988-8E38-3DB2D101875B",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "F1058C26-0634-4E8D-87F5-3F72A4C2C577",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T14:20:12Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Record D3 default order and MCP primitive targeting",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T14:22:21Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Recorded D3 default workflow and official MCP primitive targeting for tools/resources/prompts/elicitation/sampling/annotations.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "F1058C26-0634-4E8D-87F5-3F72A4C2C577",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "325FB0AE-60E9-4368-B05C-2AEFB2B34213",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T14:21:37Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Record EEF MCP primitive targeting pattern",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T14:22:21Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Recorded EEF MCP primitive targeting and default workflow pattern in napkin.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "325FB0AE-60E9-4368-B05C-2AEFB2B34213",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "18CF9301-08EA-4F87-B243-D1DDF8785162",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T14:38:39Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Record deterministic MCP input-boundary correction",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T14:39:35Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Recorded deterministic MCP input-boundary correction in napkin.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "18CF9301-08EA-4F87-B243-D1DDF8785162",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "23131AC6-2DA0-44AF-ADE0-803EFC7F5756",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T14:38:35Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Record deterministic MCP input boundary",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T14:39:35Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Recorded that EEF MCP tool inputs are deterministic finite values only; invoking agent handles free-form interpretation before tool calls.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "23131AC6-2DA0-44AF-ADE0-803EFC7F5756",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "734093E8-1AF6-4639-8BDC-CBF77CB20128",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T14:40:29Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Clarify prompt-guided workflow means agent-followed workflow",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T14:41:15Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Recorded prompt-guided workflow clarification in napkin.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "734093E8-1AF6-4639-8BDC-CBF77CB20128",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "B618D236-48ED-4FB9-8B82-744C17509A24",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T14:40:21Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Clarify prompt-guided workflow boundary",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T14:41:15Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Clarified that prompt-guided workflow means the invoking agent follows a workflow, not that the deterministic tool interprets free text.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "B618D236-48ED-4FB9-8B82-744C17509A24",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "808693D4-07D1-4EB1-9917-2B93CA27DE61",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T14:44:40Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Record EEF output ontology-on-demand pattern",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T14:45:47Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Recorded EEF output ontology-on-demand pattern in napkin.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "808693D4-07D1-4EB1-9917-2B93CA27DE61",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "160134AE-9C23-4E59-928B-0D7382357C0D",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T14:43:51Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Record EEF output ontology and optional interpretation surface",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T14:45:47Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Recorded compact EEF tool outputs plus optional interpretation ontology/resource or prompt derived from corpus methodology where possible.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "160134AE-9C23-4E59-928B-0D7382357C0D",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1E2EBCB7-BAF2-4C37-92F1-22CF8DDC7FA7",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T14:59:06Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Record settled EEF MCP surface triad",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T14:59:49Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Recorded settled EEF MCP surface triad in napkin.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1E2EBCB7-BAF2-4C37-92F1-22CF8DDC7FA7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "098E42A4-052D-45FC-AA16-B1F72B79F3C6",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T14:58:32Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Record settled EEF MCP tool resource prompt surface",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T14:59:49Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Recorded settled EEF MCP surface triad: deterministic query/fetch tool, interpretation resource/template, user-facing workflow prompt.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "098E42A4-052D-45FC-AA16-B1F72B79F3C6",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "82A0B97D-BE6F-4313-B2D1-1FD203A56E4E",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T15:05:27Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Record D3 contract versus verification clarification",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T15:06:14Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Recorded D3 contract-versus-verification clarification in napkin.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "82A0B97D-BE6F-4313-B2D1-1FD203A56E4E",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "699AEFA0-EEE2-4AC0-AD93-702D2408E36F",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T15:03:50Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Tighten D3 contract and verification language",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T15:06:14Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Tightened D3 language into owner-ratified decisions, written MCP contract artefact, and separate SDK/app verification record.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "699AEFA0-EEE2-4AC0-AD93-702D2408E36F",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "A8EABB89-9201-4C43-BF5B-2D01A676AC5E",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-plan-holistic-pass.codex-brief.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T15:10:39Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Write next-session holistic EEF plan brief",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T15:12:14Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Created next-session Codex brief for holistic EEF plan pass.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "A8EABB89-9201-4C43-BF5B-2D01A676AC5E",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "F0A6587D-1F82-46F2-B88F-C584E1120085",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/threads/eef.next-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T15:10:39Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Update EEF thread handoff for holistic pass",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T15:12:14Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Updated EEF thread handoff with D1/D3 outcome and holistic-pass next safe step.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "F0A6587D-1F82-46F2-B88F-C584E1120085",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "E17D99AF-C597-471E-950D-5B8C4ED09C4F",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T15:10:39Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Update repo continuity EEF next safe step",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T15:12:14Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Updated repo continuity EEF active-thread summary and next safe step.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "E17D99AF-C597-471E-950D-5B8C4ED09C4F",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "8233D05E-DBD6-43F4-BBF8-E86F7F8BF65E",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-plan-holistic-pass.codex-brief.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T15:14:57Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Integrate predecision report into holistic pass brief",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T15:15:57Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Updated holistic pass brief to include the predecision research report and plan-report relationship review.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8233D05E-DBD6-43F4-BBF8-E86F7F8BF65E",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "ED37A5C2-7E1A-4484-AEE2-F91C97565A60",
+      "agent_id": {
+        "agent_name": "Estuarine Rolling Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7d",
+        "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T15:18:46Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Record final EEF plan-report handoff insight",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T15:19:35Z",
+        "closed_by": {
+          "agent_name": "Estuarine Rolling Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7d",
+          "id": "05a6d736-556b-521c-9c1a-d1a284df7e50"
+        },
+        "summary": "Recorded final EEF plan/report authority distinction insight in napkin.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "ED37A5C2-7E1A-4484-AEE2-F91C97565A60",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "88EC5C8F-89C2-4700-AB0F-B3BB65B0E794",
+      "agent_id": {
+        "agent_name": "Prismatic Shimmering Constellation",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7e",
+        "id": "b413af66-5a3e-5e24-84a8-28ec2ed3f132"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/threads/eef.next-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T15:59:22Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Add PDR-027 identity row for EEF D2 plan repair/reviewer session.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T16:04:30Z",
+        "closed_by": {
+          "agent_name": "Prismatic Shimmering Constellation",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7e",
+          "id": "b413af66-5a3e-5e24-84a8-28ec2ed3f132"
+        },
+        "summary": "Added EEF thread identity row for D2 plan repair/reviewer session.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "88EC5C8F-89C2-4700-AB0F-B3BB65B0E794",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "69A96288-2863-4A2B-B9CC-2CD8477435F7",
+      "agent_id": {
+        "agent_name": "Prismatic Shimmering Constellation",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7e",
+        "id": "b413af66-5a3e-5e24-84a8-28ec2ed3f132"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T15:59:05Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Apply owner-corrected D2 fixed-data-shape repair and run code/docs reviewer passes over the full D2 section.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T16:04:30Z",
+        "closed_by": {
+          "agent_name": "Prismatic Shimmering Constellation",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7e",
+          "id": "b413af66-5a3e-5e24-84a8-28ec2ed3f132"
+        },
+        "summary": "Applied owner-corrected D2 fixed-data-shape wording and ran code/docs reviewer passes; synthesis reports follow in chat.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "69A96288-2863-4A2B-B9CC-2CD8477435F7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "A8D3443E-C94D-4979-8342-86F617310037",
+      "agent_id": {
+        "agent_name": "Prismatic Shimmering Constellation",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7e",
+        "id": "b413af66-5a3e-5e24-84a8-28ec2ed3f132"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T16:01:30Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Record repeated shell-quoting miss from D2 review session.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T16:04:30Z",
+        "closed_by": {
+          "agent_name": "Prismatic Shimmering Constellation",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7e",
+          "id": "b413af66-5a3e-5e24-84a8-28ec2ed3f132"
+        },
+        "summary": "Recorded repeated shell-quoting miss in active napkin.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "A8D3443E-C94D-4979-8342-86F617310037",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "B61A19D6-D5B2-4B68-9CC0-E8CAFE68CC31",
+      "agent_id": {
+        "agent_name": "Prismatic Shimmering Constellation",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7e",
+        "id": "b413af66-5a3e-5e24-84a8-28ec2ed3f132"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md",
+            ".agent/plans/sector-engagement/eef/current/eef-graph-predecision-research.report.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T16:13:48Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Apply owner-corrected D2/report fixed-data single-source repair: no escape hatches, no maintained key/value lists.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T16:15:42Z",
+        "closed_by": {
+          "agent_name": "Prismatic Shimmering Constellation",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7e",
+          "id": "b413af66-5a3e-5e24-84a8-28ec2ed3f132"
+        },
+        "summary": "Applied owner-corrected D2/report fixed-data single-source repair: removed escape hatches and aligned report/plan.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "B61A19D6-D5B2-4B68-9CC0-E8CAFE68CC31",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "76C71DBE-40B4-482A-88DA-E9938190DBF1",
+      "agent_id": {
+        "agent_name": "Prismatic Shimmering Constellation",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7e",
+        "id": "b413af66-5a3e-5e24-84a8-28ec2ed3f132"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md",
+            ".agent/plans/sector-engagement/eef/current/eef-graph-predecision-research.report.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T16:18:19Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Patch D2 reviewer findings: remove remaining report free-text/fallback escape hatches and align plan/report wording.",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T16:24:24Z",
+        "closed_by": {
+          "agent_name": "Prismatic Shimmering Constellation",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7e",
+          "id": "b413af66-5a3e-5e24-84a8-28ec2ed3f132"
+        },
+        "summary": "Applied no-escape-hatches correction across principles, D2 plan, and EEF report; reviewers passed final re-check.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "76C71DBE-40B4-482A-88DA-E9938190DBF1",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "2859a501-dc70-4415-b110-f0af3a08db75",
+      "agent_id": {
+        "agent_name": "Kilned Crackling Ember",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7f",
+        "id": "154dc156-665c-5952-af19-e4b039aafe43"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md",
+            ".agent/reports/eef-value-trace.report.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T19:53:17Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Fix D3 workflow mapping and resolved value-trace report findings for D1 review",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T19:54:24Z",
+        "closed_by": {
+          "agent_name": "Kilned Crackling Ember",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7f",
+          "id": "154dc156-665c-5952-af19-e4b039aafe43"
+        },
+        "summary": "Fixed D3 workflow mapping to real EEF strand ids and marked value-trace report findings resolved where folded into the live plan.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "2859a501-dc70-4415-b110-f0af3a08db75",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "082a4229-292a-4062-a95b-1f497927f66c",
+      "agent_id": {
+        "agent_name": "Kilned Crackling Ember",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7f",
+        "id": "154dc156-665c-5952-af19-e4b039aafe43"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T19:57:07Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Fold evidence-standard finding into D1 value contract",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T19:58:09Z",
+        "closed_by": {
+          "agent_name": "Kilned Crackling Ember",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7f",
+          "id": "154dc156-665c-5952-af19-e4b039aafe43"
+        },
+        "summary": "Folded faithful-evidence-transmission standard into D1 value contract, D1 acceptance, and D7 proof.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "082a4229-292a-4062-a95b-1f497927f66c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "95f5a571-7df6-43fb-bb29-6f0101e3786d",
+      "agent_id": {
+        "agent_name": "Kilned Crackling Ember",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7f",
+        "id": "154dc156-665c-5952-af19-e4b039aafe43"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T20:07:14Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Replace D1 evidence-term-list framing with corpus-derived projection/provenance framing",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T20:08:50Z",
+        "closed_by": {
+          "agent_name": "Kilned Crackling Ember",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7f",
+          "id": "154dc156-665c-5952-af19-e4b039aafe43"
+        },
+        "summary": "Replaced D1 evidence-term-list framing with corpus-derived projection/provenance contract and schema projection invariant.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "95f5a571-7df6-43fb-bb29-6f0101e3786d",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "3f29c853-1806-44e1-808d-360d85f7545a",
+      "agent_id": {
+        "agent_name": "Kilned Crackling Ember",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7f",
+        "id": "154dc156-665c-5952-af19-e4b039aafe43"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T20:10:52Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Clarify MCP schemas derive from graph-native EEF view, not raw EEF data directly",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T20:11:56Z",
+        "closed_by": {
+          "agent_name": "Kilned Crackling Ember",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7f",
+          "id": "154dc156-665c-5952-af19-e4b039aafe43"
+        },
+        "summary": "Clarified MCP schemas derive from named graph-native EEF view subsets, while graph form derives from raw EEF data with provenance preserved.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "3f29c853-1806-44e1-808d-360d85f7545a",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "85be541f-8caf-477e-b498-0d8252f37e77",
+      "agent_id": {
+        "agent_name": "Kilned Crackling Ember",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7f",
+        "id": "154dc156-665c-5952-af19-e4b039aafe43"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T20:14:25Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Mark D1 value-impact contract complete after owner ratification",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T20:15:14Z",
+        "closed_by": {
+          "agent_name": "Kilned Crackling Ember",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7f",
+          "id": "154dc156-665c-5952-af19-e4b039aafe43"
+        },
+        "summary": "Marked D1 value-impact contract complete after owner ratification and updated ratification status text.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "85be541f-8caf-477e-b498-0d8252f37e77",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "8e39ea13-b55a-494b-8cd1-43bfca33ca49",
+      "agent_id": {
+        "agent_name": "Kilned Crackling Ember",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7f",
+        "id": "154dc156-665c-5952-af19-e4b039aafe43"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T20:22:07Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Capture napkin note for EEF D1/D0 plan review tooling friction",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T20:22:53Z",
+        "closed_by": {
+          "agent_name": "Kilned Crackling Ember",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7f",
+          "id": "154dc156-665c-5952-af19-e4b039aafe43"
+        },
+        "summary": "Captured napkin note for claims list CLI flag friction during D1/D0 plan review.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8e39ea13-b55a-494b-8cd1-43bfca33ca49",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1b187984-83d0-425f-b533-84da6785cf11",
+      "agent_id": {
+        "agent_name": "Kilned Crackling Ember",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7f",
+        "id": "154dc156-665c-5952-af19-e4b039aafe43"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md",
+            ".agent/plans/sector-engagement/eef/current/eef-value-trace.codex-brief.md",
+            ".agent/reports/eef-value-trace.report.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T20:26:23Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Archive ancillary EEF value-trace artefacts and fix D0/D1-aligned plan language",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T20:33:26Z",
+        "closed_by": {
+          "agent_name": "Kilned Crackling Ember",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7f",
+          "id": "154dc156-665c-5952-af19-e4b039aafe43"
+        },
+        "summary": "Archived EEF value-trace brief/report and fixed D0/D1-aligned plan language.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1b187984-83d0-425f-b533-84da6785cf11",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "25b64b83-465b-4e5a-9cb8-0d0df1c01300",
+      "agent_id": {
+        "agent_name": "Kilned Crackling Ember",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7f",
+        "id": "154dc156-665c-5952-af19-e4b039aafe43"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/README.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/eef.next-session.md",
+            ".agent/plans/sector-engagement/eef/archive/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T20:27:11Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Update EEF routing surfaces after archiving value-trace artefacts",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T20:33:26Z",
+        "closed_by": {
+          "agent_name": "Kilned Crackling Ember",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7f",
+          "id": "154dc156-665c-5952-af19-e4b039aafe43"
+        },
+        "summary": "Updated EEF README, continuity, thread, and archive index after archiving working artefacts.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "25b64b83-465b-4e5a-9cb8-0d0df1c01300",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "60da5ca5-166f-47ea-b748-656fa389dbe3",
+      "agent_id": {
+        "agent_name": "Kilned Crackling Ember",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7f",
+        "id": "154dc156-665c-5952-af19-e4b039aafe43"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-d1-reviewers.codex-brief.md",
+            ".agent/plans/sector-engagement/eef/current/eef-graph-predecision-report-fix.codex-brief.md",
+            ".agent/plans/sector-engagement/eef/current/eef-graph-predecision-research.codex-brief.md",
+            ".agent/plans/sector-engagement/eef/current/eef-graph-predecision-research.report.md",
+            ".agent/plans/sector-engagement/eef/current/eef-plan-architecture-reviewers.codex-brief.md",
+            ".agent/plans/sector-engagement/eef/current/eef-plan-consistency-sweep.codex-brief.md",
+            ".agent/plans/sector-engagement/eef/current/eef-plan-holistic-pass.codex-brief.md",
+            ".agent/plans/sector-engagement/eef/current/eef-plan-reviewers.codex-brief.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T20:28:49Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Archive stale EEF current briefs and predecision report after folding substance into plan",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T20:33:26Z",
+        "closed_by": {
+          "agent_name": "Kilned Crackling Ember",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7f",
+          "id": "154dc156-665c-5952-af19-e4b039aafe43"
+        },
+        "summary": "Archived stale EEF current briefs and predecision report after folding substance into the live plan.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "60da5ca5-166f-47ea-b748-656fa389dbe3",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "0349dac8-ffce-4685-a4c4-2ccce6711908",
+      "agent_id": {
+        "agent_name": "Kilned Crackling Ember",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7f",
+        "id": "154dc156-665c-5952-af19-e4b039aafe43"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T20:36:43Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Commit EEF plan/archive staged bundle.",
+      "intent_to_commit": "09577d1d-d9a5-45c1-928c-db1fb50b9ed2",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T20:38:05Z",
+        "closed_by": {
+          "agent_name": "Kilned Crackling Ember",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7f",
+          "id": "154dc156-665c-5952-af19-e4b039aafe43"
+        },
+        "summary": "Closed in same collaboration-state commit for EEF plan/archive bundle.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "0349dac8-ffce-4685-a4c4-2ccce6711908",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f5ccfa22-2f02-471f-b87f-00d2693759b3",
+      "agent_id": {
+        "agent_name": "Kilned Crackling Ember",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7f",
+        "id": "154dc156-665c-5952-af19-e4b039aafe43"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T20:41:57Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Commit EEF handoff and consolidation closeout bundle.",
+      "intent_to_commit": "2da6a474-46b8-478a-8ac6-d11d32b390b8",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T20:42:35Z",
+        "closed_by": {
+          "agent_name": "Kilned Crackling Ember",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7f",
+          "id": "154dc156-665c-5952-af19-e4b039aafe43"
+        },
+        "summary": "Closed in same collaboration-state commit for EEF handoff closeout.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f5ccfa22-2f02-471f-b87f-00d2693759b3",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1e1f48ce-df62-4566-9041-a9862069ca44",
+      "agent_id": {
+        "agent_name": "Solar Drifting Nebula",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7f",
+        "id": "8363f2c5-b624-5be5-90e4-e1b02e4bc1f7"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-31T20:56:52Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Correct D2 plan wording and re-review whole EEF graph-tool plan",
+      "archived_at": "2026-05-31",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-31T21:01:05Z",
+        "closed_by": {
+          "agent_name": "Solar Drifting Nebula",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7f",
+          "id": "8363f2c5-b624-5be5-90e4-e1b02e4bc1f7"
+        },
+        "summary": "Corrected D2 plan wording and re-reviewed whole EEF plan; targeted markdown/prettier/diff checks green",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1e1f48ce-df62-4566-9041-a9862069ca44",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "8f26914a-2482-43ea-87c8-fa1f5e5113d8",
+      "agent_id": {
+        "agent_name": "Evergreen Budding Copse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7f",
+        "id": "89be843b-aff3-5563-a519-34caa6629f13"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T05:08:56Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Apply D2/D3 architecture reviewer fixes to EEF graph-tool completion plan",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T05:21:32Z",
+        "closed_by": {
+          "agent_name": "Evergreen Budding Copse",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7f",
+          "id": "89be843b-aff3-5563-a519-34caa6629f13"
+        },
+        "summary": "Applied EEF plan fixes from architecture review and owner correction: D2 deletes old load/list/Zod/freshness path outright, D3 requires source-path/no-crosswalk, D5 ingests raw foundation into graph projection, D6 registers only graph-derived surfaces; napkin updated.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8f26914a-2482-43ea-87c8-fa1f5e5113d8",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "43e16c3b-d000-40f1-ac5d-c3ccd91cc41e",
+      "agent_id": {
+        "agent_name": "Evergreen Budding Copse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e7f",
+        "id": "89be843b-aff3-5563-a519-34caa6629f13"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T05:25:44Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit EEF replacement-plan handoff.",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T05:26:06Z",
+        "closed_by": {
+          "agent_name": "Evergreen Budding Copse",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e7f",
+          "id": "89be843b-aff3-5563-a519-34caa6629f13"
+        },
+        "summary": "closed in same collaboration-state commit: docs(agent): update eef replacement handoff",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "43e16c3b-d000-40f1-ac5d-c3ccd91cc41e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "3cad6208-f3a5-4e21-94b2-a3beb05e5119",
+      "agent_id": {
+        "agent_name": "Luminous Dancing Aurora",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e82",
+        "id": "db9722cc-9721-5cdc-bd11-59ce426d9e87"
+      },
+      "thread": "discovery",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/discovery/future/*.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T11:10:29Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Author skills-discovery research report and future plans for agentic mechanism discovery",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T11:14:49Z",
+        "closed_by": {
+          "agent_name": "Luminous Dancing Aurora",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e82",
+          "id": "db9722cc-9721-5cdc-bd11-59ce426d9e87"
+        },
+        "summary": "Authored Agent Skills Discovery research report, child strategic plan, parent discovery-mechanisms plan, and discovery indexes; no implementation work started.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "3cad6208-f3a5-4e21-94b2-a3beb05e5119",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "683126c5-61ab-4e06-a577-e94b0fccdbef",
+      "agent_id": {
+        "agent_name": "Luminous Dancing Aurora",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e82",
+        "id": "db9722cc-9721-5cdc-bd11-59ce426d9e87"
+      },
+      "thread": "discovery",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T11:15:10Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Record collaboration-state comms append tool surprise from discovery planning session",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T11:15:24Z",
+        "closed_by": {
+          "agent_name": "Luminous Dancing Aurora",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e82",
+          "id": "db9722cc-9721-5cdc-bd11-59ce426d9e87"
+        },
+        "summary": "Recorded comms append late-failure surprise in napkin.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "683126c5-61ab-4e06-a577-e94b0fccdbef",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "3a6fe2fc-320f-4506-8bd0-17096eae07c6",
+      "agent_id": {
+        "agent_name": "Luminous Dancing Aurora",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e82",
+        "id": "db9722cc-9721-5cdc-bd11-59ce426d9e87"
+      },
+      "thread": "discovery-agentic-mechanisms",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/discovery/future/mcp-server-cards.plan.md",
+            ".agent/plans/discovery/future/agentic-mechanisms-discovery.plan.md",
+            ".agent/plans/discovery/future/agent-skills-discovery.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T11:31:28Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Align discovery future plans by adding parent and sibling references plus lifecycle wording.",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T11:32:42Z",
+        "closed_by": {
+          "agent_name": "Luminous Dancing Aurora",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e82",
+          "id": "db9722cc-9721-5cdc-bd11-59ce426d9e87"
+        },
+        "summary": "Aligned discovery future plans: MCP plan now links to parent/sibling lanes, parent plan uses baseline readiness wording, and MCP release checklist is labelled as promotion seed context. Validated markdownlint and Prettier for the three plans.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "3a6fe2fc-320f-4506-8bd0-17096eae07c6",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1c5499f8-1fad-4a77-82b7-8c08331c7bf3",
+      "agent_id": {
+        "agent_name": "Luminous Dancing Aurora",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e82",
+        "id": "db9722cc-9721-5cdc-bd11-59ce426d9e87"
+      },
+      "thread": "agentic-mechanisms-discovery",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-mechanisms-discovery.next-session.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T11:37:30Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Light session handoff for agentic mechanisms discovery work; no commit and no check by owner direction.",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T11:38:29Z",
+        "closed_by": {
+          "agent_name": "Luminous Dancing Aurora",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e82",
+          "id": "db9722cc-9721-5cdc-bd11-59ce426d9e87"
+        },
+        "summary": "Light handoff complete for agentic mechanisms discovery: created thread record, refreshed repo-continuity, and added napkin closeout note. No commit and no aggregate check by owner direction.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1c5499f8-1fad-4a77-82b7-8c08331c7bf3",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "9b0f0050-cf39-4561-ba53-7cd50b0ee2ab",
+      "agent_id": {
+        "agent_name": "Umbral Whispering Silhouette",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e83",
+        "id": "b1c594cd-046d-57f3-8e90-87f8cbb2125b"
+      },
+      "thread": "agentic-mechanisms-discovery",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/discovery/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T13:26:44Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Promote discovery agent-readiness work to current plans and add missing Oak-ticket child plans",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T13:33:11Z",
+        "closed_by": {
+          "agent_name": "Umbral Whispering Silhouette",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e83",
+          "id": "b1c594cd-046d-57f3-8e90-87f8cbb2125b"
+        },
+        "summary": "Promoted agent-readiness Phase 1 to discovery/current, added verification report, and added DNS-AID/Aila A2A/WebMCP future plans",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "9b0f0050-cf39-4561-ba53-7cd50b0ee2ab",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "0f0c9221-fd69-4371-91d0-d94692651ad3",
+      "agent_id": {
+        "agent_name": "Tempestuous Gliding Falcon",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e83",
+        "id": "ef26f73b-a755-55c7-a101-430ef929bf07"
+      },
+      "thread": "agent-tooling",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/**",
+            "agent-tools/tests/collaboration-state/**",
+            "agent-tools/package.json",
+            "package.json",
+            ".agent/plans/agent-tooling/current/comms-event-write-integrity.plan.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T13:00:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Implement comms-event write-integrity plan with validated atomic writes, hard-fail reads, validator, and gate wiring",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T12:30:00Z",
+        "closed_by": {
+          "agent_name": "Tempestuous Gliding Falcon",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e83",
+          "id": "ef26f73b-a755-55c7-a101-430ef929bf07"
+        },
+        "summary": "Implemented comms-event write integrity: validated atomic JSON writes, loud path-named reads, true-JSON estate validator, gate wiring, docs, tests, and reviewer-requested hardening.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "0f0c9221-fd69-4371-91d0-d94692651ad3",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "56bf6c30-9b5d-4d3d-9032-a23967531694",
+      "agent_id": {
+        "agent_name": "Tempestuous Gliding Falcon",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e83",
+        "id": "ef26f73b-a755-55c7-a101-430ef929bf07"
+      },
+      "thread": "agent-tooling",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agent-tooling/frictions-register.md",
+            "agent-tools/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T12:00:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Close F-05 and document comms validate after comms-event write integrity implementation.",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T12:31:00Z",
+        "closed_by": {
+          "agent_name": "Tempestuous Gliding Falcon",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e83",
+          "id": "ef26f73b-a755-55c7-a101-430ef929bf07"
+        },
+        "summary": "Closed F-05 against the implemented write-integrity plan and documented comms validate in the agent-tools README.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "56bf6c30-9b5d-4d3d-9032-a23967531694",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "9cad410a-f2c2-44dd-8eae-0f6f520a5a5c",
+      "agent_id": {
+        "agent_name": "Tempestuous Gliding Falcon",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e83",
+        "id": "ef26f73b-a755-55c7-a101-430ef929bf07"
+      },
+      "thread": "agent-tooling",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "knip.config.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T12:05:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Add collaboration-state validator entrypoint to Knip after gate failure.",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T12:32:00Z",
+        "closed_by": {
+          "agent_name": "Tempestuous Gliding Falcon",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e83",
+          "id": "ef26f73b-a755-55c7-a101-430ef929bf07"
+        },
+        "summary": "Added the collaboration-state validator entrypoint to Knip after the root gate exposed it as an untraced script.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "9cad410a-f2c2-44dd-8eae-0f6f520a5a5c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "7513933b-dd6c-4b2b-9b9c-a877d42d02c0",
+      "agent_id": {
+        "agent_name": "Tempestuous Gliding Falcon",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e83",
+        "id": "ef26f73b-a755-55c7-a101-430ef929bf07"
+      },
+      "thread": "agent-tooling",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/directives/principles.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T12:10:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Record owner doctrine: no legacy collaboration dirs or fallback legacy surfaces.",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T12:33:00Z",
+        "closed_by": {
+          "agent_name": "Tempestuous Gliding Falcon",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e83",
+          "id": "ef26f73b-a755-55c7-a101-430ef929bf07"
+        },
+        "summary": "Recorded owner doctrine in principles.md: no legacy directories, old-path fallbacks, compatibility writers, or quiet missing canonical surfaces.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "7513933b-dd6c-4b2b-9b9c-a877d42d02c0",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "232196f8-9eca-42a9-a72f-15b8fdcdb70e",
+      "agent_id": {
+        "agent_name": "Tempestuous Gliding Falcon",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e83",
+        "id": "ef26f73b-a755-55c7-a101-430ef929bf07"
+      },
+      "thread": "agent-tooling",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/state/collaboration/closed-claims.archive.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T12:15:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Repair schema-format invalid archived_at surfaced by collaboration-state validator.",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T12:34:00Z",
+        "closed_by": {
+          "agent_name": "Tempestuous Gliding Falcon",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e83",
+          "id": "ef26f73b-a755-55c7-a101-430ef929bf07"
+        },
+        "summary": "Repaired a closed-claim archived_at value surfaced by schema format validation so the real collaboration estate validates cleanly.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "232196f8-9eca-42a9-a72f-15b8fdcdb70e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f9ec1686-e96f-447a-988b-b113623b141d",
+      "agent_id": {
+        "agent_name": "Tempestuous Gliding Falcon",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e83",
+        "id": "ef26f73b-a755-55c7-a101-430ef929bf07"
+      },
+      "thread": "agent-tooling",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T14:43:55Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit comms-event write-integrity implementation and session handoff.",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T14:47:30Z",
+        "closed_by": {
+          "agent_name": "Tempestuous Gliding Falcon",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e83",
+          "id": "ef26f73b-a755-55c7-a101-430ef929bf07"
+        },
+        "summary": "Commit-window claim closed after staging/commit coordination; no quality gates run during handoff per owner direction.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f9ec1686-e96f-447a-988b-b113623b141d",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "8922a304-50a4-4550-ac12-2430e2b42dc5",
+      "agent_id": {
+        "agent_name": "Woodland Swaying Copse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e83",
+        "id": "5d23c0d8-d6a3-5601-aec3-29d504db6c42"
+      },
+      "thread": "dependency-maintenance",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "package.json",
+            "pnpm-lock.yaml",
+            "agent-tools/package.json",
+            "apps/oak-search-cli/package.json",
+            "apps/oak-curriculum-mcp-streamable-http/package.json",
+            "packages/libs/sentry-node/package.json",
+            "packages/design/oak-design-ink/package.json",
+            "packages/core/oak-eslint/package.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T15:35:51Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Update outdated dependencies in risk-banded batches and validate affected workspaces",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T15:43:41Z",
+        "closed_by": {
+          "agent_name": "Woodland Swaying Copse",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e83",
+          "id": "5d23c0d8-d6a3-5601-aec3-29d504db6c42"
+        },
+        "summary": "Dependency updates applied and validated; superseded by broader manifest claim after recursive ESLint update touched all workspace manifests.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8922a304-50a4-4550-ac12-2430e2b42dc5",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "686f0543-01d2-48d0-80c1-d7c014467b25",
+      "agent_id": {
+        "agent_name": "Woodland Swaying Copse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e83",
+        "id": "5d23c0d8-d6a3-5601-aec3-29d504db6c42"
+      },
+      "thread": "dependency-maintenance",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "package.json",
+            "*/package.json",
+            "*/*/package.json",
+            "*/*/*/package.json",
+            "pnpm-lock.yaml"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T15:39:29Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Expanded dependency update claim after recursive ESLint bump touched every workspace manifest",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T15:44:36Z",
+        "closed_by": {
+          "agent_name": "Woodland Swaying Copse",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e83",
+          "id": "5d23c0d8-d6a3-5601-aec3-29d504db6c42"
+        },
+        "summary": "Dependency manifests and lockfile updated; outdated, lint, type-check, knip, depcruise, and focused package tests/checks completed. TypeScript 6 peer-range warnings intentionally ignored by owner direction.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "686f0543-01d2-48d0-80c1-d7c014467b25",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "78f1bb3b-7012-4e60-83c6-214799bc7ee0",
+      "agent_id": {
+        "agent_name": "Woodland Swaying Copse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e83",
+        "id": "5d23c0d8-d6a3-5601-aec3-29d504db6c42"
+      },
+      "thread": "dependency-maintenance",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T15:50:00Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit all remaining working-tree files.",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T15:54:59Z",
+        "closed_by": {
+          "agent_name": "Woodland Swaying Copse",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e83",
+          "id": "5d23c0d8-d6a3-5601-aec3-29d504db6c42"
+        },
+        "summary": "commit 70f06de955d42d63fad00daf8424224a0d717e14: chore(agentic): commit dependency and discovery updates",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "78f1bb3b-7012-4e60-83c6-214799bc7ee0",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "77a4780f-24b3-422a-be59-8cbf83e622b9",
+      "agent_id": {
+        "agent_name": "Woodland Swaying Copse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e83",
+        "id": "5d23c0d8-d6a3-5601-aec3-29d504db6c42"
+      },
+      "thread": "dependency-maintenance",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T15:55:36Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Commit collaboration lifecycle residue from the all-files commit.",
+      "intent_to_commit": "a6972a65-ab5c-48b4-8026-02a7eb5cb73c",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T15:56:16Z",
+        "closed_by": {
+          "agent_name": "Woodland Swaying Copse",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e83",
+          "id": "5d23c0d8-d6a3-5601-aec3-29d504db6c42"
+        },
+        "summary": "closed in same collaboration-state commit: chore(agentic): close commit lifecycle residue",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "77a4780f-24b3-422a-be59-8cbf83e622b9",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "c67d820a-3306-4194-acef-5b20e97d6d33",
+      "agent_id": {
+        "agent_name": "Woodland Swaying Copse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e83",
+        "id": "5d23c0d8-d6a3-5601-aec3-29d504db6c42"
+      },
+      "thread": "dependency-maintenance",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T15:56:47Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Commit remaining lifecycle residue and late-arriving plan file.",
+      "intent_to_commit": "af1f738f-3e7d-412b-8a90-d445cafd95d0",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T15:57:30Z",
+        "closed_by": {
+          "agent_name": "Woodland Swaying Copse",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e83",
+          "id": "5d23c0d8-d6a3-5601-aec3-29d504db6c42"
+        },
+        "summary": "abandoned widened residue intent after owner narrowed scope; late-arriving plan left uncommitted",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "c67d820a-3306-4194-acef-5b20e97d6d33",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "e349d6d5-fc62-4a63-879f-d1018ef9defe",
+      "agent_id": {
+        "agent_name": "Coppery Warming Flame",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "9a5cc3",
+        "id": "39b6fef7-c18a-524f-94ab-831cff061240"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-01T16:54:34Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit graph-estate plan currency + graph-ingest gate-1a decontamination.",
+      "archived_at": "2026-06-01",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-01T16:55:58Z",
+        "closed_by": {
+          "agent_name": "Coppery Warming Flame",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "9a5cc3",
+          "id": "39b6fef7-c18a-524f-94ab-831cff061240"
+        },
+        "summary": "commit 623c4d5b: docs(eef) graph-estate plan currency + graph-ingest gate-1a decontamination",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "e349d6d5-fc62-4a63-879f-d1018ef9defe",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

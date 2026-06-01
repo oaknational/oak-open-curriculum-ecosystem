@@ -55,7 +55,7 @@ todos:
 > The 2026-05-11 MVP arc reshape moved the slice-3b plan from
 > `.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/`
 > to `.../future/` and migrated its spine to
-> [`graph-combinatorial-arc.plan.md`](../../../graph-combinatorial-arc.plan.md).
+> `graph-combinatorial-arc.plan.md`.
 > This file is retained as historical evidence of PR #102 state; do not
 > retro-edit. For current state see the spine plans directly.
 

@@ -20,6 +20,19 @@ Each tool name corresponds to an OpenAPI operation id. For example:
 
 From the SDK docs, you can locate the endpoint’s types and then relate them to a tool via the authored mapping above.
 
+### EEF evidence-corpus tools
+
+The EEF evidence-corpus surface is authored rather than generated from an Oak
+Curriculum API operation. Its nearby README explains the product boundary and
+value contract for `eef-explore-evidence-for-context` and
+`eef-evidence-grounded-lesson-plan`: EEF turns curriculum retrieval into
+evidence-calibrated lesson adaptation, while preserving professional judgement
+and uncertainty.
+
+See
+[`../../src/mcp/evidence-corpus/README.md`](../../src/mcp/evidence-corpus/README.md)
+for the EEF-specific tool and prompt guidance.
+
 ### Response handling
 
 - Response descriptors are generated for **every documented status code**. At sdk-codegen time we emit a frozen map keyed by operation id → status → `{ zod, json }` descriptor.

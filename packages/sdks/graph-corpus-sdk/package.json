@@ -23,11 +23,6 @@
       "types": "./dist/eef-strands/index.d.ts",
       "development": "./src/eef-strands/index.ts",
       "default": "./dist/eef-strands/index.js"
-    },
-    "./threads": {
-      "types": "./dist/threads/index.d.ts",
-      "development": "./src/threads/index.ts",
-      "default": "./dist/threads/index.js"
     }
   },
   "scripts": {
@@ -41,13 +36,12 @@
   },
   "dependencies": {
     "@oaknational/graph-core": "workspace:*",
-    "@oaknational/result": "workspace:*",
-    "zod": "^4.4.3"
+    "@oaknational/result": "workspace:*"
   },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
     "@types/node": "^25.9.1",
-    "eslint": "^10.4.0",
+    "eslint": "^10.4.1",
     "tsup": "^8.5.1",
     "typescript": "^6.0.3",
     "vitest": "^4.1.7"

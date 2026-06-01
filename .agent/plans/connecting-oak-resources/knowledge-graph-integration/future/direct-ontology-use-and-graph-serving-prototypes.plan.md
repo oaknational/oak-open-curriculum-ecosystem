@@ -3,7 +3,6 @@ name: "Direct Ontology Use and Graph Serving Prototypes"
 overview: "Start with direct ontology-backed use as the control case, then compare bounded Neo4j and Stardog prototypes against the same Oak use cases to determine whether either downstream serving platform earns adoption."
 status: future
 graph_layer: oak-graph-surface
-graph_portfolio_index: "../../../graph-portfolio-index.md"
 related_reports:
   - "../../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md"
 related_research:

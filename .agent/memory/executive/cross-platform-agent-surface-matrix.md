@@ -18,9 +18,11 @@ platform support, this file is the authoritative local source.
 
 Claude Code currently has native `PreToolUse` activation for Bash
 commands via the tracked project `.claude/settings.json`, backed by the
-canonical policy in `.agent/hooks/policy.json` and the repo-local
-workspace command `pnpm agent-tools:check-blocked-patterns`. Local additive
-overrides, when needed, live in `.claude/settings.local.json`.
+canonical policy in `.agent/hooks/policy.json` and the prebuilt runtime
+artefact `agent-tools/dist/src/hook-policy/check-blocked-patterns.js`, invoked
+directly with `node` so the per-tool-call guard runs in tens of milliseconds
+and never times out under concurrent load. Local additive overrides, when
+needed, live in `.claude/settings.local.json`.
 
 Status by platform:
 
@@ -45,7 +47,7 @@ This repo's hook and adapter surfaces follow a small Policy Spine:
 | --- | --- | --- |
 | Canonical policy (`.agent/`) | Declares intended behaviour and support | No |
 | Native activation (tracked `.claude/settings.json`) | Activates supported policy in the repo baseline | No |
-| Workspace runtime (`pnpm agent-tools:check-blocked-patterns`) | Enforces the active native hook path | No |
+| Workspace runtime (`node agent-tools/dist/src/hook-policy/check-blocked-patterns.js`) | Enforces the active native hook path | No |
 | Explanatory mirrors (this matrix, hook README) | Describe the live state and support contract | No |
 
 Failure semantics:

@@ -1,6 +1,7 @@
 import { readFile } from 'node:fs/promises';
 
 import { getJsonValue, isJsonObject } from './json.js';
+import { validateCollaborationJsonFileText } from './collaboration-json-validation.js';
 import { optional, required, type Options } from './cli-options.js';
 import {
   parseClosedClaimsArchive,
@@ -14,9 +15,11 @@ interface EntriesFile {
 }
 
 export async function appendJsonEntry(options: Options): Promise<string> {
+  const filePath = required(options, 'file');
   await updateJsonFileWithRetry({
-    filePath: required(options, 'file'),
+    filePath,
     parseText: parseEntriesFile,
+    validateText: (text) => validateCollaborationJsonFileText(filePath, text),
     transform: (value) => ({
       ...value,
       entries: [...value.entries, JSON.parse(required(options, 'entry-json'))],
@@ -28,9 +31,11 @@ export async function appendJsonEntry(options: Options): Promise<string> {
 }
 
 export async function writeJsonBody(options: Options): Promise<string> {
+  const filePath = required(options, 'file');
   await writeJsonFileAtomically({
-    filePath: required(options, 'file'),
+    filePath,
     value: JSON.parse(required(options, 'body-json')),
+    validateText: (text) => validateCollaborationJsonFileText(filePath, text),
   });
 
   return '';

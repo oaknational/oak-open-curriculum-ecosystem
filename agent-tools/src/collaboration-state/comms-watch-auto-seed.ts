@@ -17,7 +17,7 @@ export interface AutoSeedRunInput {
   readonly seenFile: string;
   /** If `true`, always seed with current events regardless of seen-file state. */
   readonly seedFromNow: boolean;
-  /** If `true`, skip auto-seed entirely (legacy replay-on-empty behaviour). */
+  /** If `true`, skip auto-seed and replay the full event history. */
   readonly noAutoSeed: boolean;
 }
 
@@ -52,7 +52,7 @@ export type AutoSeedDecision =
  * forward from now rather than replaying full history.
  *
  * Precedence (most-specific first):
- *   1. `--no-auto-seed` returns immediately — legacy replay-on-empty preserved.
+ *   1. `--no-auto-seed` returns immediately, preserving full replay-on-empty.
  *   2. `--seed-from-now` always seeds — overrides any existing seen-file content.
  *   3. Empty/missing seen-file → auto-seed.
  *   4. Existing seen-file content → no-op (idempotent restart).
@@ -62,7 +62,7 @@ export type AutoSeedDecision =
  * `cli-runtime.ts`), so callers do not need to distinguish.
  *
  * Auto-seed-on-empty is the cycle-9 intentional behaviour change. Any caller
- * that wants the legacy replay-on-empty contract must pass `--no-auto-seed`.
+ * that wants full replay-on-empty must pass `--no-auto-seed`.
  */
 export async function seedSeenStateIfNeeded(input: AutoSeedRunInput): Promise<AutoSeedDecision> {
   if (input.noAutoSeed) {

@@ -97,7 +97,7 @@ function usage(): string {
     '',
     'Topics:',
     '  identity       preflight, audit',
-    '  comms          append, send, render, inbox, watch, direct, reply',
+    '  comms          append, send, render, validate, inbox, watch, direct, reply',
     '  claims         open, heartbeat, close, archive-stale, list, mine, show, status, active-agents',
     '  tui            terminal collaboration dashboard',
     '  conversation   append',

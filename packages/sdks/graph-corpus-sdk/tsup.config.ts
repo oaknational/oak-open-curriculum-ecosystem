@@ -6,12 +6,6 @@ import { createSdkConfig } from '../../../tsup.config.base.js';
 // `index.js` files whose `./graph-view.js` / `./loader.js` imports resolve to
 // files that were never written to dist. Globbing the trees emits each module.
 export default createSdkConfig(
-  [
-    'src/*.ts',
-    'src/eef-strands/**/*.ts',
-    'src/threads/**/*.ts',
-    '!src/**/*.test.ts',
-    '!src/**/*.spec.ts',
-  ],
+  ['src/*.ts', 'src/eef-strands/**/*.ts', '!src/**/*.test.ts', '!src/**/*.spec.ts'],
   { external: ['zod'] },
 );

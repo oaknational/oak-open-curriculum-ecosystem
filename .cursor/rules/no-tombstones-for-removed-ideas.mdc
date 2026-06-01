@@ -1,0 +1,6 @@
+---
+description: When a wrong idea is removed, state the correct design in the positive and stop; write so a reader who never saw the mistake cannot reconstruct it. The rule is about prose describing the present design; removing code is ordinary work, and the story of a change lives in the history surfaces.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/no-tombstones-for-removed-ideas.md`.

@@ -1,9 +1,11 @@
 # Knowledge Graph Integration
 
-> **Cross-collection index**: the full graph portfolio — substrate, Oak graph
-> surfaces, features, and the EEF cross-cutting thread — is indexed at
-> [`../../graph-portfolio-index.md`](../../graph-portfolio-index.md).
-> This README covers the **internal Oak KG integration** subset in more depth.
+> **Graph hub**: this README is the index for Oak-owned knowledge-graph work —
+> substrate, Oak graph surfaces, and features. The EEF evidence tool (the live
+> first proper graph tool) is owned under
+> [`sector-engagement/eef/`](../../sector-engagement/eef/README.md); wider graph
+> coordination is undefined until it ships — estate clean-up is owned by
+> [`graph-estate-consolidation.plan.md`](current/graph-estate-consolidation.plan.md).
 
 Internal engineering hub for Oak-owned knowledge graph work: integrating the
 Oak Curriculum Ontology and Oak-derived graphs into the MCP server, semantic
@@ -58,7 +60,7 @@ under [sector-engagement/](../sector-engagement/).
 | [future/oak-curriculum-ontology-workspace-reassessment.plan.md](future/oak-curriculum-ontology-workspace-reassessment.plan.md) | Strategic brief | Re-open the previous no-monorepo decision now that MCP, KGs, and API convergence is an organisational priority |
 | [future/ontology-repo-fresh-perspective-review.plan.md](future/ontology-repo-fresh-perspective-review.plan.md) | Short future plan | Re-read the official ontology repo from an upstream-first starting point and write up what that fresh pass changes |
 | [future/direct-ontology-use-and-graph-serving-prototypes.plan.md](future/direct-ontology-use-and-graph-serving-prototypes.plan.md) | Strategic future plan | Start with direct ontology use as the control case, then compare bounded Neo4j and Stardog serving prototypes against the same Oak use cases |
-| [future/extending-graph-support-tooling.plan.md](future/extending-graph-support-tooling.plan.md) | Candidate buffer | Home for graph-delivery enhancement candidates (rank/explain/compare, ordering, more corpora) discovered while building/exercising the [graph-tooling-rebuild](../../sector-engagement/eef/current/graph-tooling-rebuild.plan.md) instrument — each an explicit owner decision, not a deferral gate |
+| [future/extending-graph-support-tooling.plan.md](future/extending-graph-support-tooling.plan.md) | Candidate buffer | Home for graph-delivery enhancement candidates (rank/explain/compare, ordering, more corpora) discovered while building the EEF graph tooling — each an explicit owner decision, not a deferral gate |
 | [../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md](../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md) | Formal report | Cross-boundary synthesis tying the official ontology to MCP orientation, direct ontology resources, search projections, and governance/update needs |
 | [../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md](../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md) | Research note | Direct-use baseline plus Neo4j/Stardog serving-platform comparison for external user-facing graph features |
 

@@ -114,7 +114,7 @@ adding rules, skills, commands, sub-agents, adapters, or ADRs.
 
 Use the [commit skill canonical](../skills/commit/SKILL-CANONICAL.md) for
 commits. It enumerates live commitlint constraints and validates the drafted
-message via `scripts/check-commit-message.sh` before `git commit`.
+message via `pnpm agent-tools:check-commit-message` before `git commit`.
 
 ## Memory And Continuity
 

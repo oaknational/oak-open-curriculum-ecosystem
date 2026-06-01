@@ -17,13 +17,12 @@ function addRootLandingPage(
   app: Express,
   dnsRebindingMw: RequestHandler,
   log: Logger,
-  eefEnabled: boolean,
   vercelHostname?: string,
   appVersion?: string,
 ): void {
   app.get('/', dnsRebindingMw, (req, res) => {
     log.debug('landing.get', { path: req.path, method: req.method });
-    res.type('text/html').send(renderLandingPageHtml(vercelHostname, appVersion, eefEnabled));
+    res.type('text/html').send(renderLandingPageHtml(vercelHostname, appVersion));
   });
 }
 
@@ -42,10 +41,9 @@ export function mountStaticContentRoutes(
   app: Express,
   dnsRebindingMw: RequestHandler,
   log: Logger,
-  eefEnabled: boolean,
   vercelHostname?: string,
   appVersion?: string,
 ): void {
-  addRootLandingPage(app, dnsRebindingMw, log, eefEnabled, vercelHostname, appVersion);
+  addRootLandingPage(app, dnsRebindingMw, log, vercelHostname, appVersion);
   mountStaticAssets(app);
 }

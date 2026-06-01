@@ -1,5 +1,6 @@
 import { readFile } from 'node:fs/promises';
 
+import { validateCollaborationJsonFileText } from '../collaboration-state/collaboration-json-validation.js';
 import { updateJsonFileWithRetry } from '../collaboration-state/index.js';
 
 import {
@@ -30,6 +31,7 @@ export async function updateRegistry(
   await updateJsonFileWithRetry({
     filePath: registryPath,
     parseText: (text) => parseRegistry(JSON.parse(text), registryPath),
+    validateText: (text) => validateCollaborationJsonFileText(registryPath, text),
     transform,
     maxAttempts: 5,
   });

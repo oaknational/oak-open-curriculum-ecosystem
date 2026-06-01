@@ -62,6 +62,42 @@ export interface RunPreToolUseContentGuardOptions {
 }
 
 /**
+ * A normalised blocked Bash-command pattern: a token-sequence pattern plus an
+ * optional doctrinal citation surfaced in the deny payload.
+ */
+export interface BlockedPatternEntry {
+  readonly pattern: string;
+  readonly citation?: string;
+}
+
+/**
+ * A raw blocked-pattern policy entry. May be a bare pattern string (legacy) or
+ * an object carrying a required `pattern` and optional `citation`. Normalised
+ * to {@link BlockedPatternEntry} at match time.
+ */
+export type RawBlockedPattern = string | BlockedPatternEntry;
+
+/**
+ * Zod schema for a raw blocked-pattern policy entry, used at the
+ * `.agent/hooks/policy.json` trust boundary. Validates the bare-string or
+ * `{ pattern, citation? }` shape without transforming it, so the parsed array
+ * preserves the policy file's original entry forms.
+ */
+export const RawBlockedPatternSchema = z.union([
+  z.string(),
+  z.object({ pattern: z.string(), citation: z.string().optional() }),
+]);
+
+/** Injectable seams for the PreToolUse Bash blocked-pattern guard. */
+export interface RunPreToolUseBlockedPatternGuardOptions {
+  readonly stdin?: AsyncIterable<string | Buffer>;
+  readonly stdout?: { write(text: string): void };
+  readonly stderr?: { write(text: string): void };
+  readonly policyUrl?: URL;
+  readonly blockedPatterns?: readonly RawBlockedPattern[];
+}
+
+/**
  * Zod schema for `ScopedContentBlock`. Used at the policy-load trust
  * boundary to parse `.agent/hooks/policy.json` entries into typed,
  * validated blocks. The schema's `.superRefine` also verifies that

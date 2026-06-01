@@ -1,5 +1,215 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-06-01 — Moonless Lurking Dusk / claude / Opus 4.8 / `0641a3`, dedicated knowledge-curation pass)
+
+**Curation pass complete; fitness fully green.** Ran `oak-consolidate-until-done`
+then `oak-consolidate-docs` in `dedicated-knowledge-curation` mode.
+
+**Graduations:**
+
+- `eef-corpus-grounding` rule (trigger-loaded, EEF-scoped) — all four forms +
+  `RULES_INDEX` row; stopgap `eef/reference/eef-corpus-grounding.md` retired. The
+  folded open question dissolved: the rules tier carries a designed `Classification`
+  column; trigger-loaded is the home for a non-always-on domain-scoped rule.
+- `verify-data-supports-shape-before-building` rule (always-on) — consolidated the
+  value-trace + fingerprint-data candidates into one design-time rule rather than
+  fragmenting.
+- `owner-attention-at-action-moments` §"Evidence that refutes an owner-approved
+  premise is an action-moment" (clause + worked instance).
+- `consolidate-docs` step 7 clause — owner-gated items whose trigger is
+  owner-direction get walked in the consolidation session, not parked.
+
+**Napkin:** critical (759 ln) → healthy; fully processed before archive (verbatim
+at `archive/napkin-2026-06-01-moonless-curation.md`); 3 cross-session lessons →
+`distilled.md` (one-law-three-faces; opening-statements-teach-by-form;
+independent-eyes-vs-self-review).
+
+**Register:** four pending-graduation entries graduated; cross-platform rules
+generator marked trigger-fired→agent-tools impl lane; seam-map archetype marked
+APPROVED (size L, deferred to a focused authoring session).
+
+**Owner-surfaced (not promoted without approval):** one-law-three-faces (PDR
+candidate); opening-statements-teach-by-form (no-tombstones/continuity-practice
+clause candidate).
+
+**Next safe step:** if the owner reopens curation, walk the next owner-gated
+cluster (agent-tooling/test-coverage gates, or the collaboration-governance
+bundle) in-session per the new step-7 clause. The seam-map archetype is the
+largest approved authoring task awaiting a focused session.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Moonless Lurking Dusk` | `claude` | `Opus 4.8` | `0641a3` | `dedicated-knowledge-curation` | 2026-06-01 | 2026-06-01 |
+
+## Session Outcome (2026-05-31 — Blooming Twining Grove / codex / GPT-5 / `019e7d`, longitudinal napkin review + deep handoff)
+
+**Named longitudinal review complete.** The owner-directed
+current-plus-twenty napkin review ran from
+`codex-napkin-longitudinal-review.brief.md` and landed in commit `b19a382a`.
+Durable outputs:
+
+- `research/agentic-engineering/continuity-memory-and-knowledge-flow/longitudinal-napkin-review-2026-05-31.md`
+- `curator-passes/2026-05-31-codex-napkin-longitudinal-review.md`
+
+**Routing result:** the pass found two non-duplicate forward routes and added
+them as owner-gated entries in `pending-graduations.md`: active-buffer
+pre-replacement proof, and shell-significant collaboration CLI affordance. The
+review left archived napkins as read-only evidence and did not process the
+paused comms-event corpus.
+
+**Deep closeout boundary:** the owner then requested deep session handoff plus
+deep `consolidate-docs`, with no `pnpm check` and no commit. The closeout mode
+is `session-completion`: the named review is complete, while broader docs
+consolidation remains live only by explicit owner-gated register items. Current
+validation evidence for the named review is in the curator ledger; this handoff
+does not rerun aggregate `pnpm check`.
+
+**Next safe step:** no immediate agentic-engineering curation work is queued.
+If the owner reopens ordinary docs consolidation, start from the canonical
+pending-graduations register and the existing continuation brief, not from a
+new archive/pointer replacement. Comms-event rotation remains paused until a
+dedicated comms research plan exists.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Blooming Twining Grove` | `codex` | `GPT-5` | `019e7d` | `longitudinal-napkin-review+deep-handoff` | 2026-05-31 | 2026-05-31 |
+
+## Session Outcome (2026-05-31 — Foamy Charting Harbour / codex / GPT-5 / `019e7d`, longitudinal napkin-review brief + light handoff)
+
+**Brief landed; curation review remains the next-session work.** The owner asked
+for the next Codex session to process the current napkin plus the last twenty
+archived napkins, looking for missed content and long-timescale patterns. This
+session authored the paste-ready brief at
+`codex-napkin-longitudinal-review.brief.md`, including the recompute-the-corpus
+instruction, prior synthesis reads, candidate disposition rules, expected
+research report and curator ledger, and a completion-verdict contract. The brief
+also preserves the active boundary that comms-event rotation remains paused and
+EEF plan files should not be touched without re-checking claims.
+
+**Validation:** targeted `markdownlint` and `git diff --check` passed for the
+new brief. The narrow brief-authoring claim was closed explicitly. Full
+longitudinal review was not run in this session; the next agent should treat the
+brief as the controlling pickup artefact.
+
+**Next safe step:** start a single Codex `/goal` session from
+`codex-napkin-longitudinal-review.brief.md`, recompute the archive corpus at
+session start, then produce the research report plus curator-pass ledger named
+there. Use `codex-docs-consolidation.brief.md` only if the owner asks for the
+ordinary docs-consolidation continuation instead.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Foamy Charting Harbour` | `codex` | `GPT-5` | `019e7d` | `longitudinal-napkin-review-brief` | 2026-05-31 | 2026-05-31 |
+| `Blooming Twining Grove` | `codex` | `GPT-5` | `019e7d` | `longitudinal-napkin-review` | 2026-05-31 | 2026-05-31 |
+
+## Session Outcome (2026-05-31 — Open Lofting Cliff / codex / GPT-5 / `019e7d`, consolidation repair and handoff brief)
+
+**Partial repair landed; original consolidation remains pending.** After owner
+correction, Open Lofting Cliff repaired the failed archive-only consolidation
+pattern by restoring active `napkin.md` and `distilled.md` to counted live
+buffers, removing the failed 2026-05-31 archive sidecars, and amending the
+curator ledgers so archive relocation is not described as completion evidence.
+The 2026-05-31 consolidation reports now say the bad source-buffer pass was
+repaired to live-buffer state, not completed.
+
+**Real curation batch landed before handoff.** PDR-089 acceptance/index drift was
+processed; several `distilled.md` entries were removed only after durable
+disposition evidence existed: PDR-089 coverage, explicit owner-gated entries in
+`pending-graduations.md`, or duplicate permanent homes. Ledger:
+`curator-passes/2026-05-31-open-lofting-cliff-docs-consolidation.md`.
+
+**Next safe step:** start one single-agent `/goal` session from
+`codex-docs-consolidation.brief.md` and continue item-by-item. Do not spawn
+parallel repair agents. Do not archive, split, shard, rename, or pointer-replace
+live buffer content to improve fitness. Last repair-state fitness truth had
+`napkin.md` critical, `distilled.md` hard, and `repo-continuity.md` hard; rerun
+`pnpm practice:fitness:strict-hard` before acting. Full `pnpm check` was not run
+for this handoff; this is a handoff/briefing stop, not a completed consolidation.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Open Lofting Cliff` | `codex` | `GPT-5` | `019e7d` | `consolidation-repair-handoff` | 2026-05-31 | 2026-05-31 |
+
+## Session Outcome (2026-05-31 — Evergreen Foraging Stamen / codex / GPT-5 / `019e7d`, owner-gated graduation question 1)
+
+**Owner-gated graduation slice landed; session stopped by owner direction.**
+The owner accepted PDR-089, so the conservation-reflex pending-graduation gate
+was processed normally: PDR-089 now says `Accepted`, the PDR index and
+`practice-index.md` were updated, the live pending-graduations item was removed,
+`distilled.md` no longer describes PDR-089 as owner-gated, and the 2026-05-31
+curator ledger records the disposition. Focused validation passed:
+`markdownlint` on the touched docs was clean, and
+`pnpm practice:fitness:strict-hard` exited 0 with SOFT only (19 soft, 27
+healthy, 0 hard, 0 critical) immediately after the PDR-089 slice.
+
+The next high-impact owner gate was surfaced and explicitly declined for this
+session: do **not** open or route the dedicated comms research plan now. The
+comms-event lifecycle and watcher/filter-loss candidate therefore remain
+owner-gated for a later session. Falsifiability: future pickup should find
+`pending-graduations.md` still carrying the watcher/filter-loss item with trigger
+`comms research plan opens or owner direction`, and repo-continuity still saying
+comms-log rotation is paused until that plan exists.
+
+Handoff boundary: repo-continuity refresh is currently owned by Open Lofting
+Cliff's active claim `eddac957-4833-4ba3-a34b-79426c14f5b7` ("repair invalid
+archive-only consolidation in Open Lofting non-source lane"), so this handoff did
+not edit `repo-continuity.md`. A handoff rerun of
+`pnpm practice:fitness:strict-hard` is now HARD on `repo-continuity.md` only
+(740 lines / 52,172 characters), matching that active repair claim. Full
+`pnpm check` was not run in this stop-slice.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Evergreen Foraging Stamen` | `codex` | `GPT-5` | `019e7d` | `owner-gated-curation-slice` | 2026-05-31 | 2026-05-31 |
+
+## Session Outcome (2026-05-31 — Open Lofting Cliff / codex / GPT-5 / `019e7d`, dedicated docs consolidation)
+
+**Dedicated documentation consolidation partial slice landed.** Owner-directed
+order applied: draft ADRs and PDRs first, pending graduations second, distilled
+third. Landed: PDR-075 added to the PDR index; PDR-078 stale Candidate wording
+corrected in the PDR index and Practice bridge; PDR-089 reviewed as existing,
+indexed, and owner-gated for acceptance; pending-graduations and distilled now
+point to the curation ledger; `consolidate-docs` and collaboration-state
+conventions now state comms-event rotation is paused pending a dedicated comms
+research plan. Ledger:
+`curator-passes/2026-05-31-open-lofting-cliff-docs-consolidation.md`.
+Active claim: `74ded4c9-4379-4e8c-b65b-81a52b653c26` (closing at session end).
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Open Lofting Cliff` | `codex` | `GPT-5` | `019e7d` | `dedicated-docs-consolidation` | 2026-05-31 | 2026-05-31 |
+
+## Session Outcome (2026-05-29 — Eclipsed Creeping Secret / claude / claude-opus-4-8 / `1d950c`, Group A WS-Z convergence — DONE; content committed, finish bookkeeping uncommitted)
+
+**WS-Z (shared-index convergence) complete.** The six owner-approved Group A
+graduations are landed and the convergence is committed — folded into the owner's
+whole-tree sweep `9317cdcd` ("docs: planning") rather than a dedicated WS-Z commit.
+
+- **Shared indices**: PDR README rows for PDR-087 + PDR-088; practice-index
+  phenotype-bridge rows for 087/088; RULES_INDEX 0 new rows (Lane E minted no rule
+  files); PDR-058 README row unchanged (title/status did not change).
+- **Register**: the six graduated entries removed **cleanly** — no provenance
+  pointers/tombstones (owner-directed); substance verified live in each home first
+  (knowledge-preservation screen passed). Owner-gated count 63 → 56.
+- **Review**: a six-dimension adversarial pre-commit review returned all CLEAN
+  (index rows; clean removal + no pointers; knowledge-preservation; the #42-fold
+  judgment; repo-continuity; PDR-087/088 portability). Two repo-continuity findings
+  (premature "archived" assertion + a fragile plan path-link) fixed.
+- **Gates** green where they matter (markdownlint / portability / vocabulary /
+  repo-validators / agent-tools type-check+lint+test). `fitness:strict-hard` RED on
+  napkin (CRITICAL) + distilled (HARD) recorded as **deferred to the fitness
+  session** (owner-directed; not rotated or trimmed).
+
+**Uncommitted finish-bookkeeping (left for the owner's orchestration; owner
+directed "no commit this session"):** this plan archived to `archive/completed/`
+(plan `status: done`, ws-z todo done); my WS-Z claim relinquished; this block + the
+repo-continuity fixes. agent-tools is GREEN (Twilit Orbiting Satellite greened the
+routing-sunset tests in `d9225d5b`).
+
+**Next safe step for this thread: none queued.** Groups B/D/E forks + claim-liveness
+promotion remain owner-surfaced; napkin + distilled strict-hard remediation is the
+fitness session's.
+
 ## Session Outcome (2026-05-29 — Highland Rising Squall / claude / claude-opus-4-8 / `71b264`, raw-input extraction curation pass — COMPLETE for scope, UNCOMMITTED)
 
 **Owner-directed `consolidate-until-done` scoped to raw-input extraction** (disjoint
@@ -2091,7 +2301,7 @@ itself.
 
 **Landed outcome**: Cycle 8a (ADR-187, Claude self-modification authz cure-shape, WS-8) landed at HEAD `7f7ad862` via Hushed marshal after pre-format cure on prettier-mangled state. Cycle 8a was the trailing-task closeout of Misty's pre-compaction Implementer claim `e097d5a1` (now resolved). Option B plan-file markdownlint cure also landed at `26f8e7cb` via Hushed marshal (Eclipsed-authored).
 
-**Director coordination outcome**: routed ~90 min of team activity. Eclipsed Cycle 9 mid-flight via PDR-063 pickup from Eclipsed (compaction-prep); Wooded ONBOARDING.md disavowed by owner mid-session (false-provenance failure-mode owned); Twilit open-questions memory system completed; Shadowed napkin hard-width cure completed. Owner reset team's delivery frame at 06:45Z: "delivering means implemented, pushed, fixed, merged and live". Closeout plan `/Users/jim/.claude/plans/vast-chasing-iverson.md` authored and approved by owner.
+**Director coordination outcome**: routed ~90 min of team activity. Eclipsed Cycle 9 mid-flight via PDR-063 pickup from Eclipsed (compaction-prep); Wooded ONBOARDING.md disavowed by owner mid-session (false-provenance failure-mode owned); Twilit open-questions memory system completed; Shadowed napkin hard-width cure completed. Owner reset team's delivery frame at 06:45Z: "delivering means implemented, pushed, fixed, merged and live". External Claude plan path `~/.claude/plans/vast-chasing-iverson.md` authored and approved by owner.
 
 **Failure-modes surfaced (10 distinct; all in napkin)**:
 
@@ -4967,7 +5177,7 @@ remains on disk with its framing amendments — read for the Phase 4
 four-probe matrix spec and the OD-1/2/3 + ORD-1/2 rationale.
 
 Demand side: see
-[`graph-mvp-arc.plan.md`](../../../plans/graph-mvp-arc.plan.md) §
+`graph-mvp-arc.plan.md` §
 Team-of-Agents Execution + the corresponding
 [`graph execution-prep opener`](../../../plans/connecting-oak-resources/knowledge-graph-integration/current/2026-05-11-graph-execution-prep-opener.md)
 which routes step 4 here.

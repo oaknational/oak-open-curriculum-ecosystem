@@ -12,7 +12,7 @@ real repo.
 - **Native surface**: tracked project `.claude/settings.json`
 - **Hook event**: `PreToolUse`
 - **Matcher**: `Bash`
-- **Runtime**: `pnpm agent-tools:check-blocked-patterns`
+- **Runtime**: `node "${CLAUDE_PROJECT_DIR}/agent-tools/dist/src/hook-policy/check-blocked-patterns.js"` (invoked directly by the native activation; the `pnpm agent-tools:check-blocked-patterns` script remains a manual/diagnostic entry point)
 - **Canonical policy**: `.agent/hooks/policy.json`
 
 The runtime reads Claude's hook payload from `stdin`, extracts the shell

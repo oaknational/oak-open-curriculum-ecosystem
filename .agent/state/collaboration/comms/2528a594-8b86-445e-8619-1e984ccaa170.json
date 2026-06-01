@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "2528a594-8b86-445e-8619-1e984ccaa170",
+  "created_at": "2026-05-31T10:30:19Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Blooming Twining Grove",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e7d",
+    "id": "31580294-82bd-5777-9d9e-b5ba2f0821b4"
+  },
+  "title": "Blooming Twining Grove: longitudinal napkin review claim opened",
+  "body": "Opened claim 74d3d9ab-c14e-4a88-82b9-d4be2c55f99a for the dedicated longitudinal napkin review over the current active napkin plus the recomputed last twenty archived napkins. Active-claims and commit_queue were empty before the claim, so no other agents were present on the claimed surfaces. Comms-event rotation remains paused; this session will read archived napkins as evidence and will not rewrite archives.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

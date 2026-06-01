@@ -4,7 +4,6 @@ overview: "Opener for the next graph session. The 2026-05-11 MVP arc reshape clo
 type: session-opener
 status: current
 thread: connecting-oak-resources
-parent_plan: ".agent/plans/graph-mvp-arc.plan.md"
 last_updated: 2026-05-11
 isProject: false
 todos:
@@ -33,7 +32,7 @@ todos:
 
 **Last updated**: 2026-05-11
 **Status**: opener for the next graph session
-**Parent**: [`graph-mvp-arc.plan.md`](../../../graph-mvp-arc.plan.md) §
+**Parent**: `graph-mvp-arc.plan.md` §
 Team-of-Agents Execution
 
 ## Discipline carried into this session
@@ -52,8 +51,8 @@ and ADR-172.
 ## Why this opener exists
 
 The 2026-05-11 MVP arc reshape closed the planning question. The
-[graph-mvp-arc spine](../../../graph-mvp-arc.plan.md) and
-[graph-combinatorial-arc](../../../graph-combinatorial-arc.plan.md) are
+graph-mvp-arc spine and
+graph-combinatorial-arc are
 both decision-clear. **The next move is not to start writing slice 1
 code** — it is to land four scoped pieces of planning + tooling work
 that unblock and parallelise the execution that follows.
@@ -181,7 +180,7 @@ first discipline and lands its own commits.
 
 ## Cross-references
 
-- [`graph-mvp-arc.plan.md`](../../../graph-mvp-arc.plan.md) § Team-of-
+- `graph-mvp-arc.plan.md` § Team-of-
   Agents Execution — full parallelisability findings; resolution
   surface for D-1 through D-7.
 - [`graph-stack.plan.md`](graph-stack.plan.md) — substrate-side

@@ -1,8 +1,15 @@
 ---
 fitness_line_target: 450
 fitness_line_limit: 525
-fitness_char_limit: 24000
+fitness_char_limit: 26000
 fitness_line_length: 100
+fitness_rationale: >-
+  Char limit raised 24000 → 26000 on owner direction 2026-06-01 (Moonless Lurking
+  Dusk curation pass). The content (≈24.9k chars) is dense always-on doctrine that
+  grew legitimately; trimming substance was explicitly forbidden ("do not chase the
+  fitness number"). This is a "for now" raise — a deliberate substance-led
+  refinement (graduate elaborated guidance to governance docs per split_strategy,
+  never the principles themselves) remains the proper long-term move.
 split_strategy: "This file is the source of truth for all principles. Extract only elaborated guidance to governance docs, never the principles themselves. The principles are operationalised through several mechanisms, including rules, sub-agents, and tooling."
 ---
 
@@ -21,8 +28,11 @@ but bring real critical thinking to the question each time.
 **Strict and complete, everywhere, all the time.** Prefer explicit, strict,
 total, fully checked systems over permissive, partial, or hand-wavy
 ones. Do not invent optionality, fallback options, or implied
-enforcement. Type precision is one of the clearest concrete
-expressions of this tenet.
+enforcement. Do not preserve proven-wrong ideas behind compatibility
+layers, adapters, soft migrations, "just in case" branches, or fallback
+menus. A disproven design is removed or replaced with the correct design;
+it is never kept alive as an option. Type precision is one of the clearest
+concrete expressions of this tenet.
 
 ## Architectural Excellence Over Expediency
 
@@ -169,6 +179,18 @@ this way produces cleaner boundaries and simpler classification.
   functioning of the system depends on acknowledging and embracing
   those restrictions, and the valuing insights offered by the type
   system.
+- **No escape hatches** - no fallbacks, no compatibility layers, no
+  preserving proven wrong ideas, no "just in case" branches, and no
+  hedged plan options. When evidence disproves a shape, delete or replace
+  it at the owning architectural level. Do not keep it reachable as a
+  runtime option, migration bridge, alternate path, or executor choice.
+- **No legacy surfaces** - do not preserve legacy directories, legacy
+  data shapes, legacy commands, fallback readers, compatibility writers,
+  or optional old paths. Repair historical data in place or replace the
+  owning surface completely. A validator, reader, writer, or operator
+  command MUST target the canonical surface and fail loudly when that
+  surface is absent or invalid; it must not quietly scan an old location,
+  skip a missing canonical directory, or keep a migration path alive.
 - **Pure functions first** - Use TDD to design (_test first_, red,
   green, refactor), no side effects, no I/O
 - **Consistent Naming** - Use consistent naming conventions for

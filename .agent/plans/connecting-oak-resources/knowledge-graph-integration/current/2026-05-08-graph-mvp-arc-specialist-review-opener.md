@@ -5,7 +5,6 @@ authored_by: Windward Darting Horizon (cursor, claude-opus-4.7, dd084d)
 thread: connecting-oak-resources (with eef subthread coordination)
 target_session_shape: superseded by completed Breezy planning closure; retained as historical opener only
 superseded_by: .agent/memory/operational/threads/connecting-oak-resources.next-session.md#first-task-of-next-session
-spine_plan: ../../../graph-mvp-arc.plan.md
 artefacts_under_review:
   - .agent/plans/graph-mvp-arc.plan.md
   - .agent/plans/graph-portfolio-index.md
@@ -282,8 +281,8 @@ decision-completeness closeout before slice execution starts.
 
 ## Cross-references
 
-- Spine plan: [`../../../graph-mvp-arc.plan.md`](../../../graph-mvp-arc.plan.md)
-- Portfolio index: [`../../../graph-portfolio-index.md`](../../../graph-portfolio-index.md)
+- Spine plan: `../../../graph-mvp-arc.plan.md`
+- Portfolio index: `../../../graph-portfolio-index.md`
 - Research: [`../../../../research/graph-library.research.md`](../../../../research/graph-library.research.md)
 - ADR-173: [`../../../../../docs/architecture/architectural-decisions/173-graph-stack-topology.md`](../../../../../docs/architecture/architectural-decisions/173-graph-stack-topology.md)
 - ADR-157: [`../../../../../docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md`](../../../../../docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md)

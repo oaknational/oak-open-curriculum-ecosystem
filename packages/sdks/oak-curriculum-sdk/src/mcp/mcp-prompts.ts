@@ -17,7 +17,6 @@ import {
   getExploreCurriculumMessages,
   getLearningProgressionMessages,
 } from './mcp-prompt-messages.js';
-import { getEefEvidenceGroundedLessonPlanMessages } from './evidence-corpus/eef-evidence-grounded-lesson-plan-messages.js';
 
 /**
  * Prompt argument definition for MCP registration.
@@ -112,34 +111,6 @@ export const MCP_PROMPTS: readonly McpPrompt[] = [
       requiredArgument('subject', 'The subject area (e.g., "maths", "science", "english")'),
     ],
   },
-  // Co-gated delivery unit. This prompt drives the `eef-explore-evidence-for-context`
-  // tool; the two form ONE unit and must surface together or not at all (Definition
-  // of Delivery, criterion 4 — whole for its unit). The HTTP app registers this
-  // prompt only when `OAK_CURRICULUM_MCP_EEF_ENABLED` is set (see the consuming
-  // app's register-prompts wiring); registering it while the tool is gated OFF would
-  // create an orphaned surface (a prompt whose tool is absent). Defining it here in
-  // the SDK is substrate, not delivery — the prompt is latent until the flag co-gates
-  // it with the tool.
-  {
-    name: 'eef-evidence-grounded-lesson-plan',
-    description:
-      'Design a lesson plan grounded in EEF Toolkit evidence: combines 2-3 evidence-backed approaches drawn from a typed subgraph of EEF strands, with caveats and implementation guidance, into a structured pedagogical sequence (starter → main → practice → plenary with metacognitive reflection).',
-    arguments: [
-      requiredArgument('subject', 'The subject (e.g., "mathematics", "science", "english")'),
-      requiredArgument(
-        'keyStage',
-        'The key stage (e.g., "EYFS", "KS1", "KS2", "KS3", "KS4", "KS5")',
-      ),
-      requiredArgument(
-        'topic',
-        'The specific topic for the lesson (e.g., "fractions", "the water cycle", "narrative writing")',
-      ),
-      optionalArgument(
-        'focus',
-        'Optional EEF priority to focus on, e.g. improving_maths, improving_reading, metacognition_and_self_regulation, or closing_disadvantage_gap',
-      ),
-    ],
-  },
 ] as const;
 
 /**
@@ -165,8 +136,6 @@ export function getPromptMessages(
       return getExploreCurriculumMessages(args);
     case 'learning-progression':
       return getLearningProgressionMessages(args);
-    case 'eef-evidence-grounded-lesson-plan':
-      return getEefEvidenceGroundedLessonPlanMessages(args);
     default:
       return [];
   }

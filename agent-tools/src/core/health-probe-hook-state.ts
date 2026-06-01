@@ -2,6 +2,7 @@ import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 
 import {
+  CLAUDE_HOOK_ARTEFACT,
   CLAUDE_HOOK_COMMAND,
   CLAUDE_SETTINGS_PATH,
   HOOK_POLICY_PATH,
@@ -109,16 +110,11 @@ function readHookPolicyInputs(repoRoot: string, hookPolicyExists: boolean) {
 }
 
 function isClaudeHookWired(claudeSettingsText: string | null): boolean {
-  const commandPattern = new RegExp(
-    `"command"\\s*:\\s*"${CLAUDE_HOOK_COMMAND.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&')}"`,
-    'u',
-  );
-
   return (
     claudeSettingsText !== null &&
     claudeSettingsText.includes('"PreToolUse"') &&
     /"matcher"\s*:\s*"Bash"/u.test(claudeSettingsText) &&
-    commandPattern.test(claudeSettingsText)
+    claudeSettingsText.includes(CLAUDE_HOOK_ARTEFACT)
   );
 }
 
@@ -170,7 +166,7 @@ function collectSurfaceMatrixDetails(surfaceMatrixText: string | null): string[]
   pushIfMissing(
     details,
     surfaceMatrixText,
-    CLAUDE_HOOK_COMMAND,
+    CLAUDE_HOOK_ARTEFACT,
     `${SURFACE_MATRIX_PATH} does not describe the workspace-owned hook runtime command.`,
   );
   pushIfMissing(

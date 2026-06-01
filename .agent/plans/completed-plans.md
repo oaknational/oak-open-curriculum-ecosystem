@@ -102,6 +102,27 @@ Before archival, mine completed outcomes into permanent documentation
 
 ---
 
+## Graph Coordination Spines (Superseded Framing)
+
+These four cross-collection graph coordination artefacts encoded the pre-rebuild
+architecture (gate-1a/1b, the 7-method `GraphView`, the withdrawn ADR-175 freshness
+gate, `recommend`/`explain`/`compare`, the Inc.3 cross-corpus join). The EEF
+graph-tooling rebuild discarded that framing; they were quarantined 2026-06-01 under
+[`graph-estate-consolidation.plan.md`](connecting-oak-resources/knowledge-graph-integration/current/graph-estate-consolidation.plan.md).
+Superseded by the live EEF plan
+([`eef-graph-tool-completion.plan.md`](sector-engagement/eef/current/eef-graph-tool-completion.plan.md))
+and the live KG hub
+([`knowledge-graph-integration/`](connecting-oak-resources/knowledge-graph-integration/README.md)).
+
+| Plan | Archived | Why superseded | Archive |
+|------|----------|----------------|---------|
+| Graph Portfolio — Index | 2026-06-01 | Cross-collection index routing into archived EEF plans and citing withdrawn ADR-175; replaced by collection-level navigation | [archived plan](archive/completed/graph-portfolio-index.md) |
+| Graph MVP Arc | 2026-06-01 | Gate-1a/1b spine over the discarded `EefStrandsGraphView` / 7-method `GraphView` / freshness-gate stack | [archived plan](archive/completed/graph-mvp-arc.plan.md) |
+| Graph Combinatorial Arc | 2026-06-01 | Follow-on spine depending on gates and graph-stack Inc.3 that the rebuild removed | [archived plan](archive/completed/graph-combinatorial-arc.plan.md) |
+| Meta — feat/mcp-graph-support-foundation | 2026-06-01 | Branch-scoped navigation index, two branches stale; inbound links all archived | [archived plan](archive/completed/feat-mcp-graph-support-foundation-meta.md) |
+
+---
+
 ## Adding Entries
 
 When archiving a plan:

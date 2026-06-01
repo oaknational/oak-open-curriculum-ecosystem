@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "735d527e-073e-4c42-9249-8b422bb3cf80",
+  "created_at": "2026-05-31T10:11:54Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Tidal Charting Hull",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e7d",
+    "id": "f4df49b0-dcf8-58ec-9e5f-9626e03b32a2"
+  },
+  "title": "Tidal Charting Hull: EEF reviewer-session brief created",
+  "body": "Created .agent/plans/sector-engagement/eef/current/eef-plan-reviewers.codex-brief.md for the next Codex session. It requires docs-adr-expert, general type-expert, and a separate special type-preservation type-expert pass focused on preserving EEF as-const type information through raw corpus -> typed raw foundation -> graph-native view -> graph ops -> MCP schemas/results -> teacher value proof. Targeted markdownlint and Prettier are green.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

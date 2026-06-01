@@ -17,237 +17,88 @@ fitness_rationale: >-
   substance rather than trimming the lesson.
 ---
 
-## 2026-05-28 — a forced conclusion is executed, not offered; deference can be a hedge
+## 2026-06-01 — one law, three faces (EEF thread synthesis)
 
-When your own analysis forces a conclusion (the remaining options are expedient
-anti-shapes), executing it IS the answer — offering to execute it, or asking
-permission to act on a determination you were asked to make, is
-responsibility-passback, not diligence. The subtle trap: dressing the deferral as
-deference by misapplying a real owner-decision principle (e.g.
-`feedback_feature_shaping_is_owner_decision`) as cover for not finishing. That
-principle governs product/feature forks; authoring an internal artefact you just
-proved is needed is task completion, not a fork. Owner corrected this twice in one
-session ("just author it"). Reserve questions for genuine owner-only forks,
-irreversible/risky actions, and evidence-undecidable choices. Extends
-`present-verdicts-not-menus`, `feedback_no_responsibility_passback`, PDR-058
-(stop-inventing-optionality), and the escape-hatch 'menu' reflex below.
+Three disciplines are one principle seen from different sides:
+derive-from-the-single-source-of-truth-never-bridge (code — derive from the
+fixed corpus, never glue), seams-compose-never-reconciled (architecture —
+friction at a junction means an input drifted from the root; fix upstream at the
+source, never bridge at the seam), and state-what-is-no-monuments (writing —
+opening statements, handoffs, `no-tombstones-for-removed-ideas`). The tell:
+whenever a frame slips (conservation reflex, tombstone reflex, gap-hunting
+inversion, remediation-voice), the cure is the same shape — return to the source
+of truth, fix upstream, state what is. Graduation candidate: a PDR naming the
+unifying principle (owner-surfaced).
 
-Source: 2026-05-28 deferral/non-goal audit + closeout (Kilned Brazing Bellows).
+## 2026-06-01 — opening statements and handoff artefacts teach by their form
 
-## 2026-05-28 — a verification/audit artefact is itself a claim; verify the auditor
+A handoff or opening statement is the next agent's first and most-attended
+context, so its *form* trains them, not just its content. Written in
+remediation/avoidance voice ("X re-opened because the sweep was wrong", "do not
+expand scope", quoted dead negation-lists) it teaches the next agent to think
+that way; written as positive construction — present truth + destination — it
+teaches that. Keep the why and what-went-wrong in napkin, experience, ledger, and
+commits (record); keep the loaded-first surfaces (opening statements, thread
+records, repo-continuity, plan banners) as present-truth instruction. Test:
+"would a first-time reader reconstruct the mistakes from this?" — if yes, it is a
+monument. Worked twice across sessions (Shaded, then Windswept). Pairs with
+`no-tombstones-for-removed-ideas`. Graduation candidate: a clause of no-tombstones
+or continuity-practice (owner-surfaced).
 
-A read-only verification sub-agent, commissioned to check "is X already covered?"
-across ~51 register items, produced a report with a ~50% false-negative rate in
-spot-checks: it searched the wrong file or a different phrasing and reported "not
-found" over substance that existed (a clause present at `agent-collaboration.md`
-line 196; a doctrine named in a pattern the report never opened). Never mass-act
-on a verification sub-agent's findings; re-verify against the repo before any
-irreversible disposition. This extends `feedback_validate_specialist_findings_before_acting`
-(specialists over-escalate severity) to the distinct failure of factual
-false-negatives in a search/verification report. Curation corollary: "drain an
-owner-gated register" means evaluate each item on substance and attach a verdict,
-not empty the buffer — removal is owner ratification.
+## 2026-06-01 — independent eyes catch what self-review cannot
 
-Source: 2026-05-28 pending-graduations drain (Sunlit Waxing Moon); ledger
-`curator-passes/2026-05-28-sunlit-waxing-moon.md`.
+Self-review shares the author's blind spots: a careful re-read of my own EEF plan
+missed a grounding error (`behind_the_average_by_phase` mis-described) that an
+independent multi-lane grounding audit caught immediately. For
+grounding/contamination checks, spawn independent eyes rather than relying on
+re-reading your own work. Related scoping insight: distinguish "delete the fake
+surfaces" (stubs with no real consumers — usually cleanly green) from "the full
+total removal" (the genuinely red replacement window); they are different scopes
+with different risk.
 
-## 2026-05-28 — Cursor statusline: delegate shim to Claude adapter
+## 2026-06-01 — archived means archived: remove references, don't repoint (Hearthlit Stoking Cinder)
 
-For Cursor CLI statusline, the repo shim can target
-`agent-tools/dist/src/claude/statusline-identity.js` — the Claude stdin parser
-already accepts `session_id`, `cwd`, and `workspace.current_dir`. Lane A is
-wiring + install helper + docs; retire `agent-tools/src/cursor/statusline*` in a
-follow-on lane only after smoke proof. Activation stays global
-(`pnpm agent-tools:install-cursor-statusline` → `~/.cursor/cli-config.json`).
+When quarantining a plan/doc to `archive/`, the live estate must STOP referencing
+it — remove the references (delete frontmatter pointers; de-link prose to plain
+text), never repoint them into the archive. Repointing N live references at the
+archived copy is the "no redirects" anti-pattern: it keeps the archive
+load-bearing in live navigation and dissolves the live/archived boundary. The
+single sanctioned inbound pointer is ONE archive-index note (`completed-plans.md`)
+recording where it went and what supersedes it. Caught mid-execution this session
+(owner: "archived means archived … not a bunch of links that dissolve the meaning
+of /archive/") after I had planned a uniform repoint. May merit a rule or PDR
+("archive is a terminal sink; one index note; no live→archive redirects"). Source:
+graph-spine quarantine, commit `5063456a`.
 
-Source: Stratospheric Hovering Gale session 2026-05-28, commit `59d50265`.
+## 2026-05-31 — repair of invalid active-distilled archive move
 
-## 2026-05-28 — the EEF wrong-shape episode (graph≠list; hold-open; build-don't-stub)
+The prior source-buffer pass moved this active register into
+`archive/distilled-2026-05-31-eclipsed-source-processing.md`, replaced the active
+file with a pointer, then deleted the failed archive copy during repair. That hid
+live buffer content before an acceptable item-level disposition proof existed.
+The content is restored here after owner correction. Do not archive or replace
+this active buffer again unless every item has a valid `graduated`, `duplicate`,
+`owner-gated`, or `stale-withdrawn` disposition under `consolidate-until-done`.
 
-The EEF explore tool was built, three-reviewer-approved, and committed — and was
-the wrong shape. Three behaviour-changing lessons:
+## 2026-05-31 — trace user value before tool design (EEF reframe, Fruited Regrowing Copse)
 
-1. **A graph is not a list.** Slice/cap/truncate/field-project are list-ops,
-   categorically wrong for graphs. Reduce by a COMPLETE subgraph (contiguous or
-   sparse): relationships always represented, no evidence without its
-   uncertainty, referenced-but-absent nodes reachable. Budget is a DESIGN signal
-   (scope the subgraph), never a runtime cap.
-2. **Premature crystallisation.** Architectural warning-signals (bypassing a
-   contract param, working around a stub, adding a cap, dropping data for budget)
-   are a VERDICT that the shape is wrong, not patches. Specialist review
-   validates correctness WITHIN a frame; only "is this the right thing at all"
-   catches a wrong frame. Hold open foundational design.
-3. **Build the required tools; don't soft-stub.** `Result.err(NotImplementedYet)`
-   masks a hole as handled and breeds list-shaped workarounds. Build, or throw.
-4. **Escape hatches dodge the complete build — and re-skin per situation.**
-   Defer (a "later gate"), menu (offer a forced conclusion as A/B), list-op
-   (rank-and-cut a graph), and suppress-the-signal (exclude a path from a check,
-   raise a threshold, mark a hotspot safe without review) are one reflex: make
-   the friction vanish without the complete correct fix. The screen is
-   GENERATIVE, not a catalogue — *would this make a valid signal/requirement go
-   away without doing the complete correct thing?* If yes, strike it and state
-   the single valid cure as a verdict; never surface a cheap cure as co-equal
-   (that surfacing is itself the failure). Owner-caught 4× in ONE session (menu,
-   deferral, rank-and-cut, exclude-from-Sonar); knowing the rules
-   (`never-disable-checks`, `no-warning-toleration`) did not immunise — the cure
-   is the pre-output screen.
+Trace the user journey and its value end to end before committing to a tool
+design; ask "does the data support this value?" at each hop, not "can we build
+this tool?" The EEF tools as first envisioned were impossible — they keyed on
+curriculum subject/topic, but EEF strands carry no subject/topic axis, so the data
+never supported the join. Months of data-shape engineering went into a tool that
+could not deliver value: the data-shape work was the tail wagging the dog. Cure:
+front-load the value/user-journey trace as a standing design-time guard (live
+instance: `eef-value-trace.codex-brief.md`). Platform-memory mirror:
+`feedback_trace_user_value_before_tool_design`.
 
-Source: EEF graph-tooling rebuild. Full diagnosis:
-`plans/sector-engagement/eef/current/graph-tooling-rebuild-foundation-2026-05-28.md`.
-Graduation candidates: graph-tool-category ADR/PDR, self-correcting-deliverables
-planning methodology (PDR + oak-plan), Definition-of-Delivery refinement
-(PDR-085), 'working with graphs' skill — all in `pending-graduations.md`.
-
-## 2026-05-28 — a `tail -F | grep` watcher re-emits its whole history on rewrite
-
-A raw `tail -n 0 -F <file> | grep` over an append-only coordination file
-re-emits *every* matched historical line whenever the file is rewritten — and an
-Edit-tool append rewrites the file, so your own append fires a false "new" batch.
-Cure: a dedup poll that diffs the current matched-line set against a baseline and
-filters your own prefix, emitting only genuinely new lines. Two instances
-(2026-05-27, 2026-05-28). Distinct from `use-monitor-for-event-driven-wake`,
-which is about Monitor vs Bash-background, not this re-emit.
-
-## 2026-05-27 — read git merge/divergence risk from content, not raw name-status
-
-Never predict merge risk from a raw `HEAD..origin` name-status diff: it counts
-branch-local additions as "deletes from the other side" and overstates the
-conflict set. Make the local bundle durable first, then let the merge algorithm
-prove the real conflicts. A rebase-without-force-push reads as "ahead N /
-behind M+1" where the +1 is a dropped merge commit; confirm it is benign with
-`git diff HEAD origin/<branch>` (empty tree = identical content; the divergence
-is a pure structural SHA rewrite).
-
-## 2026-05-27 — generated adapters are never hand-written (owner-corrected)
-
-Platform skill/agent adapter files (`.claude/`, `.cursor/`, `.codex/`) are
-generated from the `.agent/` canonical by the codegen tools. If generation fails
-(e.g. a sandbox permission error), fix the generator invocation/permissions and
-rerun it — never hand-create adapter stubs. Stubs mask the toolchain fault and
-drift from canonical. This is the action corollary of "the generator is the
-source of truth".
-
-## 2026-05-27 — treat session-opener fitness as stale until you rerun it
-
-The fitness report read at session open is stale: a parallel slice, or a later
-edit this session, may have pushed a file over a limit since. Rerun the validator
-before trusting it, and cure a freshly-HARD file by narrow structural routing of
-its substance to a durable home — not by score-chasing trims.
-
-## 2026-05-27 — collaboration state is source, not storage
-
-Collaboration state files may be temporarily preserved for the bounded
-comms/coordination research plan, but state files are not long-term knowledge
-storage. Outside an explicit preservation window, process them as potential
-knowledge sources, route useful substance into memory/docs/plans, then delete
-the state files. Source session: Solar Illuminating Dawn temp/state-file
-curation.
-
-## 2026-05-27 — supersession must refresh the auto-surfaced continuity chain
-
-When superseding a direction, the SAME pass must refresh the continuity chain a
-fresh session reads first — the thread-record top entry AND
-`repo-continuity § Next Safe Steps` — not just plan bodies. A fresh session
-boots with no conversation memory; a stale next-safe-step silently propagates
-the superseded frame. (EEF whole-graph → selection restructure: the thread top
-and repo-continuity still said "whole-graph flagged for discussion" after the
-plan bodies were corrected.) Candidate PDR-011 / PDR-026 amendment.
-
-## 2026-05-27 — production-reachability is verified at the deployed registration path
-
-A surface is "live in production" only if the DEPLOYED app registers it — never
-inferred from SDK definition/routing. An SDK-defined-but-app-unregistered
-surface (e.g. a prompt in `MCP_PROMPTS` absent from the app's
-`PROMPT_REGISTRATIONS`) is LATENT dead code, not live. Verify-don't-trust
-applies to your own claims, not just others': I asserted the EEF prompt was live
-in prod; checking the app registration path showed it was not.
-
-## 2026-05-27 — delegate by judgment-load, not by "parallelise everything"
-
-When delegating edits to subagents, split by judgment-load: parallelise
-mechanical/contained edits, but KEEP edits carrying a subtle correctness
-boundary. A subagent applying a known pattern (e.g. a retraction banner) can
-plant a NEW false claim at a boundary it doesn't grasp (selection-vs-ranking:
-the scoring engine + recommend/explain/compare tools are correctly gate-1b;
-only seed-selection moves to gate-1a). Brief delegated edits with the exact
-boundary, and keep the boundary-sensitive ones yourself.
-
-## 2026-05-14..28 — declarative capture ≠ procedural inhibition (rule-traction gap)
-
-An agent can hold a rule in working memory — *having just written it* — and walk
-straight into the named failure mode seconds later. Four independent instances
-across four sessions (Brazen gate-verify; Riverine cheap-cure; Mistbound
-portability in 3/4 PDRs; Woodland escape-hatch tripped 4× same session). The cure
-is NOT "know the rule harder" — it is a **structural interrupt at the moment of
-action**: a generative pre-output screen, a mandatory pre-action pause, a
-per-decision checklist. A rule with no enforcement mechanism at the moment of
-action has no traction on in-flight reflexes. Same mechanism as the
-`feedback_metacognition_impact_test` pre-action ratification of the action→impact
-bridge — treat them as one discipline. Source: cross-corpus synthesis
-2026-05-29 (`historical-napkin-synthesis-2026-05-29.md` A1).
-
-## 2026-05-25..26 — substrate encodes outcome; prose cannot override it
-
-Agent behaviour follows what the substrate structurally encodes, not what
-doctrine says. Four Opus agents shipped zero merged deliverables for 90 min
-because heartbeat + Done-When measured coordination-liveness, not delivery-to-live
-(Misty); curator agents chased fitness-score reduction because the SKILL named it
-as the success signal (Thermal/Feathered). The owner's one-line reframe shifted
-behaviour *immediately* — substrate alignment is the real lever. When you catch a
-doubt or a signal, route it **inward and downward into the substrate** (the
-Done-When field, the heartbeat template, the SKILL success criterion, the rule
-that fires at action-time), not outward to a chat message — "the artefact has
-gravity; a conversation does not." Source: synthesis 2026-05-29 (A2);
-`experience/2026-05-29-substrate-not-surface`.
-
-## 2026-05-22..25 — `.git/COMMIT_EDITMSG` is single-writer (multi-agent commit hazard)
-
-`.git/COMMIT_EDITMSG` is one shared file; concurrent `cp <draft> COMMIT_EDITMSG`
-across agents produces *wrong-attribution commits*. 4 instances May 2026; the
-emergent cure is intent-scoped message files (`.git/.commit-queue/<intent>.msg`),
-not yet built into the commit-queue CLI as the default. Related live P0:
-commit-queue `record-staged` fingerprints the FULL git index, not `intent.files`,
-so peer-staged content rides into your commit (cure plan:
-`commit-queue-intent-scope-discipline.plan.md`). Until the CLI cures it: use
-explicit per-intent paths and verify no peer rewrote `COMMIT_EDITMSG` between your
-`cp` and `git commit`. Source: synthesis 2026-05-29 (B1/B2).
-
-## 2026-05-25 — repo-wide auto-fix is a multi-agent sweep footgun
-
-`pnpm markdownlint:root` / `pnpm format:root` (any repo-wide auto-fix) in a
-multi-agent dirty tree makes husky pre-commit promote auto-fix output into the
-staged set, sweeping peer-owned files into your commit. Single-agent: correct.
-Multi-agent: an incident (Hushed swept 4 Stormy-owned files). Before any
-repo-wide auto-fix in a multi-agent window: `git status --short`, enumerate
-peer-owned dirty files, confirm before fixing. Source: synthesis 2026-05-29 (B3).
-
-## 2026-05-26 — `git apply --cached` for surgical cross-lane staging
-
-In a multi-agent tree, stage only your hunk without disturbing peer WIP:
-`git diff HEAD -- <file> > f.patch` then `git apply --cached f.patch`. Index gets
-your change; working tree keeps peer WIP. Worked: Torrid committed a 3-line cure
-while 351 lines of peer WIP stayed untouched. Source: synthesis 2026-05-29 (B4).
-
-## 2026-05-27 (Codex) — re-run `git status` after long gate runs
-
-A `pnpm check` (>~30s) can widen the diff surface while it runs (parallel agents,
-formatter side-effects, generated files). Cleanliness/handoff claims from a
-pre-gate status are a recurring false-clean assertion. Re-run `git status --short`
-after any long gate before claiming tree-clean or filing a handoff. Source: Codex
-MEMORY.md §Failures 2026-05-27 (cross-platform); synthesis 2026-05-29 (B5).
-
-## 2026-05-27 (Codex) — closeout verdicts require live plan-acceptance evidence
-
-Documentation closeout, handoff wording, or "a useful slice was delivered" is NOT
-proof a workstream is complete. Use explicit verdicts: `complete` (live plan
-acceptance matches), `partial slice landed` (named slice in named lane only), or
-`pending` (blocked/deferred/no progress). The anti-pattern is homed
-(`feel-state-of-completion-preceding-evidence-of-completion.md`); this is the
-positive prescription. Source: Codex MEMORY.md 2026-05-27; synthesis 2026-05-29 (D2).
-
-## 2026-05-25 — ADR Status must match implementation maturity
-
-Landing an ADR `Accepted` when the paired PDR is still `Candidate` AND
-implementation is explicitly deferred is a maturity mismatch: future agents read
-`Accepted` as decided-and-validated. Correct status is `Proposed` when either
-holds. Two reviewers surfaced this simultaneously. Source: synthesis 2026-05-29 (D3).
+**Deleting failed content is a contamination vector (2026-06-01, eef thread).**
+When archiving or removing wrong/superseded work, default to saving NOTHING from
+it; anything carried into a live doc must independently re-ground — cite a real
+source-of-truth path, or be tagged agent-side — never trusted because it was in
+the old artefact. A fabricated key-stage→phase concept rode out of a deleted EEF
+prompt into the ratified plan, cross-cited to a real finding to look grounded,
+caught only by chance. Pairs with no-tombstones: the corrective reframe must be
+genuinely positive, not a negation of the removed thing (caught fixing a tombstone
+with a tombstone this session). Auto-memory mirror:
+`harvest-from-deleted-is-contamination-vector`.

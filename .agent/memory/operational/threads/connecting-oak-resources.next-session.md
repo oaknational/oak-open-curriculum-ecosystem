@@ -1,5 +1,34 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
+## 2026-06-01 — Hearthlit Stoking Cinder / claude / claude-opus-4-8 / `4c1eeb` — graph-spine quarantine
+
+**Landed**: Quarantined the four superseded root-level graph coordination spines
+(`graph-portfolio-index`, `graph-mvp-arc`, `graph-combinatorial-arc`,
+`feat-mcp-graph-support-foundation-meta`) to `archive/completed/` — commit
+`5063456a` (51 files, full pre-commit gate green).
+
+**Shape**: archived-means-archived — one `completed-plans.md` note plus a one-line
+supersession banner per file; dead frontmatter pointers removed and prose links
+de-linked to plain text estate-wide (no live→archive redirects); live navigation
+surfaces (root README, high-level-plan, kg README, curriculum-mcp roadmap)
+reframed to stable collection homes. Disposition recorded in
+`graph-estate-consolidation.plan.md`.
+
+**Next safe step**: run `graph-estate-consolidation.plan.md` t1–t7 — the deeper
+gate-1a/1b/Inc.3 *concept* decontamination of the contaminated/pending plan files
+(de-linked this session, but their narratives are intact) — in a fresh session,
+as owner-deferred.
+
+**Blocker (not mine)**: `repo-continuity.md` carries a pre-existing markdownlint
+failure (MD038/MD004/MD032, lines 338–340) from another session's in-flight edit;
+it blocks any push (`pre-push` runs full markdownlint) until its owner fixes it.
+Left untouched (held + flagged coordinate-don't-edit).
+
+**Commits**: `5063456a`. Working tree retains other agents' unrelated in-flight
+work (discovery, security, eef plan, `env.ts`) untouched.
+
+---
+
 ## 2026-05-25 — Riverine Navigating Rudder / cursor / Composer / `27d9af` — oak-preview-1 full manual UAT + suggest URL WS5
 
 **Landed**: Full black-box UAT against education-evidence preview via Cursor
@@ -1087,7 +1116,7 @@ naming the four definite steps before graph execution begins (D-4
 topology BLOCKERs; Inc.1 decomposition; EEF WS restructure;
 collaboration-protocol Workstreams 2–5). Parallelisability findings and
 open decisions D-1 through D-7 are discoverable in
-[`graph-mvp-arc.plan.md`](../../../plans/graph-mvp-arc.plan.md) §
+`graph-mvp-arc.plan.md` §
 Team-of-Agents Execution. Separate
 [`collaboration-protocol hardening opener`](../../../plans/agent-tooling/current/2026-05-11-collaboration-protocol-hardening-opener.md)
 authored for the agentic-engineering-enhancements thread to address the
@@ -1099,7 +1128,7 @@ surfacing-exploration; teacher value is downstream of AI-client
 adoption. Four-dimension value model (substrate / shape-understanding /
 surfacing-exploration / partnership-or-combinatorial) replaces the
 per-slice "user value triplet" framing. Slice 3b moves OUT of MVP arc;
-new [`graph-combinatorial-arc.plan.md`](../../../plans/graph-combinatorial-arc.plan.md)
+new `graph-combinatorial-arc.plan.md`
 authored in `current/` owns substrate-layer cross-corpus composition;
 its promotion trigger fires on MVP arc gate-1 + gate-3a shipped +
 graph-stack Inc.3 design-stable. Slice-3b executable plan migrated from
@@ -1259,7 +1288,7 @@ the 2026-05-08 structural-only EEF decision. NO slice execution; NO
 graph-stack ACTIVE promotion; NO ADR-173 ratification.
 **Prior**: 2026-05-07 — Windward Darting Horizon / cursor /
 claude-opus-4.7 / `dd084d` — authored
-[`graph-mvp-arc.plan.md`](../../../plans/graph-mvp-arc.plan.md) at
+`graph-mvp-arc.plan.md` at
 top-level as a cross-collection coordination spine sequencing three
 vertical slices: (1) EEF evidence corpus MCP surface; (2) Oak ontology
 Threads MCP surface; (3) misconception sub-graph queries +
@@ -1268,7 +1297,7 @@ landed: ADR-157 namespace table extended (`oak-misconceptions-*` +
 compound prefix + explicit-source-attribution discipline);
 [`eef-evidence-corpus.plan.md`](../../../plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md)
 tool/prompt names re-prefixed `eef-*` (19 occurrences via 5
-replace-alls); [`graph-portfolio-index.md`](../../../plans/graph-portfolio-index.md)
+replace-alls); `graph-portfolio-index.md`
 gained `## Vertical-slice arc` section pointing at the spine;
 [`high-level-plan.md`](../../../plans/high-level-plan.md) cross-links
 the spine from the Cross-cutting Threads section. **Course

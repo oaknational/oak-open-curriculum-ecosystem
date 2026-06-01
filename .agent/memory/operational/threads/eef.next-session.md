@@ -1,7 +1,948 @@
 # Next-Session Record — `eef` thread
 
-> **CURRENT TRUTH — RESUME HERE (2026-05-29). Everything below this banner is
-> SUPERSEDED HISTORY — do not resume it.**
+> **EEF PLAN + D3 REVIEW (grounded) + PLAN/​TABLE CURRENCY FIXES + A PROCESS
+> MISSTEP (2026-06-01, Dawnlit Dancing Satellite / `b91f7b`; claude / Opus 4.8;
+> owner-directed; HEAD `604ec53`; no commit).** Ran the owner-requested whole-plan
+> and D3 reviews, grounding **every** corpus claim directly against
+> `EEF_TOOLKIT_DATA` (prior reviewers fabricated facts, so nothing was trusted).
+>
+> **Grounding verified (all exact):** floor `headline`/`definition`/`key_findings`/
+> `tags` 30/30; sparse `effectiveness` 7, `behind_the_average` 6, `implementation`
+> 4, `common_pitfalls` 2, `school_context_relevance` 17, `related_strands` 17,
+> `related_guidance_reports` 7; `impact_months: null` on 4. Phase and key stage are
+> independent (the only key-stage map is `uk_context.key_stage_mapping` → ages/years
+> — **no** key-stage→phase mapping); divergence exact (phase
+> post_16/all_through/special; keyStage KS5; priority
+> improving_attendance/teacher_retention); `behind_the_average_by_phase` +
+> `applications` sit under `school_context_relevance` (feedback primary 7/secondary
+> 5, oral 7/written 5). **No fabrication found; the contamination correction holds
+> (zero composite-axis shorthand survives).**
+>
+> **Review verdict:** design coherent + SOUND; D3 sound (field classification
+> grounded, no-crosswalk consistent with Decision 10, single-Zod-call, and the
+> `outputSchema` gap is real — `handlers.ts` `registerTools` config carries
+> `inputSchema` only). **D3 open finding (recorded, not yet applied):** the D2
+> source-path table lacked rows for the attribution/summary output fields
+> (`name`/`slug`/`eef_url`/`headline.headline_summary`, all 30/30 field-access) and
+> `closing_the_disadvantage_gap` (2/30), so D3's "every output field traces to a
+> source path" obligation could not close — **now fixed** (rows added, with the
+> `uk_context` and non-phase/key-stage/priority `school_context_schema` enums
+> recorded as intentionally-unprojected school-leader context). D3 should also state
+> the
+> declared-only exclusions (`KS5`/`post_16`/`all_through`/`special`/
+> `improving_attendance`/`teacher_retention` are **not** valid filter inputs) — not
+> yet applied.
+>
+> **Currency fixes APPLIED to the plan this session (D2 had landed but the plan
+> still described the pre-D2 tree):** D2 frontmatter `pending`→`completed` + a body
+> `Status: complete` line; `EefKeyStage`/`EefPriority` (never built) replaced with
+> the real committed D2 projection inventory (the Observed/Declared split +
+> divergence, headline-metric domains, edges, corpus-meta); `response-budget.ts`,
+> `EvidenceCorpus` `rank`/`explain`/`compare` types, and `citation-shape.ts`
+> corrected from "future D5/D6 deletion" to "already removed" (all verified gone
+> from HEAD); `handlers.ts:185-196` de-line-numbered; Carried Context refreshed to
+> post-D2 truth. Plan + table pass prettier/markdownlint/diff-check.
+>
+> **⚠ THE PROCESS MISSTEP (why the owner stopped the session).** Owner directed
+> projection purity — **all data a deterministic projection of the corpus; no
+> separate lists of keys; no type assertions; type predicates only for parsing
+> external/user input.** To make the table's cardinality "derived, not asserted"
+> I wrote `field-cardinality.ts` **v1 as a runtime `Record<field,count>` using
+> `Object.keys` + two `as` casts** — every one of those is **banned** by the strict
+> ESLint config (`consistent-type-assertions: never`, `no-explicit-any`,
+> `no-restricted-properties` on `Object.keys` → use `typeSafeKeys`). I verified with
+> `type-check` + `test` only — **not `lint`** — and the cast **silenced type-check**
+> (casts pass tsc by design), producing a false green. Owner caught it across three
+> corrections. **Root causes:** (1) wrong data shape — a runtime keyed record forces
+> `Object.keys`+cast = thrown-away type info; the *type-level* floor/sparse split
+> needs none; (2) skipped `lint-after-edit`; **type-check is cast-blind, lint is the
+> only guard**; (3) wrote product code under a *review* mandate at reduced rigor;
+> (4) failed to apply the owner's already-stated principle as a **pre-write screen**
+> — reaching for `as`/`Object.keys`/a non-parsing predicate is itself the signal the
+> shape is wrong. Lessons captured in `napkin.md`.
+>
+> **DECISION (owner-directed): the flawed code is backed out; there was never
+> separate work to defer.** `field-cardinality.ts` + its test were removed and the
+> `index.ts` barrel reverted — graph-corpus-sdk is back to its committed-D2 state
+> (3 test files, 15 tests, lint + type-check green). The earlier "build it at D6"
+> framing was wrong (can-kicking). The correct insight: **the floor/sparse
+> distinction is inherent in `EefStrand` — `keyof EefStrand` *is* the floor, and the
+> union carries optionality (a strand without `effectiveness` simply has no such
+> key). There is no separate cardinality/floor structure to build, now or later.**
+> A redundant module restating an inherent type fact is deleted, not deferred.
+>
+> **What GOOD looks like for the EEF graph stack (the floor — non-negotiable):**
+>
+> + Every datum is a deterministic projection of `EEF_TOOLKIT_DATA`; the corpus is
+>   the single source of truth and its own type authority. No separate lists of
+>   keys/values/fields, no hand-maintained vocabulary, no parallel data.
+> + No type assertions (`as`), no `any`, no `Object.keys`-style type erasure. The
+>   *one* type predicate in the system is `isValidStrandKey` (the single external
+>   unknown — the key). A predicate anywhere else means type info was thrown away.
+> + TypeScript proves types, tests prove runtime behaviour, ESLint proves structural
+>   rules — **run all three after every edit.** type-check is cast-blind (an `as`
+>   silences it); lint (`consistent-type-assertions: never`,
+>   `no-restricted-properties` on `Object.keys`, `no-explicit-any`) is the guard.
+> + Every exported surface has a real consumer (Decision 6 / PDR-058). No
+>   speculative surface, no stub, no build-ahead-of-need.
+>
+> **What GREAT looks like (the bar to aim for):**
+>
+> + The distinction you reach to build (floor/sparse, cardinality, optionality) is
+>   recognised as **already inherent in the corpus type**, so you build *nothing*
+>   separate — you derive at the point of use and let `satisfies` make the type
+>   enforce correctness. D6's output-schema optionality falls out of the
+>   graph-native view type automatically; no counting, no classification.
+> + Reaching for `as` / `Object.keys` / a non-parsing predicate triggers a **stop**:
+>   it is the signal the shape discarded type information — find the type-level
+>   projection (`keyof`, indexed access, mapped types) instead.
+> + Removal of a redundant or zero-consumer surface is read as *excellence*, not
+>   loss; "do it later" is not the alternative to "keep it" — "it does not exist as
+>   separate work" is.
+>
+> **Uncommitted tree state (`feat/graph-tooling-tidyup`, on top of `604ec53`) — docs
+> only, no product code:**
+>
+> + **Plan** (`eef-graph-tool-completion.plan.md`): D2 `completed`; post-D2 currency
+>   fixes (real projection inventory replacing the never-built `EefKeyStage`/
+>   `EefPriority`; already-removed `response-budget`/`EvidenceCorpus`/`citation-shape`
+>   corrected; `handlers.ts` de-line-numbered; Carried Context refreshed).
+> + **Source-path table**: added attribution rows (`name`/`slug`/`eef_url`/
+>   `headline_summary` 30/30, `closing_the_disadvantage_gap` 2/30); the floor-is-
+>   `keyof EefStrand` fact + the no-separate-structure note; the intentionally-
+>   unprojected `uk_context`/`school_context_schema` scoping note.
+> + **Continuity**: this banner + `napkin.md` process lessons.
+> + All gate-green (type-check/lint/test on graph-corpus-sdk; prettier/markdownlint/
+>   diff-check on the docs). **No commit.** Active-claims empty (mine); peer `Coppery
+>   Warming Flame` owns the graph-estate banner below (untouched).
+>
+> **NEXT SESSION — start here, in order:**
+>
+> 1. **Review the whole plan** (`eef-graph-tool-completion.plan.md`) for coherence
+>    and post-D2 currency, grounding every corpus claim directly against
+>    `EEF_TOOLKIT_DATA` (trust no prose — prior reviewers fabricated facts). The
+>    currency fixes above should hold; verify, don't assume.
+> 2. **Review D3** (the MCP tool/resource/prompt contract) in full: field
+>    classification (every input traces `contract field → graph-native subset → raw
+>    EEF source path → proof test`); the no-server-side-crosswalk boundary
+>    (Decision 10); the single-Zod-call input/output schemas (root `type: object`);
+>    the SDK/app verification record (the `outputSchema` gap in `handlers.ts`
+>    `registerTools` is real; `mcp-expert` verification pending). **One addition to
+>    apply** that this session recorded but did not make: D3 should state the
+>    declared-only filter exclusions — `KS5`/`post_16`/`all_through`/`special`/
+>    `improving_attendance`/`teacher_retention` are declared-but-unobserved and are
+>    **not** valid filter inputs (they yield empty-but-valid results).
+> 3. Hold every edit to the GOOD/GREAT bar above; lint after each one.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Dawnlit Dancing Satellite` | `claude` | `Opus 4.8` | `b91f7b` | `eef-plan-and-d3-review-currency-fixes-and-backout` | 2026-06-01 | 2026-06-01 |
+>
+> ---
+>
+> **CONSOLIDATION-PLAN CURRENCY + GRAPH-INGEST DECONTAMINATION (2026-06-01,
+> Coppery Warming Flame / `9a5cc3`; claude / Opus 4.8; owner-directed, commit
+> attempted).** Made `graph-estate-consolidation.plan.md` post-D2 accurate and
+> crystal-clear, and finished the code-side gate-1a decontamination. Plan edits:
+> corrected "Verified state to inherit" (it presented D2-deleted surfaces —
+> `EefStrandsGraphView`, the `loadEefCorpus`/`selectEefSeedIds`/freshness path, the
+> EEF tool "shipping dark" — as live/pending), added an "Inbound from EEF D2"
+> section, removed the stale D0 code-residue bullet, and added an explicit
+> `## Execution sequence`. The sequence makes the key finding unmissable: **t1's
+> six dispositions are unconfirmed proposals** (t1 `pending`; all six files still
+> in their original lanes), so Increment 1 = t1 + `assumptions-expert` runs first;
+> the do-now subset is t1–t5 + t7 (everything except the D7-gated t6 and t8's t6
+> criterion). Code: removed the two surviving `gate-1a` TSDoc/test comments in
+> `graph-ingest` (meaning preserved), so the repo now carries zero gate-1a/1b/Inc.3
+> code residue (graph-ingest type-check + 36 tests green). `repo-continuity` item 7
+> refreshed. All four touched files gate-green
+> (markdownlint/prettier/eslint/diff-check), uncommitted on
+> `feat/graph-tooling-tidyup`. A peer (`Woodland Swaying Copse`, codex) had an
+> abandoned commit-queue entry touching the plan file; no live claim.
+>
+> **Next safe step:** execute the plan's `## Execution sequence` — Increment 1
+> (t1 verify + `assumptions-expert`) before any archive/park move. t6 + final t8
+> wait on finishing-plan D7.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Coppery Warming Flame` | `claude` | `Opus 4.8` | `9a5cc3` | `consolidation-plan-currency-and-graph-ingest-decontamination` | 2026-06-01 | 2026-06-01 |
+>
+> ---
+>
+> **EEF D2 LANDED + CONTAMINATION-CORRECTION ARC (2026-06-01, Lunar Transiting
+> Eclipse / `9cde59`; claude / Opus 4.8; owner-directed).** D2 (the typed
+> raw-corpus foundation) is COMPLETE and committed `9019bb86`, green + reviewed
+> (code/type/test experts): `EefStrand`/`EefStrandId`/`EefStrandById` derived from
+> the `as const` corpus (the `z.infer` name repointed), `isValidStrandKey`, the
+> observed/declared domains + the declared-vs-observed divergence (phase:
+> post_16/all_through/special; keyStage: KS5; priority:
+> improving_attendance/teacher_retention), related-strand edges, corpus
+> provenance, and the source-path table with its cardinality column
+> (`eef/current/eef-d2-source-path-table.md`). The old list-shaped EEF surface was
+> removed across three workspaces (graph-corpus-sdk + oak-curriculum-sdk + the
+> streamable-http app); `OAK_CURRICULUM_MCP_EEF_ENABLED` is a dormant seam for D6.
+> Clean green atomic removal — no red window needed.
+>
+> **Contamination correction (owner-caught).** A fabricated key-stage→phase
+> mapping — the corpus holds phase and key-stage as two independent fields with no
+> correspondence — had been carried into the canonical plan from a deleted prompt.
+> Removed it; ran an independent 4-lane grounding audit against `EEF_TOOLKIT_DATA`
+> (which caught a second grounding error — `behind_the_average_by_phase` "at which
+> key stage" → "at which phase" — and the "key stage / phase" composite-axis
+> shorthand); completed a tombstone disposition pass over the plan (commits
+> `fb7ad234`, `70ccbef8`, `75b0734a`, `6d0fbbfd`). Lesson in Claude auto-memory:
+> `harvest-from-deleted-is-contamination-vector` — deleting failed content, save
+> nothing by default; anything carried must cite a corpus path or be tagged
+> agent-side.
+>
+> **Next safe steps.**
+>
+> 1. **Cite-or-tag is now a real rule** (graduated 2026-06-01, Moonless Lurking
+>    Dusk). It lives at `.agent/rules/eef-corpus-grounding.md` as a `trigger-loaded`
+>    rule (all four forms + `RULES_INDEX.md` row); the stopgap doc was retired. The
+>    rule fires when authoring/editing an `EEF_TOOLKIT_DATA` claim.
+> 2. **D3** (MCP tool/resource/prompt contract) is the next plan deliverable —
+>    owner-ratified, `mcp-expert` SDK-registration verification pending.
+> 3. **Graph-estate-consolidation plan needs a currency update + execution**: its
+>    "Verified state to inherit" presents D2-deleted surfaces as live; refresh it
+>    and add an "Inbound from EEF D2" section first, then execute t1–t8 (mostly
+>    pending; ~1–2 focused sessions; t7 largest; t6 deferred until D7).
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Lunar Transiting Eclipse` | `claude` | `Opus 4.8` | `9cde59` | `eef-d2-implementation-and-contamination-correction` | 2026-06-01 | 2026-06-01 |
+>
+> **EEF PLAN SEAM-MAPPING + GROUNDED REVIEW CORRECTIONS (2026-06-01, Windswept
+> Floating Summit / `d8560c`; claude / Opus 4.8; owner-directed, no pnpm check,
+> commit).** Ran the two owner-requested reviews of the live plan — whole-plan
+> coherence and a D2-specific review — grounding every claim directly against
+> `EEF_TOOLKIT_DATA` and the repo. Two Explore subagents returned a fabricated
+> `graph-project` import fact and wrong `~N/30` cardinalities; both were caught by
+> direct verification before reaching any edit (and my own narrow-`ls`
+> over-correction — "graph-ingest/graph-project don't exist" — was caught too; they
+> live in `packages/libs/`). **Corrections + enhancements applied to the live
+> plan:**
+>
+> + **Status truth:** the claim that the `graph-view` query contract was "already
+>   removed in code" is false — `graph-core/src/graph-view/` (interface/types/index/
+>   contract test) and the EEF-local adapter are LIVE. Reworded: D2 deletes the
+>   adapter + old list tool (the contract's only consumers), D5 replaces the
+>   contract; `graph-ingest`/`graph-project` (in `packages/libs/`) consume only the
+>   RDF substrate, so zero external blast radius. The RDF substrate is genuinely
+>   multi-consumer.
+> + **V1 source-path fixes:** `behind_the_average_by_phase` and `applications` sit
+>   under `school_context_relevance` (not under `behind_the_average`); `meta.caveats`
+>   is corpus-level (one global block), not a per-strand field.
+> + **Optionality first-class (verified cardinalities over 30 strands):** universal
+>   floor `headline`/`definition`/`key_findings`/`tags` 30/30; sparse/optional
+>   `effectiveness` 7/30, `behind_the_average` 6/30, `implementation` 4/30,
+>   `common_pitfalls` 2/30, `school_context_relevance` 17/30, `related_strands`
+>   17/30, `related_guidance_reports` 7/30. D2 source-path table gains a corpus-
+>   cardinality column; D6 output schema marks non-floor fields optional; D7 proves
+>   graceful collapse on a floor-only strand.
+> + **Decision 10 added:** the system is deterministic data; the consuming agent is
+>   the only reasoner. Every surface is a deterministic projection of the static
+>   corpus; relevance/ranking/move→strand mapping belong to the agent; the static
+>   interpretation resource scaffolds its reasoning. This is the positive rationale
+>   for the no-server-side-crosswalk boundary. `EefStrand` is currently a
+>   `z.infer` type in the to-be-deleted `strand-schema.ts`; D2 repoints the name to
+>   the `as const` derivation. Three existing EEF-MCP files (`telemetry.ts`,
+>   `eef-evidence-grounded-lesson-plan-messages.ts`, `eef-evidence-guidance.ts`) now
+>   have a stated disposition; the R1/R7 guidance is corpus-grounded and is candidate
+>   D3-interpretation-resource content.
+> + **`## Sequencing` rewritten** as the exemplar seam map: three axes (execution
+>   schedule / dependency DAG / runtime path) + the value closure arc, then a seam
+>   taxonomy — fan-out (D1/D2/D4), confluence (D3/D5/D6, the D2→D5 skip-level
+>   construction boundary the deepest), closure arc (D1⇒D7), orthogonal runtime axis,
+>   layering anti-seams, the source-path-table ledger, the temporal red-tree seam —
+>   and the law **seams compose, they are never reconciled** (friction at a junction
+>   = an input drifted from the single corpus root; fix upstream, never bridge). D7
+>   gains an obligation to exercise the Oak/EEF workflow seam on more than one signal.
+>
+> **Next safe step (owner-directed 2026-06-01): do ONE more D2 review, then
+> implement D2.** D2 is the typed raw-data ingestion foundation in
+> `eef-graph-tool-completion.plan.md` (see its D2 Do/Done-when): derive
+> `EefStrand`/`EefStrandId`/`EefStrandById` from the `as const` corpus, implement
+> `isValidStrandKey`, build the source-path table (with the corpus-cardinality
+> column), derive the observed/declared vocab domains + the declared-vs-observed
+> divergence record, and delete the old school-context/strand-schema/load/list/Zod/
+> freshness path and the EEF-local graph adapter outright — the plan's intentional
+> in-flight red window, cured by the completed D2-D6 chain, not by any
+> wrapper/shim/fallback. TDD cycles; test and product code co-land. Note `EefStrand`
+> is currently the `z.infer` type in the to-be-deleted `strand-schema.ts` — repoint
+> the name to the `as const` derivation, leaving no Zod-inferred strand type. This is
+> the first product-code execution since D0, so `code-expert` (and the specialists it
+> flags) run in the normal loop after edits. The D3/D4 PENDING reviewers fire later
+> against ratified D3/D4 outputs. The seam-mapping taxonomy + "seams compose" law is
+> captured in `pending-graduations.md` as a reusable plan-template/archetype
+> candidate (owner-confirmed intent). A live peer (Luminous Dancing Aurora, codex/GPT-5/
+> `019e82`) held an active claim on the `discovery/future/` plans and was editing
+> them at session close; the owner directed committing everything in this session's
+> bundle, so those plans were included (peer notified via a directed comms event;
+> their later edits land as a delta). This session's continuity + EEF-plan + napkin
+> edits are committed on `feat/graph-tooling-tidyup`; active-claims has no entry of
+> mine.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Windswept Floating Summit` | `claude` | `Opus 4.8` | `d8560c` | `eef-plan-seam-mapping-grounded-review-corrections` | 2026-06-01 | 2026-06-01 |
+>
+> ---
+>
+> **EEF PLAN RECAST AS POSITIVE DESIGN + D0 COMPLETE + NO-EXCEPTIONS RULE
+> (2026-06-01, Twilit Threading Satellite / `435b98`; claude / Opus 4.8;
+> committed `f8548985`; owner-directed, no pnpm check).** The live EEF plan now
+> reads as positive design throughout: it states what the system is and builds,
+> carried by one invariant — every tool, resource, prompt, graph operation, and
+> handler is implemented with real graph-derived logic and tests, or it is
+> absent. **D0** (fixed-data doctrine + validator removal + estate
+> decontamination) and **D1** (teacher value contract) are complete; D0 is
+> verified against its acceptance criteria and the repo: `repo-validators:check`
+> green, ADR-038/153/157/173 doctrine set, ADR-175 withdrawn, the `as const`
+> corpus types derived in `graph-corpus-sdk/src/eef-strands/strand-lookup.ts`,
+> and the decontamination ledger complete with a clean extended-token acceptance
+> sweep. Two rules now hold: **`rules-have-no-exceptions`** (a rule holds in
+> every case it governs; a misfit improves the rule) and the now exception-free
+> **`no-tombstones-for-removed-ideas`** (framed as a domain statement: removing
+> code is ordinary work, and a history record's subject is the change). How the
+> plan reached this shape lives in the napkin, the ledger, and commit
+> `f8548985`.
+>
+> **Next safe step:** two reviews, in order, held against the teacher value the
+> work serves (EEF evidence enriching Oak lesson adaptation, with strength, cost,
+> impact, caveats, and uncertainty preserved). (1) A whole-of-plan review of
+> `eef/current/eef-graph-tool-completion.plan.md`: does it cohere as one design in
+> service of that value — value contract → MCP surface → graph layer → raw corpus?
+> (2) A D2-specific review: is the typed raw-data foundation the right foundation —
+> does what it derives from `EEF_TOOLKIT_DATA` support the evidence the teacher
+> needs downstream, and is its boundary with D5/D3/D6 clean? These are reviews;
+> whether and when D2 is implemented is an owner decision after they land. The
+> plan's D3/D4 PENDING reviewers fire later, against the ratified D3/D4 outputs
+> once those exist. Continuity writes this session are working-tree (uncommitted)
+> on `feat/graph-tooling-tidyup`; active-claims empty.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Twilit Threading Satellite` | `claude` | `Opus 4.8` | `435b98` | `eef-plan-positive-recast-d0-complete-no-exceptions-rule` | 2026-06-01 | 2026-06-01 |
+>
+> ---
+>
+> **EEF GRAPH-TOOL RE-REVIEW + STUB DELETION + DECONTAMINATION (2026-06-01,
+> Shaded Swaying Sapling / `d37ba7`; claude / Opus 4.8; owner requested handoff,
+> no pnpm check, no commit).** Re-reviewed the live EEF plan for total old-shape
+> removal and settled the D2 union-vs-binding test boundary: domain-generic
+> traversal + synthetic-node tests live in graph-core; the EEF binding is tested
+> over the real corpus; nothing fabricates an `EefStrand`. Deleted the stub tools
+> in code — the five `NotImplementedYet` graph ops, the `EvidenceCorpus`
+> rank/explain/compare substrate, and the `threads` `export {}` placeholder —
+> landing GREEN across all consumers (graph-core 76 / graph-corpus-sdk 48 /
+> curriculum-sdk 784 tests; MCP app + graph libs type-check clean). Swept the
+> plan's GraphView language to delete-and-build-fresh and scrubbed negation
+> monuments (Decisions 6/7, the D2/D4/D5 bullets, the D4 todo). Corrected ADR-173
+> (2026-06-01 amendment: query layer real-ops-only, Threads placeholder removed)
+> and a `graph-project` comment; ADR-157's `EvidenceCorpus` note stays as demoted,
+> self-disclaimed speculation. **D0 is RE-OPENED (decontamination only** — its code
+> and ADR-doctrine work stays committed at `ce9745c7`). **Next safe step:** to
+> re-close D0, update `eef-d0-decontamination-ledger.md` with the new-token
+> dispositions (ADR-173 corrected; ADR-157 demoted-speculation / history-retained;
+> graph-project comment corrected; estate-plan sweep routed to
+> graph-estate-consolidation) and run the extended-token acceptance sweep
+> (`NotImplementedYet` / `EvidenceCorpus` / threads / `Inc.3`) over EEF plans +
+> non-plan docs proving zero live references, then flip the D0 frontmatter status
+> back to `completed`. Then continue D2 per the live plan. No claim opened or closed
+> (active-claims empty). Uncommitted code + doc edits on `feat/graph-tooling-tidyup`.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Shaded Swaying Sapling` | `claude` | `Opus 4.8` | `d37ba7` | `eef-re-review-stub-deletion-decontamination` | 2026-06-01 | 2026-06-01 |
+>
+> ---
+>
+> **D2-D6 REPLACEMENT-PLAN CORRECTION APPLIED (2026-06-01, Evergreen Budding
+> Copse / `019e7f`; owner requested handoff, no pnpm check, commit all files).**
+> This session read D2, ran four architecture reviewers, critically synthesised
+> their findings, then applied the owner correction: no wrappers, no compromises,
+> no remnant of the old shape, and no requirement to keep the tree green while the
+> fundamental replacement is in flight. The live plan now states: D2 builds the
+> typed raw-data ingestion foundation from the complete in-memory
+> `EEF_TOOLKIT_DATA` constant; D2 deletes the old school-context/strand-schema/
+> load/list/Zod/freshness path outright; D3 requires
+> `contract field -> graph-native subset -> raw EEF source path -> proof test`;
+> D3/D6 contain no Oak-signal-category, pedagogical-move, misconception,
+> prerequisite, quiz, text, subject, or topic crosswalk to `EefStrandId`; D5
+> ingests the D2 raw foundation into the D4-ratified deterministic graph-native
+> EEF projection; and D6 registers only graph-derived MCP surfaces. The old list
+> implementation is deletion evidence only, never a behaviour target. Napkin
+> captures the correction. Collaboration claim
+> `8f26914a-2482-43ea-87c8-fa1f5e5113d8` is closed. **Next safe step:** implement
+> D2 exactly as written in
+> `eef/current/eef-graph-tool-completion.plan.md`; do not introduce selector lists,
+> compatibility fallbacks, raw-foundation wrappers, static no-survivor audit
+> harnesses, stub tools, or old-list behaviour repairs.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Evergreen Budding Copse` | `codex` | `GPT-5` | `019e7f` | `eef-d2-d6-replacement-plan-correction` | 2026-06-01 | 2026-06-01 |
+>
+> ---
+>
+> **D1 COMPLETE + ANCILLARY REPORTS ARCHIVED (2026-05-31, Kilned Crackling
+> Ember / `019e7f`; committed at `a6ec6766`; no `pnpm check` by explicit owner
+> direction).** Double-checked the settled D0/D1 content after owner ratification.
+> D1 is complete in the live plan: EEF concepts, payload fields, resources, and
+> schemas are deterministic type-strict projections of the graph form of the fixed
+> EEF data, with provenance visible back to that data; no separate evidence-term
+> list, externally maintained vocabulary, crosswalk, fallback, or
+> data-justification layer remains live. Reviewed the rest of the plan against
+> that settled frame and fixed
+> the plan accordingly: D3 now writes and validates the MCP contract; D4/D6 own the
+> graph-native Zod schema path; D2/D5 deletion ordering is coherent; EEF tool
+> inputs use fixed finite ids; Oak subject/topic context is workflow context, not
+> an EEF input. Per owner direction, stale ancillary reports/briefs were archived
+> after their useful substance was folded directly into the plan. The only live
+> files under `eef/current/` are now the D0 decontamination ledger and the graph
+> tool completion plan. Targeted validation before the commit was green:
+> Prettier, markdownlint, `git diff --check`, and stale-language `rg` guards.
+> **Next safe step:** resume from D2 or D3 in
+> `eef/current/eef-graph-tool-completion.plan.md` as the owner directs; treat the
+> live plan as the authority and the archived reports/briefs as historical scratch
+> artefacts only. Session-handoff collaboration check found active claims empty,
+> commit queue empty, and no relevant EEF conversation/escalation handoff needed.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Kilned Crackling Ember` | `codex` | `GPT-5` | `019e7f` | `eef-d1-completion-plan-archive-closeout` | 2026-05-31 | 2026-05-31 |
+>
+> ---
+>
+> **VALUE REFRAME LANDED + PLAN RESYNCED (2026-05-31, Fruited Regrowing
+> Copse / `abec59`, `claude-opus-4-8`; owner-directed, no commit).** The owner
+> reframed the EEF value model and the plan was resynced to it. **The reframe:**
+> EEF is evidence about teaching strategies and decisions, not
+> topic-indexed content; relevance is a function of the *pedagogical move* on EEF's
+> own finite axes (approach / priority / key-stage-phase / impact-cost), and the
+> value intersects Oak's tools at the *workflow* level — Oak's misconception and
+> prior-knowledge graphs (plus the quiz/text) raise the signal, the agent names the
+> move, the EEF tool returns the evidence on it. The EEF tool takes only the
+> corpus's finite keys; subject/topic are Oak's domain and are simply not EEF
+> inputs (stated by absence, not as a guarded prohibition — per the owner's
+> no-tombstones correction). **Done this session:** `## Value And Impact` rewritten
+> (new "What EEF is, and how relevance works"); D1/D3/D4/D5/D6/D7 bodies + Fully
+> Specified End State + Non-Goals resynced natively (reframe-consequence banners
+> removed, not kept as warnings); the graph layer reaffirmed as deliberate
+> multi-source foundation (EEF first, then misconceptions / prerequisites / Oak
+> ontology — owner direction); SLT strands split to
+> `future/eef-school-leadership-evidence.plan.md`; EEF-only-workflow value captured
+> in `future/eef-standalone-evidence-workflows.plan.md`; research/reviewer detail
+> folded into the live plan. Gaps 2–4 from the holistic pass also cleared
+> (D3→D4→D6 schema hand-off; D7↔observability matrix; D1 ratification-status note).
+> Targeted checks green (Prettier, markdownlint, git diff --check) on every touched
+> doc. **No commit, no `pnpm check`.** The user-value trace and graph predecision
+> research/reviewer artefacts have since been folded directly into the live plan;
+> their briefs/reports are archived as historical scratch artefacts and are not
+> live sources. D0 and D1 are complete; resume at D2 or D3's written MCP contract /
+> SDK-app verification record as the owner directs. Two cross-session lessons
+> captured to platform memory: no-tombstones-for-removed-ideas and
+> trace-user-value-before-tool-design.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Fruited Regrowing Copse` | `claude` | `claude-opus-4-8` | `abec59` | `eef-value-reframe-plan-report-resync` | 2026-05-31 | 2026-05-31 |
+>
+> ---
+>
+> **D2 / REPORT / PRINCIPLES NO-ESCAPE-HATCHES CORRECTION APPLIED (2026-05-31,
+> Prismatic Shimmering Constellation / `019e7e`; owner-requested tight handoff,
+> no commit, no new check).** This session repaired the D2 plan/report alignment
+> after owner correction: the fixed `EEF_TOOLKIT_DATA` object is the only source
+> of truth for EEF finite values; no separate maintained key/value/vocabulary
+> lists, no glue/crosswalk layer, and no compatibility/fallback path is allowed.
+> Any proposed EEF tool input that cannot map directly to fixed known data is a
+> D1/D3 architectural misalignment, not D2 adapter work. The EEF plan and report
+> now say free-form teacher language is interpreted before the deterministic tool
+> call, not accepted as an EEF tool-input category. Adjacent D3/D6 wording was
+> tightened from "replacement/fallback after verification" to hard proof
+> requirements: failure means the contract/foundation is wrong and must be
+> corrected. `.agent/directives/principles.md` now explicitly bans fallbacks,
+> compatibility layers, preserving proven-wrong ideas, "just in case" branches,
+> and hedged plan options. Code and docs reviewers re-checked the final wording
+> and both returned PASS. Final checks before the handoff request had passed
+> (Prettier, markdownlint, `git diff --check`, and targeted stale-phrase guards),
+> but no additional check and no commit were run by explicit owner direction.
+> **Next safe step:** continue from
+> `eef/current/eef-graph-tool-completion.plan.md` D2 with the single-source rule
+> as controlling doctrine, or proceed to the D3 MCP contract / SDK-app
+> verification record if the owner chooses that lane; do not resurrect old-list,
+> free-text, fallback, or compatibility paths.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Prismatic Shimmering Constellation` | `codex` | `GPT-5` | `019e7e` | `eef-d2-no-escape-hatches-plan-report-principles-repair` | 2026-05-31 | 2026-05-31 |
+>
+> ---
+>
+> **PRE-DECISION REPORT FIXED + REVIEWER POLISH APPLIED (2026-05-31, Deep
+> Drifting Anchor / `019e7e`; owner-requested tight handoff, no additional check,
+> no commit).** This session read
+> `eef/current/eef-graph-predecision-report-fix.codex-brief.md`, applied the
+> required fixes to
+> `eef/current/eef-graph-predecision-research.report.md`, then dispatched a
+> read-only reviewer set (`code-expert`, `docs-adr-expert`, `type-expert`,
+> `mcp-expert`, `assumptions-expert`, and `architecture-expert-wilma`). Reviewer
+> synthesis found one real blocker: the report covered broad-`string`
+> result/error IDs but under-specified graph query inputs. The follow-up polish
+> now explicitly threads `TNodeId` through query inputs as well as outputs,
+> labels `EefStrandId` / `isValidStrandKey` as planned D2 work rather than
+> current D0 code, aligns M1 with the practical-small D3 MCP direction, fixes
+> `listUniversalTools` provenance, expands deletion-ordering evidence, separates
+> corpus-op deletion from graph-core contract-test updates, and adds the MCP
+> structured-content compatibility caveat. Targeted report validation before
+> this handoff passed: Prettier, `git diff --check`, markdownlint, and the
+> brief's targeted `rg` guard. **No new handoff check and no commit by explicit
+> owner direction.** **Next safe step:** resume the EEF lane with the fixed
+> pre-decision report as handoff-safe research material; run the live holistic
+> plan pass brief if that review has not been superseded by owner direction, then
+> proceed to the written D3 MCP contract artefact and SDK/app verification record
+> or owner-directed D4+ planning.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Deep Drifting Anchor` | `codex` | `GPT-5` | `019e7e` | `eef-predecision-report-repair-review-synthesis` | 2026-05-31 | 2026-05-31 |
+> | `Prismatic Shimmering Constellation` | `codex` | `GPT-5` | `019e7e` | `eef-d2-plan-repair-review-synthesis` | 2026-05-31 | 2026-05-31 |
+>
+> ---
+>
+> **OWNER QUESTIONS ANSWERED + D3 TIGHTENED; HOLISTIC PASS BRIEF READY
+> (2026-05-31, Estuarine Rolling Harbour / `019e7d`; owner-requested tight
+> handoff, no commit, no `pnpm check`).** This session applied the remaining D1/D3
+> fixes and polish, answered the owner-facing open questions, and recorded the
+> settled D3 MCP surface: one deterministic EEF query/fetch tool, one EEF
+> interpretation resource/template for applying evidence, and one user-facing
+> prompt for starting the teacher workflow. The plan now states that free-form
+> teacher language is interpreted by the invoking agent before any EEF tool call;
+> the deterministic tool receives only finite fixed inputs derived from Oak/EEF
+> data. D3 is now tightened into two remaining products: a written MCP contract
+> artefact and a separate SDK/app verification record; `mcp-expert` sign-off is
+> still pending. EEF-specific docs now include the value of EEF evidence and the
+> Sunday-night cover example as illustrative, not exhaustive. **Next safe step:**
+> run the new holistic plan pass brief at
+> `eef/current/eef-plan-holistic-pass.codex-brief.md` to review the entire live
+> plan for coherence, cohesion, completeness, accuracy, and freshness before D4+
+> execution proceeds. Targeted checks run this session for touched docs:
+> `git diff --check`, Prettier, markdownlint. No commit and no full `pnpm check`
+> by explicit owner direction.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Estuarine Rolling Harbour` | `codex` | `GPT-5` | `019e7d` | `eef-d1-d3-owner-question-resolution` | 2026-05-31 | 2026-05-31 |
+>
+> ---
+>
+> **REPORT REVIEWED; FIX BRIEF READY (2026-05-31, Codex GPT-5; owner-requested
+> short handoff, no gates, no commit).** This session created the D1-parallel
+> pre-decision research brief at
+> `eef/current/eef-graph-predecision-research.codex-brief.md`, the D1 reviewer
+> brief at `eef/current/eef-d1-reviewers.codex-brief.md`, monitored the
+> delivered graph research report, swept SDK/plan/report language away from
+> list-era/ranking/recommendation concepts, improved the report once, then ran
+> code / architecture / docs reviewer passes on the report. Reviewer synthesis:
+> the report is useful but **not yet safe as D3/D4/D5 handoff material**. It must
+> first fix traversal-reuse wording, current-code-vs-plan-target wording for
+> `structuredContent`, construction-integrity overclaims, shorthand file/line
+> refs, process self-certification, and small projection/schema line-shape
+> inaccuracies. A dedicated follow-up brief now exists:
+> `eef/current/eef-graph-predecision-report-fix.codex-brief.md`. **Next safe
+> step:** run that brief before using
+> `eef/current/eef-graph-predecision-research.report.md` to guide D3/D4/D5. No
+> gates run and no commit made by explicit owner direction.
+>
+> ---
+>
+> **PRE-DECISION GRAPH RESEARCH DELIVERED (2026-05-31, Vining Ripening Fern /
+> `870a40`, `claude-opus-4-8`; owner-directed read-only research session).** Ran
+> the research instruction set in
+> `eef/current/eef-graph-predecision-research.codex-brief.md` and delivered the
+> report at **`eef/current/eef-graph-predecision-research.report.md`** — the
+> file/line-grounded map of the graph decision space (executive summary, known
+> constraints C1–C9, open D1/D3/D4 questions, three candidate graph-native view
+> forms with pros/risks/proof needs, layer-split map, risk register R1–R10, and
+> the D3/D4 decision agenda). The `eef/README.md` "Status of the Live Plan"
+> section now points at it. It is labelled `pre-decision research` and **ratifies
+> nothing** — it names the decisions D1/D3/D4 own and surfaces considerations,
+> it does not make or recommend them (owner-corrected mid-session: "research, not
+> decision making").
+>
+> Concrete findings the report grounds for D3/D4: (1) the clean `as const`
+> foundation (`strand-lookup.ts`) exists but the graph layer still types nodes as
+> the Zod-inferred `EefStrand` keyed by broad `string` — D5 is mainly a
+> re-pointing, the BFS traversal in `eef-graph-model.ts` is reusable once re-keyed
+> on `EefStrandId`; (2) type erasure is concentrated at two named seams
+> (`graph-core` broad-`string` result/error ids; the EEF adapter's
+> `ReadonlyMap<string, EefStrand>`); (3) the MCP registration config at
+> `handlers.ts:185-196` carries **no `outputSchema`** today, and both
+> `registerTool` and `registerAppTool` paths exist — D6 must extend the config +
+> the `listUniversalTools` projection; (4) `rank`/`explain`/`compare` are
+> type-only, barrel-exported — corroborates the zero-external-blast-radius
+> finding; (5) **D3's output schema cannot be settled before D1 ratifies the
+> teacher-facing evidence field set** (the old `projection.ts` field set was sized
+> by the deleted response cap, so it is not a neutral baseline — V1–V4 in §3a).
+>
+> **Tree state**: the report + the `eef/README.md` pointer are uncommitted
+> working-tree edits. **No commit and no `pnpm check`** by explicit owner
+> direction. Other agent present this session: Codex `Estuarine Rolling Harbour`,
+> claim scoped to `napkin.md` only — no overlap. **Next step unchanged**: D1
+> (value, owner-ratified) ∥ D2 (typed raw foundation), then D3→D7; the report
+> feeds D3/D4.
+>
+> ---
+>
+> **REVIEWER FINDINGS APPLIED + ARCHITECTURE BRIEF READY (2026-05-31,
+> Hearthlit Roasting Caldera / `019e7d`; owner-confirmed light handoff).** This
+> session ran the Codex reviewer brief at
+> `eef/current/eef-plan-reviewers.codex-brief.md`: `docs-adr-expert`, a general
+> `type-expert`, and a special type-preservation `type-expert`. Findings were
+> synthesised, then the owner widened scope to apply all findings and polish. The
+> live plan and EEF README now state the controlling doctrine clearly: raw
+> `EEF_TOOLKIT_DATA as const` is definitively **not** the graph contract; the graph
+> is derived from the raw data; exact raw-derived typing must be preserved through
+> the graph-native view, graph operations, MCP schema declarations,
+> `structuredContent`, and the teacher-facing value proof. The plan no longer
+> leaves an "identical raw/graph shape" revisit path. The next-session Codex brief
+> for all four architecture reviewers is now
+> `eef/current/eef-plan-architecture-reviewers.codex-brief.md`; run
+> `architecture-expert-barney`, `architecture-expert-betty`,
+> `architecture-expert-fred`, and `architecture-expert-wilma`, then synthesize.
+> This session did **not** run `pnpm check` by explicit owner direction. Targeted
+> checks for the touched plan/brief files passed: `git diff --check`,
+> `pnpm markdownlint-check:root ...`, and `pnpm exec prettier --check ...`.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Hearthlit Roasting Caldera` | `codex` | `GPT-5` | `019e7d` | `eef-reviewer-synthesis-plan-repair-architecture-brief` | 2026-05-31 | 2026-05-31 |
+>
+> **PLAN REPAIR + REVIEWER BRIEF COMPLETE — RESUME HERE (2026-05-31, Tidal
+> Charting Hull / `019e7d`; owner-confirmed handoff).** The EEF live plan was
+> repaired after the D0 completion audit: D0 stale-state residue was swept; the
+> MCP input/output schema rule now says each schema is derived by a single Zod call
+> on the appropriate subset of the constructed graph-native EEF view; and the raw
+> EEF corpus is explicitly the source snapshot and type source, not automatically
+> the graph contract. D5 now owns an explicit pure graph-native
+> construction/adaptation boundary; if no distinct graph-native shape adds value,
+> the identical raw/graph-native shape requires owner ratification before
+> implementation proceeds. The EEF README was reframed around graph tools/resources
+> and evidence-preservation obligations. A next Codex reviewer-session brief now
+> exists at `eef/current/eef-plan-reviewers.codex-brief.md`; run it next. It
+> requires `docs-adr-expert`, a general `type-expert`, and a separate special
+> `type-expert` pass tracing `EEF_TOOLKIT_DATA as const` through raw corpus ->
+> typed raw foundation -> graph-native view -> graph ops -> MCP schemas/results ->
+> teacher value proof. Targeted markdownlint/Prettier and root Prettier were green;
+> `pnpm check` was not run in the final handoff by explicit owner direction.
+>
+> **D0 COMPLETE + INTENT-VS-LETTER AUDITED (2026-05-31, Opalescent Transiting
+> Prism / `73491c`; owner-confirmed).** Both Commit 1 (code) and Commit
+> 2 (docs/decontamination) are DONE and verified in the working tree. A
+> 4-dimension adversarial audit (letter / intent / conservation-reflex /
+> cross-session coherence) confirmed the intent is met — the gate was greened by
+> DELETION (not by retyping the corpus to `unknown`), the corpus is typed by
+> derivation, the doctrine is coherent across ADR-038/157/173/175 — and closed the
+> one residue: the validator-deletion reshape had been recorded only in this
+> banner, not propagated, so a shipped-code `gate-1b` line in
+> `eef-toolkit.external-data.ts` and the stale "keep two rules" framing in the
+> plan (Ratified Decision 3, frontmatter step 7, "Do — validator expunge", the
+> "Done when" criterion + Proof) were left live; all now corrected /
+> superseded-in-place. The decontamination ledger
+> (`eef/current/eef-d0-decontamination-ledger.md`) is complete. **Full `pnpm
+> check` is GREEN (exit 0** — build/e2e/a11y/widget/type-check/lint/test/knip/
+> depcruise/markdownlint/prettier). **The whole D0 bundle is committed at
+> `ce9745c7`** (2026-05-31, one owner-directed commit including the non-EEF
+> `discovery/` plan collection and draft PDR-089; pre-commit hook green; 7 ahead
+> of origin, NOT pushed). **Next sessions: (1) a Codex EEF plan-consistency /
+> residue sweep — brief at
+> `eef/current/eef-plan-consistency-sweep.codex-brief.md` (hunts the D1–D7 and
+> cross-cutting sections for the same reshape-propagation residue D0's audit
+> caught and PDR-089 names) is now complete; then (2) run the Codex reviewer
+> session brief named above; then (3) D1 (value, owner-ratified) ∥ D2 (typed raw
+> foundation), then D3→D7.** The detailed Commit-1/Commit-2 record below remains
+> accurate; the plan-finalisation banner further below remains the authority for
+> D1–D7 scope. (A small continuity SHA-stamp delta — this update — is the only
+> thing uncommitted on top of `ce9745c7`.)
+>
+> ---
+>
+> **Commit 1 (D0 code) is DONE and verified green in the WORKING TREE
+> (UNCOMMITTED):**
+>
+> + The ENTIRE `validate-external-data-files` validator is **DELETED** —
+>   owner-directed: the right tool to keep one external-data file logic-free is to
+>   LOOK at it, not an AST validator + test suite. This **SUPERSEDES** the plan's
+>   Ratified Decision 3 / D0 "expunge two rules, keep two" — that framing was
+>   itself the conservation reflex the whole plan exists to remedy. Deleted:
+>   `agent-tools/src/external-data/{external-data-contract, external-data-contract.unit.test, external-data-discovery, external-data-discovery.unit.test, external-data-logic}.ts`
+>   plus `agent-tools/src/bin/validate-external-data-files.ts`, the
+>   `validate-external-data-files` script (agent-tools `package.json`), and its
+>   segment in root `repo-validators:check`. **KEPT** (the real duplication-gate
+>   mechanism, untouched): the `.external-data.ts` suffix, the Sonar
+>   `cpd.exclusions` pattern, and the ESLint ignore glob.
+> + `strandById`, `Strand`, `StrandByStrandId`, `lastUpdated`, AND `EefToolkitData`
+>   relocated from `eef-toolkit.external-data.ts` into a NEW checked module
+>   `packages/sdks/graph-corpus-sdk/src/eef-strands/strand-lookup.ts`,
+>   barrel-exported via `eef-strands/index.ts`. The `.external-data.ts` file is now
+>   PURE DATA (`EEF_TOOLKIT_DATA as const` + provenance docstring only).
+> + Gates green: `repo-validators:check` **exit 0** (the RED gate is gone);
+>   graph-corpus-sdk type-check + **53/53** tests; agent-tools type-check +
+>   **722/722** tests; `knip` clean; lint + format clean. `pnpm check` (full) NOT
+>   run — mid-arc, Commit 2 docs pending; the heavy suites (build/e2e/widget/a11y)
+>   are unaffected by a validator deletion + type relocation.
+>
+> **⚠ TREE STATE: the owner DELETED the ADR-175 record file this session.** Its
+> inbound links (ADR-157 ×2, the 3 README index entries) are NOT yet cleaned —
+> that is Commit 2. **`pnpm check` will be RED on link integrity until Commit 2
+> lands.** This is known/expected, not a regression.
+>
+> **Commit 2 (D0 docs) is PENDING — next session, then `pnpm check` green + commit:**
+>
+> + **ADR-038** generalise in-record to any fully-known `as const` constant. Cite
+>   the **`unknown-is-type-destruction` RULE** as the primary linchpin (it is the
+>   artefact that forbids `unknown` over known data and names `as const` as
+>   non-destruction); ADR-034 is the ADR it operationalises — do NOT attribute
+>   those exact words to ADR-034 directly (verified this session). No Amendment Log
+>   exists on ADR-038; add a dated note (model ADR-153's convention).
+> + **ADR-157** surgical (status "Proposed (was Accepted; demoted 2026-04-30)"):
+>   Typing Discipline EEF bullet (l.115–119, BOTH sentences), Trade-offs sentence
+>   (l.281–283), and REMOVE both ADR-175 refs — the Related link (l.16–17) and the
+>   Status Amendment Note "binding" paragraph (l.42–45). Do NOT mark the whole ADR
+>   superseded.
+> + **ADR-173** Zod-loader designation in all FOUR locations (l.46–50 amendment
+>   summary, l.256–261 First-wave ingestion item, l.318–323 Consequences bullet,
+>   and the §Typing Discipline cross-ref inside l.256–261) → typed direct-load.
+> + **ADR-175 inbound cleanup**: README index entries
+>   (`architectural-decisions/README.md` l.226–229 + l.284–285;
+>   `docs/architecture/README.md` l.74–75) + add **WITHDRAWN** to the lifecycle
+>   vocabulary (`architectural-decisions/README.md` l.418–423, currently
+>   Proposed/Accepted/Superseded/Deprecated). The ADR file is ALREADY deleted.
+> + **`docs/governance/sonar-disposition-policy.md`** lines **357** and **450** —
+>   drop the "MUST export its data typed `unknown`" clause AND the "enforced by the
+>   `validate-external-data-files` repo-validator" clause; the convention is now
+>   verified by review/inspection (no validator, no unknown requirement).
+> + **Estate decontamination ledger** (EEF plans + non-plan docs only). Grounded
+>   facts from this session's sweep: `gate-1a/1b` = **69 hits / 22 files**, ALL in
+>   delete-bound CODE (covered by D2/D5/D6, not corrected individually); the LIVE
+>   non-plan-doc hits needing correction are the ADR-175 inbound refs above + this
+>   thread record's banner + repo-continuity's quarantined-rebuild pointers + the
+>   `eef/README.md` + `eef/reference/conservation-map.md`. NON-EEF plans
+>   (`graph-mvp-arc` etc.) are OUT of scope → `graph-estate-consolidation.plan.md`.
+>   History/archive/comms/napkin = `history-retained`, NOT touched.
+>
+> **SESSION META-LESSON (curated — the reason this session was slow):** the
+> conservation reflex recurred ~5× DURING EXECUTION (not just planning): I
+> re-litigated the owner-deleted ADR-175; framed "zero importers" of the
+> `strandById`/`StrandByStrandId` EXEMPLARS as a finding (they are the worked
+> demonstration of the derive-from-`as const` doctrine — no consumers is by
+> design); TDD-ed a validator that should not exist; framed the validator deletion
+> as "superseding the approved plan" when deleting it was always the intent; and
+> left `EefToolkitData` fossilised in the data file. Root: **in remediation the
+> default verb is DELETE/REPLACE the mistaken status quo — and even a ratified plan
+> clause (Decision 3) can carry the reflex.** The cure is an execution-time
+> default-flip, NOT another `distilled.md` entry (the lesson already lives in
+> `feedback_existence_is_not_correctness_default_replace` + the escape-hatch
+> screen). Captured in napkin + an experience file this session.
+>
+> ---
+>
+> **CURRENT TRUTH — PLAN FINALISATION BANNER (2026-05-30; planning complete, D0 now
+> executing per the block above). Everything below this banner is SUPERSEDED
+> HISTORY — do not resume it (including the 2026-05-29 S1–S5 banner).**
+>
+> **PM UPDATE (Evergreen Bending Thicket / `d4da14`).** The plan was reviewed (an
+> 11-agent readiness workflow), then **finalised** under owner direction: it is
+> decision-complete + validated (frontmatter parses, markdownlint clean), scoped to
+> the EEF work. The two broken-concept design docs
+> (`graph-tooling-rebuild-foundation-2026-05-28.md`, `graph-tooling-rebuild.plan.md`)
+> were **QUARANTINED** to `archive/` and every live link severed estate-wide. The
+> wider graph consolidation/decontamination/rewriting — gate-1a/1b everywhere, the
+> `graph-mvp-arc`/`graph-portfolio-index`/`graph-combinatorial-arc` disposition — is
+> nominated to **`graph-estate-consolidation.plan.md`** (the master plan). This
+> session's substantive work is **committed at `2e8d5455`** (the owner ran the
+> `--no-verify` commit). The session-close continuity writes (this banner, the session
+> entry below, repo-continuity, napkin, experience) are staged on top, uncommitted.
+> `pnpm check` skipped by owner direction; it is RED only on the pre-existing
+> `data-export-must-be-unknown` validator — the exact gate D0 greens.
+>
+> The finishing plan `eef-graph-tool-completion.plan.md` was **restructured again
+> across 2026-05-30** (begun by Misty Washing Lagoon, deepened by Igneous Flaring
+> Spark under a full owner-metacognition session). It is now an **impact-led,
+> value-first D0–D7 plan**, **decision-complete**, with remaining exploration named
+> as explicit steps (D1 value, D3 MCP, D4 graph). The S1–S5 framing is superseded.
+>
+> **The plan now opens with a Remediation Context section.** This is remediation
+> for compounded mistakes-on-mistakes: one root error — external-origin data ≡
+> unknown-shape data — is repeated across the corpus typing, a Zod strand-schema, a
+> Zod freshness loader, the `validate-external-data-files` validator, and ADRs
+> 157/173/175/032/003. The dominant risk is **drift** into re-stating the mistake;
+> the default move on every inherited shape is to **replace it, never soften/preserve/
+> hold-open**.
+>
+> **Owner-ratified decisions baked into the plan:**
+>
+> 1. **Axis = KNOWN vs UNKNOWN, not external vs internal.** Known data is derived
+>    from; unknown-*structure* data is narrowed at its boundary. A clarification, not
+>    a contest.
+> 2. **No Zod anywhere in the EEF work EXCEPT the single MCP tool output schema**
+>    (a Zod-4 declaration derived directly from the fixed EEF data; the installed
+>    SDK accepts only Zod for `outputSchema` and validates `structuredContent`
+>    against it). Tool input is predicate-narrowed, no Zod. Remove strand-schema,
+>    school-context Zod + drift-guard, loader `safeParse`, MCP
+>    tool-definition/validation/citation-shape Zod.
+> 3. **Expunge the validator's `data-export-must-be-unknown` + `no-unknown-data-export`
+>    rules entirely** (not soften). Keep `logic-export-forbidden` + provenance. Exactly
+>    one `.external-data.ts` file → zero blast radius.
+> 4. **Node type CLOSED**: `EefStrand = (typeof EEF_TOOLKIT_DATA.strands)[number]`; the
+>    only unknown is the key, narrowed by `isValidStrandKey`; no hand-normalized
+>    interface (the `z.infer<EefStrandSchema>` one is removed).
+> 5. **graph-core is input to be RESHAPED, not a fixed foundation.** Its 7-op stubbed
+>    `GraphView` (2 live — manifest/subgraph; 5 `NotImplementedYet`) is premature
+>    generalization; reshape (kept domain-generic) to the concrete ops the MCP
+>    surface consumes — after verifying graph-ingest/graph-project consumer impact
+>    (shared RDF substrate stays; the threads adapter is an empty stub → blast
+>    radius zero).
+> 6. **Budget cap removed unconditionally** (list-era remnant; subgraph scope is the
+>    bound).
+> 7. **ADR-038 generalised, not duplicated** — it already is the compile-time
+>    umbrella; extend it to any fully-known `as const` constant (grounded in the
+>    `unknown-is-type-destruction` rule + ADR-034).
+> 8. **ADR-175 WITHDRAWN** (added 2026-05-30 PM). It was a little-used
+>    plan-promotion safeguard, mis-implemented as a freshness *gate* in code:
+>    tighten-then-withdraw the ADR and delete the freshness apparatus + all refs.
+> 9. **Estate decontamination is a deliverable** (added 2026-05-30 PM). The
+>    discarded positions (`data-export-must-be-unknown`, `gate-1a`/`gate-1b`,
+>    freshness/ADR-175, Zod-over-corpus, the response cap) are written across ADRs,
+>    plans, and code comments; D0 sweeps + corrects/deletes every LIVE reference.
+>
+> **The `repo-validators` gate is RED right now** (3 violations on
+> `eef-toolkit.external-data.ts`): 2× `data-export-must-be-unknown` (the erroneous
+> rule → expunge in D0) + 1× `logic-export-forbidden` (`strandById` → relocate in D2).
+> **D0 greens it and is the FIRST execution step.** Never satisfy by retyping the
+> corpus `unknown`.
+>
+> **Read:** `.agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md`
+> — the LIVE plan and the **ONLY** EEF plan (D0–D7, decision-complete; Remediation
+> Context + Ratified Decisions at the top). The old `graph-tooling-rebuild*` design
+> docs were **quarantined** to `archive/` (2026-05-30) — symptoms of the superseded
+> broken concept; do not resume, cite, or build on them.
+>
+> **Next session = execute D0** (doctrine ADRs: generalise 038, correct 157/173
+> in-record, WITHDRAW 175, ground 153/028 + `unknown-is-type-destruction`/034, note
+> 032/003; EXPUNGE the two validator rules + all references; run the estate
+> decontamination sweep → greens the gate), then **D1 (value, owner-ratified) ∥ D2
+> (typed foundation)**, then D3→D7. Readiness reviewers (`assumptions-expert`, `mcp-expert`, `type-expert`, +
+> an architecture reviewer for the graph-core reshape) before execution moves past
+> D4.
+>
+> Two generalised cross-session lessons captured this session (platform memory +
+> napkin): **existence-is-not-correctness / default-replace-in-remediation** and
+> **ground-convenient-claims**.
+
+## Session 2026-05-30 (PM, cont.) — D0 execution begun: validator DELETED + exemplars relocated (Opalescent Transiting Prism / `73491c`)
+
+**Execution session (owner-directed; D0 of the EEF plan).** Took D0 from
+plan-approved to **Commit 1 done + verified green in the working tree** (full
+state in the EXECUTION UPDATE banner at the top). Headline: the entire
+`validate-external-data-files` validator DELETED (owner: "the right tool to not
+export logic from external data files is to look at them"); the
+`strandById`/`Strand`/`StrandByStrandId`/`lastUpdated`/`EefToolkitData` exemplars
+relocated to a checked `strand-lookup.ts`; `.external-data.ts` now pure data;
+`repo-validators:check` exit 0; both touched packages' type-check + tests green;
+knip/lint/format clean. Commit 2 (ADR/doc decontamination) pending; the owner
+deleted the ADR-175 record (inbound links dangling until Commit 2). No commit, no
+claim (solo, empty registry). `pnpm check` not run (mid-arc; compaction prep).
+
+**Process (owner-caught ~5×, the session's primary artefact):** the conservation
+reflex recurred throughout EXECUTION — re-litigating the owner-deleted ADR-175,
+framing the exemplars' zero consumers as a finding, TDD-ing a doomed validator,
+framing a planned deletion as a deviation, fossilising `EefToolkitData`. Root:
+in remediation the default verb is DELETE/REPLACE; even a ratified plan clause
+can carry the reflex. Curated to napkin + experience file.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Opalescent Transiting Prism` | `claude` | `claude-opus-4-8` | `73491c` | `eef-d0-execution-validator-deletion-relocation-decontamination-and-intent-audit` | 2026-05-30 | 2026-05-31 |
+
+## Session 2026-05-30 (PM) — readiness review → plan finalisation + estate decontamination (Evergreen Bending Thicket / `d4da14`)
+
+**Planning/docs session (owner-directed; zero product code).** Opened to review
+`eef-graph-tool-completion.plan.md` via an 11-agent readiness workflow (2 ground-truth
+verifiers + 9 specialist/drift/starting-statement reviewers), contamination-reframed
+after the owner's note that ADRs/docs may themselves be wrong. Synthesised + grounded
+the findings, then applied them plus owner directives:
+
++ ADR-175 tightened-then-WITHDRAWN; freshness apparatus + all refs removed. Zod ONLY
+  for the single MCP tool output schema (Zod-4, derived from the fixed EEF data);
+  input predicate-narrowed. `data-export-must-be-unknown` named the core defect;
+  deleted with all references. GraphView corrected 6→7 ops. Escape hatches removed.
+  EEF-scoped estate-decontamination deliverable + ledger added.
++ **Quarantined** the 2 design docs to `archive/` (banners + status flipped); severed
+  EVERY live link across ~8 files (plans, READMEs, memory, research); audited + fixed
+  `extending-graph-support-tooling.plan.md`.
++ **Nominated `graph-estate-consolidation.plan.md`** as the master consolidation/
+  decontamination/rewriting plan for ALL graph materials (added the structural
+  gate-based plans — `graph-mvp-arc` et al. — to its disposition map; named the
+  corrected doctrine as the rewrite standard).
+
+**Process (mine, owner-caught — echoing Igneous's conservation reflex one layer up):**
+I kept trying to LIMIT/CONSERVE while the owner kept EXPANDING — (1) argued to KEEP
+`checkFreshness` off a STALE `gate-1b` comment in `freshness.ts` (gate-1b removed
+sessions ago; I took a dead comment as a live obligation); (2) under-reported the link
+surface because my first sweep piped through `rg -v "current/graph-tooling-rebuild"`,
+silently hiding the hard-links (the exact target class); (3) drew an artificial
+EEF/graph scope boundary, owner-corrected. Same frame-capture as Igneous, now in
+verification + scoping. Captured to napkin + distilled.
+
+**State:** plan finalised + validated; substantive work **committed at `2e8d5455`**;
+session-close continuity staged on top (uncommitted); `pnpm check` skipped by owner
+(RED only on the pre-existing validator D0 greens). No claim opened (solo; bootstrap).
+Next session = execute D0.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Evergreen Bending Thicket` | `claude` | `claude-opus-4-8` | `d4da14` | `eef-readiness-review-plan-finalisation-estate-decontamination` | 2026-05-30 | 2026-05-30 |
+
+## Session 2026-05-30 (cont.) — impact-led D0–D7 restructure under full owner metacognition (Igneous Flaring Spark / `6e055a`)
+
+**Planning-only session (owner-directed; zero product code).** Opened to "read +
+reflect on `eef-graph-tool-completion.plan.md`". Inherited the day's earlier
+impact-led restructure (Misty Washing Lagoon) and deepened it through several owner
+correction passes into the current **D0–D7, decision-complete** plan. The seven
+ratified decisions are in the banner above and in the plan's Ratified Decisions
+section.
+
+**Process arc (mine, owner-caught — the session's central lesson): a
+conservation reflex fired four times** — I kept reaching for the smallest edit that
+preserved a wrong inherited shape (softening the validator rule instead of deleting
+it; preserving a Zod role in a system with no unknown-shape data; treating the
+committed `graph-core` interface as fixed; holding the list-era cap as an open
+question). Root: **existence/commitment is zero evidence of correctness; in
+remediation the default verb is REPLACE.** Also caught grounding two convenient ADR
+claims (032 over-claim, 157 "supersede in spirit") without verifying them, one step
+after grounding ADR-173 correctly — discipline drops where a claim fits the thesis.
+Both captured to platform memory + napkin + distilled.
+
+**State:** plan rewritten + 2 memory entries; no commits, no claim opened (nothing
+to close). `repo-validators` gate RED (pre-existing external-data-validator
+conflation — the exact thing D0 fixes; surfaced to owner repeatedly; owner directed
+planning + compaction with it red). Readiness reviewers NOT dispatched (plan queued,
+not yet owner-moved to execution; the plan body changed materially this session, so
+the next owner-move toward execution should dispatch them).
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Igneous Flaring Spark` | `claude` | `claude-opus-4-8` | `6e055a` | `eef-impact-led-D0-D7-restructure-under-metacognition` | 2026-05-30 | 2026-05-30 |
+
+---
+
+> **SUPERSEDED 2026-05-30 (was CURRENT TRUTH at 2026-05-29). The S1–S5 framing
+> below is replaced by the 2026-05-30 D0–D7 restructure in the banner above — read
+> it for history only. Everything below this banner is SUPERSEDED HISTORY.**
 >
 > The EEF explore tool and the gate-1a / gate-1b split were diagnosed as the
 > **wrong foundation** (list-thinking in a graph domain; a query surface that
@@ -22,28 +963,213 @@
 >
 > 1. `.agent/plans/sector-engagement/eef/current/graph-tooling-rebuild-foundation-2026-05-28.md`
 >    — the single source of truth (diagnosis, principles, intent; §10 now resolved).
-> 2. `.agent/plans/sector-engagement/eef/current/graph-tooling-rebuild.plan.md`
->    — the SPECIFIED plan (resolved design + self-correcting D0–D6 + DX).
+> 2. `.agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md`
+>    — the LIVE execution plan (S1–S5, rewritten 2026-05-29; supersedes the
+>    D1–D6 + DX spine of `graph-tooling-rebuild.plan.md`, which — with the
+>    foundation — remains the design record).
 >
-> **Next session = continue GOAL 2 / D0.** D0 merge-safety (PR #122) is now
-> mostly committed: Lanes A/C/D + plan + PDR README at `c67af4e6`; Lane C4
-> (the `validate-external-data-files` repo-validator) at `0d45cf07` + knip
-> follow-up `fc14463d`; **gateway review done + Lane C4 validator hardened at
-> `e76b9b7c`.** **Remaining — ALL OWNER-GATED: (1) push the 7 commits
-> [pre-authorised; held for wind-down]; (2) Lane B Sonar SAFE write [needs
-> EXPLICIT per-action owner auth — auto-mode-classifier-blocked]; (3) Vercel
-> deployed-env flag check; (4) merge PR #122.** See the **2026-05-29 (cont. II)
-> entry below** (Tempestuous Gliding Thermal) for exact state and the ordered
-> remaining steps. After D0: D1 contract ADR → D2 query
-> surface (un-stub the GraphView ops; selection → `enumerateNodes` filter) →
-> D3 thin delivery tool (full-node subgraph, `structuredContent`-only) →
-> D4 navigation round-trip → D5 skills + methodology graduation → D6 explore
-> value → DX estate reconciliation. Bounded — terminates at D6 (plan §"End
-> goal + bounded goals").
+> **GOAL 2 / D0 (merge-safety) is COMPLETE — PR #122 MERGED to `main` at
+> `29fc29e4` (2026-05-29, Quiet Hiding Hush).** The EEF graph foundation ships
+> **dark** behind `OAK_CURRICULUM_MCP_EEF_ENABLED` (proven OFF in every deployed
+> environment). All D0 acceptance conditions met: PR safe; flag co-gating proven;
+> flag OFF in preview & production; QG green. See the **2026-05-29 (cont. III)
+> entry below** (Quiet Hiding Hush) for the full close.
+>
+> **Next session = CLOSE THE EEF WORK** by executing the finishing plan
+> [`eef-graph-tool-completion.plan.md`](../../../plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md),
+> **REWRITTEN 2026-05-29 (Radiant Glimmering Aurora) under a deeper owner critique
+> pass** — S1 contract ADR → S2 corpus-is-its-own-typed-source (derive
+> `EefStrand`/vocab from the `as const` `EEF_TOOLKIT_DATA`; DELETE the Zod
+> `EefToolkitSchema`, `freshness.ts`, the drift-guard; collapse `loader.ts` to an
+> infallible adapter) → S3 extend `graph-core` `NodeFilter` to nested paths +
+> build ONLY the ops the tool consumes (`enumerateNodes`/`getNode`/`subgraph`) and
+> **DELETE every unbuilt op** from adapter AND interface → S4 thin tool (delete
+> `projection.ts`/`response-budget.ts`; `structuredContent`-only + derived
+> `outputSchema`) → S5 navigation round-trip.
+>
+> **Three deepened owner directives now baked into the plan (they SUPERSEDE the
+> foundation §7 "salvage the Zod loader + freshness" line — the foundation is
+> explicitly evolving, not frozen):**
+>
+> 1. **The fixed `as const` corpus IS its own authority** — derive types FROM it,
+>    NEVER validate it. No Zod, no freshness gate, no runtime/build integrity
+>    check. The only validation in the system is the inbound tool request (the one
+>    trust boundary). Validating fixed known data is strictness-DESTRUCTION (Zod
+>    widens the exact literals), not rigor.
+> 2. **No stub operations, anywhere** — an op is built or it does not exist. The
+>    5 `NotImplementedYet` ops are DELETED from the adapter AND the generic
+>    `GraphView` interface (which declares only built ops; it grows by real
+>    implementation when a second adapter needs more).
+> 3. **The generic `NodeFilter` is EXTENDED to nested paths** (symmetric with
+>    `NodeProjection`'s `DeepKeyPath`) — settled LTAE solution, serves the
+>    misconceptions / prerequisites / KG roadmap; not an option.
+>
+> The corpus is delivered as a context-scoped **subgraph** (too large to hand over
+> whole), full nodes within it, navigable frontier. `outputSchema` is the DERIVED
+> published output contract (data → type → schema), not a runtime gate. Supersedes
+> the rebuild D1–D6 + DX spine (foundation + resolved design preserved and cited).
+>
+> **Forward sequence (owner-directed 2026-05-29 — Pelagic Sailing Sextant, planning session):**
+>
+> 1. **Next session:** execute the finishing plan to close the EEF work, then merge.
+> 2. **After merge:** start a **team session** for (a) evaluating the tool **in
+>    context** — its usefulness against the other curriculum tools (the discovery
+>    lens) — and (b) the graph + EEF **plan-estate consolidation**, briefed by
+>    [`graph-estate-consolidation.plan.md`](../../../plans/connecting-oak-resources/knowledge-graph-integration/current/graph-estate-consolidation.plan.md)
+>    (which also authors the value-evaluation plan, superseding
+>    `eef-outcome-evaluation-infrastructure.plan.md`).
+>
+> The earlier "three items" next-session scope is **superseded** by this planning
+> session: the ADR is now S1 of the finishing plan; the tool-in-context
+> evaluation and the plan-estate consolidation move to the post-merge team
+> session. The estate is mostly superseded gate-1a/1b / five-increment framing —
+> the consolidation brief carries the verified disposition map so that session
+> starts grounded.
 >
 > Do NOT resume the increments B–H / gate-1a/1b framing below. Detailed prior
 > session history remains in git. The full clean rewrite of this surface is plan
 > deliverable DX (estate-wide reference reconciliation).
+
+## Session 2026-05-29 (cont. V) — finishing plan REWRITTEN under deeper owner critique (Radiant Glimmering Aurora / `c23958`)
+
+**Planning-only session (owner-directed; zero code — implementation explicitly
+held).** Opened to "read + reflect on the finishing plan, report, then stop"; the
+owner then delivered several escalating critique passes that deepened the
+foundation and exposed the plan (and my reasoning) as still carrying rejected
+shapes. Outcome: `eef-graph-tool-completion.plan.md` **rewritten** S1–S5; the
+superseded plan-mode scratch file removed.
+
+**What the critique surfaced (and corrected):**
+
++ **The corpus is now `as const`** (owner-set; `eef-toolkit.external-data.ts` ends
+  `} as const`, exports `EefToolkitData = typeof …`, `strands`, `strandIds`). This
+  OBSOLETES the entire Zod-parse / freshness / runtime-integrity ingest layer the
+  prior plan meant to *salvage*. Types DERIVE from the const; the corpus is its own
+  authority and is NEVER validated. The prior `unknown` typing + Zod re-parse was
+  strictness-DESTRUCTION (Zod widens the exact literals).
++ **No stubs, ever** (owner, absolute) — the 5 `NotImplementedYet` ops are DELETED
+  from the adapter AND the generic `GraphView` interface; build only what the tool
+  consumes (`enumerateNodes`/`getNode`/`subgraph`); the interface declares only
+  built ops and grows by real implementation.
++ **Extend the generic `NodeFilter` to nested paths** (settled LTAE solution, not
+  an option) — the multi-corpus roadmap (misconceptions, prerequisites, KGs)
+  justifies the generic query surface; EEF is its first reference adapter; subgraphs
+  are the real size mechanism (corpus too large to hand over whole).
++ **No freshness** — the 180-day gate is invented/incorrect/damaging; deleted.
+  Verify ADR-175 and retract if it mandates it; reconcile ADR-173 (Zod loader).
+
+**Process lesson (mine, owner-caught repeatedly): the verify-reflex regenerated in
+six costumes** (Zod parse → MCP `outputSchema`-as-defense → cross-host-encoding
+worry → `satisfies` contract → build-time integrity test) and I twice re-served
+SETTLED decisions as A/B choices ("invented optionality even when you claim
+otherwise"). Also over-corrected the opposite way — briefly called the generic
+layer + subgraphs "premature" by theorising instead of reading the foundation that
+already justifies them. Root rule taken: **fixed canonical data is its own
+authority — derive, never verify; read the primary artefact before reasoning about
+the machinery around it** (the answer — `as const` on the file's last line — was
+there the whole time while I circled it). Captured in napkin + distilled.
+
+**Next session = execute the rewritten plan** (S1 ADR first; readiness reviewers —
+assumptions-expert on the chain, type-expert at S3, mcp-expert at S4 — dispatch
+when the owner moves it toward execution). Working tree carries the owner's
+in-progress S2 edits (`eef-toolkit.external-data.ts` as-const, `loader.ts`) — the
+Zod removal is S2 work, not yet done.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Radiant Glimmering Aurora` | `claude` | `claude-opus-4-8` | `c23958` | `eef-finishing-plan-rewrite-under-deeper-critique` | 2026-05-29 | 2026-05-29 |
+
+## Session 2026-05-29 (cont. IV) — EEF completion + consolidation PLANS authored (Pelagic Sailing Sextant / `606a0e`)
+
+**Planning-only session (owner-directed; zero code).** Verified true state
+against code + git via a 6-agent workflow (not records): D0 done/merged (PR #122,
+origin/main `5405f576` v1.15.0; tool ships **dark** behind the flag); D1–D6 + DX
+**not started**; the tool is real but **F-shape** (`capForBudget` slice-to-12 +
+`projectExploreNode` field-mask + dual `content[]`); **5 of 7** GraphView ops are
+`NotImplementedYet` stubs; the substrate (graph-core, graph-corpus-sdk
+eef-strands, 30-strand/37-edge corpus, 53 tests) is built. Owner correction
+absorbed: the five live curriculum graph tools are the **naive first-pass** tools
+the EEF tool is the **pathfinder** to replace — the wider graph work is undefined
+until this first proper graph tool is finished.
+
+**Authored (working tree → committed this session):**
+
++ **Finishing plan** —
+  [`current/eef-graph-tool-completion.plan.md`](../../../plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md):
+  simple/linear/explicit, S1 contract ADR → S2 query surface → S3 thin formatter
+  → S4 navigation round-trip; supersedes the rebuild plan's D1–D6 + DX spine.
+  assumptions-expert reviewed (scope proportionate, supersession sound, linear
+  chain legitimate); D5 doctrine-graduation made an explicit out-of-scope
+  follow-on; S4 telemetry framed as completing the existing `recordSpan` seam.
++ **Consolidation brief** —
+  [`knowledge-graph-integration/current/graph-estate-consolidation.plan.md`](../../../plans/connecting-oak-resources/knowledge-graph-integration/current/graph-estate-consolidation.plan.md):
+  fresh-session plan carrying the verified estate map + disposition proposal +
+  the value-evaluation-plan authoring (t6, supersedes
+  `eef-outcome-evaluation-infrastructure.plan.md`). Review caught 3 unclassified
+  live-lane files (`oak-kg-threads-surface`, `oak-misconceptions-subgraph-mcp-surface`,
+  `open-education-knowledge-surfaces`) → added to t1 verify-first.
+
+**Forward:** next session executes the finishing plan to close EEF → merge →
+team session for tool-in-context evaluation + plan-estate consolidation (see the
+banner).
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Pelagic Sailing Sextant` | `claude` | `claude-opus-4-8` | `606a0e` | `eef-completion-and-consolidation-planning` | 2026-05-29 | 2026-05-29 |
+
+## Session 2026-05-29 (cont. III) — Goal 2 / D0 COMPLETE: PR #122 merged (Quiet Hiding Hush / `457189`)
+
+**D0 (merge-safety) is done. PR #122 (`feat/graph-foundations` → `main`) MERGED at
+`29fc29e4`.** Now on `feat/graph-tooling-tidyup`. This session took D0 from
+"committed but unpushed, all owner-gated" to merged, with a full functional proof
+the owner explicitly raised the bar to require.
+
+**Landed this session:**
+
++ **Pushed the D0 bundle** (was 8 ahead of origin — the 7 from cont. II plus the
+  handoff commit). Note: the branch had also advanced under the session with the
+  parallel routing-sunset commits (`d9225d5b`/`9317cdcd`/`d1525f55`), so the push
+  published 11 commits — benign (peer-committed, gate-green).
++ **Fixed the remaining Sonar `new_violation`** — `typescript:S4624` nested
+  template literal in `external-data-contract.ts:240` (the validator hardened last
+  session). Extracted a `lineSuffix` local; `90714ea5`. → `new_violations` 0.
++ **Lane B hotspot SAFE write** (owner-authorised, explicit per-action): hotspot
+  `AZ5rZYbMCv0_1Y1L8PE3` → REVIEWED/SAFE per `sonar-disposition-policy` §S4036.
+  → `new_security_hotspots_reviewed` 100% → **SonarCloud QG GREEN**.
++ **Full functional proof (owner-raised bar — necessary, not just QG-green):**
+  + *Local, real server* via `prod:harness` (exercises the real
+    `env→toBooleanFlag→runtimeConfig` path, not the injected-config e2e path),
+    **both flag states**: OFF → 35 tools / 4 prompts, EEF tool+prompt absent, base
+    tool executes; ON → 36 / 5, EEF present and the **EEF tool executes** (returns
+    a real `structuredContent` subgraph). Plus the e2e suite (133) green.
+  + *Preview deployment* (`oak-preview` authed MCP + unauth probes): EEF tool
+    absent from the authed tool set, `get-key-stages` executes (200); `/healthz`
+    200, OAuth PRM 200, unauth `/mcp` 401, landing page 35/4 no-EEF.
++ **Found + fixed a flag-gating leak the review surfaced** — the public landing
+  page (`/`) listed the EEF tool+prompt names+descriptions **even when the flag
+  was OFF** (`renderToolsSection`/`renderPromptsSection` iterated the full SDK set
+  unconditionally). Fixed via a single-source-of-truth `eef-surface.ts`
+  (`EEF_TOOL_NAME`/`EEF_PROMPT_NAME`) consumed by BOTH the MCP registration AND
+  the landing page, with `eefEnabled` threaded from `runtimeConfig`. `28bb7ace`;
+  in-cycle reviewed (code-expert APPROVED, type-expert SAFE → added `as const`);
+  verified live local + deployed preview (OFF 35/4 no-EEF, ON 36/5 EEF shown).
++ **Merge-readiness review** (5-lens workflow → adversarial verify →
+  release-readiness synthesis): **GO_WITH_CONDITIONS, zero confirmed blockers**;
+  flag-gating provably sealed on the MCP protocol surface. The landing-page leak
+  was its one real finding (now fixed); conditions all met.
++ **Deployed-flag confirmation**: owner confirmed `OAK_CURRICULUM_MCP_EEF_ENABLED`
+  must be literal `'true'` to enable and is **not set anywhere in Vercel** →
+  fail-safe OFF in preview + production.
+
+**Tooling note:** the Vercel MCP plugin has **no env-var tool** (`get_project`
+returns no env data) — re-auth does not add one; env-var confirmation is a
+dashboard/CLI action, owner-side when the CLI session lacks the team scope.
+
+**Next session = D1** (graph-tool contract ADR) per the banner + plan.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Quiet Hiding Hush` | `claude` | `claude-opus-4-8` | `457189` | `goal-2-d0-completion-functional-proof-landing-gate-fix-and-merge-handoff` | 2026-05-29 | 2026-05-29 |
 
 ## Session 2026-05-29 (cont. II) — Goal 2 / D0 gateway review + validator hardening landed (Tempestuous Gliding Thermal / `3e5d88`)
 
@@ -53,11 +1179,11 @@ Everything else remaining is owner-gated.
 
 **Landed this session:**
 
-- **Gateway review** (via a background workflow + sub-agents): type-expert
++ **Gateway review** (via a background workflow + sub-agents): type-expert
   **SOUND** on the Lane A S7763 generator fix; code-expert + security-expert on
   the Lane C4 `*.external-data.ts` validator surfaced a real logic-smuggling
   bypass class.
-- **Lane B (S4036) disposition VERIFIED SAFE** — matches `sonar-disposition-policy`
++ **Lane B (S4036) disposition VERIFIED SAFE** — matches `sonar-disposition-policy`
   §S4036 (all three criteria: agent-tooling site / project-required `git`
   toolchain / dev-CI trust boundary; the second `spawnSync` uses `process.execPath`
   and does not trigger S4036). Hotspot key `AZ5rZYbMCv0_1Y1L8PE3`; ready-to-write
@@ -65,16 +1191,16 @@ Everything else remaining is owner-gated.
   AND was **BLOCKED by the auto-mode classifier** ("yes to all" judged too vague
   for a specific external security-disposition write) — needs EXPLICIT per-action
   owner authorisation (or a settings permission rule).
-- **Lane E co-gating integration test PASS** (8/8: OFF→neither tool nor prompt,
++ **Lane E co-gating integration test PASS** (8/8: OFF→neither tool nor prompt,
   ON→both, base prompts always). Flag is fail-safe — `toBooleanFlag = value ===
   'true'`, so unset/malformed → OFF.
-- **SonarCloud QG** maps 1:1 to the three D0 lanes: `new_violations`=2 (Lane A
++ **SonarCloud QG** maps 1:1 to the three D0 lanes: `new_violations`=2 (Lane A
   S7763 — `fixtures.ts:155` + `index-documents.ts:10`; fixed → awaits push),
   `new_duplicated_lines_density`=3.9% (Lane C — cpd-excluded → awaits push),
   `new_security_hotspots_reviewed`=0% (Lane B — awaits the SAFE write). The PR's
   SonarCloud check is STALE (scans origin, 7 commits behind). The 4 Copilot
   comments are advisory (`COMMENTED`); each maps to a Lane D fix in the bundle.
-- **Commit `e76b9b7c`** — hardened the `*.external-data.ts` validator from
++ **Commit `e76b9b7c`** — hardened the `*.external-data.ts` validator from
   "no *exported* logic" to a **file-wide "no runtime logic anywhere"** invariant.
   The cpd-exclusion is file-level, so a namespace, a function nested in the data
   literal, a non-exported helper, a value re-export, an `import = require`, or an
@@ -205,7 +1331,7 @@ comments). **type-check + lint GREEN on the bundle.**
 
 DONE:
 
-- **Lane A — S7763 (generator-first).** Fixed both emitters:
++ **Lane A — S7763 (generator-first).** Fixed both emitters:
   `oak-sdk-codegen/code-generation/typegen/search/generate-search-index-docs.ts`
   (IMPORTS template: `AllSubjectSlug` → `export type … from`; kept the
   `ALL_SUBJECTS` value import) and `…/generate-search-fixtures.ts` (the four
@@ -213,12 +1339,12 @@ DONE:
   → `export type … from`; `*Response` types stay imported+re-exported, used
   in-file). Ran `pnpm sdk-codegen` → regenerated `generated/search/{fixtures,index-documents}.ts`
   verified. No test broken. Sonar confirms post-push.
-- **Lane D — 4 review comments.** `.gitignore` `_temp-*`→`_tmp-*`; PDR-085 README
++ **Lane D — 4 review comments.** `.gitignore` `_temp-*`→`_tmp-*`; PDR-085 README
   `Proposed`→`Accepted` (PDR header verified Accepted); `execution.ts:83` dropped
   `${error.kind}` from the user string (kind still logged at the call site);
   `prompt-schemas.ts` docstring softened (focus is a free-text MCP arg; the tool
   enforces EEF_PRIORITIES).
-- **Lane C (duplication) — reshaped to the EXTERNAL-DATA FILE CONVENTION
++ **Lane C (duplication) — reshaped to the EXTERNAL-DATA FILE CONVENTION
   (owner-decided).** The 3.9% dup is entirely in the EEF corpus data file, an
   EXTERNAL EEF snapshot — DRY would destroy source fidelity. Owner authorised a
   filename convention `*.external-data.ts` matched by a cpd-exclusion **pattern**
@@ -402,18 +1528,18 @@ the separate EEF worktree lane.
 
 **Landed**:
 
-- `544b2f4e` — `docs(eef): record value-pr coordination state`.
-- Captured value-PR coordination artefacts:
-  - `eef-value-pr-review-register.md`
-  - `eef-value-path-reflection-2026-05-27.md`
-  - `please-do-a-deep-mighty-peach.plan.md` corrections
-  - comms-method comparison report and README update
-  - EEF PR1 sidebar backup and collaboration-state claim closure.
++ `544b2f4e` — `docs(eef): record value-pr coordination state`.
++ Captured value-PR coordination artefacts:
+  + `eef-value-pr-review-register.md`
+  + `eef-value-path-reflection-2026-05-27.md`
+  + `please-do-a-deep-mighty-peach.plan.md` corrections
+  + comms-method comparison report and README update
+  + EEF PR1 sidebar backup and collaboration-state claim closure.
 
 **Evidence**:
 
-- Full pre-commit hook passed 90/90 turbo tasks for the commit.
-- Later same-session merge of `origin/main` landed at `3c136e9d`; focused
++ Full pre-commit hook passed 90/90 turbo tasks for the commit.
++ Later same-session merge of `origin/main` landed at `3c136e9d`; focused
   agent-tools type-check, lint, and tests stayed green after the merge.
 
 **Current state**: EEF remains the active product thread. The value-PR shape is
@@ -448,7 +1574,7 @@ direction per the explicit scope instruction.
 **Substantive output**: drift A–I plus the verified `_meta.attribution`
 canonical-field corrections applied across three plan files:
 
-- `.agent/plans/sector-engagement/eef/current/eef-first-feature.plan.md`
++ `.agent/plans/sector-engagement/eef/current/eef-first-feature.plan.md`
   — ff1 → completed (skip per 2026-05-23 owner direction); ff3 → completed
   with PR #114 SHA `77fcf746`; ff4 stays pending but content updated with
   partial-progress record (5 of 7 full + partial breakdown corrected from
@@ -462,10 +1588,10 @@ canonical-field corrections applied across three plan files:
   `175-external-evidence-corpus-freshness-governance.md` and
   `179-transport-agnostic-graph-substrate.md`); pre-existing substrate-leak
   in `types.ts:64-219` documented as Drift I with PR-1 healing pointer.
-- `.agent/plans/connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md`
++ `.agent/plans/connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md`
   — WS4.4 + WS4.5 status: pending → completed with PR #114 SHA in YAML
   comments (verified by directory listing of substrate workspaces).
-- `.agent/memory/operational/threads/eef.next-session.md` — this entry.
++ `.agent/memory/operational/threads/eef.next-session.md` — this entry.
 
 **Critical assessment performed before any plan-file edit**: five
 concurrent specialist verdicts (architecture-expert-betty + -fred +
@@ -473,20 +1599,20 @@ concurrent specialist verdicts (architecture-expert-betty + -fred +
 sketch. Key verdicts I verified by direct ADR + corpus-plan read before
 absorbing:
 
-- Fred CRITICAL #1 (loader belongs in `graph-corpus-sdk`) — CONFIRMED
++ Fred CRITICAL #1 (loader belongs in `graph-corpus-sdk`) — CONFIRMED
   against ADR-173:50.
-- Fred CRITICAL #2 (freshness vitest insufficient) — PARTIALLY CONFIRMED
++ Fred CRITICAL #2 (freshness vitest insufficient) — PARTIALLY CONFIRMED
   against ADR-175:40-46; the ADR mandates a **plan-promotion gate**, not
   per-PR/per-release CI. Scope softened to: `pnpm freshness:check`
   script + extended unit test + plan-promotion-checklist documentation.
   Scheduled CI workflow is optional excellence, not ADR-mandated.
-- Test-expert `_meta.attribution = EEF_ATTRIBUTION` correction — CONFIRMED
++ Test-expert `_meta.attribution = EEF_ATTRIBUTION` correction — CONFIRMED
   against corpus plan line 66. Propagated through every plan reference.
-- Assumptions 3-PR compression argument — REJECTED via direct
++ Assumptions 3-PR compression argument — REJECTED via direct
   architectural-identity test; 4-PR shape (PR-0 freshness + PR-1
   boundary discipline + PR-2 surface + PR-3 closeout) each maps to one
   identity. PR-0 hygiene argument defended on stale-plan risk grounds.
-- Wilma contract-coherence "single best change" — REVISED placement from
++ Wilma contract-coherence "single best change" — REVISED placement from
   PR-3 closeout to PR-2 cross-cutting reviewer (architecture-expert-betty)
   so mismatch surfaces while PR-2 is still amendable, not after merge.
 
@@ -496,9 +1622,9 @@ assessment is at
 
 **Outstanding state (next-session pickup)**:
 
-- **PR-0 landed and paused** — owner direction this session was PR-0
++ **PR-0 landed and paused** — owner direction this session was PR-0
   only; subsequent PRs trigger on explicit owner extension or new session.
-- **PR-1 (boundary discipline)** is the immediate next executable unit:
++ **PR-1 (boundary discipline)** is the immediate next executable unit:
   relocate corpus-substrate types from
   `oak-curriculum-sdk/src/mcp/evidence-corpus/types.ts:64-219` →
   `graph-corpus-sdk/src/eef-strands/types.ts`; add t2 Zod loader in
@@ -506,13 +1632,13 @@ assessment is at
   script + extend `freshness.unit.test.ts` with invalid-date error
   path + document plan-promotion checklist in
   `.agent/plans/sector-engagement/eef/README.md` §Promotion Rule.
-- **PR-2 (MCP feature surface)** sequenced after PR-1:
++ **PR-2 (MCP feature surface)** sequenced after PR-1:
   Agent A (t6a tool + tests) → Agent B (wire-up: barrel + register +
   ADR-123 amendment + t15 TSDoc) → Agent C (E2E shape conditions). Plus
   the architecture-expert-betty cross-cutting pre-merge contract-coherence
   check against Inc 3 preconditions per
   `.agent/plans/graph-combinatorial-arc.plan.md`.
-- **PR-3 (gate-1a closure ceremony)** sequenced after PR-2: ff5 plan
++ **PR-3 (gate-1a closure ceremony)** sequenced after PR-2: ff5 plan
   answers, ff6 acceptance bundle, plan status syncs, Inc-3 verification
   record transcribed.
 
@@ -567,18 +1693,18 @@ The team's reciprocal cross-agent post-execution reviewer dispatch (SVW ↔
 Sparking, SVW ↔ Foamy) produced **8 substantive defect catches** across this
 session (each absorbed cleanly):
 
-- SVW caught on Sparking cycles (3): t13a TSDoc-filename forward-reference
++ SVW caught on Sparking cycles (3): t13a TSDoc-filename forward-reference
   (`8f253280`); t1 `RankOptions.context` 3 plan-vs-implementation divergences
   — focus enum 4/6 members + missing `pp_percentage` + `max_results` mis-nested
   (`9425faa0`); WS2.2 jsonld-compatible literal-object quads partial
   C2-deviation (cleaner `dataset.has(quad(..., literal('Ada')))` vs
   manual-iteration predicate-value-only checks) (`361cae35`).
-- Sparking caught on SVW t10 cycle (3): registration tests were schema-audit
++ Sparking caught on SVW t10 cycle (3): registration tests were schema-audit
   not behavioural (removed; added dispatcher-route-correctness); KS5
   phase-resolution coverage gap (F9 edge-case test); `m.content.text` access
   unguarded (narrowing filter); SHA-pinned TSDoc reference rot risk (replaced
   with stable plan-file path). Absorbed at `11c05ced`.
-- Foamy ↔ SVW (2): Foamy's post-exec on SVW's t9 caught TSDoc line-range
++ Foamy ↔ SVW (2): Foamy's post-exec on SVW's t9 caught TSDoc line-range
   references that would rot (absorbed in-touch); SVW's reciprocal on Foamy's
   WS4.4 amendment caught WS4.5 `depends_on` array drift + stale `Last Updated`
   header (recorded as targeted follow-up).
@@ -627,7 +1753,7 @@ session (each absorbed cleanly):
 
 **Outstanding state (next-session pickup)**:
 
-- **Lunar WS4.1 — RESOLVED at `3241893d`**. Stormbound Spiralling Breeze
++ **Lunar WS4.1 — RESOLVED at `3241893d`**. Stormbound Spiralling Breeze
   landed Lunar's substance under owner-directed ownership-override at
   06:39Z 2026-05-23 with two pre-execution code-expert absorptions
   baked in (`src/index.ts` placeholder replaced with type re-exports of
@@ -637,15 +1763,15 @@ session (each absorbed cleanly):
   Lunar's `355d2ddb` (workspace) + `15465f06` (git:index/head) claims
   closed at the same commit. **WS4.5 (Foamy's natural next cycle —
   EefStrandsGraphView adapter) is now unblocked**.
-- **Sparking parser-integration follow-on** (claim `9c163e1c`,
++ **Sparking parser-integration follow-on** (claim `9c163e1c`,
   `ws2-source-map-parser-integration`) — intent broadcast at 01:08Z
   2026-05-23; never authored. Sparking acknowledged session ceiling
   after 15+ cycles. Clean pickup for any agent: per-quad source-location
   attachment refactor across both WS2.2 parsers (JSON-LD custom walker +
   n3.js StreamParser refactor), atomic landing per test-expert C4.
-- **Stormbound Floating Wing ff5 intent** at 06:14Z — stood down on owner
++ **Stormbound Floating Wing ff5 intent** at 06:14Z — stood down on owner
   cron cancellation immediately after broadcast; ff5 unclaimed.
-- **Critical-path beyond Round 2**: t2-zod-loader (needs WS4.1 substance
++ **Critical-path beyond Round 2**: t2-zod-loader (needs WS4.1 substance
   committed for `@oaknational/graph-corpus-sdk` import path stable);
   t6a-explore-tool (needs t2 + WS4.5); ff3 + ff4 + ff5 + ff6 delivery-
   contract items.
@@ -781,13 +1907,13 @@ under the ≥2-of-3 rule (`neighbours × misconception`,
 
 ## Thread Identity
 
-- **Thread**: `eef`
-- **Thread purpose**: Integrate the EEF Teaching and Learning Toolkit
++ **Thread**: `eef`
++ **Thread purpose**: Integrate the EEF Teaching and Learning Toolkit
   as an evidence corpus on Oak's MCP server, on top of a polymorphic
   graph-query foundation that also serves the misconception and
   prerequisite graphs. Five-increment delivery, parallel implementation
   across three graphs, user-value template enforced on every plan task.
-- **Branch**: `feat/eef_exploration` (originating session); execution
++ **Branch**: `feat/eef_exploration` (originating session); execution
   branch TBD when Increment 1 promotes to ACTIVE.
 
 ## Participating Agent Identities
@@ -830,33 +1956,33 @@ history at commit `e2796757`.
 
 Evidence:
 
-- [eef/README.md](../../../plans/sector-engagement/eef/README.md) — subthread orientation
-- [eef/current/eef-evidence-corpus.plan.md](../../../plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md) — Increment 2 executable plan
-- [eef/reference/conservation-map.md](../../../plans/sector-engagement/eef/reference/conservation-map.md) — semantic preservation map with verification log (§N)
-- [knowledge-graph-integration/current/graph-query-layer.plan.md](../../../plans/connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md) — Increment 1 foundation
-- [knowledge-graph-integration/future/cross-source-journeys.plan.md](../../../plans/connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md) — Increment 3 design
-- [napkin § 2026-04-30 EEF graph-and-corpus architecture session](../../active/napkin.md) — full session insight
-- [experience/2026-04-30-iridescent-graph-corpus-composition.md](../../../experience/2026-04-30-iridescent-graph-corpus-composition.md) — methodology + reflection
++ [eef/README.md](../../../plans/sector-engagement/eef/README.md) — subthread orientation
++ [eef/current/eef-evidence-corpus.plan.md](../../../plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md) — Increment 2 executable plan
++ [eef/reference/conservation-map.md](../../../plans/sector-engagement/eef/reference/conservation-map.md) — semantic preservation map with verification log (§N)
++ [knowledge-graph-integration/current/graph-query-layer.plan.md](../../../plans/connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md) — Increment 1 foundation
++ [knowledge-graph-integration/future/cross-source-journeys.plan.md](../../../plans/connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md) — Increment 3 design
++ [napkin § 2026-04-30 EEF graph-and-corpus architecture session](../../active/napkin.md) — full session insight
++ [experience/2026-04-30-iridescent-graph-corpus-composition.md](../../../experience/2026-04-30-iridescent-graph-corpus-composition.md) — methodology + reflection
 
 ---
 
 ## Current State
 
-- All three plan files (graph-query-layer, eef-evidence-corpus,
++ All three plan files (graph-query-layer, eef-evidence-corpus,
   cross-source-journeys) are CURRENT or FUTURE; **none is ACTIVE**.
-- `eef-evidence-corpus.plan.md` now carries the structural-only evaluation
++ `eef-evidence-corpus.plan.md` now carries the structural-only evaluation
   stance: T19 proves shape/citation/data/caveat preservation at the tool
   boundary; LLM/outcome evaluation is sequenced behind follow-on evaluation
   infrastructure.
-- Predecessor `eef-evidence-mcp-surface.plan.md` deleted from working
++ Predecessor `eef-evidence-mcp-surface.plan.md` deleted from working
   tree; recoverable via `git show e2796757:.agent/plans/exploring-open-education-resources/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md`.
-- The `originals/` snapshot directory was created during the
++ The `originals/` snapshot directory was created during the
   restructure for the verification pass and deleted afterwards (see
   conservation map § Recovery path).
-- 25 files in the working tree at session-handoff time; 0 commits
++ 25 files in the working tree at session-handoff time; 0 commits
   ahead of main; ready to commit in three sensible chunks (restructure,
   napkin, handoff).
-- Sector-engagement umbrella sees the new subthread:
++ Sector-engagement umbrella sees the new subthread:
   `sector-engagement/README.md` documents table includes `eef/` row;
   `external-knowledge-sources/README.md` retains education-skills + KG
   meta-strategy plans only.
@@ -896,13 +2022,13 @@ Foamy Snorkelling Jetty (planning specialist) raised three
 architectural routing questions during PDR-063..066 reviewer-verdict
 absorption that remain owner-class decisions:
 
-- Q1: portability migration surface — how do PDR-063, PDR-065,
++ Q1: portability migration surface — how do PDR-063, PDR-065,
   PDR-066 cure their embedded-repo-path defects without losing
   substantive grounding? (Cure-shape decision: abstract substrate
   language vs migrate detail to a non-Practice-Core surface.)
-- Q2: PDR-065 `[DOCTRINE]` tag mechanism — keep, defer, or move to
++ Q2: PDR-065 `[DOCTRINE]` tag mechanism — keep, defer, or move to
   PDR-066 Tranche 2 amendment?
-- Q3: PDR-065 `fast_bootstrap_eligible` frontmatter field — keep or
++ Q3: PDR-065 `fast_bootstrap_eligible` frontmatter field — keep or
   downgrade to deferred-to-first-instance?
 
 All three remain unanswered at session pause. PDR-064 cured cleanly
@@ -910,10 +2036,10 @@ in working tree (uncommitted); PDR-063/065/066 cures NOT STARTED.
 
 **Roster outcomes**:
 
-- Codex side fully cleared: Veiled Cloaking Threshold, Salty
++ Codex side fully cleared: Veiled Cloaking Threshold, Salty
   Charting Harbour, Midnight Veiling Threshold all rotated out via
   team-member closeout broadcasts.
-- Claude side held in pause: Blustery (coordinator), Foamy
++ Claude side held in pause: Blustery (coordinator), Foamy
   (planning), Flamebright (retired post-Cycle-1/6 prep), Ferny
   (continuing for consolidation pass under owner direction).
 
@@ -931,7 +2057,7 @@ tools ls --format json` BEFORE declaring Sonar unavailable.
 **Branch-state pickup pointer (2026-05-22 final shape)**: any
 session picking up this thread on `feat/mcp-graph-support-foundation`
 MUST first read
-[`feat-mcp-graph-support-foundation-meta.md`](../../../plans/feat-mcp-graph-support-foundation-meta.md)
+`feat-mcp-graph-support-foundation-meta.md`
 — the top-level meta plan naming every plan currently in force on
 the branch, the cross-plan dependency picture, the file-scope
 partition (work-structure, not team-structure), current state of
@@ -955,33 +2081,33 @@ direction at session-end.
 Files landed in working tree (staged at handoff, not committed by
 Mistbound):
 
-- `packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/citation-shape.ts`
++ `packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/citation-shape.ts`
   — `CitationSchema` + `CaveatsSchema` + `CitationsSchema` with
   Zod 4 two-arg `z.tuple([T], T).readonly()` producing readonly
   non-empty tuples via `z.infer`. `z.url()` on `eef_url`.
   Source-attribution field DROPPED per owner direction (Option A):
   envelope `_meta.attribution` carries `EEF_ATTRIBUTION` once per
   response.
-- `.../citation-shape.unit.test.ts` — 17 tests; `satisfies Citation`
++ `.../citation-shape.unit.test.ts` — 17 tests; `satisfies Citation`
   on fixtures; `safeParse` + `result.success`; `it.each` over
   literal `keyof Citation` array for parametrised missing-field
   rejection. No pure type-only tests (per `test-immediate-fails.md`
   item 19).
-- `.agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md`
++ `.agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md`
   — §Phase F amendment dropping `source` from `Citation`;
   frontmatter t12 todo flipped `status: pending` → `completed`.
 
 **Reviewer cadence absorbed**:
 
-- Pre-execution code-expert: CHANGES REQUESTED — surfaced the
++ Pre-execution code-expert: CHANGES REQUESTED — surfaced the
   source-field duplication risk against `EEF_ATTRIBUTION` constant;
   Zod 4 tuple/min(1) tension; `@ts-expect-error` convention. Owner
   resolved source-field → Option A (drop).
-- Pre-execution type-expert: `z.tuple([T], T).readonly()` Zod 4
++ Pre-execution type-expert: `z.tuple([T], T).readonly()` Zod 4
   two-arg form; `z.url()` not `z.string().url()`; SSoT via `z.infer`.
-- Pre-execution test-expert: no pure type-only tests; `satisfies` +
++ Pre-execution test-expert: no pure type-only tests; `satisfies` +
   `safeParse` + `it.each` over literal dataset.
-- Post-execution code-expert: CLEAR; all architectural commitments
++ Post-execution code-expert: CLEAR; all architectural commitments
   honoured.
 
 **Local gate state at handoff**: lint clean (after
@@ -1063,24 +2189,24 @@ documents describe work-structure, not operational/team approach
 The five-increment delivery sequence with explicit promotion gates:
 
 1. **Increment 1** (graph-query-layer) → ACTIVE when:
-   - Owner has approved architecture session conclusions ✓ (done this session).
-   - T1 (tracer use cases — 21 minimum, 7 ops × 3 graphs) signed off.
-   - Plan-body first-principles check applied to tracer shapes against
+   + Owner has approved architecture session conclusions ✓ (done this session).
+   + T1 (tracer use cases — 21 minimum, 7 ops × 3 graphs) signed off.
+   + Plan-body first-principles check applied to tracer shapes against
      actual data files.
-   - EEF corpus plan (Increment 2) ready for parallel start.
+   + EEF corpus plan (Increment 2) ready for parallel start.
 2. **Increment 2** (eef-evidence-corpus) → ACTIVE when:
-   - Increment 1 reached ACTIVE.
-   - EEF provenance/refresh check performed with EEF or Oak's EEF contact. If
+   + Increment 1 reached ACTIVE.
+   + EEF provenance/refresh check performed with EEF or Oak's EEF contact. If
      unresolved, promotion notes must explicitly record that the checked-in
      JSON remains the definitive implementation source pending clarification.
-   - Conservation map signed off by owner.
-   - Plan-body first-principles check applied to citation type, corpus
+   + Conservation map signed off by owner.
+   + Plan-body first-principles check applied to citation type, corpus
      operations, test shapes.
 3. **Increment 3** (cross-source-journeys) → CURRENT when:
-   - Increments 1 and 2 both reached ACTIVE.
-   - GraphView adapters exist for misconception and prerequisite (T3,
+   + Increments 1 and 2 both reached ACTIVE.
+   + GraphView adapters exist for misconception and prerequisite (T3,
      T4 of graph-query-layer plan).
-   - Real teacher question identifies that prompt-only orchestration
+   + Real teacher question identifies that prompt-only orchestration
      is insufficient (the load-bearing observation the journeys plan
      waits on).
 4. **Increment 4** (telemetry/freshness/provenance) — does not have a
@@ -1100,11 +2226,11 @@ real interface when it lands. See Increment 2 § Risks.
 **Status**: type-expert round complete. Verdict: AT-RISK with concrete
 remediations applied. Of 11 findings:
 
-- **Bucket (a) principles-decided** — applied: Result<T, E> on fallible
++ **Bucket (a) principles-decided** — applied: Result<T, E> on fallible
   GraphView ops; non-empty tuple `caveats: readonly [string, ...string[]]`;
   non-empty tuple `citations: readonly [Citation, ...Citation[]]`;
   `ComparisonDimension` literal union (no `string[]` widening).
-- **Bucket (b) reviewer-recommendation** — applied: DeepKeyPath
++ **Bucket (b) reviewer-recommendation** — applied: DeepKeyPath
   array-stop constraint named in T2; T7a compile-time smoke-test added;
   `ExplainOptions` clarified TNode-independent (sketched); `NodeFilter<TNode>`
   and `RankOptions<TNode>` sketched in plans to prevent implementor drift;
@@ -1112,7 +2238,7 @@ remediations applied. Of 11 findings:
   `meta.last_updated` and `meta.data_version` Zod precision tightened
   (`z.string().date()` and semver regex); journey citation propagation
   type note added to T4.
-- **Bucket (c) resolved by reading the data, not by escalation:**
++ **Bucket (c) resolved by reading the data, not by escalation:**
   `school_context_schema` in `eef-toolkit.json` is itself a JSON Schema
   document with a known closed shape — 9 named properties
   (phase, key_stage, school_type, pupil_premium, send_percentage,
@@ -1177,10 +2303,10 @@ Result after two review rounds: **17 of 21 tracer cells drafted**
 (7 operations × 3 graphs), **4 cells explicitly marked NO TRACER**
 under the ≥2-of-3 rule:
 
-- `neighbours × misconception` — no edges in current `MisconceptionGraph` data (round-1 finding).
-- `subgraph × misconception` — same root cause (round-1 finding).
-- `find_by_tag × prerequisite` — no tag taxonomy in source data (round-2 finding from assumptions-expert); the synthetic-compound `${subject}-${keyStage}` proxy initially drafted was the *invented optionality* anti-pattern. Agents wanting subject+keyStage filtering use `enumerate_nodes`.
-- `find_by_tag × misconception` — same root cause (round-2 finding).
++ `neighbours × misconception` — no edges in current `MisconceptionGraph` data (round-1 finding).
++ `subgraph × misconception` — same root cause (round-1 finding).
++ `find_by_tag × prerequisite` — no tag taxonomy in source data (round-2 finding from assumptions-expert); the synthetic-compound `${subject}-${keyStage}` proxy initially drafted was the *invented optionality* anti-pattern. Agents wanting subject+keyStage filtering use `enumerate_nodes`.
++ `find_by_tag × misconception` — same root cause (round-2 finding).
 
 Final MCP tool count: **17**, not 21. Per-graph: prerequisite 6 +
 misconception 4 + eef-strands 7. The four carve-outs are explicit in
@@ -1190,11 +2316,11 @@ contributor).
 
 Each of the 19 tracers carries:
 
-- A concrete teacher question.
-- An expected response shape grounded in the actual data structure.
-- A token budget at default projection.
-- A boundary check (drops to graph mechanics, not corpus scoring).
-- A verification footnote (`Verified against: <file> + <field path>`).
++ A concrete teacher question.
++ An expected response shape grounded in the actual data structure.
++ A token budget at default projection.
++ A boundary check (drops to graph mechanics, not corpus scoring).
++ A verification footnote (`Verified against: <file> + <field path>`).
 
 Inline location: `.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md § Phase 1 § T1 Tracer Matrix`.
 
@@ -1243,10 +2369,10 @@ in this session:
 Two additional plan-body corrections were applied while verifying
 the existing T3/T4 adapter descriptions against real data:
 
-- T3 PrerequisiteGraphView previously named edge types `prerequisite_of`,
++ T3 PrerequisiteGraphView previously named edge types `prerequisite_of`,
   `succeeds`. Real data: single edge type `prerequisiteFor` with a
   `source: 'thread' | 'priorKnowledge'` discriminator. Corrected.
-- T4 MisconceptionGraphView previously named edge types
++ T4 MisconceptionGraphView previously named edge types
   `related_misconception`, `addressed_by_lesson`. Real data: no edges
   at all. Corrected (with carve-outs).
 
@@ -1278,17 +2404,17 @@ Verified against `.agent/plans/sector-engagement/eef/current/eef-evidence-corpus
 Modifications to `.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md`
 this session, across two review rounds:
 
-- Added § Phase 1 § T1 Tracer Matrix subsection (17 tracers + 4 NO TRACER cells + 6 Phase B findings + matrix summary).
-- Extended `FieldPredicate<TFieldValue>` with the array-element `contains` arm (T2 spec) plus the "Semantic collision note" that names the string-vs-array structural identity for `{ contains }`.
-- Corrected T3 PrerequisiteGraphView edge-type description (`prerequisiteFor` only, with `source` discriminator); marked `find_by_tag` as not registered (no tag taxonomy in source data) — implements 6 of 7 operations.
-- Rewrote T4 MisconceptionGraphView description: 4-of-7 operations (no edges, no tag taxonomy), mints stable IDs (SHA-1-based; index-based forms ruled out).
-- Rewrote T5 EefStrandsGraphView description with concrete tag/edge counts, the `id → strand_id` rename note, the optionality of `related_strands` (absent on 13 of 30) and `related_guidance_reports` (absent on 23 of 30, present as `{title, url}` objects). Added a "Sparse-relations surface" subsection: `manifest()` and `summary()` expose `strands_without_relations: readonly string[]` to front-load the empty-edge knowledge.
-- Updated `manifest × eef-strands`, `neighbours × eef-strands`, and `subgraph × eef-strands` tracers to name the absent-field behaviour and the new manifest field.
-- Updated T6 description: 17 MCP tools (not 21), with the four carve-outs explicit.
-- Replaced Risk #5 ("tag-search semantics drift" mitigation) with a structural resolution: `find_by_tag` no longer ships for prerequisite or misconception, so the docstring-as-correction-of-surface-lie pattern is gone.
-- Updated Size Estimate table: 17 tools, ~1605 lines total.
-- Updated Exit Criteria § Shape conditions #1 to read "17 MCP tools".
-- **Reframed Exit Criteria § Outcome conditions** from a "ratio ≥50% in 4 weeks" gate (sampling-noise-dominated at expected launch volumes) to a composite "adoption evidence" gate with three branches (≥10 distinct sessions / ≥1 downstream consumer composing without special-casing / honest analysis).
++ Added § Phase 1 § T1 Tracer Matrix subsection (17 tracers + 4 NO TRACER cells + 6 Phase B findings + matrix summary).
++ Extended `FieldPredicate<TFieldValue>` with the array-element `contains` arm (T2 spec) plus the "Semantic collision note" that names the string-vs-array structural identity for `{ contains }`.
++ Corrected T3 PrerequisiteGraphView edge-type description (`prerequisiteFor` only, with `source` discriminator); marked `find_by_tag` as not registered (no tag taxonomy in source data) — implements 6 of 7 operations.
++ Rewrote T4 MisconceptionGraphView description: 4-of-7 operations (no edges, no tag taxonomy), mints stable IDs (SHA-1-based; index-based forms ruled out).
++ Rewrote T5 EefStrandsGraphView description with concrete tag/edge counts, the `id → strand_id` rename note, the optionality of `related_strands` (absent on 13 of 30) and `related_guidance_reports` (absent on 23 of 30, present as `{title, url}` objects). Added a "Sparse-relations surface" subsection: `manifest()` and `summary()` expose `strands_without_relations: readonly string[]` to front-load the empty-edge knowledge.
++ Updated `manifest × eef-strands`, `neighbours × eef-strands`, and `subgraph × eef-strands` tracers to name the absent-field behaviour and the new manifest field.
++ Updated T6 description: 17 MCP tools (not 21), with the four carve-outs explicit.
++ Replaced Risk #5 ("tag-search semantics drift" mitigation) with a structural resolution: `find_by_tag` no longer ships for prerequisite or misconception, so the docstring-as-correction-of-surface-lie pattern is gone.
++ Updated Size Estimate table: 17 tools, ~1605 lines total.
++ Updated Exit Criteria § Shape conditions #1 to read "17 MCP tools".
++ **Reframed Exit Criteria § Outcome conditions** from a "ratio ≥50% in 4 weeks" gate (sampling-noise-dominated at expected launch volumes) to a composite "adoption evidence" gate with three branches (≥10 distinct sessions / ≥1 downstream consumer composing without special-casing / honest analysis).
 
 `eef-evidence-corpus.plan.md` is unchanged this session (Phase C verified
 no drift). However, the round-2 findings have a forward-impact for
@@ -1303,12 +2429,12 @@ without specifying these field shapes.
 
 **Approve promotion of Increment 1 (`graph-query-layer.plan.md`) to ACTIVE?**
 
-- **YES** → the plan moves from `current/` to `active/`; the next
++ **YES** → the plan moves from `current/` to `active/`; the next
   execution session begins with the `pnpm sdk-codegen` round-trip
   (verifying the type designs translate to working SDK code).
-- **AMEND** → name the gap; the plan is updated and the packet is
++ **AMEND** → name the gap; the plan is updated and the packet is
   re-presented.
-- **NO** → name the blocker; the plan stays CURRENT and the blocker
++ **NO** → name the blocker; the plan stays CURRENT and the blocker
   becomes a new pre-promotion task.
 
 No menu of alternative shapes is offered; the doctrine is to apply
@@ -1327,12 +2453,12 @@ above).
 
 Brief the type-expert with:
 
-- Branch: `feat/eef_exploration` at HEAD.
-- Primary files: `graph-query-layer.plan.md` (NodeProjection recursive
++ Branch: `feat/eef_exploration` at HEAD.
++ Primary files: `graph-query-layer.plan.md` (NodeProjection recursive
   deep-path type with depth bound 4; the seven-operation interface),
   `eef-evidence-corpus.plan.md` (EvidenceCorpus wrapping a GraphView,
   Citation type as structural invariant).
-- Specific questions for the reviewer:
++ Specific questions for the reviewer:
   1. Does the recursive `DeepKeyPath<TNode, Depth extends number = 4>`
      shape produce useful inference at depth 4 for `EefStrand` (the
      deepest node type), or does it hit instantiation limits earlier?
@@ -1441,7 +2567,7 @@ for the full list with triggers and candidate homes. Items cover:
 
 ## Cross-Plan and Cross-Thread Links
 
-- **Parent (sector-engagement)**: [`sector-engagement.next-session.md`](sector-engagement.next-session.md)
-- **Parent (KG-integration coordinator)**: [`open-education-knowledge-surfaces.plan.md`](../../../plans/connecting-oak-resources/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md) — this subthread owns its WS-3 (now restructured into Increments 1+2+3).
-- **Authoritative ADR**: [ADR-157](../../../../docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md)
-- **Strategic brief**: [`evidence-integration-strategy.md`](../../../plans/sector-engagement/eef/future/evidence-integration-strategy.md) — R1–R8 source.
++ **Parent (sector-engagement)**: [`sector-engagement.next-session.md`](sector-engagement.next-session.md)
++ **Parent (KG-integration coordinator)**: [`open-education-knowledge-surfaces.plan.md`](../../../plans/connecting-oak-resources/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md) — this subthread owns its WS-3 (now restructured into Increments 1+2+3).
++ **Authoritative ADR**: [ADR-157](../../../../docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md)
++ **Strategic brief**: [`evidence-integration-strategy.md`](../../../plans/sector-engagement/eef/future/evidence-integration-strategy.md) — R1–R8 source.

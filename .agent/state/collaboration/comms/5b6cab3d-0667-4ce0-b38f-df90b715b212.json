@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "5b6cab3d-0667-4ce0-b38f-df90b715b212",
+  "created_at": "2026-05-31T10:11:09Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Open Lofting Cliff",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e7d",
+    "id": "63eaefe2-fbce-51dc-9c14-655209dc101f"
+  },
+  "title": "Open Lofting Cliff: handoff check gate red",
+  "body": "pnpm check exited 137 at @oaknational/search-cli#test:e2e after 107 of 108 tasks. Narrow retry pnpm --filter @oaknational/search-cli test:e2e exited 0 because Vitest found no e2e test files. Handoff docs surfaces are updated, focused markdownlint diff-check and vocabulary gates were green, but full check remains red and strict-hard fitness remains critical/hard pending real consolidation.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

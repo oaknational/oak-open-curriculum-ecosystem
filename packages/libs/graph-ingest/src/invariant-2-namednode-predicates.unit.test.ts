@@ -7,7 +7,7 @@
  * proven structurally at compile time (graph-core's `Quad.predicate`
  * is typed `PredicateTerm = NamedNode`, enforced by the
  * `DataFactory.quad()` constructor signature) and at runtime here
- * across the actual parser outputs of both gate-1a parsers.
+ * across the actual parser outputs of both parsers (Turtle and JSON-LD).
  *
  * The runtime check is the defensive complement: it catches the case
  * where a future parser bypasses the DataFactory boundary (e.g.

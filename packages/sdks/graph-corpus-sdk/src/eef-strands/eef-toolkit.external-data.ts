@@ -1,21 +1,37 @@
 /**
  * EEF Teaching and Learning Toolkit — repository-held canonical snapshot.
  *
- * The canonical corpus artefact for gate-1a (ADR-173 — the EEF data and its
- * Zod loader live in graph-corpus-sdk). Shipped as a typed module rather than
- * a raw .json so it survives the SDK build (`bundle: false`, ADR-010) without
- * a separate asset-copy step.
+ * The canonical corpus artefact (ADR-173 — the EEF data lives corpus-locally in
+ * graph-corpus-sdk). Shipped as a typed module rather than a raw .json so it
+ * survives the SDK build (`bundle: false`, ADR-010) without a separate
+ * asset-copy step.
  *
- * Typed `unknown` deliberately: this is external input and MUST be validated
- * through `EefToolkitSchema` (./strand-schema.ts) before use — never consumed
- * directly. See ./loader.ts for the validation + freshness boundary.
+ * Exported `as const`: this is known, fixed data carrying fully-precise
+ * literal types, so it is consumed directly with full type precision — the
+ * derived types and accessors in `./strand-lookup.ts` read it with no cast and
+ * no runtime parse.
+ *
+ * This `as const` constant is the type authority for the EEF corpus: downstream
+ * types are derived from it (`typeof` + indexed access), never re-established.
+ * Schema-first derivation (Zod / `z.infer`) is the discipline for the upstream
+ * OpenAPI surface, not for this fixed, fully-known corpus — here the data is the
+ * schema.
+ *
+ * Direction: `./loader.ts` currently still runs a Zod parse and a freshness gate
+ * over this constant. For a fixed, compile-time-known corpus that is redundant
+ * re-validation of information the type already carries, and that path is under
+ * active removal (see
+ * `.agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md`,
+ * exploratory). Do not add Zod parsing, freshness gating, `unknown`, or type
+ * assertions at this boundary.
  *
  * Provenance: the acquisition path is not yet confirmed in-repo (see
  * `meta.licence.attribution_note`); until EEF clarifies refresh mechanics this
- * repository copy is the definitive implementation source. The gate-1b refresh
- * script regenerates this module from a reviewed replacement.
+ * repository copy is the definitive implementation source. A reviewed
+ * replacement snapshot is copied into this module by hand when EEF clarifies
+ * the supply path.
  */
-export const EEF_TOOLKIT_RAW: unknown = {
+export const EEF_TOOLKIT_DATA = {
   meta: {
     schema_version: '0.1.0',
     data_version: '0.2.0',
@@ -1949,4 +1965,4 @@ export const EEF_TOOLKIT_RAW: unknown = {
       },
     },
   },
-};
+} as const;

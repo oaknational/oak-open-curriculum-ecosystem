@@ -1,539 +1,182 @@
 # Plans
 
-Strategic and tactical planning documents for the Oak Open Curriculum Ecosystem.
+Strategic and tactical planning documents for the Oak Open Curriculum
+Ecosystem.
 
-**High-Level Coordination**: [high-level-plan.md](high-level-plan.md)
-**Graph Portfolio Index**: [graph-portfolio-index.md](graph-portfolio-index.md) — single cross-collection index for every graph-related plan and artefact; coordinates the MVP and combinatorial arcs below
-**Graph MVP Arc**: [graph-mvp-arc.plan.md](graph-mvp-arc.plan.md) — three-slice substrate-and-surface spine across EEF strands, Oak ontology Threads, and Oak misconceptions
-**Graph Combinatorial Arc**: [graph-combinatorial-arc.plan.md](graph-combinatorial-arc.plan.md) — follow-on cross-corpus composition spine after the MVP arc
-**Milestones**: [milestones/](../milestones/) — per-milestone summaries (audience, value, gates)
-**Completed Plans**: [completed-plans.md](completed-plans.md)
-**Foundation Documents**: [.agent/directives/](../directives/)
+This is the root operational index for `.agent/plans/`. It answers:
+
+- where to start;
+- which collection owns a topic;
+- how lifecycle directories work;
+- how every plan stays reachable from the root.
+
+For the strategic overview, use [high-level-plan.md](high-level-plan.md).
+
+---
+
+## Start Here
+
+| Entry | Purpose |
+|---|---|
+| [high-level-plan.md](high-level-plan.md) | Strategic cross-collection overview |
+| [curriculum-mcp-path-to-ga/roadmap.md](curriculum-mcp-path-to-ga/roadmap.md) | MCP HTTP server M1 → M2 → M3 → GA coordination |
+| [discovery/README.md](discovery/README.md) | Agent/web discoverability of Oak machine surfaces |
+| [milestones/](../milestones/) | Per-milestone summaries: audience, value, gates |
+| [completed-plans.md](completed-plans.md) | Completed plan index |
+| [.agent/directives/](../directives/) | Foundation documents and canonical directives |
+| [templates/README.md](templates/README.md) | Current plan templates and reusable components |
 
 ---
 
 ## Plan Collections
 
 | Collection | Purpose | Status |
-|------------|---------|--------|
-| [semantic-search/](semantic-search/) | Elasticsearch search implementation | 🔄 Post-merge execution active; Milestone 2 blocker queued alongside independent search-quality streams |
-| [sdk-and-mcp-enhancements/](sdk-and-mcp-enhancements/) | MCP extensions, SDK pipeline evolution, concept preservation | 🔄 Active |
-| [architecture-and-infrastructure/](architecture-and-infrastructure/) | Cross-cutting architecture, system quality, observability | 📋 Planned |
-| [agentic-engineering-enhancements/](agentic-engineering-enhancements/) | **Broad practice + governance level.** How agents work, collaborate, plan, communicate, review, and learn; Practice texts, doctrine enforcement, specialist reviewer capabilities, hallucination/evidence guards, mutation testing, learning loops, governance concepts. Operates above any single workspace. | 🔄 Active + queued execution |
-| [agent-tooling/](agent-tooling/) | **Implementation level — the `agent-tools/` workspace specifically.** CLIs, schemas, validators, codegen, identity derivation, hooks, collaboration-state substrate, intent-to-commit queue, adapter generation. Plus a live [frictions register](agent-tooling/frictions-register.md). Distinct from `agentic-engineering-enhancements/` (which is broader and at the practice/governance level). | 🔄 Active + queued execution |
-| [security-and-privacy/](security-and-privacy/) | MCP security hardening, claim/evidence safeguards, and protocol/auth/tool governance baselines | 🔄 Active execution |
-| [compliance/](compliance/) | External policy compliance, directory listing requirements, regulatory alignment | 📋 Planned |
-| [developer-experience/](developer-experience/) | SDK publishing, generated docs, tooling | 🔄 Active + queued execution |
-| [sector-engagement/](sector-engagement/) | External data sources, upstream coordination, partner review threads, KG adoption support, and external-source intake | 📋 Reference |
-| [icebox/](icebox/) | Deferred/low priority | ⏸ Deferred |
-| [connecting-oak-resources/](connecting-oak-resources/) | Connecting Oak's own resources into this repo — internal Oak knowledge-graph work plus external Oak-repo references (ontology, Aila, moderation patterns) | 🔄 Active |
-| [exploring-open-education-resources/](exploring-open-education-resources/) | Third-party / non-Oak knowledge sources Oak applications consume — education skills, public curriculum APIs, future external KG ingestion | 📋 Planned |
-| [archive/](archive/) | Completed/superseded plans | ✅ Complete |
-| [templates/](templates/) | Plan templates | 📚 Reference |
+|---|---|---|
+| [curriculum-mcp-path-to-ga/](curriculum-mcp-path-to-ga/roadmap.md) | Thin strategic index for the Curriculum MCP HTTP server release arc; coordinates M2/M3/GA gates across collections and owns no execution | 🔄 Active strategic index |
+| [semantic-search/](semantic-search/) | Hybrid semantic search, ingestion, retrieval quality, search/graph adjacency, and search-facing SDK/MCP support | 🔄 Current queue |
+| [sdk-and-mcp-enhancements/](sdk-and-mcp-enhancements/) | MCP Apps, MCP protocol adoption, generated SDK/tool surfaces, and OpenAPI-to-MCP pipeline evolution | 🔄 Active + queued execution |
+| [observability/](observability/) | Five-axis observability under ADR-162: engineering, product, usability, accessibility, and security signals | 🔄 Active |
+| [architecture-and-infrastructure/](architecture-and-infrastructure/) | Cross-cutting architecture, workspace boundaries, quality gates, infrastructure, and system quality | 🔄 Active backlog |
+| [security-and-privacy/](security-and-privacy/) | Security controls, privacy posture, security claim evidence, Cloudflare MCP gate, and Web Bot Auth enforcement evidence | 🔄 Active execution |
+| [compliance/](compliance/) | External policy compliance, platform submission, directory listing requirements, and regulatory/documentation alignment | 📋 Planned / queued |
+| [developer-experience/](developer-experience/) | SDK publishing, generated docs, tooling ergonomics, strictness, and developer-facing quality | 🔄 Active + queued execution |
+| [connecting-oak-resources/](connecting-oak-resources/) | Oak-owned resource integration: ontology, graph surfaces, Aila/reference repos, and internal Oak KG work | 🔄 Active |
+| [exploring-open-education-resources/](exploring-open-education-resources/) | Third-party and non-Oak knowledge sources that Oak applications may consume | 📋 Planned |
+| [sector-engagement/](sector-engagement/) | External data sources, partner review, upstream coordination, EEF, and KG adoption support | 📋 Reference + active subthreads |
+| [discovery/](discovery/) | Public discoverability of Oak machine surfaces: API catalog, Agent Skills, MCP Server Cards, A2A, DNS-AID, WebMCP, Web Bot Auth, robots/sitemaps, and `.well-known` metadata | 🔄 Active + queued execution |
+| [agentic-engineering-enhancements/](agentic-engineering-enhancements/) | Practice/governance layer: how agents collaborate, plan, communicate, review, learn, and improve the repo | 🔄 Active + queued execution |
+| [agent-tooling/](agent-tooling/) | Implementation layer for the `agent-tools/` workspace, collaboration-state substrate, hooks, CLIs, schemas, and adapter generation | 🔄 Active + queued execution |
+| [user-experience/](user-experience/) | Persona-level outcome contracts and UX reference material | 📋 Legacy/reference |
+| [icebox/](icebox/) | Deferred/low-priority ideas with promotion triggers | ⏸ Deferred |
+| [archive/](archive/) | Historical completed/superseded plans | ✅ Reference |
+| [templates/](templates/) | Plan templates and reusable components | 📚 Reference |
 
 ---
 
-## Plan Collection Structure
+## Lifecycle Taxonomy
 
-Each plan collection follows a lifecycle-oriented pattern, even when some
-directories are omitted because the collection does not need them yet:
+Use the lifecycle directory as a status contract before reading a plan body.
 
-```text
-.agent/plans/{collection-name}/
-├── README.md             # Collection hub and read order
-├── roadmap.md            # Strategic phase sequence and adjacent work (optional)
-├── active/README.md      # Active execution index
-├── current/README.md     # Strategic source / queued-work index
-├── future/               # Planned adjacent capability work (optional)
-├── archive/              # Completed/superseded plans
-├── templates/            # Reusable plan scaffolds (optional)
-├── reference/            # Supporting reference material (optional)
-└── {plan-documents}      # Collection-owned plans outside lifecycle subdirs
-```
+| Directory | Meaning | Plan Form | Rule |
+|---|---|---|---|
+| `active/` | **NOW** - in-progress execution | Executable | Only work being executed now belongs here. Update `active/README.md` as the execution index. |
+| `current/` | **NEXT** - queued and ready, not started | Executable | Move to `active/` before execution starts. Update both indexes. |
+| `future/` | **LATER** - deferred strategic intent | Strategic | Promote to `current/` before writing executable tasks or claiming readiness. |
+| `archive/completed/` | **DONE** - completed, read-only history | Archived | Extract durable outcomes before archiving. Do not keep editing historical plans. |
 
-### Lifecycle Taxonomy
+`current/` is not "currently active". It means next-up executable work.
+`active/` is the only lifecycle lane for work in progress.
 
-Use the lifecycle directory as a status contract before reading the body of a
-plan:
+---
 
-| Directory | Meaning | Plan form | Promotion rule |
-|-----------|---------|-----------|----------------|
-| `active/` | **NOW** — in-progress execution | Executable plan | Only plans being worked now live here; update `active/README.md` as the execution index. |
-| `current/` | **NEXT** — queued and ready, not started | Executable plan | Move the plan to `active/` and update both indexes before work starts. |
-| `future/` | **LATER** — deferred strategic intent | Strategic plan | Promote to `current/` before writing execution tasks or treating it as ready-to-run. |
-| `archive/completed/` | **DONE** — completed, read-only history | Archived plan | Extract durable outcomes first, then archive and update references. |
+## Reachability Invariant
 
-`current/` is not a synonym for "currently active": it means next-up
-executable work. `active/` is the only lifecycle lane for work in flight.
-This distinction is the shared vocabulary used by `/jc-plan`, the plan
-templates, and collection READMEs.
-
-### Reachability Invariant — Leaf-To-Root
-
-Every plan file MUST be a leaf node reachable from this root README via the
-index chain:
+Every plan file must be reachable from this root README through an index chain:
 
 ```text
 .agent/plans/README.md
-  → {collection}/README.md
-    → {collection}/{active|current|future}/README.md
-      → {plan-file}.md
+  -> {collection}/README.md
+    -> {collection}/{active|current|future}/README.md
+      -> {plan-file}.md
 ```
 
-Equivalently: the plan portfolio is a tree, and every leaf has exactly one
-path back to this shared root. Cross-collection coordination spines
-(top-level `*-arc.plan.md` or `*-portfolio-index.md` files at
-`.agent/plans/`) are leaves of the root README directly, not of any single
-collection.
+The strategic cross-collection index `high-level-plan.md` is linked directly
+from this root; every other plan is reached through its owning collection's
+index. Graph work is reached through its collections —
+`connecting-oak-resources/knowledge-graph-integration/` for graph substrate and
+Oak graph surfaces, and `sector-engagement/eef/` for the EEF evidence tool — not
+through standalone root-level spine files.
 
-This is the **plan-portfolio reachability invariant**. It is the structural
-reason the lifecycle READMEs exist; an unindexed plan is invisible to plan
-triage, consolidation, and the broken/accelerator lens applied at
-priority-setting time. The
-[plan-index-reachability-remediation plan](agentic-engineering-enhancements/current/plan-index-reachability-remediation.plan.md)
-owns the validator that enforces this invariant at CI time.
+The invariant is structural, not cosmetic: unindexed plans are invisible to
+handoff, review, consolidation, and priority-setting.
+
+---
+
+## Cross-Collection Boundaries
+
+- **Execution detail belongs to collection plans.** `high-level-plan.md` and
+  `curriculum-mcp-path-to-ga/roadmap.md` coordinate, but do not replace owning
+  active/current plans.
+- **Discovery is about being found.** Runtime MCP tools, SDK generation, and
+  tool schemas belong in [sdk-and-mcp-enhancements/](sdk-and-mcp-enhancements/);
+  public web/agent discoverability belongs in [discovery/](discovery/).
+- **Security evidence has an owner.** Discovery may name Web Bot Auth as an
+  agent-readiness surface, but [security-and-privacy/](security-and-privacy/)
+  owns edge enforcement evidence and security-control claims.
+- **Agent practice and agent tooling are separate.**
+  [agentic-engineering-enhancements/](agentic-engineering-enhancements/) owns
+  doctrine and practice; [agent-tooling/](agent-tooling/) owns the
+  implementation substrate.
+- **Oak-owned and third-party knowledge sources are separate.**
+  [connecting-oak-resources/](connecting-oak-resources/) handles Oak resources;
+  [exploring-open-education-resources/](exploring-open-education-resources/)
+  handles third-party/non-Oak sources; EEF lives under
+  [sector-engagement/](sector-engagement/).
 
 ---
 
 ## Related Directories
 
 | Directory | Purpose | Relationship |
-|-----------|---------|--------------|
-| [.agent/research/](../research/) | Research proposals, analysis | Informs plans |
-| [.agent/evaluations/](../evaluations/) | Experiment results, guidance | Validates plans |
-| [.agent/prompts/](../prompts/) | Entry points for AI sessions | Implements plans |
-| [docs/architecture/architectural-decisions/](../../docs/architecture/architectural-decisions/) | ADRs | Documents decisions |
+|---|---|---|
+| [.agent/research/](../research/) | Research proposals, reports, source analysis | Informs plans; not executable by itself |
+| [.agent/evaluations/](../evaluations/) | Experiment results and evaluation guidance | Validates or motivates plans |
+| [.agent/prompts/](../prompts/) | AI-session entry points | May implement or resume plans |
+| [.agent/directives/](../directives/) | Canonical agent directives | Foundation rules for all work |
+| [docs/architecture/architectural-decisions/](../../docs/architecture/architectural-decisions/) | ADRs | Durable architecture decisions |
 
 ---
 
-## Naming Conventions
+## Maintenance Checklist
 
-### Plan Files
+When adding, promoting, or retiring plan work:
 
-| Pattern | Use For | Example |
-|---------|---------|---------|
-| `{nn}-{name}-plan.md` | Numbered plans in a sequence | `03-mcp-infrastructure-plan.md` |
-| `{part}-{stream}-{name}.md` | Part/Stream structured plans | `part-1-stream-a-relevance.md` |
-| `phase-{n}-{name}.md` | Sequential phases (legacy) | `phase-3-multi-index.md` |
-| `{name}-plan.md` | Standalone plans | `config-architecture-plan.md` |
+1. Add or update the collection README.
+2. Add or update the relevant lifecycle index: `active/README.md`,
+   `current/README.md`, or `future/README.md`.
+3. Update this root README if a collection, top-level spine, or strategic
+   routing rule changes.
+4. Update [high-level-plan.md](high-level-plan.md) only if the strategic
+   cross-collection picture changes.
+5. Keep the plan body and lifecycle lane aligned. A `future/` plan cannot be
+   treated as executable until promoted.
+6. Before archiving, extract settled durable documentation to ADRs, `/docs/`,
+   collection READMEs, or other permanent homes, then apply
+   [consolidate-docs](../skills/consolidate-docs/SKILL-CANONICAL.md).
 
-### Status Indicators
+---
+
+## Status Indicators
 
 | Status | Meaning |
-|--------|---------|
-| 📋 Planned | Not started |
+|---|---|
+| 📋 Planned | Not started or queued but not executing |
 | 🔬 In Progress | Actively being worked on |
 | 🔄 Active | Active collection or mixed active surface |
 | ⏸ Blocked/Deferred | Waiting on dependency or deprioritised |
 | ✅ Complete | Done |
-| ❌ Abandoned | Won't implement |
+| ❌ Abandoned | Will not implement |
 | 📚 Reference | Reference-only material or navigation surface |
 | ⛔ Superseded | Replaced by a newer canonical artefact |
 
 ---
 
-## Creating New Plan Collections
+## Creating Or Restructuring Collections
 
-When creating a new plan collection:
+Use [templates/README.md](templates/README.md) as the source of truth for plan
+templates and reusable components.
 
-1. **Create the directory**: `.agent/plans/{collection-name}/`
-2. **Create README.md**: Navigation hub (see template below)
-3. **Create requirements.md** (optional): Business context and success criteria
-4. **Follow the hierarchy guidelines** in the next section
-5. **Update this file**: Add to the Plan Collections table
-6. **Update high-level-plan.md**: Add to directory structure and active items
-
----
-
-## Plan Triage Protocol
-
-Use this when modernising an existing collection, consolidating stale plans, or
-preparing archive moves.
-
-### Triage Questions
-
-1. Is the work still relevant to current repository state?
-2. Is the plan stale (paths, ADR links, assumptions)?
-3. Is there overlap or duplication with another plan?
-4. Is the plan referenced by `high-level-plan.md` or other active documents?
-5. Does the plan contain settled documentation that must be extracted before
-   archiving?
-
-### Decision Taxonomy
-
-| Decision | Meaning | Typical Action |
-|----------|---------|----------------|
-| Keep | Current and actively useful | Retain in place; ensure status is accurate |
-| Rewrite | Core intent valid, structure stale | Replace with a modernised plan |
-| Consolidate | Duplicative with another plan | Merge content; keep one canonical plan |
-| Icebox | Useful but not currently prioritised | Move to `icebox/` with a clear trigger |
-| Archive | Complete and historical | Move to `archive/completed/` and update references |
-| Delete | Obsolete/superseded with no remaining value | Remove after reference checks |
-
-### Archive Prerequisite
-
-Before archiving, extract settled documentation to permanent locations (ADRs,
-`/docs/`, or workspace README files) and apply
-[`jc-consolidate-docs`](../../.cursor/commands/jc-consolidate-docs.md).
-
----
-
-# Plan Hierarchy: Part → Stream → Task
-
-This section defines the standard structure for organising complex, multi-workstream plans. Use this structure when work involves multiple parallel concerns that converge on a common milestone.
-
-## Core Concepts
-
-### Hierarchy Levels
+Minimum collection shape:
 
 ```text
-Part (Major Milestone)
-└── Stream (Parallel Workstream)
-    └── Task (Concrete Work Item)
+.agent/plans/{collection-name}/
+├── README.md
+├── active/README.md      # if active execution exists
+├── current/README.md     # if queued executable work exists
+├── future/README.md      # if strategic backlog exists
+└── archive/completed/    # once completed plans exist
 ```
 
-| Level | Purpose | Relationship | Naming |
-|-------|---------|--------------|--------|
-| **Part** | Major milestone or deliverable | Sequential gates | Part 1, Part 2, ... |
-| **Stream** | Area of concern or capability | Can run in parallel | Stream A, Stream B, ... |
-| **Task** | Concrete, actionable work item | Usually sequential within stream | A.1, A.2, B.1, ... |
-
-### Why This Structure?
-
-1. **Parallelism is explicit** — Streams A, B, C can progress independently
-2. **Sequencing is implicit** — Tasks within a stream are ordered (A.1 before A.2)
-3. **Dependencies are documented** — Cross-stream dependencies are called out
-4. **Navigation is simple** — Easy to answer "where are we?" and "what's next?"
-
----
-
-## Part: Major Milestone
-
-A **Part** represents a major milestone or deliverable that gates significant progress.
-
-### Characteristics
-
-- Has a clear "Definition of Done"
-- Enables subsequent Parts
-- May take weeks or months to complete
-- Contains multiple parallel Streams
-
-### Example
-
-```markdown
-═══════════════════════════════════════════════════════════════════
-Part 1: Search Excellence
-═══════════════════════════════════════════════════════════════════
-Done when: Hard Query MRR ≥0.50, Search SDK ready for MCP consumption
-```
-
-### When to Create a New Part
-
-- Work represents a major capability or milestone
-- There's a clear gate before the next phase of work
-- Multiple parallel workstreams will converge
-
----
-
-## Stream: Parallel Workstream
-
-A **Stream** represents an area of concern that can progress independently of other Streams within the same Part.
-
-### Characteristics
-
-- Has a distinct focus (e.g., "Relevance", "Infrastructure")
-- Can run in parallel with other Streams
-- Contains sequential Tasks
-- May have dependencies on Tasks in other Streams
-
-### Example
-
-```markdown
-Stream A: Relevance Optimization                    [Can start now]
-───────────────────────────────────────────────────────────────────
-  A.1  Baseline documentation                       B-001  📋
-  A.2  Semantic reranking experiment                E-001  📋
-  A.3  Linear retriever experiment                  E-003  📋
-  A.4  Implement winning approaches                        📋
-
-Stream B: Query Intelligence                        [Start after A.2]
-───────────────────────────────────────────────────────────────────
-  B.1  Query expansion experiment                   E-002  📋
-  B.2  Query classification design                  ADR-082 📋
-```
-
-### Stream Naming
-
-Use letters (A, B, C...) to reinforce that Streams are parallel, not sequential.
-
-| Good | Avoid |
-|------|-------|
-| Stream A: Relevance | Stream 1: Relevance |
-| Stream B: Infrastructure | Phase 1: Infrastructure |
-
-### Stream Annotations
-
-Add annotations to clarify parallelism and dependencies:
-
-| Annotation | Meaning |
-|------------|---------|
-| `[Can start now]` | No blockers, work can begin |
-| `[Start after X.n]` | Depends on specific task |
-| `[Blocked by Part N]` | Depends on prior Part completion |
-| `[Optional]` | Only if primary approach doesn't meet goals |
-
----
-
-## Task: Concrete Work Item
-
-A **Task** is a concrete, actionable work item that can be completed in a bounded time.
-
-### Characteristics
-
-- Atomic and specific
-- Has clear completion criteria
-- Takes hours to days (not weeks)
-- May reference experiments (E-XXX) or ADRs
-
-### Example
-
-```markdown
-  A.1  Baseline documentation                       B-001  📋
-  A.2  Semantic reranking experiment                E-001  🔬
-  A.3  Implement reranking                                 📋
-```
-
-### Task Numbering
-
-Use `{Stream}.{Number}` format:
-
-| Good | Avoid |
-|------|-------|
-| A.1, A.2, A.3 | 1, 2, 3 |
-| B.1, B.2 | Task 1, Task 2 |
-
-### Linking to Experiments and ADRs
-
-Tasks should reference related artefacts:
-
-```markdown
-  A.2  Semantic reranking experiment                E-001  📋
-       └── Details: .agent/evaluations/experiments/E-001-semantic-reranking.experiment.md
-
-  B.2  Query classification design                  ADR-082 📋
-       └── Requires: docs/architecture/architectural-decisions/082-*.md
-```
-
----
-
-## Dependencies
-
-Document cross-stream dependencies explicitly:
-
-```markdown
-Dependencies:
-  • B.1-B.4 depend on A.2 results (reranking may obviate expansion)
-  • Part 2 depends on C.1-C.3 (SDK must exist for MCP to consume)
-  • Stream C can start immediately (no blockers)
-```
-
-### Dependency Types
-
-| Type | Notation | Meaning |
-|------|----------|---------|
-| Task-to-Task | `B.1 depends on A.2` | Specific task blocks another |
-| Stream-to-Task | `Stream B starts after A.2` | Whole stream blocked |
-| Part-to-Part | `Part 2 depends on Part 1` | Major milestone gate |
-| Conditional | `Stream C if A doesn't meet target` | Fallback path |
-
----
-
-## Complete Example
-
-```markdown
-═══════════════════════════════════════════════════════════════════
-Part 1: Search Excellence
-═══════════════════════════════════════════════════════════════════
-Done when: Hard Query MRR ≥0.50, Search SDK ready for MCP consumption
-
-Stream A: Relevance Optimization                    [Can start now]
-───────────────────────────────────────────────────────────────────
-  A.1  Baseline documentation                       B-001  📋
-  A.2  Semantic reranking experiment                E-001  📋
-  A.3  Linear retriever experiment                  E-003  📋
-  A.4  Implement winning approaches                        📋
-  A.5  Validate MRR improvement                            📋
-
-Stream B: Query Intelligence                        [Start after A.2]
-───────────────────────────────────────────────────────────────────
-  B.1  Query expansion experiment                   E-002  📋
-  B.2  Phonetic enhancement experiment              E-004  📋
-  B.3  Query classification design                  ADR-082 📋
-  B.4  Implement classification routing                    📋
-
-Stream C: Infrastructure                            [Can start now]
-───────────────────────────────────────────────────────────────────
-  C.1  Extract Search SDK                                  📋
-  C.2  Create CLI workspace                                📋
-  C.3  Retire Next.js app                                  📋
-  C.4  Documentation                                       📋
-
-Dependencies:
-  • B.1-B.4 depend on A.2 results (reranking may obviate expansion)
-  • Part 2 depends on C.1-C.3 (SDK must exist for MCP to consume)
-  • Stream C can start immediately (no blockers)
-
-═══════════════════════════════════════════════════════════════════
-Part 2: MCP Natural Language Tools
-═══════════════════════════════════════════════════════════════════
-Done when: Agents can search Oak curriculum via natural language
-
-(Cross-reference: .agent/plans/sdk-and-mcp-enhancements/)
-
-Stream A: Structured Search Tools
-───────────────────────────────────────────────────────────────────
-  A.1  Lesson search tool
-  A.2  Unit search tool
-  A.3  Filter tools (KS4, subject, etc.)
-
-Stream B: Natural Language Pipeline
-───────────────────────────────────────────────────────────────────
-  B.1  NL→Search routing
-  B.2  Intent detection
-  B.3  Answer generation (RAG)
-
-Stream C: Agent Guidance
-───────────────────────────────────────────────────────────────────
-  C.1  Tool prompts
-  C.2  Workflow prompts
-  C.3  Error handling
-
-═══════════════════════════════════════════════════════════════════
-Part 3: Future Enhancements
-═══════════════════════════════════════════════════════════════════
-
-Stream A: Reference Indices
-Stream B: Entity Extraction
-Stream C: Learning to Rank
-Stream D: Full Curriculum Coverage
-```
-
----
-
-## When to Use This Structure
-
-### Good Fit
-
-- ✅ Multi-week projects with parallel concerns
-- ✅ Work that converges on a major milestone
-- ✅ Multiple team members or AI agents working simultaneously
-- ✅ Complex dependencies that need explicit documentation
-
-### Not Required
-
-- ❌ Simple, linear sequences of tasks
-- ❌ Single-stream work with no parallelism
-- ❌ Small plans (< 10 tasks)
-
-For simpler plans, use numbered tasks or the existing Phase structure.
-
----
-
-## Migration from Phase-Based Plans
-
-Existing phase-based plans (Phase 1, 2, 3...) don't need immediate migration. The Part → Stream → Task structure is recommended for:
-
-1. **New plan collections** — Use from the start
-2. **Major plan rewrites** — When restructuring significantly
-3. **Complex multi-stream work** — When parallelism emerges
-
-Phases can be mapped to the new structure:
-
-| Old Structure | New Structure |
-|---------------|---------------|
-| Phase 1-3 (complete) | Part 1, Stream A (complete) |
-| Phase 4 (SDK) | Part 1, Stream C |
-| Phase 5-7 (future) | Part 2 or Part 3 |
-
----
-
-## Templates
-
-### Part Template
-
-```markdown
-═══════════════════════════════════════════════════════════════════
-Part N: [Name]
-═══════════════════════════════════════════════════════════════════
-Done when: [Clear definition of done]
-
-[Streams...]
-
-Dependencies:
-  • [Cross-stream and cross-part dependencies]
-```
-
-### Stream Template
-
-```markdown
-Stream X: [Name]                                    [Annotation]
-───────────────────────────────────────────────────────────────────
-  X.1  [Task description]                           [Ref]  [Status]
-  X.2  [Task description]                           [Ref]  [Status]
-  X.3  [Task description]                                  [Status]
-```
-
-### README.md Template for New Collections
-
-```markdown
-# [Collection Name]
-
-[One-line description of what this collection covers.]
-
-**Status**: [Overall status]  
-**Last Updated**: [Date]
-
----
-
-## Overview
-
-[2-3 paragraphs explaining the purpose, scope, and current state.]
-
----
-
-## Structure
-
-[Part → Stream → Task breakdown, or simpler structure if appropriate.]
-
----
-
-## Entry Points
-
-| Document | Purpose |
-|----------|---------|
-| [README.md](README.md) | This file — navigation hub |
-| [requirements.md](requirements.md) | Business context, success criteria |
-| [Part 1 Plan](part-1-*.md) | Current active work |
-
----
-
-## Related Documents
-
-- [ADR-XXX](../../docs/architecture/architectural-decisions/XXX-*.md)
-- [Research](../research/*.md)
-- [Evaluations](../evaluations/*)
-
----
-
-## Quality Gates
-
-[Standard quality gate reminder, or collection-specific gates.]
-```
-
----
-
-## References
-
-- [ADR-081: Search Approach Evaluation Framework](../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md) — Experiment structure
-- [Evaluations Directory](../evaluations/) — Experiment documentation conventions
-- [high-level-plan.md](high-level-plan.md) — Strategic coordination
+When creating a collection, update both this file and
+[high-level-plan.md](high-level-plan.md) if the collection is strategically
+important enough to affect cross-collection orientation.

@@ -3,7 +3,6 @@ name: "Oak KG IRI Traverser"
 overview: "Future generic IRI traversal surface for exploratory graph use, deliberately sequenced after named user-value surfaces."
 status: future
 graph_layer: oak-graph-surface
-graph_portfolio_index: "../../../graph-portfolio-index.md"
 parent_plan: "../current/oak-kg-threads-surface.plan.md"
 isProject: false
 todos:

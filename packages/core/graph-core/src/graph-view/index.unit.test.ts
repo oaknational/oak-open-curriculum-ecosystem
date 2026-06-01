@@ -25,16 +25,14 @@
  * §Architectural amendment.
  */
 
-import { err, ok, type Result } from '@oaknational/result';
+import { ok, type Result } from '@oaknational/result';
 import { describe, expect, expectTypeOf, it } from 'vitest';
 
 import type {
   DeepKeyPath,
   GraphManifest,
-  GraphSummary,
   GraphView,
   NodeProjection,
-  NotImplementedYet,
   SubgraphResult,
 } from './index.js';
 
@@ -112,8 +110,8 @@ describe('NodeProjection accepts valid path lists', () => {
   });
 });
 
-describe('GraphView interface stub-implementation contract', () => {
-  it('admits a minimal stub object that satisfies the interface contract', () => {
+describe('GraphView interface implementation contract', () => {
+  it('admits a minimal object that satisfies the manifest + subgraph contract', () => {
     const stubManifest: GraphManifest = {
       nodeCount: 0,
       edgeTypes: [],
@@ -124,23 +122,17 @@ describe('GraphView interface stub-implementation contract', () => {
       sparseRelationsByNodeId: [],
     };
 
-    const stub: GraphView<FixtureNode, 'related'> = {
+    const view: GraphView<FixtureNode> = {
       manifest: () => stubManifest,
-      summary: (): Result<GraphSummary, NotImplementedYet> =>
-        err({ kind: 'NotImplementedYet', operation: 'summary' }),
-      getNode: () => err({ kind: 'NotImplementedYet', operation: 'getNode' }),
-      enumerateNodes: () => err({ kind: 'NotImplementedYet', operation: 'enumerateNodes' }),
-      neighbours: () => err({ kind: 'NotImplementedYet', operation: 'neighbours' }),
       subgraph: (): Result<SubgraphResult<FixtureNode>, never> => ok({ nodes: [], edges: [] }),
-      findByTag: () => err({ kind: 'NotImplementedYet', operation: 'findByTag' }),
     };
 
     // The structural assignment above is the load-bearing contract check —
     // TypeScript rejects the binding at declaration if any method signature
-    // is wrong. The runtime expectation below proves the stub-construction
-    // path executes without throw, satisfying the "do not test types alone"
+    // is wrong. The runtime expectation below proves the construction path
+    // executes without throw, satisfying the "do not test types alone"
     // testing-strategy rule.
-    expectTypeOf(stub).toExtend<GraphView<FixtureNode, 'related'>>();
-    expect(typeof stub.manifest).toBe('function');
+    expectTypeOf(view).toExtend<GraphView<FixtureNode>>();
+    expect(typeof view.manifest).toBe('function');
   });
 });

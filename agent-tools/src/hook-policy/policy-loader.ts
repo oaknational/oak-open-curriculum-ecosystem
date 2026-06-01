@@ -1,14 +1,20 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { pathToFileURL } from 'node:url';
 
 import { z } from 'zod';
 
 import { isJsonObject } from '../collaboration-state/json.js';
+import { resolveRepoRoot } from '../core/repo-root.js';
 
-import { ScopedContentBlockSchema, type ScopedContentBlock } from './types.js';
+import {
+  RawBlockedPatternSchema,
+  ScopedContentBlockSchema,
+  type RawBlockedPattern,
+  type ScopedContentBlock,
+} from './types.js';
 
-const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
+const REPO_ROOT = resolveRepoRoot(import.meta.url);
 
 /** URL of the canonical hook policy file, used by all loaders by default. */
 export const POLICY_URL = pathToFileURL(path.resolve(REPO_ROOT, '.agent/hooks/policy.json'));
@@ -87,4 +93,45 @@ export async function loadScopedContentBlocks(
   const policyText = await fs.readFile(policyUrl, 'utf8');
   const policy: unknown = JSON.parse(policyText);
   return parseScopedContentBlocks(policy);
+}
+
+/**
+ * Parse blocked Bash-command patterns from already-loaded policy data.
+ *
+ * Reads `hooks.preToolUse.blocked_patterns` (the Bash guard key, sibling to the
+ * content guard's `hooks.preToolUseContent.blocked_patterns`). Entries are
+ * returned in their raw policy-file form — bare strings stay strings — and are
+ * normalised to {@link BlockedPatternEntry} only at match time.
+ */
+export function parseBlockedPatternPolicy(policy: unknown): readonly RawBlockedPattern[] {
+  if (
+    !isJsonObject(policy) ||
+    !isJsonObject(policy.hooks) ||
+    !isJsonObject(policy.hooks.preToolUse)
+  ) {
+    throw new Error('The canonical hook policy did not contain hooks.preToolUse.blocked_patterns.');
+  }
+  const parsed = z
+    .array(RawBlockedPatternSchema)
+    .safeParse(policy.hooks.preToolUse.blocked_patterns);
+  if (!parsed.success) {
+    throw new Error(
+      'The canonical hook policy did not contain hooks.preToolUse.blocked_patterns.',
+      {
+        cause: parsed.error,
+      },
+    );
+  }
+  return parsed.data;
+}
+
+/**
+ * Load blocked Bash-command patterns from the canonical hook policy.
+ */
+export async function loadBlockedPatterns(
+  policyUrl: URL = POLICY_URL,
+): Promise<readonly RawBlockedPattern[]> {
+  const policyText = await fs.readFile(policyUrl, 'utf8');
+  const policy: unknown = JSON.parse(policyText);
+  return parseBlockedPatternPolicy(policy);
 }

@@ -1,46 +1,47 @@
 # EEF Teaching and Learning Toolkit
 
-> **2026-05-28 — single source of truth has moved.** The gate-1a/1b EEF plan
-> estate was diagnosed as the wrong foundation and is archived in
-> [`archive/`](archive/). Current work is the **graph-tooling rebuild**:
-> read [`current/graph-tooling-rebuild-foundation-2026-05-28.md`](current/graph-tooling-rebuild-foundation-2026-05-28.md)
-> (diagnosis + principles + intent) and
-> [`current/graph-tooling-rebuild.plan.md`](current/graph-tooling-rebuild.plan.md)
-> (the new plan). The Status line below is historical.
+> **2026-05-30 — one live plan.** The ONLY EEF plan is
+> [`current/eef-graph-tool-completion.plan.md`](current/eef-graph-tool-completion.plan.md)
+> (impact-led D0–D7, decision-complete, in execution). The earlier
+> `eef-evidence-corpus` / `eef-delivery-restructure` / `eef-first-feature`
+> list-era estate and the 2026-05-28 graph-tooling-rebuild design docs were
+> **quarantined** to [`archive/`](archive/) as superseded broken-concept work —
+> do not resume or cite them.
 
 Dedicated subthread for integrating the [Education Endowment Foundation
 Teaching and Learning Toolkit](https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit)
-as an **evidence corpus** (composition: graph foundation + ranking
-engine) on Oak's MCP server.
+as a typed **evidence graph** on Oak's MCP server.
 
-**Status**: Strategic brief landed; executable plan restructured 2026-04-30
-into corpus-and-graph shape (CURRENT lifecycle bucket, awaiting
-promotion to ACTIVE once foundation graph-query-layer plan reaches
-ACTIVE — see [Promotion Rule](#promotion-rule)).
-**Last Updated**: 2026-05-10
-**Originating session branch**: `feat/eef_exploration`
+**Status**: One decision-complete plan in execution
+([`current/eef-graph-tool-completion.plan.md`](current/eef-graph-tool-completion.plan.md),
+D0–D7). The EEF corpus substrate lives in `packages/sdks/graph-corpus-sdk`
+(`eef-strands`); the typed foundation, graph tool/resource surface, prompt,
+evidence-preservation obligations, and telemetry are sequenced in the live plan.
+**Originating session branch**: `feat/eef_exploration`.
 **Conservation evidence**: semantic preservation map at
-[`reference/conservation-map.md`](reference/conservation-map.md). The
-predecessor was preserved byte-identically in `originals/` during the
-restructure for a verification pass; after the verification confirmed
-no semantic loss, `originals/` was deleted. Pre-session predecessor
-state is permanently recoverable from git history (see conservation
-map § Recovery path).
+[`reference/conservation-map.md`](reference/conservation-map.md) — a historical
+record of the 2026-04-30 restructure, itself since superseded. Predecessor
+plans are recoverable from git history.
+
+**Authoring discipline**: when writing any document or code that claims something
+about the EEF corpus, follow the cite-or-tag rule at
+[`.agent/rules/eef-corpus-grounding.md`](../../../rules/eef-corpus-grounding.md)
+— every corpus claim cites an `EEF_TOOLKIT_DATA` source path or is tagged
+agent-side. It is a trigger-loaded rule (RULES_INDEX), loaded for EEF work.
 
 ---
 
 ## Why This Subthread Exists
 
-EEF material previously co-habited with `external-knowledge-sources/`
-alongside education-skills and meta-strategy plans. As the EEF cluster grew
-to four artefacts (executable plan + strategic brief + technical comparison +
-dataset) and acquired its own attribution/credits commitments (John Roberts'
-EEF MCP server prototype), it earned a dedicated home for discoverability and
-ownership clarity.
+EEF material previously co-habited with the education-skills and meta-strategy
+plans. As the EEF cluster grew (executable plan + strategic brief + technical
+comparison + dataset) and acquired its own attribution/credits commitments
+(John Roberts' EEF MCP server prototype), it earned a dedicated home for
+discoverability and ownership clarity.
 
-Education skills, future third-party KGs, and the generic source-ingestion
-intake model remain in the sibling
-[`../exploring-open-education-resources/external-knowledge-sources/`](../exploring-open-education-resources/external-knowledge-sources/) subthread.
+Education skills, future third-party knowledge graphs, and the generic
+source-ingestion intake model live in sibling subthreads under
+`sector-engagement/`.
 
 ## Scope
 
@@ -49,75 +50,65 @@ In scope:
 - the EEF Teaching and Learning Toolkit dataset snapshot;
 - strategic and technical reference material describing how Oak should
   integrate that data;
-- the executable plan to expose EEF resources, a recommendation tool, and a
-  prompt through Oak's MCP server.
+- the executable plan to expose EEF graph tools/resources and prompt support
+  through Oak's MCP server.
 
 Out of scope:
 
-- non-EEF education-skills material (lives in `../exploring-open-education-resources/external-knowledge-sources/`);
+- non-EEF education-skills material (lives in a sibling subthread under
+  `sector-engagement/`);
 - the formal Oak Curriculum Ontology integration (lives in
-  `../../connecting-oak-resources/knowledge-graph-integration/`);
+  [`../../connecting-oak-resources/knowledge-graph-integration/`](../../connecting-oak-resources/knowledge-graph-integration/));
 - the EEF MCP server prototype source code (read-only external artefact;
   attribution is captured here).
 
-## The Five-Increment Architecture
+## The Live Plan and Where EEF Sits
 
-The EEF integration is delivered across five increments, of which this
-subthread owns Increment 2 plus the EEF-side of Increments 3 and 4. The
-foundation (Increment 1) and the cross-source journey primitive design
-(Increment 3, split between substrate-layer combinatorial primitives and
-feature-layer journey orchestration — see table below) live in
-`knowledge-graph-integration/`.
+The EEF integration is one strand of Oak's broader multi-source graph work (see
+the [`knowledge-graph-integration/`](../../connecting-oak-resources/knowledge-graph-integration/)
+collection). The single live EEF plan finishes the EEF graph tooling end to
+end:
 
-| Inc | Plan home | Owns |
-|---|---|---|
-| 0 | already landed | misconception graph as JSON dump (baseline) |
-| 1 | [`../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md) | 7-operation graph layer with progressive disclosure, polymorphic over prerequisite + misconception + EEF strands |
-| 2 | [`current/eef-evidence-corpus.plan.md`](current/eef-evidence-corpus.plan.md) | Evidence corpus extension on top of graph layer; `recommend`, `explain`, `compare` tools; two prompts; structural citation discipline; freshness gate; telemetry |
-| 3 | [`../../graph-combinatorial-arc.plan.md`](../../graph-combinatorial-arc.plan.md) | Substrate-layer cross-corpus tooling (first concrete tool: EEF × Oak misconceptions for a Thread IRI). Authored 2026-05-11 as the follow-on arc to the MVP arc. |
-| 3b | [`../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md) | Feature-layer journey orchestration (search × misconception × EEF); first journey = `evidence-aware-lesson-sequencing`. Downstream of Inc 3's substrate-layer primitives. |
-| 4 | within Inc 2 + Inc 1 | Telemetry + freshness + provenance (EEF-specific lives in Inc 2; graph-layer telemetry lives in Inc 1) |
-| 5 | deferred | School-context overlay (gated on multi-tenant identity) |
+- **[`current/eef-graph-tool-completion.plan.md`](current/eef-graph-tool-completion.plan.md)**
+  — impact-led D0–D7, decision-complete. D0 corrects the known-vs-unknown data
+  doctrine and the corpus substrate (the EEF snapshot is a fully-known `as
+  const` constant; its types are derived from it, not validated against a
+  schema); D1–D7 deliver the typed foundation, graph tool/resource surface,
+  prompt, evidence-preservation obligations, and telemetry.
 
-## Documents
+The broader increment context (graph-query foundation, cross-corpus
+combinatorial primitives, cross-source journeys) lives in the
+`knowledge-graph-integration/` collection and the graph-estate plans; those are
+not owned here.
+
+## Reference Material
 
 | Path | Type | Purpose |
 |---|---|---|
-| [current/eef-delivery-restructure.plan.md](current/eef-delivery-restructure.plan.md) | Owning meta-plan (CURRENT) | **Owning restructure plan (2026-05-27).** Rebuilds the EEF First Feature around the new Definition of Delivery doctrine: restores sub-graph selection as a gate-1a requirement, sets a 10k output budget, adds a basic feature flag co-gating the tool+prompt, and corrects every plan/ADR surface. Decomposed into delivery increments A–H (A landed at `27956bb6`). Supersedes the gate-1a contract in `eef-first-feature.plan.md`. |
-| [current/eef-evidence-corpus.plan.md](current/eef-evidence-corpus.plan.md) | Executable plan (CURRENT) | Restructured successor to the original `eef-evidence-mcp-surface.plan.md`. 20 todos covering corpus shape, ranking engine, three tools, two prompts, structural citation enforcement, refresh gate, telemetry, negative-space documentation, and load-bearing credits to John Roberts. WS-3 of [`open-education-knowledge-surfaces.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md). **Gate-grouping table pending restructure correction (selection was wrongly deferred to gate-1b) — see the meta-plan §Part 5.** |
-| [reference/conservation-map.md](reference/conservation-map.md) | **Semantic preservation map** | Agent-judged mapping of every concept/requirement/credit/todo from the predecessor to its new home, with a verification log. Load-bearing artefact for "nothing lost". The predecessor itself is recoverable via `git show e2796757:.agent/plans/exploring-open-education-resources/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md` (see conservation map § Recovery path). |
-| [future/evidence-integration-strategy.md](future/evidence-integration-strategy.md) | Strategic brief | Three-layer architecture, R1–R8 impact-preserving requirements, four integration levels (1–3 independently deliverable; 4/4b need formal ontology). |
-| [reference/oak-eef-technical-comparison.md](reference/oak-eef-technical-comparison.md) | Technical reference | Side-by-side comparison of the EEF Python prototype stack and Oak's HTTP MCP stack. |
-| [reference/eef-toolkit.json](reference/eef-toolkit.json) | Data snapshot | EEF dataset v0.2.0 (last_updated 2026-04-02). 30 strands, 9 caveats, 17/30 with school-context relevance. Authoritative input for `current/`. |
+| [`future/evidence-integration-strategy.md`](future/evidence-integration-strategy.md) | Strategic brief | Three-layer architecture, R1–R8 impact-preserving requirements, four integration levels (1–3 independently deliverable; 4/4b need formal ontology). |
+| [`reference/oak-eef-technical-comparison.md`](reference/oak-eef-technical-comparison.md) | Technical reference | Side-by-side comparison of the EEF Python prototype stack and Oak's HTTP MCP stack. |
+| [`reference/eef-toolkit.json`](reference/eef-toolkit.json) | Data snapshot | EEF dataset v0.2.0 (last_updated 2026-04-02). 30 strands, 9 caveats, 17/30 with school-context relevance. Source for the in-repo `as const` corpus. |
+| [`reference/conservation-map.md`](reference/conservation-map.md) | Historical preservation map | Record of the 2026-04-30 restructure (since superseded). Retained for the "nothing lost" audit trail. |
+| [`future/eef-outcome-evaluation-infrastructure.plan.md`](future/eef-outcome-evaluation-infrastructure.plan.md) | Future plan | EEF outcome-evaluation infrastructure (deferred). |
+| [`future/eef-school-leadership-evidence.plan.md`](future/eef-school-leadership-evidence.plan.md) | Seed plan | School-leadership / SLT EEF strands, split out of the teacher plan 2026-05-31; gated on establishing clear school-leader value before any design. |
+| [`future/eef-standalone-evidence-workflows.plan.md`](future/eef-standalone-evidence-workflows.plan.md) | Seed plan | EEF-only MCP-app workflows that deliver value without intersecting Oak's tools; captured 2026-05-31, gated on establishing standalone teacher value. |
+| [`archive/`](archive/) | Superseded | The quarantined list-era estate and graph-tooling-rebuild design docs. Do not resume or cite. |
 
 ## Read Order
 
 1. This README (orientation)
 2. [`future/evidence-integration-strategy.md`](future/evidence-integration-strategy.md)
-   — *why* and *what*: impact requirements, integration levels, sequencing
-3. [`../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md)
-   — *foundation* (Increment 1): the graph operations EEF strands sit on
-4. [`current/eef-evidence-corpus.plan.md`](current/eef-evidence-corpus.plan.md)
-   — *how* (Increment 2): the executable plan
-5. [`reference/conservation-map.md`](reference/conservation-map.md)
-   — *what was preserved and what was added* in the 2026-04-30
-   restructure (read this if you want to know that nothing was lost)
-6. [`../../graph-combinatorial-arc.plan.md`](../../graph-combinatorial-arc.plan.md)
-   — *follow-on arc* (Increment 3, substrate layer): the combinatorial
-   arc owning cross-corpus primitives; the first concrete tool composes
-   EEF × Oak misconceptions for a Thread IRI.
-7. [`../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md)
-   — *future feature layer* (Increment 3b): journey orchestration
-   consuming substrate-layer primitives.
-7. [`reference/oak-eef-technical-comparison.md`](reference/oak-eef-technical-comparison.md)
+   — _why_ and _what_: impact requirements, integration levels, sequencing
+3. [`current/eef-graph-tool-completion.plan.md`](current/eef-graph-tool-completion.plan.md)
+   — _how_: the live, decision-complete D0–D7 finishing plan
+4. [`reference/eef-toolkit.json`](reference/eef-toolkit.json) — the data itself
+5. [`reference/oak-eef-technical-comparison.md`](reference/oak-eef-technical-comparison.md)
    — comparative context for the EEF prototype design choices
-8. [`reference/eef-toolkit.json`](reference/eef-toolkit.json) — the data itself
 
-To read the predecessor, use `git show e2796757:.agent/plans/exploring-open-education-resources/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md`
-(or follow the recovery instructions in the conservation map's
-§ Recovery path).
+To read a quarantined predecessor plan, see [`archive/`](archive/); pre-archive
+state is recoverable from git history.
 
-## Snapshot Validation (2026-04-30)
+## Snapshot Validation (2026-04-30, historical)
 
 The dataset was structurally validated at the time of relocation:
 
@@ -133,27 +124,28 @@ The dataset was structurally validated at the time of relocation:
 | Behind-the-average | 6/30 | 6 ✓ |
 | Caveats | 9 (plan body); 8 (strategy + tech comparison, **drift fixed**) | 9 ✓ |
 
-Currency note: snapshot is 28 days old at relocation. The EEF Toolkit is a
+Currency note: the snapshot was 28 days old at relocation. The EEF Toolkit is a
 "living systematic review" updated roughly twice per year; caveat #8 inside the
-JSON itself records that the data reflects "May 2025 and October 2025 living
-systematic review updates where available." [ADR-175](../../../../docs/architecture/architectural-decisions/175-external-evidence-corpus-freshness-governance.md)
-now makes freshness metadata and a default 180-day threshold binding for
-external evidence corpora before user-facing surfaces ship. A fresh upstream
-check remains required before the executable plan promotes from CURRENT to
-ACTIVE.
+JSON records that the data reflects "May 2025 and October 2025 living systematic
+review updates where available." A fresh upstream check is taken before the
+corpus is copied into the SDK. The snapshot is a fully-known `as const` constant
+and types derive from it — see the live plan's D0 doctrine and the generalised
+ADR-038.
 
 ## Parent and Sibling Relationships
 
-- **Parent (coordinator)**: [`../../connecting-oak-resources/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md)
-  — multi-source coordinating plan; this subthread owns its **WS-3**.
-- **Sibling subthreads under `sector-engagement/`**:
-  - [`../exploring-open-education-resources/external-knowledge-sources/`](../exploring-open-education-resources/external-knowledge-sources/) — education skills + future KGs.
-  - [`../knowledge-graph-adoption/`](../knowledge-graph-adoption/) — outbound: external orgs using Oak's KG assets.
-- **Cross-collection siblings**:
-  - [`../../connecting-oak-resources/knowledge-graph-integration/active/misconception-graph-mcp-surface.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/active/misconception-graph-mcp-surface.plan.md) — WS-2 (DONE), establishes graph factory pattern.
-  - [`../../connecting-oak-resources/knowledge-graph-integration/active/nc-knowledge-taxonomy-surface.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/active/nc-knowledge-taxonomy-surface.plan.md) — WS-4 (PENDING).
-- **Related ADR (proposed, not constraining)**: [`docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md`](../../../../docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md) — typing discipline, URI scheme, namespace prefixes (`eef-*`), licensing. ADR is in **Proposed** status as of 2026-04-30; it documents a direction that the in-flight work explores, not a constraint that gates the work.
-- **Freshness governance (accepted)**: [`docs/architecture/architectural-decisions/175-external-evidence-corpus-freshness-governance.md`](../../../../docs/architecture/architectural-decisions/175-external-evidence-corpus-freshness-governance.md) — owner, metadata, threshold, and stale-corpus behaviour for EEF and future external evidence corpora.
+- **Parent (coordinator)**:
+  [`../../connecting-oak-resources/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md)
+  — the multi-source coordinating plan; this subthread owns the EEF strand.
+- **Cross-collection context**: the
+  [`knowledge-graph-integration/`](../../connecting-oak-resources/knowledge-graph-integration/)
+  collection (graph query layer, misconception graph, NC knowledge taxonomy)
+  and the graph-estate plans.
+- **Related ADR (proposed, not constraining)**:
+  [ADR-157](../../../../docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md)
+  — typing discipline (`as const` derivation), `curriculum://` URI scheme,
+  namespace prefixes (`eef-*`), licensing. In **Proposed** status; it documents
+  a direction the in-flight work explores, not a constraint that gates the work.
 
 ## Credits and Attribution
 
@@ -165,16 +157,27 @@ ACTIVE.
   must be added to the repo's authors list per `evidence-integration-strategy.md`
   §Credits.**
 
-## Promotion Rule
+## Status of the Live Plan
 
-<a id="promotion-rule"></a>
-Promote `current/eef-evidence-corpus.plan.md` from CURRENT to ACTIVE when:
+The live plan is decision-complete and in execution. D0 is complete and committed
+at `ce9745c7`; D1 is complete and owner-ratified in the live plan. On 2026-05-31
+the value model was reframed: EEF is evidence about teaching strategies and
+decisions, and relevance is a function of the pedagogical move (on EEF's own
+finite axes), with the value intersecting Oak's tools — the misconception and
+prior-knowledge graphs — at the workflow level. The user-value trace has been
+folded into the live plan; its brief/report are archived as historical scratch
+artefacts. The next implementation move is D2, or D3's written MCP contract and
+SDK/app verification record if the owner chooses that lane.
 
-1. The owner gives the go-ahead;
-2. The plan body has been re-checked against current upstream EEF data
-   (re-validate the snapshot before copying it into the SDK);
-3. The plan-body first-principles check has been re-applied to the test
-   shapes, file landing paths, and vendor literals.
+The working Codex briefs and reports that de-risked D1/D3/D4 are archived as
+historical scratch artefacts. Their useful substance is folded into the live plan;
+do not resume or cite them as live sources.
+
+Before any refreshed EEF data is copied into the SDK:
+
+1. re-validate the snapshot against current upstream EEF data;
+2. re-apply the plan-body first-principles check to test shapes, file landing
+   paths, and vendor literals.
 
 ## Foundation Documents
 
@@ -186,4 +189,4 @@ Before promoting any plan in this subthread:
 4. ADR-029 (cardinal rule — applies to Oak API types; EEF data has its own
    typing discipline per ADR-157)
 
-First question: *Could it be simpler without compromising quality?*
+First question: _Could it be simpler without compromising quality?_

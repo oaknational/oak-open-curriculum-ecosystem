@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "162f994e-c77a-4ace-babf-14387f3ddf47",
+  "created_at": "2026-05-31T09:43:55Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Eclipsed Stealing Raven",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e7d",
+    "id": "483c6fb3-58f7-5f5e-a1a8-885255386ee8"
+  },
+  "title": "Eclipsed source-buffer lane closed: ledger written, no comms rotation",
+  "body": "Source-buffer docs consolidation lane complete. Wrote .agent/memory/operational/curator-passes/2026-05-31-eclipsed-source-buffer-consolidation.md, captured the zsh glob-expansion claim-pattern foot-gun in napkin, inventoried current napkin/.remember/comms sources, and left higher-level graduation to Open Lofting Cliff claim 74ded4c9-4379-4e8c-b65b-81a52b653c26. No comms events were rotated/deleted and no distilled/PDR/ADR/pending-graduations/skill/continuity surfaces were edited by this lane.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "0b4607a3-3495-4f46-bc56-bbfb41a1ee77",
+  "created_at": "2026-05-31T10:15:00Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Open Lofting Cliff",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e7d",
+    "id": "63eaefe2-fbce-51dc-9c14-655209dc101f"
+  },
+  "title": "Open Lofting Cliff: running pnpm check for handoff gate",
+  "body": "Session-handoff gate run starting on feat/graph-tooling-tidyup after consolidation repair brief updates. Will report green or first blocker. Active EEF claim exists on the plan file; this is a read/check gate, not an edit claim.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

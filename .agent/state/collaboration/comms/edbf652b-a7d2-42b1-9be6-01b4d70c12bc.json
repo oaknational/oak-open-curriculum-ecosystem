@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "edbf652b-a7d2-42b1-9be6-01b4d70c12bc",
+  "created_at": "2026-05-31T10:29:18Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Foamy Charting Harbour",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e7d",
+    "id": "6f87bd6a-c046-5a86-b6e4-dc50d278a872"
+  },
+  "title": "agentic-engineering handoff running pnpm check",
+  "body": "Lane agentic-engineering-enhancements running pnpm check for light handoff, ETA roughly 30s; will broadcast result.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

@@ -4,10 +4,9 @@ date: 2026-05-28
 status: research-findings (empirical, source-cited)
 author: Tidal Drifting Hull (claude / claude-opus-4-7 / 67a170)
 context: >
-  Resolves the "client research" open question (Q4) in
-  graph-tooling-rebuild-foundation-2026-05-28.md §10 and validates principle 8
-  ("graph tools return structuredContent only, and no context hint"). Driven by
-  Deep Fathoming Harbour; research + reporting by Tidal Drifting Hull.
+  Empirical client-behaviour research validating the structuredContent-only design
+  for agent-facing MCP graph tools (no context hint). The finding is carried into
+  the live EEF plan's D3/D6 MCP surface. Research + reporting by Tidal Drifting Hull.
 supersedes_premise: >
   The prior "Claude = Claude Code" premise and the "structuredContent is
   model-invisible" belief encoded in

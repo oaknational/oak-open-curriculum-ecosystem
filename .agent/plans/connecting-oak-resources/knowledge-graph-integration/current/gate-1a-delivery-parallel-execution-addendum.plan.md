@@ -2,11 +2,9 @@
 name: "Gate-1a EEF First Tool Delivery — Parallel Execution Addendum"
 overview: "Addendum to graph-stack / graph-mvp-arc / eef-first-feature / graph-query-layer. Captures one architectural amendment, four rotating-cast coordination questions, the dependency-graph-dictated round structure, and the inviolate quality invariants for getting the first EEF MCP tool delivered without rushing or compromising. Authored 2026-05-21 evening by Cirrus Circling Plume after a six-agent team session landed the Inc.1d planning amendment-set at 0cdaf58c plus the residual at f4ca84f6."
 graph_layer: substrate
-graph_portfolio_index: "../../../graph-portfolio-index.md"
 parent_plan: "../active/graph-stack.plan.md"
 sibling_plans:
   - "../active/graph-stack.plan.md"
-  - "../../../graph-mvp-arc.plan.md"
   - "../../../sector-engagement/eef/current/eef-first-feature.plan.md"
   - "./graph-query-layer.plan.md"
   - "../../../sector-engagement/eef/current/eef-evidence-corpus.plan.md"
@@ -76,7 +74,7 @@ todos:
 This addendum is a strategic-brief overlay across four existing plans:
 
 - [`graph-stack.plan.md`](../active/graph-stack.plan.md) — substrate sequencing (WS2.2, WS2.3, WS3.3, WS4.1, WS4.2, WS4.3, WS4.4, WS4.5).
-- [`graph-mvp-arc.plan.md`](../../../graph-mvp-arc.plan.md) — gate-0a / gate-1a / gate-0b / gate-1b spine.
+- `graph-mvp-arc.plan.md` — gate-0a / gate-1a / gate-0b / gate-1b spine.
 - [`eef-first-feature.plan.md`](../../../sector-engagement/eef/current/eef-first-feature.plan.md) — gate-1a delivery contract (ff1–ff6).
 - [`graph-query-layer.plan.md`](./graph-query-layer.plan.md) — per-operation sequencing of the 17 MCP tools.
 

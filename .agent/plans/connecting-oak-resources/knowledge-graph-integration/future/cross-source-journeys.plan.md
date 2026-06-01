@@ -2,7 +2,6 @@
 name: "Cross-Source Journeys (Increment 3 Design)"
 overview: "First-class user-journey artefacts that compose graph queries, evidence-corpus rankings, and search across sources. Two reference journeys: evidence-aware-lesson-sequencing (cross-source) and prerequisite-trace (graph-only). Discovers whether journeys need a new MCP primitive (playbook) or can ride on prompts."
 graph_layer: feature
-graph_portfolio_index: "../../../graph-portfolio-index.md"
 parent_plan: "../active/open-education-knowledge-surfaces.plan.md"
 sibling_plans:
   - "../current/graph-query-layer.plan.md"
@@ -36,7 +35,7 @@ todos:
 
 **Status**: FUTURE — design-only until Increments 1 (graph layer) and 2
 (EEF corpus) reach ACTIVE, plus the substrate-layer cross-corpus
-primitives in [`../../../graph-combinatorial-arc.plan.md`](../../../graph-combinatorial-arc.plan.md)
+primitives in `../../../graph-combinatorial-arc.plan.md`
 have shipped (this plan consumes those primitives).
 **Last Updated**: 2026-05-11 (layer-distinction note added during the
 MVP-arc reshape; plan body otherwise unchanged from 2026-04-30 authoring).
@@ -47,7 +46,7 @@ cross-corpus primitives.
 **Layer distinction (added 2026-05-11)**: this plan is feature-layer
 journey orchestration (playbook primitive or rich prompts composing
 multiple tool calls). It is **distinct from**
-[`../../../graph-combinatorial-arc.plan.md`](../../../graph-combinatorial-arc.plan.md),
+`../../../graph-combinatorial-arc.plan.md`,
 which is substrate-layer combinatorial primitive delivery (MCP tools
 whose body composes corpora through `graph-corpus-sdk`). Journeys
 consume substrate-layer primitives; this plan does not duplicate or

@@ -1,8 +1,9 @@
 # Security and Privacy Roadmap
 
 **Status**: 📋 Phase 0 ready to start
-**Last Updated**: 2026-04-28
-**Session Entry**: [start-right-quick.md](../../commands/start-right-quick.md)
+**Last Updated**: 2026-06-01
+**Session Entry**:
+[start-right-quick](../../skills/start-right-quick/SKILL-CANONICAL.md)
 
 ---
 
@@ -48,7 +49,7 @@ Each phase must either:
   [documentation-sync-log.md](documentation-sync-log.md)
 
 Before phase closure, apply the
-[`jc-consolidate-docs` workflow](../../../.cursor/commands/jc-consolidate-docs.md).
+[`consolidate-docs` workflow](../../skills/consolidate-docs/SKILL-CANONICAL.md).
 
 ---
 
@@ -158,6 +159,10 @@ Cloudflare MCP public-beta security gate            ⛔ M3 BLOCKER
 
 - Active planning surface:
   [cloudflare-mcp-public-beta-security-gate.plan.md](future/cloudflare-mcp-public-beta-security-gate.plan.md)
+- Discovery cross-link:
+  [Web Bot Auth agent verification](../discovery/future/web-bot-auth-agent-verification.plan.md)
+  is first-class in discovery; this roadmap owns security evidence and risk
+  disposition for any enabled signed-agent verification control.
 - Baseline-control cross-reference:
   [phase-3-baseline-control-cut-list.md](future/phase-3-baseline-control-cut-list.md)
 - Done when:

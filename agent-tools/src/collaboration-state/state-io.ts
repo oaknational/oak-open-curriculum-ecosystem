@@ -1,13 +1,15 @@
-import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 import { createCommsEvent } from './comms.js';
+import { validateCollaborationJsonFileText } from './collaboration-json-validation.js';
 import {
   parseClosedClaimsArchive,
   parseCollaborationRegistry,
   parseCommsEvent,
 } from './state-parsers.js';
 import {
+  createJsonFileAtomically,
   runJsonStateTransaction,
   updateJsonFileWithRetry,
   writeJsonFileWithinTransaction,
@@ -51,7 +53,15 @@ export async function writeCommsEvent(input: {
     existingEventIds: existingIds,
   });
 
-  await writeFile(eventPath(input.commsDir, event.event_id), eventJson(event), { flag: 'wx' });
+  const path = eventPath(input.commsDir, event.event_id);
+  await createJsonFileAtomically({
+    filePath: path,
+    value: event,
+    validateText: async (text) => {
+      parseCommsEvent(text);
+      await validateCollaborationJsonFileText(path, text);
+    },
+  });
 }
 
 /**
@@ -82,6 +92,7 @@ export async function updateActiveClaimsFile(input: {
   await updateJsonFileWithRetry({
     filePath: input.activePath,
     parseText: parseCollaborationRegistry,
+    validateText: (text) => validateActiveClaimsText(input.activePath, text),
     transform: input.transform,
     maxAttempts: 5,
   });
@@ -108,8 +119,16 @@ export async function updateClaimStateFiles(input: {
       const closed = parseClosedClaimsArchive(await readFile(input.closedPath, 'utf8'));
       const next = input.transform({ active, closed });
 
-      await writeJsonFileWithinTransaction({ filePath: input.activePath, value: next.active });
-      await writeJsonFileWithinTransaction({ filePath: input.closedPath, value: next.closed });
+      await writeJsonFileWithinTransaction({
+        filePath: input.activePath,
+        value: next.active,
+        validateText: (text) => validateActiveClaimsText(input.activePath, text),
+      });
+      await writeJsonFileWithinTransaction({
+        filePath: input.closedPath,
+        value: next.closed,
+        validateText: (text) => validateClosedClaimsText(input.closedPath, text),
+      });
     },
   });
 }
@@ -118,13 +137,26 @@ async function readEventDirectory<TEvent>(
   directory: string,
   parser: (text: string) => TEvent,
 ): Promise<readonly TEvent[]> {
-  const filenames: readonly string[] = await readdir(directory).catch(() => []);
+  const filenames: readonly string[] = await readdir(directory);
   const events: TEvent[] = [];
 
   for (const filename of filenames
     .filter((entry) => entry.endsWith('.json'))
     .toSorted((left, right) => left.localeCompare(right))) {
-    events.push(parser(await readFile(join(directory, filename), 'utf8')));
+    const path = join(directory, filename);
+    try {
+      const text = await readFile(path, 'utf8');
+      const event = parser(text);
+      await validateCollaborationJsonFileText(path, text);
+      events.push(event);
+    } catch (error) {
+      throw new Error(
+        `failed to parse collaboration JSON file ${path}: ${
+          error instanceof Error ? error.message : String(error)
+        }`,
+        { cause: error },
+      );
+    }
   }
 
   return events;
@@ -144,8 +176,14 @@ function eventPath(eventsDir: string, eventId: string): string {
   return join(eventsDir, `${eventId}.json`);
 }
 
-function eventJson(event: CommsEvent): string {
-  return `${JSON.stringify(event, null, 2)}\n`;
+async function validateActiveClaimsText(path: string, text: string): Promise<void> {
+  parseCollaborationRegistry(text);
+  await validateCollaborationJsonFileText(path, text);
+}
+
+async function validateClosedClaimsText(path: string, text: string): Promise<void> {
+  parseClosedClaimsArchive(text);
+  await validateCollaborationJsonFileText(path, text);
 }
 
 function filterEvents<TKind extends CommsEvent['kind']>(

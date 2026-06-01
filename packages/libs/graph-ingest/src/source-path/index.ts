@@ -239,7 +239,6 @@ function termKey(t: AnyTerm): string {
  *
  * Empty when the parser cannot attach source locations to any Quad
  * (a defensive shape; in practice every emitted Quad should carry a
- * source location at gate-1a closure per §Test discipline invariant
- * #3).
+ * source location per §Test discipline invariant #3).
  */
 export type SourceMap = ReadonlyMap<string, SourceLocation>;

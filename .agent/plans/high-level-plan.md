@@ -3,470 +3,199 @@ plan_id: high-level-plan
 title: "High-Level Plan"
 type: strategic-index
 status: active
-last_updated: 2026-05-10
+last_updated: 2026-06-01
 related_indices:
-  - "graph-portfolio-index.md"
+  - "README.md"
+  - "curriculum-mcp-path-to-ga/roadmap.md"
+  - "discovery/README.md"
+  - "observability/high-level-observability-plan.md"
 ---
 
 # High-Level Plan
 
 **Status**: 🔄 Active strategic index
-**Scope**: Strategic cross-collection overview for the Oak Open Curriculum ecosystem.
+**Scope**: Cross-collection orientation for the Oak Open Curriculum Ecosystem.
 
-This file is a strategic index. Execution detail belongs in collection roadmaps
-and active plans. Per-milestone summaries (audience, value, progression gates):
-[milestones/](../milestones/).
-
-## Onboarding entry points
-
-- [good-first-issues.md](good-first-issues.md) — curated starter-task index
-  for new Oak teammates and AI coding teammates. Points to the live GitHub
-  `good first issue` label plus stable area onramps. Sibling plan index;
-  separate from the milestone sequence below.
-
-## Repository Goal Narrative
-
-The strategic goal is to turn Oak's openly licenced, fully sequenced and
-resourced curriculum into world-class primitives and modular building blocks
-for education applications. The live work explores MCP Apps in AI platforms
-such as Claude Cowork and ChatGPT; makes the Curriculum SDK, MCP server, and
-OpenAPI-to-MCP server pipeline easier for the wider education and technology
-sectors to use; combines hybrid semantic search with APIs, MCP, and Oak
-knowledge graphs; and keeps the self-improving Practice visible as a reusable
-plain-text framework for agentic-first engineering across major agent vendors.
-
----
-
-## Milestone Sequence
-
-```text
-Milestone 0: Open Private Alpha                  ✅ COMPLETE
-  → Make the repo public — external teams can build on Oak's curriculum
-  → Secrets/PII sweep, docs remediation, merge branch, make repo public
-  → Repo public, HTTP server still private alpha (invitation-only)
-
-Milestone 1: Invite-Only Alpha                   ✅ COMPLETE
-  → Oak staff and invited users access the MCP server via dev Clerk allowlist
-  → Oak email domain + explicit Clerk invitations, no prod Clerk needed
-  → Repo public, server live at curriculum-mcp-alpha.oaknational.dev, v1.0.0
-
-Milestone 2: Open Public Alpha                   🔄 NEXT
-
-> Dev Clerk remains; search, graph, and final Sentry evidence are the gates
-
-  → ES re-index + search quality validation DONE
-  → Replace OpenAI app with MCP Apps infrastructure DONE
-  → Knowledge graph alignment audit DONE
-  → Sentry + OTel foundation deployment evidence for HTTP MCP app IN PROGRESS (95%)
-  -> Build user facing MCP App search experience NOT STARTED (5%)
-
-
-Milestone 3: Public Beta                         📋 PLANNED
-  → BLOCKED: Cloudflare MCP security gate must be satisfied first
-  → Production Clerk integration (social providers, public sign-up)
-  → Operational hardening on top of the observability foundation
-  → KG alignment (if not completed in M2)
-  → Exemplar MCP App UI (user_search tool, React, design input)
-  → Operational hardening, extension surfaces, tech debt
-```
-
-### Milestone State Progression
-
-| State | Repo | HTTP Server | Auth | Key requirement |
-|---|---|---|---|---|
-| Closed private alpha | Private | Private alpha | Test Clerk | — |
-| Open private alpha (M0) | **Public** | Private alpha | Test Clerk | ✅ Complete |
-| Invite-only alpha (M1) | Public | **Invite-only alpha** | Dev Clerk + allowlist | ✅ Complete |
-| Open public alpha (M2) | Public | **Open public alpha** | Dev Clerk | ES re-index, MCP Apps, KG alignment, Sentry+OTel foundation |
-| Public beta (M3) | Public | **Public beta** | **Prod Clerk** | Cloudflare MCP security gate, Prod Clerk, alerting/ops hardening, KG alignment, exemplar UI |
-
-### MCP Path-to-GA coordination
-
-Cross-collection coordination for the Curriculum MCP HTTP server release arc (M1 → M2 → M3 → GA) lives at
+This file explains the strategic shape of the work. It does not own execution
+detail. For the operational plan index, lifecycle rules, and collection table,
+start at [README.md](README.md). For the Curriculum MCP release arc, use
 [curriculum-mcp-path-to-ga/roadmap.md](curriculum-mcp-path-to-ga/roadmap.md).
-It is a thin strategic index — owns no execution; sequences sub-plans across
-`observability/`, `security-and-privacy/`, `sdk-and-mcp-enhancements/`,
-`compliance/`, and `architecture-and-infrastructure/` against the milestone
-gates above.
 
 ---
 
-## Cross-cutting Threads
+## Strategic Goal
 
-Two cross-cutting threads run alongside the milestone sequence and produce
-impact independently of any single milestone gate. They are tracked through
-their own collections and indices rather than as milestone bullets.
+Oak's open curriculum should become a set of world-class primitives and modular
+building blocks for education applications. The repo pursues that through:
 
-### Knowledge Graph thread
+- public SDK, OpenAPI, MCP, search, and graph surfaces for curriculum access;
+- MCP Apps and remote MCP server work for AI assistant hosts;
+- knowledge-graph and evidence-corpus work that composes Oak curriculum,
+  ontology, misconceptions, and sector evidence;
+- agent-readiness discovery so external agents, crawlers, registries, and IDEs
+  can find the right public machine surfaces;
+- practice, tooling, security, observability, compliance, and documentation
+  infrastructure that keeps the work reusable and trustworthy.
 
-Goal: a layered, standards-based graph capability that knits curriculum
-content, curriculum structure, pedagogical evidence, and Oak's own engineering
-practice into a navigable, citation-grade, AI-accessible substrate — and
-positions the stack as open-education infrastructure.
-
-The portfolio is split into three goals (substrate, Oak graph surfaces,
-features) with first-wave ingestion targeting Oak Curriculum Ontology Turtle
-and SHACL, the prerequisite graph, the misconception graph, and the EEF
-corpus.
-
-- **Index (all graph plans + research)**:
-  [graph-portfolio-index.md](graph-portfolio-index.md)
-- **MVP vertical-slice arc** (three-slice substrate-and-surface spine
-  for EEF, Oak ontology Threads, and Oak misconceptions):
-  [graph-mvp-arc.plan.md](graph-mvp-arc.plan.md)
-- **Combinatorial arc** (follow-on; substrate-layer cross-corpus
-  composition; activates when MVP arc gate-1a + gate-3a ship +
-  graph-stack Inc.3 design-stable per the 2026-05-21 gate-split
-  amendment):
-  [graph-combinatorial-arc.plan.md](graph-combinatorial-arc.plan.md)
-- **Research direction**:
-  [graph-library.research.md](../research/graph-library.research.md)
-- **Topology spine plan**:
-  [connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md](connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md)
-- **Collection README**:
-  [connecting-oak-resources/knowledge-graph-integration/README.md](connecting-oak-resources/knowledge-graph-integration/README.md)
-
-### EEF Evidence thread (sector-cohesion demonstration)
-
-Goal: integrate the EEF Teaching and Learning Toolkit as an evidence corpus
-on top of Oak's graph stack — a clear, visible demonstration of the wider
-education sector coming together to deliver compounded impact through openly
-licensed resources. Oak's openly licensed curriculum on one side, EEF's openly
-licensed evidence on the other, composable in a single working context for
-every Oak user (and every external partner building on Oak).
-
-This thread is part of the graph portfolio (the EEF corpus is one of the
-first-wave Oak graph surfaces) and is also a separately important
-sector-engagement story.
-
-- **Canonical plan**:
-  [sector-engagement/eef/current/eef-evidence-corpus.plan.md](sector-engagement/eef/current/eef-evidence-corpus.plan.md)
-- **MVP vertical-slice arc** (slice 1 ships the EEF surface and opens the
-  EEF partnership conversation):
-  [graph-mvp-arc.plan.md](graph-mvp-arc.plan.md)
-- **Combinatorial arc** (cross-corpus EEF × Oak misconceptions
-  strengthens the EEF partnership case):
-  [graph-combinatorial-arc.plan.md](graph-combinatorial-arc.plan.md)
-- **Cross-source journeys** (feature-layer journey orchestration over
-  multiple cross-corpus primitives):
-  [connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md](connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md)
-- **External-source intake** (generalised model for future sector partners
-  beyond EEF):
-  [exploring-open-education-resources/external-knowledge-sources/future/external-knowledge-graph-data-source-integration.plan.md](exploring-open-education-resources/external-knowledge-sources/future/external-knowledge-graph-data-source-integration.plan.md)
+The high-level plan is deliberately short-lived as a source of execution truth.
+If a collection README or active/current plan disagrees with this file, update
+the collection-owned plan first, then reconcile this index.
 
 ---
 
-## Immediate Next Intentions
+## Primary Entry Points
 
-The active branch-critical closure sequence remains:
-
-1. Complete Sentry credential provisioning for the HTTP MCP deployment.
-2. Produce the deployment evidence bundle required to close the M2
-   observability foundation lane.
-
-Beyond that active branch closure, the broader repo queue is currently:
-
-Once the observability evidence bundle closes cleanly, the next implementation
-lane on the same branch is the MCP-server-confined executable plan
-[sentry-observability-maximisation-mcp.plan.md](observability/active/sentry-observability-maximisation-mcp.plan.md)
-(strategic parent:
-[sentry-observability-maximisation.plan.md](observability/future/sentry-observability-maximisation.plan.md)),
-which supersedes the archived `sentry-observability-expansion.plan.md`.
-Broader search observability stays in
-[search-observability.plan.md](observability/current/search-observability.plan.md)
-and is deferred to the next branch (Search CLI maximisation mirror opens
-there). Observability plans moved into the dedicated
-[observability/](observability/) directory on 2026-04-18 per the
-[observability strategy restructure](architecture-and-infrastructure/current/observability-strategy-restructure.plan.md).
-
-1. ~~Implement oak-preview MCP snagging and deploy the resulting fixes.~~
-   ✅ COMPLETE — all phases done, branch deployed. Archived to
-   [oak-preview-mcp-snagging.execution.plan.md](sdk-and-mcp-enhancements/archive/completed/oak-preview-mcp-snagging.execution.plan.md).
-2. Re-download the bulk data, re-process it, re-index the Elasticsearch
-   instance, and validate that stale search/index issues have cleared.
-   🔄 IN PROGRESS — recovery-and-guardrails is now the primary incident lane;
-   lifecycle ingest run completed upload but failed metadata commit
-   (`strict_dynamic_mapping_exception` on `previous_version`), with salvage-first
-   recovery and anti-recurrence guardrails now the active execution path.
-3. Implement
-   [mcp-app-extension-migration.plan.md](sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md)
-   and deploy that migration work.
-4. The first graph-enablement slice has now been promoted into
-   [kg-alignment-audit.execution.plan.md](connecting-oak-resources/knowledge-graph-integration/current/kg-alignment-audit.execution.plan.md).
-   Use its outputs to decide whether the next graph promotion is separate Neo4j
-   provisioning, Elasticsearch projection work, or explanation-first graph
-   augmentation. The full graph portfolio is indexed at
-   [graph-portfolio-index.md](graph-portfolio-index.md).
-
-This sequence reflects current user priority ahead of broader Milestone 2 and
-Milestone 3 backlog items.
+| Need | Start Here | Why |
+|---|---|---|
+| Whole plan portfolio | [README.md](README.md) | Root operational index, collection table, lifecycle/reachability contract |
+| MCP server release arc | [curriculum-mcp-path-to-ga/roadmap.md](curriculum-mcp-path-to-ga/roadmap.md) | Thin strategic index for M1 → M2 → M3 → GA across observability, security, compliance, SDK/MCP, and architecture |
+| Graph & evidence work | [connecting-oak-resources/knowledge-graph-integration/README.md](connecting-oak-resources/knowledge-graph-integration/README.md) | Knowledge-graph integration hub; the live EEF evidence tool is under [sector-engagement/eef/](sector-engagement/eef/README.md) |
+| Agent-readiness discovery | [discovery/README.md](discovery/README.md) | API catalog, Agent Skills, MCP Server Cards, A2A, DNS-AID, WebMCP, Web Bot Auth, robots/sitemaps, and `.well-known` metadata |
+| Observability strategy | [observability/high-level-observability-plan.md](observability/high-level-observability-plan.md) | Five-axis observability plan under ADR-162 |
+| Completed history | [completed-plans.md](completed-plans.md) | Human-readable completed-plan index; archives remain read-only provenance |
+| New teammate onramp | [good-first-issues.md](good-first-issues.md) | Curated starter-task index |
 
 ---
 
-## Milestone 0: Open Private Alpha — COMPLETE
+## Milestone State
 
-**Goal**: Make the repository safe to be public on GitHub. The HTTP MCP
-server remains private alpha (invitation-only) at this stage.
+Milestones are the release-level story for the Curriculum MCP server. The
+authoritative cross-collection release index is
+[curriculum-mcp-path-to-ga/roadmap.md](curriculum-mcp-path-to-ga/roadmap.md).
 
-**User impact**: The SDK, MCP servers, search infrastructure, and pipeline
-patterns become publicly available — external developers and edtech teams can
-start building curriculum tools on Oak's open data for the first time.
-
-**Completed** (2026-03-02):
-
-- `feat/semantic_search_deployment` branch merged to `main`
-- SDK workspace separation (archived
-  [sdk-workspace-separation.md](semantic-search/archive/completed/sdk-workspace-separation.md))
-- Documentation remediation (17 items, 4 onboarding reruns)
-- ESLint OOM fix (graph data dedup, vocab/vocab-data split)
-- Search results quality (fuzziness `AUTO:6,9`, `DEFAULT_MIN_SCORE = 0.02`,
-  ADR-120)
-- Phase 3a MCP integration, search dispatch type safety
-- OAuth specification compliance (ADR-113), Proxy OAuth AS for Cursor (ADR-115)
-- Widget Phases 0-5 (Track 1a + 1b) including Phase 5 resilience hardening
-- MCP tool snagging (5 SDK bugs, 32 tools verified)
-- Logger architectural bug (DI, OTEL attributes)
-- Release workflow fix (Turborepo CI pattern)
-
-Repository made public on GitHub (2026-03-03). Live at
-`curriculum-mcp-alpha.oaknational.dev`.
+| Milestone | State | Summary | Current Authority |
+|---|---|---|---|
+| M0 - Open Private Alpha | ✅ Complete | Repo made public after secrets/PII and docs remediation; HTTP server remained private alpha. | Archives and [completed-plans.md](completed-plans.md) |
+| M1 - Invite-Only Alpha | ✅ Complete | Dev Clerk allowlist, Oak/invited users, server live at `curriculum-mcp-alpha.oaknational.dev`. | [curriculum-mcp-path-to-ga/roadmap.md](curriculum-mcp-path-to-ga/roadmap.md) |
+| M2 - Open Public Alpha | 🔄 In progress | Public-alpha readiness across search/index health, MCP Apps migration, graph alignment, observability evidence, and user-facing MCP App experience. | [curriculum-mcp-path-to-ga/roadmap.md](curriculum-mcp-path-to-ga/roadmap.md) plus collection active/current plans |
+| M3 - Public Beta | 📋 Planned / gated | Production Clerk, Cloudflare MCP security gate, operational hardening, alerting, compliance/privacy paperwork, and exemplar UI readiness. | [security-and-privacy/roadmap.md](security-and-privacy/roadmap.md), [compliance/roadmap.md](compliance/roadmap.md), and [curriculum-mcp-path-to-ga/roadmap.md](curriculum-mcp-path-to-ga/roadmap.md) |
+| M4 / GA | ⏳ Undefined | Sustained production GA needs owner-defined gates after M3 evidence accumulates. | Backlog in [curriculum-mcp-path-to-ga/roadmap.md](curriculum-mcp-path-to-ga/roadmap.md) |
 
 ---
 
-## Milestone 1: Invite-Only Alpha
+## Cross-Cutting Programmes
 
-**Goal**: Oak staff and invited users access the MCP server via the
-development Clerk instance with an allowlist.
+### 1. Curriculum MCP Path To GA
 
-**User impact**: Oak staff and selected partners can use AI assistants
-(ChatGPT, Claude, Gemini) to access Oak's curriculum directly. Provides
-real-world validation with a controlled user base before broader release.
+The MCP release arc crosses SDK/MCP work, observability, security, compliance,
+architecture, and user experience. It is coordinated by
+[curriculum-mcp-path-to-ga/roadmap.md](curriculum-mcp-path-to-ga/roadmap.md),
+which indexes sub-plans without owning their execution.
 
-**Invite-only alpha baseline**:
+Key linked collections:
 
-1. SDK works.
-2. Search works.
-3. MCP server works.
-4. ChatGPT key commands show basic branding.
-5. Dev Clerk with allowlist access control (Oak emails + explicit invites).
+- [sdk-and-mcp-enhancements/](sdk-and-mcp-enhancements/README.md) - MCP Apps,
+  MCP protocol adoption, generated SDK/tool surfaces.
+- [observability/](observability/README.md) - five-axis observability and
+  runtime emission.
+- [security-and-privacy/](security-and-privacy/README.md) - Cloudflare MCP
+  public-beta security gate, evidence-backed security claims, Web Bot Auth
+  enforcement evidence.
+- [compliance/](compliance/README.md) - host submission, policy, and external
+  regulatory/documentation alignment.
 
-**Status**: Complete (2026-03-03). All gates satisfied. Server live at
-`curriculum-mcp-alpha.oaknational.dev`. v1.0.0 released.
+### 2. Graph And Evidence Surfaces
 
-**Not required for this milestone** (deferred to M2 or M3):
+Graph work connects Oak curriculum structure, Oak ontology resources,
+misconceptions, and sector evidence. It is owned by its collections:
 
-- Production Clerk instance
-- Social providers (Google, Microsoft, GitHub)
-- Full Sentry observability
-- Open public access
-- Rate limiting beyond upstream API limits
+- [connecting-oak-resources/knowledge-graph-integration/](connecting-oak-resources/knowledge-graph-integration/README.md) -
+  graph substrate (`graph-core`/`graph-ingest`/`graph-project`,
+  `graph-corpus-sdk`) and Oak graph MCP surfaces.
+- [sector-engagement/eef/](sector-engagement/eef/README.md) - the EEF evidence
+  tool ([eef-graph-tool-completion.plan.md](sector-engagement/eef/current/eef-graph-tool-completion.plan.md)),
+  the live first proper graph tool.
 
-**Post-merge work** (not blocking but valuable):
+Wider graph coordination is deliberately undefined until that first tool ships;
+the estate clean-up is owned by
+[graph-estate-consolidation.plan.md](connecting-oak-resources/knowledge-graph-integration/current/graph-estate-consolidation.plan.md).
 
-- Result pattern unification: ✅ COMPLETE —
-  [mcp-result-pattern-unification.execution.plan.md](semantic-search/archive/completed/mcp-result-pattern-unification.execution.plan.md)
-- STDIO/HTTP alignment:
-  [stdio-http-server-alignment.md](architecture-and-infrastructure/future/stdio-http-server-alignment.md)
-- no-console + strictness convergence (includes ESLint override removal and boundary/separation lint integration):
-  [devx-strictness-convergence.plan.md](developer-experience/active/devx-strictness-convergence.plan.md)
+### 3. Agent-Readiness Discovery
 
----
+Discovery is now an active and queued workstream, not a reference-only note.
+Start at [discovery/README.md](discovery/README.md).
 
-## Milestone 2: Open Public Alpha
+Current promoted slice:
+[discovery/current/agent-readiness-discovery-hub.plan.md](discovery/current/agent-readiness-discovery-hub.plan.md).
 
-**Goal**: Deliver reliable search, unified MCP Apps infrastructure, and
-initial knowledge graph alignment. Dev Clerk remains; production auth
-is deferred to M3.
+It covers the Phase 1 estate shape: apex API catalog hub, Agent Skills index,
+Open API `Auth.md`, markdown representation, robots/sitemap baseline for every
+official Oak web app, Content Signals routing, and the Web Bot Auth
+decision/evidence bridge. Future discovery lanes cover MCP Server Cards,
+DNS-AID, Aila A2A, WebMCP, and enabled-control Web Bot Auth rollout if Oak
+ratifies signed-agent verification.
 
-**User impact**: Invited users get accurate, up-to-date search results
-and a single MCP server serving all platforms (ChatGPT, Claude, Cursor).
-Graph-augmented curriculum navigation begins to surface.
+### 4. Practice, Tooling, And Review Infrastructure
 
-**Blocking work**:
+Agentic practice and the implementation tooling are separate but coordinated:
 
-1. **Elasticsearch re-index and search quality validation** (intention #2)
-   - Re-download bulk data, re-process, re-index the Elasticsearch instance
-   - Resolve `strict_dynamic_mapping_exception` on `previous_version`
-     (recovery-and-guardrails primary lane + supporting incident evidence lane)
-   - Validate stale search/index issues have cleared
-2. **Replace OpenAI app with MCP Apps infrastructure** (intention #3)
-   - Canonical execution plan:
-     [mcp-app-extension-migration.plan.md](sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md)
-   - **Must include basic branding** for the MCP App (logo, colours,
-     metadata visible in Claude Desktop / ChatGPT tool listings)
-3. **Knowledge graph alignment audit** (intention #4)
-   - First graph-enablement slice:
-     [kg-alignment-audit.execution.plan.md](connecting-oak-resources/knowledge-graph-integration/current/kg-alignment-audit.execution.plan.md)
-   - Outputs inform whether next graph promotion is separate Neo4j
-     provisioning, Elasticsearch projection work, or explanation-first
-     graph augmentation
-   - Full graph portfolio (substrate + Oak surfaces + features + EEF
-     thread): [graph-portfolio-index.md](graph-portfolio-index.md)
-4. **Sentry + OpenTelemetry foundation**
-   - Collection entry point:
-     [architecture-and-infrastructure/README.md](architecture-and-infrastructure/README.md)
-   - Strategic umbrella:
-     [observability-and-quality-metrics.plan.md](architecture-and-infrastructure/future/observability-and-quality-metrics.plan.md)
-   - Scope: HTTP MCP server + Search CLI, shared logger foundation, Sentry
-     runtime integration, telemetry redaction, release/source-map evidence
-   - Current state: runtime implementation is complete; remaining M2 work is
-     HTTP credential provisioning plus the deployment evidence bundle, with
-     follow-on search observability tracked in companion active plans
-   - Note: deprecated standalone stdio MCP workspace is not an adoption target
+- [agentic-engineering-enhancements/](agentic-engineering-enhancements/README.md)
+  owns doctrine, planning, review, evidence guards, learning loops, and broad
+  agent practice.
+- [agent-tooling/](agent-tooling/README.md) owns the `agent-tools/` workspace,
+  collaboration-state substrate, hooks, CLI behaviour, schemas, and
+  implementation-level tooling.
 
----
+### 5. Runtime Quality, Architecture, And Developer Experience
 
-## Milestone 3: Public Beta
+Architecture, observability, developer experience, and semantic-search follow-up
+form the reliability substrate for the public app and public repo:
 
-**Goal**: Operational hardening, extension surfaces, and accumulated tech
-debt. Strengthen reliability, observability, and developer experience so
-the service is ready for sustained daily use.
-
-**User impact**: The primary MCP-server impact is for end users such as
-teachers: safer, more reliable curriculum exploration and use inside AI
-assistant hosts. Supporting engineers who build ed-tech products is also
-important, but secondary for the MCP server; the SDK remains the surface that
-speaks most directly to direct API integration and product-development
-workflows. Quality improvements compound: architectural enforcement prevents
-regression, observability enables rapid diagnosis, and extension surfaces
-broaden platform reach.
-
-**Blocking work**:
-
-1. **Cloudflare MCP security gate**
-   - Public beta of the Oak MCP server is blocked until appropriate
-     Cloudflare-side security features for remote/public MCP servers are
-     available to Oak, evaluated against our threat model, and either enabled
-     or explicitly declined with owner-visible evidence.
-   - Source: Cloudflare's 2026-04-14 enterprise MCP reference architecture:
-     <https://blog.cloudflare.com/enterprise-mcp/>
-   - The security-and-privacy collection owns the executable gate:
-     [security-and-privacy/roadmap.md](security-and-privacy/roadmap.md)
-   - The detailed control-family matrix and required dispositions live in the
-     strategic gate brief:
-     [cloudflare-mcp-public-beta-security-gate.plan.md](security-and-privacy/future/cloudflare-mcp-public-beta-security-gate.plan.md)
-2. **Production Clerk integration**
-   - Research complete:
-     [auth/clerk-production-migration.md](../research/auth/clerk-production-migration.md)
-   - Blocking decision: shared vs independent Clerk instance
-     (Section 0 of the research report)
-   - Social providers Phase 1: Google, Microsoft, GitHub
-   - `CLERK_AUTHORIZED_PARTIES` environment variable implementation
-   - Public sign-up with disposable email blocking
-   - Edge rate limiting on OAuth proxy endpoints
-     (`/oauth/register`, `/oauth/authorize`, `/oauth/token`) —
-     [m2-public-alpha-auth-rate-limits.execution.plan.md](semantic-search/current/m2-public-alpha-auth-rate-limits.execution.plan.md)
-3. **Operational hardening on top of the observability foundation**
-   - Strategic umbrella:
-     [observability-and-quality-metrics.plan.md](architecture-and-infrastructure/future/observability-and-quality-metrics.plan.md)
-   - Covers: alerting, quality metrics dashboards, operational verification,
-     and the sustained use of the already-landed Sentry + OTel foundation
-   - Collection entry point:
-     [architecture-and-infrastructure/README.md](architecture-and-infrastructure/README.md)
-   - Reference implementation patterns exist in `starter-app-spike`
-4. **Knowledge graph alignment** (if not completed in M2)
-   - [kg-alignment-audit.execution.plan.md](connecting-oak-resources/knowledge-graph-integration/current/kg-alignment-audit.execution.plan.md)
-5. **Exemplar MCP App UI experience (`user_search` tool)**
-   - New user-facing search tool (`user_search`/`userSearch`) with the same
-     capabilities as the existing `search` tool but designed for interactive
-     use within Claude Desktop, ChatGPT, and other MCP App hosts
-   - React components rendered via
-     [MCP Apps UI extensions](https://modelcontextprotocol.io/extensions/apps/overview)
-   - Requires design input for layout, interaction patterns, and branding
-   - Goal: demonstrate a polished, interactive curriculum search experience
-     as the reference MCP App UI
-
-**Additional streams** (drawn from existing plans across collections):
-
-1. **Operational hardening**
-   - Monitoring and alerting (sign-up velocity, abuse patterns, Clerk
-     API quota)
-   - Canonical host enforcement verified on Vercel
-   - Incident response procedures documented
-   - Vercel log drain verification (tracked from onboarding simulation R29)
-2. **Extension surfaces**
-   - MCP Apps standard migration: adapter pattern, platform detection, widget/MIME/metadata migration
-   - One MCP server serving ChatGPT, Claude, Cursor, and generic MCP hosts via MCP Apps standard
-   - Migration plan:
-     [roadmap.md](sdk-and-mcp-enhancements/roadmap.md)
-3. **Architectural enforcement adoption**
-   - Full plan:
-     [architectural-enforcement-adoption.plan.md](agentic-engineering-enhancements/current/architectural-enforcement-adoption.plan.md)
-   - Covers: ESLint boundary rules, dependency-cruiser, knip dead
-     code detection
-4. **Mutation testing**
-   - Full plan:
-     [mutation-testing-implementation.plan.md](agentic-engineering-enhancements/current/mutation-testing-implementation.plan.md)
-   - Covers: Stryker integration, `pnpm mutate`, workspace roll-out
-5. **Hallucination and evidence guard adoption**
-   - Full plan:
-     [hallucination-and-evidence-guard-adoption.plan.md](agentic-engineering-enhancements/current/hallucination-and-evidence-guard-adoption.plan.md)
-6. **Cross-agent standardisation**
-   - Full plan:
-     [cross-agent-standardisation.plan.md](agentic-engineering-enhancements/archive/completed/cross-agent-standardisation.plan.md)
-7. **Security and privacy hardening**
-   - Collection roadmap:
-     [security-and-privacy/roadmap.md](security-and-privacy/roadmap.md)
-8. **Supply chain controls** (if npm publishing is imminent)
-   - Icebox note:
-     [supply-chain-controls.md](icebox/supply-chain-controls.md)
-9. **Search quality stream progression** via semantic-search roadmap
-10. **Developer experience** — TSDoc overhaul, SDK publishing,
-    strictness convergence (`vi.mock`/assertions/no-console/override removal) plus delegated boundary/separation lint hardening
-
----
-
-## SDK Decomposition Trajectory (ADR-108)
-
-Strategic architecture remains anchored in:
-
-- [ADR-108](../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md)
-- [SDK workspace separation plan](semantic-search/archive/completed/sdk-workspace-separation.md) (archived, complete)
-- Pipeline framework extraction (iceboxed):
-  [icebox/openapi-pipeline-framework.md](icebox/openapi-pipeline-framework.md)
+- [architecture-and-infrastructure/](architecture-and-infrastructure/README.md)
+  owns cross-cutting architecture, quality gates, workspace boundaries, and
+  system quality.
+- [observability/](observability/README.md) owns five-axis observability after
+  the 2026-04-18 restructure.
+- [developer-experience/](developer-experience/README.md) owns SDK publishing,
+  generated docs, tooling strictness, and developer-facing quality.
+- [semantic-search/](semantic-search/README.md) owns search quality, ingestion,
+  retrieval surfaces, and search/graph adjacency.
 
 ---
 
 ## Collection Status
 
-| Collection | Strategic Role | Current Status | Primary Entry |
-|------------|----------------|----------------|---------------|
-| `sdk-and-mcp-enhancements/` | MCP extension surfaces, SDK pipeline evolution | 📋 M3 Public Beta | [sdk-and-mcp-enhancements/README.md](sdk-and-mcp-enhancements/README.md) |
-| `semantic-search/` | Search quality roadmap and SDK integration | 📋 M3 Public Beta | [semantic-search/roadmap.md](semantic-search/roadmap.md) |
-| `agentic-engineering-enhancements/` | Architectural constraints, AI guardrails, mutation testing | 📋 M3 Public Beta | [agentic-engineering-enhancements/README.md](agentic-engineering-enhancements/README.md) |
-| `security-and-privacy/` | Security hardening, hallucination guards, evidence-backed claims | 📋 M3 Public Beta | [security-and-privacy/roadmap.md](security-and-privacy/roadmap.md) |
-| `compliance/` | External policy compliance, directory listing requirements | 📋 M2 Open Public Alpha | [compliance/roadmap.md](compliance/roadmap.md) |
-| `architecture-and-infrastructure/` | Cross-cutting architecture, observability, system quality | 📋 M3 Public Beta | [architecture-and-infrastructure/README.md](architecture-and-infrastructure/README.md) |
-| `user-experience/` | Persona-level outcome contracts | 📋 M1-M2 | [user-experience/README.md](user-experience/README.md) |
-| `developer-experience/` | SDK publishing, generated docs, tooling | 📋 M1-M3 mixed lanes | [active/README.md](developer-experience/active/README.md) |
-| `connecting-oak-resources/knowledge-graph-integration/` | Internal Oak KG integration, ontology repo/workspace decisions, search projections, graph serving | 🔄 M2-M3 mixed lanes | [connecting-oak-resources/knowledge-graph-integration/README.md](connecting-oak-resources/knowledge-graph-integration/README.md) |
-| `sector-engagement/` | External data sources, upstream coordination, partner review threads, and adoption support for Oak resources | 📋 Reference | [sector-engagement/README.md](sector-engagement/README.md) |
+This table is a strategic snapshot. Collection READMEs and active/current plans
+remain authoritative for execution.
+
+| Collection | Strategic Role | Status | Entry |
+|---|---|---|---|
+| `curriculum-mcp-path-to-ga/` | Cross-collection release arc for Curriculum MCP HTTP server | 🔄 Active strategic index | [roadmap.md](curriculum-mcp-path-to-ga/roadmap.md) |
+| `semantic-search/` | Hybrid search, ingestion, retrieval quality, search/graph adjacency | 🔄 Current queue; no active plan in collection README | [README.md](semantic-search/README.md) |
+| `sdk-and-mcp-enhancements/` | MCP Apps, MCP protocol adoption, generated SDK/tool surfaces | 🔄 Active + queued execution | [README.md](sdk-and-mcp-enhancements/README.md) |
+| `observability/` | Five-axis observability under ADR-162 | 🔄 Active | [README.md](observability/README.md) |
+| `architecture-and-infrastructure/` | Architecture, quality gates, workspace boundaries, system quality | 🔄 Active backlog | [README.md](architecture-and-infrastructure/README.md) |
+| `security-and-privacy/` | Security controls, privacy posture, evidence-backed claims, Web Bot Auth enforcement evidence | 🔄 Active execution | [README.md](security-and-privacy/README.md) |
+| `compliance/` | External policy compliance, app submission, regulatory alignment | 📋 Planned / queued | [README.md](compliance/README.md) |
+| `developer-experience/` | SDK publishing, generated docs, tooling, strictness | 🔄 Active + queued execution | [README.md](developer-experience/README.md) |
+| `connecting-oak-resources/` | Oak-owned resource integration and external Oak repo references | 🔄 Active | [README.md](connecting-oak-resources/README.md) |
+| `exploring-open-education-resources/` | Third-party/non-Oak knowledge sources | 📋 Planned | [README.md](exploring-open-education-resources/README.md) |
+| `sector-engagement/` | External data sources, partner review, EEF and KG adoption | 📋 Reference + active subthreads | [README.md](sector-engagement/README.md) |
+| `discovery/` | Public agent/web discoverability of Oak machine surfaces | 🔄 Active + queued execution | [README.md](discovery/README.md) |
+| `agentic-engineering-enhancements/` | Practice, governance, review, learning, evidence guards | 🔄 Active + queued execution | [README.md](agentic-engineering-enhancements/README.md) |
+| `agent-tooling/` | `agent-tools/` workspace and collaboration-state substrate | 🔄 Active + queued execution | [README.md](agent-tooling/README.md) |
+| `user-experience/` | Persona-level outcome contracts | 📋 Legacy/reference | [README.md](user-experience/README.md) |
+| `icebox/` | Deferred/low-priority ideas | ⏸ Deferred | [icebox/](icebox/) |
 | `archive/` | Historical completed/superseded plans | ✅ Reference | [archive/](archive/) |
 
 ---
 
-## Potential Short-Term Enhancements
+## Update Rules
 
-### MCP Features
+Update this file when:
 
-- Incorporate Claude Education Skills as a user facing feature
-- Incorporate EEF Evidence as a user facing feature (JR's demo)
-- Combine EEF Evidence and Education Skills as a user facing feature (clear labelling as experiment, not endorsement, until pedagogical evaluation is complete)
-- API/KG convergence: decide whether the sibling `oak-openapi` and
-  `oak-curriculum-ontology` repos remain separate, become generated artefact
-  dependencies, or move closer to this monorepo — see
-  [sector-engagement/future/oak-openapi-monorepo-integration.plan.md](sector-engagement/future/oak-openapi-monorepo-integration.plan.md)
-  and
-  [connecting-oak-resources/knowledge-graph-integration/future/oak-curriculum-ontology-workspace-reassessment.plan.md](connecting-oak-resources/knowledge-graph-integration/future/oak-curriculum-ontology-workspace-reassessment.plan.md)
-- External KG adoption: define how MATs, edtechs, researchers, and public-sector partners can consume Oak KG assets responsibly — see [sector-engagement/knowledge-graph-adoption/future/oak-knowledge-graph-external-adoption.plan.md](sector-engagement/knowledge-graph-adoption/future/oak-knowledge-graph-external-adoption.plan.md)
-- Token-efficient MCP tool use: evaluate Cloudflare/Anthropic Code Mode
-  patterns, progressive tool discovery, and result filtering against Oak's
-  teacher-facing curriculum workflows first, with engineering/API workflows as
-  the secondary comparison before the product grows into a much larger tool set —
-  see [mcp-tool-token-economy-and-progressive-discovery.plan.md](sdk-and-mcp-enhancements/future/mcp-tool-token-economy-and-progressive-discovery.plan.md)
+- a new plan collection is created or retired;
+- a cross-collection strategic index becomes authoritative;
+- milestone state changes at M2/M3/M4 level;
+- discovery, graph, MCP release, security, or observability posture changes in a
+  way future sessions must see from the root.
 
-### Practice Capabilities
+Do not use this file for:
 
-- Incorporate useful practices and processes from <https://github.com/microsoft/agent-governance-toolkit?tab=readme-ov-file>
-- Incorporate useful concepts from <https://github.com/safishamsi/graphify> (additional cross-cutting memory and learning layer)
-- Consider how the MCP server could feed into development tooling. That might be a separate MCP app, providing expertise and guidance in using our SDKs, including the knowledge graphs and ontology. This is related to of building bundles of skills, rules, tools etc <https://claude.com/plugins>
+- task-level TODOs;
+- branch-specific handoff detail;
+- historical completion logs already captured in archives;
+- duplicating the body of collection roadmaps.
+
+When in doubt: link to the owning collection and make this file a map, not a
+second source of truth.

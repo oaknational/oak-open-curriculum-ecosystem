@@ -6,9 +6,12 @@ architecture-expert-betty, architecture-expert-fred,
 assumptions-expert, and architecture-expert-barney
 PROMOTION-READY verdict on `graph-stack.plan.md`). Skeleton 2026-05-07;
 NC-boundary amendment 2026-05-10; reviewer-absorption amendment
-2026-05-11; EEF concurrent-tenant amendment 2026-05-21.
+2026-05-11; EEF concurrent-tenant amendment 2026-05-21; graph-query-layer
+correction 2026-06-01; post-acceptance hygiene 2026-06-01 (stale
+pre-promotion sections cleared; Inc.3 adapter-sequencing retired).
 
-**Date**: 2026-05-07; amended 2026-05-10; amended 2026-05-11; amended 2026-05-21
+**Date**: 2026-05-07; amended 2026-05-10; amended 2026-05-11; amended 2026-05-21;
+amended 2026-06-01
 
 **2026-05-11 amendment summary** (Flamebright Burning Lava session,
 reviewer absorption against architecture-expert-betty,
@@ -47,8 +50,8 @@ earlier without scope reduction):
 - §First-wave ingestion scope amended to record two concurrent
   attached corpora with disjoint ingestion paths: Threads via
   `graph-ingest` Turtle/SHACL from the pinned ontology raw import,
-  EEF strands via a corpus-local Zod loader inside `graph-corpus-sdk`
-  with no `graph-ingest` participation.
+  EEF strands via a corpus-local typed direct-load inside
+  `graph-corpus-sdk` with no `graph-ingest` participation.
 - The topology of seven active workspaces plus one deferred is
   unchanged. Increment activation for the EEF adapter shifts forward;
   no workspace is added, no boundary moves, no transport rule
@@ -65,6 +68,36 @@ earlier without scope reduction):
 - Per-increment sequencing and plan-body decomposition continue to
   live in the active substrate and vertical-slice plan bodies in
   operational memory, not in this ADR.
+
+**2026-06-01 amendment summary** (graph-query-layer correction,
+owner-directed during the EEF graph-tool work):
+
+- The shared graph-core query layer ships **real operations only**: a
+  query operation is implemented with real graph-derived logic and tests,
+  or it is absent. The query contract is built from the operations its
+  consumers use.
+- The EEF strands corpus is the active first corpus consumer. Further
+  corpus adapters (Oak Curriculum Ontology Threads, prerequisite,
+  misconception) and cross-corpus join primitives are built when their
+  consumers exist. This supersedes the 2026-05-21 concurrent-tenant
+  arrangement above; the Threads adapter placeholder is removed.
+- The RDF substrate (term/dataset/jsonld/canon/data-factory), genuinely
+  multi-consumer, is unchanged.
+
+**2026-06-01 amendment summary (post-acceptance hygiene)** — clears
+residue left after the ADR reached Accepted (2026-05-11):
+
+- **Increment-numbered adapter sequencing retired.** The 2026-05-21
+  summary's "Prerequisite and misconception adapters remain at Inc.3"
+  no longer holds: per the graph-query-layer correction above, every
+  corpus adapter (Oak Curriculum Ontology Threads, prerequisite,
+  misconception) is built when its consumer exists, not at a numbered
+  increment. "Inc.3" has no live referent. The substrate-workspace
+  standup increments in §Topology (Inc.1/Inc.2/Inc.4) are unaffected —
+  they remain the legitimate foundation-build order.
+- **Stale pre-promotion framing cleared** in §"Open questions" and
+  §"Notes for future revision" (both formerly read "before promotion"
+  though the ADR has been Accepted since 2026-05-11).
 
 **Related**:
 [ADR-123](123-mcp-server-primitives-strategy.md) — MCP server primitives
@@ -165,11 +198,11 @@ once. Increment sequencing is owned by the implementing plan.
 6. `packages/sdks/graph-corpus-sdk/` — Oak's typed corpus adapters (Oak
    Curriculum Ontology Threads graph, prerequisite, misconception, EEF
    strands, future corpora). Cross-corpus join primitives. Ontology IRIs as
-   canonical identity. **Activates in Inc.1 with the Oak Curriculum
-   Ontology Threads adapter and the EEF strands adapter as concurrent
-   tenants (per the 2026-05-21 amendment); prerequisite and misconception
-   adapters activate in Inc.3. Cross-corpus join primitives activate in
-   Inc.3.**
+   canonical identity. **The EEF strands corpus is the active first corpus
+   consumer; further corpus adapters (Oak Curriculum Ontology Threads,
+   prerequisite, misconception) and cross-corpus join primitives are built
+   when their consumers exist (2026-06-01 amendment). The shared query
+   layer ships real operations only.**
 7. `agent-graphs/practice-graph/` — markdown-corpus graph for Oak's
    engineering practice. It is an agent-tooling-adjacent consumer, not a
    substrate library, and proves the substrate works for non-curriculum data.
@@ -243,7 +276,7 @@ The foundation wave targets two end-to-end attached corpora, each
 with its own ingestion path. Both are first-wave; neither is a
 follow-on. The corpora share no ingestion machinery — Threads
 exercises the substrate Turtle/SHACL path; EEF strands exercises a
-corpus-local Zod loader without `graph-ingest` participation.
+corpus-local typed direct-load without `graph-ingest` participation.
 
 1. **Oak Curriculum Ontology Threads graph** — Turtle + SHACL, ingested
    from the source-of-truth `oaknational/oak-curriculum-ontology` GitHub
@@ -254,20 +287,21 @@ corpus-local Zod loader without `graph-ingest` participation.
    parsing; `graph-enhance` owns derived graph enrichments and IRI/link records;
    `graph-corpus-sdk` owns the `curric:Thread` enumeration and
    `curric:includesThread` inverse-edge typed adapter.
-2. **EEF strands corpus** — corpus-local JSON snapshot, ingested via
-   a Zod-validated loader inside `graph-corpus-sdk` against the
-   repository-held canonical snapshot. `graph-ingest` does not
-   participate in this path; the loader carries its own schema and
-   typing discipline (consistent with §Typing Discipline of
+2. **EEF strands corpus** — corpus-local snapshot held `as const`,
+   loaded by typed direct construction inside `graph-corpus-sdk`
+   against the repository-held canonical snapshot. `graph-ingest` does
+   not participate in this path; the corpus types are derived directly
+   from the `as const` snapshot via `typeof`/indexed-access (consistent
+   with §Typing Discipline of
    [ADR-157](157-multi-source-open-education-integration.md)). Source
    authority is governed by §Corpus source authority below: the
    repository-held snapshot is canonical until EEF clarifies refresh
-   mechanics. Concurrent tenancy with the Threads adapter inside
-   `graph-corpus-sdk` is structurally valid because the two adapters
-   have disjoint ingestion paths and disjoint identity schemes
-   (ontology IRIs for Threads, EEF strand IDs for EEF strands); no
-   cross-corpus join primitive ships in Inc.1, so the two adapters
-   are independent at this increment.
+   mechanics. `graph-corpus-sdk` hosts the EEF strands corpus adapter on
+   the EEF strand ID identity scheme; further corpus adapters carry their
+   own identity schemes (e.g. ontology IRIs for an Oak Curriculum Ontology
+   Threads adapter) with disjoint ingestion paths, and a cross-corpus join
+   primitive is built when a cross-corpus consumer exists (2026-06-01
+   amendment).
 
 ### Ontology source-of-truth boundary
 
@@ -317,7 +351,7 @@ that work separately.
   Curriculum Ontology Threads corpus is imported as full straight-copy
   Turtle/SHACL source files, proving ontology IRI identity and generic
   Turtle/SKOS parsing against real Oak ontology data; the EEF strands corpus
-  is ingested through a corpus-local Zod-validated loader inside
+  is loaded by typed direct construction from its `as const` snapshot inside
   `graph-corpus-sdk`, proving the substrate composes with a corpus-native
   identity scheme through a path independent of `graph-ingest`.
 - The API/bulk/ontology split prevents a new graph adapter from becoming a
@@ -398,7 +432,10 @@ sweep.**
   preserves migration headroom. Property-graph is exposed as an ergonomic
   view, not the canonical truth.
 
-## Open questions to resolve before promotion
+## Open questions
+
+The ADR is **Accepted** (2026-05-11); these are tracked open items, not
+promotion blockers. Q1 and Q2 are resolved (history retained); Q3 remains open.
 
 1. ~~Confirm the workspace path conventions~~ **Resolved 2026-05-11**:
    the workspace path conventions
@@ -421,8 +458,9 @@ sweep.**
 
 ## Notes for future revision
 
-Before promotion to Accepted, this ADR must be reviewed for workspace path
-conventions, author attribution, and whether the MCP-agnostic principle
-belongs here or in a separate ADR. Promotion requires owner approval of the
-topology and confirmation that the proposed workspaces match repository
-workspace policy.
+The pre-promotion review this section once gated is complete: workspace path
+conventions are matrix-recorded in
+[ADR-041](041-workspace-structure-option-a.md); the transport-agnostic principle
+moved to [ADR-179](179-transport-agnostic-graph-substrate.md); the topology was
+owner-approved at acceptance (2026-05-11). Author attribution (Mark Hodierne)
+is the one tracked open item — see §Open questions Q3.

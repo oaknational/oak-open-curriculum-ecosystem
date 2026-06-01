@@ -1,0 +1,6 @@
+---
+description: EEF corpus grounding — when authoring or editing a claim about the EEF corpus (EEF_TOOLKIT_DATA), cite the source path it derives from or tag it agent-side; a claim that can do neither is left out.
+alwaysApply: false
+---
+
+Read and follow `.agent/rules/eef-corpus-grounding.md`.

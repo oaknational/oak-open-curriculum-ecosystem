@@ -143,11 +143,22 @@ below is a cross-reference index, not a second source of truth.
 - **Expected**: Per-file recovery — log the malformed file, skip it, and
   render the rest; emit a non-zero exit with a clear error summary so the
   fault is visible without blocking the substrate.
-- **Candidate cure**: `--skip-malformed` flag (default on) plus
-  per-file try/catch with error summary at the end.
-- **Target surface**: `agent-tools/src/collaboration-state/cli-comms-commands.ts`
-- **Status**: open — legacy optional-field compatibility partially fixed;
-  malformed-file skip/reporting remains
+- **Candidate cure** (revised 2026-06-01, owner direction): the original
+  `--skip-malformed` direction is **rejected** — tolerating corruption on read is
+  not a fix. The cure is prevention at the write (serialize via `JSON.stringify`
+  only, validate the serialized string round-trips and conforms, write atomically
+  via temp + rename) plus a loud, hard read-side failure that names the offending
+  file, plus a one-time repair of existing corruption and a gate-wired regression
+  guard.
+- **Target surface**: `agent-tools/src/collaboration-state/state-io.ts` (write
+  path) and `cli-comms-commands.ts` (render/read).
+- **Status**: addressed-in-working-tree-2026-06-01 —
+  [`agent-tooling/current/comms-event-write-integrity.plan.md`](current/comms-event-write-integrity.plan.md)
+  (one-time repair + absolute prevention + loud read + gate guard). Comms event
+  writes now parse-back, schema-validate, and publish via a synced same-directory
+  atomic writer before the target file appears; readers hard-fail with the bad
+  path named; `comms validate` scans true-JSON collaboration state; and
+  `repo-validators:check` runs the same validator.
 - **Review 2026-05-10**: still open. `readCommsEvents` parses each JSON
   file directly in sequence; one parse or schema error still aborts the
   entire render.
@@ -160,6 +171,27 @@ below is a cross-reference index, not a second source of truth.
   render against the repo's three comms directories exits 0 to a temp output.
   The broader F-05 contract remains open: one truly malformed file should be
   skipped/reported without blocking the rest of the rendered log.
+- **Review 2026-06-01** (Windswept Floating Summit): fresh worked instance. Three
+  legacy events (`625fb072`, `76ede08d`, `a15363e5`) had bodies truncated
+  mid-sentence into unterminated JSON; one aborted `comms render` repo-wide — the
+  exact F-05 blocker. Manually repaired all three (terminated the strings,
+  preserving surviving content, with a `[body truncated by comms-CLI write bug;
+  JSON repaired]` marker); render now exits 0. F-05's core contract (skip + report
+  one malformed file without aborting the whole render) is still open and
+  re-confirmed high-severity.
+- **Write-side gap surfaced 2026-06-01 (candidate for its own entry):** these
+  files prove the *write* path can persist truncated/malformed JSON, not only that
+  the render is fragile. `comms append`/`send`/`direct` should validate that the
+  assembled event parses and write atomically (temp file + rename) so a failed
+  write never leaves a malformed event behind. `--body-file` (shipped) is the
+  operator-side cure for shell-quoting hazards but does not by itself guarantee
+  validated, atomic persistence.
+- **Implementation review 2026-06-01** (Tempestuous Gliding Falcon): implemented
+  the revised owner-directed cure. The live validator reports
+  `collaboration-state validate: OK (2824 JSON file(s) checked)`, and the root
+  repo validator now includes that check. The older `skip + report` expected shape
+  above is retained only as historical capture; the current accepted contract is
+  prevention at write plus loud, path-named failure on any external corruption.
 - **Severity**: high (substrate-wide blocker when triggered)
 - **Related shape**: 2026-05-06 (Hidden Slipping Moth, `4be7b5`) —
   `comms send` succeeded in writing the new event but then failed
@@ -168,10 +200,11 @@ below is a cross-reference index, not a second source of truth.
   identity fields instead of the current `author` object shape. This
   is the *legacy-schema* sibling of the malformed-JSON case: the
   file parses as JSON but does not conform to the current event
-  schema. The `--skip-malformed` cure should extend to schema-shape
-  mismatches, not only parse failures, with a migration warning
-  surfacing the offending event path. Manual repair of the legacy
-  event file unblocked this instance.
+  schema. The plan's validation covers both — parse failures and
+  schema-shape mismatches are caught at the write (rejected before
+  the file is created) and surfaced loudly at read, with the
+  offending event path named. Manual repair of the legacy event file
+  unblocked this instance.
 
 ### F-06 — Build-on-each-CLI-invocation causes identity drift mid-session
 

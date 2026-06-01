@@ -229,7 +229,7 @@ governance edits.
 
 - [`.agent/memory/operational/pending-graduations.md`](../../../memory/operational/pending-graduations.md)
   — the two `due` items and the recent `pending` additions.
-- [`graph-mvp-arc.plan.md` § Open Decisions](../../graph-mvp-arc.plan.md)
+- `graph-mvp-arc.plan.md` § Open Decisions
   — D-4a entry; close on Phase 2 landing.
 - [`graph-stack.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md)
   — graph-stack ACTIVE promotion is downstream of ADR-173

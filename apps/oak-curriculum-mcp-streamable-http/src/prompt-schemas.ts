@@ -70,22 +70,3 @@ export const learningProgressionArgsSchema = {
     .describe('The concept to trace (e.g., "algebra", "cells", "narrative writing")'),
   subject: z.string().describe('The subject area (e.g., "maths", "science", "english")'),
 };
-
-/**
- * Schema for eef-evidence-grounded-lesson-plan prompt arguments.
- *
- * Co-gated with the `eef-explore-evidence-for-context` tool behind
- * `OAK_CURRICULUM_MCP_EEF_ENABLED` (see register-prompts). `focus` is an
- * optional pedagogical priority passed as free text — MCP prompt arguments are
- * string-typed, so this schema does not constrain the value. The
- * `eef-explore-evidence-for-context` tool validates `focus` against its
- * EEF_PRIORITIES vocabulary (derived schema-first from the EEF data).
- */
-export const eefEvidenceGroundedLessonPlanArgsSchema = {
-  subject: z.string().describe('The subject (e.g., "mathematics", "science", "english")'),
-  keyStage: z.string().describe('The key stage (e.g., "EYFS", "KS1", "KS2", "KS3", "KS4", "KS5")'),
-  topic: z
-    .string()
-    .describe('The specific topic for the lesson (e.g., "fractions", "the water cycle")'),
-  focus: z.string().optional().describe('Optional pedagogical focus (an EEF priority slug)'),
-};

@@ -351,11 +351,14 @@ signal under the standard quality gate.
   exists to preserve — so the durable fix path is upstream (the source or the
   refresh script), never at the site. The discriminator is _external-ness, not
   size_: a small external snapshot qualifies; a large hand-built lookup table
-  does not. The convention carries an enforced contract — a `*.external-data.ts`
-  file MUST export its data typed `unknown` (validated at a loader boundary),
-  MUST carry a provenance docstring, and MUST NOT export logic
-  (function / class / enum) — checked by the `validate-external-data-files`
-  repo-validator so the suffix cannot be used to dodge the duplication gate.
+  does not. The convention carries a contract — a `*.external-data.ts`
+  file MUST be pure data: it MUST carry a provenance docstring and MUST NOT
+  export logic (function / class / enum), so the suffix cannot be used to
+  dodge the duplication gate. Its types are derived from the data held `as
+const` (the generalised compile-time discipline of ADR-038), never typed
+  `unknown`. The contract is kept by review when the snapshot changes — the
+  right tool for keeping one external-data file logic-free is to read it —
+  not by an automated gate.
   The same suffix also drives the workspace ESLint code-quality ignore for the
   same architectural reason. Owner-authorised 2026-05-29.
 
@@ -446,8 +449,10 @@ Cloud automatic analysis. It currently covers:
   entry is functionally redundant for analyser scope; it exists to make the
   owner-ratified boundary visible in the mechanical encoding.
 - `**/*.external-data.ts` — external-source data snapshots (external-data file
-  convention; see the "Duplications (cpd.exclusions)" class above). Contract
-  enforced by the `validate-external-data-files` repo-validator.
+  convention; see the "Duplications (cpd.exclusions)" class above). The
+  pure-data contract (provenance docstring, no exported logic, types derived
+  from the `as const` data) is kept by review when the snapshot changes, not
+  by an automated gate.
 
 Block 2 is mechanically distinct from Block 1: it touches only the cpd
 analyser, never any rule analyser. All other Sonar rules continue to see

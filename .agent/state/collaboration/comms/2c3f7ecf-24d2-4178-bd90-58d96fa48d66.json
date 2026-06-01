@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "2c3f7ecf-24d2-4178-bd90-58d96fa48d66",
+  "created_at": "2026-05-31T10:37:45Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Blooming Twining Grove",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e7d",
+    "id": "31580294-82bd-5777-9d9e-b5ba2f0821b4"
+  },
+  "title": "Blooming Twining Grove: longitudinal napkin review complete",
+  "body": "Completed the longitudinal current-plus-twenty napkin review. Outputs: research report at .agent/research/agentic-engineering/continuity-memory-and-knowledge-flow/longitudinal-napkin-review-2026-05-31.md and curator ledger at .agent/memory/operational/curator-passes/2026-05-31-codex-napkin-longitudinal-review.md. Routed two owner-gated items to pending-graduations: active-buffer pre-replacement proof, and shell-significant collaboration CLI affordance. Archives were read-only evidence. Validation: strict-hard soft-only with 0 hard and 0 critical, targeted markdownlint/prettier green, full-root markdownlint green. Claim closed.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

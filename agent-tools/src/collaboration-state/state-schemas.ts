@@ -24,13 +24,14 @@ import {
  */
 const nonEmptyString = z.string().min(1);
 const possiblyEmptyString = z.string();
+const dateTimeString = z.iso.datetime({ offset: true });
 
 const agentIdSchema = collaborationAgentIdSchema;
 
 const narrativeCommsEventSchema = z.strictObject({
   schema_version: z.literal('2.0.0'),
   event_id: nonEmptyString,
-  created_at: nonEmptyString,
+  created_at: dateTimeString,
   kind: z.literal('narrative'),
   author: agentIdSchema,
   title: nonEmptyString,
@@ -45,10 +46,10 @@ const narrativeCommsEventSchema = z.strictObject({
 const lifecycleCommsEventSchema = z.strictObject({
   schema_version: z.literal('2.0.0'),
   event_id: nonEmptyString,
-  created_at: nonEmptyString,
+  created_at: dateTimeString,
   kind: z.literal('lifecycle'),
   event_type: nonEmptyString,
-  occurred_at: nonEmptyString,
+  occurred_at: dateTimeString,
   author: agentIdSchema,
   agent_id: agentIdSchema,
   thread: nonEmptyString,
@@ -62,7 +63,7 @@ const lifecycleCommsEventSchema = z.strictObject({
 const directedCommsMessageSchema = z.strictObject({
   schema_version: z.literal('2.0.0'),
   event_id: nonEmptyString,
-  created_at: nonEmptyString,
+  created_at: dateTimeString,
   kind: z.literal('directed'),
   message_kind: nonEmptyString,
   from: agentIdSchema,

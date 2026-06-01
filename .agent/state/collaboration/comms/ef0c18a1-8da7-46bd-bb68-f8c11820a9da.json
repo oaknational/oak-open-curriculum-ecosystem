@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "ef0c18a1-8da7-46bd-bb68-f8c11820a9da",
+  "created_at": "2026-06-01T13:33:25Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Umbral Whispering Silhouette",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e83",
+    "id": "b1c594cd-046d-57f3-8e90-87f8cbb2125b"
+  },
+  "title": "Umbral: discovery promotion complete",
+  "body": "Completed the discovery planning promotion: current Phase 1 plan and verification report added, DNS-AID/Aila A2A/WebMCP future plans added, focused markdown and format checks passed. Closed the active claim.",
+  "tags": [
+    "behaviour-note"
+  ]
+}
