@@ -9,17 +9,11 @@
  * live in `./eef-graph-model.ts`; this class is the thin contract surface
  * that composes them.
  *
- * **Operation scope at gate-1a (graph-stack Inc.1d)**: two operations
- * ship live — `manifest()` (graph-level truth-telling produced at
- * construction) and `subgraph()` (a bounded breadth-first traversal over
- * `related_strand` edges). The remaining five fallible operations
- * (`summary`, `getNode`, `enumerateNodes`, `neighbours`, `findByTag`)
- * return `Result.err(NotImplementedYet)` with the operation name; their
- * real implementations land at Inc.3. The widened error unions are
- * additive and backward-compatible when that happens. The stubs omit the
- * interface's parameters deliberately — a stub uses none of them, and a
- * narrower implementation still satisfies the `GraphView` signature; the
- * parameters return when the real logic lands at Inc.3.
+ * **Operation scope**: the `GraphView` contract is `manifest()`
+ * (graph-level truth-telling produced at construction) and `subgraph()`
+ * (a bounded breadth-first traversal over `related_strand` edges). No
+ * stub / `NotImplementedYet` operations exist: a capability is
+ * implemented with real graph-derived logic and tests, or it is absent.
  *
  * **Edge model**: a single edge type, `related_strand`, derived from each
  * strand's optional `related_strands` array (strand id → strand id). The
@@ -48,17 +42,9 @@ import { ok, err, type Result } from '@oaknational/result';
 import type {
   GraphView,
   GraphManifest,
-  GraphSummary,
-  GraphSummaryError,
   SubgraphResult,
   SubgraphError,
   NodeProjection,
-  NodeNotFoundError,
-  NotImplementedYet,
-  EnumerateNodesResult,
-  EnumerateNodesError,
-  NeighbourResult,
-  FindByTagError,
 } from '@oaknational/graph-core/graph-view';
 
 import type { EefStrand } from './strand-schema.js';
@@ -99,7 +85,7 @@ export interface EefStrandsGraphViewInput {
  * the constructor is private so an instance can only exist once its
  * backing data has passed the graph-level integrity checks.
  */
-export class EefStrandsGraphView implements GraphView<EefStrand, EefStrandEdgeType> {
+export class EefStrandsGraphView implements GraphView<EefStrand> {
   readonly #index: EefGraphIndex;
   readonly #meta: EefStrandsManifestMeta;
 
@@ -123,7 +109,7 @@ export class EefStrandsGraphView implements GraphView<EefStrand, EefStrandEdgeTy
    */
   static create(
     input: EefStrandsGraphViewInput,
-  ): Result<GraphView<EefStrand, EefStrandEdgeType>, EefStrandsGraphViewConstructionError> {
+  ): Result<GraphView<EefStrand>, EefStrandsGraphViewConstructionError> {
     const index = buildGraphIndex(input.strands);
     if (!index.ok) {
       return index;
@@ -165,33 +151,5 @@ export class EefStrandsGraphView implements GraphView<EefStrand, EefStrandEdgeTy
       return err(invalid);
     }
     return ok(traverseSubgraph(this.#index.nodesById, opts.rootIds, opts.depth));
-  }
-
-  /** Inc.3 stub — see class docstring. */
-  summary(): Result<GraphSummary, GraphSummaryError> {
-    return err({ kind: 'NotImplementedYet', operation: 'summary' });
-  }
-
-  /** Inc.3 stub — see class docstring. */
-  getNode(): Result<EefStrand, NodeNotFoundError | NotImplementedYet> {
-    return err({ kind: 'NotImplementedYet', operation: 'getNode' });
-  }
-
-  /** Inc.3 stub — see class docstring. */
-  enumerateNodes(): Result<
-    EnumerateNodesResult<EefStrand>,
-    EnumerateNodesError | NotImplementedYet
-  > {
-    return err({ kind: 'NotImplementedYet', operation: 'enumerateNodes' });
-  }
-
-  /** Inc.3 stub — see class docstring. */
-  neighbours(): Result<NeighbourResult<EefStrand>, NodeNotFoundError | NotImplementedYet> {
-    return err({ kind: 'NotImplementedYet', operation: 'neighbours' });
-  }
-
-  /** Inc.3 stub — see class docstring. */
-  findByTag(): Result<readonly EefStrand[], FindByTagError> {
-    return err({ kind: 'NotImplementedYet', operation: 'findByTag' });
   }
 }

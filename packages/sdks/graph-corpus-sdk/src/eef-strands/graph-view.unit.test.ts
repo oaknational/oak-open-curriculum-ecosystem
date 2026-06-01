@@ -3,7 +3,6 @@ import type { GraphView } from '@oaknational/graph-core/graph-view';
 
 import {
   EefStrandsGraphView,
-  type EefStrandEdgeType,
   type EefStrandsGraphViewInput,
   type EefStrandsManifestMeta,
 } from './graph-view.js';
@@ -59,9 +58,7 @@ const STRANDS: readonly EefStrand[] = [
 
 const DEFAULT_INPUT: EefStrandsGraphViewInput = { strands: STRANDS, meta: META };
 
-function build(
-  input: EefStrandsGraphViewInput = DEFAULT_INPUT,
-): GraphView<EefStrand, EefStrandEdgeType> {
+function build(input: EefStrandsGraphViewInput = DEFAULT_INPUT): GraphView<EefStrand> {
   const result = EefStrandsGraphView.create(input);
   if (!result.ok) {
     throw new Error(`fixture failed to construct: ${JSON.stringify(result.error)}`);
@@ -193,48 +190,6 @@ describe('EefStrandsGraphView.subgraph', () => {
     expect(result.ok).toBe(false);
     if (!result.ok) {
       expect(result.error).toEqual({ kind: 'SubgraphDepthExceeded', depth: 11, limit: 10 });
-    }
-  });
-});
-
-describe('EefStrandsGraphView Inc.3 stub operations', () => {
-  it('returns NotImplementedYet from summary', () => {
-    const result = build().summary();
-    expect(result.ok).toBe(false);
-    if (!result.ok) {
-      expect(result.error).toEqual({ kind: 'NotImplementedYet', operation: 'summary' });
-    }
-  });
-
-  it('returns NotImplementedYet from getNode', () => {
-    const result = build().getNode({ nodeId: 's1' });
-    expect(result.ok).toBe(false);
-    if (!result.ok) {
-      expect(result.error).toEqual({ kind: 'NotImplementedYet', operation: 'getNode' });
-    }
-  });
-
-  it('returns NotImplementedYet from enumerateNodes', () => {
-    const result = build().enumerateNodes({ pageIndex: 0, pageSize: 10 });
-    expect(result.ok).toBe(false);
-    if (!result.ok) {
-      expect(result.error).toEqual({ kind: 'NotImplementedYet', operation: 'enumerateNodes' });
-    }
-  });
-
-  it('returns NotImplementedYet from neighbours', () => {
-    const result = build().neighbours({ nodeId: 's1' });
-    expect(result.ok).toBe(false);
-    if (!result.ok) {
-      expect(result.error).toEqual({ kind: 'NotImplementedYet', operation: 'neighbours' });
-    }
-  });
-
-  it('returns NotImplementedYet from findByTag', () => {
-    const result = build().findByTag('literacy');
-    expect(result.ok).toBe(false);
-    if (!result.ok) {
-      expect(result.error).toEqual({ kind: 'NotImplementedYet', operation: 'findByTag' });
     }
   });
 });

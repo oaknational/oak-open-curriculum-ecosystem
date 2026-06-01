@@ -23,11 +23,6 @@
       "types": "./dist/eef-strands/index.d.ts",
       "development": "./src/eef-strands/index.ts",
       "default": "./dist/eef-strands/index.js"
-    },
-    "./threads": {
-      "types": "./dist/threads/index.d.ts",
-      "development": "./src/threads/index.ts",
-      "default": "./dist/threads/index.js"
     }
   },
   "scripts": {

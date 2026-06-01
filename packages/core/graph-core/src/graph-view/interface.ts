@@ -1,10 +1,9 @@
 /**
- * The `GraphView<TNode, TEdgeType>` polymorphic query-layer interface.
+ * The `GraphView<TNode>` polymorphic query-layer interface.
  *
- * Adapters (Threads, EEF strands, prerequisites, misconceptions, ...)
- * implement this contract over their own typed node and edge data.
- * Consumers compose against the interface, not against any one
- * adapter's internal shape.
+ * Adapters (EEF strands, prerequisites, misconceptions, ...) implement
+ * this contract over their own typed node data. Consumers compose against
+ * the interface, not against any one adapter's internal shape.
  *
  * Placement in `graph-core` is dependency-direction permanent per
  * ADR-041: lib-tier and agent-graphs-tier consumers cannot import from
@@ -24,11 +23,9 @@
  * this with the type system; documentation is the load-bearing
  * surface.
  *
- * Stub-operation discipline: at graph-stack Inc.1d, five of the six
- * fallible operations ship as `Result.err(NotImplementedYet)` stubs
- * from the EEF adapter (WS4.5). The interface widens their error
- * unions to include `NotImplementedYet`. This is additive and
- * backward-compatible at Inc.3 when real implementations land.
+ * The contract is `manifest()` + `subgraph()`: real graph-derived
+ * operations only. No stub / `NotImplementedYet` operations exist — a
+ * capability is implemented with real logic and tests, or it is absent.
  *
  * @example
  * ```typescript
@@ -39,7 +36,7 @@
  * } from '@oaknational/graph-core/graph-view';
  *
  * async function exploreEvidence<TStrand>(
- *   view: GraphView<TStrand, 'related_strand' | 'related_guidance_report'>,
+ *   view: GraphView<TStrand>,
  *   rootIds: readonly string[],
  *   projection?: NodeProjection<TStrand>,
  * ): Promise<SubgraphResult<TStrand> | undefined> {
@@ -52,60 +49,19 @@
 
 import type { Result } from '@oaknational/result';
 
-import type {
-  EnumerateNodesError,
-  EnumerateNodesResult,
-  FindByTagError,
-  GraphManifest,
-  GraphSummary,
-  GraphSummaryError,
-  NeighbourResult,
-  NodeFilter,
-  NodeNotFoundError,
-  NodeProjection,
-  NotImplementedYet,
-  SubgraphError,
-  SubgraphResult,
-} from './types.js';
+import type { GraphManifest, NodeProjection, SubgraphError, SubgraphResult } from './types.js';
 
 /**
  * Polymorphic query-layer contract for a typed graph.
  *
  * @typeParam TNode - The node value type.
- * @typeParam TEdgeType - String-literal-union of edge-type discriminants.
  */
-export interface GraphView<TNode, TEdgeType extends string> {
+export interface GraphView<TNode> {
   manifest(): GraphManifest;
-
-  summary(): Result<GraphSummary, GraphSummaryError>;
-
-  getNode(opts: {
-    readonly nodeId: string;
-    readonly projection?: NodeProjection<TNode>;
-  }): Result<TNode, NodeNotFoundError | NotImplementedYet>;
-
-  enumerateNodes(opts: {
-    readonly filter?: NodeFilter<TNode>;
-    readonly projection?: NodeProjection<TNode>;
-    readonly pageIndex: number;
-    readonly pageSize: number;
-  }): Result<EnumerateNodesResult<TNode>, EnumerateNodesError | NotImplementedYet>;
-
-  neighbours(opts: {
-    readonly nodeId: string;
-    readonly edgeType?: TEdgeType;
-    readonly direction?: 'in' | 'out' | 'both';
-    readonly projection?: NodeProjection<TNode>;
-  }): Result<NeighbourResult<TNode>, NodeNotFoundError | NotImplementedYet>;
 
   subgraph(opts: {
     readonly rootIds: readonly string[];
     readonly depth: number;
     readonly projection?: NodeProjection<TNode>;
   }): Result<SubgraphResult<TNode>, SubgraphError>;
-
-  findByTag(
-    tag: string,
-    projection?: NodeProjection<TNode>,
-  ): Result<readonly TNode[], FindByTagError>;
 }

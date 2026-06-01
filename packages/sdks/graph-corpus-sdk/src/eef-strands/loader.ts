@@ -38,11 +38,7 @@ import type { GraphView } from '@oaknational/graph-core/graph-view';
 import { EEF_TOOLKIT_DATA } from './eef-toolkit.external-data.js';
 import { EefToolkitSchema, type EefStrand } from './strand-schema.js';
 import { checkFreshness, DEFAULT_THRESHOLD_DAYS, type FreshnessError } from './freshness.js';
-import {
-  EefStrandsGraphView,
-  type EefStrandEdgeType,
-  type EefStrandsGraphViewConstructionError,
-} from './graph-view.js';
+import { EefStrandsGraphView, type EefStrandsGraphViewConstructionError } from './graph-view.js';
 
 /**
  * Failure modes of {@link loadEefCorpus}, unioned across the three
@@ -73,7 +69,7 @@ export type LoadEefCorpusError =
  * intentionally not permanent contract.
  */
 export interface LoadedEefCorpus {
-  readonly view: GraphView<EefStrand, EefStrandEdgeType>;
+  readonly view: GraphView<EefStrand>;
   readonly strands: readonly EefStrand[];
   readonly strandIds: readonly string[];
 }

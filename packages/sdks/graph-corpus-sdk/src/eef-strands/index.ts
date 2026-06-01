@@ -5,8 +5,6 @@
  * corpus types; the MCP surface consumes them) and ADR-173 (the EEF
  * adapter, its Zod loader, and the corpus snapshot live here):
  *
- * - the corpus-layer composition types (`EvidenceCorpus` and its
- *   `rank` / `explain` / `compare` operation, result, and error types);
  * - the `EefStrandsGraphView` adapter (`./graph-view.ts`) over the strands;
  * - the Zod schema (`./strand-schema.ts`) the `EefStrand` type flows from;
  * - the loader (`./loader.ts`) that validates + freshness-gates the
@@ -62,18 +60,3 @@ export {
   type FreshnessError,
   type FreshnessOk,
 } from './freshness.js';
-
-export type {
-  CompareError,
-  CompareOptions,
-  ComparisonDimension,
-  ComparisonResult,
-  EvidenceCorpus,
-  ExplainOptions,
-  NodeExplanation,
-  NotImplementedYet,
-  RankError,
-  RankOptions,
-  RankedItem,
-  RankedResults,
-} from './types.js';
