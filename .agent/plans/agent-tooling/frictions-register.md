@@ -160,6 +160,21 @@ below is a cross-reference index, not a second source of truth.
   render against the repo's three comms directories exits 0 to a temp output.
   The broader F-05 contract remains open: one truly malformed file should be
   skipped/reported without blocking the rest of the rendered log.
+- **Review 2026-06-01** (Windswept Floating Summit): fresh worked instance. Three
+  legacy events (`625fb072`, `76ede08d`, `a15363e5`) had bodies truncated
+  mid-sentence into unterminated JSON; one aborted `comms render` repo-wide — the
+  exact F-05 blocker. Manually repaired all three (terminated the strings,
+  preserving surviving content, with a `[body truncated by comms-CLI write bug;
+  JSON repaired]` marker); render now exits 0. F-05's core contract (skip + report
+  one malformed file without aborting the whole render) is still open and
+  re-confirmed high-severity.
+- **Write-side gap surfaced 2026-06-01 (candidate for its own entry):** these
+  files prove the *write* path can persist truncated/malformed JSON, not only that
+  the render is fragile. `comms append`/`send`/`direct` should validate that the
+  assembled event parses and write atomically (temp file + rename) so a failed
+  write never leaves a malformed event behind. `--body-file` (shipped) is the
+  operator-side cure for shell-quoting hazards but does not by itself guarantee
+  validated, atomic persistence.
 - **Severity**: high (substrate-wide blocker when triggered)
 - **Related shape**: 2026-05-06 (Hidden Slipping Moth, `4be7b5`) —
   `comms send` succeeded in writing the new event but then failed
