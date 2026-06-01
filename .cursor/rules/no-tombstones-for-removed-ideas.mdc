@@ -1,0 +1,6 @@
+---
+description: When a wrong idea is removed, state the correct design in the positive and stop; do not memorialise the dead idea via rejection labels, negation-contrast framing ("X, not Y"), or dead-shape prohibition lists. Deletion instructions for real code are the allowed exception.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/no-tombstones-for-removed-ideas.md`.

@@ -106,6 +106,7 @@ without proportional value.
 | `.agent/rules/no-moving-targets-in-permanent-docs.md`                      | always-on      | —                                                                                                |
 | `.agent/rules/no-skipped-tests.md`                                         | always-on      | —                                                                                                |
 | `.agent/rules/no-speed-pressure.md`                                        | always-on      | —                                                                                                |
+| `.agent/rules/no-tombstones-for-removed-ideas.md`                          | always-on      | —                                                                                                |
 | `.agent/rules/no-type-shortcuts.md`                                        | always-on      | —                                                                                                |
 | `.agent/rules/no-verify-requires-fresh-authorisation.md`                   | always-on      | —                                                                                                |
 | `.agent/rules/no-warning-toleration.md`                                    | always-on      | —                                                                                                |

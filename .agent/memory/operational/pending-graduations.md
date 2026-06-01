@@ -45,12 +45,20 @@ triggers fire.
 
 - **No tombstones for removed ideas.** `[captured: 2026-05-31 | source:
   distilled.md + feedback_no_tombstones_for_removed_ideas | target:
-  pdr-or-rule:no-tombstones-for-removed-ideas | trigger: owner flagged it recurring
-  this session; graduate on the next independent instance or owner direction |
-  size: S | status: pending]` When an idea is wrong, describe the correct design
-  and stop; do not keep it alive as a labelled prohibition. Sibling of the
-  graduated `existence-is-not-correctness / default-replace` rule (memorialise vs
-  preserve), so the natural home is alongside it.
+  .agent/rules/no-tombstones-for-removed-ideas.md | trigger: FIRED 2026-06-01 —
+  owner restated and directed graduation | size: S | status: graduated 2026-06-01]`
+  GRADUATED to `.agent/rules/no-tombstones-for-removed-ideas.md` (canonical, with
+  `.claude` / `.cursor` / `.agents` loader pointers + a RULES_INDEX entry) — now in
+  the always-applied rule tier. When an idea is wrong, describe the correct design
+  and stop; do not memorialise it via rejection labels, negation-contrast framing
+  ("X, not Y"), or dead-shape prohibition lists. Allowed exception: real-code
+  deletion instructions until the code is gone. **Remaining enforcement increment
+  (owner decision pending, NOT graduated):** the write-time innate-immunity hook
+  (`.agent/hooks/policy.json`). The negation-contrast form is a structural pattern,
+  not a clean literal — a naive block on "never / rather than / instead of" would
+  false-positive heavily — so the hook can carry only a narrow high-signal banner
+  set, and catching the structural form needs a smarter detector or an output-time
+  review pass.
 
 - **Trace user value before tool design.** `[captured: 2026-05-31 | source:
   distilled.md + feedback_trace_user_value_before_tool_design | target:

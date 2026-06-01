@@ -27,18 +27,6 @@ The content is restored here after owner correction. Do not archive or replace
 this active buffer again unless every item has a valid `graduated`, `duplicate`,
 `owner-gated`, or `stale-withdrawn` disposition under `consolidate-until-done`.
 
-## 2026-05-31 — no tombstones for removed ideas (EEF reframe, Fruited Regrowing Copse)
-
-When an idea is wrong, describe the correct design and stop. Do not keep the wrong
-idea alive by labelling it "rejected" / "to avoid" / a reframe-consequence banner —
-the warning is gravity, not absence, and re-instantiates the dead concept for every
-reader. Sharper sibling of `existence-is-not-correctness / default-replace`
-(there: don't *preserve* a wrong shape; here: don't *memorialise* one). The one
-allowed exception is transitional discipline against re-deriving behaviour from
-*real code being deleted*, until that code is gone. Owner-flagged as recurring;
-candidate for PDR/rule graduation (pending-graduations). Platform-memory mirror:
-`feedback_no_tombstones_for_removed_ideas`.
-
 ## 2026-05-31 — trace user value before tool design (EEF reframe, Fruited Regrowing Copse)
 
 Trace the user journey and its value end to end before committing to a tool

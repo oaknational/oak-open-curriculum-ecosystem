@@ -17,8 +17,8 @@
  * (research §10 fluent API on Dataset vs research §11 projection
  * adjacency on PropertyGraph; ADR-173 §Design Principles #3). Both
  * surfaces must be available because they answer different conceptual
- * questions — the Threads adapter (Inc.1b WS4.2) is free to choose
- * either for its inverse-edge lookup.
+ * questions — a corpus adapter is free to choose either for its
+ * inverse-edge lookup.
  *
  * Identity comparison uses the canonical `equals` free function from
  * `@oaknational/graph-core/term`, which dispatches on `termType` and

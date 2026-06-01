@@ -36,3 +36,24 @@ fitness_content_role: drainable-buffer
   2026-05-28 design docs that first explored it were quarantined to `archive/`
   (2026-05-30). No substance lost; this entry is retired to avoid a stale second
   home in dead gate-1a/1b vocabulary.
+
+## Q-002 — which `.agent/rules/*` rules are actually impactful
+
+- **Captured**: 2026-06-01 (Sunlit Gliding Twilight / `claude` / `2a4252`)
+- **Question**: Of the ~70 rules injected into context via `CLAUDE.md`, which
+  ones measurably change agent behaviour and earn their context cost, and which
+  are inert? Prose rules have no "firing" event to count; hook-backed rules
+  (e.g. write-time `no-moving-targets`, secrets-scan on Read, PreToolUse gates)
+  do execute and could be instrumented.
+- **Why it shapes future work**: directly informs the ~80k reliably-loaded
+  context budget (`[[project_80k_reliably_loaded_context_budget]]`) — knowing
+  which rules are inert is the evidence needed to move them on-demand or retire
+  them, rather than carrying all ~70 always-on.
+- **Why not answerable cheaply now**: prose rules are not measurable by design
+  (continuously in effect, never discretely triggered); the only well-defined
+  signal is hook-fire counts, which requires (a) instrumenting hook scripts to
+  log invocations and (b) for behaviour-change attribution, auditing transcripts
+  for evidence a rule altered a move. No built-in per-rule analytics exist.
+- **Owning artefact / discussion home**: none yet; relates to context-budget
+  governance. Does not block any current cycle.
+- **Status**: open.

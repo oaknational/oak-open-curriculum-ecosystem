@@ -501,3 +501,64 @@ most important.
   If the hook runs staged formatting, markdownlint, repo validators, shell lint,
   or turbo tasks, that is the requested enforcement path, not a violation of the
   no-manual-gates instruction.
+
+## Session: 2026-06-01 — EEF re-review, stub deletion, decontamination (Shaded Swaying Sapling / `d37ba7`)
+
+### Mistakes Made
+
+- The conservation/monument reflex fired ~4x in one session, in me, each time
+  passing surface checks: (1) "repoint `graph-view.ts` and leave it red" instead of
+  deleting it; (2) holding graph-core's `GraphView` contract in D4/D5 "behind the
+  review gate, inert not red" when it was old shape with no consumers; (3) building
+  negation-monuments ("DELETED, not reshaped", "never a foundation", "rather than
+  X") while scrubbing monuments. Owner cures, in order: "old shape + no consumers →
+  delete it now"; "listing negations IS the building-monuments antipattern".
+  Behaviour change: at write time, state what IS and stop — a negation that reads as
+  diligence is the tell. Promoted to `due` in pending-graduations; the cure is
+  write-time enforcement, not another note.
+- Ran a package gate under the wrong filter name (`@oaknational/oak-curriculum-sdk`
+  matches no workspace; the real name is `@oaknational/curriculum-sdk`), and a grep
+  for `error TS` hid the "No projects matched" line — so I briefly read a non-run as
+  a pass. Behaviour change: when filtering by package, guard greps with `|No
+  projects` and confirm the filter matched before trusting a clean result.
+
+### Patterns to Remember
+
+- Decontamination is only as good as its token list. ADR-173 (Accepted) carried
+  live old-shape claims (Threads concurrent-tenant, Inc.3 stub-deferral) that
+  survived D0 because the sweep never hunted
+  `NotImplementedYet`/`EvidenceCorpus`/threads/`Inc.3`. "Sweep complete" against a
+  narrow token list is a false clean. D0 re-opened for the extended-token sweep +
+  ledger update.
+- Ground a doc before "fixing" it: ADR-157 looked contaminated (`EvidenceCorpus`
+  composition note) but is demoted, self-disclaimed speculation in a dated note —
+  preserved history, not live wrong guidance. Reversed my own review flag honestly
+  rather than over-correcting to satisfy it.
+
+### Surprise
+
+- **Expected**: deleting the stub tools (`NotImplementedYet` ops, `EvidenceCorpus`,
+  threads placeholder) would open the intended red window.
+- **Actual**: it landed green across all consumers (graph-core 76, graph-corpus-sdk
+  48, curriculum-sdk 784, MCP app + graph-ingest/graph-project/search-cli
+  type-check clean) — the stubs had no real consumers, so removing them was a clean
+  subset of the larger total removal.
+- **Behaviour change**: separate "delete the fake surfaces" (often cleanly green)
+  from "the full total removal" (the genuinely red window) — different scopes.
+
+### Graduation insights (no-tombstones rule)
+
+- Graduating the no-monuments doctrine, I almost left a "GRADUATED → `.agent/rules/X`"
+  pointer in `distilled.md` and platform memory — which is itself a tombstone. The
+  rule applied to its own graduation: drain the buffers cleanly, let the rule + git
+  history be the provenance, leave no pointer. The graduation surfaces (canonical
+  rule, loader pointers, RULES_INDEX, the `pending-graduations` ledger entry) are
+  enough; the buffer entries go.
+- Hook-reversal honesty: I had called write-time enforcement "the cure" for this
+  recurring reflex. On grounding it, the negation-contrast monument ("X, not Y") is
+  a *structural* pattern, not a fixed literal — a naive `policy.json` block on
+  "never / rather than / instead of" would false-positive heavily. The honest
+  graduation is the always-applied rule NOW, with the hard-gate flagged as needing
+  a real detector (owner-agreed), rather than jamming in a broken hook to claim the
+  structural cure is done. Naming "the cure needs more design" beat shipping a
+  cure-shaped thing that doesn't work.

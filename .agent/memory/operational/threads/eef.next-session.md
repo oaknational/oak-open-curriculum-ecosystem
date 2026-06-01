@@ -1,5 +1,36 @@
 # Next-Session Record — `eef` thread
 
+> **EEF GRAPH-TOOL RE-REVIEW + STUB DELETION + DECONTAMINATION (2026-06-01,
+> Shaded Swaying Sapling / `d37ba7`; claude / Opus 4.8; owner requested handoff,
+> no pnpm check, no commit).** Re-reviewed the live EEF plan for total old-shape
+> removal and settled the D2 union-vs-binding test boundary: domain-generic
+> traversal + synthetic-node tests live in graph-core; the EEF binding is tested
+> over the real corpus; nothing fabricates an `EefStrand`. Deleted the stub tools
+> in code — the five `NotImplementedYet` graph ops, the `EvidenceCorpus`
+> rank/explain/compare substrate, and the `threads` `export {}` placeholder —
+> landing GREEN across all consumers (graph-core 76 / graph-corpus-sdk 48 /
+> curriculum-sdk 784 tests; MCP app + graph libs type-check clean). Swept the
+> plan's GraphView language to delete-and-build-fresh and scrubbed negation
+> monuments (Decisions 6/7, the D2/D4/D5 bullets, the D4 todo). Corrected ADR-173
+> (2026-06-01 amendment: query layer real-ops-only, Threads placeholder removed)
+> and a `graph-project` comment; ADR-157's `EvidenceCorpus` note stays as demoted,
+> self-disclaimed speculation. **D0 is RE-OPENED (decontamination only** — its code
+> and ADR-doctrine work stays committed at `ce9745c7`). **Next safe step:** to
+> re-close D0, update `eef-d0-decontamination-ledger.md` with the new-token
+> dispositions (ADR-173 corrected; ADR-157 demoted-speculation / history-retained;
+> graph-project comment corrected; estate-plan sweep routed to
+> graph-estate-consolidation) and run the extended-token acceptance sweep
+> (`NotImplementedYet` / `EvidenceCorpus` / threads / `Inc.3`) over EEF plans +
+> non-plan docs proving zero live references, then flip the D0 frontmatter status
+> back to `completed`. Then continue D2 per the live plan. No claim opened or closed
+> (active-claims empty). Uncommitted code + doc edits on `feat/graph-tooling-tidyup`.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Shaded Swaying Sapling` | `claude` | `Opus 4.8` | `d37ba7` | `eef-re-review-stub-deletion-decontamination` | 2026-06-01 | 2026-06-01 |
+>
+> ---
+>
 > **D2-D6 REPLACEMENT-PLAN CORRECTION APPLIED (2026-06-01, Evergreen Budding
 > Copse / `019e7f`; owner requested handoff, no pnpm check, commit all files).**
 > This session read D2, ran four architecture reviewers, critically synthesised

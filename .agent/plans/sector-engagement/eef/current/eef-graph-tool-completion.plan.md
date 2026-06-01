@@ -45,8 +45,8 @@ owner_scope: >-
   the corpus's `as const` type information end to end.
 todos:
   - id: d0-fixed-data-doctrine
-    content: "DOCTRINE + VALIDATOR/GATE FIX + ESTATE DECONTAMINATION. D0 is COMPLETE and committed at `ce9745c7`: ADR-038 was generalised in-record to fully-known `as const` constants; ADR-157/173 were corrected away from the EEF Zod loader; ADR-175 was withdrawn and deleted with inbound references removed; the entire `validate-external-data-files` validator was DELETED (not trimmed to two rules); `strandById`/`StrandByStrandId`/`Strand`/`lastUpdated`/`EefToolkitData` were moved out of `.external-data.ts` into the checked foundation module; the EEF estate decontamination ledger was completed; full `pnpm check` was green. The red repo-validators gate was greened by deleting the obsolete validator, never by retyping the corpus to `unknown`. Freshness CODE removal belongs to D2's deletion of the load/list/Zod/freshness path, not to a compatibility-preserving loader phase."
-    status: completed
+    content: "DOCTRINE + VALIDATOR/GATE FIX + ESTATE DECONTAMINATION. D0 is COMPLETE and committed at `ce9745c7`: ADR-038 was generalised in-record to fully-known `as const` constants; ADR-157/173 were corrected away from the EEF Zod loader; ADR-175 was withdrawn and deleted with inbound references removed; the entire `validate-external-data-files` validator was DELETED (not trimmed to two rules); `strandById`/`StrandByStrandId`/`Strand`/`lastUpdated`/`EefToolkitData` were moved out of `.external-data.ts` into the checked foundation module; the EEF estate decontamination ledger was completed; full `pnpm check` was green. The red repo-validators gate was greened by deleting the obsolete validator, never by retyping the corpus to `unknown`. Freshness CODE removal belongs to D2's deletion of the load/list/Zod/freshness path, not to a compatibility-preserving loader phase. RE-OPENED 2026-06-01: the decontamination's sweep-token list omitted the stub/adapter/Inc.3/EvidenceCorpus framing, so live contamination survived in ADR-173 (corrected 2026-06-01) and a graph-project comment (corrected); ADR-157's EvidenceCorpus note is demoted, self-disclaimed speculation and stands; the estate-wide graph-plan sweep is routed to graph-estate-consolidation.plan.md. The committed code and ADR-doctrine work (ce9745c7) stands; the decontamination acceptance re-opens until the extended-token sweep is dispositioned."
+    status: in_progress
     depends_on: []
   - id: d1-value-impact-contract
     content: "COMPLETE after owner ratification on 2026-05-31: the teacher value/impact contract covers the Sunday-night cover-lesson use case, the assistant's role, evidence-preservation obligations, non-claims, the faithful-evidence-transmission standard, the corpus-derived evidence/provenance contract, and the smallest round trip that proves value. Output is the ratified value statement and testable success criteria in `## Value And Impact`."
@@ -61,7 +61,7 @@ todos:
     status: pending
     depends_on: [d1-value-impact-contract, d2-typed-raw-corpus-foundation]
   - id: d4-graph-capability-contract
-    content: "RATIFY (non-code) the correct graph capability shape from D3, treating the existing graph-core GraphView query contract as OLD SHAPE that is DELETED, not reshaped (its 5 NotImplementedYet stub ops are already removed in code; the speculative EvidenceCorpus ops and the threads placeholder are deleted too). Split the target contract into graph-core primitives (domain-generic lookup/subgraph/frontier/result/error surfaces) and EEF/Oak binding operations, so no EEF- or MCP-specific method lands in shared graph-core. Ratify the minimal graph-native EEF view contract before D5: owner package, node id/kind policy, edge/frontier shape, payload/provenance policy, and named schema-subset/schema-builder surfaces for D3/D6. Define the target domain-generic graph-core contract parameterised over TNode, TNodeId extends string, and TEdgeType; public graph-core result and error types must carry TNodeId, so the EEF binding carries EefStrandId through subgraph roots, edge endpoints, frontier refs, strand lookup inputs, and root-not-found errors after boundary narrowing. D5 builds the new graph-core query layer FRESH in TDD cycles (real ops only); the old stub contract is deleted, not reshaped, and the speculative rank/explain/compare ops are already removed. No placeholder, future hook, fake implementation, new stub operation, old-list dependency, or Oak-signal-to-strand mapping may be specified. Record the consumer-impact finding as a HARD gate before interface changes land: verified ZERO external-consumer blast radius, with bounded IN-PACKAGE graph-core edits named. The old list tool is already gone from the D2 path and is not consumer-impact evidence to preserve. An architecture reviewer signs off the operation set + consumer-impact record. Enumerate which graph-view exports are deleted/renamed/freshly defined by the new contract; a result type may keep the old name `SubgraphResult` only if D4 freshly ratifies that name and structure from the new graph contract."
+    content: "RATIFY (non-code) the correct graph capability shape from D3, deleting the old graph-view query-contract files (their 5 NotImplementedYet stub ops, the speculative EvidenceCorpus ops, and the threads placeholder are already removed in code) and defining the new query layer. Split the target contract into graph-core primitives (domain-generic lookup/subgraph/frontier/result/error surfaces) and EEF/Oak binding operations, so no EEF- or MCP-specific method lands in shared graph-core. Ratify the minimal graph-native EEF view contract before D5: owner package, node id/kind policy, edge/frontier shape, payload/provenance policy, and named schema-subset/schema-builder surfaces for D3/D6. Define the target domain-generic graph-core contract parameterised over TNode, TNodeId extends string, and TEdgeType; public graph-core result and error types must carry TNodeId, so the EEF binding carries EefStrandId through subgraph roots, edge endpoints, frontier refs, strand lookup inputs, and root-not-found errors after boundary narrowing. D5 builds the new graph-core query layer in TDD cycles with real operations only, each implemented with real graph-derived logic and tests or absent. The calling agent selects finite corpus keys before the tool boundary, so the tool operates on finite corpus values directly. Record the consumer-impact finding as a HARD gate before interface changes land: verified ZERO external-consumer blast radius, with bounded IN-PACKAGE graph-core edits named. An architecture reviewer signs off the operation set + consumer-impact record. Enumerate which graph-view exports are deleted/renamed/freshly defined by the new contract; a result type may keep the old name `SubgraphResult` only if D4 freshly ratifies that name and structure from the new graph contract."
     status: pending
     depends_on: [d3-mcp-tool-resource-contract]
   - id: d5-graph-construction-methods
@@ -249,37 +249,25 @@ isolated to D1, D3, and D4 and is named there as explicit steps.
    widened or normalized. One unknown - the key; one narrowing - the key;
    everything downstream of a known key is exact.
 
-6. **The existing `graph-core` `GraphView` query contract is old shape and is
-   DELETED, not reshaped; build real logic or nothing.** Its committed
-   `GraphView<TNode, TEdgeType>` - 7 ops
-   (manifest + 6 fallible); 2 live (manifest, subgraph), 5 returning
-   `NotImplementedYet`, polymorphic ahead of a second consumer - is premature
-   generalization (PDR-058: a shape opened to a second consumer before one
-   existed), wired to the deleted Zod-loader meta, with list-flavoured ops
-   (`enumerateNodes` pagination, `findByTag`). It surfaces graph-ish functions
-   over the strand list rather than being a deterministic transform of the EEF
-   data into a graph substrate, and is not treated as correct because it exists.
-   The blast radius is zero: graph-ingest and graph-project consume only the RDF
-   substrate, and the threads adapter is `export {}` (a docstring-only
-   placeholder, not a consumer). The old query contract therefore has no surviving
-   consumer and is total-removed in D2 with the rest of the old shape. D4 ratifies
-   the correct graph query shape from the ratified MCP surface; D5 builds the new
-   domain-generic graph-core query layer FRESH (real ops only) — it is not a
-   reshape of the deleted contract. graph-core's shared RDF substrate
-   (term/dataset/jsonld/canon) is genuinely multi-consumer and stays. This is also the global EEF graph-tool
-   rule: no stub tools, placeholder handlers, fake registrations,
-   `NotImplementedYet` fallbacks, empty registered tools/resources/prompts, or
-   exported operations that are not implemented end to end. A capability is either
-   implemented with real graph-derived logic and tests, or it is absent. Existing
-   non-EEF empty stubs are consumer-impact evidence only; they do not authorise
-   preserving current EEF stubs or building new ones.
+6. **graph-core's query layer is built fresh from real operations only; the
+   shared RDF substrate stays.** D4 ratifies the graph query shape the MCP
+   surface needs, parameterised over `TNode`, `TNodeId extends string`, and
+   `TEdgeType` (PDR-058: a contract carries only what a real consumer uses); D5
+   builds the domain-generic graph-core query layer with real graph-derived
+   operations and tests. Delete the old graph-view query-contract files (interface,
+   types, index, contract test) and the EEF-local adapter — their only consumers
+   are the old shape deleted alongside them, and graph-ingest / graph-project
+   consume only the RDF substrate. graph-core's shared RDF substrate
+   (term/dataset/jsonld/canon) is multi-consumer and stays. The global EEF
+   graph-tool rule: every tool, handler, resource, prompt, registration, and graph
+   operation is implemented with real graph-derived logic and tests, or it is
+   absent.
 
 7. **There is no response cap; graph scope is the bound.** The
    `response-budget.ts` cap (rank everything, cut to 12 strands for a token
-   budget) is a remnant of the wrong list approach and is removed unconditionally.
-   A graph returns a scoped subgraph; its bound is graph structure (rootIds,
-   depth, membership). An oversized result is a scoping bug in the query, fixed by
-   correcting the scope, never by capping or truncating output.
+   budget) is removed. A graph returns a scoped subgraph; its bound is graph
+   structure (rootIds, depth, membership). An oversized result is a scoping bug in
+   the query, fixed by correcting the scope.
 
 8. **ADR-038 is generalised, not duplicated.** ADR-038 (Compilation-Time
    Revolution, Accepted and Implemented) already is the compile-time-construction
@@ -602,7 +590,20 @@ or recorded in the D0 ledger.
   re-homing the raw type; D5 consumes the D2 raw foundation and verifies the deleted
   path stays absent)
 - `response-budget`, `capForBudget`, `projectExploreNode` - list-era cap (D5/D6)
-- the speculative `EvidenceCorpus` `rank`/`explain`/`compare` ops (D4)
+- the speculative `EvidenceCorpus` `rank`/`explain`/`compare` ops - DELETED in
+  code (this session); sweep remaining DOC/comment residue
+- `NotImplementedYet`, the `Inc.3` / `gate-1a` stub-deferral framing, and the
+  `threads`/"concurrent tenant" adapter-roadmap language - the stub shape is
+  DELETED in code (the five `NotImplementedYet` graph ops, the `threads`
+  `export {}` placeholder, and the speculative corpus ops are gone, leaving a
+  `manifest`+`subgraph` `GraphView<TNode>`). Live DOC residue survived D0's sweep
+  because these tokens were never on it: ADR-173's "Threads adapter + EEF strands
+  adapter concurrent tenants in Inc.1 / remaining adapters at Inc.3" (Accepted ADR,
+  partly EEF-caused now the placeholder is deleted) and ADR-157's `EvidenceCorpus`
+  composition note (Proposed/demoted). Disposition is correct/delete, not history.
+  EEF owns the threads-deletion + EEF-adapter + stub-deferral consequences; the
+  prerequisite/misconception/Inc.3 adapter ROADMAP is graph-estate scope
+  (`graph-estate-consolidation.plan.md`), not this plan
 - stale STRUCTURAL references to the quarantined design docs - their deliverable
   numbers ("rebuild D2/D6"), principle numbers ("foundation principle N"), and the
   "rebuild" / "rebuild foundation" framing. These use clean vocabulary but point at
@@ -697,7 +698,9 @@ deliverables (D1, D3, D4) are exploration-and-ratify work with `non-code` proof.
 > Verified: zero ADR-175 markdown links; no EEF-corpus-Zod current-truth;
 > markdownlint + prettier clean repo-wide.
 >
-> **D0 is COMPLETE (owner-confirmed 2026-05-31) and intent-vs-letter audited.** A
+> **D0's code + ADR-doctrine work is COMPLETE (owner-confirmed 2026-05-31,
+> committed `ce9745c7`); its decontamination is RE-OPENED 2026-06-01 — see the
+> re-open note at the end of this block.** A
 > 4-dimension adversarial audit (letter / intent / conservation-reflex /
 > cross-session coherence) confirmed the intent is met — the gate was greened by
 > DELETION (not by retyping the corpus to `unknown`), the corpus is typed by
@@ -712,6 +715,16 @@ deliverables (D1, D3, D4) are exploration-and-ratify work with `non-code` proof.
 > whole D0 bundle was committed at `ce9745c7` (2026-05-31; not pushed at the time
 > of the closeout record). Full record: the `eef` thread record EXECUTION UPDATE
 > banner + `eef-d0-decontamination-ledger.md`.
+>
+> **RE-OPENED 2026-06-01 (decontamination only).** The sweep-token list omitted
+> the stub/adapter/Inc.3/EvidenceCorpus framing, so live contamination survived in
+> ADR-173 (the Threads-concurrent-tenant + Inc.3 stub-deferral claims) and a
+> `graph-project` adjacency comment. Fixed 2026-06-01: ADR-173 carries a 2026-06-01
+> amendment plus corrected topology; the comment is corrected; the Estate
+> Decontamination sweep tokens are extended. ADR-157's `EvidenceCorpus` note is
+> demoted, self-disclaimed speculation and stands. The estate-wide graph-plan sweep
+> is owned by `graph-estate-consolidation.plan.md`. The committed code and
+> ADR-doctrine work stands; this re-open is decontamination-acceptance only.
 
 **Purpose:** correct the known-vs-unknown doctrine across the ADR estate, expunge
 the obsolete external-data validator, and decontaminate EEF plans plus non-plan
@@ -995,10 +1008,9 @@ kept alive until the graph projection is ready.
   rank/explain/compare op types in `types.ts`) are deleted; `index.ts` re-exports
   only the raw foundation surfaces; no `loadEefCorpus` API, compatibility wrapper,
   old-list MCP registration, Zod parser, freshness gate, or old-list product path
-  remains. The EEF-local graph adapter is total-removed here, not repointed and
-  left red: it has no surviving consumer — only the old-shape siblings deleted in
-  D2 imported it — so D5 builds the generic graph-core traversal fresh and the
-  adapter is replaced, never reshaped. Predicates consume raw foundation
+  remains. Delete the EEF-local graph adapter here; its only importers are the
+  old-shape siblings deleted alongside it, and D5 builds the generic graph-core
+  traversal fresh. Predicates consume raw foundation
   values/types derived from `EEF_TOOLKIT_DATA`; MCP schema declarations later
   consume named graph-view subsets. If a proposed input cannot map directly to
   fixed known corpus data, that is a D1/D3 architectural misalignment, not a D2
@@ -1023,14 +1035,13 @@ kept alive until the graph projection is ready.
   sparse-root / error-path) are tests of the domain-generic graph machinery, not
   the EEF binding; they move with that machinery into graph-core (D5) and
   fabricate a minimal synthetic node over `TNodeId = string`, so `makeStrand`
-  becomes a generic `makeNode` there and never returns `EefStrand`. The EEF
-  binding instantiates the generic over `EefStrand`/`EefStrandId` and is tested
-  over real corpus members only. D2 total-removes the EEF-local graph adapter
-  (`graph-view.ts`, `eef-graph-model.ts`, `graph-view.unit.test.ts`) rather than
-  repointing it and leaving it red — it has no surviving consumer, so there is no
-  corpse to keep compiling and nothing to fight. D5 builds the generic graph-core
-  traversal and these structural tests fresh; the adapter is replaced, never
-  reshaped or patched green.
+  becomes a generic `makeNode` there; `EefStrand` instances come only from the
+  real corpus. The EEF binding instantiates the generic over
+  `EefStrand`/`EefStrandId` and is tested over real corpus members only. D2
+  deletes the EEF-local graph adapter (`graph-view.ts`, `eef-graph-model.ts`,
+  `graph-view.unit.test.ts`); its only importers are the old-shape siblings
+  deleted alongside it. D5 builds the generic graph-core traversal and these
+  structural tests fresh.
 
 **Done when (acceptance):**
 
@@ -1298,9 +1309,8 @@ SDK/app verification record, and `mcp-expert` sign-off).
 ### D4 - Graph capability shape (exploration; derived from D3; replaces the graph-core query contract)
 
 **Purpose:** derive the correct graph operations from the ratified MCP surface
-and define the new graph-core query layer for them. The old `GraphView` query
-contract is DELETED (old shape), never a foundation to build against; D5 builds
-the new layer fresh.
+and define the new graph-core query layer for them. D5 builds it fresh; the old
+graph-view query-contract files are deleted.
 
 **Folded detail:** D4 carries the minimal operation set, `TNodeId` threading,
 guidance-report disposition, edge types, graph-native view choice, and
@@ -1450,8 +1460,8 @@ real corpus with the typed id/payload relationship asserted.
 - Site the structural-traversal tests with the domain-generic machinery in
   graph-core (BFS / depth / cycle / sparse-root / duplicate-id / dangling-edge /
   error-path), fabricating a minimal synthetic node over `TNodeId = string` via a
-  generic `makeNode` written fresh here (the EEF-local `makeStrand` was deleted in
-  D2 and is not revived). Nothing fabricates an `EefStrand`. The EEF binding's
+  generic `makeNode` written fresh here; `EefStrand` instances come only from the
+  real corpus. The EEF binding's
   tests use real corpus members only and prove
   the EEF-specific facts: real `related_strands` become real edges, and
   `EefStrandId` flows through roots, edge endpoints, frontier refs, lookup inputs,
@@ -1474,9 +1484,10 @@ real corpus with the typed id/payload relationship asserted.
   list-shaped EEF tool, package re-export, or ADR-175 code reference is
   reintroduced. The graph constructor/adaptor is the only ingest path from the D2
   raw foundation to the D4 graph projection.
-- Delete every `NotImplementedYet`, the `rank`/`explain`/`compare` ops, and any
-  remaining response-cap artefact. Do not keep, repair, wrap, or consult
-  list-based logic. Do not replace deleted stubs with new placeholders, shims,
+- The `NotImplementedYet` graph ops and the `rank`/`explain`/`compare`
+  (EvidenceCorpus) ops are already deleted (stub-removal pass); verify they stay
+  absent and delete any remaining response-cap artefact. Do not keep, repair,
+  wrap, or consult list-based logic. Do not reintroduce stubs, placeholders, shims,
   fake graph methods, or exported operations whose behaviour is deferred; implement
   the D4-ratified operation with tests or leave it unexported.
 

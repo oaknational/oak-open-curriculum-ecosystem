@@ -72,9 +72,11 @@ disposition turns on a detail.
   graph work is **undefined until that tool is finished** (owner direction).
 - **The substrate is built and on `main`** (PRs #93/#108/#115/#122; v1.15.0):
   `graph-core`, `graph-ingest`, `graph-project`, and `graph-corpus-sdk`
-  eef-strands (`loadEefCorpus`, `selectEefSeedIds`, `subgraph`, `manifest`,
-  freshness; 53 tests pass). Five of seven `EefStrandsGraphView` ops are
-  `NotImplementedYet` stubs (the finishing plan's target). The EEF tool ships **dark** behind
+  eef-strands (the `EefStrandsGraphView` adapter exposes `manifest` + `subgraph`;
+  the `loadEefCorpus`/`selectEefSeedIds`/freshness path is the finishing plan's
+  deletion target). The five `NotImplementedYet` stub ops, the speculative
+  `recommend`/`explain`/`compare` ops, and the `threads` placeholder are deleted
+  (2026-06-01). The EEF tool ships **dark** behind
   `OAK_CURRICULUM_MCP_EEF_ENABLED` (default OFF; nothing sets it true).
 - **The estate is mostly superseded framing**: gate-1a/1b, the five-increment
   architecture, the 7-operation polymorphic query layer with mandatory
@@ -84,18 +86,23 @@ disposition turns on a detail.
 
 ## Inbound from EEF D0 completion (2026-05-31)
 
-EEF D0 (`eef-graph-tool-completion.plan.md`) is **complete and intent-vs-letter
-audited**. This narrows and feeds this plan:
+EEF D0 (`eef-graph-tool-completion.plan.md`) code + ADR-doctrine work is
+**complete and intent-vs-letter audited**; its decontamination **re-opened
+2026-06-01** (below). This narrows and feeds this plan:
 
 - **The corrected doctrine is now landed in-record, not just planned.** ADR-038
   is generalised to all `as const`-known constants; ADR-157 and ADR-173 no longer
   designate an EEF Zod loader; ADR-175 is WITHDRAWN and deleted (lifecycle
   vocabulary updated). The "corrected doctrine in the live EEF plan's Ratified
   Decisions" this plan references is now also the ADR estate's current truth.
-- **The EEF-stack decontamination is done.** The validator is deleted; the EEF
-  corpus file, `eef/README.md`, `conservation-map.md`, the EEF thread-record
-  banner, `sonar-disposition-policy.md`, and `repo-continuity.md` are corrected;
-  the disposition ledger is at `eef/current/eef-d0-decontamination-ledger.md`.
+- **The EEF-stack code/doctrine decontamination landed, then re-opened
+  2026-06-01.** The validator is deleted; the EEF corpus file, `eef/README.md`,
+  `conservation-map.md`, the EEF thread-record banner, `sonar-disposition-policy.md`,
+  and `repo-continuity.md` are corrected; the ledger is at
+  `eef/current/eef-d0-decontamination-ledger.md`. It re-opened when the sweep-token
+  list was found to omit the stub/adapter/Inc.3/EvidenceCorpus framing — ADR-173
+  carried live contamination, corrected 2026-06-01. The extended-token estate sweep
+  across the graph plans is this plan's job.
   This completes the **EEF half of t5** — the EEF README is already rewritten to
   the one-live-plan frame, so t5 narrows to the `knowledge-graph-integration`
   README only.

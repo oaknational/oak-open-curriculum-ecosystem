@@ -19,6 +19,27 @@ surface.
 
 ## Current State
 
+- **EEF graph-tool re-review + stub deletion + decontamination (2026-06-01,
+  Shaded Swaying Sapling / `d37ba7`, claude / Opus 4.8)**: re-reviewed the live EEF
+  plan for total old-shape removal and settled the D2 union-vs-binding test
+  boundary (domain-generic traversal + synthetic-node tests live in graph-core; the
+  EEF binding is tested over the real corpus; nothing fabricates an `EefStrand`).
+  Deleted the stub tools in code — the five `NotImplementedYet` graph ops, the
+  `EvidenceCorpus` rank/explain/compare substrate, and the `threads` `export {}`
+  placeholder — landing GREEN across all consumers (graph-core / graph-corpus-sdk /
+  curriculum-sdk tests pass; MCP app + graph libs type-check clean). Swept the
+  plan's GraphView language to delete-and-build-fresh and scrubbed negation
+  monuments. Corrected live old-shape contamination in ADR-173 (2026-06-01
+  amendment: query layer real-ops-only, Threads placeholder removed) and a
+  `graph-project` comment; ADR-157's `EvidenceCorpus` note stays as demoted,
+  self-disclaimed speculation. **D0 is RE-OPENED (decontamination only** — its code
+  and ADR-doctrine work stays committed at `ce9745c7`): the sweep-token list
+  omitted the stub/adapter/Inc.3/EvidenceCorpus framing, so to re-close, the next
+  session updates `eef-d0-decontamination-ledger.md` and runs the extended-token
+  acceptance sweep over EEF plans + non-plan docs. The estate-wide graph-plan sweep
+  is owned by `graph-estate-consolidation.plan.md`. No `pnpm check` and no commit
+  (owner direction); uncommitted code + doc edits remain on
+  `feat/graph-tooling-tidyup`.
 - **EEF D2/D3-D6 replacement-plan correction applied (2026-06-01, Evergreen
   Budding Copse / `019e7f`)**: the live EEF plan now incorporates the four
   architecture-reviewer findings and the owner correction that there are no
@@ -95,7 +116,7 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | codex / GPT-5 / Evergreen Budding Copse / EEF D2-D6 replacement-plan correction + handoff / 2026-06-01 |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Shaded Swaying Sapling / EEF re-review + stub deletion + decontamination / 2026-06-01 |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | codex / GPT-5 / Blooming Twining Grove / longitudinal napkin review + deep handoff / 2026-05-31 |
 
 ## Paused Threads
@@ -121,10 +142,16 @@ not the current session-priority lane. Reactivation is owner-directed.
 ### EEF Graph-Tooling Rebuild
 
 1. Re-ground in the `eef` thread banner and current git state.
-2. Treat D0 and D1 as complete in the live plan: D0 fixed the known-data doctrine,
-   validator deletion, and estate decontamination; D1 ratified the value,
-   evidence-transmission, provenance, schema-derivation, and value-proof
-   contracts.
+2. D1 is complete in the live plan (value, evidence-transmission, provenance,
+   schema-derivation, value-proof contracts ratified). D0's code + ADR-doctrine
+   work is complete and committed at `ce9745c7`, but **D0 is RE-OPENED for
+   decontamination only** (2026-06-01): the sweep-token list omitted the
+   stub/adapter/Inc.3/EvidenceCorpus framing, so live contamination survived in
+   ADR-173 (corrected) and a `graph-project` comment (corrected). To re-close D0,
+   update `eef-d0-decontamination-ledger.md` with the new-token dispositions and
+   run the extended-token acceptance sweep over EEF plans + non-plan docs (proving
+   zero live references). The stub tools (`NotImplementedYet` ops, `EvidenceCorpus`,
+   threads placeholder) are already deleted in code and green across all consumers.
 3. Treat the value reframe as controlling: EEF relevance is by pedagogical move on
    EEF-native finite axes; the EEF tool takes corpus-derived finite values; the
    value intersects Oak's misconception/prior-knowledge tools at the workflow
@@ -202,6 +229,16 @@ authority.
 - Shared memory/state files are always writable and commit-includable when dirty.
 
 ## Deep Consolidation Status
+
+**session-completion closeout (2026-06-01, Shaded Swaying Sapling — EEF re-review,
+decontamination, handoff)**: `due — two triggers fired but neither is well-bounded
+for this lightweight handoff, so both route to a future deliberate consolidate-docs
+pass. (1) The no-tombstones / no-monuments graduation moved to due in
+pending-graduations (target is a rule plus write-time enforcement, since a note
+alone has not changed the write-time default). (2) napkin.md is over its fitness
+limit (~545 lines vs 300 target) and due for rotation. Owner requested session
+handoff only — no pnpm check and no consolidation run this session. D0
+decontamination is separately re-opened (see EEF Next Safe Steps).`
 
 **session-completion closeout (2026-06-01, Evergreen Budding Copse — EEF
 replacement-plan correction + handoff)**: `not due — owner explicitly requested

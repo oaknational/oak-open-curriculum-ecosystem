@@ -6,9 +6,11 @@ architecture-expert-betty, architecture-expert-fred,
 assumptions-expert, and architecture-expert-barney
 PROMOTION-READY verdict on `graph-stack.plan.md`). Skeleton 2026-05-07;
 NC-boundary amendment 2026-05-10; reviewer-absorption amendment
-2026-05-11; EEF concurrent-tenant amendment 2026-05-21.
+2026-05-11; EEF concurrent-tenant amendment 2026-05-21; graph-query-layer
+correction 2026-06-01.
 
-**Date**: 2026-05-07; amended 2026-05-10; amended 2026-05-11; amended 2026-05-21
+**Date**: 2026-05-07; amended 2026-05-10; amended 2026-05-11; amended 2026-05-21;
+amended 2026-06-01
 
 **2026-05-11 amendment summary** (Flamebright Burning Lava session,
 reviewer absorption against architecture-expert-betty,
@@ -65,6 +67,21 @@ earlier without scope reduction):
 - Per-increment sequencing and plan-body decomposition continue to
   live in the active substrate and vertical-slice plan bodies in
   operational memory, not in this ADR.
+
+**2026-06-01 amendment summary** (graph-query-layer correction,
+owner-directed during the EEF graph-tool work):
+
+- The shared graph-core query layer ships **real operations only**: a
+  query operation is implemented with real graph-derived logic and tests,
+  or it is absent. The query contract is built from the operations its
+  consumers use.
+- The EEF strands corpus is the active first corpus consumer. Further
+  corpus adapters (Oak Curriculum Ontology Threads, prerequisite,
+  misconception) and cross-corpus join primitives are built when their
+  consumers exist. This supersedes the 2026-05-21 concurrent-tenant
+  arrangement above; the Threads adapter placeholder is removed.
+- The RDF substrate (term/dataset/jsonld/canon/data-factory), genuinely
+  multi-consumer, is unchanged.
 
 **Related**:
 [ADR-123](123-mcp-server-primitives-strategy.md) — MCP server primitives
@@ -165,11 +182,11 @@ once. Increment sequencing is owned by the implementing plan.
 6. `packages/sdks/graph-corpus-sdk/` — Oak's typed corpus adapters (Oak
    Curriculum Ontology Threads graph, prerequisite, misconception, EEF
    strands, future corpora). Cross-corpus join primitives. Ontology IRIs as
-   canonical identity. **Activates in Inc.1 with the Oak Curriculum
-   Ontology Threads adapter and the EEF strands adapter as concurrent
-   tenants (per the 2026-05-21 amendment); prerequisite and misconception
-   adapters activate in Inc.3. Cross-corpus join primitives activate in
-   Inc.3.**
+   canonical identity. **The EEF strands corpus is the active first corpus
+   consumer; further corpus adapters (Oak Curriculum Ontology Threads,
+   prerequisite, misconception) and cross-corpus join primitives are built
+   when their consumers exist (2026-06-01 amendment). The shared query
+   layer ships real operations only.**
 7. `agent-graphs/practice-graph/` — markdown-corpus graph for Oak's
    engineering practice. It is an agent-tooling-adjacent consumer, not a
    substrate library, and proves the substrate works for non-curriculum data.
@@ -263,12 +280,12 @@ corpus-local typed direct-load without `graph-ingest` participation.
    [ADR-157](157-multi-source-open-education-integration.md)). Source
    authority is governed by §Corpus source authority below: the
    repository-held snapshot is canonical until EEF clarifies refresh
-   mechanics. Concurrent tenancy with the Threads adapter inside
-   `graph-corpus-sdk` is structurally valid because the two adapters
-   have disjoint ingestion paths and disjoint identity schemes
-   (ontology IRIs for Threads, EEF strand IDs for EEF strands); no
-   cross-corpus join primitive ships in Inc.1, so the two adapters
-   are independent at this increment.
+   mechanics. `graph-corpus-sdk` hosts the EEF strands corpus adapter on
+   the EEF strand ID identity scheme; further corpus adapters carry their
+   own identity schemes (e.g. ontology IRIs for an Oak Curriculum Ontology
+   Threads adapter) with disjoint ingestion paths, and a cross-corpus join
+   primitive is built when a cross-corpus consumer exists (2026-06-01
+   amendment).
 
 ### Ontology source-of-truth boundary
 
