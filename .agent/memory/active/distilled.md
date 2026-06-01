@@ -17,6 +17,45 @@ fitness_rationale: >-
   substance rather than trimming the lesson.
 ---
 
+## 2026-06-01 — one law, three faces (EEF thread synthesis)
+
+Three disciplines are one principle seen from different sides:
+derive-from-the-single-source-of-truth-never-bridge (code — derive from the
+fixed corpus, never glue), seams-compose-never-reconciled (architecture —
+friction at a junction means an input drifted from the root; fix upstream at the
+source, never bridge at the seam), and state-what-is-no-monuments (writing —
+opening statements, handoffs, `no-tombstones-for-removed-ideas`). The tell:
+whenever a frame slips (conservation reflex, tombstone reflex, gap-hunting
+inversion, remediation-voice), the cure is the same shape — return to the source
+of truth, fix upstream, state what is. Graduation candidate: a PDR naming the
+unifying principle (owner-surfaced).
+
+## 2026-06-01 — opening statements and handoff artefacts teach by their form
+
+A handoff or opening statement is the next agent's first and most-attended
+context, so its *form* trains them, not just its content. Written in
+remediation/avoidance voice ("X re-opened because the sweep was wrong", "do not
+expand scope", quoted dead negation-lists) it teaches the next agent to think
+that way; written as positive construction — present truth + destination — it
+teaches that. Keep the why and what-went-wrong in napkin, experience, ledger, and
+commits (record); keep the loaded-first surfaces (opening statements, thread
+records, repo-continuity, plan banners) as present-truth instruction. Test:
+"would a first-time reader reconstruct the mistakes from this?" — if yes, it is a
+monument. Worked twice across sessions (Shaded, then Windswept). Pairs with
+`no-tombstones-for-removed-ideas`. Graduation candidate: a clause of no-tombstones
+or continuity-practice (owner-surfaced).
+
+## 2026-06-01 — independent eyes catch what self-review cannot
+
+Self-review shares the author's blind spots: a careful re-read of my own EEF plan
+missed a grounding error (`behind_the_average_by_phase` mis-described) that an
+independent multi-lane grounding audit caught immediately. For
+grounding/contamination checks, spawn independent eyes rather than relying on
+re-reading your own work. Related scoping insight: distinguish "delete the fake
+surfaces" (stubs with no real consumers — usually cleanly green) from "the full
+total removal" (the genuinely red replacement window); they are different scopes
+with different risk.
+
 ## 2026-06-01 — archived means archived: remove references, don't repoint (Hearthlit Stoking Cinder)
 
 When quarantining a plan/doc to `archive/`, the live estate must STOP referencing

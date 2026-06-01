@@ -1,0 +1,6 @@
+---
+description: Before committing to the shape of a build (tool, feature, schema, migration, refactor), verify the data actually supports it — trace value end-to-end and fingerprint the corpus before building, not after.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/verify-data-supports-shape-before-building.md`.

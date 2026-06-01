@@ -69,6 +69,16 @@ When the agent IS at an action-moment, make it observable:
   are action choices with stated trade-offs; the default option is named
   if the agent has a verdict.
 
+### Evidence that refutes an owner-approved premise is an action-moment
+
+When reviewer findings, a data fingerprint, or your own analysis refute a premise
+the owner has already approved, the design is at an owner-class action-moment:
+re-surface the corrected evidence and let the owner decide again. Do **not**
+silently reshape the design around the new evidence — that overrides an owner
+decision while disguised as a reasoning-moment. Re-surfacing is not
+re-litigating: state the refuted premise, the evidence that refutes it, and the
+corrected option, then let the owner re-decide.
+
 ### What this rule does NOT govern
 
 - Mid-session feedback the owner volunteers — owners may intervene at
@@ -110,6 +120,11 @@ observability; reasoning-moments do not.
 - **Action-moment, owner-redirected (2026-05-22, Mistbound)**: pnpm check
   attempt — agent was about to run the gate. Owner intervened with
   check-singleton-per-window invariant. Same pattern.
+- **Evidence-refuted premise, re-surfaced (2026-05-11, deciduous-twining-dew)**:
+  reviewer evidence refuted an owner-approved premise. The healthy move was to
+  re-surface the corrected evidence for owner re-decision rather than silently
+  reshaping the design — the design change was an owner-class action-moment, not a
+  reasoning-moment the agent could absorb on its own authority.
 
 ## Source attribution
 

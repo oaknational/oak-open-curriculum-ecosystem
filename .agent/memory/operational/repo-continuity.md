@@ -19,6 +19,20 @@ surface.
 
 ## Current State
 
+- **Dedicated knowledge-curation pass (2026-06-01, Moonless Lurking Dusk /
+  `0641a3`, claude / Opus 4.8)**: ran `oak-consolidate-until-done` +
+  `oak-consolidate-docs`. **Two rules graduated**: `eef-corpus-grounding`
+  (trigger-loaded, EEF-scoped — the folded open question dissolved: the rules tier
+  is not always-on by construction, trigger-loaded is the designed home) and
+  `verify-data-supports-shape-before-building` (always-on — consolidated the
+  value-trace + fingerprint-data candidates into one design-time rule). **One rule
+  clause**: `owner-attention-at-action-moments` §evidence-refutes-an-owner-approved-premise.
+  **One workflow clause**: `consolidate-docs` step 7 — owner-gated items whose
+  trigger is owner-direction get walked in-session, not parked. Critical napkin
+  rotated → healthy (fully processed, archived verbatim); 3 cross-session lessons →
+  `distilled.md`. `principles.md` char limit raised 24000 → 26000 (owner-directed).
+  Seam-map archetype marked APPROVED (deferred to a focused session). Fitness green
+  (`strict-hard` passes); no substance deleted, no number chased.
 - **EEF D2 landed + corpus-contamination correction arc (2026-06-01, Lunar
   Transiting Eclipse / `9cde59`, claude / Opus 4.8)**: D2 built the typed
   raw-corpus foundation in `graph-corpus-sdk` (`EefStrand` / `EefStrandId` /
@@ -31,14 +45,10 @@ surface.
   completed a tombstone disposition pass (commits `fb7ad234`, `70ccbef8`,
   `75b0734a`). Lesson captured in agent memory
   (`harvest-from-deleted-is-contamination-vector`).
-  **NEXT-SESSION ACTION — make a real rule.** The cite-or-tag corpus-grounding
-  discipline currently lives as a stopgap doc at
-  [`sector-engagement/eef/reference/eef-corpus-grounding.md`](../../plans/sector-engagement/eef/reference/eef-corpus-grounding.md);
-  this is not a properly-created rule. Re-create it through the real
-  rule-creation path (graduation / `.agent/rules/` + cross-platform loaders /
-  `new-rule-vs-pdr-clause`), reconciling the owner requirement that it be
-  EEF-scoped and NOT always-on — so it does not sit in the always-loaded rules
-  tier. Retire the stopgap doc once the real rule exists.
+  The cite-or-tag corpus-grounding discipline is now a real `trigger-loaded` rule at
+  [`.agent/rules/eef-corpus-grounding.md`](../../rules/eef-corpus-grounding.md)
+  (all four forms + a `RULES_INDEX.md` row; loaded for EEF work, not baseline); the
+  stopgap doc was retired (graduated 2026-06-01, Moonless Lurking Dusk).
 - **Comms-event write-integrity implemented (2026-06-01, Tempestuous Gliding
   Falcon / `019e83`, codex / GPT-5)**: owner-directed fix for the comms-CLI
   corruption bug is complete in the working tree and committed in this session.
@@ -201,7 +211,7 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Lunar Transiting Eclipse / D2 implementation + contamination correction / 2026-06-01 |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | codex / GPT-5 / Umbral Whispering Silhouette / promotion-and-root-docs-author / 2026-06-01 |
-| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | codex / GPT-5 / Blooming Twining Grove / longitudinal napkin review + deep handoff / 2026-05-31 |
+| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 / Moonless Lurking Dusk / dedicated knowledge-curation pass / 2026-06-01 |
 
 ## Paused Threads
 
@@ -266,24 +276,24 @@ not the current session-priority lane. Reactivation is owner-directed.
    key-stage as two independent fields with no mapping) reached the canonical plan
    from a deleted prompt and was caught by the owner; removed, then an independent
    grounding audit + tombstone disposition pass cleared it. Lesson in Claude
-   auto-memory (`harvest-from-deleted-is-contamination-vector`). **Next-session
-   action — make a real rule:** the cite-or-tag corpus-grounding discipline is a
-   stopgap doc at `eef/reference/eef-corpus-grounding.md`; recreate it via the real
-   rule path (graduation / `.agent/rules/` + loaders / `new-rule-vs-pdr-clause`),
-   EEF-scoped and NOT always-on; retire the stopgap.
+   auto-memory (`harvest-from-deleted-is-contamination-vector`). The cite-or-tag
+   corpus-grounding discipline is now a real `trigger-loaded` rule
+   ([`.agent/rules/eef-corpus-grounding.md`](../../rules/eef-corpus-grounding.md));
+   the stopgap doc was retired (graduated 2026-06-01).
 6. **D3 (MCP tool/resource/prompt contract) is the next plan deliverable** —
    owner-ratified, `mcp-expert` SDK-registration verification pending. The D3/D4
    PENDING reviewers fire against the ratified D3/D4 outputs once those exist.
-7. **Graph-estate-consolidation needs a currency update + execution**
-   (owner-flagged 2026-06-01). The contamination-remediation master plan at
+7. **Graph-estate-consolidation: currency update DONE; t1-t8 execution pending**
+   (2026-06-01). The contamination-remediation master plan at
    `connecting-oak-resources/knowledge-graph-integration/current/graph-estate-consolidation.plan.md`
-   has a stale "Verified state to inherit": it presents D2-deleted surfaces
-   (`EefStrandsGraphView`, the `loadEefCorpus`/`selectEefSeedIds`/freshness path,
-   the EEF tool "shipping dark") as live/pending. First step: refresh that section
-   to post-D2 reality + add an "Inbound from EEF D2" section (this narrows t7's
-   concept sweep — the D2-deleted files no longer need it). Remaining remediation:
-   t1-t8 mostly pending (~1-2 focused doc-consolidation sessions; t7 largest; t6
-   deferred until finishing-plan D7).
+   is refreshed to post-D2 reality: the "Verified state to inherit" section is
+   corrected and an "Inbound from EEF D2" section added. Code now carries no
+   gate-1a/1b/Inc.3 residue — D2 deleted the eef-strands files, and the two
+   `graph-ingest` comments were cleaned this session. t7 sweeps the remaining gate
+   concept references across the `.agent` estate only (source-file reconciliation
+   is the finishing plan's, not t7's). Remaining remediation: t1-t8 pending (~1-2
+   focused doc-consolidation sessions; t7 largest; t6 deferred until finishing-plan
+   D7).
 8. The seam-mapping taxonomy + "seams compose" law is a candidate for a reusable
    plan template/archetype (owner-confirmed intent); tracked in
    [`pending-graduations.md`](pending-graduations.md).
@@ -350,6 +360,21 @@ authority.
 - Shared memory/state files are always writable and commit-includable when dirty.
 
 ## Deep Consolidation Status
+
+**completed this handoff (2026-06-01, Moonless Lurking Dusk — dedicated
+knowledge-curation)**: `completed — owner ran oak-consolidate-until-done then
+oak-consolidate-docs. Critical napkin (759 ln) rotated → healthy, fully processed
+before archive (verbatim at archive/napkin-2026-06-01-moonless-curation.md);
+durable lessons extracted item-level to distilled.md, the EEF-execution bulk
+dispositioned as duplicate (resident in the live EEF plan / pending-graduations) at
+category level with the verbatim archive intact. Two rules + one rule clause + one
+workflow clause graduated; four pending-graduation entries graduated, one
+trigger-fired→impl lane, one APPROVED/deferred (seam-map archetype).
+practice:fitness:strict-hard passes (0 hard, 0 critical) after the owner-directed
+principles.md char-limit raise. Aggregate pnpm check NOT separately run: the change
+set is markdown/memory-only (no workspace src/build/test/type surface — falsifiable
+via git show --stat); the husky pre-commit gate enforces the doc gates (format,
+markdownlint, portability, validators) on the staged set at commit.`
 
 **deep session handoff (2026-06-01, Lunar Transiting Eclipse — EEF D2 +
 contamination correction)**: `due — napkin.md is over its fitness limit and this

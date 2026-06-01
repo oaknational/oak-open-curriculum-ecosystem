@@ -71,6 +71,7 @@ without proportional value.
 | `.agent/rules/directive-file-context-budget.md`                            | always-on      | —                                                                                                |
 | `.agent/rules/documentation-hygiene.md`                                    | always-on      | —                                                                                                |
 | `.agent/rules/dont-break-build-without-fix-plan.md`                        | always-on      | —                                                                                                |
+| `.agent/rules/eef-corpus-grounding.md`                                     | trigger-loaded | Authoring/editing a claim about the EEF corpus (`EEF_TOOLKIT_DATA`) or EEF-thread work           |
 | `.agent/rules/executive-memory-drift-capture.md`                           | always-on      | —                                                                                                |
 | `.agent/rules/follow-agent-collaboration-practice.md`                      | always-on      | —                                                                                                |
 | `.agent/rules/follow-collaboration-practice.md`                            | always-on      | —                                                                                                |
@@ -142,5 +143,6 @@ without proportional value.
 | `.agent/rules/use-result-pattern.md`                                       | always-on      | —                                                                                                |
 | `.agent/rules/validate-full-target-estate.md`                              | always-on      | —                                                                                                |
 | `.agent/rules/validators-must-recompute-not-just-record.md`                | always-on      | —                                                                                                |
+| `.agent/rules/verify-data-supports-shape-before-building.md`               | always-on      | —                                                                                                |
 | `.agent/rules/verify-dont-trust.md`                                        | always-on      | —                                                                                                |
 | `.agent/rules/verify-vendor-call-shapes-at-plan-author-time.md`            | always-on      | —                                                                                                |

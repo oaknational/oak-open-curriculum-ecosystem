@@ -1,5 +1,46 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-06-01 — Moonless Lurking Dusk / claude / Opus 4.8 / `0641a3`, dedicated knowledge-curation pass)
+
+**Curation pass complete; fitness fully green.** Ran `oak-consolidate-until-done`
+then `oak-consolidate-docs` in `dedicated-knowledge-curation` mode.
+
+**Graduations:**
+
+- `eef-corpus-grounding` rule (trigger-loaded, EEF-scoped) — all four forms +
+  `RULES_INDEX` row; stopgap `eef/reference/eef-corpus-grounding.md` retired. The
+  folded open question dissolved: the rules tier carries a designed `Classification`
+  column; trigger-loaded is the home for a non-always-on domain-scoped rule.
+- `verify-data-supports-shape-before-building` rule (always-on) — consolidated the
+  value-trace + fingerprint-data candidates into one design-time rule rather than
+  fragmenting.
+- `owner-attention-at-action-moments` §"Evidence that refutes an owner-approved
+  premise is an action-moment" (clause + worked instance).
+- `consolidate-docs` step 7 clause — owner-gated items whose trigger is
+  owner-direction get walked in the consolidation session, not parked.
+
+**Napkin:** critical (759 ln) → healthy; fully processed before archive (verbatim
+at `archive/napkin-2026-06-01-moonless-curation.md`); 3 cross-session lessons →
+`distilled.md` (one-law-three-faces; opening-statements-teach-by-form;
+independent-eyes-vs-self-review).
+
+**Register:** four pending-graduation entries graduated; cross-platform rules
+generator marked trigger-fired→agent-tools impl lane; seam-map archetype marked
+APPROVED (size L, deferred to a focused authoring session).
+
+**Owner-surfaced (not promoted without approval):** one-law-three-faces (PDR
+candidate); opening-statements-teach-by-form (no-tombstones/continuity-practice
+clause candidate).
+
+**Next safe step:** if the owner reopens curation, walk the next owner-gated
+cluster (agent-tooling/test-coverage gates, or the collaboration-governance
+bundle) in-session per the new step-7 clause. The seam-map archetype is the
+largest approved authoring task awaiting a focused session.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Moonless Lurking Dusk` | `claude` | `Opus 4.8` | `0641a3` | `dedicated-knowledge-curation` | 2026-06-01 | 2026-06-01 |
+
 ## Session Outcome (2026-05-31 — Blooming Twining Grove / codex / GPT-5 / `019e7d`, longitudinal napkin review + deep handoff)
 
 **Named longitudinal review complete.** The owner-directed

@@ -1,8 +1,15 @@
 ---
 fitness_line_target: 450
 fitness_line_limit: 525
-fitness_char_limit: 24000
+fitness_char_limit: 26000
 fitness_line_length: 100
+fitness_rationale: >-
+  Char limit raised 24000 → 26000 on owner direction 2026-06-01 (Moonless Lurking
+  Dusk curation pass). The content (≈24.9k chars) is dense always-on doctrine that
+  grew legitimately; trimming substance was explicitly forbidden ("do not chase the
+  fitness number"). This is a "for now" raise — a deliberate substance-led
+  refinement (graduate elaborated guidance to governance docs per split_strategy,
+  never the principles themselves) remains the proper long-term move.
 split_strategy: "This file is the source of truth for all principles. Extract only elaborated guidance to governance docs, never the principles themselves. The principles are operationalised through several mechanisms, including rules, sub-agents, and tooling."
 ---
 

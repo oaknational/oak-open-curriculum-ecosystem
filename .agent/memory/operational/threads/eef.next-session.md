@@ -28,11 +28,10 @@
 >
 > **Next safe steps.**
 >
-> 1. **Make a real rule.** The cite-or-tag corpus-grounding discipline landed as a
->    stopgap doc (`eef/reference/eef-corpus-grounding.md`), NOT via the real
->    rule-creation path. Recreate it properly (graduation / `.agent/rules/` +
->    loaders / `new-rule-vs-pdr-clause`), EEF-scoped and NOT always-on; retire the
->    stopgap.
+> 1. **Cite-or-tag is now a real rule** (graduated 2026-06-01, Moonless Lurking
+>    Dusk). It lives at `.agent/rules/eef-corpus-grounding.md` as a `trigger-loaded`
+>    rule (all four forms + `RULES_INDEX.md` row); the stopgap doc was retired. The
+>    rule fires when authoring/editing an `EEF_TOOLKIT_DATA` claim.
 > 2. **D3** (MCP tool/resource/prompt contract) is the next plan deliverable —
 >    owner-ratified, `mcp-expert` SDK-registration verification pending.
 > 3. **Graph-estate-consolidation plan needs a currency update + execution**: its

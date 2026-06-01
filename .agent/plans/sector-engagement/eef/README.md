@@ -25,8 +25,9 @@ plans are recoverable from git history.
 
 **Authoring discipline**: when writing any document or code that claims something
 about the EEF corpus, follow the cite-or-tag rule at
-[`reference/eef-corpus-grounding.md`](reference/eef-corpus-grounding.md) — every
-corpus claim cites an `EEF_TOOLKIT_DATA` source path or is tagged agent-side.
+[`.agent/rules/eef-corpus-grounding.md`](../../../rules/eef-corpus-grounding.md)
+— every corpus claim cites an `EEF_TOOLKIT_DATA` source path or is tagged
+agent-side. It is a trigger-loaded rule (RULES_INDEX), loaded for EEF work.
 
 ---
 

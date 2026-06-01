@@ -37,6 +37,23 @@ substance that still needed a live queue home is preserved below. Processed
 source files were deleted after extraction so the repository does not carry
 pseudo-shards that hide the true buffer state.
 
+## 2026-06-01 capture — curation-pass doctrine candidates (Moonless Lurking Dusk)
+
+Surfaced to the owner during the dedicated knowledge-curation pass; staged in
+`distilled.md`. Capture-only — owner reviews before promotion.
+
+- **One law, three faces.** Derive-from-the-single-source-of-truth-never-bridge
+  (code), seams-compose-never-reconciled (architecture), and
+  state-what-is-no-monuments (writing) are one principle seen from three sides; a
+  frame-slip's cure is always the same shape (return to the source of truth, fix
+  upstream, state what is).
+  `[captured: 2026-06-01 | source: distilled.md + EEF thread synthesis | target: pdr:one-law-three-faces (unifying principle) | trigger: owner approval | size: M | status: owner-surfaced]`
+- **Opening statements and handoff artefacts teach by their form.** Loaded-first
+  surfaces train the next agent by their voice; written as present-truth +
+  destination they teach that, written as remediation-recap they teach that.
+  Validated twice across sessions; pairs with `no-tombstones-for-removed-ideas`.
+  `[captured: 2026-06-01 | source: distilled.md + Shaded/Windswept worked instances | target: clause:no-tombstones-for-removed-ideas OR continuity-practice | trigger: owner approval | size: S | status: owner-surfaced]`
+
 ## 2026-06-01 capture — seam-mapping plan template/archetype (Windswept Floating Summit)
 
 - **A reusable "seam map" archetype for fully planning complex features, with the
@@ -58,7 +75,7 @@ pseudo-shards that hide the true buffer state.
   (`replace-dont-bridge`, `rules-have-no-exceptions`). Owner framing: "no sections
   should need reconciling; an architectural tension is a signal we have misaligned a
   fundamental concept, not a legitimate hard thing to match up."
-  `[captured: 2026-06-01 | source: EEF plan Sequencing rewrite + owner direction | target: plan-template-or-archetype:seam-map (.agent/plans/templates/components/) + possible oak-plan skill amendment | trigger: owner-direction to author the template, or next complex-feature plan | size: M | status: pending — owner-confirmed intent to create later]`
+  `[captured: 2026-06-01 | source: EEF plan Sequencing rewrite + owner direction | target: plan-template-or-archetype:seam-map (.agent/plans/templates/components/) + possible oak-plan skill amendment | trigger: schedule a focused authoring session | size: L | status: APPROVED 2026-06-01 (owner) — NOT owner-gated; a large piece of work, deliberately not done in this curation session. Needs its own focused authoring session.]`
 
 ## 2026-06-01 capture — cross-platform rules generator (Twilit Threading Satellite)
 
@@ -69,7 +86,7 @@ pseudo-shards that hide the true buffer state.
   fact. A generator would author every form from the canonical file so the forms
   cannot drift and the index stays in lockstep. (The index header already drifted:
   it says "three on-disk forms" while listing four.)
-  `[captured: 2026-06-01 | source: rules-have-no-exceptions authoring | target: agent-tools:rules-cross-platform-generator | trigger: owner-direction-or-next-rule-authoring | size: M | status: pending]`
+  `[captured: 2026-06-01 | source: rules-have-no-exceptions authoring | target: agent-tools:rules-cross-platform-generator | trigger: owner-direction-or-next-rule-authoring | size: M | status: pending — TRIGGER FIRED 2026-06-01 (eef-corpus-grounding hand-mirrored across 4 forms + index this session); routed to an agent-tools implementation lane, not a curation disposition — surfaced to owner]`
 
 ## 2026-05-31 captures — EEF value reframe (Fruited Regrowing Copse)
 
@@ -96,11 +113,13 @@ triggers fire.
 
 - **Trace user value before tool design.** `[captured: 2026-05-31 | source:
   distilled.md + feedback_trace_user_value_before_tool_design | target:
-  pdr-or-directive:value-trace-before-tool-design | trigger: second instance of a
-  built/designed tool the data could not support, or owner direction | size: S |
-  status: pending]` Trace the user journey + value end to end and check
-  data-support at each hop before designing/building. The EEF tools-as-envisioned
-  were impossible because the data never supported the subject/topic join.
+  pdr-or-directive:value-trace-before-tool-design | trigger: FIRED — owner approval
+  2026-06-01 + second instance (the value-trace inversion) | size: S |
+  status: graduated 2026-06-01 → .agent/rules/verify-data-supports-shape-before-building.md
+  (consolidated with the fingerprint-data candidate into one design-time rule)]`
+  Trace the user journey + value end to end and check data-support at each hop
+  before designing/building. The EEF tools-as-envisioned were impossible because
+  the data never supported the subject/topic join.
 
 ## 2026-05-31 captures — agent-tools PreToolUse hooks + scripts→src migration
 
@@ -548,18 +567,19 @@ Total live owner-gated items: 56.
   retrospective watch, or withdraw because the plan and implementation are
   enough.
 - 2026-05-11; **Pre-flight fingerprint scan before shape decisions**.
-  `[captured: 2026-05-11 | source: smouldering-crackling-pyre | target: rule-or-pattern:fingerprint-data-before-shaping-fix | trigger: owner-direction-or-second-data-premise-refutation | size: S | status: owner-gated]`
+  `[captured: 2026-05-11 | source: smouldering-crackling-pyre | target: rule-or-pattern:fingerprint-data-before-shaping-fix | trigger: FIRED — owner approval 2026-06-01 | size: S | status: graduated 2026-06-01 → .agent/rules/verify-data-supports-shape-before-building.md]`
   A cheap data-corpus fingerprint scan refuted a migration-plan premise before
-  code landed and let the owner redirect the shape. The remaining decision is
-  whether to promote the rule/pattern now, keep watching for a second instance,
-  or withdraw as a local investigation tactic.
+  code landed and let the owner redirect the shape. Graduated as the fix/migration
+  face of the new design-time rule (consolidated with the value-trace candidate so
+  the two facets — verify value-support before building, fingerprint data before
+  shaping a fix — share one home rather than fragmenting).
 - 2026-05-11; **Owner re-decision on evidence-refuted premise**.
-  `[captured: 2026-05-11 | source: deciduous-twining-dew | target: pdr-or-rule:re-surface-dont-override-on-evidence-correction | trigger: owner-direction-or-second-distinct-review-type | size: S | status: owner-gated]`
+  `[captured: 2026-05-11 | source: deciduous-twining-dew | target: pdr-or-rule:re-surface-dont-override-on-evidence-correction | trigger: FIRED — owner approval 2026-06-01 | size: S | status: graduated 2026-06-01 → .agent/rules/owner-attention-at-action-moments.md §"Evidence that refutes an owner-approved premise is an action-moment" + worked instance]`
   When reviewer evidence refutes an owner-approved premise, the healthy move is
   to re-surface the corrected evidence and let the owner decide again, not to
-  silently reshape the design. The remaining decision is whether to promote the
-  protocol now, keep watching for another review-type instance, or withdraw
-  because existing owner-direction discipline is sufficient.
+  silently reshape the design. Graduated as a clause on the existing
+  owner-attention rule (the premise refutation is a named owner-class
+  action-moment) rather than a new rule.
 - 2026-05-10; **evaluateParityChecks focused unit coverage**.
   `[captured: 2026-05-10 | source: commands-retirement-reviewer-follow-up | target: test-cycle:agent-tools/src/core/health-probe-parity.ts | trigger: owner-direction-or-next-touch | size: M | status: owner-gated]`
   `evaluateParityChecks` still lacks focused unit coverage for reviewer adapter
@@ -1550,20 +1570,19 @@ feedback (sidebar shape is the lightest); composes with `coordinator-role-thresh
 ## EEF cite-or-tag corpus-grounding discipline → real rule
 
 - **captured-date**: 2026-06-01
-- **source-surface**: `eef` thread; stopgap doc `eef/reference/eef-corpus-grounding.md`
-- **graduation-target**: a properly-created rule via the real path (graduation /
-  `.agent/rules/` + cross-platform loaders / `new-rule-vs-pdr-clause`), **EEF-scoped
-  and NOT always-on**
-- **trigger-condition**: next session picking up the EEF thread (owner-directed
-  2026-06-01: "that is not how rules are created... make a real rule")
-- **status**: due — owner-directed; the discipline exists only as a stopgap doc and
-  must be recreated through the real rule path, then the stopgap retired
-- **substance**: every claim about `EEF_TOOLKIT_DATA` cites a real source path or is
-  tagged agent-side; pairs with `no-tombstones-for-removed-ideas`; both enforced by a
-  human/agent **disposition pass** at EEF-doc-change time (a regex detector was
-  rejected — it cannot distinguish a genuine tombstone from a legitimate
-  delete-instruction). Origin: a fabricated key-stage→phase concept reached the
-  canonical plan; see auto-memory `harvest-from-deleted-is-contamination-vector`.
-- **open question folded in**: how does a *not-always-on, domain-scoped* rule live,
-  given the `.agent/rules/` tier is always-on by construction? Resolve the
-  scoped-rule home as part of the graduation.
+- **status**: **graduated 2026-06-01** (Moonless Lurking Dusk, claude / Opus 4.8 /
+  `0641a3`, dedicated knowledge-curation pass).
+- **home**: `.agent/rules/eef-corpus-grounding.md` (canonical) + `.claude` / `.cursor`
+  (`alwaysApply: false`) / `.agents` loaders + a `RULES_INDEX.md` row classified
+  `trigger-loaded`. The stopgap doc `eef/reference/eef-corpus-grounding.md` was
+  deleted after the substance graduated; `eef/README.md` now points at the rule.
+- **open question resolved**: the premise was false — the `.agent/rules/` tier is not
+  always-on by construction. `RULES_INDEX.md` carries a designed `Classification`
+  column and 13 rules were already `trigger-loaded`. A not-always-on, domain-scoped
+  rule lives as a `trigger-loaded` rule: only the one-line forwarder + index row sit
+  in baseline (negligible); the canonical content is read when the trigger fires
+  (here: authoring/editing an `EEF_TOOLKIT_DATA` claim or EEF-thread work). No new
+  mechanism (`replace-dont-bridge`).
+- **note**: the rejected regex detector decision is preserved in the rule's failure-mode
+  section as the human/agent disposition pass; origin remains auto-memory
+  `harvest-from-deleted-is-contamination-vector`.
