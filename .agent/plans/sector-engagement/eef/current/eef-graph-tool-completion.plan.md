@@ -948,8 +948,14 @@ kept alive until the graph projection is ready.
     `school_context_relevance.most_relevant_priorities`, and any
     graph-ratified `behind_the_average.by_phase` keys;
   - declared `school_context_schema` enums are typed raw metadata only, not D3
-    filter domains, unless D3 explicitly ratifies a declared-domain input and D4
-    proves the graph can operate on it without empty-but-valid values;
+    filter domains. Both the observed applicability facts and the declared enums
+    come from their own named corpus source paths; neither is hand-authored, and
+    they are one corpus read from two fields, not two vocabularies to reconcile.
+    D2 computes the divergence between each declared enum and the values strands
+    actually carry, and records any declared value with no backing strand as a
+    corpus fact for D3/D4. A declared enum becomes a D3 filter input only if D3
+    ratifies it and that D2 divergence record shows it yields no empty-but-valid
+    filter result;
   - raw headline metric domains come from strand `headline` fields:
     `impact_months` (including `null` in the raw domain), `cost_rating`,
     `cost_label`, `evidence_strength_rating`, and `evidence_strength_label`;
@@ -1010,12 +1016,15 @@ kept alive until the graph projection is ready.
 
 **Done when (acceptance):**
 
-- `EefStrand`, observed graph-filter domains, declared metadata domains, all EEF
-  vocabularies D3 consumes, all raw headline metric domains, methodology/caveat
-  facts, provenance facts, and raw related-strand facts derive from named
-  `EEF_TOOLKIT_DATA` source paths; no `z.infer`-normalized node type, no Zod
-  schema, no maintained key/value list, no maintained metric list, no glue
-  vocabulary, no caveat class list, no interpretation ontology, and no
+- `EefStrand`, observed graph-filter domains, declared metadata domains, all raw
+  headline metric domains, methodology/caveat facts, provenance facts, and raw
+  related-strand facts derive from named `EEF_TOOLKIT_DATA` source paths. D2
+  derives these exhaustively from what the corpus structurally holds, not from a
+  ratified D3 consumption set. D2 runs before D3, so it exposes every raw fact
+  the corpus supports and keys the source-path table by raw source path. D3
+  selects its subset from that table later. No `z.infer`-normalized node type,
+  no Zod schema, no maintained key/value list, no maintained metric list, no
+  glue vocabulary, no caveat class list, no interpretation ontology, and no
   hand-authored crosswalk remain in the foundation.
 - `strandById('<literal>')` type-checks to the exact single strand;
   `isValidStrandKey` narrows an arbitrary value to `EefStrandId`, proven by a
@@ -1035,17 +1044,23 @@ kept alive until the graph projection is ready.
   barrel, or compatibility module to make the old imports compile.
 - Raw-foundation construction from the real corpus is proven by unit test,
   including key membership, observed-vocabulary derivation, declared-metadata
-  domain derivation, headline metric-domain derivation, methodology/caveat and
-  provenance derivation, raw lookup, raw related-strand facts, and metadata;
+  domain derivation, the declared-vs-observed divergence record, headline
+  metric-domain derivation, methodology/caveat and provenance derivation, raw
+  lookup, raw related-strand facts, and metadata;
   consumers type-check against the derived types. D2 records a source-path table
-  for every finite domain or corpus-level field D3 consumes:
-  `D3 field -> raw source path -> raw projection helper -> proof test`. The
-  executor verifies removal by reading the touched files/imports during the change
-  and running the normal gates; D2 does not add a permanent negative-audit checker
-  for the deleted mistakes.
+  keyed by raw source path, one row per finite domain and corpus-level field
+  the constant structurally holds:
+  `raw source path -> raw projection helper -> proof test`. Each row may note a
+  candidate D3 field, but that note is provisional at D2 time because D3 is not
+  yet ratified: a row with no current D3 consumer is retained, not dropped, and
+  D3 later selects its subset from this table rather than the table being
+  trimmed to a guessed D3 surface. The executor verifies removal by reading the
+  touched files/imports during the change and running the normal gates; D2 does
+  not add a permanent negative-audit checker for the deleted mistakes.
 
 **Proof:** `unit` (raw substrate, predicate, keyed lookup, observed and declared
-domain derivation, headline metric-domain derivation, methodology/caveat and
+domain derivation, the declared-vs-observed divergence record, headline
+metric-domain derivation, methodology/caveat and
 provenance derivation, raw related-strand facts, and metadata over the real
 corpus) + source-path table + file/import inspection during the edit. Command:
 `pnpm --filter @oaknational/graph-corpus-sdk test`. Full type-check proof belongs
@@ -1211,8 +1226,13 @@ structuredContent-only, not dual-content output.
 - The D3 contract contains a source-path table for every finite input and output
   field:
   `contract field -> graph-native subset -> raw EEF source path -> proof test`.
-  If any field, label, metric predicate, schema key, output key, or workflow
-  mapping cannot trace through that table, D3 is not complete.
+  The `graph-native subset` column is a named but unbound forward reference.
+  D3 names the subset value each field needs and proves the field traces to a
+  real raw EEF source path. D4 binds the named subset to the ratified
+  graph-native view, and D6/D7 prove the binding closes. D3 is complete when
+  every field names its subset and traces to a raw source path, not when the
+  subset is concretely bound. A field that cannot name a subset, or cannot
+  reach a real raw source path, means D3 is not complete.
 - The D3 workflow contains no plan-authored or server-side Oak-signal-category to
   `EefStrandId` crosswalk. The invoking agent selects real corpus ids from
   corpus-derived evidence; D6 implements no hidden semantic mapping from

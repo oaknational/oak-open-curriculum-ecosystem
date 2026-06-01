@@ -484,3 +484,20 @@ most important.
   named in-flight D2-D6 replacement state. The cure is the completed replacement
   chain, not an alias, shim, fallback, side-by-side registration, or preserved
   old-path barrel.
+
+## Session: 2026-06-01 — EEF handoff commit correction
+
+### Patterns to Remember
+
+- Before committing already-staged handoff surfaces, reread their diffs against
+  the newest owner correction. Staged continuity can preserve a prior session's
+  softer truth even after the live plan has been sharpened. In this case the
+  staged repo-continuity/thread handoff still described a temporary loader wrapper
+  and D5/D6 old-list deletion, while the corrected plan said D2 deletes the old
+  path outright. Behaviour change: treat handoff surfaces as live claims to audit,
+  not passive summaries to sweep into "commit all files".
+- "Do not run quality gates; let the commit hook do that" means no extra manual
+  validation beyond the commit-message preflight and the requested `git commit`.
+  If the hook runs staged formatting, markdownlint, repo validators, shell lint,
+  or turbo tasks, that is the requested enforcement path, not a violation of the
+  no-manual-gates instruction.
