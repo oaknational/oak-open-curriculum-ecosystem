@@ -1,9 +1,12 @@
 # @oaknational/graph-corpus-sdk
 
-Oak's typed corpus-adapter SDK. Provides `GraphView` adapters over Oak's
-evidence and curriculum corpora — starting with EEF strands and the Oak
-Curriculum Ontology Threads graph, with prerequisite and misconception
-adapters following in Increment 3.
+Oak's typed corpus SDK for the graph substrate. It is the substrate home for
+Oak's open-education corpora
+([ADR-157](../../../docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md));
+the EEF Teaching and Learning Toolkit strands foundation is the first
+resident. Every type derives directly from the fixed `as const` corpus
+snapshot: the corpus is the single source of truth and its own type
+authority.
 
 Transport-agnostic per
 [ADR-179](../../../docs/architecture/architectural-decisions/179-transport-agnostic-graph-substrate.md):
@@ -12,10 +15,25 @@ through any transport is a consumer-side concern handled by the curriculum
 SDK MCP module and the curriculum MCP HTTP app, or by future consumer
 workspaces that import this SDK.
 
-## Status
+## What it provides
 
-Scaffold-only. Public surface consists of three pre-declared barrel exports;
-adapters are added in follow-on cycles tracked by the relevant plan estate.
+The `eef-strands` module is the typed raw-data foundation over
+`EEF_TOOLKIT_DATA`, the fixed `as const` corpus snapshot:
+
+- **Strand identity and lookup** — `EefStrand`, `EefStrandId`,
+  `EefStrandById`, `strandById`, and the single boundary predicate
+  `isValidStrandKey`.
+- **Finite raw domains** — the observed applicability domains, the declared
+  metadata domains, the declared-vs-observed divergence record, and the raw
+  headline-metric domains.
+- **Raw edge facts** — `relatedStrandEdges`, derived from each strand's
+  `related_strands`.
+- **Corpus-level provenance** — `corpusMeta`, `corpusCaveats`,
+  `corpusMethodology`, `lastUpdated`.
+
+The graph-native projection, graph query layer, and MCP schemas are built
+downstream in their consumer layers; this package owns the corpus types
+only.
 
 ## Architectural decisions
 
@@ -30,12 +48,11 @@ adapters are added in follow-on cycles tracked by the relevant plan estate.
 
 ## Sub-path exports
 
-- `@oaknational/graph-corpus-sdk` — root barrel.
-- `@oaknational/graph-corpus-sdk/eef-strands` — EEF strands adapter surface.
-- `@oaknational/graph-corpus-sdk/threads` — Oak Curriculum Ontology Threads adapter surface.
-
-Each sub-path is pre-declared so consumers can target a stable import
-shape without further `package.json` churn as adapters land.
+- `@oaknational/graph-corpus-sdk` — root barrel; re-exports the foundational
+  `GraphView` (from `@oaknational/graph-core`) and `Result` (from
+  `@oaknational/result`) types.
+- `@oaknational/graph-corpus-sdk/eef-strands` — the EEF strands corpus
+  foundation.
 
 ## Scripts
 

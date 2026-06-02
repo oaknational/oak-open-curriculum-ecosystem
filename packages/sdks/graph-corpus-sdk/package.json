@@ -2,7 +2,7 @@
   "name": "@oaknational/graph-corpus-sdk",
   "version": "0.0.0-development",
   "private": true,
-  "description": "Oak's typed corpus-adapter SDK. Implements GraphView adapters over EEF strands, Threads, prerequisite, and misconception corpora. Transport-agnostic (ADR-179).",
+  "description": "Oak's typed corpus SDK for the graph substrate. Ships the EEF strands typed raw-corpus foundation, derived from the fixed as-const corpus snapshot. Transport-agnostic (ADR-179).",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

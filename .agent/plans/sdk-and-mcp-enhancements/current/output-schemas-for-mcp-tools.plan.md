@@ -1,6 +1,6 @@
 ---
 name: "MCP Output Schemas and Response Validation"
-overview: "Declare a truthful, REQUIRED, object-rooted `outputSchema` on every MCP tool — composed at codegen time for the 24 generated tools, hand-authored (reusing generated sub-schemas) for the 11 aggregated tools — and thread it through the canonical universal-tools descriptor surface to `registerTool`/`registerAppTool`, so MCP clients receive a machine-checkable contract for the `structuredContent` they get back."
+overview: "Declare a truthful, REQUIRED, object-rooted `outputSchema` on every MCP tool — composed at codegen time for the generated tools, hand-authored (reusing generated sub-schemas) for the aggregated tools, with the 3 existing graph tools receiving theirs as part of their substrate migration — and thread it through the canonical universal-tools descriptor surface to `registerTool`/`registerAppTool`, so MCP clients receive a machine-checkable contract for the `structuredContent` they get back. Delivery order is ratified: the EEF tool first (via EEF D6), the graph tools at migration, the rest per tool type, required/root promotion last."
 source_research:
   - "../../../reports/output-schema-mcp-plan-audit-2026-06-02.md"
   - "../roadmap.md"
@@ -14,14 +14,14 @@ todos:
     status: pending
     depends_on: [w1-cycle-1]
   - id: w2-cycle-1
-    content: "W2 cycle 1 (aggregated, ATOMIC): add REQUIRED outputSchema (z.ZodRawShape, object root) to AggregatedToolDefShape; author each of the 11 aggregated tools' output shape matching its real structuredContent (reusing generated sub-schemas where the payload embeds generated types; search modelled as a single object with mode-specific fields optional, NOT a root union); wire all 11 into AGGREGATED_TOOL_DEFS; per-tool conformance unit tests. One commit. Tree green."
+    content: "W2 cycle 1 (aggregated, ATOMIC): author the in-scope aggregated tools' output shapes matching each tool's real structuredContent (reusing generated sub-schemas where the payload embeds generated types; search modelled as a single object with mode-specific fields optional, NOT a root union); per-tool conformance unit tests. Scope and the required-field landing shape follow §Resolved Sequencing: the 3 existing graph tools are excluded (their schemas land with their substrate migration), and requiredness lands at the per-type promotion point. Re-cut at execution start. One commit. Tree green."
     status: pending
     depends_on: []
   - id: s0-cycle-1
     content: "S0 cycle 1 (seam): add REQUIRED outputSchema (z.ZodRawShape) to ToolRegistryDescriptor and UniversalToolListEntry + a requireGeneratedToolOutputShape helper; forward outputSchema in listUniversalTools() from both the aggregated defs and generated descriptors; add `outputSchema: tool.outputSchema` to the single registerTool/registerAppTool config in handlers.ts. Integration test: the registration config carries outputSchema for all 35 tools (spy-observation pattern). One commit. Tree green."
     status: pending
     depends_on: [w1-cycle-2, w2-cycle-1]
-    decision_gate: "OPEN-DECISION-S0-OWNERSHIP"
+    decision_gate: "Re-cut to §Resolved Sequencing (owner, 2026-06-02) before execution — S0's required promotion executes last"
   - id: s0-cycle-2
     content: "S0 cycle 2 (proof): integration/E2E test proving (a) tools/list exposes outputSchema for all 35; (b) real emitted structuredContent validates against the declared outputSchema for a representative generated and a representative aggregated tool; (c) every tool's success return carries structuredContent (the required-outputSchema invariant); (d) an isError:true path skips output validation. One commit. Tree green."
     status: pending
@@ -48,7 +48,7 @@ isProject: false
 # MCP Output Schemas and Response Validation
 
 **Last Updated**: 2026-06-02
-**Status**: 🟢 DECISION-COMPLETE except one named open decision (S0 / EEF-D6 sequencing — see [§Open Decision](#open-decision-the-only-unresolved-choice)). All design and execution decisions are resolved; the plan is otherwise ready for execution.
+**Status**: 🟢 DECISION-COMPLETE — S0 ownership and the delivery order are owner-resolved (2026-06-02, see [§Resolved Sequencing](#resolved-sequencing-owner-2026-06-02)). The W1/W2/S0 cycle decomposition below predates that resolution (it decomposes by populate-all-then-wire); the cycles are re-cut to the ratified order at execution-session start, before any cycle runs.
 **Scope**: Give every MCP tool a truthful, required, object-rooted `outputSchema` and expose it through the live registration path.
 
 > **Provenance**: this plan was fully re-grounded on 2026-06-02 against live
@@ -229,35 +229,40 @@ it, so the schema must match what is **actually emitted** or the tool errors.
 
 ---
 
-## Open Decision (the only unresolved choice)
+## Resolved Sequencing (owner, 2026-06-02)
 
-> **OPEN-DECISION-S0-OWNERSHIP** — gates `s0-cycle-1` only. Everything else is
-> decided.
-
-**Settled (by both plans, verified):** the topology is **not** open. The active
-EEF plan states its tool "registers through the universal-tools path, not a
-bespoke bypass" and enumerates the **same** S0 surfaces (`AggregatedToolName`,
+**S0 ownership is resolved:** this plan owns the **general S0 seam**; EEF D6
+lands the seam's first use for its one flag-gated tool. The topology was never
+open — the EEF tool registers through the universal-tools path, and both plans
+point at the one shared additive seam (`AggregatedToolName`,
 `AGGREGATED_TOOL_DEFS`/`AggregatedToolDefShape` satisfies-guard,
 `UniversalToolListEntry`, `listUniversalTools`, the `handlers.ts` config),
-explicitly recording that they are "settled at D3 verification **together with
-the in-flight output-schema work**" (this plan). Both plans already point at the
-one shared additive seam.
+settled at EEF D3 verification together with this plan.
 
-**Verdict (this plan's position):** this plan owns the **general S0 seam** for
-the 35 always-on tools. EEF D6 adds an `outputSchema` for its one flag-gated
-tool **on the same additive seam** — it does not need a parallel path. The
-seam is additive and leaves existing generated tools unchanged.
+**The delivery order is ratified and firm:**
 
-**What is genuinely open — and why it is the owner's call, not this plan's:**
-**sequencing/ownership of the single shared change** between the *active* EEF
-branch (D3 next) and this *queued* plan. Either the EEF D3/D6 work lands the
-required-field seam (this plan's `s0-cycle-1` then becomes a consume-and-verify
-no-op) or this plan lands it first (EEF rides it). That is a cross-plan priority
-call the owner makes; `s0-cycle-1` carries the gate so the seam is landed exactly
-once, with active-claim coordination before either side edits `universal-tools/`.
+1. **The EEF tool's `outputSchema` lands first and alone**, through EEF D6 —
+   the first instance of the projection→single-Zod-call mechanism — so the
+   EEF-dependent value ships with no delay from any work on existing tools.
+2. **The 3 existing graph tools** (`get-misconception-graph`,
+   `get-prior-knowledge-graph`, `get-thread-progressions`) **receive their
+   output schemas with their substrate migration**
+   (`graph-estate-consolidation.plan.md` Judgment call 4: per tool, the
+   data/type re-emission, the tool rewrite, and its `outputSchema` land as one
+   replacement unit). They are untouched before that migration — they work
+   today, and the schema arrives when the tool is rebuilt, never before.
+3. **The remaining tools follow per tool type** (the other aggregated tools,
+   then the generated/API and search tools), with the **required-field
+   promotion to the root `UniversalToolListEntry` last**, once every type
+   carries it. The all-35 counts in the S0 cycles describe that final state and
+   are evaluated when S0 executes (last), against the tool set live at that
+   time.
 
-**Until resolved:** W1, W2, and `s0-cycle-2`'s test design are unblocked and
-executable. `s0-cycle-1` waits on this sequencing decision.
+The governing rule in one line: **a tool's schema arrives when the tool is
+built or rebuilt, never before.** The W1/W2/S0 cycles are re-cut to this order
+at execution-session start, coordinated with EEF D3 verification on the shared
+seam and with active-claim coordination before either side edits
+`universal-tools/`.
 
 ---
 
@@ -265,7 +270,10 @@ executable. `s0-cycle-1` waits on this sequencing decision.
 
 - **The 3 existing graph tools** (`get-thread-progressions`,
   `get-prior-knowledge-graph`, `get-misconception-graph`) are ordinary aggregated
-  tools (`definitions.ts:117-128`); **W2 owns them**.
+  tools (`definitions.ts:117-128`); **their output schemas land with their
+  substrate migration** (`graph-estate-consolidation.plan.md` Judgment call 4 —
+  per tool: data/type re-emission + tool rewrite + `outputSchema`, one
+  replacement unit), not in W2. They are untouched before that migration.
 - **The new EEF graph tool** (flag-gated `OAK_CURRICULUM_MCP_EEF_ENABLED`, does
   not exist yet) is owned **exclusively** by the EEF plan (D3/D4/D6). Its
   single-Zod-call graph-native-view derivation is intrinsic to its chain and must
@@ -297,7 +305,7 @@ Acceptance ids are the todo ids. Each names its proof level and proving command.
 |---------------|-------------|-----------|
 | `w1-cycle-1` | unit | emitter unit tests (single/multi-status, oakContextHint predicate); `pnpm test --filter @oaknational/sdk-codegen` + `pnpm sdk-codegen && pnpm build` |
 | `w1-cycle-2` | integration | conformance test over all 24 generated descriptors; `pnpm test` |
-| `w2-cycle-1` | unit | 11 per-tool conformance unit tests + `satisfies` guard holds; `pnpm type-check && pnpm test` |
+| `w2-cycle-1` | unit | per-tool conformance unit tests for the 8 in-scope aggregated tools (the 3 graph tools' schemas land with their migration) + `satisfies` guard holds; `pnpm type-check && pnpm test` |
 | `s0-cycle-1` | integration | registration-config carries `outputSchema` for all 35 (spy pattern); `pnpm test --filter oak-curriculum-mcp-streamable-http` |
 | `s0-cycle-2` | e2e | `tools/list` exposes `outputSchema` (35); real `structuredContent` validates; structuredContent-present invariant (35); `isError` skips; `pnpm test:e2e` |
 | `ws-docs` | non-code | TSDoc/README accurate; `pnpm markdownlint:root` |
@@ -316,13 +324,15 @@ slice is not completion.
   `ToolDescriptor` contract makes all 24 generated files fail `type-check` until
   regenerated, so the contract change + emitter + `pnpm sdk-codegen` regeneration
   land in **one** commit. Cycle 1.2 (cross-tool conformance test) follows.
-- **W2 is one atomic cycle** — `AggregatedToolDefShape.outputSchema` is required
-  and `definitions.ts` is a shared convergence file; incremental landing forces
-  either unused exports (knip) or a transient-optional field (both forbidden).
-  Authoring the 11 schemas is parallelisable *preparation*; the landing is atomic.
+- **W2 is one atomic cycle** — `definitions.ts` is a shared convergence file;
+  incremental landing forces either unused exports (knip) or a
+  transient-optional field (both forbidden). Authoring the in-scope schemas is
+  parallelisable *preparation*; the landing is atomic, with the required-field
+  landing shape set by the execution-start re-cut (§Resolved Sequencing).
 - **S0 depends on W1 + W2** — it forwards `descriptor.outputSchema` (W1) and
-  `def.outputSchema` (W2). `s0-cycle-1` additionally gated on
-  **OPEN-DECISION-S0-OWNERSHIP**.
+  `def.outputSchema` (W2). `s0-cycle-1` additionally gated on the
+  execution-start re-cut to **§Resolved Sequencing** (S0's required promotion
+  executes last, after the migrated graph tools carry schemas).
 
 ---
 
@@ -376,19 +386,21 @@ missing a declared field.
 
 ---
 
-## W2 — Aggregated-tool output schemas (11 tools, ATOMIC)
+## W2 — Aggregated-tool output schemas (ATOMIC; scope per §Resolved Sequencing)
 
-> One commit. Authoring the 11 schemas is parallelisable preparation; the landing
-> is atomic.
+> The 3 existing graph tools are out of W2's scope — their schemas land with
+> their substrate migration (§Resolved Sequencing). One commit for the in-scope
+> set. Authoring the schemas is parallelisable preparation; the landing is
+> atomic, and the required-field landing shape follows the per-type promotion
+> order at the execution-start re-cut.
 
 **File scope** (permitted to touch):
 
-- `universal-tools/definitions.ts` — add required `outputSchema: z.ZodRawShape` to `AggregatedToolDefShape` (`:58-70`); wire all 11 entries.
-- Each aggregated module (`aggregated-search/`, `aggregated-fetch/`,
+- `universal-tools/definitions.ts` — add `outputSchema: z.ZodRawShape` to `AggregatedToolDefShape` (`:58-70`) per the re-cut landing shape; wire the in-scope entries.
+- Each in-scope aggregated module (`aggregated-search/`, `aggregated-fetch/`,
   `aggregated-curriculum-model/`, `aggregated-browse/`, `aggregated-explore/`,
-  `aggregated-asset-download/`, `aggregated-user-search/`,
-  `aggregated-thread-progressions.ts`, `aggregated-prior-knowledge-graph.ts`,
-  `aggregated-misconception-graph.ts`) — export an object-rooted output raw shape.
+  `aggregated-asset-download/`, `aggregated-user-search/`) — export an
+  object-rooted output raw shape.
 - `*.unit.test.ts` beside each module.
 
 **File scope NOT to touch**: `list-tools.ts`, `types.ts`, `handlers.ts` (S0);
@@ -404,20 +416,18 @@ truths:
 | `search` | single object, mode fields optional: `{ scope?, total?, took?, results?, suggestions?, cache?, summary, status, oakContextHint? }` — **not** a root union (no shared discriminator exists) |
 | `fetch` | `oakUrl` (not `canonicalUrl`), `id`, `type`, `httpStatus`, `data`, `summary`, `oakContextHint?` |
 | `get-curriculum-model` | `summary` + curriculum-model payload (reuse generated model sub-schema) |
-| `get-thread-progressions` | `summary` + ordered progression payload |
-| `get-prior-knowledge-graph` | `summary` + spread `sourceData` graph payload |
-| `get-misconception-graph` | `summary` + spread `sourceData` graph payload |
 | `browse-curriculum` | `summary` + browse payload (reuse generated sub-schemas) |
 | `explore-topic` | `summary` + explore payload |
 | `download-asset` | `{ downloadUrl, lesson, type, summary, oakContextHint }` — **no `status`**; consume post-`download-asset-user-only-url` shape if landed |
 | `user-search` | `summary` + user-search payload; widget tool |
 | `user-search-query` | `summary` + query payload; app-only (`_meta.ui.visibility:['app']`) |
 
-**Product code (Green)**: required `outputSchema` on `AggregatedToolDefShape`;
-author each module's object-rooted shape (reusing generated Zod sub-schemas as
-property values where the payload embeds generated types); wire all 11.
+**Product code (Green)**: `outputSchema` on `AggregatedToolDefShape` per the
+re-cut landing shape; author each in-scope module's object-rooted shape
+(reusing generated Zod sub-schemas as property values where the payload embeds
+generated types); wire the in-scope entries.
 
-**Acceptance**: all 11 conformance tests pass; the
+**Acceptance**: all in-scope conformance tests pass; the
 `as const satisfies Record<AggregatedToolName, …>` guard (`:149`) holds;
 `pnpm type-check` + `pnpm test` green; tree green.
 
@@ -428,7 +438,9 @@ sub-schema reuse type-compatibility), `mcp-expert`, `code-expert`.
 
 ## S0 — Seam: thread the required `outputSchema` to the wire
 
-> Gated on **OPEN-DECISION-S0-OWNERSHIP**. Depends on W1 + W2.
+> Gated on the execution-start re-cut to **§Resolved Sequencing** — S0's
+> required promotion executes last, after the migrated graph tools carry
+> schemas. Depends on W1 + W2.
 
 ### Cycle S0.1 — Required field + projection + registration
 
@@ -436,7 +448,7 @@ sub-schema reuse type-compatibility), `mcp-expert`, `code-expert`.
 
 - `universal-tools/types.ts` — add **required** `outputSchema: z.ZodRawShape` to **both** `ToolRegistryDescriptor` (`:31-40`, the generated-descriptor narrow type — without this the generated `outputSchema` cannot cross into the universal-tools layer) **and** `UniversalToolListEntry` (`:120-142`).
 - `universal-tools/descriptor-utils.ts` — add `requireGeneratedToolOutputShape`, mirroring `requireGeneratedToolInputShape` (`:47-62`) + `extractZodShape` (no `as`/`instanceof` shortcut beyond the existing guard pattern).
-- `universal-tools/list-tools.ts` — forward `outputSchema` from `def.outputSchema` (aggregated) and the descriptor (generated, via the helper) in **both** map branches (`:62-94`); remove the stale `download-asset on stdio` TSDoc (`:25-26`); add `outputSchema` to the `@example` config spread (`:53-58`).
+- `universal-tools/list-tools.ts` — forward `outputSchema` from `def.outputSchema` (aggregated) and the descriptor (generated, via the helper) in **both** map branches (`:62-94`); remove the stale `download-asset on stdio` TSDoc (`:25-26`); add `outputSchema` to the `@example` config spread (`:47-52`).
 - `apps/oak-curriculum-mcp-streamable-http/src/handlers.ts` — add `outputSchema: tool.outputSchema` to the single `config` object (`:173-178`); both branches inherit it.
 
 **Test (Red)**: extend `handlers-tool-registration.integration.test.ts` (spy
@@ -533,7 +545,7 @@ against the real code before acting; relay a synthesised verified verdict.
 | `oakContextHint` conditionality assumed (`=== true`) instead of derived (`!== false`) | W1 derives the schema predicate off the exact runtime predicate; tested in cycle 1.1c |
 | `formatToolResponse` top-level spread mis-modelled | W1/W2 schemas encode the spread envelope explicitly; per-tool tests use real emitted output |
 | Schema strictness (`.strip`/`.passthrough`) interacts with envelope fields | Align with `schema-resilience…` OQ1/OQ2 before W1 finalises; envelope declares `summary`/`oakContextHint`/`status` so they are not "extra" |
-| S0 collides with active EEF D6 on `universal-tools/` | OPEN-DECISION-S0-OWNERSHIP + active-claims coordination before editing the seam |
+| S0 collides with active EEF D6 on `universal-tools/` | §Resolved Sequencing (EEF D6 lands the seam's first use) + active-claims coordination before editing the seam |
 | `download-asset` shape changes under W2 (URL → `_meta`) | W2 consumes the post-`download-asset-user-only-url` shape; sequence that change first |
 
 ---
@@ -591,8 +603,10 @@ ADR-117, and update `current/README.md` + the completed-plans index.
 
 ## Dependencies
 
-**Blocking**: OPEN-DECISION-S0-OWNERSHIP gates `s0-cycle-1` only. W1, W2, and
-S0.2's test design are not blocked.
+**Blocking**: the execution-start re-cut to §Resolved Sequencing — the EEF
+tool's schema lands first via EEF D6, and the 3 graph tools' schemas land with
+their substrate migration. W1, W2 (in-scope set), and S0.2's test design are
+not design-blocked.
 
 **Beneficial** (minimum shippable shape without each):
 

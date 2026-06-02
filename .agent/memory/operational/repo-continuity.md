@@ -348,8 +348,9 @@ not the current session-priority lane. Reactivation is owner-directed.
    restating an inherent type fact — the floor/sparse split **is** `keyof EefStrand`,
    carried by the corpus type, derived at D6 from the graph-native view via the
    `satisfies` tie; there is no separate structure to build. The thread banner now
-   carries an explicit GOOD/GREAT quality bar. **Next session starts with a full
-   whole-plan review, then a full D3 review** (one recorded-but-unapplied D3 edit:
+   carries an explicit GOOD/GREAT quality bar. **The next EEF session (after the
+   contamination scan and graph-estate execution in item 7's order) starts with a
+   full whole-plan review, then a full D3 review** (one recorded-but-unapplied D3 edit:
    state the declared-only filter exclusions — `KS5`/`post_16`/`all_through`/
    `special`/`improving_attendance`/`teacher_retention` are not valid filter inputs).
 7. **Graph-estate-consolidation: t1 DONE + ratified; t2-t5/t7 execution pending,
@@ -367,9 +368,13 @@ not the current session-priority lane. Reactivation is owner-directed.
    adapter-sequencing retired). Remaining: the t2+t3+t4 then t5+t7 execution unit
    (decision-complete, unexecuted — no file has moved; honour the two
    assumptions-expert park-header conditions at the t4 move); t6 + final t8
-   criterion D7-gated. The one source-tree `Inc.3` left (`graph-corpus-sdk/README.md:6`)
-   is finishing-plan scope. Owner direction: take this up after the EEF work
-   finishes.
+   criterion D7-gated. The source tree is clear: the `graph-corpus-sdk` README +
+   `package.json` description were brought current 2026-06-02. Owner direction (2026-06-02): EEF, graph-estate
+   consolidation, graph enhancements, and the substrate migration are ONE
+   thread, and this plan's decontamination + consolidation execute FIRST — the
+   t2–t5/t7/t8 unit precedes EEF D3+ and all other graph work, preceded only by
+   the deep contamination scan of the 2026-06-02 session outputs (the standing
+   mandate in the `eef` thread record).
 8. The seam-mapping taxonomy + "seams compose" law is a candidate for a reusable
    plan template/archetype (owner-confirmed intent); tracked in
    [`pending-graduations.md`](pending-graduations.md).

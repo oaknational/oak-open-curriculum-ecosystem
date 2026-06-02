@@ -222,6 +222,84 @@ t1 ratification, claim-verification), ran 3 reviewers, fixed ADR-173, flipped t1
   open question or producing your dependency, and wire them together (here: Q-003 →
   that plan). The window is generative, not only hazardous.
 
+## Session: 2026-06-02 — one-thread resequencing reflection (Silvered Lurking Mask, claude / Opus 4.8)
+
+- Owner re-ratified the frame: EEF + graph decontamination + graph consolidation +
+  graph enhancements are ONE thread; decontamination + basic consolidation run
+  FIRST (inverts the recorded "take up graph-estate after EEF finishes" in the
+  graph-estate plan §Execution sequence, repo-continuity item 7, and the eef
+  thread banner — those are now superseded owner-direction claims to rewrite
+  positively, not negate).
+- Grounded findings from the four-plan read: (1) whole-graph claim verified in
+  code — `get-misconception-graph` takes no input and returns the complete
+  12,858-misconception graph via `createGraphToolExecutor` returning
+  `config.sourceData` wholesale; (2) the unified all-tools substrate-migration
+  plan is an ownership commitment (graph-estate JC4), not yet a file — only the
+  misconception slice has a plan; (3) EEF plan D6 carries a stale conditional
+  ("Delete citation-shape.ts … if it survived D2") refuted by its own Carried
+  Context and by the tree (dir gone) — a determinable-fact conditional the
+  cleanup should remove; (4) `graph-corpus-sdk/README.md:6` still says adapters
+  "following in Increment 3" — live retired-label residue assigned to
+  "finishing-plan scope" but owned by no named EEF D-item (orphaned residue);
+  (5) branch ahead 2 unpushed — the mandate-1 unscanned session outputs are
+  committed locally only, so the push is the proliferation boundary.
+- Owner ratified in-session: (a) D7 proves value on the LIVE bulk graph tools;
+  *scaling* that value is owned by the substrate migration (total rewrite);
+  (b) the type change for misconception/prior-knowledge (loose `data.json` +
+  hand-written interface → corpus-as-type-authority emission) is PART OF the
+  migration, never a pre-EEF precondition; (c) thread-progressions data is
+  sequence-shaped — do not force it into node/edge graph form (latent
+  thread↔unit bipartite structure noted; shape decision owned by the migration
+  plan). Consequence found by the metacognition pass: the
+  `graph-tool-output-schemas.plan.md` DESIGN as written pulls vocab-gen
+  re-emission (the type change) forward as near-term work — under (b) its
+  graph-tool application re-scopes into the migration plan, with W-mech (the one
+  shared projection→single-Zod-call mechanism) staying co-designed with EEF
+  D4–D6 and landing its first instance in the EEF tool (D6). "Graph first" now
+  reads "the EEF graph tool is the first graph-type instance," not "re-emit the
+  bulk graphs first."
+- **CORRECTION (owner-caught) — I described bridging while warning against it.**
+  Having correctly named "fixing the old tools' types in place is bridging," I
+  then proposed giving the 3 old graph tools interim truthful-current-envelope
+  output schemas to satisfy W2's atomic-required landing — interim work on
+  tools that already work and are scheduled for total rewrite: bridging. Root:
+  I treated an inherited plan structure (`output-schemas-for-mcp-tools` W2
+  "all 11 atomic, required now") as a live constraint to satisfy instead of
+  re-ratifying it against the owner's recorded per-tool-type direction in the
+  same plan's own Context — and hedged ("if W2 lands pre-migration") on a
+  sequence that is ours to decide. **Ratified sequence (firm, no
+  conditionals): (1) output schema for the EEF tool ONLY — delivers the EEF
+  value undelayed; (2) the old graph tools get schemas WITH their substrate
+  migration (untouched before it — they already work); (3) the rest per the
+  existing per-type order (broader universal → API/search), required/root
+  promotion last.** Consequence: the W1/W2/S0 all-35 workstream structure in
+  `output-schemas-for-mcp-tools.plan.md` is superseded by its own Context's
+  per-type direction + this refinement; re-sequence it in the doc pass.
+  Instance of escape-hatch reflex + inherited-shape-as-constraint
+  (doctrine-by-analogy from plan text over owner direction).
+- Executed the definite-edit set (8 files) + 3-reviewer workflow
+  (docs-adr/assumptions/code, Sonnet, refutation-inviting, decided-scope
+  protected). Disposition: ACCEPTED — graph-estate 5-vs-4 misconceptions
+  contradiction (PRE-EXISTING: Flamebright's JC3 scope correction never
+  propagated to the t4 todo, disposition map, or execution sequence — an
+  executor would have folded substrate-migration into the feature
+  consolidation; fixed in all three spans), output-schemas Proof Contract
+  "11 per-tool" → 8 in-scope, `:53-58`→`:47-52` list-tools citation (verified
+  in code; sibling refs `:25-26`/`:62-94` verified correct), two fragile
+  EEF-plan line-range citations de-line-numbered. REJECTED — "README scripts
+  section must list all 7 scripts" (over-literal reading of my own brief; the
+  section makes no exhaustiveness claim). OBSERVATIONS — graph-corpus-sdk root
+  barrel TSDoc claims "re-exports each sub-path module's public surface" but
+  exports only GraphView+Result types, and frames around the old
+  corpus-adapter GraphView shape: product-code staleness, flagged for the
+  scan/D5 sessions, not touched here. My own pre-review sweep caught two spans
+  the edits had missed (S0 section gate line; repo-continuity item-7 residue
+  sentence) — sweep-before-review is cheap and worth keeping.
+- The 5-vs-4 catch is fresh evidence for the standing mandate: independent
+  eyes on a contaminated-estate edit set find what the editing session missed
+  (the contradiction predated this session and survived my own full read of
+  the plan).
+
 ## Session: 2026-06-02 — MCP output-schema audit/rewrite + graph projection plan (Abyssal Flowing Beacon, claude / Opus 4.8)
 
 - **SURPRISE / CORRECTION — "generator-first" is not the principle; projection is.**
@@ -255,3 +333,27 @@ t1 ratification, claim-verification), ran 3 reviewers, fixed ADR-173, flipped t1
   precondition (emit the data as typed `as const`), with a scale concern for large
   graphs. Whether the graph tools need finite-value precision (vs structural shape
   only, since they're output-only) is the live simplification question.
+- **SURPRISE — "did you make it up?": an untracked artefact is invisible to the
+  owner, and a Write-success is not proof to *them*.** I created
+  `graph-tool-output-schemas.plan.md` and reported it done; the owner couldn't see
+  it and asked if I'd fabricated it. It existed — but as an **untracked** file in a
+  no-commit session, so it was absent from git log / diff / PR / any tracked-file
+  view. The asymmetry: a `Write` tool success is ground truth *for me* and zero
+  evidence *for the owner*, who can only see committed/tracked state.
+  - **Operational edge**: in a no-commit session, when reporting a file as created,
+    say it is **uncommitted/untracked** and give the path + `git status` so the
+    claim is owner-verifiable. Otherwise "I created X" reads as unfalsifiable.
+  - **Reflex that was right**: when challenged on existence, I *verified on disk
+    immediately* (ls + git status + head) rather than defending the claim. Verify,
+    don't insist — and the verification doubles as the owner's proof. This is
+    `verify-dont-trust` viewed from the other side: the owner cannot trust what
+    they cannot verify, so volunteer the verification.
+- **Proportionality call held under a heavy skill.** The commit skill documents a
+  full commit-queue ceremony (claim → enqueue → guard → record-staged → workflow
+  commit → close) built for multi-writer windows. I took the lighter path (validate
+  message → `git commit`) after checking the actual preconditions: no `index.lock`,
+  no foreign claim, single owner-directed sweep, no collaboration-state in the
+  bundle (so no residue exception). The ceremony is awareness/auditability, not a
+  mechanical lock — match it to the real concurrency state, don't perform it by
+  rote. (And the pre-commit gate then did its job: caught a peer's unformatted
+  ADR-157, which I fixed with `format:root` and re-committed — never `--no-verify`.)
