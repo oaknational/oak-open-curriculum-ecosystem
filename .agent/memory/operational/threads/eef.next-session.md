@@ -1,5 +1,62 @@
 # Next-Session Record — `eef` thread
 
+> **EEF D3 ADVANCED TO RATIFIABLE OUTPUT — CONTRACT + VERIFICATION RECORD
+> AUTHORED, FOUR REVIEWERS RUN, OWNER RATIFICATION PENDING (2026-06-02,
+> Seaworthy Swimming Sextant / `a85c18`; claude / Opus 4.8; owner-directed
+> opener, approved session plan).**
+>
+> The D3 contract is written:
+> [`eef-d3-mcp-contract.md`](../../../plans/sector-engagement/eef/current/eef-d3-mcp-contract.md)
+> — tool `get-eef-evidence` (function dispatch: `evidence-for-move` /
+> `inspect-strand` / `corpus-metadata`), resource `eef://interpretation`,
+> prompt `adapt-lesson-with-evidence`; per-field source-path table (named
+> unbound D4 subsets); the SDK/app verification record (V1–V8, all
+> file:line-cited against installed `@modelcontextprotocol/sdk@1.29.0` +
+> `ext-apps@1.7.3` + HEAD: `outputSchema` carries through both register paths
+> once OUR config assembly + universal-tools surfaces add it; `isError`
+> skips output validation; the S0 seam stays owned by the output-schemas
+> plan, EEF D6 lands first use).
+>
+> + **Whole-plan + D3 review run first** (4-lens refutation workflow, 11
+>   agents + adversarial verification): every corpus cardinality/divergence/
+>   strand-id claim and the D2 table recounted EXACT against
+>   `EEF_TOOLKIT_DATA`; 7 findings → 4 real, applied (D4 frontmatter
+>   "(already removed in code)" falsity; stale threads-stub present-tense;
+>   D1 heading label; D6 `eef-surface.ts` parenthetical — the withheld
+>   known-answer probe, MISSED by the fleet, applied by the author); 3
+>   refutations validated and upheld.
+> + **The recorded-but-unapplied D3 edit is applied**: declared-only filter
+>   exclusions (phase `post_16`/`all_through`/`special`, key stage `KS5`,
+>   priority `improving_attendance`/`teacher_retention`) stated in D3 with
+>   all three divergence arms re-verified directly against the corpus
+>   constant; filter domains are the observed domains exactly.
+> + **D3 PENDING reviewers fired in-flight at ratification** (mcp-expert /
+>   assumptions-expert / type-expert / architecture-fred, refutation-briefed,
+>   decided scope protected): all four READY-WITH-CONDITIONS; every
+>   condition critically assessed, grounded, and applied — incl. the
+>   mcp-expert catch that live graph tools return non-empty `content`
+>   (V8 corrected: `content: []` is the ratified TARGET, not live
+>   evidence — author's own convenient-claim slip), the type-expert
+>   methodology-presence resolution (schema marks optional; handler
+>   enforces), `UniversalToolListEntry.inputSchema` widening added to V5,
+>   `z.nullable`-not-`z.optional` hazard named, ADR-179 placement sentence,
+>   and four D2-table provenance rows + the `update_history` honesty line.
+> + **Parallel agent coordinated**: Lofty Sweeping Falcon (codex, dedicated
+>   curation) live on the same branch; boundaries split by claim + comms
+>   event; my commit excludes their curation surfaces (incl. `distilled.md`,
+>   where their edits interleave).
+>
+> **NEXT SAFE STEP: owner ratifies D3** (the contract artefact is the
+> ratification surface; the `d3` todo flips only on that ratification).
+> On ratification, D4 (graph capability contract) proceeds per the live
+> plan — its reviewers fire against the ratified D4 output in turn.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Seaworthy Swimming Sextant` | `claude` | `Opus 4.8` | `a85c18` | `eef-d3-contract-authoring-and-review` | 2026-06-02 | 2026-06-02 |
+>
+> ---
+>
 > **JC4 UNIFIED SUBSTRATE-MIGRATION PLAN AUTHORED — PARKED ON A NAMED
 > TRIGGER (2026-06-02, Galactic Glowing Prism / `cd7389`; claude / Opus 4.8;
 > owner-approved session plan).**
@@ -44,7 +101,10 @@
 > item 6 — open with a full whole-plan review of
 > `eef-graph-tool-completion.plan.md`, then a full D3 review; one
 > recorded-but-unapplied D3 edit (the declared-only filter exclusions) is
-> noted there.
+> noted there. The owner-ratified arc (2026-06-02): **finish the EEF plan →
+> migrate the graph tools onto the new substrate → then decide what to do
+> next** — the post-migration step is an explicit owner decision point,
+> recorded in the migration plan's §Promotion trigger.
 >
 > | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 > | --- | --- | --- | --- | --- | --- | --- |

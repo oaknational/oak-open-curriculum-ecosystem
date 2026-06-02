@@ -8,6 +8,35 @@ merge_class: append-only-narrative
 fitness_content_role: drainable-buffer
 ---
 
+## 2026-06-02 — EEF D3 execution (Seaworthy Swimming Sextant)
+
+- **Known-answer probe missed again — and the miss-shape is new.** Withheld the
+  D6 `eef-surface.ts` stale parenthetical (file deleted in D2 commit `9019bb86`,
+  still named as a live co-gating site) from the 4-lens review-workflow briefs.
+  The code-currency lens CHECKED the file, confirmed it absent, then read the
+  plan text charitably ("D6 will create a new one") without raising the
+  stale-reading risk. Lesson: reviewers verify facts but normalise ambiguous
+  prose toward the charitable reading — file lists mixing live and
+  to-be-created files are a reviewer blind class; the author applies that
+  standard. Second calibration data point after the mandate-1 unfound probe.
+- **A surprise diff surface after gates is a collision-safety read, not
+  formatter noise.** `git diff --stat` after `format:root`/`markdownlint:root`
+  showed 17 files where ~9 were expected; reading the unexpected diffs (not
+  attributing them to `--fix`) surfaced a live parallel curation agent (Lofty
+  Sweeping Falcon, codex) mid-slice on the same branch — their team-start had
+  already yielded to my claim. One comms event settled the commit-window split.
+  Cheap check at assertion time, again.
+- **Fix every span of a false claim, not the first one found.** The D4
+  frontmatter still carried "(already removed in code)" for the live
+  `graph-view` files after a prior session fixed the same claim in the body —
+  same shape as the mandate-1 "the span the prior 5-vs-4 fix missed". When
+  correcting a claim, grep for its siblings (frontmatter todos duplicate body
+  text by design and drift independently).
+- **Recurrence (`feedback_repo_scripts_over_npx`)**: after canonical
+  `format:root`/`markdownlint:root` ran green, I re-verified two files with
+  targeted `npx prettier --check`/`npx markdownlint`. Same binaries/config,
+  redundant invocation — the canonical-script reflex should have sufficed.
+
 ## Session: 2026-06-02 - napkin rotation (Shaded Veiling Mirror, dedicated knowledge-curation)
 
 Rotated the prior napkin (485 lines by `wc -l`; validator counted 477 content
@@ -144,3 +173,20 @@ Disposition ledger:
   (`35472f15`) on top. Re-derive perimeters from git held; the divergence
   changed nothing material but would have corrupted the commit-window
   narrative if trusted.
+- **Recurrence: reached for `npx markdownlint` on targeted handoff files**
+  instead of the canonical `pnpm markdownlint:root`
+  (`feedback_repo_scripts_over_npx`). Same binary/config, zero impact, but
+  the canonical-script reflex should fire even for targeted runs; counts as
+  a recurring-friction instance for that memory.
+- **candidate: opener staleness is structural, so openers self-instruct
+  verification.** An opening statement is necessarily written before the
+  session's final commit window, so it is ALWAYS potentially one commit
+  stale when read — the last two openers each were (35472f15 over the
+  Opalescent opener; the arc-recording dirt over this session's first
+  draft). Not an authoring defect; a structural property of the handoff
+  seam. Cure shape: the opener names its own staleness mode and directs
+  perimeter re-derivation from git ("re-derive regardless"), and the test
+  of a good opener is that the next session verifies it cheaply and finds
+  it true — not that it is believed. Third face of the distilled
+  "opening statements teach by their form" entry; route there at next
+  consolidation.

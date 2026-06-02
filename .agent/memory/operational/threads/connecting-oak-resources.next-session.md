@@ -1,5 +1,28 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
+## 2026-06-02 — Galactic Glowing Prism / claude / Opus 4.8 / `cd7389` — JC4 unified substrate-migration plan authored (committed `9fab8669`, pushed)
+
+**Landed (commit `9fab8669`, pushed, full pre-push gate 103/103 green):**
+[`future/graph-tools-substrate-migration.plan.md`](../../../plans/connecting-oak-resources/knowledge-graph-integration/future/graph-tools-substrate-migration.plan.md)
+authored in this thread's `knowledge-graph-integration` collection — one plan
+owning the move of all three existing graph tools onto `graph-corpus-sdk`,
+parked on the named promotion trigger EEF D6 + D7.
+`oak-misconceptions-substrate-migration` absorbed by re-grounding and
+archived; the `graph-tool-output-schemas` design content folded in and its
+file archived; collection README + estate referrers aligned. This thread
+stays paused; the work proceeded under the `eef` one-thread umbrella — full
+detail in the `eef` thread banner.
+
+**Next safe step:** EEF D3 per repo-continuity's EEF Next Safe Steps item 6.
+The migration plan promotes when EEF D6 + D7 are green. Active-claims: none
+mine.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Galactic Glowing Prism` | `claude` | `Opus 4.8` | `cd7389` | `jc4-unified-substrate-migration-plan-authoring` | 2026-06-02 | 2026-06-02 |
+
+---
+
 ## 2026-06-02 — Opalescent Cascading Planet / claude / Opus 4.8 / `0340f9` — graph-estate consolidation executed (committed `c3b78eec`, pushed)
 
 **Landed (commit `c3b78eec`, pushed, full pre-push gate green):** the

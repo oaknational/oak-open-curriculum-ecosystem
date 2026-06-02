@@ -29,14 +29,16 @@ authority for this table's numbers.
 > zero-consumer surface — `principles.md`: product code used only by its own test
 > is deleted; do not extract zero-consumer abstractions.)
 
-**Not projected (intentional, recorded for honesty).** Two corpus surfaces are
-deliberately left unprojected by this teacher-facing plan: the top-level
+**Not projected (intentional, recorded for honesty).** Three corpus surfaces
+are deliberately left unprojected by this teacher-facing plan: the top-level
 `uk_context` (key-stage→age/years mapping, national averages, pupil-premium rates
-— school-leader context), and the `school_context_schema` enums other than
+— school-leader context); the `school_context_schema` enums other than
 phase/key-stage/priority (`school_type`, `pp_band`, `ofsted_grade`,
 `pupil_premium`, `attainment`, `workforce` — also school-leader context, owned by
-the school-leadership follow-on plan). They are corpus data, but not teacher
-cover-lesson value, so the table omits them by choice, not by oversight.
+the school-leadership follow-on plan); and the per-strand `update_history`
+arrays (10 of 30 strands — corpus curation metadata, not teacher cover-lesson
+value). They are corpus data, but not teacher cover-lesson value, so the table
+omits them by choice, not by oversight.
 
 ## Strand identity and lookup
 
@@ -115,6 +117,10 @@ asserted) — declared values no strand carries:
 | Raw source path | D2 projection | Cardinality | Proof test |
 | --- | --- | --- | --- |
 | `meta` | `corpusMeta` | corpus-level | `corpus-meta.unit.test.ts` |
+| `meta.source` | `corpusMeta` field access | corpus-level | `corpus-meta.unit.test.ts` |
+| `meta.licence` | `corpusMeta` field access | corpus-level | `corpus-meta.unit.test.ts` |
+| `meta.data_version` | `corpusMeta` field access | corpus-level | `corpus-meta.unit.test.ts` |
+| `meta.coverage` | `corpusMeta` field access | corpus-level | `corpus-meta.unit.test.ts` |
 | `meta.caveats` | `corpusCaveats` | corpus-level | `corpus-meta.unit.test.ts` |
 | `meta.last_updated` | `lastUpdated` | corpus-level | `corpus-meta.unit.test.ts` |
 | `methodology` | `corpusMethodology` | corpus-level | `corpus-meta.unit.test.ts` |

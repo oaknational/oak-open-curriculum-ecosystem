@@ -43,7 +43,9 @@ Wider graph work is undefined until the first proper graph tool (EEF) ships
 ([`eef-graph-tool-completion.plan.md`](../../sector-engagement/eef/current/eef-graph-tool-completion.plan.md));
 each parked plan states this block condition in its own header. The unified
 substrate-migration plan carries its own promotion trigger (EEF D6 + D7)
-rather than the generic block. Revisit after finishing-plan D7.
+rather than the generic block. Revisit at the post-migration decision point
+(owner-ratified arc, 2026-06-02: finish the EEF plan → migrate the graph
+tools → then decide what to do next).
 
 | File | Description |
 |------|-------------|

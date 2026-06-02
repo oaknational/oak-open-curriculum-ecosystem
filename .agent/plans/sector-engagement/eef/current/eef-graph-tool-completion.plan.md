@@ -38,7 +38,7 @@ todos:
     status: pending
     depends_on: [d1-value-impact-contract, d2-typed-raw-corpus-foundation]
   - id: d4-graph-capability-contract
-    content: "RATIFY (non-code) the correct graph capability shape from D3, deleting the old graph-view query-contract files (already removed in code) and defining the new query layer. Split the target contract into graph-core primitives (domain-generic lookup/subgraph/frontier/result/error surfaces) and EEF/Oak binding operations, so no EEF- or MCP-specific method lands in shared graph-core. Ratify the minimal graph-native EEF view contract before D5: owner package, node id/kind policy, edge/frontier shape, payload/provenance policy, and named schema-subset/schema-builder surfaces for D3/D6. Define the target domain-generic graph-core contract parameterised over TNode, TNodeId extends string, and TEdgeType; public graph-core result and error types must carry TNodeId, so the EEF binding carries EefStrandId through subgraph roots, edge endpoints, frontier refs, strand lookup inputs, and root-not-found errors after boundary narrowing. D5 builds the new graph-core query layer in TDD cycles with real operations only, each implemented with real graph-derived logic and tests or absent. The calling agent selects finite corpus keys before the tool boundary, so the tool operates on finite corpus values directly. Record the consumer-impact finding as a HARD gate before interface changes land: verified ZERO external-consumer blast radius, with bounded IN-PACKAGE graph-core edits named. An architecture reviewer signs off the operation set + consumer-impact record. Enumerate which graph-view exports are deleted/renamed/freshly defined by the new contract; a result type may keep the old name `SubgraphResult` only if D4 freshly ratifies that name and structure from the new graph contract."
+    content: "RATIFY (non-code) the correct graph capability shape from D3, defining the new query layer that replaces the live `graph-view` query-contract files (D5 deletes them and builds the replacement fresh). Split the target contract into graph-core primitives (domain-generic lookup/subgraph/frontier/result/error surfaces) and EEF/Oak binding operations, so no EEF- or MCP-specific method lands in shared graph-core. Ratify the minimal graph-native EEF view contract before D5: owner package, node id/kind policy, edge/frontier shape, payload/provenance policy, and named schema-subset/schema-builder surfaces for D3/D6. Define the target domain-generic graph-core contract parameterised over TNode, TNodeId extends string, and TEdgeType; public graph-core result and error types must carry TNodeId, so the EEF binding carries EefStrandId through subgraph roots, edge endpoints, frontier refs, strand lookup inputs, and root-not-found errors after boundary narrowing. D5 builds the new graph-core query layer in TDD cycles with real operations only, each implemented with real graph-derived logic and tests or absent. The calling agent selects finite corpus keys before the tool boundary, so the tool operates on finite corpus values directly. Record the consumer-impact finding as a HARD gate before interface changes land: verified ZERO external-consumer blast radius, with bounded IN-PACKAGE graph-core edits named. An architecture reviewer signs off the operation set + consumer-impact record. Enumerate which graph-view exports are deleted/renamed/freshly defined by the new contract; a result type may keep the old name `SubgraphResult` only if D4 freshly ratifies that name and structure from the new graph contract."
     status: pending
     depends_on: [d3-mcp-tool-resource-contract]
   - id: d5-graph-construction-methods
@@ -561,7 +561,7 @@ execution record is in the `eef` thread record.
 
 **Proof:** `pnpm repo-validators:check` green; the decontamination ledger.
 
-### D1 - Teacher value & impact contract (exploration; owner-ratified)
+### D1 - Teacher value & impact contract (complete; owner-ratified)
 
 **Purpose:** make the teacher value explicit before any tool or graph shape is
 chosen. Independent of D0/D2; may run in parallel. D1 may name value-driven
@@ -840,14 +840,18 @@ expressed through D2's raw-derived types and the D4-ratified graph-native EEF
 view that D5 constructs/adapts, before any graph operation is finalised. D3 now
 has two remaining products: a written MCP contract from the owner-ratified
 decisions below, and a verification record proving that the installed SDK/app
-registration path can carry that contract.
+registration path can carry that contract. Both are authored in
+[`eef-d3-mcp-contract.md`](eef-d3-mcp-contract.md) (2026-06-02, for owner
+ratification).
 
 **Folded detail:** the settled three-primitive surface, deterministic input
 boundary, field classification, output-schema subset, and SDK/app verification
 record are carried here directly: the registration config in `handlers.ts`
 (`registerTools`, the `config` object passed to both register paths) carries
-`inputSchema` but no `outputSchema` — verified 2026-06-01; the `mcp-expert`
-verification re-establishes exact locations rather than trusting a line number.
+`inputSchema` but no `outputSchema` — verified 2026-06-01, re-verified
+2026-06-02 with the full registration-path record in
+[`eef-d3-mcp-contract.md`](eef-d3-mcp-contract.md) §SDK/app verification
+record.
 The EEF tool is a graph universal tool — the same family as the existing
 `get-misconception-graph` and `get-prior-knowledge-graph` aggregated tools (both
 in `AggregatedToolName`, both already returning `structuredContent`) — so it
@@ -881,7 +885,14 @@ structuredContent-only, not dual-content output.
   weights, or comparator semantics as tool inputs. The calling agent may reason in
   those words, but the deterministic tool receives only exact corpus values or
   graph-ratified exact subsets. Subject and topic stay in the Oak workflow before
-  the EEF call; they are not EEF inputs.
+  the EEF call; they are not EEF inputs. The declared-only values — phase
+  `post_16` / `all_through` / `special`, key stage `KS5`, priority
+  `improving_attendance` / `teacher_retention` (`declaredVsObservedDivergence`;
+  D2 source-path table §"Declared metadata domains") — are declared in
+  `school_context_schema` but carried by no strand, so they are not valid filter
+  inputs: each would yield only an empty-but-valid result. The filter input
+  domains are the observed domains (`ObservedPhase` / `ObservedKeyStage` /
+  `ObservedPriority`) exactly.
 - Build one EEF MCP tool with a function/options shape, like a multitool CLI
   (`name -> function -> options`), not separate top-level MCP tools. D3 verifies
   the installed SDK/app registration and host discoverability as proof that this
@@ -1130,16 +1141,16 @@ primitives.
   kind and its edge type as part of the node/edge policy.
 - **Verify consumer impact first (hard gate):** confirm what consumes graph-core's
   query contract. Verified state: graph-ingest and graph-project consume only the
-  RDF substrate (term/dataset/jsonld/data-factory), and the threads adapter is an
-  empty export-nothing stub - so EXTERNAL-consumer blast radius is ZERO. But the
+  RDF substrate (term/dataset/jsonld/data-factory), and no other package consumes
+  the query contract - so EXTERNAL-consumer blast radius is ZERO. But the
   replacement requires bounded IN-PACKAGE edits the record MUST name: graph-core's
   own `src/index.ts` barrel re-exports the query types and
   `graph-view/index.unit.test.ts` carries the contract test (the
   `DeepKeyPath`/`NodeProjection` and `GraphView` interface-contract structural
   tests). The shared RDF substrate stays; only the query
-  contract is replaced (the live `graph-view` contract is replaced fresh in D5). The existing non-EEF empty stub is consumer-impact evidence
+  contract is replaced (the live `graph-view` contract is replaced fresh in D5). The zero-consumer state is consumer-impact evidence
   only; it is not a model for the EEF graph-tool surface and does not authorise
-  any new stub. A type may be named `SubgraphResult` only if D4 freshly defines
+  any stub or placeholder surface. A type may be named `SubgraphResult` only if D4 freshly defines
   that name and structure from the new graph contract. The D4 contract derives
   solely from the D3 consumer requirements and the D2 raw foundation. Record the
   consumer-impact finding as a named artefact and have an architecture reviewer
@@ -1323,7 +1334,8 @@ out of substrate packages.
   D3/D4 contract is wrong and must be corrected.
 - Register the ratified EEF surface behind `OAK_CURRICULUM_MCP_EEF_ENABLED`
   alongside the Oak curriculum tools; co-gate tool, resource, and prompt
-  (`eef-surface.ts`, `handlers.ts`, `register-prompts.ts`). Registration is only
+  (a fresh `eef-surface.ts` created by D6, plus the existing `handlers.ts` and
+  `register-prompts.ts`). Registration is only
   for implemented surfaces: every registered tool, resource, and prompt has real
   graph-derived behaviour and tests in the same landing (the single invariant,
   Decision 6).

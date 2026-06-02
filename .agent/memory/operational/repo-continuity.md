@@ -19,6 +19,19 @@ surface.
 
 ## Current State
 
+- **EEF D3 advanced to ratifiable output — contract + verification record
+  authored, four reviewers run, OWNER RATIFICATION PENDING (2026-06-02,
+  Seaworthy Swimming Sextant / `a85c18`, claude / Opus 4.8)** —
+  [`eef-d3-mcp-contract.md`](../../plans/sector-engagement/eef/current/eef-d3-mcp-contract.md)
+  names the surface (tool `get-eef-evidence` with function dispatch, resource
+  `eef://interpretation`, prompt `adapt-lesson-with-evidence`), the per-field
+  source-path table with named unbound D4 subsets, and the file:line-cited
+  SDK/app verification record (V1–V8). Whole-plan + D3 review ran first
+  (4-lens refutation workflow; corpus claims recounted exact; 4 real findings
+  applied); the declared-only filter exclusions edit is applied; the four D3
+  PENDING reviewers fired in-flight (all READY-WITH-CONDITIONS; every
+  condition grounded and applied). **Next: owner ratifies D3; on
+  ratification D4 proceeds.** Full detail: `eef` thread banner.
 - **JC4 unified substrate-migration plan AUTHORED — parked on a named
   trigger (2026-06-02, Galactic Glowing Prism / `cd7389`, claude / Opus 4.8,
   owner-approved session plan)** —
@@ -294,9 +307,9 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Opalescent Cascading Planet / graph-estate-consolidation-execution / 2026-06-02 (prior: Stellar Waning Planet, Silvered Lurking Mask, Flamebright Charring Ember, Abyssal Flowing Beacon, all 2026-06-02) |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Galactic Glowing Prism / jc4-unified-substrate-migration-plan-authoring / 2026-06-02 (prior: Opalescent Cascading Planet, Stellar Waning Planet, Silvered Lurking Mask, Flamebright Charring Ember, all 2026-06-02) |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | codex / GPT-5 / Umbral Whispering Silhouette / promotion-and-root-docs-author / 2026-06-01 |
-| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | codex / GPT-5 / Shaded Veiling Mirror / dedicated curation + closeout / 2026-06-02 |
+| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | codex / GPT-5 / Lofty Sweeping Falcon / due-item curation continuation / 2026-06-02 (prior: Shaded Veiling Mirror) |
 
 ## Paused Threads
 
@@ -305,7 +318,7 @@ not the current session-priority lane. Reactivation is owner-directed.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `connecting-oak-resources` | Oak resource graph substrate for EEF | [record][connecting] | claude / Opus 4.8 / Opalescent Cascading Planet / graph-estate consolidation execution (kg collection moves) / 2026-06-02 (prior: Stellar Waning Planet, Silvered Lurking Mask, Flamebright Charring Ember, all 2026-06-02) |
+| `connecting-oak-resources` | Oak resource graph substrate for EEF | [record][connecting] | claude / Opus 4.8 / Galactic Glowing Prism / jc4-plan-authoring (kg collection) / 2026-06-02 (prior: Opalescent Cascading Planet, Stellar Waning Planet, Silvered Lurking Mask, all 2026-06-02) |
 | `branch-fitness-and-push-cadence` | Small-PR, push-often, branch-fitness, PR/Sonar protocol substrate | [record][branch-fitness] | Pelagic Snorkelling Sextant / codex / GPT-5 / Cycle 1 substrate capture / 2026-05-24 |
 | `mcp-product-analytics` | MCP product analytics design and Path-to-GA Programme | [record][mcp-analytics] | Stellar Glowing Satellite / claude / claude-opus-4-7 / Programme landed + amendments / 2026-05-26 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night / claude-code / opus-4.7 / 2026-05-10 |
@@ -379,11 +392,15 @@ not the current session-priority lane. Reactivation is owner-directed.
    restating an inherent type fact — the floor/sparse split **is** `keyof EefStrand`,
    carried by the corpus type, derived at D6 from the graph-native view via the
    `satisfies` tie; there is no separate structure to build. The thread banner now
-   carries an explicit GOOD/GREAT quality bar. **The next EEF session (after the
-   contamination scan and graph-estate execution in item 7's order) starts with a
-   full whole-plan review, then a full D3 review** (one recorded-but-unapplied D3 edit:
-   state the declared-only filter exclusions — `KS5`/`post_16`/`all_through`/
-   `special`/`improving_attendance`/`teacher_retention` are not valid filter inputs).
+   carries an explicit GOOD/GREAT quality bar. **D3 is advanced to ratifiable
+   output (2026-06-02, Seaworthy Swimming Sextant)**: the whole-plan and D3
+   reviews ran (4-lens refutation workflow, findings applied), the declared-only
+   filter-exclusions edit is applied in D3, and the contract + SDK/app
+   verification record are authored in
+   [`eef-d3-mcp-contract.md`](../../plans/sector-engagement/eef/current/eef-d3-mcp-contract.md)
+   with all four D3 PENDING reviewers run and their conditions applied.
+   **Owner ratification of D3 is the open gate; the `d3` todo flips only on
+   it, and D4 starts after it.**
 7. **Graph-estate-consolidation: t2–t5+t7 EXECUTED and pushed at `c3b78eec`;
    scoped t8 verification PASSED (2026-06-02, Opalescent Cascading Planet)**.
    The estate reads true in one pass: eleven plans archived with banners +
@@ -466,32 +483,20 @@ authority.
 
 ## Deep Consolidation Status
 
-**not due — dedicated curation + consolidation completed earlier today by
-Shaded Veiling Mirror (committed `f2c12ea5`); this session (Opalescent
-Cascading Planet, graph-estate execution) routed its capture session-scoped
-(napkin entries, eef thread banner, two pending-graduations updates incl. one
-trigger-fired item now `due`) and no consolidate-docs checklist trigger fires
-on a freshly rotated napkin.** Prior status (2026-06-02, Shaded Veiling
-Mirror / codex / GPT-5 / `019e88`): the prior active napkin was processed before archive and
-preserved verbatim at
-`active/archive/napkin-2026-06-02-shaded-veiling-curation.md`; the disposition
-ledger is
-`curator-passes/2026-06-02-shaded-veiling-napkin-rotation.md`. Durable routes:
-distilled entries for assertion-time cheap checks, projection provenance,
-mechanical-sweep routing, no-commit proof, dependency-plan truth, and set-level
-confirmation before broad repair/revert; seven owner-gated
-pending-graduation routes for curation/plan/decontamination/mechanical
-sweep/Cursor identity follow-up; a graduated contamination-scan method pattern;
-and two future strategic plans for the seam-map archetype and cross-platform
-rules generator. Repo-continuity historical closeout prose was split to the
-companion archive named below. `pending-graduations.md` now has no generic
-`pending`, `APPROVED`, or `owner-surfaced` statuses; entries are graduated or
-explicitly owner-/trigger-gated. Falsifiable: rerun
-`pnpm practice:fitness:strict-hard` and scan the register status labels.
-Full session-handoff + `consolidate-docs` session-completion closeout found no
-additional ADR/PDR/open-question promotion requirement beyond the routed lanes;
-entry points are canonical, active claims are clear, and the remaining action is
-the closeout commit.
+**partial slice landed — owner reopened curation on 2026-06-02; Lofty Sweeping
+Falcon graduated the two due pending-graduation entries and routed two fresh
+Galactic napkin-tail candidates.** Ledger:
+`curator-passes/2026-06-02-lofty-sweeping-falcon-curation.md`. Routes:
+archive/park substance screen -> knowledge-preservation rule; archive-reference
+role split -> ADR-117 + `.agent/plans/README.md`; relative-link integrity ->
+owner-gated; opener staleness -> `distilled.md`. Verdict remains partial, not
+complete: Q-003 and owner-gated register items remain live. Prior Shaded Veiling
+Mirror closeout detail lives in
+`curator-passes/2026-06-02-shaded-veiling-napkin-rotation.md` and
+`active/archive/napkin-2026-06-02-shaded-veiling-curation.md`; its live outcome
+was no generic `pending`/`APPROVED`/`owner-surfaced` statuses in
+`pending-graduations.md`, canonical entry points, clear claims, and a remaining
+closeout commit.
 
 **Historical deep-consolidation closeout entries archived.** Older closeout
 prose from this section, dated 2026-05-31 to 2026-06-02, now lives in the

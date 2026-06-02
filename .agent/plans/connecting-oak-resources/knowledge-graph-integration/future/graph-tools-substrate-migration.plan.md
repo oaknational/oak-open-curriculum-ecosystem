@@ -362,6 +362,12 @@ consumer sets against the tree at that time (this plan's pins are
 verified-2026-06-02 facts, re-checked at execution start, not trusted
 across the gap).
 
+The ratified arc this plan sits inside (owner, 2026-06-02): **finish the EEF
+plan → migrate the graph tools onto the new substrate → then decide what to
+do next.** This plan is the middle step. Its completion opens an owner
+decision point — nothing downstream (the parked feature surfaces, t6, wider
+graph work) auto-resumes from its landing.
+
 ## Foundation alignment and first-principles check
 
 [`principles.md`](../../../../directives/principles.md) — Cardinal Rule
