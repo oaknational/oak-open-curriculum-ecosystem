@@ -19,6 +19,53 @@ surface.
 
 ## Current State
 
+- **EEF/ADR/graph-estate plan review + refinement — doc-only, all uncommitted
+  (2026-06-02, Flamebright Charring Ember / `30dd5d`, claude / Opus 4.8)** — deep
+  multi-workflow review (holistic 6-lens, D3 4-lens, 4-architecture-reviewer pass,
+  each critically assessed with false-positives rejected) plus grounded refinements
+  to `eef/current/eef-graph-tool-completion.plan.md` (the EEF tool is a **graph
+  universal tool**, not a bespoke bypass; `TNodeId` replace-not-extend; green-at-
+  each-boundary replaces the "red-tree window" framing; the interpretation resource
+  is **agent guidance**; live signal tools `get-misconception-graph`/
+  `get-prior-knowledge-graph` pinned in D7), **ADR-157** (EvidenceCorpus/five-
+  increment supersession + namespace de-noise), a new seed
+  `eef/future/eef-revalidate-on-new-graph-tools.plan.md`, and
+  `graph-estate-consolidation.plan.md` (cross-thread migration relationship + new
+  **Judgment call 4**: ONE plan owns moving all existing graph tools to the new
+  substrate). Three owner-caught convenient-claim slips (bespoke topology /
+  over-specified output-schema mechanics / proliferated retired `Inc.3`) → cure
+  sharpened in `distilled.md` + auto-memory. **TWO STANDING OWNER MANDATES for a
+  near-future session:** (1) **deeply scan ALL this session's outputs for
+  contamination**; (2) **graph estate consolidation + graph enhancement + EEF work
+  can no longer exist independently — clean and align ALL graph work as ONE unit.**
+  **OPEN:** input/output schema strategy is owned by
+  `sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md` (the
+  Abyssal Flowing Beacon workstream below; audited in-tree); EEF output-schema
+  mechanics deferred to it (open-questions **Q-003**). Full detail: `eef` +
+  `connecting-oak-resources` thread banners. Doc-only; markdownlint green on every
+  touched file; full `pnpm check` NOT run (uncommitted, shared tree carries the
+  output-schema workstream); no commit.
+- **MCP output-schema plan audited + rewritten; graph-tool output-schema
+  projection plan created (2026-06-02, Abyssal Flowing Beacon / `762085`,
+  claude / Opus 4.8)** — a 61-agent audit of
+  `sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md`
+  ([report](../../reports/output-schema-mcp-plan-audit-2026-06-02.md)) found it
+  materially stale (stdio transport gone; 34→35 tools / 10→11 aggregated;
+  Phase-3 gate pointed at deleted `projections.ts` from PR #76). Rewrote it
+  decision-complete (object-rooted **required** `outputSchema`, generated-vs-
+  aggregated split, the S0 universal-tools seam) with one named open decision.
+  Owner resolved it: **this plan owns S0**; apply the required field **per tool
+  type, graph first**, promote to the root `UniversalToolListEntry` last. Owner
+  correction mid-design (metacognition): output schemas are NOT hand-constructed
+  Zod — they are a deterministic, type-strict **projection** of the static data
+  fed to a **single Zod call** (`satisfies`-tied to `structuredContent`), the
+  SAME pattern as EEF, emitted at codegen. New plan
+  [`graph-tool-output-schemas.plan.md`](../../plans/sdk-and-mcp-enhancements/current/graph-tool-output-schemas.plan.md)
+  (status DESIGN — co-designed with EEF D4–D6, five open questions, not
+  executable); implementation **paused for owner review**. This aligns with the
+  owner mandate in the `eef` banner: graph-estate + graph-enhancement + EEF must
+  be cleaned and aligned as ONE unit. Doc-only, uncommitted on
+  `feat/graph-tooling-tidyup`; no gates run (owner direction).
 - **Graph-estate-consolidation plan made post-D2 accurate + crystal-clear, and
   `graph-ingest` decontaminated (2026-06-01, Coppery Warming Flame / `9a5cc3`,
   claude / Opus 4.8)** — full detail in the `eef` thread banner and the plan's new
@@ -216,7 +263,7 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Dawnlit Dancing Satellite / EEF plan + D3 review, currency fixes, projection back-out / 2026-06-01, claude / Opus 4.8 / Glittering Soaring Meteor / graph-estate points 1/2/3 + ADR-173 decontamination + t1 ratified / 2026-06-01 |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Flamebright Charring Ember / EEF+ADR+graph-plan review & refinement / 2026-06-02, claude / Opus 4.8 / Abyssal Flowing Beacon / MCP output-schema audit + rewrite + graph projection plan / 2026-06-02 |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | codex / GPT-5 / Umbral Whispering Silhouette / promotion-and-root-docs-author / 2026-06-01 |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 / Moonless Lurking Dusk / dedicated knowledge-curation pass / 2026-06-01 |
 
@@ -227,7 +274,7 @@ not the current session-priority lane. Reactivation is owner-directed.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `connecting-oak-resources` | Oak resource graph substrate for EEF | [record][connecting] | Riverine Navigating Rudder / cursor / Composer / oak-preview-1 manual UAT pass / 2026-05-25 |
+| `connecting-oak-resources` | Oak resource graph substrate for EEF | [record][connecting] | claude / Opus 4.8 / Flamebright Charring Ember / graph-estate cross-thread relationship + one-migration ownership / 2026-06-02 (prior: Hearthlit Stoking Cinder 2026-06-01) |
 | `branch-fitness-and-push-cadence` | Small-PR, push-often, branch-fitness, PR/Sonar protocol substrate | [record][branch-fitness] | Pelagic Snorkelling Sextant / codex / GPT-5 / Cycle 1 substrate capture / 2026-05-24 |
 | `mcp-product-analytics` | MCP product analytics design and Path-to-GA Programme | [record][mcp-analytics] | Stellar Glowing Satellite / claude / claude-opus-4-7 / Programme landed + amendments / 2026-05-26 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night / claude-code / opus-4.7 / 2026-05-10 |
@@ -389,6 +436,21 @@ authority.
 - Shared memory/state files are always writable and commit-includable when dirty.
 
 ## Deep Consolidation Status
+
+**narrow docs-only handoff (2026-06-02, Abyssal Flowing Beacon — MCP output-schema
+audit/rewrite + graph projection plan)**: `not due — owner requested a narrow
+docs-only handoff (no commits, no gates). No consolidation trigger fired: napkin
+is healthy (~232 lines vs 300 limit) after appending this session's surprise at
+full weight; no thread completed; no milestone. Continuity edits are working-tree
+on feat/graph-tooling-tidyup. Q-003 updated (not duplicated — the graph
+projection plan owns the five sub-questions). Experience file written
+(2026-06-02-location-was-not-the-principle.md). markdownlint green on every
+touched file (also cleared two pre-existing MD032 errors in the sibling's eef
+banner, same file); full pnpm check NOT run (owner direction). No ADR/PDR
+candidate opened. Active-claims: none for my identity. Standing owner mandate
+recorded in the eef banner: graph-estate + graph-enhancement + EEF must be
+aligned as ONE unit in a near-future session — that is the natural home for both
+the contamination scan and the output-schema/EEF co-design.`
 
 **completed this handoff (2026-06-01, Moonless Lurking Dusk — dedicated
 knowledge-curation)**: `completed — owner ran oak-consolidate-until-done then

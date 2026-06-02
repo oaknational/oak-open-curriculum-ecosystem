@@ -37,6 +37,57 @@ re-evaluated when the corpus extension lands. Until then, this ADR
 is **proposed**, not **accepted** — it documents a direction, not a
 constraint.
 
+## Status Amendment Note (2026-06-01)
+
+Owner-directed correction during the EEF graph-tool work. This note
+supersedes the delivery-model description in the first paragraph of the
+2026-04-30 note above; that paragraph recorded architecture that has since
+been retired.
+
+- **Five-increment delivery sequence retired.** EEF is no longer
+  "Increment 2" of a numbered sequence. Per
+  [ADR-173](173-graph-stack-topology.md) (2026-06-01 corrections), the
+  shared graph-query layer ships real operations only — an operation is
+  implemented with real graph-derived logic and tests, or it is absent —
+  and each corpus adapter is built when a consumer exists, not at a
+  numbered increment. The EEF strands corpus is the active first
+  graph-corpus consumer and pathfinder.
+- **`EvidenceCorpus`-over-`GraphView` abandoned.** The speculative
+  `EvidenceCorpus` surface and its `rank`/`explain`/`compare` operations
+  were removed from the tree; no such type exists.
+
+What has shipped is the typed `as const` foundation in `graph-corpus-sdk`:
+strand identity and lookup, the finite raw domains, the declared-vs-observed
+divergence, raw related-strand edge facts, and corpus-level provenance. The
+graph-native projection and the MCP tool/resource/prompt surface are later
+deliverables and have not yet shipped. By design, relevance judgement,
+ranking, and selection are the consuming agent's reasoning, not a
+server-side surface.
+
+The structural decisions in the 2026-04-30 note's second paragraph stand,
+and the typing discipline is now confirmed by that shipped foundation: the
+EEF types derive from the `as const` snapshot via `typeof`/indexed access
+with the ADR-153 constant-type predicate and no hand-maintained
+declarations. The `curriculum://` URI scheme, the `eef-*` namespace prefix,
+and the machine-readable provenance metadata remain policy. This ADR stays
+**Proposed**: the multi-source MCP surface has not yet shipped end to end in
+a running host.
+
+**Namespace-table naming correction.** The namespace table below predates
+two ratified EEF decisions: the EEF surface presents evidence-informed
+options and trade-offs, never recommendations or a single chosen action; and
+there is no server-side Oak-signal-to-strand crosswalk — the consuming agent
+selects strand keys, and EEF×Oak composition is agent-mediated at the
+workflow level. The `eef-*` row's `eef-recommend-evidence-for-context`
+example and the Consequences section's "EEF recommendations" phrasing are
+corrected in place. The compound-prefix row's original motivation —
+server-side EEF×misconceptions sequencing tooling (added 2026-05-07) — is
+superseded by the agent-mediated-composition decision, so the empty
+compound-prefix example row is removed from the namespace table. The
+compound-prefix naming rule remains in the convention prose for any genuine
+future cross-corpus tool, to be re-decided when one exists; no current surface
+uses it.
+
 ## Context
 
 This repository currently integrates a single data source: the
@@ -148,13 +199,12 @@ server," not "data from the Oak API specifically."
 Resource and tool names use a prefix convention that signals data
 provenance for citation, credit, and attribution:
 
-| Prefix                         | Source                                        | Examples                                                               |
-| ------------------------------ | --------------------------------------------- | ---------------------------------------------------------------------- |
-| _(none)_                       | Oak Open Curriculum API (bulk data)           | `prior-knowledge-graph`, `thread-progressions`, `model`                |
-| `oak-kg-*`                     | Oak Curriculum Ontology                       | `oak-kg-knowledge-taxonomy`, `oak-kg-get-thread-content`               |
-| `oak-misconceptions-*`         | Oak misconception graph (bulk-derived)        | `oak-misconceptions-subgraph-for-thread`                               |
-| `eef-*`                        | EEF Teaching and Learning Toolkit             | `eef-methodology`, `eef-strands`, `eef-recommend-evidence-for-context` |
-| Compound (`oak-X-eef-*`, etc.) | Cross-corpus tool composing two named sources | `oak-misconceptions-eef-recommend-for-thread`                          |
+| Prefix                 | Source                                 | Examples                                                 |
+| ---------------------- | -------------------------------------- | -------------------------------------------------------- |
+| _(none)_               | Oak Open Curriculum API (bulk data)    | `prior-knowledge-graph`, `thread-progressions`, `model`  |
+| `oak-kg-*`             | Oak Curriculum Ontology                | `oak-kg-knowledge-taxonomy`, `oak-kg-get-thread-content` |
+| `oak-misconceptions-*` | Oak misconception graph (bulk-derived) | `oak-misconceptions-subgraph-for-thread`                 |
+| `eef-*`                | EEF Teaching and Learning Toolkit      | `eef-methodology`, `eef-strands`                         |
 
 **Explicit source attribution on every NEW tool (added 2026-05-07).**
 New tools and resources MUST carry a source-identifying prefix (or
@@ -234,7 +284,7 @@ and attribution requirements.
 This is the beginning of a multi-source integration that will deepen
 as the ontology matures, EEF data expands, and Oak's knowledge graph
 work progresses. The value of these collaborations compounds over time.
-The initial surfaces (misconception graph, EEF recommendations, Oak KG
+The initial surfaces (misconception graph, EEF strand evidence, Oak KG
 knowledge taxonomy) are deliberately modest in scope — they prove the integration
 pattern and deliver immediate value to educators while laying the
 foundation for richer cross-source capabilities.

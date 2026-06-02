@@ -1,467 +1,618 @@
 ---
 name: "MCP Output Schemas and Response Validation"
-overview: "Expose truthful `outputSchema` metadata for every MCP tool while preserving schema-derived validation of upstream API responses and aligning transport-level response shapes with the declared contract."
+overview: "Declare a truthful, REQUIRED, object-rooted `outputSchema` on every MCP tool — composed at codegen time for the 24 generated tools, hand-authored (reusing generated sub-schemas) for the 11 aggregated tools — and thread it through the canonical universal-tools descriptor surface to `registerTool`/`registerAppTool`, so MCP clients receive a machine-checkable contract for the `structuredContent` they get back."
 source_research:
+  - "../../../reports/output-schema-mcp-plan-audit-2026-06-02.md"
   - "../roadmap.md"
 todos:
-  - id: phase-0-contract-audit
-    content: "Phase 0: Audit the current generated-response validation path, tool inventory, and transport registration surfaces so the work is scoped against the real MCP contract rather than the raw OpenAPI payload shape."
+  - id: w1-cycle-1
+    content: "W1 cycle 1 (codegen, ATOMIC): add the required MCP output-envelope field to the ToolDescriptor contract + emitter (contract template, generate-tool-descriptor-file.ts, emit-index.ts); compose the envelope (status, data, summary, conditional oakContextHint) as an object-rooted Zod raw shape from each tool's response descriptor; regenerate all 24 tool files; emitter unit tests for single-status, multi-status (union nested under `data`, object root), and the requiresDomainContext oakContextHint conditional (predicate: include unless requiresDomainContext === false). One commit. Tree green."
     status: pending
-  - id: phase-1-generated-tool-schemas
-    content: "Phase 1: Generate truthful `outputSchema` objects for the 24 generated tools by composing the existing response JSON Schemas into the actual MCP `structuredContent` envelope."
+    depends_on: []
+  - id: w1-cycle-2
+    content: "W1 cycle 2 (codegen): integration test asserts every generated descriptor carries an object-rooted outputSchema whose Zod raw shape accepts that tool's real formatToolResponse structuredContent and rejects a payload missing a declared field. One commit. Tree green."
     status: pending
-  - id: phase-2-aggregated-tool-schemas
-    content: "Phase 2: Add hand-authored `outputSchema` declarations for the 10 aggregated tools, matching each tool's real `structuredContent` shape rather than forcing an over-generic shared envelope."
+    depends_on: [w1-cycle-1]
+  - id: w2-cycle-1
+    content: "W2 cycle 1 (aggregated, ATOMIC): add REQUIRED outputSchema (z.ZodRawShape, object root) to AggregatedToolDefShape; author each of the 11 aggregated tools' output shape matching its real structuredContent (reusing generated sub-schemas where the payload embeds generated types; search modelled as a single object with mode-specific fields optional, NOT a root union); wire all 11 into AGGREGATED_TOOL_DEFS; per-tool conformance unit tests. One commit. Tree green."
     status: pending
-  - id: phase-3-transport-exposure
-    content: "Phase 3: Expose `outputSchema` through the MCP registration and `tools/list` surfaces, and align any transport that would otherwise advertise a false contract."
+    depends_on: []
+  - id: s0-cycle-1
+    content: "S0 cycle 1 (seam): add REQUIRED outputSchema (z.ZodRawShape) to ToolRegistryDescriptor and UniversalToolListEntry + a requireGeneratedToolOutputShape helper; forward outputSchema in listUniversalTools() from both the aggregated defs and generated descriptors; add `outputSchema: tool.outputSchema` to the single registerTool/registerAppTool config in handlers.ts. Integration test: the registration config carries outputSchema for all 35 tools (spy-observation pattern). One commit. Tree green."
     status: pending
-  - id: phase-4-validation-and-review
-    content: "Phase 4: Prove that runtime `structuredContent` conforms to the declared schemas and run the required reviewer set before the plan is marked complete."
+    depends_on: [w1-cycle-2, w2-cycle-1]
+    decision_gate: "OPEN-DECISION-S0-OWNERSHIP"
+  - id: s0-cycle-2
+    content: "S0 cycle 2 (proof): integration/E2E test proving (a) tools/list exposes outputSchema for all 35; (b) real emitted structuredContent validates against the declared outputSchema for a representative generated and a representative aggregated tool; (c) every tool's success return carries structuredContent (the required-outputSchema invariant); (d) an isError:true path skips output validation. One commit. Tree green."
     status: pending
+    depends_on: [s0-cycle-1]
+  - id: ws-docs
+    content: "Docs: remove the stale 'download-asset on stdio' TSDoc (list-tools.ts:25-26) and update the list-tools @example to include outputSchema; TSDoc on the new fields and the requireGeneratedToolOutputShape helper; update any README enumerating the tool surface to 35 (24 + 11). Land alongside the cycles whose behaviour they document."
+    status: pending
+    depends_on: [s0-cycle-2]
+  - id: ws-gates
+    content: "Quality gates: full canonical chain (sdk-codegen → build → type-check → format → markdownlint → lint → test → test:ui → test:e2e) on the integrated delivery."
+    status: pending
+    depends_on: [ws-docs]
+  - id: ws-review
+    content: "Adversarial review: mcp-expert, code-expert, type-expert, test-expert, docs-adr-expert. Critically analyse findings against the real code before acting; document dispositions."
+    status: pending
+    depends_on: [ws-gates]
+  - id: ws-consolidate
+    content: "Consolidation: run /oak-consolidate-docs; mine any settled contract into ADR/reference docs; archive per ADR-117."
+    status: pending
+    depends_on: [ws-review]
+isProject: false
 ---
 
 # MCP Output Schemas and Response Validation
 
-**Last Updated**: 2026-04-09
-**Status**: Current — queued, not started
-**Priority**: High — improves model reasoning and spec compliance, but only if
-the declared contract matches the real MCP response surface
+**Last Updated**: 2026-06-02
+**Status**: 🟢 DECISION-COMPLETE except one named open decision (S0 / EEF-D6 sequencing — see [§Open Decision](#open-decision-the-only-unresolved-choice)). All design and execution decisions are resolved; the plan is otherwise ready for execution.
+**Scope**: Give every MCP tool a truthful, required, object-rooted `outputSchema` and expose it through the live registration path.
+
+> **Provenance**: this plan was fully re-grounded on 2026-06-02 against live
+> code, then revised against five specialist reviews (mcp / assumptions / type /
+> code / docs-adr) whose findings were verified against the installed SDK and
+> the real seam. The claim-by-claim audit lives in
+> [`output-schema-mcp-plan-audit-2026-06-02.md`](../../../reports/output-schema-mcp-plan-audit-2026-06-02.md).
+> That report is the authoritative source for *why* the facts changed; this plan
+> is the authoritative source for *what to build*.
+
+---
+
+## Context
+
+### Problem Statement
+
+The MCP tool surface exposes `inputSchema` but not `outputSchema`. MCP clients
+and models receive no machine-checkable description of the `structuredContent`
+a tool returns. The MCP spec defines `outputSchema` for exactly this, and the
+installed SDK runtime-validates a tool's `structuredContent` against it when
+declared. We declare nothing, so we get neither the client-facing contract nor
+the runtime guarantee.
+
+A prior version of this plan had rotted against the code (stdio transport that
+no longer exists, wrong tool counts, a sequencing gate pointing at deleted
+files, an inverted "must generate output schemas" framing). The audit corrected
+all of it; the facts below are verified against live code.
+
+### Verified Current State (2026-06-02)
+
+- **One transport.** `StreamableHTTPServerTransport`, instantiated per-request
+  (`apps/oak-curriculum-mcp-streamable-http/src/app/core-endpoints.ts:101`).
+  **There is no stdio transport** — zero `StdioServerTransport` occurrences.
+- **35 tools total**, all registered through one loop
+  (`handlers.ts:158`): **24 generated** (`MCP_TOOL_ENTRIES`,
+  `oak-sdk-codegen/.../mcp-tools/definitions.ts:41-66`) + **11 aggregated**
+  (`AggregatedToolName`, `universal-tools/types.ts:76-87`): `search`, `fetch`,
+  `get-curriculum-model`, `get-thread-progressions`, `get-prior-knowledge-graph`,
+  `get-misconception-graph`, `browse-curriculum`, `explore-topic`,
+  `download-asset`, `user-search`, `user-search-query`.
+- **`outputSchema` is absent from the entire wire path** — not on
+  `ToolRegistryDescriptor` (`types.ts:31-40`), `UniversalToolListEntry`
+  (`types.ts:120-142`), `AggregatedToolDefShape` (`definitions.ts:58-70`),
+  `listUniversalTools()` (`list-tools.ts:62-94`), or the `config` object passed
+  to both register paths (`handlers.ts:173-184`).
+
+### Verified Vendor Capabilities (do not re-litigate at execution)
+
+- **Both register paths accept `outputSchema`.** `server.registerTool`
+  (`@modelcontextprotocol/sdk@1.29.0`, `mcp.d.ts:150-157`,
+  `outputSchema?: ZodRawShapeCompat | AnySchema`) and `registerAppTool`
+  (`@modelcontextprotocol/ext-apps@1.7.2`, `index.d.ts:184-186`) both accept it;
+  `registerAppTool` spreads its entire config straight into `server.registerTool`,
+  so a single `outputSchema: tool.outputSchema` line on the shared `config`
+  object reaches **both** branches. **There is no Oak wrapper to modify**
+  (`registerAppTool` is a direct vendor import at `handlers.ts:11`; `zod-utils.ts`
+  only does shape extraction).
+- **The SDK runtime-validates `structuredContent` against `outputSchema`**
+  (`mcp.js:185-207`): when `outputSchema` is present and the result is not an
+  error, `structuredContent` is **mandatory** and is parsed against the schema;
+  `isError:true` skips validation. *(This entails the invariant in Principle 1.)*
+- **The SDK requires an OBJECT-ROOTED schema.** `normalizeObjectSchema`
+  (`zod-compat.js:79-121`) accepts only a raw shape (object of schemas) or an
+  object schema. **A union/`discriminatedUnion` at the root returns `undefined`**
+  → silently dropped from `tools/list` AND throws at runtime validation. Output
+  schemas are therefore object-rooted (`z.ZodRawShape`) everywhere; unions appear
+  only as **nested property values** (e.g. a multi-status `data` field).
+
+### Existing Capabilities (do not rebuild)
+
+- **Generated tools already carry their response schema at codegen time**
+  (`toolOutputJsonSchema` + `zodOutputSchema`,
+  `.../mcp-tools/contract/tool-descriptor.contract.ts:55-56`, emitted into all 24
+  files). These already validate the **raw upstream payload** (`validateOutput`,
+  **Contract A**). This plan does **not** regenerate or replace them; it
+  **composes** the MCP envelope schema from them.
+- **`formatToolResponse()` is the single response formatter**
+  (`universal-tool-shared.ts:208-221`): spreads object `data` at the top level,
+  adds `summary` (always), `oakContextHint` (unless `includeContextHint === false`),
+  and `status` (when provided). Widget routing fields (`query`, `timestamp`,
+  `toolName`, `annotationsTitle`) go into `_meta`, **not** `structuredContent`.
+- **`inputSchema` is already required and uniform** on `UniversalToolListEntry`
+  (`types.ts:108,135` — a required `z.ZodRawShape`; no-input tools expose `{}`),
+  extracted from the descriptor via `requireGeneratedToolInputShape`
+  (`descriptor-utils.ts:47-62`) + `extractZodShape` (`zod-utils.ts:55`). This is
+  the precedent — and the exact pattern — the output side mirrors.
+
+---
+
+## The Two Contracts (the load-bearing distinction)
+
+### Contract A — Upstream API response validation (EXISTING, unchanged)
+
+For generated tools the codegen emits `toolOutputJsonSchema` + `zodOutputSchema`
+from the SDK-decorated response schemas, and the runtime validates the **raw
+upstream payload** against them (`OUTPUT_VALIDATION_ERROR` on mismatch).
+Generator-driven; **must remain intact**. This plan adds nothing to it.
+
+### Contract B — MCP `structuredContent` declaration (NEW, this plan)
+
+`outputSchema` describes the **final `structuredContent` object** the client
+receives — the post-`formatToolResponse` envelope, not the raw upstream body.
+Declaring it makes the SDK runtime-validate emitted `structuredContent` against
+it, so the schema must match what is **actually emitted** or the tool errors.
+
+**The real envelopes (verified):**
+
+- **Generated tools** — `executor.ts:61-64` passes `data: { status, data }` and
+  `includeContextHint: descriptor.requiresDomainContext`, which `formatToolResponse`
+  spreads to `{ status, data: <validated payload>, summary, oakContextHint? }`.
+  Multi-status tools model the `data` variation as a **union nested under `data`**
+  (object root preserved). `oakContextHint` is present unless
+  `requiresDomainContext === false` — W1 derives the schema's optionality off the
+  **same predicate** (`!== false`), never off `=== true`.
+- **Aggregated tools** — each spreads its own domain object plus `summary` and
+  conditional `oakContextHint`/`status`. Shapes are **per tool** (e.g. `fetch`
+  exposes `oakUrl`, not `canonicalUrl`; `download-asset` has **no** `status` and
+  always includes `oakContextHint`; `search` has two real shapes — scoped
+  `{ scope, total, took, results, … }` and suggest `{ suggestions, cache, … }`
+  — with no shared literal discriminator, so it is modelled as **one object with
+  mode-specific fields optional**, never a root union).
+
+---
+
+## Design Principles (with the principle checks behind them)
+
+1. **`outputSchema` is REQUIRED and object-rooted.** Strict-and-Complete forbids
+   invented optionality; `inputSchema` is already required+uniform; every tool
+   emits `structuredContent`. The field is a required `z.ZodRawShape` on
+   `ToolRegistryDescriptor`, `AggregatedToolDefShape`, and `UniversalToolListEntry`.
+   **Entailment (SDK-enforced):** a required `outputSchema` makes a non-error
+   `structuredContent` **mandatory** on every success return of all 35 tools.
+   This holds today (every tool routes success through `formatToolResponse`,
+   which always builds `structuredContent`); S0.2 proves it as an invariant.
+   *(principles.md §Strict and Complete; "WE DON'T HEDGE".)*
+
+2. **Populate first, wire last.** A required field cannot land before its
+   producers populate it. W1 (24 generated) and W2 (11 aggregated) populate
+   independently; S0 introduces the required `UniversalToolListEntry` field and
+   the wire **last**, as the convergence. *(Inverts the audit's "S0 first", which
+   assumed an optional additive field.)*
+
+3. **Generator-first for generated tools (Cardinal Rule).** The generated
+   envelope schema is **composed at `sdk-codegen` time** from the existing
+   response schema. No hand-authored per-generated-tool overrides; fix the
+   emitter if composition is wrong. *(principles.md §Cardinal Rule; ADR-029/030/031.)*
+
+4. **Generator-reuse for aggregated payloads.** Where an aggregated tool's
+   `structuredContent` embeds a generated payload type, its output schema
+   **references the generated Zod schema** for that portion (as a property value
+   in the raw shape). Only the aggregation envelope is hand-authored.
+   *(principles.md §Context Specificity Gradient — "generated state beats authored state".)*
+
+5. **Truthful or absent.** A declared schema must match the real emitted
+   `structuredContent`. The proof is the runtime-conformance test (S0.2), not the
+   declaration. *(principles.md §"Misleading docs are blocking"; §Fail FAST.)*
+
+6. **Object root, always.** Every `outputSchema` root is a single `type: object`
+   (`z.ZodRawShape`). Multiple shapes (e.g. `search`, multi-status generated
+   tools) are expressed as **optional fields** or a **nested union property** —
+   never a root union, which the installed SDK silently drops and then throws on
+   (`zod-compat.js:79-121`).
+
+### Non-Goals (YAGNI)
+
+- **Not** changing upstream API payloads or Contract A validation.
+- **Not** retrofitting the EEF "single-Zod-call graph-native-view" doctrine onto
+  the 35 existing tools — that doctrine is EEF-tool-specific (see §EEF).
+- **Not** building the new EEF graph tool — owned by the EEF plan.
+- **Not** changing the envelope `formatToolResponse` emits. (The `status` field
+  in `structuredContent` is inherited from the formatter and declared truthfully
+  here, not endorsed; a separate envelope-cleanup could later remove it. Out of
+  scope.)
+- **Not** introducing any compatibility layer, optional-then-required migration,
+  or transport-specific output-schema path.
+- **Not** re-opening the `download-asset` URL placement (owned by
+  `download-asset-user-only-url.plan.md`; W2 consumes its post-change shape).
+
+---
+
+## Open Decision (the only unresolved choice)
+
+> **OPEN-DECISION-S0-OWNERSHIP** — gates `s0-cycle-1` only. Everything else is
+> decided.
+
+**Settled (by both plans, verified):** the topology is **not** open. The active
+EEF plan states its tool "registers through the universal-tools path, not a
+bespoke bypass" and enumerates the **same** S0 surfaces (`AggregatedToolName`,
+`AGGREGATED_TOOL_DEFS`/`AggregatedToolDefShape` satisfies-guard,
+`UniversalToolListEntry`, `listUniversalTools`, the `handlers.ts` config),
+explicitly recording that they are "settled at D3 verification **together with
+the in-flight output-schema work**" (this plan). Both plans already point at the
+one shared additive seam.
+
+**Verdict (this plan's position):** this plan owns the **general S0 seam** for
+the 35 always-on tools. EEF D6 adds an `outputSchema` for its one flag-gated
+tool **on the same additive seam** — it does not need a parallel path. The
+seam is additive and leaves existing generated tools unchanged.
+
+**What is genuinely open — and why it is the owner's call, not this plan's:**
+**sequencing/ownership of the single shared change** between the *active* EEF
+branch (D3 next) and this *queued* plan. Either the EEF D3/D6 work lands the
+required-field seam (this plan's `s0-cycle-1` then becomes a consume-and-verify
+no-op) or this plan lands it first (EEF rides it). That is a cross-plan priority
+call the owner makes; `s0-cycle-1` carries the gate so the seam is landed exactly
+once, with active-claim coordination before either side edits `universal-tools/`.
+
+**Until resolved:** W1, W2, and `s0-cycle-2`'s test design are unblocked and
+executable. `s0-cycle-1` waits on this sequencing decision.
+
+---
+
+## Relationship to the EEF graph-tool plan
+
+- **The 3 existing graph tools** (`get-thread-progressions`,
+  `get-prior-knowledge-graph`, `get-misconception-graph`) are ordinary aggregated
+  tools (`definitions.ts:117-128`); **W2 owns them**.
+- **The new EEF graph tool** (flag-gated `OAK_CURRICULUM_MCP_EEF_ENABLED`, does
+  not exist yet) is owned **exclusively** by the EEF plan (D3/D4/D6). Its
+  single-Zod-call graph-native-view derivation is intrinsic to its chain and must
+  not be fractured across two plans. **This plan scopes it out.**
+- **The shared seam** is the S0/D6 coordination above — coordinate, do not
+  transfer ownership.
+
+---
+
+## Lifecycle Triggers
+
+> See [Lifecycle Triggers component](../../templates/components/lifecycle-triggers.md)
+
+Work shape: **executable repo plan** (generated artefacts + shared SDK runtime +
+app registration path). Touch points: start-right at session open; register an
+active claim on `packages/sdks/oak-curriculum-sdk/src/mcp/` and
+`packages/sdks/oak-sdk-codegen/` before the first edit (**EEF is active in the
+same area — check `active-claims` and resolve the S0 sequencing decision before
+touching `universal-tools/`**); session-handoff at boundaries; consolidation at
+completion.
+
+---
+
+## Proof Contract
+
+Acceptance ids are the todo ids. Each names its proof level and proving command.
+
+| Acceptance id | Proof level | Proven by |
+|---------------|-------------|-----------|
+| `w1-cycle-1` | unit | emitter unit tests (single/multi-status, oakContextHint predicate); `pnpm test --filter @oaknational/sdk-codegen` + `pnpm sdk-codegen && pnpm build` |
+| `w1-cycle-2` | integration | conformance test over all 24 generated descriptors; `pnpm test` |
+| `w2-cycle-1` | unit | 11 per-tool conformance unit tests + `satisfies` guard holds; `pnpm type-check && pnpm test` |
+| `s0-cycle-1` | integration | registration-config carries `outputSchema` for all 35 (spy pattern); `pnpm test --filter oak-curriculum-mcp-streamable-http` |
+| `s0-cycle-2` | e2e | `tools/list` exposes `outputSchema` (35); real `structuredContent` validates; structuredContent-present invariant (35); `isError` skips; `pnpm test:e2e` |
+| `ws-docs` | non-code | TSDoc/README accurate; `pnpm markdownlint:root` |
+
+The plan is `complete` only when every acceptance id above is proven; a landed
+slice is not completion.
+
+---
+
+## Cycle Dependencies and Parallelisation
+
+> See [TDD Cycles component](../../templates/components/tdd-phases.md)
+
+- **W1 ∥ W2** — independent (codegen package vs aggregated SDK modules).
+- **W1 cycle 1.1 is atomic** — adding the required envelope field to the
+  `ToolDescriptor` contract makes all 24 generated files fail `type-check` until
+  regenerated, so the contract change + emitter + `pnpm sdk-codegen` regeneration
+  land in **one** commit. Cycle 1.2 (cross-tool conformance test) follows.
+- **W2 is one atomic cycle** — `AggregatedToolDefShape.outputSchema` is required
+  and `definitions.ts` is a shared convergence file; incremental landing forces
+  either unused exports (knip) or a transient-optional field (both forbidden).
+  Authoring the 11 schemas is parallelisable *preparation*; the landing is atomic.
+- **S0 depends on W1 + W2** — it forwards `descriptor.outputSchema` (W1) and
+  `def.outputSchema` (W2). `s0-cycle-1` additionally gated on
+  **OPEN-DECISION-S0-OWNERSHIP**.
+
+---
+
+## W1 — Generated-tool output schemas (24 tools, codegen)
+
+Compose the MCP output-envelope schema at `sdk-codegen` time, wrapping the
+existing response schema in the real `formatToolResponse` envelope.
+
+### Cycle 1.1 — Emitter composition + regeneration (ATOMIC)
+
+**Parallel-safety**: parallel-safe with W2 (codegen package only).
+**Starting state**: branch HEAD after this plan lands.
+
+**File scope** (permitted to touch):
+
+- `packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/contract/tool-descriptor.contract.ts` — add the required MCP-output-envelope field (object-rooted Zod raw shape; name confirmed against existing contract naming).
+- `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/generate-tool-descriptor-file.ts` — the interface-declaration template (must gain the same field, or contract and generated typing diverge).
+- `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/emit-index.ts` — emit the composed envelope (the `requiresDomainContext` literal is already computed here, `:46`/`:134`).
+- the 24 regenerated tool descriptor files (via `pnpm sdk-codegen`; never hand-edited).
+- `*.unit.test.ts` beside the emitter.
+
+**File scope NOT to touch**: `oak-curriculum-sdk/src/mcp/**` (W2/S0).
+
+**Test (Red)**: emitter unit tests assert the composed object-rooted shape for
+(a) single-status = `{ status, data: <response shape>, summary, oakContextHint? }`;
+(b) multi-status — the `data` variation is a **union nested under `data`**, root
+stays `type: object`;
+(c) `oakContextHint` present in the schema **iff** the descriptor's
+`requiresDomainContext !== false` (the same predicate the runtime uses).
+
+**Product code (Green)**: contract field + emitter composition + `pnpm sdk-codegen`.
+
+**Acceptance**: `pnpm test --filter @oaknational/sdk-codegen` green;
+`pnpm sdk-codegen && pnpm build` clean; tree green; commit names the cycle.
+
+**Reviewer dispatch**: `type-expert` (the `zodOutputSchema: ZodType<TResult>` →
+object-rooted raw-shape composition; no `as`/`unknown` widening), `mcp-expert`.
+
+### Cycle 1.2 — Cross-tool conformance
+
+**Parallel-safety**: sequenced after 1.1.
+
+**File scope**: one integration test.
+
+**Test (Red)**: iterate all 24 descriptors; assert each `outputSchema` is
+object-rooted and **accepts** that tool's real `formatToolResponse`
+`structuredContent` (from a representative fixture) and **rejects** a payload
+missing a declared field.
+
+**Acceptance**: all 24 conformant; tree green.
+
+---
+
+## W2 — Aggregated-tool output schemas (11 tools, ATOMIC)
+
+> One commit. Authoring the 11 schemas is parallelisable preparation; the landing
+> is atomic.
 
-## Why This Plan Exists
+**File scope** (permitted to touch):
 
-The MCP tool surface currently exposes `inputSchema` but not `outputSchema`.
-That leaves models and MCP clients without a machine-checkable description of
-the `structuredContent` they will receive.
+- `universal-tools/definitions.ts` — add required `outputSchema: z.ZodRawShape` to `AggregatedToolDefShape` (`:58-70`); wire all 11 entries.
+- Each aggregated module (`aggregated-search/`, `aggregated-fetch/`,
+  `aggregated-curriculum-model/`, `aggregated-browse/`, `aggregated-explore/`,
+  `aggregated-asset-download/`, `aggregated-user-search/`,
+  `aggregated-thread-progressions.ts`, `aggregated-prior-knowledge-graph.ts`,
+  `aggregated-misconception-graph.ts`) — export an object-rooted output raw shape.
+- `*.unit.test.ts` beside each module.
 
-The earlier plan version blurred two different contracts:
+**File scope NOT to touch**: `list-tools.ts`, `types.ts`, `handlers.ts` (S0);
+the codegen package (W1).
 
-1. **Upstream API response validation**
-2. **MCP tool result declaration**
+**Test (Red)** — per-tool conformance unit test: each tool's declared shape
+**accepts** its real emitted `structuredContent` (built from the module's own
+execution against a fixture) and **rejects** a malformed one. Tool-specific
+truths:
 
-This rewrite separates them explicitly.
+| Tool | Output-shape truths the schema must encode |
+|------|--------------------------------------------|
+| `search` | single object, mode fields optional: `{ scope?, total?, took?, results?, suggestions?, cache?, summary, status, oakContextHint? }` — **not** a root union (no shared discriminator exists) |
+| `fetch` | `oakUrl` (not `canonicalUrl`), `id`, `type`, `httpStatus`, `data`, `summary`, `oakContextHint?` |
+| `get-curriculum-model` | `summary` + curriculum-model payload (reuse generated model sub-schema) |
+| `get-thread-progressions` | `summary` + ordered progression payload |
+| `get-prior-knowledge-graph` | `summary` + spread `sourceData` graph payload |
+| `get-misconception-graph` | `summary` + spread `sourceData` graph payload |
+| `browse-curriculum` | `summary` + browse payload (reuse generated sub-schemas) |
+| `explore-topic` | `summary` + explore payload |
+| `download-asset` | `{ downloadUrl, lesson, type, summary, oakContextHint }` — **no `status`**; consume post-`download-asset-user-only-url` shape if landed |
+| `user-search` | `summary` + user-search payload; widget tool |
+| `user-search-query` | `summary` + query payload; app-only (`_meta.ui.visibility:['app']`) |
 
-## The Key Clarification
+**Product code (Green)**: required `outputSchema` on `AggregatedToolDefShape`;
+author each module's object-rooted shape (reusing generated Zod sub-schemas as
+property values where the payload embeds generated types); wire all 11.
 
-### Contract A — Upstream API Responses
+**Acceptance**: all 11 conformance tests pass; the
+`as const satisfies Record<AggregatedToolName, …>` guard (`:149`) holds;
+`pnpm type-check` + `pnpm test` green; tree green.
 
-For generated tools, the repository already generates both:
+**Reviewer dispatch**: `type-expert` (the `ZodRawShape` typing; generated
+sub-schema reuse type-compatibility), `mcp-expert`, `code-expert`.
 
-1. `toolOutputJsonSchema`
-2. `zodOutputSchema`
+---
 
-These come from the generated response descriptors and are already used to
-validate the raw upstream payload in the generated runtime executor before the
-result becomes an MCP response.
+## S0 — Seam: thread the required `outputSchema` to the wire
 
-This is the relevant existing behaviour:
+> Gated on **OPEN-DECISION-S0-OWNERSHIP**. Depends on W1 + W2.
 
-1. generated descriptors expose `toolOutputJsonSchema` and `zodOutputSchema`
-2. `callTool()` validates the raw tool output against `descriptor.validateOutput`
-3. successful execution returns `{ status, data }`
+### Cycle S0.1 — Required field + projection + registration
 
-That validation path is valuable and must remain generator-driven.
+**File scope**:
 
-### Contract B — MCP `structuredContent`
+- `universal-tools/types.ts` — add **required** `outputSchema: z.ZodRawShape` to **both** `ToolRegistryDescriptor` (`:31-40`, the generated-descriptor narrow type — without this the generated `outputSchema` cannot cross into the universal-tools layer) **and** `UniversalToolListEntry` (`:120-142`).
+- `universal-tools/descriptor-utils.ts` — add `requireGeneratedToolOutputShape`, mirroring `requireGeneratedToolInputShape` (`:47-62`) + `extractZodShape` (no `as`/`instanceof` shortcut beyond the existing guard pattern).
+- `universal-tools/list-tools.ts` — forward `outputSchema` from `def.outputSchema` (aggregated) and the descriptor (generated, via the helper) in **both** map branches (`:62-94`); remove the stale `download-asset on stdio` TSDoc (`:25-26`); add `outputSchema` to the `@example` config spread (`:53-58`).
+- `apps/oak-curriculum-mcp-streamable-http/src/handlers.ts` — add `outputSchema: tool.outputSchema` to the single `config` object (`:173-178`); both branches inherit it.
 
-`outputSchema` is not the raw API response schema. It is the schema for the
-final MCP `structuredContent` object exposed to clients at tool-call time.
+**Test (Red)**: extend `handlers-tool-registration.integration.test.ts` (spy
+pattern, `:76-89`) to assert the captured `registerTool`/`registerAppTool` config
+carries an object-rooted `outputSchema` for **all 35** tools.
 
-For generated tools, the runtime wraps the validated API payload in the MCP
-response envelope created by `formatToolResponse()`. That means the MCP output
-contract is a composed wrapper, not the raw OpenAPI response body.
+**Product code (Green)**: the fields + helper + forwards + the one `config` line.
 
-For aggregated tools, the output contract is whatever their execution functions
-actually place into `structuredContent`.
+**Acceptance**: registration config carries `outputSchema` for all 35;
+`pnpm type-check` + `pnpm test --filter oak-curriculum-mcp-streamable-http` green;
+tree green.
 
-## Current State
+**Reviewer dispatch**: `mcp-expert`, `architecture-expert-barney` (the
+`ToolRegistryDescriptor` cross-package boundary), `test-expert` (the spy-pattern
+assertion: field presence, not type shape), `code-expert`.
 
-### Tool Inventory
+### Cycle S0.2 — Wire + runtime conformance proof
 
-The repository currently exposes:
+**File scope**: integration/E2E test files only.
 
-1. **24 generated tools**
-2. **10 aggregated tools**
+**Test (Red)**:
 
-Total: **34 tools**
+1. `tools/list` exposes an object-rooted `outputSchema` for all 35 tools;
+2. invoke a representative generated and a representative aggregated tool
+   end-to-end; the emitted `structuredContent` **validates** against the
+   advertised `outputSchema` (the SDK's own runtime validation must not reject a
+   real success response);
+3. **invariant**: every tool's non-error return carries `structuredContent`
+   (the required-`outputSchema` entailment);
+4. an error path returns `isError:true` and is **not** output-validated.
 
-The aggregated set is:
+**Product code (Green)**: none expected — this proves S0.1 + W1 + W2 are mutually
+truthful. If a real response fails its declared schema, fix the schema (W1 emitter
+or W2 author), never loosen the test.
 
-1. `search`
-2. `fetch`
-3. `get-curriculum-model`
-4. `get-thread-progressions`
-5. `get-prerequisite-graph`
-6. `browse-curriculum`
-7. `explore-topic`
-8. `download-asset`
-9. `user-search`
-10. `user-search-query`
+**Acceptance**: all four hold; `pnpm test:e2e` green.
 
-### Transport Inventory
+**Reviewer dispatch**: `mcp-expert`, `test-expert`.
 
-The current transports do not expose the same tool surface:
+---
 
-1. **Universal/streamable HTTP** exposes all 34 tools through
-   `listUniversalTools()`
-2. **Stdio** currently exposes only the 24 generated tools
+## Documentation and Cross-Surface Updates (`ws-docs`)
 
-That distinction matters for this plan:
+- Remove the stale `download-asset on stdio` reference (`list-tools.ts:25-26`)
+  and update its `@example` to include `outputSchema` (`:53-58`).
+- TSDoc on the new `outputSchema` fields and `requireGeneratedToolOutputShape`.
+- Update any README enumerating the tool surface to **35** (24 + 11).
 
-1. the universal/HTTP surface is the main place where all 34 tool contracts
-   must become visible
-2. stdio must not advertise generated-tool `outputSchema` until its success
-   responses return matching `structuredContent`
+---
 
-### What Already Exists
+## Quality Gates (`ws-gates`)
 
-1. generated JSON Schema and Zod response descriptors
-2. generated runtime validation for raw tool outputs
-3. aggregated tool definitions and execution functions
-4. a shared `formatToolResponse()` helper for most MCP results
-5. transport-specific tool registration layers
+> See [Quality Gates component](../../templates/components/quality-gates.md)
 
-### What Is Missing
-
-1. truthful `outputSchema` metadata on the MCP tool definitions
-2. a clear generator/runtime distinction between raw response validation and MCP
-   output declaration
-3. transport-level propagation of `outputSchema` through `tools/list`
-4. proof that every declared schema matches the actual emitted
-   `structuredContent`
-
-## Design Principles
-
-### 1. Preserve Existing Response Validation
-
-This work must not replace schema-derived response validation with hand-authored
-runtime logic.
-
-Generated tools already validate upstream payloads. The plan must strengthen
-that story, not regress it.
-
-### 2. Declare the MCP Contract Truthfully
-
-If a tool advertises `outputSchema`, the declared schema must match the real
-`structuredContent` object that transport returns.
-
-No transport may advertise a schema it does not actually honour.
-
-### 3. Keep Generated and Authored Work in Their Proper Layers
-
-1. **Generated tools**: compose output schemas at `sdk-codegen` time from the
-   generated response JSON Schemas plus the MCP wrapper contract
-2. **Aggregated tools**: hand-author the output schema beside the hand-authored
-   tool definition
-3. **Runtime**: consume these schemas; do not invent them
-
-### 4. Prefer Precise Contracts Over Over-Generalised Helpers
-
-`formatToolResponse()` creates a common framing pattern, but not every tool
-exposes the same top-level fields. A helper may be used where truthful, but the
-plan must not force a fake universal `status?: string` contract across tools
-that do not actually emit that field.
-
-### 5. Land on the canonical descriptor surface, not transport-specific seams
-
-`outputSchema` must be threaded through the canonical transport-neutral SDK tool
-descriptor surface, then exposed through transport consumers such as
-`listUniversalTools()` and registration layers. This plan should extend that
-SDK-owned seam rather than inventing a parallel transport-owned path.
-
-## Scope
-
-In scope:
-
-1. generating MCP output schemas for the 24 generated tools
-2. hand-authoring MCP output schemas for the 10 aggregated tools
-3. explicitly preserving and documenting generated upstream-response validation
-4. exposing `outputSchema` through the MCP registration and `tools/list`
-   surfaces
-5. aligning any transport whose success responses would otherwise contradict the
-   declared schema
-6. tests that prove declared `outputSchema` matches runtime `structuredContent`
-
-Out of scope:
-
-1. changing upstream API payloads
-2. replacing Zod validation with ad hoc JSON Schema runtime validation
-3. introducing compatibility layers or dual contracts
-4. broad MCP Apps/widget migration work unrelated to tool metadata
-
-## Resolved Decisions
-
-### 1. Source of Truth for Generated Tool Output
-
-Use the **generated SDK response descriptors** as the source of truth for the
-validated payload inside the MCP wrapper.
-
-That means:
-
-1. do not derive generated output schemas from hand-written runtime objects
-2. do not derive generated output schemas from the undecorated
-   `api-schema-original.json`
-3. do derive them from the generated response descriptor JSON Schemas produced
-   from the SDK-decorated schema flow already used by runtime validation
-
-### 2. Relationship Between Validation and `outputSchema`
-
-The plan should make this explicit:
-
-1. **runtime validation** continues to use generated validators for the raw
-   upstream payload
-2. **`outputSchema`** documents the post-wrapper MCP `structuredContent`
-3. generated MCP output schemas should be composed from the already-generated
-   response JSON Schema plus the wrapper fields actually emitted at runtime
-
-### 3. Transport Truthfulness
-
-The plan must stay explicit about the current split:
-
-1. the universal/HTTP runtime already uses `formatToolResponse()` for generated
-   and aggregated MCP outputs
-2. the stdio success path currently returns text content only for generated
-   tools
-3. therefore stdio cannot advertise the generated-tool MCP wrapper schema until
-   its success response shape is aligned
-
-### 4. Root Type Restriction
-
-Every emitted `outputSchema` must remain object-shaped at the root. This still
-allows truthful object unions such as `oneOf` over different
-`{ status, data }` pairings where needed.
-
-### 5. Boundary sequencing
-
-Phases 0-2 of this plan can proceed while the runtime-boundary follow-up is
-queued or in progress. However, Phase 3 must consume the canonical descriptor
-groundwork from `../archive/completed/mcp-runtime-boundary-simplification.plan.md`
-rather than extending the current app-owned `listUniversalTools()` /
-`tools/list` exposure seam directly.
-
-## Output Shape Strategy
-
-### Generated Tools
-
-For generated tools, the intended MCP output contract is:
-
-```typescript
-{
-  summary: string;
-  status: number | string;
-  data: <validated response payload>;
-  oakContextHint?: string;
-}
-```
-
-Important nuance:
-
-1. `status` is top-level because the generated runtime currently passes
-   `{ status, data }` into `formatToolResponse()`
-2. `summary` is always present
-3. `oakContextHint` is present only when the descriptor says the tool requires
-   domain context
-4. if a tool has multiple documented statuses, the schema should model the
-   actual `{ status, data }` pairing truthfully rather than pretending only the
-   primary status exists
-
-### Aggregated Tools
-
-Aggregated tools must match their real `structuredContent` shape exactly.
-
-Examples:
-
-1. `fetch`: `summary`, `status`, `id`, `type`, `canonicalUrl`, `httpStatus`,
-   `data`, optional `oakContextHint`
-2. `search`: different but still object-shaped outputs for scoped search versus
-   suggest mode
-3. `download-asset`: `summary`, `downloadUrl`, `lesson`, `type`
-4. graph/model tools: `summary` plus the graph/model payload they already expose
-
-Do not force all aggregated tools into one artificial shared envelope if that
-would reduce truthfulness.
-
-## Execution Phases
-
-### Phase 0 — Audit the Real Contract
-
-Goal: remove ambiguity before editing generators or runtime surfaces.
-
-Tasks:
-
-1. confirm the tool count and aggregated inventory
-2. document the exact generated validation flow from descriptor response schema
-   to `callTool()`
-3. document the actual `structuredContent` shape for:
-   - one generated tool with a single documented status
-   - one generated tool with multiple documented statuses
-   - each aggregated tool family
-4. identify every transport surface that must expose or consume `outputSchema`
-5. identify any transport that would advertise a false contract unless response
-   shaping is aligned first
-
-Phase complete when:
-
-1. the plan still describes **34** tools, not stale counts
-2. the generator/runtime split is written down clearly
-3. there is no remaining ambiguity about where response validation already
-   happens
-
-### Phase 1 — Generate Output Schemas for Generated Tools
-
-Goal: emit truthful MCP output schemas for generated tools at `sdk-codegen`
-time.
-
-Tasks:
-
-1. extend the MCP tool generator contract so generated descriptors can carry a
-   generated `outputSchema`
-2. compose that schema from the already-generated response JSON Schema plus the
-   wrapper fields the MCP runtime actually emits
-3. ensure multi-status tools model the real `status`/`data` relationship rather
-   than collapsing to the first documented response only
-4. keep the existing generated response validation path intact
-5. update generated-tool listing metadata so the new schema is available to
-   transport layers
-
-Required outcome:
-
-1. generated tools still validate raw upstream payloads with generated validators
-2. generated descriptors now also expose a truthful MCP `outputSchema`
-3. no hand-authored per-tool overrides are introduced for generated tools
-
-### Phase 2 — Add Output Schemas for Aggregated Tools
-
-Goal: declare truthful MCP output contracts for all aggregated tools.
-
-Tasks:
-
-1. add `outputSchema` beside each aggregated tool definition
-2. model the actual `structuredContent` emitted by each tool family
-3. use small shared helpers only where they remain truthful
-4. cover the full ten-tool aggregated set explicitly, including
-   `download-asset`, `user-search`, and `user-search-query`
-
-Required outcome:
-
-1. every aggregated tool has an `outputSchema`
-2. no schema claims a top-level field that the tool does not actually emit
-3. the authored schemas remain small, readable, and colocated with the tool
-   definition
-
-### Phase 3 — Expose the Schemas Through Canonical MCP Surfaces
-
-Goal: make the declared schemas visible to clients without creating a false
-contract on any transport.
-
-Tasks:
-
-1. add `outputSchema` to the canonical transport-neutral SDK tool descriptor
-   surface
-2. expose it through the SDK-owned protocol projection used for `tools/list`
-3. expose it through the registration path each transport uses, staying
-   helper-compatible for app-rendering tools
-4. align any transport response-shaping path that would otherwise declare an
-   `outputSchema` but fail to return matching `structuredContent`
-
-Important boundary:
-
-If a transport cannot yet honour the declared schema, fix the transport or keep
-`outputSchema` off that transport until it can. Do not knowingly publish a
-lying contract.
-
-Transport-specific expectation:
-
-1. universal/HTTP should expose `outputSchema` for all 34 tools once the
-   declared contracts are available
-2. stdio currently exposes only the 24 generated tools and should only expose
-   `outputSchema` after its success path returns matching `structuredContent`
-
-Phase gate:
-
-Do not start this phase until the canonical descriptor / projection work from
-`../archive/completed/mcp-runtime-boundary-simplification.plan.md` has been
-grounded and verified in the current branch.
-
-### Phase 4 — Prove the Contract
-
-Goal: verify both sides of the story:
-
-1. generated/raw response validation still works
-2. declared MCP output schemas match runtime `structuredContent`
-
-Minimum test coverage:
-
-1. generator tests for generated output-schema composition
-2. a multi-status generated tool test
-3. aggregated-tool tests for representative schema families
-4. HTTP `tools/list` tests proving `outputSchema` is exposed
-5. integration tests proving actual `structuredContent` conforms to the
-   declared schema for representative generated and aggregated tools
-
-Minimum reviewers:
-
-1. `mcp-expert`
-2. `code-expert`
-3. `docs-adr-expert`
-4. `test-expert` if test files change materially
-
-## Dependencies and Sequencing
-
-1. Phases 0-2 can begin immediately.
-2. Phase 3 depends on the completed groundwork documented in
-   `../archive/completed/mcp-runtime-boundary-simplification.plan.md`.
-3. If the canonical descriptor surface lands first in the same branch, this plan
-   must consume it instead of duplicating tool metadata in transport-specific
-   registration code or `tools/list` overrides.
-4. Do not land transport-exposure work for `outputSchema` against a
-   transport-local seam that bypasses the SDK-owned descriptor surface.
-
-## Quality Gates
-
-Because this work changes generated artefacts, shared runtime code, and MCP app
-surfaces, treat all quality gates as blocking.
-
-Run the full quality-gate sequence defined in
-`docs/governance/development-practice.md`. For this work, the expected sequence
-is:
+All gates blocking (generated artefacts + shared SDK runtime + app registration).
 
 ```bash
-pnpm sdk-codegen
-pnpm build
-pnpm type-check
-pnpm lint:fix
-pnpm test
-pnpm test:ui
-pnpm test:e2e
-pnpm format:root
-pnpm markdownlint:root
+pnpm clean && pnpm sdk-codegen && pnpm build && pnpm type-check && \
+pnpm format:root && pnpm markdownlint:root && pnpm lint:fix && \
+pnpm test && pnpm test:ui && pnpm test:e2e
 ```
 
-Add targeted test commands during development, but do not treat them as a
-replacement for the full gate set.
+Per-cycle: focused `pnpm test --filter <workspace>` plus the local gates.
 
-## Completion Criteria
+---
 
-This plan is complete when all of the following are true:
+## Adversarial Review (`ws-review`)
 
-1. all **34** tools have truthful `outputSchema` declarations
-2. generated-tool output schemas are produced at codegen time
-3. generated upstream-response validation remains intact and explicitly
-   documented in the implementation
-4. the universal/HTTP surface exposes `outputSchema` for all 34 tools
-5. stdio only exposes `outputSchema` after its generated-tool success responses
-   have been aligned to the declared contract
-6. no transport advertises a schema it does not honour
-7. tests prove representative `structuredContent` objects conform to the
-   declared schemas
-8. the reviewer set signs off with no unresolved blocking findings
+> See [Adversarial Review component](../../templates/components/adversarial-review.md)
 
-## Related
+- **Plan-phase (done 2026-06-02)**: `assumptions-expert`, `mcp-expert`,
+  `type-expert`, `code-expert`, `docs-adr-expert` — findings verified against the
+  installed SDK and folded into this revision (object-root constraint, required→
+  structuredContent invariant, verified `registerAppTool` forwarding, W1
+  atomicity, `ToolRegistryDescriptor` field, search-as-object).
+- **Mid-cycle**: `type-expert`, `test-expert`, `architecture-expert-barney`,
+  `code-expert`.
+- **Close**: `docs-adr-expert`, `release-readiness-expert`.
 
-- [ADR-029: No Manual API Data Structures](../../../../docs/architecture/architectural-decisions/029-no-manual-api-data.md)
-- [ADR-030: SDK Single Source of Truth](../../../../docs/architecture/architectural-decisions/030-sdk-single-source-truth.md)
-- [ADR-031: Generation-Time Extraction](../../../../docs/architecture/architectural-decisions/031-generation-time-extraction.md)
-- [Schema-First Execution Directive](../../../directives/schema-first-execution.md)
-- [MCP Runtime Boundary Simplification](../archive/completed/mcp-runtime-boundary-simplification.plan.md)
-- MCP spec: [Tools — Output Schema](https://modelcontextprotocol.io/specification/2025-06-18/server/tools#output-schema)
+Per `feedback_validate_specialist_findings_before_acting`: ground every finding
+against the real code before acting; relay a synthesised verified verdict.
+
+---
+
+## Risk Assessment
+
+> See [Risk Assessment component](../../templates/components/risk-assessment.md)
+
+| Risk | Mitigation |
+|------|------------|
+| Declared schema ≠ real `structuredContent` → SDK rejects a real success response at runtime | S0.2 conformance test proves real output validates; schemas built from real fixtures |
+| A root union slips into an output schema → SDK silently drops it from `tools/list` and throws on validate | Principle 6 forbids root unions; W1/W2 tests assert object root; `search` modelled as one object with optional mode fields |
+| Required `outputSchema` makes `structuredContent` mandatory on every success return | S0.2 invariant test across all 35; every tool already routes success through `formatToolResponse` |
+| `oakContextHint` conditionality assumed (`=== true`) instead of derived (`!== false`) | W1 derives the schema predicate off the exact runtime predicate; tested in cycle 1.1c |
+| `formatToolResponse` top-level spread mis-modelled | W1/W2 schemas encode the spread envelope explicitly; per-tool tests use real emitted output |
+| Schema strictness (`.strip`/`.passthrough`) interacts with envelope fields | Align with `schema-resilience…` OQ1/OQ2 before W1 finalises; envelope declares `summary`/`oakContextHint`/`status` so they are not "extra" |
+| S0 collides with active EEF D6 on `universal-tools/` | OPEN-DECISION-S0-OWNERSHIP + active-claims coordination before editing the seam |
+| `download-asset` shape changes under W2 (URL → `_meta`) | W2 consumes the post-`download-asset-user-only-url` shape; sequence that change first |
+
+---
+
+## Foundation Alignment
+
+> See [Foundation Alignment component](../../templates/components/foundation-alignment.md)
+
+- **principles.md** — §Cardinal Rule (W1 composes at codegen); §Strict and
+  Complete + "WE DON'T HEDGE" (required, object-rooted, no optionality);
+  §Context Specificity Gradient (W2 reuses generated sub-schemas); §"Misleading
+  docs are blocking" (stdio TSDoc cleanup); §Fail FAST (truthful-or-error).
+- **testing-strategy.md** — TDD cycle-pairs as landing units at unit /
+  integration / E2E; conformance proven through public interfaces (real
+  `structuredContent`); no global state in tests.
+- **schema-first-execution.md** — generated type/schema flow stays codegen-driven;
+  the output envelope is composed at generation time from the OpenAPI-derived
+  response schemas.
+
+### Plan-body first-principles check
+
+> See [`plan-body-first-principles-check.md`](../../../rules/plan-body-first-principles-check.md)
+
+- **Shape clause**: required-vs-optional and object-root-vs-union decided at
+  plan-author time against the installed SDK + the `inputSchema` precedent — not
+  deferred to execution.
+- **Landing-path clause**: "populate first, wire last" and the W1/W2 atomic
+  landings are forced by the required-field constraint, not chosen for
+  convenience; every cycle lands green.
+- **Vendor-literal clause**: SDK/ext-apps `outputSchema` support, runtime
+  validation, and the object-root constraint are grounded in the installed
+  `mcp.d.ts:150-157` / `mcp.js:185-207` / `zod-compat.js:79-121` and
+  `ext-apps/.../index.d.ts:184-186`, verified during this plan's review — not
+  assumed. S0.1 re-confirms the live signature before relying on it.
+
+---
+
+## Documentation Propagation
+
+> See [Documentation Propagation component](../../templates/components/documentation-propagation.md)
+
+On completion, evaluate whether the Contract-A-vs-Contract-B distinction and the
+required object-rooted `outputSchema` seam warrant an ADR or a reference-doc note.
+Do not author a summary-of-work doc.
+
+---
+
+## Consolidation (`ws-consolidate`)
+
+After gates pass and review closes, run `/oak-consolidate-docs`: mine any settled
+contract into permanent docs, rotate the napkin, manage fitness, archive per
+ADR-117, and update `current/README.md` + the completed-plans index.
+
+---
+
+## Dependencies
+
+**Blocking**: OPEN-DECISION-S0-OWNERSHIP gates `s0-cycle-1` only. W1, W2, and
+S0.2's test design are not blocked.
+
+**Beneficial** (minimum shippable shape without each):
+
+- `../current/download-asset-user-only-url.plan.md` — W2's `download-asset` schema
+  should match its post-change shape. *Without it*: author against the current
+  shape (`{ downloadUrl, lesson, type, summary, oakContextHint }`) and re-point
+  when it lands.
+- `../active/schema-resilience-and-response-architecture.plan.md` (OQ1/OQ2) —
+  affects generated envelope strictness. *Without it*: W1 declares the envelope
+  fields explicitly so resolution mode does not change conformance.
+
+**Related Plans**:
+
+- `../../sector-engagement/eef/current/eef-graph-tool-completion.plan.md` — owns
+  the new EEF graph tool and the D6 half of the S0 sequencing decision.
+- `../active/upstream-api-reference-metadata.plan.md` — sibling codegen-seam
+  change; serialise with W1 at the emitter, never concurrent.
+- `../aggregated-tool-result-type-remediation.plan.md` (collection root) — if it
+  lands first, W2 schemas match the post-migration `structuredContent`.
+- Superseded reference only:
+  `../archive/completed/mcp-runtime-boundary-simplification.plan.md` (its
+  `projections.ts` deliverable was deleted in PR #76; the live seam is
+  `UniversalToolListEntry` + `list-tools.ts` + `handlers.ts:173-184`).

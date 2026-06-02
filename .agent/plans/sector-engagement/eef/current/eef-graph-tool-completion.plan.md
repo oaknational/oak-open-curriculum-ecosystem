@@ -30,7 +30,7 @@ todos:
     status: completed
     depends_on: []
   - id: d2-typed-raw-corpus-foundation
-    content: "Build the typed raw-data ingestion foundation from EEF_TOOLKIT_DATA: canonicalise the raw strand type as EefStrand (= (typeof EEF_TOOLKIT_DATA.strands)[number]), derive EefStrandId, EefStrandById, EefToolkitData, raw related_strand facts, corpus metadata, methodology/caveat/provenance facts, observed graph-filter domains, declared metadata domains, and raw headline metric domains directly from named source paths in the fixed raw object graph via typeof/indexed-access and deterministic raw projection helpers. The EEF data structure is the only source of truth: do not maintain separate lists of keys, values, field names, phases, priorities, key stages, metric values, metric labels, caveat classes, interpretation labels, crosswalks, or known-vocab constants. Any proposed tool input that cannot point directly at fixed known corpus data is an architectural misalignment, not D2 glue work. D2 is raw-foundation work only: it does not author teacher-facing payload fields, MCP input/output schemas, graph-native subsets, ranking/selection behaviour, or the deterministic graph projection. D5 owns ingesting this raw foundation into the graph-native EEF projection, and D6 derives MCP schemas/payloads from named graph-view subsets, not raw data directly. Implement isValidStrandKey(value: unknown): value is EefStrandId backed by the id-to-strand lookup, with a named unit test. Delete every non-source-of-truth raw vocabulary/list/Zod/load/freshness surface outright: school-context tuples/Zod/drift guards, strand-schema, loader/loadEefCorpus, freshness, old-list selection/projection/tool code, old-list MCP registration, and package exports that keep any of them live. The typed foundation replaces that path outright (replace-dont-bridge); the tree need not stay green while this fundamental replacement is in flight, and the settlement proof comes from the completed D2-D6 chain. Test migration is split only by behaviour: structural graph tests may keep synthetic purpose-built fixtures; corpus-grounded tests use real corpus members and the source-path table. Brought forward; depends only on D0 and the corpus."
+    content: "Build the typed raw-data ingestion foundation from EEF_TOOLKIT_DATA: canonicalise the raw strand type as EefStrand (= (typeof EEF_TOOLKIT_DATA.strands)[number]), derive EefStrandId, EefStrandById, EefToolkitData, raw related_strand facts, corpus metadata, methodology/caveat/provenance facts, observed graph-filter domains, declared metadata domains, and raw headline metric domains directly from named source paths in the fixed raw object graph via typeof/indexed-access and deterministic raw projection helpers. The EEF data structure is the only source of truth: do not maintain separate lists of keys, values, field names, phases, priorities, key stages, metric values, metric labels, caveat classes, interpretation labels, crosswalks, or known-vocab constants. Any proposed tool input that cannot point directly at fixed known corpus data is an architectural misalignment, not D2 glue work. D2 is raw-foundation work only: it does not author teacher-facing payload fields, MCP input/output schemas, graph-native subsets, ranking/selection behaviour, or the deterministic graph projection. D5 owns ingesting this raw foundation into the graph-native EEF projection, and D6 derives MCP schemas/payloads from named graph-view subsets, not raw data directly. Implement isValidStrandKey(value: unknown): value is EefStrandId backed by the id-to-strand lookup, with a named unit test. Delete every non-source-of-truth raw vocabulary/list/Zod/load/freshness surface outright: school-context tuples/Zod/drift guards, strand-schema, loader/loadEefCorpus, freshness, old-list selection/projection/tool code, old-list MCP registration, and package exports that keep any of them live. The typed foundation replaces that path outright (replace-dont-bridge), landing green by updating its consumers in the same atomic change. Test migration is split only by behaviour: structural graph tests may keep synthetic purpose-built fixtures; corpus-grounded tests use real corpus members and the source-path table. Brought forward; depends only on D0 and the corpus."
     status: completed
     depends_on: [d0-fixed-data-doctrine]
   - id: d3-mcp-tool-resource-contract
@@ -152,9 +152,11 @@ instrument that audits every data-derivation seam at once
 (`contract field -> graph-native subset -> raw source path -> corpus cardinality
 -> proof test`), spanning D2 through D7.
 
-**The temporal seam.** D2 removes the old path before D5/D6 build the new one, so
-the tree is red across the D2-D6 window — a seam in time, not structure. The chain
-is validated green once the replacement completes.
+**The temporal seam.** D2 removed the old path and landed green — its deletions
+and consumer updates were atomic — so the EEF surface is absent-but-green from D2
+onward. D3/D4 are non-code; D5 and D6 each land green per the atomic-landing
+invariant. Only normal local in-flight red occurs during their authoring and is
+never pushed; committed history has no persistent red window.
 
 ### Seams compose; they are never reconciled
 
@@ -845,10 +847,20 @@ boundary, field classification, output-schema subset, and SDK/app verification
 record are carried here directly: the registration config in `handlers.ts`
 (`registerTools`, the `config` object passed to both register paths) carries
 `inputSchema` but no `outputSchema` — verified 2026-06-01; the `mcp-expert`
-verification re-establishes exact locations rather than trusting a line number —
-and both `registerTool` and `registerAppTool` paths plus the `listUniversalTools`
-projection must be extended; the target is structuredContent-only, not
-dual-content output.
+verification re-establishes exact locations rather than trusting a line number.
+The EEF tool is a graph universal tool — the same family as the existing
+`get-misconception-graph` and `get-prior-knowledge-graph` aggregated tools (both
+in `AggregatedToolName`, both already returning `structuredContent`) — so it
+registers through the universal-tools path, not a bespoke bypass. Carrying an
+`outputSchema` through that path is net-new (no existing universal tool declares
+one; the `handlers.ts` config and `listUniversalTools` projection carry
+`inputSchema` only). The exact universal-tools surfaces that must change to do so
+— the `AggregatedToolName` union, `AGGREGATED_TOOL_DEFS` /
+`AggregatedToolDefShape` (the `satisfies` guard), `UniversalToolListEntry`,
+`listUniversalTools`, and the `handlers.ts` config — are settled at D3
+verification together with the in-flight output-schema work, not fixed here; the
+extension is additive and leaves existing generated tools unchanged. The target is
+structuredContent-only, not dual-content output.
 
 **Do:**
 
@@ -917,10 +929,19 @@ dual-content output.
     host may browse, attach, or inject without the model choosing an action.
     Define the EEF interpretation resource/template here, deriving it first from
     the corpus methodology/caveats where the dataset already explains impact,
-    cost, evidence strength, and conversion notes. Supplement only with
-    graph-structural names ratified by D4/D5, such as field names, edge types,
-    provenance-envelope fields, and schema-subset names. These structural names
-    are not evidence categories, caveat classes, or adaptation concepts.
+    cost, evidence strength, and conversion notes. Beyond the corpus-cited
+    methodology and caveats, the resource carries explicit agent-side reasoning
+    guidance (tagged agent-side per `eef-corpus-grounding`, never presented as
+    corpus evidence): the end goals that matter (faithful evidence transmission,
+    options not recommendations, preserving strength/cost/impact/caveats/limits),
+    how to reach them through the Oak/EEF workflow, and positive and negative
+    worked examples of faithful versus unfaithful evidence use. The resource
+    guides the agent's reasoning but cannot constrain it — it is read context,
+    not executable. It may also carry graph-structural names ratified by D4/D5
+    (field names, edge types, provenance-envelope fields, schema-subset names).
+    The guidance and examples are about how to apply evidence faithfully; they do
+    not invent EEF evidence categories, caveat classes, or strand vocabulary —
+    every evidence claim stays corpus-cited.
   - **Prompt:** user-controlled workflow template for teacher-invoked flows,
     such as evidence-grounded lesson adaptation or the cover-lesson example,
     that orchestrate Oak API/search plus the EEF tool. Prompts may help the
@@ -1113,8 +1134,9 @@ primitives.
   empty export-nothing stub - so EXTERNAL-consumer blast radius is ZERO. But the
   replacement requires bounded IN-PACKAGE edits the record MUST name: graph-core's
   own `src/index.ts` barrel re-exports the query types and
-  `graph-view/index.unit.test.ts` carries the contract test (its 5-stub-op
-  assertions are already removed). The shared RDF substrate stays; only the query
+  `graph-view/index.unit.test.ts` carries the contract test (the
+  `DeepKeyPath`/`NodeProjection` and `GraphView` interface-contract structural
+  tests). The shared RDF substrate stays; only the query
   contract is replaced (the live `graph-view` contract is replaced fresh in D5). The existing non-EEF empty stub is consumer-impact evidence
   only; it is not a model for the EEF graph-tool surface and does not authorise
   any new stub. A type may be named `SubgraphResult` only if D4 freshly defines
@@ -1155,6 +1177,10 @@ primitives.
   surfaced in the teacher-facing payload (V1).
 - Graph-core public result/error types preserve `TNodeId`, proven by the D5
   compile-time tests for `EefStrandId`.
+- The existing string-typed `GraphView`/`SubgraphResult`/`SubgraphError` are
+  deleted and re-defined carrying `TNodeId` (`rootIds`, edge `source`/`target`,
+  and `rootId` become `TNodeId`), never extended or wrapped behind a
+  compatibility shim (replace-don't-bridge).
 - The `rank`/`explain`/`compare` op types are already removed (no D5 deletion
   remains).
 - Owner ratifies the value -> MCP -> graph derivation.
@@ -1283,10 +1309,16 @@ out of substrate packages.
   fully populated. The composition module does not validate the fixed corpus and does not
   require substrate packages to import MCP types (ADR-179 - an explicit
   acceptance check). Do not extract a generic factory until a real second consumer
-  exists. Confirm the registry path (direct `server.registerTool`/`registerAppTool`
-  vs the universal-tools `AggregatedToolDefShape`, which may not carry
-  `outputSchema`). If the active registry path drops `outputSchema`, replace that
-  segment so the SDK receives the configured schema. D6 is not complete until the
+  exists. The EEF tool is a graph universal tool (the same family as the existing
+  `get-misconception-graph`/`get-prior-knowledge-graph` aggregated tools), so it
+  registers through the universal-tools path — not a bespoke bypass. Carrying an
+  `outputSchema` through that path is net-new: the universal-tools surfaces that
+  must change to do so — the `AggregatedToolName` union, `AGGREGATED_TOOL_DEFS` /
+  `AggregatedToolDefShape` (the `satisfies` guard), `UniversalToolListEntry`,
+  `listUniversalTools`, and the `handlers.ts` config — are settled at D3
+  verification together with the in-flight output-schema work; the extension is
+  additive and leaves existing generated tools unchanged, so the SDK validates the
+  graph tool's `structuredContent`. D6 is not complete until the
   single-Zod-call graph-subset rule is implemented exactly; failure means the
   D3/D4 contract is wrong and must be corrected.
 - Register the ratified EEF surface behind `OAK_CURRICULUM_MCP_EEF_ENABLED`
@@ -1349,8 +1381,9 @@ the typed raw/graph-native chain, not duplicated fixture text.
 - Add an MCP-client e2e flow (StreamableHTTP transport: MCP client SDK +
   `StreamableHTTPClientTransport`, in
   `apps/oak-curriculum-mcp-streamable-http/e2e-tests/`, `*.e2e.test.ts`):
-  initialise the server; call existing Oak curriculum tools (including a
-  pedagogical signal such as the misconception or prior-knowledge graph) for a
+  initialise the server; call the Oak curriculum tools that are live today — the
+  `get-misconception-graph` and `get-prior-knowledge-graph` tools, plus the Oak
+  API/search tools — to surface a pedagogical signal for a
   lesson; query the ratified EEF tool for the evidence on the pedagogical move that
   signal raises; inspect or expand a returned strand through the ratified surface;
   assert all EEF graph payloads arrive through `structuredContent`.
@@ -1368,10 +1401,10 @@ the typed raw/graph-native chain, not duplicated fixture text.
 
 - The e2e round trip proves graph retrieval, node/resource lookup, and subgraph
   expansion through MCP.
-- The proof exercises the Oak/EEF workflow seam on more than one signal type (for
-  example a misconception-graph signal and a prior-knowledge-graph signal), so the
-  agent's move -> strand selection is shown to generalise rather than ride one
-  hard-coded path.
+- The proof exercises the Oak/EEF workflow seam on more than one signal type — a
+  `get-misconception-graph` signal and a `get-prior-knowledge-graph` signal (the
+  Oak tools live today) — so the agent's move -> strand selection is shown to
+  generalise rather than ride one hard-coded path.
 - The scenario proof shows Oak material and EEF evidence used together; the final
   assistant-facing payload contains the known strand's VERBATIM corpus attribution,
   caveats, evidence strength, impact, and cost (the independent-ground-truth check),
@@ -1594,6 +1627,11 @@ The plan is done when D0-D7 are complete and:
 - Building a UI widget.
 - Flipping `OAK_CURRICULUM_MCP_EEF_ENABLED` in any deployed environment.
 - Building the next graph corpus before this first surface proves the pattern.
+- Re-validating the EEF value path against the new graph-corpus-sdk replacements
+  of the live Oak graph tools. This plan's D7 proof runs on the Oak graph tools
+  live today (`get-misconception-graph`, `get-prior-knowledge-graph`); when those
+  are replaced, the re-validation is owned by a separate follow-on plan,
+  [`../future/eef-revalidate-on-new-graph-tools.plan.md`](../future/eef-revalidate-on-new-graph-tools.plan.md).
 - Surfacing EEF-only workflows that deliver value in the MCP app without
   intersecting Oak's tools (for example standalone "what does the evidence say
   about this approach" or impact/cost decision-support flows). These are owned by
@@ -1619,12 +1657,14 @@ The plan is done when D0-D7 are complete and:
   compile-time cost is known: exact-union membership predicates can collapse
   `.includes()` parameters; the cure belongs at the raw-foundation or graph-native
   boundary, and any further named cost is a fresh `type-expert` decision there.
-- **Intentional in-flight red-tree window.** Deleting the old
-  load/list/Zod/freshness path before the graph projection and MCP surface are
-  rebuilt may leave compile errors while D2-D6 are in flight. Mitigation: D2
-  replaces the path outright, D5 ingests the D2 raw foundation into the
-  deterministic graph projection, D6 registers the graph-derived MCP surface, and
-  the tree is validated once the replacement chain completes.
+- **Each deliverable lands green; the EEF surface is absent-but-green between D2
+  and D6.** D2 deleted the old load/list/Zod/freshness path and landed green by
+  updating its consumers atomically. D3/D4 are non-code. D5 (graph projection +
+  graph-core query-contract replacement) and D6 (MCP surface) each co-land test
+  and product code, with deletions travelling alongside their replacements, and
+  nothing is pushed until green (local-broken-code-never-leaves). The discipline
+  to hold: D5 is a large atomic replacement, so it must land in one green commit
+  rather than a sequence that leaves the tree broken between commits.
 - **MCP schema declaration not reaching runtime validation.** The universal-tools
   registration path may not carry `outputSchema` to the SDK even when local
   declarations exist. Mitigation: D3 verifies the live SDK/app path, D6 proves the

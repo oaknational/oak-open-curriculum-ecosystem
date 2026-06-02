@@ -1,5 +1,47 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
+## 2026-06-02 — Flamebright Charring Ember / claude / Opus 4.8 / `30dd5d` — graph-estate cross-thread relationship + one-migration ownership
+
+**Landed (uncommitted, doc-only):** made
+`graph-estate-consolidation.plan.md` explicitly aware of the multi-way,
+cross-thread substrate-migration relationship and gave it **ownership** of
+ensuring ONE plan moves all existing graph tools onto the new `graph-corpus-sdk`
+substrate.
+
+**Shape:**
+
+- New verified-ground-truth bullet: the substrate migration of the existing graph
+  tools (misconception, prior-knowledge, thread-progressions) is graph-stack
+  corpus-adapter work, sequenced by **consumer-readiness (ADR-173)**, NOT a
+  numbered increment; ownership is today fragmented (misconception has a surface
+  plan; prerequisite/thread-progressions have none) and stands upstream of a
+  single EEF re-validation gate (`eef/future/eef-revalidate-on-new-graph-tools.plan.md`).
+- New **Judgment call 4**: one all-tools substrate-migration plan (absorbs the
+  misconception substrate-migration; gives prerequisite/thread-progressions the
+  home they currently lack; single upstream of EEF re-validation). Substrate-
+  migration pulled OUT of the misconceptions-feature consolidation (Jc3 now covers
+  4 feature plans). End-goal updated to require the single migration plan.
+- graph-stack disposition row now includes scrubbing the retired increment-number
+  and gate framing per t7 ("heaviest remaining carrier; labels must not be reused").
+
+**Self-correction (owner-caught):** I first proliferated the retired `Inc.3`
+label into this plan as a live authority; removed it and reframed to ADR-173
+consumer-readiness sequencing. No `Inc.3` remains in my content — only the
+pre-existing decontamination-tracking mentions.
+
+**OWNER MANDATE (near-future):** graph estate consolidation + graph enhancement +
+EEF work must be cleaned and aligned as ONE unit — they can no longer exist
+independently. And ALL of this session's outputs need a deep contamination scan.
+
+**Next safe step:** unchanged base (run graph-estate-consolidation t1–t7 after
+EEF finishes) **plus** the new one-migration ownership (Jc4) and the cross-thread
+alignment mandate; the near-future graph-alignment session should treat this plan,
+the graph-enhancement work, and the EEF plan as one cleanup unit. Gate: markdownlint
+green; full `pnpm check` not run (doc-only, uncommitted, shared tree). Active-claims:
+none mine.
+
+---
+
 ## 2026-06-01 — Hearthlit Stoking Cinder / claude / claude-opus-4-8 / `4c1eeb` — graph-spine quarantine
 
 **Landed**: Quarantined the four superseded root-level graph coordination spines

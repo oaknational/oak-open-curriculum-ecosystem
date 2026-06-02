@@ -116,6 +116,28 @@ narrative it exists to remove. Re-verify a fact only if a disposition turns on i
   mandatory projection, the `recommend/explain/compare` tools, and the response
   budget cap — all discarded by the rebuild. Consolidation = archive that framing
   and shrink the estate to a clean minimal set.
+- **Moving the existing graph tools onto the new substrate is one coupled,
+  cross-thread system this plan must own** (verified 2026-06-02). Replatforming
+  the existing bulk-derived graph tools — misconception, prior-knowledge, and
+  thread-progressions — onto `graph-corpus-sdk` is graph-stack work
+  ([`graph-stack.plan.md`](../active/graph-stack.plan.md), the corpus-adapter
+  build), sequenced by consumer-readiness, not a numbered increment (ADR-173 — the
+  increment-number framing graph-stack still carries is a t7 decontamination
+  target, not a live label to reuse). That ownership is today **fragmented and
+  gapped**: **misconception** has a dedicated surface re-platform plan
+  ([`future/oak-misconceptions-substrate-migration.plan.md`](../future/oak-misconceptions-substrate-migration.plan.md));
+  **prerequisite/prior-knowledge and thread-progressions have no surface
+  re-platform plan at all** — those tool re-wraps are unowned. Crossing into the
+  `eef` thread: the EEF value path
+  ([`eef-graph-tool-completion.plan.md`](../../../sector-engagement/eef/current/eef-graph-tool-completion.plan.md)
+  D7) is proven against the **live** `get-misconception-graph` /
+  `get-prior-knowledge-graph` tools, so replacing them triggers EEF re-validation,
+  owned by
+  [`eef/future/eef-revalidate-on-new-graph-tools.plan.md`](../../../sector-engagement/eef/future/eef-revalidate-on-new-graph-tools.plan.md).
+  Net: scattered, gapped migration ownership upstream of a single EEF gate. This
+  plan therefore takes ownership of unifying it into **one** substrate-migration
+  plan covering every existing graph tool (End goal; Judgment call 4), so no tool
+  is orphaned and the EEF re-validation gate has one upstream.
 
 **Residue position (verified, point-precise):**
 
@@ -148,9 +170,11 @@ when each file is archived/parked/rewritten under t1–t7.
 
 A clean, minimal, accurate graph plan estate: one live finishing plan, one
 strategic value plan, accurate READMEs, the superseded framing archived with
-pointers, and the speculative future surfaces parked with an explicit
-block-on-EEF condition — so any agent opening the estate sees the true state in
-one read.
+pointers, the speculative future surfaces parked with an explicit block-on-EEF
+condition, and a **single substrate-migration plan that owns moving every
+existing graph tool onto the new `graph-corpus-sdk` substrate** (no per-tool
+scatter, no orphaned tool) — so any agent opening the estate sees the true state
+in one read.
 
 ## Disposition map (proposal carried forward; confirm at execution)
 
@@ -158,7 +182,7 @@ one read.
 |---|---|---|
 | **Archive — superseded framing** | `eef/archive/graph-tooling-rebuild.plan.md` (quarantined 2026-05-30); `kg/current/graph-query-layer.plan.md` (old 7-op layer → S2); `kg/current/gate-1a-delivery-parallel-execution-addendum.plan.md`; `kg/current/2026-05-08-graph-mvp-arc-specialist-review-opener.md`; `kg/current/2026-05-08-pr102-graph-decision-complete-closeout.plan.md`; `kg/current/2026-05-11-graph-execution-prep-opener.md`; `kg/current/pr-108-sonar-live-issues-2026-05-24.md` | move to `archive/completed/` + supersession pointer + index entry |
 | **Quarantine — DONE 2026-06-01** | `graph-mvp-arc.plan.md`; `graph-portfolio-index.md`; `graph-combinatorial-arc.plan.md`; **`feat-mcp-graph-support-foundation-meta.md`** (branch-scoped, never merged) | Owner-directed quarantine — *not* rewrite: rewrite has no live target while wider graph work is undefined until the EEF tool ships, so a rewritten-live spine would be fresh speculative contamination. All four moved to `archive/completed/` with a one-line supersession banner each; one note in `completed-plans.md`; references removed from the live surviving estate and de-linked to plain text in contaminated/pending files. The deeper gate-1a/1b/Inc.3 **concept** decontamination of those contaminated files remains per their own disposition (t1–t7). See §"Current state (verified ground truth)". |
-| **Update in place — stale but live** | `eef/README.md`; `kg/README.md`; `kg/active/graph-stack.plan.md` (flip landed WS statuses, fix the active/↔current/ link mismatch) | edit |
+| **Update in place — stale but live** | `eef/README.md`; `kg/README.md`; `kg/active/graph-stack.plan.md` (flip landed WS statuses, fix the active/↔current/ link mismatch, and scrub the retired increment-number + gate framing per t7 — graph-stack is the heaviest remaining carrier, and its labels must not be reused elsewhere) | edit |
 | **Archive — completed** | `kg/active/graph-resource-factory.plan.md`; `kg/active/misconception-graph-mcp-surface.plan.md`; `kg/active/graph-stack-ws1.6-vocab-prep.md` | move to `archive/completed/` |
 | **Park as `future/`, blocked-on-EEF** | `kg/active/nc-knowledge-taxonomy-surface.plan.md`; the `future/oak-kg-*` (iri-traverser, programme-navigator, schema-browser, lesson-graph-surface) + `future/oak-misconceptions-*` (cross-corpus, extended-contexts, substrate-migration, topic-extraction) + `future/cross-source-journeys.plan.md` | mark *"undefined until the first proper graph tool is finished"*; consolidate the 5 misconceptions-* into one |
 | **Replace — value** | `eef/future/eef-outcome-evaluation-infrastructure.plan.md` | superseded by the new value-evaluation plan (t6) |
@@ -216,7 +240,8 @@ below is its input, not a substitute for it.
 
 1. **Archive the entire superseded gate-1a/1b estate** (moved, never deleted, each with a pointer). *Recommended: yes.*
 2. **Park the ~9 speculative graph-surface future plans** with an explicit block-on-EEF condition rather than leaving them reading as live. *Recommended: yes.*
-3. **Consolidate the 5 `oak-misconceptions-*` future plans into one** parked plan. *Recommended: yes, with a condition (assumptions-expert): the consolidated plan must KEEP each distinct problem as a named section (cross-corpus composition, substrate migration, topic extraction, extended contexts, bounded sub-graph extraction) — they are variations on one undefined-until-EEF theme but not one problem. A single summary paragraph that loses the bounded-extraction contract is the failure mode to avoid.*
+3. **Consolidate the 5 `oak-misconceptions-*` future plans into one** parked plan. *Recommended: yes, with a condition (assumptions-expert): the consolidated plan must KEEP each distinct problem as a named section (cross-corpus composition, substrate migration, topic extraction, extended contexts, bounded sub-graph extraction) — they are variations on one undefined-until-EEF theme but not one problem. A single summary paragraph that loses the bounded-extraction contract is the failure mode to avoid. Scope correction (per the multi-way relationship in §Current state): the misconception **substrate-migration** is migration work, not a feature idea — it belongs in the single all-tools substrate-migration plan (Judgment call 4), not in this misconceptions-feature consolidation. So this consolidation covers the four feature plans (cross-corpus composition, topic extraction, extended contexts, bounded sub-graph extraction); substrate-migration moves to Judgment call 4.*
+4. **Own the unification of graph-tool substrate migration into ONE plan.** Ensure a single substrate-migration plan moves *all* existing graph tools (misconception, prior-knowledge, thread-progressions; exact set pinned by that plan) onto the new `graph-corpus-sdk` substrate — absorbing the misconception substrate-migration plan, giving prerequisite/prior-knowledge and thread-progressions a home they currently lack, and standing as the single upstream of the EEF re-validation gate ([`eef/future/eef-revalidate-on-new-graph-tools.plan.md`](../../../sector-engagement/eef/future/eef-revalidate-on-new-graph-tools.plan.md)). *Recommended: yes — scattered, gapped per-tool migration ownership is the failure mode; one plan stops an orphaned tool silently breaking the EEF value path. Migration is sequenced by consumer-readiness (ADR-173), not a retired increment number; the plan may be parked until substrate + finishing-plan readiness allow, but its ownership of all tools is established now.*
 
 ## Execution sequence
 

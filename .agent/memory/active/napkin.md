@@ -177,3 +177,81 @@ t1 ratification, claim-verification), ran 3 reviewers, fixed ADR-173, flipped t1
   parallel back-out executed. Nothing lost, but the git picture went stale twice.
   When a file appears/disappears unexpectedly, re-ground `git status` + HEAD before
   acting — do not trust the session-start snapshot in a live multi-agent window.
+
+## Session: 2026-06-02 — EEF/ADR/graph plan review + refinement (Flamebright Charring Ember)
+
+- **One root failure wore three faces in one session, and the third actively
+  spread contamination.** Reviewing/refining the EEF + graph plans I (1) asserted
+  a "bespoke" MCP-registration topology — wrong, graph tools ARE universal tools
+  (`AggregatedToolName` already holds `get-misconception-graph`/
+  `get-prior-knowledge-graph`); (2) over-specified output-schema *mechanics* the
+  owner had flagged as still-in-flux; (3) cited `graph-stack` **`Inc.3`** as the
+  migration owner — a label ADR-173 retired, which I'd *read this same session* —
+  proliferating a dead label into the consolidation plan. Each time I'd grounded
+  the *surface* fact (the row says X) but not the *load-bearing meta-fact* (is the
+  topology / the mechanism / the label itself live?). All three caught by the
+  owner. New operational edge: **when citing a label/section/increment/status from
+  a contaminated or in-flux artefact, the label may itself BE the contamination —
+  verify its liveness, and proliferating it spreads what the estate is removing.**
+  Conserved to auto-memory `ground-convenient-claims` + `distilled.md`.
+- **Seeded reviewer consensus is amplification, not corroboration.** A Stage-3
+  workflow brief I wrote *asserted* the bespoke-topology frame; all four reviewers
+  anchored and "confirmed" it, and I relayed the convergence as strong evidence.
+  Cure applied next turn: the architecture-review brief was deliberately neutral
+  and refutation-inviting (verifiable facts + "try hardest to refute"), and the
+  topology then survived genuinely. Distinguish "reviewers independently found X"
+  from "reviewers confirmed the X I told them."
+- **I ran metacognition in recovery mode, not prevention mode.** I invoked
+  `/oak-metacognition` several times this session — but each time *after* the owner
+  had already caught a slip, so it operated retrospectively (doctrine-by-analogy
+  repair), never generatively. The directive names generative (pre-action) as the
+  safer default for non-trivial work; the 3× recurrence of one root is the evidence
+  that retrospective-only metacognition does not close the loop. The trigger for the
+  generative pass is the moment of *asserting a load-bearing fact* (a topology, a
+  mechanism, a label) from an inherited or contaminated artefact — run the check
+  there, before writing, not after the correction. The owner was effectively my
+  external generative-metacognition this session; the work is to internalise it.
+- **In a live multi-agent window, scan for convergence, not only collision.** The
+  existing concurrency lesson is purely defensive (re-ground, don't clobber — which
+  held this session: a failed edit, my identity in a row I hadn't written, an
+  invalidated read-state mid-handoff, all absorbed by re-grounding). But the
+  *generative* face showed up at handoff: the parallel Abyssal Flowing Beacon
+  workstream had produced exactly the artefact my deferred open question needed
+  (`graph-tool-output-schemas.plan.md`, "via the EEF projection pattern"). Reflex to
+  add: at handoff in a shared window, actively look for another agent answering your
+  open question or producing your dependency, and wire them together (here: Q-003 →
+  that plan). The window is generative, not only hazardous.
+
+## Session: 2026-06-02 — MCP output-schema audit/rewrite + graph projection plan (Abyssal Flowing Beacon, claude / Opus 4.8)
+
+- **SURPRISE / CORRECTION — "generator-first" is not the principle; projection is.**
+  Designing graph-tool output schemas, I reached for "the generator emits the Zod
+  schema" and called it generator-first / Cardinal-Rule-aligned. I was about to
+  hand-author a `z.object({...})` string in the codegen descriptor and emit it,
+  guarded by a runtime test. Owner named the defect: that *constructs* a parallel
+  Zod — it just **relocates** the hand-maintained parallel into the generator.
+  - **Expectation that failed**: I treated *location* (generator vs consumer) as
+    the thing that satisfies the doctrine. It isn't. The doctrine is **provenance +
+    drift-proofing**: the static data is the sole source of truth; the schema is a
+    deterministic, type-strict **projection** of it fed to a **single Zod call**,
+    `satisfies`-tied to `structuredContent`. A hand-authored schema (anywhere) can
+    drift and is caught only *after the fact* by a test (a once-cure); the
+    projection+`satisfies` makes drift a **compile error** (the structural cure the
+    metacognition directive's "structural, not doc-patch" edge demands).
+  - **Operational edge**: when a design claims to honour a data-as-source-of-truth
+    rule, ask "is the artefact PROJECTED from the data, or MIRRORED beside it?" Test
+    guards on a mirror are the tell. Same single-Zod-call pattern is the EEF
+    Decision-2 / D6 mechanism — and it is **not yet built there** (D5/D6 pending),
+    so the graph tools and EEF are co-defining ONE mechanism, not copying.
+- **Audit-then-grounded-rewrite arc worked well.** A 61-agent workflow audited the
+  stale output-schema plan (40 claims; stdio gone, counts wrong, gate on a deleted
+  file); I re-verified the top-stakes findings by hand before trusting, then rewrote
+  the plan decision-complete. The workflow's "S0 first" recommendation was *wrong*
+  under strict-required (I inverted it to populate-first via the `inputSchema`
+  precedent) — a reminder that workflow output is evidence to validate, not accept.
+- **`as const` is load-bearing for the EEF projection pattern** (`strand-lookup.ts:25`:
+  lose it and per-member precision collapses). The misconception/prior-knowledge
+  graph data is currently loose `data.json` — so "same pattern at codegen" has a real
+  precondition (emit the data as typed `as const`), with a scale concern for large
+  graphs. Whether the graph tools need finite-value precision (vs structural shape
+  only, since they're output-only) is the live simplification question.

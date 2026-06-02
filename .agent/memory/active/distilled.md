@@ -102,3 +102,18 @@ caught only by chance. Pairs with no-tombstones: the corrective reframe must be
 genuinely positive, not a negation of the removed thing (caught fixing a tombstone
 with a tombstone this session). Auto-memory mirror:
 `harvest-from-deleted-is-contamination-vector`.
+
+**A label cited from a contaminated/in-flux artefact may itself BE the
+contamination (2026-06-02, eef/graph threads).** When citing a label, section
+number, increment, status, or structural name from a document known to be
+contaminated or being rewritten, verify the *label's liveness* — not just that the
+row contains the words you want. Proliferating a retired label (here `Inc.3`,
+retired by ADR-173 yet cited as the migration owner) into another live plan spreads
+the contamination the estate exists to remove. This is the third face of the
+convenient-claim root in one session (surface fact grounded, load-bearing
+meta-fact assumed); the others were asserting a "bespoke" MCP-registration topology
+(graph tools are in fact universal tools) and over-specifying unsettled
+output-schema mechanics. Corollary: seeded reviewer/workflow consensus is
+amplification of your own premise, not corroboration — brief reviewers with
+verifiable facts and invite refutation, never the conclusion. Auto-memory mirror:
+`ground-convenient-claims` (2026-06-02 entries).

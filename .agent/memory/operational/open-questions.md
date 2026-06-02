@@ -57,3 +57,44 @@ fitness_content_role: drainable-buffer
 - **Owning artefact / discussion home**: none yet; relates to context-budget
   governance. Does not block any current cycle.
 - **Status**: open.
+
+## Q-003 — input/output schema strategy for MCP tools (+ the EEF coupling)
+
+- **Captured**: 2026-06-02 (Flamebright Charring Ember / `claude` / Opus 4.8 / `30dd5d`)
+- **Question**: how are MCP tool **input and output** schemas carried to the SDK
+  registration path, and what is the canonical mechanism? (Owner: "additional
+  information about input/output schemas is coming soon.")
+- **Owning artefact**:
+  [`sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md`](../../plans/sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md)
+  (general) and — the precise owner of the EEF-coupling sub-question —
+  [`sdk-and-mcp-enhancements/current/graph-tool-output-schemas.plan.md`](../../plans/sdk-and-mcp-enhancements/current/graph-tool-output-schemas.plan.md)
+  ("Graph-tool output schemas via the EEF projection pattern", DESIGN), both
+  authored/refreshed 2026-06-02 by the Abyssal Flowing Beacon workstream (audit:
+  `.agent/reports/output-schema-mcp-plan-audit-2026-06-02.md`). Owner resolved the
+  S0 universal-tools seam there: apply the required `outputSchema` per tool type,
+  **graph first**, promoting to root `UniversalToolListEntry` last. This entry does
+  **not** duplicate those plans; it records the EEF coupling so it is not lost.
+- **EEF coupling (this session's finding to hand to the owning plan)**: the EEF
+  MCP tool is a *graph universal tool* (same family as `get-misconception-graph`/
+  `get-prior-knowledge-graph`, which return `structuredContent` but carry **no**
+  `outputSchema` today). Carrying `outputSchema` through the universal-tools path
+  is net-new and touches a specific surface set — `AggregatedToolName`,
+  `AGGREGATED_TOOL_DEFS`/`AggregatedToolDefShape`, `UniversalToolListEntry`,
+  `listUniversalTools`, and the `handlers.ts` config (all carry `inputSchema`
+  only). A four-architecture-reviewer pass flagged a **three-step asymmetric-drop**
+  failure mode (a silent `outputSchema` drop leaves graph tools unvalidated while
+  existing no-outputSchema tools pass, uncaught by current tests). The EEF plan
+  (D3/D6) defers these mechanics to this question's resolution.
+- **Update (2026-06-02, Abyssal Flowing Beacon / `762085`)**: the output-schemas
+  plan was audited + rewritten decision-complete, and the owner **resolved S0
+  ownership** (that plan owns the seam) and the **sourcing doctrine**: schemas are
+  a deterministic type-strict **projection** of the static data fed to a **single
+  Zod call** (`satisfies`-tied), never hand-constructed — same pattern as EEF,
+  emitted at codegen for the graph tools. The graph slice and its five sub-questions
+  (the `as const` precondition + scale, the output-only structural simplification,
+  where the one shared mechanism lives, 2-vs-3 graph scope, codegen emission shape)
+  are owned by the new
+  [`graph-tool-output-schemas.plan.md`](../../plans/sdk-and-mcp-enhancements/current/graph-tool-output-schemas.plan.md)
+  (status DESIGN; co-design with EEF D4–D6). EEF D5/D6's single-Zod-call mechanism
+  is pending, so the two are co-defining ONE mechanism.
+- **Status**: open; owned by the output-schemas plan + the graph projection plan.

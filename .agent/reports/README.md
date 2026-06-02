@@ -22,6 +22,10 @@ research notes or investigation logs.
   — cross-boundary synthesis of the official Oak ontology's implications for
   MCP orientation, direct ontology resources, search projections, and service
   governance
+- [output-schema-mcp-plan-audit-2026-06-02.md](./output-schema-mcp-plan-audit-2026-06-02.md)
+  — 61-agent audit of the `output-schemas-for-mcp-tools` plan against live code:
+  claim ledger, drift (stdio removed, 34→35 / 10→11 tools, broken Phase-3 gate),
+  EEF relationship, and the corrected S0/W1/W2 decomposition
 - [oak-openapi-bug-report-2026-03-07.md](./oak-openapi-bug-report-2026-03-07.md)
   — existing standalone report
 - [claude-code-compaction-thinking-block-bug-2026-05-28.md](./claude-code-compaction-thinking-block-bug-2026-05-28.md)

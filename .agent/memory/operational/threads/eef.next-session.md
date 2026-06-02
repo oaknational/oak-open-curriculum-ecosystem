@@ -1,5 +1,134 @@
 # Next-Session Record — `eef` thread
 
+> **MCP OUTPUT-SCHEMA PLAN AUDITED + REWRITTEN; GRAPH-TOOL OUTPUT-SCHEMA
+> PROJECTION PLAN CREATED; S0 OWNERSHIP RESOLVED (2026-06-02, Abyssal Flowing
+> Beacon / `762085`; claude / Opus 4.8; owner-directed; doc-only, no commit, no
+> gates).** The output-schema workstream the sibling banner below flagged as
+> "separate, NOT mine" — this is it.
+>
+> **Outputs (all uncommitted on `feat/graph-tooling-tidyup`):**
+>
+> + **Audit** `.agent/reports/output-schema-mcp-plan-audit-2026-06-02.md` (61-agent
+>   workflow; 40 claims verified, top-stakes re-verified by hand). Found
+>   `output-schemas-for-mcp-tools.plan.md` materially stale: stdio gone; 34→35
+>   tools / 10→11 aggregated; Phase-3 gate on `projections.ts` deleted in PR #76.
+> + **Rewrote** `output-schemas-for-mcp-tools.plan.md` decision-complete:
+>   object-rooted **required** `outputSchema`; generated (codegen-composed) vs
+>   aggregated (hand-authored) split; the S0 universal-tools seam; one open
+>   decision. Then **owner resolved S0**: this plan owns it; apply the required
+>   field **per tool type, graph first**; promote to root `UniversalToolListEntry`
+>   last. `current/README.md` row refreshed.
+> + **Created** `sdk-and-mcp-enhancements/current/graph-tool-output-schemas.plan.md`
+>   (status DESIGN, not executable). Captures the owner's **projection** doctrine:
+>   schemas are NOT hand-constructed Zod; they are a deterministic, type-strict
+>   projection of the static data fed to a **single Zod call** (`satisfies`-tied),
+>   the SAME pattern as EEF (Decision 2 / D6), emitted at **codegen**. Five open
+>   questions (see **Q-003**) + co-design with EEF D4–D6.
+>
+> **Metacognition correction (mid-design):** I first designed "generator emits a
+> hand-authored Zod string" and called it generator-first — owner named it as
+> *constructing* a parallel Zod. Insight: **location ≠ principle**; a test-guarded
+> hand-authored schema is a once-cure that can drift, the projection+`satisfies`
+> tie is the structural cure (drift = compile error). Captured in napkin +
+> experience this narrow handoff.
+>
+> **Key integration fact:** EEF D5/D6 (the single-Zod-call mechanism) are pending
+> — so the graph tools and EEF are **co-defining one shared mechanism**, not
+> copying. EEF D6 names the identical S0 seam this plan owns. The `as const`
+> precondition (the typed projection needs it; graph data is currently loose
+> `data.json`) and the output-only simplification are the live open questions.
+>
+> **Next safe step:** do NOT implement; the graph slice is paused for owner review
+> of `graph-tool-output-schemas.plan.md` and must be coordinated with the EEF
+> thread (one mechanism, one seam) per the owner mandate that graph-estate +
+> graph-enhancement + EEF be aligned as ONE unit.
+>
+> **Gate:** doc-only; markdownlint green on touched files; full `pnpm check` NOT
+> run (owner direction). Active-claims: none for my identity.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Abyssal Flowing Beacon` | `claude` | `Opus 4.8` | `762085` | `mcp-output-schema-audit-rewrite-and-graph-projection-plan` | 2026-06-02 | 2026-06-02 |
+>
+> ---
+>
+> **EEF/ADR/GRAPH-ESTATE PLAN REVIEW + REFINEMENT (deep, multi-workflow) — 3×
+> CONVENIENT-CLAIM CATCHES, ALL UNCOMMITTED (2026-06-02, Flamebright Charring
+> Ember / `30dd5d`; claude / Opus 4.8; owner-directed; no commit).** Reflect-and-
+> review session that grew into grounded plan/ADR refinement across two threads.
+> Doc-only; everything below is uncommitted working-tree on `feat/graph-tooling-tidyup`.
+>
+> **My session's outputs (the contamination-scan targets):**
+>
+> + **ADR-157 corrected** — dated 2026-06-01 amendment supersedes the retired
+>   EvidenceCorpus/five-increment model (cites ADR-173 only, no plan-path; tense
+>   fixed after docs-adr-expert caught a present-tense overclaim of the unshipped
+>   projection); namespace table de-noised (dropped `eef-recommend-*` + the
+>   forbidden `oak-misconceptions-eef-recommend-for-thread` compound example, then
+>   removed the empty compound row entirely; "EEF recommendations" → "EEF strand
+>   evidence").
+> + **`eef-graph-tool-completion.plan.md`** — (C, corrected) the EEF tool is a
+>   **graph universal tool** registered through the universal-tools path, NOT a
+>   bespoke bypass (topology validated by 4 architecture reviewers + grounded in
+>   `AggregatedToolName` containing the live graph tools; output-schema *mechanics*
+>   deferred — see OPEN below). (A) D4 acceptance: string-typed
+>   `GraphView`/`SubgraphResult`/`SubgraphError` are deleted + re-defined carrying
+>   `TNodeId`, never extended. (B) the "red-tree window D2–D6" framing replaced with
+>   green-at-each-boundary (D2 landed green; fixed in 3 places incl. the D2 todo).
+>   (resource) the interpretation resource is **agent guidance** — end goals,
+>   how-to, positive/negative examples, tagged agent-side per `eef-corpus-grounding`;
+>   guides, cannot constrain. (D7) pinned the **live** signal tools
+>   `get-misconception-graph`/`get-prior-knowledge-graph` (not "for example").
+> + **Created `eef/future/eef-revalidate-on-new-graph-tools.plan.md`** (seed) —
+>   re-validate the EEF value path against the new graph-corpus-sdk replacements
+>   once they land.
+> + **Memory** `ground-convenient-claims` sharpened twice (seeded-consensus;
+>   label-contamination).
+>
+> **Reviews (3 Sonnet fan-out workflows, critically assessed — several findings
+> rejected as over-escalations/false-positives):** holistic 6-lens plan review;
+> D3 4-lens review; 4-architecture-reviewer review of my changes (barney/betty/
+> fred/wilma — 0 refutes on the edits; the C topology survived "try hardest to
+> refute"). Rejected e.g. a "dangling related-strand edge" runtime test (the
+> compile-time guard already exists) and fred's plan-citation flag (matches the
+> ADR-173 house convention).
+>
+> **OPEN — input/output schemas:** owned by
+> `sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md` (ACTIVE;
+> modified + audited in the working tree this session by a SEPARATE workstream —
+> NOT mine: report `.agent/reports/output-schema-mcp-plan-audit-2026-06-02.md`,
+> `.agent/state/output-schema-plan-audit.workflow.js`). EEF's output-schema
+> mechanics — the universal-tools surface set (`AggregatedToolName`,
+> `AGGREGATED_TOOL_DEFS`/`AggregatedToolDefShape`, `UniversalToolListEntry`,
+> `listUniversalTools`, `handlers.ts` config) + Wilma's three-step asymmetric-drop
+> guard — are deferred to that plan. See open-questions **Q-003**.
+>
+> **3× convenient-claim catches (owner):** asserted "bespoke" MCP topology (wrong —
+> graph tools ARE universal tools); over-specified unsettled output-schema
+> mechanics (pulled back); **proliferated retired `Inc.3`** into graph-estate
+> (removed, reframed to ADR-173 consumer-readiness). One root: grounded the surface
+> fact, not the load-bearing meta-fact. Cure sharpened in memory + `distilled.md`.
+>
+> **OWNER MANDATE (near-future session) — two standing items:**
+>
+> 1. **Deeply scan ALL this session's outputs for contamination** (the 3× catches
+>    mean more may have slipped).
+> 2. **Graph estate consolidation + graph enhancement + EEF work can no longer
+>    exist independently — a near-future session must clean and align ALL
+>    graph-related work as ONE unit.**
+>
+> **Gate:** doc-only; markdownlint green on every touched file; full `pnpm check`
+> NOT run (doc-only, uncommitted, tree carries the separate output-schema
+> workstream + `.vscode`/sdk-README edits not authored here, nothing committed) —
+> the contamination-scan session must run the full gate before any commit.
+> Active-claims: none for my identity.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Flamebright Charring Ember` | `claude` | `Opus 4.8` | `30dd5d` | `eef-adr-graph-plan-review-and-refinement` | 2026-06-02 | 2026-06-02 |
+>
+> ---
+>
 > **GRAPH-ESTATE CONSOLIDATION PLAN — POINTS 1/2/3 ADDRESSED + ADR-173
 > DECONTAMINATED + t1 RATIFIED & FLIPPED (2026-06-01, Glittering Soaring Meteor /
 > `9d9b06`; claude / Opus 4.8; owner-directed).** Owner asked to reflect on
