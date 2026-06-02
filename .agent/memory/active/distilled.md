@@ -17,6 +17,23 @@ fitness_rationale: >-
   substance rather than trimming the lesson.
 ---
 
+## 2026-06-02 — contamination scans: perimeter from git, probes for recall, author-applied standards
+
+Three sharpened edges from the mandate-1 scan (Stellar Waning Planet). (1) A
+scan brief is inside its own scan perimeter and structurally cannot enumerate
+itself — re-derive the perimeter from git at grounding; the brief is the first
+artefact scanned (this caught a mis-dated commit and the excluded handoff
+commit). (2) Withhold one already-known finding from reviewer briefs as a
+known-answer probe: the fleet missing it (which happened) converts a known
+answer into a recall measurement — zero-finding groups then carry calibrated,
+not absolute, confidence. (3) Verifier fleets apply inconsistent standards to
+identical defect classes (one upheld a heading/body count contradiction;
+another refuted the same class as "labelling imprecision") — author-level
+synthesis is where one standard gets applied; validate refutations with the
+same rigour as findings. Extends independent-eyes-catch-what-self-review-cannot.
+Method ledger: `.agent/reports/mandate-1-contamination-scan-2026-06-02.md`.
+Graduation candidate: contamination-scan method pattern (pending-graduations).
+
 ## 2026-06-01 — one law, three faces (EEF thread synthesis)
 
 Three disciplines are one principle seen from different sides:

@@ -479,7 +479,7 @@ pnpm benchmark:lessons -s SUBJECT -p PHASE -c CATEGORY --review
 5. Fill COMMIT table with A, B, C
 6. Comparison table has identical columns
 
-**Why wrong**: No independent judgment formed. Just justified what search returned.
+**Why wrong**: No independent judgement formed. Just justified what search returned.
 
 **✅ CORRECT (Independent Discovery)**:
 
@@ -719,7 +719,7 @@ pnpm benchmark:lessons --verbose     # Stage 3: Measure against search
 ### From geography (Session 15-16)
 
 - **Search validation is not discovery**: Running benchmark first and justifying results is not independent discovery.
-- **COMMIT before benchmark**: Must form independent judgment before seeing search results.
+- **COMMIT before benchmark**: Must form independent judgement before seeing search results.
 - **"actions" ≠ "effects"**: Query asking for "effects" should not expect slugs about "actions to tackle".
 - **EVERY query requires FRESH MCP analysis**: Even when two queries have "similar semantic intent", you MUST do fresh bulk exploration AND fresh MCP summaries for EACH query.
 

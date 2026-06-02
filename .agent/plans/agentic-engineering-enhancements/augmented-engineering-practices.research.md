@@ -420,7 +420,7 @@ The best teams standardise:
 | Change failure rate | catches “fast but fragile” dynamics |
 | Security findings trend | ensures risk doesn’t silently rise |
 
-A recurring industry finding is that AI code can be functional but weak on architectural judgment, increasing debt risk.  
+A recurring industry finding is that AI code can be functional but weak on architectural judgement, increasing debt risk.  
 See: [infoq.com/news/2025/11/ai-code-technical-debt](https://www.infoq.com/news/2025/11/ai-code-technical-debt/)
 
 ---
@@ -432,7 +432,7 @@ AI increases the need for:
 - strong code review skills
 - threat modelling basics
 - test design capability
-- system thinking and architecture judgment
+- system thinking and architecture judgement
 
 Because reviewing is a different cognitive task than authoring, teams often need to explicitly train it.  
 See: [smcmaster.com/blog/ai-coding-is-creating-a-code-review-crisis](https://www.smcmaster.com/blog/ai-coding-is-creating-a-code-review-crisis)

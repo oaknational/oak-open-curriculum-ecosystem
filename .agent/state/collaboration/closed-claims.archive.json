@@ -5392,6 +5392,101 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "b7dc9256-4755-457a-8407-d431f0ba917e",
+      "agent_id": {
+        "agent_name": "Stellar Waning Planet",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "64c383",
+        "id": "30032123-1ee6-5dc8-b430-2bc980472c6c"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-02T13:31:28Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit mandate-1 contamination scan outputs (nine fixes + report + continuity).",
+      "archived_at": "2026-06-02",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-02T13:34:12Z",
+        "closed_by": {
+          "agent_name": "Stellar Waning Planet",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "64c383",
+          "id": "30032123-1ee6-5dc8-b430-2bc980472c6c"
+        },
+        "summary": "commit 37020386: docs(graph): mandate-1 contamination scan — nine fixes, report, continuity",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "b7dc9256-4755-457a-8407-d431f0ba917e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "ba63d002-47c9-4103-86d7-9e9af4504dcc",
+      "agent_id": {
+        "agent_name": "Stellar Waning Planet",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "64c383",
+        "id": "30032123-1ee6-5dc8-b430-2bc980472c6c"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sdk-and-mcp-enhancements/current/*.md",
+            ".agent/plans/sector-engagement/eef/**/*.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/*.md",
+            ".agent/memory/operational/threads/eef.next-session.md",
+            ".agent/memory/operational/threads/connecting-oak-resources.next-session.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/open-questions.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/reports/*.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-02T13:02:41Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Mandate-1 deep contamination scan: scan-ledger report + fixes to graph/EEF plan estate, thread records, continuity buffers; napkin append at close (overlap noted with Squally's napkin claim — append-only)",
+      "archived_at": "2026-06-02",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-02T13:35:47Z",
+        "closed_by": {
+          "agent_name": "Stellar Waning Planet",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "64c383",
+          "id": "30032123-1ee6-5dc8-b430-2bc980472c6c"
+        },
+        "summary": "Mandate-1 scan complete: ledger at .agent/reports/mandate-1-contamination-scan-2026-06-02.md, nine fixes committed 37020386 and pushed gate-green",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "ba63d002-47c9-4103-86d7-9e9af4504dcc",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

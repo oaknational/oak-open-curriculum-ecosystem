@@ -66,7 +66,7 @@ not backfill. Critically re-verify findings against real code before acting
 
 ## NEXT STEP 2 — increment F (the value tool) — DO NOT delegate the selection boundary
 
-F is the high-judgment increment. Keep the selection-vs-ranking boundary in the
+F is the high-judgement increment. Keep the selection-vs-ranking boundary in the
 main thread (gate-1a = SELECTION + projection only; the scoring engine and
 recommend/explain/compare tools stay gate-1b).
 

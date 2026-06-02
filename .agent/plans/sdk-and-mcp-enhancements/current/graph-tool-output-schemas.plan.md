@@ -1,6 +1,6 @@
 ---
 name: "Graph-tool output schemas via the EEF projection pattern"
-overview: "Give the misconception and prior-knowledge graph MCP tools a required, object-rooted outputSchema produced by the SAME pattern the EEF tool uses — static data as sole source of truth, a deterministic type-strict projection of it, and a SINGLE Zod call tied by `satisfies` to the structuredContent type. The shared mechanism is co-designed with the EEF plan's D4–D6 and lands its FIRST instance in the EEF tool alone (EEF D6); the application to the existing graph tools is part of their substrate migration (graph-estate-consolidation Judgment call 4 — per tool: data/type re-emission + rewrite + outputSchema, one replacement unit), into whose unified plan this design content folds when that plan is authored."
+overview: "Give the misconception and prior-knowledge graph MCP tools a required, object-rooted outputSchema produced by the SAME pattern the EEF tool uses — static data as sole source of truth, a deterministic type-strict projection of it, and a SINGLE Zod call tied by `satisfies` to the structuredContent type. The shared mechanism is co-designed with the EEF plan's D4–D6 and lands its FIRST instance in the EEF tool alone (EEF D6); the application to the existing graph tools is part of their substrate migration (graph-estate-consolidation Judgement call 4 — per tool: data/type re-emission + rewrite + outputSchema, one replacement unit), into whose unified plan this design content folds when that plan is authored."
 status: "DESIGN — pending owner review and EEF co-design; NOT yet executable"
 source_research:
   - "../../../reports/output-schema-mcp-plan-audit-2026-06-02.md"
@@ -18,7 +18,7 @@ todos:
 # Graph-tool output schemas via the EEF projection pattern
 
 **Last Updated**: 2026-06-02
-**Status**: 🟠 DESIGN — mechanism input to the unified substrate-migration plan (graph-estate-consolidation Judgment call 4); the shared mechanism is co-designed with EEF D4–D6 and its first instance lands in the EEF tool alone (EEF D6). The existing graph tools are untouched until their migration. Q2 and Q4 below are owner-resolved (2026-06-02); Q1/Q3/Q5 are resolved in the co-design and the migration plan.
+**Status**: 🟠 DESIGN — mechanism input to the unified substrate-migration plan (graph-estate-consolidation Judgement call 4); the shared mechanism is co-designed with EEF D4–D6 and its first instance lands in the EEF tool alone (EEF D6). The existing graph tools are untouched until their migration. Q2 and Q4 below are owner-resolved (2026-06-02); Q1/Q3/Q5 are resolved in the co-design and the migration plan.
 
 > **Supersedes** the hand-authored-Zod approach in the scratch plan and in
 > `output-schemas-for-mcp-tools.plan.md` §W2 for the graph tools. Per owner

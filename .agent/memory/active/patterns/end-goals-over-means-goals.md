@@ -26,7 +26,7 @@ contribute to the chain.
 
 Grinding through a well-reviewed, internally-consistent plan
 without questioning whether each item serves the actual goal.
-Consensus and reviewer validation do not substitute for judgment
+Consensus and reviewer validation do not substitute for judgement
 about whether an item should exist at all.
 
 ## Test

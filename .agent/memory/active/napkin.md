@@ -411,7 +411,75 @@ Squally Snorkelling Sail, codex / GPT-5.
   imprecision a reasonable executor reads past". Author-level synthesis is where
   the standard gets applied consistently — I overrode the second refutation and
   fixed both. Validate refutations with the same rigour as findings.
-- **Routed, not done**: estate-wide US "judgment" spelling (83 hits / 57 files;
-  immutable comms events, generated data.json, oak-search-cli identifiers,
-  archives — per-class dispositions in the scan report; renaming only my
-  perimeter would have forked the live JC3/JC4 label). Owner direction wanted.
+- **Routed, then resolved in-session**: estate-wide US-spelled instances of
+  "judgement" (83 hits / 57 files; per-class dispositions in the scan report;
+  renaming only my perimeter would have forked the live JC3/JC4 label). The
+  owner directed British "judgement" estate-wide the same day; resolution
+  recorded in the scan report §Spelling signal and a follow-up napkin entry
+  below.
+
+## Session: 2026-06-02 — judgment→judgement sweep, missed the routed signal (Ashen Igniting Hearth)
+
+- **A mechanical estate-wide sweep ran over a per-class disposition that already
+  existed.** Owner asked for `judgment`→`judgement` (British target) repo-wide
+  incl. dotfiles. I did a flat `git grep | perl -i` sweep over all 58 tracked
+  matches. The mandate-1 scan report §"Routed signal" (lines 97–107) had ALREADY
+  classified this exact task: prose=fix, identifiers=refactor-with-tests-after-
+  external-shape-check, generated=generator/upstream-check, immutable+archives=
+  leave-as-record. My flat sweep rewrote immutable comms audit events, edited
+  generated `data.json` directly (not the generator), and renamed oak-search-cli
+  ground-truth identifiers with no external-shape check or tests. Only the 16
+  prose/source files were cleanly correct.
+- **Reflex: at start-right, read the LAST napkin entry as live routing, not just
+  history.** The napkin's final line literally flagged this task as "Routed, not
+  done — owner direction wanted" with a pointer to the per-class report. Skipping
+  that read turned an owner go-ahead into an over-reach. Owner-direction-to-do-X
+  does not erase a prior agent's per-class plan for X; reconcile the two first.
+- **`rg --hidden` was pathologically slow on this estate (0 output after 2+ min,
+  crawling hidden/ignored trees); `git grep` was sub-second.** For tracked-file
+  scope incl. dotfiles, `git grep` is the right tool — it already excludes `.git`
+  and gitignored output.
+
+## Session: 2026-06-02 — scan closeout + spelling-sweep scoping (Stellar Waning Planet / `64c383`, continued)
+
+- **Correction to the entry above (grounded against the diffs): NO oak-search-cli
+  identifiers were renamed.** Every change in the ground-truth `types.ts`/test
+  files was a TSDoc comment, `//` comment, or test-description string — zero
+  identifier lines in any hunk. The sweep's handoff over-claimed its own damage;
+  a refutation pass on a peer's self-report is as necessary as on their findings
+  (verify-dont-trust cuts both ways — including self-incriminating claims).
+- **Mechanical sweeps cannot distinguish mention from use.** The sweep flipped my
+  own committed sentences that NAMED the US form ("estate-wide US 'judgment'
+  spelling"), making them call "judgement" the US spelling — false statements
+  manufactured from true ones. Cure applied: rephrase mentions to be
+  sweep-proof ("US-spelled instances of 'judgement'") rather than carrying the
+  US token. When writing about a spelling/token being removed, phrase the
+  mention so a future mechanical pass cannot falsify it.
+- **Set-level confirmation before reverting a peer's edits.** Under "revert any
+  incorrect changes" I reverted 28 record-class files per the standing per-class
+  dispositions; the owner then narrowed scope mid-action to "only what codegen
+  would overwrite — .agent/* can stay fixed". Nothing was lost (the inverse was
+  exact, preconditions checked: 2 files with pre-existing British instances got
+  hunk-precise treatment, 26 got verified byte-identical restores), but the
+  right move was stating the planned revert SET first — set-level confirmation
+  is one sentence; set-level surprise costs trust.
+- **The generated-data carve-out held, with the upstream cause identified**:
+  the owner confirmed the US spellings in the vocab `data.json` snapshots come
+  from auto-generated lesson-transcript captions upstream. Snapshot stays
+  faithful; the durable fix is in the source captions. Routed in the scan
+  report §Spelling signal.
+- **`never-use-git-to-remove-work` hook fired exactly as designed** (blocked
+  `git restore` on the revert attempt); the compliant filesystem-forward path
+  (precondition-checked inverse replace + Edit for the 2 mixed files) was
+  strictly safer — the precondition check caught what a blind restore-vs-inverse
+  equivalence assumption would have missed.
+- **Cursor sessions can run unregistered**: Ashen could not claim/broadcast
+  because `PRACTICE_AGENT_SESSION_ID_CURSOR` was absent from their shell — a
+  58-file sweep happened with no claim visible to peers. Environment gap, not
+  agent error; worth an owner look at the `.cursor` sessionStart hook on that
+  machine.
+- Operational minutiae: pnpm scripts flatten shell-constructed `$VAR` argument
+  lists into one quoted token — write repeatable `--file` flags literally;
+  commitlint warned `footer-leading-blank` on a body whose last paragraph
+  starts "Full ledger: …" (colon-prefixed line parsed as a footer token) —
+  cosmetic, but avoid colon-led openings in final body paragraphs.

@@ -254,7 +254,7 @@ question; cross-link rather than duplicate.
   override an owner-blessed plan choice is not fully legitimate here.
   The rule's §Carry-On vs Adopt failure mode applies when doctrine
   sharpens mid-execution — no doctrine sharpened here. Torrid's
-  architectural argument is a competing design judgment, not a
+  architectural argument is a competing design judgement, not a
   doctrine-sharpening event."* The cure landed per plan; this question
   surfaces the architectural argument for owner adjudication rather than
   self-authorising a deviation.

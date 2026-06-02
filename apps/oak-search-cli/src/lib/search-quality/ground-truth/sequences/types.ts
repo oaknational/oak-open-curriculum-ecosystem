@@ -58,7 +58,7 @@ export interface SequenceGroundTruth {
   readonly query: string;
 
   /**
-   * Expected relevance judgments for the top results.
+   * Expected relevance judgements for the top results.
    *
    * Maps sequence slugs to relevance scores (1-3).
    * Given the tiny index, may only have 1-2 expected results.

@@ -52,7 +52,7 @@ and one probe outcome complete the ledger.
 | `output-schemas-for-mcp-tools.plan.md:189` | Principle 2 "W2 (11 aggregated)" vs the plan's 4× explicit 8-tool W2 scope (refutation overridden: same class as the JC3 count fix) | B | "the 8 in-scope aggregated — the 3 graph tools' schemas land with their substrate migration" |
 | `graph-estate-consolidation.plan.md:81` | "D0 and D2 are landed" omits completed D1 | D | "D0, D1, and D2 are complete" |
 | `graph-estate-consolidation.plan.md:182` | meta-plan "(branch-scoped, never merged)" — the branch merged via PR #108 (`2462952a`) | D | "(branch-scoped navigation index; its branch merged via PR #108, retiring it)" |
-| `graph-estate-consolidation.plan.md:241` | Judgment call 3 heading "the 5" vs body/t4/disposition-map/sequence "four" — the fourth span the 2026-06-02 5-vs-4 fix missed | B | "the four `oak-misconceptions-*` feature plans" |
+| `graph-estate-consolidation.plan.md:241` | Judgement call 3 heading "the 5" vs body/t4/disposition-map/sequence "four" — the fourth span the 2026-06-02 5-vs-4 fix missed | B | "the four `oak-misconceptions-*` feature plans" |
 | `pending-graduations.md:86` | seam-taxonomy buffer entry "temporal seam (an intentional red-tree window)" — framing the EEF plan replaced with green-at-each-boundary in `9946ccf4` | C | re-grounded to the ratified atomic-green description |
 | `repo-continuity.md:377` | item-7 heading "to be taken up AFTER the EEF work" — superseded sequencing live in a heading whose own body carries the correction (falsified the banners' "removed everywhere it lived") | K | heading restated to the one-thread order |
 | `output-schema-plan-audit.workflow.js:34` | FILE_MAP "verified to exist" path names `oak-curriculum-sdk` for the generated tools dir; it is `oak-sdk-codegen` | D | path corrected |
@@ -94,17 +94,32 @@ blocking).
 - `open-questions.md` Q-001: withdrawn entry with explicit status +
   disposition; retired vocabulary in its heading is the record's key.
 
-### Routed signal (owner direction wanted)
+### Spelling signal — routed, then resolved in-session by the owner
 
-`Judgment call` / `judgment` is US spelling against the repo's British
-commitment — 83 occurrences across ~57 files spanning live prose,
-**immutable comms events**, **generated corpus `data.json`**,
-**product-code identifiers** (oak-search-cli ground-truth types), and
-archives. A partial in-perimeter rename would fork a cross-document
-label (JC3/JC4), so nothing was renamed in this scan. The complete cure
-is an estate-wide pass with per-class dispositions (prose: fix;
-identifiers: refactor with tests after external-shape check; generated:
-generator/upstream check; immutable + archives: leave as record).
+At scan time the word now standardised as "judgement" appeared in its
+US spelling at 83 occurrences across ~57 files, against the repo's
+British commitment. Nothing was renamed during the scan itself (a
+partial in-perimeter rename would have forked the cross-document
+JC3/JC4 label); the signal was routed with per-class dispositions.
+
+The owner then directed the British form estate-wide the same day,
+executed as a mechanical sweep by a parallel cursor session (Ashen
+Igniting Hearth / `46b2bc`) and scoped afterwards:
+
+- **Kept (owner direction: everything under `.agent/` and all live
+  prose stays fixed)**: plans, ADRs, thread records, memory surfaces,
+  archives, comms records, sidebars, oak-search-cli doc comments and
+  test-description strings (verified: no code identifier was involved —
+  the parallel handoff's "identifiers renamed" claim did not survive
+  grounding), and the cSpell dictionary.
+- **Carved out (the only reverts)**: the two generated vocab snapshots
+  `oak-sdk-codegen/src/generated/vocab/{misconception-graph,vocabulary-graph}/data.json`
+  — their strings are upstream curriculum content (caption-derived from
+  lesson transcripts, per the owner), hand-edits to generated files are
+  forbidden, and `pnpm sdk-codegen` would silently revert them.
+  **Upstream content defect noted**: the US spellings live in the
+  source captions; the durable fix is upstream in the Oak curriculum
+  content, from which the snapshots inherit at regeneration.
 
 ## Verdict
 

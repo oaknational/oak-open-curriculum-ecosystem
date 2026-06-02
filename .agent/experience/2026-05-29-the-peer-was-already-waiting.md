@@ -32,7 +32,7 @@ on the rule that already fires? — I worked through `new-rule-vs-pdr-clause`
 on my own and landed on "clause, not new file." Then I read the peer's brief,
 and the owner had already forced exactly that via the long-term-excellence
 lens. Not a relief of being rescued from a hard call — a quieter thing: the
-sense that the classifier, applied honestly, *isn't* a judgment call. The fork
+sense that the classifier, applied honestly, *isn't* a judgement call. The fork
 I'd treated as open was closed by its own logic. I'd been bracing to defend a
 preference and found there was nothing to defend.
 

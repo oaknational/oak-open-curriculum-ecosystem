@@ -91,7 +91,7 @@ frontmatter `todos` content blob). Hunt for:
 
 - A findings list, each with a disposition: correct-in-place / inline
   supersession-marker (preserve decision history) / leave-as-history /
-  surface-as-owner-judgment-call. Fix the clear-cut ones; surface judgment calls.
+  surface-as-owner-judgement-call. Fix the clear-cut ones; surface judgement calls.
 - After edits: a final `rg` sweep returns zero LIVE discarded-token current-truth
   in the EEF estate; each cross-cutting decision reads consistently across all its
   restatements; `pnpm markdownlint-check:root` and `pnpm format-check:root` green

@@ -363,7 +363,7 @@ pathways_available: { type: 'keyword' },
 **Detailed Implementation Guide**: See `.agent/prompts/semantic-search/semantic-search.prompt.md` for:
 
 - IR metrics explanation (MRR, NDCG@10, what they mean)
-- Ground truth creation (relevance judgment methodology)
+- Ground truth creation (relevance judgement methodology)
 - Metrics calculation code examples
 - E2E test suite implementation
 

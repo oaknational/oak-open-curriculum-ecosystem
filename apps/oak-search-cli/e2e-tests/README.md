@@ -4,7 +4,7 @@ End-to-end tests for the Oak Open Curriculum Semantic Search application.
 
 ## Test Types
 
-- **Search Quality Benchmarks** (`search-quality.e2e.test.ts`) - Measures MRR, NDCG@10, and other IR metrics against ground truth relevance judgments
+- **Search Quality Benchmarks** (`search-quality.e2e.test.ts`) - Measures MRR, NDCG@10, and other IR metrics against ground truth relevance judgements
 
 ## Running Tests
 

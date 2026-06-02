@@ -56,7 +56,7 @@ pnpm benchmark -s SUBJECT -p PHASE --review  # Detailed per-query output
 ## Cardinal Principles
 
 1. **The search might be RIGHT. The expected slugs might be WRONG.**
-2. **Form independent judgments BEFORE seeing search results or expected slugs.**
+2. **Form independent judgements BEFORE seeing search results or expected slugs.**
 3. **Use the three-way comparison: YOUR rankings vs SEARCH vs EXPECTED.**
 4. **Document evidence, not assumptions.**
 

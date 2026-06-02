@@ -58,7 +58,7 @@ export interface ThreadGroundTruth {
   readonly query: string;
 
   /**
-   * Expected relevance judgments for the top results.
+   * Expected relevance judgements for the top results.
    *
    * Maps thread slugs to relevance scores (1-3).
    * Should include 2-3 expected results for meaningful metrics.

@@ -35,12 +35,15 @@ surface.
   `graph-corpus-sdk` root-barrel TSDoc rewritten to present truth.
   Cross-document consistency of the ratified sequencing/ownership/counts
   verified across all four plans + both thread banners + this file.
-  **Routed signal**: estate-wide US "judgment" spelling (83 hits, 57
-  files, immutable/generated/identifier surfaces — owner direction
-  wanted; see the report). **Next: graph-estate t2+t3+t4 → t5+t7 →
-  scoped t8 in a fresh session**, then the JC4 unified
-  substrate-migration plan, then EEF D3. Full detail: `eef` thread
-  banner.
+  **Spelling signal resolved in-session**: the owner directed British
+  "judgement" estate-wide (executed as a mechanical sweep by a parallel
+  cursor session, then scoped); the two generated vocab `data.json`
+  snapshots are carved out — their strings are upstream caption-derived
+  curriculum content and `pnpm sdk-codegen` would revert hand-edits; the
+  upstream content defect is noted in the scan report §Spelling signal.
+  **Next: graph-estate t2+t3+t4 → t5+t7 → scoped t8 in a fresh
+  session**, then the JC4 unified substrate-migration plan, then EEF
+  D3. Full detail: `eef` thread banner.
 - **One-thread resequencing ratified + estate corrections — committed
   `e8fe16e0` and PUSHED, full pre-push gate green (2026-06-02, Silvered
   Lurking Mask / `bbb696`, claude / Opus 4.8, owner-directed)** — the owner
@@ -53,7 +56,7 @@ surface.
   data/type re-emission + rewrite + `outputSchema`; untouched before it);
   rest per type; required/root promotion last — recorded in
   `output-schemas-for-mcp-tools.plan.md` §Resolved Sequencing +
-  `graph-tool-output-schemas.plan.md` + graph-estate Judgment call 4. D7
+  `graph-tool-output-schemas.plan.md` + graph-estate Judgement call 4. D7
   proves value on the live bulk tools; scaling is the migration's. Corruption
   removed (stale D6 conditional, superseded sequencing, OPEN-DECISION refs,
   the pre-existing 5-vs-4 misconceptions contradiction, `Increment 3` residue
@@ -74,7 +77,7 @@ surface.
   increment supersession + namespace de-noise), a new seed
   `eef/future/eef-revalidate-on-new-graph-tools.plan.md`, and
   `graph-estate-consolidation.plan.md` (cross-thread migration relationship + new
-  **Judgment call 4**: ONE plan owns moving all existing graph tools to the new
+  **Judgement call 4**: ONE plan owns moving all existing graph tools to the new
   substrate). Three owner-caught convenient-claim slips (bespoke topology /
   over-specified output-schema mechanics / proliferated retired `Inc.3`) → cure
   sharpened in `distilled.md` + auto-memory. **TWO STANDING OWNER MANDATES for a
@@ -306,7 +309,7 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Silvered Lurking Mask / one-thread resequencing ratification + estate corrections / 2026-06-02 (prior: Flamebright Charring Ember, Abyssal Flowing Beacon, both 2026-06-02) |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Stellar Waning Planet / mandate-1 deep contamination scan / 2026-06-02 (prior: Silvered Lurking Mask, Flamebright Charring Ember, Abyssal Flowing Beacon, all 2026-06-02) |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | codex / GPT-5 / Umbral Whispering Silhouette / promotion-and-root-docs-author / 2026-06-01 |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 / Moonless Lurking Dusk / dedicated knowledge-curation pass / 2026-06-01 |
 
@@ -317,7 +320,7 @@ not the current session-priority lane. Reactivation is owner-directed.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `connecting-oak-resources` | Oak resource graph substrate for EEF | [record][connecting] | claude / Opus 4.8 / Silvered Lurking Mask / one-thread resequencing + estate corrections / 2026-06-02 (prior: Flamebright Charring Ember 2026-06-02) |
+| `connecting-oak-resources` | Oak resource graph substrate for EEF | [record][connecting] | claude / Opus 4.8 / Stellar Waning Planet / mandate-1 scan fixes to graph-estate plan / 2026-06-02 (prior: Silvered Lurking Mask, Flamebright Charring Ember, both 2026-06-02) |
 | `branch-fitness-and-push-cadence` | Small-PR, push-often, branch-fitness, PR/Sonar protocol substrate | [record][branch-fitness] | Pelagic Snorkelling Sextant / codex / GPT-5 / Cycle 1 substrate capture / 2026-05-24 |
 | `mcp-product-analytics` | MCP product analytics design and Path-to-GA Programme | [record][mcp-analytics] | Stellar Glowing Satellite / claude / claude-opus-4-7 / Programme landed + amendments / 2026-05-26 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night / claude-code / opus-4.7 / 2026-05-10 |
@@ -397,9 +400,10 @@ not the current session-priority lane. Reactivation is owner-directed.
    state the declared-only filter exclusions — `KS5`/`post_16`/`all_through`/
    `special`/`improving_attendance`/`teacher_retention` are not valid filter inputs).
 7. **Graph-estate-consolidation: t1 DONE + ratified; t2-t5/t7 execution pending —
-   executes FIRST under the one-thread ratification (precedes EEF D3+, preceded
-   only by the mandate-1 deep contamination scan)** (2026-06-01, Glittering
-   Soaring Meteor; resequenced 2026-06-02).
+   executes FIRST under the one-thread ratification (precedes EEF D3+; the
+   mandate-1 deep contamination scan that preceded it was executed 2026-06-02,
+   estate clean)** (2026-06-01, Glittering Soaring Meteor; resequenced
+   2026-06-02; scan complete 2026-06-02, Stellar Waning Planet).
    The contamination-remediation master plan at
    `connecting-oak-resources/knowledge-graph-integration/current/graph-estate-consolidation.plan.md`
    was flattened (four stratified "Inbound from …" sections → one verified
@@ -486,6 +490,18 @@ authority.
 - Shared memory/state files are always writable and commit-includable when dirty.
 
 ## Deep Consolidation Status
+
+**due — napkin in critical zone (2026-06-02, Stellar Waning Planet —
+mandate-1 scan closeout)**: `practice:fitness:strict-hard` reports
+`napkin.md` at 409 lines (hard 300) and 28,989 chars (critical 27,000) — the
+rotation signal the 2026-06-02 opening statement already routed to "the next
+dedicated curation pass". ADR-144 post-mortem recorded in the session: earlier
+zones fired and were routed; the limit fits the buffer role; two legitimate
+session appends (dependency refresh + scan) crossed critical. Not run at this
+closeout: owner directed a lightweight handoff (no commit during handoff, no
+`pnpm check`), and decontamination execution is the stated priority — the
+dedicated curation pass owns the rotation. Falsifiable: re-run
+`pnpm practice:fitness:strict-hard`.
 
 **session-completion closeout (2026-06-02, Squally Snorkelling Sail —
 dependency refresh)**: `partial slice landed — owner asked for

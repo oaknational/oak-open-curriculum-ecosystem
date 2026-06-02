@@ -68,7 +68,7 @@ describe('LESSON_GROUND_TRUTHS', () => {
   });
 
   it('all entries have expected relevance with 2-3 results', () => {
-    // Each ground truth must have relevance judgments for benchmarking
+    // Each ground truth must have relevance judgements for benchmarking
     for (const gt of LESSON_GROUND_TRUTHS) {
       const resultCount = typeSafeKeys(gt.expectedRelevance).length;
       expect(resultCount).toBeGreaterThanOrEqual(2);

@@ -248,7 +248,7 @@ settled at EEF D3 verification together with this plan.
 2. **The 3 existing graph tools** (`get-misconception-graph`,
    `get-prior-knowledge-graph`, `get-thread-progressions`) **receive their
    output schemas with their substrate migration**
-   (`graph-estate-consolidation.plan.md` Judgment call 4: per tool, the
+   (`graph-estate-consolidation.plan.md` Judgement call 4: per tool, the
    data/type re-emission, the tool rewrite, and its `outputSchema` land as one
    replacement unit). They are untouched before that migration — they work
    today, and the schema arrives when the tool is rebuilt, never before.
@@ -272,7 +272,7 @@ seam and with active-claim coordination before either side edits
 - **The 3 existing graph tools** (`get-thread-progressions`,
   `get-prior-knowledge-graph`, `get-misconception-graph`) are ordinary aggregated
   tools (`definitions.ts:117-128`); **their output schemas land with their
-  substrate migration** (`graph-estate-consolidation.plan.md` Judgment call 4 —
+  substrate migration** (`graph-estate-consolidation.plan.md` Judgement call 4 —
   per tool: data/type re-emission + tool rewrite + `outputSchema`, one
   replacement unit), not in W2. They are untouched before that migration.
 - **The new EEF graph tool** (flag-gated `OAK_CURRICULUM_MCP_EEF_ENABLED`, does

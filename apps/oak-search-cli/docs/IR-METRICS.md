@@ -201,7 +201,7 @@ These metrics have an inherent trade-off:
 
 ---
 
-## Creating Ground Truth (Relevance Judgments)
+## Creating Ground Truth (Relevance Judgements)
 
 Before measuring metrics, you must define what "relevant" means for each test query.
 

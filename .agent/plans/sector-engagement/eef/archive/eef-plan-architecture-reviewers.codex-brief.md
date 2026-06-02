@@ -222,8 +222,8 @@ After the four reviewer passes:
    - `must-fix before implementation`
    - `optional plan polish`
    - `incorrect reviewer recommendation`
-   - `owner judgment call`
-4. For any `owner judgment call`, state the decision needed in one sentence.
+   - `owner judgement call`
+4. For any `owner judgement call`, state the decision needed in one sentence.
 5. Do not implement fixes unless the owner explicitly widens the session.
 
 ## Acceptance
@@ -232,5 +232,5 @@ After the four reviewer passes:
 - All four architecture passes run.
 - Host synthesis names consolidated findings and disagreements.
 - Readiness verdict states whether implementation can continue, needs plan
-  repair, or needs owner judgment first.
+  repair, or needs owner judgement first.
 - No code gates are required unless the owner widens scope into edits.

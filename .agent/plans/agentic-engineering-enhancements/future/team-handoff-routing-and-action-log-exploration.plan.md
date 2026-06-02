@@ -28,7 +28,7 @@ a new action-log surface, or a combination.
 `jc-session-handoff` was designed around an individual contributor closing a
 session. In a team window, every agent running the full ritual creates
 redundant continuity edits, repeated identity-summary churn, duplicated
-consolidation-gate judgments, and extra comms/state residue for the controller
+consolidation-gate judgements, and extra comms/state residue for the controller
 to absorb.
 
 The real impact is not "less paperwork". The impact is preserving context,

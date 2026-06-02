@@ -193,7 +193,7 @@ whole-tree sweep `9317cdcd` ("docs: planning") rather than a dedicated WS-Z comm
   (knowledge-preservation screen passed). Owner-gated count 63 → 56.
 - **Review**: a six-dimension adversarial pre-commit review returned all CLEAN
   (index rows; clean removal + no pointers; knowledge-preservation; the #42-fold
-  judgment; repo-continuity; PDR-087/088 portability). Two repo-continuity findings
+  judgement; repo-continuity; PDR-087/088 portability). Two repo-continuity findings
   (premature "archived" assertion + a fragile plan path-link) fixed.
 - **Gates** green where they matter (markdownlint / portability / vocabulary /
   repo-validators / agent-tools type-check+lint+test). `fitness:strict-hard` RED on

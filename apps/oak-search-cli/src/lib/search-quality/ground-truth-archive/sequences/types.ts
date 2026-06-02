@@ -10,7 +10,7 @@
  */
 
 /**
- * A ground truth query for sequence search with expected relevance judgments.
+ * A ground truth query for sequence search with expected relevance judgements.
  */
 export interface SequenceGroundTruthQuery {
   /** The search query text */

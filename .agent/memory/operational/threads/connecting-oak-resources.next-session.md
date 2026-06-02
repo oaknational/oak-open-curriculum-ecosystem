@@ -1,5 +1,30 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
+## 2026-06-02 — Stellar Waning Planet / claude / Opus 4.8 / `64c383` — mandate-1 scan: graph-estate plan fixes (committed `37020386`, pushed)
+
+**Landed (commit `37020386`, pushed, full pre-push gate 103/103 green):** the
+mandate-1 deep contamination scan covered the four-commit session-output
+surface; complete ledger at
+[`mandate-1-contamination-scan-2026-06-02.md`](../../../reports/mandate-1-contamination-scan-2026-06-02.md).
+Three fixes landed in `graph-estate-consolidation.plan.md`: the JC3 heading
+"5"→four (the span the prior 5-vs-4 fix missed — caught again by independent
+eyes); the meta-plan parenthetical corrected to branch-merged truth (PR #108,
+merge `2462952a`); "D0 and D2"→"D0, D1, and D2 are complete". The
+`graph-corpus-sdk` root-barrel TSDoc was rewritten to present truth (prose
+only; exports untouched — D4/D5 own the surface design).
+
+**Next safe step:** execute this plan's **t2+t3+t4 → t5+t7 → scoped t8** in a
+fresh session (decontamination is the owner-confirmed priority), honouring the
+two assumptions-expert park-header conditions at the t4 move; then author the
+Jc4 unified substrate-migration plan from the clean estate. Active-claims:
+none mine.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Stellar Waning Planet` | `claude` | `Opus 4.8` | `64c383` | `mandate-1-scan-graph-estate-fixes` | 2026-06-02 | 2026-06-02 |
+
+---
+
 ## 2026-06-02 — Silvered Lurking Mask / claude / Opus 4.8 / `bbb696` — one-thread resequencing ratified + estate corrections (committed `e8fe16e0`, pushed)
 
 **Landed (commit `e8fe16e0`, pushed, full pre-push gate green):** the owner
@@ -9,7 +34,7 @@ precede EEF D3+ and all other graph work), preceded only by the mandate-1
 deep contamination scan. The prior "after the EEF work finishes" direction is
 superseded and removed everywhere it lived.
 
-**Judgment call 4 scope (owner-ratified):** per tool, the substrate migration
+**Judgement call 4 scope (owner-ratified):** per tool, the substrate migration
 is ONE replacement unit — data/type re-emission (generated data becomes its
 own type authority) + tool rewrite + that tool's projection-derived
 `outputSchema` land together. The existing tools are untouched before their
@@ -52,7 +77,7 @@ substrate.
   numbered increment; ownership is today fragmented (misconception has a surface
   plan; prerequisite/thread-progressions have none) and stands upstream of a
   single EEF re-validation gate (`eef/future/eef-revalidate-on-new-graph-tools.plan.md`).
-- New **Judgment call 4**: one all-tools substrate-migration plan (absorbs the
+- New **Judgement call 4**: one all-tools substrate-migration plan (absorbs the
   misconception substrate-migration; gives prerequisite/thread-progressions the
   home they currently lack; single upstream of EEF re-validation). Substrate-
   migration pulled OUT of the misconceptions-feature consolidation (Jc3 now covers

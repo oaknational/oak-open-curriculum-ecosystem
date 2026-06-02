@@ -192,7 +192,7 @@ where IDCG is DCG with perfectly ranked results
 
 ---
 
-## Creating Ground Truth (Relevance Judgments)
+## Creating Ground Truth (Relevance Judgements)
 
 Before measuring metrics, you must define what "relevant" means for each test query.
 
@@ -213,7 +213,7 @@ Before measuring metrics, you must define what "relevant" means for each test qu
 
 ```typescript
 /**
- * Ground truth relevance judgments for search quality evaluation.
+ * Ground truth relevance judgements for search quality evaluation.
  *
  * ⚠️ POPULATE THESE FROM DISCOVERY SCRIPT OUTPUT
  *

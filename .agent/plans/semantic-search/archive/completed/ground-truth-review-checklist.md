@@ -351,7 +351,7 @@ Previous sessions have repeatedly fallen into the "search validation" failure mo
 
 ### Rule 2: You must COMMIT to your rankings BEFORE seeing search results.
 
-**Session 15 (geography) proved this is critical**: Without explicit commitment before benchmark, agents repeatedly validate search results instead of doing independent discovery. The COMMIT step forces you to form an independent judgment first.
+**Session 15 (geography) proved this is critical**: Without explicit commitment before benchmark, agents repeatedly validate search results instead of doing independent discovery. The COMMIT step forces you to form an independent judgement first.
 
 **The Key Question is NOT**: "Do expected slugs appear in results?"  
 **The Key Question IS**: "What are the BEST slugs for this query, based on curriculum content?"
@@ -468,7 +468,7 @@ This failure mode has occurred repeatedly. Learn to recognise it.
 5. Fill COMMIT table with A, B, C
 6. Comparison table has identical columns
 
-**Why wrong**: No independent judgment formed. Just justified what search returned.
+**Why wrong**: No independent judgement formed. Just justified what search returned.
 
 ### ✅ CORRECT (Independent Discovery)
 
@@ -480,7 +480,7 @@ This failure mode has occurred repeatedly. Learn to recognise it.
 6. Three-way comparison shows differences
 7. Conclude: "X and Y are better than A and B because..."
 
-**Why correct**: Independent judgment formed first. Meaningful comparison made.
+**Why correct**: Independent judgement formed first. Meaningful comparison made.
 
 ---
 

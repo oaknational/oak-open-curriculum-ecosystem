@@ -37,12 +37,26 @@ substance that still needed a live queue home is preserved below. Processed
 source files were deleted after extraction so the repository does not carry
 pseudo-shards that hide the true buffer state.
 
+## 2026-06-02 capture — contamination-scan method pattern (Stellar Waning Planet)
+
+- **The contamination-scan method is a reusable pattern: token+concept
+  inventory → mechanical sweep classified by current-truth-vs-history →
+  refutation-briefed reviewer fan-out (verifiable facts, never conclusions) →
+  per-finding adversarial verification → author-level grounding of every
+  survivor AND every refutation, with one withheld known-answer probe as a
+  recall measurement.** Third+ worked instance on this estate (D0 ledger
+  sweeps, the 2026-06-02 estate corrections, the mandate-1 scan); the probe
+  and refutation-validation edges are new in the mandate-1 instance. Worked
+  ledger: `.agent/reports/mandate-1-contamination-scan-2026-06-02.md`;
+  distilled entry 2026-06-02.
+  `[captured: 2026-06-02 | source: mandate-1 scan session + distilled.md | target: pattern:.agent/memory/active/patterns/ OR skill amendment (consolidate-docs/curator-pass family) | trigger: next scan-shaped mandate or owner direction | size: M | status: pending]`
+
 ## 2026-06-02 capture — substrate-migration doctrine (Silvered Lurking Mask)
 
 - **Graph-tool substrate-migration doctrine: one replacement unit per tool, and
   a tool's schema arrives when the tool is built or rebuilt, never before.**
   Owner-ratified 2026-06-02 and recorded in
-  `graph-estate-consolidation.plan.md` (Judgment call 4) +
+  `graph-estate-consolidation.plan.md` (Judgement call 4) +
   `output-schemas-for-mcp-tools.plan.md` (§Resolved Sequencing): per migrated
   tool, the data/type re-emission (generated data becomes its own type
   authority), the tool rewrite onto `graph-corpus-sdk`, and that tool's
@@ -50,7 +64,7 @@ pseudo-shards that hide the true buffer state.
   untouched before their migration. Plans are ephemeral; if this doctrine is
   durable architecture it needs an ADR home (new ADR or ADR-173 amendment)
   when its owning plan exists.
-  `[captured: 2026-06-02 | source: owner direction in-session + the two plans above | target: adr:graph-substrate-migration-doctrine OR amendment:ADR-173 | trigger: authoring of the unified substrate-migration plan (graph-estate Judgment call 4) | size: M | status: pending]`
+  `[captured: 2026-06-02 | source: owner direction in-session + the two plans above | target: adr:graph-substrate-migration-doctrine OR amendment:ADR-173 | trigger: authoring of the unified substrate-migration plan (graph-estate Judgement call 4) | size: M | status: pending]`
 
 ## 2026-06-01 capture — curation-pass doctrine candidates (Moonless Lurking Dusk)
 
@@ -400,7 +414,7 @@ routes here or duplicate homes named in the curator ledger.
   size: S | status: owner-gated]`
   The reusable rule is to test the deployed registration path before calling a
   prompt/tool/resource live in production.
-- **Delegate by judgment load, not by available parallelism.**
+- **Delegate by judgement load, not by available parallelism.**
   `[captured: 2026-05-31 | source: distilled 2026-05-27 delegation entry |
   target: agent-collaboration-or-reviewer-delegation-doctrine |
   trigger: second boundary-sensitive delegated edit that plants a false claim,

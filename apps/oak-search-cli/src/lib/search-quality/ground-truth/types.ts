@@ -42,7 +42,7 @@ export type Phase = 'primary' | 'secondary';
 type RelevanceScore = 1 | 2 | 3;
 
 /**
- * Expected relevance judgments for search results.
+ * Expected relevance judgements for search results.
  *
  * Maps lesson slugs to their relevance scores (1-3).
  * Used by the benchmark system to calculate MRR, NDCG, Precision, Recall.
@@ -100,7 +100,7 @@ export interface LessonGroundTruth {
   readonly query: string;
 
   /**
-   * Expected relevance judgments for the top results.
+   * Expected relevance judgements for the top results.
    *
    * Maps lesson slugs to relevance scores (1-3).
    * Should include 2-3 expected results for meaningful metrics.
@@ -147,7 +147,7 @@ export interface CrossSubjectLessonGroundTruth {
   readonly query: string;
 
   /**
-   * Expected relevance judgments for the top results.
+   * Expected relevance judgements for the top results.
    *
    * Maps lesson slugs to relevance scores (1-3).
    * Should include 2-3 expected results for meaningful metrics.

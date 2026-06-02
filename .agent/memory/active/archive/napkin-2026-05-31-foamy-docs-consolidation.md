@@ -586,7 +586,7 @@ instances). Verdicts: [[curator-passes/2026-05-29-tempestuous-vaulting-falcon]].
 
 ### Right-sizing win
 
-+ Grounding before orchestrating collapsed the judgment-load. I was about to
++ Grounding before orchestrating collapsed the judgement-load. I was about to
   fan out a 6-agent pre-execution review workflow over the D0 signals. Once
   grounded: Lane B (PATH hotspot) is a documented-class SAFE per policy §S4036
   (agent-tooling + `git` + dev-workstation — exact match, no expert needed);

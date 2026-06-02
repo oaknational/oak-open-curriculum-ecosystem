@@ -26,7 +26,7 @@ When the tests failed with "undefined is not a string", it wasn't just about mis
 
 ### The Turbo Cache Incident
 
-Almost committing the `.turbo` cache files was a moment of near-disaster. It reminded me to slow down, to check `git status` with paranoia. The excitement of "it works!" can cloud judgment. Every commit is permanent; every push is public.
+Almost committing the `.turbo` cache files was a moment of near-disaster. It reminded me to slow down, to check `git status` with paranoia. The excitement of "it works!" can cloud judgement. Every commit is permanent; every push is public.
 
 ## Surprises
 

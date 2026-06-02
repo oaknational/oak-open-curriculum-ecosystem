@@ -30,15 +30,18 @@
 >   migration), S0/migration/re-validation ownership, 24+11=35 tool
 >   counts (code-grounded), and Q1–Q5 statuses read identically across
 >   all four plans, both thread-record top banners, and repo-continuity.
-> + **Routed signal awaiting owner direction**: estate-wide US "judgment"
->   spelling (83 hits, 57 files, spans immutable/generated/identifier
->   surfaces — per-class dispositions named in the report; nothing
->   renamed mid-scan to avoid forking the JC3/JC4 label).
+> + **Spelling signal resolved in-session**: the owner directed British
+>   "judgement" estate-wide (83 hits, 57 files; executed as a mechanical
+>   sweep by a parallel cursor session — Ashen Igniting Hearth — then
+>   scoped). The two generated vocab `data.json` snapshots are carved
+>   out: their strings are upstream caption-derived curriculum content
+>   and `pnpm sdk-codegen` would revert hand-edits. Upstream content
+>   defect noted in the scan report §Spelling signal.
 >
 > **NEXT SAFE STEP (fresh session, the graph-estate plan's own doctrine):
 > graph-estate t2+t3+t4 → t5+t7 as one ship-unit → scoped t8**, honouring
 > the two assumptions-expert park-header conditions at the t4 move. Then
-> the Judgment-call-4 unified substrate-migration plan, authored from this
+> the Judgement-call-4 unified substrate-migration plan, authored from this
 > clean estate. Then EEF D3 per repo-continuity's EEF Next Safe Steps
 > item 6.
 >
@@ -95,7 +98,7 @@
 > `graph-corpus-sdk/src/index.ts` root-barrel TSDoc (claims "re-exports each
 > sub-path module's public surface"; the code exports only the
 > `GraphView`+`Result` types; old corpus-adapter framing — D4/D5 surface).
-> Then graph-estate execution (fresh session), then the Judgment-call-4
+> Then graph-estate execution (fresh session), then the Judgement-call-4
 > unified substrate-migration plan (born from the clean estate), then EEF D3
 > per item 6 of repo-continuity's EEF Next Safe Steps. The EEF plan's D3/D4
 > PENDING reviewers fire against ratified D3/D4 outputs, which do not exist

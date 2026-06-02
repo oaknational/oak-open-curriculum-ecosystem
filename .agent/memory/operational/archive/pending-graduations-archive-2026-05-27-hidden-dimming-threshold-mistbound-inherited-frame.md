@@ -113,7 +113,7 @@ named blocker.
   this structurally at the linguistic layer — it is PDR-044's
   innate-immunity layer applied to the LINGUISTIC instantiation
   of the principle, not just the semantic.
-- The pattern is fractal — every "this is mechanical" judgment
+- The pattern is fractal — every "this is mechanical" judgement
   is potentially a "this is conceptual" layer I missed. My
   Layer-3 trim was itself the fourth recurrence: I stopped based
   on inherited self-trust about when to stop, rather than

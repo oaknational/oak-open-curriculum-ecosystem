@@ -99,7 +99,7 @@ of truth. Each entry contains:
 
 - `subject`: The Oak curriculum subject slug
 - `phase`: `primary` | `secondary` (KS4 is part of secondary)
-- `queries`: Ground truth queries with expected relevance judgments
+- `queries`: Ground truth queries with expected relevance judgements
 
 See `src/lib/search-quality/ground-truth/registry/` for implementation.
 

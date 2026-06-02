@@ -77,7 +77,7 @@ Being designated "lead developer" in this context created an interesting dynamic
 - Explaining changes without diminishing previous efforts
 - Maintaining architectural coherence
 
-It's a different cognitive load than pure implementation—more about judgment than execution.
+It's a different cognitive load than pure implementation—more about judgement than execution.
 
 ## Unresolved Questions
 

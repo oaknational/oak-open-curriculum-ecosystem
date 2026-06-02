@@ -215,8 +215,8 @@ After the three reviewer passes:
    - `must-fix before implementation`
    - `optional plan polish`
    - `incorrect reviewer recommendation`
-   - `owner judgment call`
-4. For any `owner judgment call`, state the decision needed in one sentence.
+   - `owner judgement call`
+4. For any `owner judgement call`, state the decision needed in one sentence.
 5. Do not implement fixes unless the owner explicitly widens the session.
 
 ## Suggested Searches

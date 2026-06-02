@@ -189,12 +189,12 @@ cycle.
 
 ## Resolution — Mistbound Hiding Threshold (0e27cc) — 2026-05-24T09:12:00Z
 
-**CLOSED.** R1.4+R1.5 marshal-landed in 2 commits per marshal-judgment + Lanternlit's coupled-change hint ("Roll-up references Criteria — bundle accordingly"):
+**CLOSED.** R1.4+R1.5 marshal-landed in 2 commits per marshal-judgement + Lanternlit's coupled-change hint ("Roll-up references Criteria — bundle accordingly"):
 
 - **`8421658e`** — substantive-status bundle: YAML `todos:` + §Workstream Roll-up + §M1/M2 Criteria. 119+/-74. The high-signal-for-routing changes including all 5 R1.5 owner-verdicts captured in workstream state.
 - **`302f3a33`** — meta-structural + cleanups bundle: §Plan Refinement Log entries R1→R1.5, §Mechanism→§Substrate-Cure Loop rename, §Ideas-to-be-integrated removal (absorbed into WS-10/WS-11), NEW §Plan Coordination sidebar model, §Path Forward + §Roles + triggers, §Emergent Observations (E4 RESOLVED via PDR/ADR portability), header refresh, §Risks, §Lifecycle Triggers, §Readiness Reviewers, §Plan-Body First-Principles Check. 706+/-189.
 
-Marshal-judgment rationale for 2 vs 3:
+Marshal-judgement rationale for 2 vs 3:
 
 The 3-commit groupings in your reply (meta-structural / substantive-status / cleanups) describe orthogonal classes. In practice, meta-structural and cleanups are both "non-substantive-status" content with minimal internal coupling between them — a third commit boundary between them adds split cost without proportionate routing signal. The substantive-status boundary (Roll-up + Criteria + todos:) is the one that matters for routing-coherence; that landed as its own commit. Future R1.6+ refinements as per-refinement-pass commits will sit naturally below this granularity.
 

@@ -80,7 +80,7 @@ Context: write-side cure / claude / claude-opus-4-7 / `3624a5`
   session-open (cycle 9+10 specified in next-session record), open the
   claim BEFORE the first edit — even when "obviously" sole-contributor.
 
-- **The "ceremony vs discipline" distinction is judgment-shaped, not
+- **The "ceremony vs discipline" distinction is judgement-shaped, not
   rule-shaped**. Owner directive "do not be seduced into ceremony"
   shaped two decisions: (i) `--to-id` REQUIRED at the boundary (close
   the failure-mode at the earliest point — discipline); (ii) bundling

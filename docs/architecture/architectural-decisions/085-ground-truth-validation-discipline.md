@@ -300,7 +300,7 @@ After programmatic validation passes, the agent MUST verify each query:
 
 | Check              | Description                  | Method                        |
 | ------------------ | ---------------------------- | ----------------------------- |
-| Query realism      | Would a teacher type this?   | Human judgment                |
+| Query realism      | Would a teacher type this?   | Human judgement               |
 | Relevance accuracy | Do scores match content?     | `get-lessons-summary` via MCP |
 | Completeness       | Any missed relevant lessons? | Search bulk data              |
 | Category accuracy  | Is the category correct?     | Compare to definitions        |
@@ -450,7 +450,7 @@ Programmatic validation confirms slugs exist but cannot verify:
 - Query is realistic (subjective)
 - Relevance scores are accurate (requires content understanding)
 - All relevant lessons are included (requires curriculum knowledge)
-- Category matches query characteristics (semantic judgment)
+- Category matches query characteristics (semantic judgement)
 
 The two-stage process combines:
 

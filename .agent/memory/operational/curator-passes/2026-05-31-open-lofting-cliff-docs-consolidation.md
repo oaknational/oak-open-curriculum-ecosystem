@@ -140,7 +140,7 @@ real item-level processing.
 | 2026-05-27 collaboration state source, not storage | `owner-gated` | Removed from active `distilled.md`; canonical `pending-graduations.md` now holds the state-as-source candidate for collaboration lifecycle research. |
 | 2026-05-27 supersession refresh continuity chain | `owner-gated` | Removed from active `distilled.md`; canonical `pending-graduations.md` now holds the supersession-continuity candidate. |
 | 2026-05-27 production reachability / deployed registration | `owner-gated` | Removed from active `distilled.md`; canonical `pending-graduations.md` now holds the deployed-registration candidate. |
-| 2026-05-27 delegate by judgment-load | `owner-gated` | Removed from active `distilled.md`; canonical `pending-graduations.md` now holds the judgment-load delegation candidate. |
+| 2026-05-27 delegate by judgement-load | `owner-gated` | Removed from active `distilled.md`; canonical `pending-graduations.md` now holds the judgement-load delegation candidate. |
 | 2026-05-22..25 `COMMIT_EDITMSG` single-writer | `duplicate` | Removed from active `distilled.md`; `commit-queue-multi-writer-cure.plan.md` carries Tranche C native intent-scoped commit message storage and names `.git/COMMIT_EDITMSG` as shared single-writer state. |
 | 2026-05-27 closeout verdicts / live acceptance evidence | `owner-gated` | Removed from active `distilled.md`; canonical `pending-graduations.md` now holds the truthful-closeout-language candidate. |
 

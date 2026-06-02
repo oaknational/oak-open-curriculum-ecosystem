@@ -20,7 +20,7 @@ This approach has problems:
 The original ground truth system (120 queries, 4 categories) suffered from:
 
 - **59% zero-hit rate** on natural-expression queries
-- **Subjective relevance judgments** — disagreement on what "should" match
+- **Subjective relevance judgements** — disagreement on what "should" match
 - **High maintenance burden** — 401 files, split architecture
 - **Unclear value signal** — were low scores due to bad queries or bad search?
 
@@ -58,7 +58,7 @@ For each subject-phase:
 | 2     | Related      | Lesson covers the topic but not directly |
 | 1     | Tangential   | Lesson mentions the concept peripherally |
 
-Scores are determined by examining lesson content (title, keywords, key learning points, transcript), not by subjective judgment.
+Scores are determined by examining lesson content (title, keywords, key learning points, transcript), not by subjective judgement.
 
 ## Consequences
 
@@ -153,7 +153,7 @@ The methodology itself was sound, but iterative query testing naturally converge
 
 Design queries based on assumed teacher behaviour, then determine expected results.
 
-**Rejected**: Led to 59% zero-hit rate on natural-expression queries. Subjective relevance judgments caused disagreement and maintenance burden.
+**Rejected**: Led to 59% zero-hit rate on natural-expression queries. Subjective relevance judgements caused disagreement and maintenance burden.
 
 ### Exhaustive Category Coverage
 

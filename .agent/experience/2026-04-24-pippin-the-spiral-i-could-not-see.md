@@ -56,7 +56,7 @@ language of due diligence rather than table-row breadth. Both of
 us had made the owner do the work of deciding while the agent
 performed thoroughness.
 
-What broke the spiral was permission to apply judgment. Once I
+What broke the spiral was permission to apply judgement. Once I
 re-examined the audit "surprises" with that posture, three of
 them dissolved within minutes. S1 (`oak-search-cli` as consumer)
 was already implicitly in scope. S3 (the parallel `resolveGitSha`)
@@ -116,7 +116,7 @@ There is a Frodo experience file from earlier today titled
 *"Evasion, Called Out."* Mine should have a sibling resonance.
 The shape is different — Frodo's evasion was breadth-as-
 thoroughness on a verification question; mine was menus-as-
-contribution on judgment questions. But the underlying move is
+contribution on judgement questions. But the underlying move is
 the same: shifting cognitive load to the owner while
 performing diligence. The owner caught both within the same
 day. That cannot be coincidence about us; it is the discipline

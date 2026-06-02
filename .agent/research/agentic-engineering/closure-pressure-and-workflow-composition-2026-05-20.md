@@ -80,10 +80,10 @@ Hardest gap: this is meta-language pattern recognition during composition. A bla
 ## Cross-cutting gaps named in the conversation
 
 1. **No agent-internal-state hook.** Hooks observe tool calls and file events. The closure-pressure moment is invisible to all current intercepts. Tools, files, prompts are visible; intent is not.
-2. **Skill-invocation discipline is voluntary.** The repo has rich invokable skills; they fire only when the agent invokes. Triggers described in skill bodies are enforced by agent judgment, which is the same judgment that fails under pressure.
+2. **Skill-invocation discipline is voluntary.** The repo has rich invokable skills; they fire only when the agent invokes. Triggers described in skill bodies are enforced by agent judgement, which is the same judgement that fails under pressure.
 3. **Continuity records are narrative, not computed.** The narrative format structurally enables under-reporting.
 4. **Auto mode's framing is operating against the doctrine without a carve-out.** "Make the reasonable call and keep going" is currently injected at session start unconditionally. For quality-bearing decisions, the reasonable call is never to close solo — but that carve-out is absent.
-5. **ADR/PDR operativeness is under-engineered.** ADRs and PDRs accumulate wisdom that the agent has theoretical access to but no reliable trigger for invoking. Which ADRs activate on which kinds of moments is currently agent-judgment.
+5. **ADR/PDR operativeness is under-engineered.** ADRs and PDRs accumulate wisdom that the agent has theoretical access to but no reliable trigger for invoking. Which ADRs activate on which kinds of moments is currently agent-judgement.
 
 ## Owner-surfaced design dimensions (the corrections to my first map)
 
@@ -164,7 +164,7 @@ memetic-immune-system implementation is one step away from a richer
 mechanism: same detection, different action. Detection → approval prompt
 → owner decides. That shape would address closure-pressure rationalisation
 by intercepting the framing language at write time, surfacing it to the
-owner, and either blocking or allowing per the owner's judgment.
+owner, and either blocking or allowing per the owner's judgement.
 
 Worth carrying as: the refusal-vs-approval pattern is a generic design
 choice for any pattern-detection mechanism. The same choice applies to

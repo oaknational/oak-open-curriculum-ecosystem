@@ -118,7 +118,7 @@ describe('calculateNDCG', () => {
     expect(ndcg).toBe(0);
   });
 
-  it('handles empty relevance judgments', () => {
+  it('handles empty relevance judgements', () => {
     const results = ['slug-a', 'slug-b'];
     const relevance: Record<string, number> = {};
 

@@ -247,7 +247,7 @@
 | Metric                         | Baseline | Target | Measurement Method                   |
 | ------------------------------ | -------- | ------ | ------------------------------------ |
 | **MRR (Mean Reciprocal Rank)** | 0.65     | 0.80   | Human-labeled test set (100 queries) |
-| **NDCG@10**                    | 0.70     | 0.85   | Relevance judgments                  |
+| **NDCG@10**                    | 0.70     | 0.85   | Relevance judgements                  |
 | **Zero-Hit Rate**              | 15%      | <5%    | Query analytics                      |
 | **Click-Through Rate**         | 30%      | >50%   | Usage tracking                       |
 
