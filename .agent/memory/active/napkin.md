@@ -369,3 +369,21 @@ t1 ratification, claim-verification), ran 3 reviewers, fixed ADR-173, flipped t1
   mechanical lock — match it to the real concurrency state, don't perform it by
   rote. (And the pre-commit gate then did its job: caught a peer's unformatted
   ADR-157, which I fixed with `format:root` and re-committed — never `--no-verify`.)
+
+## Session: 2026-06-02 — Dependency refresh from `pnpm -r outdated`
+
+Squally Snorkelling Sail, codex / GPT-5.
+
+- **Dependency-update wrinkle.** `pnpm update -r vitest ...` widened the touch
+  surface from the package(s) named in `pnpm -r outdated` to every workspace
+  manifest carrying the shared `vitest` range; open or broaden collaboration
+  claims after seeing the actual diff, not just the initial outdated table.
+  This checkout also had `node_modules` linked to the user pnpm store while pnpm
+  defaulted to the repo-local `.pnpm-store`; targeted updates needed
+  `--store-dir` set to the user-level pnpm store under escalation, then ordinary
+  build/type-check/lint gates were sufficient.
+- **Consolidation catch.** A clean outdated table is not the same as clean
+  planning truth: the old Clerk/MCP dependency-bump plan still advertised
+  already-landed versions as queued work. Session-completion consolidation is a
+  good backstop for dependency work because it checks whether the executable
+  plan estate still matches the manifest and lockfile.

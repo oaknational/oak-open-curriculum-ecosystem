@@ -26,9 +26,9 @@
     "@typescript-eslint/eslint-plugin": "^8.60.0",
     "@typescript-eslint/parser": "^8.60.0",
     "@typescript-eslint/utils": "^8.60.0",
-    "@vitest/eslint-plugin": "^1.6.18",
+    "@vitest/eslint-plugin": "^1.6.19",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-import-resolver-typescript": "^4.4.5",
     "eslint-plugin-import-x": "^4.16.2",
     "eslint-plugin-prettier": "^5.5.6",
     "eslint-plugin-react": "^7.37.5",
@@ -46,7 +46,7 @@
     "eslint": "^10.4.1",
     "tsup": "^8.5.1",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.7"
+    "vitest": "^4.1.8"
   },
   "scripts": {
     "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",

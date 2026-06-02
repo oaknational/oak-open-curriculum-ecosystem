@@ -110,7 +110,7 @@ Cross-axis index: [`.agent/plans/observability/high-level-observability-plan.md`
 ### `sdk-and-mcp-enhancements/`
 
 - [`active/mcp-app-extension-migration.plan.md`](../sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md) — MCP App widget rebuild (WS3 in progress, WS4 pending)
-- [`current/clerk-mcp-tools-and-ext-apps-bumps.plan.md`](../sdk-and-mcp-enhancements/current/clerk-mcp-tools-and-ext-apps-bumps.plan.md) — Clerk + MCP Apps version bumps (M3 dependency)
+- [`current/clerk-mcp-tools-and-ext-apps-bumps.plan.md`](../sdk-and-mcp-enhancements/current/clerk-mcp-tools-and-ext-apps-bumps.plan.md) — Clerk + MCP Apps version bumps complete; archive pending
 
 ### `compliance/`
 

@@ -50,7 +50,7 @@
     "globals": "^17.6.0",
     "ink-testing-library": "^4.0.0",
     "tsx": "^4.22.4",
-    "vitest": "^4.1.7"
+    "vitest": "^4.1.8"
   },
   "dependencies": {
     "ajv": "^8.20.0",

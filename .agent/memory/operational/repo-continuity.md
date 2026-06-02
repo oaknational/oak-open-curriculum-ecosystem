@@ -463,6 +463,24 @@ authority.
 
 ## Deep Consolidation Status
 
+**session-completion closeout (2026-06-02, Squally Snorkelling Sail —
+dependency refresh)**: `partial slice landed — owner asked for
+oak-session-handoff, oak-consolidate-docs, final napkin capture, and commit.
+Landed outcome: pnpm outdated refresh complete; final pnpm -r outdated exits
+0 with no output. Package manifests and pnpm-lock.yaml now carry the safe
+patch/minor bundle; validation passed for pnpm build, pnpm type-check, pnpm
+lint, pnpm sdk-codegen, targeted MCP app tests, widget tests, Oak ESLint
+tests/lint, OpenAPI adapter tests, and sdk-codegen tests. Session-completion
+consolidation homed the stale Clerk/MCP dependency-bump plan by marking it
+complete and updating SDK/MCP + curriculum roadmap indexes; no drainable
+buffers were selected or drained. Fitness before/after is HARD (napkin.md and
+repo-continuity.md); this pass preserved the dependency lessons and fixed only
+my introduced napkin line-width issue. Deferral-honesty: broader napkin
+rotation/repo-continuity restructuring is not performed in this commit because
+Stellar Waning Planet has a fresh active claim over repo-continuity, EEF/graph
+continuity, pending-graduations, and append-only napkin closeout; falsifiable by
+active-claims.json claim ba63d002. Active claims for Squally: none.`
+
 **completed this handoff — light session-completion pass (2026-06-02, Silvered
 Lurking Mask — one-thread resequencing + estate corrections)**: `owner-directed
 light oak-consolidate-docs after a full oak-session-handoff. Fresh learning

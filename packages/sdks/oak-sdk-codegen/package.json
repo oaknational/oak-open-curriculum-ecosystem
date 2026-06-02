@@ -110,7 +110,7 @@
     "@zod/core": "^0.11.6",
     "openapi-fetch": "^0.17.0",
     "openapi-typescript": "^7.13.0",
-    "openapi3-ts": "^4.5.0",
+    "openapi3-ts": "^4.6.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
@@ -119,7 +119,7 @@
     "eslint": "^10.4.1",
     "tsup": "^8.5.1",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.7"
+    "vitest": "^4.1.8"
   },
   "repository": {
     "type": "git",

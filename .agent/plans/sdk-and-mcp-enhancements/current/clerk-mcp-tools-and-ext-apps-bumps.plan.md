@@ -4,26 +4,26 @@ overview: "Land four available updates in apps/oak-curriculum-mcp-streamable-htt
 todos:
   - id: phase-0-preflight
     content: "Phase 0: Pre-flight invariant verification — confirm none of the breaking-change surfaces apply to this codebase."
-    status: pending
+    status: completed
   - id: phase-1-in-range-trio
     content: "Phase 1: In-range trio bump (@clerk/express 2.1.5→2.1.7, @clerk/backend 3.2.13→3.3.0, @modelcontextprotocol/ext-apps 1.6.0→1.7.0). One commit, low risk."
-    status: pending
+    status: completed
   - id: phase-2-mcp-tools-bump
     content: "Phase 2: Deliberate @clerk/mcp-tools 0.3.1→0.5.0 bump (manifest spec change ~0.3.1 → ^0.5.0). Run version-bump-reminder conformance test."
-    status: pending
+    status: completed
   - id: phase-3-forward-notes
     content: "Phase 3: Capture forward-planning candidates — AppOptions.strict adoption, ext-apps 1.7.0 new capabilities, MCP SDK 2.0 evaluation. Notes only, no code change."
-    status: pending
+    status: completed
   - id: phase-4-consolidation
     content: "Phase 4: Run /jc-consolidate-docs and update collection README index."
-    status: pending
+    status: completed
 isProject: false
 ---
 
 # Clerk + MCP Apps Dependency Bumps (Apr 2026)
 
-**Last Updated**: 2026-04-23
-**Status**: QUEUED
+**Last Updated**: 2026-06-02
+**Status**: COMPLETE — awaiting archive
 **Scope**: Land the four available Clerk + MCP-related dependency updates in
 `apps/oak-curriculum-mcp-streamable-http`, in the safest commit order, and
 record three forward-planning candidates surfaced by the changelog analysis.
@@ -31,6 +31,23 @@ record three forward-planning candidates surfaced by the changelog analysis.
 ---
 
 ## Context
+
+### Completion Note (2026-06-02)
+
+This plan's dependency targets are now landed in the live manifest and lockfile.
+The app currently declares `@clerk/express` `^2.1.22`, `@clerk/backend`
+`^3.4.14`, `@clerk/mcp-tools` `^0.5.0`,
+`@modelcontextprotocol/ext-apps` `^1.7.3`, and
+`@modelcontextprotocol/sdk` `^1.29.0`. The 2026-06-02 dependency refresh
+confirmed `pnpm -r outdated` is clean after the latest `ext-apps` patch and
+the wider tooling patch bundle. Validation evidence for the closeout bundle:
+`pnpm build`, `pnpm type-check`, `pnpm lint`, `pnpm sdk-codegen`, targeted MCP
+app tests, widget tests, Oak ESLint tests/lint, OpenAPI adapter tests, and
+sdk-codegen tests all passed.
+
+This file now remains only as the historical execution record and forward-note
+source for `AppOptions.strict`, ext-apps 1.7 capability adoption, and MCP SDK
+2.0 migration triggers.
 
 `pnpm -r outdated` (run 2026-04-23) reports four updates relevant to the
 Clerk and Model Context Protocol surface, all scoped to a single workspace:
