@@ -9,7 +9,7 @@ sibling_plans:
   - "./graph-query-layer.plan.md"
   - "../../../sector-engagement/eef/current/eef-evidence-corpus.plan.md"
 specialist_reviewer: "architecture-expert-betty, architecture-expert-fred, assumptions-expert, type-expert, test-expert"
-status: current
+status: superseded
 isProject: false
 promotion_trigger: "Owner authorisation of the WS4.4 test-partition amendment + sketch-level ratification of the four rotating-cast protocol additions. Until both are owner-authorised, this addendum is pre-launch and no rotating-cast rounds open."
 todos:
@@ -68,6 +68,13 @@ todos:
 ---
 
 # Gate-1a EEF First Tool Delivery — Parallel Execution Addendum
+
+> **⛔ SUPERSEDED — ARCHIVED 2026-06-02.** This addendum coordinates rotating-cast
+> delivery for the retired gate-1a MVP arc; the arc and its gate framing were
+> discarded by the EEF graph-tooling rebuild. Do not resume or cite it as live.
+> Live graph work: [`eef-graph-tool-completion.plan.md`](../../../../sector-engagement/eef/current/eef-graph-tool-completion.plan.md)
+> and the [knowledge-graph-integration README](../../README.md).
+> Archive record: [`graph-estate-consolidation.plan.md`](../../current/graph-estate-consolidation.plan.md).
 
 ## Scope
 

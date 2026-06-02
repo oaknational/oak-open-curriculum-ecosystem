@@ -1,7 +1,7 @@
 ---
 name: "Oak Misconceptions EEF Extended Contexts"
 overview: "Future extension of the EEF x misconceptions cross-corpus surface beyond Thread IRI context, for unit, lesson, or descriptor-driven sequencing."
-status: future
+status: superseded
 graph_layer: oak-graph-surface
 parent_plan: "./oak-misconceptions-eef-cross-corpus-surface.plan.md"
 isProject: false
@@ -15,6 +15,12 @@ todos:
 ---
 
 # Oak Misconceptions EEF Extended Contexts
+
+> **⛔ CONSOLIDATED — ARCHIVED 2026-06-02.** The extended-contexts problem this
+> plan owns lives on as §4 of
+> [`oak-misconceptions-graph-features.plan.md`](../../future/oak-misconceptions-graph-features.plan.md)
+> (parked until the first proper graph tool — EEF — ships). Archive record:
+> [`graph-estate-consolidation.plan.md`](../../current/graph-estate-consolidation.plan.md).
 
 This follow-on owns open-ended sequencing contexts cut from slice 3b. Slice 3b
 remains Thread IRI only.

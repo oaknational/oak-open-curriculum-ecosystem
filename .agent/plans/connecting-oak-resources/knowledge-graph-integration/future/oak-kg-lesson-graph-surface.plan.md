@@ -1,9 +1,9 @@
 ---
 name: "Oak KG Lesson Graph Surface"
 overview: "Future MCP surface for lesson-level graph projection once the Thread surface has shipped and lesson graph demand is concrete."
-status: future
+status: parked
 graph_layer: oak-graph-surface
-parent_plan: "../current/oak-kg-threads-surface.plan.md"
+parent_plan: "./oak-kg-threads-surface.plan.md"
 isProject: false
 todos:
   - id: confirm-lesson-user-value
@@ -15,6 +15,12 @@ todos:
 ---
 
 # Oak KG Lesson Graph Surface
+
+> **⏸️ PARKED 2026-06-02.** Wider graph work is undefined until the first
+> proper graph tool (EEF) ships
+> ([`eef-graph-tool-completion.plan.md`](../../../sector-engagement/eef/current/eef-graph-tool-completion.plan.md));
+> revisit after finishing-plan D7. Park record:
+> [`graph-estate-consolidation.plan.md`](../current/graph-estate-consolidation.plan.md).
 
 This follow-on owns lesson-level graph projection cut from slice 2. It does not
 block the `curriculum://oak-kg-threads` resource or `oak-kg-get-thread-content`

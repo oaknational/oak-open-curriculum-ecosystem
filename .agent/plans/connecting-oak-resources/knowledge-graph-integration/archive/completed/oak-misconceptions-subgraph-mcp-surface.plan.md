@@ -3,7 +3,7 @@ name: "Oak Misconceptions Sub-Graph MCP Surface (Slice 3a of MVP arc)"
 overview: "Author the executable plan for the slice-3a MCP surface: `oak-misconceptions-subgraph-for-thread` (and optional `-for-unit`) tool(s) on the bulk-derived legacy misconception graph factory plus graph-stack Inc.1 Thread-to-Unit lookup. Bounded sub-graph extraction is the blocking primitive the misconception graph needs to fit `maxResponseTokens = 16000`. Substance inherited from the MVP-arc spine; this plan adds TDD cycle structure, file scopes, and reviewer dispatch."
 plan_id: oak-misconceptions-subgraph-mcp-surface
 type: feature-workstream
-status: current
+status: superseded
 graph_layer: oak-graph-surface
 spine_slice: 3a
 namespace: "oak-misconceptions-*"
@@ -78,6 +78,17 @@ todos:
 ---
 
 # Oak Misconceptions Sub-Graph MCP Surface — Slice 3a of the MVP Arc
+
+> **⛔ CONSOLIDATED — ARCHIVED 2026-06-02.** The bounded sub-graph extraction
+> problem this plan owns lives on as §1 of
+> [`oak-misconceptions-graph-features.plan.md`](../../future/oak-misconceptions-graph-features.plan.md)
+> (parked until the first proper graph tool — EEF — ships), with the
+> bounded-traversal contract, the 20-context fixture-manifest scheme, and the
+> `_meta` legacy-disclosure discipline preserved there and the
+> `maxResponseTokens = 16000` budget cap marked retired. The MVP-arc
+> slice/gate scaffold in this body is retired. Do not resume or cite it as
+> live. Archive record:
+> [`graph-estate-consolidation.plan.md`](../../current/graph-estate-consolidation.plan.md).
 
 **Last Updated**: 2026-05-21 (substrate-floor + parallel-safety wording aligned with the 2026-05-21 gate-split amendment; previous: 2026-05-10).
 **Status**: 🟡 PLANNING (current/) — pending graph-stack Inc.1b

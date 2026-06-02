@@ -10,7 +10,7 @@ overview: >-
   every plan/ADR surface so no false-delivery claim survives. Decomposed
   into delivery increments A–H, each named by beneficiary and delivery state.
 type: cross-collection-coordination-spine
-status: current
+status: superseded
 parent_plans:
   - "../../../graph-mvp-arc.plan.md"
   - "./eef-first-feature.plan.md"

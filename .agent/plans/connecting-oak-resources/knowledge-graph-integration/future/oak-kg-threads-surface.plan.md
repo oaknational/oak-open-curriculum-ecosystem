@@ -3,14 +3,10 @@ name: "Oak KG Threads MCP Surface (Slice 2 of MVP arc)"
 overview: "Author the executable plan for the slice-2 MCP surface: `curriculum://oak-kg-threads` resource + `oak-kg-get-thread-content` tool, both backed by the `graph-corpus-sdk` Oak Curriculum Ontology adapter. Substance is inherited from the MVP-arc spine; this plan adds TDD cycle structure, file scopes, and reviewer dispatch."
 plan_id: oak-kg-threads-surface
 type: feature-workstream
-status: current
+status: parked
 graph_layer: oak-graph-surface
-spine_slice: 2
 namespace: "oak-kg-*"
-substrate_floor:
-  - "graph-stack Inc.1 (Oak Curriculum Ontology Threads foundation: generic Turtle/SKOS ingestion, graph-project adjacency, graph-corpus-sdk curric:Thread adapter)"
-sequencing_gate: "PARALLEL-SAFE with slice 3a (gate-3a) and slice 1's gates (gate-1a + gate-1b) after graph-stack Inc.1b lands. Per the 2026-05-21 gate-split amendment: gate-2 (Threads slice) does not depend on the slice-1 EEF gates because the Threads adapter does not consume the GraphView<TNode, TEdgeType> interface (different adapter shape: ontology-IRI enumeration + inverse-edge resolution); substrate-floor for gate-2 is Inc.1b alone, not the broader MVP-arc gate-0a/gate-0b path."
-last_updated: 2026-05-11
+last_updated: 2026-06-02
 related_indices:
   - ".agent/plans/connecting-oak-resources/knowledge-graph-integration/README.md"
 adr_amendments_required:
@@ -74,9 +70,25 @@ todos:
 
 # Oak KG Threads MCP Surface — Slice 2 of the MVP Arc
 
-**Last Updated**: 2026-05-21 (substrate-floor + parallel-safety wording aligned with the gate-split amendment; previous: 2026-05-10).
-**Status**: 🟡 PLANNING (current/) — pending substrate floor (graph-stack
-Inc.1b Oak Curriculum Ontology Threads adapter). Per the 2026-05-21 gate-split amendment, gate-2 (this slice) is parallel-safe with gate-1a/gate-1b (slice 1 EEF) and gate-3a (slice 3a misconception) — it does not depend on the slice-1 EEF gates.
+> **⏸️ PARKED 2026-06-02 — spine scaffold retired.** Wider graph work is
+> undefined until the first proper graph tool (EEF) ships
+> ([`eef-graph-tool-completion.plan.md`](../../../sector-engagement/eef/current/eef-graph-tool-completion.plan.md)),
+> and the MVP-arc spine that scaffolded this slice is quarantined — revisit
+> after finishing-plan D7. The slice/gate framing in the body
+> (`spine_slice`/`gate-2`/`gate-3a`/`Inc.1b`) is retired scaffold, not a live
+> sequencing contract; this is not a technical EEF dependency (the plan's own
+> substrate floor was the graph-stack Threads adapter, not the EEF gates).
+> **Carry-forward substance preserved here**: (1) the **inverse-edge query
+> primitive** insight — Thread is a forward edge from Unit
+> (`curric:includesThread`), so thread-content resolution requires inverse
+> lookup, and this surface is the slice that proves that primitive earns its
+> keep end-to-end; (2) the **spine-locked names**
+> `curriculum://oak-kg-threads` (resource) and `oak-kg-get-thread-content`
+> (tool). Park record:
+> [`graph-estate-consolidation.plan.md`](../current/graph-estate-consolidation.plan.md).
+
+**Last Updated**: 2026-06-02 (parked; previous substantive update 2026-05-21).
+**Status**: ⏸️ PARKED (future/)
 **Scope**: Slice 2 of the
 `graph-mvp-arc.plan.md` — author and
 ship the `curriculum://oak-kg-threads` resource + `oak-kg-get-thread-content`
@@ -113,7 +125,7 @@ dependency.
 ### Existing capabilities consumed
 
 - Graph-stack Inc.1 Oak Curriculum Ontology Threads foundation (see
-  [`graph-stack.plan.md`](graph-stack.plan.md)); slice 2 starts only after
+  [`graph-stack.plan.md`](../active/graph-stack.plan.md)); slice 2 starts only after
   that increment lands the `graph-corpus-sdk` API for `curric:Thread`
   enumeration and inverse `curric:includesThread` resolution over
   `graph-project` adjacency.
@@ -347,7 +359,8 @@ composes EEF and misconceptions only.
 
 **Parallel-safe with**:
 
-- [`oak-misconceptions-subgraph-mcp-surface.plan.md`](oak-misconceptions-subgraph-mcp-surface.plan.md)
+- `oak-misconceptions-subgraph-mcp-surface.plan.md` (since consolidated into
+  [`oak-misconceptions-graph-features.plan.md`](oak-misconceptions-graph-features.plan.md) §1)
   (slice 3a, gate-3a) — different substrate path, different namespace, different
   files. Both wait on graph-stack Inc.1b only.
 - Slice 1 EEF gates (gate-1a + gate-1b) — per the 2026-05-21
@@ -357,9 +370,9 @@ composes EEF and misconceptions only.
 
 **Consumed by**:
 
-- [`../future/oak-misconceptions-eef-cross-corpus-surface.plan.md`](../future/oak-misconceptions-eef-cross-corpus-surface.plan.md)
-  (formerly MVP slice 3b, now first concrete combinatorial-arc
-  exploration) **does not** consume this slice's tool. The cross-corpus
+- `oak-misconceptions-eef-cross-corpus-surface.plan.md` (since consolidated
+  into [`oak-misconceptions-graph-features.plan.md`](oak-misconceptions-graph-features.plan.md) §2)
+  (formerly MVP slice 3b) **does not** consume this slice's tool. The cross-corpus
   tool composes EEF (slice 1) + misconceptions (slice 3a) through
   `graph-corpus-sdk` directly; the Oak Threads surface is not part of
   that composition.
@@ -367,9 +380,9 @@ composes EEF and misconceptions only.
 **Related plans**:
 
 - `graph-mvp-arc.plan.md` — coordination
-  spine.
-- [`graph-stack.plan.md`](graph-stack.plan.md) — substrate plan.
-- [`graph-query-layer.plan.md`](graph-query-layer.plan.md) — related query
+  spine (quarantined).
+- [`graph-stack.plan.md`](../active/graph-stack.plan.md) — substrate plan.
+- `graph-query-layer.plan.md` (since archived superseded) — related query
   substrate, but not a slice-2 gate.
 
 ## Consolidation

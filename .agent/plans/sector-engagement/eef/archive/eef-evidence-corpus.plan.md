@@ -10,7 +10,7 @@ sibling_plans:
   - "../../../connecting-oak-resources/knowledge-graph-integration/active/misconception-graph-mcp-surface.plan.md"
   - "../../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md"
 specialist_reviewer: "mcp-expert, code-expert, test-expert, type-expert, sentry-expert"
-status: current
+status: superseded
 isProject: false
 todos:
   - id: t1-corpus-shape

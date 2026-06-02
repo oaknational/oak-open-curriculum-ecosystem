@@ -1,9 +1,9 @@
 ---
 name: "Oak KG Schema Browser"
 overview: "Future schema/class browser for Oak ontology classes and properties, sequenced after direct Thread value is delivered."
-status: future
+status: parked
 graph_layer: oak-graph-surface
-parent_plan: "../current/oak-kg-threads-surface.plan.md"
+parent_plan: "./oak-kg-threads-surface.plan.md"
 isProject: false
 todos:
   - id: confirm-schema-browser-audience
@@ -15,5 +15,11 @@ todos:
 ---
 
 # Oak KG Schema Browser
+
+> **⏸️ PARKED 2026-06-02.** Wider graph work is undefined until the first
+> proper graph tool (EEF) ships
+> ([`eef-graph-tool-completion.plan.md`](../../../sector-engagement/eef/current/eef-graph-tool-completion.plan.md));
+> revisit after finishing-plan D7. Park record:
+> [`graph-estate-consolidation.plan.md`](../current/graph-estate-consolidation.plan.md).
 
 This follow-on owns the schema/class browser cut from slice 2.

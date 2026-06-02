@@ -1,11 +1,8 @@
 ---
 name: "Education Skills MCP Surface"
 overview: "Integrate evidence-based pedagogical skills from the Agent Skills ecosystem into the MCP server as prompts and discovery tools, with proper licence isolation and upstream update mechanism."
-parent_plan: "../../../connecting-oak-resources/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md"
 sibling_plans:
-  - "../../eef/current/eef-evidence-corpus.plan.md"
-  - "../../../connecting-oak-resources/knowledge-graph-integration/active/misconception-graph-mcp-surface.plan.md"
-  - "../../../connecting-oak-resources/knowledge-graph-integration/active/nc-knowledge-taxonomy-surface.plan.md"
+  - "../../../connecting-oak-resources/knowledge-graph-integration/future/nc-knowledge-taxonomy-surface.plan.md"
 specialist_reviewer: "mcp-expert, code-expert, test-expert, architecture-expert-barney"
 status: future
 todos:
@@ -360,8 +357,9 @@ T8: E2E tests                                      ← quality gate
 
 ### Parent
 
-- [open-education-knowledge-surfaces.plan.md](../../../connecting-oak-resources/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md)
-  — this plan adds a fourth external content source to the coordinator
+- The historical multi-source coordinator (open-education-knowledge-surfaces)
+  is archived; this plan stands alone as an external content-source surface
+  under the external-knowledge-sources thread
 
 ### Siblings
 

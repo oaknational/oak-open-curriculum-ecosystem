@@ -8,7 +8,7 @@ sibling_plans:
   - "../active/misconception-graph-mcp-surface.plan.md"
   - "../../sector-engagement/eef/current/eef-evidence-corpus.plan.md"
 specialist_reviewer: "mcp-expert, code-expert, type-expert, test-expert, architecture-expert-betty"
-status: current
+status: superseded
 isProject: false
 todos:
   - id: t1-tracer-use-cases
@@ -44,6 +44,14 @@ todos:
 ---
 
 # Graph Query Layer
+
+> **⛔ SUPERSEDED — ARCHIVED 2026-06-02.** This plan encodes the pre-rebuild
+> 7-operation polymorphic `GraphView` query layer with mandatory projection,
+> sequenced across the retired gate-1a/gate-0b MVP arc — framing the EEF
+> graph-tooling rebuild discarded. Do not resume or cite it as live. Live graph
+> work: [`eef-graph-tool-completion.plan.md`](../../../../sector-engagement/eef/current/eef-graph-tool-completion.plan.md)
+> and the [knowledge-graph-integration README](../../README.md).
+> Archive record: [`graph-estate-consolidation.plan.md`](../../current/graph-estate-consolidation.plan.md).
 
 **Status**: CURRENT — architecture-session conclusions approved by owner 2026-05-19. **Distributed across graph-stack increments per the 2026-05-21 EEF sequencing pull-forward**: T2 (`GraphView<TNode, TEdgeType>` interface + supporting types + T7a compile-time smoke-test) and the `subgraph` + `manifest` portion of T5 (`EefStrandsGraphView`) land at **graph-stack Inc.1d** (WS4.4 + WS4.5). The remaining 5 EEF operations plus T3 (`PrerequisiteGraphView`) and T4 (`MisconceptionGraphView`) land at **graph-stack Inc.3**. T6 (17 MCP tools) splits across MVP arc **gate-1a** (the one EEF tool consumed by the first user-facing feature) and **gate-0b** (the other 16 graph-layer tools across all three graphs). T7/T8/T9/T10 follow the same gate split. Remaining promotion gates: T1 tracer use-cases signed off, plan-body first-principles check re-applied, EEF corpus plan ready for parallel start.
 **Last Updated**: 2026-05-22 (Foamy Fathoming Compass / claude / claude-opus-4-7 / ecb459) — **WS4.4 test-partition amendment absorbed** at commit `bf7fa545`. Phase 5 §T7a partitioned into half (a) interface-contract (inline-fixture TNode in graph-core) + half (b) instantiation-contract (EefStrand in graph-corpus-sdk). Phase 2 §T2 absorbed type-expert findings: `SubgraphError` shape explicitly defined (`SubgraphRootNotFound` + `SubgraphDepthExceeded`); `NodeFilter` mapped-type uses `FieldPredicate<NonNullable<TNode[K]>>` to preserve `gte`/`lte` arms on nullable numeric fields; `DeepKeyPath` depth-decrement specified via tuple-indexed `Prev` pattern with array-stop short-circuit; Result API note corrects earlier `Result.match()`/`Result.err()` namespace-notation to the actual named-function API (`ok()`, `err()`, `.ok` discriminant). Previous: 2026-05-21 (Torrid Glowing Flame / claude / opus-4-7-1m / 5ab0ec) — sequencing pull-forward authored under owner direction. T2 interface home corrected twice in the same day: first from `oak-curriculum-sdk/src/mcp/graph-views/` to `graph-corpus-sdk/src/graph-views/` per ADR-173 §Topology workspace #6 (substrate-vs-transport discipline: substrate workspaces ship no MCP code, so the interface belongs in a substrate workspace; MCP tool wiring lives in the consumer `oak-curriculum-sdk` MCP module), then a second correction to `packages/core/graph-core/src/graph-view/` per architecture-expert-betty's verdict 2026-05-21 under ADR-041 dependency-direction rules: `packages/libs/` cannot import from `packages/sdks/`, and the interface is intended to be implemented by non-corpus consumers (practice-graph at Inc.4, possibly graph-project for type annotation) — those consumers cannot acquire the contract from a sdks/ home. graph-core is the dependency-direction-correct home, and the sequence-first stance makes this placement permanent. Per-adapter sequencing recorded across §Implementation. T5 split notes recorded inline. No content removed; sequencing notes added.

@@ -5,7 +5,7 @@ type: evaluation-infrastructure
 status: future
 thread: eef
 related_plans:
-  - "../current/eef-evidence-corpus.plan.md"
+  - "../current/eef-graph-tool-completion.plan.md"
 isProject: false
 todos:
   - id: define-rubric-and-owner

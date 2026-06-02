@@ -3,12 +3,6 @@ name: "Oak KG Knowledge Taxonomy MCP Surface"
 overview: "Extract the NC-aligned SKOS knowledge taxonomy from the Oak Curriculum Ontology and expose it as an oak-kg-namespaced MCP resource + tool — the smallest meaningful integration of the formal knowledge graph."
 graph_layer: oak-graph-surface
 promotion_trigger: "demand-tripwire — promotes from PENDING to executing when documented external/internal demand surfaces for SKOS Discipline/Strand/SubStrand/ContentDescriptor traversal that the Oak Threads MCP surface cannot answer"
-parent_plan: "open-education-knowledge-surfaces.plan.md"
-sibling_plans:
-  - "graph-resource-factory.plan.md"
-  - "misconception-graph-mcp-surface.plan.md"
-  - "../../sector-engagement/eef/current/eef-evidence-corpus.plan.md"
-  - "agent-guidance-consolidation.plan.md"
 specialist_reviewer: "mcp-expert, code-expert, test-expert"
 isProject: false
 todos:
@@ -49,10 +43,16 @@ todos:
 
 # Oak KG Knowledge Taxonomy MCP Surface
 
-**Status**: PENDING
-**Last Updated**: 2026-05-07 (promotion trigger recorded)
-**Branch**: TBD (same branch as parent plan)
-**Parent**: `open-education-knowledge-surfaces.plan.md` (WS-4)
+> **⏸️ PARKED 2026-06-02.** Wider graph work is undefined until the first
+> proper graph tool (EEF) ships
+> ([`eef-graph-tool-completion.plan.md`](../../../sector-engagement/eef/current/eef-graph-tool-completion.plan.md));
+> revisit after finishing-plan D7. The demand-tripwire promotion trigger below
+> also remains live and can fire independently. Park record:
+> [`graph-estate-consolidation.plan.md`](../current/graph-estate-consolidation.plan.md).
+
+**Status**: PARKED
+**Last Updated**: 2026-06-02 (parked; promotion trigger retained)
+**Branch**: TBD
 **Strategic context**: This is the smallest meaningful integration of
 the [Oak Curriculum Ontology](https://github.com/oaknational/oak-curriculum-ontology)
 into the MCP server. All ontology-sourced resources use the `oak-kg-*`

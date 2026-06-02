@@ -1,5 +1,11 @@
 # WS1.6 Vocabulary Registry Prep
 
+> **✅ COMPLETED — ARCHIVED 2026-06-02.** Prep note that served its purpose:
+> scope boundary and open design questions for the WS1.6 vocabulary registry
+> slice, surfaced for owner review. Subsequent vocabulary direction is owned by
+> [`graph-stack.plan.md`](../../active/graph-stack.plan.md).
+> Archive record: [`graph-estate-consolidation.plan.md`](../../current/graph-estate-consolidation.plan.md).
+
 Status: planning prep only. This note prepares the WS1.6 vocabulary registry
 slice for owner review; it does not propose implementation, choose namespace
 policy, or add registry data.

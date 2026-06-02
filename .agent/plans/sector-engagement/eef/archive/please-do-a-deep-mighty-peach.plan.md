@@ -5,7 +5,7 @@ parent_plans:
   - "./eef-first-feature.plan.md"
 sibling_plans:
   - "./eef-evidence-corpus.plan.md"
-status: current
+status: superseded
 isProject: false
 todos:
   - id: pr0-plan-freshness

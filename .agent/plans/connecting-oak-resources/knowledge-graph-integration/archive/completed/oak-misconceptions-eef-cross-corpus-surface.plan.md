@@ -3,7 +3,7 @@ name: "Oak Misconceptions × EEF Cross-Corpus MCP Surface (first concrete combin
 overview: "Executable plan for the cross-corpus MCP tool `oak-misconceptions-eef-recommend-for-thread` — composes repository-held EEF strands and the bounded bulk-derived misconception sub-graph for a Thread IRI through the `graph-corpus-sdk` cross-corpus join primitive (graph-stack Inc.3). Migrated from current/ to future/ during the 2026-05-11 MVP-arc reshape; spine moved from graph-mvp-arc to graph-combinatorial-arc. TDD cycles, file scopes, and reviewer dispatch unchanged."
 plan_id: oak-misconceptions-eef-cross-corpus-surface
 type: feature-workstream
-status: future
+status: superseded
 graph_layer: oak-graph-surface
 namespace: "oak-misconceptions-eef-*"
 substrate_path: "graph-corpus-sdk EEF + misconception adapters via graph-stack Inc.3 cross-corpus join primitive"
@@ -74,6 +74,16 @@ todos:
 ---
 
 # Oak Misconceptions × EEF Cross-Corpus MCP Surface — first concrete combinatorial-arc exploration
+
+> **⛔ CONSOLIDATED — ARCHIVED 2026-06-02.** The cross-corpus composition
+> problem this plan owns lives on as §2 of
+> [`oak-misconceptions-graph-features.plan.md`](../../future/oak-misconceptions-graph-features.plan.md)
+> (parked until the first proper graph tool — EEF — ships), with the
+> compound-prefix attribution discipline, substrate-only principle,
+> empty-response shape contract, and fixture discipline preserved there. The
+> gate-1a/gate-3a/Inc.3 scaffold in this body is retired. Do not resume or
+> cite it as live. Archive record:
+> [`graph-estate-consolidation.plan.md`](../../current/graph-estate-consolidation.plan.md).
 
 **Last Updated**: 2026-05-21 (gate-name references aligned with the 2026-05-21 gate-split amendment; previous: 2026-05-11).
 **Status**: 🟡 PLANNING (future/) — queued behind the

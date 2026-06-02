@@ -12,7 +12,7 @@ sibling_plans:
   - "../../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md"
 substrate_dependency: "graph-stack Inc.1d (WS4.4 + WS4.5)"
 specialist_reviewer: "mcp-expert, code-expert, test-expert, type-expert, sentry-expert, docs-adr-expert"
-status: current
+status: superseded
 isProject: false
 todos:
   - id: ff1-partnership-opener

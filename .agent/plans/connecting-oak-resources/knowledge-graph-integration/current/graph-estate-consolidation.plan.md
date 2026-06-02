@@ -13,24 +13,24 @@ todos:
     content: "Grounded reading DONE 2026-06-01 (six files read against content, substance-loss lens first); dispositions proposed in the disposition map's 't1 grounded findings' block: agent-guidance-consolidation → update-in-place (live MCP-DX debt, EEF-independent); kg-alignment-audit + kg-integration-quick-wins → keep — independent (NOT EEF-gated); open-education-knowledge-surfaces → archive — superseded; oak-kg-threads-surface + oak-misconceptions-subgraph-mcp-surface → park — blocked-on-EEF (MVP-arc scaffold retired). assumptions-expert ratified READY 2026-06-01 (agrees 6/6, no false-keep; two park-header substance-preservation conditions apply at the t4 move). Decision complete; the file moves are t2–t4."
     status: completed
   - id: t2-archive-superseded
-    content: "Archive the superseded-framing plans to archive/completed/ with a supersession pointer to the finishing plan; add completed-plans index entries. NEVER delete (knowledge-preservation)."
-    status: pending
+    content: "Archive the superseded-framing plans to archive/completed/ with a supersession pointer to the finishing plan; add completed-plans index entries. NEVER delete (knowledge-preservation). DONE 2026-06-02: seven kg files moved with banners + status flips; graph-tooling-rebuild verified already-bannered in eef/archive (no relocation; missing completed-plans entry added); live referrers de-linked across nine collections; orphaned parent_plan pointers removed from surviving children."
+    status: completed
   - id: t3-archive-completed
-    content: "Archive the genuinely-DONE plans (graph-resource-factory, misconception-graph-mcp-surface, graph-stack-ws1.6-vocab-prep) to archive/completed/ with outcomes + SHAs."
-    status: pending
+    content: "Archive the genuinely-DONE plans (graph-resource-factory, misconception-graph-mcp-surface, graph-stack-ws1.6-vocab-prep) to archive/completed/ with outcomes + SHAs. DONE 2026-06-02: all three moved with outcome banners (1eb302e8 evidence) + per-plan completed-plans entries; historical citations repointed to archive per ADR-117 completed-plan convention."
+    status: completed
   - id: t4-park-future-blocked
-    content: "Park the speculative graph-surface future plans with the precise block condition: wider graph work is undefined until the first proper graph tool (EEF) ships — NOT a technical EEF-gate dependency (oak-kg-threads / oak-misconceptions-subgraph depend technically on graph-stack Inc.1b, whose MVP-arc spine is quarantined). State 'spine scaffold retired' in each. Consolidate the four oak-misconceptions feature plans (cross-corpus composition, topic extraction, extended contexts, bounded sub-graph extraction) into one that KEEPS each distinct problem as a named section (do not flatten to a summary); oak-misconceptions-substrate-migration is excluded — it folds into the single all-tools substrate-migration plan (Judgement call 4). Move nc-knowledge-taxonomy-surface from active/ to future/. At the park move, each header must preserve carry-forward substance with no other home: oak-kg-threads — the inverse-edge query primitive + spine-locked tool names; oak-misconceptions-subgraph — the bounded-traversal contract, fixture-manifest scheme, and _meta legacy-disclosure discipline, with maxResponseTokens=16000 marked retired."
-    status: pending
+    content: "Park the speculative graph-surface future plans with the precise block condition: wider graph work is undefined until the first proper graph tool (EEF) ships — NOT a technical EEF-gate dependency (oak-kg-threads / oak-misconceptions-subgraph depend technically on graph-stack Inc.1b, whose MVP-arc spine is quarantined). State 'spine scaffold retired' in each. Consolidate the four oak-misconceptions feature plans (cross-corpus composition, topic extraction, extended contexts, bounded sub-graph extraction) into one that KEEPS each distinct problem as a named section (do not flatten to a summary); oak-misconceptions-substrate-migration is excluded — it folds into the single all-tools substrate-migration plan (Judgement call 4). Move nc-knowledge-taxonomy-surface from active/ to future/. At the park move, each header must preserve carry-forward substance with no other home: oak-kg-threads — the inverse-edge query primitive + spine-locked tool names; oak-misconceptions-subgraph — the bounded-traversal contract, fixture-manifest scheme, and _meta legacy-disclosure discipline, with maxResponseTokens=16000 marked retired. DONE 2026-06-02: both assumptions-expert park-header conditions honoured — four misconception feature plans consolidated into future/oak-misconceptions-graph-features.plan.md with each problem a named section (bounded-traversal contract, fixture-manifest scheme, _meta discipline preserved in §1; maxResponseTokens marked retired); oak-kg-threads parked with inverse-edge + spine-locked-names header; nc-knowledge-taxonomy parked to future/ (demand tripwire retained); five remaining future surfaces given block-condition headers; oak-misconceptions-substrate-migration untouched bar a parent_plan re-point to the consolidated plan."
+    status: completed
   - id: t5-rewrite-readmes
-    content: "Rewrite the knowledge-graph-integration README to the corrected reality (drop five-increment/gate-1a-1b/7-op-polymorphic/recommend-explain-compare framing; fix broken current/<->active/ links; remove the eef-evidence-corpus link in the graph-query-layer row; point to the finishing plan only). The EEF README half is DONE (already one-live-plan frame); t5 is now the KG README only."
-    status: pending
+    content: "Rewrite the knowledge-graph-integration README to the corrected reality (drop five-increment/gate-1a-1b/7-op-polymorphic/recommend-explain-compare framing; fix broken current/<->active/ links; remove the eef-evidence-corpus link in the graph-query-layer row; point to the finishing plan only). The EEF README half is DONE (already one-live-plan frame); t5 is now the KG README only. DONE 2026-06-02: README rewritten to the post-move estate — Live Work + Parked Surfaces sections, retired framing removed, all links resolve."
+    status: completed
   - id: t6-author-value-plan
     content: "Author future/eef-graph-tool-value-evaluation.plan.md (strategic), superseding future/eef-outcome-evaluation-infrastructure.plan.md, evaluating the FINISHED tool's value (structural fidelity; the discovery questions; usefulness vs the other curriculum tools). Promotion trigger: finishing-plan D7 green. ALSO decide the home for the post-completion 'working with graphs' doctrine graduation (old D5): fold into this value plan or a named follow-on."
     status: pending
     depends_on: [t1-verify-unclassified]
   - id: t7-reconcile-references
-    content: "Reconcile remaining gate-1a/1b/Inc.3 references across the live .agent estate ONLY (the old DX): oak-misconceptions-eef-cross-corpus-surface.plan.md, graph-stack.plan.md, graph-query-layer references, repo-continuity.md (coordinate, do not edit unilaterally). graph-portfolio-index.md is now quarantined (not a live target). ADR-173 was decontaminated 2026-06-01 (done). The source tree is clear: the graph-corpus-sdk README + package.json description were brought current 2026-06-02 (see the residue-position note)."
-    status: pending
+    content: "Reconcile remaining gate-1a/1b/Inc.3 references across the live .agent estate ONLY (the old DX): oak-misconceptions-eef-cross-corpus-surface.plan.md, graph-stack.plan.md, graph-query-layer references, repo-continuity.md (coordinate, do not edit unilaterally). graph-portfolio-index.md is now quarantined (not a live target). ADR-173 was decontaminated 2026-06-01 (done). The source tree is clear: the graph-corpus-sdk README + package.json description were brought current 2026-06-02 (see the residue-position note). DONE 2026-06-02: cross-corpus plan cleaned via the t4 consolidation; graph-stack re-framed (sequencing banner naming Inc.N/gate labels retired per ADR-173, landed WS statuses flipped incl. WS4.1 scaffold + WS5 closure, stale PR-108 blocker + quarantined meta-plan navigation removed, archived-sibling refs de-linked); repo-continuity verified zero-edit (all six token instances are decontamination-record framing — no coordination with the parallel claim holder needed); four eef/archive files with stale status:current frontmatter corrected to superseded; agent-guidance-consolidation scrubbed (recommend/compare workflows, eef-toolkit:// resource rows, orphaned parent_plan)."
+    status: completed
     depends_on: [t2-archive-superseded, t5-rewrite-readmes]
   - id: t8-verify-clean
     content: "Verify the estate reads clean: no broken links (rg link-check), READMEs accurate, every archived plan has a pointer + index entry, every parked plan states its block condition; markdownlint + relevant gates green."
@@ -274,6 +274,21 @@ the `eef` thread record). Execution is strictly ordered:
 3. **Verify — scoped `t8`.** Confirm the estate reads clean for steps 1–2: no
    broken links, READMEs accurate, every archived plan has a pointer, every
    parked plan states its block condition, markdownlint + relevant gates green.
+   **Scoped verification PASSED 2026-06-02** (the `t8` todo stays `pending` —
+   its full acceptance includes the D7-gated t6/value-plan criterion): link
+   check over both collections' live lanes + `completed-plans.md` + the
+   touched cross-collection indexes returned zero broken links (including 14
+   pre-existing path-depth breaks fixed in passing); the retired-token sweep
+   over the live kg lanes returned only sanctioned hits (this plan's own
+   decontamination vocabulary, naming-as-retired park banners, and the
+   untouched Judgement-call-4 fold-in target); every archived plan carries a
+   banner + index entry; every parked plan states its block condition;
+   markdownlint + prettier green. Reviewed in real time by docs-adr-expert
+   (findings remediated: README link depths, parked-claim qualification,
+   index-format consistency) and an adversarial dangling-pointer hunt
+   (24 confirmed misses remediated by de-link; two deferred — they sit in the
+   `agentic-engineering-enhancements` thread record held under a parallel
+   agent's active claim).
 
 **Deferred until finishing-plan D7 is green:** `t6` (the value-evaluation plan,
 promotion trigger = D7 green) and t8's t6/value-plan acceptance criterion. These

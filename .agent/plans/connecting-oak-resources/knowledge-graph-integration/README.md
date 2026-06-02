@@ -19,31 +19,44 @@ graph exports, SDKs, MCP resources, and search projections.
 
 This collection is deliberately not the home for every graph-shaped idea:
 sector-facing adoption and external knowledge/data-source ingestion now live
-under [sector-engagement/](../sector-engagement/).
+under [sector-engagement/](../../sector-engagement/) and
+[exploring-open-education-resources/](../../exploring-open-education-resources/).
 
 **Active Plans**: [active/](active/)
 **Current Queue**: [current/](current/)
 **Later Plans**: [future/](future/)
 **Archive**: [archive/](archive/)
 
-## Active Execution
+## Live Work
 
 | File | Description |
 |------|-------------|
-| [active/open-education-knowledge-surfaces.plan.md](active/open-education-knowledge-surfaces.plan.md) | Historical umbrella plan: multi-source knowledge surfaces, now split across internal KG and sector-engagement lanes |
-| [active/graph-resource-factory.plan.md](active/graph-resource-factory.plan.md) | WS-1: Shared graph resource factory (DONE) |
-| [active/misconception-graph-mcp-surface.plan.md](active/misconception-graph-mcp-surface.plan.md) | WS-2: Misconception graph MCP surface (DONE) |
-| [active/nc-knowledge-taxonomy-surface.plan.md](active/nc-knowledge-taxonomy-surface.plan.md) | NC knowledge taxonomy surface. Outside the current graph MVP; requires separate owner promotion before substrate or surfacing work resumes. |
-| [active/agent-guidance-consolidation.plan.md](active/agent-guidance-consolidation.plan.md) | WS-5: Agent guidance consolidation |
+| [current/graph-estate-consolidation.plan.md](current/graph-estate-consolidation.plan.md) | **Master plan** for consolidation, decontamination, and rewriting of all graph-related materials; also owns unifying the graph-tool substrate migration into one plan (Judgement call 4) |
+| [active/graph-stack.plan.md](active/graph-stack.plan.md) | Substrate plan: the graph workspaces (`graph-core`, `graph-ingest`, `graph-project`, `graph-corpus-sdk`) and the corpus-adapter work that replatforms existing graph tools, sequenced by consumer-readiness (ADR-173). **Graph workspaces are MCP-agnostic** — surfacing (MCP, CLI, HTTP, JSON-LD export) is a consumer-side decision |
+| [current/kg-alignment-audit.execution.plan.md](current/kg-alignment-audit.execution.plan.md) | First canonical overlap audit between ontology graph and search-facing records — independent of the EEF tool; promotes via the "Direct ontology work" trigger below |
+| [current/kg-integration-quick-wins.plan.md](current/kg-integration-quick-wins.plan.md) | Safe projection-first graph integration opportunities — independent of the EEF tool; promotes via the "Direct ontology work" trigger below |
+| [active/agent-guidance-consolidation.plan.md](active/agent-guidance-consolidation.plan.md) | Agent guidance consolidation: the scattered, partly stale tool/resource/prompt guidance for the **existing** MCP surface becomes one generated catalogue — EEF-independent MCP-DX debt |
 
-## Current Queue
+## Parked Surfaces (blocked until the EEF tool ships)
+
+Wider graph work is undefined until the first proper graph tool (EEF) ships
+([`eef-graph-tool-completion.plan.md`](../../sector-engagement/eef/current/eef-graph-tool-completion.plan.md));
+each parked plan states this block condition in its own header, except
+`oak-misconceptions-substrate-migration`, which instead folds into the unified
+all-tools substrate-migration plan (graph-estate-consolidation Judgement
+call 4). Revisit after finishing-plan D7.
 
 | File | Description |
 |------|-------------|
-| [current/graph-stack.plan.md](current/graph-stack.plan.md) | **Topology decision + foundation increment.** Seven active graph workspaces plus one deferred for the standards-based graph capability; reserves a workspace home for every layer in `.agent/research/graph-library.research.md`. **Graph workspaces are MCP-agnostic** — surfacing (MCP, CLI, HTTP, JSON-LD export) is a consumer-side decision tracked separately. Foundation increment ingests the Oak Curriculum Ontology Threads graph end-to-end (in-process; no surfacing). NC taxonomy work is outside the MVP and not subsumed by this foundation. The *substrate* path of `graph-query-layer.plan.md` migrates into `graph-corpus-sdk`; its MCP-surfacing concerns remain independent. |
-| [current/kg-alignment-audit.execution.plan.md](current/kg-alignment-audit.execution.plan.md) | First canonical overlap audit between ontology graph and search-facing records |
-| [current/kg-integration-quick-wins.plan.md](current/kg-integration-quick-wins.plan.md) | Safe projection-first graph integration opportunities |
-| [current/graph-query-layer.plan.md](current/graph-query-layer.plan.md) | Increment 1 of EEF graph-and-corpus delivery: 7-operation polymorphic query layer over prerequisite + misconception + EEF strands, with progressive disclosure (manifest → summary → detail → edge) and mandatory projection. Foundation for [`../sector-engagement/eef/current/eef-evidence-corpus.plan.md`](../sector-engagement/eef/current/eef-evidence-corpus.plan.md). **Coordination note**: the *substrate* (GraphView interface, 7-operation surface, projection discipline) migrates into `graph-corpus-sdk` under the graph-stack spine; the *MCP exposure* (17 tools) becomes a separate consumer-side decision unrelated to the substrate. |
+| [future/oak-misconceptions-graph-features.plan.md](future/oak-misconceptions-graph-features.plan.md) | Consolidated misconception feature directions: bounded sub-graph extraction, EEF cross-corpus composition, topic extraction, extended contexts — each a named section |
+| [future/oak-kg-threads-surface.plan.md](future/oak-kg-threads-surface.plan.md) | Oak KG Threads resource + thread-content tool (inverse-edge query primitive; names locked) |
+| [future/nc-knowledge-taxonomy-surface.plan.md](future/nc-knowledge-taxonomy-surface.plan.md) | NC-aligned SKOS knowledge taxonomy surface (also carries its own demand-tripwire promotion trigger) |
+| [future/oak-kg-iri-traverser.plan.md](future/oak-kg-iri-traverser.plan.md) | Generic IRI traversal surface |
+| [future/oak-kg-programme-navigator.plan.md](future/oak-kg-programme-navigator.plan.md) | Programme/unit navigation surface |
+| [future/oak-kg-schema-browser.plan.md](future/oak-kg-schema-browser.plan.md) | Ontology schema/class browser |
+| [future/oak-kg-lesson-graph-surface.plan.md](future/oak-kg-lesson-graph-surface.plan.md) | Lesson-level graph projection surface |
+| [future/cross-source-journeys.plan.md](future/cross-source-journeys.plan.md) | Feature-layer journey orchestration (playbook-vs-prompt question; two reference journeys) |
+| [future/oak-misconceptions-substrate-migration.plan.md](future/oak-misconceptions-substrate-migration.plan.md) | Folds into the unified all-tools substrate-migration plan (graph-estate-consolidation Judgement call 4) |
 
 ## Strategy and Research
 
@@ -60,30 +73,33 @@ under [sector-engagement/](../sector-engagement/).
 | [future/oak-curriculum-ontology-workspace-reassessment.plan.md](future/oak-curriculum-ontology-workspace-reassessment.plan.md) | Strategic brief | Re-open the previous no-monorepo decision now that MCP, KGs, and API convergence is an organisational priority |
 | [future/ontology-repo-fresh-perspective-review.plan.md](future/ontology-repo-fresh-perspective-review.plan.md) | Short future plan | Re-read the official ontology repo from an upstream-first starting point and write up what that fresh pass changes |
 | [future/direct-ontology-use-and-graph-serving-prototypes.plan.md](future/direct-ontology-use-and-graph-serving-prototypes.plan.md) | Strategic future plan | Start with direct ontology use as the control case, then compare bounded Neo4j and Stardog serving prototypes against the same Oak use cases |
-| [future/extending-graph-support-tooling.plan.md](future/extending-graph-support-tooling.plan.md) | Candidate buffer | Home for graph-delivery enhancement candidates (rank/explain/compare, ordering, more corpora) discovered while building the EEF graph tooling — each an explicit owner decision, not a deferral gate |
-| [../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md](../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md) | Formal report | Cross-boundary synthesis tying the official ontology to MCP orientation, direct ontology resources, search projections, and governance/update needs |
-| [../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md](../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md) | Research note | Direct-use baseline plus Neo4j/Stardog serving-platform comparison for external user-facing graph features |
+| [future/extending-graph-support-tooling.plan.md](future/extending-graph-support-tooling.plan.md) | Candidate buffer | Home for graph-delivery enhancement candidates discovered while building the EEF graph tooling — each an explicit owner decision, not a deferral gate |
+| [../../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md](../../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md) | Formal report | Cross-boundary synthesis tying the official ontology to MCP orientation, direct ontology resources, search projections, and governance/update needs |
+| [../../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md](../../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md) | Research note | Direct-use baseline plus Neo4j/Stardog serving-platform comparison for external user-facing graph features |
 
 ## Read Order
 
-1. **Topology spine (read first if touching graph code)**:
-   [current/graph-stack.plan.md](current/graph-stack.plan.md)
-2. **Current formal synthesis**:
-   [../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md](../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md)
-3. **Direct-use versus platform comparison**:
+1. **Estate state (read first)**:
+   [current/graph-estate-consolidation.plan.md](current/graph-estate-consolidation.plan.md)
+   §"Current state (verified ground truth)"
+2. **Substrate plan (read first if touching graph code)**:
+   [active/graph-stack.plan.md](active/graph-stack.plan.md)
+3. **Current formal synthesis**:
+   [../../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md](../../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md)
+4. **Direct-use versus platform comparison**:
    [future/direct-ontology-use-and-graph-serving-prototypes.plan.md](future/direct-ontology-use-and-graph-serving-prototypes.plan.md)
-4. **Ontology workspace reassessment**:
+5. **Ontology workspace reassessment**:
    [future/oak-curriculum-ontology-workspace-reassessment.plan.md](future/oak-curriculum-ontology-workspace-reassessment.plan.md)
-5. **Ontology source strategy**:
+6. **Ontology source strategy**:
    [future/ontology-integration-strategy.md](future/ontology-integration-strategy.md)
-6. **Fresh-perspective follow-on**:
+7. **Fresh-perspective follow-on**:
    [future/ontology-repo-fresh-perspective-review.plan.md](future/ontology-repo-fresh-perspective-review.plan.md)
-7. **Search-adjacent graph strategy**:
+8. **Search-adjacent graph strategy**:
    [oak-ontology-graph-opportunities.strategy.md](oak-ontology-graph-opportunities.strategy.md)
-8. **Platform research note**:
-   [../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md](../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md)
-9. **External knowledge sources**:
-   [../sector-engagement/external-knowledge-sources/README.md](../sector-engagement/external-knowledge-sources/README.md)
+9. **Platform research note**:
+   [../../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md](../../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md)
+10. **External knowledge sources**:
+    [../../exploring-open-education-resources/external-knowledge-sources/README.md](../../exploring-open-education-resources/external-knowledge-sources/README.md)
 
 ## Document Roles (DRY)
 
@@ -117,11 +133,11 @@ threads:
    becomes a published artefact dependency, or is brought into this monorepo
    with explicit developer-experience safeguards.
 3. **External organisation use of Oak KGs**:
-   [sector-engagement/knowledge-graph-adoption/](../sector-engagement/knowledge-graph-adoption/)
+   [sector-engagement/knowledge-graph-adoption/](../../sector-engagement/knowledge-graph-adoption/)
    owns how MATs, edtechs, researchers, and other organisations can use Oak's
    ontology, graph exports, SDKs, MCP resources, and search projections.
 4. **External knowledge/data sources**:
-   [sector-engagement/external-knowledge-sources/](../sector-engagement/external-knowledge-sources/)
+   [exploring-open-education-resources/external-knowledge-sources/](../../exploring-open-education-resources/external-knowledge-sources/)
    owns EEF, education skills, external curriculum APIs, and future third-party
    knowledge graphs used as data sources for Oak applications.
 
@@ -147,6 +163,9 @@ monorepo.
 **External source/adoption work**: promote through the sector-engagement
 subthreads when the next action is a partner-facing playbook, external
 data-source feasibility spike, or adoption support plan.
+
+**Parked graph surfaces**: revisit when the EEF tool finishes
+(finishing-plan D7), per each parked plan's header.
 
 ## Terminology Note
 
@@ -178,8 +197,8 @@ planning/review when available.
 
 ## Foundation Documents (Mandatory Re-read)
 
-1. [principles.md](../../directives/principles.md)
-2. [testing-strategy.md](../../directives/testing-strategy.md)
-3. [schema-first-execution.md](../../directives/schema-first-execution.md)
+1. [principles.md](../../../directives/principles.md)
+2. [testing-strategy.md](../../../directives/testing-strategy.md)
+3. [schema-first-execution.md](../../../directives/schema-first-execution.md)
 
 First question: Could it be simpler without compromising quality?

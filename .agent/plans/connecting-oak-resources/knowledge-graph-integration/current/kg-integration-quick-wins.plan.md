@@ -414,6 +414,6 @@ Promotion candidates:
 |----------|---------|
 | [../research/elasticsearch-neo4j-oak-ontology-synthesis.research.md](../research/elasticsearch-neo4j-oak-ontology-synthesis.research.md) | Canonical graph and platform synthesis with real links |
 | [../oak-ontology-graph-opportunities.strategy.md](../oak-ontology-graph-opportunities.strategy.md) | Strategic direction that this quick-win plan operationalises |
-| [../../high-level-plan.md](../../high-level-plan.md) | Cross-collection sequencing that names this work as the next graph promotion candidate |
-| [semantic-search/current/bulk-metadata-quick-wins.execution.plan.md](../../semantic-search/current/bulk-metadata-quick-wins.execution.plan.md) | Existing queued semantic-search work that may later consume graph-derived enrichments |
+| [../../high-level-plan.md](../../../high-level-plan.md) | Cross-collection sequencing that names this work as the next graph promotion candidate |
+| [semantic-search/current/bulk-metadata-quick-wins.execution.plan.md](../../../semantic-search/current/bulk-metadata-quick-wins.execution.plan.md) | Existing queued semantic-search work that may later consume graph-derived enrichments |
 | [https://github.com/oaknational/oak-curriculum-ontology](https://github.com/oaknational/oak-curriculum-ontology) | Source ontology, RDF distributions, and Neo4j export implementation |

@@ -4,7 +4,6 @@ overview: "Home for candidate enhancements to the graph-delivery capability, dis
 graph_layer: feature
 parent_plan: "../../../sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
 sibling_plans:
-  - "../current/graph-query-layer.plan.md"
   - "../active/graph-stack.plan.md"
 specialist_reviewer: "mcp-expert, architecture-expert-betty, assumptions-expert"
 status: future

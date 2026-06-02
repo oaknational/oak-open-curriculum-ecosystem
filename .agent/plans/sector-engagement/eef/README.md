@@ -134,13 +134,13 @@ ADR-038.
 
 ## Parent and Sibling Relationships
 
-- **Parent (coordinator)**:
-  [`../../connecting-oak-resources/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md)
-  — the multi-source coordinating plan; this subthread owns the EEF strand.
+- **No live parent**: the historical multi-source umbrella
+  (open-education-knowledge-surfaces) is archived; this subthread owns the EEF
+  strand directly.
 - **Cross-collection context**: the
   [`knowledge-graph-integration/`](../../connecting-oak-resources/knowledge-graph-integration/)
-  collection (graph query layer, misconception graph, NC knowledge taxonomy)
-  and the graph-estate plans.
+  collection (the graph substrate plan, parked Oak graph surfaces, ontology
+  work) and the graph-estate consolidation plan.
 - **Related ADR (proposed, not constraining)**:
   [ADR-157](../../../../docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md)
   — typing discipline (`as const` derivation), `curriculum://` URI scheme,

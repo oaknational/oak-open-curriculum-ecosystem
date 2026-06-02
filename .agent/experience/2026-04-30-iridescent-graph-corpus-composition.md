@@ -411,9 +411,9 @@ narrative/scope work was settled in earlier sessions.
 - Conservation map (semantic preservation + verification log):
   [`.agent/plans/sector-engagement/eef/reference/conservation-map.md`](../plans/sector-engagement/eef/reference/conservation-map.md)
 - Increment 1 plan (foundation):
-  [`.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md`](../plans/connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md)
+  `graph-query-layer.plan.md` (since archived)
 - Increment 2 plan (EEF as corpus):
-  [`.agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md`](../plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md)
+  `eef-evidence-corpus.plan.md` (since archived)
 - Increment 3 plan (cross-source journeys):
   [`.agent/plans/connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md`](../plans/connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md)
 - Pre-session predecessor (recoverable from git history):

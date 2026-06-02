@@ -254,9 +254,9 @@ These concerns moved or were lifted to sibling plans during the
 restructure:
 
 - **Graph operations (manifest, summary, get_node, enumerate_nodes,
-  neighbours, subgraph, find_by_tag)** — now in
-  [`../../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md).
-  EEF strands becomes a `GraphView` adapter (T5 of that plan).
+  neighbours, subgraph, find_by_tag)** — recorded in
+  `graph-query-layer.plan.md` (since archived superseded).
+  EEF strands became a `GraphView` adapter via graph-stack WS4.5.
 - **Cross-source primitives + journeys** — split across two layers:
   substrate-layer cross-corpus primitives in
   `../../../graph-combinatorial-arc.plan.md`
@@ -287,8 +287,8 @@ restructure:
 - **Predecessor recovery**: `git show e2796757:<path>` (paths in the
   Recovery path section above). The pre-session state is permanently
   in git history.
-- [`../current/eef-evidence-corpus.plan.md`](../current/eef-evidence-corpus.plan.md) — successor
-- [`../../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md) — Increment 1 (foundation)
+- `eef-evidence-corpus.plan.md` (since archived) — successor at the time
+- `graph-query-layer.plan.md` (since archived) — Increment 1 (foundation)
 - `../../../graph-combinatorial-arc.plan.md` — Increment 3 substrate-layer cross-corpus primitives (combinatorial arc, authored 2026-05-11)
 - [`../../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md) — Increment 3b feature-layer journey orchestration
 - [`../../../../memory/active/napkin.md` § 2026-04-30 EEF graph-and-corpus architecture session](../../../../memory/active/napkin.md) — full session insight
@@ -327,7 +327,7 @@ This created a `gate-1a delivery contract` with no natural home in the
 existing plan tree.
 
 **Resolution**: a new plan
-[`../current/eef-first-feature.plan.md`](../current/eef-first-feature.plan.md)
+`eef-first-feature.plan.md` (since archived superseded)
 was authored (Charcoal Searing Ember session) to absorb the
 docs-adr-expert P0 finding (missing-owning-plan for gate-1a). The new
 plan owns the gate-1a delivery contract **by reference** — it points at
@@ -353,7 +353,7 @@ authoring home. No item was relocated, duplicated, or lost.
 
 **Cross-references for the extraction**:
 
-- [`../current/eef-first-feature.plan.md`](../current/eef-first-feature.plan.md) — new owning plan for gate-1a (CURRENT, 2026-05-21)
+- `eef-first-feature.plan.md` (since archived superseded) — owning plan for gate-1a at the time (2026-05-21)
 - `../../../graph-mvp-arc.plan.md` — gate-0a/gate-1a vs gate-0b/gate-1b definitions
 - [`../../../connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md) — substrate todos (WS4.4 + WS4.5)
 - `../../../graph-portfolio-index.md` — slice 1a / 1b portfolio rows (split applied 2026-05-21)

@@ -1,9 +1,9 @@
 ---
 name: "Oak KG IRI Traverser"
 overview: "Future generic IRI traversal surface for exploratory graph use, deliberately sequenced after named user-value surfaces."
-status: future
+status: parked
 graph_layer: oak-graph-surface
-parent_plan: "../current/oak-kg-threads-surface.plan.md"
+parent_plan: "./oak-kg-threads-surface.plan.md"
 isProject: false
 todos:
   - id: prove-generic-traverser-need
@@ -15,6 +15,12 @@ todos:
 ---
 
 # Oak KG IRI Traverser
+
+> **⏸️ PARKED 2026-06-02.** Wider graph work is undefined until the first
+> proper graph tool (EEF) ships
+> ([`eef-graph-tool-completion.plan.md`](../../../sector-engagement/eef/current/eef-graph-tool-completion.plan.md));
+> revisit after finishing-plan D7. Park record:
+> [`graph-estate-consolidation.plan.md`](../current/graph-estate-consolidation.plan.md).
 
 This follow-on owns the generic IRI traverser cut from slice 2. It is not a
 shortcut around specific, user-valued graph surfaces.

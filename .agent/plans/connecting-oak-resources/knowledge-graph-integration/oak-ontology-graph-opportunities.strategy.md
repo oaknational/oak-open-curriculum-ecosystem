@@ -46,9 +46,9 @@ ontology-serving or platform-selection decision.
 Two cross-boundary companions now matter when reading it:
 
 - the formal ontology integration report in
-  [../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md](../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md)
+  [../../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md](../../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md)
 - the direct-use versus Neo4j/Stardog comparison note in
-  [../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md](../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md)
+  [../../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md](../../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md)
 
 Read this strategy with one caveat: **direct ontology use without a live graph
 platform remains the baseline** for MCP surfaces, search projections, and QA.

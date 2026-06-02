@@ -2,13 +2,10 @@
 name: "Cross-Source Journeys (Increment 3 Design)"
 overview: "First-class user-journey artefacts that compose graph queries, evidence-corpus rankings, and search across sources. Two reference journeys: evidence-aware-lesson-sequencing (cross-source) and prerequisite-trace (graph-only). Discovers whether journeys need a new MCP primitive (playbook) or can ride on prompts."
 graph_layer: feature
-parent_plan: "../active/open-education-knowledge-surfaces.plan.md"
 sibling_plans:
-  - "../current/graph-query-layer.plan.md"
-  - "../../sector-engagement/eef/current/eef-evidence-corpus.plan.md"
   - "../active/agent-guidance-consolidation.plan.md"
 specialist_reviewer: "mcp-expert, code-expert, architecture-expert-betty, docs-adr-expert"
-status: future
+status: parked
 isProject: false
 todos:
   - id: t1-journey-shape-decision
@@ -33,25 +30,27 @@ todos:
 
 # Cross-Source Journeys
 
-**Status**: FUTURE — design-only until Increments 1 (graph layer) and 2
-(EEF corpus) reach ACTIVE, plus the substrate-layer cross-corpus
-primitives in `../../../graph-combinatorial-arc.plan.md`
-have shipped (this plan consumes those primitives).
-**Last Updated**: 2026-05-11 (layer-distinction note added during the
-MVP-arc reshape; plan body otherwise unchanged from 2026-04-30 authoring).
-**Increment**: 3b of the EEF graph-and-corpus delivery sequence —
-**feature-layer** journey orchestration over multiple substrate-layer
-cross-corpus primitives.
+> **⏸️ PARKED 2026-06-02 — increment scaffold retired.** Wider graph work is
+> undefined until the first proper graph tool (EEF) ships
+> ([`eef-graph-tool-completion.plan.md`](../../../sector-engagement/eef/current/eef-graph-tool-completion.plan.md));
+> revisit after finishing-plan D7. The increment/arc framing in this body
+> (Increments 1–3, the combinatorial arc, the 7-op query layer) is retired
+> scaffold from the pre-rebuild architecture; the journey concept, the two
+> reference journeys, and the open playbook-vs-prompt question are the live
+> substance. Park record:
+> [`graph-estate-consolidation.plan.md`](../current/graph-estate-consolidation.plan.md).
+
+**Status**: ⏸️ PARKED (future/)
+**Last Updated**: 2026-06-02 (parked; body otherwise unchanged from
+2026-04-30 authoring + 2026-05-11 layer-distinction note).
 
 **Layer distinction (added 2026-05-11)**: this plan is feature-layer
 journey orchestration (playbook primitive or rich prompts composing
-multiple tool calls). It is **distinct from**
-`../../../graph-combinatorial-arc.plan.md`,
-which is substrate-layer combinatorial primitive delivery (MCP tools
-whose body composes corpora through `graph-corpus-sdk`). Journeys
-consume substrate-layer primitives; this plan does not duplicate or
-replace them. Two layers, two plans, sequential dependency direction
-(this plan consumes those primitives once they ship).
+multiple tool calls), distinct from substrate-layer primitive delivery
+(MCP tools whose body composes corpora through `graph-corpus-sdk`).
+Journeys consume substrate-layer primitives; this plan does not duplicate
+or replace them. Two layers, sequential dependency direction (this plan
+consumes those primitives once they ship).
 
 ## Why This Plan Exists
 
@@ -262,8 +261,9 @@ promote on observed insufficiency.
 
 ## Cross-Plan References
 
-- **Foundation (Inc 1)**: [`../current/graph-query-layer.plan.md`](../current/graph-query-layer.plan.md)
-- **Corpus (Inc 2)**: [`../../sector-engagement/eef/current/eef-evidence-corpus.plan.md`](../../sector-engagement/eef/current/eef-evidence-corpus.plan.md)
-- **Parent**: [`../active/open-education-knowledge-surfaces.plan.md`](../active/open-education-knowledge-surfaces.plan.md)
+- **Substrate**: the finished EEF graph tool
+  ([`eef-graph-tool-completion.plan.md`](../../../sector-engagement/eef/current/eef-graph-tool-completion.plan.md))
+  and whatever cross-corpus primitives follow it — the historical
+  graph-query-layer, eef-evidence-corpus, and open-education-knowledge-surfaces
+  parents of this plan are archived superseded framing.
 - **Sibling (guidance)**: [`../active/agent-guidance-consolidation.plan.md`](../active/agent-guidance-consolidation.plan.md) — workflows defined there are the prose ancestor of journeys defined here.
-- **Session insight**: [`.agent/memory/active/napkin.md` § 2026-04-30 EEF graph-and-corpus architecture session](../../../memory/active/napkin.md)

@@ -2,10 +2,6 @@
 name: "Agent Guidance Consolidation"
 overview: "Review and consolidate the advice delivered to AI agents via server instructions, tool descriptions, resource annotations, and prompts — currently scattered, partially stale, and not fully DRY."
 graph_layer: feature
-parent_plan: "open-education-knowledge-surfaces.plan.md"
-sibling_plans:
-  - "misconception-graph-mcp-surface.plan.md"
-  - "../../sector-engagement/eef/current/eef-evidence-corpus.plan.md"
 specialist_reviewer: "mcp-expert, code-expert, docs-adr-expert"
 isProject: false
 todos:
@@ -166,15 +162,17 @@ tool's description should be composed from:
 
 **T5: Tool categories** — Update `tool-guidance-data.ts` categories
 to be derived from the catalogue. Add new categories if needed
-(e.g. `evidence` for EEF tools, `diagnostics` for misconception graph).
+(e.g. `diagnostics` for misconception graph; an `evidence` category
+arrives with the EEF tool when it ships).
 
 **T6: Workflows** — Update workflow definitions to include new tools
 and new workflows:
 
-- Evidence-grounded lesson planning (EEF recommend → select → plan)
 - Misconception diagnostics (search lesson → get misconceptions →
   plan remediation)
-- Pupil Premium strategy review (EEF recommend → compare → assess)
+- Evidence-grounded workflows follow when the EEF evidence tool ships
+  (owned by the live EEF plan; the old recommend/compare workflow
+  shapes are retired)
 
 **T7: Resource-loading advice** — Consolidate into a single
 resource-priority model:
@@ -182,10 +180,11 @@ resource-priority model:
 | Resource | When to load | Who loads it | Why |
 |---|---|---|---|
 | `curriculum://model` | Conversation start | Agent or host | Domain orientation |
-| `eef-toolkit://methodology` | Before citing EEF data | Agent | Methodology context |
 | `curriculum://prior-knowledge-graph` | When exploring progressions | Agent | Relationship context |
 | `curriculum://misconception-graph` | When diagnosing understanding | Agent | Error patterns |
-| `eef-toolkit://strands` | When recommending approaches | Agent | Evidence overview |
+
+(EEF resource rows join this table when the EEF tool ships and declares
+its resource surface.)
 
 This replaces the current scattered "call get-curriculum-model first"
 advice in 7+ tool descriptions.
@@ -238,16 +237,13 @@ T9-T11 are validation. Each phase depends on the previous.
 
 ## Coordination with Sibling Plans
 
-This plan should execute AFTER the misconception graph and EEF evidence
-plans, because those plans add new tools and resources that need to be
-included in the consolidated guidance. However, the audit (T1-T2) can
-run at any time.
-
-Execution order:
-
-1. Misconception graph MCP surface (adds 1 tool, 1 resource)
-2. EEF evidence MCP surface (adds 1 tool, 2 resources, 1 prompt)
-3. **This plan** (consolidates guidance for the full tool surface)
+The misconception graph MCP surface is landed (completed, archived). The
+EEF evidence tool is owned by the live EEF plan
+([`eef-graph-tool-completion.plan.md`](../../../sector-engagement/eef/current/eef-graph-tool-completion.plan.md))
+and is not yet shipped; when it ships, its tools and resources join the
+consolidated guidance. This plan consolidates guidance for the
+**existing** tool surface and is otherwise EEF-independent; the audit
+(T1-T2) can run at any time.
 
 ## Size Estimate
 

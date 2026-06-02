@@ -4,10 +4,9 @@ overview: "Revisit the official Oak ontology repo from an upstream-first startin
 status: complete
 graph_layer: oak-graph-surface
 related_reports:
-  - "../../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md"
+  - "../../../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md"
 related_plans:
   - "ontology-integration-strategy.md"
-  - "../active/open-education-knowledge-surfaces.plan.md"
   - "../current/kg-alignment-audit.execution.plan.md"
 specialist_reviewer: "docs-adr-expert, assumptions-expert, onboarding-expert"
 todos:
@@ -38,7 +37,7 @@ todos:
 
 The repo now has a strong local synthesis of ontology implications for MCP and
 search in
-[oak-ontology-mcp-search-integration-report-2026-04-19.md](../../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md).
+[oak-ontology-mcp-search-integration-report-2026-04-19.md](../../../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md).
 That report is intentionally useful for current repo decisions, but it is still
 anchored in the shapes and needs of this repo.
 
@@ -86,10 +85,9 @@ Produce a short write-up that:
 
 ### Second-pass local comparison surfaces
 
-1. [oak-ontology-mcp-search-integration-report-2026-04-19.md](../../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md)
+1. [oak-ontology-mcp-search-integration-report-2026-04-19.md](../../../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md)
 2. [ontology-integration-strategy.md](ontology-integration-strategy.md)
-3. [open-education-knowledge-surfaces.plan.md](../active/open-education-knowledge-surfaces.plan.md)
-4. [kg-alignment-audit.execution.plan.md](../current/kg-alignment-audit.execution.plan.md)
+3. [kg-alignment-audit.execution.plan.md](../current/kg-alignment-audit.execution.plan.md)
 
 ## Completion Note
 
@@ -98,7 +96,7 @@ than five independent documents, following an assumptions-expert
 assessment that the existing integration report already covered ~80% of
 the plan's stated purpose. The synthesis was appended as a
 "Fresh-Perspective Addendum" section to the
-[integration report](../../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md)
+[integration report](../../../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md)
 rather than creating a standalone document, to avoid a parallel
 maintenance surface.
 

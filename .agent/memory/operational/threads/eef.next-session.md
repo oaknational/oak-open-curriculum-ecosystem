@@ -1,5 +1,46 @@
 # Next-Session Record — `eef` thread
 
+> **GRAPH-ESTATE CONSOLIDATION EXECUTED — t2–t5+t7 LANDED AS ONE SHIP-UNIT,
+> SCOPED t8 VERIFICATION PASSED (2026-06-02, Opalescent Cascading Planet /
+> `0340f9`; claude / Opus 4.8; owner-approved session plan).**
+>
+> The graph plan estate now reads true in one pass: eleven plans archived to
+> `kg/archive/completed/` with banners (seven superseded-framing, three
+> completed with outcomes + SHAs, plus verification of the already-quarantined
+> `graph-tooling-rebuild`); the four misconception feature plans consolidated
+> into
+> [`oak-misconceptions-graph-features.plan.md`](../../../plans/connecting-oak-resources/knowledge-graph-integration/future/oak-misconceptions-graph-features.plan.md)
+> (each problem a named section; both assumptions-expert park-header
+> conditions honoured; `maxResponseTokens=16000` marked retired);
+> `oak-kg-threads-surface` + `nc-knowledge-taxonomy-surface` parked with
+> substance-preserving block-condition headers; the KG README rewritten to
+> the post-move reality; `graph-stack.plan.md` re-framed (Inc.N/gate labels
+> declared retired per ADR-173, landed WS statuses flipped incl. the WS4.1
+> scaffold, WS5 closed as executed-by-consolidation); the live-estate
+> reference sweep de-linked every survived pointer (one where-did-they-go
+> record: `completed-plans.md` §"Knowledge Graph Integration (2026-06-02
+> Estate Consolidation)"). `repo-continuity.md` verified zero-edit (all token
+> instances are decontamination record). Reviewed in real time
+> (docs-adr-expert + adversarial dangling-pointer hunt; all findings
+> remediated except two broken links inside the
+> `agentic-engineering-enhancements` thread record, deferred under a parallel
+> agent's active claim — de-link the `graph-query-layer` /
+> `2026-05-11-graph-execution-prep-opener` mentions there when that claim
+> clears). `t6` and the full `t8` close stay D7-gated; the `t8` todo is
+> `pending` by design.
+>
+> **NEXT SAFE STEP: author the Judgement-call-4 unified substrate-migration
+> plan from this clean estate** (one plan owning the move of all existing
+> graph tools onto `graph-corpus-sdk`; scope ratified in
+> `graph-estate-consolidation.plan.md` §Judgement calls, call 4). Then EEF D3
+> per repo-continuity's EEF Next Safe Steps item 6.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Opalescent Cascading Planet` | `claude` | `Opus 4.8` | `0340f9` | `graph-estate-consolidation-execution` | 2026-06-02 | 2026-06-02 |
+>
+> ---
+>
 > **MANDATE-1 DEEP CONTAMINATION SCAN EXECUTED — ESTATE CLEAN AFTER NINE
 > FIXES (2026-06-02, Stellar Waning Planet / `64c383`; claude / Opus 4.8;
 > owner-directed standing mandate).**
@@ -2259,7 +2300,7 @@ Evidence:
 + [eef/README.md](../../../plans/sector-engagement/eef/README.md) — subthread orientation
 + [eef/current/eef-evidence-corpus.plan.md](../../../plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md) — Increment 2 executable plan
 + [eef/reference/conservation-map.md](../../../plans/sector-engagement/eef/reference/conservation-map.md) — semantic preservation map with verification log (§N)
-+ [knowledge-graph-integration/current/graph-query-layer.plan.md](../../../plans/connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md) — Increment 1 foundation
++ `knowledge-graph-integration` graph-query-layer.plan.md (since archived) — Increment 1 foundation
 + [knowledge-graph-integration/future/cross-source-journeys.plan.md](../../../plans/connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md) — Increment 3 design
 + [napkin § 2026-04-30 EEF graph-and-corpus architecture session](../../active/napkin.md) — full session insight
 + [experience/2026-04-30-iridescent-graph-corpus-composition.md](../../../experience/2026-04-30-iridescent-graph-corpus-composition.md) — methodology + reflection
@@ -2868,6 +2909,6 @@ for the full list with triggers and candidate homes. Items cover:
 ## Cross-Plan and Cross-Thread Links
 
 + **Parent (sector-engagement)**: [`sector-engagement.next-session.md`](sector-engagement.next-session.md)
-+ **Parent (KG-integration coordinator)**: [`open-education-knowledge-surfaces.plan.md`](../../../plans/connecting-oak-resources/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md) — this subthread owns its WS-3 (now restructured into Increments 1+2+3).
++ **Parent (KG-integration coordinator)**: `open-education-knowledge-surfaces.plan.md` (since archived) — this subthread owns its WS-3 (now restructured into Increments 1+2+3).
 + **Authoritative ADR**: [ADR-157](../../../../docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md)
 + **Strategic brief**: [`evidence-integration-strategy.md`](../../../plans/sector-engagement/eef/future/evidence-integration-strategy.md) — R1–R8 source.

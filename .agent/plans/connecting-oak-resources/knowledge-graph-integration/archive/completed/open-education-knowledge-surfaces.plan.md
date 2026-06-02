@@ -1,7 +1,7 @@
 ---
 name: "Open Education Knowledge Surfaces"
 overview: "Coordinate the integration of three open education data sources (Oak API, Oak Ontology, EEF Toolkit) into the MCP server as graph resources, tools, and prompts — and declare this multi-source integration prominently in documentation."
-status: active
+status: superseded
 graph_layer: feature
 child_plans:
   - "graph-resource-factory.plan.md"
@@ -39,7 +39,16 @@ todos:
 
 # Open Education Knowledge Surfaces
 
-**Status**: ACTIVE — WS-0/1/2 committed (`1eb302e8`); WS-3 next
+> **⛔ SUPERSEDED — ARCHIVED 2026-06-02.** Historical multi-source umbrella:
+> WS-0/1/2 landed (`1eb302e8`); WS-3 (the EEF recommend tool) was superseded by
+> the EEF graph-tooling rebuild; WS-4/5/6 are owned by their own plans
+> (`nc-knowledge-taxonomy-surface`, `agent-guidance-consolidation`). Do not
+> resume or cite it as live. Live graph work:
+> [`eef-graph-tool-completion.plan.md`](../../../../sector-engagement/eef/current/eef-graph-tool-completion.plan.md)
+> and the [knowledge-graph-integration README](../../README.md).
+> Archive record: [`graph-estate-consolidation.plan.md`](../../current/graph-estate-consolidation.plan.md).
+
+**Status**: SUPERSEDED — WS-0/1/2 committed (`1eb302e8`)
 **Last Updated**: 2026-04-11
 **Branch**: `planning/kg_eef_integration`
 

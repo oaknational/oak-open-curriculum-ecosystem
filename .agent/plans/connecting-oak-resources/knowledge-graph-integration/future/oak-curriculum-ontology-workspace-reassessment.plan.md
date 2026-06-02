@@ -62,7 +62,7 @@ Explicit non-goals:
 2. The KG alignment audit should inform the decision, because measured overlap
    changes whether tight repo coupling creates enough value.
 3. The Oak OpenAPI integration plan in
-   [../../sector-engagement/future/oak-openapi-monorepo-integration.plan.md](../../sector-engagement/future/oak-openapi-monorepo-integration.plan.md)
+   [../../../sector-engagement/future/oak-openapi-monorepo-integration.plan.md](../../../sector-engagement/future/oak-openapi-monorepo-integration.plan.md)
    is a sibling convergence question; the two should not be decided in
    isolation.
 4. Any monorepo option must include explicit developer workflow containment:

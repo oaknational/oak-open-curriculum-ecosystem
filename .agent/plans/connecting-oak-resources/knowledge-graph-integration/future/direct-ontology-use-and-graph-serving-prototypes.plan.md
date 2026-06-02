@@ -4,13 +4,12 @@ overview: "Start with direct ontology-backed use as the control case, then compa
 status: future
 graph_layer: oak-graph-surface
 related_reports:
-  - "../../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md"
+  - "../../../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md"
 related_research:
-  - "../../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md"
+  - "../../../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md"
 related_plans:
   - "../current/kg-alignment-audit.execution.plan.md"
   - "ontology-integration-strategy.md"
-  - "../active/open-education-knowledge-surfaces.plan.md"
 specialist_reviewer: "assumptions-expert, docs-adr-expert, onboarding-expert, architecture-expert-wilma"
 todos:
   - id: dgsp-1-direct-use-baseline
@@ -43,12 +42,12 @@ todos:
 The repo now has two strong pieces of cross-boundary analysis:
 
 1. the formal ontology integration report in
-   [oak-ontology-mcp-search-integration-report-2026-04-19.md](../../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md),
+   [oak-ontology-mcp-search-integration-report-2026-04-19.md](../../../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md),
    which argues that official ontology value should land directly in MCP
    orientation, standalone ontology surfaces, search projections, and QA
    governance
 2. the platform-comparison research note in
-   [kg-neo4j-stardog-product-creation-clean.md](../../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md),
+   [kg-neo4j-stardog-product-creation-clean.md](../../../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md),
    which argues that Neo4j and Stardog are downstream serving-architecture
    choices rather than the ontology itself
 

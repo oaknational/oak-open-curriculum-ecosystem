@@ -30,7 +30,7 @@ Authoritative execution sources:
 2. [current/README.md](current/README.md)
 3. [future/README.md](future/README.md)
 4. [oeai/README.md](oeai/README.md)
-5. [external-knowledge-sources/README.md](external-knowledge-sources/README.md)
+5. [external-knowledge-sources/README.md](../exploring-open-education-resources/external-knowledge-sources/README.md)
 6. [knowledge-graph-adoption/README.md](knowledge-graph-adoption/README.md)
 
 Implementation detail belongs in the owning engineering collection. This
@@ -44,7 +44,7 @@ should become executable work.
   contained upstream API coordination, external issue reports, and a partner
   requirements pack for Castr.
 - External knowledge-source work has been split into
-  [external-knowledge-sources/](external-knowledge-sources/), while internal
+  [external-knowledge-sources/](../exploring-open-education-resources/external-knowledge-sources/), while internal
   Oak KG integration remains in
   [../connecting-oak-resources/knowledge-graph-integration/](../connecting-oak-resources/knowledge-graph-integration/).
 - External organisation use of Oak's own KG assets now has a dedicated
@@ -95,7 +95,7 @@ Phase 4: Organisation-specific support playbooks            Future
 ### Phase 3 - External Data-Source Demonstrations
 
 - Related source-ingestion thread:
-  [external-knowledge-sources/](external-knowledge-sources/)
+  [external-knowledge-sources/](../exploring-open-education-resources/external-knowledge-sources/)
 - Done when: at least one non-Oak data source can flow through the generalised
   OpenAPI -> SDK -> MCP pipeline without Oak-specific assumptions.
 - Dependencies: generic SDK/codegen foundation work in
@@ -135,5 +135,6 @@ own deterministic gates in the owning engineering collection.
 1. [High-Level Plan](../high-level-plan.md)
 2. [Collection README](README.md)
 3. [External Material Triage](external-material-triage.md)
-4. [Open Education Knowledge Surfaces](../connecting-oak-resources/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md)
+4. [Knowledge Graph Integration hub](../connecting-oak-resources/knowledge-graph-integration/README.md)
+   (the historical open-education-knowledge-surfaces umbrella is archived)
 5. [Oak Surface Isolation and Generic Foundation Programme](../architecture-and-infrastructure/future/oak-surface-isolation-and-generic-foundation-programme.plan.md)

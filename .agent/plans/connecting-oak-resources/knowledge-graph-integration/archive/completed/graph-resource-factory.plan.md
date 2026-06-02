@@ -45,6 +45,13 @@ todos:
 
 # Graph Resource Factory
 
+> **✅ COMPLETED — ARCHIVED 2026-06-02.** All ten todos done, committed in
+> `1eb302e8` (2026-04-11): shared graph resource/tool factory extracted
+> (SDK-internal), prior-knowledge and thread-progressions surfaces refactored
+> onto it, curriculum-model documented as a justified exception, behaviour
+> verified by the full test suite.
+> Archive record: [`graph-estate-consolidation.plan.md`](../../current/graph-estate-consolidation.plan.md).
+
 **Status**: DONE — committed in `1eb302e8` (2026-04-11)
 **Last Updated**: 2026-04-11
 **Branch**: `planning/kg_eef_integration`

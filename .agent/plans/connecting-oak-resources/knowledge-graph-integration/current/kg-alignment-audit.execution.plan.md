@@ -6,7 +6,7 @@ source_research:
   - "../research/elasticsearch-neo4j-oak-ontology-synthesis.research.md"
   - "../oak-ontology-graph-opportunities.strategy.md"
   - "kg-integration-quick-wins.plan.md"
-  - "../../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md"
+  - "../../../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md"
 todos:
   - id: phase-0-scope-lock
     content: "Phase 0: Lock the audited entity slices, source versions, operational representation, and exact report template before writing code or analysis scripts."
@@ -76,7 +76,7 @@ Read:
 8. [oak-curriculum-ontology `README.md`](https://github.com/oaknational/oak-curriculum-ontology/blob/main/README.md)
 9. [oak-curriculum-ontology `scripts/export_to_neo4j.py`](https://github.com/oaknational/oak-curriculum-ontology/blob/main/scripts/export_to_neo4j.py)
 10. [oak-curriculum-ontology `scripts/export_to_neo4j_config.json`](https://github.com/oaknational/oak-curriculum-ontology/blob/main/scripts/export_to_neo4j_config.json)
-11. [.agent/research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md](../../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md)
+11. [.agent/research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md](../../../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md)
 
 ### Verify Current State
 
@@ -273,10 +273,10 @@ Once the first canonical audit outputs exist, update these documents.
    - narrow the remaining quick wins based on real match quality
 3. [README.md](../README.md)
    - update hub navigation so later graph work references the audit outputs
-4. [semantic-search/README.md](../../semantic-search/README.md)
+4. [semantic-search/README.md](../../../semantic-search/README.md)
    - update search-adjacent guidance from strategy-only to
      strategy-plus-evidence
-5. [high-level-plan.md](../../high-level-plan.md)
+5. [high-level-plan.md](../../../high-level-plan.md)
    - update the immediate-next-intentions wording if the audit changes the next
      graph promotion target
 
@@ -418,4 +418,4 @@ Success criteria:
 - Strategy:
   [oak-ontology-graph-opportunities.strategy.md](../oak-ontology-graph-opportunities.strategy.md)
 - Cross-collection sequencing:
-  [high-level-plan.md](../../high-level-plan.md)
+  [high-level-plan.md](../../../high-level-plan.md)

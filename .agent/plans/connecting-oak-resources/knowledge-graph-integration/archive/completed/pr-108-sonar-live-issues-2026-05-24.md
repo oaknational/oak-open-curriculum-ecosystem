@@ -1,5 +1,10 @@
 # PR 108 Sonar live issue inventory - 2026-05-24
 
+> **📦 ARCHIVED 2026-06-02.** Point-in-time SonarCloud inventory for PR #108,
+> which merged 2026-05-24; the live Sonar state is queried fresh per session,
+> never from this snapshot.
+> Archive record: [`graph-estate-consolidation.plan.md`](../../current/graph-estate-consolidation.plan.md).
+
 ## Scope
 
 - Branch: `feat/mcp-graph-support-foundation`

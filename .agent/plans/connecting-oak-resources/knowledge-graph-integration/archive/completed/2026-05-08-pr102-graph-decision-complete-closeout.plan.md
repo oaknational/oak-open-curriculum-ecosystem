@@ -49,6 +49,13 @@ todos:
 
 # PR 102 Graph Decision-Complete Closeout
 
+> **📦 ARCHIVED 2026-06-02.** Completed session record of the PR #102
+> decision-complete closeout; the graph architecture it closed out (MVP arc,
+> gate framing) was later discarded by the EEF graph-tooling rebuild. Live
+> graph work: [`eef-graph-tool-completion.plan.md`](../../../../sector-engagement/eef/current/eef-graph-tool-completion.plan.md)
+> and the [knowledge-graph-integration README](../../README.md).
+> Archive record: [`graph-estate-consolidation.plan.md`](../../current/graph-estate-consolidation.plan.md).
+
 > **Historical context note (added 2026-05-11)**: this plan is a session-
 > scoped record of the 2026-05-08 PR #102 decision-complete closeout. Paths
 > and slice numbers captured below reflect the planning state at that time.

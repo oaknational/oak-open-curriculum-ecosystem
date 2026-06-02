@@ -40,6 +40,15 @@ todos:
 
 # Misconception Graph MCP Surface
 
+> **✅ COMPLETED — ARCHIVED 2026-06-02.** All ten todos done, committed in
+> `1eb302e8` (2026-04-11): `curriculum://misconception-graph` resource +
+> `get-misconception-graph` aggregated tool live, ADR-123 resources table
+> updated, E2E assertions landed. This is the live bulk misconception tool the
+> EEF value proof (finishing-plan D7) runs against; replatforming it is owned
+> by the unified substrate-migration plan
+> ([`graph-estate-consolidation.plan.md`](../../current/graph-estate-consolidation.plan.md)
+> Judgement call 4).
+
 **Status**: DONE — committed in `1eb302e8` (2026-04-11)
 **Last Updated**: 2026-04-11
 **Branch**: `planning/kg_eef_integration`

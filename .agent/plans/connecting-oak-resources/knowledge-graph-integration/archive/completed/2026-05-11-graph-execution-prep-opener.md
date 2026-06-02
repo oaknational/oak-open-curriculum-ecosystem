@@ -2,7 +2,7 @@
 name: "Graph Execution Prep — Next Session Opener"
 overview: "Opener for the next graph session. The 2026-05-11 MVP arc reshape closed planning; the next session prepares for graph execution by landing four definite scoped pieces of planning work in order: D-4 topology BLOCKERs, Inc.1 decomposition, EEF plan WS restructure, agent-tooling collaboration workstreams. None of these is graph implementation yet; they unblock and parallelise it."
 type: session-opener
-status: current
+status: superseded
 thread: connecting-oak-resources
 last_updated: 2026-05-11
 isProject: false
@@ -29,6 +29,14 @@ todos:
 ---
 
 # Graph Execution Prep — Next Session Opener
+
+> **⛔ SUPERSEDED — ARCHIVED 2026-06-02.** Session opener for the retired MVP-arc
+> execution prep; steps 1–3 landed (SHAs inline below), and the arc this opener
+> prepared was discarded by the EEF graph-tooling rebuild. Do not execute it as
+> a next step. Live graph work:
+> [`eef-graph-tool-completion.plan.md`](../../../../sector-engagement/eef/current/eef-graph-tool-completion.plan.md)
+> and the [knowledge-graph-integration README](../../README.md).
+> Archive record: [`graph-estate-consolidation.plan.md`](../../current/graph-estate-consolidation.plan.md).
 
 **Last updated**: 2026-05-11
 **Status**: opener for the next graph session

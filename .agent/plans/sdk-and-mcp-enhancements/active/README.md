@@ -12,30 +12,20 @@ direct ontology resources, search projections, and service-level updates.
 - [mcp-app-extension-migration.plan.md](mcp-app-extension-migration.plan.md) —
   MCP Apps migration. WS1-WS3 Phases 0-4.5 complete and shipped
   (PR #76 merged). Phase 5 pending.
-- [../../connecting-oak-resources/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md](../../connecting-oak-resources/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md) —
-  **NEW**. Coordinate integration of three open education data sources
-  (Oak API, Oak Ontology, EEF Toolkit) into MCP surfaces. Parent for
-  WS-0 through WS-6 below.
 
-## Open Education Knowledge Surfaces (WS-0 → WS-6)
+## Open Education Knowledge Surfaces
 
-Execution order:
+The historical multi-source umbrella (open-education-knowledge-surfaces) is
+archived: WS-0/1/2 landed (`1eb302e8` — ADR + factory + misconception
+surface), the EEF workstream was superseded by the graph-tooling rebuild
+(live plan:
+[`eef-graph-tool-completion.plan.md`](../../sector-engagement/eef/current/eef-graph-tool-completion.plan.md)),
+and the surviving strands are owned by their own plans:
 
-1. **WS-0**: ADR + root README update (narrative first)
-2. **WS-1**: [graph-resource-factory.plan.md](../../connecting-oak-resources/knowledge-graph-integration/active/graph-resource-factory.plan.md) —
-   **PENDING**. Extract shared graph infrastructure, refactor existing
-   surfaces.
-3. **WS-2**: [misconception-graph-mcp-surface.plan.md](../../connecting-oak-resources/knowledge-graph-integration/active/misconception-graph-mcp-surface.plan.md) —
-   **PENDING**. 12,858 misconceptions from bulk data (first factory
-   consumer).
-4. **WS-3**: [eef-evidence-corpus.plan.md](../../sector-engagement/eef/current/eef-evidence-corpus.plan.md) —
-   **PENDING**. EEF evidence resources + recommendation tool + prompt.
-5. **WS-4**: [nc-knowledge-taxonomy-surface.plan.md](../../connecting-oak-resources/knowledge-graph-integration/active/nc-knowledge-taxonomy-surface.plan.md) —
-   **PENDING**. NC knowledge taxonomy from the ontology (smallest KG
-   integration).
-6. **WS-5**: [agent-guidance-consolidation.plan.md](../../connecting-oak-resources/knowledge-graph-integration/active/agent-guidance-consolidation.plan.md) —
-   **PENDING**. Consolidate agent guidance after all surfaces exist.
-7. **WS-6**: Documentation propagation (tracked in parent plan).
+- [agent-guidance-consolidation.plan.md](../../connecting-oak-resources/knowledge-graph-integration/active/agent-guidance-consolidation.plan.md) —
+  **LIVE**. Consolidate agent guidance for the existing tool surface.
+- [nc-knowledge-taxonomy-surface.plan.md](../../connecting-oak-resources/knowledge-graph-integration/future/nc-knowledge-taxonomy-surface.plan.md) —
+  **PARKED** (blocked until the EEF tool ships; demand tripwire also live).
 
 Companion follow-on plan outside this collection:
 
