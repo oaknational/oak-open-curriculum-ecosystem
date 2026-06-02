@@ -5714,6 +5714,98 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "0a53c3ee-20e5-47fb-9679-3582159ed7a6",
+      "agent_id": {
+        "agent_name": "Galactic Glowing Prism",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "cd7389",
+        "id": "8caf736c-1d85-5cd6-a2b9-5f38cdfdd87f"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-02T20:04:32Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit the JC4 unified substrate-migration plan authoring bundle.",
+      "intent_to_commit": "198200d8-e785-496b-9df4-11cf35cedfbc",
+      "archived_at": "2026-06-02",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-02T20:09:13Z",
+        "closed_by": {
+          "agent_name": "Galactic Glowing Prism",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "cd7389",
+          "id": "8caf736c-1d85-5cd6-a2b9-5f38cdfdd87f"
+        },
+        "summary": "commit window for the JC4 plan-authoring bundle; closed in the same collaboration-state commit",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "0a53c3ee-20e5-47fb-9679-3582159ed7a6",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f2b9f5f5-cd50-43eb-a936-219606abdcd6",
+      "agent_id": {
+        "agent_name": "Galactic Glowing Prism",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "cd7389",
+        "id": "8caf736c-1d85-5cd6-a2b9-5f38cdfdd87f"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/**",
+            ".agent/plans/sector-engagement/eef/future/eef-revalidate-on-new-graph-tools.plan.md",
+            ".agent/plans/sdk-and-mcp-enhancements/current/graph-tool-output-schemas.plan.md",
+            ".agent/plans/completed-plans.md",
+            ".agent/memory/operational/threads/eef.next-session.md",
+            ".agent/memory/active/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-02T19:38:48Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Author the JC4 unified substrate-migration plan (graph-tools-substrate-migration) + absorb/archive oak-misconceptions-substrate-migration + estate alignment edits + continuity surfaces",
+      "archived_at": "2026-06-02",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-02T20:09:14Z",
+        "closed_by": {
+          "agent_name": "Galactic Glowing Prism",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "cd7389",
+          "id": "8caf736c-1d85-5cd6-a2b9-5f38cdfdd87f"
+        },
+        "summary": "JC4 plan authored (kg/future/graph-tools-substrate-migration.plan.md), absorptions archived, estate aligned; landing in this commit",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f2b9f5f5-cd50-43eb-a936-219606abdcd6",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

@@ -109,8 +109,18 @@ fitness_content_role: drainable-buffer
   graph-forced). Q1/Q3/Q5 (as-const scope, mechanism home, codegen emission
   shape) resolve in the EEF D4–D6 co-design and the unified substrate-migration
   plan.
+- **Update (2026-06-02, Galactic Glowing Prism / `cd7389`)**: the unified
+  substrate-migration plan is authored —
+  [`graph-tools-substrate-migration.plan.md`][q3-migration]. The graph
+  projection plan's design content is absorbed there (Q1/Q3/Q5 are its
+  Decisions A/B/D; the projection doctrine and resolved Q2/Q4 are its
+  Ratified decisions 7–9) and the file is archived. Q1/Q3/Q5 now resolve in
+  the EEF D4–D6 co-design and at that plan's promotion (trigger: EEF D6
+  landed + D7 green).
 - **Status**: open (narrowed to Q1/Q3/Q5 — the shared-mechanism design); owned
-  by the output-schemas plan + the graph projection plan + EEF D4–D6.
+  by the output-schemas plan + the unified substrate-migration plan + EEF
+  D4–D6.
 
 [q3-general]: ../../plans/sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md
-[q3-graph]: ../../plans/sdk-and-mcp-enhancements/current/graph-tool-output-schemas.plan.md
+[q3-graph]: ../../plans/sdk-and-mcp-enhancements/archive/completed/graph-tool-output-schemas.plan.md
+[q3-migration]: ../../plans/connecting-oak-resources/knowledge-graph-integration/future/graph-tools-substrate-migration.plan.md

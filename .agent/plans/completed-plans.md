@@ -43,6 +43,7 @@ Before archival, mine completed outcomes into permanent documentation
 | Merge Readiness | 2026-03-02 | `feat/semantic_search_deployment` merged to `main`. MCP prompts investigated (ADR-123), onboarding review complete, quality gates green, secrets sweep done. | [archived plan](sdk-and-mcp-enhancements/archive/completed/merge-readiness.plan.md) |
 | Search `text` → `query` Rename | 2026-03-07 | Renamed the primary search/explore-topic MCP parameter from `text` to `query` across SDK, MCP, CLI, codegen, tests, prompts, and docs. Full specialist-review remediation completed and the governance follow-through that closed the wrapper/rules gap was recorded. | [archived plan](sdk-and-mcp-enhancements/archive/completed/search-tool-text-to-query-rename.plan.md) |
 | Folder Modernisation Meta Plan | 2026-02-22 | Legacy numbered plans archived under collection archive classes, disposition ledger established, governance docs normalised, and ADR-071 collision resolved by retaining widget URI ADR as 071 and renumbering dense-vector ADR to 118. | [archived plan](sdk-and-mcp-enhancements/archive/completed/folder-modernisation-meta-plan.md) |
+| Graph-Tool Output Schemas (DESIGN) | 2026-06-02 | Design content absorbed by `connecting-oak-resources/knowledge-graph-integration/future/graph-tools-substrate-migration.plan.md` as its own overview directed: projection doctrine + Q2/Q4 → its Ratified decisions; Q1/Q3/Q5 → its Decisions A/B/D; W-mech rides EEF D4–D6. | [archived plan](sdk-and-mcp-enhancements/archive/completed/graph-tool-output-schemas.plan.md) |
 
 ---
 
@@ -159,6 +160,7 @@ plans into
 | Oak Misconceptions × EEF Cross-Corpus Surface | 2026-06-02 | Consolidated into `oak-misconceptions-graph-features` §2 (compound-prefix attribution, substrate-only principle preserved) | [archived plan](connecting-oak-resources/knowledge-graph-integration/archive/completed/oak-misconceptions-eef-cross-corpus-surface.plan.md) |
 | Oak Misconceptions Topic Extraction | 2026-06-02 | Consolidated into `oak-misconceptions-graph-features` §3 | [archived plan](connecting-oak-resources/knowledge-graph-integration/archive/completed/oak-misconceptions-topic-extraction.plan.md) |
 | Oak Misconceptions EEF Extended Contexts | 2026-06-02 | Consolidated into `oak-misconceptions-graph-features` §4 | [archived plan](connecting-oak-resources/knowledge-graph-integration/archive/completed/oak-misconceptions-eef-extended-contexts.plan.md) |
+| Oak Misconceptions Substrate Migration | 2026-06-02 | Absorbed by the unified Judgement-call-4 plan `future/graph-tools-substrate-migration.plan.md` via independent re-grounding (disposition ledger in its §Absorption record); the `Inc.3` trigger and `maxResponseTokens=16000` demand were retired framing | [archived plan](connecting-oak-resources/knowledge-graph-integration/archive/completed/oak-misconceptions-substrate-migration.plan.md) |
 
 ---
 

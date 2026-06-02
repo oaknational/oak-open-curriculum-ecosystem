@@ -91,7 +91,20 @@ commits (record); keep the loaded-first surfaces (opening statements, thread
 records, repo-continuity, plan banners) as present-truth instruction. Test:
 "would a first-time reader reconstruct the mistakes from this?" — if yes, it is a
 monument. Worked twice across sessions (Shaded, then Windswept). Pairs with
-`no-tombstones-for-removed-ideas`. Graduation candidate: a clause of no-tombstones
+`no-tombstones-for-removed-ideas`. **Second face (2026-06-02, Opalescent): form
+must also match the successor session's work-shape.** Execution sessions and
+authoring sessions have opposite failure-mode families — execution risks drift
+from closed decisions (cure: ratified sequence, tight perimeter, "the plan is
+the authority"); authoring risks premature crystallization and ungrounded
+data-shape claims (cure: an explicit ratified-closed vs genuinely-open
+decomposition, grounding sources per open question, contamination guards on
+absorbed artefacts). An execution-form opener handed to an authoring session
+invites both failures at once: re-opening closed decisions and crystallizing
+open ones untested. Worked instance: the JC4 plan-authoring opener was rewritten
+under metacognition from execution form to authoring form, and the rewrite's
+contamination guard immediately grounded a live defect (the absorbed
+substrate-migration plan still demands the retired `maxResponseTokens` budget).
+Graduation candidate: a clause of no-tombstones
 or continuity-practice (owner-surfaced).
 
 ## 2026-06-01 — independent eyes catch what self-review cannot

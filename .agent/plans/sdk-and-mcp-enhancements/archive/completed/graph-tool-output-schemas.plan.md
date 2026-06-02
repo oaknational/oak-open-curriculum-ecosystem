@@ -1,11 +1,11 @@
 ---
 name: "Graph-tool output schemas via the EEF projection pattern"
 overview: "Give the misconception and prior-knowledge graph MCP tools a required, object-rooted outputSchema produced by the SAME pattern the EEF tool uses — static data as sole source of truth, a deterministic type-strict projection of it, and a SINGLE Zod call tied by `satisfies` to the structuredContent type. The shared mechanism is co-designed with the EEF plan's D4–D6 and lands its FIRST instance in the EEF tool alone (EEF D6); the application to the existing graph tools is part of their substrate migration (graph-estate-consolidation Judgement call 4 — per tool: data/type re-emission + rewrite + outputSchema, one replacement unit), into whose unified plan this design content folds when that plan is authored."
-status: "DESIGN — pending owner review and EEF co-design; NOT yet executable"
+status: "absorbed — design content folded into graph-tools-substrate-migration.plan.md (2026-06-02)"
 source_research:
-  - "../../../reports/output-schema-mcp-plan-audit-2026-06-02.md"
-  - "./output-schemas-for-mcp-tools.plan.md"
-  - "../../sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+  - "../../../../reports/output-schema-mcp-plan-audit-2026-06-02.md"
+  - "../../current/output-schemas-for-mcp-tools.plan.md"
+  - "../../../sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
 todos:
   - id: co-design-mechanism
     content: "Co-design (with EEF D4–D6) the single shared projection→single-Zod-call mechanism: where the schema-builder util lives, the typed-projection shape, and the `satisfies` tie. Non-code ratification before any graph cycle."
@@ -17,8 +17,17 @@ todos:
 
 # Graph-tool output schemas via the EEF projection pattern
 
+> **⛔ ABSORBED 2026-06-02 into the unified substrate-migration plan.** As
+> this plan's own overview directed, the design content folds into
+> [`graph-tools-substrate-migration.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/future/graph-tools-substrate-migration.plan.md):
+> the projection doctrine and resolved Q2/Q4 are its §Ratified decisions
+> 7–9; open Q1/Q3/Q5 are its Decisions A/B/D; the
+> W-codegen/W-graph-def/W-seam/W-proof shapes are carried into its
+> per-corpus replacement units. W-mech (the shared mechanism co-design)
+> rides EEF D4–D6 and is that plan's blocking dependency.
+
 **Last Updated**: 2026-06-02
-**Status**: 🟠 DESIGN — mechanism input to the unified substrate-migration plan (graph-estate-consolidation Judgement call 4); the shared mechanism is co-designed with EEF D4–D6 and its first instance lands in the EEF tool alone (EEF D6). The existing graph tools are untouched until their migration. Q2 and Q4 below are owner-resolved (2026-06-02); Q1/Q3/Q5 are resolved in the co-design and the migration plan.
+**Status**: absorbed — see the banner above. Historical status at absorption: 🟠 DESIGN — mechanism input to the unified substrate-migration plan (graph-estate-consolidation Judgement call 4); the shared mechanism is co-designed with EEF D4–D6 and its first instance lands in the EEF tool alone (EEF D6). The existing graph tools are untouched until their migration. Q2 and Q4 below are owner-resolved (2026-06-02); Q1/Q3/Q5 are resolved in the co-design and the migration plan.
 
 > **Supersedes** the hand-authored-Zod approach in the scratch plan and in
 > `output-schemas-for-mcp-tools.plan.md` §W2 for the graph tools. Per owner
@@ -30,7 +39,7 @@ todos:
 Owner direction (refined 2026-06-02) resolved the seam and the order:
 
 1. **The general S0 seam is owned by
-   [`output-schemas-for-mcp-tools.plan.md`](./output-schemas-for-mcp-tools.plan.md)**
+   [`output-schemas-for-mcp-tools.plan.md`](../../current/output-schemas-for-mcp-tools.plan.md)**
    (its §Resolved Sequencing); **EEF D6 lands the seam's first use** for the
    one flag-gated EEF tool.
 2. **Sequencing is per tool TYPE, and the EEF graph tool is the first

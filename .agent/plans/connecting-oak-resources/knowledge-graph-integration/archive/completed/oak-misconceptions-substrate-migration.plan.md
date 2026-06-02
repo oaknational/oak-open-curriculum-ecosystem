@@ -1,9 +1,8 @@
 ---
 name: "Oak Misconceptions Substrate Migration"
 overview: "Migrate the slice-3a misconception sub-graph surface from the legacy graph factory onto graph-corpus-sdk and GraphView after graph-stack Inc.3 lands the misconception adapter."
-status: future
+status: superseded
 graph_layer: oak-graph-surface
-parent_plan: "./oak-misconceptions-graph-features.plan.md"
 isProject: false
 todos:
   - id: wait-for-inc3-adapter
@@ -15,6 +14,14 @@ todos:
 ---
 
 # Oak Misconceptions Substrate Migration
+
+> **⛔ SUPERSEDED 2026-06-02 — absorbed by the unified substrate-migration
+> plan.** Migration ownership for ALL existing graph tools lives in
+> [`graph-tools-substrate-migration.plan.md`](../../future/graph-tools-substrate-migration.plan.md)
+> (graph-estate-consolidation Judgement call 4). Every claim in this file was
+> independently re-grounded at absorption — the disposition ledger is that
+> plan's §Absorption record. The `Inc.3` trigger and the
+> `maxResponseTokens = 16000` budget demanded below are retired framing.
 
 This follow-on owns the substrate migration cut from slice 3a. Slice 3a may
 ship first on the legacy graph factory as an explicit interim path.

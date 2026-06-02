@@ -6,6 +6,7 @@ status: future
 thread: eef
 related_plans:
   - "../current/eef-graph-tool-completion.plan.md"
+  - "../../../connecting-oak-resources/knowledge-graph-integration/future/graph-tools-substrate-migration.plan.md"
 isProject: false
 todos:
   - id: track-graph-tool-replacements
@@ -55,3 +56,10 @@ migration could silently break the seam the teacher value depends on.
 Created as a clean EEF-side seed while the graph estate is in flux, so it does not
 point at plans that are being rewritten. Refine and deduplicate against the
 settled graph estate later.
+
+**Update (2026-06-02)**: the single upstream is authored —
+[`graph-tools-substrate-migration.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/future/graph-tools-substrate-migration.plan.md)
+owns all three replacements (`get-misconception-graph`,
+`get-prior-knowledge-graph`, `get-thread-progressions`), one replacement unit
+per corpus; its `signal-eef-revalidation` todo raises the landing signal that
+this plan's `track-graph-tool-replacements` todo tracks.

@@ -88,3 +88,59 @@ Disposition ledger:
   dangling-pointer hunt (24 confirmed misses across 9 files, all verified
   before acting) caught what the mechanical referrer sweep missed — fresh
   evidence for independent-eyes-catch-what-self-review-cannot.
+
+## 2026-06-02 — final-capture additions (Opalescent Cascading Planet)
+
+- **Decision-completeness does not amortise grounding; it relocates it.** This
+  session executed the most-ratified inheritance imaginable (owner-confirmed,
+  assumptions-expert READY, contamination-scanned) and still needed every
+  confirm-at-move check: the scan session had edited the executing plan after
+  its decisions closed, the eef/archive carried four false `status: current`
+  frontmatters found only by full enumeration, and the Threads adapter that
+  plan prose implied was nearer turned out absent from
+  `graph-corpus-sdk/src/`. Heavy ratification shifts the live risk from
+  under-ratification to treating ratification as a substitute for
+  execution-time grounding.
+- **Verify the overlap before designing the coordination.** Planned
+  inter-agent coordination over `repo-continuity.md` (comms event shapes,
+  deadline, default action, polling) evaporated under six grep lines — every
+  token instance was sanctioned record, zero edits needed. The cheapest
+  coordination is discovering none is required; the collision-safety read
+  should test whether the conflict is real before any ceremony is built.
+- **candidate: relative-link integrity gate for the `.agent` estate.** The
+  scoped-t8 link check (an ad-hoc shell loop resolving every relative
+  markdown link) found 14 pre-existing broken links that markdownlint,
+  prettier, and the full gate chain structurally cannot catch — the repo has
+  no link-integrity validator, so breaks accumulate silently until a manual
+  sweep. Structural-cure shape (per the metacognition cure-shape clause): a
+  repo-validator over live lanes (excluding `archive/`), wired at `warn`
+  first per the new-ESLint-rules convention. Promote at next register
+  refresh; target: repo-validators or a `check`-chain addition.
+
+## 2026-06-02 — JC4 plan authoring (Galactic Glowing Prism)
+
+- **Verification scoped by the claim cannot find unclaimed members.** My
+  spot-check of the thread-progressions consumer set verified only the two
+  files the claim named (`ontology-data.ts`, `tool-guidance-data.ts`) and
+  passed; the reviewer fleet's open `rg` over the import symbol found a third
+  (`tool-guidance-workflows.ts:15`). Confirm-the-claim greps inherit the
+  claim's selection bias — completeness checks must enumerate from the code
+  side (symbol/import sweep), never from the claim's file list. Fresh face of
+  independent-eyes-catch-what-self-review-cannot.
+- **Known-answer probe worked as calibration.** Withheld the ADR-086 §4
+  "no new MCP tools" freeze from the reviewer briefs; docs-adr-expert found
+  it unprompted (READY-WITH-CONDITIONS, condition F-02). Positive recall
+  signal — the fleet's zero-findings elsewhere carry calibrated weight. The
+  probe had to be redesigned mid-session: both absorbed-plan contaminations
+  were already disclosed in the plan's own ledger, so the probe had to be a
+  fact known to the author but absent from the artefact under review.
+- **zsh false-green: `for f in $FILES` does not word-split.** The first
+  link-integrity sweep "passed" having checked zero files (multiline var,
+  no splitting; the `ugrep` warnings were the tell). Re-ran with explicit
+  word-split + an extraction sanity check. Verify the verifier: a green
+  sweep whose extraction count is unknown proves nothing.
+- **Brief-vs-git divergence again, benign this time.** The opener said
+  `c3b78eec` is HEAD; git showed an unpushed owner handoff commit
+  (`35472f15`) on top. Re-derive perimeters from git held; the divergence
+  changed nothing material but would have corrupted the commit-window
+  narrative if trusted.

@@ -1,5 +1,57 @@
 # Next-Session Record — `eef` thread
 
+> **JC4 UNIFIED SUBSTRATE-MIGRATION PLAN AUTHORED — PARKED ON A NAMED
+> TRIGGER (2026-06-02, Galactic Glowing Prism / `cd7389`; claude / Opus 4.8;
+> owner-approved session plan).**
+>
+> [`graph-tools-substrate-migration.plan.md`](../../../plans/connecting-oak-resources/knowledge-graph-integration/future/graph-tools-substrate-migration.plan.md)
+> now owns moving all existing graph tools onto `graph-corpus-sdk`
+> (graph-estate-consolidation §Judgement calls, call 4 — authored-note added
+> there). The estate edits land as one commit with the plan.
+>
+> + **Shape**: per-corpus replacement units (tool + resource twin +
+>   interpolation consumers — entailed by the ratified type-authority
+>   re-emission, so a promotion-time scope-back to per-tool would have to
+>   accept split-brain explicitly). Tool set pinned from code:
+>   `get-misconception-graph` (6.0MB, nodes-only), `get-prior-knowledge-graph`
+>   (1.8MB, nodes+edges), `get-thread-progressions` (190KB `as const`
+>   sequences — already its own type authority; its consumer set includes
+>   `ontology-data.ts`, `tool-guidance-data.ts`, AND
+>   `tool-guidance-workflows.ts`).
+> + **Closed/open ledger**: nine ratified decisions carried with citations
+>   (incl. the §Resolved Sequencing contract and owner-resolved Q2/Q4); open
+>   Decisions A–F (re-emission shape, adapter home + dependency direction,
+>   thread-progressions hosting incl. the named null-participation option,
+>   schema-emission shape, landing order, factory third-consumer
+>   consolidation) settle at promotion. **Promotion trigger: EEF D6 landed +
+>   D7 green** (both observable todo flips).
+> + **Absorptions**: `oak-misconceptions-substrate-migration` archived after
+>   independent re-grounding (its `Inc.3` trigger + `maxResponseTokens`
+>   demand are retired framing; disposition ledger in the plan);
+>   `graph-tool-output-schemas` archived after its design content folded in
+>   (Q1/Q3/Q5 → Decisions A/B/D); referrers repointed (kg README, Q-003,
+>   repo-continuity, eef-revalidate seed). The ADR-086 amendment (large-graph
+>   type pattern, stale tool rows, AND the §4 no-new-tools freeze) is a named
+>   deliverable riding the first re-emission commit.
+> + **Review**: 4-specialist refutation workflow (assumptions / betty /
+>   docs-adr / mcp — all READY-WITH-CONDITIONS; every finding critically
+>   assessed, one rejected with reason). The known-answer probe (the withheld
+>   ADR-086 §4 freeze) was CAUGHT by docs-adr-expert — recall calibration
+>   positive. The fleet caught a real consumer-set miss
+>   (`tool-guidance-workflows.ts`) that author spot-checking did not.
+>
+> **NEXT SAFE STEP: EEF D3** per repo-continuity's EEF Next Safe Steps
+> item 6 — open with a full whole-plan review of
+> `eef-graph-tool-completion.plan.md`, then a full D3 review; one
+> recorded-but-unapplied D3 edit (the declared-only filter exclusions) is
+> noted there.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Galactic Glowing Prism` | `claude` | `Opus 4.8` | `cd7389` | `jc4-unified-substrate-migration-plan-authoring` | 2026-06-02 | 2026-06-02 |
+>
+> ---
+>
 > **GRAPH-ESTATE CONSOLIDATION EXECUTED — t2–t5+t7 LANDED AS ONE SHIP-UNIT,
 > SCOPED t8 VERIFICATION PASSED (2026-06-02, Opalescent Cascading Planet /
 > `0340f9`; claude / Opus 4.8; owner-approved session plan).**

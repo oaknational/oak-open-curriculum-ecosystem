@@ -19,6 +19,16 @@ surface.
 
 ## Current State
 
+- **JC4 unified substrate-migration plan AUTHORED — parked on a named
+  trigger (2026-06-02, Galactic Glowing Prism / `cd7389`, claude / Opus 4.8,
+  owner-approved session plan)** —
+  [`graph-tools-substrate-migration.plan.md`](../../plans/connecting-oak-resources/knowledge-graph-integration/future/graph-tools-substrate-migration.plan.md)
+  owns moving all three existing graph tools onto `graph-corpus-sdk`:
+  per-corpus replacement units, ratified decisions carried with citations,
+  open Decisions A–F settled at promotion (**trigger: EEF D6 + D7**). Two
+  absorbed plans archived; the ADR-086 amendment rides the first
+  re-emission. Four-specialist refutation review applied. **Next: EEF D3
+  per EEF Next Safe Steps item 6.** Full detail: `eef` thread banner.
 - **Graph-estate consolidation executed — t2–t5+t7 landed as one ship-unit at
   `c3b78eec` and PUSHED, full pre-push gate green; scoped t8 verification
   PASSED (2026-06-02, Opalescent Cascading Planet / `0340f9`, claude /
@@ -125,7 +135,8 @@ surface.
   Zod — they are a deterministic, type-strict **projection** of the static data
   fed to a **single Zod call** (`satisfies`-tied to `structuredContent`), the
   SAME pattern as EEF, emitted at codegen. New plan
-  [`graph-tool-output-schemas.plan.md`](../../plans/sdk-and-mcp-enhancements/current/graph-tool-output-schemas.plan.md)
+  [`graph-tool-output-schemas.plan.md`](../../plans/sdk-and-mcp-enhancements/archive/completed/graph-tool-output-schemas.plan.md)
+  (since absorbed and archived)
   (status DESIGN — co-designed with EEF D4–D6, five open questions, not
   executable); implementation **paused for owner review**. This aligns with the
   owner mandate in the `eef` banner: graph-estate + graph-enhancement + EEF must
@@ -382,11 +393,11 @@ not the current session-priority lane. Reactivation is owner-directed.
    the KG README rewritten, `graph-stack.plan.md` re-framed per ADR-173,
    surviving live references de-linked. `t6` + the full `t8` close are the
    only remaining graph-estate items and stay D7-gated (the `t8` todo is
-   `pending` by design). **The next step in the ratified one-thread order is
-   the Judgement-call-4 unified substrate-migration plan** (one plan owning
-   the move of all existing graph tools onto `graph-corpus-sdk`; scope in
-   `graph-estate-consolidation.plan.md` §Judgement calls, call 4), then EEF
-   D3 per item 6.
+   `pending` by design). **The Judgement-call-4 unified substrate-migration
+   plan is AUTHORED (2026-06-02, Galactic Glowing Prism):**
+   `kg/future/graph-tools-substrate-migration.plan.md`, parked on the named
+   promotion trigger EEF D6 + D7. **The next step in the ratified one-thread
+   order is EEF D3 per item 6.**
 8. The seam-mapping taxonomy + "seams compose" law is a candidate for a reusable
    plan template/archetype (owner-confirmed intent); tracked in
    [`pending-graduations.md`](pending-graduations.md).

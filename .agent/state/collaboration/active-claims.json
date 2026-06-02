@@ -96,6 +96,74 @@
       "staged_bundle_fingerprint": "c2ed501dbb8b7ed30394ca97bba7da9ba10839834a5ac83706ffff83872c8a9b",
       "staged_name_status": "M\t.agent/experience/2026-04-30-iridescent-graph-corpus-composition.md\nM\t.agent/memory/operational/threads/connecting-oak-resources.next-session.md\nM\t.agent/memory/operational/threads/eef.next-session.md\nM\t.agent/plans/agent-tooling/current/2026-05-11-collaboration-protocol-hardening-opener.md\nM\t.agent/plans/completed-plans.md\nM\t.agent/plans/compliance/current/claude-and-chatgpt-app-submission-compliance.plan.md\nM\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/README.md\nM\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/active/agent-guidance-consolidation.plan.md\nM\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md\nA\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/archive/completed/2026-05-08-graph-mvp-arc-specialist-review-opener.md\nR097\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/2026-05-08-pr102-graph-decision-complete-closeout.plan.md\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/archive/completed/2026-05-08-pr102-graph-decision-complete-closeout.plan.md\nR094\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/2026-05-11-graph-execution-prep-opener.md\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/archive/completed/2026-05-11-graph-execution-prep-opener.md\nR097\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/gate-1a-delivery-parallel-execution-addendum.plan.md\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/archive/completed/gate-1a-delivery-parallel-execution-addendum.plan.md\nR099\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/archive/completed/graph-query-layer.plan.md\nR095\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/active/graph-resource-factory.plan.md\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/archive/completed/graph-resource-factory.plan.md\nR092\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/active/graph-stack-ws1.6-vocab-prep.md\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/archive/completed/graph-stack-ws1.6-vocab-prep.md\nR094\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/active/misconception-graph-mcp-surface.plan.md\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/archive/completed/misconception-graph-mcp-surface.plan.md\nR097\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/future/oak-misconceptions-eef-cross-corpus-surface.plan.md\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/archive/completed/oak-misconceptions-eef-cross-corpus-surface.plan.md\nR067\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/future/oak-misconceptions-eef-extended-contexts.plan.md\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/archive/completed/oak-misconceptions-eef-extended-contexts.plan.md\nR097\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-misconceptions-subgraph-mcp-surface.plan.md\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/archive/completed/oak-misconceptions-subgraph-mcp-surface.plan.md\nR062\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/future/oak-misconceptions-topic-extraction.plan.md\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/archive/completed/oak-misconceptions-topic-extraction.plan.md\nR096\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/archive/completed/open-education-knowledge-surfaces.plan.md\nR097\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/pr-108-sonar-live-issues-2026-05-24.md\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/archive/completed/pr-108-sonar-live-issues-2026-05-24.md\nM\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-estate-consolidation.plan.md\nM\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/kg-alignment-audit.execution.plan.md\nM\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/kg-integration-quick-wins.plan.md\nM\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md\nM\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md\nM\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/future/extending-graph-support-tooling.plan.md\nR094\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/active/nc-knowledge-taxonomy-surface.plan.md\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/future/nc-knowledge-taxonomy-surface.plan.md\nM\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/future/oak-curriculum-ontology-workspace-reassessment.plan.md\nM\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/future/oak-kg-iri-traverser.plan.md\nM\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/future/oak-kg-lesson-graph-surface.plan.md\nM\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/future/oak-kg-programme-navigator.plan.md\nM\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/future/oak-kg-schema-browser.plan.md\nR090\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-kg-threads-surface.plan.md\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/future/oak-kg-threads-surface.plan.md\nA\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/future/oak-misconceptions-graph-features.plan.md\nM\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/future/oak-misconceptions-substrate-migration.plan.md\nM\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/future/ontology-integration-strategy.md\nM\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/future/ontology-repo-fresh-perspective-review.plan.md\nM\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/oak-ontology-graph-opportunities.strategy.md\nM\t.agent/plans/curriculum-mcp-path-to-ga/roadmap.md\nM\t.agent/plans/exploring-open-education-resources/external-knowledge-sources/future/education-skills-mcp-surface.plan.md\nM\t.agent/plans/sdk-and-mcp-enhancements/README.md\nM\t.agent/plans/sdk-and-mcp-enhancements/active/README.md\nM\t.agent/plans/sdk-and-mcp-enhancements/future/mcp-protocol-adoption-roadmap.plan.md\nM\t.agent/plans/sector-engagement/current/README.md\nM\t.agent/plans/sector-engagement/eef/README.md\nM\t.agent/plans/sector-engagement/eef/archive/eef-delivery-restructure.plan.md\nM\t.agent/plans/sector-engagement/eef/archive/eef-evidence-corpus.plan.md\nM\t.agent/plans/sector-engagement/eef/archive/eef-first-feature.plan.md\nM\t.agent/plans/sector-engagement/eef/archive/please-do-a-deep-mighty-peach.plan.md\nM\t.agent/plans/sector-engagement/eef/future/eef-outcome-evaluation-infrastructure.plan.md\nM\t.agent/plans/sector-engagement/eef/reference/conservation-map.md\nM\t.agent/plans/sector-engagement/roadmap.md\nM\t.agent/plans/semantic-search/future/curriculum-nlp-processing-workspace.md\nM\t.agent/reports/oak-ontology-mcp-search-integration-report-2026-04-19.md\nM\t.agent/research/graphify-oak-practice-analysis.md\nM\t.agent/state/collaboration/active-claims.json\nA\t.agent/state/collaboration/comms/c7682f39-2951-451b-8d6e-cc90f4e6cb25.json\n",
       "notes": "intent over-declared: included 15 pre-rename old paths that rename detection collapses out of the staged name set; re-enqueued with the exact staged list"
+    },
+    {
+      "intent_id": "3ce023ab-8869-448f-b671-f62a8ead988d",
+      "claim_id": "0a53c3ee-20e5-47fb-9679-3582159ed7a6",
+      "agent_id": {
+        "agent_name": "Galactic Glowing Prism",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "cd7389",
+        "id": "8caf736c-1d85-5cd6-a2b9-5f38cdfdd87f"
+      },
+      "files": [
+        ".agent/memory/active/distilled.md",
+        ".agent/memory/active/napkin.md",
+        ".agent/memory/operational/open-questions.md",
+        ".agent/memory/operational/repo-continuity.md",
+        ".agent/memory/operational/threads/eef.next-session.md",
+        ".agent/plans/completed-plans.md",
+        ".agent/plans/connecting-oak-resources/knowledge-graph-integration/README.md",
+        ".agent/plans/connecting-oak-resources/knowledge-graph-integration/archive/completed/oak-misconceptions-substrate-migration.plan.md",
+        ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-estate-consolidation.plan.md",
+        ".agent/plans/connecting-oak-resources/knowledge-graph-integration/future/graph-tools-substrate-migration.plan.md",
+        ".agent/plans/sdk-and-mcp-enhancements/archive/completed/graph-tool-output-schemas.plan.md",
+        ".agent/plans/sector-engagement/eef/future/eef-revalidate-on-new-graph-tools.plan.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/closed-claims.archive.json"
+      ],
+      "commit_subject": "docs(graph): author the unified graph-tools substrate-migration plan (judgement call 4)",
+      "queued_at": "2026-06-02T20:05:06.827Z",
+      "updated_at": "2026-06-02T20:06:43.160Z",
+      "expires_at": "2026-06-02T20:20:06.827Z",
+      "phase": "abandoned",
+      "notes": "duplicate enqueue: first invocation succeeded but its output was piped into jq which exited non-zero, masking success; re-enqueued as 198200d8"
+    },
+    {
+      "intent_id": "198200d8-e785-496b-9df4-11cf35cedfbc",
+      "claim_id": "0a53c3ee-20e5-47fb-9679-3582159ed7a6",
+      "agent_id": {
+        "agent_name": "Galactic Glowing Prism",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "cd7389",
+        "id": "8caf736c-1d85-5cd6-a2b9-5f38cdfdd87f"
+      },
+      "files": [
+        ".agent/memory/active/distilled.md",
+        ".agent/memory/active/napkin.md",
+        ".agent/memory/operational/open-questions.md",
+        ".agent/memory/operational/repo-continuity.md",
+        ".agent/memory/operational/threads/eef.next-session.md",
+        ".agent/plans/completed-plans.md",
+        ".agent/plans/connecting-oak-resources/knowledge-graph-integration/README.md",
+        ".agent/plans/connecting-oak-resources/knowledge-graph-integration/archive/completed/oak-misconceptions-substrate-migration.plan.md",
+        ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-estate-consolidation.plan.md",
+        ".agent/plans/connecting-oak-resources/knowledge-graph-integration/future/graph-tools-substrate-migration.plan.md",
+        ".agent/plans/sdk-and-mcp-enhancements/archive/completed/graph-tool-output-schemas.plan.md",
+        ".agent/plans/sector-engagement/eef/future/eef-revalidate-on-new-graph-tools.plan.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/closed-claims.archive.json"
+      ],
+      "commit_subject": "docs(graph): author the unified graph-tools substrate-migration plan (judgement call 4)",
+      "queued_at": "2026-06-02T20:05:21.212Z",
+      "updated_at": "2026-06-02T20:09:13.061Z",
+      "expires_at": "2026-06-02T20:20:21.212Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "7cf7c56e68143613424f141d89113f41ac4cbc18d232cd27e48b50e444ee69e8",
+      "staged_name_status": "M\t.agent/memory/active/distilled.md\nM\t.agent/memory/active/napkin.md\nM\t.agent/memory/operational/open-questions.md\nM\t.agent/memory/operational/repo-continuity.md\nM\t.agent/memory/operational/threads/eef.next-session.md\nM\t.agent/plans/completed-plans.md\nM\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/README.md\nA\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/archive/completed/oak-misconceptions-substrate-migration.plan.md\nM\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-estate-consolidation.plan.md\nA\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/future/graph-tools-substrate-migration.plan.md\nA\t.agent/plans/sdk-and-mcp-enhancements/archive/completed/graph-tool-output-schemas.plan.md\nM\t.agent/plans/sector-engagement/eef/future/eef-revalidate-on-new-graph-tools.plan.md\nM\t.agent/state/collaboration/active-claims.json\n",
+      "notes": "closed in same collaboration-state commit (lifecycle exception); bundle verified manually against the intent list immediately before git commit"
     }
   ],
   "claims": []

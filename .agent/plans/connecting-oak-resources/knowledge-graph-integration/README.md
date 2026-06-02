@@ -41,10 +41,9 @@ under [sector-engagement/](../../sector-engagement/) and
 
 Wider graph work is undefined until the first proper graph tool (EEF) ships
 ([`eef-graph-tool-completion.plan.md`](../../sector-engagement/eef/current/eef-graph-tool-completion.plan.md));
-each parked plan states this block condition in its own header, except
-`oak-misconceptions-substrate-migration`, which instead folds into the unified
-all-tools substrate-migration plan (graph-estate-consolidation Judgement
-call 4). Revisit after finishing-plan D7.
+each parked plan states this block condition in its own header. The unified
+substrate-migration plan carries its own promotion trigger (EEF D6 + D7)
+rather than the generic block. Revisit after finishing-plan D7.
 
 | File | Description |
 |------|-------------|
@@ -56,7 +55,7 @@ call 4). Revisit after finishing-plan D7.
 | [future/oak-kg-schema-browser.plan.md](future/oak-kg-schema-browser.plan.md) | Ontology schema/class browser |
 | [future/oak-kg-lesson-graph-surface.plan.md](future/oak-kg-lesson-graph-surface.plan.md) | Lesson-level graph projection surface |
 | [future/cross-source-journeys.plan.md](future/cross-source-journeys.plan.md) | Feature-layer journey orchestration (playbook-vs-prompt question; two reference journeys) |
-| [future/oak-misconceptions-substrate-migration.plan.md](future/oak-misconceptions-substrate-migration.plan.md) | Folds into the unified all-tools substrate-migration plan (graph-estate-consolidation Judgement call 4) |
+| [future/graph-tools-substrate-migration.plan.md](future/graph-tools-substrate-migration.plan.md) | **Unified substrate migration** of all existing graph tools (misconception, prior-knowledge, thread-progressions) onto `graph-corpus-sdk` — one replacement unit per corpus; single upstream of the EEF re-validation gate; promotion trigger EEF D6 + D7 (Judgement call 4) |
 
 ## Strategy and Research
 
