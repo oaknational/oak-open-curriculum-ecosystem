@@ -65,3 +65,26 @@ Disposition ledger:
   durable future lane with acceptance and promotion triggers, plus a graduated
   register pointer. That preserves the insight without pretending a strategic
   deliverable has already landed.
+
+## 2026-06-02 — graph-estate consolidation execution (Opalescent Cascading Planet)
+
+- **Commit-queue intent lists collide with git rename detection.** Deriving an
+  intent file list from `git status --porcelain` with a naive awk over `R`/`RM`
+  lines double-counts rename pairs: `verify-staged` compares against
+  `git diff --cached --name-only`, which collapses renames to the NEW path
+  only, so the old paths read as "missing" and the verify fails. Cure: build
+  the intent from `git diff --cached --name-only` after staging (the exact
+  staged truth), or filter old rename paths out before enqueue. Cost: one
+  abandoned intent + re-enqueue.
+- **The installed `commit-queue` CLI build lacks the composed `commit`
+  primitive the commit skill documents** (usage shows enqueue/phase/guard/
+  record-staged/verify-staged; `complete` exists but is undocumented in usage
+  and rejects `--sha`). Manual sequencing works; skill-vs-build drift worth a
+  doc-or-build reconciliation pass.
+- **De-link vs repoint split worked cleanly at execution**: superseded plans →
+  live refs become plain text "(since archived)"; completed plans → historical
+  citations may repoint to `archive/completed/` per ADR-117; one
+  where-did-they-go record in `completed-plans.md`. The adversarial
+  dangling-pointer hunt (24 confirmed misses across 9 files, all verified
+  before acting) caught what the mechanical referrer sweep missed — fresh
+  evidence for independent-eyes-catch-what-self-review-cannot.

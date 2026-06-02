@@ -3392,7 +3392,7 @@ cost-of-collab P6/P7, and the hardening tail waves 2–6 defer past graph.
    named non-negotiable in
    [`comms-watch-mechanism.md`](../../reference/comms-watch-mechanism.md).
    WS4–WS7 deferred to parallel-with-graph.
-3. [`graph-query-layer.plan.md`](../../plans/connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md)
+3. `graph-query-layer.plan.md` (since archived)
    — architecture-session conclusions approved by owner 2026-05-19.
    Remaining promotion-to-ACTIVE gates: T1 sign-off, first-principles
    re-check, EEF corpus parallel-readiness.
@@ -5223,8 +5223,8 @@ four-probe matrix spec and the OD-1/2/3 + ORD-1/2 rationale.
 Demand side: see
 `graph-mvp-arc.plan.md` §
 Team-of-Agents Execution + the corresponding
-[`graph execution-prep opener`](../../../plans/connecting-oak-resources/knowledge-graph-integration/current/2026-05-11-graph-execution-prep-opener.md)
-which routes step 4 here.
+graph execution-prep opener (`2026-05-11-graph-execution-prep-opener.md`,
+since archived) which routes step 4 here.
 
 ## Active arc — `.agent/commands/` surface retirement (landed 2026-05-10)
 

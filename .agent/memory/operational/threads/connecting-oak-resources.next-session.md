@@ -1,5 +1,32 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
+## 2026-06-02 — Opalescent Cascading Planet / claude / Opus 4.8 / `0340f9` — graph-estate consolidation executed (committed `c3b78eec`, pushed)
+
+**Landed (commit `c3b78eec`, pushed, full pre-push gate green):** the
+graph-estate consolidation t2–t5+t7 executed as one ship-unit over this
+thread's `knowledge-graph-integration` collection; scoped t8 verification
+PASSED. Eleven plans archived to `archive/completed/` with banners + index
+entries in `completed-plans.md`; the four misconception feature plans
+consolidated into
+[`oak-misconceptions-graph-features.plan.md`](../../../plans/connecting-oak-resources/knowledge-graph-integration/future/oak-misconceptions-graph-features.plan.md);
+`oak-kg-threads-surface` + `nc-knowledge-taxonomy-surface` parked with
+substance-preserving block-condition headers; the collection README rewritten;
+`graph-stack.plan.md` re-framed per ADR-173 (landed WS statuses flipped, WS5
+closed as executed-by-consolidation); surviving live references de-linked
+estate-wide. This thread stays paused; its graph work proceeds under the
+`eef` one-thread umbrella.
+
+**Next safe step:** author the Judgement-call-4 unified substrate-migration
+plan from the clean estate (scope: `graph-estate-consolidation.plan.md`
+§Judgement calls, call 4), then EEF D3. `t6` + full `t8` close are D7-gated.
+Active-claims: none mine.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Opalescent Cascading Planet` | `claude` | `Opus 4.8` | `0340f9` | `graph-estate-consolidation-execution` | 2026-06-02 | 2026-06-02 |
+
+---
+
 ## 2026-06-02 — Stellar Waning Planet / claude / Opus 4.8 / `64c383` — mandate-1 scan: graph-estate plan fixes (committed `37020386`, pushed)
 
 **Landed (commit `37020386`, pushed, full pre-push gate 103/103 green):** the

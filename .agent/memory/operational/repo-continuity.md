@@ -19,6 +19,25 @@ surface.
 
 ## Current State
 
+- **Graph-estate consolidation executed — t2–t5+t7 landed as one ship-unit at
+  `c3b78eec` and PUSHED, full pre-push gate green; scoped t8 verification
+  PASSED (2026-06-02, Opalescent Cascading Planet / `0340f9`, claude /
+  Opus 4.8, owner-approved session plan)** — eleven plans archived to
+  `kg/archive/completed/` with banners + one where-did-they-go record in
+  `completed-plans.md`; the four misconception feature plans consolidated into
+  `kg/future/oak-misconceptions-graph-features.plan.md` (each problem a named
+  section; both assumptions-expert park-header conditions honoured;
+  `maxResponseTokens=16000` marked retired); `oak-kg-threads-surface` +
+  `nc-knowledge-taxonomy-surface` parked with substance-preserving
+  block-condition headers; the KG README rewritten to the post-move reality;
+  `graph-stack.plan.md` re-framed per ADR-173 (Inc.N/gate labels retired,
+  landed WS statuses flipped, WS5 closed as executed-by-consolidation);
+  every surviving live reference de-linked; `repo-continuity.md` verified
+  zero-edit for retired tokens. Reviewed in real time (docs-adr-expert +
+  adversarial dangling-pointer hunt; all findings remediated). `t6` + full
+  `t8` close stay D7-gated; the `t8` todo is `pending` by design. **Next:
+  author the Judgement-call-4 unified substrate-migration plan from the
+  clean estate, then EEF D3.** Full detail: `eef` thread banner.
 - **Mandate-1 deep contamination scan executed — estate clean after nine
   fixes (2026-06-02, Stellar Waning Planet / `64c383`, claude / Opus 4.8,
   owner-directed standing mandate)** — the scan covered the full
@@ -264,7 +283,7 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Stellar Waning Planet / mandate-1 deep contamination scan / 2026-06-02 (prior: Silvered Lurking Mask, Flamebright Charring Ember, Abyssal Flowing Beacon, all 2026-06-02) |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Opalescent Cascading Planet / graph-estate-consolidation-execution / 2026-06-02 (prior: Stellar Waning Planet, Silvered Lurking Mask, Flamebright Charring Ember, Abyssal Flowing Beacon, all 2026-06-02) |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | codex / GPT-5 / Umbral Whispering Silhouette / promotion-and-root-docs-author / 2026-06-01 |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | codex / GPT-5 / Shaded Veiling Mirror / dedicated curation + closeout / 2026-06-02 |
 
@@ -275,7 +294,7 @@ not the current session-priority lane. Reactivation is owner-directed.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `connecting-oak-resources` | Oak resource graph substrate for EEF | [record][connecting] | claude / Opus 4.8 / Stellar Waning Planet / mandate-1 scan fixes to graph-estate plan / 2026-06-02 (prior: Silvered Lurking Mask, Flamebright Charring Ember, both 2026-06-02) |
+| `connecting-oak-resources` | Oak resource graph substrate for EEF | [record][connecting] | claude / Opus 4.8 / Opalescent Cascading Planet / graph-estate consolidation execution (kg collection moves) / 2026-06-02 (prior: Stellar Waning Planet, Silvered Lurking Mask, Flamebright Charring Ember, all 2026-06-02) |
 | `branch-fitness-and-push-cadence` | Small-PR, push-often, branch-fitness, PR/Sonar protocol substrate | [record][branch-fitness] | Pelagic Snorkelling Sextant / codex / GPT-5 / Cycle 1 substrate capture / 2026-05-24 |
 | `mcp-product-analytics` | MCP product analytics design and Path-to-GA Programme | [record][mcp-analytics] | Stellar Glowing Satellite / claude / claude-opus-4-7 / Programme landed + amendments / 2026-05-26 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night / claude-code / opus-4.7 / 2026-05-10 |
@@ -354,31 +373,20 @@ not the current session-priority lane. Reactivation is owner-directed.
    full whole-plan review, then a full D3 review** (one recorded-but-unapplied D3 edit:
    state the declared-only filter exclusions — `KS5`/`post_16`/`all_through`/
    `special`/`improving_attendance`/`teacher_retention` are not valid filter inputs).
-7. **Graph-estate-consolidation: t1 DONE + ratified; t2-t5/t7 execution pending —
-   executes FIRST under the one-thread ratification (precedes EEF D3+; the
-   mandate-1 deep contamination scan that preceded it was executed 2026-06-02,
-   estate clean)** (2026-06-01, Glittering Soaring Meteor; resequenced
-   2026-06-02; scan complete 2026-06-02, Stellar Waning Planet).
-   The contamination-remediation master plan at
-   `connecting-oak-resources/knowledge-graph-integration/current/graph-estate-consolidation.plan.md`
-   was flattened (four stratified "Inbound from …" sections → one verified
-   `## Current state` + an anti-restratification rule), the residue position was
-   grounded point-precise, and **t1 is complete**: the six unclassified files were
-   read against content (substance-loss lens first) and `assumptions-expert`
-   ratified READY. The substance-loss catch: `kg-alignment-audit`,
-   `kg-integration-quick-wins`, and `agent-guidance-consolidation` are independent
-   live work, NOT archive/park-blocked-on-EEF. `ADR-173` was decontaminated
-   (post-acceptance hygiene: stale pre-promotion sections cleared, `Inc.3`
-   adapter-sequencing retired). Remaining: the t2+t3+t4 then t5+t7 execution unit
-   (decision-complete, unexecuted — no file has moved; honour the two
-   assumptions-expert park-header conditions at the t4 move); t6 + final t8
-   criterion D7-gated. The source tree is clear: the `graph-corpus-sdk` README +
-   `package.json` description were brought current 2026-06-02. Owner direction (2026-06-02): EEF, graph-estate
-   consolidation, graph enhancements, and the substrate migration are ONE
-   thread, and this plan's decontamination + consolidation execute FIRST — the
-   t2–t5/t7/t8 unit precedes EEF D3+ and all other graph work, preceded only by
-   the deep contamination scan of the 2026-06-02 session outputs (the standing
-   mandate in the `eef` thread record).
+7. **Graph-estate-consolidation: t2–t5+t7 EXECUTED and pushed at `c3b78eec`;
+   scoped t8 verification PASSED (2026-06-02, Opalescent Cascading Planet)**.
+   The estate reads true in one pass: eleven plans archived with banners +
+   index entries, the four misconception feature plans consolidated into
+   `kg/future/oak-misconceptions-graph-features.plan.md`, both
+   assumptions-expert park-header conditions honoured at the t4 move,
+   the KG README rewritten, `graph-stack.plan.md` re-framed per ADR-173,
+   surviving live references de-linked. `t6` + the full `t8` close are the
+   only remaining graph-estate items and stay D7-gated (the `t8` todo is
+   `pending` by design). **The next step in the ratified one-thread order is
+   the Judgement-call-4 unified substrate-migration plan** (one plan owning
+   the move of all existing graph tools onto `graph-corpus-sdk`; scope in
+   `graph-estate-consolidation.plan.md` §Judgement calls, call 4), then EEF
+   D3 per item 6.
 8. The seam-mapping taxonomy + "seams compose" law is a candidate for a reusable
    plan template/archetype (owner-confirmed intent); tracked in
    [`pending-graduations.md`](pending-graduations.md).
@@ -447,9 +455,13 @@ authority.
 
 ## Deep Consolidation Status
 
-**completed this handoff — dedicated curation + session-completion
-consolidation ready to commit (2026-06-02, Shaded Veiling Mirror / codex /
-GPT-5 / `019e88`)**: the prior active napkin was processed before archive and
+**not due — dedicated curation + consolidation completed earlier today by
+Shaded Veiling Mirror (committed `f2c12ea5`); this session (Opalescent
+Cascading Planet, graph-estate execution) routed its capture session-scoped
+(napkin entries, eef thread banner, two pending-graduations updates incl. one
+trigger-fired item now `due`) and no consolidate-docs checklist trigger fires
+on a freshly rotated napkin.** Prior status (2026-06-02, Shaded Veiling
+Mirror / codex / GPT-5 / `019e88`): the prior active napkin was processed before archive and
 preserved verbatim at
 `active/archive/napkin-2026-06-02-shaded-veiling-curation.md`; the disposition
 ledger is

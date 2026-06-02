@@ -37,8 +37,24 @@ they graduate, duplicate, become stale-withdrawn, or receive owner direction.
   `kg-alignment-audit`, `kg-integration-quick-wins`, and
   `agent-guidance-consolidation`. The durable curation lens is substance-loss
   first; archive/park is a later lifecycle action only after that lens is
-  satisfied.
-  `[captured: 2026-06-02 | source: napkin rotation from Glittering Soaring Meteor | target: amend:consolidate-docs OR rule:knowledge-preservation-over-fitness-warnings | trigger: owner direction or next archive/park-shaped curation pass | size: M | status: owner-gated]`
+  satisfied. **Trigger fired 2026-06-02 (Opalescent Cascading Planet)**: the
+  graph-estate t2–t5+t7 execution WAS the next archive/park-shaped pass; the
+  lens held as confirm-at-move discipline (every disposition re-checked
+  against current file content at the move; both assumptions-expert
+  substance-preservation conditions honoured at the t4 move; landed at
+  `c3b78eec`). Second worked instance — ready for graduation drafting.
+  `[captured: 2026-06-02 | source: napkin rotation from Glittering Soaring Meteor | target: amend:consolidate-docs OR rule:knowledge-preservation-over-fitness-warnings | trigger: FIRED 2026-06-02 (archive/park-shaped pass executed with the lens applied) | size: M | status: due]`
+- **Archive is a terminal sink: de-link live references, never repoint;
+  one index note.** Owner-corrected discipline (2026-06-01, commit `5063456a`)
+  with a second full worked instance 2026-06-02 (`c3b78eec`): the graph-estate
+  consolidation de-linked 24 surviving live references to moved plans as plain
+  text "(since archived)", repointed ONLY completed-plan historical citations
+  to `archive/completed/` per ADR-117, and kept `completed-plans.md` as the
+  single sanctioned inbound index. Tension to resolve at graduation: ADR-117's
+  "fix all cross-references to point directly to archive/completed" wording
+  reads as repoint-everything; the executed split (superseded → de-link;
+  completed → may cite archive) needs encoding in the ADR or a rule.
+  `[captured: 2026-06-02 | source: distilled.md Hearthlit entry + graph-estate execution worked instance | target: rule (archive-terminal-sink) or ADR-117 amendment | trigger: owner direction (two instances accumulated) | size: M | status: due]`
 - **Plans that de-stratify an estate must not re-stratify themselves.** A
   consolidation plan that accumulates dated "Inbound from ..." sections recreates
   the stratified narrative it exists to remove. Durable shape: one derived

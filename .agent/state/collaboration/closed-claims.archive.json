@@ -5623,6 +5623,97 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "5ed2c0d1-d2f1-4c69-8326-e2bd56c34811",
+      "agent_id": {
+        "agent_name": "Opalescent Cascading Planet",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "0340f9",
+        "id": "cbe7d9d2-83b8-5a98-8e29-4d2d74a799b6"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-02T16:00:00Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit the graph-estate consolidation ship-unit (t2-t5+t7 + scoped t8).",
+      "intent_to_commit": "7ea35157-bee6-4722-837c-0b84f3089877",
+      "archived_at": "2026-06-02",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-02T16:04:04Z",
+        "closed_by": {
+          "agent_name": "Opalescent Cascading Planet",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "0340f9",
+          "id": "cbe7d9d2-83b8-5a98-8e29-4d2d74a799b6"
+        },
+        "summary": "commit c3b78eec: docs(graph): consolidate the graph plan estate — archive, park, rewrite, sweep",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "5ed2c0d1-d2f1-4c69-8326-e2bd56c34811",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "559676e4-804f-4211-9d30-f412775e3dd5",
+      "agent_id": {
+        "agent_name": "Opalescent Cascading Planet",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "0340f9",
+        "id": "cbe7d9d2-83b8-5a98-8e29-4d2d74a799b6"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/**",
+            ".agent/plans/sector-engagement/eef/**",
+            ".agent/plans/sdk-and-mcp-enhancements/active/README.md",
+            ".agent/plans/completed-plans.md",
+            ".agent/memory/operational/threads/eef.next-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-02T15:14:47Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Graph-estate consolidation execution: t2+t3+t4 moves, t5 README rewrite, t7 retired-concept sweep, scoped t8 verify, one ship-unit (graph-estate-consolidation.plan.md)",
+      "archived_at": "2026-06-02",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-02T16:06:07Z",
+        "closed_by": {
+          "agent_name": "Opalescent Cascading Planet",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "0340f9",
+          "id": "cbe7d9d2-83b8-5a98-8e29-4d2d74a799b6"
+        },
+        "summary": "graph-estate consolidation t2-t5+t7 + scoped t8 landed at c3b78eec and pushed; t6/full-t8 D7-gated; JC4 plan authoring is next",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "559676e4-804f-4211-9d30-f412775e3dd5",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
