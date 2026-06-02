@@ -26,6 +26,11 @@ research notes or investigation logs.
   — 61-agent audit of the `output-schemas-for-mcp-tools` plan against live code:
   claim ledger, drift (stdio removed, 34→35 / 10→11 tools, broken Phase-3 gate),
   EEF relationship, and the corrected S0/W1/W2 decomposition
+- [mandate-1-contamination-scan-2026-06-02.md](./mandate-1-contamination-scan-2026-06-02.md)
+  — deep contamination scan of the four-commit session-output surface
+  (`384b74de`–`52cad7ee`): method (token+concept inventory, 8 refutation-briefed
+  reviewers, adversarial verification, known-answer probe), nine fixes, accepted
+  refutations, and the routed British-spelling signal
 - [oak-openapi-bug-report-2026-03-07.md](./oak-openapi-bug-report-2026-03-07.md)
   — existing standalone report
 - [claude-code-compaction-thinking-block-bug-2026-05-28.md](./claude-code-compaction-thinking-block-bug-2026-05-28.md)

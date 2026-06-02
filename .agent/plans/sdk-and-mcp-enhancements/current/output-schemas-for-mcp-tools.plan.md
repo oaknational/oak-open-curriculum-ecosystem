@@ -131,7 +131,7 @@ all of it; the facts below are verified against live code.
   and `status` (when provided). Widget routing fields (`query`, `timestamp`,
   `toolName`, `annotationsTitle`) go into `_meta`, **not** `structuredContent`.
 - **`inputSchema` is already required and uniform** on `UniversalToolListEntry`
-  (`types.ts:108,135` — a required `z.ZodRawShape`; no-input tools expose `{}`),
+  (`types.ts:135` — a required `z.ZodRawShape`; no-input tools expose `{}`),
   extracted from the descriptor via `requireGeneratedToolInputShape`
   (`descriptor-utils.ts:47-62`) + `extractZodShape` (`zod-utils.ts:55`). This is
   the precedent — and the exact pattern — the output side mirrors.
@@ -186,7 +186,8 @@ it, so the schema must match what is **actually emitted** or the tool errors.
    *(principles.md §Strict and Complete; "WE DON'T HEDGE".)*
 
 2. **Populate first, wire last.** A required field cannot land before its
-   producers populate it. W1 (24 generated) and W2 (11 aggregated) populate
+   producers populate it. W1 (24 generated) and W2 (the 8 in-scope aggregated —
+   the 3 graph tools' schemas land with their substrate migration) populate
    independently; S0 introduces the required `UniversalToolListEntry` field and
    the wire **last**, as the convergence. *(Inverts the audit's "S0 first", which
    assumed an optional additive field.)*

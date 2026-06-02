@@ -83,7 +83,10 @@ Surfaced to the owner during the dedicated knowledge-curation pass; staged in
   axis** (design/runtime path crossing the execution DAG perpendicularly),
   **layering anti-seams** (boundaries held by nothing crossing them), **cross-cutting
   ledger** (one artifact auditing every data-derivation seam at once), and
-  **temporal seam** (an intentional red-tree window). The governing law: because
+  **temporal seam** (a designed span between a removal landing green and its
+  replacement landing green — each boundary lands atomically green per the
+  atomic-landing invariant; committed history carries no persistent red window).
+  The governing law: because
   every junction input is a projection of one source of truth, junctions compose by
   construction; friction at a junction is the signal that an input has drifted from
   the root, fixed upstream at the source, never bridged at the seam

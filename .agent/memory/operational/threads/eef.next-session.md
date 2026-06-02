@@ -1,5 +1,53 @@
 # Next-Session Record — `eef` thread
 
+> **MANDATE-1 DEEP CONTAMINATION SCAN EXECUTED — ESTATE CLEAN AFTER NINE
+> FIXES (2026-06-02, Stellar Waning Planet / `64c383`; claude / Opus 4.8;
+> owner-directed standing mandate).**
+>
+> The scan ran over the full four-commit session-output surface
+> (`384b74de`, `9946ccf4`, `e8fe16e0`, `52cad7ee` — the perimeter was
+> corrected at grounding: the brief's three-commit enumeration carried a
+> June-1 commit and structurally excluded its own handoff commit). Method
+> and complete ledger:
+> [`mandate-1-contamination-scan-2026-06-02.md`](../../../reports/mandate-1-contamination-scan-2026-06-02.md)
+> — token+concept inventory, mechanical sweep (237 hits, all sanctioned
+> record), 8 refutation-briefed Sonnet reviewers + adversarial
+> verification per finding (13 raised → 7 survived → all author-grounded),
+> one known-answer probe (unfound by the fleet; calibration recorded).
+>
+> + **Nine fixes landed**: two count/citation precisions in
+>   `output-schemas-for-mcp-tools.plan.md` (incl. the W2 8-vs-11 label);
+>   three in `graph-estate-consolidation.plan.md` (D0–D2 completeness;
+>   the meta-plan "never merged" falsity — its branch merged via PR #108;
+>   the JC3 heading "5"→four, the span the prior 5-vs-4 fix missed); the
+>   `pending-graduations` temporal-seam entry re-grounded to
+>   green-at-each-boundary; the `repo-continuity` item-7 heading restated
+>   to the one-thread order; the audit-workflow FILE_MAP path; and the
+>   `graph-corpus-sdk` root-barrel TSDoc rewritten to present truth
+>   (prose only — exports untouched, D4/D5 own the surface design).
+> + **Cross-document consistency verified**: the one-thread sequencing,
+>   schema-delivery order (EEF D6 first and alone; graph tools with their
+>   migration), S0/migration/re-validation ownership, 24+11=35 tool
+>   counts (code-grounded), and Q1–Q5 statuses read identically across
+>   all four plans, both thread-record top banners, and repo-continuity.
+> + **Routed signal awaiting owner direction**: estate-wide US "judgment"
+>   spelling (83 hits, 57 files, spans immutable/generated/identifier
+>   surfaces — per-class dispositions named in the report; nothing
+>   renamed mid-scan to avoid forking the JC3/JC4 label).
+>
+> **NEXT SAFE STEP (fresh session, the graph-estate plan's own doctrine):
+> graph-estate t2+t3+t4 → t5+t7 as one ship-unit → scoped t8**, honouring
+> the two assumptions-expert park-header conditions at the t4 move. Then
+> the Judgment-call-4 unified substrate-migration plan, authored from this
+> clean estate. Then EEF D3 per repo-continuity's EEF Next Safe Steps
+> item 6.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Stellar Waning Planet` | `claude` | `Opus 4.8` | `64c383` | `mandate-1-deep-contamination-scan` | 2026-06-02 | 2026-06-02 |
+>
+> ---
+>
 > **ONE-THREAD RESEQUENCING RATIFIED + ESTATE CORRECTIONS — COMMITTED
 > `e8fe16e0` AND PUSHED, FULL PRE-PUSH GATE GREEN (2026-06-02, Silvered
 > Lurking Mask / `bbb696`; claude / Opus 4.8; owner-directed).**

@@ -31,7 +31,7 @@ KEY PATHS (verified to exist as of this branch):
     universal-tool-shared.ts (formatToolResponse lives here), execute-tool-call.ts, public/mcp-tools.ts
 - Generated ("API") tools + codegen:
     packages/sdks/oak-sdk-codegen/
-    packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/mcp-tools/tools/*.ts
+    packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/*.ts
 - Graph SDK / corpus: packages/sdks/graph-corpus-sdk/src/ (eef-strands/, index.ts),
     packages/libs/graph-project, packages/libs/graph-ingest
 - Search SDK: packages/sdks/oak-search-sdk/

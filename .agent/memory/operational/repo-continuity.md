@@ -19,6 +19,28 @@ surface.
 
 ## Current State
 
+- **Mandate-1 deep contamination scan executed — estate clean after nine
+  fixes (2026-06-02, Stellar Waning Planet / `64c383`, claude / Opus 4.8,
+  owner-directed standing mandate)** — the scan covered the full
+  four-commit session-output surface (`384b74de`, `9946ccf4`, `e8fe16e0`,
+  `52cad7ee`; perimeter corrected at grounding). Method + complete ledger:
+  [`mandate-1-contamination-scan-2026-06-02.md`](../../reports/mandate-1-contamination-scan-2026-06-02.md)
+  (8 refutation-briefed reviewers + adversarial verification; 13 findings
+  → 7 survived → all author-grounded; known-answer probe unfound,
+  calibration recorded). Nine fixes: plan count/citation precisions (W2
+  8-vs-11; JC3 heading "5"→four; D0–D2 completeness; meta-plan branch
+  merged via PR #108), the temporal-seam buffer entry re-grounded to
+  green-at-each-boundary, this file's item-7 heading restated to the
+  one-thread order, the audit-workflow FILE_MAP path, and the
+  `graph-corpus-sdk` root-barrel TSDoc rewritten to present truth.
+  Cross-document consistency of the ratified sequencing/ownership/counts
+  verified across all four plans + both thread banners + this file.
+  **Routed signal**: estate-wide US "judgment" spelling (83 hits, 57
+  files, immutable/generated/identifier surfaces — owner direction
+  wanted; see the report). **Next: graph-estate t2+t3+t4 → t5+t7 →
+  scoped t8 in a fresh session**, then the JC4 unified
+  substrate-migration plan, then EEF D3. Full detail: `eef` thread
+  banner.
 - **One-thread resequencing ratified + estate corrections — committed
   `e8fe16e0` and PUSHED, full pre-push gate green (2026-06-02, Silvered
   Lurking Mask / `bbb696`, claude / Opus 4.8, owner-directed)** — the owner
@@ -374,8 +396,10 @@ not the current session-priority lane. Reactivation is owner-directed.
    full whole-plan review, then a full D3 review** (one recorded-but-unapplied D3 edit:
    state the declared-only filter exclusions — `KS5`/`post_16`/`all_through`/
    `special`/`improving_attendance`/`teacher_retention` are not valid filter inputs).
-7. **Graph-estate-consolidation: t1 DONE + ratified; t2-t5/t7 execution pending,
-   to be taken up AFTER the EEF work** (2026-06-01, Glittering Soaring Meteor).
+7. **Graph-estate-consolidation: t1 DONE + ratified; t2-t5/t7 execution pending —
+   executes FIRST under the one-thread ratification (precedes EEF D3+, preceded
+   only by the mandate-1 deep contamination scan)** (2026-06-01, Glittering
+   Soaring Meteor; resequenced 2026-06-02).
    The contamination-remediation master plan at
    `connecting-oak-resources/knowledge-graph-integration/current/graph-estate-consolidation.plan.md`
    was flattened (four stratified "Inbound from …" sections → one verified

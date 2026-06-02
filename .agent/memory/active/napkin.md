@@ -387,3 +387,31 @@ Squally Snorkelling Sail, codex / GPT-5.
   already-landed versions as queued work. Session-completion consolidation is a
   good backstop for dependency work because it checks whether the executable
   plan estate still matches the manifest and lockfile.
+
+## Session: 2026-06-02 — mandate-1 deep contamination scan (Stellar Waning Planet / `64c383`)
+
+- **A scan brief is inside its own scan perimeter — and cannot enumerate
+  itself.** The handoff's "scan ALL the 2026-06-02 session outputs" listed three
+  commits: one was dated June 1, and the commit carrying the brief itself
+  (created after the enumeration was drafted) was absent. Structural, not
+  careless — an author cannot list a commit that does not yet exist. Reflex: at
+  scan-grounding, re-derive the perimeter from git, never from the brief; the
+  brief is the first artefact scanned. Same shape as "HEAD pushed" being
+  falsified by the act of committing the handoff that claims it.
+- **Known-answer probes calibrate reviewer fleets.** Withheld the pre-flagged
+  root-barrel TSDoc finding from the permanent-docs reviewer brief (scope named
+  the surface; conclusion withheld). The fleet did NOT find it — direct evidence
+  that one-pass fan-out recall is imperfect and zero-finding groups carry
+  calibrated, not absolute, confidence. Cheap to do whenever a prior session has
+  already flagged one finding: it converts a known answer into a recall
+  measurement. (The probe item itself was in-mandate and fixed.)
+- **Verifier fleets apply inconsistent standards across identical defect
+  classes.** One verifier upheld a heading/body count contradiction (JC3 "5" vs
+  "four"); another refuted the same class elsewhere (W2 "11" vs 8) as "labelling
+  imprecision a reasonable executor reads past". Author-level synthesis is where
+  the standard gets applied consistently — I overrode the second refutation and
+  fixed both. Validate refutations with the same rigour as findings.
+- **Routed, not done**: estate-wide US "judgment" spelling (83 hits / 57 files;
+  immutable comms events, generated data.json, oak-search-cli identifiers,
+  archives — per-class dispositions in the scan report; renaming only my
+  perimeter would have forked the live JC3/JC4 label). Owner direction wanted.
