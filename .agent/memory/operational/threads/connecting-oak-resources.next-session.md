@@ -1,5 +1,41 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
+## 2026-06-02 — Silvered Lurking Mask / claude / Opus 4.8 / `bbb696` — one-thread resequencing ratified + estate corrections (committed `e8fe16e0`, pushed)
+
+**Landed (commit `e8fe16e0`, pushed, full pre-push gate green):** the owner
+ratified the one-thread order and it is now recorded in the estate —
+**this plan's decontamination + consolidation execute FIRST** (t2–t5/t7/t8
+precede EEF D3+ and all other graph work), preceded only by the mandate-1
+deep contamination scan. The prior "after the EEF work finishes" direction is
+superseded and removed everywhere it lived.
+
+**Judgment call 4 scope (owner-ratified):** per tool, the substrate migration
+is ONE replacement unit — data/type re-emission (generated data becomes its
+own type authority) + tool rewrite + that tool's projection-derived
+`outputSchema` land together. The existing tools are untouched before their
+migration (EEF D7 proves value on them as-is; *scaling* is the migration's
+job). Thread-progressions data is sequence-shaped and is not forced into
+node/edge graph form; the unified plan decides its substrate shape.
+
+**Corruption removed (review-caught + self-caught):** the pre-existing 5-vs-4
+misconceptions-consolidation contradiction (t4 todo, disposition map, and
+execution sequence still said "consolidate the 5" against Jc3's four-feature
+scope — an executor would have folded `oak-misconceptions-substrate-migration`
+into the feature consolidation; fixed in all three spans, substrate-migration
+routed to Jc4); the `graph-corpus-sdk` README/`package.json` `Increment 3`
+residue (README rewritten to grounded present truth, no forward-looking
+schedule); the residue-position note now records the source tree as clear.
+
+**Next safe step:** the mandate-1 deep contamination scan (independent eyes)
+of the 2026-06-02 outputs — now pushed (`9946ccf4`, `384b74de`, `e8fe16e0`) —
+then execute this plan's t2+t3+t4 → t5+t7 → scoped t8 in a fresh session,
+then author the Jc4 unified substrate-migration plan from the clean estate.
+Known scan target already flagged: `graph-corpus-sdk/src/index.ts` root-barrel
+TSDoc (claims sub-path re-export; exports only the `GraphView`+`Result` types;
+old corpus-adapter framing — D4/D5 surface). Active-claims: none mine.
+
+---
+
 ## 2026-06-02 — Flamebright Charring Ember / claude / Opus 4.8 / `30dd5d` — graph-estate cross-thread relationship + one-migration ownership
 
 **Landed (uncommitted, doc-only):** made

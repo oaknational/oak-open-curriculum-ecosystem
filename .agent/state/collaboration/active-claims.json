@@ -1,28 +1,5 @@
 {
   "schema_version": "1.3.0",
-  "commit_queue": [
-    {
-      "intent_id": "af1f738f-3e7d-412b-8a90-d445cafd95d0",
-      "claim_id": "c67d820a-3306-4194-acef-5b20e97d6d33",
-      "agent_id": {
-        "agent_name": "Woodland Swaying Copse",
-        "platform": "codex",
-        "model": "GPT-5",
-        "session_id_prefix": "019e83",
-        "id": "5d23c0d8-d6a3-5601-aec3-29d504db6c42"
-      },
-      "files": [
-        ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-estate-consolidation.plan.md",
-        ".agent/state/collaboration/active-claims.json",
-        ".agent/state/collaboration/closed-claims.archive.json"
-      ],
-      "commit_subject": "chore(agentic): close remaining commit residue",
-      "queued_at": "2026-06-01T15:56:57.918Z",
-      "updated_at": "2026-06-01T15:57:35.616Z",
-      "expires_at": "2026-06-01T16:11:57.918Z",
-      "phase": "abandoned",
-      "notes": "Owner narrowed follow-up commit to files present when commit request started; leave late-arriving plan file uncommitted."
-    }
-  ],
+  "commit_queue": [],
   "claims": []
 }

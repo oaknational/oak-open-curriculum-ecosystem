@@ -299,6 +299,18 @@ t1 ratification, claim-verification), ran 3 reviewers, fixed ADR-173, flipped t1
   eyes on a contaminated-estate edit set find what the editing session missed
   (the contradiction predated this session and survived my own full read of
   the plan).
+- **Close-phase insights.** (1) Prose-line-width fitness has no graduated
+  zones — one long inline-link line lands straight in CRITICAL; the cure for
+  long repo paths in memory surfaces is reference-style links, a formatting
+  convention, not a limit change (applied to open-questions Q-003; cleared
+  the critical). (2) An expired `abandoned` commit-queue entry is a
+  deliberate-cleanup candidate at consolidation, not ambient state — cleared
+  with evidence (Woodland Swaying Copse entry, expired 2026-06-01T16:11Z,
+  substance preserved in the thread record + git history). (3) The owner
+  directing "commit, then push" with their own green `pnpm check` in hand,
+  while the mandate-1 scan is still pending, re-locates the proliferation
+  boundary from the push to the scan itself — the scan now runs against
+  pushed state; recorded honestly in the banner rather than relitigated.
 
 ## Session: 2026-06-02 — MCP output-schema audit/rewrite + graph projection plan (Abyssal Flowing Beacon, claude / Opus 4.8)
 

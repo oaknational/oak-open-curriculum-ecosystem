@@ -19,6 +19,27 @@ surface.
 
 ## Current State
 
+- **One-thread resequencing ratified + estate corrections — committed
+  `e8fe16e0` and PUSHED, full pre-push gate green (2026-06-02, Silvered
+  Lurking Mask / `bbb696`, claude / Opus 4.8, owner-directed)** — the owner
+  ratified: EEF + graph decontamination/consolidation + graph enhancements +
+  substrate migration are ONE thread; **decontamination + consolidation
+  execute FIRST** (graph-estate t2–t5/t7/t8 precede EEF D3+), preceded only by
+  the mandate-1 deep contamination scan. Output schemas: **the EEF tool's
+  lands first and alone via EEF D6**; the 3 existing graph tools receive
+  theirs WITH their substrate migration (one replacement unit per tool:
+  data/type re-emission + rewrite + `outputSchema`; untouched before it);
+  rest per type; required/root promotion last — recorded in
+  `output-schemas-for-mcp-tools.plan.md` §Resolved Sequencing +
+  `graph-tool-output-schemas.plan.md` + graph-estate Judgment call 4. D7
+  proves value on the live bulk tools; scaling is the migration's. Corruption
+  removed (stale D6 conditional, superseded sequencing, OPEN-DECISION refs,
+  the pre-existing 5-vs-4 misconceptions contradiction, `Increment 3` residue
+  in the `graph-corpus-sdk` README/`package.json`). 3-reviewer workflow
+  validated; findings critically assessed. **Next: the mandate-1 deep
+  contamination scan** (now against pushed state), then graph-estate
+  execution, then the unified substrate-migration plan, then EEF D3. Full
+  detail: `eef` + `connecting-oak-resources` thread banners.
 - **EEF/ADR/graph-estate plan review + refinement — doc-only, all uncommitted
   (2026-06-02, Flamebright Charring Ember / `30dd5d`, claude / Opus 4.8)** — deep
   multi-workflow review (holistic 6-lens, D3 4-lens, 4-architecture-reviewer pass,
@@ -263,7 +284,7 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Flamebright Charring Ember / EEF+ADR+graph-plan review & refinement / 2026-06-02, claude / Opus 4.8 / Abyssal Flowing Beacon / MCP output-schema audit + rewrite + graph projection plan / 2026-06-02 |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Silvered Lurking Mask / one-thread resequencing ratification + estate corrections / 2026-06-02 (prior: Flamebright Charring Ember, Abyssal Flowing Beacon, both 2026-06-02) |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | codex / GPT-5 / Umbral Whispering Silhouette / promotion-and-root-docs-author / 2026-06-01 |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 / Moonless Lurking Dusk / dedicated knowledge-curation pass / 2026-06-01 |
 
@@ -274,7 +295,7 @@ not the current session-priority lane. Reactivation is owner-directed.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `connecting-oak-resources` | Oak resource graph substrate for EEF | [record][connecting] | claude / Opus 4.8 / Flamebright Charring Ember / graph-estate cross-thread relationship + one-migration ownership / 2026-06-02 (prior: Hearthlit Stoking Cinder 2026-06-01) |
+| `connecting-oak-resources` | Oak resource graph substrate for EEF | [record][connecting] | claude / Opus 4.8 / Silvered Lurking Mask / one-thread resequencing + estate corrections / 2026-06-02 (prior: Flamebright Charring Ember 2026-06-02) |
 | `branch-fitness-and-push-cadence` | Small-PR, push-often, branch-fitness, PR/Sonar protocol substrate | [record][branch-fitness] | Pelagic Snorkelling Sextant / codex / GPT-5 / Cycle 1 substrate capture / 2026-05-24 |
 | `mcp-product-analytics` | MCP product analytics design and Path-to-GA Programme | [record][mcp-analytics] | Stellar Glowing Satellite / claude / claude-opus-4-7 / Programme landed + amendments / 2026-05-26 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night / claude-code / opus-4.7 / 2026-05-10 |
@@ -442,7 +463,24 @@ authority.
 
 ## Deep Consolidation Status
 
-**narrow docs-only handoff (2026-06-02, Abyssal Flowing Beacon — MCP output-schema
+**completed this handoff — light session-completion pass (2026-06-02, Silvered
+Lurking Mask — one-thread resequencing + estate corrections)**: `owner-directed
+light oak-consolidate-docs after a full oak-session-handoff. Fresh learning
+captured (napkin at full weight; experience file
+2026-06-02-naming-the-pattern-is-not-immunity.md; pending-graduations gains the
+substrate-migration-doctrine candidate, trigger = authoring of the JC4 unified
+plan). Q-003 updated answered-in-part (sequencing ratified; narrowed to
+Q1/Q3/Q5) + its two over-width link lines converted to reference style,
+clearing the open-questions CRITICAL (post-mortem: prose-width has no graduated
+zones — a single long inline-link line lands straight in critical; limit
+correct; formatting defect, not missing graduation). Expired abandoned
+commit-queue entry (Woodland Swaying Copse, 2026-06-01) deliberately cleared
+with evidence in the closeout. Carried forward with deferral-honesty (owner
+scoped this pass light; falsifiable at the next dedicated curation pass):
+napkin rotation (359 ln vs 300 hard limit — one day's accumulation since the
+2026-06-01 rotation; the 4 over-width lines are peer session headings that
+clear at rotation), repo-continuity archive-trim per its split_strategy (632 ln
+vs 525), typescript-practice soft. Verdict: partial slice landed.`
 audit/rewrite + graph projection plan)**: `not due — owner requested a narrow
 docs-only handoff (no commits, no gates). No consolidation trigger fired: napkin
 is healthy (~232 lines vs 300 limit) after appending this session's surprise at

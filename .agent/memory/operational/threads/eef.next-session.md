@@ -1,5 +1,70 @@
 # Next-Session Record — `eef` thread
 
+> **ONE-THREAD RESEQUENCING RATIFIED + ESTATE CORRECTIONS — COMMITTED
+> `e8fe16e0` AND PUSHED, FULL PRE-PUSH GATE GREEN (2026-06-02, Silvered
+> Lurking Mask / `bbb696`; claude / Opus 4.8; owner-directed).**
+>
+> **Owner-ratified and now recorded in the estate (the plans are the
+> authority; this banner is the pointer):**
+>
+> + **ONE thread**: EEF + graph decontamination/consolidation + graph
+>   enhancements + substrate migration. **Decontamination + consolidation
+>   execute FIRST** (graph-estate t2–t5/t7/t8 precede EEF D3+), preceded only
+>   by the mandate-1 deep contamination scan. The prior "graph-estate after
+>   EEF finishes" direction is superseded and removed everywhere it lived.
+> + **Output-schema delivery order** (in
+>   `output-schemas-for-mcp-tools.plan.md` §Resolved Sequencing): the EEF
+>   tool's `outputSchema` lands **first and alone via EEF D6** — the first
+>   instance of the projection→single-Zod-call mechanism; the 3 existing
+>   graph tools receive theirs **with their substrate migration** (one
+>   replacement unit per tool: data/type re-emission + rewrite +
+>   `outputSchema`) and are untouched before it; remaining tool types follow;
+>   required/root `UniversalToolListEntry` promotion last. **Rule: a tool's
+>   schema arrives when the tool is built or rebuilt, never before.**
+> + **D7 proves value on the LIVE bulk graph tools** (verified: they take no
+>   input and return the whole graph — 6.0MB misconception / 1.8MB
+>   prior-knowledge data); *scaling* that value is owned by the migration.
+>   Thread-progressions (~190KB, sequence-shaped) is not graph-forced and is
+>   not on the EEF value path.
+> + **Corruption removed**: stale D6 citation-shape conditional (refuted by
+>   tree); superseded sequencing directions; OPEN-DECISION-S0-OWNERSHIP
+>   references (resolved); the **pre-existing 5-vs-4
+>   misconceptions-consolidation contradiction** in graph-estate
+>   (independent-reviewer catch — it survived this session's own full plan
+>   read); `Increment 3` residue in the `graph-corpus-sdk` README +
+>   `package.json` (README rewritten to grounded present truth, no
+>   forward-looking schedule, per `no-moving-targets`).
+> + **Review**: 3-reviewer workflow (docs-adr/assumptions/code,
+>   refutation-inviting, decided scope protected); findings critically
+>   assessed against the artefacts — 5 accepted and fixed, 1 rejected as
+>   over-literal, 4 observations.
+>
+> **NEXT SAFE STEP (start here): the mandate-1 DEEP CONTAMINATION SCAN** of
+> the 2026-06-02 session outputs — now pushed (`9946ccf4`, `384b74de`,
+> `e8fe16e0`) — with independent eyes and a token+concept inventory assembled
+> from the D0 decontamination ledger, the graph-estate plan preamble, and the
+> June-2 convenient-claim slip classes. Known scan target already flagged:
+> `graph-corpus-sdk/src/index.ts` root-barrel TSDoc (claims "re-exports each
+> sub-path module's public surface"; the code exports only the
+> `GraphView`+`Result` types; old corpus-adapter framing — D4/D5 surface).
+> Then graph-estate execution (fresh session), then the Judgment-call-4
+> unified substrate-migration plan (born from the clean estate), then EEF D3
+> per item 6 of repo-continuity's EEF Next Safe Steps. The EEF plan's D3/D4
+> PENDING reviewers fire against ratified D3/D4 outputs, which do not exist
+> yet — no dispatch was due this session.
+>
+> **Gate:** commit `e8fe16e0` pushed; the successful push is the green proof
+> (full pre-push gate: format, markdownlint, knip, depcruise, repo-validators,
+> shell-lint, turbo build/type-check/lint/test/e2e/ui — 103/103). Owner also
+> ran a green full `pnpm check` before the commit. Active-claims: none for my
+> identity.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Silvered Lurking Mask` | `claude` | `Opus 4.8` | `bbb696` | `one-thread-resequencing-ratification-and-estate-corrections` | 2026-06-02 | 2026-06-02 |
+>
+> ---
+>
 > **MCP OUTPUT-SCHEMA PLAN AUDITED + REWRITTEN; GRAPH-TOOL OUTPUT-SCHEMA
 > PROJECTION PLAN CREATED; S0 OWNERSHIP RESOLVED (2026-06-02, Abyssal Flowing
 > Beacon / `762085`; claude / Opus 4.8; owner-directed; doc-only, no commit, no

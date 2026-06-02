@@ -37,6 +37,21 @@ substance that still needed a live queue home is preserved below. Processed
 source files were deleted after extraction so the repository does not carry
 pseudo-shards that hide the true buffer state.
 
+## 2026-06-02 capture — substrate-migration doctrine (Silvered Lurking Mask)
+
+- **Graph-tool substrate-migration doctrine: one replacement unit per tool, and
+  a tool's schema arrives when the tool is built or rebuilt, never before.**
+  Owner-ratified 2026-06-02 and recorded in
+  `graph-estate-consolidation.plan.md` (Judgment call 4) +
+  `output-schemas-for-mcp-tools.plan.md` (§Resolved Sequencing): per migrated
+  tool, the data/type re-emission (generated data becomes its own type
+  authority), the tool rewrite onto `graph-corpus-sdk`, and that tool's
+  projection-derived `outputSchema` land together; existing tools are
+  untouched before their migration. Plans are ephemeral; if this doctrine is
+  durable architecture it needs an ADR home (new ADR or ADR-173 amendment)
+  when its owning plan exists.
+  `[captured: 2026-06-02 | source: owner direction in-session + the two plans above | target: adr:graph-substrate-migration-doctrine OR amendment:ADR-173 | trigger: authoring of the unified substrate-migration plan (graph-estate Judgment call 4) | size: M | status: pending]`
+
 ## 2026-06-01 capture — curation-pass doctrine candidates (Moonless Lurking Dusk)
 
 Surfaced to the owner during the dedicated knowledge-curation pass; staged in

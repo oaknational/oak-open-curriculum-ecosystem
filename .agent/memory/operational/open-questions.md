@@ -65,9 +65,9 @@ fitness_content_role: drainable-buffer
   registration path, and what is the canonical mechanism? (Owner: "additional
   information about input/output schemas is coming soon.")
 - **Owning artefact**:
-  [`sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md`](../../plans/sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md)
+  [`sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md`][q3-general]
   (general) and — the precise owner of the EEF-coupling sub-question —
-  [`sdk-and-mcp-enhancements/current/graph-tool-output-schemas.plan.md`](../../plans/sdk-and-mcp-enhancements/current/graph-tool-output-schemas.plan.md)
+  [`sdk-and-mcp-enhancements/current/graph-tool-output-schemas.plan.md`][q3-graph]
   ("Graph-tool output schemas via the EEF projection pattern", DESIGN), both
   authored/refreshed 2026-06-02 by the Abyssal Flowing Beacon workstream (audit:
   `.agent/reports/output-schema-mcp-plan-audit-2026-06-02.md`). Owner resolved the
@@ -94,7 +94,23 @@ fitness_content_role: drainable-buffer
   (the `as const` precondition + scale, the output-only structural simplification,
   where the one shared mechanism lives, 2-vs-3 graph scope, codegen emission shape)
   are owned by the new
-  [`graph-tool-output-schemas.plan.md`](../../plans/sdk-and-mcp-enhancements/current/graph-tool-output-schemas.plan.md)
+  [`graph-tool-output-schemas.plan.md`][q3-graph]
   (status DESIGN; co-design with EEF D4–D6). EEF D5/D6's single-Zod-call mechanism
   is pending, so the two are co-defining ONE mechanism.
-- **Status**: open; owned by the output-schemas plan + the graph projection plan.
+- **Update (2026-06-02, Silvered Lurking Mask / `bbb696`)**: the owner ratified
+  the **delivery order** (now recorded in the owning plans, committed
+  `e8fe16e0`): the EEF tool's `outputSchema` lands **first and alone via EEF
+  D6** — the mechanism's first instance; the 3 existing graph tools receive
+  theirs **with their substrate migration** (one replacement unit per tool) and
+  are untouched before it; remaining types follow; required/root promotion
+  last. Of the five sub-questions, **Q2 is resolved** (verified in code: the
+  graph tools take no input; the projection is structural) and **Q4 is
+  resolved** (thread-progressions excluded — sequence-shaped, not
+  graph-forced). Q1/Q3/Q5 (as-const scope, mechanism home, codegen emission
+  shape) resolve in the EEF D4–D6 co-design and the unified substrate-migration
+  plan.
+- **Status**: open (narrowed to Q1/Q3/Q5 — the shared-mechanism design); owned
+  by the output-schemas plan + the graph projection plan + EEF D4–D6.
+
+[q3-general]: ../../plans/sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md
+[q3-graph]: ../../plans/sdk-and-mcp-enhancements/current/graph-tool-output-schemas.plan.md
