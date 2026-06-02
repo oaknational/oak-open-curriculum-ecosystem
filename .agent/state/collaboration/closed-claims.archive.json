@@ -5487,6 +5487,142 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "b1638189-3084-4068-b0f4-7fa83eda1687",
+      "agent_id": {
+        "agent_name": "Shaded Veiling Mirror",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e88",
+        "id": "2138c720-0ec2-5457-819d-36dfe1df03b1"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/active/archive/napkin-2026-06-02-shaded-veiling-curation.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/curator-passes/2026-06-02-shaded-veiling-napkin-rotation.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-02T14:44:30Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Rotate current napkin with item-level disposition ledger; route durable insights without fitness-chasing",
+      "archived_at": "2026-06-02",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-02T14:58:12Z",
+        "closed_by": {
+          "agent_name": "Shaded Veiling Mirror",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e88",
+          "id": "2138c720-0ec2-5457-819d-36dfe1df03b1"
+        },
+        "summary": "Shaded curation pass landed: active napkin rotated with item-level ledger, contamination-scan pattern graduated, pending-graduations drained to graduated or owner/trigger-gated statuses, continuity surfaces refreshed, strict-hard soft-only.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "b1638189-3084-4068-b0f4-7fa83eda1687",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "8d7386c6-af82-41c0-a300-bb270076078e",
+      "agent_id": {
+        "agent_name": "Shaded Veiling Mirror",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e88",
+        "id": "2138c720-0ec2-5457-819d-36dfe1df03b1"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/archive/repo-continuity-deep-consolidation-status-2026-06-02-shaded-veiling.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-02T14:58:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Archive historical repo-continuity deep-consolidation closeout prose per split strategy",
+      "archived_at": "2026-06-02",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-02T14:58:12Z",
+        "closed_by": {
+          "agent_name": "Shaded Veiling Mirror",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e88",
+          "id": "2138c720-0ec2-5457-819d-36dfe1df03b1"
+        },
+        "summary": "Repo-continuity hard pressure resolved by planned structural split: historical deep-consolidation closeout prose and older May 31 current-state history moved to companion archive with active pointers retained; strict-hard soft-only.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8d7386c6-af82-41c0-a300-bb270076078e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "32f4bc35-8e3b-41ed-aca0-7997f1c94c3a",
+      "agent_id": {
+        "agent_name": "Shaded Veiling Mirror",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e88",
+        "id": "2138c720-0ec2-5457-819d-36dfe1df03b1"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-02T15:10:40Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit Shaded curation handoff bundle.",
+      "intent_to_commit": "ed57cdb9-9c58-43a5-89fe-1cc3c34dd1e1",
+      "archived_at": "2026-06-02",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-02T15:11:56Z",
+        "closed_by": {
+          "agent_name": "Shaded Veiling Mirror",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e88",
+          "id": "2138c720-0ec2-5457-819d-36dfe1df03b1"
+        },
+        "summary": "closed in same collaboration-state commit: docs(agentic): consolidate curation knowledge",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "32f4bc35-8e3b-41ed-aca0-7997f1c94c3a",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

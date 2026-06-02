@@ -17,6 +17,36 @@ fitness_rationale: >-
   substance rather than trimming the lesson.
 ---
 
+## 2026-06-02 — assertion-time checks, projection provenance, and visible proof
+
+Several June 2 entries sharpen one shared discipline: a claim becomes true only
+when the proving surface is current and visible. Run the cheap check at assertion
+time, not after a later metacognition pass: grep the residue, read the status,
+verify the cited label's liveness. For data-as-source-of-truth work, the
+principle is projection provenance, not generator location — a hand-authored
+mirror inside codegen is still a mirror; the durable shape is static data
+projected through one type-strict Zod call with `satisfies` tying it to the
+structured content. For no-commit sessions, a newly written untracked file is
+evidence to the agent but invisible to the owner; report the path with `git
+status` so the claim is falsifiable.
+
+## 2026-06-02 — mechanical sweeps need live routing and set confirmation
+
+Mechanical text sweeps cannot distinguish use from mention, generated snapshot
+from source, or record-class evidence from live prose. Before running one, read
+the newest napkin and scan reports as live routing, then state the intended
+change/revert set before broad action when peer edits or record surfaces are
+involved. A future-safe wording should also survive the sweep itself: when naming
+a token being removed, phrase the statement so a later replacement pass cannot
+turn a true sentence into a false one.
+
+## 2026-06-02 — dependency refreshes also need planning-truth cleanup
+
+Dependency updates can widen beyond the initially named package because shared
+workspace ranges move together. After manifests and lockfiles are current, check
+the plan estate too: a clean `pnpm -r outdated` table is not proof that old
+dependency-update plans no longer advertise completed work.
+
 ## 2026-06-02 — contamination scans: perimeter from git, probes for recall, author-applied standards
 
 Three sharpened edges from the mandate-1 scan (Stellar Waning Planet). (1) A
@@ -32,7 +62,9 @@ another refuted the same class as "labelling imprecision") — author-level
 synthesis is where one standard gets applied; validate refutations with the
 same rigour as findings. Extends independent-eyes-catch-what-self-review-cannot.
 Method ledger: `.agent/reports/mandate-1-contamination-scan-2026-06-02.md`.
-Graduation candidate: contamination-scan method pattern (pending-graduations).
+Graduated 2026-06-02 to
+`patterns/contamination-scan-method.md`; the pending-graduations entry now
+records the durable route.
 
 ## 2026-06-01 — one law, three faces (EEF thread synthesis)
 

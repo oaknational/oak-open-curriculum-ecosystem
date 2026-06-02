@@ -1,5 +1,49 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-06-02 — Shaded Veiling Mirror / codex / GPT-5 / `019e88`, dedicated curation pass)
+
+**Curation pass landed in working tree.** The active napkin crossed critical
+after legitimate June 2 captures. Shaded Veiling Mirror processed the current
+napkin item by item, moved the verbatim source to
+`active/archive/napkin-2026-06-02-shaded-veiling-curation.md`, and recorded the
+disposition ledger at
+`curator-passes/2026-06-02-shaded-veiling-napkin-rotation.md`.
+
+Durable routes: `distilled.md` gained concise entries for assertion-time cheap
+checks, projection provenance, live-routing before mechanical sweeps,
+owner-visible proof for untracked artefacts, dependency-plan truth, and
+set-level confirmation before broad repair/revert. `pending-graduations.md`
+gained owner-gated routes for substance-loss-first curation, plan
+anti-restratification, history-vs-residue decontamination, convergence scanning,
+no-commit artefact proof, mechanical-sweep set discipline, and Cursor
+identity-seed observability.
+
+Follow-on drain: the contamination-scan method graduated to
+`active/patterns/contamination-scan-method.md`; the seam-map archetype and
+rules cross-platform generator graduated out of the register into future
+strategic plans. `pending-graduations.md` now has no generic `pending`,
+`APPROVED`, or `owner-surfaced` status labels.
+
+Repo-continuity hard pressure was structural, not live-state pressure: older
+deep-consolidation closeout prose and May 31 current-state history moved to
+`archive/repo-continuity-deep-consolidation-status-2026-06-02-shaded-veiling.md`
+with active pointers retained.
+
+**Next safe step:** if the owner asks for closeout, commit this curation bundle
+after the normal claim/queue/staged verification flow. If the owner reopens
+curation instead, walk the next owner-gated cluster by substance rather than by
+fitness score.
+
+**Closeout update:** the owner asked for full session handoff,
+`consolidate-docs`, final napkin capture, and commit. Handoff/consolidation
+found no further ADR/PDR/open-question promotion requirement beyond the routed
+pattern and future-plan lanes. Entry points are canonical; active claims are
+clear. Commit the current bundle through the repo commit protocol.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Shaded Veiling Mirror` | `codex` | `GPT-5` | `019e88` | `dedicated-curation+closeout` | 2026-06-02 | 2026-06-02 |
+
 ## Session Outcome (2026-06-01 — Moonless Lurking Dusk / claude / Opus 4.8 / `0641a3`, dedicated knowledge-curation pass)
 
 **Curation pass complete; fitness fully green.** Ran `oak-consolidate-until-done`

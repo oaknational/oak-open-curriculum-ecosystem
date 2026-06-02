@@ -203,7 +203,7 @@ surface that makes later governance or enforcement honest.
 - **Wire-Format-Aware Redaction** -- Use this when: telemetry redaction protects structured objects or URLs, but secrets can also travel through raw encoded strings such as `application/x-www-form-urlencoded` request bodies. → [wire-format-aware-redaction.md](wire-format-aware-redaction.md)
 - **Workaround Debt Compounds Through Rationalisation** -- Use this when: a workaround exists and someone is explaining why it's justified, especially when invoking "different purposes" or "separate concerns". → [workaround-debt-compounds-through-rationalisation.md](workaround-debt-compounds-through-rationalisation.md)
 
-### Process (35)
+### Process (36)
 
 - **ADR by Reusability, Not Diff Size** -- Use this when: closing a small implementation lane and deciding whether the decision it encoded deserves to be promoted to an ADR. → [adr-by-reusability-not-diff-size.md](adr-by-reusability-not-diff-size.md)
 
@@ -212,6 +212,7 @@ surface that makes later governance or enforcement honest.
 - **Collapse Authoritative Frames When Settled** -- Use this when: a document or plan carries multiple authoritative descriptions of the same concept after a reorganisation, and "transitional dual-frame with sunset note" is being considered. → [collapse-authoritative-frames-when-settled.md](collapse-authoritative-frames-when-settled.md)
 - **Comprehensive-Cataloguing Drift** *(anti-pattern)* -- Use this when: authoring a spine plan, dispatching a reviewer pass, extending a rule, or scoping any artefact whose substance crosses a "what's in vs what's adjacent" boundary — the proportionality question is the substrate. → [comprehensive-cataloguing-drift.md](comprehensive-cataloguing-drift.md)
 - **Consolidation Output Shape — Contract for One Pattern, Report for N Independents** -- Use this when: a consolidation/audit/deep-exploration pass has produced N findings and you are choosing the shape of the output artefact — a single contract, a per-finding remediation list, an ADR/PDR, or a report. → [consolidation-output-shape-pattern-vs-report.md](consolidation-output-shape-pattern-vs-report.md)
+- **Contamination Scan Method** -- Use this when: a plan, report, or memory estate may contain contaminated current-truth claims and needs a repeatable scan that separates live residue from historical mention. → [contamination-scan-method.md](contamination-scan-method.md)
 - **In-Session Contract Authoring Conditions** -- Use this when: a plan has just landed that proposes a new contract / directive / governance doc and the question is whether to author the contract in the same session or sequence it to a fresh session. → [in-session-contract-authoring-conditions.md](in-session-contract-authoring-conditions.md)
 - **Current Plan Promotion** -- Use this when: a review or planning pass has resolved "what comes next" and the repo needs a concrete next-session entry point rather than a mere intended future direction. → [current-plan-promotion.md](current-plan-promotion.md)
 - **Monotonic Counter Is Not a Quality Indicator** -- Use this when: comparing two versions of a document or artefact that each carry a sequence counter. → [monotonic-counter-is-not-quality-indicator.md](monotonic-counter-is-not-quality-indicator.md)

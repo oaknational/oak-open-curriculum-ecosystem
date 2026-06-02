@@ -29,6 +29,51 @@ windowed, backlog, split, or shard-like pending-graduation files. New capture,
 owner-gated items, and unresolved pending-graduation decisions belong here until
 they graduate, duplicate, become stale-withdrawn, or receive owner direction.
 
+## 2026-06-02 captures — napkin rotation doctrine routes (Shaded Veiling Mirror)
+
+- **Curation reads for live-unique substance before archive or park framing.**
+  Graph-estate t1 proved the failure mode: the initial "archive/park the
+  superseded estate" frame would have lost independent live work in
+  `kg-alignment-audit`, `kg-integration-quick-wins`, and
+  `agent-guidance-consolidation`. The durable curation lens is substance-loss
+  first; archive/park is a later lifecycle action only after that lens is
+  satisfied.
+  `[captured: 2026-06-02 | source: napkin rotation from Glittering Soaring Meteor | target: amend:consolidate-docs OR rule:knowledge-preservation-over-fitness-warnings | trigger: owner direction or next archive/park-shaped curation pass | size: M | status: owner-gated]`
+- **Plans that de-stratify an estate must not re-stratify themselves.** A
+  consolidation plan that accumulates dated "Inbound from ..." sections recreates
+  the stratified narrative it exists to remove. Durable shape: one derived
+  current-state section; session handoff details live in thread records, not new
+  plan strata.
+  `[captured: 2026-06-02 | source: napkin rotation from graph-estate plan flattening | target: plan-hygiene doctrine or oak-plan template amendment | trigger: owner direction or second plan-consolidation instance | size: M | status: owner-gated]`
+- **Decontamination distinguishes history from live residue.** Dated amendment
+  summaries and changelogs can retain retired terms as history; live current-tense
+  claims must be superseded or removed. The fix is not a flat sweep but a
+  classification pass that names whether a token is history-retained or
+  live-residue.
+  `[captured: 2026-06-02 | source: napkin rotation from ADR-173 Inc.3 handling | target: amend:verify-dont-trust OR decontamination pattern | trigger: owner direction or second decontamination pass with history/current classification | size: S | status: owner-gated]`
+- **Shared-window handoffs should scan for convergence, not only collision.** A
+  parallel agent may have produced the dependency or answer your lane needed. At
+  handoff, actively look for live peer outputs that answer open questions and wire
+  them together, rather than only checking for file conflicts.
+  `[captured: 2026-06-02 | source: napkin rotation from Flamebright/Abyssal Q-003 convergence | target: session-handoff or agent-collaboration practice amendment | trigger: owner direction or second shared-window convergence instance | size: S | status: owner-gated]`
+- **No-commit sessions need owner-visible proof for untracked artefacts.** A
+  successful file write is evidence to the writing agent but not to the owner if
+  the file is untracked and uncommitted. Reports that say "created X" should carry
+  path plus current `git status` evidence in no-commit sessions.
+  `[captured: 2026-06-02 | source: napkin rotation from graph-tool-output-schemas plan creation | target: amend:session-handoff OR verify-dont-trust | trigger: owner direction or second owner-invisible untracked artefact incident | size: S | status: owner-gated]`
+- **Mechanical sweep and broad revert actions need set-level disposition before
+  execution.** A broad text sweep or revert can cross generated snapshots,
+  immutable records, peer edits, and live prose; state the planned set and
+  per-class disposition before action when the set spans more than simple live
+  prose.
+  `[captured: 2026-06-02 | source: napkin rotation from judgement sweep repair | target: rule-or-pattern:mechanical-sweep-set-discipline | trigger: owner direction or next broad text-sweep/revert pass | size: M | status: owner-gated]`
+- **Cursor identity seed observability needs a machine-level check.** Ashen's
+  Cursor session could not claim or broadcast because
+  `PRACTICE_AGENT_SESSION_ID_CURSOR` was absent from the shell, so a broad sweep
+  was invisible to active-claims/comms. This looks like a host hook/environment
+  gap rather than an agent-level behaviour failure.
+  `[captured: 2026-06-02 | source: napkin rotation from Ashen Igniting Hearth sweep | target: cursor-hook/agent-tools identity observability check | trigger: owner direction or next Cursor session with missing identity seed | size: S | status: owner-gated]`
+
 ## Register Rule
 
 Legacy recovery files under `.agent/memory/operational/pending-graduations/`
@@ -49,7 +94,7 @@ pseudo-shards that hide the true buffer state.
   and refutation-validation edges are new in the mandate-1 instance. Worked
   ledger: `.agent/reports/mandate-1-contamination-scan-2026-06-02.md`;
   distilled entry 2026-06-02.
-  `[captured: 2026-06-02 | source: mandate-1 scan session + distilled.md | target: pattern:.agent/memory/active/patterns/ OR skill amendment (consolidate-docs/curator-pass family) | trigger: next scan-shaped mandate or owner direction | size: M | status: pending]`
+  `[captured: 2026-06-02 | source: mandate-1 scan session + distilled.md | target: pattern:.agent/memory/active/patterns/contamination-scan-method.md | trigger: next scan-shaped mandate or owner direction | size: M | status: graduated 2026-06-02]`
 
 ## 2026-06-02 capture — substrate-migration doctrine (Silvered Lurking Mask)
 
@@ -64,7 +109,7 @@ pseudo-shards that hide the true buffer state.
   untouched before their migration. Plans are ephemeral; if this doctrine is
   durable architecture it needs an ADR home (new ADR or ADR-173 amendment)
   when its owning plan exists.
-  `[captured: 2026-06-02 | source: owner direction in-session + the two plans above | target: adr:graph-substrate-migration-doctrine OR amendment:ADR-173 | trigger: authoring of the unified substrate-migration plan (graph-estate Judgement call 4) | size: M | status: pending]`
+  `[captured: 2026-06-02 | source: owner direction in-session + the two plans above | target: adr:graph-substrate-migration-doctrine OR amendment:ADR-173 | trigger: authoring of the unified substrate-migration plan (graph-estate Judgement call 4) | size: M | status: owner-gated 2026-06-02 — trigger not fired; hold until the unified substrate-migration plan exists or owner directs ADR authoring]`
 
 ## 2026-06-01 capture — curation-pass doctrine candidates (Moonless Lurking Dusk)
 
@@ -76,12 +121,12 @@ Surfaced to the owner during the dedicated knowledge-curation pass; staged in
   state-what-is-no-monuments (writing) are one principle seen from three sides; a
   frame-slip's cure is always the same shape (return to the source of truth, fix
   upstream, state what is).
-  `[captured: 2026-06-01 | source: distilled.md + EEF thread synthesis | target: pdr:one-law-three-faces (unifying principle) | trigger: owner approval | size: M | status: owner-surfaced]`
+  `[captured: 2026-06-01 | source: distilled.md + EEF thread synthesis | target: pdr:one-law-three-faces (unifying principle) | trigger: owner approval | size: M | status: owner-gated 2026-06-02 — surfaced to owner; awaiting explicit approval before promotion]`
 - **Opening statements and handoff artefacts teach by their form.** Loaded-first
   surfaces train the next agent by their voice; written as present-truth +
   destination they teach that, written as remediation-recap they teach that.
   Validated twice across sessions; pairs with `no-tombstones-for-removed-ideas`.
-  `[captured: 2026-06-01 | source: distilled.md + Shaded/Windswept worked instances | target: clause:no-tombstones-for-removed-ideas OR continuity-practice | trigger: owner approval | size: S | status: owner-surfaced]`
+  `[captured: 2026-06-01 | source: distilled.md + Shaded/Windswept worked instances | target: clause:no-tombstones-for-removed-ideas OR continuity-practice | trigger: owner approval | size: S | status: owner-gated 2026-06-02 — surfaced to owner; awaiting explicit approval before promotion]`
 
 ## 2026-06-01 capture — seam-mapping plan template/archetype (Windswept Floating Summit)
 
@@ -107,7 +152,7 @@ Surfaced to the owner during the dedicated knowledge-curation pass; staged in
   (`replace-dont-bridge`, `rules-have-no-exceptions`). Owner framing: "no sections
   should need reconciling; an architectural tension is a signal we have misaligned a
   fundamental concept, not a legitimate hard thing to match up."
-  `[captured: 2026-06-01 | source: EEF plan Sequencing rewrite + owner direction | target: plan-template-or-archetype:seam-map (.agent/plans/templates/components/) + possible oak-plan skill amendment | trigger: schedule a focused authoring session | size: L | status: APPROVED 2026-06-01 (owner) — NOT owner-gated; a large piece of work, deliberately not done in this curation session. Needs its own focused authoring session.]`
+  `[captured: 2026-06-01 | source: EEF plan Sequencing rewrite + owner direction | target: .agent/plans/agentic-engineering-enhancements/future/seam-map-plan-template-archetype.plan.md | trigger: schedule a focused authoring session | size: L | status: graduated 2026-06-02 — future strategic lane created for focused authoring]`
 
 ## 2026-06-01 capture — cross-platform rules generator (Twilit Threading Satellite)
 
@@ -118,7 +163,7 @@ Surfaced to the owner during the dedicated knowledge-curation pass; staged in
   fact. A generator would author every form from the canonical file so the forms
   cannot drift and the index stays in lockstep. (The index header already drifted:
   it says "three on-disk forms" while listing four.)
-  `[captured: 2026-06-01 | source: rules-have-no-exceptions authoring | target: agent-tools:rules-cross-platform-generator | trigger: owner-direction-or-next-rule-authoring | size: M | status: pending — TRIGGER FIRED 2026-06-01 (eef-corpus-grounding hand-mirrored across 4 forms + index this session); routed to an agent-tools implementation lane, not a curation disposition — surfaced to owner]`
+  `[captured: 2026-06-01 | source: rules-have-no-exceptions authoring | target: .agent/plans/agent-tooling/future/rules-cross-platform-generator.plan.md | trigger: owner-direction-or-next-rule-authoring | size: M | status: graduated 2026-06-02 — future strategic lane created for the fired implementation trigger]`
 
 ## 2026-05-31 captures — EEF value reframe (Fruited Regrowing Copse)
 
@@ -162,7 +207,9 @@ Capture-only; graduation deferred to a future consolidation when triggers fire.
 - **PreToolUse safety hooks must run prebuilt artefacts, not `pnpm exec tsx`.**
   `[captured: 2026-05-31 | source: this-session commit 1851eed | target:
   adr:hook-execution-from-prebuilt-artefacts | trigger: second per-tool-call hook
-  instance, a new PreToolUse hook, or owner direction | size: S | status: pending]`
+  instance, a new PreToolUse hook, or owner direction | size: S |
+  status: owner-gated 2026-06-02 — keep until a second instance, new hook,
+  or owner direction fires]`
   Per-call TS recompile (~1-2s) blows the 5s hook timeout under concurrent load
   and the guard then fails OPEN. Cure: invoke `node dist/...` directly; guarantee
   dist via the install lifecycle (postinstall + pre-commit build).
@@ -173,7 +220,7 @@ Capture-only; graduation deferred to a future consolidation when triggers fire.
   rule-or-pdr:subagent-brief-mandates-full-gate-set (extends
   validate-specialist-findings-before-acting) | trigger: second instance of an
   agent passing one gate while failing another, or owner direction | size: S |
-  status: pending]`
+  status: owner-gated 2026-06-02 — keep until recurrence or owner direction]`
   Split agents wrote compact code that passed eslint but failed Prettier; the
   format pass then un-compacted it over `max-lines`. The cure for over-cap is
   responsibility-based splitting, never compaction.
@@ -182,7 +229,7 @@ Capture-only; graduation deferred to a future consolidation when triggers fire.
   `[captured: 2026-05-31 | source: this-session knip failure | target:
   pattern:knip-entry-config-tracks-entry-point-moves | trigger: second
   entry-point relocation that breaks knip, or owner direction | size: S |
-  status: pending]`
+  status: owner-gated 2026-06-02 — keep until recurrence or owner direction]`
   knip `entry` globs pointed at the old `scripts/`; moving entries to `src/` made
   the whole dependency graph read as unused. Update `knip.config.ts` entry list
   on any entry-point relocation.
@@ -446,9 +493,9 @@ below, independent of them.)
     a design signal; the graph/corpus is smart and the tool is a thin formatter"
   - trigger-condition: the live EEF plan ratifies the graph-tool / MCP contract
     (D3/D4 — becomes settled and reusable across adapters)
-  - status: pending (graduate when the live EEF plan's D3/D4 contract is
-    ratified). Reviewed 2026-05-31 by Open Lofting Cliff: carried forward because
-    current continuity says D0 is complete and D1/D2 are next.
+  - status: owner-gated 2026-06-02 (graduate when the live EEF plan's D3/D4
+    contract is ratified). Reviewed 2026-05-31 by Open Lofting Cliff: carried
+    forward because current continuity says D0 is complete and D1/D2 are next.
 - **Self-correcting measurable deliverables (planning methodology).**
   - captured-date: 2026-05-28
   - source-surface: foundation §5 + this rebuild plan (first instance)
@@ -458,8 +505,9 @@ below, independent of them.)
     the predecessor drifted
   - trigger-condition: plan D5 (extract from the rebuild plan as its first proven
     instance)
-  - status: pending (owner wants this in planning methodology). Reviewed
-    2026-05-31 by Open Lofting Cliff: carried forward because D5 has not fired.
+  - status: owner-gated 2026-06-02 (owner wants this in planning methodology).
+    Reviewed 2026-05-31 by Open Lofting Cliff: carried forward because D5 has
+    not fired.
 - **Definition-of-Delivery refinement for discovery/instrument work.**
   - captured-date: 2026-05-28
   - source-surface: foundation §6; PDR-085
@@ -468,9 +516,9 @@ below, independent of them.)
     and the self-correcting-deliverables structure as the honesty mechanism; the
     F tool is the case study (merged + green + reviewed != delivery)
   - trigger-condition: plan D5 / owner direction on the doctrine refinement
-  - status: pending (open question, owner-flagged). Reviewed 2026-05-31 by Open
-    Lofting Cliff: carried forward because D5 / direct owner promotion has not
-    fired.
+  - status: owner-gated 2026-06-02 (open question, owner-flagged). Reviewed
+    2026-05-31 by Open Lofting Cliff: carried forward because D5 / direct owner
+    promotion has not fired.
 - **'Working with graphs' skill(s) + supporting docs.**
   - captured-date: 2026-05-28
   - source-surface: foundation §11; plan D5 (owner-directed deliverable)
@@ -479,9 +527,9 @@ below, independent of them.)
     sparse subgraphs; navigable links; graph tools as a category; soft-stub
     failure mode
   - trigger-condition: plan D5 (extract from the real built tool/contract)
-  - status: pending (owner-directed plan deliverable). Reviewed 2026-05-31 by
-    Open Lofting Cliff: carried forward because the D5 extraction trigger has
-    not fired.
+  - status: owner-gated 2026-06-02 (owner-directed plan deliverable). Reviewed
+    2026-05-31 by Open Lofting Cliff: carried forward because the D5 extraction
+    trigger has not fired.
 - **Proportionate exploration — raising a question is fine; the expenditure is the failure.**
   - captured-date: 2026-05-28
   - source-surface: owner correction 2026-05-28 — "it's always fine to raise a
@@ -494,9 +542,9 @@ below, independent of them.)
     a sentence with a default, then move on) + costume-awareness
   - trigger-condition: second instance or owner-direction (one-session lesson;
     needs stability before graduating)
-  - status: pending. Reviewed 2026-05-31 by Open Lofting Cliff: carried forward;
-    no second instance or direct owner promotion found in the selected docs
-    surfaces.
+  - status: owner-gated 2026-06-02. Reviewed 2026-05-31 by Open Lofting Cliff:
+    carried forward; no second instance or direct owner promotion found in the
+    selected docs surfaces.
 
 ## Extracted Recovery-File Disposition Ledger
 
@@ -1009,8 +1057,8 @@ done && echo "lock cleared"`). Even though the loop only OBSERVED
   listing during WS0 promotion. Trigger: second instance of new-plan-
   stub-spawn-without-future-survey; graduation target: distilled.md
   § Process entry naming "directory survey before plan-stub spawning"
-  OR amendment to `consolidate-at-third-consumer.md`; status: pending
-  (single instance; capture-only until second instance accumulates).
+  OR amendment to `consolidate-at-third-consumer.md`; status: owner-gated
+  2026-06-02 (single instance; capture-only until second instance accumulates).
   **Curation disposition (2026-05-27)**: owner-gated. No second
   plan-stub-survey instance was found in durable surfaces. Owner decision
   needed: promote a directory-survey-before-plan-stub rule now, keep the

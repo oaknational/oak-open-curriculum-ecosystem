@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "1624c4de-d1f2-42b6-8b2a-e2c68819427a",
+  "created_at": "2026-06-02T14:45:30Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Shaded Veiling Mirror",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e88",
+    "id": "2138c720-0ec2-5457-819d-36dfe1df03b1"
+  },
+  "title": "Shaded Veiling Mirror: curation claim open for napkin rotation",
+  "body": "Solo curation slice started. Active claims were empty before claim b1638189-3084-4068-b0f4-7fa83eda1687; scope is current napkin rotation with item-level disposition ledger, plus distilled, pending-graduations, repo-continuity, and thread-record updates only where the evidence requires them. Fitness is routing evidence, not the goal.",
+  "tags": [
+    "behaviour-note"
+  ]
+}
