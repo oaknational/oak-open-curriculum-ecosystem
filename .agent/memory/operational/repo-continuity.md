@@ -19,8 +19,30 @@ surface.
 
 ## Current State
 
-- **EEF D3 OWNER-RATIFIED after the dedicated review-then-ratify session;
-  bundle uncommitted by owner direction (2026-06-03, Lacustrine Swimming
+- **UPSTREAM SEQUENCES API CHANGED — repo realignment is the TOP-PRIORITY
+  next item, owner-directed dedicated specialist session (2026-06-03,
+  Lacustrine Swimming Beacon / `687a54`, claude / Opus 4.8)** — the
+  session-handoff `pnpm check` gate ran `sdk-codegen`, which pulled an
+  upstream schema where `/subjects/{subject}/sequences` is REMOVED and
+  `/sequences/{slug}` added (tool `get-subjects-sequences` →
+  `get-sequences`; subject detail now carries `sequenceSlugs`). HEAD is
+  green (its gates ran on the cached schema); any codegen-refreshed tree is
+  red in `oak-search-cli` (legacy API-supplementation pipeline built on the
+  removed list-per-subject capability). The codegen diff and the mechanical
+  name fixes were REVERTED to HEAD (owner-authorised per-file restores;
+  exact fix content in the plan §Evidence for re-application), and the tree
+  returned to green via the owner's CI=true cure (codegen reads the schema
+  cache when `CI === 'true'` exactly; the poisoned turbo cache entries were
+  healed with forced CI=true runs — full procedure in the plan §Codegen
+  fetch/cache mechanics). Commits unblocked; `pnpm check` remains known-red
+  (online codegen by design) until the realignment lands.
+  Authority:
+  [`upstream-sequences-api-realignment.plan.md`](../../plans/sdk-and-mcp-enhancements/current/upstream-sequences-api-realignment.plan.md)
+  — owner-stated risks and the delete-first hypothesis (the bulk-data
+  feature request marks the broken path legacy) are recorded there.
+  **Next: the specialist session runs that plan's todos in order;
+  this closeout bundle commits once the tree is green.**
+- **EEF D3 OWNER-RATIFIED and COMMITTED (2026-06-03, Lacustrine Swimming
   Beacon / `687a54`, claude / Opus 4.8)** — independent review (full corpus
   census, cite-or-strike, V1–V8 re-verification, 4-lens refutation workflow
   with author re-grounding) found four real defects clustered in the
@@ -32,10 +54,13 @@ surface.
   renamed `adapt-lesson`; a corpus-cited strand index added to the resource
   (axis filters reach only the 17 tagged strands — the index is the
   corpus-complete discovery surface); declared-only exclusions recorded as
-  snapshot-relative and self-healing. The `d3` todo is flipped; all gates
-  green. **Commit is owner-gated; the orphan untracked Seaworthy experience
-  file awaits owner direction. Next: commit on owner word, then D4.** Full
-  detail: `eef` thread banner.
+  snapshot-relative and self-healing. The `d3` todo is flipped. The day's
+  working tree landed as four owner-directed full-gate-green chunks:
+  `a0fd7b0f` (D3 ratification), `88d8da9d` (Antigravity identity slice),
+  `6379f1e4` (taxonomy seed), `422e57e0` (continuity + lifecycle, incl. the
+  orphan Seaworthy experience file). **Next: D4 (graph capability shape,
+  binding the nine handed-off names); the branch is unpushed — pushing is
+  the owner's call.** Full detail: `eef` thread banner.
 - **Antigravity Practice-integration slice implemented in the working tree; no
   commit and no `pnpm check` by owner direction (2026-06-03, Ashen Burning Magma
   / `019e8d`, codex / GPT-5)** — `agent-tools` identity now recognises
@@ -280,7 +305,7 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Lacustrine Swimming Beacon / eef-d3-review-then-ratify / 2026-06-03 (prior: Seaworthy Swimming Sextant 2026-06-03; Galactic Glowing Prism, Opalescent Cascading Planet, Stellar Waning Planet, Silvered Lurking Mask, all 2026-06-02) |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | codex / GPT-5 / Umbral Whispering Silhouette / promotion-and-root-docs-author / 2026-06-01 |
-| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | codex / GPT-5 / Ashen Burning Magma / antigravity-practice-integration / 2026-06-03 (prior: Solar Glowing Meteor, Stratospheric Buffeting Breeze, Lofty Sweeping Falcon, Shaded Veiling Mirror) |
+| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 / Lacustrine Swimming Beacon / working-tree-commit-marshal / 2026-06-03 (prior: Ashen Burning Magma, Solar Glowing Meteor, Stratospheric Buffeting Breeze, Lofty Sweeping Falcon, Shaded Veiling Mirror) |
 
 ## Paused Threads
 
@@ -397,11 +422,13 @@ not the current session-priority lane. Reactivation is owner-directed.
 
 ### Agentic-Engineering Curation
 
-1. Current docs bundle is uncommitted by owner direction. If the owner asks for
-   a commit, start from live `git status`, preserve unrelated user/peer files,
-   and use the normal claim/queue/staged verification flow.
-2. No immediate next curation action is required after this closeout unless the
-   owner explicitly reopens curation or a recorded trigger fires.
+1. The 2026-06-03 docs bundles are all committed (owner-directed, four chunks:
+   `a0fd7b0f`, `88d8da9d`, `6379f1e4`, `422e57e0` + this closeout commit).
+2. **Next curation action: rotate `napkin.md`** — HARD on fitness (333/300
+   lines) after three sessions' capture on 2026-06-03; rotation per its
+   drain_strategy with item-level dispositions, never a trim. The abandoned
+   commit-queue residue entries in `active-claims.json` are a secondary
+   cleanup signal for the same pass.
 3. Remaining `pending-graduations.md` items stay owner-gated or trigger-gated;
    do not infer full curation completion from the first-batch graduations.
 4. The relative-link integrity item is accepted as a future validator lane, not
@@ -459,6 +486,21 @@ authority.
 
 ## Deep Consolidation Status
 
+**completed this handoff — session-completion mode, owner-directed full
+handoff + consolidation after the D3 ratification commits (2026-06-03,
+Lacustrine Swimming Beacon).** Fresh learning captured and routed: four
+napkin method lessons plus settlement insights; one distilled entry
+(reviewer-brief scope protection cites numbered ratified decisions only);
+one pending-graduations candidate (same lesson, trigger-gated on a second
+instance); one experience file. Entry points clean; tracks empty; practice
+box empty; no PENDING reviewer markers; claims and conversations clear.
+Named remediation lane: `napkin.md` is HARD on fitness (333/300 lines,
+20.7k/18k chars — three sessions' capture in one day); its cure is a
+rotation pass in the curation lane (drain_strategy), never a trim —
+falsifiable by the next `practice:fitness` run after rotation. Verdict:
+`partial slice landed` — session learning homed; the napkin rotation and
+the owner-gated register items remain live. Prior status (2026-06-03,
+Stratospheric Buffeting Breeze):
 **completed this handoff — session-completion mode, owner-directed first-batch
 graduation plus final closeout commit (2026-06-03, Stratospheric Buffeting
 Breeze).** The first accepted pending-graduations batch landed in durable homes
@@ -469,26 +511,9 @@ found no further immediately graduated ADR/PDR/rule candidate beyond the two
 separate opener lanes already recorded. No standalone `pnpm check` was run;
 fitness was SOFT-only and commit hooks remain authoritative. Verdict:
 `partial slice landed` — the first batch is graduated, but remaining register
-items are still owner-gated or trigger-gated. Prior status
-(2026-06-03, Seaworthy Swimming Sextant): fresh learning captured and routed:
-one distilled entry (design-rationale cite-or-strike), one trigger-gated
-pending-graduations entry (the same + MCP-brief target pinning), one
-contamination-scan-method pattern extension (probe miss-shape), one experience
-file, napkin entries, and the platform-memory face update. Prior Lofty status
-(2026-06-02): **partial slice landed — owner reopened curation on 2026-06-02; Lofty Sweeping
-Falcon graduated the two due pending-graduation entries and routed two fresh
-Galactic napkin-tail candidates.** Ledger:
-`curator-passes/2026-06-02-lofty-sweeping-falcon-curation.md`. Routes:
-archive/park substance screen -> knowledge-preservation rule; archive-reference
-role split -> ADR-117 + `.agent/plans/README.md`; relative-link integrity ->
-owner-gated; opener staleness -> `distilled.md`. Verdict remains partial, not
-complete: Q-003 and owner-gated register items remain live. Prior Shaded Veiling
-Mirror closeout detail lives in
-`curator-passes/2026-06-02-shaded-veiling-napkin-rotation.md` and
-`active/archive/napkin-2026-06-02-shaded-veiling-curation.md`; its live outcome
-was no generic `pending`/`APPROVED`/`owner-surfaced` statuses in
-`pending-graduations.md`, canonical entry points, clear claims, and a remaining
-closeout commit.
+items are still owner-gated or trigger-gated. Older prior-status history
+(Seaworthy, Lofty, Shaded Veiling) lives verbatim in
+`archive/repo-continuity-deep-consolidation-status-2026-06-02-shaded-veiling.md`.
 
 **Historical deep-consolidation closeout entries archived.** Older closeout
 prose from this section, dated 2026-05-31 to 2026-06-02, now lives in the

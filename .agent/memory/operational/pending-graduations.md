@@ -1731,3 +1731,21 @@ feedback (sidebar shape is the lightest); composes with `coordinator-role-thresh
   `.agent/rules/verify-data-supports-shape-before-building.md` +
   `.agent/rules/invoke-mcp-expert.md` (owner-directed first-batch
   consolidation; `distilled.md` staging entry cleared).
+
+## Reviewer-brief scope protection cites numbered ratified decisions only
+
+- **captured-date**: 2026-06-03
+- **source-surface**: `napkin.md` 2026-06-03 Lacustrine Swimming Beacon entry +
+  `distilled.md` 2026-06-03 entry (EEF D3 review-then-ratify session).
+- **graduation-target**: a clause in the reviewer-brief discipline surface
+  (`memory/executive/invoke-code-experts.md` or the brief-authoring guidance):
+  when a brief protects decided scope, the protection list enumerates the
+  owner's NUMBERED ratified decisions (and explicitly owner-settled artefact
+  sections); plan-authored elaborations remain refutable. Worked instance
+  2026-06-03: protecting the whole §Do sweep suppressed a legitimate PDR-058
+  no-consumer finding (metric-filter inputs) that the owner's settlement
+  question then surfaced and resolved by deferral.
+- **trigger-condition**: a second observed instance of scope-protection
+  suppressing a legitimate finding, OR the next authoring pass over the
+  reviewer-brief discipline surface — whichever first.
+- **status**: pending

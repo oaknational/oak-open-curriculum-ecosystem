@@ -260,3 +260,31 @@ The following older current-state bullets were moved from the active pickup inde
   the intent-vs-letter audit are recorded in the `eef` thread banner. The thread
   record says the D0 bundle is committed at `ce9745c7` and not pushed; verify
   current git state before acting.
+
+## Appended 2026-06-03 (Lacustrine Swimming Beacon) — drained prior-status chain
+
+Drained verbatim from `repo-continuity.md` §Deep Consolidation Status per the
+file's split strategy when the 2026-06-03 closeout entry pushed the file over
+its char limit. Each entry is carried by its session's thread banner and
+curator ledgers.
+
+Prior status
+(2026-06-03, Seaworthy Swimming Sextant): fresh learning captured and routed:
+one distilled entry (design-rationale cite-or-strike), one trigger-gated
+pending-graduations entry (the same + MCP-brief target pinning), one
+contamination-scan-method pattern extension (probe miss-shape), one experience
+file, napkin entries, and the platform-memory face update. Prior Lofty status
+(2026-06-02): **partial slice landed — owner reopened curation on 2026-06-02; Lofty Sweeping
+Falcon graduated the two due pending-graduation entries and routed two fresh
+Galactic napkin-tail candidates.** Ledger:
+`curator-passes/2026-06-02-lofty-sweeping-falcon-curation.md`. Routes:
+archive/park substance screen -> knowledge-preservation rule; archive-reference
+role split -> ADR-117 + `.agent/plans/README.md`; relative-link integrity ->
+owner-gated; opener staleness -> `distilled.md`. Verdict remains partial, not
+complete: Q-003 and owner-gated register items remain live. Prior Shaded Veiling
+Mirror closeout detail lives in
+`curator-passes/2026-06-02-shaded-veiling-napkin-rotation.md` and
+`active/archive/napkin-2026-06-02-shaded-veiling-curation.md`; its live outcome
+was no generic `pending`/`APPROVED`/`owner-surfaced` statuses in
+`pending-graduations.md`, canonical entry points, clear claims, and a remaining
+closeout commit.

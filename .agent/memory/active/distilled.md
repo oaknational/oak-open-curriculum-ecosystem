@@ -37,3 +37,18 @@ staging surface; fitness remains a routing signal, not a reason to avoid capture
   similar surfaces can own their own file rotation/deletion while the learning
   remains repo-owned. Anything read by a repo process needs a disposition and a
   new home when it matters; otherwise it remains live in the source buffer.
+
+## 2026-06-03 — reviewer-brief scope protection (Lacustrine Swimming Beacon)
+
+- **"Decided scope protected" in reviewer briefs cites the NUMBERED ratified
+  decisions only — plan elaborations stay refutable.** At the D3
+  review-then-ratify session the briefs protected "owner-ratified decisions
+  and the Fully Specified End State", implicitly sweeping in §Do elaborations
+  (the metric-filter input enumeration) the owner had never specifically
+  ratified; that suppressed a legitimate PDR-058 no-consumer finding which the
+  owner's own settlement question then surfaced. Source: napkin 2026-06-03
+  Lacustrine entry. Routing: pending-graduations candidate (target: a clause
+  in the reviewer-brief discipline surface, e.g.
+  `memory/executive/invoke-code-experts.md` or the brief-authoring rule);
+  trigger-gated on a second instance or the next reviewer-brief authoring
+  pass.

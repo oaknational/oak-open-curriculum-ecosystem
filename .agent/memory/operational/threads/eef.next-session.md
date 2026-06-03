@@ -1,10 +1,12 @@
 # Next-Session Record — `eef` thread
 
-> **EEF D3 OWNER-RATIFIED (2026-06-03, Lacustrine Swimming Beacon / `687a54`;
-> claude / Opus 4.8; the owner-ratified dedicated review-then-ratify
-> session). The `d3` todo is flipped; the bundle is UNCOMMITTED by owner
-> direction ("do not commit quite yet") — commit on owner word, staged by
-> explicit pathspec.**
+> **EEF D3 OWNER-RATIFIED AND COMMITTED (2026-06-03, Lacustrine Swimming
+> Beacon / `687a54`; claude / Opus 4.8; the owner-ratified dedicated
+> review-then-ratify session). The `d3` todo is flipped. The day's working
+> tree landed as four owner-directed chunks, all full-gate green:
+> `a0fd7b0f` (the D3 ratification bundle), `88d8da9d` (Ashen Burning Magma's
+> Antigravity identity slice), `6379f1e4` (skills-taxonomy seed),
+> `422e57e0` (continuity + collaboration-state lifecycle).**
 >
 > The independent review ran in the fixed order (D3 work → whole plan →
 > owner discussion → resolution → ratification), grounding every claim
@@ -59,15 +61,16 @@
 > + **Verification**: graph-corpus-sdk type-check + 15/15 tests + eslint
 >   green; prettier + markdownlint green repo-wide; focused refutation
 >   reviewer over the final diff: a–f ALL PASS. Mid-session the owner/codex
->   committed the parallel curation slice (`23ee0ef3`), so the working tree
->   carries exactly this session's bundle + one orphan untracked Seaworthy
->   experience file (owner to direct).
+>   committed the parallel curation slice (`23ee0ef3`); the orphan Seaworthy
+>   experience file landed in `422e57e0`.
 >
 > **NEXT SAFE STEP: D4 (graph capability shape)** — its reviewers fire
 > against the ratified D4 output in turn; D4 binds the nine handed-off names
 > (per the ratified contract §Handoff to D4) and the `guidance_report` node
-> kind / edge types / provenance policy. The commit of this session's bundle
-> precedes D4 work (owner authorisation pending).
+> kind / edge types / provenance policy. The branch is unpushed (9+ commits
+> ahead of origin); pushing is the owner's call. The napkin is HARD on
+> fitness — its named remediation lane is a rotation pass in the curation
+> lane, not a trim.
 >
 > | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 > | --- | --- | --- | --- | --- | --- | --- |

@@ -49,6 +49,13 @@ wrapper commands once those surfaces have fresh host evidence.
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
 | `Ashen Burning Magma` | `codex` | `GPT-5` | `019e8d` | `antigravity-practice-integration` | 2026-06-03 | 2026-06-03 |
+| `Lacustrine Swimming Beacon` | `claude` | `Opus 4.8` | `687a54` | `working-tree-commit-marshal` | 2026-06-03 | 2026-06-03 |
+
+> Commit note (2026-06-03, Lacustrine Swimming Beacon): the Antigravity
+> identity slice landed as `88d8da9d` and the skills-taxonomy seed as
+> `6379f1e4`, committed by the EEF session as sole active agent under owner
+> direction ("commit ALL files in sensible chunks"); authorship credited in
+> each commit body.
 
 ## Session Closeout (2026-06-03 — Solar Glowing Meteor / codex / GPT-5 / `019e8d`, skills classification taxonomy implemented)
 

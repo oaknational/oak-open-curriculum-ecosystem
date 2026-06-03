@@ -62,6 +62,42 @@ fitness_content_role: drainable-buffer
   declared schema's own `recommend_for_context` upstream framing. The unit of
   enumeration must match the question's scope — the question was about the
   data, I had answered about the strands.
+- **`commit-queue enqueue` requires a LIVE claim — the lifecycle-exception
+  order is load-bearing.** I closed my session claim before enqueueing the
+  final lifecycle bundle and enqueue refused (`unknown claim_id`); the
+  residue exception's documented order (enqueue while the claim is live, THEN
+  close) is not ceremony, it is a referential-integrity constraint in the
+  CLI. Cure: open a short window claim for the lifecycle commit when the
+  session claim is already closed.
+- **Owner "commit ALL" overrides per-slice handoff scoping — credit
+  authorship in the commit body.** Peer handoffs said "stage only the
+  Antigravity-owned set"; the owner's later "commit ALL files in sensible
+  chunks" supersedes (sole-agent confirmed). The sensible-chunk boundary is
+  still ownership (one slice per commit), and each peer-authored chunk names
+  its authoring agent in the body so attribution survives the committer
+  identity.
+- **The closeout `pnpm check` gate is also an upstream-drift detector — and
+  capability-change scope is the stop line.** `pnpm check` runs
+  `sdk-codegen`, so a green-HEAD repo can go red at closeout purely because
+  the upstream schema moved (here: `/subjects/{subject}/sequences` →
+  `/sequences/{slug}`). I correctly fixed the mechanical renames, then kept
+  investigating one step past the moment the breakage revealed itself as a
+  capability change (list-per-subject removed) — the owner's surprise
+  ("why are you still working?") was the signal. Cure: the instant a red
+  gate's cause crosses from mechanical to capability/design scope, stop and
+  surface; investigation beyond that point belongs to the dedicated
+  session. Also: the owner's domain knowledge reframed the cure entirely
+  (legacy-by-intent → delete-first hypothesis) — evidence that surfacing
+  early buys better cures, not just permission.
+- **Codegen offline mode is `CI === 'true'` EXACTLY, and turbo caches can be
+  poisoned by online runs — heal, don't fight.** `CI=1` silently fails the
+  strict equality and fetches anyway; my "commits blocked repo-wide"
+  conclusion was wrong because I didn't know the offline switch existed
+  (the owner did — ask before concluding structural impossibility). An
+  online run under old-input cache keys poisons FULL-TURBO replays with
+  new-schema outputs; the heal is restore-inputs + forced `CI=true` runs of
+  the poisoned tasks (`sdk-codegen`, then `#build`) so correct outputs
+  overwrite the entries. Verified end-to-end 2026-06-03.
 
 ## 2026-06-03 — Antigravity audit vs skills taxonomy separation (Stratospheric Buffeting Breeze)
 
