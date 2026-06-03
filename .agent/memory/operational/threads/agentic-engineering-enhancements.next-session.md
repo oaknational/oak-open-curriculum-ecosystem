@@ -1,5 +1,56 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Final Handoff (2026-06-03 — Opalescent Illuminating Prism / no commit, no check)
+
+Owner-directed closeout after the dedicated curation goal completed. Ran
+`oak-session-handoff` plus `oak-consolidate-docs` in `session-completion`
+mode only: no commit, no quality/check commands after this instruction. The
+durable curation state remains the ledger-backed slice below; no new buffer
+archive or deep inventory was started during this final handoff.
+
+Final pickup: the session is complete. Continue from the branch's product lane
+or owner-directed school-search/upstream sessions; do not reopen this curation
+slice unless new evidence or owner direction changes the substrate.
+
+## Session Closeout (2026-06-03 — Opalescent Illuminating Prism / codex / GPT-5 / `019e8e`, dedicated knowledge curation)
+
+**Dedicated knowledge-curation slice landed in the working tree; no commit has
+been made by this session.** The pass corrected an archive-before-ledger
+mistake, restored the live napkin, wrote an item-level disposition ledger, then
+performed the napkin lifecycle move only after the source items and routes were
+durably recorded.
+
+Landed:
+
+- Item-level curation ledger:
+  [`2026-06-03-opalescent-illuminating-prism-curation.md`](../curator-passes/2026-06-03-opalescent-illuminating-prism-curation.md).
+- Prior active napkin processed and preserved at
+  [`napkin-2026-06-03-opalescent-curation.md`](../../active/archive/napkin-2026-06-03-opalescent-curation.md);
+  live `napkin.md` reopened as a small capture buffer.
+- PDF-only ChatGPT deep-research citation recovery graduated into the canonical
+  ChatGPT report-normalisation skill and reusable pattern; the pending item is
+  marked `graduated 2026-06-03`.
+- The archive-before-ledger failure graduated into a pre-archive ledger gate in
+  `consolidate-docs`, `consolidate-until-done`, and `session-handoff`.
+- `repo-continuity.md` now points to the current curation state and no longer
+  carries stale "Antigravity uncommitted" pickup instructions after commit
+  `88d8da9d`.
+
+Validation:
+
+- `pnpm practice:fitness:strict-hard` — `SOFT` only, 0 hard, 0 critical.
+- Active learning-buffer grep — no `status: pending` or `carried-forward`
+  matches in the checked active buffers.
+
+Remaining owner decisions: the canonical `pending-graduations.md` register
+still contains owner-gated doctrine and tooling candidates. They remain live
+only on their named triggers or owner direction; do not treat their presence as
+work to drain by moving or splitting the register.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Opalescent Illuminating Prism` | `codex` | `GPT-5` | `019e8e` | `dedicated-knowledge-curation` | 2026-06-03 | 2026-06-03 |
+
 ## Session Closeout (2026-06-03 — Ashen Burning Magma / codex / GPT-5 / `019e8d`, Antigravity Practice integration implemented)
 
 **Working-tree slice implemented; no commit and no `pnpm check` per owner

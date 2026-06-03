@@ -29,6 +29,57 @@ windowed, backlog, split, or shard-like pending-graduation files. New capture,
 owner-gated items, and unresolved pending-graduation decisions belong here until
 they graduate, duplicate, become stale-withdrawn, or receive owner direction.
 
+## 2026-06-03 captures — Opalescent curation enforcement pass
+
+- **Curation archive moves need a pre-archive ledger tripwire.** Three
+  invoked workflows already said "process before archive", but the agent still
+  performed `git mv` before writing the disposition ledger. The failure shape is
+  an action-sequencing gap: passive prose did not stop the lifecycle primitive.
+  Graduated cure: `consolidate-docs`, `consolidate-until-done`, and
+  `session-handoff` now carry a pre-archive ledger gate: the first mutating
+  step in any buffer lifecycle move must create or update the durable
+  disposition ledger, and archive/rename commands are forbidden until the
+  ledger path exists and names the source item set. `[captured: 2026-06-03 |
+  source: Opalescent Illuminating Prism owner-corrected curation pass |
+  target: skill-amend:consolidate-docs+consolidate-until-done+session-handoff
+  | trigger: owner direction and current curation-skill amendment pass |
+  size: M | status: graduated 2026-06-03 ->
+  .agent/skills/consolidate-docs/SKILL-CANONICAL.md +
+  .agent/skills/consolidate-until-done/SKILL-CANONICAL.md +
+  .agent/skills/session-handoff/SKILL-CANONICAL.md]`
+- **Commit-queue write-command help must expose the full identity tuple.**
+  `commit-queue enqueue` and `guard` require identity `--id`, but usage text
+  displayed agent name/platform/model/session-prefix and omitted the UUID field.
+  This produced avoidable closeout friction and combines with the live-claim
+  referential-integrity lesson: write commands need help/validation that shows
+  every required identity field. `[captured: 2026-06-03 | source: Lofty and
+  Lacustrine closeout napkin entries | target: agent-tools commit-queue UX/TDD
+  lane | trigger: owner direction or next commit-queue tool touch | size: S |
+  status: owner-gated]`
+
+## 2026-06-03 capture — chatgpt-report-normalisation PDF-only protocol (Hushed Lurking Mask)
+
+- **Deep-research PDF exports now carry an exact positional citation map; the
+  skill should document the PDF-only recovery protocol.** captured-date:
+  2026-06-03; source-surface: napkin 2026-06-03 citation-audit entry (Hushed
+  Lurking Mask); graduation-target:
+  `.agent/skills/chatgpt-report-normalisation/SKILL-CANONICAL.md` +
+  `.agent/memory/active/patterns/chatgpt-report-normalisation.md`;
+  trigger-condition: next invocation of the skill OR next consolidation pass,
+  whichever first; status: graduated 2026-06-03 ->
+  `.agent/skills/chatgpt-report-normalisation/SKILL-CANONICAL.md` and
+  `.agent/memory/active/patterns/chatgpt-report-normalisation.md`. Substance:
+  current ChatGPT deep-research PDFs (WeasyPrint 68 generation) render inline
+  citations as NUMBERED 12pt chip link-annotations and append a numbered source
+  list whose number-chips are themselves link annotations — giving number→URL
+  mapping cross-verifiable against each inline chip's own annotation URL
+  (verified exact on two documents, 56+42 positions, zero mismatches). This is
+  stronger than the DOCX `_rels` set (URL set only, no positions); the skill's
+  DOCX-first default now has a documented PDF-only path. Bundle included the
+  tooling warning: literal PUA characters in agent-written files are
+  non-deterministically stripped by editing tools — scripts must use `\ueNNN`
+  escapes, and the skill's PUA guidance now says so.
+
 ## 2026-06-02 captures — napkin rotation doctrine routes (Shaded Veiling Mirror)
 
 - **Curation reads for live-unique substance before archive or park framing.**
@@ -168,6 +219,10 @@ Surfaced to the owner during the dedicated knowledge-curation pass; staged in
   surfaces train the next agent by their voice; written as present-truth +
   destination they teach that, written as remediation-recap they teach that.
   Validated twice across sessions; pairs with `no-tombstones-for-removed-ideas`.
+  Opalescent curation pass refinement, 2026-06-03: opener staleness is
+  structural, not merely an authoring defect; a good opener self-instructs
+  cheap re-derivation from git and live surfaces instead of asking the next
+  agent to believe it.
   `[captured: 2026-06-01 | source: distilled.md + Shaded/Windswept worked instances | target: clause:no-tombstones-for-removed-ideas OR continuity-practice | trigger: owner approval | size: S | status: owner-gated 2026-06-02 — surfaced to owner; awaiting explicit approval before promotion]`
 
 ## 2026-06-01 capture — seam-mapping plan template/archetype (Windswept Floating Summit)

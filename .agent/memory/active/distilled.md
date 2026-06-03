@@ -52,3 +52,23 @@ staging surface; fitness remains a routing signal, not a reason to avoid capture
   `memory/executive/invoke-code-experts.md` or the brief-authoring rule);
   trigger-gated on a second instance or the next reviewer-brief authoring
   pass.
+
+## 2026-06-03 — curation enforcement and verifier lessons
+
+- **A curation archive move is not allowed until the ledger exists.** Intent to
+  process is not processing. In a buffer rotation, write the durable item-level
+  disposition ledger first, then perform any archive move only as preservation
+  of an already-processed source. Source: Opalescent archive-before-ledger
+  mistake; routing: pending-graduations candidate for a skill/rule tripwire.
+- **During live parallel curation, verify named surfaces immediately before
+  quoting or editing them.** Between-turn drift is normal: another agent may
+  graduate, rewrite, or close a surface while the current agent is mid-turn.
+  Cheap proof is `git status` plus targeted greps or reads before citing state.
+- **A green verifier with no extraction count proves nothing.** Shell loops,
+  especially zsh loops over multiline variables, can false-green by checking no
+  inputs. Verifiers that enumerate files or links must report the count they
+  checked before their green result is trusted.
+- **Literal private-use characters in scripts are unsafe capture material.**
+  When code needs PUA sentinels, write escaped forms such as `\ue200`, not
+  literal bytes; literal PUA text was stripped once and made a regex match
+  everywhere.

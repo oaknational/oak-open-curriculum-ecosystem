@@ -7327,6 +7327,160 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "b3f6c607-3683-4479-9a2c-d813888b8cf8",
+      "agent_id": {
+        "agent_name": "Opalescent Illuminating Prism",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e8e",
+        "id": "61d654cf-d153-5491-919a-ffac748d77b8"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/active/archive/napkin-2026-06-03-opalescent-curation.md",
+            ".agent/memory/operational/curator-passes/2026-06-03-opalescent-illuminating-prism-curation.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/open-questions.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/state/collaboration/comms/4245149e-cef4-4c81-889d-f737d7955cd2.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-03T15:48:16Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Dedicated knowledge-curation pass: rotate critical napkin, cure hard repo-continuity, update curation ledgers and closeout surfaces.",
+      "archived_at": "2026-06-03",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-03T16:07:57Z",
+        "closed_by": {
+          "agent_name": "Opalescent Illuminating Prism",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e8e",
+          "id": "61d654cf-d153-5491-919a-ffac748d77b8"
+        },
+        "summary": "Dedicated knowledge-curation slice: ledger-backed napkin rotation, PDF-only report-normalisation protocol graduated to skill and pattern, repo-continuity compacted to current pickup, rest-state health soft-only with no hard or critical files.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "b3f6c607-3683-4479-9a2c-d813888b8cf8",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "3182de62-068b-46fa-a654-0bb69c76c8c4",
+      "agent_id": {
+        "agent_name": "Opalescent Illuminating Prism",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e8e",
+        "id": "61d654cf-d153-5491-919a-ffac748d77b8"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/consolidate-docs/SKILL-CANONICAL.md",
+            ".agent/skills/consolidate-until-done/SKILL-CANONICAL.md",
+            ".agent/skills/session-handoff/SKILL-CANONICAL.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/curator-passes/2026-06-03-opalescent-illuminating-prism-curation.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-03T16:07:57Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Finalize curation enforcement graduation: pre-archive ledger gate in consolidation/handoff skills, update disposition ledger and closeout surfaces.",
+      "archived_at": "2026-06-03",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-03T16:10:30Z",
+        "closed_by": {
+          "agent_name": "Opalescent Illuminating Prism",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e8e",
+          "id": "61d654cf-d153-5491-919a-ffac748d77b8"
+        },
+        "summary": "Graduated pre-archive ledger gate into consolidate-docs, consolidate-until-done, and session-handoff; updated pending-graduations, curation ledger, thread record, and repo continuity; checks remain soft-only with no active pending/carried-forward buffer matches.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "3182de62-068b-46fa-a654-0bb69c76c8c4",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "e3ce69dc-61de-4e5c-ab3a-8481e10596f7",
+      "agent_id": {
+        "agent_name": "Opalescent Illuminating Prism",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e8e",
+        "id": "61d654cf-d153-5491-919a-ffac748d77b8"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-03T16:12:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Final no-commit/no-check handoff and session-completion consolidation capture.",
+      "archived_at": "2026-06-03",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-03T16:12:37Z",
+        "closed_by": {
+          "agent_name": "Opalescent Illuminating Prism",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e8e",
+          "id": "61d654cf-d153-5491-919a-ffac748d77b8"
+        },
+        "summary": "Final owner-directed session handoff: no commit, no check; recorded session-completion consolidation closeout and final napkin insight.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "e3ce69dc-61de-4e5c-ab3a-8481e10596f7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

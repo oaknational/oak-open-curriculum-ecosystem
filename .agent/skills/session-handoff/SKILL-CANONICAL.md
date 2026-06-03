@@ -27,6 +27,14 @@ point, and ADRs / PDRs / rules / permanent docs as the enforcement
 surface. Session handoff is the **capture edge** of this pipeline —
 it produces the surface `consolidate-docs` later distils.
 
+If a session-handoff discovers that a live buffer needs rotation or archive
+lifecycle work, it may record the need, but the first mutating action for that
+buffer belongs to the consolidation ledger: name or create the item-level
+disposition ledger before any archive, rename, park, supersession, or
+replacement move. Handoff must not turn "fitness is high" into "move the
+source"; the action is conserving and homing insight, and the validator is only
+evidence about routing and rest-state health.
+
 Lightweight end-of-session continuity update with a conditional
 consolidation gate.
 

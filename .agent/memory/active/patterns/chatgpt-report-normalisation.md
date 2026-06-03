@@ -47,6 +47,12 @@ In the common paired-export case, the strongest surviving layer is usually:
   citation belongs in the prose (numbered `[[N]](URL)` links anchored to the
   right text spans)
 
+When no DOCX exists but a paired deep-research PDF does, the PDF can be the
+strongest surviving citation layer. Current exports have been observed to
+carry exact numbered inline citation chips plus an appended number-to-URL
+source list; the two PDF annotation surfaces cross-check each other and give
+positions the DOCX `_rels` set does not.
+
 ## Pattern
 
 1. Default to a source-faithful clean copy.
@@ -58,6 +64,19 @@ In the common paired-export case, the strongest surviving layer is usually:
 3. Prefer the `.docx` over the markdown or PDF when you need to recover links.
    The DOCX relationship targets usually preserve the actual URLs even when the
    markdown only contains internal `turn...` references.
+3a. When **no DOCX exists**, a paired deep-research PDF is a complete — and
+   positionally *stronger* — recovery surface. Current exports (verified
+   exact on two documents, 56 + 42 positions, zero mismatches, 2026-06-03)
+   render each citation block as exactly one **numbered chip** (a ~12pt link
+   annotation with its digit word inside the rect) and append a numbered
+   source list whose number-chips are link annotations to the same URL —
+   an exact chip-number→URL map cross-verifiable against each inline chip's
+   own annotation URL. Caveats: chip numbering is per unique search-result
+   token (one URL may own several numbers; re-cited tokens reuse theirs);
+   annotation rect y-pairs may be unnormalised; the appended list's leading
+   number-chips sit one text line above its first wide annotation, so cap
+   the final block's assignment window at the markdown body's end. Full
+   protocol: skill workflow step 2a.
 4. Use the existing markdown structure if it is already better than a fresh
    conversion. `pandoc` is useful as a secondary lens for recovering citation
    placement, but its direct conversion may degrade tables, lists, code fences,
@@ -79,11 +98,23 @@ In the common paired-export case, the strongest surviving layer is usually:
 7. Treat trailing raw-URL dumps from PDFs as a verification layer, not as a
    better bibliography. Compare them against the DOCX relationship targets
    before treating them as genuinely new references.
+7a. If there is no DOCX, use the skill's PDF-only protocol instead of
+   declaring citation recovery blocked:
+   - Extract PDF link annotations and word boxes.
+   - Distinguish narrow numbered inline chips from full-width appended source
+     entries.
+   - Build the chip-number to URL map from the appended list, then verify it
+     against each inline chip's own annotation URL.
+   - Assign chip positions back to the source markdown's citation blocks by
+     positional context matching, capping the body before the appended source
+     list so trailing number chips cannot leak into the last prose block.
 8. Strip export artefacts explicitly:
    - internal citation markers such as `cite`, `filecite`, and `turn...`
    - Unicode PUA wrapper characters (U+E200 start, U+E202 separator, U+E201
      end) — these are invisible in editors and the Read tool but persist in
-     file bytes; use `cat -v` or Python `ord()` to detect them
+     file bytes; use `cat -v` or Python `ord()` to detect them; in scripts,
+     write PUA sentinels as escaped forms such as `\ue200`, never literal
+     invisible bytes
    - entity/image export markers such as `entity` and `image_group`
    - tracking parameters such as `utm_source=chatgpt.com`
    - generic export metadata where relevant
@@ -208,6 +239,10 @@ In the common paired-export case, the strongest surviving layer is usually:
 - Matching line-by-line against pandoc output when pandoc wraps long lines;
   use full-text search with normalised whitespace
 - Leaving invisible PUA characters in the clean output
+- Writing literal PUA bytes into recovery scripts or notes — agent editing
+  tools strip them non-deterministically (a regex can silently become
+  match-everything; an edit can no-op invisibly); always use `\ueNNN`
+  escape sequences in code and `U+E200`-style notation in prose
 - Treating a dumped PDF URL appendix as authoritative new references without
   comparing it to the DOCX relationship targets
 - Rebuilding from a fresh conversion that worsens the document structure when a

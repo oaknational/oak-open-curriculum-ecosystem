@@ -3,6 +3,8 @@
 Teachers and curriculum practitioners using Oak through AI clients (for example:
 ChatGPT, Claude, Gemini).
 
+**Future Strategic Plans**: [future/README.md](future/README.md)
+
 ---
 
 ## Public-Alpha Scope

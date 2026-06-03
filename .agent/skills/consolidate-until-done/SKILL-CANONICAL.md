@@ -97,6 +97,16 @@ Archive moves are allowed only as normal lifecycle cleanup after the item-level
 disposition ledger already proves the source content is graduated, duplicate,
 stale-withdrawn, or owner-gated.
 
+## Pre-Archive Ledger Gate
+
+Before any command or edit that moves, renames, archives, parks, supersedes, or
+replaces a live buffer source, stop and name the ledger path that already
+records the source item set and each disposition. If the ledger does not exist
+yet, the next mutating action must create or update that ledger. Do not describe
+the action as making the fitness check pass; the action is conserving and
+homing knowledge, with the validator used only as routing and rest-state health
+evidence.
+
 ## Work Loop
 
 Repeat this loop until the completion contract is met:

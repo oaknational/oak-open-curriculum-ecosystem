@@ -31,6 +31,11 @@ When both `.md` and `.docx` copies exist, the default protocol is:
 - use the DOCX as the **primary source for recovering real hyperlink targets**
 - use pandoc or PDF extraction only as secondary diagnostic lenses
 
+When **no DOCX exists** but a paired deep-research PDF does, the PDF alone is
+a complete recovery surface — current exports carry an exact positional
+citation map that is *stronger* than the DOCX `_rels` set (which has URLs but
+no positions). See workflow step 2a for the PDF-only protocol.
+
 This skill is for **repair**, not editorial rewrite or summary generation.
 
 ## Use This Skill When
@@ -133,6 +138,46 @@ structural decisions or choosing a rebuild strategy.
    for `citeturn` will fail. Use `cat -v` or `python3 -c "print(hex(ord(c)))"
    inspection to detect them, or match on the PUA range
    `[\ue200-\ue2ff]` in regex.
+
+   **Tooling corollary (observed 2026-06-03): never put literal PUA bytes in
+   agent-authored scripts or files.** Agent editing tools strip literal PUA
+   characters non-deterministically — the same text can survive one write and
+   lose its PUA bytes in the next, silently turning a citation-block regex
+   into a match-everything pattern; an edit whose old/new strings differ only
+   in PUA bytes can no-op invisibly. Always write PUA characters as `\ueNNN`
+   escape sequences in code, and address them symbolically (`U+E200`) in
+   prose.
+
+2a. **PDF-only recovery protocol** (when no DOCX exists). Empirical structure
+   of current deep-research PDF exports (verified exact on two documents,
+   56 + 42 citation positions, zero mismatches, 2026-06-03; WeasyPrint-68
+   generation):
+
+- Each inline citation renders as a **numbered chip**: a ~12pt-wide link
+  annotation whose digit word (the chip number) sits inside its rect.
+  Each source-markdown citation block renders as **exactly one chip** \u2014
+  the block's `turn\u2026` token set dedupes to its primary source.
+- The document end carries an appended source list: one entry per unique
+  URL, with full-width link annotations (the URL text) preceded by the
+  entry's chip-number annotations linking to the same URL. Chip numbering
+  is per unique search-result token, so one URL may own several numbers
+  and a re-cited token reuses its number \u2014 do not assume numbers are
+  per-position or per-source.
+- This yields an exact, **doubly-verifiable** positional map: inline chip
+  number \u2192 URL via the appended list, cross-checked against the inline
+  chip's own annotation URL. Both surfaces must agree; treat any mismatch
+  as the real signal.
+- Extraction recipe: `pypdf` for annotation rects (rect y-pairs may be
+  unnormalised \u2014 sort before testing containment; flip to top-down
+  coordinates via page height before comparing with `pdftotext -bbox`
+  word boxes); a chip's number is the digit word inside its rect; the
+  width split (\u224812pt chips vs full-width entries) separates inline
+  citations from the appended list; cap the final citation block's
+  assignment window at the markdown body's end so the appended list's
+  leading number-chips do not leak into the last block.
+- Citation-position assignment then follows the same positional context
+  matching as the DOCX path (step 5), with the chip stream in place of
+  the pandoc layer.
 
 3. Choose the canonical editing target.
    - The editing target is a **new** source-faithful clean sibling copy

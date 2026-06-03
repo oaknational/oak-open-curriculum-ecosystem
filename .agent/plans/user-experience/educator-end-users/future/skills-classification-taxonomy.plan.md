@@ -1,7 +1,7 @@
 ---
 plan_kind: strategic
 lifecycle: future
-collection: agent-tooling
+collection: user-experience
 title: Skills classification taxonomy
 created: 2026-06-03
 status: strategic
@@ -9,6 +9,9 @@ execution_note: |
   This is a strategic taxonomy brief. It defines the audience and governance
   split to preserve during later implementation, packaging, or plugin work.
   It is not an executable adapter-generation or platform-integration plan.
+  Homed with educator end users by owner direction: the taxonomy spans
+  repo-working, developer, and educator audiences, but its primary external
+  beneficiary is teacher-facing curriculum assistance.
 ---
 
 # Skills Classification Taxonomy
@@ -38,9 +41,18 @@ three categories to be packaged as platform skills later.
 ## Mechanism And Means
 
 The durable vocabulary home is
-[`agent-capability-vocabulary.md`](../../../memory/executive/agent-capability-vocabulary.md).
+[`agent-capability-vocabulary.md`](../../../../memory/executive/agent-capability-vocabulary.md).
 It is executive memory because agents look it up when deciding where a new
 agent-readable knowledge surface belongs.
+
+A companion report,
+[`skills-distribution-channels-suggestions.report.md`](skills-distribution-channels-suggestions.report.md),
+records the 2026-06-03 ecosystem survey (Agent Skills format, MCP, plugin
+bundles) and suggested future directions: capability manifests, developer and
+curriculum-assistance capability packs, and packaging adapters. Its
+recommendations are promotion-time shaping input, and the decisions it names
+remain the owner's; its ecosystem claims need verification against official
+platform documentation at promotion time.
 
 Future execution should:
 
@@ -55,9 +67,9 @@ Future execution should:
    integration work. Host support can constrain packaging, not the category
    names.
 
-[pdr-051]: ../../../practice-core/decision-records/PDR-051-vendor-agnostic-skills-standardisation.md
-[pdr-010]: ../../../practice-core/decision-records/PDR-010-domain-specialist-capability-pattern.md
-[adr-125]: ../../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md
+[pdr-051]: ../../../../practice-core/decision-records/PDR-051-vendor-agnostic-skills-standardisation.md
+[pdr-010]: ../../../../practice-core/decision-records/PDR-010-domain-specialist-capability-pattern.md
+[adr-125]: ../../../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md
 
 ## Dependencies And Non-Goals
 

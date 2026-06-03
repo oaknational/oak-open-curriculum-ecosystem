@@ -228,6 +228,14 @@ closeout section, or a curation report. It must be durable enough for the next
 agent to verify the item count and each route without rereading the whole
 source history.
 
+**Pre-archive ledger gate**: before any command or edit that moves, renames,
+archives, parks, supersedes, or replaces a live buffer source, stop and name
+the ledger path that already records the source item set and each disposition.
+If no such ledger exists, the next mutating action must be the ledger write.
+Do not frame the action as making a fitness check pass; the action is
+conserving and homing knowledge, with the validator used only as routing and
+rest-state health evidence.
+
 **Checklist failure / anti-example**: archiving a buffer or source file before
 read/extract/route/disposition evidence exists is not curation. An
 archive-only "drain" leaves the buffer live for completion purposes, even if

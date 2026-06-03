@@ -19,6 +19,17 @@ surface.
 
 ## Current State
 
+- **School-search research briefs normalised; report+plan session is the
+  owner-directed NEXT session (2026-06-03, Hushed Lurking Mask / `75123f`,
+  claude / Opus 4.8)** — the three gitignored reference-local briefs are now
+  clean markdown siblings, and the owner added `additional-requirements.md`
+  (POC builds in this repo; every API exposes strict OpenAPI 3.x). **Next:**
+  author the tracked synthesis report, then the plan, from the four inputs.
+  Authority and citation/provenance details:
+  [`school-data-search` thread record](threads/school-data-search.next-session.md).
+  Sequencing note: the upstream-sequences realignment below remains the
+  standing top-priority item for its dedicated specialist session; the owner
+  has explicitly directed the school-search report+plan session as next.
 - **UPSTREAM SEQUENCES API CHANGED — repo realignment is the TOP-PRIORITY
   next item, owner-directed dedicated specialist session (2026-06-03,
   Lacustrine Swimming Beacon / `687a54`, claude / Opus 4.8)** — the
@@ -61,45 +72,12 @@ surface.
   orphan Seaworthy experience file). **Next: D4 (graph capability shape,
   binding the nine handed-off names); the branch is unpushed — pushing is
   the owner's call.** Full detail: `eef` thread banner.
-- **Antigravity Practice-integration slice implemented in the working tree; no
-  commit and no `pnpm check` by owner direction (2026-06-03, Ashen Burning Magma
-  / `019e8d`, codex / GPT-5)** — `agent-tools` identity now recognises
-  Gemini/Antigravity stable session surfaces (`PRACTICE_AGENT_SESSION_ID_GEMINI`
-  and stable Antigravity `conversationId` metadata) while explicitly leaving
-  volatile Antigravity trajectory ids out of durable identity seeds. The
-  collaboration-state preflight uses the same stable seed set, and the platform
-  matrix, artefact inventory, ADR-125, and agent identity docs now distinguish
-  official Antigravity support from repo-local wiring: commands and identity are
-  partially wired; hooks/native agents/MCP adapters remain future work. Prior
-  validation before closeout: `@oaknational/agent-tools` tests green (95 files,
-  855 tests), lint green, `tsc --noEmit` green, targeted prettier and
-  markdownlint green. The skills-taxonomy slice is separate and already has its
-  own `agentic-engineering-enhancements` closeout. **Next: if the owner wants
-  this landed, stage only the Antigravity-owned file set after re-checking live
-  status; do not bundle active EEF or taxonomy work unless explicitly widened.**
-- **First-batch pending-graduations accepted into durable homes; final
-  consolidation/commit closeout requested after initial docs-only handoff
-  (2026-06-03, Stratospheric Buffeting Breeze / `019e8c`, codex / GPT-5)** —
-  six accepted items now show `graduated 2026-06-03` in
-  `pending-graduations.md`; durable homes are listed in the
-  `agentic-engineering-enhancements` thread record. `distilled.md` carries the
-  curation/buffer-disposition lessons; `napkin.md` carries the Antigravity vs
-  taxonomy and mixed-tree commit-scope lessons. No standalone `pnpm check` was
-  run; commit hooks are the final gate. Live EEF files remain outside this
-  agentic-engineering commit because Lacustrine Swimming Beacon holds the active
-  EEF claim.
-- **Agentic curation session-completion closeout recorded (2026-06-03,
-  Lofty Sweeping Falcon / `019e8a`, codex / GPT-5)** — the Lofty continuation
-  processed the live due pending-graduations slice, drained `distilled.md` to a
-  ready-empty state with item-level routes, and left unresolved work truthfully
-  in the owner-gated register and Q-003 rather than declaring full curation
-  complete. `oak-session-handoff` + `oak-consolidate-docs` ran in
-  session-completion mode; the stale Seaworthy D3 claim expired at
-  `2026-06-03T00:36:57Z` and was archived by `claims archive-stale`; active
-  claims are clear. Validation: `pnpm practice:fitness:strict-hard` SOFT-only
-  (20 soft, 26 healthy, 0 hard, 0 critical), `pnpm practice:vocabulary` green,
-  and `git diff --check` clean. Full detail: `agentic-engineering-enhancements`
-  thread banner and the Lofty curator ledger.
+- **Agentic curation history for 2026-06-03 lives in the
+  `agentic-engineering-enhancements` thread record and curator ledgers.** The
+  Antigravity identity slice (`88d8da9d`), taxonomy seed (`6379f1e4`), first
+  accepted pending-graduations batch, and Lofty session-completion slice are no
+  longer live pickup instructions; keep this file focused on the current
+  curation state below.
 - **JC4 unified substrate-migration plan AUTHORED — parked on a named
   trigger (2026-06-02, Galactic Glowing Prism / `cd7389`, claude / Opus 4.8,
   owner-approved session plan)** —
@@ -305,7 +283,8 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Lacustrine Swimming Beacon / eef-d3-review-then-ratify / 2026-06-03 (prior: Seaworthy Swimming Sextant 2026-06-03; Galactic Glowing Prism, Opalescent Cascading Planet, Stellar Waning Planet, Silvered Lurking Mask, all 2026-06-02) |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | codex / GPT-5 / Umbral Whispering Silhouette / promotion-and-root-docs-author / 2026-06-01 |
-| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 / Lacustrine Swimming Beacon / working-tree-commit-marshal / 2026-06-03 (prior: Ashen Burning Magma, Solar Glowing Meteor, Stratospheric Buffeting Breeze, Lofty Sweeping Falcon, Shaded Veiling Mirror) |
+| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | codex / GPT-5 / Opalescent Illuminating Prism / dedicated-knowledge-curation / 2026-06-03 (prior: Lacustrine Swimming Beacon, Ashen Burning Magma, Solar Glowing Meteor, Stratospheric Buffeting Breeze, Lofty Sweeping Falcon, Shaded Veiling Mirror) |
+| `school-data-search` | Oak School Data Search service (POC MVP): briefs → report → plan → build | [record][school-data-search] | claude / Opus 4.8 / Hushed Lurking Mask / brief-normaliser / 2026-06-03 |
 
 ## Paused Threads
 
@@ -422,15 +401,16 @@ not the current session-priority lane. Reactivation is owner-directed.
 
 ### Agentic-Engineering Curation
 
-1. The 2026-06-03 docs bundles are all committed (owner-directed, four chunks:
-   `a0fd7b0f`, `88d8da9d`, `6379f1e4`, `422e57e0` + this closeout commit).
-2. **Next curation action: rotate `napkin.md`** — HARD on fitness (333/300
-   lines) after three sessions' capture on 2026-06-03; rotation per its
-   drain_strategy with item-level dispositions, never a trim. The abandoned
-   commit-queue residue entries in `active-claims.json` are a secondary
-   cleanup signal for the same pass.
-3. Remaining `pending-graduations.md` items stay owner-gated or trigger-gated;
-   do not infer full curation completion from the first-batch graduations.
+1. The 2026-06-03 docs bundles are committed (`a0fd7b0f`, `88d8da9d`,
+   `6379f1e4`, `422e57e0`); current curation is Opalescent's dedicated pass.
+2. `napkin.md` has been processed through the Opalescent item-level ledger and
+   preserved as `active/archive/napkin-2026-06-03-opalescent-curation.md`.
+   The PDF-only ChatGPT report-normalisation protocol graduated into the
+   canonical skill and pattern; the pre-archive ledger tripwire graduated into
+   the consolidation/handoff skills. Remaining register items are owner-gated
+   or trigger-gated.
+3. The abandoned commit-queue residue entries in `active-claims.json` remain a
+   secondary cleanup signal; do not treat them as current commit authority.
 4. The relative-link integrity item is accepted as a future validator lane, not
    implemented tooling; promote the plan only on its recorded trigger.
 5. Comms-event rotation remains paused until a dedicated comms research plan
@@ -486,34 +466,20 @@ authority.
 
 ## Deep Consolidation Status
 
-**completed this handoff — session-completion mode, owner-directed full
-handoff + consolidation after the D3 ratification commits (2026-06-03,
-Lacustrine Swimming Beacon).** Fresh learning captured and routed: four
-napkin method lessons plus settlement insights; one distilled entry
-(reviewer-brief scope protection cites numbered ratified decisions only);
-one pending-graduations candidate (same lesson, trigger-gated on a second
-instance); one experience file. Entry points clean; tracks empty; practice
-box empty; no PENDING reviewer markers; claims and conversations clear.
-Named remediation lane: `napkin.md` is HARD on fitness (333/300 lines,
-20.7k/18k chars — three sessions' capture in one day); its cure is a
-rotation pass in the curation lane (drain_strategy), never a trim —
-falsifiable by the next `practice:fitness` run after rotation. Verdict:
-`partial slice landed` — session learning homed; the napkin rotation and
-the owner-gated register items remain live. Prior status (2026-06-03,
-Stratospheric Buffeting Breeze):
-**completed this handoff — session-completion mode, owner-directed first-batch
-graduation plus final closeout commit (2026-06-03, Stratospheric Buffeting
-Breeze).** The first accepted pending-graduations batch landed in durable homes
-and the register now points at those homes. `distilled.md` is ready-empty after
-clearing the graduated EEF D3 staging entry. The new relative-link integrity
-work is a future lane, not an implemented validator. Final `consolidate-docs`
-found no further immediately graduated ADR/PDR/rule candidate beyond the two
-separate opener lanes already recorded. No standalone `pnpm check` was run;
-fitness was SOFT-only and commit hooks remain authoritative. Verdict:
-`partial slice landed` — the first batch is graduated, but remaining register
-items are still owner-gated or trigger-gated. Older prior-status history
-(Seaworthy, Lofty, Shaded Veiling) lives verbatim in
-`archive/repo-continuity-deep-consolidation-status-2026-06-02-shaded-veiling.md`.
+**complete — dedicated-knowledge-curation plus final no-commit/no-check handoff
+(2026-06-03, Opalescent Illuminating Prism / codex / GPT-5 / `019e8e`).**
+The active napkin was
+processed through
+`curator-passes/2026-06-03-opalescent-illuminating-prism-curation.md`,
+preserved at `active/archive/napkin-2026-06-03-opalescent-curation.md`, and
+reopened as a small live capture buffer. The PDF-only ChatGPT
+report-normalisation protocol is graduated into the canonical skill and
+pattern, and the pre-archive ledger tripwire is graduated into the
+consolidation/handoff skills; `pending-graduations.md` has no live
+`status: pending` items found by the current inventory grep. Final owner
+instruction after completion: run session handoff + session-completion
+consolidation only, with no commit and no check; done in the thread record and
+napkin. This curation slice is not the next pickup lane.
 
 **Historical deep-consolidation closeout entries archived.** Older closeout
 prose from this section, dated 2026-05-31 to 2026-06-02, now lives in the
@@ -530,6 +496,7 @@ archive is evidence, not a live queue.
 [cloudflare]: threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md
 [sector]: threads/sector-engagement.next-session.md
 [eef]: threads/eef.next-session.md
+[school-data-search]: threads/school-data-search.next-session.md
 [agentic-mechanisms-discovery]: threads/agentic-mechanisms-discovery.next-session.md
 [collab-research]: threads/agent-collaboration-research.next-session.md
 [branch-fitness]: threads/branch-fitness-and-push-cadence.next-session.md
