@@ -5,10 +5,10 @@ specialist_reviewer: "code-expert, type-expert, mcp-expert, architecture-expert-
 isProject: false
 todos:
   - id: strict-or-strip
-    content: "OPEN QUESTION: Decide .strip() vs .passthrough() for upstream API response schemas in codegen pipeline. See Open Questions section. Owner-ratified 2026-06-03: this question is settled within the schema-change-minimal-adaptation arc (see ../current/schema-change-minimal-adaptation.plan.md §Owner ratification) — both shape how the SDK absorbs upstream change."
-    status: pending
+    content: "SETTLED by owner direction 2026-06-03: .strict() is retained everywhere — 'we are strict, everywhere, all the time, but we also do not want to ignore aspects of the upstream schemas'. .strip() rejected (silently deletes upstream data at the boundary AND suppresses the drift signal); .passthrough() rejected (silently smuggles untyped data through a typed pipeline — the same signal-suppression mirrored). The 2026-04-13 incident's root cause was schema STALENESS, not validation strictness: strict validation against the current schema is correct; the cure is drift freshness and loudness (see schema-drift-health-endpoint) plus the schema-change-minimal-adaptation arc shrinking the absorption window to one regeneration."
+    status: completed
   - id: implement-schema-policy
-    content: "Implement the chosen schema strictness policy in generate-zod-schemas.ts + JSON Schema additionalProperties. Search schemas stay strict."
+    content: "No schema-policy change (strict-or-strip settled: .strict() everywhere stands; generate-zod-schemas.ts and JSON Schema additionalProperties stay as they are). Replacement scope: make extra-field validation failures DIAGNOSTIC — when a response fails validation specifically because of unknown additional fields, the generated classifier names it as suspected upstream schema drift (still a failure, per fail-fast) instead of a generic validation error, and the observability path fires loudly. Pairs with schema-drift-health-endpoint."
     status: pending
   - id: schema-drift-health-endpoint
     content: "Implement schema drift health endpoint on the MCP server (GET /health/schema-drift) — deep-diffs live swagger against baked-in schema-cache. Monitored by Sentry."
@@ -93,7 +93,21 @@ Each is labelled with risk-if-wrong.
 
 ## Open Questions
 
-### OQ1: `.strip()` vs `.passthrough()` — OWNER DECISION REQUIRED
+### OQ1: `.strip()` vs `.passthrough()` — SETTLED 2026-06-03 (owner)
+
+**Decision: neither — `.strict()` is retained everywhere.** Owner:
+"we are strict, everywhere, all the time, but we also do not want to
+ignore aspects of the upstream schemas." `.strip()` silently deletes
+upstream data at the boundary and suppresses the drift signal;
+`.passthrough()` silently smuggles untyped data through a typed
+pipeline. The 2026-04-13 incident's root cause was schema STALENESS,
+not validation strictness — the cure is drift freshness and loudness
+(`schema-drift-health-endpoint`, diagnostic extra-field failure
+classification per the revised `implement-schema-policy` todo) plus
+the
+[schema-change-minimal-adaptation](../current/schema-change-minimal-adaptation.plan.md)
+arc shrinking the absorption window to one regeneration. The option
+analysis below is preserved as the considered decision space.
 
 Both resolve the immediate breakage. The choice affects type safety
 and data flow:
@@ -120,16 +134,16 @@ and data flow:
 
 - Overly complex, not recommended.
 
-**Recommendation**: Option B (`.strip()`), pending owner decision.
+**Outcome**: all three options rejected; `.strict()` stands (see the
+settlement at the head of OQ1).
 
 ### OQ2: Should `additionalProperties: false` also be removed from
 
 JSON Schema output?
 
-If MCP clients validate tool responses against the advertised
-`toolOutputJsonSchema`, they would reject extra fields even if Zod
-accepts them. Removing `additionalProperties: false` from response
-JSON Schemas makes the two layers consistent.
+DISSOLVED by the OQ1 settlement: with `.strict()` retained,
+`additionalProperties: false` in the JSON Schema output is already
+consistent with the Zod layer. No change.
 
 ### OQ3: Specific lesson slugs from the third-party consumer
 
@@ -137,6 +151,12 @@ Awaiting their response. Testing those slugs against oak-prod would
 confirm whether the issue is fixed or latent.
 
 ## Section 1: Schema Strictness Migration
+
+> **SUPERSEDED by the OQ1 settlement (2026-06-03)**: no strictness
+> migration happens — `.strict()` stands. This section's
+> strip-assuming impact analysis is preserved as decision-record
+> evidence only; the live scope for this area is the revised
+> `implement-schema-policy` todo (diagnostic drift classification).
 
 ### The control knob
 
