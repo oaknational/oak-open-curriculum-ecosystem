@@ -464,31 +464,36 @@
       "staged_bundle_fingerprint": "91333d3688f9d00b52b17c49b5560cb9083cfbe2d2d6bf7b618508603f947d21",
       "staged_name_status": "M\t.agent/memory/operational/repo-continuity.md\n",
       "notes": "closed in same collaboration-state commit (lifecycle exception); pathspec-scoped commit excludes peer-staged files"
+    },
+    {
+      "intent_id": "a9d67b9c-0cc5-461c-a736-ec4e99fc7961",
+      "claim_id": "6b581e8c-c620-4965-8689-baf8fc5a98bb",
+      "agent_id": {
+        "agent_name": "Moonlit Waxing Nebula",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "e756f7",
+        "id": "282b8921-e04b-5bd8-bfd5-21cabb07b137"
+      },
+      "files": [
+        ".agent/memory/active/napkin.md",
+        ".agent/memory/operational/repo-continuity.md",
+        ".agent/memory/operational/archive/repo-continuity-current-state-2026-06-03-moonlit-history-trim.md",
+        ".agent/memory/operational/threads/semantic-search.next-session.md",
+        ".agent/experience/2026-06-03-moonlit-the-verdict-before-the-plan.md",
+        ".agent/state/collaboration/comms/12f17929-b84f-48ef-a6b6-f216758b4e9e.json",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/closed-claims.archive.json"
+      ],
+      "commit_subject": "docs(memory): land the realignment session handoff and consolidation",
+      "queued_at": "2026-06-03T20:02:58.238Z",
+      "updated_at": "2026-06-03T20:03:01.142Z",
+      "expires_at": "2026-06-03T20:17:58.238Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "9af136c162bee9b39e77ed5d56f07132b96444e29f5070796575bb12b3e75e1b",
+      "staged_name_status": "A\t.agent/experience/2026-06-03-moonlit-the-verdict-before-the-plan.md\nM\t.agent/memory/active/napkin.md\nA\t.agent/memory/operational/archive/repo-continuity-current-state-2026-06-03-moonlit-history-trim.md\nM\t.agent/memory/operational/repo-continuity.md\nA\t.agent/memory/operational/threads/semantic-search.next-session.md\nA\t.agent/state/collaboration/comms/12f17929-b84f-48ef-a6b6-f216758b4e9e.json\n",
+      "notes": "closed in same collaboration-state commit (lifecycle exception); pathspec-scoped commit excludes peer-owned uncommitted work (Airy assessment estate, Blustery staged bundle, open-questions Q-005)"
     }
   ],
-  "claims": [
-    {
-      "claim_id": "2920c301-bc55-4654-ba64-22c60277a2b8",
-      "agent_id": {
-        "agent_name": "Airy Whirling Wing",
-        "platform": "codex",
-        "model": "GPT-5",
-        "session_id_prefix": "019e8e",
-        "id": "5a6ab023-801a-53ad-b317-cab4208222cd"
-      },
-      "thread": "repo-professionalism-assessment",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            ".agent/reports/oak-repo-professionalism-engineering-quality-report-2026-06-03.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-06-03T18:58:37Z",
-      "freshness_seconds": 7200,
-      "sidebar_open": false,
-      "intent": "Create detailed professionalism and engineering-quality assessment report"
-    }
-  ]
+  "claims": []
 }

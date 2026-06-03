@@ -80,6 +80,27 @@ fitness_content_role: drainable-buffer
   and my edit (HEAD moved 2 commits); the Edit-tool freshness error was the
   collision detector, and a re-read merge was cheap. Re-derive before every
   shared-surface edit, not just at open.
+- **Pathspec-scoped `git commit` is the structural cure for a peer-staged
+  shared index.** A peer's staged file appeared in my index mid-ceremony;
+  `git restore --staged` is hook-blocked and `git reset` is forbidden — but
+  `git commit -F msg -- <intent files>` commits exactly the intent bundle
+  and leaves the peer's staged entries untouched. This is the same
+  intent-scoping the commit-queue's own `commit` primitive encodes; the
+  manual path mirrors it. Used three times this session, zero collisions.
+- **candidate: when both options of a binary policy question suppress a
+  signal, re-attribute the root cause — the question dissolves.**
+  strict-vs-strip: `.strip()` silently deletes upstream data,
+  `.passthrough()` silently smuggles untyped data; both are
+  signal-suppression shapes. The real failure was schema STALENESS, not
+  validation strictness — re-attribution dissolved a 7-week-old open
+  question into "keep strict; cure freshness". PDR-shaped (one instance);
+  promote on a second dissolution-by-re-attribution.
+- **Pre-commit online codegen doubles as a free upstream-alignment probe.**
+  Every commit's hook chain re-fetches the live schema and regenerates; an
+  idempotent result is positive evidence the repo matches live upstream at
+  that moment (observed at `23e50d9a`: generated-file mtime touch, zero
+  diff). The known-red gate inverted into a standing alignment monitor the
+  moment the realignment landed.
 
 ## Session: 2026-06-03 - Opalescent dedicated curation continuation
 
