@@ -93,10 +93,23 @@ surface.
   ks4-context/sequence-facet traversal, recorded in the plan's
   execute-cure todo. Authority:
   [`upstream-sequences-api-realignment.plan.md`](../../plans/sdk-and-mcp-enhancements/current/upstream-sequences-api-realignment.plan.md)
-  (§Verdict). **Next: pushing is the owner's call; the upstream
-  feature-request chase (bulk Phase 1–2 population) is the path to
-  bulk-only ingestion and the deletion of the remaining supplementation
-  endpoint.**
+  (§Verdict). **Post-realignment arc landed in the same session
+  (commits `2b746ef9`, `dc399f3f`, `790fc098`, `23e50d9a`)**: the
+  bulk-data POPULATION feature request
+  ([`bulk_data_population.feature_request.md`](../../plans/semantic-search/current/bulk_data_population.feature_request.md),
+  owner hands upstream 2026-06-04, incl. the `/api/bulk/schema`
+  endpoint companion ask); the
+  [`schema-change-minimal-adaptation`](../../plans/sdk-and-mcp-enhancements/current/schema-change-minimal-adaptation.plan.md)
+  lane (two-tier Cardinal Rule ADR + six hardening todos,
+  owner-ratified "yes to all");
+  `bulk-schema-driven-code-generation.md` promotion APPROVED (move at
+  its executing session); and the schema-strictness open question
+  SETTLED — `.strict()` everywhere stands, strip/passthrough rejected,
+  cure is drift freshness (recorded in
+  `schema-resilience-and-response-architecture.plan.md` OQ1).
+  **Next: owner-directed — the next session returns to EEF D4; the
+  minimal-adaptation lane executes after or parallel to D4 on owner
+  scheduling. Pushing remains the owner's call (branch ~25 ahead).**
 - **EEF D3 OWNER-RATIFIED and COMMITTED (2026-06-03, Lacustrine Swimming
   Beacon / `687a54`, claude / Opus 4.8)** — independent review (full corpus
   census, cite-or-strike, V1–V8 re-verification, 4-lens refutation workflow

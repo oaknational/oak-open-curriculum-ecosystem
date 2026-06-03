@@ -8030,6 +8030,93 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "32393f7c-b5de-47a6-b6c2-aacee8abcbec",
+      "agent_id": {
+        "agent_name": "Moonlit Waxing Nebula",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "e756f7",
+        "id": "282b8921-e04b-5bd8-bfd5-21cabb07b137"
+      },
+      "thread": "semantic-search",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-03T18:52:40Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "Commit the strict-everywhere settlement of the schema strictness question.",
+      "archived_at": "2026-06-03",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-03T18:55:12Z",
+        "closed_by": {
+          "agent_name": "Moonlit Waxing Nebula",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "e756f7",
+          "id": "282b8921-e04b-5bd8-bfd5-21cabb07b137"
+        },
+        "summary": "commit 23e50d9a: strict-everywhere settlement recorded",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "32393f7c-b5de-47a6-b6c2-aacee8abcbec",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "80dccef0-e014-4567-8386-3b26df43f230",
+      "agent_id": {
+        "agent_name": "Moonlit Waxing Nebula",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "e756f7",
+        "id": "282b8921-e04b-5bd8-bfd5-21cabb07b137"
+      },
+      "thread": "semantic-search",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-03T19:00:53Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "Commit the continuity refresh for the realignment lane closeout.",
+      "intent_to_commit": "c33585d4-493e-44d9-a829-84a3e328a4df",
+      "archived_at": "2026-06-03",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-03T19:00:58Z",
+        "closed_by": {
+          "agent_name": "Moonlit Waxing Nebula",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "e756f7",
+          "id": "282b8921-e04b-5bd8-bfd5-21cabb07b137"
+        },
+        "summary": "continuity refresh commit window; lifecycle closed in-commit",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "80dccef0-e014-4567-8386-3b26df43f230",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
