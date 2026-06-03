@@ -414,11 +414,10 @@
       "staged_bundle_fingerprint": "2effc284e7fb5248e4e88242e28826659a3f8ecd7ddcd7775dfef8319e06844e",
       "staged_name_status": "M\t.agent/analysis/mcp-tool-mapping.md\nM\t.agent/memory/operational/repo-continuity.md\nM\t.agent/plans/sdk-and-mcp-enhancements/current/upstream-sequences-api-realignment.plan.md\nM\tapps/oak-search-cli/docs/ingestion-harness.md\nM\tapps/oak-search-cli/evaluation/validation/lib/api-checkers.ts\nA\tapps/oak-search-cli/fixtures/sandbox/subject-detail.json\nD\tapps/oak-search-cli/fixtures/sandbox/subject-sequences.json\nM\tapps/oak-search-cli/src/adapters/api-supplementation.integration.test.ts\nM\tapps/oak-search-cli/src/adapters/api-supplementation.ts\nM\tapps/oak-search-cli/src/adapters/hybrid-data-source.integration.test.ts\nM\tapps/oak-search-cli/src/adapters/oak-adapter-types.ts\nM\tapps/oak-search-cli/src/adapters/oak-adapter.ts\nM\tapps/oak-search-cli/src/adapters/sdk-api-methods.integration.test.ts\nM\tapps/oak-search-cli/src/adapters/sdk-api-methods/index.ts\nM\tapps/oak-search-cli/src/adapters/sdk-api-methods/sequence-methods.ts\nM\tapps/oak-search-cli/src/adapters/sdk-client-factory.ts\nM\tapps/oak-search-cli/src/lib/index-batch-generator.unit.test.ts\nM\tapps/oak-search-cli/src/lib/index-batch-helpers.ts\nM\tapps/oak-search-cli/src/lib/indexing/ingest-harness.unit.test.ts\nM\tapps/oak-search-cli/src/lib/indexing/ks4-context-types.ts\nM\tapps/oak-search-cli/src/lib/indexing/run-versioned-ingest.integration.test.ts\nM\tapps/oak-search-cli/src/lib/indexing/sandbox-fixture-data.ts\nM\tapps/oak-search-cli/src/lib/indexing/sandbox-fixture.ts\nM\tapps/oak-search-cli/src/lib/search-quality/ground-truth-archive/sequences/index.ts\nM\tapps/oak-search-cli/src/lib/sequence-entry-helpers.ts\nM\tapps/oak-search-cli/src/test-helpers/mock-oak-client.ts\nM\tapps/oak-search-cli/src/types/oak.ts\nM\tpackages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts\nM\tpackages/sdks/oak-curriculum-sdk/src/mcp/tool-guidance-data.ts\nM\tpackages/sdks/oak-curriculum-sdk/src/public/search.ts\nM\tpackages/sdks/oak-curriculum-sdk/src/response-augmentation-helpers.ts\nM\tpackages/sdks/oak-curriculum-sdk/src/response-augmentation-helpers.unit.test.ts\nM\tpackages/sdks/oak-curriculum-sdk/src/response-augmentation.ts\nM\tpackages/sdks/oak-curriculum-sdk/src/response-augmentation.unit.test.ts\nM\tpackages/sdks/oak-curriculum-sdk/src/types/index.ts\nM\tpackages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts\nM\tpackages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/kebab-to-title-case.unit.test.ts\nM\tpackages/sdks/oak-sdk-codegen/schema-cache/api-schema-original.json\nM\tpackages/sdks/oak-sdk-codegen/src/types/generated/api-schema/api-paths-types.ts\nM\tpackages/sdks/oak-sdk-codegen/src/types/generated/api-schema/api-schema-base.ts\nM\tpackages/sdks/oak-sdk-codegen/src/types/generated/api-schema/api-schema-original.json\nM\tpackages/sdks/oak-sdk-codegen/src/types/generated/api-schema/api-schema-sdk.json\nM\tpackages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/definitions.ts\nM\tpackages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/runtime/execute.ts\nA\tpackages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/stubs/tools/get-sequences.ts\nD\tpackages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/stubs/tools/get-subjects-sequences.ts\nM\tpackages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/stubs/tools/get-subjects.ts\nM\tpackages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/stubs/tools/index.ts\nR074\tpackages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-subjects-sequences.ts\tpackages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-sequences.ts\nM\tpackages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-subjects.ts\nM\tpackages/sdks/oak-sdk-codegen/src/types/generated/api-schema/path-parameters.ts\nM\tpackages/sdks/oak-sdk-codegen/src/types/generated/api-schema/response-map.ts\nM\tpackages/sdks/oak-sdk-codegen/src/types/generated/api-schema/validation/request-parameter-map.ts\nM\tpackages/sdks/oak-sdk-codegen/src/types/generated/zod/curriculumZodSchemas.ts\n",
       "notes": "closed in same collaboration-state commit (lifecycle exception); bundle verified against the intent scope immediately before pathspec-scoped git commit; one peer-staged file (skills-classification-taxonomy.plan.md) deliberately left staged and excluded via pathspec"
-    }
-  ],
-  "claims": [
+    },
     {
-      "claim_id": "99d10032-3e1e-4b91-b566-fc284fd25888",
+      "intent_id": "8e9cc066-d04e-46da-8a89-642b5915b334",
+      "claim_id": "7d6d861e-6236-4435-ae1e-3f0aa87d3b9f",
       "agent_id": {
         "agent_name": "Furnace Roasting Brazier",
         "platform": "claude",
@@ -426,25 +425,24 @@
         "session_id_prefix": "88a769",
         "id": "45b37fc8-c9ab-58fe-8a32-0a0ae6383808"
       },
-      "thread": "school-data-search",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            ".agent/reports/school-data-search-synthesis-report-2026-06-03.md",
-            ".agent/reports/README.md",
-            ".agent/plans/school-data-search/**",
-            ".agent/plans/README.md",
-            ".agent/plans/high-level-plan.md",
-            ".agent/memory/operational/threads/school-data-search.next-session.md"
-          ]
-        }
+      "files": [
+        ".agent/memory/operational/threads/school-data-search.next-session.md",
+        ".agent/memory/operational/repo-continuity.md",
+        ".agent/memory/active/napkin.md",
+        ".agent/state/collaboration/comms/763aba70-cded-428e-b9ec-aefa303a6a56.json",
+        ".agent/state/collaboration/shared-comms-log.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/closed-claims.archive.json"
       ],
-      "claimed_at": "2026-06-03T16:44:49Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "School-data-search synthesis session: author tracked synthesis report (.agent/reports/) + new .agent/plans/school-data-search/ collection; report decides nothing, plan gates owner forks. Scanned registry: 2 active claims (Moonlit Waxing Nebula sdk realignment; Blustery Lifting Gale plan moves), no overlap with my areas."
-    },
+      "commit_subject": "chore(continuity): land 2026-06-03 furnace-roasting-brazier session reflection",
+      "queued_at": "2026-06-03T17:23:35.132Z",
+      "updated_at": "2026-06-03T17:24:06.608Z",
+      "expires_at": "2026-06-03T17:38:35.132Z",
+      "phase": "abandoned",
+      "notes": "closed in same collaboration-state commit (lifecycle exception); bundle verified manually against the intent list immediately before git commit"
+    }
+  ],
+  "claims": [
     {
       "claim_id": "2a9d7474-8053-4c29-a573-db76c25a19ba",
       "agent_id": {

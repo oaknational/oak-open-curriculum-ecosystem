@@ -8,33 +8,37 @@ from research-brief normalisation through report, plan, and in-repo build.
 | platform | model | session_id_prefix | agent_name | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
 | claude | Opus 4.8 | 75123f | Hushed Lurking Mask | brief-normaliser | 2026-06-03 | 2026-06-03 |
+| claude | Opus 4.8 | 88a769 | Furnace Roasting Brazier | report-and-plan-synthesiser | 2026-06-03 | 2026-06-03 |
 
 ## Current Continuation
 
-- Branch: `feat/graph-tooling-tidyup` (shared working branch; this lane has no
-  branch of its own yet — the next session decides whether report/plan land
-  here or on a fresh branch).
+- Branch: `feat/graph-tooling-tidyup` (shared working branch; report and plan
+  landed here — `36f1d61b` report, `26b7eb77` plan collection).
 - Invocation pointer: `start-right-quick`, then this record.
-- Controlling plan: none yet — authoring the plan IS the next session's work.
-- Next safe step: read the four inputs end-to-end, then author the synthesis
-  report, then the plan (see Landing target).
-- Completed prerequisites: all three research briefs normalised to verified
-  clean markdown (2026-06-03, this session); citation recovery doubly verified
-  against PDF surfaces; PDFs deleted (owner-directed); Brief 1 references are
-  an owner-supplied verified approximate set (21 URLs, 19 probed OK, 2 GIAS
-  bot-blocked as expected).
-- Recent relevant commits: none (the lane's artefacts are gitignored
-  reference-local files plus uncommitted continuity edits; owner directed
-  no-commit at the normalisation session's close).
-- Team expectation: unknown until live grounding.
-- Acceptance bar: a tracked, self-contained report + an executable plan that
-  do not depend on reading gitignored files.
+- Controlling plan:
+  [`school-data-search-poc.plan.md`](../../../plans/school-data-search/current/school-data-search-poc.plan.md)
+  (lifecycle `current/`; promotes to `active/` when gates G-1/G-2/G-3/G-8 are
+  decided and build starts).
+- Next safe step: the **owner gate session** — walk gates G-1…G-9 against the
+  [synthesis report](../../../reports/school-data-search-synthesis-report-2026-06-03.md)
+  (divergence matrix §4, collision ledger §5, OpenAPI inversion §6). The
+  report carries all considerations; no further research is required to
+  decide. Architectural ratifications at the gates land as ADRs.
+- Completed (2026-06-03, Furnace Roasting Brazier): the synthesis report
+  (self-contained, citation-grounded, reviewed pre-landing by
+  assumptions-expert + architecture-expert-betty, dispositions in report
+  §10) and the plan collection (gates G-1…G-9, WS-D1, WS1–WS10 with
+  structured `depends_on`; assumptions-expert plan-readiness review:
+  ready-with-changes, no blockers, findings applied; docs-adr-expert chain
+  review clean). Prior session: briefs normalised (Hushed Lurking Mask).
+- Acceptance bar: met — tracked, self-contained report + executable plan,
+  zero dependence on gitignored files (docs-adr-expert verified the chain).
 
-## Inputs (read all four end-to-end before authoring)
+## Inputs (synthesised 2026-06-03; provenance record)
 
-All in `.agent/reference-local/oak-school-search-research/` (gitignored —
-quote what the report needs into tracked canon; CI and other agents cannot
-read this lane):
+All in `.agent/reference-local/oak-school-search-research/` (gitignored).
+The synthesis report is fully self-contained — these files are provenance
+for re-verification only; nothing in tracked canon depends on reading them:
 
 1. `additional-requirements.md` — owner requirements, override the briefs:
    (1) POC MVP is built IN THIS repo, not extracted until POC complete and a
@@ -52,30 +56,18 @@ owner may direct their removal after comparison.
 
 ## Landing target for the next session on this thread
 
-**Synthesis discipline (owner emphasis 2026-06-03: synthesise ALL inputs):**
+**The owner gate session.** Walk gates G-1…G-9 in the
+[controlling plan](../../../plans/school-data-search/current/school-data-search-poc.plan.md)
+§Phase 0 against the synthesis report. Blocking structure: G-1/G-2/G-3/G-8
+unblock all build workstreams; G-4→WS3, G-5→WS7, G-6→WS4, G-7→WS6; G-9
+gates publishing only. Decisions recorded in the plan (todo flips) and, where
+architectural (G-1 produced-spec shape is the named ADR candidate), as ADRs.
+After the gates: WS-D1 (workspace decomposition proposal) → G-8
+ratification → promote the plan to `active/` and begin WS1/WS2/WS3 TDD
+cycles.
 
-- Verify input completeness at session open by re-listing
-  `.agent/reference-local/oak-school-search-research/` — owner files have
-  arrived mid-session twice; anything new there is first-class input.
-- Ground every load-bearing synthesis claim by brief + citation (`[[N]]`
-  anchors in Briefs 2/3 resolve to verified URLs; Brief 1's references are
-  approximate, no position claims). A claim no brief can ground is flagged
-  for build-time verification, never asserted.
-- Dispatch `assumptions-expert` (plus an architecture reviewer as needed) on
-  the synthesis report BEFORE authoring the plan — real-time, not backfill.
-
-Author and land in tracked canon:
-
-1. **Synthesis report** (home: `.agent/reports/`) — the three briefs are three
-   independent answers to the SAME research brief. The report's value is the
-   synthesis surface: (a) convergent foundation (what all three agree on —
-   high confidence), (b) divergence matrix (where they differ — each a named
-   decision with considerations, NOT a made decision; feature-shaping forks
-   are the owner's), (c) collision ledger between brief assumptions and the
-   owner requirements / this repo's doctrine, (d) claims needing live
-   re-verification at build time.
-2. **Plan** (home: `.agent/plans/` — new lane, e.g. `school-data-search/`)
-   per the plan architecture (`oak-plan`), grounded in the report.
+The synthesis-and-plan landing target set on 2026-06-03 is **complete**
+(report `36f1d61b`, plan `26b7eb77`).
 
 ## Standing decisions and constraints the thread carries forward
 
@@ -92,12 +84,11 @@ Author and land in tracked canon:
   its own spec. The report should name how the existing schema-first doctrine
   maps onto a spec-producing service (likely ADR material — candidate, not
   decided).
-- Briefs converge on (verify in synthesis, do not assume): Next.js App Router
-  API on Vercel, Neon Postgres via marketplace, Drizzle ORM + explicit SQL
-  migrations, Postgres FTS + pg_trgm (Elasticsearch deferred), redacted
-  snapshots, hashed bearer tokens, OTEL observability, Slack alerts, MIT code
-  licence, OGL-only data, nightly 02:00 Europe/London refresh with whole-
-  dataset promotion, conservative PII exclusion allowlists.
+- Brief convergence is now canonically recorded in the
+  [synthesis report](../../../reports/school-data-search-synthesis-report-2026-06-03.md)
+  §3 — superseding this record's earlier preliminary list. Note the report's
+  §3.1 caveat: the briefs' 3/3 Next.js vote was frame-dependent (no in-repo
+  workspace uses Next.js); the runtime is fork D-16, decided at gate G-2.
 - Citation provenance differs by brief: Briefs 2/3 inline `[[N]]` anchors are
   export-recovered and position-exact; Brief 1's reference list is
   owner-supplied and approximate with no position claims. Weight accordingly

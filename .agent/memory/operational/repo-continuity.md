@@ -19,17 +19,21 @@ surface.
 
 ## Current State
 
-- **School-search research briefs normalised; report+plan session is the
-  owner-directed NEXT session (2026-06-03, Hushed Lurking Mask / `75123f`,
-  claude / Opus 4.8)** — the three gitignored reference-local briefs are now
-  clean markdown siblings, and the owner added `additional-requirements.md`
-  (POC builds in this repo; every API exposes strict OpenAPI 3.x). **Next:**
-  author the tracked synthesis report, then the plan, from the four inputs.
-  Authority and citation/provenance details:
+- **School-search synthesis report + gated POC plan LANDED (2026-06-03,
+  Furnace Roasting Brazier / `88a769`, claude / Opus 4.8)** — the
+  self-contained synthesis of the three briefs + owner requirements is at
+  [`school-data-search-synthesis-report-2026-06-03.md`](../../reports/school-data-search-synthesis-report-2026-06-03.md)
+  (`36f1d61b`): convergent foundation, 16 named owner forks, collision
+  ledger vs repo doctrine, OpenAPI produced-spec inversion (F-A/F-B/F-C,
+  ADR candidate), build-time verification ledger. The new
+  [`school-data-search` collection](../../plans/school-data-search/README.md)
+  (`26b7eb77`) carries the executable POC plan: gates G-1…G-9 → WS-D1
+  decomposition → WS1–WS10 TDD workstreams. Reviewed in real time
+  (assumptions-expert ×2, architecture-expert-betty, docs-adr-expert; all
+  dispositions recorded). **Next: the owner gate session** — walk G-1…G-9
+  against the report (it carries all considerations; no further research
+  needed), then promote the plan to `active/`. Authority:
   [`school-data-search` thread record](threads/school-data-search.next-session.md).
-  Sequencing note: the upstream-sequences realignment below remains the
-  standing top-priority item for its dedicated specialist session; the owner
-  has explicitly directed the school-search report+plan session as next.
 - **UPSTREAM SEQUENCES API REALIGNMENT EXECUTED — all three plan todos
   complete, owner-approved adaptation route landed (2026-06-03, Moonlit
   Waxing Nebula / `e756f7`, claude / Opus 4.8, dedicated specialist

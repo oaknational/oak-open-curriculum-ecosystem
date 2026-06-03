@@ -7669,6 +7669,184 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "d8803015-e39f-4e2d-99ae-7fc7d6704470",
+      "agent_id": {
+        "agent_name": "Furnace Roasting Brazier",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "88a769",
+        "id": "45b37fc8-c9ab-58fe-8a32-0a0ae6383808"
+      },
+      "thread": "school-data-search",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-03T17:13:45Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit ship-unit (a): school-data-search synthesis report + reports README index entry.",
+      "archived_at": "2026-06-03",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-03T17:14:53Z",
+        "closed_by": {
+          "agent_name": "Furnace Roasting Brazier",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "88a769",
+          "id": "45b37fc8-c9ab-58fe-8a32-0a0ae6383808"
+        },
+        "summary": "commit 36f1d61b: docs(reports): land the school-data-search synthesis report",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "d8803015-e39f-4e2d-99ae-7fc7d6704470",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1968ccae-9cab-4aaa-a872-6250b96cd5d7",
+      "agent_id": {
+        "agent_name": "Furnace Roasting Brazier",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "88a769",
+        "id": "45b37fc8-c9ab-58fe-8a32-0a0ae6383808"
+      },
+      "thread": "school-data-search",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-03T17:15:27Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit ship-unit (b): school-data-search plan collection + root registrations.",
+      "archived_at": "2026-06-03",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-03T17:16:28Z",
+        "closed_by": {
+          "agent_name": "Furnace Roasting Brazier",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "88a769",
+          "id": "45b37fc8-c9ab-58fe-8a32-0a0ae6383808"
+        },
+        "summary": "commit 26b7eb77: docs(plans): seed the school-data-search collection with the gated poc plan",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1968ccae-9cab-4aaa-a872-6250b96cd5d7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "99d10032-3e1e-4b91-b566-fc284fd25888",
+      "agent_id": {
+        "agent_name": "Furnace Roasting Brazier",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "88a769",
+        "id": "45b37fc8-c9ab-58fe-8a32-0a0ae6383808"
+      },
+      "thread": "school-data-search",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/reports/school-data-search-synthesis-report-2026-06-03.md",
+            ".agent/reports/README.md",
+            ".agent/plans/school-data-search/**",
+            ".agent/plans/README.md",
+            ".agent/plans/high-level-plan.md",
+            ".agent/memory/operational/threads/school-data-search.next-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-03T16:44:49Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "School-data-search synthesis session: author tracked synthesis report (.agent/reports/) + new .agent/plans/school-data-search/ collection; report decides nothing, plan gates owner forks. Scanned registry: 2 active claims (Moonlit Waxing Nebula sdk realignment; Blustery Lifting Gale plan moves), no overlap with my areas.",
+      "archived_at": "2026-06-03",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-03T17:24:03Z",
+        "closed_by": {
+          "agent_name": "Furnace Roasting Brazier",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "88a769",
+          "id": "45b37fc8-c9ab-58fe-8a32-0a0ae6383808"
+        },
+        "summary": "Session complete: synthesis report 36f1d61b + plan collection 26b7eb77 landed, reviewed at every stage; next is the owner gate session (G-1..G-9)",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "99d10032-3e1e-4b91-b566-fc284fd25888",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "7d6d861e-6236-4435-ae1e-3f0aa87d3b9f",
+      "agent_id": {
+        "agent_name": "Furnace Roasting Brazier",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "88a769",
+        "id": "45b37fc8-c9ab-58fe-8a32-0a0ae6383808"
+      },
+      "thread": "school-data-search",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-03T17:23:33Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit the session continuity bundle (lifecycle exception: self-contained collaboration-state commit).",
+      "intent_to_commit": "8e9cc066-d04e-46da-8a89-642b5915b334",
+      "archived_at": "2026-06-03",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-03T17:24:03Z",
+        "closed_by": {
+          "agent_name": "Furnace Roasting Brazier",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "88a769",
+          "id": "45b37fc8-c9ab-58fe-8a32-0a0ae6383808"
+        },
+        "summary": "closed in same collaboration-state commit (lifecycle exception); continuity bundle staged immediately after",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "7d6d861e-6236-4435-ae1e-3f0aa87d3b9f",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

@@ -8,6 +8,79 @@ merge_class: append-only-narrative
 fitness_content_role: drainable-buffer
 ---
 
+## Session: 2026-06-03 - school-search synthesis + plan (Furnace Roasting Brazier)
+
+### What Was Done
+
+- Synthesised the three school-search briefs + owner requirements into the
+  self-contained report (`36f1d61b`) and the gated POC plan collection
+  (`26b7eb77`); reviewers at every stage (assumptions-expert ×2, betty,
+  docs-adr-expert), all findings validated against artefacts before applying.
+
+### Mistakes Made
+
+- **Claimed a markdownlint pass that never linted the file.** Scoped
+  `markdownlint <report>` printed usage + exit 0 because `.agent/reports/`
+  is in `.markdownlintignore` — ignore-filtering left ZERO inputs, and the
+  CLI's no-input shape is usage-print-with-exit-0. The earlier two-file run
+  was "green" because the OTHER file passed. This is the napkin's own
+  "green verifier with no extraction count proves nothing" lesson recurring
+  in a new costume: a targeted lint claim needs the file to be IN the
+  gate's footprint, and a silent pass needs per-file attestation. Cure
+  applied in-session: re-ran per surface with the governance split named
+  (reports = prettier-only by design; canon = markdownlint + prettier).
+
+### Patterns to Remember
+
+- **Convergence inherits the frame it was voted in.** All three briefs
+  "agreed 3/3" on Next.js — but the vote was cast inside their
+  standalone-repo frame; in-repo (no Next.js anywhere, deployed app is
+  Express) the agreement carries no evidence weight. Betty's blocker
+  generalises: when a shared premise is invalidated, every convergence
+  downstream of it must be re-graded, not inherited. Candidate for the
+  synthesis-method pattern register.
+- **Openers degrade in transit; canon survives.** The pasted opener arrived
+  duplicated and garbled mid-sentence; the thread record + remember.md
+  carried the exact text. Ground openers from canonical files, treat chat
+  paste as lossy transport.
+- The owner-mandated synthesise-before-plan sequencing earned its cost:
+  both beyond-opener insights (OpenAPI contract-layer collision → the F-C
+  shape; apps-thin decomposition) emerged only from reading ALL inputs
+  against doctrine in one pass — neither is visible from any single brief.
+
+## 2026-06-03 — upstream sequences API realignment (Moonlit Waxing Nebula)
+
+- **A healed turbo cache inverts the poisoning direction — deliberate online
+  regeneration needs `--force`.** After the recorded CI=true heal, an unforced
+  `pnpm sdk-codegen` FULL-TURBO-replayed the OLD-schema outputs and never
+  fetched; the plan's mechanics described online runs poisoning offline
+  replays, but the healed state poisons deliberate online runs the same way.
+  Cure: any regeneration that must observe upstream change is a forced run.
+- **Schema presence ≠ value population — count instances before a
+  delivered/undelivered verdict.** The bulk schema.json had declared
+  tier/examSubjects/categories as optional since at least 2026-05-21, yet
+  zero units populated them in old AND fresh downloads; an Explore agent's
+  own report contradicted itself by reading the schema for one half of its
+  table and the feature request for the other. Field-population counts over
+  the actual corpus settled it in one command.
+- **Read-only evidence in plan mode answered all three owner questions before
+  approval.** Fresh OpenAPI fetch + one-subject authenticated bulk ZIP to
+  /tmp produced the full source-side diff and the bulk-unchanged proof with
+  zero repo mutation — the plan was approved with the verdict already
+  evidence-complete, and execution held no surprises.
+- **Reviewer-validation pass earned its keep both ways**: code-expert's
+  ontology `schemaRef` rename was a false positive (the value IS the correct
+  upstream schema name); type-expert's `Promise<unknown>` erasure finding was
+  real but pre-existing — metabolised as a named follow-up in the plan, not
+  smuggled scope. Plan-agent claim "tool-guidance rename is doc-only" was
+  refuted by the build: the generated `AllToolName` union gates hand-authored
+  tool references at compile time.
+- **Peer continuity entries land mid-session under parallel planning
+  sessions** — repo-continuity gained a committed peer entry between my read
+  and my edit (HEAD moved 2 commits); the Edit-tool freshness error was the
+  collision detector, and a re-read merge was cheap. Re-derive before every
+  shared-surface edit, not just at open.
+
 ## Session: 2026-06-03 - Opalescent dedicated curation continuation
 
 ### What Was Done
@@ -86,3 +159,24 @@ fitness_content_role: drainable-buffer
   an em-dash into the literal text `\u2014` while converting PUA literals to clean
   escapes. Refinement of the graduated corollary: byte-verify any edited
   line carrying non-ASCII near escape-like content.
+
+## 2026-06-03 — skills taxonomy rehome + ADR-189 (Blustery Lifting Gale)
+
+- **Re-derive tracked-vs-untracked at move time, not from turn-start memory.**
+  An owner commit (`7ca7b918`) landed mid-session and flipped my
+  untracked turn-1 files to tracked; the planned `mv`/`rm` then produced
+  worktree `D` statuses I had not predicted. Harmless here (intentional
+  moves), but the same stale assumption against a delete would have been a
+  signal missed. Same family as verify-before-referencing under live
+  parallel curation; the trigger here was owner action, not a peer agent.
+- **Comms CLI flag asymmetry cost two failed sends**: `comms direct` takes
+  `--kind`/`--subject`; `comms append` takes `--title` (+ required
+  `--created-at`) and has no `--kind`. Existing
+  `project_comms_cli_grounding_gap` memory names list/show gaps; add the
+  write-side asymmetry to that friction family. Also self-caught: a stray
+  draft fragment in the first body — re-read bodies before send.
+- **The discovery/ collection was the decisive grounding find** for the
+  rehome question: the word "skills" pulled toward taxonomy/agent-tooling
+  lanes, but distribution-channels substance belonged beside
+  `agent-skills-discovery.plan.md`. Cheap Explore sweep before forming the
+  location verdict is what surfaced it.
