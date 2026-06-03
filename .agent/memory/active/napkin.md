@@ -18,6 +18,36 @@ fitness_content_role: drainable-buffer
   not an intent id. Cure shape: commit-queue usage/option validation should make
   the identity tuple visibly complete for every write command that parses it.
 
+## 2026-06-03 — D3 adversarial self-audit, owner-directed (Seaworthy Swimming Sextant)
+
+- **When an authored element needs a rationale the plan does not supply, the
+  rationale gets fabricated — delete the element instead.** I authored a third
+  tool function (corpus metadata) the plan's primitive targeting had already
+  assigned to the resource, then justified the duplication with "hosts that do
+  not surface MCP resources" — pure invention in the generic-MCP-ecosystem
+  register, while Oak explicitly targets Claude.ai + ChatGPT (and the installed
+  ext-apps stack requires resources). Cure: design-decision cite-or-strike —
+  every surface element cites the plan text assigning it to that primitive; an
+  element whose rationale must be invented is deleted, not justified.
+- **Seeded consensus, third face**: assumptions-expert "validated" my invented
+  rationale as "a known MCP ecosystem fact" — reviewers amplify the premise the
+  artefact hands them. The ecosystem-hedging register ("older hosts", "some
+  hosts") is a recurring reviewer import; pin the real targets in every MCP
+  brief and reject findings in that register.
+- **A reviewer finding that needs a bridge is a finding about the shape.**
+  type-expert's conditional-presence tension (provenance.methodology) was the
+  seams-law signal that the function had drifted from the plan; I engineered an
+  optional-field + handler-enforcement bridge instead of deleting the drifted
+  input. "Seams compose, never reconciled" applies to absorbing review findings
+  too.
+- **Two more smuggles the owner's lens caught**: internal
+  `data_version`/`last_updated` placed in every envelope under an "internal
+  debugging metadata" label (D1 V2 had already routed them out of the payload —
+  telemetry is their home), and an optional free-text prompt argument where the
+  house shape is required named args (`topic`/`yearGroup`, per
+  `lesson-planning`). Both were "while I'm here" inclusions that read as
+  completeness and were actually scope.
+
 ## 2026-06-02 — EEF D3 execution (Seaworthy Swimming Sextant)
 
 - **Known-answer probe missed again — and the miss-shape is new.** Withheld the

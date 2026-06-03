@@ -8,7 +8,9 @@
 > The D3 contract is written:
 > [`eef-d3-mcp-contract.md`](../../../plans/sector-engagement/eef/current/eef-d3-mcp-contract.md)
 > — tool `get-eef-evidence` (function dispatch: `evidence-for-move` /
-> `inspect-strand` / `corpus-metadata`), resource `eef://interpretation`,
+> `inspect-strand` — the plan's two named operations; corpus metadata is the
+> interpretation resource's job per the plan's primitive targeting),
+> resource `eef://interpretation`,
 > prompt `adapt-lesson-with-evidence`; per-field source-path table (named
 > unbound D4 subsets); the SDK/app verification record (V1–V8, all
 > file:line-cited against installed `@modelcontextprotocol/sdk@1.29.0` +
@@ -36,11 +38,26 @@
 >   condition critically assessed, grounded, and applied — incl. the
 >   mcp-expert catch that live graph tools return non-empty `content`
 >   (V8 corrected: `content: []` is the ratified TARGET, not live
->   evidence — author's own convenient-claim slip), the type-expert
->   methodology-presence resolution (schema marks optional; handler
->   enforces), `UniversalToolListEntry.inputSchema` widening added to V5,
+>   evidence — author's own convenient-claim slip),
+>   `UniversalToolListEntry.inputSchema` widening added to V5,
 >   `z.nullable`-not-`z.optional` hazard named, ADR-179 placement sentence,
->   and four D2-table provenance rows + the `update_history` honesty line.
+>   and the D2-table provenance rows + the `update_history` honesty line.
+> + **Owner-directed adversarial self-audit (2026-06-03) corrected three
+>   authored defects**: the third tool function (corpus metadata) DELETED —
+>   the plan's primitive targeting assigns corpus metadata to the resource,
+>   and the function's "resource-less hosts" rationale was author-fabricated
+>   then reviewer-amplified (Oak targets Claude.ai + ChatGPT exclusively;
+>   the installed ext-apps stack itself requires resources); internal
+>   `data_version`/`last_updated` removed from the envelope (D1 V2: internal
+>   debugging metadata — telemetry's home, never `structuredContent`); prompt
+>   arguments aligned to the house shape (`topic` + `yearGroup` required,
+>   per `lesson-planning`). The envelope is now one uniform shape with zero
+>   conditional fields; the type-expert optional-methodology bridge dissolved
+>   with the function it patched (friction at that seam was the signal the
+>   function was wrong); the fifth D2 provenance row (`meta.schema_version`)
+>   completes the table's corpus-level rule. A focused mcp-expert re-pass ran
+>   against the corrected artefact with the Claude.ai/ChatGPT target register
+>   pinned in the brief.
 > + **Parallel agent coordinated**: Lofty Sweeping Falcon (codex, dedicated
 >   curation) live on the same branch; boundaries split by claim + comms
 >   event; my commit excludes their curation surfaces (incl. `distilled.md`,

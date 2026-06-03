@@ -42,8 +42,14 @@ surface.
   (4-lens refutation workflow; corpus claims recounted exact; 4 real findings
   applied); the declared-only filter exclusions edit is applied; the four D3
   PENDING reviewers fired in-flight (all READY-WITH-CONDITIONS; every
-  condition grounded and applied). **Next: owner ratifies D3; on
-  ratification D4 proceeds.** Full detail: `eef` thread banner.
+  condition grounded and applied). An owner-directed adversarial audit
+  (2026-06-03) then deleted an author-invented third tool function (corpus
+  metadata is the resource's job per the plan's primitive targeting; its
+  "resource-less hosts" rationale was fabricated — Oak targets Claude.ai +
+  ChatGPT), removed internal `data_version`/`last_updated` from the envelope,
+  and aligned prompt arguments to the required-arg house shape. **Next: owner
+  ratifies D3; on ratification D4 proceeds.** Full detail: `eef` thread
+  banner.
 - **JC4 unified substrate-migration plan AUTHORED — parked on a named
   trigger (2026-06-02, Galactic Glowing Prism / `cd7389`, claude / Opus 4.8,
   owner-approved session plan)** —

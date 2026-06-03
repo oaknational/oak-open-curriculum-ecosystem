@@ -59,15 +59,19 @@ All three primitives co-gate behind `OAK_CURRICULUM_MCP_EEF_ENABLED` (D6).
 
 | Function | Does | Returns |
 | --- | --- | --- |
-| `evidence-for-move` | Returns the evidence subgraph for the strands matching the supplied selectors — the strands the agent mapped the pedagogical move to, and/or strands matching observed-axis and exact-metric filters | Evidence envelope (members + edges + frontier + provenance) |
-| `inspect-strand` | Returns the single-strand subgraph for one known strand id — full evidence fields, its `related_strands` edges, frontier refs | Evidence envelope (one member) |
-| `corpus-metadata` | Returns the corpus-level provenance and methodology — source, licence/attribution, coverage, caveats, and the corpus's own interpretation guidance (impact/cost/evidence-strength measures) | Evidence envelope (zero members; provenance extended with methodology + coverage) |
+| `evidence-for-move` | Returns the evidence subgraph for the strands matching the supplied selectors — the strands the agent mapped the pedagogical move to, and/or strands matching observed-axis and exact-metric filters (the plan's evidence query + bounded subgraph-around-strands operations) | Evidence envelope (members + edges + frontier + provenance) |
+| `inspect-strand` | Returns the single-strand subgraph for one known strand id — full evidence fields, its `related_strands` edges, frontier refs (the plan's total strand-by-id lookup) | Evidence envelope (one member) |
 
-`corpus-metadata` exists on the tool (not only in the resource) because caveat
-and methodology preservation is a D1 obligation even in hosts that do not
-surface MCP resources to the model. **agent-side**: choosing which strands a
-move maps to, and weighing impact-for-effort, is the invoking agent's
-reasoning (plan Decision 10) — no function performs it.
+These two functions are exactly the tool's plan-assigned scope: "corpus-derived
+evidence options and strand inspection" (plan §D3 primitive targeting). Corpus
+metadata and methodology are the **resource's** job by the same targeting —
+the tool does not duplicate them. `inspect-strand` with one id and
+`evidence-for-move` with `strandIds: [oneId]` return the same envelope; the
+two functions exist because they are the plan's two named operations
+(axis/metric evidence query; total by-id lookup), and the overlap at
+cardinality one is stated here rather than hidden. **agent-side**: choosing
+which strands a move maps to, and weighing impact-for-effort, is the invoking
+agent's reasoning (plan Decision 10) — no function performs it.
 
 ### Input contract
 
@@ -110,9 +114,9 @@ Boundary rules:
 
 ### Output contract — the evidence envelope (contract-defined name)
 
-One output shape for all three functions: the **evidence envelope**. A
-function's result varies only by member count and provenance extension — no
-root-level union, no per-function output layouts.
+One output shape for both functions: the **evidence envelope**. A function's
+result varies only by member count — no root-level union, no per-function
+output layouts, no conditional fields.
 
 | Contract field | Graph-native subset (D4-bound) | Raw EEF source path | Proof test |
 | --- | --- | --- | --- |
@@ -120,8 +124,7 @@ root-level union, no per-function output layouts.
 | `members[]` — guidance-report nodes `{ title, url }` reached by `has_guidance_report` edges (D4-ratified node kind, deduplicated across strands) | `eefGuidanceReportNodeSubset` | `strands[number].related_guidance_reports` | D5 constructor test |
 | `edges[]` — typed edges among members (`related_strand`, `has_guidance_report`) | `eefEvidenceEnvelopeSubset` (edge set) | `strands[number].related_strands`; `strands[number].related_guidance_reports` | `raw-domains.unit.test.ts` (edge facts); D5 |
 | `frontier[]` — refs to related strands outside the members | `eefEvidenceEnvelopeSubset` (frontier refs) | `strands[number].related_strands` | D5 traversal tests |
-| `provenance` — once per envelope: source attribution, corpus caveats, internal `data_version` / `last_updated` (internal debugging metadata per D1 V2 — never teacher-facing evidence context) | `eefProvenanceSubset` | `meta.source`, `meta.licence`, `meta.caveats`, `meta.data_version`, `meta.last_updated` | `corpus-meta.unit.test.ts` |
-| `provenance.methodology` + `provenance.coverage` — optional in the schema; the handler returns them exactly when `function = corpus-metadata` (the schema cannot and does not enforce per-function presence — a root discriminated union is ruled out by the `type: object` rule; compactness keeps routine evidence results lean, and the extension is the resource-less host's route to the corpus's own interpretation guidance and coverage) | `eefProvenanceSubset` (corpus-metadata extension) | `methodology`; `meta.coverage` | `corpus-meta.unit.test.ts` |
+| `provenance` — once per envelope: source attribution and the corpus caveats, nothing else (`data_version` / `last_updated` are internal debugging/logging metadata per the ratified D1 V2 decision — they do not enter `structuredContent`; D6's telemetry wiring is their home) | `eefProvenanceSubset` | `meta.source`, `meta.licence`, `meta.caveats` | `corpus-meta.unit.test.ts` |
 
 Output rules:
 
@@ -191,9 +194,10 @@ subset names; it does not relocate them into the substrate.
   `lesson-planning`, `explore-curriculum`).
 - **D1-tied purpose**: the teacher/user-invoked starter for the evidence-grounded
   adaptation workflow — the cover-lesson scenario's entry point.
-- **Arguments**: one optional `lessonContext` free-text argument (subject,
-  year, topic, what the teacher needs). Free-form language is legitimate HERE —
-  the prompt instructs the agent to convert it into Oak retrieval inputs and
+- **Arguments**: `topic` (required) and `yearGroup` (required) — the same
+  argument shape as the sibling `lesson-planning` prompt, which this workflow
+  extends with evidence grounding. Free-form values are legitimate HERE — the
+  prompt instructs the agent to convert them into Oak retrieval inputs and
   finite EEF tool inputs before any deterministic call.
 - **Behaviour**: instantiates the default calling-agent workflow below,
   instructing the agent to preserve caveats/attribution and present options,
@@ -212,8 +216,8 @@ Default calling-agent workflow (plan D3, restated as contract):
    key findings, tags, applicability facts, and graph relations. Call
    `get-eef-evidence` / `evidence-for-move` with those finite keys.
 4. Call `inspect-strand` only when more detail, caveats, or evidence-shape
-   explanation is needed; fetch `eef://interpretation` (or call
-   `corpus-metadata` in resource-less hosts) when applying the evidence.
+   explanation is needed; fetch `eef://interpretation` when applying the
+   evidence.
 5. Produce teacher-facing output with Oak material, EEF options and trade-offs,
    uncertainty/caveats, and the short EEF rationale.
 
@@ -249,7 +253,7 @@ values. The SDK normalises both (`normalizeObjectSchema` accepts raw shapes and
 object schemas — SDK `mcp.js` `validateToolInput`), so the universal-tools
 entry type extension chooses the carrier shape at S0 settlement; both reach the
 SDK intact. The same carrier question applies to `outputSchema` and is equally
-settled at S0. The three dispatch functions live entirely within the tool's
+settled at S0. The dispatch functions live entirely within the tool's
 input schema (`function` is a schema field, not a registry concept): the
 registry carries one entry, one input schema, one output schema for this tool,
 exactly like every other aggregated tool. One named D6 hazard: `impactMonths`
@@ -264,9 +268,8 @@ D4 ratifies the graph-native EEF view and binds: `eefStrandIdSubset`,
 `eefObservedPhaseSubset`, `eefObservedKeyStageSubset`,
 `eefObservedPrioritySubset`, `eefHeadlineMetricSubset`,
 `eefEvidenceEnvelopeSubset` (member payload, edge set, frontier refs),
-`eefGuidanceReportNodeSubset`, `eefProvenanceSubset` (incl. the
-corpus-metadata extension: methodology + coverage),
-`eefToolInputSchemaSource`, and `eefToolOutputSchemaSource` —
+`eefGuidanceReportNodeSubset`, `eefProvenanceSubset` (source attribution +
+corpus caveats), `eefToolInputSchemaSource`, and `eefToolOutputSchemaSource` —
 together with the node id/kind policy, edge types (`related_strand`,
 `has_guidance_report`), and the provenance-envelope policy. D3 is complete when
 these names are ratified as the handed-off set; D6 implements the two Zod

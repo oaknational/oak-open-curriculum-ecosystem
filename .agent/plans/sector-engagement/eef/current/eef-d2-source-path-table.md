@@ -117,6 +117,7 @@ asserted) — declared values no strand carries:
 | Raw source path | D2 projection | Cardinality | Proof test |
 | --- | --- | --- | --- |
 | `meta` | `corpusMeta` | corpus-level | `corpus-meta.unit.test.ts` |
+| `meta.schema_version` | `corpusMeta` field access | corpus-level | `corpus-meta.unit.test.ts` |
 | `meta.source` | `corpusMeta` field access | corpus-level | `corpus-meta.unit.test.ts` |
 | `meta.licence` | `corpusMeta` field access | corpus-level | `corpus-meta.unit.test.ts` |
 | `meta.data_version` | `corpusMeta` field access | corpus-level | `corpus-meta.unit.test.ts` |

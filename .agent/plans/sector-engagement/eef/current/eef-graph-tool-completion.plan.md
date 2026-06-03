@@ -868,8 +868,10 @@ structuredContent-only, not dual-content output.
 
 **Do:**
 
-- Build the practical-small surface: evidence for a pedagogical move, strand
-  inspection, and corpus metadata. A graph-forward collection is a follow-on plan.
+- Build the practical-small surface: evidence for a pedagogical move and strand
+  inspection on the tool; corpus metadata as read context on the interpretation
+  resource (the primitive targeting below assigns it there). A graph-forward
+  collection is a follow-on plan.
   Keep two surfaces distinct: the agent-facing MCP surface and the underlying
   graph tools it composes. The MCP surface composes graph tools as it needs.
 - The EEF tool's inputs are the finite keys of the fixed EEF data: an
