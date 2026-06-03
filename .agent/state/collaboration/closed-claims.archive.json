@@ -7195,6 +7195,50 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "ec6a2253-a3aa-43f2-87d7-670fd2d7fd98",
+      "agent_id": {
+        "agent_name": "Lacustrine Swimming Beacon",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "687a54",
+        "id": "19ebd316-ef92-510b-ae21-ae0e7db80ff7"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-03T15:25:39Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit one subjective experience capture.",
+      "intent_to_commit": "d1d53284-05fe-490f-b327-e92e4afbd4bd",
+      "archived_at": "2026-06-03",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-03T15:25:40Z",
+        "closed_by": {
+          "agent_name": "Lacustrine Swimming Beacon",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "687a54",
+          "id": "19ebd316-ef92-510b-ae21-ae0e7db80ff7"
+        },
+        "summary": "closed in same collaboration-state commit (experience capture)",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "ec6a2253-a3aa-43f2-87d7-670fd2d7fd98",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

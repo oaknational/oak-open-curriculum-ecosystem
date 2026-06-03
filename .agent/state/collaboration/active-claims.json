@@ -270,6 +270,28 @@
       "expires_at": "2026-06-03T15:28:17.425Z",
       "phase": "abandoned",
       "notes": "closed in same collaboration-state commit (lifecycle exception)"
+    },
+    {
+      "intent_id": "d1d53284-05fe-490f-b327-e92e4afbd4bd",
+      "claim_id": "ec6a2253-a3aa-43f2-87d7-670fd2d7fd98",
+      "agent_id": {
+        "agent_name": "Lacustrine Swimming Beacon",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "687a54",
+        "id": "19ebd316-ef92-510b-ae21-ae0e7db80ff7"
+      },
+      "files": [
+        ".agent/experience/2026-06-03-lacustrine-wall-that-was-a-groove.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/closed-claims.archive.json"
+      ],
+      "commit_subject": "docs(experience): record the wall-that-was-a-groove capture",
+      "queued_at": "2026-06-03T15:25:40.193Z",
+      "updated_at": "2026-06-03T15:25:40.462Z",
+      "expires_at": "2026-06-03T15:40:40.193Z",
+      "phase": "abandoned",
+      "notes": "closed in same collaboration-state commit (lifecycle exception)"
     }
   ],
   "claims": []
