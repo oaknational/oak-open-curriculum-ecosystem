@@ -60,13 +60,13 @@ they graduate, duplicate, become stale-withdrawn, or receive owner direction.
   the stratified narrative it exists to remove. Durable shape: one derived
   current-state section; session handoff details live in thread records, not new
   plan strata.
-  `[captured: 2026-06-02 | source: napkin rotation from graph-estate plan flattening | target: plan-hygiene doctrine or oak-plan template amendment | trigger: owner direction or second plan-consolidation instance | size: M | status: owner-gated]`
+  `[captured: 2026-06-02 | source: napkin rotation from graph-estate plan flattening | target: plan-hygiene doctrine or oak-plan template amendment | trigger: owner direction or second plan-consolidation instance | size: M | status: graduated 2026-06-03 -> .agent/memory/active/patterns/collapse-authoritative-frames-when-settled.md]`
 - **Decontamination distinguishes history from live residue.** Dated amendment
   summaries and changelogs can retain retired terms as history; live current-tense
   claims must be superseded or removed. The fix is not a flat sweep but a
   classification pass that names whether a token is history-retained or
   live-residue.
-  `[captured: 2026-06-02 | source: napkin rotation from ADR-173 Inc.3 handling | target: amend:verify-dont-trust OR decontamination pattern | trigger: owner direction or second decontamination pass with history/current classification | size: S | status: owner-gated]`
+  `[captured: 2026-06-02 | source: napkin rotation from ADR-173 Inc.3 handling | target: amend:verify-dont-trust OR decontamination pattern | trigger: owner direction or second decontamination pass with history/current classification | size: S | status: graduated 2026-06-03 -> .agent/memory/active/patterns/contamination-scan-method.md]`
 - **Shared-window handoffs should scan for convergence, not only collision.** A
   parallel agent may have produced the dependency or answer your lane needed. At
   handoff, actively look for live peer outputs that answer open questions and wire
@@ -81,7 +81,7 @@ they graduate, duplicate, become stale-withdrawn, or receive owner direction.
   true only when the proving surface is current and visible; cheap checks belong
   at assertion time, including whether a cited label, status, section, or row is
   still live rather than merely present in a contaminated or in-flight artefact.
-  `[captured: 2026-06-02 | source: distilled.md June 2 assertion-time checks | target: amend:verify-dont-trust OR contamination-scan-method | trigger: owner direction or second assertion-time liveness failure | size: S | status: owner-gated]`
+  `[captured: 2026-06-02 | source: distilled.md June 2 assertion-time checks | target: amend:verify-dont-trust OR contamination-scan-method | trigger: owner direction or second assertion-time liveness failure | size: S | status: graduated 2026-06-03 -> .agent/rules/verify-dont-trust.md]`
 - **Projection provenance for data-as-source-of-truth work.** A hand-authored
   mirror inside codegen is still a mirror; durable data shapes should be static
   data projected through a type-strict schema boundary, with `satisfies` tying
@@ -102,7 +102,7 @@ they graduate, duplicate, become stale-withdrawn, or receive owner direction.
   spot-check scoped to the files a claim names cannot find unclaimed consumers or
   siblings; for symbol/import/file-set completeness, enumerate from the code or
   source corpus side before accepting the claim boundary.
-  `[captured: 2026-06-02 | source: distilled.md independent-eyes/claim-selection lesson | target: amend:verify-dont-trust OR pattern:source-side-completeness-enumeration | trigger: owner direction or second claim-scoped completeness miss | size: S | status: owner-gated]`
+  `[captured: 2026-06-02 | source: distilled.md independent-eyes/claim-selection lesson | target: amend:verify-dont-trust OR pattern:source-side-completeness-enumeration | trigger: owner direction or second claim-scoped completeness miss | size: S | status: graduated 2026-06-03 -> .agent/rules/verify-dont-trust.md]`
 - **Cursor identity seed observability needs a machine-level check.** Ashen's
   Cursor session could not claim or broadcast because
   `PRACTICE_AGENT_SESSION_ID_CURSOR` was absent from the shell, so a broad sweep
@@ -114,7 +114,7 @@ they graduate, duplicate, become stale-withdrawn, or receive owner direction.
   relative links that markdownlint, Prettier, and the full gate chain do not
   catch. Structural cure shape: a repo validator over live lanes, excluding
   `archive/`, wired at `warn` first per the new-rule/new-validator convention.
-  `[captured: 2026-06-02 | source: active napkin / Galactic Glowing Prism JC4 plan authoring | target: repo-validator:relative-link-integrity-live-lanes | trigger: owner direction or next link-integrity remediation/validator touch | size: M | status: owner-gated]`
+  `[captured: 2026-06-02 | source: active napkin / Galactic Glowing Prism JC4 plan authoring | target: repo-validator:relative-link-integrity-live-lanes | trigger: owner direction or next link-integrity remediation/validator touch | size: M | status: graduated 2026-06-03 -> .agent/plans/agent-tooling/future/relative-link-integrity-live-lanes-validator.plan.md]`
 
 ## Register Rule
 
@@ -1727,5 +1727,7 @@ feedback (sidebar shape is the lightest); composes with `coordinator-role-thresh
 - **trigger-condition**: a second observed instance of a fabricated design
   rationale or an ecosystem-hedging reviewer finding reaching an artefact, OR the
   next dedicated consolidation pass — whichever first.
-- **status**: trigger-gated (owner may direct earlier; substance is complete in
-  the distilled entry).
+- **status**: graduated 2026-06-03 ->
+  `.agent/rules/verify-data-supports-shape-before-building.md` +
+  `.agent/rules/invoke-mcp-expert.md` (owner-directed first-batch
+  consolidation; `distilled.md` staging entry cleared).

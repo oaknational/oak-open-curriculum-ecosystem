@@ -13,6 +13,8 @@ not trust confirmations".
 
 If a decision changes work ownership, route, completion status, gate state, or
 knowledge disposition, verify it against the surface that would make it true.
+A claim becomes true only when the proving surface is current and visible, not
+merely present in a historical, contaminated, in-flight, or superseded artefact.
 
 Ask for and inspect concrete artefacts such as:
 
@@ -21,7 +23,9 @@ Ask for and inspect concrete artefacts such as:
 - comms event IDs and event bodies;
 - transcript IDs or reviewer outputs when a review is the evidence;
 - staged diff, git status, commit, or branch evidence;
-- command output from the gate that actually covers the requirement.
+- command output from the gate that actually covers the requirement;
+- source-side enumeration output for completeness claims, such as `rg`,
+  import graphs, generated indexes, schema inventories, or source corpus lists.
 
 Generic confirmations like "done", "still true", "looks good", "green",
 "landed", or "processed" are routing hints, not proof.
@@ -46,6 +50,8 @@ not only the new-content area, before declaring the tranche complete.
 - absorbing sub-agent or reviewer findings into a durable artefact.
 - closing a reviewer, revision, or fix tranche that was meant to remove or
   replace a specific defective statement.
+- asserting that all siblings, consumers, imports, labels, sections, statuses,
+  or file-set members have been found.
 
 ## What To Do Instead
 
@@ -59,6 +65,11 @@ says so. It is processed only when the source substance has a visible
 disposition: permanent home, pending route, explicit duplicate skip, or named
 blocker.
 
+For completeness work, start from the source side rather than the claim side.
+A spot check scoped to files named by a claim cannot discover unclaimed
+consumers or siblings. Enumerate from the code, graph, schema, or source corpus
+first, then compare the claim boundary to that discovered set.
+
 ## Anti-Patterns
 
 - Asking "are you done?" when the answer needs a claim, diff, event, or gate.
@@ -70,6 +81,10 @@ blocker.
   evidence for the archived substance.
 - Checking only the intended cure location while the original defect location
   still carries contradictory text.
+- Treating a label as live because the token appears in a changelog,
+  historical note, superseded plan, or contaminated in-flight artefact.
+- Checking only files named by a claim when the assertion is about all
+  consumers, siblings, or members of a source set.
 
 ## Composition
 
@@ -95,3 +110,9 @@ blocker.
 - 2026-05-24 PDR-066 revision: a blocker fix added new cure text while leaving
   the original contradicting statement in place; the durable check is to inspect
   the original defect location before calling the revision complete.
+- 2026-06-02 JC4 thread-progressions repair: claim-scoped spot checks missed a
+  consumer outside the named set; the durable check is source-side enumeration
+  before accepting completeness.
+- 2026-06-02 EEF D4 sibling-frontmatter repair: a stale label was present in
+  history and contaminated artefacts but not live truth; assertion-time checks
+  needed to test whether the cited label was current and visible.

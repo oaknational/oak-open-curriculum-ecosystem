@@ -196,101 +196,32 @@
   ],
   "claims": [
     {
-      "claim_id": "ba040705-74dc-4afd-a191-6c683006a669",
+      "claim_id": "d4361f53-8136-4093-9c28-d8a1f9a15564",
       "agent_id": {
-        "agent_name": "Stratospheric Buffeting Breeze",
-        "platform": "codex",
-        "model": "GPT-5",
-        "session_id_prefix": "019e8c",
-        "id": "465a6e75-9155-56bd-b081-cb805cbb37eb"
+        "agent_name": "Lacustrine Swimming Beacon",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "687a54",
+        "id": "19ebd316-ef92-510b-ae21-ae0e7db80ff7"
       },
-      "thread": "agentic-engineering-enhancements",
+      "thread": "eef",
       "areas": [
         {
           "kind": "files",
           "patterns": [
-            ".agent/memory/operational/pending-graduations.md",
-            ".agent/rules/verify-dont-trust.md",
-            ".agent/rules/invoke-mcp-expert.md",
-            ".agent/memory/active/patterns/contamination-scan-method.md",
-            ".agent/memory/active/patterns/collapse-authoritative-frames-when-settled.md",
-            ".agent/plans/agent-tooling/future/relative-link-integrity-live-lanes-validator.plan.md"
+            ".agent/plans/sector-engagement/eef/current/eef-d3-mcp-contract.md",
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md",
+            ".agent/plans/sector-engagement/eef/current/eef-d2-source-path-table.md",
+            ".agent/memory/operational/threads/eef.next-session.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/active/napkin.md"
           ]
         }
       ],
-      "claimed_at": "2026-06-03T07:41:17Z",
+      "claimed_at": "2026-06-03T08:02:08Z",
       "freshness_seconds": 14400,
       "sidebar_open": false,
-      "intent": "Graduate accepted first-batch pending-graduations entries into existing doctrine and a bounded validator lane"
-    },
-    {
-      "claim_id": "d9b390d0-8f3d-4dd0-86bf-65c3461466df",
-      "agent_id": {
-        "agent_name": "Stratospheric Buffeting Breeze",
-        "platform": "codex",
-        "model": "GPT-5",
-        "session_id_prefix": "019e8c",
-        "id": "465a6e75-9155-56bd-b081-cb805cbb37eb"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            ".agent/rules/verify-data-supports-shape-before-building.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-06-03T07:41:17Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "Amend design-time verification rule for design-rationale cite-or-strike"
-    },
-    {
-      "claim_id": "4df79943-f9e2-47f0-bc8f-d95ebd5c6bb3",
-      "agent_id": {
-        "agent_name": "Stratospheric Buffeting Breeze",
-        "platform": "codex",
-        "model": "GPT-5",
-        "session_id_prefix": "019e8c",
-        "id": "465a6e75-9155-56bd-b081-cb805cbb37eb"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            ".agent/memory/active/distilled.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-06-03T07:41:17Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "Clear graduated design-rationale entry from distilled after permanent homes land"
-    },
-    {
-      "claim_id": "8636c2b4-0ce3-4c41-aa3d-49a00e92afe0",
-      "agent_id": {
-        "agent_name": "Stratospheric Buffeting Breeze",
-        "platform": "codex",
-        "model": "GPT-5",
-        "session_id_prefix": "019e8c",
-        "id": "465a6e75-9155-56bd-b081-cb805cbb37eb"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            ".agent/plans/agent-tooling/future/README.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-06-03T07:41:17Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "Index relative-link validator future lane"
+      "intent": "EEF D3 review-then-ratify session: independent review of eef-d3-mcp-contract.md + whole-plan review + owner discussion/ratification; closeout edits to plan, thread record, continuity"
     }
   ]
 }

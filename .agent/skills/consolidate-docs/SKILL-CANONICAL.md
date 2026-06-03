@@ -55,6 +55,16 @@ extraction, napkin rotation, fitness management, and practice exchange.
 
 ## Mode Contract
 
+### Conservation Invariant
+
+The value of every mode is conserving and correctly homing insight. Fitness
+results, line counts, and buffer sizes are diagnostic signals, not goals. Do not
+chase lower numbers, trim understanding, or suppress capture to make a report
+look better. Process the knowledge, preserve the learning at full weight, move
+it to the right durable home, and let any fitness improvement happen only as the
+side effect of real curation. Completion evidence is item-level disposition and
+truthful closeout, not a softer fitness report.
+
 Start every invocation by declaring one mode. The mode fixes the default scope,
 completion criteria, and closeout evidence for the pass.
 
@@ -271,12 +281,19 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
      not yet graduated), prompt artefacts.
    - **Plugin-managed capture buffers**: `.remember/now.md`,
      `.remember/today-*.md`, `.remember/recent.md`, and sibling
-     buffers authored by the remember plugin. These are a
-     session-and-daily capture surface whose lifecycle (rotation,
-     archival, deletion) is managed by the plugin — do not rotate
-     or delete them manually. Read them alongside the napkin and
-     extract any cross-session insight into `distilled.md` or a
-     permanent home per the standard graduation rules in step 7.
+     buffers authored by the remember plugin. These are
+     **repo-owned knowledge buffers** with **plugin-owned file
+     lifecycle**. Do not rotate, archive, or delete them manually,
+     but do inventory their learning content during consolidation and
+     record a disposition for every processed item. Read them
+     alongside the napkin and extract cross-session insight into
+     `distilled.md` or a permanent home per the standard graduation
+     rules in step 7. Material not extracted in a bounded
+     `session-completion` pass remains live in `.remember/`; material
+     selected during `dedicated-knowledge-curation` needs an
+     item-level disposition (`graduated`, `duplicate`,
+     `owner-gated`, `stale-withdrawn`, or honest `carried-forward`
+     only for interrupted mid-pass handoff).
    - **Session comms-events**: `.agent/state/collaboration/comms/`
      (and the regenerated `shared-comms-log.md`) carry coordination-context
      substance — owner-direction-captured-inline, inter-agent surprises,
@@ -294,22 +311,28 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
      rather than what to do next.
    - **Platform-specific per-user memory**: session logs and
      curated memory outside the repo, one location per platform
-     per user. Named instances:
+     per user. Every consolidation run checks at least Claude, Codex,
+     Cursor, and Gemini. If a surface is absent or inaccessible on the
+     current machine, record that fact in the disposition evidence instead
+     of silently skipping it. Named instances:
      - Claude Code: `~/.claude/projects/<project>/memory/`
        (curated auto-memory; `MEMORY.md` + per-entry files)
-     - Cursor: `~/.cursor/chats/` (per-session transcripts),
-       `~/.cursor/prompt_history.json` (accumulated prompts)
      - Codex: `~/.codex/memories/` (curated memory files),
        `~/.codex/history.jsonl` (rolling session history),
        `~/.codex/archived_sessions/` (older session archives)
+     - Cursor: `~/.cursor/chats/` (per-session transcripts),
+       `~/.cursor/prompt_history.json` (accumulated prompts)
+     - Gemini CLI: `~/.gemini/` memory, history, or session surfaces
+       when present; if Gemini exposes no separate memory surface on the
+       current machine, record `not present` rather than inventing a path.
 
      These are platform-specific napkin analogues. Agents
-     running on each platform should scan their own platform's
-     surface; at consolidation, insights with cross-platform
-     value flow into the canonical napkin or `distilled.md`, or
-     directly to permanent homes if stable. Do not assume one
-     platform's memory is readable to another platform's agent
-     at session open — cross-platform ingestion is a
+     running on any platform scan the minimum four-platform set above
+     when accessible; at consolidation, insights with cross-platform value
+     flow into the canonical napkin or `distilled.md`, or directly to
+     permanent homes if stable. Do not assume every platform's memory is
+     readable on every machine — unavailable surfaces are explicit
+     dispositions, not silent skips. Cross-platform ingestion is a
      consolidation-time activity, not a session-open activity.
    - **Platform-specific entry points**: `CLAUDE.md`, `AGENTS.md`,
      `GEMINI.md`, and analogous host adapters. Session-handoff
@@ -434,7 +457,13 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
 
    - `.agent/memory/active/distilled.md` — refined cross-session entries from prior napkin rotations.
    - `.agent/memory/active/napkin.md` — recent surprises and candidate tags.
-   - `.remember/now.md`, `.remember/today-*.md`, `.remember/recent.md` — plugin-managed capture buffers. Read-only for graduation purposes; extract qualifying insight into `distilled.md` or the appropriate permanent home, then leave the buffers to the plugin's own lifecycle.
+   - `.remember/now.md`, `.remember/today-*.md`, `.remember/recent.md` —
+     plugin-managed capture buffers. They are read-only for file lifecycle
+     purposes, not optional for knowledge disposition: extract qualifying
+     insight into `distilled.md` or the appropriate permanent home, prove
+     duplicates against the destination, or record why the item remains
+     owner-gated/stale/carried-forward. Leave the physical buffers to the
+     plugin's own lifecycle.
    - **[`.agent/memory/operational/pending-graduations.md`](../../memory/operational/pending-graduations.md) (the pending-graduations register)** — the structured list of captured candidates with per-item `captured-date`, `source-surface`, `graduation-target`, `trigger-condition`, and `status`. Items with `status: due` or `status: overdue` are the primary graduation candidates for this pass. Items with `status: pending` are reviewed to see whether their trigger condition has fired since last consolidation. Items with `status: owner-gated` whose remaining trigger is owner-direction are **not** parked indefinitely: a dedicated consolidation session with the owner present is itself the venue where that owner-direction trigger fires, so walk owner-gated items with the owner during the pass rather than deferring them as if awaiting an external event. The register was split out from `repo-continuity.md § Deep consolidation status` on 2026-04-30; older references to that location route here.
    - **[`.agent/memory/operational/open-questions.md`](../../memory/operational/open-questions.md) (the open-questions register)** — the structured list of non-urgent unresolved decision-shapes with `Q-NNN` identity, context, deferral reason, suggested resolution path, status, and links. Open entries are not graduation candidates by default; they are consolidation-time questions to answer, surface to owner, withdraw, or leave open with deferral-honesty.
 
@@ -737,6 +766,12 @@ mode. The closeout must report:
 - durable homes changed;
 - unresolved live items and blockers;
 - explicit verdict: `complete`, `partial slice landed`, or `pending`.
+
+Repeat the conservation invariant in the closeout: the pass curated knowledge,
+and any softer fitness report is evidence to explain, not the thing delivered.
+If the numbers improved, name the item-level dispositions that caused it. If
+they did not improve, do not weaken the verdict unless insight was unprocessed
+or unhomed.
 
 For `session-completion`, `partial slice landed` is acceptable when fresh
 learning was captured and obvious substance was routed while larger curation

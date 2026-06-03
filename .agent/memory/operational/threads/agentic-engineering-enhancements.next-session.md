@@ -1,5 +1,127 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Closeout (2026-06-03 — Stratospheric Buffeting Breeze / codex / GPT-5 / `019e8c`, Antigravity audit separated from skills taxonomy)
+
+**Handoff prepared for final closeout commit; no standalone `pnpm check`.** The owner
+clarified that the Antigravity integration work and the skills-classification
+work are separate concerns. This session verified the owner-provided
+Antigravity CLI mechanisms report against local repo state and current public
+Antigravity docs, then separated it from the taxonomy question.
+
+Working conclusions:
+
+- Antigravity integration is a platform-Practice lane: verify host support and
+  local wiring for entrypoints, skills, rules, commands, subagents, hooks, MCP,
+  identity, and platform memory before updating the surface matrix or wiring
+  adapters.
+- The skills-classification work is a vocabulary/governance lane: separate
+  repo-working skills from developer-facing Oak service capabilities and
+  educator-facing curriculum capabilities.
+- The Antigravity report is directionally useful but not mechanically
+  authoritative. Local verification found 20 repo skills, 86 portable rules,
+  19 Gemini command files, no local `hooks.json`, and no `.gemini/agents/`
+  wiring.
+- Keep unqualified "skills" for repo-working skills until a taxonomy artefact is
+  ratified; use qualified names for the developer-service and
+  educator-curriculum categories.
+
+**Next safe step:** run two separate focused sessions rather than one combined
+platform-and-taxonomy pass. Use the opener statements below as the session
+starts. The Antigravity session should verify before editing. The skills
+classification session should not let platform packaging mechanics decide the
+conceptual model.
+
+### Opening statement — Antigravity integration into the Practice
+
+> Target: `agent-tooling/antigravity-practice-integration` — verify and update
+> the Practice's Antigravity platform surface model without conflating it with
+> skills taxonomy work.
+>
+> I am picking up the owner-provided Antigravity CLI mechanisms audit as a
+> platform-integration brief. First I will verify the report's claims against
+> live repo state, local Antigravity configuration/state, and current official
+> Antigravity docs. Then I will critically assess which matrix, artefact
+> inventory, identity, hook, subagent, MCP, or adapter changes are warranted.
+> The report is evidence, not authority: it already appears to be directionally
+> useful but contains at least one category/count error, so I will not apply it
+> mechanically.
+>
+> Scope boundary: this session is about Antigravity as a host for the Practice:
+> entrypoints, skills loading, rules routing, commands, subagents, hooks, MCP,
+> identity, native memory separation, and local wiring. It is not the session
+> that defines the repo/developer/educator skills taxonomy.
+
+### Opening statement — skills classification
+
+> Target: `agent-tooling/skills-classification` — clarify the repo's vocabulary
+> for three different audiences without letting platform `SKILL.md` mechanics
+> drive the conceptual model.
+>
+> I am picking up the owner's taxonomy question separately from Antigravity
+> integration. The working split is: repo-working skills (the current meaning of
+> unqualified "skills" in this repo), developer-facing Oak service capabilities
+> for agents helping internal or external developers use Oak APIs/MCP/search/data
+> services, and educator-facing curriculum capabilities for agents helping
+> teachers plan lessons or discover what Oak services can offer pedagogically.
+> I will test that split against existing docs and plans, choose terminology
+> that prevents practice-governance leakage into external/teacher-facing
+> contexts, and identify the durable home for the taxonomy.
+>
+> Scope boundary: this session is about audience, governance, naming, and
+> knowledge homes. Platform packaging support in Claude, Codex, Cursor,
+> Antigravity, or any other host is an implementation detail unless it exposes a
+> genuine taxonomy constraint.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Stratospheric Buffeting Breeze` | `codex` | `GPT-5` | `019e8c` | `antigravity-audit+skills-taxonomy-handoff` | 2026-06-03 | 2026-06-03 |
+
+## Session Closeout (2026-06-03 — Stratospheric Buffeting Breeze / codex / GPT-5 / `019e8c`, first-batch graduation + docs-only handoff)
+
+**Partial slice landed in working tree; final closeout commit requested after a
+later owner instruction.** The owner accepted the first batch from the
+pending-graduations risk review, initially asked for docs-only session handoff
+plus docs consolidation with no commit / no `pnpm check`, then later requested
+final `consolidate-docs`, napkin capture, and commit. This closeout is
+`session-completion`: the first batch is graduated; remaining owner-gated and
+trigger-gated register items remain live.
+
+Graduated first batch:
+
+- plan de-stratification -> `active/patterns/collapse-authoritative-frames-when-settled.md`;
+- history-vs-live-residue decontamination -> `active/patterns/contamination-scan-method.md`;
+- assertion-time label liveness -> `rules/verify-dont-trust.md`;
+- source-side completeness enumeration -> `rules/verify-dont-trust.md`;
+- relative-link integrity -> `agent-tooling/future/relative-link-integrity-live-lanes-validator.plan.md`
+  and the future README index;
+- design-rationale cite-or-strike + MCP target-host pinning ->
+  `rules/verify-data-supports-shape-before-building.md` and
+  `rules/invoke-mcp-expert.md`.
+
+Closeout state:
+
+- `pending-graduations.md` shows those six items as `graduated 2026-06-03`.
+- `distilled.md` is ready-empty; the EEF D3 design-rationale staging entry was
+  cleared after durable homes landed.
+- `napkin.md` records the metacognition lesson: accepted graduations need a
+  behaviour-changing home, not just cleaner register prose.
+- Entry points (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`) match their canonical
+  pointer contracts.
+- `.remember/today-2026-06-03.md`, `.remember/now.md`, and `.remember/recent.md`
+  had no new unhomed cross-session substance for this closeout.
+- No standalone `pnpm check` was run; commit hooks remain authoritative for the
+  final commit.
+
+**Next safe step:** if the owner asks for a commit, start from live
+`git status`, preserve unrelated user/peer artefacts, and use the normal
+claim/queue/staged-verification flow. If the owner reopens curation, process
+the remaining canonical `pending-graduations.md` items only when owner-directed
+or when their recorded triggers fire.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Stratospheric Buffeting Breeze` | `codex` | `GPT-5` | `019e8c` | `first-batch-graduation+docs-only-handoff` | 2026-06-03 | 2026-06-03 |
+
 ## Session Closeout (2026-06-03 — Lofty Sweeping Falcon / codex / GPT-5 / `019e8a`, handoff + consolidation)
 
 **Session-completion closeout recorded; commit window next.** The owner stopped

@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "d540e8f2-13e8-47a6-8dc9-eef7d8284250",
+  "created_at": "2026-06-03T10:20:00Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Stratospheric Buffeting Breeze",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e8c",
+    "id": "465a6e75-9155-56bd-b081-cb805cbb37eb"
+  },
+  "title": "Narrow closeout overlap on continuity surfaces",
+  "body": "Owner asked Codex to capture the Antigravity-vs-skills-taxonomy separation, run session handoff, and produce two separate opener statements. This will touch napkin/repo-continuity/agentic-engineering thread only for agent-tooling closeout. I will avoid EEF plan files and keep the handoff compact.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

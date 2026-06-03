@@ -16,27 +16,24 @@ fitness_rationale: >-
   no stable permanent home, preserve it first and revise the envelope by
   substance rather than trimming the lesson.
 ---
-## 2026-06-03 — design-rationale cite-or-strike (EEF D3 audit, Seaworthy)
-
-When an authored design element needs a rationale the governing plan does not
-supply, the rationale gets fabricated from generic ecosystem knowledge instead
-of the element being questioned — and reviewers then amplify the fabricated
-premise the artefact hands them (seeded consensus). Worked instance: a third
-EEF tool function justified by invented "resource-less hosts" while the plan's
-primitive targeting had already assigned that capability to the resource, and
-Oak's explicit targets (Claude.ai + ChatGPT) refuted the premise. The cure is
-the corpus cite-or-tag discipline extended to design decisions: **every surface
-element cites the plan text that assigns it to that primitive, or it is
-struck**; reviewer briefs pin the real deployment targets and pre-reject
-ecosystem-hedging registers. Companion face: a reviewer finding that needs a
-bridge (optional field + handler enforcement) is a finding about the shape —
-seams-law applies to absorbing review conditions too. Source: Seaworthy
-Swimming Sextant D3 audit; routing: pending-graduations (rule candidate +
-`invoke-mcp-expert` clause).
 
 ## Ready-Empty State (2026-06-02 baseline)
 
 All active entries present at the 2026-06-02 Lofty Sweeping Falcon continuation
 now have item-level dispositions in the 2026-06-02 Lofty curation ledger.
+The 2026-06-03 EEF D3 design-rationale entry graduated to
+`verify-data-supports-shape-before-building.md` and `invoke-mcp-expert.md`.
 Future high-signal lessons may be added here when they need the distilled
 staging surface; fitness remains a routing signal, not a reason to avoid capture.
+
+## 2026-06-03 — curation and buffer disposition lessons
+
+- **Accepted does not mean one landing shape.** For pending graduations, ask
+  what future action changes because of the edit. Some accepted items amend
+  existing doctrine, some become future lanes because tooling does not exist
+  yet, and adjacent owner-gated items may correctly stay unmoved. If the only
+  outcome is a cleaner register, the graduation has not happened.
+- **Plugin-owned lifecycle is not knowledge-owned lifecycle.** `.remember` and
+  similar surfaces can own their own file rotation/deletion while the learning
+  remains repo-owned. Anything read by a repo process needs a disposition and a
+  new home when it matters; otherwise it remains live in the source buffer.

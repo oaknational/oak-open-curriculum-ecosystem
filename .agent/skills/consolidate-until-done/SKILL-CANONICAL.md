@@ -24,6 +24,17 @@ strict, persistent version of `dedicated-knowledge-curation`: keep working
 until the proof exists, or report the exact remaining owner decisions without
 calling the goal complete.
 
+## Conservation Invariant
+
+The value of this workflow is conserving and correctly homing insight until the
+knowledge substrate is genuinely cared for. Fitness results, line counts, and
+buffer sizes are diagnostic signals, not goals. Do not chase lower numbers, trim
+understanding, or hide buffers to make a report look better. Process the
+knowledge item by item, preserve the learning at full weight, move it to the
+right durable home, and let any fitness improvement happen only as the side
+effect of real curation. "No file worse than soft" is a health condition to
+verify at rest, not the work itself.
+
 ## Required Grounding
 
 Before substantive work:
@@ -34,8 +45,9 @@ Before substantive work:
    [`consolidate-docs`](../consolidate-docs/SKILL-CANONICAL.md).
 3. Declare mode `dedicated-knowledge-curation`.
 4. State this bridge explicitly in your own words:
-   fitness output is routing evidence, while completion requires real
-   item-level buffer disposition plus no file worse than soft.
+   fitness output is routing evidence, while the value is conserving insight
+   and completion requires real item-level buffer disposition plus no file
+   worse than soft at rest.
 5. Check active claims, comms, and git state before edits. Open narrow claims
    for touched surfaces.
 
@@ -51,10 +63,16 @@ current session:
    included in the buffer inventory. A file does not stop being a buffer
    because it is called a shard, split, window, archive candidate, backlog, or
    carry-forward surface.
-4. Any remaining non-empty buffer item is explicitly `owner-gated`, with the
+4. Additional capture/source buffers named by `consolidate-docs` are accounted
+   for when they are in scope: `.remember/now.md`, `.remember/today-*.md`,
+   `.remember/recent.md`, the minimum platform-memory set (Claude, Codex,
+   Cursor, Gemini), non-repo plans, entry-point drift, and any explicitly named
+   comms-event evidence. Plugin or platform file lifecycle may be external, but
+   the knowledge disposition is not optional.
+5. Any remaining non-empty buffer item is explicitly `owner-gated`, with the
    user decision needed, the live holding location, and the evidence a future
    agent can use to tell whether the gate still applies.
-5. The closeout cites a durable disposition ledger for each processed buffer
+6. The closeout cites a durable disposition ledger for each processed buffer
    item and gives before/after counts.
 
 Anything else is `pending` or `partial slice landed`, not complete.
@@ -86,8 +104,14 @@ Repeat this loop until the completion contract is met:
 1. **Inventory.** Run the current fitness validator and build a buffer
    inventory that includes all live drainable buffers and their split or child
    files. Include pending-graduations directories, active/recent memory
-   buffers, open-questions, relevant practice boxes, and stale collaboration
-   comms when those surfaces are in scope.
+   buffers, `.remember/` plugin-managed capture buffers, open-questions,
+   relevant practice boxes, the minimum platform-memory set named by
+   `consolidate-docs` (Claude, Codex, Cursor, Gemini), non-repo plans,
+   entry-point drift, and collaboration comms only when those surfaces are in
+   scope. For plugin/platform-owned files, inventory the learning items and
+   record knowledge disposition without taking over file rotation, archival, or
+   deletion; if a required platform surface is absent or inaccessible, record
+   that as an explicit inventory disposition.
 2. **Choose the next real item.** Prefer critical, then hard, then soft, then
    ready-empty verification. Within a buffer, work item by item.
 3. **Read before routing.** Understand the source item before editing. Do not

@@ -30,6 +30,14 @@ it produces the surface `consolidate-docs` later distils.
 Lightweight end-of-session continuity update with a conditional
 consolidation gate.
 
+## Conservation Invariant
+
+The value of this workflow is conserving and correctly homing insight. Fitness
+numbers, line counts, and buffer sizes are diagnostic signals, never goals. Do
+not chase lower numbers, trim understanding, or skip capture to keep a surface
+green. Capture the knowledge at full weight, route it to the right home, and
+let any fitness improvement happen only as the side effect of real curation.
+
 **Relationship to `consolidate-docs`**: this workflow and
 [`consolidate-docs`](../consolidate-docs/SKILL-CANONICAL.md) are one
 knowledge-flow pair with different cadences. Handoff runs at ordinary
@@ -231,13 +239,16 @@ there unless the owner or closeout owner gives a further assignment.
 
    **Auxiliary input: plugin-managed capture buffers.** The remember
    plugin maintains `.remember/now.md`, `.remember/today-*.md`, and
-   sibling buffers as a separate ephemeral capture surface. Scan
-   them at session close for entries that would change next-session
-   behaviour; mirror any such entry into `napkin.md` using the
-   structured surprise format. Do not rotate, archive, or delete
-   `.remember/` files — lifecycle is owned by the plugin. This
-   surface is a read-source for extraction, not a surface we
-   maintain.
+   sibling buffers as a separate ephemeral capture surface. Treat these
+   files as **repo-owned knowledge buffers** and **plugin-owned file
+   lifecycle**: the learning is ours to preserve and disposition, while
+   rotation, archival, and deletion of `.remember/` files remains owned by
+   the plugin. Scan them at session close for entries that would change
+   next-session behaviour; mirror any such entry into `napkin.md` using
+   the structured surprise format. If material is not mirrored because it
+   does not affect this thread's next session, leave it in `.remember/`
+   for consolidation rather than treating it as processed. Do not rotate,
+   archive, or delete `.remember/` files during handoff.
 
    **Auxiliary input: session comms-events.** The session's own
    comms-events under `.agent/state/collaboration/comms/`
@@ -254,27 +265,30 @@ there unless the owner or closeout owner gives a further assignment.
    not a buffer surface. This is a read-source for extraction.
    Owner-stated standing 2026-05-05.
 
-   **Auxiliary input: platform-specific per-user memory.** Vendor
-   tools maintain their own per-user memory and session-history
-   surfaces outside the repo, one location per platform per user.
-   Named instances:
+   **Auxiliary input: platform-specific per-user memory.** Vendor tools
+   maintain their own per-user memory and session-history surfaces outside the
+   repo, one location per platform per user. Every session-close run checks at
+   least the four-platform set below. If a surface is absent or inaccessible on
+   the current machine, record that fact in the handoff/consolidation evidence
+   instead of silently skipping it.
 
    - Claude Code: `~/.claude/projects/<project>/memory/` (curated
      auto-memory; `MEMORY.md` + per-entry files)
-   - Cursor: `~/.cursor/chats/` (per-session transcripts),
-     `~/.cursor/prompt_history.json` (accumulated prompts)
    - Codex: `~/.codex/memories/` (curated memory files),
      `~/.codex/history.jsonl` (rolling session history),
      `~/.codex/archived_sessions/` (older session archives)
+   - Cursor: `~/.cursor/chats/` (per-session transcripts),
+     `~/.cursor/prompt_history.json` (accumulated prompts)
+   - Gemini CLI: `~/.gemini/` memory, history, or session surfaces when
+     present; if Gemini exposes no separate memory surface on the current
+     machine, record `not present` rather than inventing a path.
 
-   Read **only the surface that matches your current platform**
-   at session close — cross-platform ingestion (reading another
-   platform's memory) is reserved for `consolidate-docs` step 3.
-   Mirror any entry that would change next-session behaviour into
-   `napkin.md` using the structured surprise format. These are
-   vendor-managed surfaces; do not rotate, archive, or delete
-   them — lifecycle is owned by the platform. This is a read-source
-   for extraction, not a buffer surface this workflow maintains.
+   Mirror any entry that would change next-session behaviour into `napkin.md`
+   using the structured surprise format. These are vendor-managed file
+   surfaces; do not rotate, archive, or delete them — lifecycle is owned by
+   the platform. The learning they contain is still a repo knowledge source:
+   unmirrored material remains live for consolidation rather than being
+   considered processed.
    Symmetry note: this auxiliary input is also enumerated in
    [`start-right-quick`](../start-right-quick/shared/start-right.md)
    §4 (own-platform read at session open) and

@@ -19,6 +19,31 @@ surface.
 
 ## Current State
 
+- **Antigravity integration and skills taxonomy split into two future sessions
+  (2026-06-03, Stratospheric Buffeting Breeze / `019e8c`, codex / GPT-5)** —
+  owner clarified that the Antigravity CLI mechanisms audit and the skills
+  classification question are separate concerns. The Antigravity report was
+  verified enough to treat it as a useful platform-integration brief, not a
+  mechanical patch spec: local truth is 20 repo skills, 86 portable rules,
+  19 Gemini command files, no local `hooks.json`, and no `.gemini/agents/`
+  wiring. The taxonomy conclusion is separate: keep unqualified "skills" for
+  repo-working skills for now, and use qualified names for developer-facing Oak
+  service capabilities and educator-facing curriculum capabilities until a
+  durable taxonomy is ratified. Two paste-ready opener statements now live in
+  the `agentic-engineering-enhancements` thread record. **Next: run either the
+  Antigravity Practice-integration session or the skills-classification session,
+  but do not combine them by default.**
+- **First-batch pending-graduations accepted into durable homes; final
+  consolidation/commit closeout requested after initial docs-only handoff
+  (2026-06-03, Stratospheric Buffeting Breeze / `019e8c`, codex / GPT-5)** —
+  six accepted items now show `graduated 2026-06-03` in
+  `pending-graduations.md`; durable homes are listed in the
+  `agentic-engineering-enhancements` thread record. `distilled.md` carries the
+  curation/buffer-disposition lessons; `napkin.md` carries the Antigravity vs
+  taxonomy and mixed-tree commit-scope lessons. No standalone `pnpm check` was
+  run; commit hooks are the final gate. Live EEF files remain outside this
+  agentic-engineering commit because Lacustrine Swimming Beacon holds the active
+  EEF claim.
 - **Agentic curation session-completion closeout recorded (2026-06-03,
   Lofty Sweeping Falcon / `019e8a`, codex / GPT-5)** — the Lofty continuation
   processed the live due pending-graduations slice, drained `distilled.md` to a
@@ -257,7 +282,7 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Seaworthy Swimming Sextant / eef-d3-contract-authoring-and-review / 2026-06-03 (prior: Galactic Glowing Prism, Opalescent Cascading Planet, Stellar Waning Planet, Silvered Lurking Mask, all 2026-06-02) |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | codex / GPT-5 / Umbral Whispering Silhouette / promotion-and-root-docs-author / 2026-06-01 |
-| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | codex / GPT-5 / Lofty Sweeping Falcon / due-item curation continuation / 2026-06-02 (prior: Shaded Veiling Mirror) |
+| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | codex / GPT-5 / Stratospheric Buffeting Breeze / first-batch pending-graduations graduation + docs-only handoff / 2026-06-03 (prior: Lofty Sweeping Falcon, Shaded Veiling Mirror) |
 
 ## Paused Threads
 
@@ -373,16 +398,16 @@ not the current session-priority lane. Reactivation is owner-directed.
 
 ### Agentic-Engineering Curation
 
-1. Shaded Veiling Mirror's 2026-06-02 curation bundle is ready to commit:
-   active napkin rotation, repo-continuity structural split, contamination-scan
-   pattern graduation, pending-graduations status normalization, and two future
-   strategic lanes.
+1. Current docs bundle is uncommitted by owner direction. If the owner asks for
+   a commit, start from live `git status`, preserve unrelated user/peer files,
+   and use the normal claim/queue/staged verification flow.
 2. No immediate next curation action is required after this closeout unless the
    owner explicitly reopens curation or a recorded trigger fires.
-3. Continue item-level dispositions from active buffers and the canonical
-   `pending-graduations.md` only when the owner route or a trigger asks for
-   ordinary docs consolidation.
-4. Comms-event rotation remains paused until a dedicated comms research plan
+3. Remaining `pending-graduations.md` items stay owner-gated or trigger-gated;
+   do not infer full curation completion from the first-batch graduations.
+4. The relative-link integrity item is accepted as a future validator lane, not
+   implemented tooling; promote the plan only on its recorded trigger.
+5. Comms-event rotation remains paused until a dedicated comms research plan
    exists.
 
 ### Docs Consolidation Repair
@@ -435,18 +460,23 @@ authority.
 
 ## Deep Consolidation Status
 
-**completed this handoff — session-completion mode, owner-directed
-(2026-06-03, Seaworthy Swimming Sextant).** Fresh learning captured and
-routed: one distilled entry (design-rationale cite-or-strike), one
-trigger-gated pending-graduations entry (the same + MCP-brief target
-pinning), one contamination-scan-method pattern extension (probe miss-shape),
-one experience file, napkin entries, and the platform-memory face update. No
-graduation due (register processed 2026-06-02 by Lofty; the new entry is
-trigger-gated); napkin under rotation threshold; entry points clean; claims
-and queue clear; verdict: `partial slice landed` is the honest
-session-completion outcome — the live buffers are the napkin (healthy) and
-the trigger-gated register entries. Prior status (2026-06-02, Lofty Sweeping
-Falcon): **partial slice landed — owner reopened curation on 2026-06-02; Lofty Sweeping
+**completed this handoff — session-completion mode, owner-directed first-batch
+graduation plus final closeout commit (2026-06-03, Stratospheric Buffeting
+Breeze).** The first accepted pending-graduations batch landed in durable homes
+and the register now points at those homes. `distilled.md` is ready-empty after
+clearing the graduated EEF D3 staging entry. The new relative-link integrity
+work is a future lane, not an implemented validator. Final `consolidate-docs`
+found no further immediately graduated ADR/PDR/rule candidate beyond the two
+separate opener lanes already recorded. No standalone `pnpm check` was run;
+fitness was SOFT-only and commit hooks remain authoritative. Verdict:
+`partial slice landed` — the first batch is graduated, but remaining register
+items are still owner-gated or trigger-gated. Prior status
+(2026-06-03, Seaworthy Swimming Sextant): fresh learning captured and routed:
+one distilled entry (design-rationale cite-or-strike), one trigger-gated
+pending-graduations entry (the same + MCP-brief target pinning), one
+contamination-scan-method pattern extension (probe miss-shape), one experience
+file, napkin entries, and the platform-memory face update. Prior Lofty status
+(2026-06-02): **partial slice landed — owner reopened curation on 2026-06-02; Lofty Sweeping
 Falcon graduated the two due pending-graduation entries and routed two fresh
 Galactic napkin-tail candidates.** Ledger:
 `curator-passes/2026-06-02-lofty-sweeping-falcon-curation.md`. Routes:

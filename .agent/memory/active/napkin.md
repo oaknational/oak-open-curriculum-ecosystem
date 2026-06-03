@@ -8,6 +8,60 @@ merge_class: append-only-narrative
 fitness_content_role: drainable-buffer
 ---
 
+## 2026-06-03 — Antigravity audit vs skills taxonomy separation (Stratospheric Buffeting Breeze)
+
+### Surprise
+
+- **Expected**: The owner-provided Antigravity CLI mechanisms report and the
+  "what do we mean by skills?" classification question could be assessed in one
+  coherent platform-agnostic pass because both talk about skills, rules, hooks,
+  and host mechanisms.
+- **Actual**: The shared word "skills" was a false bridge. Antigravity parity is
+  a platform-integration lane: verify host support, local wiring, identity,
+  hooks, subagents, MCP, and matrix truth. Skills classification is a separate
+  vocabulary/governance lane: define which audience the knowledge serves and
+  what practices should travel with it. The report also contained a concrete
+  category/count slip (rules counted as repo skills), which made separation more
+  important, not less.
+- **Why expectation failed**: I let the platform mechanism axis (`SKILL.md`
+  support) and the audience/governance axis (repo contributors vs service
+  developers vs educators/teachers) occupy the same conceptual slot.
+- **Behaviour change**: Treat host capability audits and knowledge taxonomy
+  design as separate lanes unless a later ratified artefact deliberately joins
+  them. Keep unqualified "skills" reserved for repo-working skills in current
+  repo context; use qualified names for developer-facing Oak service
+  capabilities and educator-facing curriculum capabilities until the taxonomy is
+  ratified.
+- **Source plane**: `executive`
+
+- **Commit scope follows ownership, not the owner's final word "commit".** This
+  closeout had a fresh overlapping EEF claim on `napkin.md` and
+  `repo-continuity.md`, plus active EEF plan/code files in the working tree.
+  The correct closeout bundle is the agentic-engineering / Practice slice and
+  its collaboration-state lifecycle, not every dirty path. Behaviour change:
+  when a final commit request arrives in a mixed multi-agent tree, freeze the
+  bundle by ownership and live claim evidence before staging, then leave peer
+  work visibly uncommitted.
+
+## 2026-06-03 — final closeout observations (Seaworthy Swimming Sextant)
+
+- **Shortest observed capture→enforce cycle: under one day.** The
+  design-rationale fabrication was caught by the owner in the morning, audited
+  and corrected by midday, distilled at handoff, and graduated into two rules
+  (`verify-data-supports-shape-before-building` strike clause;
+  `invoke-mcp-expert` target-pinning) by a parallel curation pass the same
+  evening — read back as enforcement-tier doctrine before the authoring
+  session had even ended. Loop-health datum: the pipeline can run end-to-end
+  inside one session window when the owner is in the loop; the registers and
+  trigger-gates are the slow path, not the only path.
+- **Between-turns surface drift is normal under live parallel curation —
+  verify before referencing, even mid-conversation.** My own distilled entry
+  changed meaning (captured → graduated) between two of my turns; the opener
+  I had already written to `.remember/remember.md` went stale on its
+  Housekeeping section within the hour. Cheap cure that worked: git status +
+  grep the named artefacts + claims-clear check before every buffer write and
+  before quoting any state in owner-facing output.
+
 ## 2026-06-03 — closeout commit tooling (Lofty Sweeping Falcon)
 
 - **`commit-queue` help still omits required identity `--id` on write commands.**

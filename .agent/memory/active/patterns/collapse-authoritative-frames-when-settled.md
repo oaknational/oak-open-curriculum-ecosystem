@@ -38,6 +38,13 @@ phase ↔ content mapping, the section headers below match the table.
 If per-item inline notes are also claiming to describe phase
 membership, they either agree with the table or they are deleted.
 
+For estate-consolidation plans, the same rule applies to narrative strata. A
+plan whose purpose is to de-stratify an estate must not accumulate dated
+"Inbound from ..." sections as new authoritative layers. Derive one
+current-state section from the inbound sources, and route session details to
+thread records, ledgers, or evidence notes instead of making the plan itself a
+new stratified archive.
+
 Three tests for settledness:
 
 1. **Is the decision still subject to owner input?** If yes, leave
@@ -108,6 +115,12 @@ the §Phase Structure table's wave order, removed the per-lane
 execution-phase notes, and reduced the document to a single
 authoritative frame. Plan is now single-frame physically.
 
+**2026-06-02 graph-estate curation plan flattening**. A consolidation plan had
+started to collect dated "Inbound from ..." sections while trying to dissolve a
+stratified plan estate. Owner correction collapsed that into one derived
+current-state frame, with session details routed to thread records instead of
+kept as new plan strata.
+
 **Underlying principle, cross-layer**. The "collapse authoritative
 frames" discipline is an instance of the same no-smuggled-drops
 principle that governs `findings-route-to-lane-or-rejection` and
@@ -129,6 +142,8 @@ the documentation layer — drift accumulates in the gap between them.
   "transitional dual-frame" cleanup to run later — run it now.
 - When a document reviewer reports confusion about which section is
   canonical: the confusion is the signal.
+- When a consolidation plan starts accumulating dated inbound sections while
+  its purpose is to dissolve strata in the source estate.
 
 ## Related Patterns
 

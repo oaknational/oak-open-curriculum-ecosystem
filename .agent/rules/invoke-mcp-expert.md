@@ -4,6 +4,10 @@ Operationalises [ADR-129 (Domain Specialist Capability Pattern)](../../docs/arch
 
 When changes touch the MCP protocol, MCP Apps Extension, or MCP server implementation, invoke the `mcp-expert` specialist in addition to the standard `code-expert` gateway.
 
+For planning or contract-review briefs, give the specialist the actual target
+hosts named by the current plan and ask them to evaluate that target set, not a
+generic MCP ecosystem.
+
 ## Trigger Conditions
 
 Invoke `mcp-expert` when the change involves:
@@ -18,6 +22,8 @@ Invoke `mcp-expert` when the change involves:
 - OpenAI App to MCP Apps migration work
 - MCP auth patterns (OAuth 2.1, PRM, AS metadata at the protocol level)
 - MCP SDK version upgrades or breaking changes
+- Reviewer briefs that make host-support, resource-surfacing, tool-resource
+  allocation, prompt-resource allocation, or fallback-contract claims
 
 ## Non-Goals
 
@@ -28,6 +34,18 @@ Do not invoke `mcp-expert` for:
 - Security exploitability assessment (use `security-expert`)
 - Oak product decisions that do not involve MCP protocol capabilities
 - TypeScript type safety unrelated to MCP schemas (use `type-expert`)
+
+## Target-Host Briefing Discipline
+
+For Oak MCP work, pin the target host set from the live plan. When the
+controlling plan names Claude.ai and ChatGPT, say that explicitly in the brief
+and reject hypothetical, legacy, or resource-less-host findings unless the
+reviewer cites current evidence that a named target has that limitation.
+
+Findings that require a tool fallback for a resource, an optional argument for a
+closed prompt, or a handler bridge for an invented host capability are
+design-shape findings. Verify the governing plan and host evidence before
+absorbing them.
 
 ## Overlap Boundaries
 
