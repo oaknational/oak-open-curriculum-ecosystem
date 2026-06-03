@@ -3,7 +3,7 @@ name: "Agent Skills Discovery - Oak workflow publication"
 collection: discovery
 lane: future
 status: strategic-tracking
-last_updated: 2026-06-01
+last_updated: 2026-06-03
 parent_plan: agentic-mechanisms-discovery.plan.md
 ---
 
@@ -31,6 +31,12 @@ Supporting references:
 - Agent Skills specification: <https://agentskills.io/specification>
 - Research report:
   [agent-skills-discovery-research.report.md](agent-skills-discovery-research.report.md)
+- Distribution-channels report (packaging, install paths, announcement
+  redundancy):
+  [skills-distribution-channels-suggestions.report.md](skills-distribution-channels-suggestions.report.md)
+- First-party skills library:
+  [`oaknational/oak-skills`](https://github.com/oaknational/oak-skills)
+  (private at the time of writing, 2026-06-03)
 - Parent plan:
   [agentic-mechanisms-discovery.plan.md](agentic-mechanisms-discovery.plan.md)
 
@@ -109,6 +115,18 @@ Each skill must name the Oak MCP/resource/search/graph surfaces it expects an
 agent to use. If a needed surface does not exist, the skill is not ready; route
 the gap to the owning product or data plan instead of hiding it in prose.
 
+**Reconcile against the real library at promotion.** Since this candidate
+table was drafted, a first-party library landed in
+[`oaknational/oak-skills`](https://github.com/oaknational/oak-skills) with six
+skills (`oak-brand`, `oak-tone-of-voice`, `oak-curriculum-principles` plus an
+MCP-grounded variant, `oak-lesson-builder`, `oak-curriculum-mapper`),
+spec-validation CI, per-skill trigger/quality evals, and Claude plugin
+packaging. Several candidates above overlap that catalogue
+(`oak-lesson-adaptation` ≈ lesson-builder; `oak-progression-explorer` ≈
+curriculum-mapper). Promotion must start from the real library — catalogue,
+tooling, and eval harness — rather than this hypothetical table, and route
+the publication/trust decisions through that repo's owners.
+
 ## Required Skill Constraints
 
 Every Oak-published skill must:
@@ -124,6 +142,23 @@ Every Oak-published skill must:
 - include compatibility notes for required hosts/tools when needed;
 - declare no bundled script unless a later executable plan ratifies script need;
 - be digest-verifiable from the discovery index.
+
+## Installation Messaging Redundancy
+
+Hosts require users to choose to install or enable a skill; no host surfaces
+Oak's skills to users automatically, and no single channel reaches every user.
+Every published installable capability must therefore name its redundant
+announcement surfaces — candidates include the skills discovery index, the MCP
+server `instructions` text, MCP prompt/resource descriptions, the
+agent-readiness/docs hub, and app onboarding copy. Redundancy of sources is
+the requirement, not an optimisation
+(rationale: [distribution-channels report](skills-distribution-channels-suggestions.report.md)).
+
+Mutual announcement between capability tiers is the cheapest implementation:
+the `oaknational/oak-skills` library's self-contained skills can announce the
+MCP-grounded tier, and the MCP server `instructions` can reciprocally announce
+the installable skills — each surface advertising the other already satisfies
+the two-independent-surfaces criterion.
 
 ## Discovery Index Shape To Track
 
@@ -212,6 +247,8 @@ Success after implementation would mean:
   surfaces.
 - Teacher-facing workflows preserve provenance, caveats, and teacher judgement.
 - Partner docs explain when to use skills, MCP, SDK, search, graph, or A2A.
+- A user on any supported host can learn that an Oak skill exists, and how to
+  install it, from at least two independent announcement surfaces.
 
 ## Risks And Unknowns
 

@@ -1,20 +1,19 @@
 ---
-plan_kind: strategic
-lifecycle: future
-collection: user-experience
-title: Skills classification taxonomy
-created: 2026-06-03
+name: "Skills Classification Taxonomy - audience-led capability vocabulary"
+collection: discovery
+lane: future
 status: strategic
-execution_note: |
-  This is a strategic taxonomy brief. It defines the audience and governance
-  split to preserve during later implementation, packaging, or plugin work.
-  It is not an executable adapter-generation or platform-integration plan.
-  Homed with educator end users by owner direction: the taxonomy spans
-  repo-working, developer, and educator audiences, but its primary external
-  beneficiary is teacher-facing curriculum assistance.
+last_updated: 2026-06-03
 ---
 
 # Skills Classification Taxonomy
+
+> **Strategic brief (`future/`).** This defines the audience and governance
+> split to preserve during later implementation, packaging, or plugin work; it
+> is not an executable adapter-generation or platform-integration plan. Homed
+> in the discovery collection by owner direction, beside its companion
+> distribution-channels report: the taxonomy governs the audience-led naming
+> of the capabilities that the discovery collection publishes and distributes.
 
 ## Problem And Intent
 
@@ -38,12 +37,21 @@ The taxonomy exists to prevent Practice-governance vocabulary leaking into
 external developer or teacher-facing contexts, while still allowing any of the
 three categories to be packaged as platform skills later.
 
+The audience axis is not the whole taxonomy. A second, orthogonal
+**distribution axis** (ADR-189) records deployment locus: **repo-internal**
+(under `.agent/` with generated platform adapters), **distributable**
+(published to external systems — skills libraries, discovery indexes, MCP
+apps, plugin marketplaces), or **both** — the same capability, or versions of
+it, may be dual-homed. Audience names the category, distribution names the
+locus, packaging stays mechanism.
+
 ## Mechanism And Means
 
 The durable vocabulary home is
-[`agent-capability-vocabulary.md`](../../../../memory/executive/agent-capability-vocabulary.md).
+[`agent-capability-vocabulary.md`](../../../memory/executive/agent-capability-vocabulary.md).
 It is executive memory because agents look it up when deciding where a new
-agent-readable knowledge surface belongs.
+agent-readable knowledge surface belongs. The taxonomy itself is ratified by
+[ADR-189][adr-189] (2026-06-03).
 
 A companion report,
 [`skills-distribution-channels-suggestions.report.md`](skills-distribution-channels-suggestions.report.md),
@@ -58,23 +66,74 @@ Future execution should:
 
 1. Audit existing uses of "skill", "capability", "developer", "teacher",
    "educator", "MCP", "search", and "curriculum" across live docs and plans.
+   The audit's output artefact is an inventory table — artefact × current
+   path × audience × distribution locus (repo-internal / distributable /
+   both) × governance owner × packaging × status — so ambiguous cases
+   surface early (report §14 Phase 2 shape, extended with the ADR-189
+   distribution axis).
 2. Apply the executive vocabulary to ambiguous docs by replacing mechanism-led
-   wording with audience-led wording.
+   wording with audience-led wording, applying the noun discipline from the
+   companion report §11: unqualified "skill" only for platform packages and
+   repo-working Practice workflows; "capability" for durable audience-facing
+   categories; "plugin"/"bundle" for installable compositions; teacher-facing
+   copy never uses skill/`SKILL.md`/adapter/Practice/repo-workflow vocabulary.
 3. Cross-reference related doctrine rather than duplicating it:
-   [PDR-051][pdr-051] for platform skills, [PDR-010][pdr-010] for specialist
-   capabilities, and [ADR-125][adr-125] for canonical/adapter mechanics.
+   [ADR-189][adr-189] for the ratified taxonomy, [PDR-051][pdr-051] for
+   platform skills, [PDR-010][pdr-010] for specialist capabilities, and
+   [ADR-125][adr-125] for canonical/adapter mechanics.
 4. Preserve the boundary between this taxonomy and Antigravity or other host
    integration work. Host support can constrain packaging, not the category
    names.
 
-[pdr-051]: ../../../../practice-core/decision-records/PDR-051-vendor-agnostic-skills-standardisation.md
-[pdr-010]: ../../../../practice-core/decision-records/PDR-010-domain-specialist-capability-pattern.md
-[adr-125]: ../../../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md
+The companion report's larger structural suggestions — canonical capability
+manifests, developer and curriculum-assistance capability packs, and
+capability-pack adapter generation — are candidate future lanes that require
+owner direction before any brief is authored; the likely owning collections
+are `discovery/` (publication and adoption) and `sdk-and-mcp-enhancements/`
+(runtime surfaces). They are not scope of this plan.
+
+## Live Application Target: The Oak Skills Library
+
+A first-party Oak skills library exists at
+[`oaknational/oak-skills`](https://github.com/oaknational/oak-skills)
+(private at the time of writing, 2026-06-03; initial library under review in
+its PR #1): six user-facing Agent Skills — `oak-brand`, `oak-tone-of-voice`,
+`oak-curriculum-principles` (self-contained), an MCP-grounded principles
+variant, `oak-lesson-builder`, and `oak-curriculum-mapper` — packaged as a
+Claude plugin bundle with spec validation and per-skill evals.
+
+The owner's assessment (2026-06-03): the two skill sets are complementary and
+serve slightly different purposes — this repo owns repo-working skills and
+Oak developer capabilities; the library owns user-facing brand and curriculum
+capabilities — and eventual integration of the user-facing set into this repo
+is likely. Integration is a named owner decision, not committed scope here.
+
+For this plan the library is:
+
+- **Promotion-trigger evidence**: a concrete agent-facing package that needs
+  the taxonomy applied (its packaging vocabulary is "skills" throughout,
+  correct under ADR-189 packaging usage; its user-facing copy is where the
+  audience-led layer applies).
+- **A named ambiguous case for the audit inventory**: `oak-brand` and
+  `oak-tone-of-voice` are literal branding capabilities — visual identity and
+  writing voice — that span audiences and fit none of the three categories
+  cleanly; the audit must classify them rather than inherit "skills" by
+  default. Do not conflate them with Oak's defined standards of pedagogical
+  and factual rigour (evidence use, provenance, caveats, teacher judgement,
+  factual grounding): rigour standards are constraints that travel inside
+  curriculum-assistance and developer capabilities, owned by
+  curriculum/evidence governance — they are not a branding concern and not a
+  category candidate.
+
+[adr-189]: ../../../../docs/architecture/architectural-decisions/189-audience-led-agent-capability-taxonomy.md
+[pdr-051]: ../../../practice-core/decision-records/PDR-051-vendor-agnostic-skills-standardisation.md
+[pdr-010]: ../../../practice-core/decision-records/PDR-010-domain-specialist-capability-pattern.md
+[adr-125]: ../../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md
 
 ## Dependencies And Non-Goals
 
-**Blocking prerequisite:** owner acceptance of the three-category vocabulary in
-the executive contract.
+**Blocking prerequisite (met 2026-06-03):** owner acceptance of the
+three-category vocabulary, ratified as [ADR-189][adr-189].
 
 **Beneficial prerequisite:** a later platform-integration pass may discover
 host-specific naming constraints. The minimum shippable taxonomy still stands
@@ -100,7 +159,13 @@ without that pass: platform constraints are recorded as packaging notes only.
   repo, platform, or Practice implementation mechanics.
 - Platform `SKILL.md` support is treated as packaging unless it reveals a real
   audience or governance constraint.
-- The future plan index points at this plan as the owner of the taxonomy lane.
+- Generated or published platform descriptions (skill descriptions, MCP
+  prompt/resource descriptions, app copy) are reviewed for audience fit before
+  release.
+- The noun discipline (skill / capability / plugin usage rules) holds across
+  live docs after the audit pass.
+- The [`discovery/future/README.md`](README.md) table row for this plan names
+  it as the owner of the taxonomy lane.
 
 ## Promotion Trigger
 

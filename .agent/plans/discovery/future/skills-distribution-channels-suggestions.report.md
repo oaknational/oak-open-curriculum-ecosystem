@@ -1,3 +1,11 @@
+---
+title: "Skills, MCP, Plugins, and Oak Capability Packaging"
+collection: discovery
+lane: future
+status: strategy-report
+last_updated: 2026-06-03
+---
+
 # Skills, MCP, Plugins, and Oak Capability Packaging
 
 **Date:** 2026-06-03  
