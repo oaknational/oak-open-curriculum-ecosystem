@@ -45,6 +45,18 @@ todos:
 
 # Schema-Change Minimal Adaptation
 
+## Owner ratification (2026-06-03)
+
+The owner ratified all three decision points in one direction ("yes to
+all"): (1) the two-tier Cardinal Rule ADR proceeds; (2)
+`bulk-schema-driven-code-generation.md` is approved for promotion to an
+executable lane (the physical move happens when its executing session
+opens); (3) the stale strict-vs-strip open question in
+`schema-resilience-and-response-architecture.plan.md` is settled within
+this arc. Sequencing: the next session returns to EEF D4 (the active
+product lane); this plan executes after or parallel to D4 on owner
+scheduling — it is queued, not dormant.
+
 ## Why this plan exists (owner-directed 2026-06-03)
 
 The owner's standing goal: when the upstream schema changes — the OpenAPI spec

@@ -1,7 +1,7 @@
 # Bulk Schema-Driven Type Generation
 
 **Boundary**: schema-authority-and-codegen
-**Status**: 📋 BACKLOG — **promotion candidate (owner-flagged 2026-06-03)**
+**Status**: 📋 BACKLOG — **promotion APPROVED (owner-ratified 2026-06-03)**; the physical move to an executable lane happens when its executing session opens
 **Priority**: Medium-High — improves type safety, eliminates hardcoded domain constants
 **Created**: 2026-02-17
 **Promotion evidence (2026-06-03)**: the sequences-restructure realignment

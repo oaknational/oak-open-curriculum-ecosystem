@@ -5,7 +5,7 @@ specialist_reviewer: "code-expert, type-expert, mcp-expert, architecture-expert-
 isProject: false
 todos:
   - id: strict-or-strip
-    content: "OPEN QUESTION: Decide .strip() vs .passthrough() for upstream API response schemas in codegen pipeline. See Open Questions section."
+    content: "OPEN QUESTION: Decide .strip() vs .passthrough() for upstream API response schemas in codegen pipeline. See Open Questions section. Owner-ratified 2026-06-03: this question is settled within the schema-change-minimal-adaptation arc (see ../current/schema-change-minimal-adaptation.plan.md §Owner ratification) — both shape how the SDK absorbs upstream change."
     status: pending
   - id: implement-schema-policy
     content: "Implement the chosen schema strictness policy in generate-zod-schemas.ts + JSON Schema additionalProperties. Search schemas stay strict."
