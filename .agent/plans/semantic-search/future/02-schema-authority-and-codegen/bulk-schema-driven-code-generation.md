@@ -1,9 +1,20 @@
 # Bulk Schema-Driven Type Generation
 
 **Boundary**: schema-authority-and-codegen
-**Status**: 📋 BACKLOG
+**Status**: 📋 BACKLOG — **promotion candidate (owner-flagged 2026-06-03)**
 **Priority**: Medium-High — improves type safety, eliminates hardcoded domain constants
 **Created**: 2026-02-17
+**Promotion evidence (2026-06-03)**: the sequences-restructure realignment
+confirmed `bulkgen.ts` still generates from hardcoded templates with no
+schema input — the bulk surface would not auto-realign at all on a
+bulk-schema change. This plan is the bulk half of the owner's
+minimal-adaptation goal; the API half is
+[schema-change-minimal-adaptation.plan.md](../../../sdk-and-mcp-enhancements/current/schema-change-minimal-adaptation.plan.md).
+The schema-endpoint prerequisite (§below) is now a live companion ask in
+[bulk_data_population.feature_request.md](../../current/bulk_data_population.feature_request.md),
+handed upstream 2026-06-04. `schema.json` ships inside every bulk ZIP today
+(verified by fresh download 2026-06-03), so the committed-schema-cache
+fallback is immediately workable.
 **Related**:
 
 - [Config Architecture Standardisation](../../../architecture-and-infrastructure/config-architecture-standardisation-plan.md)

@@ -70,6 +70,15 @@ declared bulk fields removes the last live-API dependency from ingestion entirel
    says `examSubjects` where `/subjects/{subject}` now says `childSubject`; one name per
    concept across both surfaces would remove a mapping step for every consumer.
 
+## Companion ask: a stable schema endpoint
+
+Please also consider exposing the bulk `schema.json` at a dedicated, stable endpoint (e.g.
+`GET /api/bulk/schema`) rather than only inside the download ZIP. Our code generation treats the
+OpenAPI document as the single source of truth for API types; with a fetchable bulk schema we can
+apply exactly the same discipline to bulk types — regenerating against schema changes without
+downloading the full data set. This makes your future bulk-schema evolution cheap for consumers
+to absorb.
+
 ## Acceptance criteria
 
 - A fresh bulk download shows non-zero population for each requested field, with KS4 units in

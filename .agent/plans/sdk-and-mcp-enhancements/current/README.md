@@ -4,7 +4,7 @@ Executable plans queued or ready to resume.
 
 | Plan | Scope | Status / Blocked By |
 |---|---|---|
-| [upstream-sequences-api-realignment.plan.md](upstream-sequences-api-realignment.plan.md) | Realign the repo to the upstream sequences API change (`/subjects/{subject}/sequences` removed; `/sequences/{slug}` added; tool renamed `get-sequences`); search-cli's legacy API-supplementation pipeline is red after codegen refresh | **TOP PRIORITY — owner-directed dedicated specialist session (2026-06-03)**; decide delete-vs-adapt FIRST (the bulk-data feature request marks the broken path legacy); `pnpm check` red on any codegen-refreshed tree until cured |
+| [schema-change-minimal-adaptation.plan.md](schema-change-minimal-adaptation.plan.md) | Drive hand-adaptation cost of upstream schema changes (OpenAPI AND bulk schema) to the irreducible minimum: two-tier Cardinal Rule ADR, generated tool-mapping doc, inventory-iterating fixtures, codegen path classification, schema-derived sandbox fixtures, API-boundary lint, typed sequence-units rethreading | Owner-directed 2026-06-03 from the sequences-realignment evidence; bulk half gated on promoting [bulk-schema-driven-code-generation](../../semantic-search/future/02-schema-authority-and-codegen/bulk-schema-driven-code-generation.md) |
 | [canonical-url-enforcement.plan.md](canonical-url-enforcement.plan.md) | Promote URL validation from warn-only to configurable gate; validate URLs in ingestion pipeline before ES storage | Queued; dependency on naming collision remediation satisfied ([archived](../archive/completed/url-naming-collision-remediation.plan.md), ADR-145) |
 | [output-schemas-for-mcp-tools.plan.md](output-schemas-for-mcp-tools.plan.md) | Declare a required, object-rooted `outputSchema` on all 35 tools (24 generated via codegen, 11 aggregated hand-authored) and thread it through the universal-tools seam to `registerTool` | Decision-complete (re-grounded 2026-06-02, [audit](../../../reports/output-schema-mcp-plan-audit-2026-06-02.md)); one open S0/EEF-D6 sequencing decision gates `s0-cycle-1` only |
 | [download-asset-user-only-url.plan.md](download-asset-user-only-url.plan.md) | Move `download-asset` signed URLs out of model-visible MCP result fields and into MCP App `_meta` for user-only downloads | Queued; should run before output-schema work finalises the `download-asset` contract |
@@ -12,6 +12,12 @@ Executable plans queued or ready to resume.
 
 Completed, awaiting archive:
 
+- [upstream-sequences-api-realignment.plan.md](upstream-sequences-api-realignment.plan.md) —
+  COMPLETE (2026-06-03, commit `c924d4b3`). All three todos executed: full-diff
+  evidence, owner-approved verdict (bulk-only NOT yet possible), API surface
+  shrunk 2 → 1 endpoints, all gates green incl. online `pnpm check`. Its
+  follow-up items are owned by
+  [schema-change-minimal-adaptation.plan.md](schema-change-minimal-adaptation.plan.md).
 - [clerk-mcp-tools-and-ext-apps-bumps.plan.md](clerk-mcp-tools-and-ext-apps-bumps.plan.md) —
   COMPLETE. Clerk/MCP dependency targets are landed; 2026-06-02 refresh leaves
   `pnpm -r outdated` clean.
