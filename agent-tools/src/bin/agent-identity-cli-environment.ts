@@ -16,10 +16,16 @@ export function agentIdentityCliEnvironmentFromProcessEnv(
       env.PRACTICE_AGENT_SESSION_ID_CURSOR,
     ),
     ...optionalEnvironmentValue(
+      'PRACTICE_AGENT_SESSION_ID_GEMINI',
+      env.PRACTICE_AGENT_SESSION_ID_GEMINI,
+    ),
+    ...optionalEnvironmentValue(
       'PRACTICE_AGENT_SESSION_ID_CODEX',
       env.PRACTICE_AGENT_SESSION_ID_CODEX,
     ),
     ...optionalEnvironmentValue('CODEX_THREAD_ID', env.CODEX_THREAD_ID),
+    ...optionalEnvironmentValue('conversationId', env.conversationId),
+    ...optionalEnvironmentValue('ANTIGRAVITY_SOURCE_METADATA', env.ANTIGRAVITY_SOURCE_METADATA),
     ...optionalEnvironmentValue('OAK_AGENT_IDENTITY_OVERRIDE', env.OAK_AGENT_IDENTITY_OVERRIDE),
   };
 }

@@ -1,14 +1,13 @@
-/**
- * Shared collaboration-state types used by the repo-owned state helpers.
- */
-
 import { z } from 'zod';
 
 export interface CollaborationStateEnvironment {
   readonly PRACTICE_AGENT_SESSION_ID_CLAUDE?: string;
   readonly PRACTICE_AGENT_SESSION_ID_CURSOR?: string;
+  readonly PRACTICE_AGENT_SESSION_ID_GEMINI?: string;
   readonly PRACTICE_AGENT_SESSION_ID_CODEX?: string;
   readonly CODEX_THREAD_ID?: string;
+  readonly conversationId?: string;
+  readonly ANTIGRAVITY_SOURCE_METADATA?: string;
   readonly OAK_AGENT_IDENTITY_OVERRIDE?: string;
 }
 

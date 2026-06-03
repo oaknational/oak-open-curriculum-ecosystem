@@ -18,7 +18,19 @@ describe('deriveCollaborationIdentity', () => {
         env: {},
       }),
     ).toThrow(
-      'missing collaboration identity seed; set one of PRACTICE_AGENT_SESSION_ID_CLAUDE, PRACTICE_AGENT_SESSION_ID_CURSOR, PRACTICE_AGENT_SESSION_ID_CODEX, or CODEX_THREAD_ID. For codex, the primary Practice seed is PRACTICE_AGENT_SESSION_ID_CODEX or CODEX_THREAD_ID.',
+      'missing collaboration identity seed; set one of PRACTICE_AGENT_SESSION_ID_CLAUDE, PRACTICE_AGENT_SESSION_ID_CURSOR, PRACTICE_AGENT_SESSION_ID_GEMINI, PRACTICE_AGENT_SESSION_ID_CODEX, CODEX_THREAD_ID, or Antigravity conversationId. For codex, the primary Practice seed is PRACTICE_AGENT_SESSION_ID_CODEX or CODEX_THREAD_ID.',
+    );
+  });
+
+  it('names the Antigravity/Gemini seed surfaces for Antigravity preflight', () => {
+    expect(() =>
+      deriveCollaborationIdentity({
+        platform: 'antigravity',
+        model: 'Claude Opus 4.6 (Thinking)',
+        env: {},
+      }),
+    ).toThrow(
+      'missing collaboration identity seed; set one of PRACTICE_AGENT_SESSION_ID_CLAUDE, PRACTICE_AGENT_SESSION_ID_CURSOR, PRACTICE_AGENT_SESSION_ID_GEMINI, PRACTICE_AGENT_SESSION_ID_CODEX, CODEX_THREAD_ID, or Antigravity conversationId. For antigravity, the primary Practice seed is PRACTICE_AGENT_SESSION_ID_GEMINI or Antigravity conversationId.',
     );
   });
 
@@ -51,6 +63,36 @@ describe('deriveCollaborationIdentity', () => {
     });
 
     expect(a.agentId.id).not.toBe(b.agentId.id);
+  });
+
+  it('derives Antigravity identity from the Practice Gemini seed', () => {
+    const result = deriveCollaborationIdentity({
+      platform: 'antigravity',
+      model: 'Claude Opus 4.6 (Thinking)',
+      env: { PRACTICE_AGENT_SESSION_ID_GEMINI: 'antigravity-conversation-seed' },
+    });
+
+    expect(result.seed_source).toBe('PRACTICE_AGENT_SESSION_ID_GEMINI');
+    expect(result.agentId.platform).toBe('antigravity');
+    expect(result.agentId.session_id_prefix).toBe('antigr');
+    expect(result.agentId.id).toMatch(uuidV5Pattern);
+  });
+
+  it('derives Antigravity identity from source metadata conversationId fallback', () => {
+    const result = deriveCollaborationIdentity({
+      platform: 'antigravity',
+      model: 'Claude Opus 4.6 (Thinking)',
+      env: {
+        ANTIGRAVITY_SOURCE_METADATA: JSON.stringify({
+          conversationId: '0f8b2a6e-9fd0-4bd9-a319-33dc4815fa62',
+          trajectoryId: 'volatile-run-id',
+        }),
+      },
+    });
+
+    expect(result.seed_source).toBe('ANTIGRAVITY_SOURCE_METADATA.conversationId');
+    expect(result.agentId.session_id_prefix).toBe('0f8b2a');
+    expect(result.agentId.id).toMatch(uuidV5Pattern);
   });
 
   it('returns CollaborationAgentIdWrite (compile-time enforced via assignment)', () => {

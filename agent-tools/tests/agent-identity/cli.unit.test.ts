@@ -60,6 +60,22 @@ describe('agent identity CLI planning', () => {
     });
   });
 
+  it('falls back to PRACTICE_AGENT_SESSION_ID_GEMINI before Codex seeds', () => {
+    const result = runAgentIdentityCli({
+      argv: ['--format', 'json'],
+      env: {
+        PRACTICE_AGENT_SESSION_ID_GEMINI: 'gemini-practice-seed',
+        PRACTICE_AGENT_SESSION_ID_CODEX: 'codex-practice-seed',
+        CODEX_THREAD_ID: 'codex-thread-seed',
+      },
+    });
+
+    expect(result.exitCode).toBe(0);
+    expect(JSON.parse(result.stdout)).toMatchObject({
+      seedDigest: createHash('sha256').update('gemini-practice-seed').digest('hex'),
+    });
+  });
+
   it('falls back to PRACTICE_AGENT_SESSION_ID_CODEX before the harness CODEX_THREAD_ID', () => {
     const result = runAgentIdentityCli({
       argv: ['--format', 'json'],
@@ -86,6 +102,55 @@ describe('agent identity CLI planning', () => {
     expect(result.exitCode).toBe(0);
     expect(JSON.parse(result.stdout)).toMatchObject({
       seedDigest: createHash('sha256').update('codex-thread-seed').digest('hex'),
+    });
+  });
+
+  it('falls back to Antigravity conversationId when no Practice var is set', () => {
+    const result = runAgentIdentityCli({
+      argv: ['--format', 'json'],
+      env: {
+        conversationId: 'antigravity-conversation-seed',
+      },
+    });
+
+    expect(result.exitCode).toBe(0);
+    expect(JSON.parse(result.stdout)).toMatchObject({
+      seedDigest: createHash('sha256').update('antigravity-conversation-seed').digest('hex'),
+    });
+  });
+
+  it('falls back to Antigravity source metadata conversationId', () => {
+    const result = runAgentIdentityCli({
+      argv: ['--format', 'json'],
+      env: {
+        ANTIGRAVITY_SOURCE_METADATA: JSON.stringify({
+          conversationId: 'antigravity-source-metadata-seed',
+          toolCall: 'ignored',
+        }),
+      },
+    });
+
+    expect(result.exitCode).toBe(0);
+    expect(JSON.parse(result.stdout)).toMatchObject({
+      seedDigest: createHash('sha256').update('antigravity-source-metadata-seed').digest('hex'),
+    });
+  });
+
+  it('does not use Antigravity run-volatile trajectory ids as seeds', () => {
+    const result = runAgentIdentityCli({
+      argv: [],
+      env: {
+        ANTIGRAVITY_SOURCE_METADATA: JSON.stringify({
+          ANTIGRAVITY_TRAJECTORY_ID: 'volatile-run-id',
+        }),
+      },
+    });
+
+    expect(result).toEqual({
+      exitCode: 2,
+      stdout: '',
+      stderr:
+        'Error: missing seed; pass --seed or set PRACTICE_AGENT_SESSION_ID_CLAUDE, PRACTICE_AGENT_SESSION_ID_CURSOR, PRACTICE_AGENT_SESSION_ID_GEMINI, PRACTICE_AGENT_SESSION_ID_CODEX, CODEX_THREAD_ID, or Antigravity conversationId\n',
     });
   });
 
@@ -124,7 +189,7 @@ describe('agent identity CLI planning', () => {
       exitCode: 2,
       stdout: '',
       stderr:
-        'Error: missing seed; pass --seed or set PRACTICE_AGENT_SESSION_ID_CLAUDE, PRACTICE_AGENT_SESSION_ID_CURSOR, PRACTICE_AGENT_SESSION_ID_CODEX, or CODEX_THREAD_ID\n',
+        'Error: missing seed; pass --seed or set PRACTICE_AGENT_SESSION_ID_CLAUDE, PRACTICE_AGENT_SESSION_ID_CURSOR, PRACTICE_AGENT_SESSION_ID_GEMINI, PRACTICE_AGENT_SESSION_ID_CODEX, CODEX_THREAD_ID, or Antigravity conversationId\n',
     });
   });
 
@@ -176,10 +241,12 @@ describe('agent identity CLI planning', () => {
     expect(
       agentIdentityCliEnvironmentFromProcessEnv({
         PRACTICE_AGENT_SESSION_ID_CURSOR: 'cursor-session-seed',
+        PRACTICE_AGENT_SESSION_ID_GEMINI: 'gemini-session-seed',
         OAK_AGENT_IDENTITY_OVERRIDE: 'Cached Session Name',
       }),
     ).toStrictEqual({
       PRACTICE_AGENT_SESSION_ID_CURSOR: 'cursor-session-seed',
+      PRACTICE_AGENT_SESSION_ID_GEMINI: 'gemini-session-seed',
       OAK_AGENT_IDENTITY_OVERRIDE: 'Cached Session Name',
     });
   });

@@ -133,8 +133,14 @@ function resolveCollaborationSeed(env: CollaborationStateEnvironment): SeedCandi
   return firstSeed([
     { source: 'PRACTICE_AGENT_SESSION_ID_CLAUDE', value: env.PRACTICE_AGENT_SESSION_ID_CLAUDE },
     { source: 'PRACTICE_AGENT_SESSION_ID_CURSOR', value: env.PRACTICE_AGENT_SESSION_ID_CURSOR },
+    { source: 'PRACTICE_AGENT_SESSION_ID_GEMINI', value: env.PRACTICE_AGENT_SESSION_ID_GEMINI },
     { source: 'PRACTICE_AGENT_SESSION_ID_CODEX', value: env.PRACTICE_AGENT_SESSION_ID_CODEX },
     { source: 'CODEX_THREAD_ID', value: env.CODEX_THREAD_ID },
+    { source: 'conversationId', value: env.conversationId },
+    {
+      source: 'ANTIGRAVITY_SOURCE_METADATA.conversationId',
+      value: antigravitySourceMetadataConversationId(env.ANTIGRAVITY_SOURCE_METADATA),
+    },
   ]);
 }
 
@@ -148,7 +154,8 @@ function missingCollaborationIdentitySeedMessage(platform: string): string {
   return (
     'missing collaboration identity seed; set one of ' +
     'PRACTICE_AGENT_SESSION_ID_CLAUDE, PRACTICE_AGENT_SESSION_ID_CURSOR, ' +
-    'PRACTICE_AGENT_SESSION_ID_CODEX, or CODEX_THREAD_ID.' +
+    'PRACTICE_AGENT_SESSION_ID_GEMINI, PRACTICE_AGENT_SESSION_ID_CODEX, ' +
+    'CODEX_THREAD_ID, or Antigravity conversationId.' +
     platformHint
   );
 }
@@ -159,11 +166,37 @@ function practiceSessionVarForPlatform(platform: string): string | undefined {
       return 'PRACTICE_AGENT_SESSION_ID_CLAUDE';
     case 'cursor':
       return 'PRACTICE_AGENT_SESSION_ID_CURSOR';
+    case 'gemini':
+    case 'antigravity':
+      return 'PRACTICE_AGENT_SESSION_ID_GEMINI or Antigravity conversationId';
     case 'codex':
       return 'PRACTICE_AGENT_SESSION_ID_CODEX or CODEX_THREAD_ID';
     default:
       return undefined;
   }
+}
+
+function antigravitySourceMetadataConversationId(value: string | undefined): string | undefined {
+  const trimmed = nonEmptyValue(value);
+  if (trimmed === undefined) {
+    return undefined;
+  }
+
+  try {
+    const parsed: unknown = JSON.parse(trimmed);
+    if (
+      typeof parsed === 'object' &&
+      parsed !== null &&
+      'conversationId' in parsed &&
+      typeof parsed.conversationId === 'string'
+    ) {
+      return nonEmptyValue(parsed.conversationId);
+    }
+  } catch {
+    return undefined;
+  }
+
+  return undefined;
 }
 
 function firstSeed(

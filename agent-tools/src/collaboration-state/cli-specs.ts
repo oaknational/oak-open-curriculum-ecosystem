@@ -35,7 +35,6 @@ export interface CommandSpec {
   readonly options: ReadonlySet<string>;
   readonly allowsFiles?: boolean;
 }
-
 type CliHandler = (
   options: Options,
   env: CollaborationStateEnvironment,
@@ -78,7 +77,8 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
       '--tag is repeatable, accepts ADR-183 namespace ' +
       '[failure-mode, behaviour-note, heartbeat]) ' +
       '(identity seed: PRACTICE_AGENT_SESSION_ID_CLAUDE, ' +
-      'PRACTICE_AGENT_SESSION_ID_CURSOR, PRACTICE_AGENT_SESSION_ID_CODEX, CODEX_THREAD_ID, ' +
+      'PRACTICE_AGENT_SESSION_ID_CURSOR, PRACTICE_AGENT_SESSION_ID_GEMINI, ' +
+      'PRACTICE_AGENT_SESSION_ID_CODEX, CODEX_THREAD_ID, Antigravity conversationId, ' +
       'or OAK_AGENT_IDENTITY_OVERRIDE)',
     options: commsSendOptions,
     handler: sendComms,

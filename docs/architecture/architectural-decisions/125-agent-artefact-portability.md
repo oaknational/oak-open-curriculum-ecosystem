@@ -82,14 +82,21 @@ previously-emitted `.cursor/skills/` adapters are retired per the 2026-05-09
 amendment; `.cursor/commands/` is retired in full per the 2026-05-10
 amendment.
 
-#### Gemini CLI (`.gemini/`) — settings only
+#### Gemini / Antigravity CLI (`.gemini/` and `.agents/`)
 
-Gemini CLI reads skills from `.agents/skills/` (documented as an alias
-for `.gemini/skills/`, with precedence). General custom-command adapters
-are retired per the 2026-05-10 amendment. `review-*.toml` files in
-`.gemini/commands/` remain as transitional sub-agent invocation adapters
-for a platform without native sub-agent spawning, not a user workflow
-command surface.
+Gemini / Antigravity CLI reads repo skills from `.agents/skills/`.
+General custom-command adapters are retired per the 2026-05-10 amendment.
+`review-*.toml` files in `.gemini/commands/` remain as transitional
+reviewer invocation adapters that point at canonical templates, not a
+user workflow command surface.
+
+Antigravity CLI now documents native plugin bundles that may contain
+skills, agents, rules, MCP definitions, and hooks. That upstream capability
+does not imply every surface is wired in this repo: `.agents/rules/` is
+documented here as a portable wrapper layer, while Antigravity rule
+activation currently comes through the entrypoint chain; native agents,
+`.agents/hooks.json`, and `.agents/mcp_config.json` remain unwired until a
+fresh verification and adapter design lands.
 
 #### Codex (`.codex/`)
 
@@ -149,24 +156,24 @@ Ingested skills (recorded in `skills-lock.json`) keep their canonical
 name. The prefix is applied only at adapter emission; canonical
 identity is unprefixed.
 
-| Platform    | Invocation       | Source                                             |
-| ----------- | ---------------- | -------------------------------------------------- |
-| Claude Code | `/oak-plan`      | `.claude/skills/oak-plan/SKILL.md`                 |
-| Cursor      | `/oak-plan`      | `.agents/skills/oak-plan/SKILL.md`                 |
-| Codex       | `$oak-plan`      | `.agents/skills/oak-plan/SKILL.md`                 |
-| Gemini CLI  | `activate_skill` | `.agents/skills/oak-plan/SKILL.md` (model-invoked) |
-| Amp         | palette          | `.agents/skills/oak-plan/SKILL.md`                 |
+| Platform                 | Invocation                   | Source                             |
+| ------------------------ | ---------------------------- | ---------------------------------- |
+| Claude Code              | `/oak-plan`                  | `.claude/skills/oak-plan/SKILL.md` |
+| Cursor                   | `/oak-plan`                  | `.agents/skills/oak-plan/SKILL.md` |
+| Codex                    | `$oak-plan`                  | `.agents/skills/oak-plan/SKILL.md` |
+| Gemini / Antigravity CLI | `activate_skill` / `/skills` | `.agents/skills/oak-plan/SKILL.md` |
+| Amp                      | palette                      | `.agents/skills/oak-plan/SKILL.md` |
 
 ### Sub-agent Adapter Formats
 
 Each platform uses its native mechanism for sub-agent-equivalent functionality:
 
-| Platform    | Mechanism                        | Key fields                                                                            |
-| ----------- | -------------------------------- | ------------------------------------------------------------------------------------- |
-| Cursor      | `.cursor/agents/*.md`            | `name`, `description`, `model`, `tools`, `readonly`                                   |
-| Claude Code | `.claude/agents/*.md`            | `name`, `description`, `tools`, `disallowedTools`, `model`, `permissionMode`, `color` |
-| Gemini CLI  | `.gemini/commands/review-*.toml` | Transitional sub-agent invocation adapter until native support exists                 |
-| Codex       | `.codex/agents/*.toml`           | TOML roster and developer instructions loaded from canonical templates                |
+| Platform                 | Mechanism                                                  | Key fields                                                                            |
+| ------------------------ | ---------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| Cursor                   | `.cursor/agents/*.md`                                      | `name`, `description`, `model`, `tools`, `readonly`                                   |
+| Claude Code              | `.claude/agents/*.md`                                      | `name`, `description`, `tools`, `disallowedTools`, `model`, `permissionMode`, `color` |
+| Gemini / Antigravity CLI | `.gemini/commands/review-*.toml`; native `/agents` unwired | Transitional reviewer invocation adapter plus native platform capability              |
+| Codex                    | `.codex/agents/*.toml`                                     | TOML roster and developer instructions loaded from canonical templates                |
 
 Read-only reviewers on Claude Code use `permissionMode: plan` and `disallowedTools: Write, Edit` to enforce read-only behaviour at the platform level, not just via instructions.
 

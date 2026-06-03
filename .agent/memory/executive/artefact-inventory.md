@@ -48,16 +48,21 @@ boundary is ADR-165.
 
 ## Platform Adapters (Layer 2)
 
-| Surface | Cursor | Claude Code | Codex (`.agents/` alias) | Gemini |
-|---------|--------|-------------|-------|--------|
+| Surface | Cursor | Claude Code | Codex (`.agents/` alias) | Gemini / Antigravity CLI |
+|---------|--------|-------------|-------|--------------------------|
 | Skills | (reads `.agents/skills/`) | `.claude/skills/jc-*/SKILL.md` | `.agents/skills/jc-*/SKILL.md` | (reads `.agents/skills/`) |
-| Rules | `.cursor/rules/*.mdc` | `.claude/rules/*.md` | `.agents/rules/*.md` | — |
-| Sub-agents | `.cursor/agents/*.md` | `.claude/agents/*.md` | `.codex/agents/*.toml` | (`review-*.toml` transitional, sub-agent only) |
+| Rules | `.cursor/rules/*.mdc` | `.claude/rules/*.md` | `.agents/rules/*.md` | entry-point chain only |
+| Sub-agents | `.cursor/agents/*.md` | `.claude/agents/*.md` | `.codex/agents/*.toml` | `.gemini/commands/review-*.toml`; native agents unwired |
+| Hooks | — | `.claude/settings.json` `PreToolUse` | — | supported upstream; no `.agents/hooks.json` wired |
+| MCP | user-local | user-local | plugin/user-local | supported upstream; no `.agents/mcp_config.json` wired |
 
 Platform adapters are thin pointers. Canonical content lives under
 `.agent/`; adapters preserve platform activation semantics without copying
 substance. Claude Code keeps tracked system policy in `.claude/settings.json`;
 `.claude/settings.local.json` is gitignored user-local override state.
+Gemini / Antigravity CLI has native plugin surfaces for skills, agents, rules,
+MCP definitions, and hooks, but the repo currently wires only the entrypoint
+chain, portable skills, and transitional review commands.
 
 ## How to Create New Artefacts
 
@@ -101,3 +106,5 @@ command surfaces are retired (see ADR-125 §2026-05-10).
 
 Each adapter reads the canonical template as its first action.
 See existing adapters for platform-specific metadata fields.
+Do not add `.agents/agents/` as a shared sub-agent surface; Antigravity-native
+agent wrappers require a separate platform-specific design and verification.

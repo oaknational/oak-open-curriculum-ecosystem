@@ -6,13 +6,14 @@ platform support, this file is the authoritative local source.
 
 ## Adapter Families
 
-| Surface        | Cursor              | Claude Code                                                      | Gemini CLI          | GitHub Copilot    | Codex             | `.agents/`             |
-| -------------- | ------------------- | ---------------------------------------------------------------- | ------------------- | ----------------- | ----------------- | ---------------------- |
-| **Skills**     | `.cursor/skills/`   | `.claude/skills/`                                                | unsupported         | unsupported       | unsupported       | `.agents/skills/`      |
-| **Commands**   | `.cursor/commands/` | `.claude/commands/`                                              | `.gemini/commands/` | unsupported       | unsupported       | `.agents/skills/jc-*/` |
-| **Rules**      | `.cursor/rules/`    | `.claude/rules/`                                                 | entry-point chain   | entry-point chain | entry-point chain | `.agents/rules/`       |
-| **Sub-agents** | `.cursor/agents/`   | `.claude/agents/`                                                | unsupported         | unsupported       | `.codex/`         | unsupported            |
-| **Hooks**      | unsupported         | `.claude/settings.json` (tracked project `PreToolUse`)           | unsupported         | unsupported       | supported upstream; no project-local hook wired | unsupported            |
+| Surface        | Cursor              | Claude Code                                            | Gemini / Antigravity CLI                          | GitHub Copilot    | Codex                                      | `.agents/`             |
+| -------------- | ------------------- | ------------------------------------------------------ | ------------------------------------------------- | ----------------- | ------------------------------------------ | ---------------------- |
+| **Skills**     | `.cursor/skills/`   | `.claude/skills/`                                      | `.agents/skills/`                                  | unsupported       | unsupported                                | `.agents/skills/`      |
+| **Commands**   | `.cursor/commands/` | `.claude/commands/`                                    | `.gemini/commands/`                                | unsupported       | unsupported                                | `.agents/skills/jc-*/` |
+| **Rules**      | `.cursor/rules/`    | `.claude/rules/`                                       | entry-point chain only                             | entry-point chain | entry-point chain                          | `.agents/rules/`       |
+| **Sub-agents** | `.cursor/agents/`   | `.claude/agents/`                                      | native `/agents` upstream; no repo wrappers wired  | unsupported       | `.codex/`                                  | unsupported            |
+| **Hooks**      | unsupported         | `.claude/settings.json` (tracked project `PreToolUse`) | supported upstream; no project-local hook wired    | unsupported       | supported upstream; no project-local hook wired | unsupported            |
+| **MCP**        | user-local          | user-local / MCP config                                | supported upstream; no `.agents/mcp_config.json` wired | unsupported       | plugin/user-local                          | `.agents/mcp_config.json` target |
 
 ## Hook Support
 
@@ -29,7 +30,10 @@ Status by platform:
 - **Claude Code**: supported for `PreToolUse` only (Bash blocked-pattern
   enforcement via tracked project `.claude/settings.json`)
 - **Cursor**: no native agent hook surface at time of writing
-- **Gemini CLI**: no native agent hook surface at time of writing
+- **Gemini / Antigravity CLI**: native hooks are documented through
+  `hooks.json` under the workspace `.agents/` directory or global config, with
+  `PreToolUse`, `PostToolUse`, `PreInvocation`, `PostInvocation`, and `Stop`
+  events. This repository has no project-local `.agents/hooks.json` wired.
 - **GitHub Copilot**: no native agent hook surface at time of writing
 - **Codex**: upstream Codex hooks are available behind `codex_hooks`, and this
   local Codex install reports the feature enabled. This repository has no
@@ -71,6 +75,12 @@ Failure semantics:
 - `.agents/skills/` and `.agents/rules/` are portable skill/command and
   rule-adapter layers, not evidence for blanket `.agents/` parity with
   every platform-native surface.
+- Gemini / Antigravity CLI loads the repo's 20 portable skills from
+  `.agents/skills/`. The 86 files under `.agents/rules/` are rule wrappers,
+  not skills, and are not treated as a native auto-scan surface here unless a
+  future verification proves that behaviour.
+- Antigravity plugins can bundle skills, agents, rules, MCP definitions, and
+  hooks, but plugin bundle support is not the same as repo-local wiring.
 - Tracked project platform config is part of the agentic system contract;
   local overrides are additive where the platform supports them.
 - Unsupported states are written down explicitly rather than inferred

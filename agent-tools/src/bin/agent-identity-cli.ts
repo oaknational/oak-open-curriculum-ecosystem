@@ -17,7 +17,7 @@ export type { AgentIdentityFormat } from './agent-identity-cli-parser.js';
  * @remarks
  * `PRACTICE_AGENT_SESSION_ID_*` are the Practice-namespaced surface set by
  * platform hooks (Claude `SessionStart` writes `_CLAUDE`; Cursor `sessionStart`
- * writes `_CURSOR`; a future Codex wrapper would write `_CODEX`).
+ * writes `_CURSOR`; Antigravity/Gemini writes `_GEMINI`; Codex writes `_CODEX`).
  * `CODEX_THREAD_ID` is the Codex harness-native variable kept as a fallback
  * for environments without a Practice Codex wrapper.
  */
@@ -26,10 +26,16 @@ export interface AgentIdentityCliEnvironment {
   readonly PRACTICE_AGENT_SESSION_ID_CLAUDE?: string;
   /** Cursor composer session id, written by the Practice Cursor `sessionStart` hook. */
   readonly PRACTICE_AGENT_SESSION_ID_CURSOR?: string;
+  /** Antigravity/Gemini conversation id surfaced through the Practice seed convention. */
+  readonly PRACTICE_AGENT_SESSION_ID_GEMINI?: string;
   /** Codex thread id surfaced via the Practice naming convention. */
   readonly PRACTICE_AGENT_SESSION_ID_CODEX?: string;
   /** Codex harness-native thread id; fallback when no Practice var is set. */
   readonly CODEX_THREAD_ID?: string;
+  /** Antigravity native per-conversation id; fallback when no Practice var is set. */
+  readonly conversationId?: string;
+  /** Antigravity per-tool-call metadata JSON; `conversationId` is stable. */
+  readonly ANTIGRAVITY_SOURCE_METADATA?: string;
   /** Operator-provided display-name override. */
   readonly OAK_AGENT_IDENTITY_OVERRIDE?: string;
 }
@@ -64,8 +70,10 @@ export const HELP_TEXT = `Usage: agent-identity [--seed <seed>] [--format <kebab
   --seed <seed>       Stable seed. If omitted, uses (in order)
                       $PRACTICE_AGENT_SESSION_ID_CLAUDE,
                       $PRACTICE_AGENT_SESSION_ID_CURSOR,
+                      $PRACTICE_AGENT_SESSION_ID_GEMINI,
                       $PRACTICE_AGENT_SESSION_ID_CODEX,
-                      then $CODEX_THREAD_ID (Codex harness-native fallback).
+                      then platform-native stable fallbacks:
+                      $CODEX_THREAD_ID (Codex) and Antigravity conversationId.
   --format <fmt>      Output format. kebab (default) | display | json.
   --help              Print help and exit 0.
 
@@ -116,18 +124,22 @@ function deriveOptions(override: string | undefined): DeriveIdentityOptions {
 }
 
 function resolveSeed(seed: string | undefined, env: AgentIdentityCliEnvironment): SeedResult {
-  const resolvedSeed =
-    nonEmptyEnvironmentValue(seed) ??
-    nonEmptyEnvironmentValue(env.PRACTICE_AGENT_SESSION_ID_CLAUDE) ??
-    nonEmptyEnvironmentValue(env.PRACTICE_AGENT_SESSION_ID_CURSOR) ??
-    nonEmptyEnvironmentValue(env.PRACTICE_AGENT_SESSION_ID_CODEX) ??
-    nonEmptyEnvironmentValue(env.CODEX_THREAD_ID);
+  const resolvedSeed = firstSeed([
+    nonEmptyEnvironmentValue(seed),
+    nonEmptyEnvironmentValue(env.PRACTICE_AGENT_SESSION_ID_CLAUDE),
+    nonEmptyEnvironmentValue(env.PRACTICE_AGENT_SESSION_ID_CURSOR),
+    nonEmptyEnvironmentValue(env.PRACTICE_AGENT_SESSION_ID_GEMINI),
+    nonEmptyEnvironmentValue(env.PRACTICE_AGENT_SESSION_ID_CODEX),
+    nonEmptyEnvironmentValue(env.CODEX_THREAD_ID),
+    nonEmptyEnvironmentValue(env.conversationId),
+    antigravitySourceMetadataConversationId(env.ANTIGRAVITY_SOURCE_METADATA),
+  ]);
 
   if (resolvedSeed === undefined) {
     return {
       kind: 'error',
       message:
-        'missing seed; pass --seed or set PRACTICE_AGENT_SESSION_ID_CLAUDE, PRACTICE_AGENT_SESSION_ID_CURSOR, PRACTICE_AGENT_SESSION_ID_CODEX, or CODEX_THREAD_ID',
+        'missing seed; pass --seed or set PRACTICE_AGENT_SESSION_ID_CLAUDE, PRACTICE_AGENT_SESSION_ID_CURSOR, PRACTICE_AGENT_SESSION_ID_GEMINI, PRACTICE_AGENT_SESSION_ID_CODEX, CODEX_THREAD_ID, or Antigravity conversationId',
     };
   }
 
@@ -135,6 +147,16 @@ function resolveSeed(seed: string | undefined, env: AgentIdentityCliEnvironment)
     kind: 'ok',
     value: resolvedSeed,
   };
+}
+
+function firstSeed(candidates: readonly (string | undefined)[]): string | undefined {
+  for (const candidate of candidates) {
+    if (candidate !== undefined) {
+      return candidate;
+    }
+  }
+
+  return undefined;
 }
 
 function renderIdentityResult(result: IdentityResult, format: AgentIdentityFormat): string {
@@ -145,6 +167,29 @@ function renderIdentityResult(result: IdentityResult, format: AgentIdentityForma
     return `${JSON.stringify(result, null, 2)}\n`;
   }
   return `${result.slug}\n`;
+}
+
+function antigravitySourceMetadataConversationId(value: string | undefined): string | undefined {
+  const trimmed = nonEmptyEnvironmentValue(value);
+  if (trimmed === undefined) {
+    return undefined;
+  }
+
+  try {
+    const parsed: unknown = JSON.parse(trimmed);
+    if (
+      typeof parsed === 'object' &&
+      parsed !== null &&
+      'conversationId' in parsed &&
+      typeof parsed.conversationId === 'string'
+    ) {
+      return nonEmptyEnvironmentValue(parsed.conversationId);
+    }
+  } catch {
+    return undefined;
+  }
+
+  return undefined;
 }
 
 function nonEmptyEnvironmentValue(value: string | undefined): string | undefined {
