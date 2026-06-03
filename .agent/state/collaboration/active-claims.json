@@ -314,6 +314,28 @@
       "expires_at": "2026-06-03T15:47:42.658Z",
       "phase": "abandoned",
       "notes": "closed in same collaboration-state commit (lifecycle exception)"
+    },
+    {
+      "intent_id": "8cbf4f9f-2c74-48da-8cc3-d442ed136a5d",
+      "claim_id": "68a0e2d6-48d4-44b1-86d6-56e40c9e3527",
+      "agent_id": {
+        "agent_name": "Lacustrine Swimming Beacon",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "687a54",
+        "id": "19ebd316-ef92-510b-ae21-ae0e7db80ff7"
+      },
+      "files": [
+        ".agent/memory/active/napkin.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/closed-claims.archive.json"
+      ],
+      "commit_subject": "docs(memory): capture the openers-are-briefs insight at session close",
+      "queued_at": "2026-06-03T15:37:44.178Z",
+      "updated_at": "2026-06-03T15:37:44.440Z",
+      "expires_at": "2026-06-03T15:52:44.178Z",
+      "phase": "abandoned",
+      "notes": "closed in same collaboration-state commit (lifecycle exception)"
     }
   ],
   "claims": []

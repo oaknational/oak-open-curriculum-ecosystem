@@ -8,6 +8,34 @@ merge_class: append-only-narrative
 fitness_content_role: drainable-buffer
 ---
 
+## 2026-06-03 — school-search briefs normalisation citation audit (Hushed Lurking Mask)
+
+Citation-set audit for the three `oak-school-search-research` reference-local briefs
+(required by `chatgpt-report-normalisation` step 7; clean siblings written, sources untouched).
+
+- **Brief 2**: 309 `turn…` refs (98 unique) in source md; 56 citation blocks at distinct
+  positions; **no DOCX exists** (deviation from the default protocol — PDF was the URL
+  authority); PDF: 56 body chips over 31 unique URLs; body emitted 56 `[[N]]` → 31 refs.
+- **Brief 3**: 194 `turn…` refs (64 unique); 42 blocks; no DOCX; PDF: 42 body chips over
+  24 unique URLs; body emitted 42 `[[N]]` → 24 refs.
+- **Brief 1**: no citation surface at all (md-only export, citations flattened to 48
+  U+FFFC placeholders) — links locally unrecoverable; structure-only repair; flagged to owner.
+- **Surface agreement**: no DOCX/Sources-panel surfaces available; the two PDF surfaces
+  (inline chip link annotations; trailing numbered source-list annotations) agree **exactly**
+  on both briefs (31=31, 24=24), and an independent verifier re-derivation matched all
+  56+42 positions with zero mismatches.
+- **New empirical structure (skill-amendment candidate)**: current ChatGPT deep-research
+  PDFs (WeasyPrint 68) render citations as NUMBERED chips plus an appended number→URL list
+  whose number-chips are themselves link annotations — an exact, doubly-verifiable
+  positional citation map, stronger than DOCX `_rels` (which has no positions). A PDF-only
+  recovery protocol is viable and arguably preferable; route to the
+  `chatgpt-report-normalisation` skill/pattern at next consolidation.
+- **Tooling gotcha**: literal PUA characters (U+E200…U+E201) written into a script via the
+  Write tool were silently stripped once (identical text survived in an earlier Write),
+  producing a regex that matched everywhere; an Edit with PUA in both old/new strings was
+  an invisible no-op. Cure: always use `\ueNNN` escape sequences in source code, never
+  literal PUA bytes.
+
 ## 2026-06-03 — Antigravity Practice integration closeout (Ashen Burning Magma)
 
 ### Surprise
@@ -113,6 +141,19 @@ fitness_content_role: drainable-buffer
   durable in triplicate, and the reversal cost three coordinated edits.
   While a conclusion is still live-developing, the authority surface holds
   the claim and other surfaces hold pointers; copies are for settled state.
+- **Openers are briefs — the reviewer-brief discipline applies verbatim to
+  session handoffs.** Authoring the specialist-session opener at close
+  required exactly the moves my morning reviewer briefs required: name the
+  risk family, hand hypotheses over as hypotheses (the owner's delete-first
+  framing went over marked "to refute, not confirm"), demand source-side
+  enumeration for any completeness verdict, and explicitly forbid
+  inheriting the author's partial picture as complete (my sequences-arm
+  study is NOT the full upstream diff). The next session reviews your
+  conclusions whether you frame it that way or not: an opener written as a
+  state dump invites confirm-the-claim grounding; an opener written as a
+  brief structures independent verification. The opener I received this
+  morning did this for me; I only recognised the pattern from the
+  authoring side.
 
 ## 2026-06-03 — Antigravity audit vs skills taxonomy separation (Stratospheric Buffeting Breeze)
 
