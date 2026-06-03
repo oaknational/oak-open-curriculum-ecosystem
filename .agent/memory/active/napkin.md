@@ -210,3 +210,23 @@ fitness_content_role: drainable-buffer
   "reject-as-framed"; without it, owner hesitation at a mis-posed gate gets coerced into a
   decision or a costume-trigger park. A reframed gate routes back to synthesis and edits the
   gate row itself — a different recording shape from a park, which only dates it.
+
+## 2026-06-03 — closeout insights (Blustery Lifting Gale)
+
+- **Missed a directed comms event for ~90 minutes during deep work.** Furnace
+  Roasting Brazier sent a directed request at 17:22Z (vocabulary line-wrap
+  under my live claim); I found it at ~19:50 only because a commit-window
+  collision check made me read the comms dir. The request happened to be
+  already satisfied by my independent fitness cure — luck, not process. The
+  periodic-comms-check duty needs a structural moment in long single-agent
+  work: the natural anchors are claim-open/claim-close and every
+  commit-window entry, not "when I remember".
+- **The commit window is a moving target under live parallel agents —
+  re-derive the tree per chunk, not per pass.** New peer files went dirty
+  TWICE during the five-chunk commit pass (Furnace school-data-search edits;
+  then a live schema-resilience edit arriving with its own commits). Same
+  family as this morning's tracked-vs-untracked lesson, now at commit
+  granularity: each chunk's pathspec came from a fresh `git status`, which
+  is why nothing foreign was swept. What-works confirmation: six-plus agent
+  sessions landed on one branch today with zero collisions — claims +
+  explicit pathspec staging + per-chunk re-derivation carried it.
