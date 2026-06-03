@@ -3,10 +3,11 @@
 The D3 contract artefact of
 [`eef-graph-tool-completion.plan.md`](eef-graph-tool-completion.plan.md): the
 written MCP surface derived from the owner-ratified D3 decisions, plus the
-SDK/app registration verification record. **Status: authored for owner
-ratification** — names proposed here (tool, functions, resource URI, prompt)
-become contract on ratification; everything marked **D4-bound** is a named but
-unbound forward reference that D4 ratifies and D6 implements.
+SDK/app registration verification record. **Status: owner-ratified 2026-06-03**
+(after the dedicated independent review-then-ratify session) — the names here
+(tool, functions, resource URI, prompt) are contract; everything marked
+**D4-bound** is a named but unbound forward reference that D4 ratifies and D6
+implements.
 
 Grounding rule ([`eef-corpus-grounding`](../../../../rules/eef-corpus-grounding.md)):
 every corpus claim below cites an `EEF_TOOLKIT_DATA` source path (the
@@ -21,7 +22,7 @@ vocabulary) are tagged **contract-defined**.
 | --- | --- | --- |
 | Tool | `get-eef-evidence` | Model-controlled deterministic query/fetch over the fixed EEF corpus — the agent decides when evidence is needed and passes only finite corpus values |
 | Resource | `eef://interpretation` | Application-driven read context for applying the evidence faithfully — the host may browse, attach, or inject it without the model choosing an action |
-| Prompt | `adapt-lesson-with-evidence` | User-controlled workflow template that starts the evidence-grounded adaptation workflow |
+| Prompt | `adapt-lesson` | User-controlled workflow template that starts the evidence-grounded adaptation workflow |
 
 Elicitation and sampling are **not** part of this surface (plan D3 "Do":
 elicitation only for a future host-supported structured-context need, never for
@@ -59,7 +60,7 @@ All three primitives co-gate behind `OAK_CURRICULUM_MCP_EEF_ENABLED` (D6).
 
 | Function | Does | Returns |
 | --- | --- | --- |
-| `evidence-for-move` | Returns the evidence subgraph for the strands matching the supplied selectors — the strands the agent mapped the pedagogical move to, and/or strands matching observed-axis and exact-metric filters (the plan's evidence query + bounded subgraph-around-strands operations) | Evidence envelope (members + edges + frontier + provenance) |
+| `evidence-for-move` | Returns the evidence subgraph for the strands matching the supplied selectors — the strands the agent mapped the pedagogical move to, and/or strands matching observed-axis filters (the plan's evidence query + bounded subgraph-around-strands operations) | Evidence envelope (members + edges + frontier + provenance) |
 | `inspect-strand` | Returns the single-strand subgraph for one known strand id — full evidence fields, its `related_strands` edges, frontier refs (the plan's total strand-by-id lookup) | Evidence envelope (one member) |
 
 These two functions are exactly the tool's plan-assigned scope: "corpus-derived
@@ -68,7 +69,7 @@ metadata and methodology are the **resource's** job by the same targeting —
 the tool does not duplicate them. `inspect-strand` with one id and
 `evidence-for-move` with `strandIds: [oneId]` return the same envelope; the
 two functions exist because they are the plan's two named operations
-(axis/metric evidence query; total by-id lookup), and the overlap at
+(axis evidence query; total by-id lookup), and the overlap at
 cardinality one is stated here rather than hidden. **agent-side**: choosing
 which strands a move maps to, and weighing impact-for-effort, is the invoking
 agent's reasoning (plan Decision 10) — no function performs it.
@@ -79,6 +80,11 @@ Every externally supplied field is classified and narrowed by predicate at the
 boundary before it reaches graph code. The MCP input schema proves structure;
 membership of finite domains is proven by fixed-data predicates; the only
 genuinely unknown value class is the strand key (plan Decision 5).
+Discoverability is schema-borne: because the input schema derives from
+corpus-derived literal unions, the published `inputSchema` (returned in
+`tools/list`) enumerates the full finite vocabulary — all 30 strand ids and
+every observed axis value — so the model sees the valid key space before its
+first call.
 
 | Contract field | Classification | Graph-native subset (D4-bound) | Raw EEF source path | Proof test |
 | --- | --- | --- | --- | --- |
@@ -88,23 +94,46 @@ genuinely unknown value class is the strand key (plan Decision 5).
 | `phase` | observed finite EEF-corpus-vocabulary predicate (`ObservedPhase`) | `eefObservedPhaseSubset` | `strands[number].school_context_relevance.most_relevant_phases` | `raw-domains.unit.test.ts` |
 | `keyStage` | observed finite EEF-corpus-vocabulary predicate (`ObservedKeyStage`) | `eefObservedKeyStageSubset` | `strands[number].school_context_relevance.most_relevant_key_stages` | `raw-domains.unit.test.ts` |
 | `priority` | observed finite EEF-corpus-vocabulary predicate (`ObservedPriority`) | `eefObservedPrioritySubset` | `strands[number].school_context_relevance.most_relevant_priorities` | `raw-domains.unit.test.ts` |
-| `impactMonths` | graph-projected raw headline metric predicate (`HeadlineImpactMonths`, incl. `null`) | `eefHeadlineMetricSubset` | `strands[number].headline.impact_months` | `strand-lookup.unit.test.ts` (literal narrowing) |
-| `costRating` | graph-projected raw headline metric predicate (`HeadlineCostRating`) | `eefHeadlineMetricSubset` | `strands[number].headline.cost_rating` | type-checked via `EefStrand` |
-| `costLabel` | graph-projected raw headline metric predicate (`HeadlineCostLabel`) | `eefHeadlineMetricSubset` | `strands[number].headline.cost_label` | type-checked via `EefStrand` |
-| `evidenceStrengthRating` | graph-projected raw headline metric predicate (`HeadlineEvidenceStrengthRating`) | `eefHeadlineMetricSubset` | `strands[number].headline.evidence_strength_rating` | type-checked via `EefStrand` |
-| `evidenceStrengthLabel` | graph-projected raw headline metric predicate (`HeadlineEvidenceStrengthLabel`) | `eefHeadlineMetricSubset` | `strands[number].headline.evidence_strength_label` | type-checked via `EefStrand` |
+
+Exact-value filters over the graph-projected raw headline metric domains
+(`impactMonths`, `costRating`, `costLabel`, `evidenceStrengthRating`,
+`evidenceStrengthLabel`) are **not v1 inputs** — owner-deferred (2026-06-03) to
+[`eef-tool-metric-filter-inputs.plan.md`](../future/eef-tool-metric-filter-inputs.plan.md),
+sequenced after D7: strands are 1–5.5KB, the leverage lens is agent-side over
+returned headline facts, and exact-match filtering has no v1 consumer.
 
 Boundary rules:
 
-- Metric inputs are **exact corpus values** only — no bucket labels, threshold
-  cut-offs, ranking weights, or comparator semantics exist as inputs.
-  "High-impact for low effort" is **agent-side** reasoning over returned facts.
+- No bucket labels, threshold cut-offs, ranking weights, or comparator
+  semantics exist as inputs, in v1 or in the deferred metric-filter
+  enhancement. "High-impact for low effort" is **agent-side** reasoning over
+  returned facts.
 - The declared-only values — phase `post_16` / `all_through` / `special`, key
   stage `KS5`, priority `improving_attendance` / `teacher_retention`
   (`declaredVsObservedDivergence`; D2 table §"Declared metadata domains") — are
   not valid filter inputs; the filter domains are the observed domains exactly.
+  This is snapshot-relative, not fundamental: the observed domains are derived
+  from the constant, so a future snapshot that tags strands with these values
+  widens the filter domains automatically, with no design change. Outside the
+  strands, these values appear only as declaring vocabulary
+  (`school_context_schema`, whose own description targets an upstream
+  `recommend_for_context` concept this surface deliberately assigns to the
+  agent, plan Decision 10) and as definitional school-leader context
+  (`uk_context.key_stage_mapping.KS5`) — never as evidence content. A boundary
+  rejection is chosen over an empty result because the two make different
+  claims: rejection says "this snapshot indexes nothing along that value";
+  an empty envelope would imply "searched the evidence and found none".
+  Coverage nuance: `meta.coverage.age_range` is "3-18 year-olds", so the
+  absence of a `KS5`/`post_16` tag must not be read as post-16 irrelevance —
+  applicability tags are sparse curation, not applicability boundaries (the
+  interpretation resource carries this guidance).
+- Axis selectors match strands through `school_context_relevance`, which 17 of
+  30 strands carry — an axis-filtered call can never surface the other 13.
+  The interpretation resource's corpus-cited strand index is the
+  corpus-complete discovery surface; axis filters are a focusing convenience
+  over the tagged subset, not the discovery path.
 - `evidence-for-move` requires at least one selector (`strandIds`, `phase`,
-  `keyStage`, `priority`, or one metric field): the unscoped whole-corpus call
+  `keyStage`, or `priority`): the unscoped whole-corpus call
   is contractually invalid (D1: a focused subgraph, not the whole corpus). This
   is a semantic predicate at the handler boundary, returned as `isError: true`,
   not a structural schema rule.
@@ -120,7 +149,7 @@ output layouts, no conditional fields.
 
 | Contract field | Graph-native subset (D4-bound) | Raw EEF source path | Proof test |
 | --- | --- | --- | --- |
-| `members[]` — full strand nodes: the V1 set: `id`, `name`, `slug`, `eef_url`, `headline` (all six fields), `definition`, `key_findings`, `tags` (floor); `effectiveness`, `implementation` (incl. `common_pitfalls`), `school_context_relevance` (incl. `behind_the_average_by_phase`, `applications`), `behind_the_average`, `closing_the_disadvantage_gap` (optional, presence per corpus) | `eefEvidenceEnvelopeSubset` (member payload) | per-field rows of the D2 table §§Strand identity / Universal floor / Corpus-sparse | D2 table column 4; D5 constructor test; D7 verbatim proof |
+| `members[]` — full strand nodes: the V1 set (owner-ratified 2026-05-31, extended 2026-06-03): `id`, `name`, `slug`, `eef_url`, `headline` (the six universal fields, plus `number_of_studies` where the corpus carries it, 2/30), `definition`, `key_findings`, `tags` (floor); `effectiveness` (incl. `summary`, `mechanisms`), `implementation` (incl. `key_considerations`, `common_pitfalls`, `digital_technology_application`), `school_context_relevance` (travelling whole; incl. `behind_the_average_by_phase`, `applications`), `behind_the_average`, `closing_the_disadvantage_gap` (optional, presence per corpus) | `eefEvidenceEnvelopeSubset` (member payload) | per-field rows of the D2 table §§Strand identity / Universal floor / Corpus-sparse | D2 table column 4; D5 constructor test; D7 verbatim proof |
 | `members[]` — guidance-report nodes `{ title, url }` reached by `has_guidance_report` edges (D4-ratified node kind, deduplicated across strands) | `eefGuidanceReportNodeSubset` | `strands[number].related_guidance_reports` | D5 constructor test |
 | `edges[]` — typed edges among members (`related_strand`, `has_guidance_report`) | `eefEvidenceEnvelopeSubset` (edge set) | `strands[number].related_strands`; `strands[number].related_guidance_reports` | `raw-domains.unit.test.ts` (edge facts); D5 |
 | `frontier[]` — refs to related strands outside the members | `eefEvidenceEnvelopeSubset` (frontier refs) | `strands[number].related_strands` | D5 traversal tests |
@@ -145,7 +174,7 @@ Output rules:
 Two named schema-builder values, both **D4-bound** and implemented in D6:
 
 - `eefToolInputSchemaSource` — typed from the graph-native view's key/domain
-  types (`EefStrandId`, observed domains, headline metric domains);
+  types (`EefStrandId`, observed domains);
   `inputSchema` derives from it by ONE Zod call, `satisfies`-tied to the input
   payload type.
 - `eefToolOutputSchemaSource` — typed from `eefEvidenceEnvelopeSubset`;
@@ -177,21 +206,33 @@ subset names; it does not relocate them into the substrate.
   1. **Corpus-cited**: the corpus's own methodology (`methodology` — impact
      measure derivation and interpretation guidance, cost scale, evidence
      strength measure), corpus caveats (`meta.caveats`), source, licence,
-     coverage (`meta.source` / `meta.licence` / `meta.coverage`).
+     coverage (`meta.source` / `meta.licence` / `meta.coverage`), and the
+     **strand index** — `id`, `name`, `headline.headline_summary`, and `tags`
+     for all 30 strands (floor fields, 30/30; a deterministic projection,
+     ~7KB) — the corpus-complete discovery surface the agent chooses strands
+     from, carrying the impact-for-cost one-liner per strand.
   2. **Agent-side (tagged, never presented as corpus evidence)**: the end goals
      (faithful evidence transmission; options not recommendations; preserving
      strength/cost/impact/caveats/limits); how to reach them through the
      Oak/EEF workflow; positive and negative worked examples of faithful versus
-     unfaithful evidence use. No EEF evidence categories, caveat classes, or
+     unfaithful evidence use; and how to read sparse curation honestly —
+     applicability tags (`school_context_relevance`) exist on 17 of 30
+     strands, so the absence of a tag is not evidence of inapplicability
+     (corpus coverage is 3-18 year-olds per `meta.coverage`), and the strand
+     index, not axis filtering, is the discovery path over the full corpus.
+     No EEF evidence categories, caveat classes, or
      strand vocabulary are invented here.
   3. **Graph-structural (D4/D5-bound)**: the ratified field names, edge types,
      provenance-envelope fields, and schema-subset names, so the agent can
      navigate returned envelopes.
 
-## The prompt: `adapt-lesson-with-evidence`
+## The prompt: `adapt-lesson`
 
-- **Name**: `adapt-lesson-with-evidence` (house style per `find-lessons`,
-  `lesson-planning`, `explore-curriculum`).
+- **Name**: `adapt-lesson` (house style per `find-lessons`, `lesson-planning`,
+  `explore-curriculum`). The name carries no "with-evidence" qualifier:
+  evidence-grounding is how Oak adapts lessons — it comes from Oak's
+  commitment to rigour and pedagogical excellence, not from a special "good
+  version" of the workflow (owner-directed 2026-06-03).
 - **D1-tied purpose**: the teacher/user-invoked starter for the evidence-grounded
   adaptation workflow — the cover-lesson scenario's entry point.
 - **Arguments**: `topic` (required) and `yearGroup` (required) — the same
@@ -212,8 +253,10 @@ Default calling-agent workflow (plan D3, restated as contract):
    misconception and prior-knowledge graphs (plus the lesson's quiz and text)
    to surface the pedagogical signals in it.
 3. Name the pedagogical move the signal raises (**agent-side**), then select
-   real corpus keys by inspecting corpus-derived strand names, definitions,
-   key findings, tags, applicability facts, and graph relations. Call
+   real corpus keys from the resource's corpus-cited strand index (all 30
+   strands with name, impact-for-cost summary, and tags) and by inspecting
+   corpus-derived definitions, key findings, applicability facts, and graph
+   relations. Call
    `get-eef-evidence` / `evidence-for-move` with those finite keys.
 4. Call `inspect-strand` only when more detail, caveats, or evidence-shape
    explanation is needed; fetch `eef://interpretation` when applying the
@@ -239,7 +282,7 @@ tree.
 | # | Claim | Verified state | Evidence |
 | --- | --- | --- | --- |
 | V1 | Installed SDK accepts Zod schemas for `inputSchema`/`outputSchema` | `@modelcontextprotocol/sdk@1.29.0` built against `zod@4.4.3` (workspaces pin `zod ^4.4.3`); `registerTool` config carries `outputSchema?` | pnpm store key `@modelcontextprotocol+sdk@1.29.0_zod@4.4.3`; `dist/esm/server/mcp.d.ts:154,283` |
-| V2 | `isError: true` skips output validation | `validateToolOutput` returns early on `result.isError`; also returns early when no `outputSchema`; throws when a schema is declared but `structuredContent` is missing; otherwise validates `structuredContent` | SDK `dist/esm/server/mcp.js` (`validateToolOutput`) |
+| V2 | `isError: true` skips output validation | `validateToolOutput` guards in source order: returns early when no `outputSchema`, when the result carries no `content` key (non-CallToolResult task results — never the EEF shape, whose `content: []` carries the key), and on `result.isError`; throws when a schema is declared but `structuredContent` is missing; otherwise validates `structuredContent` | SDK `dist/esm/server/mcp.js` (`validateToolOutput`) |
 | V3 | `outputSchema` reaches both register paths | `registerAppTool` spreads its whole config into `server.registerTool` (only `_meta` rewritten); `McpUiAppToolConfig extends ToolConfig` | `@modelcontextprotocol/ext-apps@1.7.3` `dist/src/server/index.js` (`registerAppTool`); `index.d.ts:62,184` |
 | V4 | The app registration path currently drops `outputSchema` | The gap is in OUR config assembly, not the SDK: `registerTools` builds `{ title, description, inputSchema, annotations }` (+`_meta`) and no universal-tools surface carries an output schema (`UniversalToolListEntry` has `inputSchema: z.ZodRawShape` only; `AggregatedToolDefShape` has none; `listUniversalTools` projects none) | `apps/oak-curriculum-mcp-streamable-http/src/handlers.ts:173-183`; `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/types.ts:120-142`, `definitions.ts`, `list-tools.ts:62-90` |
 | V5 | Surfaces that must change for `outputSchema` to reach registration | `AggregatedToolName` union (new tool name), `AGGREGATED_TOOL_DEFS` / `AggregatedToolDefShape` (new entry; output-schema field), `UniversalToolListEntry` (output-schema field AND `inputSchema` field-type widening — today `z.ZodRawShape` only at `types.ts:135`, while the EEF tool's single-Zod-call schema is a `z.object(...)` value; without the widening the assignment forces an `as` cast, the named stop signal), `listUniversalTools`, and the `handlers.ts` config. **Ownership**: the S0 seam belongs to `output-schemas-for-mcp-tools.plan.md` §Resolved Sequencing; EEF D6 lands the seam's first use, first and alone; the extension is additive and leaves existing generated tools unchanged | the same files; `.agent/plans/sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md` §Resolved Sequencing |
@@ -256,17 +299,20 @@ SDK intact. The same carrier question applies to `outputSchema` and is equally
 settled at S0. The dispatch functions live entirely within the tool's
 input schema (`function` is a schema field, not a registry concept): the
 registry carries one entry, one input schema, one output schema for this tool,
-exactly like every other aggregated tool. One named D6 hazard: `impactMonths`
-includes the corpus value `null` (4 strands), so its schema field is
-`z.nullable(...)`, never `z.optional(...)` — optional signals "not supplied",
-null is a real corpus value; confusing the two widens the schema against the
-corpus type.
+exactly like every other aggregated tool. One named D6 hazard, in the OUTPUT
+schema: `members[].headline.impact_months` carries the corpus value `null`
+(4 strands), so its VALUE type is `z.nullable(...)`, never `z.optional(...)`
+in the value position — optional signals "field absent", null is a real corpus
+value the field carries on all 30 strands; confusing the two widens the schema
+against the corpus type. Value-nullability and field-optionality are
+orthogonal concerns, never collapsed into one call (the same rule binds the
+deferred metric-filter inputs when they land).
 
 ## Handoff to D4 (the named unbound values)
 
 D4 ratifies the graph-native EEF view and binds: `eefStrandIdSubset`,
 `eefObservedPhaseSubset`, `eefObservedKeyStageSubset`,
-`eefObservedPrioritySubset`, `eefHeadlineMetricSubset`,
+`eefObservedPrioritySubset`,
 `eefEvidenceEnvelopeSubset` (member payload, edge set, frontier refs),
 `eefGuidanceReportNodeSubset`, `eefProvenanceSubset` (source attribution +
 corpus caveats), `eefToolInputSchemaSource`, and `eefToolOutputSchemaSource` —

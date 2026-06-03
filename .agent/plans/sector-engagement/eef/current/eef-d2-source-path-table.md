@@ -10,6 +10,15 @@ of D3. Every row is retained for D3 to select its subset from later, and D6's
 output schema marks every non-floor field optional to match the cardinality
 recorded here.
 
+Row granularity: rows enumerate every per-strand top-level field, every
+corpus-level surface, and every sub-field that a downstream artefact (the V1
+field set or the D3 contract) names individually. An object field travels
+whole, so a sub-field without its own row travels with its parent — for
+example `school_context_relevance.pp_relevance`, `.pp_relevance_note`, and
+`.implementation_requirements` (17/30 each, on every strand that carries the
+parent), plus `.number_of_studies` and `.review_last_updated` (2/30 each),
+travel inside the `school_context_relevance` row below.
+
 Cardinality legend: `N/30` = present on N of the 30 strands; `corpus-level` = a
 single corpus-wide value. Every count is a deterministic projection of the corpus,
 not a hand-maintained figure: each is `strands.filter((s) => 'field' in s).length`,
@@ -71,10 +80,17 @@ match presence; D3 binds its consumer subset when it is ratified.
 
 | Raw source path | D2 projection | Cardinality | Proof test |
 | --- | --- | --- | --- |
+| `strands[number].headline.number_of_studies` | `EefStrand` field access | 2/30 | type-checked via `EefStrand` |
 | `strands[number].effectiveness` | `EefStrand` field access | 7/30 | type-checked via `EefStrand` |
+| `strands[number].effectiveness.summary` | `EefStrand` field access | 7/30 | type-checked via `EefStrand` |
+| `strands[number].effectiveness.mechanisms` | `EefStrand` field access | 7/30 | type-checked via `EefStrand` |
 | `strands[number].implementation` | `EefStrand` field access | 4/30 | type-checked via `EefStrand` |
+| `strands[number].implementation.key_considerations` | `EefStrand` field access | 4/30 | type-checked via `EefStrand` |
 | `strands[number].implementation.common_pitfalls` | `EefStrand` field access | 2/30 | type-checked via `EefStrand` |
+| `strands[number].implementation.digital_technology_application` | `EefStrand` field access | 1/30 | type-checked via `EefStrand` |
 | `strands[number].school_context_relevance` | `EefStrand` field access | 17/30 | type-checked via `EefStrand` |
+| `strands[number].school_context_relevance.behind_the_average_by_phase` | `EefStrand` field access | 4/30 | type-checked via `EefStrand` |
+| `strands[number].school_context_relevance.applications` | `EefStrand` field access | 2/30 | type-checked via `EefStrand` |
 | `strands[number].behind_the_average` | `EefStrand` field access | 6/30 | type-checked via `EefStrand` |
 | `strands[number].closing_the_disadvantage_gap` | `EefStrand` field access | 2/30 | type-checked via `EefStrand` |
 | `strands[number].related_guidance_reports` | `EefStrand` field access | 7/30 | type-checked via `EefStrand` |

@@ -17,13 +17,11 @@
  * OpenAPI surface, not for this fixed, fully-known corpus — here the data is the
  * schema.
  *
- * Direction: `./loader.ts` currently still runs a Zod parse and a freshness gate
- * over this constant. For a fixed, compile-time-known corpus that is redundant
- * re-validation of information the type already carries, and that path is under
- * active removal (see
- * `.agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md`,
- * exploratory). Do not add Zod parsing, freshness gating, `unknown`, or type
- * assertions at this boundary.
+ * Direction: the former loader's Zod parse and freshness gate over this
+ * constant were removed — for a fixed, compile-time-known corpus they were
+ * redundant re-validation of information the type already carries. Do not add
+ * Zod parsing, freshness gating, `unknown`, or type assertions at this
+ * boundary.
  *
  * Provenance: the acquisition path is not yet confirmed in-repo (see
  * `meta.licence.attribution_note`); until EEF clarifies refresh mechanics this

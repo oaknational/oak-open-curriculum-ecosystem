@@ -92,6 +92,8 @@ not owned here.
 | [`future/eef-outcome-evaluation-infrastructure.plan.md`](future/eef-outcome-evaluation-infrastructure.plan.md) | Future plan | EEF outcome-evaluation infrastructure (deferred). |
 | [`future/eef-school-leadership-evidence.plan.md`](future/eef-school-leadership-evidence.plan.md) | Seed plan | School-leadership / SLT EEF strands, split out of the teacher plan 2026-05-31; gated on establishing clear school-leader value before any design. |
 | [`future/eef-standalone-evidence-workflows.plan.md`](future/eef-standalone-evidence-workflows.plan.md) | Seed plan | EEF-only MCP-app workflows that deliver value without intersecting Oak's tools; captured 2026-05-31, gated on establishing standalone teacher value. |
+| [`future/eef-tool-metric-filter-inputs.plan.md`](future/eef-tool-metric-filter-inputs.plan.md) | Seed plan | Exact-value headline-metric filter inputs for `get-eef-evidence`, owner-deferred from the D3 v1 contract (2026-06-03); trigger: D7 green + observed agent usage. |
+| [`future/eef-revalidate-on-new-graph-tools.plan.md`](future/eef-revalidate-on-new-graph-tools.plan.md) | Seed plan | Re-validate the EEF value path (D7 round trip) once the graph-corpus-sdk replacements for the live Oak graph tools land. |
 | [`archive/`](archive/) | Superseded | The quarantined list-era estate and graph-tooling-rebuild design docs. Do not resume or cite. |
 
 ## Read Order

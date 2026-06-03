@@ -1,5 +1,80 @@
 # Next-Session Record — `eef` thread
 
+> **EEF D3 OWNER-RATIFIED (2026-06-03, Lacustrine Swimming Beacon / `687a54`;
+> claude / Opus 4.8; the owner-ratified dedicated review-then-ratify
+> session). The `d3` todo is flipped; the bundle is UNCOMMITTED by owner
+> direction ("do not commit quite yet") — commit on owner word, staged by
+> explicit pathspec.**
+>
+> The independent review ran in the fixed order (D3 work → whole plan →
+> owner discussion → resolution → ratification), grounding every claim
+> directly: full corpus census (extraction-count-verified), cite-or-strike
+> over every contract element (zero invented rationale survived; the
+> primitive-targeting text pre-existed the correction commits), V1–V8
+> re-verified at file:line against HEAD + installed `sdk@1.29.0` /
+> `ext-apps@1.7.3`, commit honesty for all three D3 commits (incl. a
+> line-by-line verbatim check of the `0ace63ad` drain), then a 4-lens
+> refutation workflow (15 agents) with every finding author-re-grounded
+> (8 confirmed, 3 rejected as false positives with reasons).
+>
+> + **Review fixes (corpus-side enumeration found what confirm-the-claim
+>   review could not)**: all four real defects clustered in the contract's
+>   `members[]` cell — `headline.number_of_studies` (a seventh headline field
+>   on 2 strands) unhandled; `closing_the_disadvantage_gap` labelled V1
+>   without V1 authorisation; `implementation.key_considerations` dropped
+>   from the naming; broken "per-field rows" citations for
+>   `behind_the_average_by_phase`/`applications`. Plus: D2-table
+>   exhaustiveness made true (row-granularity rule + 8 sub-field rows), the
+>   stale `loader.ts` TSDoc in the corpus header fixed, the settled D1 V2
+>   decision de-opened in two plan spots, and a `plus corpus metadata`
+>   third-function residue in §Fully Specified End State (spaced token form —
+>   the hyphenated-only sweep had missed it).
+> + **Owner settlement decisions (all folded into contract + plan)**:
+>   (1) **V1 extended** — `closing_the_disadvantage_gap`,
+>   `headline.number_of_studies`, `implementation.digital_technology_application`
+>   are included members ("central to the heart and soul of education, never
+>   second-class"). (2) **Metric filters deferred** to
+>   `eef/future/eef-tool-metric-filter-inputs.plan.md` (trigger: D7 green +
+>   observed agent usage; `eefHeadlineMetricSubset` reserved there; D4 handoff
+>   is now NINE names). (3) **Prompt renamed `adapt-lesson`** — evidence
+>   grounding is how Oak adapts lessons, not a "with-evidence" qualifier.
+>   (4) **Strand index added to the resource's corpus-cited layer** (id, name,
+>   `headline_summary`, tags for all 30; ~7KB) — the corpus-complete discovery
+>   surface, curing the structural bias where axis filters reach only the 17
+>   `school_context_relevance`-tagged strands and hide 13 (including the
+>   honest-insufficiency exemplars). (5) **Declared-only exclusions recorded
+>   as snapshot-relative and self-healing** (observed domains derive from the
+>   constant), with the `meta.coverage` "3-18" nuance and the
+>   boundary-rejection-vs-empty-result rationale stated; KS5 lives only in
+>   `uk_context.key_stage_mapping` + the declared schema (whose own
+>   description targets an upstream `recommend_for_context` concept Oak
+>   assigns to the agent, Decision 10). (6) Schema-borne discoverability
+>   stated: the published `inputSchema` enumerates all 30 ids + observed axis
+>   values.
+> + **Estate also touched**: EEF README indexes the new future plan AND the
+>   previously-unindexed `eef-revalidate-on-new-graph-tools` seed; napkin
+>   carries four method lessons (ratified-decisions-only scope protection;
+>   facts-verified ≠ implications-composed; both-token-form residue sweeps;
+>   enumeration unit must match question scope).
+> + **Verification**: graph-corpus-sdk type-check + 15/15 tests + eslint
+>   green; prettier + markdownlint green repo-wide; focused refutation
+>   reviewer over the final diff: a–f ALL PASS. Mid-session the owner/codex
+>   committed the parallel curation slice (`23ee0ef3`), so the working tree
+>   carries exactly this session's bundle + one orphan untracked Seaworthy
+>   experience file (owner to direct).
+>
+> **NEXT SAFE STEP: D4 (graph capability shape)** — its reviewers fire
+> against the ratified D4 output in turn; D4 binds the nine handed-off names
+> (per the ratified contract §Handoff to D4) and the `guidance_report` node
+> kind / edge types / provenance policy. The commit of this session's bundle
+> precedes D4 work (owner authorisation pending).
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Lacustrine Swimming Beacon` | `claude` | `Opus 4.8` | `687a54` | `eef-d3-review-then-ratify` | 2026-06-03 | 2026-06-03 |
+>
+> ---
+>
 > **EEF D3 ADVANCED TO RATIFIABLE OUTPUT — CONTRACT + VERIFICATION RECORD
 > AUTHORED, FOUR REVIEWERS RUN, OWNER RATIFICATION PENDING (2026-06-02,
 > Seaworthy Swimming Sextant / `a85c18`; claude / Opus 4.8; owner-directed
