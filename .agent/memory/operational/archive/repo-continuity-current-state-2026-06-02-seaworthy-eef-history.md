@@ -80,3 +80,32 @@ by its `eef` thread-record banner. Verbatim moves, no edits.
   Oak-signal/pedagogical-move crosswalk. D5 ingests the D2 raw foundation into the
   D4-ratified deterministic graph-native EEF projection. D6 registers only
   graph-derived MCP surfaces. Treat the live plan as the sole authority.
+
+## Appended 2026-06-03 (Lacustrine Swimming Beacon) — the D3-authoring entry, superseded by ratification
+
+Drained from `repo-continuity.md` §Current State per that file's split
+strategy when the D3 ratification entry replaced it (the ratified state is
+carried by the 2026-06-03 entry and the `eef` thread banner). Verbatim move,
+no edits.
+
+- **EEF D3 advanced to ratifiable output — contract + verification record
+  authored, four reviewers run, OWNER RATIFICATION PENDING (2026-06-02,
+  Seaworthy Swimming Sextant / `a85c18`, claude / Opus 4.8)** —
+  [`eef-d3-mcp-contract.md`](../../plans/sector-engagement/eef/current/eef-d3-mcp-contract.md)
+  names the surface (tool `get-eef-evidence` with function dispatch, resource
+  `eef://interpretation`, prompt `adapt-lesson-with-evidence`), the per-field
+  source-path table with named unbound D4 subsets, and the file:line-cited
+  SDK/app verification record (V1–V8). Whole-plan + D3 review ran first
+  (4-lens refutation workflow; corpus claims recounted exact; 4 real findings
+  applied); the declared-only filter exclusions edit is applied; the four D3
+  PENDING reviewers fired in-flight (all READY-WITH-CONDITIONS; every
+  condition grounded and applied). An owner-directed adversarial audit
+  (2026-06-03) then deleted an author-invented third tool function (corpus
+  metadata is the resource's job per the plan's primitive targeting; its
+  "resource-less hosts" rationale was fabricated — Oak targets Claude.ai +
+  ChatGPT), removed internal `data_version`/`last_updated` from the envelope,
+  and aligned prompt arguments to the required-arg house shape. **Next
+  (owner-ratified 2026-06-03): a dedicated review-then-ratify session — review
+  the D3 work independently, then the whole plan, then discussion, resolution
+  if required, then owner ratification; the `d3` flip and D4 start follow
+  ratification only.** Full detail: `eef` thread banner.

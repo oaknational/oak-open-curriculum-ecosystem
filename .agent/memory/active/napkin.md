@@ -8,6 +8,61 @@ merge_class: append-only-narrative
 fitness_content_role: drainable-buffer
 ---
 
+## 2026-06-03 — Antigravity Practice integration closeout (Ashen Burning Magma)
+
+### Surprise
+
+- **Expected**: Antigravity support would need to wait for a complete host
+  parity answer across commands, rules, hooks, subagents, MCP, memory, and
+  wrappers before code could safely move.
+- **Actual**: Identity had a narrower correct slice: stable Gemini/Antigravity
+  session ids and `conversationId` metadata can become durable Practice seeds
+  while volatile Antigravity trajectory ids stay excluded, and while hooks/native
+  agents/MCP adapters remain future work.
+- **Why expectation failed**: I was treating platform parity as one surface.
+  The identity surface has its own evidence standard: stable enough to resume a
+  Practice session, not broad enough to claim host parity.
+- **Behaviour change**: Land verified stable-host identity seeds as a narrow
+  integration slice, then mark the unwired host surfaces plainly in the matrix
+  and artefact inventory instead of waiting for all-or-nothing parity.
+- **Source plane**: `operational`
+
+- **Closeout ownership must be frozen before any root-scoped fixer or handoff
+  edit.** I accidentally ran the root markdownlint fixer script shape while
+  validating a narrow Antigravity slice; the final dirty tree also contained
+  concurrent EEF and taxonomy work. Behaviour change: for no-commit/no-check
+  closeouts in a shared branch, report the session-owned file set separately
+  from the dirty tree, avoid root-fixing commands, and re-read continuity after
+  every failed patch because another agent may have landed a handoff meanwhile.
+
+## 2026-06-03 — D3 review-then-ratify settlement (Lacustrine Swimming Beacon)
+
+- **"Decided scope protected" briefs must name the ratified-decision list, not
+  the plan's elaborations.** I briefed all reviewers to protect "owner-ratified
+  decisions and the Fully Specified End State", implicitly sweeping in the §Do
+  input enumeration (metric filters) — plan-authored elaboration the owner had
+  never specifically ratified. The owner's own settlement question then found
+  what my scope-protection had structurally suppressed: a PDR-058
+  no-v1-consumer finding against the metric filters. Cure: protection lists
+  cite the numbered Ratified Decisions; everything else stays refutable.
+- **Facts verified ≠ implications composed.** I had recounted 17/30 SCR and
+  meta.coverage "3-18" exactly, yet needed the owner's "would not having them
+  implicitly shape how we use the strands?" to compose them into the
+  consequence: axis-filtered discovery structurally hides 13 strands —
+  including the honest-insufficiency exemplars teachers most need to see.
+  When verifying an N/30 fact, ask what the gap shapes.
+- **Sweep both token forms.** My third-function residue grep used
+  `corpus-metadata` (hyphenated); the End State §MCP Surface residue said
+  "plus corpus metadata" (spaced) and survived two review passes until a
+  settlement re-read caught it. Residue sweeps enumerate the concept's
+  surface forms, not one spelling.
+- **The corpus-side enumeration lesson recursed one level up.** I answered the
+  declared-only question from the strands alone; the owner's "re-read the full
+  EEF data" found KS5 living in `uk_context.key_stage_mapping` and the
+  declared schema's own `recommend_for_context` upstream framing. The unit of
+  enumeration must match the question's scope — the question was about the
+  data, I had answered about the strands.
+
 ## 2026-06-03 — Antigravity audit vs skills taxonomy separation (Stratospheric Buffeting Breeze)
 
 ### Surprise

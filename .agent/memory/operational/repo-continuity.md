@@ -19,20 +19,39 @@ surface.
 
 ## Current State
 
-- **Antigravity integration and skills taxonomy split into two future sessions
-  (2026-06-03, Stratospheric Buffeting Breeze / `019e8c`, codex / GPT-5)** —
-  owner clarified that the Antigravity CLI mechanisms audit and the skills
-  classification question are separate concerns. The Antigravity report was
-  verified enough to treat it as a useful platform-integration brief, not a
-  mechanical patch spec: local truth is 20 repo skills, 86 portable rules,
-  19 Gemini command files, no local `hooks.json`, and no `.gemini/agents/`
-  wiring. The taxonomy conclusion is separate: keep unqualified "skills" for
-  repo-working skills for now, and use qualified names for developer-facing Oak
-  service capabilities and educator-facing curriculum capabilities until a
-  durable taxonomy is ratified. Two paste-ready opener statements now live in
-  the `agentic-engineering-enhancements` thread record. **Next: run either the
-  Antigravity Practice-integration session or the skills-classification session,
-  but do not combine them by default.**
+- **EEF D3 OWNER-RATIFIED after the dedicated review-then-ratify session;
+  bundle uncommitted by owner direction (2026-06-03, Lacustrine Swimming
+  Beacon / `687a54`, claude / Opus 4.8)** — independent review (full corpus
+  census, cite-or-strike, V1–V8 re-verification, 4-lens refutation workflow
+  with author re-grounding) found four real defects clustered in the
+  contract's `members[]` cell, all fixed. Owner settlement: V1 extended
+  (`closing_the_disadvantage_gap`, `headline.number_of_studies`,
+  `implementation.digital_technology_application` — never second-class);
+  metric filters deferred to `eef/future/eef-tool-metric-filter-inputs.plan.md`
+  (trigger: D7 green + observed usage; D4 handoff is nine names); prompt
+  renamed `adapt-lesson`; a corpus-cited strand index added to the resource
+  (axis filters reach only the 17 tagged strands — the index is the
+  corpus-complete discovery surface); declared-only exclusions recorded as
+  snapshot-relative and self-healing. The `d3` todo is flipped; all gates
+  green. **Commit is owner-gated; the orphan untracked Seaworthy experience
+  file awaits owner direction. Next: commit on owner word, then D4.** Full
+  detail: `eef` thread banner.
+- **Antigravity Practice-integration slice implemented in the working tree; no
+  commit and no `pnpm check` by owner direction (2026-06-03, Ashen Burning Magma
+  / `019e8d`, codex / GPT-5)** — `agent-tools` identity now recognises
+  Gemini/Antigravity stable session surfaces (`PRACTICE_AGENT_SESSION_ID_GEMINI`
+  and stable Antigravity `conversationId` metadata) while explicitly leaving
+  volatile Antigravity trajectory ids out of durable identity seeds. The
+  collaboration-state preflight uses the same stable seed set, and the platform
+  matrix, artefact inventory, ADR-125, and agent identity docs now distinguish
+  official Antigravity support from repo-local wiring: commands and identity are
+  partially wired; hooks/native agents/MCP adapters remain future work. Prior
+  validation before closeout: `@oaknational/agent-tools` tests green (95 files,
+  855 tests), lint green, `tsc --noEmit` green, targeted prettier and
+  markdownlint green. The skills-taxonomy slice is separate and already has its
+  own `agentic-engineering-enhancements` closeout. **Next: if the owner wants
+  this landed, stage only the Antigravity-owned file set after re-checking live
+  status; do not bundle active EEF or taxonomy work unless explicitly widened.**
 - **First-batch pending-graduations accepted into durable homes; final
   consolidation/commit closeout requested after initial docs-only handoff
   (2026-06-03, Stratospheric Buffeting Breeze / `019e8c`, codex / GPT-5)** —
@@ -56,27 +75,6 @@ surface.
   (20 soft, 26 healthy, 0 hard, 0 critical), `pnpm practice:vocabulary` green,
   and `git diff --check` clean. Full detail: `agentic-engineering-enhancements`
   thread banner and the Lofty curator ledger.
-- **EEF D3 advanced to ratifiable output — contract + verification record
-  authored, four reviewers run, OWNER RATIFICATION PENDING (2026-06-02,
-  Seaworthy Swimming Sextant / `a85c18`, claude / Opus 4.8)** —
-  [`eef-d3-mcp-contract.md`](../../plans/sector-engagement/eef/current/eef-d3-mcp-contract.md)
-  names the surface (tool `get-eef-evidence` with function dispatch, resource
-  `eef://interpretation`, prompt `adapt-lesson-with-evidence`), the per-field
-  source-path table with named unbound D4 subsets, and the file:line-cited
-  SDK/app verification record (V1–V8). Whole-plan + D3 review ran first
-  (4-lens refutation workflow; corpus claims recounted exact; 4 real findings
-  applied); the declared-only filter exclusions edit is applied; the four D3
-  PENDING reviewers fired in-flight (all READY-WITH-CONDITIONS; every
-  condition grounded and applied). An owner-directed adversarial audit
-  (2026-06-03) then deleted an author-invented third tool function (corpus
-  metadata is the resource's job per the plan's primitive targeting; its
-  "resource-less hosts" rationale was fabricated — Oak targets Claude.ai +
-  ChatGPT), removed internal `data_version`/`last_updated` from the envelope,
-  and aligned prompt arguments to the required-arg house shape. **Next
-  (owner-ratified 2026-06-03): a dedicated review-then-ratify session — review
-  the D3 work independently, then the whole plan, then discussion, resolution
-  if required, then owner ratification; the `d3` flip and D4 start follow
-  ratification only.** Full detail: `eef` thread banner.
 - **JC4 unified substrate-migration plan AUTHORED — parked on a named
   trigger (2026-06-02, Galactic Glowing Prism / `cd7389`, claude / Opus 4.8,
   owner-approved session plan)** —
@@ -280,9 +278,9 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Seaworthy Swimming Sextant / eef-d3-contract-authoring-and-review / 2026-06-03 (prior: Galactic Glowing Prism, Opalescent Cascading Planet, Stellar Waning Planet, Silvered Lurking Mask, all 2026-06-02) |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Lacustrine Swimming Beacon / eef-d3-review-then-ratify / 2026-06-03 (prior: Seaworthy Swimming Sextant 2026-06-03; Galactic Glowing Prism, Opalescent Cascading Planet, Stellar Waning Planet, Silvered Lurking Mask, all 2026-06-02) |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | codex / GPT-5 / Umbral Whispering Silhouette / promotion-and-root-docs-author / 2026-06-01 |
-| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | codex / GPT-5 / Stratospheric Buffeting Breeze / first-batch pending-graduations graduation + docs-only handoff / 2026-06-03 (prior: Lofty Sweeping Falcon, Shaded Veiling Mirror) |
+| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | codex / GPT-5 / Ashen Burning Magma / antigravity-practice-integration / 2026-06-03 (prior: Solar Glowing Meteor, Stratospheric Buffeting Breeze, Lofty Sweeping Falcon, Shaded Veiling Mirror) |
 
 ## Paused Threads
 
@@ -373,11 +371,12 @@ not the current session-priority lane. Reactivation is owner-directed.
    [`eef-d3-mcp-contract.md`](../../plans/sector-engagement/eef/current/eef-d3-mcp-contract.md)
    with all four D3 PENDING reviewers run and their conditions applied. An
    owner-directed adversarial audit (2026-06-03) removed three author-invented
-   surfaces; a pinned-target mcp-expert re-pass returned SIGN-OFF. **The open
-   gate (owner-ratified 2026-06-03) is a dedicated review-then-ratify session:
-   independent review of the D3 work, then the whole plan, then discussion,
-   resolution if required, then owner ratification — the `d3` todo flips only
-   on it, and D4 starts after it.**
+   surfaces; a pinned-target mcp-expert re-pass returned SIGN-OFF. **The
+   review-then-ratify gate CLOSED 2026-06-03 (Lacustrine Swimming Beacon):
+   D3 is owner-ratified with the settlement decisions folded in (V1
+   extension, metric-filter deferral, `adapt-lesson` rename, resource strand
+   index); the `d3` todo is flipped, the bundle is uncommitted pending owner
+   word, and D4 is the next deliverable.**
 7. **Graph-estate-consolidation: t2–t5+t7 EXECUTED and pushed at `c3b78eec`;
    scoped t8 verification PASSED (2026-06-02, Opalescent Cascading Planet)**.
    The estate reads true in one pass: eleven plans archived with banners +
