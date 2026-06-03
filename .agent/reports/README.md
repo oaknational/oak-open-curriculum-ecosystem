@@ -31,6 +31,12 @@ research notes or investigation logs.
   (`384b74de`–`52cad7ee`): method (token+concept inventory, 8 refutation-briefed
   reviewers, adversarial verification, known-answer probe), nine fixes, accepted
   refutations, and the routed British-spelling signal
+- [school-data-search-synthesis-report-2026-06-03.md](./school-data-search-synthesis-report-2026-06-03.md)
+  — self-contained synthesis of the three school-data-search research briefs +
+  owner requirements: convergent foundation, divergence matrix (16 named owner
+  decisions), collision ledger vs repo doctrine, OpenAPI inversion analysis
+  (F-A/F-B/F-C), and the build-time verification ledger; evidence authority for
+  the [`school-data-search` plan collection](../plans/school-data-search/README.md)
 - [oak-openapi-bug-report-2026-03-07.md](./oak-openapi-bug-report-2026-03-07.md)
   — existing standalone report
 - [claude-code-compaction-thinking-block-bug-2026-05-28.md](./claude-code-compaction-thinking-block-bug-2026-05-28.md)
