@@ -26,7 +26,7 @@ export type {
   GetUnitSummaryFn,
 } from './oak-adapter-types';
 export type {
-  GetSubjectSequencesFn,
+  GetSubjectDetailFn,
   GetSequenceUnitsFn,
   GetLessonsByKeyStageAndSubjectFn,
 } from './oak-adapter-types';

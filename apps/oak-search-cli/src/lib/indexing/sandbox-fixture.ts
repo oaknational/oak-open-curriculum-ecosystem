@@ -37,7 +37,7 @@ function createFixtureClient(data: FixtureData): OakClient {
     getLessonTranscript: makeFixtureTranscriptFn(data),
     getLessonSummary: makeFixtureLessonSummaryFn(data),
     getUnitSummary: makeFixtureUnitSummaryFn(data),
-    getSubjectSequences: makeFixtureSubjectSequencesFn(data),
+    getSubjectDetail: makeFixtureSubjectDetailFn(data),
     rateLimitTracker: {
       getStatus: () => ({
         limit: null,
@@ -137,13 +137,18 @@ function makeFixtureUnitSummaryFn(data: FixtureData): OakClient['getUnitSummary'
   };
 }
 
-function makeFixtureSubjectSequencesFn(data: FixtureData): OakClient['getSubjectSequences'] {
+function makeFixtureSubjectDetailFn(data: FixtureData): OakClient['getSubjectDetail'] {
   return async (subject) => {
-    const sequences = data.subjectSequences.get(subject);
-    if (!sequences) {
-      return ok([]);
+    const detail = data.subjectDetails.get(subject);
+    if (!detail) {
+      const error: SdkNotFoundError = {
+        kind: 'not_found',
+        resource: subject,
+        resourceType: 'other',
+      };
+      return err(error);
     }
-    return ok(sequences);
+    return ok(detail);
   };
 }
 

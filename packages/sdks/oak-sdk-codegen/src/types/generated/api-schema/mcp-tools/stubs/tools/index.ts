@@ -12,13 +12,13 @@ import { stubGetLessonsQuizResponse } from './get-lessons-quiz.js';
 import { stubGetLessonsSummaryResponse } from './get-lessons-summary.js';
 import { stubGetLessonsTranscriptResponse } from './get-lessons-transcript.js';
 import { stubGetRateLimitResponse } from './get-rate-limit.js';
+import { stubGetSequencesResponse } from './get-sequences.js';
 import { stubGetSequencesAssetsResponse } from './get-sequences-assets.js';
 import { stubGetSequencesQuestionsResponse } from './get-sequences-questions.js';
 import { stubGetSequencesUnitsResponse } from './get-sequences-units.js';
 import { stubGetSubjectDetailResponse } from './get-subject-detail.js';
 import { stubGetSubjectsResponse } from './get-subjects.js';
 import { stubGetSubjectsKeyStagesResponse } from './get-subjects-key-stages.js';
-import { stubGetSubjectsSequencesResponse } from './get-subjects-sequences.js';
 import { stubGetSubjectsYearsResponse } from './get-subjects-years.js';
 import { stubGetThreadsResponse } from './get-threads.js';
 import { stubGetThreadsUnitsResponse } from './get-threads-units.js';
@@ -38,13 +38,13 @@ export const stubbedToolResponses = {
   'get-lessons-summary': () => stubGetLessonsSummaryResponse,
   'get-lessons-transcript': () => stubGetLessonsTranscriptResponse,
   'get-rate-limit': () => stubGetRateLimitResponse,
+  'get-sequences': () => stubGetSequencesResponse,
   'get-sequences-assets': () => stubGetSequencesAssetsResponse,
   'get-sequences-questions': () => stubGetSequencesQuestionsResponse,
   'get-sequences-units': () => stubGetSequencesUnitsResponse,
   'get-subject-detail': () => stubGetSubjectDetailResponse,
   'get-subjects': () => stubGetSubjectsResponse,
   'get-subjects-key-stages': () => stubGetSubjectsKeyStagesResponse,
-  'get-subjects-sequences': () => stubGetSubjectsSequencesResponse,
   'get-subjects-years': () => stubGetSubjectsYearsResponse,
   'get-threads': () => stubGetThreadsResponse,
   'get-threads-units': () => stubGetThreadsUnitsResponse,

@@ -13,6 +13,7 @@
  */
 
 import type { LogContextInput } from '@oaknational/logger';
+import type { SubjectSequenceEntry } from '../../adapters/oak-adapter-types';
 
 /**
  * Context for a single unit, representing one occurrence in a sequence.
@@ -38,10 +39,13 @@ export interface AggregatedUnitContext {
 /** Map of unit slug to aggregated KS4 context. Used during document indexing. */
 export type UnitContextMap = Map<string, AggregatedUnitContext>;
 
-/** Subject sequence entry from the subjects API. */
-export interface SubjectSequenceInfo {
-  readonly sequenceSlug: string;
-}
+/**
+ * Slug-only projection of a subject-detail sequence entry.
+ *
+ * Derived from the schema-flowing {@link SubjectSequenceEntry} so the
+ * KS4 context builder stays bound to the generated shape.
+ */
+export type SubjectSequenceInfo = Pick<SubjectSequenceEntry, 'sequenceSlug'>;
 
 /** Tier entry in the sequence response. */
 export interface TierEntry {

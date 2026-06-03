@@ -5,20 +5,26 @@
 import type { OakApiClient } from '@oaknational/curriculum-sdk';
 import { classifyHttpError, validationError } from '@oaknational/curriculum-sdk';
 import { ok, err } from '@oaknational/result';
-import { isSubjectSequences, isSequenceUnitsResponse } from '../../types/oak';
-import type { GetSubjectSequencesFn, GetSequenceUnitsFn } from '../oak-adapter-types';
+import { isSubjectDetail, isSequenceUnitsResponse } from '../../types/oak';
+import type { GetSubjectDetailFn, GetSequenceUnitsFn } from '../oak-adapter-types';
 import { safeGet } from '../sdk-safe-get';
 
-/** Create getSubjectSequences method. */
-export function makeGetSubjectSequences(client: Pick<OakApiClient, 'GET'>): GetSubjectSequencesFn {
+/**
+ * Create getSubjectDetail method.
+ *
+ * Fetches `/subjects/{subject}` — the subject detail response whose
+ * `sequenceSlugs` field is the per-subject sequence enumeration
+ * (e.g. science → science-primary, science-secondary-aqa/edexcel/ocr).
+ */
+export function makeGetSubjectDetail(client: Pick<OakApiClient, 'GET'>): GetSubjectDetailFn {
   return async (subject) => {
     const getResult = await safeGet(
       () =>
-        client.GET('/subjects/{subject}/sequences', {
+        client.GET('/subjects/{subject}', {
           params: { path: { subject } },
         }),
       subject,
-      'sequence',
+      'other',
     );
     if (!getResult.ok) {
       return getResult;
@@ -27,11 +33,10 @@ export function makeGetSubjectSequences(client: Pick<OakApiClient, 'GET'>): GetS
     if (!res.response.ok) {
       return err(classifyHttpError(res.response.status, subject, 'other', res.response.statusText));
     }
-    const data = res.data ?? [];
-    if (isSubjectSequences(data)) {
-      return ok(data);
+    if (isSubjectDetail(res.data)) {
+      return ok(res.data);
     }
-    return err(validationError(subject, 'SubjectSequences', data));
+    return err(validationError(subject, 'SubjectDetail', res.data));
   };
 }
 

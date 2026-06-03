@@ -12,16 +12,55 @@
  *
  * // Override a single method
  * const client = createMockClient({
- *   getSubjectSequences: vi.fn().mockResolvedValue({
+ *   getSubjectDetail: vi.fn().mockResolvedValue({
  *     ok: true,
- *     value: [{ sequenceSlug: 'maths-primary' }],
+ *     value: createSubjectDetail({
+ *       sequenceSlugs: [createSequenceEntry('maths-primary')],
+ *     }),
  *   }),
  * });
  * ```
  */
 import { vi } from 'vitest';
 
-import type { OakClient } from '../adapters/oak-adapter.js';
+import type { OakClient, SubjectSequenceEntry } from '../adapters/oak-adapter.js';
+import type { SubjectDetail } from '../types/oak.js';
+
+/**
+ * Create a structurally-valid {@link SubjectDetail} for tests.
+ *
+ * Defaults to a maths subject with no sequences; override any field.
+ */
+export function createSubjectDetail(overrides: Partial<SubjectDetail> = {}): SubjectDetail {
+  return {
+    subjectTitle: 'Maths',
+    subjectSlug: 'maths',
+    sequenceSlugs: [],
+    years: [],
+    keyStages: [],
+    ks4ProgrammeFactors: {},
+    ...overrides,
+  };
+}
+
+/**
+ * Create a structurally-valid {@link SubjectSequenceEntry} for tests.
+ *
+ * Defaults to a secondary-phase entry; override any field.
+ */
+export function createSequenceEntry(
+  sequenceSlug: string,
+  overrides: Partial<SubjectSequenceEntry> = {},
+): SubjectSequenceEntry {
+  return {
+    sequenceSlug,
+    years: [],
+    keyStages: [],
+    phaseSlug: 'secondary',
+    phaseTitle: 'Secondary',
+    ...overrides,
+  };
+}
 
 /**
  * Create a mock {@link OakClient} with all methods stubbed.
@@ -35,7 +74,7 @@ import type { OakClient } from '../adapters/oak-adapter.js';
  */
 export function createMockClient(overrides: Partial<OakClient> = {}): OakClient {
   return {
-    getSubjectSequences: vi.fn().mockResolvedValue({ ok: true, value: [] }),
+    getSubjectDetail: vi.fn().mockResolvedValue({ ok: true, value: createSubjectDetail() }),
     getSequenceUnits: vi.fn().mockResolvedValue({ ok: true, value: [] }),
     getUnitsByKeyStageAndSubject: vi.fn().mockResolvedValue({ ok: true, value: [] }),
     getLessonTranscript: vi.fn().mockResolvedValue({ ok: true, value: null }),

@@ -9,7 +9,7 @@ import type { BulkDownloadFile, Lesson, Unit } from '@oaknational/sdk-codegen/bu
 import type { OakClient } from './oak-adapter';
 import type { AdminError } from '@oaknational/oak-search-sdk/admin';
 import { unwrap } from '@oaknational/result';
-import { createMockClient } from '../test-helpers/mock-oak-client';
+import { createMockClient, createSubjectDetail } from '../test-helpers/mock-oak-client';
 
 /** Unwrap a Result from createHybridDataSource, failing the test on error. */
 async function createSourceOrFail(
@@ -185,18 +185,20 @@ describe('HybridDataSource KS4 enrichment', () => {
     });
 
     const client = createMockClient();
-    // Mock sequence with tiers
-    vi.mocked(client.getSubjectSequences).mockResolvedValue({
+    // Mock subject detail enumerating the tiered sequence
+    vi.mocked(client.getSubjectDetail).mockResolvedValue({
       ok: true,
-      value: [
-        {
-          sequenceSlug: 'maths-secondary',
-          years: [10, 11],
-          keyStages: [{ keyStageSlug: 'ks4', keyStageTitle: 'Key Stage 4' }],
-          phaseSlug: 'secondary',
-          phaseTitle: 'Secondary',
-        },
-      ],
+      value: createSubjectDetail({
+        sequenceSlugs: [
+          {
+            sequenceSlug: 'maths-secondary',
+            years: [10, 11],
+            keyStages: [{ keyStageSlug: 'ks4', keyStageTitle: 'Key Stage 4' }],
+            phaseSlug: 'secondary',
+            phaseTitle: 'Secondary',
+          },
+        ],
+      }),
     });
     vi.mocked(client.getSequenceUnits).mockResolvedValue({
       ok: true,
@@ -239,7 +241,7 @@ describe('HybridDataSource KS4 enrichment', () => {
 
     expect(docs[0].tiers).toBeUndefined();
     // Client should not be called
-    expect(client.getSubjectSequences).not.toHaveBeenCalled();
+    expect(client.getSubjectDetail).not.toHaveBeenCalled();
   });
 
   it('skips enrichment for non-KS4 content', async () => {
@@ -279,7 +281,7 @@ describe('createHybridDataSource error handling', () => {
 
     const client = createMockClient();
     // Simulate a network error during KS4 supplementation
-    vi.mocked(client.getSubjectSequences).mockRejectedValue(
+    vi.mocked(client.getSubjectDetail).mockRejectedValue(
       new Error('Network timeout: ECONNREFUSED'),
     );
 
@@ -374,7 +376,7 @@ describe('processBulkFileBatch', () => {
       lessons: [createMockLesson({ keyStageSlug: 'ks4', unitSlug: 'algebra-higher' })],
     });
     const client = createMockClient();
-    vi.mocked(client.getSubjectSequences).mockRejectedValue(new Error('Injected batch failure'));
+    vi.mocked(client.getSubjectDetail).mockRejectedValue(new Error('Injected batch failure'));
 
     const result = await processBulkFileBatch(
       [safeFile, failingFile],

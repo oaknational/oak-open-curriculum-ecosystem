@@ -23,7 +23,7 @@
 | oak-get-sequences-units              | /sequences/{sequence}/units                        | GET    | getSequences-units                                          | path: sequence; query: year                         |
 | oak-get-subjects                     | /subjects                                          | GET    | getSubjects-getSubjects                                     | None                                                |
 | oak-get-subjects-key-stages          | /subjects/{subject}/key-stages                     | GET    | getSubjects-getSubjectKeyStages                             | path: subject                                       |
-| oak-get-subjects-sequences           | /subjects/{subject}/sequences                      | GET    | getSubjects-getSubjectSequences                             | path: subject                                       |
+| oak-get-sequences                    | /sequences/{slug}                                  | GET    | getSequences-getSubjectSequence                             | path: slug                                          |
 | oak-get-subjects-years               | /subjects/{subject}/years                          | GET    | getSubjects-getSubjectYears                                 | path: subject                                       |
 | oak-get-threads                      | /threads                                           | GET    | getThreads-getThreads                                       | None                                                |
 | oak-get-threads-units                | /threads/{threadSlug}/units                        | GET    | getThreads-getThreadUnits                                   | path: threadSlug                                    |

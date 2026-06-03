@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Oak OpenAPI",
-    "version": "0.7.0-3804b95b2b38a67f085077b82b763226a06966a2"
+    "version": "0.7.0-2e1a01d29abbcb2f13e2e92725d59a839e80b109"
   },
   "servers": [
     {
@@ -39,6 +39,74 @@
     "url": "https://open-api.thenational.academy/api/v0/swagger.json"
   },
   "paths": {
+    "/sequences/{slug}": {
+      "get": {
+        "operationId": "getSequences-getSubjectSequence",
+        "summary": "Sequencing information for a given sequence slug",
+        "description": "This endpoint returns the sequence object for the provided sequence slug. For secondary sequences, this includes information about key stage 4 variance such as exam board sequences and non-GCSE ‘core’ unit sequences.",
+        "tags": ["lists", "sequences"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "schema": {
+              "type": "string",
+              "description": "The sequence slug identifier",
+              "example": "art-secondary-aqa"
+            },
+            "required": true,
+            "description": "The sequence slug identifier"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubjectSequenceResponseSchema"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.BAD_REQUEST"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "API token not provided or invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.UNAUTHORIZED"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.NOT_FOUND"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/sequences/{sequence}/units": {
       "get": {
         "operationId": "getSequences-getSequenceUnits",
@@ -660,7 +728,7 @@
       "get": {
         "operationId": "getSubjects-getAllSubjects",
         "summary": "Subjects",
-        "description": "This endpoint returns an array of all available subjects and their associated sequences, key stages and years.",
+        "description": "This endpoint returns an array of available subject slugs.",
         "tags": ["lists"],
         "security": [
           {
@@ -761,74 +829,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/SubjectResponseSchema"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.BAD_REQUEST"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "API token not provided or invalid",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.UNAUTHORIZED"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.NOT_FOUND"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/subjects/{subject}/sequences": {
-      "get": {
-        "operationId": "getSubjects-getSubjectSequence",
-        "summary": "Sequencing information for a given subject",
-        "description": "This endpoint returns an array of sequence objects that are currently available for a given subject. For secondary sequences, this includes information about key stage 4 variance such as exam board sequences and non-GCSE ‘core’ unit sequences.",
-        "tags": ["lists", "sequences"],
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "subject",
-            "schema": {
-              "type": "string",
-              "description": "The slug identifier for the subject",
-              "example": "art"
-            },
-            "required": true,
-            "description": "The slug identifier for the subject"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SubjectSequenceResponseSchema"
                 }
               }
             }
@@ -2383,6 +2383,306 @@
   },
   "components": {
     "schemas": {
+      "SubjectSequenceResponseSchema": {
+        "type": "object",
+        "properties": {
+          "sequenceSlug": {
+            "type": "string",
+            "description": "The unique identifier for each sequence"
+          },
+          "years": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "The years for which this subject has content available for"
+          },
+          "keyStages": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "keyStageTitle": {
+                  "type": "string",
+                  "description": "The key stage title for the given key stage"
+                },
+                "keyStageSlug": {
+                  "type": "string",
+                  "description": "The unique identifier for a given key stage"
+                }
+              },
+              "required": ["keyStageTitle", "keyStageSlug"],
+              "additionalProperties": false
+            },
+            "description": "The key stage slug identifiers for which this subject has content available for."
+          },
+          "phaseSlug": {
+            "type": "string",
+            "description": "The unique identifier for the phase to which this sequence belongs"
+          },
+          "phaseTitle": {
+            "type": "string",
+            "description": "The title for the phase to which this sequence belongs"
+          },
+          "ks4ProgrammeFactors": {
+            "type": "object",
+            "properties": {
+              "examBoard": {
+                "description": "The valid exam board values offered by Oak for this subject at key stage 4.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "description": "The display title for a valid programme factor value"
+                    },
+                    "slug": {
+                      "type": "string",
+                      "description": "The slug identifier for a valid programme factor value"
+                    }
+                  },
+                  "required": ["title", "slug"],
+                  "additionalProperties": false
+                }
+              },
+              "pathway": {
+                "description": "The valid pathway values offered by Oak for this subject at key stage 4.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "description": "The display title for a valid programme factor value"
+                    },
+                    "slug": {
+                      "type": "string",
+                      "description": "The slug identifier for a valid programme factor value"
+                    }
+                  },
+                  "required": ["title", "slug"],
+                  "additionalProperties": false
+                }
+              },
+              "tier": {
+                "description": "The valid tier values offered by Oak for this subject at key stage 4.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "description": "The display title for a valid programme factor value"
+                    },
+                    "slug": {
+                      "type": "string",
+                      "description": "The slug identifier for a valid programme factor value"
+                    }
+                  },
+                  "required": ["title", "slug"],
+                  "additionalProperties": false
+                }
+              },
+              "childSubject": {
+                "description": "The child subjects offered by Oak for this subject at key stage 4 (e.g. biology, chemistry, physics and combined-science under science). Only present for Science, which is split into child subjects at KS4.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "description": "The display title for a valid programme factor value"
+                    },
+                    "slug": {
+                      "type": "string",
+                      "description": "The slug identifier for a valid programme factor value"
+                    }
+                  },
+                  "required": ["title", "slug"],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "additionalProperties": false,
+            "description": "The programme factors that apply to this subject at key stage 4, with the valid values for each factor."
+          }
+        },
+        "required": [
+          "sequenceSlug",
+          "years",
+          "keyStages",
+          "phaseSlug",
+          "phaseTitle",
+          "ks4ProgrammeFactors"
+        ],
+        "additionalProperties": false,
+        "example": {
+          "sequenceSlug": "computing-secondary-core",
+          "years": [7, 8, 9, 10, 11],
+          "keyStages": [
+            {
+              "keyStageTitle": "Key Stage 3",
+              "keyStageSlug": "ks3"
+            },
+            {
+              "keyStageTitle": "Key Stage 4",
+              "keyStageSlug": "ks4"
+            }
+          ],
+          "phaseSlug": "secondary",
+          "phaseTitle": "Secondary",
+          "ks4ProgrammeFactors": {
+            "examBoard": [
+              {
+                "title": "AQA",
+                "slug": "aqa"
+              },
+              {
+                "title": "Edexcel",
+                "slug": "edexcel"
+              },
+              {
+                "title": "OCR",
+                "slug": "ocr"
+              }
+            ],
+            "pathway": [
+              {
+                "title": "Core",
+                "slug": "core"
+              }
+            ],
+            "tier": [
+              {
+                "title": "Foundation",
+                "slug": "foundation"
+              },
+              {
+                "title": "Higher",
+                "slug": "higher"
+              }
+            ]
+          }
+        }
+      },
+      "error.BAD_REQUEST": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "The error message",
+            "example": "Bad request - e.g. \"Content is blocked for copyright reasons\""
+          },
+          "code": {
+            "type": "string",
+            "description": "The error code",
+            "example": "BAD_REQUEST"
+          },
+          "issues": {
+            "description": "An array of issues that were responsible for the error",
+            "example": [],
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": ["message"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["message", "code"],
+        "additionalProperties": false,
+        "title": "Bad request - e.g. \"Content is blocked for copyright reasons\" error (400)",
+        "description": "The error information",
+        "example": {
+          "code": "BAD_REQUEST",
+          "message": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
+          "issues": []
+        }
+      },
+      "error.UNAUTHORIZED": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "The error message",
+            "example": "API token not provided or invalid"
+          },
+          "code": {
+            "type": "string",
+            "description": "The error code",
+            "example": "UNAUTHORIZED"
+          },
+          "issues": {
+            "description": "An array of issues that were responsible for the error",
+            "example": [],
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": ["message"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["message", "code"],
+        "additionalProperties": false,
+        "title": "API token not provided or invalid error (401)",
+        "description": "The error information",
+        "example": {
+          "code": "UNAUTHORIZED",
+          "message": "API token not provided or invalid",
+          "issues": []
+        }
+      },
+      "error.NOT_FOUND": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "The error message",
+            "example": "Detail of the request causing the 404, e.g. \"Lesson not found\""
+          },
+          "code": {
+            "type": "string",
+            "description": "The error code",
+            "example": "NOT_FOUND"
+          },
+          "issues": {
+            "description": "An array of issues that were responsible for the error",
+            "example": [],
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": ["message"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["message", "code"],
+        "additionalProperties": false,
+        "title": "Detail of the request causing the 404, e.g. \"Lesson not found\" error (404)",
+        "description": "The error information",
+        "example": {
+          "code": "NOT_FOUND",
+          "message": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
+          "issues": []
+        }
+      },
       "SequenceUnitsResponseSchema": {
         "type": "array",
         "items": {
@@ -3238,123 +3538,6 @@
           }
         ]
       },
-      "error.BAD_REQUEST": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string",
-            "description": "The error message",
-            "example": "Bad request - e.g. \"Content is blocked for copyright reasons\""
-          },
-          "code": {
-            "type": "string",
-            "description": "The error code",
-            "example": "BAD_REQUEST"
-          },
-          "issues": {
-            "description": "An array of issues that were responsible for the error",
-            "example": [],
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string"
-                }
-              },
-              "required": ["message"],
-              "additionalProperties": false
-            }
-          }
-        },
-        "required": ["message", "code"],
-        "additionalProperties": false,
-        "title": "Bad request - e.g. \"Content is blocked for copyright reasons\" error (400)",
-        "description": "The error information",
-        "example": {
-          "code": "BAD_REQUEST",
-          "message": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
-          "issues": []
-        }
-      },
-      "error.UNAUTHORIZED": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string",
-            "description": "The error message",
-            "example": "API token not provided or invalid"
-          },
-          "code": {
-            "type": "string",
-            "description": "The error code",
-            "example": "UNAUTHORIZED"
-          },
-          "issues": {
-            "description": "An array of issues that were responsible for the error",
-            "example": [],
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string"
-                }
-              },
-              "required": ["message"],
-              "additionalProperties": false
-            }
-          }
-        },
-        "required": ["message", "code"],
-        "additionalProperties": false,
-        "title": "API token not provided or invalid error (401)",
-        "description": "The error information",
-        "example": {
-          "code": "UNAUTHORIZED",
-          "message": "API token not provided or invalid",
-          "issues": []
-        }
-      },
-      "error.NOT_FOUND": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string",
-            "description": "The error message",
-            "example": "Detail of the request causing the 404, e.g. \"Lesson not found\""
-          },
-          "code": {
-            "type": "string",
-            "description": "The error code",
-            "example": "NOT_FOUND"
-          },
-          "issues": {
-            "description": "An array of issues that were responsible for the error",
-            "example": [],
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string"
-                }
-              },
-              "required": ["message"],
-              "additionalProperties": false
-            }
-          }
-        },
-        "required": ["message", "code"],
-        "additionalProperties": false,
-        "title": "Detail of the request causing the 404, e.g. \"Lesson not found\" error (404)",
-        "description": "The error information",
-        "example": {
-          "code": "NOT_FOUND",
-          "message": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
-          "issues": []
-        }
-      },
       "TranscriptResponseSchema": {
         "type": "object",
         "properties": {
@@ -3668,154 +3851,28 @@
       "AllSubjectsResponseSchema": {
         "type": "array",
         "items": {
-          "type": "object",
-          "properties": {
-            "subjectTitle": {
-              "type": "string",
-              "description": "The subject title"
-            },
-            "subjectSlug": {
-              "type": "string",
-              "description": "The subject slug identifier"
-            },
-            "sequenceSlugs": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "sequenceSlug": {
-                    "type": "string",
-                    "description": "The unique identifier for each sequence"
-                  },
-                  "years": {
-                    "type": "array",
-                    "items": {
-                      "type": "number"
-                    },
-                    "description": "The years for which this subject has content available for"
-                  },
-                  "keyStages": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "keyStageTitle": {
-                          "type": "string",
-                          "description": "The key stage title for the given key stage"
-                        },
-                        "keyStageSlug": {
-                          "type": "string",
-                          "description": "The unique identifier for a given key stage"
-                        }
-                      },
-                      "required": ["keyStageTitle", "keyStageSlug"],
-                      "additionalProperties": false
-                    },
-                    "description": "The key stage slug identifiers for which this subject has content available for."
-                  },
-                  "phaseSlug": {
-                    "type": "string",
-                    "description": "The unique identifier for the phase to which this sequence belongs"
-                  },
-                  "phaseTitle": {
-                    "type": "string",
-                    "description": "The title for the phase to which this sequence belongs"
-                  }
-                },
-                "required": ["sequenceSlug", "years", "keyStages", "phaseSlug", "phaseTitle"],
-                "additionalProperties": false
-              },
-              "description": "Information about the years, key stages and key stage 4 variance for each sequence"
-            },
-            "years": {
-              "type": "array",
-              "items": {
-                "type": "number"
-              },
-              "description": "The years for which this subject has content available for"
-            },
-            "keyStages": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "keyStageTitle": {
-                    "type": "string",
-                    "description": "The key stage title for the given key stage"
-                  },
-                  "keyStageSlug": {
-                    "type": "string",
-                    "description": "The unique identifier for a given key stage"
-                  }
-                },
-                "required": ["keyStageTitle", "keyStageSlug"],
-                "additionalProperties": false
-              },
-              "description": "The key stage slug identifiers for which this subject has content available for."
-            }
-          },
-          "required": ["subjectTitle", "subjectSlug", "sequenceSlugs", "years", "keyStages"],
-          "additionalProperties": false
+          "type": "string",
+          "enum": [
+            "art",
+            "citizenship",
+            "computing",
+            "cooking-nutrition",
+            "design-technology",
+            "english",
+            "french",
+            "geography",
+            "german",
+            "history",
+            "maths",
+            "music",
+            "physical-education",
+            "religious-education",
+            "rshe-pshe",
+            "science",
+            "spanish"
+          ]
         },
-        "example": [
-          {
-            "subjectTitle": "Art and design",
-            "subjectSlug": "art",
-            "sequenceSlugs": [
-              {
-                "sequenceSlug": "art-primary",
-                "years": [1, 2, 3, 4, 5, 6],
-                "keyStages": [
-                  {
-                    "keyStageTitle": "Key Stage 1",
-                    "keyStageSlug": "ks1"
-                  },
-                  {
-                    "keyStageTitle": "Key Stage 2",
-                    "keyStageSlug": "ks2"
-                  }
-                ],
-                "phaseSlug": "primary",
-                "phaseTitle": "Primary"
-              },
-              {
-                "sequenceSlug": "art-secondary",
-                "years": [7, 8, 9, 10, 11],
-                "keyStages": [
-                  {
-                    "keyStageTitle": "Key Stage 3",
-                    "keyStageSlug": "ks3"
-                  },
-                  {
-                    "keyStageTitle": "Key Stage 4",
-                    "keyStageSlug": "ks4"
-                  }
-                ],
-                "phaseSlug": "secondary",
-                "phaseTitle": "Secondary"
-              }
-            ],
-            "years": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-            "keyStages": [
-              {
-                "keyStageTitle": "Key Stage 1",
-                "keyStageSlug": "ks1"
-              },
-              {
-                "keyStageTitle": "Key Stage 2",
-                "keyStageSlug": "ks2"
-              },
-              {
-                "keyStageTitle": "Key Stage 3",
-                "keyStageSlug": "ks3"
-              },
-              {
-                "keyStageTitle": "Key Stage 4",
-                "keyStageSlug": "ks4"
-              }
-            ]
-          }
-        ]
+        "example": ["art", "computing", "english"]
       },
       "SubjectResponseSchema": {
         "type": "object",
@@ -4129,88 +4186,6 @@
             ]
           }
         }
-      },
-      "SubjectSequenceResponseSchema": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "sequenceSlug": {
-              "type": "string",
-              "description": "The unique identifier for each sequence"
-            },
-            "years": {
-              "type": "array",
-              "items": {
-                "type": "number"
-              },
-              "description": "The years for which this subject has content available for"
-            },
-            "keyStages": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "keyStageTitle": {
-                    "type": "string",
-                    "description": "The key stage title for the given key stage"
-                  },
-                  "keyStageSlug": {
-                    "type": "string",
-                    "description": "The unique identifier for a given key stage"
-                  }
-                },
-                "required": ["keyStageTitle", "keyStageSlug"],
-                "additionalProperties": false
-              },
-              "description": "The key stage slug identifiers for which this subject has content available for."
-            },
-            "phaseSlug": {
-              "type": "string",
-              "description": "The unique identifier for the phase to which this sequence belongs"
-            },
-            "phaseTitle": {
-              "type": "string",
-              "description": "The title for the phase to which this sequence belongs"
-            }
-          },
-          "required": ["sequenceSlug", "years", "keyStages", "phaseSlug", "phaseTitle"],
-          "additionalProperties": false
-        },
-        "example": [
-          {
-            "sequenceSlug": "art-primary",
-            "years": [1, 2, 3, 4, 5, 6],
-            "keyStages": [
-              {
-                "keyStageTitle": "Key Stage 1",
-                "keyStageSlug": "ks1"
-              },
-              {
-                "keyStageTitle": "Key Stage 2",
-                "keyStageSlug": "ks2"
-              }
-            ],
-            "phaseSlug": "primary",
-            "phaseTitle": "Primary"
-          },
-          {
-            "sequenceSlug": "art-secondary",
-            "years": [1, 2, 3, 4, 5, 6],
-            "keyStages": [
-              {
-                "keyStageTitle": "Key Stage 1",
-                "keyStageSlug": "ks1"
-              },
-              {
-                "keyStageTitle": "Key Stage 2",
-                "keyStageSlug": "ks2"
-              }
-            ],
-            "phaseSlug": "secondary",
-            "phaseTitle": "Secondary"
-          }
-        ]
       },
       "SubjectKeyStagesResponseSchema": {
         "type": "array",

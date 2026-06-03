@@ -1,0 +1,18 @@
+{
+  "history": {
+    "subjectTitle": "History",
+    "subjectSlug": "history",
+    "sequenceSlugs": [
+      {
+        "sequenceSlug": "history-ancient-egypt-programme",
+        "phaseSlug": "primary",
+        "phaseTitle": "Primary",
+        "keyStages": [{ "keyStageSlug": "ks2", "keyStageTitle": "Key stage 2" }],
+        "years": [4]
+      }
+    ],
+    "years": [4],
+    "keyStages": [{ "keyStageSlug": "ks2", "keyStageTitle": "Key stage 2" }],
+    "ks4ProgrammeFactors": {}
+  }
+}

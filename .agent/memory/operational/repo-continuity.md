@@ -30,29 +30,38 @@ surface.
   Sequencing note: the upstream-sequences realignment below remains the
   standing top-priority item for its dedicated specialist session; the owner
   has explicitly directed the school-search report+plan session as next.
-- **UPSTREAM SEQUENCES API CHANGED — repo realignment is the TOP-PRIORITY
-  next item, owner-directed dedicated specialist session (2026-06-03,
-  Lacustrine Swimming Beacon / `687a54`, claude / Opus 4.8)** — the
-  session-handoff `pnpm check` gate ran `sdk-codegen`, which pulled an
-  upstream schema where `/subjects/{subject}/sequences` is REMOVED and
-  `/sequences/{slug}` added (tool `get-subjects-sequences` →
-  `get-sequences`; subject detail now carries `sequenceSlugs`). HEAD is
-  green (its gates ran on the cached schema); any codegen-refreshed tree is
-  red in `oak-search-cli` (legacy API-supplementation pipeline built on the
-  removed list-per-subject capability). The codegen diff and the mechanical
-  name fixes were REVERTED to HEAD (owner-authorised per-file restores;
-  exact fix content in the plan §Evidence for re-application), and the tree
-  returned to green via the owner's CI=true cure (codegen reads the schema
-  cache when `CI === 'true'` exactly; the poisoned turbo cache entries were
-  healed with forced CI=true runs — full procedure in the plan §Codegen
-  fetch/cache mechanics). Commits unblocked; `pnpm check` remains known-red
-  (online codegen by design) until the realignment lands.
-  Authority:
+- **UPSTREAM SEQUENCES API REALIGNMENT EXECUTED — all three plan todos
+  complete, owner-approved adaptation route landed (2026-06-03, Moonlit
+  Waxing Nebula / `e756f7`, claude / Opus 4.8, dedicated specialist
+  session)** — evidence-first execution: the FULL OpenAPI diff was derived
+  by direct JSON diff before any regeneration (one path removed, one
+  added, `/subjects` collapsed to a slug-string enum, all 25 other paths
+  unchanged — including `/sequences/{sequence}/units`), and a fresh
+  authenticated bulk download proved the BULK DATA UNCHANGED (schema
+  byte-identical to 2026-05-21; feature-request fields declared but
+  populated in zero units). Verdict (owner-approved): search indexes
+  CANNOT yet be built purely from bulk — `tiers`/`exam_subjects`/
+  `unit_topics` still come only from `getSequenceUnits`, which survives;
+  bulk-only remains the target, blocked upstream on
+  `bulk_data_for_semantic_search.feature_request.md` Phases 1–2. Cure
+  executed: API surface shrunk 2 → 1 endpoints — `getSubjectSequences`
+  deleted everywhere (replace-don't-bridge), enumeration rewired to
+  `getSubjectDetail` (`/subjects/{subject}`) consuming `sequenceSlugs`;
+  `SubjectSequenceEntry` now derives from the schema
+  (`SubjectDetail['sequenceSlugs'][number]`); sandbox fixture moved to
+  `subject-detail.json`; evaluation api-checkers rewired; dead SDK guard
+  trio removed; four mechanical fixes re-applied. Reviewed in real time
+  (code-expert + type-expert; findings critically validated, accepted
+  fixes applied). ALL gates green including online `pnpm check` — the
+  recorded known-red is CLOSED. Named follow-up (pre-existing): the
+  `SequenceUnitsFetcher` `Promise<unknown>` erasure through the
+  ks4-context/sequence-facet traversal, recorded in the plan's
+  execute-cure todo. Authority:
   [`upstream-sequences-api-realignment.plan.md`](../../plans/sdk-and-mcp-enhancements/current/upstream-sequences-api-realignment.plan.md)
-  — owner-stated risks and the delete-first hypothesis (the bulk-data
-  feature request marks the broken path legacy) are recorded there.
-  **Next: the specialist session runs that plan's todos in order;
-  this closeout bundle commits once the tree is green.**
+  (§Verdict). **Next: pushing is the owner's call; the upstream
+  feature-request chase (bulk Phase 1–2 population) is the path to
+  bulk-only ingestion and the deletion of the remaining supplementation
+  endpoint.**
 - **EEF D3 OWNER-RATIFIED and COMMITTED (2026-06-03, Lacustrine Swimming
   Beacon / `687a54`, claude / Opus 4.8)** — independent review (full corpus
   census, cite-or-strike, V1–V8 re-verification, 4-lens refutation workflow

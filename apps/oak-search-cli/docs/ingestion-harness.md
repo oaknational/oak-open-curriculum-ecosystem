@@ -25,7 +25,7 @@ Establish a repeatable ingestion workflow that exercises the full indexing pipel
   - `unit-summaries.json` – keyed by unit slug; each entry satisfies the SDK `unitSummarySchema`.
   - `lesson-summaries.json` – keyed by lesson slug; each entry satisfies the SDK `lessonSummarySchema`.
   - `lesson-transcripts.json` – keyed by lesson slug with `{ transcript, vtt }` payloads consumed by `getLessonTranscript`.
-  - `subject-sequences.json` – map of subject slug → sequences array validated by `subjectSequencesSchema`.
+  - `subject-detail.json` – map of subject slug → subject detail (carrying `sequenceSlugs`) validated by `subjectDetailSchema`.
   - `sequence-units.json` – map of `sequenceSlug` → raw payload consumed by `extractSequenceFacetSource` (stored as arrays for easy traversal).
 - Each file contains a single KS2 history programme (one unit, two lessons) so the harness exercises lessons, unit rollups, and sequence facets without slowing tests.
 - Fixtures are consumed directly by `createFixtureOakClient`, and `ingest-harness.unit.test.ts` verifies the dataset remains compliant with the generated Zod schemas.

@@ -67,13 +67,13 @@ export {
   isTranscriptResponse,
   isLessonSummary,
   isUnitSummary,
-  isSubjectSequences,
+  isSubjectDetail,
   sequenceUnitsSchema,
   isSequenceUnitsResponse,
 } from './search-response-guards.js';
 export type {
   SearchLessonSummary,
   SearchUnitSummary,
-  SearchSubjectSequences,
+  SubjectDetail,
   SequenceUnitsResponse,
 } from './search-response-guards.js';

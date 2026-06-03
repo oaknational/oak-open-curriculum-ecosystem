@@ -7,6 +7,9 @@ import { z } from 'zod';
 import type { ApiHttpMethod, ValidPath } from '../path-parameters.js';
 
 export const REQUEST_PARAMETER_SCHEMAS = {
+  "GET:/sequences/:slug": z.object({
+    "slug": z.string(),
+  }),
   "GET:/sequences/:sequence/units": z.object({
     "sequence": z.string(),
     "year": z.enum(["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "all-years"]).optional(),
@@ -39,9 +42,6 @@ export const REQUEST_PARAMETER_SCHEMAS = {
   "GET:/subjects": z.object({}),
   "GET:/subjects/:subject": z.object({
     "subject": z.enum(["art", "citizenship", "computing", "cooking-nutrition", "design-technology", "english", "french", "geography", "german", "history", "maths", "music", "physical-education", "religious-education", "rshe-pshe", "science", "spanish"]),
-  }),
-  "GET:/subjects/:subject/sequences": z.object({
-    "subject": z.string(),
   }),
   "GET:/subjects/:subject/key-stages": z.object({
     "subject": z.string(),

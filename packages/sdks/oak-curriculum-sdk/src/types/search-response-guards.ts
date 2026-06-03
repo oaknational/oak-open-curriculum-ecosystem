@@ -13,8 +13,8 @@ export const lessonSummarySchema = rawCurriculumSchemas.LessonSummaryResponseSch
 /** Schema for unit summaries derived from the OpenAPI specification. */
 export const unitSummarySchema = rawCurriculumSchemas.UnitSummaryResponseSchema;
 
-/** Schema for subject sequences derived from the OpenAPI specification. */
-export const subjectSequencesSchema = rawCurriculumSchemas.SubjectSequenceResponseSchema;
+/** Schema for subject detail derived from the OpenAPI specification. */
+export const subjectDetailSchema = rawCurriculumSchemas.SubjectResponseSchema;
 
 /** Schema for sequence units response derived from the OpenAPI specification. */
 export const sequenceUnitsSchema = rawCurriculumSchemas.SequenceUnitsResponseSchema;
@@ -25,8 +25,8 @@ export type LessonSummaryResponseSchema = typeof lessonSummarySchema;
 /** Type alias for the unit summary schema derived from the OpenAPI specification. */
 export type UnitSummaryResponseSchema = typeof unitSummarySchema;
 
-/** Type alias for the subject sequence schema derived from the OpenAPI specification. */
-export type SubjectSequenceResponseSchema = typeof subjectSequencesSchema;
+/** Type alias for the subject detail schema derived from the OpenAPI specification. */
+export type SubjectResponseSchema = typeof subjectDetailSchema;
 
 /** Type alias for the sequence units response schema derived from the OpenAPI specification. */
 export type SequenceUnitsResponseSchema = typeof sequenceUnitsSchema;
@@ -61,10 +61,17 @@ export function isUnitSummary(v: unknown): v is SearchUnitSummary {
   return unitSummarySchema.safeParse(v).success;
 }
 
-export type SearchSubjectSequences = z.infer<SubjectSequenceResponseSchema>;
+/**
+ * Type for subject detail (API response for /subjects/:subject).
+ *
+ * Carries `sequenceSlugs` — the per-subject sequence enumeration
+ * (e.g. science → science-primary, science-secondary-aqa/edexcel/ocr)
+ * — plus `keyStages`, `years`, and `ks4ProgrammeFactors`.
+ */
+export type SubjectDetail = z.infer<SubjectResponseSchema>;
 
-export function isSubjectSequences(v: unknown): v is SearchSubjectSequences {
-  return subjectSequencesSchema.safeParse(v).success;
+export function isSubjectDetail(v: unknown): v is SubjectDetail {
+  return subjectDetailSchema.safeParse(v).success;
 }
 
 /** Type for sequence units response (API response for /sequences/:sequence/units). */

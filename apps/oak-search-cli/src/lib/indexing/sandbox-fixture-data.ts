@@ -2,10 +2,10 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import {
   lessonSummarySchema,
-  subjectSequencesSchema,
+  subjectDetailSchema,
   unitSummarySchema,
   sequenceUnitsSchema,
-  type SearchSubjectSequences,
+  type SubjectDetail,
   type SearchUnitSummary,
   type SearchLessonSummary,
   type SequenceUnitsResponse,
@@ -60,7 +60,7 @@ export interface FixtureData {
   readonly unitSummaries: ReadonlyMap<string, SearchUnitSummary>;
   readonly lessonSummaries: ReadonlyMap<string, SearchLessonSummary>;
   readonly lessonTranscripts: ReadonlyMap<string, FixtureLessonTranscript>;
-  readonly subjectSequences: ReadonlyMap<SearchSubjectSlug, SearchSubjectSequences>;
+  readonly subjectDetails: ReadonlyMap<SearchSubjectSlug, SubjectDetail>;
   readonly sequenceUnits: ReadonlyMap<string, SequenceUnitsResponse>;
 }
 
@@ -77,9 +77,7 @@ export async function loadSandboxFixtureData(fixtureRoot: string): Promise<Fixtu
     unitSummaries: parseUnitSummaryMap(await loadJson(fixtureRoot, 'unit-summaries.json')),
     lessonSummaries: parseLessonSummaryMap(await loadJson(fixtureRoot, 'lesson-summaries.json')),
     lessonTranscripts: parseTranscriptMap(await loadJson(fixtureRoot, 'lesson-transcripts.json')),
-    subjectSequences: parseSubjectSequenceMap(
-      await loadJson(fixtureRoot, 'subject-sequences.json'),
-    ),
+    subjectDetails: parseSubjectDetailMap(await loadJson(fixtureRoot, 'subject-detail.json')),
     sequenceUnits: parseSequenceUnitsMap(await loadJson(fixtureRoot, 'sequence-units.json')),
   };
 }
@@ -198,20 +196,12 @@ function parseTranscriptMap(value: unknown): ReadonlyMap<string, FixtureLessonTr
   return entries;
 }
 
-function parseSubjectSequenceMap(
-  value: unknown,
-): ReadonlyMap<SearchSubjectSlug, SearchSubjectSequences> {
-  const record = parseStringKeyedObject(
-    value,
-    'subject sequences must be an object keyed by subject',
-  );
-  const entries = new Map<SearchSubjectSlug, SearchSubjectSequences>();
+function parseSubjectDetailMap(value: unknown): ReadonlyMap<SearchSubjectSlug, SubjectDetail> {
+  const record = parseStringKeyedObject(value, 'subject detail must be an object keyed by subject');
+  const entries = new Map<SearchSubjectSlug, SubjectDetail>();
   for (const slug of getRecordKeys(record)) {
-    const subject = ensureSubject(
-      slug,
-      `Invalid subject key in subject sequences fixture: ${slug}`,
-    );
-    entries.set(subject, subjectSequencesSchema.parse(record[slug]));
+    const subject = ensureSubject(slug, `Invalid subject key in subject detail fixture: ${slug}`);
+    entries.set(subject, subjectDetailSchema.parse(record[slug]));
   }
   return entries;
 }

@@ -40,8 +40,12 @@ describe('isSingleEntityEndpoint', () => {
       expect(isSingleEntityEndpoint('/sequences/maths-ks1')).toBe('sequence');
     });
 
-    it('returns sequence for /subjects/{s}/sequences', () => {
-      expect(isSingleEntityEndpoint('/subjects/maths/sequences')).toBe('sequence');
+    it('returns sequence for /sequences/{s}/units', () => {
+      expect(isSingleEntityEndpoint('/sequences/maths-secondary/units')).toBe('sequence');
+    });
+
+    it('returns undefined for a path that merely ends with /sequences', () => {
+      expect(isSingleEntityEndpoint('/subjects/maths/sequences')).toBeUndefined();
     });
   });
 
@@ -143,8 +147,8 @@ describe('getContentTypeFromPath', () => {
     expect(getContentTypeFromPath('/key-stages/ks2/subjects/maths/units')).toBe('unit');
   });
 
-  it('returns sequence for /subjects/{s}/sequences', () => {
-    expect(getContentTypeFromPath('/subjects/maths/sequences')).toBe('sequence');
+  it('returns sequence for /sequences/{slug}', () => {
+    expect(getContentTypeFromPath('/sequences/science-secondary-aqa')).toBe('sequence');
   });
 });
 

@@ -275,7 +275,8 @@ export const ontologyData = {
           'science',
           'spanish',
         ],
-        detection: 'Subject has multiple ks4Options in /subjects/{subject} response',
+        detection:
+          'Subject has multiple ks4ProgrammeFactors values in /subjects/{subject} response',
         note: 'Science has exam boards AND exam subjects AND tiers (all three)',
       },
       {
@@ -333,7 +334,7 @@ export const ontologyData = {
         entity: 'Subject',
         example: 'maths',
         contains: 'Sequences (API) / Programmes (user-facing)',
-        schemaRef: 'AllSubjectsResponseSchema',
+        schemaRef: 'SubjectResponseSchema',
       },
       {
         entity: 'Sequence',

@@ -27,7 +27,7 @@ import {
   makeGetLessonTranscript,
   makeGetLessonSummary,
   makeGetUnitSummary,
-  makeGetSubjectSequences,
+  makeGetSubjectDetail,
   makeGetSequenceUnits,
   makeGetLessonsByKeyStageAndSubject,
   makeGetSubjectAssets,
@@ -39,7 +39,7 @@ import type {
   GetTranscriptFn,
   GetLessonSummaryFn,
   GetUnitSummaryFn,
-  GetSubjectSequencesFn,
+  GetSubjectDetailFn,
   GetSequenceUnitsFn,
   GetLessonsByKeyStageAndSubjectFn,
   GetSubjectAssetsFn,
@@ -51,7 +51,7 @@ interface BaseMethods {
   readonly getLessonTranscript: GetTranscriptFn;
   readonly getLessonSummary: GetLessonSummaryFn;
   readonly getUnitSummary: GetUnitSummaryFn;
-  readonly getSubjectSequences: GetSubjectSequencesFn;
+  readonly getSubjectDetail: GetSubjectDetailFn;
   readonly getSequenceUnits: GetSequenceUnitsFn;
   readonly getAllThreads: ReturnType<typeof makeGetAllThreads>;
   readonly getThreadUnits: ReturnType<typeof makeGetThreadUnits>;
@@ -66,7 +66,7 @@ function createBaseMethods(apiClient: OakApiClient): BaseMethods {
     getLessonTranscript: makeGetLessonTranscript(apiClient),
     getLessonSummary: makeGetLessonSummary(apiClient),
     getUnitSummary: makeGetUnitSummary(apiClient),
-    getSubjectSequences: makeGetSubjectSequences(apiClient),
+    getSubjectDetail: makeGetSubjectDetail(apiClient),
     getSequenceUnits: makeGetSequenceUnits(apiClient),
     getAllThreads: makeGetAllThreads(apiClient),
     getThreadUnits: makeGetThreadUnits(apiClient),

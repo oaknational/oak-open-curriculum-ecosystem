@@ -22,7 +22,7 @@ import {
   makeGetLessonSummary,
   makeGetUnitSummary,
   makeGetUnitsByKeyStageAndSubject,
-  makeGetSubjectSequences,
+  makeGetSubjectDetail,
   makeGetSequenceUnits,
   makeGetLessonsByKeyStageAndSubject,
   makeGetSubjectAssets,
@@ -119,21 +119,31 @@ function createMockUnitsGrouped() {
 }
 
 /**
- * Create minimal valid SubjectSequences data matching SubjectSequenceResponseSchema.
+ * Create minimal valid SubjectDetail data matching SubjectResponseSchema.
  */
-function createMockSubjectSequences() {
-  return [
-    {
-      sequenceSlug: 'maths-primary',
-      years: [1, 2, 3],
-      keyStages: [
-        { keyStageTitle: 'Key Stage 1', keyStageSlug: 'ks1' },
-        { keyStageTitle: 'Key Stage 2', keyStageSlug: 'ks2' },
-      ],
-      phaseSlug: 'primary',
-      phaseTitle: 'Primary',
-    },
-  ];
+function createMockSubjectDetail() {
+  return {
+    subjectTitle: 'Maths',
+    subjectSlug: 'maths',
+    sequenceSlugs: [
+      {
+        sequenceSlug: 'maths-primary',
+        years: [1, 2, 3],
+        keyStages: [
+          { keyStageTitle: 'Key Stage 1', keyStageSlug: 'ks1' },
+          { keyStageTitle: 'Key Stage 2', keyStageSlug: 'ks2' },
+        ],
+        phaseSlug: 'primary',
+        phaseTitle: 'Primary',
+      },
+    ],
+    years: [1, 2, 3],
+    keyStages: [
+      { keyStageTitle: 'Key Stage 1', keyStageSlug: 'ks1' },
+      { keyStageTitle: 'Key Stage 2', keyStageSlug: 'ks2' },
+    ],
+    ks4ProgrammeFactors: {},
+  };
 }
 
 /**
@@ -299,12 +309,12 @@ describe('SDK API Methods - Network Exception Handling', () => {
     });
   });
 
-  describe('makeGetSubjectSequences', () => {
+  describe('makeGetSubjectDetail', () => {
     it('should return Err(network_error) when fetch throws', async () => {
       const client = createThrowingClient(networkError);
-      const getSequences = makeGetSubjectSequences(client);
+      const getSubjectDetail = makeGetSubjectDetail(client);
 
-      const result = await getSequences('maths');
+      const result = await getSubjectDetail('maths');
 
       expect(result.ok).toBe(false);
       if (!result.ok) {
@@ -313,18 +323,31 @@ describe('SDK API Methods - Network Exception Handling', () => {
       }
     });
 
-    it('should return Ok with subject sequences on successful response', async () => {
-      const mockData = createMockSubjectSequences();
+    it('should return Ok with subject detail carrying sequenceSlugs', async () => {
+      const mockData = createMockSubjectDetail();
       const client = createSuccessClient(mockData);
-      const getSequences = makeGetSubjectSequences(client);
+      const getSubjectDetail = makeGetSubjectDetail(client);
 
-      const result = await getSequences('maths');
+      const result = await getSubjectDetail('maths');
 
       expect(result.ok).toBe(true);
       if (result.ok) {
-        expect(result.value).toHaveLength(1);
-        expect(result.value[0].sequenceSlug).toBe('maths-primary');
-        expect(result.value[0].phaseSlug).toBe('primary');
+        expect(result.value.sequenceSlugs).toHaveLength(1);
+        expect(result.value.sequenceSlugs[0].sequenceSlug).toBe('maths-primary');
+        expect(result.value.sequenceSlugs[0].phaseSlug).toBe('primary');
+      }
+    });
+
+    it('should return Err(validation_error) when the response is not a subject detail', async () => {
+      const client = createSuccessClient([{ not: 'a subject detail' }]);
+      const getSubjectDetail = makeGetSubjectDetail(client);
+
+      const result = await getSubjectDetail('maths');
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error.kind).toBe('validation_error');
+        expect(result.error.resource).toBe('maths');
       }
     });
   });

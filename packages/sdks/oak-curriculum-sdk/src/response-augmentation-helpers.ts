@@ -61,15 +61,13 @@ export function isKeyStageScopedEndpoint(path: string): ContentType | undefined 
 /**
  * Checks if path is a single entity endpoint.
  *
- * Note: Order matters for paths like `/subjects/\{subject\}/sequences` which
- * contains both `/subjects/` and ends with `/sequences`. We prioritise based
- * on what the endpoint actually returns.
- *
  * Subject paths use positive exact-depth matching to prevent sub-resource
  * paths like `/subjects/maths/key-stages` or `/subjects/maths/years` from
  * being misclassified as subject entities. Lesson and unit paths retain
  * `includes()` matching because they have valid deeper paths (e.g.,
- * `/lessons/\{l\}/summary`, `/units/\{u\}/summary`).
+ * `/lessons/\{l\}/summary`, `/units/\{u\}/summary`). Sequence paths
+ * (`/sequences/\{slug\}`, `/sequences/\{sequence\}/units`) match via
+ * `includes()` on the `/sequences/` segment.
  */
 export function isSingleEntityEndpoint(path: string): ContentType | undefined {
   if (includesEntityCollection(path, 'lesson')) {
@@ -79,9 +77,6 @@ export function isSingleEntityEndpoint(path: string): ContentType | undefined {
     return 'unit';
   }
   if (includesEntityCollection(path, 'sequence')) {
-    return 'sequence';
-  }
-  if (endsWithEntityCollection(path, 'sequence')) {
     return 'sequence';
   }
   if (subjectCollectionPattern.test(path)) {

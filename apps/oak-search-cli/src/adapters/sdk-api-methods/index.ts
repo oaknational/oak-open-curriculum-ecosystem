@@ -4,7 +4,7 @@
  * Split by responsibility:
  * - lesson-methods: Lesson transcripts, summaries, and listings
  * - unit-methods: Unit listings and summaries
- * - sequence-methods: Subject sequences and sequence units
+ * - sequence-methods: Subject detail (sequence enumeration) and sequence units
  * - asset-methods: Subject assets
  *
  * All methods return `Result<T, SdkFetchError>` per ADR-088.
@@ -19,6 +19,6 @@ export {
 
 export { makeGetUnitsByKeyStageAndSubject, makeGetUnitSummary } from './unit-methods';
 
-export { makeGetSubjectSequences, makeGetSequenceUnits } from './sequence-methods';
+export { makeGetSubjectDetail, makeGetSequenceUnits } from './sequence-methods';
 
 export { makeGetSubjectAssets } from './asset-methods';

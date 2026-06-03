@@ -7,14 +7,14 @@ import type { OakApiPathBasedClient } from '../../client-types.js';
 /**
  * GENERATED FILE - DO NOT EDIT
  * 
- * Tool: get-subjects-sequences
- * Path: /subjects/\{subject\}/sequences
+ * Tool: get-sequences
+ * Path: /sequences/\{slug\}
  * Method: GET
  */
 
-const operationId = 'getSubjects-getSubjectSequence' as const;
-const name = 'get-subjects-sequences' as const;
-const path = '/subjects/{subject}/sequences' as const;
+const operationId = 'getSequences-getSubjectSequence' as const;
+const name = 'get-sequences' as const;
+const path = '/sequences/{slug}' as const;
 const method = 'GET' as const;
 
 
@@ -22,8 +22,8 @@ const method = 'GET' as const;
  * Path parameters derived from the OpenAPI schema.
  */
 export interface ToolPathParams {
-  /** The slug identifier for the subject */
-  readonly subject: string;
+  /** The sequence slug identifier */
+  readonly slug: string;
 }
 export interface ToolParams {
   readonly path: ToolPathParams;
@@ -31,11 +31,11 @@ export interface ToolParams {
 
 export interface ToolArgs { readonly params: ToolParams; }
 
-export const toolInputJsonSchema = { type: 'object' as const, properties: {"subject":{"type":"string","description":"The slug identifier for the subject","examples":["art"]}} as const, additionalProperties: false as const, required: ["subject"] };
-export const toolZodSchema = z.object({ params: z.object({ path: z.object({ subject: z.string().describe("The slug identifier for the subject") }) }) });
-export const toolMcpFlatInputSchema = z.strictObject({ subject: z.string().describe("The slug identifier for the subject").meta({ examples: ["art"] }) });
+export const toolInputJsonSchema = { type: 'object' as const, properties: {"slug":{"type":"string","description":"The sequence slug identifier","examples":["art-secondary-aqa"]}} as const, additionalProperties: false as const, required: ["slug"] };
+export const toolZodSchema = z.object({ params: z.object({ path: z.object({ slug: z.string().describe("The sequence slug identifier") }) }) });
+export const toolMcpFlatInputSchema = z.strictObject({ slug: z.string().describe("The sequence slug identifier").meta({ examples: ["art-secondary-aqa"] }) });
 export type ToolInputSchema = z.infer<typeof toolZodSchema>;
-const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"subject":{"type":"string","description":"The slug identifier for the subject","examples":["art"]}},"additionalProperties":false,"required":["subject"]}\nRequired: subject';
+const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"slug":{"type":"string","description":"The sequence slug identifier","examples":["art-secondary-aqa"]}},"additionalProperties":false,"required":["slug"]}\nRequired: slug';
 export const describeToolArgs = () => toolArgsDescription;
 /**
  * Transform flat MCP arguments to nested SDK format.
@@ -49,7 +49,7 @@ export const describeToolArgs = () => toolArgsDescription;
 export function transformFlatToNestedArgs(flatArgs: z.infer<typeof toolMcpFlatInputSchema>): ToolArgs {
   const params: ToolParams = {
     path: {
-      subject: flatArgs.subject,
+      slug: flatArgs.slug,
     },
   };
   return { params };
@@ -61,7 +61,7 @@ const STATUS_DISCRIMINANTS = { '200': 200, '400': 400, '401': 401, '404': 404 } 
 type DocumentedStatusDiscriminant = typeof STATUS_DISCRIMINANTS[DocumentedStatus];
 const primaryResponseDescriptor = responseDescriptors[documentedStatuses[0]];
 if (!primaryResponseDescriptor) {
-  throw new TypeError('Missing response descriptor for documented status 200 on getSubjects-getSubjectSequence.');
+  throw new TypeError('Missing response descriptor for documented status 200 on getSequences-getSubjectSequence.');
 }
 const resolveDescriptorForStatus = (status: number) => {
   const directKey = String(status);
@@ -82,23 +82,23 @@ const resolveDescriptorForStatus = (status: number) => {
  * @see MCP_TOOLS
  * @remarks Wiring layers (stdio, HTTP, aliases) rely on this metadata for execution and validation.
  */
-export const getSubjectsSequences = {
+export const getSequences = {
   invoke: async (client: OakApiPathBasedClient, args: ToolArgs) => {
     const validation = toolZodSchema.safeParse(args);
     if (!validation.success) {
       throw new TypeError(describeToolArgs());
     }
-    const endpoint = client["/subjects/{subject}/sequences"];
+    const endpoint = client["/sequences/{slug}"];
     const call = endpoint ? endpoint.GET : undefined;
     if (typeof call !== "function") {
-      throw new TypeError('Invalid method on endpoint: GET for /subjects/{subject}/sequences');
+      throw new TypeError('Invalid method on endpoint: GET for /sequences/{slug}');
     }
     const response = await call(validation.data);
     const status = response.response.status;
     const descriptorForStatus = resolveDescriptorForStatus(status);
     if (!descriptorForStatus) {
       const responseBody = status >= 200 && status < 300 ? response.data : response.error;
-      throw new UndocumentedResponseError(status, 'getSubjects-getSubjectSequence', documentedStatuses, responseBody);
+      throw new UndocumentedResponseError(status, 'getSequences-getSubjectSequence', documentedStatuses, responseBody);
     }
     const payload = status >= 200 && status < 300 ? response.data : response.error;
     return { httpStatus: status, payload };
@@ -113,7 +113,7 @@ export const getSubjectsSequences = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Sequencing information for a given subject\n\nThis tool returns an array of sequence objects that are currently available for a given subject. For secondary sequences, this includes information about key stage 4 variance such as exam board sequences and non-GCSE ‘core’ unit sequences.\n\nPREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.",
+  description: "Sequencing information for a given sequence slug\n\nThis tool returns the sequence object for the provided sequence slug. For secondary sequences, this includes information about key stage 4 variance such as exam board sequences and non-GCSE ‘core’ unit sequences.\n\nPREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.",
   path,
   method,
   documentedStatuses,
@@ -124,7 +124,7 @@ export const getSubjectsSequences = {
     destructiveHint: false,
     idempotentHint: true,
     openWorldHint: false,
-    title: "Get Subjects Sequences",
+    title: "Get Sequences",
   },
   _meta: {
     securitySchemes: [{ type: 'oauth2', scopes: ['email'] }],

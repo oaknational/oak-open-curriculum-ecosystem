@@ -62,25 +62,25 @@ export async function buildKs4SupplementationContext(
   subjectSlug: SearchSubjectSlug,
 ): Promise<Ks4SupplementationContext> {
   ingestLogger.debug('Building KS4 supplementation context', { subjectSlug });
-  // Fetch sequences for the subject
-  const sequencesResult = await client.getSubjectSequences(subjectSlug);
+  // Enumerate the subject's sequences from subject detail (`sequenceSlugs`)
+  const subjectDetailResult = await client.getSubjectDetail(subjectSlug);
 
-  if (!sequencesResult.ok) {
-    // No sequences available - return empty context
+  if (!subjectDetailResult.ok) {
+    // No subject detail available - return empty context
     return {
       unitContextMap: new Map(),
       subjectSlug,
     };
   }
 
-  const sequences = sequencesResult.value;
-
-  // Convert to SubjectSequenceInfo format
-  // ks4Options was removed from the API response in v0.7.0; the live-API path
-  // no longer carries per-sequence variant info. Bulk-data path still does.
-  const sequenceInfos: SubjectSequenceInfo[] = sequences.map((seq) => ({
-    sequenceSlug: seq.sequenceSlug,
-  }));
+  // Convert to SubjectSequenceInfo format. Per-unit tier/exam-subject data
+  // comes from the per-sequence units fetch below; subject detail only
+  // enumerates the sequence slugs (e.g. science-secondary-aqa/edexcel/ocr).
+  const sequenceInfos: SubjectSequenceInfo[] = subjectDetailResult.value.sequenceSlugs.map(
+    (seq) => ({
+      sequenceSlug: seq.sequenceSlug,
+    }),
+  );
 
   // Build context map by fetching sequence units
   const fetchSequenceUnits = async (slug: string): Promise<unknown> => {

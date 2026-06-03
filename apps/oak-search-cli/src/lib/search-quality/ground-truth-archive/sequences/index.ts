@@ -15,6 +15,9 @@
  * Sequence slugs verified against Oak API via:
  * - `get-subjects` for all subject slugs
  * - `get-subjects-sequences` for sequence slugs per subject
+ *   (endpoint since moved upstream to `/sequences/{slug}`; the tool is
+ *   now `get-sequences`, and per-subject sequence slugs come from
+ *   `get-subject-detail` `sequenceSlugs`)
  */
 
 import { SEQUENCE_STANDARD_QUERIES } from './standard-queries';

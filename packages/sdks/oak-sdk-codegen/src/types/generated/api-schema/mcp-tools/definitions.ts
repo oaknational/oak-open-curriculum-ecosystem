@@ -26,13 +26,13 @@ import { getLessonsQuiz } from './tools/get-lessons-quiz.js';
 import { getLessonsSummary } from './tools/get-lessons-summary.js';
 import { getLessonsTranscript } from './tools/get-lessons-transcript.js';
 import { getRateLimit } from './tools/get-rate-limit.js';
+import { getSequences } from './tools/get-sequences.js';
 import { getSequencesAssets } from './tools/get-sequences-assets.js';
 import { getSequencesQuestions } from './tools/get-sequences-questions.js';
 import { getSequencesUnits } from './tools/get-sequences-units.js';
 import { getSubjectDetail } from './tools/get-subject-detail.js';
 import { getSubjects } from './tools/get-subjects.js';
 import { getSubjectsKeyStages } from './tools/get-subjects-key-stages.js';
-import { getSubjectsSequences } from './tools/get-subjects-sequences.js';
 import { getSubjectsYears } from './tools/get-subjects-years.js';
 import { getThreads } from './tools/get-threads.js';
 import { getThreadsUnits } from './tools/get-threads-units.js';
@@ -52,13 +52,13 @@ export const MCP_TOOL_ENTRIES = [
   { name: 'get-lessons-summary', descriptor: getLessonsSummary, operationId: 'getLessons-getLesson' },
   { name: 'get-lessons-transcript', descriptor: getLessonsTranscript, operationId: 'getLessonTranscript-getLessonTranscript' },
   { name: 'get-rate-limit', descriptor: getRateLimit, operationId: 'getRateLimit-getRateLimit' },
+  { name: 'get-sequences', descriptor: getSequences, operationId: 'getSequences-getSubjectSequence' },
   { name: 'get-sequences-assets', descriptor: getSequencesAssets, operationId: 'getAssets-getSequenceAssets' },
   { name: 'get-sequences-questions', descriptor: getSequencesQuestions, operationId: 'getQuestions-getQuestionsForSequence' },
   { name: 'get-sequences-units', descriptor: getSequencesUnits, operationId: 'getSequences-getSequenceUnits' },
   { name: 'get-subject-detail', descriptor: getSubjectDetail, operationId: 'getSubjects-getSubject' },
   { name: 'get-subjects', descriptor: getSubjects, operationId: 'getSubjects-getAllSubjects' },
   { name: 'get-subjects-key-stages', descriptor: getSubjectsKeyStages, operationId: 'getSubjects-getSubjectKeyStages' },
-  { name: 'get-subjects-sequences', descriptor: getSubjectsSequences, operationId: 'getSubjects-getSubjectSequence' },
   { name: 'get-subjects-years', descriptor: getSubjectsYears, operationId: 'getSubjects-getSubjectYears' },
   { name: 'get-threads', descriptor: getThreads, operationId: 'getThreads-getAllThreads' },
   { name: 'get-threads-units', descriptor: getThreadsUnits, operationId: 'getThreads-getThreadUnits' },
@@ -79,13 +79,13 @@ const TOOL_ENTRY_BY_NAME = {
   'get-lessons-summary': MCP_TOOL_ENTRIES[10],
   'get-lessons-transcript': MCP_TOOL_ENTRIES[11],
   'get-rate-limit': MCP_TOOL_ENTRIES[12],
-  'get-sequences-assets': MCP_TOOL_ENTRIES[13],
-  'get-sequences-questions': MCP_TOOL_ENTRIES[14],
-  'get-sequences-units': MCP_TOOL_ENTRIES[15],
-  'get-subject-detail': MCP_TOOL_ENTRIES[16],
-  'get-subjects': MCP_TOOL_ENTRIES[17],
-  'get-subjects-key-stages': MCP_TOOL_ENTRIES[18],
-  'get-subjects-sequences': MCP_TOOL_ENTRIES[19],
+  'get-sequences': MCP_TOOL_ENTRIES[13],
+  'get-sequences-assets': MCP_TOOL_ENTRIES[14],
+  'get-sequences-questions': MCP_TOOL_ENTRIES[15],
+  'get-sequences-units': MCP_TOOL_ENTRIES[16],
+  'get-subject-detail': MCP_TOOL_ENTRIES[17],
+  'get-subjects': MCP_TOOL_ENTRIES[18],
+  'get-subjects-key-stages': MCP_TOOL_ENTRIES[19],
   'get-subjects-years': MCP_TOOL_ENTRIES[20],
   'get-threads': MCP_TOOL_ENTRIES[21],
   'get-threads-units': MCP_TOOL_ENTRIES[22],
@@ -119,13 +119,13 @@ export const MCP_TOOL_DESCRIPTORS = {
   'get-lessons-summary': getLessonsSummary,
   'get-lessons-transcript': getLessonsTranscript,
   'get-rate-limit': getRateLimit,
+  'get-sequences': getSequences,
   'get-sequences-assets': getSequencesAssets,
   'get-sequences-questions': getSequencesQuestions,
   'get-sequences-units': getSequencesUnits,
   'get-subject-detail': getSubjectDetail,
   'get-subjects': getSubjects,
   'get-subjects-key-stages': getSubjectsKeyStages,
-  'get-subjects-sequences': getSubjectsSequences,
   'get-subjects-years': getSubjectsYears,
   'get-threads': getThreads,
   'get-threads-units': getThreadsUnits,
@@ -152,6 +152,7 @@ export function getToolFromToolName<TName extends ToolName>(toolName: TName): To
 }
 
 const OPERATION_ID_TO_TOOL_NAME = {
+  'getSequences-getSubjectSequence': 'get-sequences',
   'getSequences-getSequenceUnits': 'get-sequences-units',
   'getLessonTranscript-getLessonTranscript': 'get-lessons-transcript',
   'getAssets-getSequenceAssets': 'get-sequences-assets',
@@ -159,7 +160,6 @@ const OPERATION_ID_TO_TOOL_NAME = {
   'getAssets-getLessonAssets': 'get-lessons-assets',
   'getSubjects-getAllSubjects': 'get-subjects',
   'getSubjects-getSubject': 'get-subject-detail',
-  'getSubjects-getSubjectSequence': 'get-subjects-sequences',
   'getSubjects-getSubjectKeyStages': 'get-subjects-key-stages',
   'getSubjects-getSubjectYears': 'get-subjects-years',
   'getKeyStages-getKeyStages': 'get-key-stages',
@@ -199,6 +199,7 @@ export function getToolFromOperationId<TId extends ToolOperationId>(operationId:
 }
 
 const TOOL_NAME_TO_OPERATION_ID = {
+  'get-sequences': 'getSequences-getSubjectSequence',
   'get-sequences-units': 'getSequences-getSequenceUnits',
   'get-lessons-transcript': 'getLessonTranscript-getLessonTranscript',
   'get-sequences-assets': 'getAssets-getSequenceAssets',
@@ -206,7 +207,6 @@ const TOOL_NAME_TO_OPERATION_ID = {
   'get-lessons-assets': 'getAssets-getLessonAssets',
   'get-subjects': 'getSubjects-getAllSubjects',
   'get-subject-detail': 'getSubjects-getSubject',
-  'get-subjects-sequences': 'getSubjects-getSubjectSequence',
   'get-subjects-key-stages': 'getSubjects-getSubjectKeyStages',
   'get-subjects-years': 'getSubjects-getSubjectYears',
   'get-key-stages': 'getKeyStages-getKeyStages',

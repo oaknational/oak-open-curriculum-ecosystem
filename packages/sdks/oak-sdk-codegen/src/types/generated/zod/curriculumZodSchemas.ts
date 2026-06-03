@@ -12,6 +12,7 @@ interface Endpoint {
 }
 
 const OPERATION_ID_BY_METHOD_AND_PATH = {
+  "get /sequences/:slug": "getSequences-getSubjectSequence",
   "get /sequences/:sequence/units": "getSequences-getSequenceUnits",
   "get /lessons/:lesson/transcript": "getLessonTranscript-getLessonTranscript",
   "get /search/transcripts": "searchTranscripts-searchTranscripts",
@@ -21,7 +22,6 @@ const OPERATION_ID_BY_METHOD_AND_PATH = {
   "get /lessons/:lesson/assets/:type": "getAssets-getLessonAsset",
   "get /subjects": "getSubjects-getAllSubjects",
   "get /subjects/:subject": "getSubjects-getSubject",
-  "get /subjects/:subject/sequences": "getSubjects-getSubjectSequence",
   "get /subjects/:subject/key-stages": "getSubjects-getSubjectKeyStages",
   "get /subjects/:subject/years": "getSubjects-getSubjectYears",
   "get /key-stages": "getKeyStages-getKeyStages",
@@ -41,6 +41,7 @@ const OPERATION_ID_BY_METHOD_AND_PATH = {
   "get /rate-limit": "getRateLimit-getRateLimit",
 } as const;
 const PRIMARY_RESPONSE_STATUS_BY_OPERATION_ID = {
+  "getSequences-getSubjectSequence": "200",
   "getSequences-getSequenceUnits": "200",
   "getLessonTranscript-getLessonTranscript": "200",
   "searchTranscripts-searchTranscripts": "200",
@@ -50,7 +51,6 @@ const PRIMARY_RESPONSE_STATUS_BY_OPERATION_ID = {
   "getAssets-getLessonAsset": "200",
   "getSubjects-getAllSubjects": "200",
   "getSubjects-getSubject": "200",
-  "getSubjects-getSubjectSequence": "200",
   "getSubjects-getSubjectKeyStages": "200",
   "getSubjects-getSubjectYears": "200",
   "getKeyStages-getKeyStages": "200",
@@ -107,6 +107,56 @@ function sanitizeSchemaKeys(
 }
 
 
+const SubjectSequenceResponseSchema = z
+  .object({
+    sequenceSlug: z.string(),
+    years: z.array(z.number()),
+    keyStages: z.array(
+      z.object({ keyStageTitle: z.string(), keyStageSlug: z.string() }).strict()
+    ),
+    phaseSlug: z.string(),
+    phaseTitle: z.string(),
+    ks4ProgrammeFactors: z
+      .object({
+        examBoard: z.array(
+          z.object({ title: z.string(), slug: z.string() }).strict()
+        ),
+        pathway: z.array(
+          z.object({ title: z.string(), slug: z.string() }).strict()
+        ),
+        tier: z.array(
+          z.object({ title: z.string(), slug: z.string() }).strict()
+        ),
+        childSubject: z.array(
+          z.object({ title: z.string(), slug: z.string() }).strict()
+        ),
+      })
+      .partial()
+      .strict(),
+    oakUrl: z.url().optional(),
+  })
+  .strict();
+const error_BAD_REQUEST = z
+  .object({
+    message: z.string(),
+    code: z.string(),
+    issues: z.array(z.object({ message: z.string() }).strict()).optional(),
+  })
+  .strict();
+const error_UNAUTHORIZED = z
+  .object({
+    message: z.string(),
+    code: z.string(),
+    issues: z.array(z.object({ message: z.string() }).strict()).optional(),
+  })
+  .strict();
+const error_NOT_FOUND = z
+  .object({
+    message: z.string(),
+    code: z.string(),
+    issues: z.array(z.object({ message: z.string() }).strict()).optional(),
+  })
+  .strict();
 const SequenceUnitsResponseSchema = z.array(
   z.union([
     z
@@ -487,27 +537,6 @@ const SequenceUnitsResponseSchema = z.array(
       .strict(),
   ])
 );
-const error_BAD_REQUEST = z
-  .object({
-    message: z.string(),
-    code: z.string(),
-    issues: z.array(z.object({ message: z.string() }).strict()).optional(),
-  })
-  .strict();
-const error_UNAUTHORIZED = z
-  .object({
-    message: z.string(),
-    code: z.string(),
-    issues: z.array(z.object({ message: z.string() }).strict()).optional(),
-  })
-  .strict();
-const error_NOT_FOUND = z
-  .object({
-    message: z.string(),
-    code: z.string(),
-    issues: z.array(z.object({ message: z.string() }).strict()).optional(),
-  })
-  .strict();
 const TranscriptResponseSchema = z
   .object({
     transcript: z.string(),
@@ -612,34 +641,25 @@ const LessonAssetsResponseSchema = z
   .strict();
 const LessonAssetResponseSchema = z.unknown();
 const AllSubjectsResponseSchema = z.array(
-  z
-    .object({
-      subjectTitle: z.string(),
-      subjectSlug: z.string(),
-      sequenceSlugs: z.array(
-        z
-          .object({
-            sequenceSlug: z.string(),
-            years: z.array(z.number()),
-            keyStages: z.array(
-              z
-                .object({ keyStageTitle: z.string(), keyStageSlug: z.string() })
-                .strict()
-            ),
-            phaseSlug: z.string(),
-            phaseTitle: z.string(),
-          })
-          .strict()
-      ),
-      years: z.array(z.number()),
-      keyStages: z.array(
-        z
-          .object({ keyStageTitle: z.string(), keyStageSlug: z.string() })
-          .strict()
-      ),
-      oakUrl: z.url().optional(),
-    })
-    .strict()
+  z.enum([
+    "art",
+    "citizenship",
+    "computing",
+    "cooking-nutrition",
+    "design-technology",
+    "english",
+    "french",
+    "geography",
+    "german",
+    "history",
+    "maths",
+    "music",
+    "physical-education",
+    "religious-education",
+    "rshe-pshe",
+    "science",
+    "spanish",
+  ])
 );
 const SubjectResponseSchema = z
   .object({
@@ -684,22 +704,6 @@ const SubjectResponseSchema = z
     oakUrl: z.url().optional(),
   })
   .strict();
-const SubjectSequenceResponseSchema = z.array(
-  z
-    .object({
-      sequenceSlug: z.string(),
-      years: z.array(z.number()),
-      keyStages: z.array(
-        z
-          .object({ keyStageTitle: z.string(), keyStageSlug: z.string() })
-          .strict()
-      ),
-      phaseSlug: z.string(),
-      phaseTitle: z.string(),
-      oakUrl: z.url().optional(),
-    })
-    .strict()
-);
 const SubjectKeyStagesResponseSchema = z.array(
   z
     .object({
@@ -1701,10 +1705,11 @@ const renameInlineSchema = (original: string) => {
 };
 
 export const rawCurriculumSchemas = {
-  SequenceUnitsResponseSchema,
+  SubjectSequenceResponseSchema,
   error_BAD_REQUEST,
   error_UNAUTHORIZED,
   error_NOT_FOUND,
+  SequenceUnitsResponseSchema,
   TranscriptResponseSchema,
   SearchTranscriptResponseSchema,
   SequenceAssetsResponseSchema,
@@ -1713,7 +1718,6 @@ export const rawCurriculumSchemas = {
   LessonAssetResponseSchema,
   AllSubjectsResponseSchema,
   SubjectResponseSchema,
-  SubjectSequenceResponseSchema,
   SubjectKeyStagesResponseSchema,
   SubjectYearsResponseSchema,
   KeyStageResponseSchema,
@@ -2668,10 +2672,61 @@ This endpoint contains licence information for any third-party content contained
   },
   {
     method: "get",
-    path: "/subjects",
-    description: `This endpoint returns an array of all available subjects and their associated sequences, key stages and years.`,
+    path: "/sequences/:slug",
+    description: `This endpoint returns the sequence object for the provided sequence slug. For secondary sequences, this includes information about key stage 4 variance such as exam board sequences and non-GCSE ‘core’ unit sequences.`,
     requestFormat: "json",
-    response: AllSubjectsResponseSchema,
+    parameters: [
+      {
+        name: "slug",
+        type: "Path",
+        schema: z.string(),
+      },
+    ],
+    response: SubjectSequenceResponseSchema,
+    errors: [
+      {
+        status: 400,
+        description: `Bad request - e.g. &quot;Content is blocked for copyright reasons&quot;`,
+        schema: error_BAD_REQUEST,
+      },
+      {
+        status: 401,
+        description: `API token not provided or invalid`,
+        schema: error_UNAUTHORIZED,
+      },
+      {
+        status: 404,
+        description: `Detail of the request causing the 404, e.g. &quot;Lesson not found&quot;`,
+        schema: error_NOT_FOUND,
+      },
+    ],
+  },
+  {
+    method: "get",
+    path: "/subjects",
+    description: `This endpoint returns an array of available subject slugs.`,
+    requestFormat: "json",
+    response: z.array(
+      z.enum([
+        "art",
+        "citizenship",
+        "computing",
+        "cooking-nutrition",
+        "design-technology",
+        "english",
+        "french",
+        "geography",
+        "german",
+        "history",
+        "maths",
+        "music",
+        "physical-education",
+        "religious-education",
+        "rshe-pshe",
+        "science",
+        "spanish",
+      ])
+    ),
     errors: [
       {
         status: 400,
@@ -2752,37 +2807,6 @@ This endpoint contains licence information for any third-party content contained
       },
     ],
     response: SubjectKeyStagesResponseSchema,
-    errors: [
-      {
-        status: 400,
-        description: `Bad request - e.g. &quot;Content is blocked for copyright reasons&quot;`,
-        schema: error_BAD_REQUEST,
-      },
-      {
-        status: 401,
-        description: `API token not provided or invalid`,
-        schema: error_UNAUTHORIZED,
-      },
-      {
-        status: 404,
-        description: `Detail of the request causing the 404, e.g. &quot;Lesson not found&quot;`,
-        schema: error_NOT_FOUND,
-      },
-    ],
-  },
-  {
-    method: "get",
-    path: "/subjects/:subject/sequences",
-    description: `This endpoint returns an array of sequence objects that are currently available for a given subject. For secondary sequences, this includes information about key stage 4 variance such as exam board sequences and non-GCSE ‘core’ unit sequences.`,
-    requestFormat: "json",
-    parameters: [
-      {
-        name: "subject",
-        type: "Path",
-        schema: z.string(),
-      },
-    ],
-    response: SubjectSequenceResponseSchema,
     errors: [
       {
         status: 400,

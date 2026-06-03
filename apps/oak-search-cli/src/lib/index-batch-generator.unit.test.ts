@@ -18,6 +18,7 @@ import type {
 } from '../types/oak';
 import type { RateLimitTracker } from '@oaknational/curriculum-sdk';
 import { ok } from '@oaknational/result';
+import { createSubjectDetail } from '../test-helpers/mock-oak-client';
 
 /** Minimal valid SearchLessonSummary for mock client (tests do not inspect fields). */
 function minimalLessonSummary(): SearchLessonSummary {
@@ -82,7 +83,7 @@ function createMinimalMockClient(): OakClient {
     getLessonTranscript: async () => ok({ transcript: '', vtt: '' }),
     getLessonSummary: async () => ok(minimalLessonSummary()),
     getUnitSummary: async () => ok(minimalUnitSummary()),
-    getSubjectSequences: async () => ok([]),
+    getSubjectDetail: async () => ok(createSubjectDetail()),
     getSequenceUnits: async () => ok([]),
     getAllThreads: async () => ok([]),
     getThreadUnits: async () => ok([]),

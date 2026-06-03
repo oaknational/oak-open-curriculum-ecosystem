@@ -2,21 +2,26 @@
  * Integration tests for API supplementation context building.
  *
  * Tests `buildKs4SupplementationContext` which wires the OakClient
- * to build a KS4 supplementation context from sequence/unit API data.
+ * to build a KS4 supplementation context from subject-detail
+ * sequence enumeration plus per-sequence unit API data.
  */
 
 import { describe, it, expect, vi } from 'vitest';
 import { buildKs4SupplementationContext } from './api-supplementation.js';
-import { createMockClient } from '../test-helpers/mock-oak-client';
+import {
+  createMockClient,
+  createSubjectDetail,
+  createSequenceEntry,
+} from '../test-helpers/mock-oak-client';
 
 // ============================================================================
 // Tests: buildKs4SupplementationContext
 // ============================================================================
 
 describe('buildKs4SupplementationContext', () => {
-  it('returns empty context when getSubjectSequences fails', async () => {
+  it('returns empty context when getSubjectDetail fails', async () => {
     const client = createMockClient({
-      getSubjectSequences: vi.fn().mockResolvedValue({
+      getSubjectDetail: vi.fn().mockResolvedValue({
         ok: false,
         error: 'Not found',
       }),
@@ -28,11 +33,11 @@ describe('buildKs4SupplementationContext', () => {
     expect(context.subjectSlug).toBe('maths');
   });
 
-  it('returns empty context when no sequences found', async () => {
+  it('returns empty context when subject detail has no sequences', async () => {
     const client = createMockClient({
-      getSubjectSequences: vi.fn().mockResolvedValue({
+      getSubjectDetail: vi.fn().mockResolvedValue({
         ok: true,
-        value: [],
+        value: createSubjectDetail({ sequenceSlugs: [] }),
       }),
     });
 
@@ -44,9 +49,11 @@ describe('buildKs4SupplementationContext', () => {
 
   it('builds context from sequence units with tiers', async () => {
     const client = createMockClient({
-      getSubjectSequences: vi.fn().mockResolvedValue({
+      getSubjectDetail: vi.fn().mockResolvedValue({
         ok: true,
-        value: [{ sequenceSlug: 'maths-secondary' }],
+        value: createSubjectDetail({
+          sequenceSlugs: [createSequenceEntry('maths-secondary')],
+        }),
       }),
       getSequenceUnits: vi.fn().mockResolvedValue({
         ok: true,
@@ -75,5 +82,30 @@ describe('buildKs4SupplementationContext', () => {
     expect(context.unitContextMap.size).toBe(2);
     expect(context.unitContextMap.has('algebra-foundation')).toBe(true);
     expect(context.unitContextMap.has('algebra-higher')).toBe(true);
+  });
+
+  it('enumerates per-board sequences from subject detail sequenceSlugs', async () => {
+    const getSequenceUnits = vi.fn().mockResolvedValue({ ok: true, value: [] });
+    const client = createMockClient({
+      getSubjectDetail: vi.fn().mockResolvedValue({
+        ok: true,
+        value: createSubjectDetail({
+          subjectTitle: 'Science',
+          subjectSlug: 'science',
+          sequenceSlugs: [
+            createSequenceEntry('science-secondary-aqa'),
+            createSequenceEntry('science-secondary-edexcel'),
+            createSequenceEntry('science-secondary-ocr'),
+          ],
+        }),
+      }),
+      getSequenceUnits,
+    });
+
+    await buildKs4SupplementationContext(client, 'science');
+
+    expect(getSequenceUnits).toHaveBeenCalledWith('science-secondary-aqa');
+    expect(getSequenceUnits).toHaveBeenCalledWith('science-secondary-edexcel');
+    expect(getSequenceUnits).toHaveBeenCalledWith('science-secondary-ocr');
   });
 });

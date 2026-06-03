@@ -42,10 +42,10 @@ export const PATHS = {
   '/sequences/{sequence}/assets': '/sequences/{sequence}/assets',
   '/sequences/{sequence}/questions': '/sequences/{sequence}/questions',
   '/sequences/{sequence}/units': '/sequences/{sequence}/units',
+  '/sequences/{slug}': '/sequences/{slug}',
   '/subjects': '/subjects',
   '/subjects/{subject}': '/subjects/{subject}',
   '/subjects/{subject}/key-stages': '/subjects/{subject}/key-stages',
-  '/subjects/{subject}/sequences': '/subjects/{subject}/sequences',
   '/subjects/{subject}/years': '/subjects/{subject}/years',
   '/threads': '/threads',
   '/threads/{threadSlug}/units': '/threads/{threadSlug}/units',
@@ -145,10 +145,10 @@ export type GetResponseBody =
   | Paths['/sequences/{sequence}/assets']['get']['responses'][200]['content']['application/json']
   | Paths['/sequences/{sequence}/questions']['get']['responses'][200]['content']['application/json']
   | Paths['/sequences/{sequence}/units']['get']['responses'][200]['content']['application/json']
+  | Paths['/sequences/{slug}']['get']['responses'][200]['content']['application/json']
   | Paths['/subjects']['get']['responses'][200]['content']['application/json']
   | Paths['/subjects/{subject}']['get']['responses'][200]['content']['application/json']
   | Paths['/subjects/{subject}/key-stages']['get']['responses'][200]['content']['application/json']
-  | Paths['/subjects/{subject}/sequences']['get']['responses'][200]['content']['application/json']
   | Paths['/subjects/{subject}/years']['get']['responses'][200]['content']['application/json']
   | Paths['/threads']['get']['responses'][200]['content']['application/json']
   | Paths['/threads/{threadSlug}/units']['get']['responses'][200]['content']['application/json']
@@ -285,7 +285,7 @@ export function isValidPathParameter(parameterType: unknown, value: unknown): bo
 /**
  * Path grouping keys
  */
-export type PathGroupingKeys = "NO_PARAMS" | "keyStage_subject" | "lesson" | "lesson_type" | "sequence" | "subject" | "threadSlug" | "unit";
+export type PathGroupingKeys = "NO_PARAMS" | "keyStage_subject" | "lesson" | "lesson_type" | "sequence" | "slug" | "subject" | "threadSlug" | "unit";
 
 
 /**
@@ -424,6 +424,13 @@ export const VALID_PATHS_BY_PARAMETERS: ValidPathGroupings = {
         "paramsKey": "sequence"
     }
   },
+  "slug": {
+    "/sequences/{slug}": {
+        "params": "slug",
+        "path": "/sequences/{slug}",
+        "paramsKey": "slug"
+    }
+  },
   "subject": {
     "/subjects/{subject}": {
         "params": "subject",
@@ -433,11 +440,6 @@ export const VALID_PATHS_BY_PARAMETERS: ValidPathGroupings = {
     "/subjects/{subject}/key-stages": {
         "params": "subject",
         "path": "/subjects/{subject}/key-stages",
-        "paramsKey": "subject"
-    },
-    "/subjects/{subject}/sequences": {
-        "params": "subject",
-        "path": "/subjects/{subject}/sequences",
         "paramsKey": "subject"
     },
     "/subjects/{subject}/years": {
@@ -467,6 +469,68 @@ export const VALID_PATHS_BY_PARAMETERS: ValidPathGroupings = {
  * Generated at build time for runtime use
  */
 export const PATH_OPERATIONS = [
+  {
+    "path": "/sequences/{slug}",
+    "method": "get",
+    "operationId": "getSequences-getSubjectSequence",
+    "summary": "Sequencing information for a given sequence slug",
+    "description": "This endpoint returns the sequence object for the provided sequence slug. For secondary sequences, this includes information about key stage 4 variance such as exam board sequences and non-GCSE ‘core’ unit sequences.",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "slug",
+        "description": "The sequence slug identifier",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "description": "The sequence slug identifier",
+          "example": "art-secondary-aqa"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Successful response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/SubjectSequenceResponseSchema"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.BAD_REQUEST"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "API token not provided or invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.UNAUTHORIZED"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.NOT_FOUND"
+            }
+          }
+        }
+      }
+    }
+  },
   {
     "path": "/sequences/{sequence}/units",
     "method": "get",
@@ -1065,7 +1129,7 @@ export const PATH_OPERATIONS = [
     "method": "get",
     "operationId": "getSubjects-getAllSubjects",
     "summary": "Subjects",
-    "description": "This endpoint returns an array of all available subjects and their associated sequences, key stages and years.",
+    "description": "This endpoint returns an array of available subject slugs.",
     "parameters": [],
     "responses": {
       "200": {
@@ -1155,68 +1219,6 @@ export const PATH_OPERATIONS = [
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/SubjectResponseSchema"
-            }
-          }
-        }
-      },
-      "400": {
-        "description": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/error.BAD_REQUEST"
-            }
-          }
-        }
-      },
-      "401": {
-        "description": "API token not provided or invalid",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/error.UNAUTHORIZED"
-            }
-          }
-        }
-      },
-      "404": {
-        "description": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/error.NOT_FOUND"
-            }
-          }
-        }
-      }
-    }
-  },
-  {
-    "path": "/subjects/{subject}/sequences",
-    "method": "get",
-    "operationId": "getSubjects-getSubjectSequence",
-    "summary": "Sequencing information for a given subject",
-    "description": "This endpoint returns an array of sequence objects that are currently available for a given subject. For secondary sequences, this includes information about key stage 4 variance such as exam board sequences and non-GCSE ‘core’ unit sequences.",
-    "parameters": [
-      {
-        "in": "path",
-        "name": "subject",
-        "description": "The slug identifier for the subject",
-        "required": true,
-        "schema": {
-          "type": "string",
-          "description": "The slug identifier for the subject",
-          "example": "art"
-        }
-      }
-    ],
-    "responses": {
-      "200": {
-        "description": "Successful response",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/SubjectSequenceResponseSchema"
             }
           }
         }
@@ -2750,16 +2752,16 @@ export type PathOperation = (typeof PATH_OPERATIONS)[number];
  * Generated at build time for runtime use
  */
 export const OPERATIONS_BY_ID = {
-  "getSequences-getSequenceUnits": PATH_OPERATIONS[0],
-  "getLessonTranscript-getLessonTranscript": PATH_OPERATIONS[1],
-  "searchTranscripts-searchTranscripts": PATH_OPERATIONS[2],
-  "getAssets-getSequenceAssets": PATH_OPERATIONS[3],
-  "getAssets-getSubjectAssets": PATH_OPERATIONS[4],
-  "getAssets-getLessonAssets": PATH_OPERATIONS[5],
-  "getAssets-getLessonAsset": PATH_OPERATIONS[6],
-  "getSubjects-getAllSubjects": PATH_OPERATIONS[7],
-  "getSubjects-getSubject": PATH_OPERATIONS[8],
-  "getSubjects-getSubjectSequence": PATH_OPERATIONS[9],
+  "getSequences-getSubjectSequence": PATH_OPERATIONS[0],
+  "getSequences-getSequenceUnits": PATH_OPERATIONS[1],
+  "getLessonTranscript-getLessonTranscript": PATH_OPERATIONS[2],
+  "searchTranscripts-searchTranscripts": PATH_OPERATIONS[3],
+  "getAssets-getSequenceAssets": PATH_OPERATIONS[4],
+  "getAssets-getSubjectAssets": PATH_OPERATIONS[5],
+  "getAssets-getLessonAssets": PATH_OPERATIONS[6],
+  "getAssets-getLessonAsset": PATH_OPERATIONS[7],
+  "getSubjects-getAllSubjects": PATH_OPERATIONS[8],
+  "getSubjects-getSubject": PATH_OPERATIONS[9],
   "getSubjects-getSubjectKeyStages": PATH_OPERATIONS[10],
   "getSubjects-getSubjectYears": PATH_OPERATIONS[11],
   "getKeyStages-getKeyStages": PATH_OPERATIONS[12],

@@ -12,9 +12,9 @@ import type {
   KeyStage,
   SearchLessonSummary,
   SearchSubjectSlug,
-  SearchSubjectSequences,
   SearchUnitSummary,
   SequenceUnitsResponse,
+  SubjectDetail,
 } from '../types/oak';
 import type { Result } from '@oaknational/result';
 import type { SdkFetchError, createOakBaseClient } from '@oaknational/curriculum-sdk';
@@ -49,8 +49,14 @@ export interface LessonsPaginationOptions {
   readonly unit?: string;
 }
 
-/** Subject sequence entry type. */
-export type SubjectSequenceEntry = SearchSubjectSequences[number];
+/**
+ * Subject sequence entry type.
+ *
+ * One element of the subject detail's `sequenceSlugs` enumeration
+ * (`/subjects/{subject}`): `sequenceSlug`, `years`, `keyStages`,
+ * `phaseSlug`, `phaseTitle`. Schema-derived via `SubjectDetail`.
+ */
+export type SubjectSequenceEntry = SubjectDetail['sequenceSlugs'][number];
 
 /**
  * Asset entry from subject assets endpoint.
@@ -91,10 +97,13 @@ export type GetUnitSummaryFn = (
   unitSlug: string,
 ) => Promise<Result<SearchUnitSummary, SdkFetchError>>;
 
-/** Fetches subject sequences. Returns Result per ADR-088. */
-export type GetSubjectSequencesFn = (
+/**
+ * Fetches subject detail (`/subjects/{subject}`), carrying the
+ * `sequenceSlugs` enumeration. Returns Result per ADR-088.
+ */
+export type GetSubjectDetailFn = (
   subject: SearchSubjectSlug,
-) => Promise<Result<SearchSubjectSequences, SdkFetchError>>;
+) => Promise<Result<SubjectDetail, SdkFetchError>>;
 
 /** Fetches units in a sequence. Returns Result per ADR-088. */
 export type GetSequenceUnitsFn = (
@@ -143,7 +152,7 @@ export interface OakClient {
   getLessonTranscript: GetTranscriptFn;
   getLessonSummary: GetLessonSummaryFn;
   getUnitSummary: GetUnitSummaryFn;
-  getSubjectSequences: GetSubjectSequencesFn;
+  getSubjectDetail: GetSubjectDetailFn;
   getSequenceUnits: GetSequenceUnitsFn;
   getAllThreads: ReturnType<typeof makeGetAllThreads>;
   getThreadUnits: ReturnType<typeof makeGetThreadUnits>;

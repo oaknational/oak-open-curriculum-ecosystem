@@ -1,4 +1,24 @@
 export interface paths {
+    "/sequences/{slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Sequencing information for a given sequence slug
+         * This endpoint returns the sequence object for the provided sequence slug. For secondary sequences, this includes information about key stage 4 variance such as exam board sequences and non-GCSE ‘core’ unit sequences.
+         */
+        get: operations["getSequences-getSubjectSequence"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/sequences/{sequence}/units": {
         parameters: {
             query?: never;
@@ -151,7 +171,7 @@ export interface paths {
         };
         /**
          * Subjects
-         * This endpoint returns an array of all available subjects and their associated sequences, key stages and years.
+         * This endpoint returns an array of available subject slugs.
          */
         get: operations["getSubjects-getAllSubjects"];
         put?: never;
@@ -174,26 +194,6 @@ export interface paths {
          * This endpoint returns the sequences, key stages and years that are currently available for a given subject.
          */
         get: operations["getSubjects-getSubject"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/subjects/{subject}/sequences": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Sequencing information for a given subject
-         * This endpoint returns an array of sequence objects that are currently available for a given subject. For secondary sequences, this includes information about key stage 4 variance such as exam board sequences and non-GCSE ‘core’ unit sequences.
-         */
-        get: operations["getSubjects-getSubjectSequence"];
         put?: never;
         post?: never;
         delete?: never;
@@ -542,6 +542,200 @@ export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
         /**
+         * @example \{
+         *       "sequenceSlug": "computing-secondary-core",
+         *       "years": [
+         *         7,
+         *         8,
+         *         9,
+         *         10,
+         *         11
+         *       ],
+         *       "keyStages": [
+         *         \{
+         *           "keyStageTitle": "Key Stage 3",
+         *           "keyStageSlug": "ks3"
+         *         \},
+         *         \{
+         *           "keyStageTitle": "Key Stage 4",
+         *           "keyStageSlug": "ks4"
+         *         \}
+         *       ],
+         *       "phaseSlug": "secondary",
+         *       "phaseTitle": "Secondary",
+         *       "ks4ProgrammeFactors": \{
+         *         "examBoard": [
+         *           \{
+         *             "title": "AQA",
+         *             "slug": "aqa"
+         *           \},
+         *           \{
+         *             "title": "Edexcel",
+         *             "slug": "edexcel"
+         *           \},
+         *           \{
+         *             "title": "OCR",
+         *             "slug": "ocr"
+         *           \}
+         *         ],
+         *         "pathway": [
+         *           \{
+         *             "title": "Core",
+         *             "slug": "core"
+         *           \}
+         *         ],
+         *         "tier": [
+         *           \{
+         *             "title": "Foundation",
+         *             "slug": "foundation"
+         *           \},
+         *           \{
+         *             "title": "Higher",
+         *             "slug": "higher"
+         *           \}
+         *         ]
+         *       \}
+         *     \}
+         */
+        SubjectSequenceResponseSchema: {
+            /** The unique identifier for each sequence */
+            sequenceSlug: string;
+            /** The years for which this subject has content available for */
+            years: number[];
+            /** The key stage slug identifiers for which this subject has content available for. */
+            keyStages: {
+                /** The key stage title for the given key stage */
+                keyStageTitle: string;
+                /** The unique identifier for a given key stage */
+                keyStageSlug: string;
+            }[];
+            /** The unique identifier for the phase to which this sequence belongs */
+            phaseSlug: string;
+            /** The title for the phase to which this sequence belongs */
+            phaseTitle: string;
+            /** The programme factors that apply to this subject at key stage 4, with the valid values for each factor. */
+            ks4ProgrammeFactors: {
+                /** The valid exam board values offered by Oak for this subject at key stage 4. */
+                examBoard?: {
+                    /** The display title for a valid programme factor value */
+                    title: string;
+                    /** The slug identifier for a valid programme factor value */
+                    slug: string;
+                }[];
+                /** The valid pathway values offered by Oak for this subject at key stage 4. */
+                pathway?: {
+                    /** The display title for a valid programme factor value */
+                    title: string;
+                    /** The slug identifier for a valid programme factor value */
+                    slug: string;
+                }[];
+                /** The valid tier values offered by Oak for this subject at key stage 4. */
+                tier?: {
+                    /** The display title for a valid programme factor value */
+                    title: string;
+                    /** The slug identifier for a valid programme factor value */
+                    slug: string;
+                }[];
+                /** The child subjects offered by Oak for this subject at key stage 4 (e.g. biology, chemistry, physics and combined-science under science). Only present for Science, which is split into child subjects at KS4. */
+                childSubject?: {
+                    /** The display title for a valid programme factor value */
+                    title: string;
+                    /** The slug identifier for a valid programme factor value */
+                    slug: string;
+                }[];
+            };
+            /**
+             * Format: uri
+             * The Oak URL for this resource — a direct, slug-based URL generated by the SDK. Distinct from canonicalUrl, which encodes full curriculum context.
+             * @example https://www.thenational.academy/teachers/lessons/example-lesson
+             */
+            oakUrl?: string;
+        };
+        /**
+         * Bad request - e.g. "Content is blocked for copyright reasons" error (400)
+         * The error information
+         * @example \{
+         *       "code": "BAD_REQUEST",
+         *       "message": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
+         *       "issues": []
+         *     \}
+         */
+        "error.BAD_REQUEST": {
+            /**
+             * The error message
+             * @example Bad request - e.g. "Content is blocked for copyright reasons"
+             */
+            message: string;
+            /**
+             * The error code
+             * @example BAD_REQUEST
+             */
+            code: string;
+            /**
+             * An array of issues that were responsible for the error
+             * @example []
+             */
+            issues?: {
+                message: string;
+            }[];
+        };
+        /**
+         * API token not provided or invalid error (401)
+         * The error information
+         * @example \{
+         *       "code": "UNAUTHORIZED",
+         *       "message": "API token not provided or invalid",
+         *       "issues": []
+         *     \}
+         */
+        "error.UNAUTHORIZED": {
+            /**
+             * The error message
+             * @example API token not provided or invalid
+             */
+            message: string;
+            /**
+             * The error code
+             * @example UNAUTHORIZED
+             */
+            code: string;
+            /**
+             * An array of issues that were responsible for the error
+             * @example []
+             */
+            issues?: {
+                message: string;
+            }[];
+        };
+        /**
+         * Detail of the request causing the 404, e.g. "Lesson not found" error (404)
+         * The error information
+         * @example \{
+         *       "code": "NOT_FOUND",
+         *       "message": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
+         *       "issues": []
+         *     \}
+         */
+        "error.NOT_FOUND": {
+            /**
+             * The error message
+             * @example Detail of the request causing the 404, e.g. "Lesson not found"
+             */
+            message: string;
+            /**
+             * The error code
+             * @example NOT_FOUND
+             */
+            code: string;
+            /**
+             * An array of issues that were responsible for the error
+             * @example []
+             */
+            issues?: {
+                message: string;
+            }[];
+        };
+        /**
          * @example [
          *       \{
          *         "year": 1,
@@ -859,90 +1053,6 @@ export interface components {
             oakUrl?: string;
         })[];
         /**
-         * Bad request - e.g. "Content is blocked for copyright reasons" error (400)
-         * The error information
-         * @example \{
-         *       "code": "BAD_REQUEST",
-         *       "message": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
-         *       "issues": []
-         *     \}
-         */
-        "error.BAD_REQUEST": {
-            /**
-             * The error message
-             * @example Bad request - e.g. "Content is blocked for copyright reasons"
-             */
-            message: string;
-            /**
-             * The error code
-             * @example BAD_REQUEST
-             */
-            code: string;
-            /**
-             * An array of issues that were responsible for the error
-             * @example []
-             */
-            issues?: {
-                message: string;
-            }[];
-        };
-        /**
-         * API token not provided or invalid error (401)
-         * The error information
-         * @example \{
-         *       "code": "UNAUTHORIZED",
-         *       "message": "API token not provided or invalid",
-         *       "issues": []
-         *     \}
-         */
-        "error.UNAUTHORIZED": {
-            /**
-             * The error message
-             * @example API token not provided or invalid
-             */
-            message: string;
-            /**
-             * The error code
-             * @example UNAUTHORIZED
-             */
-            code: string;
-            /**
-             * An array of issues that were responsible for the error
-             * @example []
-             */
-            issues?: {
-                message: string;
-            }[];
-        };
-        /**
-         * Detail of the request causing the 404, e.g. "Lesson not found" error (404)
-         * The error information
-         * @example \{
-         *       "code": "NOT_FOUND",
-         *       "message": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
-         *       "issues": []
-         *     \}
-         */
-        "error.NOT_FOUND": {
-            /**
-             * The error message
-             * @example Detail of the request causing the 404, e.g. "Lesson not found"
-             */
-            message: string;
-            /**
-             * The error code
-             * @example NOT_FOUND
-             */
-            code: string;
-            /**
-             * An array of issues that were responsible for the error
-             * @example []
-             */
-            issues?: {
-                message: string;
-            }[];
-        };
-        /**
          * @example \{
          *       "transcript": "Hello, I'm Mrs. Lashley. I'm looking forward to guiding you through your learning today...",
          *       "vtt": "WEBVTT\\n\\n1\\n00:00:06.300 --\> 00:00:08.070\\n\<v -\>Hello, I'm Mrs. Lashley.\</v\>\\n\\n2\\n00:00:08.070 --\> 00:00:09.240\\nI'm looking forward to guiding you\\n\\n3\\n00:00:09.240 --\> 00:00:10.980\\nthrough your learning today..."
@@ -1163,129 +1273,12 @@ export interface components {
         LessonAssetResponseSchema: unknown;
         /**
          * @example [
-         *       \{
-         *         "subjectTitle": "Art and design",
-         *         "subjectSlug": "art",
-         *         "sequenceSlugs": [
-         *           \{
-         *             "sequenceSlug": "art-primary",
-         *             "years": [
-         *               1,
-         *               2,
-         *               3,
-         *               4,
-         *               5,
-         *               6
-         *             ],
-         *             "keyStages": [
-         *               \{
-         *                 "keyStageTitle": "Key Stage 1",
-         *                 "keyStageSlug": "ks1"
-         *               \},
-         *               \{
-         *                 "keyStageTitle": "Key Stage 2",
-         *                 "keyStageSlug": "ks2"
-         *               \}
-         *             ],
-         *             "phaseSlug": "primary",
-         *             "phaseTitle": "Primary"
-         *           \},
-         *           \{
-         *             "sequenceSlug": "art-secondary",
-         *             "years": [
-         *               7,
-         *               8,
-         *               9,
-         *               10,
-         *               11
-         *             ],
-         *             "keyStages": [
-         *               \{
-         *                 "keyStageTitle": "Key Stage 3",
-         *                 "keyStageSlug": "ks3"
-         *               \},
-         *               \{
-         *                 "keyStageTitle": "Key Stage 4",
-         *                 "keyStageSlug": "ks4"
-         *               \}
-         *             ],
-         *             "phaseSlug": "secondary",
-         *             "phaseTitle": "Secondary"
-         *           \}
-         *         ],
-         *         "years": [
-         *           1,
-         *           2,
-         *           3,
-         *           4,
-         *           5,
-         *           6,
-         *           7,
-         *           8,
-         *           9,
-         *           10,
-         *           11
-         *         ],
-         *         "keyStages": [
-         *           \{
-         *             "keyStageTitle": "Key Stage 1",
-         *             "keyStageSlug": "ks1"
-         *           \},
-         *           \{
-         *             "keyStageTitle": "Key Stage 2",
-         *             "keyStageSlug": "ks2"
-         *           \},
-         *           \{
-         *             "keyStageTitle": "Key Stage 3",
-         *             "keyStageSlug": "ks3"
-         *           \},
-         *           \{
-         *             "keyStageTitle": "Key Stage 4",
-         *             "keyStageSlug": "ks4"
-         *           \}
-         *         ]
-         *       \}
+         *       "art",
+         *       "computing",
+         *       "english"
          *     ]
          */
-        AllSubjectsResponseSchema: {
-            /** The subject title */
-            subjectTitle: string;
-            /** The subject slug identifier */
-            subjectSlug: string;
-            /** Information about the years, key stages and key stage 4 variance for each sequence */
-            sequenceSlugs: {
-                /** The unique identifier for each sequence */
-                sequenceSlug: string;
-                /** The years for which this subject has content available for */
-                years: number[];
-                /** The key stage slug identifiers for which this subject has content available for. */
-                keyStages: {
-                    /** The key stage title for the given key stage */
-                    keyStageTitle: string;
-                    /** The unique identifier for a given key stage */
-                    keyStageSlug: string;
-                }[];
-                /** The unique identifier for the phase to which this sequence belongs */
-                phaseSlug: string;
-                /** The title for the phase to which this sequence belongs */
-                phaseTitle: string;
-            }[];
-            /** The years for which this subject has content available for */
-            years: number[];
-            /** The key stage slug identifiers for which this subject has content available for. */
-            keyStages: {
-                /** The key stage title for the given key stage */
-                keyStageTitle: string;
-                /** The unique identifier for a given key stage */
-                keyStageSlug: string;
-            }[];
-            /**
-             * Format: uri
-             * The Oak URL for this resource — a direct, slug-based URL generated by the SDK. Distinct from canonicalUrl, which encodes full curriculum context.
-             * @example https://www.thenational.academy/teachers/lessons/example-lesson
-             */
-            oakUrl?: string;
-        }[];
+        AllSubjectsResponseSchema: ("art" | "citizenship" | "computing" | "cooking-nutrition" | "design-technology" | "english" | "french" | "geography" | "german" | "history" | "maths" | "music" | "physical-education" | "religious-education" | "rshe-pshe" | "science" | "spanish")[];
         /**
          * @example \{
          *       "subjectTitle": "Science",
@@ -1528,79 +1521,6 @@ export interface components {
              */
             oakUrl?: string;
         };
-        /**
-         * @example [
-         *       \{
-         *         "sequenceSlug": "art-primary",
-         *         "years": [
-         *           1,
-         *           2,
-         *           3,
-         *           4,
-         *           5,
-         *           6
-         *         ],
-         *         "keyStages": [
-         *           \{
-         *             "keyStageTitle": "Key Stage 1",
-         *             "keyStageSlug": "ks1"
-         *           \},
-         *           \{
-         *             "keyStageTitle": "Key Stage 2",
-         *             "keyStageSlug": "ks2"
-         *           \}
-         *         ],
-         *         "phaseSlug": "primary",
-         *         "phaseTitle": "Primary"
-         *       \},
-         *       \{
-         *         "sequenceSlug": "art-secondary",
-         *         "years": [
-         *           1,
-         *           2,
-         *           3,
-         *           4,
-         *           5,
-         *           6
-         *         ],
-         *         "keyStages": [
-         *           \{
-         *             "keyStageTitle": "Key Stage 1",
-         *             "keyStageSlug": "ks1"
-         *           \},
-         *           \{
-         *             "keyStageTitle": "Key Stage 2",
-         *             "keyStageSlug": "ks2"
-         *           \}
-         *         ],
-         *         "phaseSlug": "secondary",
-         *         "phaseTitle": "Secondary"
-         *       \}
-         *     ]
-         */
-        SubjectSequenceResponseSchema: {
-            /** The unique identifier for each sequence */
-            sequenceSlug: string;
-            /** The years for which this subject has content available for */
-            years: number[];
-            /** The key stage slug identifiers for which this subject has content available for. */
-            keyStages: {
-                /** The key stage title for the given key stage */
-                keyStageTitle: string;
-                /** The unique identifier for a given key stage */
-                keyStageSlug: string;
-            }[];
-            /** The unique identifier for the phase to which this sequence belongs */
-            phaseSlug: string;
-            /** The title for the phase to which this sequence belongs */
-            phaseTitle: string;
-            /**
-             * Format: uri
-             * The Oak URL for this resource — a direct, slug-based URL generated by the SDK. Distinct from canonicalUrl, which encodes full curriculum context.
-             * @example https://www.thenational.academy/teachers/lessons/example-lesson
-             */
-            oakUrl?: string;
-        }[];
         /**
          * The key stage slug identifiers for which this subject has content available for
          * @example [
@@ -3353,6 +3273,48 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    "getSequences-getSubjectSequence": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** The sequence slug identifier */
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** Successful response */
+            200: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["SubjectSequenceResponseSchema"];
+                };
+            };
+            /** Bad request - e.g. "Content is blocked for copyright reasons" */
+            400: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** API token not provided or invalid */
+            401: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** Detail of the request causing the 404, e.g. "Lesson not found" */
+            404: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                };
+            };
+        };
+    };
     "getSequences-getSequenceUnits": {
         parameters: {
             query?: {
@@ -3717,48 +3679,6 @@ export interface operations {
                 headers?: never;
                 content: {
                     "application/json": components["schemas"]["SubjectResponseSchema"];
-                };
-            };
-            /** Bad request - e.g. "Content is blocked for copyright reasons" */
-            400: {
-                headers?: never;
-                content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
-                };
-            };
-            /** API token not provided or invalid */
-            401: {
-                headers?: never;
-                content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
-                };
-            };
-            /** Detail of the request causing the 404, e.g. "Lesson not found" */
-            404: {
-                headers?: never;
-                content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
-                };
-            };
-        };
-    };
-    "getSubjects-getSubjectSequence": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** The slug identifier for the subject */
-                subject: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** Successful response */
-            200: {
-                headers?: never;
-                content: {
-                    "application/json": components["schemas"]["SubjectSequenceResponseSchema"];
                 };
             };
             /** Bad request - e.g. "Content is blocked for copyright reasons" */

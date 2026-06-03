@@ -408,6 +408,36 @@ async function invokeGetRateLimitTool(
   return { status: validation.status, data: validation.data };
 }
 
+async function invokeGetSequencesTool(
+  client: ToolClientForName<'get-sequences'>,
+  rawArgs: unknown,
+): Promise<ToolResultForName<'get-sequences'>> {
+  const descriptor: ToolDescriptorForName<'get-sequences'> = getToolEntryFromToolName('get-sequences').descriptor;
+  const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
+  if (!parsed.success) {
+    throw new TypeError(descriptor.describeToolArgs());
+  }
+  const flatArgs = parsed.data;
+  const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+  const invokeResult = await descriptor.invoke(client, nestedArgs);
+  if (invokeResult.httpStatus >= 400) {
+    throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+      cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+    });
+  }
+  const validation = descriptor.validateOutput(invokeResult.payload);
+  if (!validation.ok) {
+    throw new TypeError('Output validation error: ' + validation.message, {
+      cause: {
+        raw: invokeResult.payload,
+        issues: validation.issues,
+        attemptedStatuses: validation.attemptedStatuses,
+      },
+    });
+  }
+  return { status: validation.status, data: validation.data };
+}
+
 async function invokeGetSequencesAssetsTool(
   client: ToolClientForName<'get-sequences-assets'>,
   rawArgs: unknown,
@@ -588,36 +618,6 @@ async function invokeGetSubjectsKeyStagesTool(
   return { status: validation.status, data: validation.data };
 }
 
-async function invokeGetSubjectsSequencesTool(
-  client: ToolClientForName<'get-subjects-sequences'>,
-  rawArgs: unknown,
-): Promise<ToolResultForName<'get-subjects-sequences'>> {
-  const descriptor: ToolDescriptorForName<'get-subjects-sequences'> = getToolEntryFromToolName('get-subjects-sequences').descriptor;
-  const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
-  if (!parsed.success) {
-    throw new TypeError(descriptor.describeToolArgs());
-  }
-  const flatArgs = parsed.data;
-  const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-  const invokeResult = await descriptor.invoke(client, nestedArgs);
-  if (invokeResult.httpStatus >= 400) {
-    throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
-      cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
-    });
-  }
-  const validation = descriptor.validateOutput(invokeResult.payload);
-  if (!validation.ok) {
-    throw new TypeError('Output validation error: ' + validation.message, {
-      cause: {
-        raw: invokeResult.payload,
-        issues: validation.issues,
-        attemptedStatuses: validation.attemptedStatuses,
-      },
-    });
-  }
-  return { status: validation.status, data: validation.data };
-}
-
 async function invokeGetSubjectsYearsTool(
   client: ToolClientForName<'get-subjects-years'>,
   rawArgs: unknown,
@@ -770,6 +770,8 @@ async function invokeToolByName<TName extends ToolName>(
       return invokeGetLessonsTranscriptTool(client, rawArgs);
     case 'get-rate-limit':
       return invokeGetRateLimitTool(client, rawArgs);
+    case 'get-sequences':
+      return invokeGetSequencesTool(client, rawArgs);
     case 'get-sequences-assets':
       return invokeGetSequencesAssetsTool(client, rawArgs);
     case 'get-sequences-questions':
@@ -782,8 +784,6 @@ async function invokeToolByName<TName extends ToolName>(
       return invokeGetSubjectsTool(client, rawArgs);
     case 'get-subjects-key-stages':
       return invokeGetSubjectsKeyStagesTool(client, rawArgs);
-    case 'get-subjects-sequences':
-      return invokeGetSubjectsSequencesTool(client, rawArgs);
     case 'get-subjects-years':
       return invokeGetSubjectsYearsTool(client, rawArgs);
     case 'get-threads':
@@ -876,6 +876,12 @@ export function callTool(
   logger?: Logger,
 ): Promise<ToolResultForName<'get-rate-limit'>>;
 export function callTool(
+  name: 'get-sequences',
+  client: ToolClientForName<'get-sequences'>,
+  rawArgs: ToolArgsForName<'get-sequences'>,
+  logger?: Logger,
+): Promise<ToolResultForName<'get-sequences'>>;
+export function callTool(
   name: 'get-sequences-assets',
   client: ToolClientForName<'get-sequences-assets'>,
   rawArgs: ToolArgsForName<'get-sequences-assets'>,
@@ -911,12 +917,6 @@ export function callTool(
   rawArgs: ToolArgsForName<'get-subjects-key-stages'>,
   logger?: Logger,
 ): Promise<ToolResultForName<'get-subjects-key-stages'>>;
-export function callTool(
-  name: 'get-subjects-sequences',
-  client: ToolClientForName<'get-subjects-sequences'>,
-  rawArgs: ToolArgsForName<'get-subjects-sequences'>,
-  logger?: Logger,
-): Promise<ToolResultForName<'get-subjects-sequences'>>;
 export function callTool(
   name: 'get-subjects-years',
   client: ToolClientForName<'get-subjects-years'>,

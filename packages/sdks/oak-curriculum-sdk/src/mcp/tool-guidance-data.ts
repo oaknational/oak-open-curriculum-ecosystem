@@ -73,7 +73,7 @@ export const toolGuidanceData = {
       tools: [
         'get-key-stages-subject-units',
         'get-key-stages-subject-lessons',
-        'get-subjects-sequences',
+        'get-sequences',
         'get-subjects-years',
       ],
       description:

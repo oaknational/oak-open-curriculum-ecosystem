@@ -26,17 +26,11 @@ type TierEntry = z.infer<typeof TierEntrySchema>;
 
 const YearEntriesArraySchema = z.array(YearEntrySchema);
 
-const SubjectEntrySchema = z.object({
-  subjectSlug: z.string(),
+const SubjectsArraySchema = z.array(z.string());
+
+const SubjectDetailSchema = z.object({
+  sequenceSlugs: z.array(z.object({ sequenceSlug: z.string() })),
 });
-
-const SubjectsArraySchema = z.array(SubjectEntrySchema);
-
-const SequenceEntrySchema = z.object({
-  sequenceSlug: z.string(),
-});
-
-const SequencesArraySchema = z.array(SequenceEntrySchema);
 
 // ============ LESSONS ============
 
@@ -143,22 +137,22 @@ async function fetchSequenceSlugsForSubject(
   apiKey: string,
   slugs: Set<string>,
 ): Promise<void> {
-  const seqRes = await fetch(`${API_BASE}/subjects/${subjectSlug}/sequences`, {
+  const detailRes = await fetch(`${API_BASE}/subjects/${subjectSlug}`, {
     headers: { Authorization: `Bearer ${apiKey}` },
   });
 
-  if (!seqRes.ok) {
+  if (!detailRes.ok) {
     return;
   }
 
-  const seqData: unknown = await seqRes.json();
-  const parsed = SequencesArraySchema.safeParse(seqData);
+  const detailData: unknown = await detailRes.json();
+  const parsed = SubjectDetailSchema.safeParse(detailData);
 
   if (!parsed.success) {
     return;
   }
 
-  for (const seq of parsed.data) {
+  for (const seq of parsed.data.sequenceSlugs) {
     slugs.add(seq.sequenceSlug);
   }
 }
@@ -184,8 +178,8 @@ async function loadAvailableSequenceSlugs(apiKey: string): Promise<Set<string>> 
   }
 
   const slugs = new Set<string>();
-  for (const subject of parsed.data) {
-    await fetchSequenceSlugsForSubject(subject.subjectSlug, apiKey, slugs);
+  for (const subjectSlug of parsed.data) {
+    await fetchSequenceSlugsForSubject(subjectSlug, apiKey, slugs);
   }
 
   cachedSequenceSlugs = slugs;

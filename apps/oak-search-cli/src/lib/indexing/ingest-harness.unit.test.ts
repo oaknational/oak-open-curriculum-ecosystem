@@ -1,6 +1,7 @@
 import path from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createIngestHarness } from './ingest-harness';
+import { createFixtureOakClient } from './sandbox-fixture';
 import { resolveSearchIndexName } from '../search-index-target';
 import type { EsTransport } from './ingest-harness-ops';
 
@@ -89,6 +90,33 @@ describe('ingest harness', () => {
     expect(result.metrics?.sequenceFacets.totalSequences).toBeGreaterThan(0);
     expect(mock.requestMock).not.toHaveBeenCalled();
     expect(mock.requests).toHaveLength(0);
+  });
+});
+
+describe('fixture Oak client', () => {
+  it('returns not_found for a subject absent from the subject-detail fixture', async () => {
+    const { client } = await createFixtureOakClient(FIXTURE_ROOT);
+
+    const result = await client.getSubjectDetail('maths');
+
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.kind).toBe('not_found');
+      expect(result.error.resource).toBe('maths');
+    }
+  });
+
+  it('returns the subject detail with sequenceSlugs for a fixture subject', async () => {
+    const { client } = await createFixtureOakClient(FIXTURE_ROOT);
+
+    const result = await client.getSubjectDetail('history');
+
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value.sequenceSlugs.map((s) => s.sequenceSlug)).toEqual([
+        'history-ancient-egypt-programme',
+      ]);
+    }
   });
 });
 

@@ -7481,6 +7481,194 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "fd92db73-8b16-4e37-ade0-a1e12e3b25e9",
+      "agent_id": {
+        "agent_name": "Blustery Lifting Gale",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "9b33b0",
+        "id": "39616b04-eb22-5c2d-8bac-a84bc356d863"
+      },
+      "thread": "agent-tooling",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agent-tooling/future/skills-classification-taxonomy.plan.md",
+            ".agent/plans/agent-tooling/future/README.md",
+            ".agent/plans/user-experience/README.md",
+            ".agent/plans/user-experience/educator-end-users/README.md",
+            ".agent/plans/user-experience/educator-end-users/future/README.md",
+            ".agent/plans/user-experience/educator-end-users/future/skills-classification-taxonomy.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-03T16:04:36Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Owner-directed move: skills-classification-taxonomy plan from agent-tooling/future to user-experience/educator-end-users/future, plus index updates",
+      "archived_at": "2026-06-03",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-03T17:05:23Z",
+        "closed_by": {
+          "agent_name": "Blustery Lifting Gale",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "9b33b0",
+          "id": "39616b04-eb22-5c2d-8bac-a84bc356d863"
+        },
+        "summary": "Paths superseded by further owner-directed rehomes; final surfaces re-claimed under a consolidated claim",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "fd92db73-8b16-4e37-ade0-a1e12e3b25e9",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "c66e21b3-2a77-45ff-a697-1902af5383e5",
+      "agent_id": {
+        "agent_name": "Blustery Lifting Gale",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "9b33b0",
+        "id": "39616b04-eb22-5c2d-8bac-a84bc356d863"
+      },
+      "thread": "user-experience",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "docs/architecture/architectural-decisions/188-audience-led-agent-capability-taxonomy.md",
+            ".agent/plans/discovery/README.md",
+            ".agent/plans/discovery/future/README.md",
+            ".agent/plans/discovery/future/agent-skills-discovery.plan.md",
+            ".agent/plans/discovery/future/skills-distribution-channels-suggestions.report.md",
+            ".agent/plans/user-experience/future/README.md",
+            ".agent/plans/user-experience/future/skills-classification-taxonomy.plan.md",
+            ".agent/memory/executive/agent-capability-vocabulary.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-03T16:25:50Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Approved plan: relocate skills taxonomy plan (user-experience/future) + distribution report (discovery/future), absorb report amendments, author taxonomy ADR, amend agent-skills-discovery plan with installation-messaging redundancy",
+      "archived_at": "2026-06-03",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-03T17:05:23Z",
+        "closed_by": {
+          "agent_name": "Blustery Lifting Gale",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "9b33b0",
+          "id": "39616b04-eb22-5c2d-8bac-a84bc356d863"
+        },
+        "summary": "Intermediate user-experience/future paths superseded by final discovery/future home; re-claimed consolidated",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "c66e21b3-2a77-45ff-a697-1902af5383e5",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "092e5acc-6270-4566-becf-f38a8a989028",
+      "agent_id": {
+        "agent_name": "Moonlit Waxing Nebula",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "e756f7",
+        "id": "282b8921-e04b-5bd8-bfd5-21cabb07b137"
+      },
+      "thread": "semantic-search",
+      "areas": [
+        {
+          "kind": "workspace",
+          "patterns": [
+            "packages/sdks/oak-sdk-codegen/**",
+            "packages/sdks/oak-curriculum-sdk/**",
+            "apps/oak-search-cli/**",
+            ".agent/plans/sdk-and-mcp-enhancements/current/upstream-sequences-api-realignment.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-03T16:21:16Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Upstream sequences API realignment: online regeneration, delete getSubjectSequences, rewire enumeration to subject detail (owner-approved plan)",
+      "archived_at": "2026-06-03",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-03T17:05:55Z",
+        "closed_by": {
+          "agent_name": "Moonlit Waxing Nebula",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "e756f7",
+          "id": "282b8921-e04b-5bd8-bfd5-21cabb07b137"
+        },
+        "summary": "Upstream sequences API realignment executed end-to-end: verdict delivered (bulk-only NOT yet possible), getSubjectSequences deleted, enumeration rewired to subject detail, all gates green incl. online pnpm check; landing commit follows in-window.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "092e5acc-6270-4566-becf-f38a8a989028",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "c4df148d-7263-4aa2-b7de-8d4d367aba2b",
+      "agent_id": {
+        "agent_name": "Moonlit Waxing Nebula",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "e756f7",
+        "id": "282b8921-e04b-5bd8-bfd5-21cabb07b137"
+      },
+      "thread": "semantic-search",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-03T17:02:42Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit the upstream sequences API realignment (single landing commit).",
+      "intent_to_commit": "8f71cf5f-0962-48a0-80e7-efffdd6a527b",
+      "archived_at": "2026-06-03",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-03T17:05:55Z",
+        "closed_by": {
+          "agent_name": "Moonlit Waxing Nebula",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "e756f7",
+          "id": "282b8921-e04b-5bd8-bfd5-21cabb07b137"
+        },
+        "summary": "commit window used for the realignment landing commit; pathspec-scoped to the intent bundle",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "c4df148d-7263-4aa2-b7de-8d4d367aba2b",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

@@ -10,16 +10,16 @@ related_plans:
 isProject: false
 todos:
   - id: ground-and-regenerate
-    content: "Open the specialist session with start-right grounding, then re-run `pnpm sdk-codegen` + `pnpm build` from a clean HEAD so the session works from a fresh regeneration, not an inherited working-tree diff. Verify the upstream change directly in the regenerated schema: /subjects/{subject}/sequences removed; /sequences/{slug} added (operationId getSequences-getSubjectSequence; response is ONE sequence object with ks4ProgrammeFactors/pathway); /subjects/{subject} (subject detail, SubjectResponseSchema) carries sequenceSlugs — the apparent intended enumeration replacement. Treat the schema as the sole type authority throughout (Cardinal Rule; ADR-029/030/031): no hand-authored shapes, no `as` casts, no widening to make old code compile."
-    status: pending
+    content: "DONE 2026-06-03 (Moonlit Waxing Nebula). Grounded via start-right-thorough; full OpenAPI diff derived by direct JSON diff of the cached schema vs a fresh fetch BEFORE regeneration (plan-mode evidence pass), then regenerated ONLINE from clean HEAD (forced turbo run — the healed cache replays old-schema outputs on unforced runs). Upstream change verified exactly as described; additionally /subjects collapsed to a 17-slug string enum (AllSubjectsResponseSchema). No hand-authored shapes, no casts, no widening anywhere in the realignment."
+    status: completed
     depends_on: []
   - id: decide-delete-vs-adapt
-    content: "BEFORE adapting any search-cli code, answer the owner's standing question with a field-by-field verdict (owner-sharpened 2026-06-03). Three sub-questions in order: (A) enumerate the FULL upstream OpenAPI diff — every path/operation/schema change, not only the sequences arm already studied (source-side enumeration: derive the change set from the old-vs-new schema files, never from the failures observed so far). (B) Check whether the BULK DATA and its schema changed too: fetch fresh bulk downloads, diff against apps/oak-search-cli/bulk-downloads/schema.json and the generate:bulk pipeline's expectations in oak-sdk-codegen — the upstream restructure may have landed bulk-side improvements at the same time (the draft feature request bulk_data_for_semantic_search.feature_request.md asked for exactly that: Phase 1 'Eliminate API calls during ingestion'; Phase 2 categories/unitOptionGroup/canonicalUrl/phaseSlug). (C) Deliver the explicit verdict: CAN the search indexes be built PURELY from bulk data — yes/no, proven by enumerating every field the ingest consumes from the API path (api-supplementation.ts, sequence-methods.ts, category-supplementation per category-integration-remediation.md) and showing each is or is not present in bulk. 'The fields I checked were there' is not a verdict; the enumeration is from the consumer side. If YES: the cure is DELETING the legacy API-supplementation path (replace-dont-bridge). If NO: name exactly which fields still require the API and adapt only that minimal surface to the new endpoints. The delete-first framing is a HYPOTHESIS to refute, not a conclusion to confirm. Surface the verdict with evidence to the owner before executing either route."
-    status: pending
+    content: "ANSWERED 2026-06-03 (Moonlit Waxing Nebula) — verdict delivered with evidence and the adaptation route owner-approved via the session plan. See §Verdict below. (A) Full OpenAPI diff source-side enumerated: one path removed, one added, /subjects response collapsed, two schemas changed, all 25 other paths unchanged — including /sequences/{sequence}/units. (B) Bulk data UNCHANGED upstream: fresh authenticated fetch, schema.json byte-identical to the 2026-05-21 download; feature-request fields declared in schema but populated in ZERO units. (C) Verdict: NO — indexes cannot yet be built purely from bulk; tiers/exam_subjects/unit_topics come only from getSequenceUnits (which survives). Cure: delete getSubjectSequences, rewire enumeration to /subjects/{subject} sequenceSlugs, keep getSequenceUnits as the single remaining legacy supplementation endpoint."
+    status: completed
     depends_on: [ground-and-regenerate]
   - id: execute-cure
-    content: "Execute the owner-confirmed cure. Deletion route: remove the legacy sequence API-supplementation path and its tests atomically, with consumers updated in the same change (test and product code co-land). Adaptation route (fallback): rewire enumeration to subjectDetail.sequenceSlugs + per-slug /sequences/{slug} fetches, with every type flowing from the regenerated schema. Either route: type-check, lint, AND test after every edit; finish with a green `pnpm check`; update .agent/analysis/mcp-tool-mapping.md and any tool-count claims if the registered tool set changed. The three mechanical name fixes from 2026-06-03 (tool-guidance-data.ts 'get-sequences', the kebab-to-title-case fixture, the ground-truth-archive comment annotation) are already in the working tree — verify they survive or re-apply."
-    status: pending
+    content: "DONE 2026-06-03 (Moonlit Waxing Nebula), owner-approved route executed: deleted getSubjectSequences (method, GetSubjectSequencesFn, OakClient member, factory wiring, removed-behaviour tests, the dead string-branch resolver, the dead endsWith-sequence classification branches in SDK response-augmentation) and rewired enumeration to getSubjectDetail (/subjects/{subject}) consuming sequenceSlugs — SubjectSequenceEntry now derives as SubjectDetail['sequenceSlugs'][number]. The four mechanical fixes re-applied. Sandbox fixture moved to subject-detail.json; evaluation api-checkers rewired off both changed endpoints. Reviewer pass (code-expert + type-expert, findings critically validated): dead SDK trio (subjectSequencesSchema/SearchSubjectSequences/isSubjectSequences) deleted, ingestion-harness doc fixed, SubjectSequenceInfo bound via Pick, fixture not_found behaviour tested. All gates green incl. online `pnpm check` (the recorded known-red is closed); tests 729 SDK + 1005 search-cli. Named follow-up surfaced to owner (pre-existing, not introduced here): SequenceUnitsFetcher returns Promise<unknown>, erasing the proven SequenceUnitsResponse type through the ks4-context/sequence-facet traversal — candidate for a typed-rethreading work item."
+    status: completed
     depends_on: [decide-delete-vs-adapt]
 ---
 
@@ -101,6 +101,45 @@ the workspaces). The named stop signals apply in full: `as` casts,
 types to make legacy code compile are each the signal that the approach is
 wrong. The session must be a dedicated, well-grounded specialist session,
 not a tail-of-session fix.
+
+## Verdict (2026-06-03, Moonlit Waxing Nebula — evidence-complete, owner-approved route)
+
+Owner clarifications folded in: search SHOULD be solely bulk-driven (target
+architecture); bulk structure ≠ API structure; full change information on
+BOTH surfaces precedes adaptation design.
+
+1. **Full API diff** (direct JSON diff, old cached schema vs fresh fetch,
+   every path + schema): REMOVED `/subjects/{subject}/sequences`; ADDED
+   `/sequences/{slug}` (`SubjectSequenceResponseSchema` array → single
+   object with `ks4ProgrammeFactors` — a per-factor inventory of VALID
+   VALUES, not per-unit assignments); CHANGED `/subjects`
+   (`AllSubjectsResponseSchema` collapsed to a 17-slug string enum). All
+   25 other paths unchanged, including `/sequences/{sequence}/units`
+   (`getSequenceUnits` — the critical supplementation source) and
+   `/subjects/{subject}` (`SubjectResponseSchema.sequenceSlugs` carries
+   the per-board enumeration, e.g. `science-secondary-aqa/edexcel/ocr`).
+2. **Bulk data unchanged**: fresh authenticated bulk fetch — `schema.json`
+   byte-identical to the local 2026-05-21 download; `tier`/`examSubjects`/
+   `examBoard`/`pathway`/`categories`/`unitOptionGroup`/`canonicalUrl`
+   declared optional in the bulk schema but populated in ZERO units (old
+   and fresh). Schema presence ≠ population: the feature request's
+   Phase 1–2 improvements have NOT landed upstream.
+3. **Bulk-only verdict: NO, not yet.** Consumer-side census: `tiers`
+   (maths KS4), `exam_subjects` (science KS4), `unit_topics` (categories)
+   are sourced only from `getSequenceUnits`, which survives. Everything
+   else is bulk-carried. The cure shrinks the API surface 2 → 1:
+   DELETE `getSubjectSequences` (enumeration), rewire enumeration to
+   `subjectDetail.sequenceSlugs` (schema-carried; slug construction from
+   bulk `ks4Options` would be a hand-maintained parallel shape —
+   forbidden), KEEP `getSequenceUnits`. Bulk-only completion stays
+   blocked on the upstream feature request.
+
+Additional in-scope surface found beyond the known red files: SDK
+response-augmentation path-classification + tests reference the removed
+path; search-cli sandbox fixtures (`sandbox-fixture.ts`,
+`sandbox-fixture-data.ts`, `fixtures/sandbox/subject-sequences.json`)
+parse the old array shape; `evaluation/validation/lib/api-checkers.ts`
+raw-fetches the removed path.
 
 ## The delete-first hypothesis (owner-stated 2026-06-03)
 

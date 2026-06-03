@@ -336,39 +336,10 @@
       "expires_at": "2026-06-03T15:52:44.178Z",
       "phase": "abandoned",
       "notes": "closed in same collaboration-state commit (lifecycle exception)"
-    }
-  ],
-  "claims": [
-    {
-      "claim_id": "fd92db73-8b16-4e37-ade0-a1e12e3b25e9",
-      "agent_id": {
-        "agent_name": "Blustery Lifting Gale",
-        "platform": "claude",
-        "model": "Opus 4.8",
-        "session_id_prefix": "9b33b0",
-        "id": "39616b04-eb22-5c2d-8bac-a84bc356d863"
-      },
-      "thread": "agent-tooling",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            ".agent/plans/agent-tooling/future/skills-classification-taxonomy.plan.md",
-            ".agent/plans/agent-tooling/future/README.md",
-            ".agent/plans/user-experience/README.md",
-            ".agent/plans/user-experience/educator-end-users/README.md",
-            ".agent/plans/user-experience/educator-end-users/future/README.md",
-            ".agent/plans/user-experience/educator-end-users/future/skills-classification-taxonomy.plan.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-06-03T16:04:36Z",
-      "freshness_seconds": 7200,
-      "sidebar_open": false,
-      "intent": "Owner-directed move: skills-classification-taxonomy plan from agent-tooling/future to user-experience/educator-end-users/future, plus index updates"
     },
     {
-      "claim_id": "092e5acc-6270-4566-becf-f38a8a989028",
+      "intent_id": "8f71cf5f-0962-48a0-80e7-efffdd6a527b",
+      "claim_id": "c4df148d-7263-4aa2-b7de-8d4d367aba2b",
       "agent_id": {
         "agent_name": "Moonlit Waxing Nebula",
         "platform": "claude",
@@ -376,22 +347,137 @@
         "session_id_prefix": "e756f7",
         "id": "282b8921-e04b-5bd8-bfd5-21cabb07b137"
       },
-      "thread": "semantic-search",
+      "files": [
+        ".agent/analysis/mcp-tool-mapping.md",
+        ".agent/memory/operational/repo-continuity.md",
+        ".agent/plans/sdk-and-mcp-enhancements/current/upstream-sequences-api-realignment.plan.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/closed-claims.archive.json",
+        "apps/oak-search-cli/docs/ingestion-harness.md",
+        "apps/oak-search-cli/evaluation/validation/lib/api-checkers.ts",
+        "apps/oak-search-cli/fixtures/sandbox/subject-detail.json",
+        "apps/oak-search-cli/fixtures/sandbox/subject-sequences.json",
+        "apps/oak-search-cli/src/adapters/api-supplementation.integration.test.ts",
+        "apps/oak-search-cli/src/adapters/api-supplementation.ts",
+        "apps/oak-search-cli/src/adapters/hybrid-data-source.integration.test.ts",
+        "apps/oak-search-cli/src/adapters/oak-adapter-types.ts",
+        "apps/oak-search-cli/src/adapters/oak-adapter.ts",
+        "apps/oak-search-cli/src/adapters/sdk-api-methods.integration.test.ts",
+        "apps/oak-search-cli/src/adapters/sdk-api-methods/index.ts",
+        "apps/oak-search-cli/src/adapters/sdk-api-methods/sequence-methods.ts",
+        "apps/oak-search-cli/src/adapters/sdk-client-factory.ts",
+        "apps/oak-search-cli/src/lib/index-batch-generator.unit.test.ts",
+        "apps/oak-search-cli/src/lib/index-batch-helpers.ts",
+        "apps/oak-search-cli/src/lib/indexing/ingest-harness.unit.test.ts",
+        "apps/oak-search-cli/src/lib/indexing/ks4-context-types.ts",
+        "apps/oak-search-cli/src/lib/indexing/run-versioned-ingest.integration.test.ts",
+        "apps/oak-search-cli/src/lib/indexing/sandbox-fixture-data.ts",
+        "apps/oak-search-cli/src/lib/indexing/sandbox-fixture.ts",
+        "apps/oak-search-cli/src/lib/search-quality/ground-truth-archive/sequences/index.ts",
+        "apps/oak-search-cli/src/lib/sequence-entry-helpers.ts",
+        "apps/oak-search-cli/src/test-helpers/mock-oak-client.ts",
+        "apps/oak-search-cli/src/types/oak.ts",
+        "packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts",
+        "packages/sdks/oak-curriculum-sdk/src/mcp/tool-guidance-data.ts",
+        "packages/sdks/oak-curriculum-sdk/src/public/search.ts",
+        "packages/sdks/oak-curriculum-sdk/src/response-augmentation-helpers.ts",
+        "packages/sdks/oak-curriculum-sdk/src/response-augmentation-helpers.unit.test.ts",
+        "packages/sdks/oak-curriculum-sdk/src/response-augmentation.ts",
+        "packages/sdks/oak-curriculum-sdk/src/response-augmentation.unit.test.ts",
+        "packages/sdks/oak-curriculum-sdk/src/types/index.ts",
+        "packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts",
+        "packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/kebab-to-title-case.unit.test.ts",
+        "packages/sdks/oak-sdk-codegen/schema-cache/api-schema-original.json",
+        "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/api-paths-types.ts",
+        "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/api-schema-base.ts",
+        "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/api-schema-original.json",
+        "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/api-schema-sdk.json",
+        "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/definitions.ts",
+        "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/runtime/execute.ts",
+        "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/stubs/tools/get-sequences.ts",
+        "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/stubs/tools/get-subjects-sequences.ts",
+        "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/stubs/tools/get-subjects.ts",
+        "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/stubs/tools/index.ts",
+        "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-sequences.ts",
+        "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-subjects-sequences.ts",
+        "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-subjects.ts",
+        "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/path-parameters.ts",
+        "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/response-map.ts",
+        "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/validation/request-parameter-map.ts",
+        "packages/sdks/oak-sdk-codegen/src/types/generated/zod/curriculumZodSchemas.ts"
+      ],
+      "commit_subject": "fix(sdk): realign to the upstream sequences api restructure",
+      "queued_at": "2026-06-03T17:03:20.046Z",
+      "updated_at": "2026-06-03T17:05:58.056Z",
+      "expires_at": "2026-06-03T17:18:20.046Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "2effc284e7fb5248e4e88242e28826659a3f8ecd7ddcd7775dfef8319e06844e",
+      "staged_name_status": "M\t.agent/analysis/mcp-tool-mapping.md\nM\t.agent/memory/operational/repo-continuity.md\nM\t.agent/plans/sdk-and-mcp-enhancements/current/upstream-sequences-api-realignment.plan.md\nM\tapps/oak-search-cli/docs/ingestion-harness.md\nM\tapps/oak-search-cli/evaluation/validation/lib/api-checkers.ts\nA\tapps/oak-search-cli/fixtures/sandbox/subject-detail.json\nD\tapps/oak-search-cli/fixtures/sandbox/subject-sequences.json\nM\tapps/oak-search-cli/src/adapters/api-supplementation.integration.test.ts\nM\tapps/oak-search-cli/src/adapters/api-supplementation.ts\nM\tapps/oak-search-cli/src/adapters/hybrid-data-source.integration.test.ts\nM\tapps/oak-search-cli/src/adapters/oak-adapter-types.ts\nM\tapps/oak-search-cli/src/adapters/oak-adapter.ts\nM\tapps/oak-search-cli/src/adapters/sdk-api-methods.integration.test.ts\nM\tapps/oak-search-cli/src/adapters/sdk-api-methods/index.ts\nM\tapps/oak-search-cli/src/adapters/sdk-api-methods/sequence-methods.ts\nM\tapps/oak-search-cli/src/adapters/sdk-client-factory.ts\nM\tapps/oak-search-cli/src/lib/index-batch-generator.unit.test.ts\nM\tapps/oak-search-cli/src/lib/index-batch-helpers.ts\nM\tapps/oak-search-cli/src/lib/indexing/ingest-harness.unit.test.ts\nM\tapps/oak-search-cli/src/lib/indexing/ks4-context-types.ts\nM\tapps/oak-search-cli/src/lib/indexing/run-versioned-ingest.integration.test.ts\nM\tapps/oak-search-cli/src/lib/indexing/sandbox-fixture-data.ts\nM\tapps/oak-search-cli/src/lib/indexing/sandbox-fixture.ts\nM\tapps/oak-search-cli/src/lib/search-quality/ground-truth-archive/sequences/index.ts\nM\tapps/oak-search-cli/src/lib/sequence-entry-helpers.ts\nM\tapps/oak-search-cli/src/test-helpers/mock-oak-client.ts\nM\tapps/oak-search-cli/src/types/oak.ts\nM\tpackages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts\nM\tpackages/sdks/oak-curriculum-sdk/src/mcp/tool-guidance-data.ts\nM\tpackages/sdks/oak-curriculum-sdk/src/public/search.ts\nM\tpackages/sdks/oak-curriculum-sdk/src/response-augmentation-helpers.ts\nM\tpackages/sdks/oak-curriculum-sdk/src/response-augmentation-helpers.unit.test.ts\nM\tpackages/sdks/oak-curriculum-sdk/src/response-augmentation.ts\nM\tpackages/sdks/oak-curriculum-sdk/src/response-augmentation.unit.test.ts\nM\tpackages/sdks/oak-curriculum-sdk/src/types/index.ts\nM\tpackages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts\nM\tpackages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/kebab-to-title-case.unit.test.ts\nM\tpackages/sdks/oak-sdk-codegen/schema-cache/api-schema-original.json\nM\tpackages/sdks/oak-sdk-codegen/src/types/generated/api-schema/api-paths-types.ts\nM\tpackages/sdks/oak-sdk-codegen/src/types/generated/api-schema/api-schema-base.ts\nM\tpackages/sdks/oak-sdk-codegen/src/types/generated/api-schema/api-schema-original.json\nM\tpackages/sdks/oak-sdk-codegen/src/types/generated/api-schema/api-schema-sdk.json\nM\tpackages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/definitions.ts\nM\tpackages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/runtime/execute.ts\nA\tpackages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/stubs/tools/get-sequences.ts\nD\tpackages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/stubs/tools/get-subjects-sequences.ts\nM\tpackages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/stubs/tools/get-subjects.ts\nM\tpackages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/stubs/tools/index.ts\nR074\tpackages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-subjects-sequences.ts\tpackages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-sequences.ts\nM\tpackages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-subjects.ts\nM\tpackages/sdks/oak-sdk-codegen/src/types/generated/api-schema/path-parameters.ts\nM\tpackages/sdks/oak-sdk-codegen/src/types/generated/api-schema/response-map.ts\nM\tpackages/sdks/oak-sdk-codegen/src/types/generated/api-schema/validation/request-parameter-map.ts\nM\tpackages/sdks/oak-sdk-codegen/src/types/generated/zod/curriculumZodSchemas.ts\n",
+      "notes": "closed in same collaboration-state commit (lifecycle exception); bundle verified against the intent scope immediately before pathspec-scoped git commit; one peer-staged file (skills-classification-taxonomy.plan.md) deliberately left staged and excluded via pathspec"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "99d10032-3e1e-4b91-b566-fc284fd25888",
+      "agent_id": {
+        "agent_name": "Furnace Roasting Brazier",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "88a769",
+        "id": "45b37fc8-c9ab-58fe-8a32-0a0ae6383808"
+      },
+      "thread": "school-data-search",
       "areas": [
         {
-          "kind": "workspace",
+          "kind": "files",
           "patterns": [
-            "packages/sdks/oak-sdk-codegen/**",
-            "packages/sdks/oak-curriculum-sdk/**",
-            "apps/oak-search-cli/**",
-            ".agent/plans/sdk-and-mcp-enhancements/current/upstream-sequences-api-realignment.plan.md"
+            ".agent/reports/school-data-search-synthesis-report-2026-06-03.md",
+            ".agent/reports/README.md",
+            ".agent/plans/school-data-search/**",
+            ".agent/plans/README.md",
+            ".agent/plans/high-level-plan.md",
+            ".agent/memory/operational/threads/school-data-search.next-session.md"
           ]
         }
       ],
-      "claimed_at": "2026-06-03T16:21:16Z",
+      "claimed_at": "2026-06-03T16:44:49Z",
       "freshness_seconds": 14400,
       "sidebar_open": false,
-      "intent": "Upstream sequences API realignment: online regeneration, delete getSubjectSequences, rewire enumeration to subject detail (owner-approved plan)"
+      "intent": "School-data-search synthesis session: author tracked synthesis report (.agent/reports/) + new .agent/plans/school-data-search/ collection; report decides nothing, plan gates owner forks. Scanned registry: 2 active claims (Moonlit Waxing Nebula sdk realignment; Blustery Lifting Gale plan moves), no overlap with my areas."
+    },
+    {
+      "claim_id": "2a9d7474-8053-4c29-a573-db76c25a19ba",
+      "agent_id": {
+        "agent_name": "Blustery Lifting Gale",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "9b33b0",
+        "id": "39616b04-eb22-5c2d-8bac-a84bc356d863"
+      },
+      "thread": "discovery",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/discovery/future/skills-classification-taxonomy.plan.md",
+            ".agent/plans/discovery/future/skills-distribution-channels-suggestions.report.md",
+            ".agent/plans/discovery/future/agent-skills-discovery.plan.md",
+            ".agent/plans/discovery/future/README.md",
+            ".agent/plans/discovery/README.md",
+            ".agent/plans/user-experience/README.md",
+            ".agent/plans/user-experience/educator-end-users/README.md",
+            ".agent/plans/agent-tooling/future/README.md",
+            ".agent/memory/executive/agent-capability-vocabulary.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            "docs/architecture/architectural-decisions/189-audience-led-agent-capability-taxonomy.md",
+            "docs/architecture/architectural-decisions/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-03T17:05:23Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Skills taxonomy estate (uncommitted): plan+report in discovery/future, ADR-189, vocabulary two-axis amendments, index updates, reviewer-fix pass"
     }
   ]
 }

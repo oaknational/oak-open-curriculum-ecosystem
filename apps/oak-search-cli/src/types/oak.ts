@@ -24,13 +24,13 @@ export type {
 export {
   isLessonSummary,
   isUnitSummary,
-  isSubjectSequences,
+  isSubjectDetail,
   isSequenceUnitsResponse,
 } from '@oaknational/curriculum-sdk/public/search.js';
 
 export type {
   SearchLessonSummary,
   SearchUnitSummary,
-  SearchSubjectSequences,
+  SubjectDetail,
   SequenceUnitsResponse,
 } from '@oaknational/curriculum-sdk/public/search.js';

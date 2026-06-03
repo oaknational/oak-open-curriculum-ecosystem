@@ -111,7 +111,6 @@ function isArrayEndpointPath(path: string): boolean {
   return (
     path === '/search/lessons' ||
     path === '/search/transcripts' ||
-    endsWithEntityCollection(path, 'sequence') ||
     (path.includes('/key-stages/') &&
       (endsWithEntityCollection(path, 'lesson') || endsWithEntityCollection(path, 'unit')))
   );

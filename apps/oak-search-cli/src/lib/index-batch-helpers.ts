@@ -19,7 +19,7 @@ import {
 } from './indexing/sequence-facet-index';
 import { fetchAndBuildThreadOps } from './indexing/thread-bulk-helpers';
 import { buildKs4ContextMap, type UnitContextMap } from './indexing/ks4-context-builder';
-import { emitSequenceFacetEvents, resolveSequenceSlugFromEntry } from './sequence-entry-helpers';
+import { emitSequenceFacetEvents } from './sequence-entry-helpers';
 
 /**
  * Subject context needed to build batches (sequences, sources, unit context).
@@ -41,21 +41,21 @@ export async function buildSubjectContext(
     details: SequenceFacetProcessingMetrics & { subject: SearchSubjectSlug },
   ) => void,
 ): Promise<SubjectContext> {
-  ingestLogger.debug('Fetching sequences', { subject });
-  const sequencesResult = await client.getSubjectSequences(subject);
+  ingestLogger.debug('Fetching subject detail for sequence enumeration', { subject });
+  const subjectDetailResult = await client.getSubjectDetail(subject);
 
-  // Handle sequence fetch errors - propagate as they are critical
-  if (!sequencesResult.ok) {
-    const error = sequencesResult.error;
+  // Handle subject detail fetch errors - propagate as they are critical
+  if (!subjectDetailResult.ok) {
+    const error = subjectDetailResult.error;
     const message = formatSdkError(error);
-    ingestLogger.error('Failed to fetch subject sequences', { subject, error: message });
+    ingestLogger.error('Failed to fetch subject detail', { subject, error: message });
     if (error.kind === 'network_error') {
       throw error.cause;
     }
     throw new Error(message);
   }
 
-  const subjectSequences = sequencesResult.value;
+  const subjectSequences = subjectDetailResult.value.sequenceSlugs;
   ingestLogger.debug('Found sequences', { subject, count: subjectSequences.length });
 
   const { sequenceSources, events } = await buildSequenceSourcesWithEvents(
@@ -95,12 +95,10 @@ async function buildSubjectKs4ContextMap(
     return result.value;
   };
 
-  // ks4Options removed from API response in v0.7.0; live-API path no longer
-  // carries per-sequence variant info.
   const unitContextMap = await buildKs4ContextMap(
     fetchSequenceUnits,
     subjectSequences.map((seq) => ({
-      sequenceSlug: resolveSequenceSlugFromEntry(seq),
+      sequenceSlug: seq.sequenceSlug,
     })),
     ingestLogger,
   );

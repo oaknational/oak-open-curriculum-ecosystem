@@ -138,6 +138,33 @@ describe('augmentResponseWithOakUrl', () => {
         'https://www.thenational.academy/teachers/curriculum/maths-ks1/units',
       );
     });
+
+    it('should extract the id from sequenceSlug for /sequences/{slug} responses', () => {
+      const response = {
+        sequenceSlug: 'science-secondary-aqa',
+        phaseSlug: 'secondary',
+        phaseTitle: 'Secondary',
+        years: [7, 8, 9, 10, 11],
+        keyStages: [{ keyStageSlug: 'ks4', keyStageTitle: 'Key Stage 4' }],
+      };
+      const result = augmentResponseWithOakUrl(response, '/sequences/science-secondary-aqa', 'get');
+
+      expect(result).toHaveProperty(
+        'oakUrl',
+        'https://www.thenational.academy/teachers/curriculum/science-secondary-aqa/units',
+      );
+      expect(result).toHaveProperty('sequenceSlug', 'science-secondary-aqa');
+    });
+
+    it('should fall back to the path slug when the response lacks a sequence slug', () => {
+      const response = { phaseSlug: 'secondary', phaseTitle: 'Secondary' };
+      const result = augmentResponseWithOakUrl(response, '/sequences/maths-secondary', 'get');
+
+      expect(result).toHaveProperty(
+        'oakUrl',
+        'https://www.thenational.academy/teachers/curriculum/maths-secondary/units',
+      );
+    });
   });
 
   describe('unit responses with context', () => {
@@ -404,26 +431,6 @@ describe('augmentResponseWithOakUrl', () => {
         [0, 'oakUrl'],
         'https://www.thenational.academy/teachers/curriculum/maths-primary/units/ks-unit',
       );
-    });
-
-    it('should recognise /subjects/{subject}/sequences as sequence content type', () => {
-      const response = [{ slug: 'maths-ks4', title: 'Maths KS4 Programme' }];
-      const result = augmentArrayResponseWithOakUrl(response, '/subjects/maths/sequences', 'get');
-
-      expect(Array.isArray(result)).toBe(true);
-      expect(result).toHaveProperty([0, 'oakUrl']);
-      expect(result).toHaveProperty(
-        [0, 'oakUrl'],
-        'https://www.thenational.academy/teachers/curriculum/maths-ks4/units',
-      );
-    });
-
-    it('should throw for /subjects/{subject}/sequences items without sequence slug', () => {
-      const response = [{ title: 'Sequence without slug' }];
-
-      expect(() => {
-        augmentArrayResponseWithOakUrl(response, '/subjects/maths/sequences', 'get');
-      }).toThrow(/Could not extract ID/);
     });
   });
 

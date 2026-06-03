@@ -24,7 +24,7 @@ function fakeOakClient(): OakClient {
     getLessonTranscript: vi.fn(),
     getLessonSummary: vi.fn(),
     getUnitSummary: vi.fn(),
-    getSubjectSequences: vi.fn(),
+    getSubjectDetail: vi.fn(),
     getSequenceUnits: vi.fn(),
     getAllThreads: vi.fn(),
     getThreadUnits: vi.fn(),
