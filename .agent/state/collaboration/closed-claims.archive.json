@@ -5806,6 +5806,455 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "dbfe2183-4dac-4afc-8884-5563381bdf15",
+      "agent_id": {
+        "agent_name": "Lofty Sweeping Falcon",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e8a",
+        "id": "3e3d8696-b540-5723-8fa8-f57b4a2bd1d6"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/curator-passes/2026-06-02-lofty-sweeping-falcon-curation.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/operational/repo-continuity.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-02T20:30:58Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Dedicated knowledge-curation continuation: process due pending-graduations items with item-level dispositions; no archive/split/shard/rename-only fitness cure.",
+      "heartbeat_at": "2026-06-02T20:45:00Z",
+      "archived_at": "2026-06-02",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-02T20:39:49Z",
+        "closed_by": {
+          "agent_name": "Lofty Sweeping Falcon",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e8a",
+          "id": "3e3d8696-b540-5723-8fa8-f57b4a2bd1d6"
+        },
+        "summary": "Partial curation slice landed: two due pending-graduations graduated, two fresh napkin-tail candidates routed, strict-hard soft-only, and the goal remains active because Q-003 and owner-gated register items remain.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "dbfe2183-4dac-4afc-8884-5563381bdf15",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "52257261-4468-4252-a630-4d99b350616c",
+      "agent_id": {
+        "agent_name": "Lofty Sweeping Falcon",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e8a",
+        "id": "3e3d8696-b540-5723-8fa8-f57b4a2bd1d6"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/open-questions.md",
+            ".agent/memory/operational/curator-passes/2026-06-02-lofty-sweeping-falcon-curation.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-02T20:44:54Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Continue dedicated knowledge-curation: clean live buffer status residue and open-question disposition proof without touching Seaworthy's EEF claim surfaces.",
+      "archived_at": "2026-06-02",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-02T20:48:40Z",
+        "closed_by": {
+          "agent_name": "Lofty Sweeping Falcon",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e8a",
+          "id": "3e3d8696-b540-5723-8fa8-f57b4a2bd1d6"
+        },
+        "summary": "Partial buffer-status curation landed: pending-graduations stale pending status corrected; Q-002/Q-003 made explicitly owner-gated with future-check evidence; validation green for focused checks; goal remains active.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "52257261-4468-4252-a630-4d99b350616c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "0c943f40-b1bf-429a-b93c-09e3378de22d",
+      "agent_id": {
+        "agent_name": "Lofty Sweeping Falcon",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e8a",
+        "id": "3e3d8696-b540-5723-8fa8-f57b4a2bd1d6"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/operational/curator-passes/2026-06-02-lofty-sweeping-falcon-curation.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-02T20:47:09Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Continue dedicated knowledge-curation: replace distilled owner-surfaced candidate notes with explicit pending-graduations owner-gated route pointers.",
+      "archived_at": "2026-06-02",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-02T20:48:40Z",
+        "closed_by": {
+          "agent_name": "Lofty Sweeping Falcon",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e8a",
+          "id": "3e3d8696-b540-5723-8fa8-f57b4a2bd1d6"
+        },
+        "summary": "Partial active-buffer curation landed: two distilled owner-surfaced candidate notes replaced with explicit pending-graduations owner-gated route pointers; validation green for focused checks; goal remains active.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "0c943f40-b1bf-429a-b93c-09e3378de22d",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "a4eb4a8a-dba4-409c-b0db-d53470a04b48",
+      "agent_id": {
+        "agent_name": "Lofty Sweeping Falcon",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e8a",
+        "id": "3e3d8696-b540-5723-8fa8-f57b4a2bd1d6"
+      },
+      "thread": "knowledge-curation",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/operational/curator-passes/2026-06-02-lofty-sweeping-falcon-curation.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-02T20:54:11Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Drain one already-graduated distilled item into its durable pattern home and record item-level disposition",
+      "archived_at": "2026-06-02",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-02T20:55:36Z",
+        "closed_by": {
+          "agent_name": "Lofty Sweeping Falcon",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e8a",
+          "id": "3e3d8696-b540-5723-8fa8-f57b4a2bd1d6"
+        },
+        "summary": "Drained already-graduated distilled contamination-scan method entry into existing active pattern home and recorded disposition in Lofty curator ledger; validations: markdownlint targeted, strict-hard SOFT-only, vocabulary green, git diff --check clean.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "a4eb4a8a-dba4-409c-b0db-d53470a04b48",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1371f861-a42b-46f4-9ee5-653578019489",
+      "agent_id": {
+        "agent_name": "Lofty Sweeping Falcon",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e8a",
+        "id": "3e3d8696-b540-5723-8fa8-f57b4a2bd1d6"
+      },
+      "thread": "knowledge-curation",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/operational/curator-passes/2026-06-02-lofty-sweeping-falcon-curation.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-02T20:56:22Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Drain already-graduated archive-boundary distilled item into ADR-117 and plans README homes",
+      "archived_at": "2026-06-02",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-02T20:57:41Z",
+        "closed_by": {
+          "agent_name": "Lofty Sweeping Falcon",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e8a",
+          "id": "3e3d8696-b540-5723-8fa8-f57b4a2bd1d6"
+        },
+        "summary": "Drained already-graduated distilled archive-boundary entry into ADR-117 and plans README durable homes; validations: targeted markdownlint, strict-hard SOFT-only, vocabulary green, git diff --check clean.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1371f861-a42b-46f4-9ee5-653578019489",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "9f960ada-af5e-4f4e-8cd1-3398049e6790",
+      "agent_id": {
+        "agent_name": "Lofty Sweeping Falcon",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e8a",
+        "id": "3e3d8696-b540-5723-8fa8-f57b4a2bd1d6"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/operational/curator-passes/2026-06-02-lofty-sweeping-falcon-curation.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-02T21:02:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Drain already-graduated distilled user-value/tool-design entry to its durable rule and register homes",
+      "archived_at": "2026-06-02",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-02T21:07:00Z",
+        "closed_by": {
+          "agent_name": "Lofty Sweeping Falcon",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e8a",
+          "id": "3e3d8696-b540-5723-8fa8-f57b4a2bd1d6"
+        },
+        "summary": "Drained duplicated active-distilled bottom cluster: user-value/tool-design and deleted-content contamination graduated to durable rules; retired-label/live-residue item routed to canonical owner-gated pending-graduations entry. Validated markdownlint, strict-hard SOFT-only, vocabulary, diff check, and residue search.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "9f960ada-af5e-4f4e-8cd1-3398049e6790",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "016269ce-8077-441e-bda9-08c327592fce",
+      "agent_id": {
+        "agent_name": "Lofty Sweeping Falcon",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e8a",
+        "id": "3e3d8696-b540-5723-8fa8-f57b4a2bd1d6"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/curator-passes/2026-06-02-lofty-sweeping-falcon-curation.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-02T21:15:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Route remaining active distilled entries to canonical owner-gated or durable homes",
+      "archived_at": "2026-06-02",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-02T21:22:00Z",
+        "closed_by": {
+          "agent_name": "Lofty Sweeping Falcon",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e8a",
+          "id": "3e3d8696-b540-5723-8fa8-f57b4a2bd1d6"
+        },
+        "summary": "Routed remaining active distilled entries to canonical owner-gated or durable homes; added owner-gated rows for assertion-time/liveness checks, projection provenance, dependency-refresh plan-truth cleanup, and source-side completeness enumeration; distilled now ready-empty with only a state pointer. Validated targeted markdownlint, strict-hard SOFT-only, vocabulary, and diff check.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "016269ce-8077-441e-bda9-08c327592fce",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "09ac2f63-bd18-4dad-a9d2-62fbfaaadb24",
+      "agent_id": {
+        "agent_name": "Seaworthy Swimming Sextant",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "a85c18",
+        "id": "fe0091d2-12a7-5bb8-acbd-77908a001d0d"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-02T21:12:37Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit the EEF D3 contract + reviews + inherited Galactic handoff bundle.",
+      "archived_at": "2026-06-02",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-02T21:18:42Z",
+        "closed_by": {
+          "agent_name": "Seaworthy Swimming Sextant",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "a85c18",
+          "id": "fe0091d2-12a7-5bb8-acbd-77908a001d0d"
+        },
+        "summary": "commits 78c92b95 + 0ace63ad: eef d3 contract bundle + repo-continuity drain; window clear",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "09ac2f63-bd18-4dad-a9d2-62fbfaaadb24",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "6199e2a2-f23c-482b-97b2-03853fefb424",
+      "agent_id": {
+        "agent_name": "Seaworthy Swimming Sextant",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "a85c18",
+        "id": "fe0091d2-12a7-5bb8-acbd-77908a001d0d"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md",
+            ".agent/plans/sector-engagement/eef/current/eef-d3-mcp-contract.md",
+            ".agent/plans/sector-engagement/eef/current/eef-d2-source-path-table.md",
+            ".agent/memory/operational/threads/eef.next-session.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-02T20:36:57Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "EEF D3: whole-plan+D3 review, declared-only exclusions edit, D3 MCP contract artefact + SDK/app verification record, reviewer dispatch, owner-ratification presentation",
+      "archived_at": "2026-06-03",
+      "closure": {
+        "kind": "stale",
+        "closed_at": "2026-06-03T06:57:44Z",
+        "closed_by": {
+          "agent_name": "Lofty Sweeping Falcon",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e8a",
+          "id": "3e3d8696-b540-5723-8fa8-f57b4a2bd1d6"
+        },
+        "summary": "Archived stale/orphaned claim after its freshness TTL expired.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "6199e2a2-f23c-482b-97b2-03853fefb424",
+            "summary": "Claim exceeded its type-specific freshness TTL."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "69371c1d-649f-4347-b767-6a7c4e426047",
+      "agent_id": {
+        "agent_name": "Lofty Sweeping Falcon",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e8a",
+        "id": "3e3d8696-b540-5723-8fa8-f57b4a2bd1d6"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-03T07:00:31Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Commit Lofty session handoff and consolidation closeout bundle",
+      "intent_to_commit": "7236509a-0102-4f56-acd1-2f79fcb8a92c",
+      "archived_at": "2026-06-03",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-03T07:02:17Z",
+        "closed_by": {
+          "agent_name": "Lofty Sweeping Falcon",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e8a",
+          "id": "3e3d8696-b540-5723-8fa8-f57b4a2bd1d6"
+        },
+        "summary": "Commit window for Lofty handoff/consolidation closeout; queue intent 7236509a staged after claim closure so active-claims has no committed residue.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "69371c1d-649f-4347-b767-6a7c4e426047",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

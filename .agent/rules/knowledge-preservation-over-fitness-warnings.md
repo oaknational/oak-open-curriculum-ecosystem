@@ -22,6 +22,14 @@ the source as the preserved historical record. Archive-after-processing
 protects knowledge; archive-before-processing hides unfinished
 curation.
 
+Before any archive, park, supersede, or retirement move, run a
+live-unique substance screen. Ask what currently lives only in the
+candidate source, which current files still depend on it, and whether
+the proposed destination would keep that substance reachable for the
+next practical use. Archive/park framing is never the first lens; it
+is the lifecycle action that follows after the substance-loss question
+has been answered and recorded.
+
 Owner-stated 2026-05-11 as already-established repo doctrine:
 *"never, ever withhold knowledge preservation to keep a mechanical
 warning lower, that is already repo doctrine"*.
@@ -121,3 +129,6 @@ move. Never:
   surface so the doctrine is visible to all platforms.
 - 2026-05-24 — owner sharpened the archival boundary: knowledge
   curation comes first, always; never archive unprocessed content.
+- 2026-06-02 — graph-estate consolidation supplied the second worked
+  instance for the live-unique substance screen before archive or
+  park moves; the doctrine now names the screen explicitly.

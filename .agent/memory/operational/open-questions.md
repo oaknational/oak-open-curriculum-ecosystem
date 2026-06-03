@@ -56,7 +56,10 @@ fitness_content_role: drainable-buffer
   for evidence a rule altered a move. No built-in per-rule analytics exist.
 - **Owning artefact / discussion home**: none yet; relates to context-budget
   governance. Does not block any current cycle.
-- **Status**: open.
+- **Status**: owner-gated — needs owner direction to open a rule-impact
+  instrumentation / transcript-audit lane, or an owner decision to retire the
+  question. Future check: look for a current context-budget or rule-analytics
+  plan before asking again; none is recorded here.
 
 ## Q-003 — input/output schema strategy for MCP tools (+ the EEF coupling)
 
@@ -117,9 +120,11 @@ fitness_content_role: drainable-buffer
   Ratified decisions 7–9) and the file is archived. Q1/Q3/Q5 now resolve in
   the EEF D4–D6 co-design and at that plan's promotion (trigger: EEF D6
   landed + D7 green).
-- **Status**: open (narrowed to Q1/Q3/Q5 — the shared-mechanism design); owned
-  by the output-schemas plan + the unified substrate-migration plan + EEF
-  D4–D6.
+- **Status**: owner-gated — narrowed to Q1/Q3/Q5, the shared-mechanism design.
+  Owner-facing decision point is the EEF D4–D6 co-design and unified
+  substrate-migration promotion. Future check: verify whether EEF D6 has landed,
+  D7 is green, and the substrate-migration promotion resolved Decisions A/B/D;
+  otherwise keep this question live.
 
 [q3-general]: ../../plans/sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md
 [q3-graph]: ../../plans/sdk-and-mcp-enhancements/archive/completed/graph-tool-output-schemas.plan.md

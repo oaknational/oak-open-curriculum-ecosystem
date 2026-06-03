@@ -43,7 +43,7 @@ they graduate, duplicate, become stale-withdrawn, or receive owner direction.
   against current file content at the move; both assumptions-expert
   substance-preservation conditions honoured at the t4 move; landed at
   `c3b78eec`). Second worked instance — ready for graduation drafting.
-  `[captured: 2026-06-02 | source: napkin rotation from Glittering Soaring Meteor | target: amend:consolidate-docs OR rule:knowledge-preservation-over-fitness-warnings | trigger: FIRED 2026-06-02 (archive/park-shaped pass executed with the lens applied) | size: M | status: due]`
+  `[captured: 2026-06-02 | source: napkin rotation from Glittering Soaring Meteor | target: amend:consolidate-docs OR rule:knowledge-preservation-over-fitness-warnings | trigger: FIRED 2026-06-02 (archive/park-shaped pass executed with the lens applied) | size: M | status: graduated 2026-06-02 -> .agent/rules/knowledge-preservation-over-fitness-warnings.md]`
 - **Archive is a terminal sink: de-link live references, never repoint;
   one index note.** Owner-corrected discipline (2026-06-01, commit `5063456a`)
   with a second full worked instance 2026-06-02 (`c3b78eec`): the graph-estate
@@ -54,7 +54,7 @@ they graduate, duplicate, become stale-withdrawn, or receive owner direction.
   "fix all cross-references to point directly to archive/completed" wording
   reads as repoint-everything; the executed split (superseded → de-link;
   completed → may cite archive) needs encoding in the ADR or a rule.
-  `[captured: 2026-06-02 | source: distilled.md Hearthlit entry + graph-estate execution worked instance | target: rule (archive-terminal-sink) or ADR-117 amendment | trigger: owner direction (two instances accumulated) | size: M | status: due]`
+  `[captured: 2026-06-02 | source: distilled.md Hearthlit entry + graph-estate execution worked instance | target: rule (archive-terminal-sink) or ADR-117 amendment | trigger: owner direction (two instances accumulated) | size: M | status: graduated 2026-06-02 -> ADR-117 plan archival cross-reference role split + .agent/plans/README.md lifecycle note]`
 - **Plans that de-stratify an estate must not re-stratify themselves.** A
   consolidation plan that accumulates dated "Inbound from ..." sections recreates
   the stratified narrative it exists to remove. Durable shape: one derived
@@ -77,18 +77,44 @@ they graduate, duplicate, become stale-withdrawn, or receive owner direction.
   the file is untracked and uncommitted. Reports that say "created X" should carry
   path plus current `git status` evidence in no-commit sessions.
   `[captured: 2026-06-02 | source: napkin rotation from graph-tool-output-schemas plan creation | target: amend:session-handoff OR verify-dont-trust | trigger: owner direction or second owner-invisible untracked artefact incident | size: S | status: owner-gated]`
+- **Assertion-time verification and label liveness checks.** A claim becomes
+  true only when the proving surface is current and visible; cheap checks belong
+  at assertion time, including whether a cited label, status, section, or row is
+  still live rather than merely present in a contaminated or in-flight artefact.
+  `[captured: 2026-06-02 | source: distilled.md June 2 assertion-time checks | target: amend:verify-dont-trust OR contamination-scan-method | trigger: owner direction or second assertion-time liveness failure | size: S | status: owner-gated]`
+- **Projection provenance for data-as-source-of-truth work.** A hand-authored
+  mirror inside codegen is still a mirror; durable data shapes should be static
+  data projected through a type-strict schema boundary, with `satisfies` tying
+  the projection to the structured source.
+  `[captured: 2026-06-02 | source: distilled.md June 2 projection provenance | target: amend:schema-first-execution OR rule:projection-provenance | trigger: owner direction or second hand-authored-mirror/codegen drift instance | size: S | status: owner-gated]`
 - **Mechanical sweep and broad revert actions need set-level disposition before
   execution.** A broad text sweep or revert can cross generated snapshots,
   immutable records, peer edits, and live prose; state the planned set and
   per-class disposition before action when the set spans more than simple live
   prose.
   `[captured: 2026-06-02 | source: napkin rotation from judgement sweep repair | target: rule-or-pattern:mechanical-sweep-set-discipline | trigger: owner direction or next broad text-sweep/revert pass | size: M | status: owner-gated]`
+- **Dependency refreshes need plan-truth cleanup.** Workspace dependency updates
+  can widen beyond the initially named package because shared ranges move
+  together; after manifests and lockfiles are current, check current/future plans
+  so old dependency-update plans stop advertising completed work.
+  `[captured: 2026-06-02 | source: distilled.md June 2 dependency refresh cleanup | target: dependency-refresh closeout checklist OR plan-hygiene doctrine | trigger: owner direction or next workspace-wide dependency refresh | size: S | status: owner-gated]`
+- **Completeness checks must enumerate from the source side, not the claim.** A
+  spot-check scoped to the files a claim names cannot find unclaimed consumers or
+  siblings; for symbol/import/file-set completeness, enumerate from the code or
+  source corpus side before accepting the claim boundary.
+  `[captured: 2026-06-02 | source: distilled.md independent-eyes/claim-selection lesson | target: amend:verify-dont-trust OR pattern:source-side-completeness-enumeration | trigger: owner direction or second claim-scoped completeness miss | size: S | status: owner-gated]`
 - **Cursor identity seed observability needs a machine-level check.** Ashen's
   Cursor session could not claim or broadcast because
   `PRACTICE_AGENT_SESSION_ID_CURSOR` was absent from the shell, so a broad sweep
   was invisible to active-claims/comms. This looks like a host hook/environment
   gap rather than an agent-level behaviour failure.
   `[captured: 2026-06-02 | source: napkin rotation from Ashen Igniting Hearth sweep | target: cursor-hook/agent-tools identity observability check | trigger: owner direction or next Cursor session with missing identity seed | size: S | status: owner-gated]`
+- **Relative-link integrity needs a live-lane validator.** A scoped t8
+  link-integrity sweep over the `.agent` estate found 14 pre-existing broken
+  relative links that markdownlint, Prettier, and the full gate chain do not
+  catch. Structural cure shape: a repo validator over live lanes, excluding
+  `archive/`, wired at `warn` first per the new-rule/new-validator convention.
+  `[captured: 2026-06-02 | source: active napkin / Galactic Glowing Prism JC4 plan authoring | target: repo-validator:relative-link-integrity-live-lanes | trigger: owner direction or next link-integrity remediation/validator touch | size: M | status: owner-gated]`
 
 ## Register Rule
 
@@ -1095,7 +1121,7 @@ done && echo "lock cleared"`). Even though the loop only OBSERVED
   to touch). Plan-author discipline: do not invent serial
   dependencies the work shape does not require. Trigger: second
   Practice-bearing repo adopts the same discipline OR owner
-  direction. Status: pending (single-instance — graduates as a
+  direction. Status: owner-gated (single-instance — graduates as a
   PDR candidate when N≥2 host repos pick it up, or when owner
   directs). Captured: 2026-05-03 (Lush Spreading Seed). Source
   surface: this session's plan-template restructure following

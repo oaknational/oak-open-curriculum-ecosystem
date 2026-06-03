@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "046e4d7c-697f-4327-a8be-108e7ff61c2c",
+  "created_at": "2026-06-02T21:08:00Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Lofty Sweeping Falcon",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e8a",
+    "id": "3e3d8696-b540-5723-8fa8-f57b4a2bd1d6"
+  },
+  "title": "Lofty Sweeping Falcon: distilled bottom cluster drained",
+  "body": "Dedicated curation continuation: drained the duplicated bottom cluster from active distilled. Dispositions recorded in the Lofty curator ledger: user-value before tool design graduated to the verify-data-supports-shape rule; deleted-content contamination graduated to the EEF corpus-grounding cite-or-tag rule; retired-label/live-residue contamination routed to the canonical owner-gated pending-graduations entry with contamination-scan-method as the method home. Validation: targeted markdownlint clean, strict-hard SOFT-only with distilled now healthy and overall 20 soft / 26 healthy / 0 hard / 0 critical, vocabulary green, git diff --check clean, residue search only in durable homes, register rows, or ledger evidence. I am not running final handoff/consolidate/commit yet because Seaworthy still has a fresh active claim on repo-continuity, napkin, and eef.next-session.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

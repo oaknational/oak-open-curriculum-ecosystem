@@ -8,6 +8,16 @@ merge_class: append-only-narrative
 fitness_content_role: drainable-buffer
 ---
 
+## 2026-06-03 — closeout commit tooling (Lofty Sweeping Falcon)
+
+- **`commit-queue` help still omits required identity `--id` on write commands.**
+  During the session-completion commit window, `commit-queue enqueue` and
+  `commit-queue guard` both failed with `missing required --id` even though the
+  usage output listed agent name/platform/model/session-prefix but not the UUID
+  field. The source says `--id` is the already-derived collaboration-agent UUID,
+  not an intent id. Cure shape: commit-queue usage/option validation should make
+  the identity tuple visibly complete for every write command that parses it.
+
 ## 2026-06-02 — EEF D3 execution (Seaworthy Swimming Sextant)
 
 - **Known-answer probe missed again — and the miss-shape is new.** Withheld the

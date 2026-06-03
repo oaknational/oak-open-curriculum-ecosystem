@@ -1,5 +1,55 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Closeout (2026-06-03 — Lofty Sweeping Falcon / codex / GPT-5 / `019e8a`, handoff + consolidation)
+
+**Session-completion closeout recorded; commit window next.** The owner stopped
+the session and asked for `oak-session-handoff`, `oak-consolidate-docs`, and a
+commit. Handoff/consolidation mode is `session-completion`: the Lofty curation
+slice is closed out, while Q-003 and the owner-gated register remain live
+future work.
+
+Closeout proof:
+
+- `distilled.md` is ready-empty with every prior active body routed in the Lofty
+  curator ledger.
+- `pending-graduations.md` has no live `status: due`/generic `pending` residue
+  from this slice; unresolved candidates are explicitly owner-gated or triggered.
+- `open-questions.md` has no generic `Status: open` entries; Q-002/Q-003 name
+  owner-facing decision points.
+- The stale Seaworthy D3 claim expired at `2026-06-03T00:36:57Z` and was archived
+  by `claims archive-stale`; active claims are clear as of `2026-06-03T06:57:44Z`.
+- Validation: `pnpm practice:fitness:strict-hard` SOFT-only (20 soft,
+  26 healthy, 0 hard, 0 critical), `pnpm practice:vocabulary` green, and
+  `git diff --check` clean.
+
+Comms-event rotation remains paused. Do not infer full knowledge-curation
+completion from this closeout; next ordinary curation should start from the
+owner-gated register, Q-003, and the active napkin tail.
+
+## Session Outcome (2026-06-02 — Lofty Sweeping Falcon / codex / GPT-5 / `019e8a`, due-item curation continuation)
+
+**Partial slice landed in working tree.** Owner explicitly reopened
+`oak-consolidate-until-done` after Shaded Veiling Mirror's closeout, with the
+constraint that fitness numbers are signal, not the goal. Lofty Sweeping Falcon
+processed the two live `status: due` entries in `pending-graduations.md`:
+
+- live-unique substance screen before archive/park/supersede/retirement moves →
+  graduated into `knowledge-preservation-over-fitness-warnings.md`;
+- archive terminal-sink / de-link-vs-repoint discipline → graduated into ADR-117
+  plus the root plans README lifecycle note.
+
+The pass also absorbed Galactic Glowing Prism's live retirement event:
+relative-link integrity became a new owner-gated register item, and opener
+staleness refined the existing `distilled.md` opening-statements/handoff-form
+entry. Ledger:
+`curator-passes/2026-06-02-lofty-sweeping-falcon-curation.md`.
+
+Validation: `pnpm practice:fitness:strict-hard` remains SOFT-only
+(21 soft, 25 healthy, 0 hard, 0 critical); `pnpm practice:vocabulary`,
+`pnpm markdownlint:root ...`, and `git diff --check` passed. Verdict:
+`partial slice landed`, not full goal completion, because Q-003 remains open in
+`open-questions.md` and the owner-gated register remains live.
+
 ## Session Outcome (2026-06-02 — Shaded Veiling Mirror / codex / GPT-5 / `019e88`, dedicated curation pass)
 
 **Curation pass landed in working tree.** The active napkin crossed critical
@@ -42,6 +92,7 @@ clear. Commit the current bundle through the repo commit protocol.
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Lofty Sweeping Falcon` | `codex` | `GPT-5` | `019e8a` | `dedicated-curation-continuation+closeout` | 2026-06-02 | 2026-06-03 |
 | `Shaded Veiling Mirror` | `codex` | `GPT-5` | `019e88` | `dedicated-curation+closeout` | 2026-06-02 | 2026-06-02 |
 
 ## Session Outcome (2026-06-01 — Moonless Lurking Dusk / claude / Opus 4.8 / `0641a3`, dedicated knowledge-curation pass)

@@ -66,6 +66,9 @@ Use the lifecycle directory as a status contract before reading a plan body.
 
 `current/` is not "currently active". It means next-up executable work.
 `active/` is the only lifecycle lane for work in progress.
+Historical citations may link to `archive/completed/`; live navigation
+should point to the current owner or the completed plans index, not make an
+archived plan load-bearing again.
 
 ---
 

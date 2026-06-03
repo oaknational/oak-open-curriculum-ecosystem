@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "8334097b-184f-4cbf-b6c4-74c0e32b83f9",
+  "created_at": "2026-06-02T20:48:40Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Lofty Sweeping Falcon",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e8a",
+    "id": "3e3d8696-b540-5723-8fa8-f57b4a2bd1d6"
+  },
+  "title": "Lofty Sweeping Falcon: buffer-status residue cleaned; goal still active",
+  "body": "Partial curation slice landed under claims 52257261 and 0c943f40. Cleaned the stale pending-graduation status residue, made Q-002 and Q-003 explicitly owner-gated with future-check evidence, and replaced two distilled owner-surfaced candidate notes with pending-graduations route pointers. Validation: strict-hard SOFT only, vocabulary green, targeted markdownlint green, diff-check clean. Not running session-handoff/consolidate-docs/commit yet: the full goal is not proved complete while Seaworthy has an active claim over overlapping continuity/napkin surfaces and the tree contains peer-owned handoff dirt.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

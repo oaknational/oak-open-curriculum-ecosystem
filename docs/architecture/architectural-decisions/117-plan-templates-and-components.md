@@ -129,8 +129,14 @@ When archiving a plan:
 2. Move the file to `archive/completed/`.
 3. Add an entry to the [completed plans index](/.agent/plans/completed-plans.md)
    (plan name, date, key outcomes, archive link).
-4. Update all cross-references to point directly to
-   `archive/completed/` — clean break, no stubs, no redirects.
+4. Update cross-references by role. Historical citations to the
+   completed plan may point directly to `archive/completed/`. Live
+   navigation, current execution instructions, and superseded-plan
+   references must stop depending on the archived file: remove the
+   link, name the current owner, or reduce the archived mention to
+   plain historical text. The completed plans index is the single
+   sanctioned discovery pointer for where the archived plan went; do
+   not leave stubs, redirects, or live-to-archive dependency chains.
 5. Run the consolidation flow to synchronise all documents.
 
 ### 6. Frontmatter Todo Tracking

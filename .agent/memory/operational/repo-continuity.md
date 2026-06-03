@@ -19,6 +19,18 @@ surface.
 
 ## Current State
 
+- **Agentic curation session-completion closeout recorded (2026-06-03,
+  Lofty Sweeping Falcon / `019e8a`, codex / GPT-5)** — the Lofty continuation
+  processed the live due pending-graduations slice, drained `distilled.md` to a
+  ready-empty state with item-level routes, and left unresolved work truthfully
+  in the owner-gated register and Q-003 rather than declaring full curation
+  complete. `oak-session-handoff` + `oak-consolidate-docs` ran in
+  session-completion mode; the stale Seaworthy D3 claim expired at
+  `2026-06-03T00:36:57Z` and was archived by `claims archive-stale`; active
+  claims are clear. Validation: `pnpm practice:fitness:strict-hard` SOFT-only
+  (20 soft, 26 healthy, 0 hard, 0 critical), `pnpm practice:vocabulary` green,
+  and `git diff --check` clean. Full detail: `agentic-engineering-enhancements`
+  thread banner and the Lofty curator ledger.
 - **EEF D3 advanced to ratifiable output — contract + verification record
   authored, four reviewers run, OWNER RATIFICATION PENDING (2026-06-02,
   Seaworthy Swimming Sextant / `a85c18`, claude / Opus 4.8)** —
