@@ -149,7 +149,10 @@ The report carries the considerations; each gate names the decision, its
 report source, and what it unblocks. Gates are decided in an owner session
 walking the report (any order within a bundle; the blocking structure is
 explicit below). Per PDR-058 there are no bare deferrals: every fork is
-either decided at its gate or carries its named trigger here.
+either decided at its gate, parked with its named trigger here, or
+rejected as framed. A reframed gate is a verdict on the gate's shape: it
+routes back to synthesis as new work and amends the gate row — it is
+never pressed into a decision or disguised as a park.
 
 | Gate | Decision | Report source | Unblocks |
 | --- | --- | --- | --- |

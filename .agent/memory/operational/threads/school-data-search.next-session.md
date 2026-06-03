@@ -58,13 +58,16 @@ owner may direct their removal after comparison.
 
 **The owner gate session.** Walk gates G-1…G-9 in the
 [controlling plan](../../../plans/school-data-search/current/school-data-search-poc.plan.md)
-§Phase 0 against the synthesis report. Blocking structure: G-1/G-2/G-3/G-8
-unblock all build workstreams; G-4→WS3, G-5→WS7, G-6→WS4, G-7→WS6; G-9
-gates publishing only. Decisions recorded in the plan (todo flips) and, where
-architectural (G-1 produced-spec shape is the named ADR candidate), as ADRs.
-After the gates: WS-D1 (workspace decomposition proposal) → G-8
-ratification → promote the plan to `active/` and begin WS1/WS2/WS3 TDD
-cycles.
+§Phase 0 against the synthesis report. Gate outcomes: decided, parked with
+a named trigger (PDR-058), or rejected as framed — a reframed gate routes
+back to synthesis as new work and amends the gate row. Blocking structure:
+G-1/G-2/G-3/G-8 unblock all build workstreams; G-4→WS3, G-5→WS7, G-6→WS4,
+G-7→WS6; G-9 gates publishing only. Decisions recorded in the plan (todo
+flips) and, where architectural (G-1 produced-spec shape is the named ADR
+candidate), as ADRs. After the gates: WS-D1 (workspace decomposition
+proposal) → G-8 ratification → promote the plan to `active/` and begin
+WS1/WS2/WS3 TDD cycles. WS-D1's placement — authored in-session once G-2
+is decided, or after close — is an owner micro-decision taken at G-2.
 
 The synthesis-and-plan landing target set on 2026-06-03 is **complete**
 (report `36f1d61b`, plan `26b7eb77`).
