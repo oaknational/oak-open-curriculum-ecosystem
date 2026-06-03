@@ -34,6 +34,7 @@ For the strategic overview, use [high-level-plan.md](high-level-plan.md).
 |---|---|---|
 | [curriculum-mcp-path-to-ga/](curriculum-mcp-path-to-ga/roadmap.md) | Thin strategic index for the Curriculum MCP HTTP server release arc; coordinates M2/M3/GA gates across collections and owns no execution | 🔄 Active strategic index |
 | [semantic-search/](semantic-search/) | Hybrid semantic search, ingestion, retrieval quality, search/graph adjacency, and search-facing SDK/MCP support | 🔄 Current queue |
+| [school-data-search/](school-data-search/) | Oak School Data Search service POC MVP: UK school-register ingestion, canonical dataset, authenticated search API, typed client — built in-repo until a post-POC go/no-go | 📋 Queued (owner gates first) |
 | [sdk-and-mcp-enhancements/](sdk-and-mcp-enhancements/) | MCP Apps, MCP protocol adoption, generated SDK/tool surfaces, and OpenAPI-to-MCP pipeline evolution | 🔄 Active + queued execution |
 | [observability/](observability/) | Five-axis observability under ADR-162: engineering, product, usability, accessibility, and security signals | 🔄 Active |
 | [architecture-and-infrastructure/](architecture-and-infrastructure/) | Cross-cutting architecture, workspace boundaries, quality gates, infrastructure, and system quality | 🔄 Active backlog |

@@ -3,7 +3,7 @@ plan_id: high-level-plan
 title: "High-Level Plan"
 type: strategic-index
 status: active
-last_updated: 2026-06-01
+last_updated: 2026-06-03
 related_indices:
   - "README.md"
   - "curriculum-mcp-path-to-ga/roadmap.md"
@@ -162,6 +162,7 @@ remain authoritative for execution.
 |---|---|---|---|
 | `curriculum-mcp-path-to-ga/` | Cross-collection release arc for Curriculum MCP HTTP server | 🔄 Active strategic index | [roadmap.md](curriculum-mcp-path-to-ga/roadmap.md) |
 | `semantic-search/` | Hybrid search, ingestion, retrieval quality, search/graph adjacency | 🔄 Current queue; no active plan in collection README | [README.md](semantic-search/README.md) |
+| `school-data-search/` | UK school-register dataset service POC (in-repo until go/no-go); owner gates walk the synthesis report | 📋 Queued | [README.md](school-data-search/README.md) |
 | `sdk-and-mcp-enhancements/` | MCP Apps, MCP protocol adoption, generated SDK/tool surfaces | 🔄 Active + queued execution | [README.md](sdk-and-mcp-enhancements/README.md) |
 | `observability/` | Five-axis observability under ADR-162 | 🔄 Active | [README.md](observability/README.md) |
 | `architecture-and-infrastructure/` | Architecture, quality gates, workspace boundaries, system quality | 🔄 Active backlog | [README.md](architecture-and-infrastructure/README.md) |
