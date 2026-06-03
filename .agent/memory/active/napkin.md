@@ -98,6 +98,21 @@ fitness_content_role: drainable-buffer
   new-schema outputs; the heal is restore-inputs + forced `CI=true` runs of
   the poisoned tasks (`sdk-codegen`, then `#build`) so correct outputs
   overwrite the entries. Verified end-to-end 2026-06-03.
+- **A structural-impossibility claim is a completeness claim in disguise —
+  the census law applies to capability questions too.** "There is no way to
+  commit" asserts the empty set over the system's affordances, yet I derived
+  it from the paths I had tried, not from enumerating the system's switches
+  (one `rg "process.env.CI"` in codegen.ts would have found the offline
+  mode). Same law as the corpus census and the declared-only question:
+  negative existence claims get source-side enumeration or they get
+  hedged confidence — never investigation-proportional confidence.
+- **Record a developing conclusion ONCE, in its authority; point from
+  everywhere else.** My false "commits blocked" verdict went verbatim into
+  three surfaces (plan, opener, continuity) within minutes — the same
+  recording discipline that makes true findings durable made the wrong one
+  durable in triplicate, and the reversal cost three coordinated edits.
+  While a conclusion is still live-developing, the authority surface holds
+  the claim and other surfaces hold pointers; copies are for settled state.
 
 ## 2026-06-03 — Antigravity audit vs skills taxonomy separation (Stratospheric Buffeting Breeze)
 
