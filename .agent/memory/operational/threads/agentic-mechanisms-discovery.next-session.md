@@ -12,7 +12,10 @@
   Strategic source and gated child lanes remain under
   [`agentic-mechanisms-discovery.plan.md`](../../../plans/discovery/future/agentic-mechanisms-discovery.plan.md).
 - Related future child plans:
-  [`agent-skills-discovery.plan.md`](../../../plans/discovery/future/agent-skills-discovery.plan.md)
+  [`agent-skills-discovery.plan.md`](../../../plans/discovery/future/agent-skills-discovery.plan.md),
+  [`skills-classification-taxonomy.plan.md`](../../../plans/discovery/future/skills-classification-taxonomy.plan.md)
+  (with its companion
+  [distribution-channels report](../../../plans/discovery/future/skills-distribution-channels-suggestions.report.md)),
   [`mcp-server-cards.plan.md`](../../../plans/discovery/future/mcp-server-cards.plan.md),
   [`dns-aid-discovery.plan.md`](../../../plans/discovery/future/dns-aid-discovery.plan.md),
   [`aila-a2a-agent-card.plan.md`](../../../plans/discovery/future/aila-a2a-agent-card.plan.md),
@@ -37,6 +40,53 @@
 - Web Bot Auth split: the current Phase 1 plan owns the decision ledger and
   security-evidence cross-link. The future Web Bot Auth child plan owns any
   later enabled-control rollout if Oak ratifies signed-agent verification.
+
+## Session Outcome (2026-06-03 - Blustery Lifting Gale / claude / Opus 4.8 / `9b33b0`, skills taxonomy + distribution estate)
+
+**Landed: the audience-led capability taxonomy is ratified and the
+distribution estate restructured.**
+[ADR-189](../../../../docs/architecture/architectural-decisions/189-audience-led-agent-capability-taxonomy.md)
+ratifies two orthogonal axes — audience (repo-working skills / Oak developer
+capabilities / curriculum assistance capabilities) and distribution locus
+(repo-internal / distributable / both) — with `SKILL.md`, MCP
+tools/resources/prompts, and plugin bundles as packaging-never-category. The
+executive
+[`agent-capability-vocabulary.md`](../../executive/agent-capability-vocabulary.md)
+carries both axes plus the teacher-facing avoid-list.
+
+Estate moves (owner-directed): the
+[skills-classification-taxonomy plan](../../../plans/discovery/future/skills-classification-taxonomy.plan.md)
+landed in this collection's `future/` beside the owner-supplied
+[skills-distribution-channels report](../../../plans/discovery/future/skills-distribution-channels-suggestions.report.md)
+(final of four homes: agent-tooling → educator-end-users → user-experience →
+discovery — the wandering was the taxonomy discovering that classification
+and distribution are one problem). The first-party `oaknational/oak-skills`
+library (private at time of writing; six user-facing skills, Claude plugin
+shape, validation + evals) is wired in as promotion-trigger evidence and as
+the reconciliation baseline for this thread's skill-catalogue table.
+[`agent-skills-discovery.plan.md`](../../../plans/discovery/future/agent-skills-discovery.plan.md)
+gained §Installation Messaging Redundancy (owner requirement: hosts demand
+opt-in installs, so every published capability names redundant announcement
+surfaces; mutual announcement between capability tiers satisfies the
+two-independent-surfaces criterion) and the catalogue-reconciliation note.
+
+Owner corrections folded into artefacts: (1) pedagogical/factual-rigour
+standards are constraints that travel INSIDE capabilities under
+curriculum/evidence governance — not branding; brand/tone classification is
+the audit's named open question. (2) Library integration into this repo is
+likely but undecided — named owner decision, no committed scope.
+
+Reviewed in real time: docs-adr-expert + code-expert (parallel); the
+material catch was an ADR-number slot collision (188 reserved by the
+emission-binding plan, 81 refs) cured by renumbering to 189; frontmatter
+harmonised to collection schema; all findings dispositioned with two
+rejected as over-escalation. Committed this session in ownership chunks
+(see git log for 2026-06-03, Blustery Lifting Gale).
+
+**The taxonomy plan is promotable on owner direction** — its blocking
+prerequisite is met (ADR-189) and trigger evidence is recorded. Promotion
+must reconcile the catalogue against the real library, and verify the
+distribution report's ecosystem claims against official platform docs.
 
 ## Session Update (2026-06-01 - Umbral Whispering Silhouette / root planning docs overhaul + light handoff)
 
@@ -155,6 +205,7 @@ trust model before writing the executable `current/` plan.
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| Blustery Lifting Gale | claude | Opus 4.8 | 9b33b0 | skills-taxonomy-and-distribution | 2026-06-03 | 2026-06-03 |
 | Umbral Whispering Silhouette | codex | GPT-5 | 019e83 | promotion-and-root-docs-author | 2026-06-01 | 2026-06-01 |
 | Luminous Dancing Aurora | codex | GPT-5 | 019e82 | research-and-plan-author | 2026-06-01 | 2026-06-01 |
 
@@ -163,6 +214,7 @@ trust model before writing the executable `current/` plan.
 - **Owning plans:**
   [`agentic-mechanisms-discovery.plan.md`](../../../plans/discovery/future/agentic-mechanisms-discovery.plan.md),
   [`agent-skills-discovery.plan.md`](../../../plans/discovery/future/agent-skills-discovery.plan.md),
+  [`skills-classification-taxonomy.plan.md`](../../../plans/discovery/future/skills-classification-taxonomy.plan.md),
   [`mcp-server-cards.plan.md`](../../../plans/discovery/future/mcp-server-cards.plan.md),
   [`dns-aid-discovery.plan.md`](../../../plans/discovery/future/dns-aid-discovery.plan.md),
   [`aila-a2a-agent-card.plan.md`](../../../plans/discovery/future/aila-a2a-agent-card.plan.md),
@@ -186,7 +238,10 @@ trust model before writing the executable `current/` plan.
   Server Cards SEP stability; Oak public remote MCP server publication; DNS-AID
   draft stability and scope choice; any real Oak-hosted remote agent that would
   make A2A relevant; product decision for browser-native page actions; signed
-  agent verification posture for official Oak web apps.
+  agent verification posture for official Oak web apps; the owner's
+  oak-skills-library integration decision (fires the taxonomy plan and
+  reshapes the skill-catalogue baseline); ADR-189 taxonomy plan promotion
+  (prerequisite met, trigger evidence recorded — owner direction only).
 
 ## Standing Decisions
 

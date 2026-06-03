@@ -19,6 +19,37 @@ surface.
 
 ## Current State
 
+- **CAPABILITY TAXONOMY RATIFIED + DISTRIBUTION ESTATE LANDED (2026-06-03,
+  Blustery Lifting Gale / `9b33b0`, claude / Opus 4.8, owner-directed
+  throughout)** —
+  [ADR-189](../../../docs/architecture/architectural-decisions/189-audience-led-agent-capability-taxonomy.md)
+  ratifies the two-axis capability taxonomy: audience (repo-working skills /
+  Oak developer capabilities / curriculum assistance capabilities) ×
+  distribution locus (repo-internal / distributable / both), with
+  `SKILL.md`/MCP/plugins as packaging-never-category. The
+  [taxonomy plan](../../plans/discovery/future/skills-classification-taxonomy.plan.md)
+  and the owner's
+  [distribution-channels report](../../plans/discovery/future/skills-distribution-channels-suggestions.report.md)
+  are homed side by side in `discovery/future/` (final of four owner-directed
+  homes); the executive
+  [vocabulary contract](../executive/agent-capability-vocabulary.md)
+  carries both axes + the teacher-facing avoid-list. The first-party
+  `oaknational/oak-skills` library (private; six user-facing skills, Claude
+  plugin shape) is wired in as promotion-trigger evidence;
+  [`agent-skills-discovery.plan.md`](../../plans/discovery/future/agent-skills-discovery.plan.md)
+  gained §Installation Messaging Redundancy (owner requirement: redundant
+  announcement surfaces; mutual announcement between capability tiers) and a
+  reconcile-against-the-real-library note. Owner corrections folded: rigour
+  standards (evidence/provenance/caveats/teacher judgement) are constraints
+  inside capabilities, NOT branding; brand/tone classification stays the
+  audit's open question. Reviewed in real time (docs-adr-expert +
+  code-expert; ADR renumbered 188→189 after slot collision with the
+  emission-binding plan's reservation; all findings dispositioned). The
+  taxonomy plan is **promotable on owner direction** (blocking prerequisite
+  met via ADR-189; trigger evidence recorded). **Integration of the library's
+  user-facing skills into this repo is likely but undecided — owner
+  decision, no committed scope.** Authority: the two plans above + the
+  `agentic-mechanisms-discovery` thread record.
 - **School-search synthesis report + gated POC plan LANDED (2026-06-03,
   Furnace Roasting Brazier / `88a769`, claude / Opus 4.8)** — the
   self-contained synthesis of the three briefs + owner requirements is at
@@ -166,54 +197,10 @@ surface.
   contamination scan** (now against pushed state), then graph-estate
   execution, then the unified substrate-migration plan, then EEF D3. Full
   detail: `eef` + `connecting-oak-resources` thread banners.
-- **EEF/ADR/graph-estate plan review + refinement — doc-only, all uncommitted
-  (2026-06-02, Flamebright Charring Ember / `30dd5d`, claude / Opus 4.8)** — deep
-  multi-workflow review (holistic 6-lens, D3 4-lens, 4-architecture-reviewer pass,
-  each critically assessed with false-positives rejected) plus grounded refinements
-  to `eef/current/eef-graph-tool-completion.plan.md` (the EEF tool is a **graph
-  universal tool**, not a bespoke bypass; `TNodeId` replace-not-extend; green-at-
-  each-boundary replaces the "red-tree window" framing; the interpretation resource
-  is **agent guidance**; live signal tools `get-misconception-graph`/
-  `get-prior-knowledge-graph` pinned in D7), **ADR-157** (EvidenceCorpus/five-
-  increment supersession + namespace de-noise), a new seed
-  `eef/future/eef-revalidate-on-new-graph-tools.plan.md`, and
-  `graph-estate-consolidation.plan.md` (cross-thread migration relationship + new
-  **Judgement call 4**: ONE plan owns moving all existing graph tools to the new
-  substrate). Three owner-caught convenient-claim slips (bespoke topology /
-  over-specified output-schema mechanics / proliferated retired `Inc.3`) → cure
-  sharpened in `distilled.md` + auto-memory. **TWO STANDING OWNER MANDATES for a
-  near-future session:** (1) **deeply scan ALL this session's outputs for
-  contamination**; (2) **graph estate consolidation + graph enhancement + EEF work
-  can no longer exist independently — clean and align ALL graph work as ONE unit.**
-  **OPEN:** input/output schema strategy is owned by
-  `sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md` (the
-  Abyssal Flowing Beacon workstream below; audited in-tree); EEF output-schema
-  mechanics deferred to it (open-questions **Q-003**). Full detail: `eef` +
-  `connecting-oak-resources` thread banners. Doc-only; markdownlint green on every
-  touched file; full `pnpm check` NOT run (uncommitted, shared tree carries the
-  output-schema workstream); no commit.
-- **MCP output-schema plan audited + rewritten; graph-tool output-schema
-  projection plan created (2026-06-02, Abyssal Flowing Beacon / `762085`,
-  claude / Opus 4.8)** — a 61-agent audit of
-  `sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md`
-  ([report](../../reports/output-schema-mcp-plan-audit-2026-06-02.md)) found it
-  materially stale (stdio transport gone; 34→35 tools / 10→11 aggregated;
-  Phase-3 gate pointed at deleted `projections.ts` from PR #76). Rewrote it
-  decision-complete (object-rooted **required** `outputSchema`, generated-vs-
-  aggregated split, the S0 universal-tools seam) with one named open decision.
-  Owner resolved it: **this plan owns S0**; apply the required field **per tool
-  type, graph first**, promote to the root `UniversalToolListEntry` last. Owner
-  correction mid-design (metacognition): output schemas are NOT hand-constructed
-  Zod — they are a deterministic, type-strict **projection** of the static data
-  fed to a **single Zod call** (`satisfies`-tied to `structuredContent`), the
-  SAME pattern as EEF, emitted at codegen. New plan
-  [`graph-tool-output-schemas.plan.md`](../../plans/sdk-and-mcp-enhancements/archive/completed/graph-tool-output-schemas.plan.md)
-  (since absorbed and archived)
-  (status DESIGN — co-designed with EEF D4–D6, five open questions, not
-  executable); implementation **paused for owner review**. This aligns with the
-  owner mandate in the `eef` banner: graph-estate + graph-enhancement + EEF must
-  be cleaned and aligned as ONE unit. Doc-only, uncommitted on
-  `feat/graph-tooling-tidyup`; no gates run (owner direction).
+- **2026-06-02 Flamebright plan-review and Abyssal output-schema entries
+  archived**: both are discharged history (mandates executed; output-schema
+  state carried by open-questions Q-003 and the owning plans). Verbatim text:
+  [`archive/repo-continuity-current-state-2026-06-03-blustery-history-trim.md`](archive/repo-continuity-current-state-2026-06-03-blustery-history-trim.md).
 - **Graph-estate-consolidation plan made post-D2 accurate + crystal-clear, and
   `graph-ingest` decontaminated (2026-06-01, Coppery Warming Flame / `9a5cc3`,
   claude / Opus 4.8)** — full detail in the `eef` thread banner and the plan's new
@@ -295,9 +282,9 @@ each thread record; this table is the repo-level index.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Lacustrine Swimming Beacon / eef-d3-review-then-ratify / 2026-06-03 (prior: Seaworthy Swimming Sextant 2026-06-03; Galactic Glowing Prism, Opalescent Cascading Planet, Stellar Waning Planet, Silvered Lurking Mask, all 2026-06-02) |
-| `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | codex / GPT-5 / Umbral Whispering Silhouette / promotion-and-root-docs-author / 2026-06-01 |
+| `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Blustery Lifting Gale / skills-taxonomy-and-distribution / 2026-06-03 (prior: Umbral Whispering Silhouette 2026-06-01) |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | codex / GPT-5 / Opalescent Illuminating Prism / dedicated-knowledge-curation / 2026-06-03 (prior: Lacustrine Swimming Beacon, Ashen Burning Magma, Solar Glowing Meteor, Stratospheric Buffeting Breeze, Lofty Sweeping Falcon, Shaded Veiling Mirror) |
-| `school-data-search` | Oak School Data Search service (POC MVP): briefs → report → plan → build | [record][school-data-search] | claude / Opus 4.8 / Hushed Lurking Mask / brief-normaliser / 2026-06-03 |
+| `school-data-search` | Oak School Data Search service (POC MVP): briefs → report → plan → build | [record][school-data-search] | claude / Opus 4.8 / Furnace Roasting Brazier / report-and-plan-synthesiser / 2026-06-03 (prior: Hushed Lurking Mask 2026-06-03) |
 
 ## Paused Threads
 

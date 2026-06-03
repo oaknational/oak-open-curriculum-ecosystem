@@ -129,3 +129,25 @@ fitness_content_role: drainable-buffer
 [q3-general]: ../../plans/sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md
 [q3-graph]: ../../plans/sdk-and-mcp-enhancements/archive/completed/graph-tool-output-schemas.plan.md
 [q3-migration]: ../../plans/connecting-oak-resources/knowledge-graph-integration/future/graph-tools-substrate-migration.plan.md
+
+## Q-004 — does the capability taxonomy need a rights/licensing axis?
+
+- **Captured**: 2026-06-03 (Blustery Lifting Gale / claude / Opus 4.8 / `9b33b0`).
+- **Question**: ADR-189 ratifies two axes (audience, distribution locus) with
+  packaging as mechanism. The first-party skills library's licensing split —
+  MIT scaffolding, © Oak brand assets, curriculum content shared in a
+  pedagogical spirit — maps onto neither axis. When Oak distributes
+  capabilities externally, what may be copied, what must be attributed, and
+  what stays Oak's are questions the current taxonomy cannot record. Is
+  rights/licensing a third axis, a per-capability metadata field, or out of
+  taxonomy scope (owned by LICENSE surfaces)?
+- **Why not now**: one observation only; the repo's own discipline says one
+  instance is an observation, not a category. Becomes decidable when a
+  capability pack or skills-index publication forces a licensing declaration
+  per artefact.
+- **Owning artefact when it fires**: ADR-189 amendment +
+  [`skills-classification-taxonomy.plan.md`][q4-taxonomy] inventory columns.
+- **Status**: open — trigger is the first external capability publication or
+  the oak-skills integration decision.
+
+[q4-taxonomy]: ../../plans/discovery/future/skills-classification-taxonomy.plan.md

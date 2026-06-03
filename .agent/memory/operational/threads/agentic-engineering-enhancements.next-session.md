@@ -49,6 +49,7 @@ work to drain by moving or splitting the register.
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Blustery Lifting Gale` | `claude` | `Opus 4.8` | `9b33b0` | `taxonomy-plan-link-repoint (mechanical; session home is agentic-mechanisms-discovery)` | 2026-06-03 | 2026-06-03 |
 | `Opalescent Illuminating Prism` | `codex` | `GPT-5` | `019e8e` | `dedicated-knowledge-curation` | 2026-06-03 | 2026-06-03 |
 
 ## Session Closeout (2026-06-03 — Ashen Burning Magma / codex / GPT-5 / `019e8d`, Antigravity Practice integration implemented)
@@ -115,7 +116,7 @@ direction.** The skills-classification plan from the prior reflection was
 implemented as a narrow docs/governance slice:
 
 - New strategic plan:
-  [`skills-classification-taxonomy.plan.md`](../../../plans/agent-tooling/future/skills-classification-taxonomy.plan.md).
+  [`skills-classification-taxonomy.plan.md`](../../../plans/discovery/future/skills-classification-taxonomy.plan.md).
 - New executive-memory vocabulary contract:
   [`agent-capability-vocabulary.md`](../../executive/agent-capability-vocabulary.md).
 - Index links added in

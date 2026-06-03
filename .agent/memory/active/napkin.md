@@ -180,3 +180,33 @@ fitness_content_role: drainable-buffer
   lanes, but distribution-channels substance belonged beside
   `agent-skills-discovery.plan.md`. Cheap Explore sweep before forming the
   location verdict is what surfaced it.
+
+- **Owner correction (rigour ≠ branding): my "org-voice" lump conflated
+  Oak's pedagogical/factual-rigour standards with literal branding.** I
+  classified `oak-brand` + `oak-tone-of-voice` as one "org-voice" ambiguous
+  case; the owner split it: branding (visual identity, writing voice) is a
+  capability concern; rigour standards (evidence, provenance, caveats,
+  teacher judgement) are constraints that travel INSIDE capabilities under
+  curriculum/evidence governance. Misclassifying rigour as voice would have
+  demoted Oak's core differentiator to styling. Cure landed in the taxonomy
+  plan's ambiguous-case note; the general lesson: when a candidate category
+  lumps a quality-standard with a presentation concern, split before naming.
+
+## 2026-06-03 — opener-as-artefact reflection (Mossy Whispering Bark)
+
+### Patterns to Remember
+
+- **Opener transit-corruption, instance 2 — pattern holds at n=2.** The pasted gate-session
+  opener lost four mid-token spans; two hit intent lines (the ADR-routing clause and the
+  `active/` promotion gate-set). Thread record + plan + hook-persisted remember artefact carried
+  the exact text. Existing "openers degrade in transit" pattern confirmed; cure unchanged:
+  launch from files, treat paste as lossy transport.
+- **Openers may compress canon, never silently extend it.** The opener's "take G-8 in-session
+  if capacity allows" had no durable source — the thread record sequences WS-D1 → G-8 after the
+  gates; the plan is placement-agnostic (`depends_on` only). Net-new commitments in an opener
+  are proposals and must be marked as such. Sibling of no-unauthorised-scope-invention for the
+  opener genre. n=1, watch.
+- **Gate-outcome vocabulary needs a third word.** decide | park (PDR-058) cannot express
+  "reject-as-framed"; without it, owner hesitation at a mis-posed gate gets coerced into a
+  decision or a costume-trigger park. A reframed gate routes back to synthesis and edits the
+  gate row itself — a different recording shape from a park, which only dates it.

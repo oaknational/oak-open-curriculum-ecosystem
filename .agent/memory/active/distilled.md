@@ -53,6 +53,20 @@ staging surface; fitness remains a routing signal, not a reason to avoid capture
   trigger-gated on a second instance or the next reviewer-brief authoring
   pass.
 
+## 2026-06-03 — taxonomy design lessons (Blustery Lifting Gale)
+
+- **When a candidate category lumps a quality-standard with a presentation
+  concern, split before naming.** Classifying `oak-brand` + `oak-tone-of-voice`
+  as one "org-voice" category would have swept Oak's pedagogical/factual-rigour
+  standards (evidence, provenance, caveats, teacher judgement) into branding —
+  demoting the core differentiator to styling. Owner split: rigour standards
+  are constraints that travel INSIDE capabilities (curriculum/evidence
+  governance); branding is a capability concern in its own right. Source:
+  napkin 2026-06-03 Blustery entry; enforcement home landed in the taxonomy
+  plan's ambiguous-case note; the general heuristic stages here for any
+  future classification work. Routing: fold into the taxonomy plan's audit
+  step at promotion, then delete here.
+
 ## 2026-06-03 — curation enforcement and verifier lessons
 
 - **A curation archive move is not allowed until the ledger exists.** Intent to

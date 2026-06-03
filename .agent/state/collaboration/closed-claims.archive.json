@@ -7847,6 +7847,189 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "d2652ec5-1bdc-4aa2-a24d-ba33818c8d46",
+      "agent_id": {
+        "agent_name": "Moonlit Waxing Nebula",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "e756f7",
+        "id": "282b8921-e04b-5bd8-bfd5-21cabb07b137"
+      },
+      "thread": "semantic-search",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-03T18:23:11Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "Stage and commit the bulk-data population feature request doc.",
+      "archived_at": "2026-06-03",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-03T18:23:51Z",
+        "closed_by": {
+          "agent_name": "Moonlit Waxing Nebula",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "e756f7",
+          "id": "282b8921-e04b-5bd8-bfd5-21cabb07b137"
+        },
+        "summary": "commit 2b746ef9: docs(search): request population of the declared bulk-download fields",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "d2652ec5-1bdc-4aa2-a24d-ba33818c8d46",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "2a9d7474-8053-4c29-a573-db76c25a19ba",
+      "agent_id": {
+        "agent_name": "Blustery Lifting Gale",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "9b33b0",
+        "id": "39616b04-eb22-5c2d-8bac-a84bc356d863"
+      },
+      "thread": "discovery",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/discovery/future/skills-classification-taxonomy.plan.md",
+            ".agent/plans/discovery/future/skills-distribution-channels-suggestions.report.md",
+            ".agent/plans/discovery/future/agent-skills-discovery.plan.md",
+            ".agent/plans/discovery/future/README.md",
+            ".agent/plans/discovery/README.md",
+            ".agent/plans/user-experience/README.md",
+            ".agent/plans/user-experience/educator-end-users/README.md",
+            ".agent/plans/agent-tooling/future/README.md",
+            ".agent/memory/executive/agent-capability-vocabulary.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            "docs/architecture/architectural-decisions/189-audience-led-agent-capability-taxonomy.md",
+            "docs/architecture/architectural-decisions/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-03T17:05:23Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Skills taxonomy estate (uncommitted): plan+report in discovery/future, ADR-189, vocabulary two-axis amendments, index updates, reviewer-fix pass",
+      "archived_at": "2026-06-03",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-03T18:40:15Z",
+        "closed_by": {
+          "agent_name": "Blustery Lifting Gale",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "9b33b0",
+          "id": "39616b04-eb22-5c2d-8bac-a84bc356d863"
+        },
+        "summary": "Skills taxonomy estate complete: ADR-189 ratified, plan+report homed in discovery/future, vocabulary two-axis, agent-skills-discovery installation-messaging amendment, reviewer findings dispositioned; committed in ownership chunks this session. Evidence: agentic-mechanisms-discovery thread record 2026-06-03 session outcome.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "2a9d7474-8053-4c29-a573-db76c25a19ba",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "fb09a4eb-5ebf-4c93-b834-5d70d2102636",
+      "agent_id": {
+        "agent_name": "Moonlit Waxing Nebula",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "e756f7",
+        "id": "282b8921-e04b-5bd8-bfd5-21cabb07b137"
+      },
+      "thread": "semantic-search",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-03T18:36:51Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "Stage and commit the minimal-adaptation plan routing bundle.",
+      "archived_at": "2026-06-03",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-03T18:40:51Z",
+        "closed_by": {
+          "agent_name": "Moonlit Waxing Nebula",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "e756f7",
+          "id": "282b8921-e04b-5bd8-bfd5-21cabb07b137"
+        },
+        "summary": "commit dc399f3f: docs(plans): author the schema-change minimal-adaptation lane",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "fb09a4eb-5ebf-4c93-b834-5d70d2102636",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "9a3465e2-ca8c-4bc0-ba10-48bfe59cf01c",
+      "agent_id": {
+        "agent_name": "Moonlit Waxing Nebula",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "e756f7",
+        "id": "282b8921-e04b-5bd8-bfd5-21cabb07b137"
+      },
+      "thread": "semantic-search",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-03T18:46:52Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "Commit the owner ratification notes on the minimal-adaptation arc.",
+      "archived_at": "2026-06-03",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-03T18:47:45Z",
+        "closed_by": {
+          "agent_name": "Moonlit Waxing Nebula",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "e756f7",
+          "id": "282b8921-e04b-5bd8-bfd5-21cabb07b137"
+        },
+        "summary": "commit 790fc098: owner ratification recorded",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "9a3465e2-ca8c-4bc0-ba10-48bfe59cf01c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
