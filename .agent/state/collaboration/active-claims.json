@@ -164,7 +164,133 @@
       "staged_bundle_fingerprint": "7cf7c56e68143613424f141d89113f41ac4cbc18d232cd27e48b50e444ee69e8",
       "staged_name_status": "M\t.agent/memory/active/distilled.md\nM\t.agent/memory/active/napkin.md\nM\t.agent/memory/operational/open-questions.md\nM\t.agent/memory/operational/repo-continuity.md\nM\t.agent/memory/operational/threads/eef.next-session.md\nM\t.agent/plans/completed-plans.md\nM\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/README.md\nA\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/archive/completed/oak-misconceptions-substrate-migration.plan.md\nM\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-estate-consolidation.plan.md\nA\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/future/graph-tools-substrate-migration.plan.md\nA\t.agent/plans/sdk-and-mcp-enhancements/archive/completed/graph-tool-output-schemas.plan.md\nM\t.agent/plans/sector-engagement/eef/future/eef-revalidate-on-new-graph-tools.plan.md\nM\t.agent/state/collaboration/active-claims.json\n",
       "notes": "closed in same collaboration-state commit (lifecycle exception); bundle verified manually against the intent list immediately before git commit"
+    },
+    {
+      "intent_id": "baf0b4ba-f736-4e76-a2fc-8dc5538867d3",
+      "claim_id": "cf581645-9f28-4fc9-98e6-9849695bd585",
+      "agent_id": {
+        "agent_name": "Seaworthy Swimming Sextant",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "a85c18",
+        "id": "fe0091d2-12a7-5bb8-acbd-77908a001d0d"
+      },
+      "files": [
+        ".agent/experience/2026-06-03-seaworthy-d3-audit-dissolution.md",
+        ".agent/memory/active/distilled.md",
+        ".agent/memory/active/patterns/contamination-scan-method.md",
+        ".agent/memory/operational/pending-graduations.md",
+        ".agent/memory/operational/repo-continuity.md",
+        ".agent/memory/operational/threads/eef.next-session.md",
+        ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/closed-claims.archive.json"
+      ],
+      "commit_subject": "docs(eef): session handoff and consolidation for the d3 review-then-ratify gate",
+      "queued_at": "2026-06-03T07:46:02.777Z",
+      "updated_at": "2026-06-03T07:46:05.275Z",
+      "expires_at": "2026-06-03T08:01:02.777Z",
+      "phase": "abandoned",
+      "notes": "closed in same collaboration-state commit (lifecycle exception); bundle verified manually against the intent list immediately before git commit"
     }
   ],
-  "claims": []
+  "claims": [
+    {
+      "claim_id": "ba040705-74dc-4afd-a191-6c683006a669",
+      "agent_id": {
+        "agent_name": "Stratospheric Buffeting Breeze",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e8c",
+        "id": "465a6e75-9155-56bd-b081-cb805cbb37eb"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/rules/verify-dont-trust.md",
+            ".agent/rules/invoke-mcp-expert.md",
+            ".agent/memory/active/patterns/contamination-scan-method.md",
+            ".agent/memory/active/patterns/collapse-authoritative-frames-when-settled.md",
+            ".agent/plans/agent-tooling/future/relative-link-integrity-live-lanes-validator.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-03T07:41:17Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Graduate accepted first-batch pending-graduations entries into existing doctrine and a bounded validator lane"
+    },
+    {
+      "claim_id": "d9b390d0-8f3d-4dd0-86bf-65c3461466df",
+      "agent_id": {
+        "agent_name": "Stratospheric Buffeting Breeze",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e8c",
+        "id": "465a6e75-9155-56bd-b081-cb805cbb37eb"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/rules/verify-data-supports-shape-before-building.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-03T07:41:17Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Amend design-time verification rule for design-rationale cite-or-strike"
+    },
+    {
+      "claim_id": "4df79943-f9e2-47f0-bc8f-d95ebd5c6bb3",
+      "agent_id": {
+        "agent_name": "Stratospheric Buffeting Breeze",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e8c",
+        "id": "465a6e75-9155-56bd-b081-cb805cbb37eb"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/distilled.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-03T07:41:17Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Clear graduated design-rationale entry from distilled after permanent homes land"
+    },
+    {
+      "claim_id": "8636c2b4-0ce3-4c41-aa3d-49a00e92afe0",
+      "agent_id": {
+        "agent_name": "Stratospheric Buffeting Breeze",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e8c",
+        "id": "465a6e75-9155-56bd-b081-cb805cbb37eb"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agent-tooling/future/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-03T07:41:17Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Index relative-link validator future lane"
+    }
+  ]
 }

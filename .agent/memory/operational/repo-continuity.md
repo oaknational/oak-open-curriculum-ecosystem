@@ -47,9 +47,11 @@ surface.
   metadata is the resource's job per the plan's primitive targeting; its
   "resource-less hosts" rationale was fabricated — Oak targets Claude.ai +
   ChatGPT), removed internal `data_version`/`last_updated` from the envelope,
-  and aligned prompt arguments to the required-arg house shape. **Next: owner
-  ratifies D3; on ratification D4 proceeds.** Full detail: `eef` thread
-  banner.
+  and aligned prompt arguments to the required-arg house shape. **Next
+  (owner-ratified 2026-06-03): a dedicated review-then-ratify session — review
+  the D3 work independently, then the whole plan, then discussion, resolution
+  if required, then owner ratification; the `d3` flip and D4 start follow
+  ratification only.** Full detail: `eef` thread banner.
 - **JC4 unified substrate-migration plan AUTHORED — parked on a named
   trigger (2026-06-02, Galactic Glowing Prism / `cd7389`, claude / Opus 4.8,
   owner-approved session plan)** —
@@ -253,7 +255,7 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Galactic Glowing Prism / jc4-unified-substrate-migration-plan-authoring / 2026-06-02 (prior: Opalescent Cascading Planet, Stellar Waning Planet, Silvered Lurking Mask, Flamebright Charring Ember, all 2026-06-02) |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Seaworthy Swimming Sextant / eef-d3-contract-authoring-and-review / 2026-06-03 (prior: Galactic Glowing Prism, Opalescent Cascading Planet, Stellar Waning Planet, Silvered Lurking Mask, all 2026-06-02) |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | codex / GPT-5 / Umbral Whispering Silhouette / promotion-and-root-docs-author / 2026-06-01 |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | codex / GPT-5 / Lofty Sweeping Falcon / due-item curation continuation / 2026-06-02 (prior: Shaded Veiling Mirror) |
 
@@ -344,9 +346,13 @@ not the current session-priority lane. Reactivation is owner-directed.
    filter-exclusions edit is applied in D3, and the contract + SDK/app
    verification record are authored in
    [`eef-d3-mcp-contract.md`](../../plans/sector-engagement/eef/current/eef-d3-mcp-contract.md)
-   with all four D3 PENDING reviewers run and their conditions applied.
-   **Owner ratification of D3 is the open gate; the `d3` todo flips only on
-   it, and D4 starts after it.**
+   with all four D3 PENDING reviewers run and their conditions applied. An
+   owner-directed adversarial audit (2026-06-03) removed three author-invented
+   surfaces; a pinned-target mcp-expert re-pass returned SIGN-OFF. **The open
+   gate (owner-ratified 2026-06-03) is a dedicated review-then-ratify session:
+   independent review of the D3 work, then the whole plan, then discussion,
+   resolution if required, then owner ratification — the `d3` todo flips only
+   on it, and D4 starts after it.**
 7. **Graph-estate-consolidation: t2–t5+t7 EXECUTED and pushed at `c3b78eec`;
    scoped t8 verification PASSED (2026-06-02, Opalescent Cascading Planet)**.
    The estate reads true in one pass: eleven plans archived with banners +
@@ -429,7 +435,18 @@ authority.
 
 ## Deep Consolidation Status
 
-**partial slice landed — owner reopened curation on 2026-06-02; Lofty Sweeping
+**completed this handoff — session-completion mode, owner-directed
+(2026-06-03, Seaworthy Swimming Sextant).** Fresh learning captured and
+routed: one distilled entry (design-rationale cite-or-strike), one
+trigger-gated pending-graduations entry (the same + MCP-brief target
+pinning), one contamination-scan-method pattern extension (probe miss-shape),
+one experience file, napkin entries, and the platform-memory face update. No
+graduation due (register processed 2026-06-02 by Lofty; the new entry is
+trigger-gated); napkin under rotation threshold; entry points clean; claims
+and queue clear; verdict: `partial slice landed` is the honest
+session-completion outcome — the live buffers are the napkin (healthy) and
+the trigger-gated register entries. Prior status (2026-06-02, Lofty Sweeping
+Falcon): **partial slice landed — owner reopened curation on 2026-06-02; Lofty Sweeping
 Falcon graduated the two due pending-graduation entries and routed two fresh
 Galactic napkin-tail candidates.** Ledger:
 `curator-passes/2026-06-02-lofty-sweeping-falcon-curation.md`. Routes:

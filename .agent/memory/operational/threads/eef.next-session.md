@@ -63,14 +63,23 @@
 >   event; my commit excludes their curation surfaces (incl. `distilled.md`,
 >   where their edits interleave).
 >
-> **NEXT SAFE STEP: owner ratifies D3** (the contract artefact is the
-> ratification surface; the `d3` todo flips only on that ratification).
-> On ratification, D4 (graph capability contract) proceeds per the live
-> plan — its reviewers fire against the ratified D4 output in turn.
+> **NEXT SAFE STEP (owner-ratified 2026-06-03): a dedicated
+> review-then-ratify session for D3.** In order: (1) independent review of
+> the D3 work itself — `eef-d3-mcp-contract.md`, the plan's D3 section, and
+> the three D3 commits (`78c92b95`, `0ace63ad`, `50b928c6`) — grounding
+> every claim against `EEF_TOOLKIT_DATA`, the plan's Ratified Decisions,
+> and HEAD code; the authoring session corrected its own fabricated
+> rationale only under owner challenge, so do NOT inherit its conclusions
+> as settled — a review session's failure family is rubber-stamping and
+> confirm-the-claim bias; enumerate from the artefact and code side.
+> (2) Whole-plan review for coherence with the corrected D3. (3) Discussion
+> with the owner. (4) Resolution of anything raised. (5) Owner ratification
+> — only then the `d3` todo flips and D4 (graph capability contract)
+> proceeds, its reviewers firing against the ratified D4 output in turn.
 >
 > | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 > | --- | --- | --- | --- | --- | --- | --- |
-> | `Seaworthy Swimming Sextant` | `claude` | `Opus 4.8` | `a85c18` | `eef-d3-contract-authoring-and-review` | 2026-06-02 | 2026-06-02 |
+> | `Seaworthy Swimming Sextant` | `claude` | `Opus 4.8` | `a85c18` | `eef-d3-contract-authoring-and-review` | 2026-06-02 | 2026-06-03 |
 >
 > ---
 >

@@ -1708,3 +1708,24 @@ feedback (sidebar shape is the lightest); composes with `coordinator-role-thresh
 - **note**: the rejected regex detector decision is preserved in the rule's failure-mode
   section as the human/agent disposition pass; origin remains auto-memory
   `harvest-from-deleted-is-contamination-vector`.
+
+## Design-rationale cite-or-strike + MCP-brief target pinning
+
+- **captured-date**: 2026-06-03
+- **source-surface**: `napkin.md` 2026-06-03 entry + `distilled.md` 2026-06-03 entry
+  (Seaworthy Swimming Sextant, EEF D3 owner-directed adversarial audit).
+- **graduation-target**: two small candidates sharing one root. (1) A rule (or a
+  clause of an authoring rule) — *design-rationale cite-or-strike*: at contract/
+  design authoring time every surface element cites the governing-plan text that
+  assigns it to that primitive, or it is struck; an element whose rationale must
+  be invented is deleted, not justified. (2) A clause in
+  `.agent/rules/invoke-mcp-expert.md` — MCP reviewer briefs pin Oak's real
+  deployment targets (Claude.ai + ChatGPT per the compliance plan) and pre-reject
+  findings premised on hypothetical/legacy hosts; the pinned-register brief
+  demonstrably cured the recurring "older hosts" reviewer import (worked instance
+  2026-06-03: re-pass returned SIGN-OFF with zero ecosystem-hedging findings).
+- **trigger-condition**: a second observed instance of a fabricated design
+  rationale or an ecosystem-hedging reviewer finding reaching an artefact, OR the
+  next dedicated consolidation pass — whichever first.
+- **status**: trigger-gated (owner may direct earlier; substance is complete in
+  the distilled entry).

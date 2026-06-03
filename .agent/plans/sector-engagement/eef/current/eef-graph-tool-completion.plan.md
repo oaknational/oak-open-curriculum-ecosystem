@@ -833,7 +833,7 @@ inspection during the edit. Command:
 `pnpm --filter @oaknational/graph-corpus-sdk test`. Full type-check proof belongs
 to the settled D2-D6 replacement chain, not to D2 compatibility preservation.
 
-### D3 - MCP tool/resource contract (exploration; owner-ratified, mcp-expert verification pending)
+### D3 - MCP tool/resource contract (decisions owner-ratified; contract authored, review-then-ratify pending)
 
 **Purpose:** design the surface the AI host uses, from the D1 value contract,
 expressed through D2's raw-derived types and the D4-ratified graph-native EEF

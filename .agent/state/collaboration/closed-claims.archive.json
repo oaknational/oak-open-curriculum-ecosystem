@@ -6255,6 +6255,98 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "71fce97d-3482-4ee4-8576-9f3b61744848",
+      "agent_id": {
+        "agent_name": "Seaworthy Swimming Sextant",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "a85c18",
+        "id": "fe0091d2-12a7-5bb8-acbd-77908a001d0d"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-d3-mcp-contract.md",
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md",
+            ".agent/plans/sector-engagement/eef/current/eef-d2-source-path-table.md",
+            ".agent/memory/operational/threads/eef.next-session.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-03T07:18:01Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "EEF D3 adversarial self-audit corrections: remove fabricated corpus-metadata function + internal-metadata smuggle + optional-arg deviation",
+      "archived_at": "2026-06-03",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-03T07:25:01Z",
+        "closed_by": {
+          "agent_name": "Seaworthy Swimming Sextant",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "a85c18",
+          "id": "fe0091d2-12a7-5bb8-acbd-77908a001d0d"
+        },
+        "summary": "commit 50b928c6: d3 audit corrections — invented surfaces removed, mcp-expert SIGN-OFF",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "71fce97d-3482-4ee4-8576-9f3b61744848",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "cf581645-9f28-4fc9-98e6-9849695bd585",
+      "agent_id": {
+        "agent_name": "Seaworthy Swimming Sextant",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "a85c18",
+        "id": "fe0091d2-12a7-5bb8-acbd-77908a001d0d"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-03T07:46:00Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit the D3 session-handoff + consolidation bundle (self-contained lifecycle commit).",
+      "intent_to_commit": "baf0b4ba-f736-4e76-a2fc-8dc5538867d3",
+      "archived_at": "2026-06-03",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-03T07:46:05Z",
+        "closed_by": {
+          "agent_name": "Seaworthy Swimming Sextant",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "a85c18",
+          "id": "fe0091d2-12a7-5bb8-acbd-77908a001d0d"
+        },
+        "summary": "self-contained lifecycle commit: d3 handoff + consolidation bundle",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "cf581645-9f28-4fc9-98e6-9849695bd585",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

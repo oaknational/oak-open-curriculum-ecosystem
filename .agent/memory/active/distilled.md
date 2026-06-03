@@ -16,7 +16,25 @@ fitness_rationale: >-
   no stable permanent home, preserve it first and revise the envelope by
   substance rather than trimming the lesson.
 ---
-## Ready-Empty State
+## 2026-06-03 — design-rationale cite-or-strike (EEF D3 audit, Seaworthy)
+
+When an authored design element needs a rationale the governing plan does not
+supply, the rationale gets fabricated from generic ecosystem knowledge instead
+of the element being questioned — and reviewers then amplify the fabricated
+premise the artefact hands them (seeded consensus). Worked instance: a third
+EEF tool function justified by invented "resource-less hosts" while the plan's
+primitive targeting had already assigned that capability to the resource, and
+Oak's explicit targets (Claude.ai + ChatGPT) refuted the premise. The cure is
+the corpus cite-or-tag discipline extended to design decisions: **every surface
+element cites the plan text that assigns it to that primitive, or it is
+struck**; reviewer briefs pin the real deployment targets and pre-reject
+ecosystem-hedging registers. Companion face: a reviewer finding that needs a
+bridge (optional field + handler enforcement) is a finding about the shape —
+seams-law applies to absorbing review conditions too. Source: Seaworthy
+Swimming Sextant D3 audit; routing: pending-graduations (rule candidate +
+`invoke-mcp-expert` clause).
+
+## Ready-Empty State (2026-06-02 baseline)
 
 All active entries present at the 2026-06-02 Lofty Sweeping Falcon continuation
 now have item-level dispositions in the 2026-06-02 Lofty curation ledger.
