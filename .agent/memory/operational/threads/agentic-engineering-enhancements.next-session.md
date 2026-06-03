@@ -1,5 +1,102 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Closeout (2026-06-03 — Ashen Burning Magma / codex / GPT-5 / `019e8d`, Antigravity Practice integration implemented)
+
+**Working-tree slice implemented; no commit and no `pnpm check` per owner
+direction.** The owner-provided Antigravity CLI mechanisms audit was treated as
+evidence, not authority: the implementation stayed in the platform-integration
+lane and did not reopen the skills-taxonomy lane.
+
+Implemented:
+
+- `agent-tools` identity now accepts `PRACTICE_AGENT_SESSION_ID_GEMINI` and
+  stable Antigravity `conversationId` metadata as durable seed surfaces.
+- Volatile Antigravity trajectory ids are deliberately ignored for durable
+  agent identity.
+- Collaboration-state identity preflight uses the same Gemini/Antigravity seed
+  surfaces and recognises Gemini/Antigravity platform hints.
+- The Antigravity rows in
+  [`cross-platform-agent-surface-matrix.md`](../../executive/cross-platform-agent-surface-matrix.md)
+  and [`artefact-inventory.md`](../../executive/artefact-inventory.md) now
+  distinguish official host support from repo-local wiring.
+- [`agent-identity.md`](../../../../agent-tools/docs/agent-identity.md) and
+  [`ADR-125`](../../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md)
+  document the new seed precedence and the still-unwired hooks/native
+  agents/MCP-adapter surfaces.
+
+Validation already run before closeout:
+
+- `pnpm --filter @oaknational/agent-tools test` — green (95 files, 855 tests).
+- `pnpm --filter @oaknational/agent-tools lint` — green.
+- `pnpm --filter @oaknational/agent-tools exec tsc --noEmit` — green.
+- Targeted prettier and markdownlint on touched implementation/docs files —
+  green.
+
+No `pnpm check` was run, per owner direction. No commit was made.
+
+Docs consolidation note: the platform matrix, artefact inventory, identity
+docs, ADR-125, this thread record, repo continuity, and napkin now carry the
+fresh Antigravity learning. No new durable taxonomy artefact was created by this
+session; the taxonomy slice remains separate under Solar Glowing Meteor's
+closeout below.
+
+**Next safe step:** if the owner wants this slice committed, stage only the
+Antigravity-owned files after re-checking live status. Do not include active EEF
+or taxonomy work unless the owner explicitly widens the bundle. A later
+Antigravity lane can wire hooks, native agents/subagents, MCP adapters, or
+wrapper commands once those surfaces have fresh host evidence.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Ashen Burning Magma` | `codex` | `GPT-5` | `019e8d` | `antigravity-practice-integration` | 2026-06-03 | 2026-06-03 |
+
+## Session Closeout (2026-06-03 — Solar Glowing Meteor / codex / GPT-5 / `019e8d`, skills classification taxonomy implemented)
+
+**Working-tree slice landed; no commit and no `pnpm check` per owner
+direction.** The skills-classification plan from the prior reflection was
+implemented as a narrow docs/governance slice:
+
+- New strategic plan:
+  [`skills-classification-taxonomy.plan.md`](../../../plans/agent-tooling/future/skills-classification-taxonomy.plan.md).
+- New executive-memory vocabulary contract:
+  [`agent-capability-vocabulary.md`](../../executive/agent-capability-vocabulary.md).
+- Index links added in
+  [`agent-tooling/future/README.md`](../../../plans/agent-tooling/future/README.md)
+  and [`memory/executive/README.md`](../../executive/README.md).
+
+The taxonomy ratifies the three-way vocabulary split:
+
+- **repo-working skill** — Practice-governed workflows for agents working in
+  this repo;
+- **Oak developer capability** — guidance for developers or agents using Oak
+  APIs, SDKs, MCP, search, graph, and data services;
+- **curriculum assistance capability** — teacher/educator-facing lesson
+  planning, discovery, guidance, playbooks, evidence, and pedagogical support.
+
+Platform `SKILL.md` support is explicitly treated as packaging mechanics, not
+the conceptual model. Antigravity or other host integration remains a separate
+platform-integration lane.
+
+Validation run: `pnpm exec markdownlint --dot` on the two new taxonomy files
+plus both edited index files — green. No `pnpm check` was run, per owner
+direction. No commit was made.
+
+Collaboration lifecycle: Solar opened and explicitly closed claim
+`c3e96d92-3a99-40a8-87fa-f25773a47002`; closure is recorded in
+`closed-claims.archive.json`. There is still an active EEF claim owned by
+Lacustrine Swimming Beacon over `repo-continuity.md`, `napkin.md`, and EEF
+plan files, so this handoff deliberately does not update those shared claimed
+surfaces.
+
+**Next safe step:** if the owner wants this taxonomy slice committed, stage only
+the four taxonomy docs plus Solar's closed-claim lifecycle entry, after
+re-checking live `git status` for concurrent changes. Do not include the active
+EEF or agent-tools work unless the owner explicitly widens the bundle.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Solar Glowing Meteor` | `codex` | `GPT-5` | `019e8d` | `skills-taxonomy-implementation` | 2026-06-03 | 2026-06-03 |
+
 ## Session Closeout (2026-06-03 — Stratospheric Buffeting Breeze / codex / GPT-5 / `019e8c`, Antigravity audit separated from skills taxonomy)
 
 **Handoff prepared for final closeout commit; no standalone `pnpm check`.** The owner
