@@ -60,6 +60,27 @@ setup.
 - Qualify mixed surfaces by audience first, then mechanism. For example:
   "Oak developer capability packaged as a Codex skill", not "developer skill"
   unless the local context has already narrowed "skill" to platform packaging.
+- Teacher-facing copy never uses implementation vocabulary: no "skill",
+  `SKILL.md`, "adapter", "canonical body", "Practice", "repo workflow",
+  "plugin manifest", or MCP schema terms. Teachers see curriculum assistance
+  language (assistant, lesson planning help, curriculum search, resource
+  discovery).
+
+## Distribution Axis (Orthogonal To Audience)
+
+Every capability also has a deployment locus, recorded independently of its
+audience category:
+
+- **Repo-internal**: lives under `.agent/` with generated platform adapters;
+  consumed by agents working in this repo.
+- **Distributable**: published for external systems — skills libraries,
+  discovery indexes, MCP apps, plugin marketplaces.
+- **Both**: a capability, or versions of it, may be dual-homed; a
+  repo-internal version and a distributed version of the same capability are
+  expected, not anomalous.
+
+Audience names the category; distribution names the locus; packaging stays
+mechanism. State all three when classifying.
 
 ## Boundary Tests
 
@@ -75,6 +96,8 @@ If answers 1 and 3 differ, name by answer 1 and document answer 3 as packaging.
 
 ## Related Doctrine
 
+- [ADR-189][adr-189-vocab] ratifies this taxonomy as the repo's
+  decision-of-record.
 - [PDR-051](../../practice-core/decision-records/PDR-051-vendor-agnostic-skills-standardisation.md)
   owns platform skill standardisation and adapter mechanics.
 - [PDR-010](../../practice-core/decision-records/PDR-010-domain-specialist-capability-pattern.md)
@@ -85,4 +108,5 @@ If answers 1 and 3 differ, name by answer 1 and document answer 3 as packaging.
   deterministic guidance, playbook, and command-registry vocabulary for
   curriculum-facing MCP surfaces.
 
+[adr-189-vocab]: ../../../docs/architecture/architectural-decisions/189-audience-led-agent-capability-taxonomy.md
 [curriculum-tools]: ../../../docs/governance/curriculum-tools-guidance-and-playbooks.md

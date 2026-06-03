@@ -268,6 +268,11 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   rejected; C4 operative-in-effect-now; 4 named re-ratification
   triggers; platform-engagement vehicle as named owner-action;
   Accepted 2026-05-25)
+- [ADR-189: Audience-Led Agent Capability Taxonomy](189-audience-led-agent-capability-taxonomy.md)
+  (three audience-led categories — repo-working skills, Oak
+  developer capabilities, curriculum assistance capabilities —
+  with `SKILL.md`/MCP/plugin treated as packaging or runtime
+  mechanisms, never the category name; Accepted 2026-06-03)
 
 ## Key Architectural Decisions
 
