@@ -230,3 +230,13 @@ fitness_content_role: drainable-buffer
   is why nothing foreign was swept. What-works confirmation: six-plus agent
   sessions landed on one branch today with zero collisions — claims +
   explicit pathspec staging + per-chunk re-derivation carried it.
+
+- **Third moving-window instance, and the backstop held: `git commit` failed
+  with `cannot lock ref 'HEAD'` when a peer's commit landed in the same
+  instant.** The failure was the correct outcome — git's own ref lock is the
+  final collision backstop when no claim is open on the commit window — and
+  the cure was simply re-deriving (`git diff --cached --name-only` to confirm
+  the staged set was still exactly mine) and re-committing against the moved
+  HEAD. Sharpened reading of the never-delete-index-lock doctrine: the lock
+  family is not friction, it is the last line of the same protection the
+  claims substrate provides socially.
