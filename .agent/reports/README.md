@@ -37,6 +37,11 @@ research notes or investigation logs.
   decisions), collision ledger vs repo doctrine, OpenAPI inversion analysis
   (F-A/F-B/F-C), and the build-time verification ledger; evidence authority for
   the [`school-data-search` plan collection](../plans/school-data-search/README.md)
+- [oak-repo-professionalism-engineering-quality-report-2026-06-03.md](./oak-repo-professionalism-engineering-quality-report-2026-06-03.md)
+  — detailed live assessment of this repository's professionalism,
+  engineering quality, effectiveness, operational friction, verification
+  posture, and agentic-practice substrate; includes blunt ratings, evidence
+  snapshot, risk modes, and ordered improvement recommendations
 - [oak-openapi-bug-report-2026-03-07.md](./oak-openapi-bug-report-2026-03-07.md)
   — existing standalone report
 - [claude-code-compaction-thinking-block-bug-2026-05-28.md](./claude-code-compaction-thinking-block-bug-2026-05-28.md)

@@ -106,6 +106,13 @@ status.
 
 → [`frictions-register.md`](frictions-register.md)
 
+Assessment input:
+[Oak Repository Professionalism and Engineering Quality Report — 2026-06-03](../../reports/oak-repo-professionalism-engineering-quality-report-2026-06-03.md)
+should be assessed for practical tooling plans around repo-check output
+classification, collaboration CLI UX (`--json` parity, help examples, next-action
+messages), and state-surface dashboards. It is not itself an executable
+agent-tooling plan.
+
 The frictions register is a **capture surface**, not an execution plan. Items
 mature into:
 

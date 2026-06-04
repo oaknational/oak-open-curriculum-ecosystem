@@ -58,6 +58,15 @@ tooling substrate, it belongs under `agent-tooling/`.
 | [role-emission-citation-binding.plan.md](role-emission-citation-binding.plan.md) | Substrate cure for the PDR-074 §S1 "Director ticking-clock" failure mode: PDR-086 portable contract + ADR-188 repo-bound phenotype convert self-discipline checklist question into mechanically-enforced citation-binding (Director + Heartbeat-emitter required scope v1; other roles Reserved). 6-reviewer pre-execution pass complete; consensus absorbed | DECISION-COMPLETE pending owner execution direction |
 | [group-a-graduations-execution.plan.md](group-a-graduations-execution.plan.md) | Execute the six owner-ratified Group A pending-graduations (#21, #37, #22+23, #40, #41, reflection) as five parallel authoring lanes + one serialized shared-index convergence; carries the 2026-05-29 re-verification home-grounding | QUEUED — owner-ratified 2026-05-29; readiness gate pending |
 
+## Assessment Inputs For Planability Review
+
+These reports are not source plans yet. Use them to decide whether practical
+plan work should be created or routed into existing source plans.
+
+| Assessment | Planning question | Status |
+| --- | --- | --- |
+| [Oak Repository Professionalism and Engineering Quality Report — 2026-06-03](../../../reports/oak-repo-professionalism-engineering-quality-report-2026-06-03.md) | Can the agentic-practice findings (process surface weight, internal vocabulary load, entry-path clarity, actionability standards, and active-surface retirement pressure) be turned into practical work without adding another passive-rule layer? | ASSESS FOR PLANABILITY |
+
 Recently completed 2026-05-25 (multi-agent practice-infrastructure hardening
 arc closeout; see
 [`../archive/completed/README.md`](../archive/completed/README.md) for the

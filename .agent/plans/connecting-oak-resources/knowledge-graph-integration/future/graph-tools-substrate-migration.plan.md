@@ -26,7 +26,7 @@ todos:
     status: pending
     depends_on: [settle-mechanism-at-promotion]
   - id: migrate-thread-progressions-corpus
-    content: "Thread-progressions corpus replacement unit per Decision C: the data is already as-const type authority; the unit covers its hosting decision, the tool + curriculum://thread-progressions resource rewrite, the three stats-interpolation consumers (ontology-data.ts, tool-guidance-data.ts, tool-guidance-workflows.ts) repointed in the same unit, and the projection-derived required outputSchema. Sequence form preserved — node/edge graph form is forbidden (owner-resolved Q4)."
+    content: "Thread-progressions corpus replacement unit per Decision C: the data is already as-const type authority; the unit covers its hosting decision, the tool + curriculum://thread-progressions resource rewrite, the three stats-interpolation consumers (ontology-data.ts, tool-guidance-data.ts, tool-guidance-workflows.ts) repointed in the same unit, and the projection-derived required outputSchema. Sequence form is the default; graph form is not forced (Q4) and — per the 2026-06-04 owner-directed revision — not barred if the two governing constraints (user value; no token flooding) favour it; settled at promotion."
     status: pending
     depends_on: [settle-mechanism-at-promotion]
   - id: amend-adr-086
@@ -37,6 +37,10 @@ todos:
     content: "On each replacement-unit landing, raise the landing signal to eef-revalidate-on-new-graph-tools (name the replaced tool + commit). The value re-proof itself is owned by that plan; this plan completes when all three units have landed and signalled."
     status: pending
     depends_on: [migrate-misconception-corpus, migrate-prior-knowledge-corpus, migrate-thread-progressions-corpus]
+  - id: define-fundamental-node-edge-model
+    content: "Define the fundamental heterogeneous node/edge model for the substrate (multiple node kinds, a cross-kind node-id policy, typed inter-kind edges) and the bounded-relevant-retrieval shape per corpus. DEFERRED from EEF D4, which deliberately used a homogeneous single-kind (strand) graph (decision B 2026-06-04) — so the model is UNDEFINED and must be defined here, at the first multi-entity / value-driven graph build. Must NOT be assumed-inherited from EEF nor dropped. Governed by the two constraints (maximise user value; do not flood agents with irrelevant tokens) per the 2026-06-04 owner-directed revision; per-corpus shape verdicts land at promotion with architecture review + owner ratification."
+    status: pending
+    depends_on: [settle-mechanism-at-promotion]
 ---
 
 # Graph Tools Substrate Migration (unified)
@@ -68,6 +72,12 @@ re-validation gate has exactly one upstream.**
 
 Carried from their authoritative sources; this section cites, it does not
 re-decide.
+
+> **Amended 2026-06-04 (owner-directed).** Decisions 3, 8, and Q4 below are
+> **subordinated to the two governing constraints** — see §"Owner-directed revision
+> — governing constraints and design agency (2026-06-04)". Behaviour-preservation
+> is no longer absolute; graph data objects are reshaped from bulk data for value +
+> token-bounding where that serves users.
 
 1. **One plan owns all existing graph-tool migration** — Judgement call 4,
    [`graph-estate-consolidation.plan.md`](../current/graph-estate-consolidation.plan.md).
@@ -111,6 +121,62 @@ re-decide.
    source); this plan decides its substrate shape without forcing node/edge
    graph form onto it.
 
+## Owner-directed revision — governing constraints and design agency (2026-06-04)
+
+Recorded openly with critical reasoning, per the practice that plans change with
+new understanding — called out, in the open, and ratified where appropriate. This
+revision **amends ratified decisions 3, 8, and Q4 above**: they are no longer
+absolute; they are subordinate to the two governing constraints below.
+
+**The two governing constraints (first principles for every graph tool):**
+
+1. **Maximise value to users.**
+2. **Do not flood agents with tokens on irrelevant information** — return the
+   relevant, bounded subset, never a whole corpus.
+
+**Design agency (why we can meet them fully):** the non-EEF graphs are
+**constructed by us** from bulk data (the `vocab-gen` pipeline in
+`oak-sdk-codegen`), and the ingest/graph substrate is **built by us** (`graph-core`
+
++ `graph-corpus-sdk`). We therefore hold total design power over both the data
+shape and the retrieval mechanism. A generated graph's current serialization
+(e.g. misconception's flat, edgeless 12,858-node form) is a **design output we
+own**, not a fixed input: if a graph shape (with ids + edges) delivers more value
+and better token-bounding, we build it that way from the bulk source. **If we can
+make it work with graphs, we use graphs** — graph-bounded retrieval is the most
+direct way to return a relevant, token-bounded subset.
+
+**What this amends:**
+
++ **Decision 3 (existing tools untouched / behaviour preserved)** and **Decision 8
+  (output-only, no input, whole-corpus)** — behaviour-preservation is no longer the
+  governing premise. Where returning the whole corpus floods the agent
+  (misconception ~6MB, prior-knowledge ~1.8MB), the tool is reshaped to return a
+  bounded relevant subset (a `subgraph` query, or an attribute filter), per the two
+  constraints.
++ **Q4 / Decision C (thread-progressions not graph-forced)** — neither forced into
+  graph form nor barred from it; the shape is chosen by the two constraints (a
+  sequence projection may be the most token-efficient relevant shape for one query;
+  a graph may serve another better).
+
+**The deferred fundamental node/edge model (HARD gate — must not be dropped).** EEF
+D4 deliberately used a **homogeneous single-kind (strand) graph** (decision B,
+2026-06-04,
+[`eef-d4-graph-capability-contract.md`](../../../sector-engagement/eef/current/eef-d4-graph-capability-contract.md)),
+so the substrate's **heterogeneous node/edge model** — multiple node kinds, a
+node-id policy across kinds, typed inter-kind edges — is **undefined**. This plan
+is the first point a multi-entity / value-driven graph is built (prior-knowledge is
+a natural `subgraph` consumer; misconception is a candidate for value-driven
+graph-shaping). The model MUST be defined here and MUST NOT be assumed-inherited
+from EEF. Tracked as the `define-fundamental-node-edge-model` todo.
+
+**Ratification.** This revision — the constraints, the relaxation of
+behaviour-preservation, the design agency, and the deferred-model home — is
+owner-directed and recorded now. The **specific per-corpus shape verdicts** (does
+misconception get edges; which node kinds; what bounded-retrieval shape per tool)
+are design work that lands **at promotion**, with architecture review and owner
+ratification, against the landed EEF D5/D6 mechanism.
+
 ## The tool set, pinned from code (verified 2026-06-02)
 
 Inclusion criterion: a live aggregated MCP tool whose payload is a
@@ -148,17 +214,17 @@ API tools and the search/browse/fetch family (no graph data); the EEF tool
 
 ## End goal, mechanism, means
 
-- **End goal**: every existing graph tool runs on the `graph-corpus-sdk`
++ **End goal**: every existing graph tool runs on the `graph-corpus-sdk`
   substrate with its generated corpus as its own type authority and a
   projection-derived required `outputSchema` — same observable tool
   behaviour, scaled-up substrate — and the EEF value path is re-proven
   against the replacements.
-- **Mechanism**: per-corpus atomic replacement units (re-emission + rewrite +
++ **Mechanism**: per-corpus atomic replacement units (re-emission + rewrite +
   schema in one landing) eliminate split-brain states; the shared
   projection→single-Zod-call mechanism (first instance: EEF D6) makes
   schema/data drift a compile error rather than a runtime discovery; the
   eef-revalidate gate converts each landing into a value re-proof.
-- **Means**: the frontmatter todos — mechanism settlement at promotion, three
++ **Means**: the frontmatter todos — mechanism settlement at promotion, three
   per-corpus replacement units, the ADR-086 amendment riding the first
   re-emission, and the re-validation signal.
 
@@ -170,7 +236,7 @@ instead of landed code is the contamination pattern this estate just
 finished removing. Grounded facts narrowing each decision are recorded now;
 the verdicts land at promotion with architecture review.
 
-- **Decision A — data/type re-emission shape per corpus.** Full `as const`
++ **Decision A — data/type re-emission shape per corpus.** Full `as const`
   emission at 6.0MB is refuted by TypeScript's serialisation limit (TS7056 —
   the documented basis of ADR-086's current split). The candidate mechanism:
   the generator emits precise types **derived from the data** at `vocab-gen`
@@ -182,7 +248,7 @@ the verdicts land at promotion with architecture review.
   (`graph-corpus-sdk/src/eef-strands/`) is the in-repo precedent.
   Falsifiable check at promotion: the emitted types compile within normal
   budget over the real 6.0MB corpus.
-- **Decision B — adapter home and dependency direction.** ADR-173 names
++ **Decision B — adapter home and dependency direction.** ADR-173 names
   `graph-corpus-sdk` as the home of Oak's typed corpus adapters
   (prerequisite, misconception) built when their consumers exist. Whether
   the adapter imports the generated corpus from `oak-sdk-codegen`
@@ -197,7 +263,7 @@ the verdicts land at promotion with architecture review.
   workspace, which is equally unprecedented (today it emits only into its own
   `src/generated/`). Constraint: ONE mechanism shared with
   EEF D4–D6 — no parallel mechanism may be invented here.
-- **Decision C — thread-progressions hosting.** The sequence shape is
++ **Decision C — thread-progressions hosting.** The sequence shape is
   settled (ratified Q4) and the data is already its own type authority, so
   this corpus's re-emission leg is substantially satisfied today. The open
   question is hosting: a `graph-corpus-sdk` sequence-corpus adapter, or the
@@ -209,7 +275,7 @@ the verdicts land at promotion with architecture review.
   ratified opening for that reconciliation, and hiding the tension would be
   the failure mode. Decided at promotion against the landed EEF mechanism's
   shape; forcing node/edge form is forbidden.
-- **Decision D — codegen schema-emission shape** (absorbed open question):
++ **Decision D — codegen schema-emission shape** (absorbed open question):
   (a) emit the data + a generated schema module that performs the
   projection + single Zod call at the generated package's compile, or
   (b) emit a fully pre-rendered schema. (a) preserves the
@@ -219,7 +285,7 @@ the verdicts land at promotion with architecture review.
   `oakContextHint` (`createGraphToolExecutor` calls `formatToolResponse`
   with no `includeContextHint` override), so the projected `outputSchema`
   treats it as always-present.
-- **Decision F — factory disposition and third-consumer consolidation.**
++ **Decision F — factory disposition and third-consumer consolidation.**
   All three tools share `createGraphToolDef`/`createGraphToolExecutor`/
   `createGraphResource`
   (`packages/sdks/oak-curriculum-sdk/src/mcp/graph-resource-factory.ts`)
@@ -229,7 +295,7 @@ the verdicts land at promotion with architecture review.
   shared capability rather than being re-implemented three times. The third
   corpus migration is the natural consolidation point; the graduating shape
   is named at promotion, not discovered mid-execution.
-- **Decision E — per-unit landing order.** Consumer-readiness, not a number
++ **Decision E — per-unit landing order.** Consumer-readiness, not a number
   sequence. The EEF value path runs on the misconception and prior-knowledge
   tools (the D7 signal tools), so their replacements are what the
   re-validation gate most needs early; thread-progressions is not on the EEF
@@ -273,7 +339,7 @@ left as history.
 
 ## ADR obligations
 
-- **ADR-086 amendment (deliverable, same commit as the first re-emission)**:
++ **ADR-086 amendment (deliverable, same commit as the first re-emission)**:
   the "explicit interface types first (not `typeof`) for large graphs"
   pattern is superseded by the Decision-A data-as-type-authority emission;
   the stale tool-status rows (the misconception tool is live, not "deferred
@@ -284,7 +350,7 @@ left as history.
   in the same amendment. Until that commit, ADR-086 remains the live
   doctrine for the existing exports — this plan does not contradict it while
   parked.
-- **ADR-173 / ADR-179**: unaffected — this plan implements their
++ **ADR-173 / ADR-179**: unaffected — this plan implements their
   consumer-readiness and transport-discipline rules (the substrate ships no
   MCP code; the tool surface stays in `oak-curriculum-sdk` and the app).
 
@@ -334,19 +400,19 @@ Each criterion names its single observable signal.
 
 ## Non-goals
 
-- No behaviour changes or new features on any graph tool — bounded
++ No behaviour changes or new features on any graph tool — bounded
   traversal, cross-corpus composition, topic extraction, and extended
   contexts are owned by the parked
   [`oak-misconceptions-graph-features.plan.md`](./oak-misconceptions-graph-features.plan.md),
   gated on D7 + this migration.
-- Not the EEF tool (owned by
++ Not the EEF tool (owned by
   [`eef-graph-tool-completion.plan.md`](../../../sector-engagement/eef/current/eef-graph-tool-completion.plan.md)).
-- Not the `vocabulary-graph` / `nc-coverage-graph` data or any tool over
++ Not the `vocabulary-graph` / `nc-coverage-graph` data or any tool over
   them (no consumer exists).
-- Not the required-field promotion to the root `UniversalToolListEntry`
++ Not the required-field promotion to the root `UniversalToolListEntry`
   (owned by `output-schemas-for-mcp-tools.plan.md` S0, executed last).
-- Not the Oak Curriculum Ontology Threads adapter (graph-stack WS4.2/WS4.3).
-- No upstream bulk-pipeline changes beyond the emission shape (extraction
++ Not the Oak Curriculum Ontology Threads adapter (graph-stack WS4.2/WS4.3).
++ No upstream bulk-pipeline changes beyond the emission shape (extraction
   logic and bulk-data authority are unchanged).
 
 ## Promotion trigger (into `current/`)

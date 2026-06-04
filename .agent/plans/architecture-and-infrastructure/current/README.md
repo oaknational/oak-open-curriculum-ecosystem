@@ -21,6 +21,7 @@ Active execution:
 Strategic analysis (parent of Phase A and B):
 
 - [architectural-documentation-excellence-synthesis.plan.md](./architectural-documentation-excellence-synthesis.plan.md) — multi-part report synthesising internal docs against external research
+- [Oak Repository Professionalism and Engineering Quality Report — 2026-06-03](../../../reports/oak-repo-professionalism-engineering-quality-report-2026-06-03.md) — assessment input for deciding whether practical architecture/quality-gate plans should be cut around repo-check failure classification, Playwright environment preflight, active-surface authority mapping, and documentation-surface reduction. This is not yet an executable plan.
 
 Strategic architecture-budget context:
 

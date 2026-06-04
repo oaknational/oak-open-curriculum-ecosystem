@@ -151,3 +151,30 @@ fitness_content_role: drainable-buffer
   the oak-skills integration decision.
 
 [q4-taxonomy]: ../../plans/discovery/future/skills-classification-taxonomy.plan.md
+
+## Q-005 — can the repo professionalism assessment be cut into practical plans?
+
+- **Captured**: 2026-06-03 (Airy Whirling Wing / codex / GPT-5 / `019e8e`).
+- **Question**: The
+  [`Oak Repository Professionalism and Engineering Quality Report — 2026-06-03`][q5-report]
+  gives a blunt assessment and a friction-reduction roadmap. Can that roadmap
+  become practical plan work, and if yes should it be one cross-cutting plan or
+  separate plans under architecture/quality gates, developer experience,
+  agentic-engineering, and agent-tooling?
+- **Why it shapes future work**: the report names high-leverage improvements
+  (repo-check failure classification, Playwright preflight, contributor fast
+  path, generated authority map, collaboration CLI UX, active-surface reduction)
+  but those recommendations should not become another passive doctrine layer.
+  A planability pass decides whether the next move is executable work, routing
+  into existing plans, or no new plan.
+- **Why not answerable cheaply now**: requires cross-checking existing current
+  and future plans across at least four collections to avoid duplicate plans or
+  wrong ownership. The report was authored and indexed in this session; the
+  owner explicitly asked that it receive assessment for practical planning.
+- **Owning artefact / discussion home**: the
+  [assessment thread record](threads/repo-professionalism-assessment.next-session.md).
+- **Status**: open — trigger is the next owner-directed planning/triage
+  session, or a dedicated follow-up asking whether to turn the assessment into
+  plan work.
+
+[q5-report]: ../../reports/oak-repo-professionalism-engineering-quality-report-2026-06-03.md

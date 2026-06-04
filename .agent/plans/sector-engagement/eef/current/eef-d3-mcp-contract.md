@@ -9,6 +9,20 @@ SDK/app registration verification record. **Status: owner-ratified 2026-06-03**
 **D4-bound** is a named but unbound forward reference that D4 ratifies and D6
 implements.
 
+**Revision (owner-directed 2026-06-04, decision B — called out openly).** Guidance
+reports are modelled **inline** in the strand member payload, **not** as a separate
+`guidance_report` node kind. The node model's only token saving was deduplicating
+exactly **one** corpus-wide shared report (reports are `{ title, url }` leaves with
+no body/edges), and v1 teacher value is equivalent inline — so the
+heterogeneous-node machinery is removed. This retires the handoff name
+`eefGuidanceReportNodeSubset` (nine → **eight**) and the `has_guidance_report` edge
+type; `related_guidance_reports` (7/30) folds into the member payload
+(`eefEvidenceEnvelopeSubset`). The fundamental heterogeneous node/edge model is
+deferred and homed in
+[`graph-tools-substrate-migration.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/future/graph-tools-substrate-migration.plan.md);
+see [`eef-d4-graph-capability-contract.md`](eef-d4-graph-capability-contract.md)
+§"EEF v1 is a homogeneous strand graph".
+
 Grounding rule ([`eef-corpus-grounding`](../../../../rules/eef-corpus-grounding.md)):
 every corpus claim below cites an `EEF_TOOLKIT_DATA` source path (the
 [D2 source-path table](eef-d2-source-path-table.md) is the canonical citation
@@ -149,9 +163,8 @@ output layouts, no conditional fields.
 
 | Contract field | Graph-native subset (D4-bound) | Raw EEF source path | Proof test |
 | --- | --- | --- | --- |
-| `members[]` — full strand nodes: the V1 set (owner-ratified 2026-05-31, extended 2026-06-03): `id`, `name`, `slug`, `eef_url`, `headline` (the six universal fields, plus `number_of_studies` where the corpus carries it, 2/30), `definition`, `key_findings`, `tags` (floor); `effectiveness` (incl. `summary`, `mechanisms`), `implementation` (incl. `key_considerations`, `common_pitfalls`, `digital_technology_application`), `school_context_relevance` (travelling whole; incl. `behind_the_average_by_phase`, `applications`), `behind_the_average`, `closing_the_disadvantage_gap` (optional, presence per corpus) | `eefEvidenceEnvelopeSubset` (member payload) | per-field rows of the D2 table §§Strand identity / Universal floor / Corpus-sparse | D2 table column 4; D5 constructor test; D7 verbatim proof |
-| `members[]` — guidance-report nodes `{ title, url }` reached by `has_guidance_report` edges (D4-ratified node kind, deduplicated across strands) | `eefGuidanceReportNodeSubset` | `strands[number].related_guidance_reports` | D5 constructor test |
-| `edges[]` — typed edges among members (`related_strand`, `has_guidance_report`) | `eefEvidenceEnvelopeSubset` (edge set) | `strands[number].related_strands`; `strands[number].related_guidance_reports` | `raw-domains.unit.test.ts` (edge facts); D5 |
+| `members[]` — full strand nodes: the V1 set (owner-ratified 2026-05-31, extended 2026-06-03): `id`, `name`, `slug`, `eef_url`, `headline` (the six universal fields, plus `number_of_studies` where the corpus carries it, 2/30), `definition`, `key_findings`, `tags` (floor); `effectiveness` (incl. `summary`, `mechanisms`), `implementation` (incl. `key_considerations`, `common_pitfalls`, `digital_technology_application`), `school_context_relevance` (travelling whole; incl. `behind_the_average_by_phase`, `applications`), `behind_the_average`, `closing_the_disadvantage_gap` (optional), `related_guidance_reports` (inline `{ title, url }[]`, 7/30 — decision B 2026-06-04) | `eefEvidenceEnvelopeSubset` (member payload) | per-field rows of the D2 table §§Strand identity / Universal floor / Corpus-sparse | D2 table column 4; D5 constructor test; D7 verbatim proof |
+| `edges[]` — typed edges among members (`related_strand`) | `eefEvidenceEnvelopeSubset` (edge set) | `strands[number].related_strands` | `raw-domains.unit.test.ts` (edge facts); D5 |
 | `frontier[]` — refs to related strands outside the members | `eefEvidenceEnvelopeSubset` (frontier refs) | `strands[number].related_strands` | D5 traversal tests |
 | `provenance` — once per envelope: source attribution and the corpus caveats, nothing else (`data_version` / `last_updated` are internal debugging/logging metadata per the ratified D1 V2 decision — they do not enter `structuredContent`; D6's telemetry wiring is their home) | `eefProvenanceSubset` | `meta.source`, `meta.licence`, `meta.caveats` | `corpus-meta.unit.test.ts` |
 
@@ -310,14 +323,15 @@ deferred metric-filter inputs when they land).
 
 ## Handoff to D4 (the named unbound values)
 
-D4 ratifies the graph-native EEF view and binds: `eefStrandIdSubset`,
+D4 ratifies the graph-native EEF view and binds (**eight names** — decision B
+2026-06-04 retired the ninth, `eefGuidanceReportNodeSubset`): `eefStrandIdSubset`,
 `eefObservedPhaseSubset`, `eefObservedKeyStageSubset`,
 `eefObservedPrioritySubset`,
-`eefEvidenceEnvelopeSubset` (member payload, edge set, frontier refs),
-`eefGuidanceReportNodeSubset`, `eefProvenanceSubset` (source attribution +
+`eefEvidenceEnvelopeSubset` (member payload incl. inline `related_guidance_reports`,
+edge set, frontier refs), `eefProvenanceSubset` (source attribution +
 corpus caveats), `eefToolInputSchemaSource`, and `eefToolOutputSchemaSource` —
-together with the node id/kind policy, edge types (`related_strand`,
-`has_guidance_report`), and the provenance-envelope policy. D3 is complete when
+together with the single-`strand` node id/kind policy, the `related_strand` edge
+type, and the provenance-envelope policy. D3 is complete when
 these names are ratified as the handed-off set; D6 implements the two Zod
 calls.
 

@@ -151,6 +151,13 @@ form the reliability substrate for the public app and public repo:
 - [semantic-search/](semantic-search/README.md) owns search quality, ingestion,
   retrieval surfaces, and search/graph adjacency.
 
+Current cross-cutting assessment input:
+[Oak Repository Professionalism and Engineering Quality Report — 2026-06-03](../reports/oak-repo-professionalism-engineering-quality-report-2026-06-03.md)
+is not an executable plan. Its next planning action is to assess whether the
+recommended friction-reduction roadmap should be split into practical plans
+across architecture/quality gates, developer experience, agentic practice, and
+agent-tooling.
+
 ---
 
 ## Collection Status

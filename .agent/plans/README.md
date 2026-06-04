@@ -28,6 +28,17 @@ For the strategic overview, use [high-level-plan.md](high-level-plan.md).
 
 ---
 
+## Planning Assessment Inputs
+
+These artefacts are not executable plans. They are routed assessment inputs
+that deserve explicit triage before any practical plan is cut from them.
+
+| Assessment | Planning question | Likely owning surfaces |
+|---|---|---|
+| [Oak Repository Professionalism and Engineering Quality Report — 2026-06-03](../reports/oak-repo-professionalism-engineering-quality-report-2026-06-03.md) | Can its improvement roadmap become one or more practical plans without weakening the repo's existing engineering discipline? | [architecture-and-infrastructure/current](architecture-and-infrastructure/current/README.md), [developer-experience/current](developer-experience/current/README.md), [agentic-engineering-enhancements/current](agentic-engineering-enhancements/current/README.md), [agent-tooling](agent-tooling/README.md) |
+
+---
+
 ## Plan Collections
 
 | Collection | Purpose | Status |
