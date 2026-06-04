@@ -63,14 +63,19 @@ owner may direct their removal after comparison.
 
 ## Landing target for the next session on this thread
 
-**WS-D1 → G-8 → build.** The gate walk is complete (all nine gates decided
-2026-06-04; see plan §Phase 0 `### Gate decisions`). Remaining, in order:
+**ADR-041 amendment + ADR-190 → `active/` → WS1+.** All gates G-1…G-9 decided;
+**WS-D1 / G-8 DONE 2026-06-04** — the 4-workspace bundle is ratified: the
+`contracts`, `sdk` (data/ingest/search modules), `client`, and `apps/api`
+workspaces under a new top-level `school-data-search/` tier; auth in apps/api;
+authored boundary rules. Full
+record: [decomposition doc](../../../plans/school-data-search/current/school-data-search-wsd1-decomposition.md)
+(betty + fred reviewed/validated; 6-way split rejected). Remaining, in order:
 
-1. **WS-D1** — author the workspace decomposition proposal on the now-settled
-   ground (Next.js app + the F-B contract workspace + per-source ingestion
-   pipelines + canonical model + Postgres-only redacted-snapshot store
-   behind a port seam), then `architecture-expert` betty (cohesion/coupling)
-   and fred (ADR-041) review → **G-8** ratification.
+1. **ADR-041 amendment** — add the `school-data-search/` tier matrix row + the
+   authored boundary rules (enumerate workspaces in `pnpm-workspace.yaml`;
+   hand-authored depcruise path-prefixes; an ESLint tier factory + unit tests
+   wired into each workspace). Lands in the first scaffolding cycle, before
+   any new-workspace code.
 2. **ADR-190** — draft the produced-spec ADR as **F-B** (Zod 4 the single
    canonical source → OpenAPI 3.x via `@asteasolutions/zod-to-openapi`;
    generated-state-beats-authored-state doctrine; repo-wide forward policy;

@@ -338,11 +338,16 @@ Caldera): sound, faithful, build-ready** — refinements committed `1839e9b8`
 new WS11 access-gated value-proof school-picker page; canonical-ID a tested
 invariant + per-nation sourceId-identity check at WS4; England/GIAS
 front-loaded; change_events/import-run-inspection deferred post-go; report §6
-reframed; C-10 path fixed). **Next: WS-D1 (decomposition) →
-`architecture-expert` betty + fred → G-8; draft ADR-190 (F-B produced-spec,
-repo-wide forward guidance, justified on Zod-canonical merits) →
-`docs-adr-expert`; promote to `active/`; begin WS1+.** Carry the verification
-discipline + licensing guardrail. See the
+reframed; C-10 path fixed). **WS-D1 / G-8 DONE (2026-06-04): the 4-workspace
+bundle is ratified** (contracts + sdk [data/ingest/search modules] + client +
+apps/api under a new top-level `school-data-search/` tier; auth in apps/api;
+authored boundary rules — betty + fred reviewed/validated, 6-way split
+rejected; see the
+[decomposition doc](../../plans/school-data-search/current/school-data-search-wsd1-decomposition.md)).
+**Next: ADR-041 amendment (school-data-search/ tier matrix row + authored
+boundary rules) + draft ADR-190 (F-B produced-spec) → `docs-adr-expert`;
+promote to `active/`; begin WS1+.** Carry the verification discipline +
+licensing guardrail. See the
 [`school-data-search` thread record][school-data-search].
 
 ### Agentic Mechanisms Discovery
