@@ -12,7 +12,8 @@ completion and an owner go/no-go decision.
 | Document | Role |
 | --- | --- |
 | [Synthesis report](../../reports/school-data-search-synthesis-report-2026-06-03.md) | Evidence authority: convergent foundation, divergence matrix (named owner decisions), collision ledger, OpenAPI inversion analysis, build-time verification ledger — synthesised from three independent research briefs + the owner requirements |
-| [`current/school-data-search-poc.plan.md`](current/school-data-search-poc.plan.md) | The executable POC plan: owner decision gates G-1…G-9, then build workstreams WS1–WS10 as TDD cycles |
+| [`current/school-data-search-poc.plan.md`](current/school-data-search-poc.plan.md) | The executable POC plan: owner decision gates G-1…G-9, then build workstreams WS1–WS11 as TDD cycles |
+| [`current/school-data-search-wsd1-decomposition.md`](current/school-data-search-wsd1-decomposition.md) | The G-8-ratified workspace decomposition (4-workspace bundle under a top-level `school-data-search/` tier) |
 | [Thread record](../../memory/operational/threads/school-data-search.next-session.md) | Session continuity for the `school-data-search` thread |
 
 The research inputs themselves (three briefs + owner requirements) live in

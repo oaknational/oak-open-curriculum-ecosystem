@@ -658,9 +658,11 @@ any authenticated internal API) and the **search-document builder** (the
 canonical-dataset → search-document boundary that §3.8 already names as
 the later Elasticsearch seam). Two execution prerequisites ride with the
 decomposition: (1) **workspace boundary rules** — the repo enforces
-dependency direction via generated ESLint/depcruise rule sets (ADR-041);
-new workspaces must be added to that rule surface BEFORE their first code
-lands, not after; (2) **Drizzle schema ownership** — table definitions and
+dependency direction via **hand-authored** ESLint/depcruise rule sets
+(ADR-041 — hardcoded path-prefix regexes in `.dependency-cruiser.mjs` +
+hardcoded `@oaknational/*` arrays in `boundary.ts`, NOT directory-derived,
+verified WS-D1 2026-06-04); new workspaces (and a new top-level tier) must be
+added to that rule surface BEFORE their first code lands, not after; (2) **Drizzle schema ownership** — table definitions and
 the migration runner belong to the data-access layer, importing canonical
 types from the model workspace, so the model workspace stays free of
 runtime database dependencies. The decomposition itself is a named design

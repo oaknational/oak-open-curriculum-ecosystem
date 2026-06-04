@@ -30,12 +30,12 @@ todos:
     content: 'Gate G-7 (owner): ranking = deterministic buckets + stable tie-breaks (D-13); normalisation = app-code pure-fn multilingual normaliser (EN/Welsh/Gaelic/Turkish/Hebrew-translit), STORE BOTH original+normalised, SEARCH BOTH, Postgres now / ES-Serverless later (D-14); cache = no shared CDN + client-owned local caching (D-09) — DECIDED 2026-06-04'
     status: completed
   - id: ws-d1-decomposition
-    content: 'WS-D1: workspace decomposition proposal (seam map, Drizzle ownership, boundary rules; SPECIFIC tooling under top-level school-data-search/, REUSABLE under normal topology — owner 2026-06-04) for G-8 ratification'
-    status: pending
+    content: 'WS-D1: workspace decomposition — DONE 2026-06-04 (4-workspace bundle: contracts/sdk/client + apps/api under top-level school-data-search/; auth in apps/api; authored boundary rules; betty+fred reviewed/validated). See school-data-search-wsd1-decomposition.md'
+    status: completed
     depends_on: [g2-runtime-topology]
   - id: g8-decomposition-ratify
-    content: 'Gate G-8 (owner): ratify the workspace decomposition proposal'
-    status: pending
+    content: 'Gate G-8 (owner): ratify the WS-D1 decomposition — DECIDED 2026-06-04 (4-workspace bundle ratified; 6-way split is the named upgrade path)'
+    status: completed
     depends_on: [ws-d1-decomposition]
   - id: g9-publishing
     content: 'Gate G-9 (owner): client builds unpublished; NO npm publish without explicit owner direction (forced by POC boundary, owner req 1) — DECIDED 2026-06-04'
@@ -203,7 +203,7 @@ never pressed into a decision or disguised as a park.
 | G-5 | Admin-token rotation mechanism; token format; cursor integrity; rate-limiting posture | §4 D-05, D-10; §5 C-09 | WS7 |
 | G-6 | Scotland source composition; NI coordinates path; Wales closed-school launch posture | §4 D-07, D-08; §7 V-04 | WS4 (per nation) |
 | G-7 | Ranking mechanism; normalisation locus; metadata/detail cache headers | §4 D-13, D-14, D-09 | WS6, WS7 (headers) |
-| G-8 | Ratify the WS-D1 workspace decomposition proposal | §5 C-02 | All workspace scaffolding |
+| G-8 | Ratify the WS-D1 workspace decomposition — **DECIDED 2026-06-04** (4-workspace bundle; see [decomposition doc](school-data-search-wsd1-decomposition.md)) | §5 C-02 | All workspace scaffolding |
 | G-9 | Client-package publishing posture | §5 C-07 | Any `npm publish` (never before this gate) |
 
 Blocking structure: G-1, G-2, G-3, G-8 block all build workstreams
@@ -352,6 +352,20 @@ Whispering Bark, `fac519`). Architectural ratifications land as ADRs.
   Cloudflare/Vercel cache-header behaviour verified against live docs at WS7.
   Unblocks WS6, WS7 (headers).
 
+- **G-8 (workspace decomposition) — DECIDED 2026-06-04.** Owner ratified the
+  **4-workspace bundle** under a new top-level `school-data-search/` tier:
+  `contracts` (DB-free Zod canon + types + spec) / `sdk` (data + ingest +
+  search modules, one DI factory) / `client` (unpublished) + `apps/api`
+  (routes + picker page + auth module + cron + observability); reuse existing
+  `packages/` (env, logger, observability, result). Boundary rules are
+  **authored** (ADR-041 matrix-row amendment; explicit `pnpm-workspace.yaml`
+  entries; hand-authored depcruise + ESLint tier rules + tests), landing
+  before any new-workspace code. betty + fred reviewed (findings validated;
+  betty's 6-way split critically rejected — the repo idiom bundles read+write
+  in one SDK). Full record: [WS-D1 decomposition
+  doc](school-data-search-wsd1-decomposition.md). Unblocks all build
+  workstreams.
+
 - **G-9 (client-package publishing) — DECIDED 2026-06-04.** Set by the POC
   boundary (owner requirement 1): the client workspace is built and used
   in-repo **unpublished**; **no `npm publish`** without explicit owner
@@ -402,9 +416,14 @@ build workstreams per the verification discipline above.
   easting/northing, geometry, UPRN) dropped entirely (licensing guardrail);
   the Scotland School Roll & Locations geospatial layer is dropped.
 
-### WS-D1 — Workspace decomposition proposal (input to G-8)
+### WS-D1 — Workspace decomposition (SETTLED — G-8 RATIFIED 2026-06-04)
 
-Produce the concrete decomposition proposal the owner ratifies at G-8,
+**The ratified decomposition (4-workspace bundle) is recorded in
+[`school-data-search-wsd1-decomposition.md`](school-data-search-wsd1-decomposition.md)**
+(betty + fred reviewed; findings validated; 6-way split rejected). The brief
+below is the input spec that produced it.
+
+Produced the concrete decomposition proposal the owner ratified at G-8,
 applying report §5 C-02:
 
 - Seam candidates: ingestion framework vs Oak-source consumers; canonical
