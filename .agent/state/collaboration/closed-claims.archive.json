@@ -8340,6 +8340,50 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "65b1c13b-9d86-465a-8678-5d7729680248",
+      "agent_id": {
+        "agent_name": "Moonlit Waxing Nebula",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "e756f7",
+        "id": "282b8921-e04b-5bd8-bfd5-21cabb07b137"
+      },
+      "thread": "semantic-search",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-04T06:18:52Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "Commit two closing napkin insights.",
+      "intent_to_commit": "3839fa71-8b80-44b7-905e-c882d50da282",
+      "archived_at": "2026-06-04",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-04T06:18:56Z",
+        "closed_by": {
+          "agent_name": "Moonlit Waxing Nebula",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "e756f7",
+          "id": "282b8921-e04b-5bd8-bfd5-21cabb07b137"
+        },
+        "summary": "two closing napkin insights committed",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "65b1c13b-9d86-465a-8678-5d7729680248",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

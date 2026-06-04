@@ -101,8 +101,20 @@ fitness_content_role: drainable-buffer
   that moment (observed at `23e50d9a`: generated-file mtime touch, zero
   diff). The known-red gate inverted into a standing alignment monitor the
   moment the realignment landed.
-
-## Session: 2026-06-03 - Opalescent dedicated curation continuation
+- **`.remember/remember.md` is single-slot AND gitignored — writing my D4
+  opener would have silently destroyed a peer's school-search gate-session
+  opener.** The Write tool's "read before overwrite" guard was the only
+  thing that caught it; had I `cat >`'d it, the loss would have been
+  invisible (gitignored = no diff, no recovery). Cure: the opener file is a
+  shared single surface under parallel sessions — read it first, and when
+  another session's live opener is present, PREPEND mine and preserve theirs
+  verbatim rather than overwrite. Same single-surface-collision family as
+  the shared-index peer-staged file, different surface.
+- **Curing a fitness CHAR overage by archiving needs the measured delta, not
+  one move.** repo-continuity went 35162 → 35035 (still 35 over) after the
+  first archive batch; a second discharged entry cleared it. Char limits
+  (unlike line limits) don't telegraph how many entries an archive must
+  move — re-measure after each batch rather than assuming one pass clears it.
 
 ### What Was Done
 
