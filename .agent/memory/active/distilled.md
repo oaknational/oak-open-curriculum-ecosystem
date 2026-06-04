@@ -176,3 +176,16 @@ A claim's *convenience* (it makes the hard thing easy, or the boundary tidy) cor
 motivated construction; the fluency of a tidy narrative is itself the warning sign. Refines
 `ground-convenient-claims`, `present-key-is-not-graph-identity`,
 `validate-specialist-findings-before-acting`; connects to the Mossy verify-before-build entry.
+
+## 2026-06-04 — a fired trigger is not "graduate standalone now" (Hidden Hiding Dusk)
+
+When a pending-graduation's trigger fires, the next check is WHERE its permanent home lives — not
+"author it." If that home (an ADR, a contract, a doc section) is owned by an active thread that is
+mid-flight, authoring a standalone artefact in a consolidation session collides with or duplicates
+that thread's work. Defer to the owning thread's own landing instead. Worked instance: the
+graph-tool-category doctrine's trigger fired (EEF D4 ratified) but its ADR home is owned by the live
+graph-tools-value-redesign thread → deferred to that thread's promotion, not authored here. Sibling
+of `respect-active-agent-claims` and `ship-independent-coordinate-dependent` applied at graduation
+time. Pairs with the full-doctrine-estate non-duplication check: survey the plan estate, not just
+the register, before authoring — the same check that turned the action-time-interrupt lane into a
+general frame deferring to closure-pressure rather than a duplicate.
