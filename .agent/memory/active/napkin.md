@@ -438,3 +438,14 @@ fitness_content_role: drainable-buffer
 - Surfaced the multi-lane uncommitted entanglement (my overhaul + Shadowed's D4 +
   school-data-search) before committing, rather than sweeping another lane's
   owner-gated ratification work into my commit.
+
+### Mistakes Made (closeout phase)
+
+- **Wrote an auto-memory reflex file to a stray `<repo>/memory/` path instead of
+  the per-user dir** (`~/.claude/projects/<project>/memory/`). Caught it only at
+  commit time as an untracked `?? memory/` at repo root — it would have polluted
+  the repo. The per-user auto-memory lives OUTSIDE the repo; the long absolute
+  path is easy to mistype and a repo-relative-looking path silently resolves to
+  repo root. Verify the auto-memory absolute path on every memory write. Cure
+  applied in-session: relocated the file to the correct dir (content preserved),
+  removed the stray.
