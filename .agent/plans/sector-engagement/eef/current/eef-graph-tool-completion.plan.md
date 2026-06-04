@@ -1336,8 +1336,11 @@ real corpus with the typed id/payload relationship asserted.
   and tests in the same landing.
 
 **Proof:** `unit` + `integration` over the real corpus. Command:
+`pnpm --filter @oaknational/graph-core test` +
 `pnpm --filter @oaknational/graph-corpus-sdk test` +
-`pnpm --filter @oaknational/curriculum-sdk test` + `pnpm type-check`.
+`pnpm --filter @oaknational/curriculum-sdk test` + `pnpm type-check`
+(graph-core added 2026-06-04 — WS1 changes it most; the `@oaknational/curriculum-sdk`
+filter is correct: directory `oak-curriculum-sdk` ≠ package name).
 If D5/D6 co-land, also run
 `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test`.
 

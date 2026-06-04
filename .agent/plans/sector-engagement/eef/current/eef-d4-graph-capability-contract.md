@@ -191,8 +191,9 @@ compatibility shim, no wrapper).
 | `DeepKeyPath<T, D>` | `types.ts:36` | **Retained unchanged** — same justification |
 
 The barrel re-export list (`graph-view/index.ts:10-17` and the root barrel
-`index.ts:60-67`, the six symbols on lines 61-66) keeps the same six names; their
-signatures change. D5 rebuilds the contract test
+`index.ts:60-67`) drops `GraphManifest`, keeping five names; the `GraphView` /
+`SubgraphResult` / `SubgraphError` signatures change while `DeepKeyPath` /
+`NodeProjection` are unchanged. D5 rebuilds the contract test
 (`graph-view/index.unit.test.ts`) to instantiate the new generic parameters (its
 `GraphView<FixtureNode>` binding and the `SubgraphResult`/`GraphManifest` stub
 break under the new arity). D5's fresh rebuild of the contract files themselves
@@ -362,8 +363,10 @@ other package consumes `GraphView`/`SubgraphResult`/`SubgraphError`/`NodeProject
 **Three in-package / cross-package edit sites** (the plan's "Done when" named only
 the first two; the third is added here):
 
-1. `packages/core/graph-core/src/index.ts:60-67` (the six symbols on lines 61-66)
-   — root-barrel re-export of the query types (names unchanged; signatures change).
+1. `packages/core/graph-core/src/index.ts:60-67` (six symbols today on lines
+   61-66) — root-barrel re-export of the query types: `GraphManifest` is dropped
+   (a deletion, not a signature change), leaving five names whose signatures
+   change.
 2. `packages/core/graph-core/src/graph-view/index.unit.test.ts` — the
    contract test (`DeepKeyPath` array-stop discipline + the `GraphView<FixtureNode>`
    implementation-contract test, whose `SubgraphResult`/`GraphManifest` stubs

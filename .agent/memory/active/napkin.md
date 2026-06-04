@@ -271,3 +271,26 @@ Fresh capture starts below.
   Feathered AND found the unread primary source. Validate-findings is "resolve
   the claim against the primary source before relaying," not "assume the peer is
   wrong."
+
+## 2026-06-04 — fan-out review earns its keep on un-pre-grounded dimensions (Prismatic Twinkling Planet)
+
+- **When the lead has already established solid ground truth, a fan-out review
+  workflow pays off on the dimensions the lead did NOT pre-ground — not the ones
+  they did.** EEF D5 fresh dual-review: I verified package filters, contract
+  line-citations, corpus cardinalities, and the zero-blast-radius gate solo,
+  first-hand. The six-lens workflow then did two distinct things. On those four
+  pre-grounded claims it correctly REJECTED every adversarial attack as a
+  false-positive — pure confirmation, adding nothing I didn't already hold. The
+  value was the four real NEW findings it surfaced (the `projection?` omission,
+  the undefined depth `MAX`, the under-characterised depth-1 member-edge example,
+  the missing module-import coverage) — every one in an architecture / type /
+  test-completeness dimension I had not independently checked.
+- **Cure / next time:** brief review lenses to spend effort AWAY from what the
+  lead has already verified (hand them the verified ground truth, say "challenge
+  it, but your real value is elsewhere") and TOWARD the un-grounded judgment
+  dimensions. Adversarial-verify on a pre-grounded claim is cheap confirmation;
+  on an un-grounded dimension it is discovery. Budget the fan-out accordingly.
+- Covered by existing auto-memory
+  (`feedback_validate_specialist_findings_before_acting` +
+  `feedback_ground_state_before_planning`), so no new auto-memory entry — and
+  `MEMORY.md` is over its size limit anyway.

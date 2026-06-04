@@ -1,5 +1,61 @@
 # Next-Session Record — `eef` thread
 
+> **EEF D5 PLAN + PARENT FRESH DUAL-REVIEW — VERDICT READY WITH CONDITIONS; ALL
+> CONDITIONS OWNER-RESOLVED + FOLDED IN; D4 DOC-FIX APPLIED (2026-06-04, Prismatic
+> Twinkling Planet / `b56c93`; claude / Opus 4.8; owner-directed review-only
+> session).** Fresh independent dual-review of
+> [`eef-d5-execution.plan.md`](../../../plans/sector-engagement/eef/current/eef-d5-execution.plan.md)
+> AND the parent
+> [`eef-graph-tool-completion.plan.md`](../../../plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md)
+> together, grounding **every** empirical claim first-hand at HEAD `562b97f3`
+> (all four package filters — incl. the asymmetric trap: `oak-curriculum-sdk` →
+> `@oaknational/curriculum-sdk` drops `oak-`, but the streamable-http app keeps it;
+> the live graph-core contract line-citations; corpus cardinalities; the worked
+> anchors; and the zero-external-blast-radius hard gate — **all verified TRUE**),
+> then six independent reviewer lenses (cross-consistency + type-expert +
+> assumptions + architecture-fred + adversarial-refute + test-expert; Sonnet) +
+> adversarial per-finding verification (48 agents). Every finding re-grounded by
+> the lead before acceptance.
+>
+> + **Verdict: READY WITH CONDITIONS** — no blocking findings, no design defects;
+>   the ratified D4 stands; the one-green-commit landing holds. Four adversarial
+>   attacks on the load-bearing claims FAILED (rejected as false-positives): zero
+>   external blast radius (only the three named in-package sites; `dist/*.d.ts`
+>   hits are build artefacts), construction-validation = throw at construction not
+>   a new `Result` variant, single-commit feasibility
+>   (`graph-corpus-sdk/src/index.ts:14` re-exports `GraphView` by name), and the
+>   no-persistent-red history.
+> + **Conditions owner-resolved 2026-06-04 + folded in** (D5 plan + D4 contract):
+>   **C1** keep `projection?` (WS1.2 implements + tests it; EEF binding exposes
+>   none — matches D4's retained signature, no D4 change); **C2** depth ceiling
+>   `MAX` is a per-graph `createGraphView` factory input (`maxDepth` →
+>   `SubgraphDepthExceeded.limit`); **C3** WS2.1's depth-1 example now spells out
+>   the full 4-edge member set (incl. reverse `metacognition→feedback`,
+>   `mastery→feedback`, corpus-verified); **C4** WS2.1 adds the sole-ingest-path
+>   module-import check; **C5** stale parent-filter NOTE removed; **C6** added the
+>   fourth `expectTypeOf` on `edges[0].target`; **C7** rebuilt contract-test block
+>   keeps a runtime assertion; **C8** D4 doc-fix (the "six names" prose at
+>   D4:193-194 and the "names unchanged" parenthetical at D4:365-366 → five
+>   surviving names after the `GraphManifest` deletion).
+> + **Cross-consistency:** parent §D5 Proof aligned to include
+>   `pnpm --filter @oaknational/graph-core test` (D5's acceptance already had it).
+>   Full review verdict + method are in this session's plan-file artefact
+>   (`~/.claude/plans/`, not repo-tracked).
+>
+> **NEXT SAFE STEP: execute D5** — build the new graph-core generic query layer +
+> the graph-native EEF view fresh as TDD cycles, landing as ONE green commit, per
+> the now-condition-folded `eef-d5-execution.plan.md`. The
+> graph-tools-value-redesign lane stays parked on EEF D6 + D7. Re-derive HEAD from
+> git — this banner is one commit stale by construction; the branch is unpushed
+> (pushing is the owner's call). **These review edits are uncommitted working-tree
+> changes** (owner has not requested a commit).
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Prismatic Twinkling Planet` | `claude` | `Opus 4.8` | `b56c93` | `eef-d5-fresh-dual-review-and-condition-fold-in` | 2026-06-04 | 2026-06-04 |
+>
+> ---
+>
 > **D5 EXECUTION PLAN AUTHORED + REVIEWED READY; PARENT FILTER FIXED; NEXT = FRESH
 > DUAL-REVIEW OF D5 + PARENT TOGETHER (2026-06-04, Windward Gliding Squall /
 > `ab2bcd`; claude / Opus 4.8; owner-directed planning session).** Authored the

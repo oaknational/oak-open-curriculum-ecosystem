@@ -107,7 +107,7 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Windward Gliding Squall / eef-d5-plan-authoring-and-review / 2026-06-04 (prior: Shadowed Creeping Secret eef-d4-whole-plan-review-then-ratify 2026-06-04, Twilit Cascading Supernova migration-plan-overhaul 2026-06-04, Burnished Glowing Spark 2026-06-04, Lacustrine Swimming Beacon 2026-06-03, Seaworthy Swimming Sextant 2026-06-03, Galactic Glowing Prism + Opalescent Cascading Planet + Stellar Waning Planet + Silvered Lurking Mask 2026-06-02) |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Prismatic Twinkling Planet / eef-d5-fresh-dual-review-and-condition-fold-in / 2026-06-04 (prior: Windward Gliding Squall eef-d5-plan-authoring-and-review 2026-06-04, Shadowed Creeping Secret eef-d4-whole-plan-review-then-ratify 2026-06-04, Twilit Cascading Supernova migration-plan-overhaul 2026-06-04, Burnished Glowing Spark 2026-06-04, Lacustrine Swimming Beacon 2026-06-03, Seaworthy Swimming Sextant 2026-06-03, Galactic Glowing Prism + Opalescent Cascading Planet + Stellar Waning Planet + Silvered Lurking Mask 2026-06-02) |
 | `oak-kg-ontology-planning-review` | Plan the `oak-kg`/ontology work, starting with a deep review of the Oak Curriculum Ontology repo (separate concern from the bulk-derived graph redesign) | [record][oak-kg-ontology] | claude / Opus 4.8 / Twilit Cascading Supernova / thread-opener-brief-only / 2026-06-04 — **opened, not started; deep review is a fresh session** |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Blustery Lifting Gale / skills-taxonomy-and-distribution / 2026-06-03 (prior: Umbral Whispering Silhouette 2026-06-01) |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 / Hidden Hiding Dusk / dedicated-consolidation+owner-directed-graduations / 2026-06-04 (prior: Arboreal Sprouting Branch 2026-06-04, Opalescent Illuminating Prism 2026-06-03, Lacustrine Swimming Beacon, Ashen Burning Magma, Solar Glowing Meteor, Stratospheric Buffeting Breeze, Lofty Sweeping Falcon, Shaded Veiling Mirror) |
@@ -258,14 +258,17 @@ licensing guardrail. See the
    ways), the `d4` todo flipped to `completed`. D5 — build the new graph-core query
    layer (`GraphView<TNode, TNodeId, TEdgeType>`, `subgraph` only) + the EEF
    strand-view fresh — is the next safe step.** The redesign stays parked on EEF
-   D6 + D7. See the `eef` thread banner.** **(Update 2026-06-04, Windward Gliding
-   Squall): the D5 EXECUTION PLAN is now authored + reviewed READY
-   ([`eef-d5-execution.plan.md`](../../plans/sector-engagement/eef/current/eef-d5-execution.plan.md),
-   current/; Iridescent pair-review + type/assumptions/fred, all conditions
-   incorporated) and the parent D5-Proof package filter was fixed
-   (owner-authorised: `@oaknational/oak-curriculum-sdk` → `@oaknational/curriculum-sdk`).
-   NEXT: a fresh session dual-reviews the D5 plan AND this parent plan together,
-   then executes D5.**
+   D6 + D7. See the `eef` thread banner.** **(Update 2026-06-04, Prismatic
+   Twinkling Planet): the FRESH DUAL-REVIEW of the D5 plan + parent is DONE —
+   verdict READY WITH CONDITIONS; all conditions C1–C8 owner-resolved and folded in
+   (keep `projection?` + implement/test; per-graph depth-ceiling factory input; D4
+   doc-fix in both places; C3–C7 clarifications). Every empirical claim was
+   re-grounded first-hand; four adversarial attacks on the load-bearing claims were
+   rejected as false-positives. NEXT: **execute D5** — build the new graph-core
+   query layer (`GraphView<TNode, TNodeId, TEdgeType>`, `subgraph` only with
+   `projection?` retained) + the graph-native EEF view fresh as TDD cycles, landing
+   as ONE green commit, per the condition-folded `eef-d5-execution.plan.md`. The
+   graph-tools-value-redesign lane stays parked on EEF D6 + D7.**
 7. **Graph-estate-consolidation: t2–t5+t7 EXECUTED and pushed at `c3b78eec`;
    scoped t8 verification PASSED (2026-06-02, Opalescent Cascading Planet)**.
    The estate reads true in one pass: eleven plans archived with banners +
@@ -365,6 +368,25 @@ authority.
 - Shared memory/state files are always writable and commit-includable when dirty.
 
 ## Deep Consolidation Status
+
+**ran this handoff → owner-directed (2026-06-04, Prismatic Twinkling Planet /
+claude / Opus 4.8 / `b56c93`, EEF D5 + parent fresh dual-review + condition
+fold-in close; session-completion mode).** Landed: fresh dual-review verdict
+READY WITH CONDITIONS; all conditions C1–C8 owner-resolved + folded across four
+surfaces (D5 plan, D4 contract ×2 sites, parent §D5 Proof, eef thread banner).
+Insights homed: napkin (fan-out review earns its keep on the dimensions the lead
+did NOT pre-ground); experience file. **No auto-memory write** — `MEMORY.md` is
+over its size limit and the insight is covered by existing
+`feedback_validate_specialist_findings_before_acting` +
+`feedback_ground_state_before_planning`. **Deferred with reason**: the broad
+cross-thread + cross-platform (codex/cursor/gemini) curation drain and the
+`distilled.md`/napkin/this-file fitness drains are dedicated-curation-pass work
+this single-lane review close does not carry context for — falsifiable: the next
+curator can count unread cross-platform surfaces + the line-counts; conservation
+invariant honoured (preserved at full weight, not trimmed). Verdict: `partial
+slice landed`. Note: the working tree carries Fiery Forging Ash's verified-green
+agent-tools WIP (§Agent Tooling) — NOT mine, NOT staged; my commit is
+markdown-only.
 
 **ran this handoff → owner-directed (2026-06-04, Windward Gliding Squall /
 claude / Opus 4.8 / `ab2bcd`, EEF D5 plan-authoring + review close;
