@@ -245,19 +245,6 @@ there unless the owner or closeout owner gives a further assignment.
    write pushes `distilled.md` into a fitness zone, record the pressure
    and route the structural follow-up rather than trimming the lesson.
 
-   **Auxiliary input: plugin-managed capture buffers.** The remember
-   plugin maintains `.remember/now.md`, `.remember/today-*.md`, and
-   sibling buffers as a separate ephemeral capture surface. Treat these
-   files as **repo-owned knowledge buffers** and **plugin-owned file
-   lifecycle**: the learning is ours to preserve and disposition, while
-   rotation, archival, and deletion of `.remember/` files remains owned by
-   the plugin. Scan them at session close for entries that would change
-   next-session behaviour; mirror any such entry into `napkin.md` using
-   the structured surprise format. If material is not mirrored because it
-   does not affect this thread's next session, leave it in `.remember/`
-   for consolidation rather than treating it as processed. Do not rotate,
-   archive, or delete `.remember/` files during handoff.
-
    **Auxiliary input: session comms-events.** The session's own
    comms-events under `.agent/state/collaboration/comms/`
    (and the regenerated `shared-comms-log.md`) carry

@@ -13,9 +13,6 @@ reference
 scratch
 .cursor
 
-# Plugin-managed ephemeral capture buffers (remember plugin owns lifecycle)
-.remember/
-
 # Generated files (DO NOT FORMAT)
 *.generated.ts
 *.generated.js

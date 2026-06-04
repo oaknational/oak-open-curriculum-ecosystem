@@ -101,15 +101,38 @@ fitness_content_role: drainable-buffer
   that moment (observed at `23e50d9a`: generated-file mtime touch, zero
   diff). The known-red gate inverted into a standing alignment monitor the
   moment the realignment landed.
-- **`.remember/remember.md` is single-slot AND gitignored — writing my D4
-  opener would have silently destroyed a peer's school-search gate-session
-  opener.** The Write tool's "read before overwrite" guard was the only
-  thing that caught it; had I `cat >`'d it, the loss would have been
-  invisible (gitignored = no diff, no recovery). Cure: the opener file is a
-  shared single surface under parallel sessions — read it first, and when
-  another session's live opener is present, PREPEND mine and preserve theirs
-  verbatim rather than overwrite. Same single-surface-collision family as
-  the shared-index peer-staged file, different surface.
+- **`.remember/remember.md` is architecturally mismatched to this repo's
+  parallel-session practice — DISABLED 2026-06-04 (owner-directed).** The
+  remember plugin (`remember@claude-plugins-official`, vendored at
+  `~/.claude/plugins/cache/.../0.7.3/`, NOT in-repo) models `remember.md` as
+  a single-session one-shot baton: one session writes it via `/remember`,
+  the next SessionStart reads-and-empties it (`session-start-hook.sh`:
+  `: > "$REMEMBER_HANDOFF"`). That collides with 5+ parallel sessions on one
+  branch in TWO ways: (1) write-collision — a second opener clobbers the
+  first (the Write read-before-overwrite guard caught my near-miss; gitignored
+  via `.remember/.gitignore` `*`, so loss is diffless/unrecoverable); (2)
+  the deeper consume-collision — whichever session starts next empties the
+  file for EVERYONE, so a parallel peer's opener is destroyed unconsumed and
+  "prepend and preserve" cannot save it. Root conclusion: `remember.md` was
+  never a safe handoff surface here; the canonical surfaces
+  (`threads/<slug>.next-session.md`, `repo-continuity.md`) are versioned,
+  multi-slot, and claim-collision-safe. Plugin disabled via
+  `.claude/settings.json` + `settings.local.json` toggles, 5 canonical skill
+  docs de-referenced, 3 ignore-file entries removed, the local corpus mined
+  then deleted. Mechanism behind the prior "openers degrade in transit; canon
+  survives" lesson.
+- **Mining the retired `.remember/` corpus before deletion returned ZERO
+  orphans across ~1,400 lines / 37 Haiku session-summaries (3 Explore agents,
+  grounded against canonical homes).** Every candidate was already in an
+  ADR/PDR/rule/MEMORY/skill/today's-napkin — strong evidence the
+  capture→graduate pipeline caught everything and the plugin was pure
+  redundancy. One candidate was actively HARMFUL: the corpus preserved
+  "pre-commit staged-only gating" as live guidance, which the owner REJECTED
+  2026-05-22 (full-tree gating is intentional). An unversioned vendor buffer
+  that resurrects overturned decisions is a liability — the clinching reason
+  retiring it is correct. Lesson: when retiring a lossy mirror surface,
+  mine-then-verify-against-canon is the right diligence, and a near-empty
+  harvest is the success case, not a failed search.
 - **Curing a fitness CHAR overage by archiving needs the measured delta, not
   one move.** repo-continuity went 35162 → 35035 (still 35 over) after the
   first archive batch; a second discharged entry cleared it. Char limits

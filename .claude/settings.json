@@ -179,7 +179,7 @@
   "skillListingBudgetFraction": 0.03,
   "enabledPlugins": {
     "sentry@claude-plugins-official": true,
-    "remember@claude-plugins-official": true,
+    "remember@claude-plugins-official": false,
     "mcp-server-dev@claude-plugins-official": true,
     "sonarqube@claude-plugins-official": true,
     "vercel@claude-plugins-official": true

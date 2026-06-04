@@ -8384,6 +8384,50 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "1438f691-bc4b-4dce-806d-cee1c79ce88d",
+      "agent_id": {
+        "agent_name": "Moonlit Waxing Nebula",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "e756f7",
+        "id": "282b8921-e04b-5bd8-bfd5-21cabb07b137"
+      },
+      "thread": "semantic-search",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-04T06:50:30Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "Disable the remember plugin and de-reference .remember across canonical surfaces.",
+      "intent_to_commit": "9b4829d1-8260-473f-b37b-18fb026c02b8",
+      "archived_at": "2026-06-04",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-04T06:50:58Z",
+        "closed_by": {
+          "agent_name": "Moonlit Waxing Nebula",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "e756f7",
+          "id": "282b8921-e04b-5bd8-bfd5-21cabb07b137"
+        },
+        "summary": "remember-plugin disable + .remember de-reference + corpus mined/deleted",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1438f691-bc4b-4dce-806d-cee1c79ce88d",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

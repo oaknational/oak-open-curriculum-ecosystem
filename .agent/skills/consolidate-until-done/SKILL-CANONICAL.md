@@ -64,10 +64,9 @@ current session:
    because it is called a shard, split, window, archive candidate, backlog, or
    carry-forward surface.
 4. Additional capture/source buffers named by `consolidate-docs` are accounted
-   for when they are in scope: `.remember/now.md`, `.remember/today-*.md`,
-   `.remember/recent.md`, the minimum platform-memory set (Claude, Codex,
+   for when they are in scope: the minimum platform-memory set (Claude, Codex,
    Cursor, Gemini), non-repo plans, entry-point drift, and any explicitly named
-   comms-event evidence. Plugin or platform file lifecycle may be external, but
+   comms-event evidence. Platform file lifecycle may be external, but
    the knowledge disposition is not optional.
 5. Any remaining non-empty buffer item is explicitly `owner-gated`, with the
    user decision needed, the live holding location, and the evidence a future
@@ -114,11 +113,10 @@ Repeat this loop until the completion contract is met:
 1. **Inventory.** Run the current fitness validator and build a buffer
    inventory that includes all live drainable buffers and their split or child
    files. Include pending-graduations directories, active/recent memory
-   buffers, `.remember/` plugin-managed capture buffers, open-questions,
-   relevant practice boxes, the minimum platform-memory set named by
-   `consolidate-docs` (Claude, Codex, Cursor, Gemini), non-repo plans,
-   entry-point drift, and collaboration comms only when those surfaces are in
-   scope. For plugin/platform-owned files, inventory the learning items and
+   buffers, open-questions, relevant practice boxes, the minimum platform-memory
+   set named by `consolidate-docs` (Claude, Codex, Cursor, Gemini), non-repo
+   plans, entry-point drift, and collaboration comms only when those surfaces
+   are in scope. For platform-owned files, inventory the learning items and
    record knowledge disposition without taking over file rotation, archival, or
    deletion; if a required platform surface is absent or inaccessible, record
    that as an explicit inventory disposition.

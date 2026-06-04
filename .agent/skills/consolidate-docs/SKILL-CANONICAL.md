@@ -287,21 +287,6 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
    - **Capture surfaces**: `.agent/memory/active/napkin.md`,
      `.agent/memory/active/distilled.md` (the staging surface itself,
      not yet graduated), prompt artefacts.
-   - **Plugin-managed capture buffers**: `.remember/now.md`,
-     `.remember/today-*.md`, `.remember/recent.md`, and sibling
-     buffers authored by the remember plugin. These are
-     **repo-owned knowledge buffers** with **plugin-owned file
-     lifecycle**. Do not rotate, archive, or delete them manually,
-     but do inventory their learning content during consolidation and
-     record a disposition for every processed item. Read them
-     alongside the napkin and extract cross-session insight into
-     `distilled.md` or a permanent home per the standard graduation
-     rules in step 7. Material not extracted in a bounded
-     `session-completion` pass remains live in `.remember/`; material
-     selected during `dedicated-knowledge-curation` needs an
-     item-level disposition (`graduated`, `duplicate`,
-     `owner-gated`, `stale-withdrawn`, or honest `carried-forward`
-     only for interrupted mid-pass handoff).
    - **Session comms-events**: `.agent/state/collaboration/comms/`
      (and the regenerated `shared-comms-log.md`) carry coordination-context
      substance — owner-direction-captured-inline, inter-agent surprises,
@@ -465,13 +450,6 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
 
    - `.agent/memory/active/distilled.md` — refined cross-session entries from prior napkin rotations.
    - `.agent/memory/active/napkin.md` — recent surprises and candidate tags.
-   - `.remember/now.md`, `.remember/today-*.md`, `.remember/recent.md` —
-     plugin-managed capture buffers. They are read-only for file lifecycle
-     purposes, not optional for knowledge disposition: extract qualifying
-     insight into `distilled.md` or the appropriate permanent home, prove
-     duplicates against the destination, or record why the item remains
-     owner-gated/stale/carried-forward. Leave the physical buffers to the
-     plugin's own lifecycle.
    - **[`.agent/memory/operational/pending-graduations.md`](../../memory/operational/pending-graduations.md) (the pending-graduations register)** — the structured list of captured candidates with per-item `captured-date`, `source-surface`, `graduation-target`, `trigger-condition`, and `status`. Items with `status: due` or `status: overdue` are the primary graduation candidates for this pass. Items with `status: pending` are reviewed to see whether their trigger condition has fired since last consolidation. Items with `status: owner-gated` whose remaining trigger is owner-direction are **not** parked indefinitely: a dedicated consolidation session with the owner present is itself the venue where that owner-direction trigger fires, so walk owner-gated items with the owner during the pass rather than deferring them as if awaiting an external event. The register was split out from `repo-continuity.md § Deep consolidation status` on 2026-04-30; older references to that location route here.
    - **[`.agent/memory/operational/open-questions.md`](../../memory/operational/open-questions.md) (the open-questions register)** — the structured list of non-urgent unresolved decision-shapes with `Q-NNN` identity, context, deferral reason, suggested resolution path, status, and links. Open entries are not graduation candidates by default; they are consolidation-time questions to answer, surface to owner, withdraw, or leave open with deferral-honesty.
 
