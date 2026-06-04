@@ -385,3 +385,56 @@ fitness_content_role: drainable-buffer
   graph-node-ness was foundation-building misplaced in the first consumer.
   **Graduation candidate** — connects to `consolidate-at-third-consumer`,
   `existence-is-not-correctness`, PDR-058 §design-optionality.
+
+## 2026-06-04 — school-data-search deep review (Fiery Sparking Caldera, 80d50a)
+
+- **Twice imported a cross-thread frame into a review; corrected both times.**
+  Treated "no named in-repo consumer" as a near-blocker (value-trace doctrine)
+  and used the EEF value-reckoning as a review lens. Owner: need + value are
+  settled (any education service must let users pick their school); "this
+  service has exactly NOTHING to do with the EEF work." Cure: review from the
+  artefact's OWN value + the owner's frame; horizontal infra legitimately
+  precedes its first in-repo consumer. The empty consumer-grep *felt* like
+  evidence because it flattered the frame I walked in with — convenient-claim
+  failure as pattern-completion, not sloppiness. Captured: auto-memory
+  `feedback_no_cross_thread_analogy_in_review`; distilled.
+- **The review's value was critical assessment, not fan-out.** Workflow-1's
+  evidence base was strong, but the load-bearing move was rejecting the
+  value-trace agent's three "blocker" verdicts (invalidated premise) and
+  re-grounding fidelity/external claims against the artefacts myself.
+- **Canonical-ID sharpening (applied to plan WS4):** a present/stable field is
+  not a unique identity — Scotland SEED can be 1:many. Connects to the owner's
+  new `present_key_is_not_graph_identity`.
+- **What worked:** held hypotheses instead of asserting; surfaced the peer
+  commit-window collision (foreign staged file) instead of barging;
+  per-question recommendations with the recommended option first.
+
+## Session: 2026-06-04 - graph-tools migration-plan overhaul (Twilit Cascading Supernova)
+
+### Patterns to Remember
+
+- **I kept designing from the existing TOOL/output shape, not the DATA ASSET —
+  and the owner lifted me up a level four times in one session**:
+  migration→redesign (kept "replacement units"); whole-corpus→bounded (kept
+  "a tool returns a thing"); filter→graph (kept "an *anchored* tool"); then
+  slug-as-id (kept a present field as identity). One root: anchor design on the
+  data asset + its true identity/structure, surfaced as VIEWS — not on the tool
+  that happens to exist. Reflexes captured: auto-memory
+  `feedback_check_bulk_schema_before_declaring_data_unsourced` (read the bulk
+  SOURCE, not the lossy generated projection) +
+  `feedback_present_key_is_not_graph_identity` (verify cardinality; placement is
+  an edge, not identity).
+- **A plan patched ~15 times risks becoming half-reframed — the exact failure
+  it was overhauling.** Before declaring "happy", I ran a coherence pass and
+  found the todos/§tool-set still carried the OLD per-corpus-re-emission frame
+  while the principles said one-graph+views. "Reshape, don't patch" applies to
+  the editor too: a many-edit plan needs one read-through against its own spine.
+
+### What Worked
+
+- Verified the owner's "lessons can be in 2 units" against the bulk data (rare in
+  the snapshot: 0 cases) AND honoured it anyway — common-case-unique is the trap;
+  the model must be correct for the edge case by construction.
+- Surfaced the multi-lane uncommitted entanglement (my overhaul + Shadowed's D4 +
+  school-data-search) before committing, rather than sweeping another lane's
+  owner-gated ratification work into my commit.

@@ -19,6 +19,33 @@ surface.
 
 ## Current State
 
+- **MIGRATION PLAN OVERHAULED → VALUE-DRIVEN REDESIGN, renamed + reframed
+  (2026-06-04, Twilit Cascading Supernova / `bb53a9`, claude / Opus 4.8,
+  owner-directed)** — accepted Burnished's handoff (comms `0e2f7e7b`) and ran the
+  overhaul deeper than the metaplan first framed. `graph-tools-substrate-migration.plan.md`
+  → **[`graph-tools-value-redesign.plan.md`](../../plans/connecting-oak-resources/knowledge-graph-integration/future/graph-tools-value-redesign.plan.md)**
+  (renamed via `git mv`, history preserved), re-derived from two constraints +
+  design agency; behaviour-preservation AND the "migration" framing removed as
+  bad-assumption residue. Per-corpus value-shapes decided: prior-knowledge =
+  bounded subgraph (owner-ratified), thread-progressions = sequence projection
+  (owner-ratified), misconception = **owner-directed graph** (curriculum-anchored
+  bounded subgraph; thread→unit→lesson→misconception verified present in the bulk
+  source). Owner-directed architecture (this session): **one bulk graph + bounded
+  query views** (not fragmented graphs); **identity is deliberate — slugs are NOT
+  guaranteed-unique ids, placement is an edge** (a lesson can be in >1 unit);
+  **bulk-derived graphs and the Oak Ontology repo are SEPARATE concerns** sharing
+  the substrate (concepts live in the ontology; cross-source join gated on the
+  alignment audit). Metaplan `graph-migration-plan-overhaul.plan.md` driven to
+  COMPLETED; features-plan §1 boundary reconciled; referrers repointed; 3 readiness
+  reviewers (assumptions + architecture fred/betty) READY-WITH-CONDITIONS, all
+  validated + applied. KG estate survey report written:
+  [`graph-kg-estate-and-two-source-survey-2026-06-04.md`](../../reports/graph-kg-estate-and-two-source-survey-2026-06-04.md).
+  **Owner-directed open item: review the entire `oak-kg` / ontology estate** as a
+  distinct future activity (timing owner's; not yet planned). Plan stays PARKED on
+  EEF D6 + D7 (EEF v1 consumes today's prerequisite + misconception tools as-is —
+  must not be touched until EEF v1 ships). Two Claude auto-memory reflexes added
+  (check the bulk source not the lossy projection; a present key is not a graph
+  identity).
 - **`.remember` PLUGIN DISABLED + de-referenced repo-wide (2026-06-04,
   Moonlit Waxing Nebula / `e756f7`, claude / Opus 4.8, owner-directed)** —
   the vendored `remember@claude-plugins-official` plugin is disabled in
@@ -273,11 +300,11 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Burnished Glowing Spark / eef-d4-contract-authoring / 2026-06-04 (prior: Lacustrine Swimming Beacon 2026-06-03, Seaworthy Swimming Sextant 2026-06-03, Galactic Glowing Prism + Opalescent Cascading Planet + Stellar Waning Planet + Silvered Lurking Mask 2026-06-02) |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Twilit Cascading Supernova / migration-plan-overhaul / 2026-06-04 (prior: Burnished Glowing Spark 2026-06-04, Lacustrine Swimming Beacon 2026-06-03, Seaworthy Swimming Sextant 2026-06-03, Galactic Glowing Prism + Opalescent Cascading Planet + Stellar Waning Planet + Silvered Lurking Mask 2026-06-02) |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Blustery Lifting Gale / skills-taxonomy-and-distribution / 2026-06-03 (prior: Umbral Whispering Silhouette 2026-06-01) |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | codex / GPT-5 / Opalescent Illuminating Prism / dedicated-knowledge-curation / 2026-06-03 (prior: Lacustrine Swimming Beacon, Ashen Burning Magma, Solar Glowing Meteor, Stratospheric Buffeting Breeze, Lofty Sweeping Falcon, Shaded Veiling Mirror) |
 | `repo-professionalism-assessment` | Repo professionalism / engineering-quality report → planability triage | [record][repo-professionalism-assessment] | codex / GPT-5 / Airy Whirling Wing / report-author-and-planability-router / 2026-06-03 |
-| `school-data-search` | Oak School Data Search service (POC MVP): briefs → report → plan → **gate walk complete** → build | [record][school-data-search] | claude / Opus 4.8 / Mossy Whispering Bark / owner-gate-session / 2026-06-04 (prior: Furnace Roasting Brazier, Hushed Lurking Mask, both 2026-06-03) |
+| `school-data-search` | Oak School Data Search service (POC MVP): briefs → report → plan → gate walk → **deep review complete** → build | [record][school-data-search] | claude / Opus 4.8 / Fiery Sparking Caldera / deep-review-and-refinement / 2026-06-04 (prior: Mossy Whispering Bark 2026-06-04, Furnace Roasting Brazier + Hushed Lurking Mask 2026-06-03) |
 | `semantic-search` | Search data foundations: upstream-schema alignment, bulk sourcing, minimal-adaptation arc | [record][semantic-search] | claude / Opus 4.8 / Moonlit Waxing Nebula / upstream-realignment-specialist / 2026-06-03 |
 
 ## Paused Threads
@@ -302,17 +329,19 @@ not the current session-priority lane. Reactivation is owner-directed.
 
 ### School Data Search
 
-All nine owner gates decided 2026-06-04 (the owner gate session) plus a
-high-stakes verification pass that reopened/resolved three (G-1 F-C→F-B;
-G-6 NI register + Scotland geospatial layer; coordinates dropped). **Start
-the next session with a review**: plan §Phase 0 `### Gate decisions` + the
-`### Required high-stakes verifications` register (work done), then the
-thread record's Landing target (work ahead). Then: WS-D1 (decomposition
-proposal) → `architecture-expert` betty + fred → G-8; draft **ADR-190**
-(F-B produced-spec) → `docs-adr-expert`; promote the plan to `active/`;
-begin WS1+. Carry the **verification discipline** (verify external claims
-against primary sources before reliance) and the **licensing guardrail**
-(crystal-clear-open licences only; no OS-derived data). See the
+All nine owner gates decided 2026-06-04, plus a high-stakes verification pass
+(reopened/resolved three: G-1 F-C→F-B; G-6 NI register + Scotland geospatial;
+coordinates dropped). **Deep review complete (2026-06-04, Fiery Sparking
+Caldera): sound, faithful, build-ready** — refinements committed `1839e9b8`
+(WS9 reuses `@oaknational/logger` stdio-only + `@oaknational/observability`;
+new WS11 access-gated value-proof school-picker page; canonical-ID a tested
+invariant + per-nation sourceId-identity check at WS4; England/GIAS
+front-loaded; change_events/import-run-inspection deferred post-go; report §6
+reframed; C-10 path fixed). **Next: WS-D1 (decomposition) →
+`architecture-expert` betty + fred → G-8; draft ADR-190 (F-B produced-spec,
+repo-wide forward guidance, justified on Zod-canonical merits) →
+`docs-adr-expert`; promote to `active/`; begin WS1+.** Carry the verification
+discipline + licensing guardrail. See the
 [`school-data-search` thread record][school-data-search].
 
 ### Agentic Mechanisms Discovery
@@ -405,10 +434,13 @@ against primary sources before reliance) and the **licensing guardrail**
    is now AUTHORED + RATIFIABLE (2026-06-04, Burnished Glowing Spark, committed
    `ca927e40`):** owner decision B made EEF a homogeneous strand graph (guidance
    reports inline; nine bound names → eight); the fundamental heterogeneous
-   node/edge model is deferred-and-homed in the migration plan (active under
-   Twilit Cascading Supernova via the ratified
-   `graph-migration-plan-overhaul.plan.md` metaplan). **The next session reviews
-   D4 + the EEF plan as a whole, then ratifies; D5 the session after.** See the
+   node/edge model is deferred-and-homed in the migration plan. **That migration
+   plan was OVERHAULED → value-driven redesign and renamed
+   `graph-tools-value-redesign.plan.md` (2026-06-04, Twilit Cascading Supernova);
+   the `graph-migration-plan-overhaul.plan.md` metaplan is COMPLETED.** The
+   node/edge model is now scoped there as one-bulk-graph + views with a deliberate
+   identity model. **The next session reviews D4 + the EEF plan as a whole, then
+   ratifies; D5 the session after.** The redesign stays parked on EEF D6 + D7. See the
    `eef` thread banner.**
 7. **Graph-estate-consolidation: t2–t5+t7 EXECUTED and pushed at `c3b78eec`;
    scoped t8 verification PASSED (2026-06-02, Opalescent Cascading Planet)**.
@@ -495,7 +527,36 @@ authority.
 
 ## Deep Consolidation Status
 
-**ran this handoff → owner-directed (2026-06-04, Burnished Glowing Spark /
+**ran this handoff → owner-directed (2026-06-04, Fiery Sparking Caldera /
+claude / Opus 4.8 / `80d50a`, school-data-search deep-review close).** Owner
+asked for full handoff + consolidation + last insights + commit. Session
+insights homed: napkin (cross-thread-analogy correction; canonical-ID
+sharpening); `distilled.md` (review-from-own-value lesson); experience file;
+plan WS4 sourceId-identity sharpening (committed); Claude auto-memory
+`feedback_no_cross_thread_analogy_in_review`. Cross-thread convergence (napkin
+at 400+ lines → rotation; graph-thread graduations) is DUE but NOT bounded for
+this single-thread review close — deferred to a dedicated curation pass, NOT
+trimmed (conservation invariant); this index file is itself over its
+line-limit → same deferred drain. Cross-platform memory: own-platform (Claude)
+done; codex/cursor/gemini NOT read (single-lane review close).
+
+**ran this handoff → owner-directed (2026-06-04, Twilit Cascading Supernova /
+claude / Opus 4.8 / `bb53a9`, migration-plan-overhaul session close).** Owner
+asked for full handoff + consolidation + insights + commit (eef-thread-scoped).
+Converged this session: two Claude auto-memory reflexes
+(`feedback_check_bulk_schema_before_declaring_data_unsourced`,
+`feedback_present_key_is_not_graph_identity`) + MEMORY.md index; napkin captured
+at full weight (already over the 300 line-limit pre-session — drain remains a
+dedicated curation pass, NOT a trim, per the conservation invariant); experience
+file landed; one ADR candidate recorded in pending-graduations (bulk-derived vs
+ontology graphs as separate concerns sharing the substrate). **Deferred with
+reason**: the cross-thread fitness sweep + cross-platform memory read
+(codex/cursor/gemini) are thread-scoped curation this single-lane EEF-overhaul
+session does not carry the context for — falsifiable: the next dedicated curator
+can count the unread cross-platform surfaces and the napkin line-count. Verdict:
+`session lessons converged; broad cross-thread curation deferred`.
+
+Prior same-day pass: **owner-directed (2026-06-04, Burnished Glowing Spark /
 claude / Opus 4.8 / `67b679`, EEF D4 contract session close).** Owner asked
 for a full handoff + consolidate-docs + commit (eef-thread-scoped). Homed: the
 value-first/existing-is-malleable lesson → Claude auto-memory
