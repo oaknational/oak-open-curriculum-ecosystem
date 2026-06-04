@@ -29,6 +29,76 @@ windowed, backlog, split, or shard-like pending-graduation files. New capture,
 owner-gated items, and unresolved pending-graduation decisions belong here until
 they graduate, duplicate, become stale-withdrawn, or receive owner direction.
 
+## 2026-06-04 captures — Arboreal Sprouting Branch curation pass
+
+Routed during the dedicated knowledge-curation pass (napkin rotation +
+experience-corpus cross-read). Each verified ABSENT from this register before
+adding. Disposition ledger:
+[`curator-passes/2026-06-04-arboreal-sprouting-branch-curation.md`](curator-passes/2026-06-04-arboreal-sprouting-branch-curation.md).
+
+- **Dissolution-by-re-attribution: when both options of a binary policy question
+  suppress a signal, re-attribute the root cause and the question dissolves.**
+  Worked instance: strict-vs-strip schema validation — `.strip()` silently
+  deletes upstream data, `.passthrough()` silently smuggles untyped data; both
+  are signal-suppression shapes. The real failure was schema STALENESS, not
+  validation strictness; re-attribution dissolved a 7-week-old open question into
+  "keep strict; cure freshness."
+  `[captured: 2026-06-04 | source: napkin Moonlit Waxing Nebula 2026-06-03 + Arboreal curation pass | target: pdr:dissolution-by-re-attribution | trigger: second dissolution-by-re-attribution instance OR owner direction | size: S | status: owner-gated]`
+- **Thoroughness-texture is not evidence.** The felt character of care — review
+  counts, reproduction counts, exact figures, polish, careful inheritance —
+  appears precisely in the FAILURE cases; the discriminators that actually worked
+  were one concrete observation against the artefact, an independent lens, and
+  shown-working. Enforcement shape: verifier verdicts must carry per-check
+  positive attestations (a bare CLEAN is consumable only after reading its
+  transcript). Now strongly cross-evidenced: the 2026-05-28→06-04 experience
+  corpus produces this as a dominant pattern (≥4 files — `the-reflex-i-kept-reaching-for`,
+  `evergreen-conserving-while-reviewing`, `seaworthy-d3-audit-dissolution`,
+  `defending-then-deleting-my-own-work`): the wrong move arrives wearing the
+  costume of diligence, never laziness; the cure cannot be "be more careful"
+  (that is the disease) but a direction-check before any act of diligence.
+  `[captured: 2026-06-04 | source: napkin Hushed Lurking Mask 2026-06-03 + experience-corpus cross-read Pattern 2 | target: enforcement-mechanism:verifier-verdicts-carry-per-check-positive-attestations (the CONCEPT — thoroughness disguises as virtue — is now in PDR-089 §Context obs 2 + §Decision 6; the open facet is the operational attestation mechanism, not yet built) | trigger: owner direction OR next reviewer-discipline authoring pass | size: M | status: owner-gated]`
+- **Gate-outcome vocabulary needs a third word.** PDR-058's `decide | park`
+  cannot express "reject-as-framed"; without it, owner hesitation at a mis-posed
+  gate gets coerced into a decision or a costume-trigger park. A reframed gate
+  routes back to synthesis and EDITS the gate row itself — a different recording
+  shape from a park, which only dates it.
+  `[captured: 2026-06-04 | source: napkin Mossy Whispering Bark 2026-06-03 opener-as-artefact | target: amend:PDR-058 (gate-outcome vocabulary) | trigger: second mis-posed-gate instance OR owner direction | size: S | status: owner-gated]`
+- **Retiring a lossy mirror = mine-then-verify-against-canon; a near-empty
+  harvest is the SUCCESS case.** When retiring an unversioned/lossy knowledge
+  mirror, mine the corpus and verify EVERY candidate against canon before
+  deletion; a near-empty harvest proves the capture→graduate pipeline already
+  caught everything (success, not a failed search). An unversioned mirror that
+  resurrects overturned decisions is a liability. Worked twice this curation
+  family: the `.remember` retirement (~1,400 lines → 0 orphans) and this pass's
+  cross-platform memory read (Codex/Cursor/Gemini → ~everything already homed).
+  `[captured: 2026-06-04 | source: napkin Moonlit Waxing Nebula 2026-06-03 (.remember mining) + Arboreal cross-platform memory read | target: pattern-or-rule:retire-lossy-mirror-by-mining-then-verify (connects to knowledge-preservation-over-fitness-warnings) | trigger: second lossy-mirror retirement OR owner direction | size: S | status: owner-gated]`
+- **Corrections are high-risk re-instantiation moments — no immunity gradient.**
+  The general form behind no-tombstones-recursion: every correction is a new
+  first act with respect to the failure mode it addresses; the corrective act is
+  the highest-risk moment for re-instantiating the original error, and there is
+  NO immunity from having just fixed something adjacent ("the lesson is always
+  one level deeper than wherever I've just pinned it"). Distinct from
+  `no-tombstones-for-removed-ideas` (one instance of this general shape).
+  `[captured: 2026-06-04 | source: experience-corpus cross-read Pattern 4 (≥4 files; see curation ledger) | target: amend:no-tombstones-for-removed-ideas OR metacognition/correction-discipline | trigger: owner direction OR next metacognition/correction-discipline authoring pass | size: S | status: graduated 2026-06-04 -> PDR-089 §Decision 6 (folded: corrections-have-no-immunity-gradient)]`
+- **Independence over review-count: a same-frame reviewer amplifies the author's
+  confidence without providing independent coverage.** A reviewer briefed inside
+  the author's frame polishes confidence rather than testing the claim; "zero
+  findings" from a same-frame group means "clean with recall < 1", not "clean."
+  The value is an independent frame (or a single contrary fact), not review
+  volume — the most dangerous verdict is the confident one that SURVIVED
+  unchallenged review.
+  `[captured: 2026-06-04 | source: experience-corpus cross-read Pattern 5 (≥5 files; see curation ledger) | target: amend:validate-specialist-findings-before-acting OR reviewer-dispatch-doctrine (cf. different-lens-reviewer-divergence + thoroughness-texture per-check-attestation) | trigger: owner direction OR next reviewer-dispatch doctrine pass | size: M | status: graduated 2026-06-04 -> PDR-089 §Decision 6 (folded: review-count-is-not-coverage)]`
+
+**Cross-experience meta-signal (owner-walk, not a new candidate):** Patterns 2–5
+above are facets of one deep structure — *the failure mode hides inside the
+surfaces that feel safest* (diligence, inherited authority, the corrective act,
+review volume). Separately, the experience corpus has spent ~6 days (2026-05-30
+onward) diagnosing its own "naming a lesson does not fire the reflex — only a
+mechanical tripwire does" insufficiency (Pattern 1; home:
+`patterns/passive-guidance-loses-to-artefact-gravity.md` + the owner-gated
+`action-time-structural-interrupt` item). The action-time-structural-interrupt
+trigger (cross-session recurrence) is now strongly met — surfaced to owner.
+
 ## 2026-06-03 captures — Opalescent curation enforcement pass
 
 - **Curation archive moves need a pre-archive ledger tripwire.** Three
@@ -223,6 +293,13 @@ Surfaced to the owner during the dedicated knowledge-curation pass; staged in
   structural, not merely an authoring defect; a good opener self-instructs
   cheap re-derivation from git and live surfaces instead of asking the next
   agent to believe it.
+  Further facets (2026-06-04, Arboreal curation pass): **openers degrade in
+  transit** — the pattern now holds at n=3 (Furnace, Mossy ×2): pasted openers
+  arrive duplicated/garbled mid-token; the thread record + plan carry the exact
+  text, so launch from canonical files and treat chat paste as lossy transport.
+  And **openers may compress canon, never silently extend it** — a net-new
+  commitment in an opener with no durable source is a proposal and must be marked
+  as such (sibling of no-unauthorised-scope-invention for the opener genre).
   `[captured: 2026-06-01 | source: distilled.md + Shaded/Windswept worked instances | target: clause:no-tombstones-for-removed-ideas OR continuity-practice | trigger: owner approval | size: S | status: owner-gated 2026-06-02 — surfaced to owner; awaiting explicit approval before promotion]`
 
 ## 2026-06-01 capture — seam-mapping plan template/archetype (Windswept Floating Summit)
@@ -826,7 +903,7 @@ Total live owner-gated items: 56.
   for a second named-receiver diagnostic handoff, or withdraw because PDR-048
   and PDR-046 already carry enough capture-at-the-moment guidance.
 - 2026-05-10; **Design optionality standalone rule sibling**.
-  `[captured: 2026-05-10 | source: legacy-backlog+pdr-058-surface-2 | target: rule:closed-shape-design-optionality | trigger: owner-direction-or-second-named-instance-with-cure-draft | size: S | status: owner-gated]`
+  `[captured: 2026-05-10 | source: legacy-backlog+pdr-058-surface-2 | target: rule:closed-shape-design-optionality | trigger: FIRED 2026-06-04 — owner-directed + 2nd named instance (Burnished EEF decision B) with cure draft | size: S | status: graduated 2026-06-04 -> .agent/rules/closed-shape-design-optionality.md (+ .claude/.cursor/.agents mirrors + RULES_INDEX)]`
   PDR-058 Surface 2 names the design-optionality failure mode and cure:
   author the closed shape the known instances need, and defer configurability
   until a real second instance forces decomposition. PDR-058 also says the
@@ -834,14 +911,27 @@ Total live owner-gated items: 56.
   PDR. The owner decision is whether to graduate the standalone rule now, keep
   watching for a second named instance with a concrete cure draft, or withdraw
   because PDR-058 plus existing consolidation rules are enough.
-- 2026-04-30; **Graduation-trigger criteria refinement**.
-  `[captured: 2026-04-30 | source: legacy-backlog | target: consolidate-docs-trigger-rubric | trigger: owner-appetite-for-flow-refinement | size: M | status: owner-gated]`
-  Owner observation: the default "second instance OR owner direction" trigger
-  can leave strong single-instance candidates waiting too long when the
-  principle articulation is already robust. The remaining decision is whether
-  to amend consolidate-docs trigger guidance now with evidence-density /
-  principle-quality / structural-coverage criteria, keep the current default,
-  or route a dedicated refinement pass.
+  **Second-instance evidence (2026-06-04, Burnished Glowing Spark, EEF decision B):**
+  a `guidance_report` node kind that deduplicated exactly one leaf corpus-wide
+  (`{title,url}`, no body/edges) and bought no v1 user value was the single
+  biggest complexity driver (heterogeneous `TNodeId`, second id type, second edge
+  type); inlining it collapsed all of that — the closed shape the one instance
+  needed, configurability deferred until a real second instance forces it. This is
+  a concrete second named instance WITH a cure draft, which is exactly the trigger
+  condition above; surfaced to owner this pass (does the trigger now fire?).
+- 2026-04-30; **Graduation-trigger criteria refinement — OWNER-RESOLVED 2026-06-04**.
+  `[captured: 2026-04-30 | source: legacy-backlog | target: consolidate-docs owner-walk discipline | trigger: FIRED 2026-06-04 — owner directed "owner-gated should be collapsed into owner-directed" | size: M | status: graduated 2026-06-04 (owner-directed)]`
+  Owner observation: the default "second instance OR owner direction" trigger can
+  leave strong single-instance candidates waiting too long. **Owner resolution
+  (2026-06-04, Arboreal pass):** the owner is happy to give input on owner-gated
+  items, so they are ACTIVELY WALKED with the owner when present, not parked
+  waiting for an external second instance — "owner-gated" must not function as a
+  graveyard. This collapses the owner-gated status into owner-directed: with the
+  owner present, the consolidate-docs owner-walk covers every owner-gated item
+  (owner may graduate, withdraw, or confirm genuinely-event-gated), not only those
+  whose sole trigger is owner-direction. Applied this pass via a
+  recommendation-first backlog digest; the consolidate-docs step-7 owner-walk
+  clause is the durable home.
 - 2026-04-29; **Trinity Active Principles and bootstrap structural
   extensions**.
   `[captured: 2026-04-29 | source: legacy-backlog+trinity-drift-report | target: core:practice+practice-lineage+practice-bootstrap+practice-verification | trigger: owner-approval-for-core-amendments | size: M | status: owner-gated]`
@@ -1825,8 +1915,11 @@ feedback (sidebar shape is the lightest); composes with `coordinator-role-thresh
 - **trigger-condition**: owner ratification (owner mandated the discipline
   this session — an owner-present consolidation is the venue), OR a second
   thread where a compiled artefact's unverified claim reaches build.
-- **status**: pending (owner-gated; already operational in the
-  school-data-search plan)
+- **status**: graduated 2026-06-04 -> PDR-089 §Decision 6 (compiled evidence
+  bases are frames; tier claims by verification status before relying). Routed as
+  a clause on PDR-089, not a new PDR, because that PDR already owned the substrate
+  (frame-capture; cure is the external check). Remains operational in the
+  school-data-search plan.
 
 ## Precedent-hunting / source-framing as an optionality-invention engine
 

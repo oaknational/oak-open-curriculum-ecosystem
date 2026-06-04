@@ -151,3 +151,88 @@ memory; hygiene = move detail from over-long index lines into the topic files.
 Surfaced to owner; not chased as repo fitness (out of `practice:fitness` scope).
 Recent captures verified present + indexed (value-first, no-cross-thread-analogy,
 check-bulk-schema, present-key-not-identity).
+
+## Buffer 4 — repo-continuity.md historical archive (HARD → SOFT)
+
+633/525 lines + 43842/35000 chars (hard) → 440/400 lines + 31020/35000 chars
+(soft) by archiving discharged 2026-06-01/02/03 session-close summaries per the
+file's own `split_strategy`. Ten discharged bullets moved verbatim to
+`archive/repo-continuity-current-state-2026-06-04-arboreal-history-trim.md`
+(conservation-verified: every lead phrase present in the archive); replaced in
+the live file with two consolidated pointer bullets. The two 2026-06-04 bullets
+kept as the current snapshot; Active Threads, Paused Threads, Next Safe Steps,
+invariants, and existing archive-pointers untouched. Each archived bullet's live
+pickup state verified present in § Next Safe Steps + thread banners before the
+move. Residual soft (~40 over target) is live operational state, correctly kept.
+
+## Audits — 7c thread-register freshness + 7e collaboration-state
+
+- **7c (thread-register freshness): CLEAN.** 18 records on disk; 17 indexed
+  (7 active + 10 paused). No stale active-thread identity (all <14 days; today
+  2026-06-04). No expired track cards (tracks dir empty bar README/.gitkeep). No
+  orphan/duplicate/missing-field flags. Active↔record correspondence intact. The
+  one unindexed record (`pr-90-build-fix-landing`) already carries a correct
+  retirement banner (check-7 satisfied). No remedy needed.
+- **7e (collaboration-state): cleared abandoned commit_queue residue.** 18
+  entries, ALL `phase: abandoned` + `expires_at` past (2026-06-02→04 morning),
+  0 active claims — the "abandoned commit-queue residue" repo-continuity flagged
+  as a pending cleanup. Cleared `commit_queue` to `[]` (claims array unchanged,
+  empty); JSON re-parses + schema-valid. Pure ephemeral-signal hygiene — the
+  commit intents are not knowledge (the work landed via commits or was abandoned
+  with working tree intact). No closed-claims archival needed (these are intents,
+  not claims).
+
+## Step 8 — Practice Core upstream review
+
+Reviewed (not skipped). Practice Core (`practice-core/`) carries **no** `.remember`
+references (the prior disablement sweep was thorough there). Session learning this
+window is curation-meta — routed as owner-gated PDR candidates (thoroughness-texture,
+correction-recursion, independence-over-review-count, dissolution-by-re-attribution,
+etc.); it **reinforces** existing Core (PDR-029 metacognition; knowledge-flow PDRs)
+rather than contradicting it. No Core amendment qualifies this pass — the candidates
+graduate to Core via the normal owner-approved PDR path when their triggers fire.
+
+**One genuine drift found + fixed**: `directives/user-collaboration.md` § Owner
+Working Style carried a stale provenance sentence ("Promoted 2026-04-29 from
+`.remember/recent.md` ... graduated from `distilled.md` on 2026-05-24") — a
+dead-path reference the .remember de-reference sweep missed, plus a
+provenance-pointer plus an "Eight" moving-target count. Removed cleanly (substance
+preserved), aligning with the .remember retirement, `feedback_no_provenance_pointers`,
+and `no-moving-targets-in-permanent-docs`. This is the "de-reference sweep must rg
+the whole tree" lesson closing its own loop.
+
+## Owner-walk + graduations executed (2026-06-04, owner-directed)
+
+The owner walked the ripe owner-gated items and directed three graduations, then
+directed that **owner-gated collapses into owner-directed** (owner-gated must not
+function as a graveyard; with the owner present, every owner-gated item is walked).
+
+- **Item 6 → graduated.** Minted `.agent/rules/closed-shape-design-optionality.md`
+  (+ `.claude`/`.cursor`/`.agents` mirrors + RULES_INDEX row), operationalising
+  PDR-058 §Surface 2. Evidence: legacy-backlog cluster + the Burnished EEF
+  `guidance_report`-node 2nd instance. `portability:check` passed.
+- **Item 46 + candidates 5 & 6 → graduated to PDR-089 §Decision 6** (a clause, not
+  a new PDR). Critical re-check caught that PDR-089 ("frame-capture; cure is the
+  external check") already owned the substrate — the non-duplication verifier had
+  only checked the register, not Practice-Core PDRs. So synthesis-tier-claims +
+  review-count-is-not-coverage + corrections-have-no-immunity-gradient routed as
+  one consolidated clause, not a duplicate PDR-090. A worked instance of PDR-089
+  itself (the inherited authority I had not grounded against was the highest risk).
+- **Item 7 → owner-resolved.** The owner-gated→owner-directed directive fired
+  item 7's owner-appetite gate; landed in the register + the consolidate-docs
+  step-7 owner-walk clause (the durable home).
+- **Candidate 2 (thoroughness-texture)** cross-referenced: concept now in PDR-089
+  §Context obs 2 + §Decision 6; the open facet is the per-check positive-attestation
+  enforcement mechanism (not yet built) — kept as an enforcement candidate.
+
+### Fresh-session queue (owner-confirmed: continue in a fresh session)
+
+1. **Open the action-time-structural-interrupt design lane** (3rd greenlit
+   graduation; not started) — immune-system architecture; deserves fresh context.
+2. **Walk the rest of the owner-gated backlog** under the collapse directive —
+   present a recommendation-first digest; the honest default for the
+   autonomy-primitive / Director cluster (P1–P6, etc.) is "genuinely event-gated,
+   needs a real second instance" (graduating one-instance observations would be
+   premature-crystallization), but the owner may override any.
+3. Grounding for the fresh session: this ledger + repo-continuity § Deep
+   Consolidation Status + § Next Safe Steps › Agentic-Engineering Curation.

@@ -65,6 +65,7 @@ without proportional value.
 | `.agent/rules/apply-architectural-principles.md`                           | always-on      | —                                                                                                |
 | `.agent/rules/capture-practice-tool-feedback.md`                           | always-on      | —                                                                                                |
 | `.agent/rules/check-singleton-per-window.md`                               | always-on      | —                                                                                                |
+| `.agent/rules/closed-shape-design-optionality.md`                          | always-on      | —                                                                                                |
 | `.agent/rules/comms-all-channels-watcher.md`                               | trigger-loaded | Team session bootstrap                                                                           |
 | `.agent/rules/consolidate-at-third-consumer.md`                            | always-on      | —                                                                                                |
 | `.agent/rules/continuity-surface-commits-as-orphans.md`                    | always-on      | —                                                                                                |

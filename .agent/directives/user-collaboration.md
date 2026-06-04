@@ -18,11 +18,9 @@ and discuss it with the owner rather than silently choosing one.
 
 ## Owner Working Style
 
-Eight durable identity assertions about how the owner approaches engineering
-decisions in this repository. Promoted 2026-04-29 from `.remember/recent.md`
-candidates after multi-session validation, with the final two 2026-05-22
-owner-profile observations graduated from `distilled.md` on 2026-05-24. Treat
-these as load-bearing context when interpreting owner direction:
+Durable identity assertions about how the owner approaches engineering
+decisions in this repository. Treat these as load-bearing context when
+interpreting owner direction:
 
 - **Phased, gated activation over big-bang integrations.** The owner
   creates explicit decision gates before rolling out large

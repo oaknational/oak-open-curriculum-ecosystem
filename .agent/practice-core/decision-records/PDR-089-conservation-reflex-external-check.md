@@ -20,6 +20,20 @@ do not soften it);
 (deferral-honesty — a softened or deferred wrong shape is a hidden non-action of
 exactly the kind that discipline forbids).
 
+## Amendment Log
+
+- **2026-06-04** (Accepted; owner-directed, Arboreal curation pass): **Decision 6
+  — compiled evidence bases are frames; tier their claims by verification
+  status.** Graduates the synthesis-tier-claims doctrine (pending-graduations
+  item 46) and folds in two experience-corpus sharpenings
+  (review-count-is-not-coverage; corrections-have-no-immunity-gradient) as facets
+  of this PDR's existing principle rather than minting a duplicate PDR. Routing
+  rationale: the doctrine was about to be authored as a new PDR-090; grounding
+  revealed PDR-089 already owned the substrate (a compiled artefact is an
+  inherited frame; the cure is the external check), so per
+  `new-rule-vs-pdr-clause` the correct home is a clause here. A falsifiability
+  axis is added for Decision 6.
+
 ## Context
 
 In remediation, review, and decision-reshaping work, agents repeatedly preserve,
@@ -80,6 +94,36 @@ to a governance decision:
    zero evidence of correctness. Scrutiny, not blanket demolition, and never
    conservation-by-default: a genuinely correct shared foundation stays; a wrong
    shape is replaced.
+
+6. **A compiled evidence base is a frame; tier its claims by verification status
+   before relying on it.** A synthesis report, research synthesis, or any artefact
+   that *compiles* claims from sources does not *certify* them. Relying on a
+   compiled claim because the artefact feels finished and authoritative is
+   frame-capture (Decisions 1–3 applied to a document rather than a plan). Such
+   artefacts must distinguish (a) primary-verified facts, (b) single-source
+   claims, and (c) frame-dependent convergences — and a convergence inherits the
+   frame it was voted in, so when a shared premise is invalidated every
+   convergence downstream of it must be re-graded, not inherited. High-stakes
+   (b)/(c) claims are primary-verified before the artefact is *delivered* or
+   relied on for a build; the verification tiering IS the external check
+   (Decision 3) applied to the artefact. Two corollaries of Decision 3, made
+   explicit: **review-count is not coverage** — "zero findings" from a reviewer
+   group briefed *inside* the author's frame means "clean with recall < 1", not
+   "clean", because a same-frame reviewer amplifies the author's confidence
+   without adding independent coverage (the value is an independent frame, or a
+   single contrary fact, not review volume); and **a correction has no immunity
+   gradient** — every corrective act is a new first act with respect to the
+   failure mode it addresses, so the corrective edit earns the same external check
+   as the original (Decision 4's propagation requirement applied to the
+   correction's own correctness).
+
+   **Falsifiability (Decision 6).** Shown wrong if compiled artefacts whose claims
+   are not tiered reliably produce correct high-stakes decisions, or if same-frame
+   reviewer groups reliably reach recall ≈ 1 (independent framing adds no
+   coverage). Confirmed by a high-stakes build or decision that relied on an
+   un-verified compiled claim and failed — as in the 2026-06-04 school-data-search
+   gate session, where a primary-verification pass overturned three
+   already-recorded gate decisions.
 
 ## Consequences
 

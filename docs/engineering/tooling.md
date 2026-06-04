@@ -2,6 +2,11 @@
 
 All tooling MUST use the latest versions, use `pnpm outdated` to check for updates.
 
+> `pnpm outdated` / `pnpm -r outdated` (the repo's `outdated` script) exits with a
+> non-zero code when it finds outdated packages. That is the command's normal
+> "updates available" signal, not a failure — scripts and CI must not treat the
+> exit code as an error.
+
 ## Build System
 
 - [pnpm](https://pnpm.io) - Package manager and workspace orchestration
