@@ -113,3 +113,17 @@ staging surface; fitness remains a routing signal, not a reason to avoid capture
   (`feedback_value_first_existing_is_malleable`); PDR/rule candidate if it recurs
   cross-platform. Connects to LTAE, premature-crystallization,
   existence-is-not-correctness.
+- **Review from the artefact's own value, not by analogy** (2026-06-04,
+  school-data-search deep review — Fiery Sparking Caldera). In a review, reason
+  from THIS artefact's value + the owner's frame; do NOT import doctrines or
+  analogies from other threads. I twice imported a cross-thread frame —
+  value-trace "no consumer" as a blocker, and the EEF value-reckoning as a lens
+  — and was corrected both times; the need + value were owner-settled and the
+  work had nothing to do with EEF. "No named in-repo consumer" is not a defect
+  for horizontal infrastructure whose user-value is a self-evident action
+  serving a class of consumers. The convenient-claim failure surfaced as
+  pattern-completion: the empty consumer-grep *felt* like evidence because it
+  flattered the frame I arrived with. Routing: Claude auto-memory
+  (`feedback_no_cross_thread_analogy_in_review`); PDR/rule candidate (review or
+  metacognition surface) if it recurs. Connects to ground-convenient-claims,
+  value-first-existing-is-malleable, premature-crystallization.
