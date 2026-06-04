@@ -5,8 +5,9 @@ The D4 artefact of
 ratified graph capability shape derived from the owner-ratified D3 MCP surface
 ([`eef-d3-mcp-contract.md`](eef-d3-mcp-contract.md)) and the D2 raw-data
 foundation ([`eef-d2-source-path-table.md`](eef-d2-source-path-table.md)).
-**Status: ratifiable — pending owner ratification of the value → MCP → graph
-derivation** (plan D4 acceptance, final bullet). This is a **non-code**
+**Status: RATIFIED (owner, 2026-06-04)** — the value → MCP → graph derivation is
+accepted (plan D4 acceptance), with `type-expert` + architecture review run that
+session. This is a **non-code**
 deliverable: it ratifies names, types, and policy. D5 builds the new graph-core
 layer fresh as TDD cycles; D6 implements the two Zod calls. No source code
 changes here.
@@ -58,8 +59,8 @@ edges + frontier remain; only the report-node complication is removed.
 heterogeneous node/edge model** (multiple node kinds, a node-id policy across
 kinds, typed inter-kind edges) is therefore **not** defined by EEF D4. It is
 deferred to, and explicitly owned by, the graph-tools substrate migration —
-[`graph-tools-substrate-migration.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/future/graph-tools-substrate-migration.plan.md)
-§"Deferred from EEF D4: fundamental node/edge model + value-driven graph shapes".
+[`graph-tools-value-redesign.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/future/graph-tools-value-redesign.plan.md)
+§"Heterogeneous node/edge model (scoped deliverable; core now, reconciliation at promotion)" (todo `define-heterogeneous-node-edge-model`, which carries the must-not-drop obligation).
 That plan is the first point a multi-entity / value-driven graph is built; the
 model MUST be defined there and MUST NOT be assumed-inherited from EEF (which
 deliberately lacks it). The owner-directed enablement that the graph data objects
@@ -74,18 +75,30 @@ domain-generic: parameterised over `TNode`, an associated `TNodeId extends
 string`, and `TEdgeType extends string`; **no EEF- or MCP-specific type names in
 the substrate** (ADR-041 / ADR-179).
 
-**Why a polymorphic substrate contract survives (it is earned, not premature):**
-graph-core is the designated multi-corpus substrate (ADR-179), and the traversal
-seam has **two real, explicitly-sequenced consumers** — not the speculative
-adapters the old contract was built for. EEF (this plan) and the **prerequisite /
-prior-knowledge graph** (`get-prior-knowledge-graph`: 1,607 unit nodes keyed by
-`unitSlug` + 3,452 typed `prerequisiteFor` edges — a DAG, verified this session)
-are both natural `subgraph(rootIds, depth)` consumers: "what is the learning path
-to algebra?" is bounded BFS exactly as EEF's evidence subgraph is. With two real
-graph consumers in hand and the migration sequenced, `consolidate-at-third-consumer`
-is **satisfied** — the seam is consolidated **now**, in the substrate, not
-deferred. D4 still adds **no** surface beyond what these consumers use (Decision
-6); the generality is earned by real consumers, not opened ahead of them.
+**Why a polymorphic substrate contract is earned (not premature):** graph-core is
+the designated domain-generic multi-corpus substrate (ADR-179), which forbids EEF-
+or MCP-specific type names inside it. EEF needs its node ids and edge types to flow
+to the boundary as `EefStrandId` / `'related_strand'`, but the live string-typed
+contract (`interface.ts:62` `rootIds: readonly string[]`; `types.ts:86-88` edge
+`source`/`type`/`target: string`) widens them to `string` and loses that type
+information. Parameterising graph-core over `TNodeId`/`TEdgeType` is therefore the
+**minimal closed shape** that gives EEF typed-id flow *without* putting an EEF name
+in the substrate (ADR-179): the generality is forced by one real consumer plus the
+substrate boundary, not opened speculatively. PDR-058 §Surface 2 (design
+optionality) tests whether a concrete second instantiation is nameable in scope —
+it is: the **prerequisite / prior-knowledge graph** (`get-prior-knowledge-graph`:
+1,607 `unitSlug`-keyed unit nodes + 3,452 typed `prerequisiteFor` edges — a DAG,
+verified this session) binds the same generic with distinct `TNodeId`/`TEdgeType`
+(owner-confirmed 2026-06-04: the redesigned prerequisite **and** misconception
+tools will be graph-based — genuine future `subgraph` consumers of this substrate —
+sequenced *after* EEF's first delivery, which uses the current whole-graph tools
+as-is; prior-knowledge is thus a confirmed-and-sequenced consumer, not yet wired). Two concrete instantiations with different type arguments
+is the opposite of the Surface 2 anti-pattern (a generic where every call site
+instantiates the same concrete type). D4 still adds **no** surface beyond what
+these consumers use (Decision 6). `consolidate-at-third-consumer` governs
+*extracting* shared mechanics across corpora and has **not** fired here (it
+triggers at the third consumer); it is not the basis for this contract, and
+primitive-consolidation across corpora stays a later, third-consumer decision.
 
 **The substrate's value is bounded, relevant, token-efficient retrieval** — return
 the subset the agent needs, never a whole corpus. The existing tools today return
@@ -130,9 +143,10 @@ threading).
 | `types.ts:79` | `GraphManifest.sparseRelationsByNodeId` | `readonly string[]` | `readonly TNodeId[]` |
 | `types.ts:74` | `GraphManifest.edgeTypes` | `readonly string[]` | `readonly TEdgeType[]` |
 
-The last two are the **manifest** — node-id- and edge-type-bearing; they generify
-**iff** the substrate retains `manifest()` for the migration consumers (see the
-operations note below — EEF does not consume it). `SubgraphError.SubgraphDepthExceeded`
+The last two are the **manifest** — node-id- and edge-type-bearing; they would
+generify as shown **when** the migration re-adds `manifest()` for its consumers.
+D5's fresh contract does not carry them (no EEF consumer — see the operations note
+below). `SubgraphError.SubgraphDepthExceeded`
 (`depth`/`limit`, both `number`) is unaffected. The EEF-consumed result/error
 types carry `TNodeId`/`TEdgeType` all the way out — no `string` widening at the boundary.
 
@@ -150,9 +164,10 @@ the corpus, not from a manifest). Per Decision 6 they are **out of the EEF (D5)
 operation set** and D5 does not build them. Their plausible consumers are the
 sequenced migration tools, which return a whole graph + `stats` (the existing
 `MisconceptionGraphStats` / `PriorKnowledgeGraphStats`) — a manifest/full-listing
-shape, not a subgraph query. Whether the substrate retains/generifies
-`GraphManifest` is decided when the migration lands those consumers; D4 neither
-requires nor removes it for EEF.
+shape, not a subgraph query. Because D5 rebuilds the contract fresh and EEF does
+not consume `manifest()`, the new `GraphView` does **not** include it and D5
+carries no dormant `GraphManifest` type; the migration plan re-adds and owns both
+when its first consumer is built (homed there, not left open here).
 
 No `rank`/`explain`/`compare` primitives exist (the speculative `EvidenceCorpus`
 op types + `NotImplementedYet` were removed in D2; `eef-strands/types.ts` is
@@ -171,7 +186,7 @@ compatibility shim, no wrapper).
 | `GraphView<TNode>` | `interface.ts:58` | **Deleted and re-defined** as `GraphView<TNode, TNodeId, TEdgeType>` carrying the threaded ids |
 | `SubgraphResult<TNode>` | `types.ts:83` | **Deleted and re-defined** as `SubgraphResult<TNode, TNodeId, TEdgeType>` (edge `source`/`target` → `TNodeId`, `type` → `TEdgeType`) |
 | `SubgraphError` | `types.ts:93` | **Deleted and re-defined** as `SubgraphError<TNodeId>` (`rootId` → `TNodeId`) |
-| `GraphManifest` | `types.ts:72` | **Not EEF-consumed** — retained/generified as `GraphManifest<TNodeId, TEdgeType>` (`sparseRelationsByNodeId` → `TNodeId[]`, `edgeTypes` → `TEdgeType[]`) **only if** the migration retains `manifest()`; D5 does not build it for EEF (Decision 6) |
+| `GraphManifest` | `types.ts:72` | **Absent from the D5 fresh contract** — no EEF consumer (Decision 6 / PDR-058 §Surface 2). The migration plan re-adds and owns `manifest()`/`GraphManifest` (generified as `GraphManifest<TNodeId, TEdgeType>`: `sparseRelationsByNodeId` → `TNodeId[]`, `edgeTypes` → `TEdgeType[]`) when its first consumer is built; D5 carries no dormant manifest surface |
 | `NodeProjection<TNode, Depth>` | `types.ts:61` | **Retained unchanged** — shaped by `TNode` only; justified: projection paths are independent of the id/edge-type space |
 | `DeepKeyPath<T, D>` | `types.ts:36` | **Retained unchanged** — same justification |
 
@@ -230,8 +245,9 @@ source: EefStrandId; target: EefStrandId }`). Guidance reports are **not** edges
   - Floor (30/30): `id`, `name`, `slug`, `eef_url`, `headline` (the six universal
     fields — `impact_months` incl. `null` on 4/30, `cost_rating`, `cost_label`,
     `evidence_strength_rating`, `evidence_strength_label`, `headline_summary` —
-    plus `number_of_studies` where the corpus carries it, 2/30), `definition`,
-    `key_findings`, `tags`.
+    plus `headline.number_of_studies` where the corpus carries it, 2/30; a distinct
+    `school_context_relevance.number_of_studies` on 2 other strands travels whole
+    inside that field, not here), `definition`, `key_findings`, `tags`.
   - Sparse (optional, presence per corpus): `effectiveness` (7/30; `summary`,
     `mechanisms`), `implementation` (4/30; `key_considerations` 4/30,
     `common_pitfalls` 2/30, `digital_technology_application` 1/30),
@@ -304,9 +320,11 @@ each derive from their source by **one** Zod call, `satisfies`-tied to the
 payload type; each root serialises to `type: object`; these two declarations are
 the only Zod in the EEF graph stack; they live in the curriculum MCP consumer
 layer, never in the substrate (ADR-179). Named D6 hazard preserved:
-`members[].headline.impact_months` carries the corpus value `null` (4/30), so its
-**value** type is `z.nullable(...)`, never `z.optional(...)` — value-nullability
-and field-optionality are orthogonal, never collapsed into one call.
+`members[].headline.impact_months` carries the corpus value `null` (4/30) **and**
+the negative literal `-2` (1/30 — `eef-tl-repeating-a-year`), so its **value** type
+is `z.nullable(z.number())` with **no** lower bound — never `z.optional(...)`, and
+never `z.number().min(0)` / `.nonnegative()` (either would reject the `-2`).
+Value-nullability and field-optionality are orthogonal, never collapsed into one call.
 
 ## The minimal operation set (serves every D3 surface)
 

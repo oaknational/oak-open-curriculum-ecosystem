@@ -39,7 +39,7 @@ todos:
     depends_on: [d1-value-impact-contract, d2-typed-raw-corpus-foundation]
   - id: d4-graph-capability-contract
     content: "RATIFY (non-code) the correct graph capability shape from D3, defining the new query layer that replaces the live `graph-view` query-contract files (D5 deletes them and builds the replacement fresh). Split the target contract into graph-core primitives (domain-generic lookup/subgraph/frontier/result/error surfaces) and EEF/Oak binding operations, so no EEF- or MCP-specific method lands in shared graph-core. Ratify the minimal graph-native EEF view contract before D5: owner package, node id/kind policy, edge/frontier shape, payload/provenance policy, and named schema-subset/schema-builder surfaces for D3/D6. Define the target domain-generic graph-core contract parameterised over TNode, TNodeId extends string, and TEdgeType; public graph-core result and error types must carry TNodeId, so the EEF binding carries EefStrandId through subgraph roots, edge endpoints, frontier refs, strand lookup inputs, and root-not-found errors after boundary narrowing. D5 builds the new graph-core query layer in TDD cycles with real operations only, each implemented with real graph-derived logic and tests or absent. The calling agent selects finite corpus keys before the tool boundary, so the tool operates on finite corpus values directly. Record the consumer-impact finding as a HARD gate before interface changes land: verified ZERO external-consumer blast radius, with bounded IN-PACKAGE graph-core edits named. An architecture reviewer signs off the operation set + consumer-impact record. Enumerate which graph-view exports are deleted/renamed/freshly defined by the new contract; a result type may keep the old name `SubgraphResult` only if D4 freshly ratifies that name and structure from the new graph contract. Contract artefact authored at eef-d4-graph-capability-contract.md (ratifiable; pending owner ratification + type-expert/architecture-reviewer sign-off); it records decisions/groundings over the D4 body prose — decision B (2026-06-04): EEF v1 is a homogeneous strand graph (TNodeId = EefStrandId, related_strand only), guidance reports inline not a node kind, retiring the ninth bound name (nine to eight) and homing the deferred fundamental heterogeneous node/edge model in the migration plan; a three-site (not two) consumer-impact edit set; the GraphView substrate seam justified by two real sequenced traversal consumers (EEF + prerequisite DAG) under the governing value of bounded token-efficient retrieval; and manifest()/GraphManifest out of the EEF operation set (no EEF consumer)."
-    status: pending
+    status: completed
     depends_on: [d3-mcp-tool-resource-contract]
   - id: d5-graph-construction-methods
     content: "Ingest D2's typed raw-data foundation into the D4-ratified deterministic graph-native EEF projection and implement the D4-ratified graph operations. The construction/adaptation boundary is explicit and pure: it may materialise a standardised graph-native shape or expose a lazy view, but graph operations, MCP schemas, traversal semantics, and provenance derive from the graph-native view rather than scattered assumptions about the raw corpus. The raw data is definitively not the graph contract, even where a graph-native projection retains raw fields verbatim; the graph-native view must be a typed projection from EefStrand, EefStrandById, EefStrandId, and derived edge facts, preserving exact ids and per-strand payload relationships. Implement graph-core public result/error types with TNodeId so EEF roots, edge endpoints, frontier refs, lookup inputs, and root-not-found errors are EefStrandId, not broad string. Every graph operation is implemented with real graph-derived logic and tests, or it is absent. Surface source attribution and caveats as additive provenance on the subgraph envelope without flattening per-strand evidence fields unless the graph-native projection preserves a named type-level link to the raw source strand. Co-land replacement tests: a graph-constructor test over the real corpus, typed-id/result compile-time proof, and a provenance-on-envelope test."
@@ -244,8 +244,9 @@ exploration is isolated to D3 and D4 and is named there as explicit steps.
 
 6. **graph-core's query layer is built fresh from real operations; the shared RDF
    substrate stays.** D4 ratifies the graph query shape the MCP surface needs,
-   parameterised over `TNode`, `TNodeId extends string`, and `TEdgeType` (PDR-058:
-   a contract carries only what a real consumer uses); D5 builds the domain-generic
+   parameterised over `TNode`, `TNodeId extends string`, and `TEdgeType`
+   (PDR-058 §Surface 2 design optionality: author the closed shape the real
+   instances need); D5 builds the domain-generic
    graph-core query layer with real graph-derived operations and tests. The live
    `graph-view` query-contract files (interface, types, index, contract test) and
    the EEF-local adapter are still in the tree; the contract's only consumers are
@@ -1103,10 +1104,10 @@ structuredContent-only, not dual-content output.
 **Proof:** `non-code` (owner-ratified decisions, written MCP contract artefact,
 SDK/app verification record, and `mcp-expert` sign-off).
 
-### D4 - Graph capability shape (exploration; derived from D3; replaces the graph-core query contract)
+### D4 - Graph capability shape (ratifiable; pending owner ratification; derived from D3; replaces the graph-core query contract)
 
-**Artefact (ratifiable; pending owner ratification + `type-expert`/architecture-reviewer
-sign-off):** the ratified contract is written at
+**Artefact (RATIFIED by owner 2026-06-04; `type-expert` + architecture review run
+that session):** the ratified contract is written at
 [`eef-d4-graph-capability-contract.md`](eef-d4-graph-capability-contract.md) — the
 new domain-generic graph-core query surface, the export-disposition table, the
 graph-native EEF view (single `strand` node kind, `related_strand` edge type,
@@ -1122,12 +1123,16 @@ retires the ninth bound name (`eefGuidanceReportNodeSubset`; nine → eight) and
 deferred and **homed** in the migration plan — it must not be dropped; (2) the
 consumer-impact edit set has **three** sites, not two (the third is the
 `graph-corpus-sdk` barrel re-export of `GraphView`); (3) the polymorphic
-`GraphView` substrate seam is justified — **not** premature — by two real,
-sequenced traversal consumers (EEF + the prerequisite/prior-knowledge DAG, both
-natural `subgraph` consumers; `consolidate-at-third-consumer` satisfied), framed
-by the substrate's governing value — bounded, relevant, token-efficient retrieval —
-with the bounding mechanism chosen per corpus from the retrieval value, not a
-traversal/non-traversal label; (4) `manifest()`/`GraphManifest` have
+`GraphView` substrate seam is **earned, not premature** — graph-core is the
+ADR-179 multi-corpus substrate (no EEF/MCP names in it), and EEF's own need for
+typed `EefStrandId`/`related_strand` flow to the boundary (the live `string`-typed
+contract loses it) forces parameterising over `TNodeId`/`TEdgeType` as the minimal
+closed shape for one real consumer; the prerequisite/prior-knowledge DAG is a
+nameable concrete second instantiation (PDR-058 §Surface 2), with the bounding
+mechanism chosen per corpus from the retrieval value — bounded, relevant,
+token-efficient retrieval — not a traversal/non-traversal label.
+`consolidate-at-third-consumer` (extraction across corpora) has not yet fired;
+(4) `manifest()`/`GraphManifest` have
 no EEF consumer and are out of the EEF (D5) operation set per Decision 6 (their
 consumer, if any, is a migration tool).
 
@@ -1188,7 +1193,7 @@ the shared primitives.
   machinery is removed and EEF stays a homogeneous strand graph. The **fundamental
   heterogeneous node/edge model** (multiple node kinds, a cross-kind node-id policy,
   typed inter-kind edges) is deferred and homed in
-  [`graph-tools-substrate-migration.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/future/graph-tools-substrate-migration.plan.md)
+  [`graph-tools-value-redesign.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/future/graph-tools-value-redesign.plan.md)
   — it must not be dropped.
 - **Verify consumer impact first (hard gate):** confirm what consumes graph-core's
   query contract. Verified state: graph-ingest and graph-project consume only the
@@ -1234,11 +1239,9 @@ the shared primitives.
   query-contract test, and the `graph-corpus-sdk` `GraphView` re-export.
 - Graph-core primitives and EEF/Oak binding operations are separated; the minimal
   graph-native EEF view contract is ratified before D5 starts.
-- `related_guidance_reports` are modelled as a `guidance_report` node kind with a
-  typed strand→report edge, deduplicated across strands (the same report, e.g.
-  *Making Best Use of Teaching Assistants*, is shared by
-  `eef-tl-one-to-one-tuition` and `eef-tl-teaching-assistant-interventions`), and
-  surfaced in the teacher-facing payload (V1).
+- `related_guidance_reports` travel **inline** in the strand member payload as
+  `{ title, url }[]` (decision B, 2026-06-04), folded into `eefEvidenceEnvelopeSubset`
+  and surfaced in the teacher-facing payload (V1) — not a separate node kind or edge.
 - Graph-core public result/error types preserve `TNodeId`, proven by the D5
   compile-time tests for `EefStrandId`.
 - The existing string-typed `GraphView`/`SubgraphResult`/`SubgraphError` are
@@ -1344,9 +1347,10 @@ If D5/D6 co-land, also run
 
 **Folded detail:** D6 carries the dual-content `universal-tool-shared.ts` path,
 the `outputSchema` registration gap this deliverable must replace/extend, the
-`related_guidance_reports` value (modelled fresh as a `guidance_report` node kind
-in D4 — `citation-shape.ts` was already deleted in D2, so there is no
-citation-shape residue to preserve), and the ADR-179 boundary that keeps MCP types
+`related_guidance_reports` value (inline in the strand member payload per decision
+B — **not** a `guidance_report` node kind; `citation-shape.ts` was already deleted
+in D2, so there is no citation-shape residue to preserve), and the ADR-179 boundary
+that keeps MCP types
 out of substrate packages.
 
 **Do (TDD cycles):**
@@ -1531,8 +1535,9 @@ Artefacts already in the tree, so the next session does not rediscover them:
   contract exposes `manifest` + `subgraph`. Its RDF substrate is used by
   `graph-ingest` and `graph-project`; the query-contract replacement (D4 specifies
   the new shape, D5 builds it fresh) has zero external-consumer blast radius, with
-  bounded in-package edits remaining (graph-core's own barrel and the `graph-view`
-  contract test).
+  bounded in-package edits remaining at **three** sites (graph-core's own barrel,
+  the `graph-view` contract test, and the `graph-corpus-sdk` `GraphView` re-export
+  at `src/index.ts:14`, per the D4 consumer-impact finding).
 - **Post-D2 truth (committed `9019bb86`):** the old list surface is gone. The
   list-shaped `eef-explore-evidence-for-context` tool, the whole
   `oak-curriculum-sdk/src/mcp/evidence-corpus/` module (`projection.ts`,
@@ -1763,7 +1768,7 @@ The plan is done when D0-D7 are complete and:
 - ADR-038 (compile-time construction, generalised), ADR-153 (constant-type
   predicate), ADR-028 (Zod deferral, corroborating), ADR-041 (workspace/import
   direction), ADR-173 (graph topology), ADR-179 (transport-agnostic substrate),
-  PDR-058 (premature-generalisation / optionality), ADR-117 (plan architecture).
+  PDR-058 (three-tier optionality decomposition; §Surface 2 design optionality), ADR-117 (plan architecture).
 
 ## Plan-Body First-Principles Check
 

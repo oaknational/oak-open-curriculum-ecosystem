@@ -300,7 +300,7 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Twilit Cascading Supernova / migration-plan-overhaul / 2026-06-04 (prior: Burnished Glowing Spark 2026-06-04, Lacustrine Swimming Beacon 2026-06-03, Seaworthy Swimming Sextant 2026-06-03, Galactic Glowing Prism + Opalescent Cascading Planet + Stellar Waning Planet + Silvered Lurking Mask 2026-06-02) |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Shadowed Creeping Secret / eef-d4-whole-plan-review-then-ratify / 2026-06-04 (prior: Twilit Cascading Supernova migration-plan-overhaul 2026-06-04, Burnished Glowing Spark 2026-06-04, Lacustrine Swimming Beacon 2026-06-03, Seaworthy Swimming Sextant 2026-06-03, Galactic Glowing Prism + Opalescent Cascading Planet + Stellar Waning Planet + Silvered Lurking Mask 2026-06-02) |
 | `oak-kg-ontology-planning-review` | Plan the `oak-kg`/ontology work, starting with a deep review of the Oak Curriculum Ontology repo (separate concern from the bulk-derived graph redesign) | [record][oak-kg-ontology] | claude / Opus 4.8 / Twilit Cascading Supernova / thread-opener-brief-only / 2026-06-04 — **opened, not started; deep review is a fresh session** |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Blustery Lifting Gale / skills-taxonomy-and-distribution / 2026-06-03 (prior: Umbral Whispering Silhouette 2026-06-01) |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | codex / GPT-5 / Opalescent Illuminating Prism / dedicated-knowledge-curation / 2026-06-03 (prior: Lacustrine Swimming Beacon, Ashen Burning Magma, Solar Glowing Meteor, Stratospheric Buffeting Breeze, Lofty Sweeping Falcon, Shaded Veiling Mirror) |
@@ -440,9 +440,13 @@ discipline + licensing guardrail. See the
    `graph-tools-value-redesign.plan.md` (2026-06-04, Twilit Cascading Supernova);
    the `graph-migration-plan-overhaul.plan.md` metaplan is COMPLETED.** The
    node/edge model is now scoped there as one-bulk-graph + views with a deliberate
-   identity model. **The next session reviews D4 + the EEF plan as a whole, then
-   ratifies; D5 the session after.** The redesign stays parked on EEF D6 + D7. See the
-   `eef` thread banner.**
+   identity model. **D4 + the whole EEF plan were REVIEWED and D4 OWNER-RATIFIED
+   (2026-06-04, Shadowed Creeping Secret): 11 review corrections applied, the EEF
+   and value-redesign plans verified coherent (manifest disposition mirrored both
+   ways), the `d4` todo flipped to `completed`. D5 — build the new graph-core query
+   layer (`GraphView<TNode, TNodeId, TEdgeType>`, `subgraph` only) + the EEF
+   strand-view fresh — is the next safe step.** The redesign stays parked on EEF
+   D6 + D7. See the `eef` thread banner.**
 7. **Graph-estate-consolidation: t2–t5+t7 EXECUTED and pushed at `c3b78eec`;
    scoped t8 verification PASSED (2026-06-02, Opalescent Cascading Planet)**.
    The estate reads true in one pass: eleven plans archived with banners +

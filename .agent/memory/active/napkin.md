@@ -449,3 +449,47 @@ fitness_content_role: drainable-buffer
   repo root. Verify the auto-memory absolute path on every memory write. Cure
   applied in-session: relocated the file to the correct dir (content preserved),
   removed the stray.
+
+## Session: 2026-06-04 - EEF D4 review-then-ratify + cross-plan coherence (Shadowed Creeping Secret)
+
+### Patterns to Remember
+
+- **Ground a "premature/inherited" verdict in the rule's TEXT, not its name.**
+  Four reviewers flagged D4's substrate justification as misciting
+  `consolidate-at-third-consumer` ("satisfied" at two consumers — it fires at the
+  third). The decisive resolution came from reading PDR-058 §Surface 2's actual
+  text (its nameable-concrete-second-instantiation test), which showed the generic
+  is EARNED, not napkin-trap-#1 inherited shape: ADR-179 forbids EEF names in the
+  substrate, so EEF's own typed-id-flow need FORCES parameterising over
+  `TNodeId`/`TEdgeType`; prior-knowledge is the nameable second binding. The rule
+  NAME was garbled (fred had a prior miscitation on this exact PDR); the rule TEXT
+  decided. Sharpens `validate-specialist-findings-before-acting` +
+  `ground-convenient-claims`.
+- **Adversarial de-escalation earned its keep**: the verify stage overturned 3 of
+  19 specialist findings as false positives and cut several material→minor —
+  specialists-over-escalate confirmed at n+1. Re-grounding each finding against the
+  artefact (not the reviewer's severity) produced the honest verdict.
+- **Cross-lane coherence held by shared substrate, not direct sync**: my D4
+  contract and Twilit's redesign plan independently converged on "`manifest()`
+  absent at D5; the redesign re-adds it when its first view is built" — the thread
+  records + bidirectional plan cross-references carried it. Worked instance for
+  comms-ceremony-minimal: reading both artefacts confirmed coherence; no live sync.
+
+### Vigilance / What Worked
+
+- **Moving window benign x2, each verified before proceeding**: HEAD moved twice
+  mid-session (school-data-search `1839e9b8`; Twilit's redesign+continuity
+  commits). Twilit's `12c745f0` swept my uncommitted thread-record banner into
+  their commit — content preserved (verified present in HEAD), not lost; my
+  d4-flip + corrections stayed uncommitted (mine). "Say *I* haven't committed,
+  never *nothing* is committed" held again.
+
+### Owner Insight (carried forward; homed in auto-memory + Twilit's redesign plan)
+
+- The **bulk source is a far richer graph substrate than today's generated corpora**
+  (lossy projections). EEF's first delivery — and **only** the first — runs on the
+  current prereq/misconception tools as-is; the redesign should be **open to
+  significant but still graph-shaped change** (reshape for value from the bulk
+  richness; design-in-our-power, not behaviour-preservation). Homed:
+  `feedback_check_bulk_schema_before_declaring_data_unsourced` (extended) + the
+  value-redesign plan.
