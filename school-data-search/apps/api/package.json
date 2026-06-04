@@ -29,15 +29,9 @@
     "lint:fix": "eslint --fix ."
   },
   "dependencies": {
-    "@oaknational/env": "workspace:*",
-    "@oaknational/env-resolution": "workspace:*",
-    "@oaknational/logger": "workspace:*",
-    "@oaknational/observability": "workspace:*",
-    "@oaknational/result": "workspace:*",
     "@oaknational/school-data-search-client": "workspace:*",
     "@oaknational/school-data-search-contracts": "workspace:*",
-    "@oaknational/school-data-search-sdk": "workspace:*",
-    "zod": "^4.4.3"
+    "@oaknational/school-data-search-sdk": "workspace:*"
   },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",

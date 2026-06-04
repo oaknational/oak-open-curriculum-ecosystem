@@ -123,7 +123,7 @@ Fresh capture starts below.
   builder-readiness when the ask was only "report, then stop". Held as a named
   inference, not a given: "session titled D5" is not "build D5 now".
 
-## 2026-06-04 — subagent DISCREPANCY-claims are the highest-risk relay class (Windward Gliding Squall)
+## 2026-06-04 — subagent DISCREPANCY-claims are highest-risk relay class (Windward Gliding Squall)
 
 - **Sharpened corollary to the felt-authority entry above, found one turn later
   by reading the primary sources I had only relayed.** When I finally read the D4
@@ -186,6 +186,25 @@ Fresh capture starts below.
   hook (PDR-044 §2026-05-21 approval-vs-refusal; this impl hard-blocks). Use neutral
   names ("hedging-vocabulary trip-list", "owner-only marker") when writing about the
   patterns the hook guards.
+
+## 2026-06-04 — install bootstrap must not enter the build graph (Starlit Waxing Dusk)
+
+- **A clean worktree exposed an install-time closed loop, not a school-data-search
+  product defect.** Root `postinstall` used Turbo's general build graph to make
+  `agent-tools/dist` available after install. In a clean checkout that meant:
+  pnpm install/deps-status → root `postinstall` → Turbo build agent-tools →
+  dependency build of `oak-eslint` → pnpm deps-status/install while inside the
+  build → root `postinstall` again. The architecturally correct cure is not
+  `--only` or cache reliance; it is a narrower bootstrap boundary: root
+  `postinstall` may run a dedicated Node script that directly builds only the
+  required `agent-tools/dist` artefact, and must not invoke pnpm, Turbo, or
+  workspace package scripts. Carry this as a build-system pattern candidate if
+  it recurs beyond the current fix lane.
+- **Do not pre-load workspace shells with future dependencies.** Session-close
+  `pnpm check` caught unused API-shell placeholders (`env`, logger,
+  observability, result, zod) through Knip. Minimal shells should depend only
+  on what they import today; add runtime dependencies at the first TDD slice
+  that actually consumes them.
 
 ## 2026-06-04 - shell quoting and git index lessons (Breezy Navigating Rudder)
 

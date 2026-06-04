@@ -41,12 +41,12 @@ todos:
     content: 'Gate G-9 (owner): client builds unpublished; NO npm publish without explicit owner direction (forced by POC boundary, owner req 1) — DECIDED 2026-06-04'
     status: completed
   - id: adr041-boundary-amendment
-    content: 'ADR-041 amendment + enforcement substrate for the school-data-search tier (workspace enumeration, depcruise path-prefix rules, ESLint boundary factory/tests) before any product code; drafted in the working tree 2026-06-04, validation and fixes pending before completion'
-    status: pending
+    content: 'ADR-041 amendment + enforcement substrate for the school-data-search tier (workspace enumeration, depcruise path-prefix rules, ESLint boundary factory/tests) before any product code — LANDED 2026-06-04 in commit f6bbd60a; closeout pnpm check is green after the current working-tree API manifest cleanup'
+    status: completed
     depends_on: [g8-decomposition-ratify]
   - id: adr191-produced-spec
-    content: 'ADR-191: produced OpenAPI spec decision for school-data-search (F-B: Zod 4 canonical source → generated OpenAPI 3.x → generated typed client; Result boundary; revisit trigger); drafted in the working tree 2026-06-04, validation and docs review pending before completion'
-    status: pending
+    content: 'ADR-191: produced OpenAPI spec decision for school-data-search (F-B: Zod 4 canonical source → generated OpenAPI 3.x → generated typed client; Result boundary; revisit trigger) — LANDED 2026-06-04 in commit f6bbd60a with a passing contracts OpenAPI proof'
+    status: completed
     depends_on: [g1-contract-layer]
   - id: ws1-contract-canon
     content: 'WS1: contract canon + generated surfaces per G-1 (spec serving, CI 3.x validation, client workspace unpublished)'
@@ -118,12 +118,16 @@ clearly-licensed sources are used.
 
 **Where it stands (2026-06-04):** the research, design, and every decision
 gate (G-1…G-9 plus the workspace shape, G-8) are complete and owner-ratified.
-Implementation has started: the active-plan promotion, ADR-041 amendment,
-ADR-191 produced-spec ADR, boundary scaffolding, workspace shells, and an
-initial contracts/OpenAPI proof are drafted in the working tree. They are not
-complete until recovery validation and any resulting fixes land. Next product
-work remains WS1 contract canon, then England/GIAS first. It is a POC: at the
-end, the owner decides whether to take it forward.
+The first implementation slice landed in commit `f6bbd60a`: active-plan
+promotion, ADR-041 amendment, ADR-191 produced-spec ADR, boundary scaffolding,
+workspace shells, and an initial contracts/OpenAPI proof. Full pre-commit hooks
+were green after fixing the Zod OpenAPI extension setup. Session-close
+`pnpm check` then caught unused placeholder dependencies in the API shell;
+the current working tree removes them and the aggregate check is green. Next
+product work is WS1 contract canon, but first settle the handoff diff, then
+cherry-pick the separate postinstall-bootstrap fix once it lands so a future
+clean checkout cannot re-enter the install loop. It is a POC: at the end, the
+owner decides whether to take it forward.
 
 **Status**: active (`active/`). Promotion fired on 2026-06-04: gates
 G-1...G-9 and WS-D1 are decided, the plan has moved from `current/`, and

@@ -11,6 +11,7 @@ from research-brief normalisation through report, plan, and in-repo build.
 | claude | Opus 4.8 | 88a769 | Furnace Roasting Brazier | report-and-plan-synthesiser | 2026-06-03 | 2026-06-03 |
 | claude | Opus 4.8 | fac519 | Mossy Whispering Bark | owner-gate-session presenter/recorder | 2026-06-04 | 2026-06-04 |
 | claude | Opus 4.8 | 80d50a | Fiery Sparking Caldera | deep-review + refinement | 2026-06-04 | 2026-06-04 |
+| codex | GPT-5 | codex- | Starlit Waxing Dusk | implementation + closeout | 2026-06-04 | 2026-06-04 |
 
 ## Current Continuation
 
@@ -67,7 +68,7 @@ owner may direct their removal after comparison.
 
 ## Landing target for the next session on this thread
 
-**Recovery validation → finish ADR/boundary scaffold → WS1+.** All gates
+**Settle handoff cleanup → cherry-pick postinstall fix → WS1+.** All gates
 G-1...G-9 decided; **WS-D1 / G-8 DONE 2026-06-04** — the 4-workspace bundle is
 ratified: the `contracts`, `sdk` (data/ingest/search modules), `client`, and
 `apps/api` workspaces under a new top-level `school-data-search/` tier; auth in
@@ -75,13 +76,14 @@ apps/api; authored boundary rules. Full record:
 [decomposition doc](../../../plans/school-data-search/active/school-data-search-wsd1-decomposition.md)
 (betty + fred reviewed/validated; 6-way split rejected).
 
-Implementation snapshot in the isolation worktree (uncommitted, not complete):
+Implementation slice landed in the isolation worktree:
 
-1. Promoted the plan and WS-D1 decomposition from `current/` to `active/`,
-   added the active/current indexes, and updated plan/frontmatter status.
+1. Commit `f6bbd60a` (`feat(school-data-search): scaffold service boundary`)
+   promoted the plan and WS-D1 decomposition from `current/` to `active/`, added
+   the active/current indexes, and updated plan/frontmatter status.
 2. Amended ADR-041 with the `school-data-search/` tier and import-matrix
-   semantics; drafted ADR-191 for the F-B produced OpenAPI contract. ADR-191
-   replaces the earlier ADR-190 pointer because ADR-190 is already the heartbeat
+   semantics; landed ADR-191 for the F-B produced OpenAPI contract. ADR-191
+   replaced the earlier ADR-190 pointer because ADR-190 was already the heartbeat
    cron ADR.
 3. Added workspace entries and lockfile/package-script updates for
    `school-data-search/packages/contracts`, `packages/sdk`, `packages/client`,
@@ -89,19 +91,26 @@ Implementation snapshot in the isolation worktree (uncommitted, not complete):
 4. Added depcruise path-prefix rules, an Oak ESLint school-data-search boundary
    factory, boundary inventory validation, and unit tests.
 5. Created minimal unpublished workspace shells and seeded the contracts
-   workspace with Zod school schemas plus an OpenAPI 3.x proof test.
+   workspace with Zod school schemas plus an OpenAPI 3.x proof test. The first
+   commit attempt caught the missing Zod OpenAPI extension; the fix landed in
+   the same commit and the focused contracts test passed before the full hooks.
+6. Session-close `pnpm check` caught unused placeholder dependencies in the API
+   shell. The current working tree removes those manifest/lockfile entries and
+   `pnpm check` is green; commit/amend this cleanup before cherry-picking.
 
 Next priorities:
 
-1. First recovery step: audit the dirty worktree and finish any partial edit
-   from the interrupted session before changing behaviour.
-2. Run validation serially, not in parallel: focused markdown/diff checks,
-   ESLint package tests/type-check/validate-boundaries, contracts
-   tests/type-check, then repo-structure gates.
-3. Fix any validation failures and only then mark `adr041-boundary-amendment`
-   and `adr191-produced-spec` complete in the active plan.
-4. Continue from the active plan into WS1/WS2/WS3 TDD cycles after the ADR and
-   boundary scaffolding is green.
+1. Settle the current handoff/package cleanup diff so the working tree is ready
+   for integration work.
+2. Cherry-pick the separate postinstall-bootstrap fix once the other agent
+   lands it. The root cause report: install-time bootstrap must build only
+   `agent-tools/dist` directly with Node/TypeScript and must not invoke pnpm,
+   Turbo, or workspace scripts.
+3. Verify a clean checkout/install path after that cherry-pick, specifically
+   that `agent-tools/dist` exists after install and root `postinstall` cannot
+   recurse.
+4. Continue from the active plan into WS1 contract-canon TDD cycles, then WS2 /
+   WS3, using the completed ADR-041 and ADR-191 prerequisites.
 
 Carry the **verification discipline** as a required delivery gate:
 high-stakes external-source claims are primary-verified before reliance

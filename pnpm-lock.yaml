@@ -1236,21 +1236,6 @@ importers:
 
   school-data-search/apps/api:
     dependencies:
-      '@oaknational/env':
-        specifier: workspace:*
-        version: link:../../../packages/core/env
-      '@oaknational/env-resolution':
-        specifier: workspace:*
-        version: link:../../../packages/libs/env-resolution
-      '@oaknational/logger':
-        specifier: workspace:*
-        version: link:../../../packages/libs/logger
-      '@oaknational/observability':
-        specifier: workspace:*
-        version: link:../../../packages/core/observability
-      '@oaknational/result':
-        specifier: workspace:*
-        version: link:../../../packages/core/result
       '@oaknational/school-data-search-client':
         specifier: workspace:*
         version: link:../../packages/client
@@ -1260,9 +1245,6 @@ importers:
       '@oaknational/school-data-search-sdk':
         specifier: workspace:*
         version: link:../../packages/sdk
-      zod:
-        specifier: ^4.4.3
-        version: 4.4.3
     devDependencies:
       '@oaknational/eslint-plugin-standards':
         specifier: workspace:*

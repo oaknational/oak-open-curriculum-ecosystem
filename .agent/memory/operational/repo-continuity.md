@@ -112,7 +112,7 @@ each thread record; this table is the repo-level index.
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Blustery Lifting Gale / skills-taxonomy-and-distribution / 2026-06-03 (prior: Umbral Whispering Silhouette 2026-06-01) |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 / Hidden Hiding Dusk / dedicated-consolidation+owner-directed-graduations / 2026-06-04 (prior: Arboreal Sprouting Branch 2026-06-04, Opalescent Illuminating Prism 2026-06-03, Lacustrine Swimming Beacon, Ashen Burning Magma, Solar Glowing Meteor, Stratospheric Buffeting Breeze, Lofty Sweeping Falcon, Shaded Veiling Mirror) |
 | `repo-professionalism-assessment` | Repo professionalism / engineering-quality report → planability triage | [record][repo-professionalism-assessment] | codex / GPT-5 / Airy Whirling Wing / report-author-and-planability-router / 2026-06-03 |
-| `school-data-search` | Oak School Data Search service (POC MVP): briefs → report → plan → gate walk → **deep review complete** → build | [record][school-data-search] | claude / Opus 4.8 / Fiery Sparking Caldera / deep-review-and-refinement / 2026-06-04 (prior: Mossy Whispering Bark 2026-06-04, Furnace Roasting Brazier + Hushed Lurking Mask 2026-06-03) |
+| `school-data-search` | Oak School Data Search service (POC MVP): briefs → report → plan → gate walk → **first scaffold slice landed** → WS1 | [record][school-data-search] | codex / GPT-5 / Starlit Waxing Dusk / implementation + closeout / 2026-06-04; claude / Opus 4.8 / Fiery Sparking Caldera / deep-review-and-refinement / 2026-06-04 (prior: Mossy Whispering Bark 2026-06-04, Furnace Roasting Brazier + Hushed Lurking Mask 2026-06-03) |
 | `semantic-search` | Search data foundations: upstream-schema alignment, bulk sourcing, minimal-adaptation arc | [record][semantic-search] | claude / Opus 4.8 / Moonlit Waxing Nebula / upstream-realignment-specialist / 2026-06-03 |
 
 ## Paused Threads
@@ -151,15 +151,17 @@ apps/api under a new top-level `school-data-search/` tier; auth in apps/api;
 authored boundary rules — betty + fred reviewed/validated, 6-way split
 rejected; see the
 [decomposition doc](../../plans/school-data-search/active/school-data-search-wsd1-decomposition.md)).
-**Current implementation state:** active-plan promotion, ADR-041 amendment,
-ADR-191 produced-spec ADR, boundary scaffolding, four workspace shells, and an
-initial contracts/OpenAPI proof are drafted but **not complete**; validation was
-interrupted before a green verdict. Work is isolated on branch
-`codex/graph-tooling-tidyup-isolation`. **Next:** audit the dirty worktree, run
-serial validation/fixes for the ADR/boundary scaffold, then mark
-`adr041-boundary-amendment` and `adr191-produced-spec` complete only after the
-green proof. Carry the verification discipline + licensing guardrail. See the
-[`school-data-search` thread record][school-data-search].
+**Current implementation state:** first scaffold slice LANDED in commit
+`f6bbd60a` on branch `codex/graph-tooling-tidyup-isolation`: active-plan
+promotion, ADR-041 amendment, ADR-191 produced-spec ADR, boundary scaffolding,
+four workspace shells, and an initial contracts/OpenAPI proof. Session-close
+`pnpm check` exposed unused placeholder dependencies in the API shell; the
+current working tree removes them and the aggregate check is green. **Next:**
+settle the handoff/package cleanup diff, cherry-pick the separate
+postinstall-bootstrap fix once the other agent lands it, verify the clean
+checkout/install path cannot recurse, then continue from the active plan into
+WS1 contract-canon TDD. Carry the verification discipline + licensing
+guardrail. See the [`school-data-search` thread record][school-data-search].
 
 ### Agentic Mechanisms Discovery
 
