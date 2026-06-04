@@ -71,7 +71,7 @@ adding. Disposition ledger:
   resurrects overturned decisions is a liability. Worked twice this curation
   family: the `.remember` retirement (~1,400 lines → 0 orphans) and this pass's
   cross-platform memory read (Codex/Cursor/Gemini → ~everything already homed).
-  `[captured: 2026-06-04 | source: napkin Moonlit Waxing Nebula 2026-06-03 (.remember mining) + Arboreal cross-platform memory read | target: pattern-or-rule:retire-lossy-mirror-by-mining-then-verify (connects to knowledge-preservation-over-fitness-warnings) | trigger: second lossy-mirror retirement OR owner direction | size: S | status: owner-gated]`
+  `[captured: 2026-06-04 | source: napkin Moonlit Waxing Nebula 2026-06-03 (.remember mining) + Arboreal cross-platform memory read | target: pattern-or-rule:retire-lossy-mirror-by-mining-then-verify (connects to knowledge-preservation-over-fitness-warnings) | trigger: second lossy-mirror retirement OR owner direction | size: S | status: graduated 2026-06-04 (owner-directed) -> .agent/rules/knowledge-preservation-over-fitness-warnings.md §"Retiring a lossy or unversioned mirror"]`
 - **Corrections are high-risk re-instantiation moments — no immunity gradient.**
   The general form behind no-tombstones-recursion: every correction is a new
   first act with respect to the failure mode it addresses; the corrective act is
@@ -284,7 +284,7 @@ Surfaced to the owner during the dedicated knowledge-curation pass; staged in
   state-what-is-no-monuments (writing) are one principle seen from three sides; a
   frame-slip's cure is always the same shape (return to the source of truth, fix
   upstream, state what is).
-  `[captured: 2026-06-01 | source: distilled.md + EEF thread synthesis | target: pdr:one-law-three-faces (unifying principle) | trigger: owner approval | size: M | status: owner-gated 2026-06-02 — surfaced to owner; awaiting explicit approval before promotion]`
+  `[captured: 2026-06-01 | source: distilled.md + EEF thread synthesis | target: pdr:one-law-three-faces (unifying principle) | trigger: owner approval | size: M | status: graduated 2026-06-04 (owner-directed) -> PDR-090 (One Law, Three Faces — A Frame-Slip's Cure Is Always Return to the Source)]`
 - **Opening statements and handoff artefacts teach by their form.** Loaded-first
   surfaces train the next agent by their voice; written as present-truth +
   destination they teach that, written as remediation-recap they teach that.
@@ -300,7 +300,7 @@ Surfaced to the owner during the dedicated knowledge-curation pass; staged in
   And **openers may compress canon, never silently extend it** — a net-new
   commitment in an opener with no durable source is a proposal and must be marked
   as such (sibling of no-unauthorised-scope-invention for the opener genre).
-  `[captured: 2026-06-01 | source: distilled.md + Shaded/Windswept worked instances | target: clause:no-tombstones-for-removed-ideas OR continuity-practice | trigger: owner approval | size: S | status: owner-gated 2026-06-02 — surfaced to owner; awaiting explicit approval before promotion]`
+  `[captured: 2026-06-01 | source: distilled.md + Shaded/Windswept worked instances | target: clause:no-tombstones-for-removed-ideas OR continuity-practice | trigger: owner approval | size: S | status: graduated 2026-06-04 (owner-directed) -> .agent/rules/handoff-messages-self-contained.md §"Handoff artefacts teach by their form" (present-truth-plus-destination form, transit-degradation, compress-but-never-extend)]`
 
 ## 2026-06-01 capture — seam-mapping plan template/archetype (Windswept Floating Summit)
 
@@ -492,12 +492,12 @@ that the source buffers were validly drained.
   `[captured: 2026-05-31 | source: napkin 2026-05-31 Cirrus entry |
   target: agent-tools-platform-identity-candidate |
   trigger: second platform seed/context mismatch or owner direction | size: S |
-  status: owner-gated]`
+  status: owner-gated (TRIGGER FIRED 2026-06-04: the 2026-06-02 "Cursor identity seed observability needs a machine-level check" entry is the second instance — same PRACTICE_AGENT_SESSION_ID_CURSOR-absent failure, different agent; ready for the agent-tooling identity-observability implementation lane; surfaced to owner)]`
   Route to agent-tools/platform identity work if it recurs.
 - **Claim-pattern glob expansion is duplicate tooling friction.**
   `[captured: 2026-05-31 | source: napkin 2026-05-31 Eclipsed entry |
   target: duplicate-of:agent-tooling-frictions-register-F-04/F-14 |
-  trigger: none | size: S | status: duplicate]`
+  trigger: none | size: S | status: duplicate (verified 2026-06-04: F-04/F-14 in .agent/plans/agent-tooling/frictions-register.md genuinely cover --area-pattern cardinality/quoting; withdraw-ready, owner holding)]`
   Existing homes already cover quoting and `--area-pattern` affordance gaps; the
   active napkin entry remains restored as a fresh worked instance until a valid
   future disposition removes it.
@@ -541,7 +541,7 @@ home.
   `[captured: 2026-05-31 | source: distilled 2026-05-14..28 / historical synthesis A1 |
   target: pdr:doctrine-adoption-lag-or-action-time-structural-interrupt |
   trigger: owner direction or next Practice-Core doctrine pass that reconciles
-  this with metacognition pre-action ratification | size: M | status: owner-gated]`
+  this with metacognition pre-action ratification | size: M | status: design lane opened 2026-06-04 (Hidden Hiding Dusk) -> .agent/plans/agentic-engineering-enhancements/future/action-time-structural-interrupt-design-space.plan.md (general doctrine-traction frame + three-axis reconciliation; mechanism exploration deferred to closure-pressure-design-space)]`
   The lesson is stable and cross-session, but promotion must reconcile the
   structural-interrupt shape with existing metacognition and immune-system
   doctrine rather than minting a duplicate rule.
@@ -603,7 +603,7 @@ routes here or duplicate homes named in the curator ledger.
   `[captured: 2026-05-31 | source: distilled 2026-05-27 Sylvan entry |
   target: git-collaboration-rule:content-derived-merge-risk |
   trigger: second raw-name-status false-conflict prediction or owner direction |
-  size: S | status: owner-gated]`
+  size: S | status: owner-gated (verified 2026-06-04 NOT covered: pre-merge-divergence-analysis.md governs complex-merge handling, not the content-derived risk-assessment doctrine; stays gated — do not withdraw)]`
   The reusable move is to prove risk from the merge algorithm or an empty content
   diff, not from raw `HEAD..origin` name-status output.
 - **Session-opener fitness is stale until rerun.**
@@ -668,8 +668,14 @@ below, independent of them.)
   - trigger-condition: the live EEF plan ratifies the graph-tool / MCP contract
     (D3/D4 — becomes settled and reusable across adapters)
   - status: owner-gated 2026-06-02 (graduate when the live EEF plan's D3/D4
-    contract is ratified). Reviewed 2026-05-31 by Open Lofting Cliff: carried
-    forward because current continuity says D0 is complete and D1/D2 are next.
+    contract is ratified). TRIGGER FIRED 2026-06-04 (EEF D4 owner-ratified).
+    Owner-directed disposition 2026-06-04 (Hidden Hiding Dusk): the
+    graph-tool-category doctrine's ADR home is owned by the active
+    graph-tools-value-redesign thread (which plans an ADR-086 amendment +
+    ADR-173 / ADR-041 checks at D5/D6/D7 promotion); a standalone consolidation-
+    session ADR here would collide with that live work, so the doctrine lands via
+    the redesign's own ADR work at promotion. Deferred to EEF-redesign promotion
+    (owner choice).
 - **Self-correcting measurable deliverables (planning methodology).**
   - captured-date: 2026-05-28
   - source-surface: foundation §5 + this rebuild plan (first instance)
@@ -1633,7 +1639,7 @@ Cross-references:
 graduation-target: adr-draft:heartbeat-cron-health-monitoring OR amendment to ADR-186 §Migration discipline |
 trigger: second-instance — confirmed (Misty 20-min + Lunar 17-min concurrent gaps 23:28-23:47Z 2026-05-24) |
 size: M — substrate amendment to heartbeat emitter + watcher-staleness substrate |
-status: owner-gated]
+status: graduated 2026-06-04 (owner-directed) -> ADR-190 (Proposed) heartbeat-cron health-monitoring via watcher-staleness substrate]
 
 Context: Misty heartbeat cron silent 20 min (23:26 → 23:47Z) AND Lunar's
 silent 17 min (23:28 → 23:45Z) in the same window. Two independent

@@ -1,5 +1,69 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Closeout (2026-06-04 — Hidden Hiding Dusk / claude / Opus 4.8 / `38dbaf`, dedicated consolidation + owner-directed graduations)
+
+Executed the Arboreal fresh-session queue (the two queued items). Sole-contributor;
+parallel oak-kg-ontology session committed `7a3f8cfb` in the interim — verified zero
+overlap with this session's changed set (it touched distilled/KG/ADR-157, not my files).
+
+- **Item 1 — opened the action-time-structural-interrupt design lane.** Grounding
+  revealed the design space substantially pre-exists in
+  `closure-pressure-remediation-design-space`; owner confirmed a NEW general-frame
+  plan that defers mechanism exploration there. Authored
+  `future/action-time-structural-interrupt-design-space.plan.md` — the rule-traction
+  gap reconciled via three axes (firing × detection × response); the empty quadrant
+  is mechanical-fire + cognitive-detect + advisory-response for semantic pathogens.
+  assumptions-expert: PROPORTIONAL (rule-vs-feedback fix + three-axis sharpening applied).
+- **Item 2 — owner-directed graduation walk.** Owner directed graduate A/B/G,
+  investigate C (no withdraw), light-investigate the rest. Landed: PDR-090
+  (one-law-three-faces); ADR-190 Proposed (heartbeat-cron health via watcher-staleness);
+  clause on `knowledge-preservation-over-fitness-warnings` (retire-lossy-mirror); clause
+  on `handoff-messages-self-contained` (openers teach by form); G status update.
+  docs-adr-expert: ACCEPT all four (verified). **B1 deferred** to EEF-redesign promotion
+  (owner choice — its ADR home is owned by the active graph-tools-value-redesign thread).
+- **C verified (not withdrawn, per owner):** claim-glob covered (F-04/F-14, withdraw-ready);
+  merge-divergence NOT covered (stays gated); cursor-seed trigger fired (n=2). Light D/E/F
+  sweep (~48 items): no further fired/covered signals. Dispositions recorded in the register.
+
+**Next safe step:** no queued obligation. Open follow-ons surfaced this session (owner may pick up):
+the cursor-seed identity-observability impl lane (trigger fired); claim-glob withdraw (owner held);
+the action-time design lane's promotion (t1 reconciliation + t2 semantic-pathogen inventory + t5
+closure-pressure fold/sibling decision).
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Hidden Hiding Dusk` | `claude` | `Opus 4.8` | `38dbaf` | `dedicated-consolidation+owner-directed-graduations` | 2026-06-04 | 2026-06-04 |
+
+## Session Closeout (2026-06-04 — Arboreal Sprouting Branch / claude / Opus 4.8 / `262b3f`, dedicated knowledge curation)
+
+Owner goal "consolidate until done" — a full dedicated-curation pass plus
+owner-directed graduations. **Committed `9451a629`** (gate-green; the napkin
+drain, archive, ledger, and EEF lane were committed separately by a parallel
+session — verified zero content lost). Landed:
+
+- **Consolidation pass**: napkin CRITICAL→healthy (drained, archived verbatim,
+  fresh), repo-continuity HARD→soft (discharged history archived), 6 candidates
+  routed, cross-platform + experience cross-reads (3 sub-agent drift
+  false-positives caught), 7c/7e audits, step-8 `.remember` provenance fix.
+  Adversarially verified + independently re-checked (the re-check caught 2
+  post-verification defects the clean verdicts missed). 0 hard / 0 critical at rest.
+- **Graduations (owner-directed)**: minted `closed-shape-design-optionality` rule
+  (PDR-058 §Surface 2); consolidated synthesis-tier-claims + 2 experience patterns
+  into **PDR-089 §Decision 6** (a clause, not a duplicate PDR — PDR-089 owned the
+  substrate); captured **owner-gated→owner-directed** doctrine (item 7 +
+  consolidate-docs step-7 owner-walk clause).
+
+**Next safe step (fresh session, owner-confirmed):** (1) open the
+action-time-structural-interrupt design lane (3rd greenlit graduation, not
+started); (2) walk the rest of the owner-gated backlog under the collapse
+directive (recommendation-first digest; the autonomy-primitive/Director cluster
+honestly needs a real second instance — owner may override). Ground from the
+curator-pass ledger `2026-06-04-arboreal-sprouting-branch-curation.md`.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Arboreal Sprouting Branch` | `claude` | `Opus 4.8` | `262b3f` | `dedicated-knowledge-curation+owner-directed-graduations` | 2026-06-04 | 2026-06-04 |
+
 ## Final Handoff (2026-06-03 — Opalescent Illuminating Prism / no commit, no check)
 
 Owner-directed closeout after the dedicated curation goal completed. Ran

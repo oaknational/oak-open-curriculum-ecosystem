@@ -214,3 +214,4 @@ Practice-Core portability ratifies both — see the bridge index
 | [PDR-087](PDR-087-tdd-as-design.md) | TDD as Design — Tests Describe System States | Accepted |
 | [PDR-088](PDR-088-reviewers-carry-doctrine.md) | Reviewers Carry Doctrine, Not Just Audit Against It | Accepted |
 | [PDR-089](PDR-089-conservation-reflex-external-check.md) | The Conservation Reflex — Frame-Capture Recurs at Every Stage; the Cure Is an External Check | Accepted |
+| [PDR-090](PDR-090-one-law-three-faces.md) | One Law, Three Faces — A Frame-Slip's Cure Is Always Return to the Source | Accepted |

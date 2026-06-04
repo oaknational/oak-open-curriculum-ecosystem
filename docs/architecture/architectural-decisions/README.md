@@ -273,6 +273,12 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   developer capabilities, curriculum assistance capabilities —
   with `SKILL.md`/MCP/plugin treated as packaging or runtime
   mechanisms, never the category name; Accepted 2026-06-03)
+- [ADR-190: Heartbeat-Cron Health Monitoring via Watcher-Staleness Substrate](190-heartbeat-cron-health-monitoring-via-watcher-staleness.md)
+  (sibling to ADR-186: the heartbeat cron writes a per-tick staleness file via
+  the existing watcher-staleness substrate so retirement-detection composes
+  comms-silence AND staleness-file-age, suppressing false-positive retirement on
+  a cron-degraded-but-alive agent; `ping-before-escalate` demoted to
+  belt-and-braces; Proposed 2026-06-04)
 
 ## Key Architectural Decisions
 

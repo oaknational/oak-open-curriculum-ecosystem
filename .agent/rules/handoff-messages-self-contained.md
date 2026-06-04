@@ -54,9 +54,39 @@ compaction, flush their exact commands and intended state into the handoff and
 verify them on first wake-up. Do not rely on the compaction summary or the
 runtime process table to preserve that contract reliably.
 
+## Handoff artefacts teach by their form
+
+A handoff message, continuation opener, or next-session record does not only
+*transfer* information — it *teaches* the receiver by its voice. Beyond being
+self-contained, it carries three form disciplines:
+
+1. **Write as present-truth plus destination.** An opener written as a
+   remediation-recap trains the next agent to think in remediation terms; one
+   written as "here is what the system *is* and where it is going" trains
+   present-truth thinking (the [`no-tombstones-for-removed-ideas`](no-tombstones-for-removed-ideas.md)
+   shape, applied to the opener genre). Opener staleness is structural, not
+   merely an authoring defect: a strong opener self-instructs cheap
+   re-derivation from git and the live surfaces, so the receiver verifies
+   rather than believes.
+2. **Openers degrade in transit — launch from the canonical file.** Pasted
+   openers arrive duplicated or garbled mid-token (observed across three
+   sessions). The thread record and plan hold the exact text; the canonical
+   file is the source, and a chat paste is lossy transport to be re-grounded
+   against the file.
+3. **An opener may compress canon but never silently extend it.** Summarising
+   or pointing at durable surfaces is correct; a net-new commitment in an
+   opener that has no durable source is a *proposal* and must be marked as
+   such — the opener-genre sibling of the no-unauthorised-scope-invention
+   discipline.
+
 ## Source attribution
 
 Graduated 2026-05-22 from `.agent/memory/operational/pending-graduations.md` candidate `handoff-messages-self-contained`. Worked-instance evidence: Mistbound Slipping Night → Stormbound Kiting Squall t12 commit handoff at 2026-05-22T15:42Z (`0f03f45c-a225-4d55-bb15-2e5c44abb678`), where the message named every staged file by path, the verify-staged fingerprint, the intent_id, three commit-landing options, all four reviewer verdicts, and the closed claim disposition — all substance the receiver needed to act without a clarifying question back.
+
+The §"Handoff artefacts teach by their form" discipline was graduated 2026-06-04
+(owner-directed) from the `pending-graduations.md` "openers teach by their form"
+candidate: present-truth-plus-destination form, transit-degradation (launch from
+the canonical file; three-session evidence), and compress-but-never-extend scope.
 
 ## Cross-references
 

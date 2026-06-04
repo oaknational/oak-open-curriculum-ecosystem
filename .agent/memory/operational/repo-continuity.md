@@ -110,7 +110,7 @@ each thread record; this table is the repo-level index.
 | `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Shadowed Creeping Secret / eef-d4-whole-plan-review-then-ratify / 2026-06-04 (prior: Twilit Cascading Supernova migration-plan-overhaul 2026-06-04, Burnished Glowing Spark 2026-06-04, Lacustrine Swimming Beacon 2026-06-03, Seaworthy Swimming Sextant 2026-06-03, Galactic Glowing Prism + Opalescent Cascading Planet + Stellar Waning Planet + Silvered Lurking Mask 2026-06-02) |
 | `oak-kg-ontology-planning-review` | Plan the `oak-kg`/ontology work, starting with a deep review of the Oak Curriculum Ontology repo (separate concern from the bulk-derived graph redesign) | [record][oak-kg-ontology] | claude / Opus 4.8 / Twilit Cascading Supernova / thread-opener-brief-only / 2026-06-04 — **opened, not started; deep review is a fresh session** |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Blustery Lifting Gale / skills-taxonomy-and-distribution / 2026-06-03 (prior: Umbral Whispering Silhouette 2026-06-01) |
-| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | codex / GPT-5 / Opalescent Illuminating Prism / dedicated-knowledge-curation / 2026-06-03 (prior: Lacustrine Swimming Beacon, Ashen Burning Magma, Solar Glowing Meteor, Stratospheric Buffeting Breeze, Lofty Sweeping Falcon, Shaded Veiling Mirror) |
+| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 / Hidden Hiding Dusk / dedicated-consolidation+owner-directed-graduations / 2026-06-04 (prior: Arboreal Sprouting Branch 2026-06-04, Opalescent Illuminating Prism 2026-06-03, Lacustrine Swimming Beacon, Ashen Burning Magma, Solar Glowing Meteor, Stratospheric Buffeting Breeze, Lofty Sweeping Falcon, Shaded Veiling Mirror) |
 | `repo-professionalism-assessment` | Repo professionalism / engineering-quality report → planability triage | [record][repo-professionalism-assessment] | codex / GPT-5 / Airy Whirling Wing / report-author-and-planability-router / 2026-06-03 |
 | `school-data-search` | Oak School Data Search service (POC MVP): briefs → report → plan → gate walk → **deep review complete** → build | [record][school-data-search] | claude / Opus 4.8 / Fiery Sparking Caldera / deep-review-and-refinement / 2026-06-04 (prior: Mossy Whispering Bark 2026-06-04, Furnace Roasting Brazier + Hushed Lurking Mask 2026-06-03) |
 | `semantic-search` | Search data foundations: upstream-schema alignment, bulk sourcing, minimal-adaptation arc | [record][semantic-search] | claude / Opus 4.8 / Moonlit Waxing Nebula / upstream-realignment-specialist / 2026-06-03 |
@@ -343,6 +343,23 @@ authority.
 - Shared memory/state files are always writable and commit-includable when dirty.
 
 ## Deep Consolidation Status
+
+**FRESH-SESSION QUEUE EXECUTED (2026-06-04, Hidden Hiding Dusk / claude / Opus 4.8 /
+`38dbaf`, dedicated consolidation + owner-directed graduations).** Ran the two Arboreal
+queued items. (1) Opened the action-time-structural-interrupt design lane —
+`future/action-time-structural-interrupt-design-space.plan.md` (general doctrine-traction
+frame; grounding caught that the design space pre-existed in closure-pressure-design-space,
+so it defers mechanism exploration there; three-axis reconciliation firing × detection ×
+response; assumptions-expert PROPORTIONAL). (2) Owner-directed graduation walk: graduated
+PDR-090 (one-law-three-faces), ADR-190 Proposed (heartbeat-cron health via watcher-staleness),
+clauses on `knowledge-preservation-over-fitness-warnings` (retire-lossy-mirror) and
+`handoff-messages-self-contained` (openers teach by form); G status update; docs-adr-expert
+ACCEPT (verified). **B1 deferred to EEF-redesign promotion** (its ADR home is owned by the
+active graph-tools-value-redesign thread — collision avoided). C verified without withdrawal
+(claim-glob covered/withdraw-ready; merge-divergence NOT covered, stays gated; cursor-seed
+trigger fired n=2); light D/E/F sweep found no further fired/covered signals. Parallel
+oak-kg-ontology session committed `7a3f8cfb` mid-session — verified zero overlap with this
+session's changed set. Full backlog dispositions recorded in `pending-graduations.md`.
 
 **COMPLETED — dedicated-knowledge-curation, owner goal "consolidate until done"
 (2026-06-04, Arboreal Sprouting Branch / claude / Opus 4.8 / `262b3f`).**

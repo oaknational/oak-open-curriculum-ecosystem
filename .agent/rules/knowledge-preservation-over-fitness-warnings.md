@@ -64,6 +64,32 @@ remaining live route, record the disposition, and only then archive the
 source body. Buffer scope changes the fitness diagnosis; it does not
 permit archive-before-processing.
 
+## Retiring a lossy or unversioned mirror
+
+Retiring an unversioned or lossy knowledge mirror — `.remember`, a
+per-platform memory store, any unversioned sidecar that has accumulated
+substance over time — is a special case of the live-unique substance
+screen, and it carries its own discipline:
+
+- **Mine, then verify every candidate against canon before deletion.**
+  The mirror may hold the only copy of a behaviour-changing learning;
+  enumerate its substance and confirm each item is either already homed
+  in canon or routed to a home before the mirror is removed.
+- **A near-empty harvest is the SUCCESS case, not a failed search.**
+  When mining surfaces little, that is positive evidence the
+  capture→graduate pipeline already caught the substance — it is not a
+  signal to keep digging or to doubt the search. Finding little is the
+  outcome a healthy pipeline produces.
+- **An unversioned mirror is a liability precisely because it can
+  resurrect overturned decisions.** That risk is the reason to retire
+  it, and the reason the correct move is mine-then-verify — neither a
+  blind delete (which can drop a live-only learning) nor blind retention
+  (which lets the mirror re-introduce superseded shapes).
+
+Worked twice in 2026: the `.remember` retirement (~1,400 lines mined →
+zero orphans) and a cross-platform memory read (Codex / Cursor / Gemini
+→ substance already homed).
+
 ## Why
 
 The fitness gate surfaces overflow as a rotation prompt — it is
@@ -132,3 +158,7 @@ move. Never:
 - 2026-06-02 — graph-estate consolidation supplied the second worked
   instance for the live-unique substance screen before archive or
   park moves; the doctrine now names the screen explicitly.
+- 2026-06-04 — owner-directed graduation of the lossy-mirror-retirement
+  clause (`.remember` retirement + cross-platform memory read as the two
+  worked instances): mine-then-verify-against-canon, near-empty-harvest-
+  is-success, unversioned-mirror-is-a-liability.
