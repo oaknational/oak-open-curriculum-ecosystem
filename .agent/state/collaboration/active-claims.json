@@ -580,6 +580,30 @@
       "staged_bundle_fingerprint": "fa8f5cb0274ba866fe11d8c6c929dffa1aeca0045fe0844e94979bb4c0c47dd5",
       "staged_name_status": "M\t.agent/directives/user-collaboration.md\nM\t.agent/memory/active/distilled.md\nM\t.agent/memory/active/napkin.md\nM\t.agent/rules/directive-file-context-budget.md\nM\t.agent/rules/knowledge-preservation-over-fitness-warnings.md\nM\t.agent/skills/curator-pass/SKILL-CANONICAL.md\nM\tdocs/architecture/architectural-decisions/144-two-threshold-fitness-model.md\n",
       "notes": "closed in same collaboration-state commit (lifecycle exception); pathspec-scoped, excludes Airy assessment-routing READMEs"
+    },
+    {
+      "intent_id": "09292cc8-13b0-47f1-8793-031296b4f720",
+      "claim_id": "52e51800-6e4c-4b30-812b-27045341ce69",
+      "agent_id": {
+        "agent_name": "Moonlit Waxing Nebula",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "e756f7",
+        "id": "282b8921-e04b-5bd8-bfd5-21cabb07b137"
+      },
+      "files": [
+        ".agent/memory/operational/repo-continuity.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/closed-claims.archive.json"
+      ],
+      "commit_subject": "docs(memory): focused handoff for the .remember plugin disable",
+      "queued_at": "2026-06-04T07:03:21.885Z",
+      "updated_at": "2026-06-04T07:03:24.759Z",
+      "expires_at": "2026-06-04T07:18:21.885Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "aade473d92eec5df3597d6b5d90e473cfc30d04e55bdc14a8eeb36581124de40",
+      "staged_name_status": "M\t.agent/memory/operational/repo-continuity.md\n",
+      "notes": "closed in same collaboration-state commit (lifecycle exception)"
     }
   ],
   "claims": [

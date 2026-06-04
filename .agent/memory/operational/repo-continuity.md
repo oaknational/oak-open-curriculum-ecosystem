@@ -19,6 +19,21 @@ surface.
 
 ## Current State
 
+- **`.remember` PLUGIN DISABLED + de-referenced repo-wide (2026-06-04,
+  Moonlit Waxing Nebula / `e756f7`, claude / Opus 4.8, owner-directed)** —
+  the vendored `remember@claude-plugins-official` plugin is disabled in
+  `settings.json` (repo-wide; takes effect at next session start) and
+  `settings.local.json`. Rationale: its single-session one-shot `remember.md`
+  baton collides with parallel-session practice (write-clobber + the deeper
+  consume-collision that empties a peer's unconsumed opener) and is redundant
+  against the versioned, claim-safe canonical continuity surfaces. The local
+  corpus was mined (3 agents, ~1,400 lines) before deletion and returned
+  ZERO orphans not already in a durable home — confirming redundancy. All
+  permanent instructional surfaces de-referenced (6 skill docs, 2 rules, 1
+  directive, ADR-144, distilled exemplar); historical records and ephemeral
+  plan-body examples left intact. Commits `b188aa29` + `681e5d0f`, both
+  full-hook-gate green. Canonical handoff is unaffected — it never depended
+  on `.remember` (thread records + this file are the real baton).
 - **REPO PROFESSIONALISM ASSESSMENT REPORT LANDED + ROUTED FOR PLANABILITY
   REVIEW (2026-06-03, Airy Whirling Wing / `019e8e`, codex / GPT-5)** —
   the formal assessment report is at

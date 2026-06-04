@@ -8472,6 +8472,50 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "52e51800-6e4c-4b30-812b-27045341ce69",
+      "agent_id": {
+        "agent_name": "Moonlit Waxing Nebula",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "e756f7",
+        "id": "282b8921-e04b-5bd8-bfd5-21cabb07b137"
+      },
+      "thread": "semantic-search",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-04T07:03:19Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "Commit the focused session-handoff continuity entry for the .remember disable.",
+      "intent_to_commit": "09292cc8-13b0-47f1-8793-031296b4f720",
+      "archived_at": "2026-06-04",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-04T07:03:24Z",
+        "closed_by": {
+          "agent_name": "Moonlit Waxing Nebula",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "e756f7",
+          "id": "282b8921-e04b-5bd8-bfd5-21cabb07b137"
+        },
+        "summary": "focused handoff continuity entry for .remember disable",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "52e51800-6e4c-4b30-812b-27045341ce69",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
