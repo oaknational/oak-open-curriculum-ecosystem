@@ -2,14 +2,14 @@
 plan_id: school-data-search-poc
 title: 'School Data Search POC MVP — in-repo build'
 type: executable
-status: queued
-lifecycle: current
-last_updated: 2026-06-03
+status: active
+lifecycle: active
+last_updated: 2026-06-04
 evidence_source: '../../../reports/school-data-search-synthesis-report-2026-06-03.md'
 thread: school-data-search
 todos:
   - id: g1-contract-layer
-    content: 'Gate G-1 (owner): contract layer = F-B code-first, Zod 4 single canonical source → OpenAPI 3.x via @asteasolutions/zod-to-openapi → client via hey-api/orval; CI proves strict 3.x; repo-wide forward policy; Result boundary; ADR-190 — DECIDED 2026-06-04 (F-C reopened post-verification: no neutral-def→Zod tooling)'
+    content: 'Gate G-1 (owner): contract layer = F-B code-first, Zod 4 single canonical source → OpenAPI 3.x via @asteasolutions/zod-to-openapi → client via hey-api/orval; CI proves strict 3.x; repo-wide forward policy; Result boundary; ADR-191 — DECIDED 2026-06-04 (F-C reopened post-verification: no neutral-def→Zod tooling)'
     status: completed
   - id: g2-runtime-topology
     content: 'Gate G-2 (owner): runtime = Next.js (D-16); own Vercel project; preview posture Neon-contingent (V-08); cron = `0 2 * * *` (02:00 UTC daily, D-06); WS-D1 authored this session — DECIDED 2026-06-04'
@@ -40,18 +40,26 @@ todos:
   - id: g9-publishing
     content: 'Gate G-9 (owner): client builds unpublished; NO npm publish without explicit owner direction (forced by POC boundary, owner req 1) — DECIDED 2026-06-04'
     status: completed
+  - id: adr041-boundary-amendment
+    content: 'ADR-041 amendment + enforcement substrate for the school-data-search tier (workspace enumeration, depcruise path-prefix rules, ESLint boundary factory/tests) before any product code; drafted in the working tree 2026-06-04, validation and fixes pending before completion'
+    status: pending
+    depends_on: [g8-decomposition-ratify]
+  - id: adr191-produced-spec
+    content: 'ADR-191: produced OpenAPI spec decision for school-data-search (F-B: Zod 4 canonical source → generated OpenAPI 3.x → generated typed client; Result boundary; revisit trigger); drafted in the working tree 2026-06-04, validation and docs review pending before completion'
+    status: pending
+    depends_on: [g1-contract-layer]
   - id: ws1-contract-canon
     content: 'WS1: contract canon + generated surfaces per G-1 (spec serving, CI 3.x validation, client workspace unpublished)'
     status: pending
-    depends_on: [g1-contract-layer, g8-decomposition-ratify]
+    depends_on: [g1-contract-layer, g8-decomposition-ratify, adr041-boundary-amendment, adr191-produced-spec]
   - id: ws2-canonical-model
     content: 'WS2: canonical model + per-source mapping tables (fail-until-mapped; V-12)'
     status: pending
-    depends_on: [g3-canonical-model, g8-decomposition-ratify]
+    depends_on: [g3-canonical-model, g8-decomposition-ratify, adr041-boundary-amendment]
   - id: ws3-ingestion-framework
     content: 'WS3: ingestion framework (fetch, checksum, redacted snapshots, import-run state machine, advisory lock, idempotency); per-source pipeline with explicit configurable refresh-period + provenance/freshness surfaced (heterogeneous cadences: daily..annual)'
     status: pending
-    depends_on: [g4-storage-retention, g8-decomposition-ratify]
+    depends_on: [g4-storage-retention, g8-decomposition-ratify, adr041-boundary-amendment]
   - id: ws4-nation-adapters
     content: 'WS4: nation adapters England/Wales/Scotland/NI with fixtures incl. forbidden-field + non-OGL rows; NI via DE annual publications (annual refresh); NO coordinates/OS-derived/UPRN fields (V-06/V-10 mooted — geospatial layer dropped); per-source licence + provenance/freshness confirmed (V-01..V-05, V-07, V-09); open-school completeness proof per nation'
     status: pending
@@ -110,12 +118,17 @@ clearly-licensed sources are used.
 
 **Where it stands (2026-06-04):** the research, design, and every decision
 gate (G-1…G-9 plus the workspace shape, G-8) are complete and owner-ratified.
-Next: draft two ADRs (the produced-spec contract and the workspace-tier
-amendment), then build the workstreams — England/GIAS first. It is a POC: at
-the end, the owner decides whether to take it forward.
+Implementation has started: the active-plan promotion, ADR-041 amendment,
+ADR-191 produced-spec ADR, boundary scaffolding, workspace shells, and an
+initial contracts/OpenAPI proof are drafted in the working tree. They are not
+complete until recovery validation and any resulting fixes land. Next product
+work remains WS1 contract canon, then England/GIAS first. It is a POC: at the
+end, the owner decides whether to take it forward.
 
-**Status**: queued (`current/`). Promotion to `active/` happens when gates
-G-1, G-2, G-3, and G-8 are decided and the first build workstream starts.
+**Status**: active (`active/`). Promotion fired on 2026-06-04: gates
+G-1...G-9 and WS-D1 are decided, the plan has moved from `current/`, and
+implementation starts with the ADR/boundary scaffolding required before product
+code.
 
 **Evidence authority**: the
 [synthesis report](../../../reports/school-data-search-synthesis-report-2026-06-03.md)
@@ -253,7 +266,7 @@ Whispering Bark, `fac519`). Architectural ratifications land as ADRs.
   reading = **repo-wide forward policy** (the ADR establishes
   produced-OpenAPI-from-Zod as the contract pattern for services this repo
   builds; existing surfaces not retrofitted). Client PUBLIC error surface =
-  **`Result<T, E>` at the boundary** (C-05). Produced-spec ADR → **ADR-190**
+  **`Result<T, E>` at the boundary** (C-05). Produced-spec ADR → **ADR-191**
   (drafted this session, as F-B). Unblocks WS1, WS7.
 
 - **G-2 (runtime + topology) — DECIDED 2026-06-04.** App runtime =
@@ -738,7 +751,7 @@ Outcome-level; each maps to WS-level proof contracts above:
   the Cardinal Rule governs CONSUMING the upstream Oak Open Curriculum spec —
   it does NOT govern this service's own produced contract (owner direction
   2026-06-04). Producing this service's Zod→OpenAPI spec is a separate
-  concern (G-1 = Zod-canonical, F-B), recorded as ADR-190. Not an inversion
+  concern (G-1 = Zod-canonical, F-B), recorded as ADR-191. Not an inversion
   of the Cardinal Rule.
 
 ## Plan-body first-principles check

@@ -186,3 +186,24 @@ Fresh capture starts below.
   hook (PDR-044 §2026-05-21 approval-vs-refusal; this impl hard-blocks). Use neutral
   names ("hedging-vocabulary trip-list", "owner-only marker") when writing about the
   patterns the hook guards.
+
+## 2026-06-04 - shell quoting and git index lessons (Breezy Navigating Rudder)
+
+- **Mistake:** I parallelized two `git mv` commands during the
+  school-data-search plan promotion and one bounced on `index.lock`. Git index
+  mutations in a single worktree must be serial, even when each command is
+  individually safe. Behaviour change: parallelize reads, but run `git mv`,
+  staging, and commit-window operations one at a time; retry only after
+  confirming the lock cleared naturally with `git status`.
+- **Mistake:** My first napkin append used shell double quotes around a
+  `node -e` string containing markdown backticks, so zsh executed the
+  backticked text. Behaviour change: when an escalated shell edit must include
+  markdown literals, use single-quoted shell source or a script file; do not
+  place markdown backticks inside double-quoted shell strings.
+- **Mistake:** I launched several `pnpm --filter ...` validation commands in
+  parallel while the isolation worktree had fresh workspace/lockfile changes.
+  They produced noisy install/postinstall behaviour and made recovery harder
+  after the host crash. Behaviour change: after topology or lockfile edits,
+  run one validation command at a time, starting with the smallest package
+  check, and record incomplete validation as incomplete rather than pressing on
+  with broader gates.

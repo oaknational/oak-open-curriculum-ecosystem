@@ -1,0 +1,48 @@
+{
+  "name": "@oaknational/school-data-search-client",
+  "version": "0.0.0-development",
+  "private": true,
+  "description": "Private generated client surface for the School Data Search POC",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "development": "./src/index.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "package.json"
+  ],
+  "scripts": {
+    "clean": "rm -rf dist .turbo",
+    "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
+    "type-check": "tsc -p tsconfig.lint.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix ."
+  },
+  "dependencies": {
+    "@oaknational/result": "workspace:*",
+    "@oaknational/school-data-search-contracts": "workspace:*"
+  },
+  "devDependencies": {
+    "@oaknational/eslint-plugin-standards": "workspace:*",
+    "@types/node": "^25.9.1",
+    "eslint": "^10.4.1",
+    "globals": "^17.6.0",
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.8"
+  },
+  "engines": {
+    "node": "24.x"
+  },
+  "license": "MIT"
+}

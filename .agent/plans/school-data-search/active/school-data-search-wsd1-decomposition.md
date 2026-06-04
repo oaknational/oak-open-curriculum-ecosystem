@@ -113,7 +113,7 @@ before acting.
 
 ## Next
 
-WS-D1 is complete. Draft **ADR-190** (the produced-spec contract ADR; distinct
+WS-D1 is complete. Draft **ADR-191** (the produced-spec contract ADR; distinct
 from the ADR-041 topology amendment) and the ADR-041 amendment, then promote
 the plan to `active/` and begin WS1 (contract canon) + WS2 (model), with
 England/GIAS as the front-loaded first WS4 milestone.

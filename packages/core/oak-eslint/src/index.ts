@@ -12,6 +12,7 @@ export {
   createDesignBoundaryRules,
   createLibBoundaryRules,
   createSdkBoundaryRules,
+  createSchoolDataSearchBoundaryRules,
   appBoundaryRules,
   appArchitectureRules,
 } from './rules/boundary.js';

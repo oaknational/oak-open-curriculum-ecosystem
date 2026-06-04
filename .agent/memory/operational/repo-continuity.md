@@ -150,11 +150,15 @@ bundle is ratified** (contracts + sdk [data/ingest/search modules] + client +
 apps/api under a new top-level `school-data-search/` tier; auth in apps/api;
 authored boundary rules — betty + fred reviewed/validated, 6-way split
 rejected; see the
-[decomposition doc](../../plans/school-data-search/current/school-data-search-wsd1-decomposition.md)).
-**Next: ADR-041 amendment (school-data-search/ tier matrix row + authored
-boundary rules) + draft ADR-190 (F-B produced-spec) → `docs-adr-expert`;
-promote to `active/`; begin WS1+.** Carry the verification discipline +
-licensing guardrail. See the
+[decomposition doc](../../plans/school-data-search/active/school-data-search-wsd1-decomposition.md)).
+**Current implementation state:** active-plan promotion, ADR-041 amendment,
+ADR-191 produced-spec ADR, boundary scaffolding, four workspace shells, and an
+initial contracts/OpenAPI proof are drafted but **not complete**; validation was
+interrupted before a green verdict. Work is isolated on branch
+`codex/graph-tooling-tidyup-isolation`. **Next:** audit the dirty worktree, run
+serial validation/fixes for the ADR/boundary scaffold, then mark
+`adr041-boundary-amendment` and `adr191-produced-spec` complete only after the
+green proof. Carry the verification discipline + licensing guardrail. See the
 [`school-data-search` thread record][school-data-search].
 
 ### Agentic Mechanisms Discovery

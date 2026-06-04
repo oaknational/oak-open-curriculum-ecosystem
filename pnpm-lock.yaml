@@ -1234,6 +1234,148 @@ importers:
         specifier: ^4.1.8
         version: 4.1.8(@opentelemetry/api@1.9.1)(@types/node@25.9.1)(@vitest/coverage-v8@4.1.8)(happy-dom@20.9.0)(vite@8.0.16(@types/node@25.9.1)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.22.4)(yaml@2.9.0))
 
+  school-data-search/apps/api:
+    dependencies:
+      '@oaknational/env':
+        specifier: workspace:*
+        version: link:../../../packages/core/env
+      '@oaknational/env-resolution':
+        specifier: workspace:*
+        version: link:../../../packages/libs/env-resolution
+      '@oaknational/logger':
+        specifier: workspace:*
+        version: link:../../../packages/libs/logger
+      '@oaknational/observability':
+        specifier: workspace:*
+        version: link:../../../packages/core/observability
+      '@oaknational/result':
+        specifier: workspace:*
+        version: link:../../../packages/core/result
+      '@oaknational/school-data-search-client':
+        specifier: workspace:*
+        version: link:../../packages/client
+      '@oaknational/school-data-search-contracts':
+        specifier: workspace:*
+        version: link:../../packages/contracts
+      '@oaknational/school-data-search-sdk':
+        specifier: workspace:*
+        version: link:../../packages/sdk
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
+    devDependencies:
+      '@oaknational/eslint-plugin-standards':
+        specifier: workspace:*
+        version: link:../../../packages/core/oak-eslint
+      '@types/node':
+        specifier: ^25.9.1
+        version: 25.9.1
+      eslint:
+        specifier: ^10.4.1
+        version: 10.4.1(jiti@2.7.0)
+      globals:
+        specifier: ^17.6.0
+        version: 17.6.0
+      tsup:
+        specifier: ^8.5.1
+        version: 8.5.1(jiti@2.7.0)(postcss@8.5.15)(tsx@4.22.4)(typescript@6.0.3)(yaml@2.9.0)
+      typescript:
+        specifier: ^6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.8
+        version: 4.1.8(@opentelemetry/api@1.9.1)(@types/node@25.9.1)(@vitest/coverage-v8@4.1.8)(happy-dom@20.9.0)(vite@8.0.16(@types/node@25.9.1)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.22.4)(yaml@2.9.0))
+
+  school-data-search/packages/client:
+    dependencies:
+      '@oaknational/result':
+        specifier: workspace:*
+        version: link:../../../packages/core/result
+      '@oaknational/school-data-search-contracts':
+        specifier: workspace:*
+        version: link:../contracts
+    devDependencies:
+      '@oaknational/eslint-plugin-standards':
+        specifier: workspace:*
+        version: link:../../../packages/core/oak-eslint
+      '@types/node':
+        specifier: ^25.9.1
+        version: 25.9.1
+      eslint:
+        specifier: ^10.4.1
+        version: 10.4.1(jiti@2.7.0)
+      globals:
+        specifier: ^17.6.0
+        version: 17.6.0
+      tsup:
+        specifier: ^8.5.1
+        version: 8.5.1(jiti@2.7.0)(postcss@8.5.15)(tsx@4.22.4)(typescript@6.0.3)(yaml@2.9.0)
+      typescript:
+        specifier: ^6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.8
+        version: 4.1.8(@opentelemetry/api@1.9.1)(@types/node@25.9.1)(@vitest/coverage-v8@4.1.8)(happy-dom@20.9.0)(vite@8.0.16(@types/node@25.9.1)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.22.4)(yaml@2.9.0))
+
+  school-data-search/packages/contracts:
+    dependencies:
+      '@asteasolutions/zod-to-openapi':
+        specifier: ^8.5.0
+        version: 8.5.0(zod@4.4.3)
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
+    devDependencies:
+      '@oaknational/eslint-plugin-standards':
+        specifier: workspace:*
+        version: link:../../../packages/core/oak-eslint
+      '@types/node':
+        specifier: ^25.9.1
+        version: 25.9.1
+      eslint:
+        specifier: ^10.4.1
+        version: 10.4.1(jiti@2.7.0)
+      globals:
+        specifier: ^17.6.0
+        version: 17.6.0
+      tsup:
+        specifier: ^8.5.1
+        version: 8.5.1(jiti@2.7.0)(postcss@8.5.15)(tsx@4.22.4)(typescript@6.0.3)(yaml@2.9.0)
+      typescript:
+        specifier: ^6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.8
+        version: 4.1.8(@opentelemetry/api@1.9.1)(@types/node@25.9.1)(@vitest/coverage-v8@4.1.8)(happy-dom@20.9.0)(vite@8.0.16(@types/node@25.9.1)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.22.4)(yaml@2.9.0))
+
+  school-data-search/packages/sdk:
+    dependencies:
+      '@oaknational/school-data-search-contracts':
+        specifier: workspace:*
+        version: link:../contracts
+    devDependencies:
+      '@oaknational/eslint-plugin-standards':
+        specifier: workspace:*
+        version: link:../../../packages/core/oak-eslint
+      '@types/node':
+        specifier: ^25.9.1
+        version: 25.9.1
+      eslint:
+        specifier: ^10.4.1
+        version: 10.4.1(jiti@2.7.0)
+      globals:
+        specifier: ^17.6.0
+        version: 17.6.0
+      tsup:
+        specifier: ^8.5.1
+        version: 8.5.1(jiti@2.7.0)(postcss@8.5.15)(tsx@4.22.4)(typescript@6.0.3)(yaml@2.9.0)
+      typescript:
+        specifier: ^6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.8
+        version: 4.1.8(@opentelemetry/api@1.9.1)(@types/node@25.9.1)(@vitest/coverage-v8@4.1.8)(happy-dom@20.9.0)(vite@8.0.16(@types/node@25.9.1)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.22.4)(yaml@2.9.0))
+
 packages:
 
   '@actions/core@3.0.1':

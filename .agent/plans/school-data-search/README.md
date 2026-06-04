@@ -12,8 +12,8 @@ completion and an owner go/no-go decision.
 | Document | Role |
 | --- | --- |
 | [Synthesis report](../../reports/school-data-search-synthesis-report-2026-06-03.md) | Evidence authority: convergent foundation, divergence matrix (named owner decisions), collision ledger, OpenAPI inversion analysis, build-time verification ledger — synthesised from three independent research briefs + the owner requirements |
-| [`current/school-data-search-poc.plan.md`](current/school-data-search-poc.plan.md) | The executable POC plan: owner decision gates G-1…G-9, then build workstreams WS1–WS11 as TDD cycles |
-| [`current/school-data-search-wsd1-decomposition.md`](current/school-data-search-wsd1-decomposition.md) | The G-8-ratified workspace decomposition (4-workspace bundle under a top-level `school-data-search/` tier) |
+| [`active/school-data-search-poc.plan.md`](active/school-data-search-poc.plan.md) | The executable POC plan: owner decision gates G-1…G-9, then build workstreams WS1–WS11 as TDD cycles |
+| [`active/school-data-search-wsd1-decomposition.md`](active/school-data-search-wsd1-decomposition.md) | The G-8-ratified workspace decomposition (4-workspace bundle under a top-level `school-data-search/` tier) |
 | [Thread record](../../memory/operational/threads/school-data-search.next-session.md) | Session continuity for the `school-data-search` thread |
 
 The research inputs themselves (three briefs + owner requirements) live in
@@ -25,17 +25,17 @@ them.
 
 | Lane | Contents |
 | --- | --- |
-| [`current/`](current/README.md) | [`school-data-search-poc.plan.md`](current/school-data-search-poc.plan.md) — queued; promotes to `active/` when gates G-1/G-2/G-3/G-8 are decided and build starts |
+| [`active/`](active/README.md) | [`school-data-search-poc.plan.md`](active/school-data-search-poc.plan.md) — active POC implementation; first slice is ADR-041 + ADR-191 + boundary scaffolding |
+| [`current/`](current/README.md) | No queued executable plans |
 
-`active/`, `future/`, and `archive/completed/` are created when first
-needed.
+`future/` and `archive/completed/` are created when first needed.
 
 ## Status
 
-📋 Queued — the plan is decision-complete as a structure; execution is
-gated on the Phase 0 owner decisions (the gates walk the synthesis
-report's divergence matrix and OpenAPI inversion analysis; no further
-research is required to decide them).
+🚧 Active — all Phase 0 owner gates and WS-D1 are complete. The first
+implementation slice is architecture/enforcement first: ADR-041 amendment,
+ADR-191 produced-spec decision, boundary rules, then workspace scaffolding and
+WS1 contract work.
 
 ## Boundaries
 

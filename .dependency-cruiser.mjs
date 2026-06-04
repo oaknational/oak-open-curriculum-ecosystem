@@ -56,6 +56,9 @@ export default {
           'graph-corpus-sdk/src/(eef-strands|threads)/index\\.ts$',
           // SDK and TypeDoc entry points consumed via tsup + typedoc.json
           'oak-curriculum-sdk/src/types/(schema-bridge|public-types)\\.ts$',
+          // school-data-search package entry points consumed via package.json exports
+          'school-data-search/packages/(contracts|sdk|client)/src/index\\.ts$',
+          'school-data-search/apps/api/src/index\\.ts$',
         ],
       },
       to: {},
@@ -135,6 +138,99 @@ export default {
       },
       to: {
         path: '^apps/',
+      },
+    },
+    {
+      name: 'no-outside-to-school-data-search',
+      severity: 'error',
+      comment:
+        'School-data-search is an isolated POC tier; no existing tier imports it until an owner go/no-go widens consumption.',
+      from: {
+        path: '^(apps|packages|agent-tools|agent-graphs)/',
+      },
+      to: {
+        path: '^school-data-search/',
+      },
+    },
+    {
+      name: 'no-school-data-search-to-existing-apps',
+      severity: 'error',
+      comment: 'School-data-search workspaces must not import from existing root apps.',
+      from: {
+        path: '^school-data-search/',
+      },
+      to: {
+        path: '^apps/',
+      },
+    },
+    {
+      name: 'no-school-data-search-to-existing-sdks',
+      severity: 'error',
+      comment:
+        'School-data-search owns its own POC sdk/client tier and must not import existing SDKs.',
+      from: {
+        path: '^school-data-search/',
+      },
+      to: {
+        path: '^packages/sdks/',
+      },
+    },
+    {
+      name: 'no-school-data-search-to-adapter-libs',
+      severity: 'error',
+      comment:
+        'School-data-search may consume foundation libraries, not adapter libs, during the POC.',
+      from: {
+        path: '^school-data-search/',
+      },
+      to: {
+        path: '^packages/libs/sentry-node/',
+      },
+    },
+    {
+      name: 'no-school-data-search-contracts-to-runtime',
+      severity: 'error',
+      comment:
+        'Contracts are DB-free and runtime-free; sdk/client/api depend on contracts, not the reverse.',
+      from: {
+        path: '^school-data-search/packages/contracts/',
+      },
+      to: {
+        path: '^school-data-search/(packages/(sdk|client)|apps/api)/',
+      },
+    },
+    {
+      name: 'no-school-data-search-contracts-to-drizzle',
+      severity: 'error',
+      comment:
+        'Contracts must stay DB-free; database mapping belongs in sdk ingestion/storage modules.',
+      from: {
+        path: '^school-data-search/packages/contracts/',
+      },
+      to: {
+        path: '(^|/)drizzle-orm(/|$)',
+      },
+    },
+    {
+      name: 'no-school-data-search-sdk-to-client-or-api',
+      severity: 'error',
+      comment: 'School-data-search sdk may import contracts only; client/api are consumers.',
+      from: {
+        path: '^school-data-search/packages/sdk/',
+      },
+      to: {
+        path: '^school-data-search/(packages/client|apps/api)/',
+      },
+    },
+    {
+      name: 'no-school-data-search-client-to-sdk-or-api',
+      severity: 'error',
+      comment: 'Generated client may import contracts only; sdk/api are not client dependencies.',
+      from: {
+        path: '^school-data-search/packages/client/',
+      },
+      to: {
+        path: '^school-data-search/(packages/sdk|apps/api)/',
       },
     },
     {

@@ -279,6 +279,11 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   comms-silence AND staleness-file-age, suppressing false-positive retirement on
   a cron-degraded-but-alive agent; `ping-before-escalate` demoted to
   belt-and-braces; Proposed 2026-06-04)
+- [ADR-191: School Data Search Produced OpenAPI Contract](191-school-data-search-produced-openapi-contract.md)
+  (school-data-search produces its own API contract: Zod 4 canonical schemas
+  generate strict OpenAPI 3.x via `@asteasolutions/zod-to-openapi`, and the
+  typed private client is generated from that emitted document; Accepted
+  2026-06-04)
 
 ## Key Architectural Decisions
 
