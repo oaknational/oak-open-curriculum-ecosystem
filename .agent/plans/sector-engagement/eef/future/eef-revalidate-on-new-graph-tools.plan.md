@@ -6,7 +6,7 @@ status: future
 thread: eef
 related_plans:
   - "../current/eef-graph-tool-completion.plan.md"
-  - "../../../connecting-oak-resources/knowledge-graph-integration/future/graph-tools-substrate-migration.plan.md"
+  - "../../../connecting-oak-resources/knowledge-graph-integration/future/graph-tools-value-redesign.plan.md"
 isProject: false
 todos:
   - id: track-graph-tool-replacements
@@ -58,7 +58,7 @@ point at plans that are being rewritten. Refine and deduplicate against the
 settled graph estate later.
 
 **Update (2026-06-02)**: the single upstream is authored —
-[`graph-tools-substrate-migration.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/future/graph-tools-substrate-migration.plan.md)
+[`graph-tools-value-redesign.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/future/graph-tools-value-redesign.plan.md)
 owns all three replacements (`get-misconception-graph`,
 `get-prior-knowledge-graph`, `get-thread-progressions`), one replacement unit
 per corpus; its `signal-eef-revalidation` todo raises the landing signal that

@@ -57,7 +57,7 @@ tools → then decide what to do next).
 | [future/oak-kg-schema-browser.plan.md](future/oak-kg-schema-browser.plan.md) | Ontology schema/class browser |
 | [future/oak-kg-lesson-graph-surface.plan.md](future/oak-kg-lesson-graph-surface.plan.md) | Lesson-level graph projection surface |
 | [future/cross-source-journeys.plan.md](future/cross-source-journeys.plan.md) | Feature-layer journey orchestration (playbook-vs-prompt question; two reference journeys) |
-| [future/graph-tools-substrate-migration.plan.md](future/graph-tools-substrate-migration.plan.md) | **Unified substrate migration** of all existing graph tools (misconception, prior-knowledge, thread-progressions) onto `graph-corpus-sdk` — one replacement unit per corpus; single upstream of the EEF re-validation gate; promotion trigger EEF D6 + D7 (Judgement call 4) |
+| [future/graph-tools-value-redesign.plan.md](future/graph-tools-value-redesign.plan.md) | **Unified value-driven redesign** of all existing graph tools (misconception, prior-knowledge, thread-progressions) onto `graph-corpus-sdk` — bounded, relevant, token-efficient retrieval (not behaviour-preservation); one redesign unit per corpus; single upstream of the EEF re-validation gate; promotion trigger EEF D6 + D7 (Judgement call 4, reframed 2026-06-04) |
 
 ## Strategy and Research
 

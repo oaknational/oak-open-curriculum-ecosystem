@@ -1,5 +1,97 @@
 # Next-Session Record — `eef` thread
 
+> **MIGRATION PLAN OVERHAULED → VALUE-DRIVEN REDESIGN (renamed); parked, EEF-gated
+> (2026-06-04, Twilit Cascading Supernova / `bb53a9`; claude / Opus 4.8;
+> owner-directed).** Accepted Burnished's handoff (comms `0e2f7e7b`). The graph-tools
+> plan was re-derived from the two constraints + design agency and **renamed**
+> `graph-tools-substrate-migration.plan.md` → `graph-tools-value-redesign.plan.md`;
+> behaviour-preservation AND the "migration" framing removed. Per-corpus value-shapes:
+> prior-knowledge = bounded subgraph, thread-progressions = sequence projection (both
+> owner-ratified); misconception = **owner-directed graph** (curriculum-anchored bounded
+> subgraph, thread→unit→lesson→misconception verified in the bulk source). Owner-directed
+> architecture: **one bulk graph + bounded query views**; **deliberate identity model**
+> (slugs are NOT guaranteed-unique ids; placement is an edge — a lesson can be in >1 unit);
+> **bulk-derived graphs and the Oak Ontology repo are SEPARATE concerns** sharing the
+> substrate (concepts live in the ontology; cross-source join gated on the alignment audit).
+> Metaplan `graph-migration-plan-overhaul.plan.md` → COMPLETED; features-plan §1 reconciled;
+> 3 readiness reviewers READY-WITH-CONDITIONS (applied). KG estate survey report written
+> ([`graph-kg-estate-and-two-source-survey-2026-06-04.md`](../../../reports/graph-kg-estate-and-two-source-survey-2026-06-04.md)).
+> **D4 coordination absorbed**: D4's `manifest()`-absent-at-D5 decision is recorded in the
+> redesign plan as a first-view re-add obligation. **Owner-directed open: review the entire
+> `oak-kg` / ontology estate** (distinct future activity; timing owner's). Plan stays PARKED
+> on EEF D6 + D7 — EEF v1 consumes today's prerequisite + misconception tools as-is.
+>
+> **NEXT SAFE STEP (this lane)**: none until the redesign promotes (EEF D6 + D7). The owner
+> directed the `oak-kg`/ontology estate review as the next distinct activity (unscheduled).
+> The EEF lane's own next step is D5 (see Shadowed's banner below).
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Twilit Cascading Supernova` | `claude` | `Opus 4.8` | `bb53a9` | `migration-plan-overhaul` | 2026-06-04 | 2026-06-04 |
+>
+> ---
+>
+> **EEF D4 OWNER-RATIFIED — REVIEW-THEN-RATIFY COMPLETE; D5 IS NEXT (2026-06-04,
+> Shadowed Creeping Secret / `b33dcf`; claude / Opus 4.8; owner-directed
+> dedicated D4 + whole-plan review session).** The owner ratified the corrected
+> D4 graph-capability contract; the `d4` todo is flipped to `completed`. D5
+> (build the new graph-core query layer + EEF strand-view fresh, as TDD cycles)
+> is the next session — NOT started here.
+>
+> + **Review method**: lead grounding (git perimeter; Decision-B dedup; the
+>   contract's code citations; the live `graph-view` files; PDR-058; the rule
+>   texts; `impact_months`) cross-checked against a read-only workflow — 4
+>   grounding + 5 fresh post-B expert lenses + a 19-finding adversarial
+>   de-escalation (28 agents, Sonnet). Every finding was re-grounded against the
+>   artefact before acting; the verify stage overturned 3 specialist over-reaches
+>   as false positives and cut several material→minor.
+> + **Verdict**: RATIFY WITH CONDITIONS → all 11 conditions applied (working
+>   tree, uncommitted, prettier + markdownlint green; pushing is the owner's
+>   call). Substance verified sound: Decision-B dedup is ground-true (exactly one
+>   report shared corpus-wide — *Making Best Use of Teaching Assistants*, on
+>   `eef-tl-one-to-one-tuition` + `eef-tl-teaching-assistant-interventions`); all
+>   corpus cardinalities exact; the zero-external-blast-radius hard gate confirmed
+>   (three in-package sites, no fourth); the polymorphic `GraphView<TNode,
+>   TNodeId, TEdgeType>` substrate is **earned** (ADR-179 forbids EEF names, so
+>   EEF's typed-id-flow need forces the generic; PDR-058 §Surface 2 met), not
+>   inherited-shape preservation.
+> + **Corrections applied** (D4 contract + plan only; redesign plan untouched):
+>   A1 re-grounded the substrate justification (dropped the false
+>   "`consolidate-at-third-consumer` satisfied" — the rule fires at the *third*
+>   consumer); A2 fixed the PDR-058 label (Three-Tier Optionality Decomposition
+>   §Surface 2); B1 made `GraphManifest` decisive (absent at D5, migration
+>   re-adds); C1–C5 fixed two pre-B `guidance_report` drift sites + the
+>   Carried-Context two→three edit-site count + the stale deferred-homing anchor
+>   + the stale "(exploration)" heading; D1 extended the D6 `impact_months` Zod
+>   hazard (`-2` on `eef-tl-repeating-a-year` → `z.nullable(z.number())`, no
+>   lower bound); E1 noted `number_of_studies`'s two corpus paths.
+> + **Owner direction (2026-06-04)**: the upcoming graph tools WILL be
+>   graph-based; EEF's first delivery (D7) continues on the CURRENT
+>   `get-prior-knowledge-graph` / `get-misconception-graph` tools as-is (already
+>   the plan's Non-Goals + the `eef-revalidate-on-new-graph-tools` follow-on).
+>   This confirms the redesigned prereq + misconception tools as future
+>   `subgraph` consumers of the new substrate, sequenced AFTER EEF — and resolves
+>   the earlier comms-vs-plan misconception flag (it is graph-based, not an
+>   attribute filter).
+> + **Open coordination (not EEF lane)**: the `manifest()` re-add decision should
+>   be homed in Twilit's redesign plan when its first consumer is built — a comms
+>   note to Twilit, not an EEF edit. D4 only points at the redesign plan's
+>   `define-heterogeneous-node-edge-model` todo (must-not-drop preserved there).
+>
+> **NEXT SAFE STEP: D5** — build the new domain-generic graph-core query layer
+> (`GraphView<TNode, TNodeId, TEdgeType>`; `subgraph` only, no `manifest`) and
+> the graph-native EEF strand-view fresh as TDD cycles, per the ratified D4
+> contract. Re-derive HEAD from git — this banner is one commit stale by
+> construction (a parallel school-data-search commit `1839e9b8` landed mid-session
+> in another lane; my EEF edits are uncommitted on top). Branch ~90 ahead of
+> origin; pushing is the owner's call.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Shadowed Creeping Secret` | `claude` | `Opus 4.8` | `b33dcf` | `eef-d4-whole-plan-review-then-ratify` | 2026-06-04 | 2026-06-04 |
+>
+> ---
+>
 > **EEF D4 GRAPH CAPABILITY CONTRACT AUTHORED + RATIFIABLE; OWNER DECISION B
 > SIMPLIFIED IT; MIGRATION-OVERHAUL METAPLAN SCOPED + HANDED TO TWILIT
 > (2026-06-04, Burnished Glowing Spark / `67b679`; claude / Opus 4.8;

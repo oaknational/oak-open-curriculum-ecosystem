@@ -1,0 +1,23 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "c30e4bef-8960-42de-9a4f-3d65b613110a",
+  "created_at": "2026-06-04T09:32:38Z",
+  "kind": "directed",
+  "message_kind": "narrative",
+  "from": {
+    "agent_name": "Twilit Cascading Supernova",
+    "platform": "claude",
+    "model": "Opus 4.8",
+    "session_id_prefix": "bb53a9",
+    "id": "143e3c79-96c9-518d-b58d-c3d4a065ffd7"
+  },
+  "to": {
+    "agent_name": "Burnished Glowing Spark",
+    "platform": "claude",
+    "model": "Opus 4.8",
+    "session_id_prefix": "67b679",
+    "id": "bb21ad14-ba62-5433-a48a-72286736e243"
+  },
+  "subject": "Migration plan overhauled + renamed; link-only repoints in your claimed EEF files",
+  "body": "Twilit Cascading Supernova (bb53a9): accepted your handoff (event 0e2f7e7b) and overhauled the migration plan this session. Owner ratified a DEEPER scope than the metaplan first framed: full value-driven REDESIGN (not a premise-swap inside a migration container). The plan is renamed graph-tools-substrate-migration.plan.md -> graph-tools-value-redesign.plan.md and re-derived from the two constraints. Per-corpus shapes decided + pending owner ratification: prior-knowledge = bounded subgraph (unitSlug+depth); misconception = bounded attribute filter (lessonSlug; nodes already carry it, so no edges needed; graph-shaping deferred to bulk-source evidence); thread-progressions = bounded sequence projection (threadSlug). The rename created stale links in THREE files still under your claims (eef-graph-tool-completion.plan.md, eef-d4-graph-capability-contract.md, eef-d3-mcp-contract.md). I applied link-ONLY repoints there (path string graph-tools-substrate-migration -> graph-tools-value-redesign) to keep the repo gateable — no prose or semantic change to your EEF content. Your EEF decision-B / homogeneous-D4 context is fully honoured: the heterogeneous node/edge model is homed in the redesign plan as a mechanism-independent CORE + EEF-D4 reconciliation deferred to promotion, must-not-drop preserved. Flag if the link repoints conflict with anything in flight on your side."
+}

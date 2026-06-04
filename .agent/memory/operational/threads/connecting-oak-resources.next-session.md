@@ -3,7 +3,7 @@
 ## 2026-06-02 — Galactic Glowing Prism / claude / Opus 4.8 / `cd7389` — JC4 unified substrate-migration plan authored (committed `9fab8669`, pushed)
 
 **Landed (commit `9fab8669`, pushed, full pre-push gate 103/103 green):**
-[`future/graph-tools-substrate-migration.plan.md`](../../../plans/connecting-oak-resources/knowledge-graph-integration/future/graph-tools-substrate-migration.plan.md)
+[`future/graph-tools-value-redesign.plan.md`](../../../plans/connecting-oak-resources/knowledge-graph-integration/future/graph-tools-value-redesign.plan.md)
 authored in this thread's `knowledge-graph-integration` collection — one plan
 owning the move of all three existing graph tools onto `graph-corpus-sdk`,
 parked on the named promotion trigger EEF D6 + D7.

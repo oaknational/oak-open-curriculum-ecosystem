@@ -19,7 +19,7 @@ heterogeneous-node machinery is removed. This retires the handoff name
 type; `related_guidance_reports` (7/30) folds into the member payload
 (`eefEvidenceEnvelopeSubset`). The fundamental heterogeneous node/edge model is
 deferred and homed in
-[`graph-tools-substrate-migration.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/future/graph-tools-substrate-migration.plan.md);
+[`graph-tools-value-redesign.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/future/graph-tools-value-redesign.plan.md);
 see [`eef-d4-graph-capability-contract.md`](eef-d4-graph-capability-contract.md)
 §"EEF v1 is a homogeneous strand graph".
 

@@ -1855,3 +1855,21 @@ feedback (sidebar shape is the lightest); composes with `coordinator-role-thresh
 - **trigger-condition**: the school-data-search POC go/no-go (project
   proceeds), OR a second Oak data-ingestion surface facing the same question.
 - **status**: pending (project-gated)
+
+## Two graph data sources are separate concerns sharing one substrate (graph KG)
+
+- **captured-date**: 2026-06-04
+- **source-surface**: graph-tools-value-redesign plan + the KG estate survey
+  report (Twilit Cascading Supernova), owner-directed 2026-06-04.
+- **graduation-target**: ADR-shaped — the bulk-derived curriculum graphs
+  (instances, slug-keyed, our codegen) and the Oak Ontology graphs (formal
+  RDF/OWL/SKOS, stable w3id IRIs, separate GitHub repo) are **distinct concerns**
+  that share the `graph-core`/`graph-corpus-sdk` substrate but are NOT one graph:
+  different identity, coverage, stability, and kind. Cross-source composition
+  (e.g. concept-anchored queries) is gated on a bulk↔ontology alignment audit.
+  Candidate to formalise alongside / amend ADR-173 (graph-stack topology) +
+  ADR-157 (multi-source integration) when the KG work resumes.
+- **trigger-condition**: the owner-directed full `oak-kg` / ontology estate
+  review, OR the graph-tools-value-redesign promotion (EEF D6 + D7), whichever
+  first reopens the substrate boundary as settled architecture.
+- **status**: pending (KG-work-gated)

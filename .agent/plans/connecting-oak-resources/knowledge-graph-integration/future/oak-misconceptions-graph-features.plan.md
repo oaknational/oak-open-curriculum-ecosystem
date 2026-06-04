@@ -24,11 +24,19 @@ isProject: false
 Four feature directions, consolidated from four source plans (each archived
 with a pointer back here). They are variations on one undefined-until-EEF
 theme but **not one problem** — each keeps its own named section below so no
-contract or design substance is flattened away. Substrate migration is
-explicitly *not* one of these features: replatforming the existing
-misconception tool onto `graph-corpus-sdk` is migration work, owned by the
-single all-tools substrate-migration plan (graph-estate-consolidation
-Judgement call 4).
+contract or design substance is flattened away.
+
+> **Boundary moved 2026-06-04.** When the all-tools migration plan was reframed
+> from behaviour-preservation to a **value-driven redesign**
+> ([`graph-tools-value-redesign.plan.md`](./graph-tools-value-redesign.plan.md)),
+> bounded relevant retrieval became the **core** of that redesign, not a future
+> feature. So **§1 (bounded sub-graph extraction) is folded into the redesign
+> core** — its design substance below is prior art for that plan's
+> prior-knowledge and misconception units, not deferred work here. §2–§4 (cross-corpus
+> composition, free-text topic resolution, extended contexts) remain genuine future
+> features that compose *over* the bounded-retrieval primitive the redesign delivers,
+> gated on the redesign + D7. The redesign itself (re-platforming the tools onto
+> `graph-corpus-sdk` with bounded retrieval) is owned there, not here.
 
 **Shared context.** The misconception graph is bulk-derived, constructed in
 this repository from Oak bulk data. The live surface today is the
@@ -38,6 +46,11 @@ aggregated tool (whole-graph, ~6.0 MB) — the tool the EEF value proof
 misconception substrate; none of them re-authors misconception data.
 
 ## 1. Bounded sub-graph extraction
+
+> **Folded into the value-redesign core 2026-06-04** (see the boundary note above).
+> This section is retained as **prior art** for
+> [`graph-tools-value-redesign.plan.md`](./graph-tools-value-redesign.plan.md), not as
+> a separately-parked feature.
 
 **Problem** (owner direction 2026-05-07): the misconception graph is too
 large to use without an impractical amount of context; sub-graph query by
@@ -108,8 +121,11 @@ response, not two separate calls.
 - **Retired**: the gate-1a/gate-3a/Inc.3 sequencing scaffold. The real
   prerequisite is now stated directly — a finished EEF tool whose response
   shape and citation envelope are stable (finishing-plan D7), plus both
-  corpora queryable on `graph-corpus-sdk` (the substrate-migration plan owns
-  the misconception side).
+  corpora queryable on `graph-corpus-sdk` (the value-redesign plan owns the
+  misconception side). **Additional prerequisite**: the cross-corpus join here
+  depends on the cross-kind node-id policy defined by the value-redesign plan's
+  heterogeneous node/edge model — that policy must be settled before this
+  composition can join misconception × EEF cleanly.
 
 ## 3. Topic extraction
 
