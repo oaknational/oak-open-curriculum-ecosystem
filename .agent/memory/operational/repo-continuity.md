@@ -277,7 +277,7 @@ each thread record; this table is the repo-level index.
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Blustery Lifting Gale / skills-taxonomy-and-distribution / 2026-06-03 (prior: Umbral Whispering Silhouette 2026-06-01) |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | codex / GPT-5 / Opalescent Illuminating Prism / dedicated-knowledge-curation / 2026-06-03 (prior: Lacustrine Swimming Beacon, Ashen Burning Magma, Solar Glowing Meteor, Stratospheric Buffeting Breeze, Lofty Sweeping Falcon, Shaded Veiling Mirror) |
 | `repo-professionalism-assessment` | Repo professionalism / engineering-quality report → planability triage | [record][repo-professionalism-assessment] | codex / GPT-5 / Airy Whirling Wing / report-author-and-planability-router / 2026-06-03 |
-| `school-data-search` | Oak School Data Search service (POC MVP): briefs → report → plan → build | [record][school-data-search] | claude / Opus 4.8 / Furnace Roasting Brazier / report-and-plan-synthesiser / 2026-06-03 (prior: Hushed Lurking Mask 2026-06-03) |
+| `school-data-search` | Oak School Data Search service (POC MVP): briefs → report → plan → **gate walk complete** → build | [record][school-data-search] | claude / Opus 4.8 / Mossy Whispering Bark / owner-gate-session / 2026-06-04 (prior: Furnace Roasting Brazier, Hushed Lurking Mask, both 2026-06-03) |
 | `semantic-search` | Search data foundations: upstream-schema alignment, bulk sourcing, minimal-adaptation arc | [record][semantic-search] | claude / Opus 4.8 / Moonlit Waxing Nebula / upstream-realignment-specialist / 2026-06-03 |
 
 ## Paused Threads
@@ -299,6 +299,21 @@ not the current session-priority lane. Reactivation is owner-directed.
 | `agent-collaboration-research` | Comms-corpus pattern research | [record][collab-research] | Twilit Orbiting Satellite / routing-sunset execution landed; research vector owner-gated / 2026-05-29 |
 
 ## Next Safe Steps
+
+### School Data Search
+
+All nine owner gates decided 2026-06-04 (the owner gate session) plus a
+high-stakes verification pass that reopened/resolved three (G-1 F-C→F-B;
+G-6 NI register + Scotland geospatial layer; coordinates dropped). **Start
+the next session with a review**: plan §Phase 0 `### Gate decisions` + the
+`### Required high-stakes verifications` register (work done), then the
+thread record's Landing target (work ahead). Then: WS-D1 (decomposition
+proposal) → `architecture-expert` betty + fred → G-8; draft **ADR-190**
+(F-B produced-spec) → `docs-adr-expert`; promote the plan to `active/`;
+begin WS1+. Carry the **verification discipline** (verify external claims
+against primary sources before reliance) and the **licensing guardrail**
+(crystal-clear-open licences only; no OS-derived data). See the
+[`school-data-search` thread record][school-data-search].
 
 ### Agentic Mechanisms Discovery
 
@@ -475,7 +490,15 @@ authority.
 
 ## Deep Consolidation Status
 
-**completed this handoff — session-completion mode, owner-requested
+**running this handoff → owner-directed (2026-06-04, Mossy Whispering Bark
+/ claude / Opus 4.8 / `fac519`, school-data-search owner gate session
+close).** Owner asked for a full handoff + consolidate-docs run; scope:
+napkin disposition (over line-limit after the gate-session closeout
+capture), graduation-candidate routing (synthesis-verification-discipline →
+PDR/rule candidate; licensing guardrail → ADR candidate if the project
+proceeds), cross-platform memory read.
+
+Prior pass: **completed — session-completion mode, owner-requested
 handoff + consolidation at the realignment session close (2026-06-03,
 Moonlit Waxing Nebula / claude / Opus 4.8 / `e756f7`).** Fresh learning
 homed: nine napkin entries (incl. two `candidate:` tags —

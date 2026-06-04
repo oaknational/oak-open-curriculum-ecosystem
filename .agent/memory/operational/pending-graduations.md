@@ -1804,3 +1804,54 @@ feedback (sidebar shape is the lightest); composes with `coordinator-role-thresh
   suppressing a legitimate finding, OR the next authoring pass over the
   reviewer-brief discipline surface — whichever first.
 - **status**: pending
+
+## Synthesis/research artefacts must tier claims by verification status
+
+- **captured-date**: 2026-06-04
+- **source-surface**: `napkin.md` 2026-06-04 Mossy Whispering Bark gate-session
+  closeout entry; experience file
+  `2026-06-04-mossy-the-report-was-a-map-not-the-ground.md`; the
+  school-data-search high-stakes verification pass (plan §Phase 0 register).
+- **graduation-target**: PDR-shaped (Practice-governance: how compiled
+  evidence bases — synthesis reports, research syntheses — are built and
+  consumed). Doctrine: a compiled artefact must distinguish (a)
+  primary-verified facts from (b) single-source claims from (c)
+  frame-dependent convergences, and high-stakes (b)/(c) claims are
+  primary-verified before the artefact is "delivered" / relied on for build.
+  Operationalised this session as the plan's verification-discipline note +
+  the high-stakes register (delivery gate). Generalises
+  `verify-data-supports-shape-before-building`, `verify-dont-trust`, and the
+  "convergence inherits its frame" napkin pattern (n≥2).
+- **trigger-condition**: owner ratification (owner mandated the discipline
+  this session — an owner-present consolidation is the venue), OR a second
+  thread where a compiled artefact's unverified claim reaches build.
+- **status**: pending (owner-gated; already operational in the
+  school-data-search plan)
+
+## Precedent-hunting / source-framing as an optionality-invention engine
+
+- **captured-date**: 2026-06-04
+- **source-surface**: `napkin.md` 2026-06-04 Mossy gate-session closeout entry
+  (four owner corrections, one root); cross-experience corpus signal (Furnace
+  "suspicion of unanimous answers"; Moonlit "verdict before the plan").
+- **graduation-target**: rule- or pattern-shaped behavioural discipline —
+  decide from requirements + primary sources, not precedent/source-framing as
+  cover; a unanimous recommendation + owner intent makes a gate a
+  *confirmation*, not a fork; generalise the root on the FIRST correction and
+  re-audit in-flight work for siblings rather than patching instances.
+- **trigger-condition**: a second cross-session instance, OR owner direction
+  (four in-session instances is strong but single-session).
+- **status**: pending
+
+## Licensing guardrail — crystal-clear-open licences only (school-data-search)
+
+- **captured-date**: 2026-06-04
+- **source-surface**: school-data-search plan §Non-goals (owner directive
+  2026-06-04); the V-06 verification (Scotland geospatial OS/LGIH licence).
+- **graduation-target**: ADR-shaped if the project proceeds — a data-licensing
+  posture (only crystal-clear, open, respected licences enter the canonical
+  dataset; a licence allowlist parallel to the privacy allowlist; OS-derived /
+  Crown-Copyright / unclear-licence data excluded). Plan-local for the POC.
+- **trigger-condition**: the school-data-search POC go/no-go (project
+  proceeds), OR a second Oak data-ingestion surface facing the same question.
+- **status**: pending (project-gated)

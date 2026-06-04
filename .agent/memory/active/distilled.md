@@ -87,3 +87,16 @@ staging surface; fitness remains a routing signal, not a reason to avoid capture
   When code needs PUA sentinels, write escaped forms such as `\ue200`, not
   literal bytes; literal PUA text was stripped once and made a regex match
   everywhere.
+
+## 2026-06-04 — verify before you build on it (Mossy Whispering Bark)
+
+- **A synthesis/research report COMPILES claims; it does not CERTIFY them.**
+  Before relying on a compiled artefact's claim for a decision or a build,
+  check its verification tier — primary-verified fact vs single-source claim
+  vs frame-dependent convergence. High-stakes external-source claims are
+  primary-verified before the artefact is "delivered" (owner directive
+  2026-06-04, school-data-search gate session — a verification pass overturned
+  three already-recorded gate decisions). Decide from requirements + primary
+  sources, never from precedent or compiled-framing as cover. Routing:
+  PDR candidate in pending-graduations; operational now in the
+  school-data-search plan's verification discipline + high-stakes register.

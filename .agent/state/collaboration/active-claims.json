@@ -608,30 +608,52 @@
   ],
   "claims": [
     {
-      "claim_id": "cbf75f3b-1071-4499-b0dd-38caf62418af",
+      "claim_id": "6659dfd0-845d-4356-beb2-73f37cffaa30",
       "agent_id": {
-        "agent_name": "Mossy Whispering Bark",
+        "agent_name": "Burnished Glowing Spark",
         "platform": "claude",
         "model": "Opus 4.8",
-        "session_id_prefix": "fac519",
-        "id": "83bc53cf-5d13-5c66-8e78-3fe27f1b9e6b"
+        "session_id_prefix": "67b679",
+        "id": "bb21ad14-ba62-5433-a48a-72286736e243"
       },
-      "thread": "school-data-search",
+      "thread": "eef",
       "areas": [
         {
           "kind": "files",
           "patterns": [
-            ".agent/plans/school-data-search/**",
-            ".agent/memory/operational/threads/school-data-search.next-session.md",
-            "docs/architecture/architectural-decisions/190-*.md",
-            "docs/architecture/architectural-decisions/README.md"
+            ".agent/plans/sector-engagement/eef/current/eef-d4-graph-capability-contract.md",
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
           ]
         }
       ],
-      "claimed_at": "2026-06-04T06:18:09Z",
+      "claimed_at": "2026-06-04T07:07:16Z",
       "freshness_seconds": 14400,
       "sidebar_open": false,
-      "intent": "Owner gate session: walk G-1..G-9 of the school-data-search POC plan, record decisions at decision time, draft the G-1 produced-spec ADR if ratified. Registry scanned at open: 0 active claims, no overlap."
+      "intent": "EEF D4: author eef-d4-graph-capability-contract.md + fold ratified state into the plan (non-code ratification deliverable)"
+    },
+    {
+      "claim_id": "1dd0bafb-250b-4632-9b9c-90feee6ccff6",
+      "agent_id": {
+        "agent_name": "Burnished Glowing Spark",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "67b679",
+        "id": "bb21ad14-ba62-5433-a48a-72286736e243"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-d3-mcp-contract.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/future/graph-tools-substrate-migration.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-04T08:21:10Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "EEF D4 B-decision: inline guidance reports (revise D3+D4), home deferred heterogeneous-node-model in migration plan"
     }
   ]
 }

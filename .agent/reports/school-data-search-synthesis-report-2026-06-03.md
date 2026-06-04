@@ -109,10 +109,12 @@ happens at the plan's gates.
 - **Next.js App Router Route Handlers, deployed on Vercel as Functions**
   (3/3; B2 [[1]]). **Node.js runtime, not Edge** — database access, heavier
   ingestion, cryptographic token checks, transactional promotion (3/3;
-  B2 [[1]]). CAVEAT: this 3/3 was voted under the briefs' standalone-repo
-  frame. In-repo, no workspace uses Next.js and the deployed Vercel app is
-  Express — the app-runtime choice becomes fork **D-16** (arising from
-  C-01/C-08), not an inherited convergence.
+  B2 [[1]]). The 3/3 vote stands on the service's own merits and the
+  owner's standing intent: this is a Next.js app. The standalone→in-repo
+  frame change (C-01) bears on scaffolding, not on the runtime reasoning;
+  that Next.js is the monorepo's first Next workspace (the existing MCP app
+  is Express) is an implementation consequence, not a reason to reopen the
+  choice. Decided at G-2 (2026-06-04) — see D-16.
 - **Fluid Compute enabled; raised `maxDuration` on ingest/admin routes**
   (3/3; B2 [[17]], B3 [[18]]). Refresh runs synchronously inside the
   cron/admin request; `after()`/`waitUntil()` only for small post-response
@@ -608,30 +610,22 @@ carries these as explicit gates; none is silently defaulted.
   generic `inspection` is the only shape that serves all four nations; B2's
   finding caps what can be promised regardless of shape.
 
-### D-16 App runtime framework, in-repo (fork created by C-01/C-08)
+### D-16 App runtime framework — RESOLVED: Next.js (G-2, 2026-06-04)
 
-The briefs vote 3/3 for Next.js App Router — but that vote was cast inside
-their standalone-monorepo frame, where Next.js scaffolding cost nothing
-extra. In THIS repository (verified 2026-06-03): no workspace uses Next.js,
-and the deployed Vercel app (`apps/oak-curriculum-mcp-streamable-http`)
-declares `"framework": "express"` in its `vercel.json`. The in-repo
-options:
-
-- **Next.js App Router** (the briefs' shape): first-class Vercel Functions
-  integration, `instrumentation.ts` OTEL hook, route-segment config
-  (`maxDuration`) — at the cost of introducing a new framework class into
-  the monorepo toolchain (tsconfig/ESLint/Turbo/vitest patterns all gain
-  Next-specific shapes) for a service with no pages, no React, no SSR.
-- **The established in-repo pattern** (Express/plain Node HTTP on Vercel):
-  zero new framework surface, matches the existing deployed app's
-  operational shape; the briefs' Next-specific mechanics (route handlers,
-  segment config) re-map to the framework's equivalents.
-- Considerations: a backend-only data API uses none of Next.js's
-  distinguishing capabilities; conversely the briefs' Vercel mechanics are
-  documented Next-first, so the established pattern carries a re-mapping
-  cost (cron entry, duration config, OTEL registration — V-08 class).
-  Reversal: a framework swap after build is a full app-workspace rewrite —
-  one-way at POC completion. Decide before any app scaffolding.
+The briefs vote 3/3 for Next.js App Router, on the service's own merits
+(first-class Vercel Functions integration, `instrumentation.ts` OTEL hook,
+route-segment `maxDuration`, the documented Route-Handler shape) and in
+line with the owner's standing intent. **This is a Next.js app — it was
+always the plan.** Raising the runtime as a fork over-extended the
+frame-audit: the standalone→in-repo frame change (C-01) bears on
+scaffolding, not on the runtime reasoning, so the briefs' convergence was
+never in genuine contention here. That Next.js is the monorepo's first Next
+workspace (the existing MCP app, `apps/oak-curriculum-mcp-streamable-http`,
+declares `"framework": "express"`) is an implementation consequence — a new
+framework-class surface in the toolchain — not a reason to reopen the
+choice. The app workspace bootstraps via `pnpm create next-app@latest` and
+is adapted into the monorepo. Topology and preview-safety consequences are
+in C-08; the remaining open G-2 mechanic is the cron schedule (D-06).
 
 ## 5. Collision ledger — briefs vs owner requirements vs repo doctrine
 
@@ -720,23 +714,24 @@ owner direction (possibly at/after go/no-go).
 Briefs assume a dedicated Vercel project with its own env/cron/preview
 setup. In-repo, the collision is sharper than operational wiring:
 
-- **App runtime framework is a fork, not an inheritance** — the briefs'
-  3/3 Next.js vote was frame-dependent; no in-repo workspace uses Next.js
-  and the deployed app is Express on Vercel. Named as **D-16**, decided
-  before any app scaffolding.
-- **Vercel project topology**: cron jobs are project-scoped, and one
-  project serves one framework shape — co-locating the new service with
-  the existing Express app needs explicit partitioning, while a second
-  Vercel project doubles env/preview/provisioning management from one
-  monorepo. Named plan decision.
-- **Preview-safety is a correctness property, not a nicety**: cron and
-  destructive admin routes MUST be provably disabled in preview
-  deployments (`VERCEL_ENV` discrimination + guard logic + tests) — a
-  missed guard runs real ingestion from a preview against shared
-  infrastructure.
-- **Function-config blast radius**: Fluid Compute / `maxDuration` settings
-  for ingest routes must not silently alter the existing deployed app's
-  function behaviour if a shared project is chosen (interacts with V-08).
+- **App runtime is Next.js (D-16), not a fork** — the briefs' 3/3 vote
+  stands on the service's merits and the owner's standing intent. The
+  standalone→in-repo frame change bears on scaffolding (C-01), not the
+  runtime; raising it as a fork over-extended the frame-audit.
+- **Vercel project topology is determined, not a fork**: the service is a
+  distinct Next.js app, and a Vercel project serves one framework shape, so
+  it gets its own Vercel project.
+- **Preview-safety posture is Neon-contingent, not an unconditional
+  block**: under Neon's Vercel integration each preview deployment gets an
+  isolated database branch, so preview ingestion writes to that branch, not
+  shared/production data — the corruption risk that would force "disable
+  admin/cron in preview" largely dissolves. The posture is gated on
+  verifying the per-preview provisioning and whether Vercel runs cron on
+  preview deployments at all (V-08); external source fetches still fire from
+  a preview regardless of DB isolation. Settle alongside G-4.
+- **Function-config**: ingest routes need raised Fluid Compute /
+  `maxDuration` ceilings (V-08); in the service's own Vercel project this is
+  a local config concern, not a blast-radius risk to other apps.
 
 Neon marketplace provisioning, env var management, and project naming ride
 with these as plan workstream items with owner visibility; B1's Vercel
@@ -845,7 +840,7 @@ the plan.
 | V-01 | GIAS automated-fetch viability (downloads blocked probes; bot policy; exact download endpoints) | B1 reference note: GIAS blocks automated fetches; 2 owner probe URLs bot-blocked | First ingestion WS (England adapter) — named early milestone |
 | V-02 | GIAS extract-level licence string for the live download | B3 could not retrieve it; B2 cites page-level OGL | England adapter; capture licence string per snapshot at fetch time; block public display until confirmed (B3 acceptance criterion) |
 | V-03 | Ofsted rating / last-inspection availability in current GIAS public downloads/API | B2 [[6]] cites a 2024 removal; B1/B3 field models still carry inspection-date fields | England source-schema mapping WS |
-| V-04 | Wales independent/closed-school machine-readable coverage | B2 [[7]] weak; B3 [[10]] found only an ad-hoc dataset | Wales adapter WS; ship current-coverage Wales + documented gap if unconfirmed (B3) |
+| V-04 | Wales **closed/historical**-school coverage (independents CONFIRMED covered: the GOV.WALES address list includes independent schools — verified 2026-06-04; the earlier independent concern was a B2-only artefact, retracted) | B3 [[10]]: only an ad-hoc closures dataset, no continuous machine-readable closed register | Wales adapter WS; ship current + independent Wales, document the closed/historical gap (best-effort, lower-priority for find-your-current-school) |
 | V-05 | NI Institution Search export automation (machine interface) + NI coordinates freshness | B3 [[13]] export interface unconfirmed; B2 [[10]] freshness unconfirmed | NI adapter WS — named early milestone |
 | V-06 | Scotland School Roll & Locations licence/attribution terms | B1 flags non-OGL-clean aggregator metadata; legal sign-off needed before public display | Scotland adapter WS + pre-release legal gate |
 | V-07 | DataMapWales maintained-layer currency | B2 [[7]] says modified 2026-04-23; B1 table says 2025-03-21 — cross-brief conflict | Wales adapter WS (read the layer's live metadata) |

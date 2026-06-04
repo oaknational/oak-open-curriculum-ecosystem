@@ -290,3 +290,41 @@ fitness_content_role: drainable-buffer
   HEAD. Sharpened reading of the never-delete-index-lock doctrine: the lock
   family is not friction, it is the last line of the same protection the
   claims substrate provides socially.
+
+## 2026-06-04 — gate-session closeout reflection (Mossy Whispering Bark)
+
+### Patterns to Remember
+
+- **The session's root error: privileging a compiled/inherited source over
+  first-principles grounding against the requirement + primary sources.** Four
+  owner corrections, one root — (1) precedent-hunting (treated the existing
+  Express app as a decision input for a runtime already settled on merits +
+  owner intent; existence ≠ correctness; the First Question used as a
+  cheap-cure lever); (2) cron over-engineered from the briefs' hourly+guard
+  workaround without re-asking what a once-a-day job needs; (3) relayed a
+  single-brief caution (Welsh independents) the report had compiled as
+  consensus; (4) F-C / NI / coordinates all rested on unverified brief claims
+  the verification pass overturned. Cure (stance): decide from requirements +
+  primary sources; a unanimous recommendation + owner intent makes a gate a
+  *confirmation*, not a fork; never import precedent or source-framing as a
+  decision input without re-grounding.
+- **Generalise the root on the FIRST correction — don't patch the instance.**
+  The same root recurred four times because I fixed each instance instead of
+  sweeping for siblings. After the Express correction I should have pre-verified
+  cron, NI, coords, and F-C before presenting them as verdicts. A correction
+  names a *pattern*; re-audit the in-flight work for other instances of it.
+- **A synthesis report COMPILES claims; it does not CERTIFY them** (strengthens
+  the "convergence inherits its frame" entry to n≥2). The report graded citation
+  confidence but not frame-dependence or primary-verification status, so
+  single-brief claims and frame-dependent convergences wore the same authority
+  as verified facts. Cure (now owner doctrine, baked into the plan): high-stakes
+  external claims are primary-verified before the artefact is *delivered*; a
+  compiled evidence base must tier claims by verification status.
+  **Graduation candidate** — synthesis-method doctrine; connects to
+  `verify-data-supports-shape-before-building` + `verify-dont-trust`.
+- What worked: one-gate-at-a-time surfaced the errors at human-reviewable
+  granularity (a batch would have buried them); the 5-agent verification pass
+  paid for itself (3 reopened gates); record-at-decision-time made every
+  correction durable; and the `.remember` retirement was caught at closeout by
+  re-deriving rather than trusting the hours-old session plan — the lesson
+  landing on its own tail.

@@ -8516,6 +8516,52 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "cbf75f3b-1071-4499-b0dd-38caf62418af",
+      "agent_id": {
+        "agent_name": "Mossy Whispering Bark",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "fac519",
+        "id": "83bc53cf-5d13-5c66-8e78-3fe27f1b9e6b"
+      },
+      "thread": "school-data-search",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/school-data-search/**",
+            ".agent/memory/operational/threads/school-data-search.next-session.md",
+            "docs/architecture/architectural-decisions/190-*.md",
+            "docs/architecture/architectural-decisions/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-04T06:18:09Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Owner gate session: walk G-1..G-9 of the school-data-search POC plan, record decisions at decision time, draft the G-1 produced-spec ADR if ratified. Registry scanned at open: 0 active claims, no overlap.",
+      "archived_at": "2026-06-04",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-04T08:33:33Z",
+        "closed_by": {
+          "agent_name": "Mossy Whispering Bark",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "fac519",
+          "id": "83bc53cf-5d13-5c66-8e78-3fe27f1b9e6b"
+        },
+        "summary": "Owner gate session complete: G-1..G-9 decided + recorded in plan §Phase 0; high-stakes verification pass (5 primary-source checks) reopened+resolved G-1 F-C->F-B, G-6 NI register + Scotland geospatial, coordinates dropped; licensing guardrail + verification discipline baked into plan; thread record updated as handoff. Evidence: .agent/plans/school-data-search/current/school-data-search-poc.plan.md §Phase 0; .agent/memory/operational/threads/school-data-search.next-session.md",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "cbf75f3b-1071-4499-b0dd-38caf62418af",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
