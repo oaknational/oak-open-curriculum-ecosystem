@@ -36,6 +36,9 @@ todos:
     content: "Verify the estate reads clean: no broken links (rg link-check), READMEs accurate, every archived plan has a pointer + index entry, every parked plan states its block condition; markdownlint + relevant gates green."
     status: pending
     depends_on: [t2-archive-superseded, t3-archive-completed, t4-park-future-blocked, t5-rewrite-readmes, t6-author-value-plan, t7-reconcile-references]
+  - id: t9-deep-review-cleanup
+    content: "2026-06-04 deep-review-driven cleanup (Tempestuous Vaulting Gust / d61788). Archived 8 superseded/complete plans — graph-migration-plan-overhaul, ontology-repo-fresh-perspective-review → archive/completed/; kg-alignment-audit, kg-integration-quick-wins, oak-curriculum-ontology-workspace-reassessment, ontology-integration-strategy, direct-ontology-use-and-graph-serving-prototypes, oak-ontology-graph-opportunities.strategy → archive/superseded/ — and consolidated the 4 empty oak-kg surface stubs (lesson-graph, programme-navigator, schema-browser, iri-traverser) into a README backlog. SUPERSEDES t1's keep-disposition for kg-alignment-audit + kg-integration-quick-wins: the deep review answered their core join-key questions (thread join works on content-slug both sides; lesson/unit identity is disjoint with no public crosswalk — verified against the ontology, the bulk export, and the OpenAPI spec), so the audit is no longer a live precursor. README reindexed; ADR-157 updated with the five-prefix source convention (onto-/bulk-/oakapi-/oaksearch-/eef-), migrated incrementally. Synthesis: ../../../reports/oak-kg-ontology-deep-review-2026-06-04.md."
+    status: completed
 ---
 
 # Graph estate consolidation, decontamination & rewriting — master plan for all graph materials

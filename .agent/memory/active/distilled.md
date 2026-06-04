@@ -156,3 +156,23 @@ staging surface; fitness remains a routing signal, not a reason to avoid capture
   facts check out and the recommendation is the more decomposed/elaborate shape.
   Routing: refines `feedback_validate_specialist_findings_before_acting`; PDR/rule
   candidate on recurrence.
+
+## 2026-06-04 — convenient claims cluster at frame-fit points (Tempestuous Vaulting Gust)
+
+oak-kg/ontology deep review surfaced four convenient claims, each caught only by grounding:
+the phantom integer id-join (the bulk export has no numeric lesson id at all); "ontology
+misconceptions are sparse" (7,415 nodes on 8,394/8,399 lessons); "the Oak API holds both id
+and slug" (written into my *own* report, then falsified by the OpenAPI scan); the survey's
+"GraphView = 5 NotImplementedYet stubs" (it is `manifest()`+`subgraph()`, no stubs). Two
+sub-traps sharper than the general rule:
+
+- **Specificity is not verification.** A concrete detail ("integer `curric:id`") lends false
+  authority to the *inferred* half of a cross-cutting claim ("…matching the bulk ids") that
+  was never read. Split read-half from inferred-half; ground the convenient inferred half first.
+- **Constraint strictness is not data volume.** "SHACL `minCount` disabled → data sparse" is a
+  non-sequitur (disabled = not-required-per-record, not unpopulated).
+
+A claim's *convenience* (it makes the hard thing easy, or the boundary tidy) correlates with
+motivated construction; the fluency of a tidy narrative is itself the warning sign. Refines
+`ground-convenient-claims`, `present-key-is-not-graph-identity`,
+`validate-specialist-findings-before-acting`; connects to the Mossy verify-before-build entry.

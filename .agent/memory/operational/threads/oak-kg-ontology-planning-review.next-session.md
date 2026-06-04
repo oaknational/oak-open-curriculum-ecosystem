@@ -1,77 +1,65 @@
 # Next-Session Record — `oak-kg-ontology-planning-review` thread
 
-> **THREAD OPENED 2026-06-04 (Twilit Cascading Supernova / `bb53a9`, claude / Opus 4.8,
-> owner-directed) — brief only; the deep review is the FRESH session's work, NOT done here.**
-> Owner directed a new thread to plan the `oak-kg` / ontology work, **starting with a deep
-> review of the current Oak Curriculum Ontology repo**. This record is the cold-start brief.
+> **DEEP REVIEW COMPLETE · DECISIONS RATIFIED · ESTATE CLEANED — 2026-06-04**
+> (Tempestuous Vaulting Gust / `d61788`, claude / Opus 4.8, owner-directed). The deep review of the
+> Oak Curriculum Ontology + our estate is done; six owner decisions ratified; the KG/ontology plan
+> estate de-cluttered from 22 live surfaces to 10. Authoritative synthesis:
+> [`oak-kg-ontology-deep-review-2026-06-04.md`](../../../reports/oak-kg-ontology-deep-review-2026-06-04.md).
 
-## Lane state
+## Ratified decisions (owner, 2026-06-04)
 
-- **Owning plan(s)**: none yet — the deep review is the first activity and will *shape* the
-  plan. Author the planning artefact(s) from the review's findings; do not pre-author a plan
-  before the review (premature crystallisation).
-- **Current objective**: deeply review the current Oak Curriculum Ontology, then scope the
-  `oak-kg` / ontology planning work (which already-parked `oak-kg-*` surfaces revive, in what
-  order, on which serving model, and how it relates to — but stays separate from — the
-  bulk-derived graph redesign).
-- **Current state**: not started. Setup only.
+1. **Threads first** — build the ontology thread surface (`onto-threads`), a tool **distinct** from the
+   bulk-derived thread tooling (`bulk-threads`); not forced to match; combine later.
+2. **Serving = TTL → substrate** (live `graph-ingest` Turtle path; ADR-173 **Accepted**).
+3. **Cross-source lesson/unit deferred** — verified (OpenAPI spec + bulk export + ontology): no shared
+   identity key exists publicly. Only the **thread** join works (content-slug both sides).
+4. **Bulk and ontology stay separate / complementary.**
+5. **Integration = pinned release-download** of the ontology TTL.
+6. **Source-prefix naming convention** (ADR-157, amended): `onto-*`, `bulk-*`, `oakapi-*`,
+   `oaksearch-*`, `eef-*` mark **source only**; NC is authority/content metadata, never a prefix.
+   **Migrated incrementally** — existing names keep until next touched.
 
 ## Next safe step (the fresh session's first move)
 
-1. **Start-right**, then read the grounding inputs below before touching the ontology.
-2. **Deep-review the ontology repo** — it is checked out locally (faster + fuller than GitHub):
-   - Local checkout: `/Users/jim/code/oak/oak-curriculum-ontology`
-   - GitHub: `https://github.com/oaknational/oak-curriculum-ontology`
-   Read the schema (`ontology/oak-curriculum-ontology.ttl`), the SHACL constraints
-   (`ontology/oak-curriculum-constraints.ttl`), a representative slice of `data/**` (temporal,
-   programme-structure, threads, a subject's taxonomy + a key-stage file), the Neo4j export
-   config/architecture (`scripts/export_to_neo4j*`), and the README. Produce an assessment under
-   `.agent/reports/` (per `feedback_reports_live_in_agent_reports`).
-3. From the assessment, propose the `oak-kg` / ontology planning shape for owner ratification —
-   naming decisions, not making them (`feedback_research_outputs_name_not_make_decisions`).
+1. **Start-right**, then read the deep-review report (it carries the grounded facts — do not re-derive).
+2. **Author the `onto-threads` executable plan** (`/oak-plan`): build the `graph-corpus-sdk` Oak
+   Curriculum Ontology Threads adapter (`curric:Thread` + `curric:includesThread` inverse edge) over a
+   **pinned TTL release**, then the `onto-threads` resource + `onto-get-thread-content` tool (onto-*
+   convention; supersedes the old `oak-kg-*` names). Surface per ADR-179. The real blocker is the
+   missing Threads adapter (graph-stack WS4.2), not EEF.
+3. **Incremental hygiene** (not blocking, owner sanctioned "don't change everything at once"):
+   graph-estate-consolidation **t8** owns link-reconciliation for the ~23 referrers to the archived
+   plans; three surviving plans have light reshape pending (oak-kg-threads-surface dead spine-ref;
+   nc-knowledge-taxonomy-surface ADR-173 ingest-path note; extending-graph-support-tooling `c5`
+   onto/bulk-threads split).
 
-## Grounding inputs (read FIRST — much is already established; do not re-derive)
+## Estate state after cleanup (2026-06-04)
 
-- **The two-source map + named decisions**:
-  [`graph-kg-estate-and-two-source-survey-2026-06-04.md`](../../../reports/graph-kg-estate-and-two-source-survey-2026-06-04.md)
-  — §4 names the still-open decisions this thread inherits (one-graph-or-two-joined; anchor
-  doctrine; positioning; EEF sequencing); §6 records the owner decisions already made.
-- **The separate-concern boundary** (owner-directed): the bulk-derived curriculum graphs
-  (`graph-tools-value-redesign.plan.md`, parked on EEF D6 + D7) and the **ontology graphs** are
-  **distinct concerns sharing the `graph-core`/`graph-corpus-sdk` substrate**. This thread owns
-  the ontology side. Concepts live in the ontology (its SKOS taxonomy), not the bulk source; any
-  cross-source (concept) capability is gated on a **bulk↔ontology alignment audit**.
-- **Existing parked estate to revive/reconcile** (the survey maps these): the `oak-kg-*` surface
-  plans (`oak-kg-threads-surface` + siblings lesson/programme/schema-browser/iri-traverser),
-  `cross-source-journeys`, `ontology-integration-strategy`,
-  `direct-ontology-use-and-graph-serving-prototypes`,
-  `oak-curriculum-ontology-workspace-reassessment`, the elasticsearch-neo4j-ontology synthesis
-  research. ADRs: **ADR-157** (multi-source integration; `oak-kg-*` namespace; source-authority
-  split), **ADR-173** (graph-stack topology), ADR-179 (transport-agnostic substrate).
-- **Ontology facts already established 2026-06-04** (verify, don't re-derive): formal
-  RDF/OWL/SKOS/SHACL; stable `w3id.org` IRIs; **v0.1 early release "subject to change"**; 8
-  subjects (English, Maths, Science[Bio/Chem/Phys], History, Geography, Citizenship — NOT yet
-  Computing/Art/Music/PE/Languages); models `Programme → UnitVariantInclusion → UnitVariant →
-  LessonInclusion → Lesson`, SKOS `Discipline → Strand → SubStrand → ContentDescriptor`, threads,
-  NC alignment; **sequencing/optionality via Inclusion nodes** (which correctly represents a
-  lesson placed in multiple contexts — the identity lesson the bulk side lacks); Neo4j export +
-  SPARQL + multi-format distributions; OGL-3.0 data / MIT code.
+Live KG/ontology surfaces (10): `current/graph-estate-consolidation`; `active/graph-stack` +
+`agent-guidance-consolidation`; `future/oak-kg-threads-surface` (lead), `nc-knowledge-taxonomy-surface`,
+`cross-source-journeys`, `oak-misconceptions-graph-features`, `graph-tools-value-redesign`,
+`extending-graph-support-tooling`; `README`. Archived 2026-06-04 (graph-estate-consolidation t9):
+8 superseded/complete plans + 4 consolidated oak-kg stubs (→ README backlog). The 4 empty oak-kg
+surface stubs now live as a forward backlog in the README, not per-surface files.
 
-## Blockers / low-confidence areas
+## Blockers / external dependencies
 
-- The ontology is **v0.1 and explicitly unstable** (URIs/structure/data subject to change) —
-  design any integration for change, not as a fixed dependency.
-- The **alignment audit** (bulk slugs ↔ ontology IRIs; overlap/mismatch) is the named technical
-  precursor for any cross-source work and has not run.
-- Serving model is open (the prototypes plan's Lane A direct-use baseline vs Neo4j vs Stardog).
+- **Slug bridge — owner-raised, not gating.** Lesson/unit cross-source needs an upstream ontology
+  `curric:slug` property (the ontology generates its data upstream; we consume, we cannot add it). The
+  owner is asking the ontology team where to make the change. This does **not** gate `onto-threads` or
+  any current work. If/when the slug ships, lesson/unit cross-source unblocks (promotion trigger in the
+  README).
+- Ontology is **v0.1, unstable** — design to the coupling constraints in the report (depend on the
+  structural model + `oakcurric:` numeric IRIs; never on `natcurric:` label-IRIs or data completeness).
 
 ## Scope guardrails
 
-- This is a **review + planning** thread, not implementation; do not build.
-- It is **separate from** the bulk-derived `graph-tools-value-redesign` (which stays parked on
-  EEF D6 + D7) — do not expand that plan or fold the two concerns together.
-- Timing is owner-scheduled; this thread is opened, not started.
+- Review + planning context; the next step authors a plan, not the implementation itself.
+- **Separate from** the bulk-derived `graph-tools-value-redesign` (parked behind EEF D6+D7) — do not
+  expand it or fold the two concerns together.
+- The six decisions above are ratified and may be built against.
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
 | `Twilit Cascading Supernova` | `claude` | `Opus 4.8` | `bb53a9` | `thread-opener-brief-only` | 2026-06-04 | 2026-06-04 |
+| `Tempestuous Vaulting Gust` | `claude` | `Opus 4.8` | `d61788` | `deep-reviewer + estate-cleanup` | 2026-06-04 | 2026-06-04 |

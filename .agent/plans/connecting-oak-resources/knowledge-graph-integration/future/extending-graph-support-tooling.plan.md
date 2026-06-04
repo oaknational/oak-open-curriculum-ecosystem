@@ -22,7 +22,7 @@ todos:
     content: "Graded role-based disclosure. NOT needed for EEF (whole corpus < agent ceiling, so full nodes always fit). Becomes live only for a future corpus that genuinely cannot fit full-node, and only built in the right layer (a shared projection applier in graph-core, per graph-view.ts), never as per-tool field-masking."
     status: pending
   - id: c5-additional-corpora-adapters
-    content: "Further GraphView adapters (Threads, misconceptions, prerequisites) exercising the same delivery capability. Confirms the capability is genuinely reusable (the end-goal claim)."
+    content: "Further GraphView adapters exercising the same delivery capability — confirming it is genuinely reusable. Per the ratified source-prefix decision (2026-06-04), 'Threads' is TWO distinct tools — `onto-threads` (ontology-derived) and `bulk-threads` (bulk-derived), not one adapter — plus misconceptions and prerequisites (bulk-derived)."
     status: pending
   - id: c6-cross-corpus-and-prose
     content: "Cross-corpus surfaces and a prose-delivery tool — both genuinely-unknown candidates surfaced during the EEF work. Build only if exploration shows the need; otherwise they stay candidates here."

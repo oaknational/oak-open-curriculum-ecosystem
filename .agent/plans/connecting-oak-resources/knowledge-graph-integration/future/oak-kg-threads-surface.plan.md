@@ -62,8 +62,8 @@ todos:
     content: "WS6: dispatch `mcp-expert` (MCP spec + tool shape + namespace conformance) + `test-expert` (TDD pair audit, no audit-shaped tests, no skipped tests) + `code-expert` (gateway). Document findings; remediate or queue."
     status: pending
     depends_on: [ws5-quality-gates]
-  - id: ws7-spine-gate-2-close
-    content: "WS7: update spine `gate-2-threads-ships` todo to `completed`; record acceptance evidence (including the shape-understanding paragraph required by the MVP-arc gate-2 acceptance criterion); refresh thread next-session record. This does not gate the combinatorial-arc cross-corpus tool, which composes EEF and misconceptions only."
+  - id: ws7-acceptance-record
+    content: "WS7: the MVP-arc spine is retired — there is no live `gate-2-threads-ships` todo to update; record acceptance evidence (including the shape-understanding paragraph) in the thread next-session record instead. This does not gate any cross-corpus tool."
     status: pending
     depends_on: [ws6-adversarial-review]
 ---
@@ -82,9 +82,12 @@ todos:
 > primitive** insight — Thread is a forward edge from Unit
 > (`curric:includesThread`), so thread-content resolution requires inverse
 > lookup, and this surface is the slice that proves that primitive earns its
-> keep end-to-end; (2) the **spine-locked names**
-> `curriculum://oak-kg-threads` (resource) and `oak-kg-get-thread-content`
-> (tool). Park record:
+> keep end-to-end; (2) the surface ships under the **`onto-*` source-prefix
+> convention** (ADR-157, 2026-06-04): `curriculum://onto-threads` (resource) and
+> `onto-get-thread-content` (tool) — superseding the retired spine's `oak-kg-*`
+> names still used in the body below (rename at build time, per the convention's
+> migrate-on-touch rule). Ingestion is TTL → substrate (ADR-173, Accepted). Park
+> record:
 > [`graph-estate-consolidation.plan.md`](../current/graph-estate-consolidation.plan.md).
 
 **Last Updated**: 2026-06-02 (parked; previous substantive update 2026-05-21).

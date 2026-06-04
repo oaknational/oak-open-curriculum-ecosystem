@@ -259,17 +259,22 @@ Levels 1-3 use the EEF JSON data directly with bulk-data
 phase/subject matching. They do **not** depend on the KG alignment
 audit or the formal ontology and can proceed independently.
 
-Levels 4/4b require the formal ontology and depend on the KG
-alignment audit (`knowledge-graph-integration/current/kg-alignment-audit.execution.plan.md`)
-to establish join keys and overlap measurement.
+Levels 4/4b require the formal ontology and depend on the **EEF→curriculum
+semantic crosswalk** (§5) — pedagogical strand→content mapping, not an
+identifier join. They do **not** depend on an ontology↔bulk identity alignment
+audit (that plan is now archived). The 2026-06-04 deep review answered the
+identity question: threads join on content-slug, but lesson/unit identity is
+disjoint with no public crosswalk — and that bears only on cross-source *use*
+from a bulk/search entry point, not on extending the ontology itself with
+evidence properties.
 
 | Level | What | Data Source | Depends On | Effort | Value |
 |---|---|---|---|---|---|
 | **1: Prompt composition** | Both MCP servers used simultaneously by AI client | EEF JSON | Nothing | None | Immediate concept validation |
 | **2: Oak prompts reference EEF** | New prompts orchestrate calls to both servers | EEF JSON | Nothing | Low | Guided cross-server workflows |
 | **3: Aggregated evidence tool** | Oak ingests EEF data, exposes through own tools with type safety | EEF JSON + bulk data (phase/subject matching) | Nothing | Moderate | Unified experience, deployed |
-| **4: Ontology extension** | EEF strands as nodes in curriculum KG via formal vocabulary | Formal ontology (RDF/OWL) | KG alignment audit | Moderate-significant | Graph traversal queries |
-| **4b: Neo4j-powered queries** | Extended ontology exported via existing pipeline | Neo4j (from ontology) | KG alignment audit + Level 4 | Moderate | Cypher-powered evidence queries |
+| **4: Ontology extension** | EEF strands as nodes in curriculum KG via formal vocabulary | Formal ontology (TTL → substrate, ADR-173) | EEF→curriculum semantic crosswalk (§5) | Moderate-significant | Graph traversal queries |
+| **4b: Downstream graph queries** | Extended ontology served for richer queries | Ontology distribution (e.g. Neo4j/Cypher) — downstream of TTL → substrate, not the primary path | Level 4 | Moderate | Richer evidence queries |
 
 **Important distinction**: the "graphs" in this repo (ADR-059's
 curriculum concept map, the misconception graph, the prerequisite
@@ -369,20 +374,23 @@ The EEF material poses useful questions back to Oak's MCP strategy:
 ## 11. Dependencies and Sequencing
 
 **Levels 1-3 are independently deliverable.** They use EEF JSON data
-with bulk-data phase/subject matching. They do not require the ontology,
-the KG alignment audit, or Neo4j. They can proceed on a demo branch
+with bulk-data phase/subject matching. They do not require the ontology
+or any cross-source KG work. They can proceed on a demo branch
 immediately.
 
-**Levels 4/4b depend on the formal ontology.** They require the KG
-alignment audit to establish join keys and overlap measurement before
-the ontology can be safely extended with evidence properties.
+**Levels 4/4b depend on the formal ontology and the EEF→curriculum semantic
+crosswalk (§5).** Extending the ontology with evidence properties is
+ontology-side work plus pedagogical mapping; it does not require the (archived)
+ontology↔bulk identity audit. Cross-source *use* from a bulk/search entry point
+is thread-joinable but lesson/unit-blocked (2026-06-04 deep review) — a separate,
+already-answered concern. The ontology is consumed as a pinned TTL release
+(ADR-157 decision 5; ADR-173 TTL → substrate).
 
 | Dependency | Status | Blocks |
 |---|---|---|
 | Oak MCP ecosystem (Layer 1) | Production | Nothing — ready |
 | EEF data (Layer 3 source) | v0.2.0, 30 strands | Nothing — data file available |
-| Oak Curriculum Ontology (Layer 2) | v0.1.0, stable core | Level 4 only |
-| KG alignment audit | Active, Phase 0 pending | Level 4 only |
+| Oak Curriculum Ontology (Layer 2) | v0.1.0; consumed as pinned TTL release | Level 4 only |
 | EPPI study-level data | Not yet accessible | Layer B calibration (R4) |
 | Curriculum crosswalk mapping | Not started | Level 4 (highest-value artefact) |
 
@@ -392,10 +400,11 @@ the ontology can be safely extended with evidence properties.
 independently valuable, demonstrate the composition concept, and
 can ship on a demo branch without waiting for any KG work.
 
-**Levels 4/4b** should be promoted when:
-
-1. The KG alignment audit completes and establishes join keys
-2. OR the EEF project reaches v0.5 (curriculum crosswalk readiness)
+**Levels 4/4b** should be promoted when the EEF→curriculum semantic crosswalk
+(§5) is ready — i.e. the EEF project reaches curriculum-crosswalk readiness
+(~v0.5) and the pedagogical strand→content mapping is underway. The ontology
+itself is already consumable (pinned TTL release, ADR-157 decision 5) and is no
+longer a gating unknown.
 
 ## 13. Risks and Unknowns
 

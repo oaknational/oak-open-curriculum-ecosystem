@@ -199,12 +199,27 @@ server," not "data from the Oak API specifically."
 Resource and tool names use a prefix convention that signals data
 provenance for citation, credit, and attribution:
 
-| Prefix                 | Source                                 | Examples                                                 |
-| ---------------------- | -------------------------------------- | -------------------------------------------------------- |
-| _(none)_               | Oak Open Curriculum API (bulk data)    | `prior-knowledge-graph`, `thread-progressions`, `model`  |
-| `oak-kg-*`             | Oak Curriculum Ontology                | `oak-kg-knowledge-taxonomy`, `oak-kg-get-thread-content` |
-| `oak-misconceptions-*` | Oak misconception graph (bulk-derived) | `oak-misconceptions-subgraph-for-thread`                 |
-| `eef-*`                | EEF Teaching and Learning Toolkit      | `eef-methodology`, `eef-strands`                         |
+| Prefix        | Source (provenance)                      | Examples                                          |
+| ------------- | ---------------------------------------- | ------------------------------------------------- |
+| `onto-*`      | Oak Curriculum Ontology                  | `onto-threads`, `onto-knowledge-taxonomy`         |
+| `bulk-*`      | Oak Open Curriculum API — bulk export    | `bulk-thread-progressions`, `bulk-misconceptions` |
+| `oakapi-*`    | Oak Open Curriculum API — live endpoints | `oakapi-lesson-summary`                           |
+| `oaksearch-*` | Oak semantic search service              | `oaksearch-related-units`                         |
+| `eef-*`       | EEF Teaching and Learning Toolkit        | `eef-methodology`, `eef-strands`                  |
+
+**Source-prefix convention (owner-ratified 2026-06-04).** The prefix marks
+**source / provenance only** — which system a surface's data comes from. Five
+sources are recognised: `onto-` (ontology), `bulk-` (Oak API bulk export),
+`oakapi-` (Oak API live endpoints), `oaksearch-` (Oak search service), `eef-`
+(EEF Toolkit). This supersedes the earlier prefix table; legacy mapping:
+`oak-kg-*` → `onto-*`; unprefixed bulk tools and `oak-misconceptions-*` →
+`bulk-*`. **Migration is incremental** — already-shipped names
+(`prior-knowledge-graph`, `thread-progressions`, `model`, `oak-misconceptions-*`,
+`oak-kg-*`) keep their names until next touched; every NEW surface conforms. The
+National-Curriculum-vs-Oak-authored distinction is an **authority / content
+axis, orthogonal to source** — carried in `_meta` metadata, never as a prefix
+(see "No `nc-*` prefix" below). This makes the "Unprefixed default" note below a
+legacy-compatibility statement, not the go-forward rule.
 
 **Explicit source attribution on every NEW tool (added 2026-05-07).**
 New tools and resources MUST carry a source-identifying prefix (or

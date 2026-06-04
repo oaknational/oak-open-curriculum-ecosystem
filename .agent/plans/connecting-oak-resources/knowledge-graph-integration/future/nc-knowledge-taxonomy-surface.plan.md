@@ -55,8 +55,10 @@ todos:
 **Branch**: TBD
 **Strategic context**: This is the smallest meaningful integration of
 the [Oak Curriculum Ontology](https://github.com/oaknational/oak-curriculum-ontology)
-into the MCP server. All ontology-sourced resources use the `oak-kg-*`
-namespace prefix to distinguish them from bulk-API-derived surfaces.
+into the MCP server. Per the ADR-157 source-prefix convention (2026-06-04),
+ontology-sourced surfaces use the `onto-*` prefix (this surface ships as
+`onto-knowledge-taxonomy`); the `oak-kg-*` names in the body below predate the
+convention and rename at build time.
 
 ## Promotion trigger
 
@@ -114,12 +116,13 @@ server.
 
 ## Decision
 
-Extract the SKOS knowledge taxonomy from the ontology's `.ttl` files
-into a JSON data file at build time. Expose as
-`curriculum://oak-kg-knowledge-taxonomy` resource +
-`get-oak-kg-knowledge-taxonomy` tool using the graph resource factory.
-The `oak-kg-` prefix signals provenance from the ontology knowledge
-graph, distinguishing these surfaces from bulk-API-derived ones.
+Expose the SKOS knowledge taxonomy as a `curriculum://onto-knowledge-taxonomy`
+resource + `onto-knowledge-taxonomy` tool. **Ingestion path (ADR-173, Accepted):**
+consume the ontology's canonical Turtle via the live `graph-ingest` path
+(TTL → `DatasetCore` → property-graph), **not** a bespoke build-time JSON
+extractor/regex — the bespoke-extractor framing in Phase 1 below predates ADR-173
+and should be reworked to the substrate path at build time. The `onto-` prefix
+signals ontology provenance (ADR-157).
 
 ## Data Source
 
