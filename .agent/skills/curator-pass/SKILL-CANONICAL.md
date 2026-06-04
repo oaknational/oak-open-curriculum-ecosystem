@@ -71,8 +71,6 @@ plus targeted reads). The surfaces:
   `pending-graduations.md`, thread next-session records, tracks.
 - Platform-specific per-user memory: the surface for the current
   agent's platform only.
-- Plugin-managed capture buffers (the in-repo `.remember/`-style
-  surfaces) for observation extraction; do not mutate the buffer.
 - Comms event stream: scan recent events; check tag-namespace
   adoption signals (e.g. `failure-mode`, `behaviour-note`,
   `heartbeat`).

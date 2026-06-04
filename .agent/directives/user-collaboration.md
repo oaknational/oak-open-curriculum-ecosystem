@@ -31,7 +31,7 @@ these as load-bearing context when interpreting owner direction:
   the visibility-before-enforcement layer in plan structure, and the
   evidence-gated promotion bar across PDRs.
 - **Capture-and-distill workflows wired into existing processes.**
-  The owner builds capture surfaces (`.remember/`, napkin, distilled,
+  The owner builds capture surfaces (napkin, distilled,
   consolidate-docs) that wire into existing processes rather than
   parallel tracking; tools come into the loop, not alongside it.
 - **Formalises emergent patterns through explicit graduation.**

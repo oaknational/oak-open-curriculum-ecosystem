@@ -88,8 +88,8 @@ substance change behaviour or carry durable understanding?**
 - **Yes** — write it. Fitness state of the destination is
   irrelevant to the write decision.
 - **No** — the entry would be ephemeral; consider whether it
-  belongs in a shorter-lived surface (`.remember/` buffer, comms
-  event) rather than the durable memory.
+  belongs in a shorter-lived surface (a comms event) rather than
+  the durable memory.
 
 If the destination surface is overflowing, raise the rotation
 question separately, **after the entry lands**. If archive or

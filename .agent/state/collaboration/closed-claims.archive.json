@@ -8428,6 +8428,50 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "3a1b9874-cb63-4932-917c-a67747443540",
+      "agent_id": {
+        "agent_name": "Moonlit Waxing Nebula",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "e756f7",
+        "id": "282b8921-e04b-5bd8-bfd5-21cabb07b137"
+      },
+      "thread": "semantic-search",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-04T07:00:07Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "Complete the .remember de-reference across the remaining permanent-tier surfaces.",
+      "intent_to_commit": "bc6a3380-01aa-49a7-b5c5-7ed72cf360a1",
+      "archived_at": "2026-06-04",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-04T07:00:12Z",
+        "closed_by": {
+          "agent_name": "Moonlit Waxing Nebula",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "e756f7",
+          "id": "282b8921-e04b-5bd8-bfd5-21cabb07b137"
+        },
+        "summary": "completed .remember de-reference (curator-pass skill, 2 rules, directive, ADR-144, distilled)",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "3a1b9874-cb63-4932-917c-a67747443540",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

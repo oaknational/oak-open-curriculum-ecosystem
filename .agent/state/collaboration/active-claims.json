@@ -550,6 +550,36 @@
       "staged_bundle_fingerprint": "e854c1a5668e0d61d27d3e0db48a557e4a874c1b0a04715669fc0a70c82cb66d",
       "staged_name_status": "M\t.agent/memory/active/napkin.md\nM\t.agent/skills/consolidate-docs/SKILL-CANONICAL.md\nM\t.agent/skills/consolidate-until-done/SKILL-CANONICAL.md\nM\t.agent/skills/session-handoff/SKILL-CANONICAL.md\nM\t.agent/skills/start-right-quick/shared/start-right.md\nM\t.agent/skills/start-right-thorough/shared/start-right-thorough.md\nM\t.claude/settings.json\nM\t.markdownlintignore\nM\t.prettierignore\nM\tpackages/core/oak-eslint/src/shared.ts\n",
       "notes": "closed in same collaboration-state commit (lifecycle exception); pathspec-scoped, excludes peer estate (Airy assessment, Furnace school-search, open-questions Q-005)"
+    },
+    {
+      "intent_id": "bc6a3380-01aa-49a7-b5c5-7ed72cf360a1",
+      "claim_id": "3a1b9874-cb63-4932-917c-a67747443540",
+      "agent_id": {
+        "agent_name": "Moonlit Waxing Nebula",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "e756f7",
+        "id": "282b8921-e04b-5bd8-bfd5-21cabb07b137"
+      },
+      "files": [
+        ".agent/skills/curator-pass/SKILL-CANONICAL.md",
+        ".agent/rules/knowledge-preservation-over-fitness-warnings.md",
+        ".agent/rules/directive-file-context-budget.md",
+        "docs/architecture/architectural-decisions/144-two-threshold-fitness-model.md",
+        ".agent/directives/user-collaboration.md",
+        ".agent/memory/active/distilled.md",
+        ".agent/memory/active/napkin.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/closed-claims.archive.json"
+      ],
+      "commit_subject": "chore(agent): complete the .remember de-reference across remaining canonical surfaces",
+      "queued_at": "2026-06-04T07:00:09.768Z",
+      "updated_at": "2026-06-04T07:00:12.600Z",
+      "expires_at": "2026-06-04T07:15:09.768Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "fa8f5cb0274ba866fe11d8c6c929dffa1aeca0045fe0844e94979bb4c0c47dd5",
+      "staged_name_status": "M\t.agent/directives/user-collaboration.md\nM\t.agent/memory/active/distilled.md\nM\t.agent/memory/active/napkin.md\nM\t.agent/rules/directive-file-context-budget.md\nM\t.agent/rules/knowledge-preservation-over-fitness-warnings.md\nM\t.agent/skills/curator-pass/SKILL-CANONICAL.md\nM\tdocs/architecture/architectural-decisions/144-two-threshold-fitness-model.md\n",
+      "notes": "closed in same collaboration-state commit (lifecycle exception); pathspec-scoped, excludes Airy assessment-routing READMEs"
     }
   ],
   "claims": [

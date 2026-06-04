@@ -37,7 +37,7 @@ sequenced as the **final step** of any consolidation pass, with the
 A consolidation pass runs through capture surfaces in order:
 
 1. `napkin.md` (capture)
-2. Other capture surfaces (`.remember/`, comms events, plan bodies)
+2. Other capture surfaces (comms events, plan bodies)
 3. `distilled.md` (refinement)
 4. `pending-graduations.md` (queue)
 5. **directives** (permanent doctrine) — gated on the 30% check

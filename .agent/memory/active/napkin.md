@@ -101,38 +101,32 @@ fitness_content_role: drainable-buffer
   that moment (observed at `23e50d9a`: generated-file mtime touch, zero
   diff). The known-red gate inverted into a standing alignment monitor the
   moment the realignment landed.
-- **`.remember/remember.md` is architecturally mismatched to this repo's
-  parallel-session practice — DISABLED 2026-06-04 (owner-directed).** The
-  remember plugin (`remember@claude-plugins-official`, vendored at
-  `~/.claude/plugins/cache/.../0.7.3/`, NOT in-repo) models `remember.md` as
-  a single-session one-shot baton: one session writes it via `/remember`,
-  the next SessionStart reads-and-empties it (`session-start-hook.sh`:
-  `: > "$REMEMBER_HANDOFF"`). That collides with 5+ parallel sessions on one
-  branch in TWO ways: (1) write-collision — a second opener clobbers the
-  first (the Write read-before-overwrite guard caught my near-miss; gitignored
-  via `.remember/.gitignore` `*`, so loss is diffless/unrecoverable); (2)
-  the deeper consume-collision — whichever session starts next empties the
-  file for EVERYONE, so a parallel peer's opener is destroyed unconsumed and
-  "prepend and preserve" cannot save it. Root conclusion: `remember.md` was
-  never a safe handoff surface here; the canonical surfaces
-  (`threads/<slug>.next-session.md`, `repo-continuity.md`) are versioned,
-  multi-slot, and claim-collision-safe. Plugin disabled via
-  `.claude/settings.json` + `settings.local.json` toggles, 5 canonical skill
-  docs de-referenced, 3 ignore-file entries removed, the local corpus mined
-  then deleted. Mechanism behind the prior "openers degrade in transit; canon
-  survives" lesson.
-- **Mining the retired `.remember/` corpus before deletion returned ZERO
-  orphans across ~1,400 lines / 37 Haiku session-summaries (3 Explore agents,
-  grounded against canonical homes).** Every candidate was already in an
-  ADR/PDR/rule/MEMORY/skill/today's-napkin — strong evidence the
-  capture→graduate pipeline caught everything and the plugin was pure
-  redundancy. One candidate was actively HARMFUL: the corpus preserved
-  "pre-commit staged-only gating" as live guidance, which the owner REJECTED
-  2026-05-22 (full-tree gating is intentional). An unversioned vendor buffer
-  that resurrects overturned decisions is a liability — the clinching reason
-  retiring it is correct. Lesson: when retiring a lossy mirror surface,
-  mine-then-verify-against-canon is the right diligence, and a near-empty
-  harvest is the success case, not a failed search.
+- **`.remember` plugin DISABLED 2026-06-04 (owner-directed): single-session
+  baton vs parallel-session reality.** The vendored remember plugin
+  (`remember@claude-plugins-official`, NOT in-repo) treats `remember.md` as a
+  one-shot baton — one session writes via `/remember`, the next SessionStart
+  reads-and-empties it (`: > "$REMEMBER_HANDOFF"`). Two collisions under 5+
+  parallel sessions: write (a second opener clobbers the first; gitignored so
+  loss is diffless) and the deeper consume (the next start empties it for
+  EVERYONE, destroying a peer's unconsumed opener — "prepend and preserve"
+  can't save it). The canonical surfaces (`threads/*.next-session.md`,
+  `repo-continuity.md`) are versioned, multi-slot, claim-safe; the plugin was
+  redundant and risky. Disabled in both settings files; de-referenced across
+  6 skill docs, 2 rules, 1 directive, and ADR-144; corpus mined then deleted.
+- **Mining the corpus before deletion returned ZERO orphans (~1,400 lines, 37
+  summaries, 3 agents, grounded vs canon).** Every candidate already in an
+  ADR/PDR/rule/MEMORY/skill — proof the capture→graduate pipeline caught
+  everything. One was actively HARMFUL: it preserved "pre-commit staged-only
+  gating" as live, which the owner REJECTED 2026-05-22. An unversioned mirror
+  that resurrects overturned decisions is a liability. Lesson: retiring a
+  lossy mirror = mine-then-verify-against-canon; a near-empty harvest is the
+  success case, not a failed search.
+- **A "de-reference X everywhere" sweep must `rg` the whole tree, not a
+  pre-scoped list — I claimed clean TWICE off a 5-file list; a full sweep
+  found a 6th skill, an ADR, 2 rules, a directive.** Removing a cross-cutting
+  token touches every doc that named it; partition the `rg -l` hits into
+  must-fix-instructions / accuracy-touch / leave-as-history. Same family as
+  "verification scoped by the claim cannot find unclaimed members."
 - **Curing a fitness CHAR overage by archiving needs the measured delta, not
   one move.** repo-continuity went 35162 → 35035 (still 35 over) after the
   first archive batch; a second discharged entry cleared it. Char limits

@@ -132,9 +132,8 @@ its contract.
 `drainable-buffer` is for knowledge buffers and back-pressure control files
 whose ideal end state can be empty after every item is curated elsewhere:
 `napkin.md`, `distilled.md`, `pending-graduations.md`, active
-pending-graduations shards, `open-questions.md`, `.remember` buffers, and
-MEMORY-style capture queues. Only these files may appear in the `ready (empty)`
-inventory.
+pending-graduations shards, `open-questions.md`, and MEMORY-style capture
+queues. Only these files may appear in the `ready (empty)` inventory.
 
 ### Exit code semantics
 

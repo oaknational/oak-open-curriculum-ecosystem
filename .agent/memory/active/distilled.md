@@ -33,9 +33,10 @@ staging surface; fitness remains a routing signal, not a reason to avoid capture
   existing doctrine, some become future lanes because tooling does not exist
   yet, and adjacent owner-gated items may correctly stay unmoved. If the only
   outcome is a cleaner register, the graduation has not happened.
-- **Plugin-owned lifecycle is not knowledge-owned lifecycle.** `.remember` and
-  similar surfaces can own their own file rotation/deletion while the learning
-  remains repo-owned. Anything read by a repo process needs a disposition and a
+- **Plugin- or platform-owned lifecycle is not knowledge-owned lifecycle.**
+  Vendor/platform surfaces (per-user memory, and the now-retired `.remember`
+  plugin) can own their own file rotation/deletion while the learning remains
+  repo-owned. Anything read by a repo process needs a disposition and a
   new home when it matters; otherwise it remains live in the source buffer.
 
 ## 2026-06-03 — reviewer-brief scope protection (Lacustrine Swimming Beacon)
