@@ -749,9 +749,10 @@ review, not an inherited default.
 
 Briefs specify hand-written Zod-validated env modules (`src/lib/env.ts`).
 This repository already provides schema-driven env validation as reusable
-workspaces: `@oaknational/env` + `@oaknational/env-resolution`
-(`packages/core/env` — which B2 itself cites as the conventions reference,
-B2 [[22]]). Reuse, don't duplicate. Likewise structured-OTEL conventions
+workspaces: `@oaknational/env` (`packages/core/env`) +
+`@oaknational/env-resolution` (`packages/libs/env-resolution`) — B2 itself
+cites the env package as the conventions reference, B2 [[22]]. Reuse, don't
+duplicate. Likewise structured-OTEL conventions
 (`packages/core/observability`, cited by B2 [[26]]) are a genuine import
 target. **Correction recorded at review**: `packages/libs/search-contracts`
 (cited by B2 [[15]]) is NOT reusable here — its exports are derived from
@@ -763,7 +764,15 @@ The genuine leverage set is env + env-resolution + observability — still
 a gain the standalone frame hid, just a smaller one than the briefs'
 citations suggest.
 
-## 6. The OpenAPI inversion — likely ADR material (named, not decided)
+## 6. The produced-spec contract — ADR material (ADR-190)
+
+> **Owner correction (2026-06-04):** this is NOT an "inversion" of the
+> Cardinal Rule. Schema-first (the Cardinal Rule) is specific to CONSUMING
+> the upstream Oak Open Curriculum spec; it does not govern a service's own
+> produced contract. Producing this service's spec is a separate concern,
+> decided at G-1 as **F-B (Zod-canonical → OpenAPI + code)**. The analysis
+> below is retained as decision history; read "inversion" framing throughout
+> as "a new, separate spec-producing concern".
 
 **The structural fact**: this repository's cardinal rule makes an OpenAPI
 schema the single source of truth that everything else is GENERATED from —
@@ -772,8 +781,9 @@ but in the consuming direction (Oak's published Open Curriculum API spec →
 ADR-030 SDK-single-source-of-truth, ADR-031 generation-time extraction;
 `schema-first-execution.md`). The school-data-search service is the first
 surface this repository builds that must PRODUCE a spec (owner
-requirement 2). The flow inverts; the doctrine question is how the
-schema-first principle maps onto a spec-producing service.
+requirement 2). The doctrine question is how the generated-state principle
+maps onto a spec-producing service — a separate concern, not a reversal of
+the consume-direction Cardinal Rule.
 
 **The doctrine that actually transfers**: in the consuming direction the
 spec is canonical because Oak does not own it — it is an upstream oracle.

@@ -10,6 +10,7 @@ from research-brief normalisation through report, plan, and in-repo build.
 | claude | Opus 4.8 | 75123f | Hushed Lurking Mask | brief-normaliser | 2026-06-03 | 2026-06-03 |
 | claude | Opus 4.8 | 88a769 | Furnace Roasting Brazier | report-and-plan-synthesiser | 2026-06-03 | 2026-06-03 |
 | claude | Opus 4.8 | fac519 | Mossy Whispering Bark | owner-gate-session presenter/recorder | 2026-06-04 | 2026-06-04 |
+| claude | Opus 4.8 | 80d50a | Fiery Sparking Caldera | deep-review + refinement | 2026-06-04 | 2026-06-04 |
 
 ## Current Continuation
 
@@ -22,12 +23,15 @@ from research-brief normalisation through report, plan, and in-repo build.
   [`school-data-search-poc.plan.md`](../../../plans/school-data-search/current/school-data-search-poc.plan.md)
   (lifecycle `current/`; promotes to `active/` when G-1/G-2/G-3/G-8 are
   decided — **now all decided** — and the first build workstream starts).
-- **Next session STARTS WITH A REVIEW** (owner directive 2026-06-04):
-  (1) **work done** — plan §Phase 0 `### Gate decisions (owner gate session,
-  2026-06-04)` (all nine gates G-1…G-9 decided) and the `### Required
-  high-stakes verifications (delivery gate)` register; (2) **work ahead** —
-  the Landing target below (WS-D1 → G-8 → `active/` → WS1+; ADR-190 draft).
-  Then proceed.
+- **Deep review DONE 2026-06-04** (Fiery Sparking Caldera, `80d50a`):
+  verdict — the work is **sound, faithful, and build-ready**. Synthesis
+  fidelity to the briefs verified high (no manufactured convergence; "no
+  brief mentions OpenAPI" confirmed); external/build-readiness claims
+  re-verified against primary sources (GIAS daily CSV endpoint real; OGL
+  covers the sources; Vercel/Neon facts hold; the Zod→OpenAPI→client
+  toolchain is real and maintained). Two new owner decisions + execution
+  refinements applied this session — see "Review outcome" below. Then
+  proceed to the Landing target.
 - **Completed 2026-06-04 (Mossy Whispering Bark — owner gate session):**
   all nine owner gates decided and recorded at decision time; a mandated
   high-stakes verification pass (5 parallel primary-source checks) that
@@ -70,7 +74,14 @@ owner may direct their removal after comparison.
 2. **ADR-190** — draft the produced-spec ADR as **F-B** (Zod 4 the single
    canonical source → OpenAPI 3.x via `@asteasolutions/zod-to-openapi`;
    generated-state-beats-authored-state doctrine; repo-wide forward policy;
-   `Result` boundary) → `docs-adr-expert`.
+   `Result` boundary) → `docs-adr-expert`. **Framing (review 2026-06-04):**
+   justify F-B on its own merits (Zod is the repo's validation idiom; one
+   source generates spec + code; owner direction) — NOT by "F-C impossible".
+   A TypeSpec→Zod emitter is in active development by TypeSpec's architect but
+   not production-ready in 2026 (`@typespec/emitter-framework` is an
+   experimental dev-prerelease); record it as a revisit-trigger. The Cardinal
+   Rule is upstream-consume-specific and does NOT govern this produced spec —
+   not an "inversion".
 3. Promote the plan to `active/` (G-1/G-2/G-3/G-8 all decided + build
    starting), then WS1/WS2/WS3 TDD cycles.
 
@@ -81,6 +92,39 @@ compiled evidence base, NOT a certified one — verify before building on it.
 
 The 2026-06-03 synthesis-and-plan target and the 2026-06-04 gate walk are
 both **complete**.
+
+## Review outcome (2026-06-04, Fiery Sparking Caldera)
+
+The deep review confirmed the work is sound; refinements landed this session
+in the plan + report (working-tree). New owner decisions and changes carried
+forward:
+
+- **Observability (WS9):** reuse `@oaknational/logger` (Oak Logger, stdio
+  sink only) + `@oaknational/observability` OTEL — no reinvention, **no
+  remote sinks** for the POC (Slack alerts + Vercel-Observability-Plus out,
+  named post-go).
+- **Value-proof (WS11, new):** a Next.js school-picker page (server-side
+  bearer; browser never sees the token; **access-gated/non-public**) where a
+  user picks a real school across all four nations e2e — the go/no-go value
+  proof, not capabilities alone. Refines the "no front-end UI" non-goal
+  (picker page in; admin UI still out).
+- **Canonical-ID stability** is the picker's stored-identity invariant — now
+  a plan-level tested acceptance criterion + a per-nation `sourceId`-stability
+  verification at WS4.
+- **England/GIAS is the first WS4 milestone** (dominant data mass; V-02
+  extract-licence is a display stop-rule — an FOI reply used weaker
+  "fair-dealing" wording, confirm at fetch).
+- **`change_events` field-level diffing + import-run-inspection detail API**
+  DEFERRED to post-go (operational, not picker-essential) — owner-decided
+  2026-06-04.
+- Report §6 reframed (produced-spec is a separate concern, not a Cardinal-Rule
+  inversion); C-10 env path corrected; risk table updated (Next.js decided;
+  Vercel Pro+ for 800s; sourceId-stability).
+
+Rejected during review: the value-trace finding of "no grounded consumer" —
+the need/value are owner-settled (any education service must let the user pick
+their school); horizontal infrastructure legitimately precedes its first
+in-repo consumer.
 
 ## Standing decisions and constraints the thread carries forward
 

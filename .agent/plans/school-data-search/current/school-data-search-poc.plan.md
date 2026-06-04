@@ -73,17 +73,21 @@ todos:
     status: pending
     depends_on: [g2-runtime-topology, ws7-api-auth]
   - id: ws9-observability
-    content: 'WS9: OTEL wiring via repo observability package, Slack alerts, scrubber proofs'
+    content: 'WS9: observability via @oaknational/logger (stdio sink only) + @oaknational/observability OTEL; scrubber proofs; no remote sinks (Slack/Plus out for POC)'
     status: pending
     depends_on: [ws7-api-auth]
   - id: ws10-docs-runbook
     content: 'WS10: workspace READMEs, data-sources/licensing/attribution doc, runbook, TSDoc audit'
     status: pending
     depends_on: [ws4-nation-adapters, ws6-search, ws8-cron-preview-safety, ws9-observability]
+  - id: ws11-value-proof-picker
+    content: 'WS11: value-proof school-picker page (Next.js, server-side bearer, access-gated/non-public, user picks a real school across all 4 nations, e2e)'
+    status: pending
+    depends_on: [ws6-search, ws7-api-auth]
   - id: poc-go-no-go
     content: 'POC go/no-go evidence pack assembled for the owner extraction decision'
     status: pending
-    depends_on: [ws10-docs-runbook]
+    depends_on: [ws10-docs-runbook, ws11-value-proof-picker]
 ---
 
 # School Data Search POC MVP — In-Repo Build
@@ -150,7 +154,11 @@ Carried from the convergent brief non-goals (report §3) plus the POC
 boundary:
 
 - No public unauthenticated API; no browser/client-side production access.
-- No front-end admin UI; no user-auth (Clerk) flows; no React/RSC package.
+- No front-end admin UI; no user-auth (Clerk) flows for the POC; no
+  React/RSC component package. (Exception: the WS11 school-picker page is in
+  scope — it is the value proof, a server-side-bearer, access-gated
+  (non-public) demo page, not an admin surface and not a published component
+  package.)
 - No Elasticsearch (the export seam is kept clean; adoption is a later
   decision); no postcode-radius search; no updated-since endpoint; no
   manual record overrides.
@@ -467,36 +475,53 @@ inherited (report §5 C-04).
 
 ### WS4 — Nation adapters (after G-6; per-nation sub-workstreams)
 
-- England/GIAS: V-01 (automated-fetch viability — named early milestone),
-  V-02 (licence-string capture per snapshot), V-03 (inspection-field
-  availability), V-09 (download route) verified here; BSO/offshore rows
-  flow with `locationCountry` from address.
-- Wales: address list + DataMapWales merge; V-04 (closed/independent
-  coverage posture per G-6), V-07 (layer currency) verified here.
-- Scotland: composition per G-6; V-06 (geospatial licence sign-off gate
-  before any public display), V-10 (dataset vintage) verified here. V-06
-  is a STOP-RULE, not a documentation item: Scotland coordinates from the
-  geospatial layer must not reach any owner-visible display surface until
-  the licence/attribution sign-off is recorded.
-- Northern Ireland: Institution Search export automation (V-05 — named
-  early milestone); enrolment/available-places enrichment; coordinates
-  path per G-6.
+**England/GIAS is the first milestone** — it is the dominant data mass, so
+de-risk it before investing in WS5–WS11.
+
+- England/GIAS (first): V-01 (automated-fetch viability — the daily public
+  CSV endpoint), V-02 (extract-level licence-string capture per snapshot —
+  a STOP-RULE: public display blocked until the licence is confirmed
+  crystal-clear; an FOI reply used weaker "fair-dealing" wording, so confirm
+  at fetch time), V-03 (inspection-field availability), V-09 (download route)
+  verified here; BSO/offshore rows flow with `locationCountry` from address.
+- Wales: GOV.WALES address list (includes independents — V-04 confirmed
+  2026-06-04) + DataMapWales OGL-clean maintained enrichment with
+  geometry/coordinates EXCLUDED (licensing guardrail); V-07 (layer currency)
+  verified here; closed/historical coverage is a documented best-effort gap.
+- Scotland: School Contact Details (primary register — status, opened/closed,
+  renamed history) + the Independent Schools register, both clean OGL. The
+  School Roll & Locations geospatial layer is DROPPED (coordinates +
+  OS-Crown-copyright/LGIH-encumbered — excluded under the guardrail);
+  V-06/V-10 mooted.
+- Northern Ireland: SHIPS via a per-source pipeline over the DE annual
+  school-level publications (annual refresh, scraper-free — NOT the fragile
+  ASP.NET Institution-Search scrape); V-05 confirms operating-school
+  coverage + provenance/freshness. No coordinates.
+- **Per-nation `sourceId`-stability verification**: confirm each source
+  provides a stable per-school identifier across refreshes (GIAS URN is
+  stable; confirm Scotland SEED/SchUID, Wales `school_code`, NI reference) —
+  the canonical ID built from it is the picker's stored-identity contract.
 - Every adapter ships fixtures: valid rows, closed/proposed/independent/
   special/PRU rows where the source supports them, malformed rows,
   duplicate-ID rows, unexpected-enum rows, and forbidden-field rows.
 - Acceptance: each enabled source ingests to staging with hard-fail
-  validation; per-source verification items recorded with evidence;
-  proof level: unit + integration.
+  validation; **open-school completeness proven per nation** (first-class,
+  G-6); per-source licence + provenance/freshness + sourceId-stability
+  recorded with evidence; proof level: unit + integration.
 
 ### WS5 — Release model and promotion (after WS2, WS3)
 
 - Version-scoped staging, whole-dataset promotion in a single transaction,
-  pointer/current-flag flip per G-3 naming, change events per G-4
-  retention, row-count gates (>10% fail with explicit override; warn-band
-  posture per report D-considerations).
+  pointer/current-flag flip per G-3 naming, row-count gates (>10% fail with
+  explicit override; warn-band posture per report D-considerations).
+- **`change_events` field-level diffing + the import-run-inspection detail
+  API (`GET /api/admin/import-runs/:id`) are DEFERRED to post-go**
+  (operational observability, not picker-essential — owner-decided
+  2026-06-04). In-POC: whole-dataset promotion + basic import-run success/fail
+  status + the stale-serving-after-failed-import proof (all picker-essential).
 - Acceptance: failed import provably leaves the previous dataset serving
   (the stale-serving proof is a named integration test); promotion is
-  atomic; change events power import-run inspection; proof level:
+  atomic; the live pointer never references an in-flight import; proof level:
   integration.
 
 ### WS6 — Search (after WS5; G-7)
@@ -532,16 +557,21 @@ inherited (report §5 C-04).
 - Acceptance: local-hour guard + once-per-day idempotency proven; the
   preview-disable proof is a named test; proof level: unit + integration.
 
-### WS9 — Observability and alerts (after WS7)
+### WS9 — Observability (after WS7)
 
-- OTEL wiring per G-2 runtime using the repo observability package (report
-  §5 C-10); structured log fields per the convergent set; query scrubbing
-  proofs (emails, phone-like, postcodes, long numerics; no person-name
-  heuristics); no-IP-no-token logging proofs; Slack alert path with
-  throttling, tested against a fake webhook.
-- Acceptance: scrubber proven by fixture corpus; forbidden log content
-  fails tests; alert paths fire on the named conditions; proof level:
-  unit + integration.
+- Reuse the repo's logging/observability — do NOT reinvent (owner directive
+  2026-06-04): `@oaknational/logger` (the Oak Logger, node entry) with
+  **stdio as the only sink** via its `sink-config`, plus
+  `@oaknational/observability` for OTEL conventions + redaction; comply with
+  the `require-observability-emission` ESLint rule. **No remote sinks for the
+  POC** (Slack-webhook alerts + Vercel-Observability-Plus are out — named
+  post-go).
+- Query scrubbing proofs (emails, phone-like, postcodes, long numerics; no
+  person-name heuristics — school names contain personal names);
+  no-IP-no-token logging proofs.
+- Acceptance: logs emit via `@oaknational/logger` to stdio only (assert no
+  remote sink configured); OTEL spans present; scrubber proven by fixture
+  corpus; forbidden log content fails tests; proof level: unit + integration.
 
 ### WS10 — Docs, runbook, TSDoc (after all build WSs)
 
@@ -555,19 +585,40 @@ inherited (report §5 C-04).
   TSDoc holds; docs-adr-expert + onboarding-expert review; proof level:
   non-code (review evidence).
 
+### WS11 — Value-proof school-picker page (after WS6, WS7)
+
+The POC's go/no-go bar is a demonstrated value-path, not capabilities alone
+(owner directive 2026-06-04). Build a Next.js page (e.g. `/pick-your-school`)
+whose server side holds the bearer token and proxies to the service's own
+autocomplete/detail routes — the browser never sees the token, so the page is
+the reference server-side consumer and preserves the no-browser-credentials
+design. This is not an admin UI; it is the value proof. **Access-gated**
+(Vercel deployment protection / basic auth) — the POC stays non-public even
+for the demo page (owner-decided 2026-06-04).
+
+- Acceptance: a user can type-and-pick a real school in EACH of England,
+  Wales, Scotland, and Northern Ireland; the selected canonical school and
+  its stable ID are shown; the page is not publicly reachable (access-gate
+  proven); proof level: e2e (running-system smoke per testing-strategy E2E
+  constraints).
+
 ### Go/no-go evidence pack (closes the POC)
 
 Assemble for the owner extraction decision (owner requirement 1): gate
-decisions + ADR links; acceptance evidence per WS; the V-ledger outcomes;
-operational posture (cost, alerts observed, import-run history); known
-gaps. The extraction decision itself is out of this plan's scope.
+decisions + ADR links; acceptance evidence per WS; **the working
+school-picker page demonstrating the value across all four nations (WS11)**;
+the V-ledger outcomes; operational posture (cost, stdio logs/traces observed,
+import success/fail history); known gaps. The extraction decision itself is
+out of this plan's scope.
 
 ## Acceptance criteria (plan level)
 
 Outcome-level; each maps to WS-level proof contracts above:
 
 1. A nightly guarded refresh produces a promoted dataset; a failed import
-   provably leaves the previous dataset serving.
+   provably leaves the previous dataset serving; a school keeps the SAME
+   canonical ID across refreshes/promotions (the picker's stored-identity
+   contract).
 2. Canonical records, snapshots, API responses, and logs contain only
    allowlisted fields — proven by forbidden-field fixtures at every layer.
 3. Search supports exact/prefix/alias/fuzzy/filtered lookup with
@@ -578,13 +629,15 @@ Outcome-level; each maps to WS-level proof contracts above:
 5. The API surfaces a strict, comprehensive OpenAPI 3.x-compliant
    specification, CI-validated, with API/validation/types/client provably
    derived from the G-1 canon (owner requirement 2).
-6. OTEL traces/logs/metrics emit through the repo observability
-   conventions; Slack alerts fire on import/promotion failures.
+6. Logs/traces emit through `@oaknational/logger` (stdio sink only) +
+   `@oaknational/observability` OTEL conventions; no remote sink configured.
 7. The client package builds and contract-tests against the canon
    (publishing only per G-9).
 8. Every gate G-1…G-9 has a recorded owner decision; ratified
    architectural decisions exist as ADRs.
 9. The go/no-go evidence pack exists and is owner-consumable.
+10. A school-picker page lets a user pick a real school across all four
+    nations end-to-end (WS11) — the value proof for go/no-go.
 
 ## Prerequisite classification
 
@@ -592,9 +645,9 @@ Outcome-level; each maps to WS-level proof contracts above:
   G-2 Vercel topology decision before WS7/WS8 deployment work; ADR-041
   boundary-rule additions before first new-workspace code.
 - **Beneficial**: Vercel Blob (only if G-4 selects it; Postgres-only is
-  the minimum shippable shape); Slack webhook provisioning (alert code
-  ships with a fake-webhook proof; live webhook can follow); preview
-  database branches (manual preview DB is the minimum shape).
+  the minimum shippable shape); preview database branches (manual preview DB
+  is the minimum shape). Remote observability sinks (Slack alerts,
+  Vercel-Observability-Plus) are out of the POC — stdio only (WS9).
 
 ## Risk assessment
 
@@ -604,9 +657,11 @@ Outcome-level; each maps to WS-level proof contracts above:
 | One-way doors decided casually (promotion model, name-variants, normalisation locus, snapshot substrate — report §3.3/§4 reversal-cost notes) | The gates walk the report's reversal-cost notes explicitly; decisions land as ADRs where architectural |
 | Gate session stalls the lane | Gates are one owner session walking the report; the report carries all considerations — no further research is required to decide |
 | Preview deployment triggers real ingestion | WS8 preview-safety is a tested correctness property, not configuration hygiene |
-| New framework class (if G-2 selects Next.js) destabilises shared tooling | G-2 considers the report's D-16 toolchain-surface analysis; if selected, scaffolding isolates Next-specific config to the app workspace |
+| Next.js (first Next workspace; existing app is Express) destabilises shared tooling | Scaffolding isolates Next-specific config to the app workspace; base configs extended not replaced; ADR-041 boundary diff lands first |
 | Contract drift between spec, validation, types, client | G-1 shape makes drift build-detectable by construction; CI spec gate (WS1) |
 | Vendor call-shape drift (pooling, OTEL registration, duration config) | Pinned shapes verified in the consuming WS against installed/published docs (V-08, V-11) |
+| Upstream `sourceId` changes break a consuming service's stored school ID | Per-nation sourceId-stability verification at WS4; canonical-ID stability is a plan-level tested invariant |
+| Ingestion exceeds function duration ceiling | `maxDuration` 800s needs Vercel Pro/Enterprise (Hobby caps 300s) — ensure the project tier; chunk ingestion if needed |
 | PII reaches storage or logs | Allowlist-driven design with forbidden-field fixtures at snapshot, canonical, API, and log layers (WS3/WS4/WS7/WS9) |
 
 ## Foundation alignment
@@ -622,10 +677,12 @@ Outcome-level; each maps to WS-level proof contracts above:
   `process.env` in tests (environment injected — WS8 preview proofs);
   fixtures anchored to captured source schemas; mutation testing scoped to
   critical pure logic (mapping, scrubbing, ranking, tokens, gates).
-- [`schema-first-execution.md`](../../../directives/schema-first-execution.md)
-  with report §6: the produced-spec inversion is decided at G-1 and
-  recorded as an ADR; generated state beats authored state in whichever
-  shape the owner ratifies.
+- [`schema-first-execution.md`](../../../directives/schema-first-execution.md):
+  the Cardinal Rule governs CONSUMING the upstream Oak Open Curriculum spec —
+  it does NOT govern this service's own produced contract (owner direction
+  2026-06-04). Producing this service's Zod→OpenAPI spec is a separate
+  concern (G-1 = Zod-canonical, F-B), recorded as ADR-190. Not an inversion
+  of the Cardinal Rule.
 
 ## Plan-body first-principles check
 
