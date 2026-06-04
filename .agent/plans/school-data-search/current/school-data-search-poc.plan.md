@@ -30,7 +30,7 @@ todos:
     content: 'Gate G-7 (owner): ranking = deterministic buckets + stable tie-breaks (D-13); normalisation = app-code pure-fn multilingual normaliser (EN/Welsh/Gaelic/Turkish/Hebrew-translit), STORE BOTH original+normalised, SEARCH BOTH, Postgres now / ES-Serverless later (D-14); cache = no shared CDN + client-owned local caching (D-09) — DECIDED 2026-06-04'
     status: completed
   - id: ws-d1-decomposition
-    content: 'WS-D1: workspace decomposition proposal (seam map, Drizzle ownership, boundary rules) for G-8 ratification'
+    content: 'WS-D1: workspace decomposition proposal (seam map, Drizzle ownership, boundary rules; SPECIFIC tooling under top-level school-data-search/, REUSABLE under normal topology — owner 2026-06-04) for G-8 ratification'
     status: pending
     depends_on: [g2-runtime-topology]
   - id: g8-decomposition-ratify
@@ -420,11 +420,24 @@ applying report §5 C-02:
 - First Question applied: the minimum workspace count that preserves the
   layer doctrine at POC scale, with named extraction triggers for the
   deferred seams.
+- **Top-level layout (owner directive 2026-06-04):** everything SPECIFIC to
+  school-data-search tooling lives under a top-level `school-data-search/`
+  directory (its own workspace subtree, added to `pnpm-workspace.yaml` + the
+  ADR-041 boundary surface). Anything REUSABLE created as part of this work
+  lives under the normal repo topology (`packages/core|libs|sdks`, `apps/`).
+  This makes the framework/consumer split concrete (§Separate Framework from
+  Consumer): the reusable framework is general and lives in normal `packages/`;
+  the Oak-school-data-specific consumer is isolated under `school-data-search/`
+  — which also keeps post-POC extraction clean (lift the one top-level tree).
+  Classify each workspace specific-vs-reusable and place it accordingly, with
+  the call justified per workspace.
 
 Acceptance: a written proposal (this collection) naming workspaces, their
-dependency directions, the boundary-rule diff, and the deferred seams with
-triggers. Reviewers: architecture-expert-betty (cohesion/coupling) and
-architecture-expert-fred (ADR-041 compliance) before G-8.
+dependency directions, each workspace's specific-vs-reusable placement
+(`school-data-search/` vs normal topology), the boundary-rule diff, and the
+deferred seams with triggers. Reviewers: architecture-expert-betty
+(cohesion/coupling) and architecture-expert-fred (ADR-041 compliance) before
+G-8.
 
 ## Phase 1 — Build workstreams (TDD cycles as the unit of landing)
 
