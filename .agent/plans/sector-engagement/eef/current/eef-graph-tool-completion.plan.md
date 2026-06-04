@@ -1337,7 +1337,7 @@ real corpus with the typed id/payload relationship asserted.
 
 **Proof:** `unit` + `integration` over the real corpus. Command:
 `pnpm --filter @oaknational/graph-corpus-sdk test` +
-`pnpm --filter @oaknational/oak-curriculum-sdk test` + `pnpm type-check`.
+`pnpm --filter @oaknational/curriculum-sdk test` + `pnpm type-check`.
 If D5/D6 co-land, also run
 `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test`.
 

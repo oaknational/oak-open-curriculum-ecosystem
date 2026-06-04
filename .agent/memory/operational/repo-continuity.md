@@ -107,7 +107,7 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Shadowed Creeping Secret / eef-d4-whole-plan-review-then-ratify / 2026-06-04 (prior: Twilit Cascading Supernova migration-plan-overhaul 2026-06-04, Burnished Glowing Spark 2026-06-04, Lacustrine Swimming Beacon 2026-06-03, Seaworthy Swimming Sextant 2026-06-03, Galactic Glowing Prism + Opalescent Cascading Planet + Stellar Waning Planet + Silvered Lurking Mask 2026-06-02) |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Windward Gliding Squall / eef-d5-plan-authoring-and-review / 2026-06-04 (prior: Shadowed Creeping Secret eef-d4-whole-plan-review-then-ratify 2026-06-04, Twilit Cascading Supernova migration-plan-overhaul 2026-06-04, Burnished Glowing Spark 2026-06-04, Lacustrine Swimming Beacon 2026-06-03, Seaworthy Swimming Sextant 2026-06-03, Galactic Glowing Prism + Opalescent Cascading Planet + Stellar Waning Planet + Silvered Lurking Mask 2026-06-02) |
 | `oak-kg-ontology-planning-review` | Plan the `oak-kg`/ontology work, starting with a deep review of the Oak Curriculum Ontology repo (separate concern from the bulk-derived graph redesign) | [record][oak-kg-ontology] | claude / Opus 4.8 / Twilit Cascading Supernova / thread-opener-brief-only / 2026-06-04 — **opened, not started; deep review is a fresh session** |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Blustery Lifting Gale / skills-taxonomy-and-distribution / 2026-06-03 (prior: Umbral Whispering Silhouette 2026-06-01) |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 / Hidden Hiding Dusk / dedicated-consolidation+owner-directed-graduations / 2026-06-04 (prior: Arboreal Sprouting Branch 2026-06-04, Opalescent Illuminating Prism 2026-06-03, Lacustrine Swimming Beacon, Ashen Burning Magma, Solar Glowing Meteor, Stratospheric Buffeting Breeze, Lofty Sweeping Falcon, Shaded Veiling Mirror) |
@@ -258,7 +258,14 @@ licensing guardrail. See the
    ways), the `d4` todo flipped to `completed`. D5 — build the new graph-core query
    layer (`GraphView<TNode, TNodeId, TEdgeType>`, `subgraph` only) + the EEF
    strand-view fresh — is the next safe step.** The redesign stays parked on EEF
-   D6 + D7. See the `eef` thread banner.**
+   D6 + D7. See the `eef` thread banner.** **(Update 2026-06-04, Windward Gliding
+   Squall): the D5 EXECUTION PLAN is now authored + reviewed READY
+   ([`eef-d5-execution.plan.md`](../../plans/sector-engagement/eef/current/eef-d5-execution.plan.md),
+   current/; Iridescent pair-review + type/assumptions/fred, all conditions
+   incorporated) and the parent D5-Proof package filter was fixed
+   (owner-authorised: `@oaknational/oak-curriculum-sdk` → `@oaknational/curriculum-sdk`).
+   NEXT: a fresh session dual-reviews the D5 plan AND this parent plan together,
+   then executes D5.**
 7. **Graph-estate-consolidation: t2–t5+t7 EXECUTED and pushed at `c3b78eec`;
    scoped t8 verification PASSED (2026-06-02, Opalescent Cascading Planet)**.
    The estate reads true in one pass: eleven plans archived with banners +
@@ -312,6 +319,21 @@ Before resuming paused graph-substrate work, re-check current PR, CI, Sonar,
 CodeQL, active claims, commit queue, and git state. Do not rely on historical
 issue counts in archived prose.
 
+### Agent Tooling (collaboration CLI)
+
+Uncommitted, **verified** WIP in the working tree (2026-06-04, Fiery Forging
+Ash) — **intentional, not orphan; awaiting owner commit greenlight.** Two
+collaboration-state CLI fixes from Windward's live-session frictions: F-35
+(`comms append`/`send --help` now document the `--tag heartbeat` typed-arg
+mode; help strings extracted to `cli-spec-help.ts`) and F-07 (new
+`comms list [--tail N]` + `comms show --event-id` read-back; new module
+`cli-comms-query.ts`). agent-tools workspace gates green
+(build/type-check/lint/863 tests); full-repo `pnpm check` NOT run (uncommitted +
+live peers on the shared tree). Frictions register updated (F-35, F-07 flipped
+to partially-addressed, F-36 added for pnpm-wrapper porcelain-stdout). **Next
+safe step: commit slice A (F-35) + slice B (F-07) — independently shippable —
+then F-36 / F-07 list-filters if the owner directs.**
+
 ## Open Owner-Decision Items
 
 1. `pending-graduations.md` contains owner-gated doctrine and follow-up decisions;
@@ -343,6 +365,24 @@ authority.
 - Shared memory/state files are always writable and commit-includable when dirty.
 
 ## Deep Consolidation Status
+
+**ran this handoff → owner-directed (2026-06-04, Windward Gliding Squall /
+claude / Opus 4.8 / `ab2bcd`, EEF D5 plan-authoring + review close;
+session-completion mode).** Owner asked for fix + full handoff + consolidation +
+insights + commit. Landed: D5 execution plan authored + reviewed READY
+(`eef-d5-execution.plan.md`); parent D5-Proof package filter fixed
+(owner-authorised). Insights homed: convergence-is-not-proof /
+a-verification-claim-is-not-verification → `distilled.md` + Claude auto-memory
+(`feedback_validate_specialist_findings_before_acting`, broadened to ALL
+external agent feedback incl. peers) + napkin (felt-authority / discrepancy-claims
+/ grounding-bar entries); experience file landed; PDR candidate (felt-authority
+unification) recorded in `pending-graduations.md`. **Deferred with reason**:
+cross-thread/cross-platform curation + the `distilled.md` HARD-zone drain
+(192/180 ln) are dedicated-curation-pass work this single-lane planning close
+does not carry context for — falsifiable: the next curator can count the
+distilled line-count + the unread cross-platform surfaces; the conservation
+invariant is honoured (preserved at full weight, not trimmed). Verdict:
+`partial slice landed`.
 
 **FRESH-SESSION QUEUE EXECUTED (2026-06-04, Hidden Hiding Dusk / claude / Opus 4.8 /
 `38dbaf`, dedicated consolidation + owner-directed graduations).** Ran the two Arboreal

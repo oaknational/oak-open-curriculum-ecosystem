@@ -189,3 +189,24 @@ of `respect-active-agent-claims` and `ship-independent-coordinate-dependent` app
 time. Pairs with the full-doctrine-estate non-duplication check: survey the plan estate, not just
 the register, before authoring — the same check that turned the action-time-interrupt lane into a
 general frame deferring to closure-pressure rather than a duplicate.
+
+## 2026-06-04 — convergence is not proof; a verification-claim is not verification (Windward Gliding Squall)
+
+EEF D5-plan review: the final acceptance command used `@oaknational/oak-curriculum-sdk`,
+which matches NO project — the directory is `oak-curriculum-sdk` but the package name
+drops the prefix (`@oaknational/curriculum-sdk`). THREE reviewers used the dir-name filter
+(type-expert, architecture-fred — who wrote "confirmed in package.json" — and my own draft
+inherited from the parent plan); only the pair-reviewer's empirical `pnpm --filter` run found
+it. Two sharpenings for accepting ANY external agent feedback (owner reinforced ~4x this session):
+
+- **Convergence is not proof.** N confident reviewers agreeing is not verification; an empirical
+  check beats agreement. The pattern was not even uniform — `oak-curriculum-mcp-streamable-http`
+  KEEPS its prefix as the package name — so the convergent inference was doubly wrong.
+- **A verification-claim is not verification.** A finding pre-stamped "confirmed in X" is the most
+  seductive form (it arrives looking grounded), yet the claim-to-have-verified does not transfer
+  the verification — re-ground it. Applies to peer feedback AND sub-agent feedback; peers carry
+  higher felt-authority. Routing: Claude auto-memory `feedback_validate_specialist_findings_before_acting`
+  (broadened to all external agent feedback); owner-gated PDR candidate (felt-authority unification).
+  Connects to ground-convenient-claims, the Mossy verify-before-build entry, and the Tempestuous
+  convenient-claims-cluster entry. (distilled HARD at write time — preserved per the conservation
+  invariant; drain routed to a dedicated curation pass.)

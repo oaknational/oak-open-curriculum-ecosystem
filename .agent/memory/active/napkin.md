@@ -155,6 +155,25 @@ Fresh capture starts below.
   strand is a category error. Relayed summaries flatten exactly these
   load-bearing design principles.
 
+## 2026-06-04 — the grounding bar scales with the artefact's downstream use (Windward Gliding Squall)
+
+- **A calibration corollary that GUARDS against over-applying the felt-authority
+  lesson.** Owner directed me to read the D5 surfaces first-hand. Doing so
+  CONFIRMED almost everything the readers had relayed — all 14 corpus
+  cardinalities checked out against the actual `as const` data, and the one
+  apparent mismatch (`number_of_studies` grep=4 vs the contract's "2/30")
+  dissolved as 2 in `headline` + 2 in `school_context_relevance`, exactly as the
+  contract states. So was the re-read necessary, or paranoid belt-and-braces?
+  **Necessary** — and the reason is the calibration: relayed-with-disclosed-tier
+  facts suffice for a REPORT, but an executable PLAN turns those same facts into
+  test assertions and schema required/optional decisions, so every load-bearing
+  shape and cardinality must be first-hand. A wrong cardinality silently flips a
+  schema field optional↔required and breaks D6. The guard against the
+  over-correction (re-verifying everything always, paranoidly): scale grounding
+  effort to **what the output drives**, not to a blanket reflex. The impact sets
+  the bar, not the surface task — which is the action-to-impact bridge made
+  operational.
+
 ## 2026-06-04 — "graduate" is the gate firing, not a licence to skip grounding (Hidden Hiding Dusk)
 
 - **Owner-directed graduations are still independently-grounded acts.** Owner said
@@ -186,3 +205,69 @@ Fresh capture starts below.
   hook (PDR-044 §2026-05-21 approval-vs-refusal; this impl hard-blocks). Use neutral
   names ("hedging-vocabulary trip-list", "owner-only marker") when writing about the
   patterns the hook guards.
+
+## 2026-06-04 — pairing-buddy feedback on collaboration tooling (Feathered Spiralling Wing)
+
+- **`--body` length guard is useful, but team-start prose easily crosses it.** My
+  first comms team-start event hit the 1500-char `--body` limit (1822 chars) and
+  the CLI correctly named `--body-file` as the cure. For short team-starts, rewrite
+  compactly; for dense feedback, use `comms send` with a deliberately short verdict
+  plus a pointer to the durable artefact rather than turning comms into storage.
+- **A supposedly focused vitest invocation widened to the whole agent-tools suite.**
+  `pnpm --filter @oaknational/agent-tools test -- collaboration-state.unit.test.ts`
+  returned green but ran 95 test files / 857 tests, not just the named file. Treat
+  that as useful evidence, but do not report it as a narrow targeted test. Prefer
+  `pnpm --filter @oaknational/agent-tools exec vitest run <path>` when the intent is
+  a true focused file run.
+- **User correction: external agent feedback is never self-certifying.** During the
+  Fiery pairing pass, owner restated that all external feedback from agents must be
+  critically assessed before acceptance. Apply this immediately to peer feedback,
+  reviewer output, subagent reports, and comms suggestions: verify facts against the
+  live source, assess the evidence-to-recommendation step, and label outcomes as
+  accepted / partially accepted / rejected / unverified instead of relaying them as
+  authority.
+
+## 2026-06-04 — monitors are not a substitute for reaction (Iridescent Drifting Star)
+
+- **My watcher worked, but my pairing behavior lagged.** Owner caught that
+  Windward was posting D5 plan work while I was not reacting. The technical monitor
+  was receiving comms, but I treated that as passive awareness instead of an active
+  obligation to read, assess, and respond. In team pairing, a live watcher creates a
+  response duty: when the planner posts a draft, request, heartbeat with material
+  cycle progress, or reviewer synthesis, either respond with assessed feedback or
+  explicitly say there is nothing new to act on. "Monitor green" is not "pairing
+  done."
+
+## 2026-06-04 — frictions register is a pointer, not ground truth (Fiery Forging Ash)
+
+- **The agent-tooling frictions register carries ~20 entries stamped
+  `addressed-in-working-tree-2026-05-10` with a never-completed "replace with
+  commit SHA after landing" trigger.** Trusting those statuses would read
+  "already fixed" for things that may never have committed. Same shape as the
+  thread-record-is-pointer-not-truth law, on a new surface: before acting on a
+  register status, recompute against the *current code* (here: `comms append
+  --help`, the spec table, the option sets). The register framed the candidates;
+  the live source decided what was real. Fixed F-35 (heartbeat `--help` gap) +
+  F-07 (`comms list`/`show`) grounded against source, not against the register's
+  own claims.
+- **Monitors are scaffolding for an active collaboration loop — stop them when
+  the loop closes, or they become noise-tax.** Complements Iridescent's
+  "monitor green ≠ pairing done" above from the other end: the watcher earned
+  its keep instantly (surfaced a *directed* consolidated-frictions message from
+  Windward I hadn't read), but once that was read and the pair-review delivered,
+  it emitted only EEF cross-traffic + heartbeats — waking me with zero my-lane
+  signal. The owner's "focus on useful work, not just communications ceremony"
+  named exactly that. Heartbeat = pure outgoing ceremony (stop first; low value
+  with owner present + no claim). Watcher = useful *while* a feedback loop is
+  live. Start on demand, stop when the loop closes; don't leave them as ambient
+  tax.
+- **Critically assessing peer feedback can VINDICATE the peer by grounding — and
+  hand you the source you were missing.** Owner directive: critically assess all
+  external agent feedback (Feathered + owner captured the discipline above). My
+  distinct instance: Feathered's "Windward items 2/3 still open" looked like an
+  unverified attribution (Windward's *broadcast* named only item 1). Grounding it
+  surfaced a separate *directed* message from Windward — the consolidated 3-item
+  list I hadn't read. The doubt was right to raise; the grounding confirmed
+  Feathered AND found the unread primary source. Validate-findings is "resolve
+  the claim against the primary source before relaying," not "assume the peer is
+  wrong."

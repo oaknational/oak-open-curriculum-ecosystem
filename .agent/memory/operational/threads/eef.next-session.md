@@ -1,5 +1,53 @@
 # Next-Session Record — `eef` thread
 
+> **D5 EXECUTION PLAN AUTHORED + REVIEWED READY; PARENT FILTER FIXED; NEXT = FRESH
+> DUAL-REVIEW OF D5 + PARENT TOGETHER (2026-06-04, Windward Gliding Squall /
+> `ab2bcd`; claude / Opus 4.8; owner-directed planning session).** Authored the
+> detailed D5 execution plan
+> [`eef-d5-execution.plan.md`](../../../plans/sector-engagement/eef/current/eef-d5-execution.plan.md)
+> (current/, executable) — 5 serial TDD cycles decomposing the ratified D4
+> contract into a fresh build, landed as ONE green commit (cycles are internal
+> checkpoints; landing discipline reconciled to the parent's §Risk Assessment
+> one-commit rule): WS1.1 generify the graph-core `graph-view` contract
+> (`GraphView<TNode,TNodeId,TEdgeType>`, subgraph-only, drop `manifest`/
+> `GraphManifest` incl. the root barrel + the contract-test TSDoc); WS1.2 generic
+> bounded-BFS `createGraphView` factory + structural tests (dup-id/dangling-edge
+> are CONSTRUCTION-time validation; the per-call error surface stays EXACTLY D4's
+> two variants — no new kind); WS2.1 graph-native EEF view (inject
+> `type: 'related_strand' as const`; named `expectTypeOf` id-flow proofs);
+> WS3.1 `inspectStrand` + evidence envelope (frontier + provenance;
+> `data_version`/`last_updated` excluded); WS3.2 `evidenceForMove` axis
+> resolution (reachable-by-axis asserted by derivation).
+>
+> + **Reviewed READY**: Iridescent Drifting Star (owner-assigned pair-reviewer) +
+>   type-expert + assumptions-expert + architecture-expert-fred. ~16 findings, ALL
+>   critically assessed against the artefacts before accepting (per the owner's
+>   repeated directive); one corrected, not copied (assumptions' frontier example
+>   was imprecise vs the D4 frontier definition → pinned a definition-robust
+>   anchor). Iridescent confirmed **READY FOR EXECUTION**. Full disposition in the
+>   plan's §Review disposition. The `createGraphView` factory shape — the one
+>   D5-owned open decision — is CONFIRMED by Iridescent + type-expert.
+> + **Parent filter fix (owner-authorised)**: this plan's D5-Proof line 1340
+>   `@oaknational/oak-curriculum-sdk` → `@oaknational/curriculum-sdk` (directory
+>   name ≠ package name; the wrong filter matched no project — caught by
+>   Iridescent's empirical `pnpm --filter` run after THREE reviewers converged on
+>   the wrong name; `oak-curriculum-mcp-streamable-http` verified correct as-is and
+>   left unchanged).
+>
+> **NEXT SAFE STEP: a fresh session reviews the D5 execution plan AND the parent
+> `eef-graph-tool-completion.plan.md` TOGETHER** (owner-directed), then executes
+> D5. The two plans are cross-consistent (manifest disposition mirrored; landing
+> discipline aligned; package filters correct). The graph-tools-value-redesign
+> lane stays parked on EEF D6 + D7. Re-derive HEAD from git — this banner is one
+> commit stale by construction (branch ~109 ahead of origin; pushing is the
+> owner's call).
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Windward Gliding Squall` | `claude` | `Opus 4.8` | `ab2bcd` | `eef-d5-execution-plan-authoring-and-review` | 2026-06-04 | 2026-06-04 |
+>
+> ---
+>
 > **MIGRATION PLAN OVERHAULED → VALUE-DRIVEN REDESIGN (renamed); parked, EEF-gated
 > (2026-06-04, Twilit Cascading Supernova / `bb53a9`; claude / Opus 4.8;
 > owner-directed).** Accepted Burnished's handoff (comms `0e2f7e7b`). The graph-tools
