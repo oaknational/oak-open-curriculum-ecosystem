@@ -1,5 +1,76 @@
 # Next-Session Record — `eef` thread
 
+> **EEF D4 GRAPH CAPABILITY CONTRACT AUTHORED + RATIFIABLE; OWNER DECISION B
+> SIMPLIFIED IT; MIGRATION-OVERHAUL METAPLAN SCOPED + HANDED TO TWILIT
+> (2026-06-04, Burnished Glowing Spark / `67b679`; claude / Opus 4.8;
+> owner-directed D4 session).** D4 is a NON-CODE ratification deliverable; the
+> contract is at
+> [`eef-d4-graph-capability-contract.md`](../../../plans/sector-engagement/eef/current/eef-d4-graph-capability-contract.md)
+> (committed in the owner's broad commit `ca927e40`, with the D3 revision + plan
+> fold). **D4 ratification is HELD for a dedicated next session that reviews D4 +
+> the EEF plan as a whole** (owner-directed); D5 follows.
+>
+> + **What D4 ratifies**: the new domain-generic graph-core query surface
+>   (`GraphView<TNode, TNodeId, TEdgeType>` replacing the live string-typed
+>   contract; `subgraph` is the one primitive EEF consumes; `manifest()` is NOT
+>   EEF-consumed and left out per Decision 6); the graph-native EEF view; the
+>   bound names; the consumer-impact finding (ZERO external blast radius + THREE
+>   in-package edit sites — graph-core barrel, the contract test, AND the
+>   `graph-corpus-sdk` `GraphView` re-export the plan had omitted); the minimal
+>   operation set. The string→`TNodeId`/`TEdgeType` generification is grounded
+>   field-by-field against the live `graph-view` files.
+> + **Owner decision B (2026-06-04) — guidance reports INLINE, not a node kind**:
+>   EEF v1 is a HOMOGENEOUS strand graph (`TNodeId = EefStrandId`, one edge type
+>   `related_strand`). `related_guidance_reports` (7/30; `{title,url}` leaves,
+>   exactly ONE shared corpus-wide) travel inline in the member payload. The
+>   node-kind model deduped one leaf and bought no v1 value, so the entire
+>   heterogeneous-graph machinery (union id, second id type, second edge type,
+>   second node kind) dissolved. Nine bound names → EIGHT
+>   (`eefGuidanceReportNodeSubset` retired). The D3 contract carries a dated
+>   decision-B revision note; the plan body + frontmatter were reversed to match.
+> + **Deferred-and-HOMED (must not be dropped)**: the fundamental heterogeneous
+>   node/edge model (multiple node kinds, cross-kind node-id policy, typed
+>   inter-kind edges + the bounded-retrieval primitive) is deferred from EEF D4
+>   and HOMED in the migration plan (a `define-fundamental-node-edge-model` todo +
+>   an interim amendment).
+> + **Owner frame for the non-EEF graphs (2026-06-04)**: the migration plan's
+>   behaviour-preservation premise is REPLACED by two constraints — (1) maximise
+>   user value, (2) don't flood agents with irrelevant tokens — plus total design
+>   agency (we build the graph data objects from bulk data AND the substrate, so
+>   shape + retrieval are ours; "if we can make it work with graphs, we use
+>   graphs"). This needs its own session: a ratified metaplan
+>   [`graph-migration-plan-overhaul.plan.md`](../../../plans/connecting-oak-resources/knowledge-graph-integration/current/graph-migration-plan-overhaul.plan.md)
+>   scopes the overhaul, which is **already active under Twilit Cascading
+>   Supernova** — I handed Twilit the metaplan + decision-B context via comms
+>   event `0e2f7e7b`. I do NOT edit the migration plan further.
+> + **Grounded per-corpus facts (verified this session)**: misconception 12,858
+>   flat nodes (no ids/edges, ~6MB); prior-knowledge 1,607 `unitSlug` nodes +
+>   3,452 `prerequisiteFor` edges (a natural `subgraph` consumer);
+>   thread-progressions ordered sequences.
+> + **Reviews**: three refutation-briefed Sonnet specialists (type-expert +
+>   architecture fred/betty) on the pre-B contract — all READY-WITH-CONDITIONS,
+>   every finding critically validated (frontier-housing clarification applied;
+>   betty's envelope-subset split REJECTED as a ratified-D3-name scope violation;
+>   fred's PDR-058 miscitation verified + corrected). The B-collapse post-dates
+>   that review, so the next session's D4 review covers the final shape.
+> + **Method lesson (graduated to auto-memory, not just napkin)**: value-first;
+>   existing artefacts (inherited code, current/generated data shape, ratified
+>   decisions) are malleable design surface, not fixed constraints — the owner
+>   corrected this root ~five times this session. Reshape on frame-overturn;
+>   don't bolt-on.
+>
+> **NEXT SAFE STEP (owner-directed): a dedicated session reviewing D4 + the EEF
+> plan as a whole, then ratifying** (D5 the session after). Re-derive state from
+> git — this banner is one commit stale by construction. Branch ~39 ahead of
+> origin; pushing is the owner's call. The migration overhaul is Twilit's lane;
+> do not edit the migration plan.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Burnished Glowing Spark` | `claude` | `Opus 4.8` | `67b679` | `eef-d4-contract-authoring` | 2026-06-04 | 2026-06-04 |
+>
+> ---
+>
 > **EEF D3 OWNER-RATIFIED AND COMMITTED (2026-06-03, Lacustrine Swimming
 > Beacon / `687a54`; claude / Opus 4.8; the owner-ratified dedicated
 > review-then-ratify session). The `d3` todo is flipped. The day's working
@@ -165,7 +236,7 @@
 > TRIGGER (2026-06-02, Galactic Glowing Prism / `cd7389`; claude / Opus 4.8;
 > owner-approved session plan).**
 >
-> [`graph-tools-substrate-migration.plan.md`](../../../plans/connecting-oak-resources/knowledge-graph-integration/future/graph-tools-substrate-migration.plan.md)
+> [`graph-tools-value-redesign.plan.md`](../../../plans/connecting-oak-resources/knowledge-graph-integration/future/graph-tools-value-redesign.plan.md)
 > now owns moving all existing graph tools onto `graph-corpus-sdk`
 > (graph-estate-consolidation §Judgement calls, call 4 — authored-note added
 > there). The estate edits land as one commit with the plan.

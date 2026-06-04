@@ -328,3 +328,60 @@ fitness_content_role: drainable-buffer
   correction durable; and the `.remember` retirement was caught at closeout by
   re-deriving rather than trusting the hours-old session plan — the lesson
   landing on its own tail.
+
+## Session: 2026-06-04 - EEF D4 contract + decision B + migration metaplan (Burnished Glowing Spark)
+
+### The root that recurred five times (graduated to auto-memory: value-first-existing-is-malleable)
+
+- I treated the **existing state of things as a fixed constraint** five times,
+  each in a different costume, and the owner corrected each: (1) over-inherited
+  the live `GraphView` contract instead of asking if it should survive; (2)
+  recommended *deferring* the substrate seam by reading the current consumer
+  count as a constraint (consumers were sequenced; prerequisite is a *more*
+  natural `subgraph` fit than EEF); (3) reasoned form-first from misconception's
+  *current generated serialization* ("flat, no edges") — but we generate it from
+  bulk data, so its shape is ours; (4) treated owner-ratified decisions as
+  frozen, guarding the owner's past decisions against the owner; (5) patched a
+  frame-overturn (migration plan) as a bolt-on amendment instead of scoping a
+  reshape. **The frame:** the fixed points are the value constraints (maximise
+  user value; don't flood agents with irrelevant tokens) + our design agency
+  (we build the data objects AND the substrate). Everything else — code, data,
+  plans, ratified decisions — is malleable. Reshape on frame-overturn; do it
+  openly, with reasoning, with ratification. The owner had to say it five times;
+  the success test is the next session not needing the sixth.
+
+### Surprises / corrections
+
+- **The opener was ~27 commits stale, not "one commit"** — HEAD had moved from
+  `0df07152` to `0df07152`+27 (realignment, school-data-search, skills-taxonomy)
+  since the cited D3 commit. "Openers are one commit stale" badly understates
+  drift in a live multi-agent window. Re-derive from git unconditionally; verify
+  every estate claim (the opener's HEAD sha, ahead-count, and a tool rename were
+  all wrong) — but check whether the staleness *touches your inputs* before
+  chasing it (mine didn't; D4 inputs were byte-identical).
+- **"Nothing committed" is unprovable in a shared-tree window.** I told the owner
+  "nothing committed" repeatedly; a parallel commit (the owner's `ca927e40`)
+  then swept my whole working tree. Say "*I* haven't committed," never "nothing
+  is committed." I correctly investigated the git-state anomaly (reflog + per-file
+  log) and surfaced it truthfully before learning it was the owner — that reflex
+  was right.
+- **Re-poll active-claims/comms at each new-work boundary, not just session
+  open.** I authored a metaplan for the migration overhaul that was *already
+  active under Twilit Cascading Supernova*; my collision read was at session open
+  only. The metaplan wasn't wasted (ratified, handed to Twilit via comms), but the
+  re-poll should have preceded creating a plan in a shared thread.
+- **Scoped `markdownlint --fix` is not surgical on list style.** Running it on
+  one file flipped all 17 pre-existing `-` bullets to `+` (MD004 consistent
+  mode), which then committed. Aligning a file you're editing to its config is
+  fine, but know that `--fix` rewrites *every* bullet, not just yours.
+
+### Method note (decision B)
+
+- A `guidance_report` node kind that **deduplicates exactly one leaf** corpus-wide
+  (`{title,url}`, no body/edges) and buys no v1 user value is complexity without
+  payoff — and it was the single biggest complexity driver (heterogeneous
+  `TNodeId`, second id type, second edge type) and the most-contested reviewer
+  surface. Inlining it collapsed all of that. Token + value lens first; the
+  graph-node-ness was foundation-building misplaced in the first consumer.
+  **Graduation candidate** — connects to `consolidate-at-third-consumer`,
+  `existence-is-not-correctness`, PDR-058 §design-optionality.

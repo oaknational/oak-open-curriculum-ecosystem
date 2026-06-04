@@ -167,7 +167,7 @@ surface.
 - **JC4 unified substrate-migration plan AUTHORED — parked on a named
   trigger (2026-06-02, Galactic Glowing Prism / `cd7389`, claude / Opus 4.8,
   owner-approved session plan)** —
-  [`graph-tools-substrate-migration.plan.md`](../../plans/connecting-oak-resources/knowledge-graph-integration/future/graph-tools-substrate-migration.plan.md)
+  [`graph-tools-value-redesign.plan.md`](../../plans/connecting-oak-resources/knowledge-graph-integration/future/graph-tools-value-redesign.plan.md)
   owns moving all three existing graph tools onto `graph-corpus-sdk`:
   per-corpus replacement units, ratified decisions carried with citations,
   open Decisions A–F settled at promotion (**trigger: EEF D6 + D7**). Two
@@ -273,7 +273,7 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Lacustrine Swimming Beacon / eef-d3-review-then-ratify / 2026-06-03 (prior: Seaworthy Swimming Sextant 2026-06-03; Galactic Glowing Prism, Opalescent Cascading Planet, Stellar Waning Planet, Silvered Lurking Mask, all 2026-06-02) |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Burnished Glowing Spark / eef-d4-contract-authoring / 2026-06-04 (prior: Lacustrine Swimming Beacon 2026-06-03, Seaworthy Swimming Sextant 2026-06-03, Galactic Glowing Prism + Opalescent Cascading Planet + Stellar Waning Planet + Silvered Lurking Mask 2026-06-02) |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Blustery Lifting Gale / skills-taxonomy-and-distribution / 2026-06-03 (prior: Umbral Whispering Silhouette 2026-06-01) |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | codex / GPT-5 / Opalescent Illuminating Prism / dedicated-knowledge-curation / 2026-06-03 (prior: Lacustrine Swimming Beacon, Ashen Burning Magma, Solar Glowing Meteor, Stratospheric Buffeting Breeze, Lofty Sweeping Falcon, Shaded Veiling Mirror) |
 | `repo-professionalism-assessment` | Repo professionalism / engineering-quality report → planability triage | [record][repo-professionalism-assessment] | codex / GPT-5 / Airy Whirling Wing / report-author-and-planability-router / 2026-06-03 |
@@ -401,10 +401,15 @@ against primary sources before reliance) and the **licensing guardrail**
    owner-directed adversarial audit (2026-06-03) removed three author-invented
    surfaces; a pinned-target mcp-expert re-pass returned SIGN-OFF. **The
    review-then-ratify gate CLOSED 2026-06-03 (Lacustrine Swimming Beacon):
-   D3 is owner-ratified with the settlement decisions folded in (V1
-   extension, metric-filter deferral, `adapt-lesson` rename, resource strand
-   index); the `d3` todo is flipped, the bundle is uncommitted pending owner
-   word, and D4 is the next deliverable.**
+   D3 is owner-ratified + committed (`a0fd7b0f`). **D4 (graph capability shape)
+   is now AUTHORED + RATIFIABLE (2026-06-04, Burnished Glowing Spark, committed
+   `ca927e40`):** owner decision B made EEF a homogeneous strand graph (guidance
+   reports inline; nine bound names → eight); the fundamental heterogeneous
+   node/edge model is deferred-and-homed in the migration plan (active under
+   Twilit Cascading Supernova via the ratified
+   `graph-migration-plan-overhaul.plan.md` metaplan). **The next session reviews
+   D4 + the EEF plan as a whole, then ratifies; D5 the session after.** See the
+   `eef` thread banner.**
 7. **Graph-estate-consolidation: t2–t5+t7 EXECUTED and pushed at `c3b78eec`;
    scoped t8 verification PASSED (2026-06-02, Opalescent Cascading Planet)**.
    The estate reads true in one pass: eleven plans archived with banners +
@@ -416,7 +421,7 @@ against primary sources before reliance) and the **licensing guardrail**
    only remaining graph-estate items and stay D7-gated (the `t8` todo is
    `pending` by design). **The Judgement-call-4 unified substrate-migration
    plan is AUTHORED (2026-06-02, Galactic Glowing Prism):**
-   `kg/future/graph-tools-substrate-migration.plan.md`, parked on the named
+   `kg/future/graph-tools-value-redesign.plan.md`, parked on the named
    promotion trigger EEF D6 + D7. **The next step in the ratified one-thread
    order is EEF D3 per item 6.**
 8. The seam-mapping taxonomy + "seams compose" law is a candidate for a reusable
@@ -490,13 +495,25 @@ authority.
 
 ## Deep Consolidation Status
 
-**running this handoff → owner-directed (2026-06-04, Mossy Whispering Bark
+**ran this handoff → owner-directed (2026-06-04, Burnished Glowing Spark /
+claude / Opus 4.8 / `67b679`, EEF D4 contract session close).** Owner asked
+for a full handoff + consolidate-docs + commit (eef-thread-scoped). Homed: the
+value-first/existing-is-malleable lesson → Claude auto-memory
+(`feedback_value_first_existing_is_malleable`) + `distilled.md` + the `eef`
+banner; napkin captured at full weight (now over the 300 line-limit — drain is
+a future dedicated curation pass, NOT a trim, per the conservation invariant);
+experience file landed; the migration-overhaul metaplan ratified + handed to
+Twilit (active lane, comms `0e2f7e7b`); decision-B graduation candidate
+(node-kind-that-dedups-one-leaf) recorded in napkin. Cross-platform memory read:
+own-platform (Claude) done; codex/cursor/gemini surfaces NOT read this session
+(single-lane EEF close) — left for the dedicated curation pass.
+
+Prior same-day pass: **owner-directed (2026-06-04, Mossy Whispering Bark
 / claude / Opus 4.8 / `fac519`, school-data-search owner gate session
-close).** Owner asked for a full handoff + consolidate-docs run; scope:
-napkin disposition (over line-limit after the gate-session closeout
-capture), graduation-candidate routing (synthesis-verification-discipline →
-PDR/rule candidate; licensing guardrail → ADR candidate if the project
-proceeds), cross-platform memory read.
+close)** — full handoff + consolidate-docs; scope: napkin disposition,
+graduation-candidate routing (synthesis-verification-discipline → PDR/rule
+candidate; licensing guardrail → ADR candidate if the project proceeds),
+cross-platform memory read.
 
 Prior pass: **completed — session-completion mode, owner-requested
 handoff + consolidation at the realignment session close (2026-06-03,

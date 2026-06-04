@@ -100,3 +100,16 @@ staging surface; fitness remains a routing signal, not a reason to avoid capture
   sources, never from precedent or compiled-framing as cover. Routing:
   PDR candidate in pending-graduations; operational now in the
   school-data-search plan's verification discipline + high-stakes register.
+- **Value-first; existing artefacts are malleable design surface** (2026-06-04,
+  EEF D4 session — owner corrected the same root ~5×, each in a different
+  costume). When we control the stack (we build the data objects AND the
+  substrate), the fixed points are the value constraints (here: maximise user
+  value; don't flood agents with irrelevant tokens) + our design agency — NOT the
+  existing code, the current/generated data shape, the consumer count, or even
+  owner-ratified decisions. Start every design decision from "what value must this
+  deliver, and what do we control?"; reshape existing artefacts when value demands
+  (openly, with reasoning, with ratification); reshape on frame-overturn, never
+  bolt-on. Routing: graduated to Claude auto-memory
+  (`feedback_value_first_existing_is_malleable`); PDR/rule candidate if it recurs
+  cross-platform. Connects to LTAE, premature-crystallization,
+  existence-is-not-correctness.
