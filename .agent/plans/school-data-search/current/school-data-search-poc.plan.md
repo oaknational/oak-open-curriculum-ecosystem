@@ -92,6 +92,28 @@ todos:
 
 # School Data Search POC MVP — In-Repo Build
 
+## In short
+
+**What:** a small in-repo proof-of-concept service that gives Oak a clean,
+current, privacy-safe register of every UK school (England, Wales, Scotland,
+Northern Ireland), served through an authenticated API and a typed client,
+with a demo page where a user picks their school.
+
+**Why:** any Oak service that works with school information needs to let the
+user pick their school — this builds that shared capability once.
+
+**How:** nightly ingestion from official, openly-licensed registers →
+hard-fail validation → whole-dataset promotion (so the API always serves a
+complete, coherent list, never a half-finished import) → fast, typo-tolerant,
+multilingual search. No personal data is stored or served; only open,
+clearly-licensed sources are used.
+
+**Where it stands (2026-06-04):** the research, design, and every decision
+gate (G-1…G-9 plus the workspace shape, G-8) are complete and owner-ratified.
+Next: draft two ADRs (the produced-spec contract and the workspace-tier
+amendment), then build the workstreams — England/GIAS first. It is a POC: at
+the end, the owner decides whether to take it forward.
+
 **Status**: queued (`current/`). Promotion to `active/` happens when gates
 G-1, G-2, G-3, and G-8 are decided and the first build workstream starts.
 
