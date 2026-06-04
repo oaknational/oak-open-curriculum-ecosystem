@@ -127,3 +127,32 @@ staging surface; fitness remains a routing signal, not a reason to avoid capture
   (`feedback_no_cross_thread_analogy_in_review`); PDR/rule candidate (review or
   metacognition surface) if it recurs. Connects to ground-convenient-claims,
   value-first-existing-is-malleable, premature-crystallization.
+
+## 2026-06-04 — commit-window discipline under live parallel agents (Arboreal curation)
+
+- **The commit window is a moving target; re-derive the staged set per chunk, not
+  per pass.** Across n=5+ sessions in the 2026-06-03/04 window (Moonlit, Blustery,
+  Burnished, Shadowed), peer files went dirty mid-commit-ceremony. Each chunk's
+  pathspec must come from a FRESH `git status`; explicit-pathspec staging +
+  per-chunk re-derivation carried 6+ agents on one branch with zero collisions.
+  Three corollaries, all repeatedly validated: (1) say "*I* haven't committed,"
+  never "*nothing* is committed" — a parallel commit can sweep your whole working
+  tree, so investigate git-state anomalies (reflog + per-file log) and surface
+  truthfully, but scope the claim to your own actions; (2) `git commit -F msg --
+  <intent files>` commits exactly your bundle and leaves a peer's staged entries
+  untouched (`git restore --staged`/`reset` are hook-blocked/forbidden); (3) the
+  `cannot lock ref 'HEAD'` ref-lock is the FINAL collision backstop — re-derive
+  and re-commit against the moved HEAD, never delete the lock. Rule/PDR
+  graduation stays owner-gated (pending-grad commit-window items 15/40); this is
+  the interim cross-session home.
+- **Critically assess a subagent's inference, not just its facts** (2026-06-04,
+  school-data-search WS-D1 — Fiery Sparking Caldera). validate-specialist-findings
+  usually checks facts and severity; this sharpens it. architecture-expert-betty's
+  facts were correct (`oak-search-sdk` really has retrieval and admin modules) but
+  her inference — "therefore split the new SDK into six workspaces" — contradicted
+  what that precedent demonstrates (it BUNDLES read and write in one SDK behind a
+  DI factory). A reviewer's own cited evidence can support the opposite of their
+  recommendation; verify the evidence-to-recommendation step, most of all when the
+  facts check out and the recommendation is the more decomposed/elaborate shape.
+  Routing: refines `feedback_validate_specialist_findings_before_acting`; PDR/rule
+  candidate on recurrence.
