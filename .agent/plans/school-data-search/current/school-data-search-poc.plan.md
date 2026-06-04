@@ -497,10 +497,13 @@ de-risk it before investing in WS5–WS11.
   school-level publications (annual refresh, scraper-free — NOT the fragile
   ASP.NET Institution-Search scrape); V-05 confirms operating-school
   coverage + provenance/freshness. No coordinates.
-- **Per-nation `sourceId`-stability verification**: confirm each source
-  provides a stable per-school identifier across refreshes (GIAS URN is
-  stable; confirm Scotland SEED/SchUID, Wales `school_code`, NI reference) —
-  the canonical ID built from it is the picker's stored-identity contract.
+- **Per-nation `sourceId` identity verification**: confirm each source
+  provides a per-school identifier that is BOTH stable across refreshes AND a
+  unique identity at school grain (cardinality 1:1 — a present/stable field is
+  not automatically a unique id). GIAS URN is stable + unique; Scotland SEED
+  can be 1:many (one SEED → multiple campuses), so verify the contact-details
+  register's grain; confirm Wales `school_code` and the NI reference likewise.
+  The canonical ID built from it is the picker's stored-identity contract.
 - Every adapter ships fixtures: valid rows, closed/proposed/independent/
   special/PRU rows where the source supports them, malformed rows,
   duplicate-ID rows, unexpected-enum rows, and forbidden-field rows.
