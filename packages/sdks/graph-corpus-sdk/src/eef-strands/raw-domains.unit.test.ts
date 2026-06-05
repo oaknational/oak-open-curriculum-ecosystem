@@ -1,7 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
 import { EEF_TOOLKIT_DATA } from './eef-toolkit.external-data.js';
-import { declaredVsObservedDivergence, relatedStrandEdges } from './raw-domains.js';
+import {
+  declaredVsObservedDivergence,
+  relatedStrandEdges,
+  strandAxisIndex,
+} from './raw-domains.js';
 
 describe('declaredVsObservedDivergence', () => {
   it('lists the declared phases no strand carries', () => {
@@ -49,6 +53,30 @@ describe('relatedStrandEdges', () => {
     for (const edge of relatedStrandEdges) {
       expect(ids.has(edge.source)).toBe(true);
       expect(ids.has(edge.target)).toBe(true);
+    }
+  });
+});
+
+describe('strandAxisIndex', () => {
+  it('keys exactly the school_context_relevance-present strands (derived, not hard-coded)', () => {
+    const scrStrandIds = EEF_TOOLKIT_DATA.strands
+      .filter((strand) => 'school_context_relevance' in strand)
+      .map((strand) => strand.id)
+      .sort((a, b) => a.localeCompare(b));
+    const axisKeys = [...strandAxisIndex.keys()].sort((a, b) => a.localeCompare(b));
+    expect(axisKeys).toEqual(scrStrandIds);
+    expect(axisKeys.length).toBeGreaterThan(0);
+  });
+
+  it('projects each strand observed axes straight from its school_context_relevance', () => {
+    for (const strand of EEF_TOOLKIT_DATA.strands) {
+      if (!('school_context_relevance' in strand)) {
+        continue;
+      }
+      const axis = strandAxisIndex.get(strand.id);
+      expect(axis?.phases).toEqual(strand.school_context_relevance.most_relevant_phases);
+      expect(axis?.keyStages).toEqual(strand.school_context_relevance.most_relevant_key_stages);
+      expect(axis?.priorities).toEqual(strand.school_context_relevance.most_relevant_priorities);
     }
   });
 });

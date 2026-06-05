@@ -36,18 +36,6 @@ export const APP_PACKAGE_IMPORTS = [
 
 export const TOOLING_PACKAGE_IMPORTS = ['@oaknational/agent-tools'] as const;
 
-export const SCHOOL_DATA_SEARCH_PACKAGE_IMPORTS = [
-  '@oaknational/school-data-search-contracts',
-  '@oaknational/school-data-search-sdk',
-  '@oaknational/school-data-search-client',
-  '@oaknational/school-data-search-api',
-] as const;
-
-type SchoolDataSearchRole = 'contracts' | 'sdk' | 'client' | 'api';
-
-const SCHOOL_DATA_SEARCH_BOUNDARY_MESSAGE =
-  'Non-school-data-search workspaces cannot import from the school-data-search POC tier. The POC remains isolated until an owner go/no-go decision widens consumption.';
-
 const APP_BOUNDARY_MESSAGE = 'Apps cannot import from other apps. Each app is independent.';
 const TOOLING_BOUNDARY_MESSAGE =
   'Runtime workspaces cannot import from tooling packages. Tooling stays in development and operations layers, not shipped runtime code.';
@@ -154,10 +142,6 @@ export const coreBoundaryRules: Partial<Linter.RulesRecord> = {
         ...createPackageSpecifierPatterns(
           TOOLING_PACKAGE_IMPORTS,
           'Core cannot import from tooling workspaces. Core packages must remain reusable runtime primitives.',
-        ),
-        ...createPackageSpecifierPatterns(
-          SCHOOL_DATA_SEARCH_PACKAGE_IMPORTS,
-          SCHOOL_DATA_SEARCH_BOUNDARY_MESSAGE,
         ),
       ],
     },
@@ -292,10 +276,6 @@ export function createLibBoundaryRules(libName: LibPackage): Partial<Linter.Rule
             'Libraries cannot depend on apps. Libraries must remain reusable across applications.',
           ),
           ...createPackageSpecifierPatterns(TOOLING_PACKAGE_IMPORTS, TOOLING_BOUNDARY_MESSAGE),
-          ...createPackageSpecifierPatterns(
-            SCHOOL_DATA_SEARCH_PACKAGE_IMPORTS,
-            SCHOOL_DATA_SEARCH_BOUNDARY_MESSAGE,
-          ),
         ],
       },
     ],
@@ -433,10 +413,6 @@ export function createDesignBoundaryRules(designName: DesignPackage): Partial<Li
             LIB_PACKAGE_IMPORTS,
             'Design workspaces cannot depend on libs. Design primitives must not depend on runtime library layers.',
           ),
-          ...createPackageSpecifierPatterns(
-            SCHOOL_DATA_SEARCH_PACKAGE_IMPORTS,
-            SCHOOL_DATA_SEARCH_BOUNDARY_MESSAGE,
-          ),
         ],
       },
     ],
@@ -456,10 +432,6 @@ export const appBoundaryRules: Partial<Linter.RulesRecord> = {
       patterns: [
         ...createPackageSpecifierPatterns(APP_PACKAGE_IMPORTS, APP_BOUNDARY_MESSAGE),
         ...createPackageSpecifierPatterns(TOOLING_PACKAGE_IMPORTS, TOOLING_BOUNDARY_MESSAGE),
-        ...createPackageSpecifierPatterns(
-          SCHOOL_DATA_SEARCH_PACKAGE_IMPORTS,
-          SCHOOL_DATA_SEARCH_BOUNDARY_MESSAGE,
-        ),
         {
           ...WORKSPACE_ALIAS_IMPORT_PATTERN,
           message:
@@ -504,10 +476,6 @@ export const appArchitectureRules: Partial<Linter.RulesRecord> = {
       patterns: [
         ...createPackageSpecifierPatterns(APP_PACKAGE_IMPORTS, APP_BOUNDARY_MESSAGE),
         ...createPackageSpecifierPatterns(TOOLING_PACKAGE_IMPORTS, TOOLING_BOUNDARY_MESSAGE),
-        ...createPackageSpecifierPatterns(
-          SCHOOL_DATA_SEARCH_PACKAGE_IMPORTS,
-          SCHOOL_DATA_SEARCH_BOUNDARY_MESSAGE,
-        ),
         {
           ...WORKSPACE_ALIAS_IMPORT_PATTERN,
           message:
@@ -588,10 +556,6 @@ export function createSdkBoundaryRules(
             ...searchSdkImportPatterns,
             ...appSpecifierPatterns,
             ...toolingSpecifierPatterns,
-            ...createPackageSpecifierPatterns(
-              SCHOOL_DATA_SEARCH_PACKAGE_IMPORTS,
-              SCHOOL_DATA_SEARCH_BOUNDARY_MESSAGE,
-            ),
             {
               ...WORKSPACE_ALIAS_IMPORT_PATTERN,
             },
@@ -647,10 +611,6 @@ export function createSdkBoundaryRules(
             ),
             ...appSpecifierPatterns,
             ...toolingSpecifierPatterns,
-            ...createPackageSpecifierPatterns(
-              SCHOOL_DATA_SEARCH_PACKAGE_IMPORTS,
-              SCHOOL_DATA_SEARCH_BOUNDARY_MESSAGE,
-            ),
             {
               ...WORKSPACE_ALIAS_IMPORT_PATTERN,
             },
@@ -691,10 +651,6 @@ export function createSdkBoundaryRules(
           ),
           ...appSpecifierPatterns,
           ...toolingSpecifierPatterns,
-          ...createPackageSpecifierPatterns(
-            SCHOOL_DATA_SEARCH_PACKAGE_IMPORTS,
-            SCHOOL_DATA_SEARCH_BOUNDARY_MESSAGE,
-          ),
           {
             ...WORKSPACE_ALIAS_IMPORT_PATTERN,
           },
@@ -716,151 +672,6 @@ export function createSdkBoundaryRules(
           },
           appPathZone,
           toolingPathZone,
-        ],
-      },
-    ],
-  };
-}
-
-/**
- * School-data-search tier boundary rules.
- *
- * Internal dependency direction is:
- * contracts -> sdk/client -> apps/api. The arrow names what later workspaces may
- * consume; contracts never import from runtime workspaces, sdk/client import
- * contracts only, and api composes all internal packages.
- */
-export function createSchoolDataSearchBoundaryRules(
-  role: SchoolDataSearchRole,
-): Partial<Linter.RulesRecord> {
-  const sdkPackage = '@oaknational/school-data-search-sdk';
-  const clientPackage = '@oaknational/school-data-search-client';
-  const apiPackage = '@oaknational/school-data-search-api';
-
-  const restrictedSchoolPackagesByRole: Record<SchoolDataSearchRole, readonly string[]> = {
-    contracts: [sdkPackage, clientPackage, apiPackage],
-    sdk: [clientPackage, apiPackage],
-    client: [sdkPackage, apiPackage],
-    api: [apiPackage],
-  };
-
-  const restrictedSchoolPathZonesByRole: Record<
-    SchoolDataSearchRole,
-    readonly { readonly from: string; readonly message: string }[]
-  > = {
-    contracts: [
-      {
-        from: '../sdk/**',
-        message: 'School-data-search contracts cannot import from sdk runtime code.',
-      },
-      {
-        from: '../client/**',
-        message: 'School-data-search contracts cannot import from generated client code.',
-      },
-      {
-        from: '../../apps/**',
-        message: 'School-data-search contracts cannot import from API app runtime code.',
-      },
-    ],
-    sdk: [
-      {
-        from: '../client/**',
-        message: 'School-data-search sdk cannot import from generated client code.',
-      },
-      {
-        from: '../../apps/**',
-        message: 'School-data-search sdk cannot import from API app runtime code.',
-      },
-    ],
-    client: [
-      {
-        from: '../sdk/**',
-        message: 'School-data-search client cannot import from sdk runtime code.',
-      },
-      {
-        from: '../../apps/**',
-        message: 'School-data-search client cannot import from API app runtime code.',
-      },
-    ],
-    api: [],
-  };
-
-  const schoolPackageMessage = `School-data-search ${role} must follow ADR-041's internal dependency direction: contracts -> sdk/client -> apps/api.`;
-  const externalTierPatterns = [
-    ...createPackageSpecifierPatterns(SDK_PACKAGE_IMPORTS, SCHOOL_DATA_SEARCH_BOUNDARY_MESSAGE),
-    ...createPackageSpecifierPatterns(APP_PACKAGE_IMPORTS, SCHOOL_DATA_SEARCH_BOUNDARY_MESSAGE),
-    ...createPackageSpecifierPatterns(TOOLING_PACKAGE_IMPORTS, TOOLING_BOUNDARY_MESSAGE),
-    ...createPackageSpecifierPatterns(
-      ['@oaknational/sentry-node'],
-      'School-data-search cannot import adapter libs during the POC. Runtime adapters belong behind the API app boundary and require an explicit decision.',
-    ),
-  ];
-
-  return {
-    'import-x/no-relative-packages': 'error',
-    'import-x/no-restricted-paths': [
-      'error',
-      {
-        zones: [
-          ...restrictedSchoolPathZonesByRole[role].map((zone) => ({
-            target: './src/**' as const,
-            ...zone,
-          })),
-          {
-            target: './src/**' as const,
-            from: '../../../apps/**' as const,
-            message: SCHOOL_DATA_SEARCH_BOUNDARY_MESSAGE,
-          },
-          {
-            target: './src/**' as const,
-            from: '../../../packages/sdks/**' as const,
-            message: SCHOOL_DATA_SEARCH_BOUNDARY_MESSAGE,
-          },
-          {
-            target: './src/**' as const,
-            from: '../../../packages/design/**' as const,
-            message: SCHOOL_DATA_SEARCH_BOUNDARY_MESSAGE,
-          },
-          {
-            target: './src/**' as const,
-            from: '../../../agent-tools/**' as const,
-            message: TOOLING_BOUNDARY_MESSAGE,
-          },
-          {
-            target: './src/**' as const,
-            from: '../../../agent-graphs/**' as const,
-            message: SCHOOL_DATA_SEARCH_BOUNDARY_MESSAGE,
-          },
-          {
-            target: './src/**' as const,
-            from: '../../../packages/libs/sentry-node/**' as const,
-            message:
-              'School-data-search cannot import adapter libs during the POC. Runtime adapters belong behind the API app boundary and require an explicit decision.',
-          },
-        ],
-      },
-    ],
-    '@typescript-eslint/no-restricted-imports': [
-      'error',
-      {
-        patterns: [
-          ...createPackageSpecifierPatterns(
-            restrictedSchoolPackagesByRole[role],
-            schoolPackageMessage,
-          ),
-          ...externalTierPatterns,
-          {
-            ...WORKSPACE_ALIAS_IMPORT_PATTERN,
-          },
-          ...(role === 'contracts'
-            ? [
-                {
-                  group: ['drizzle-orm', 'drizzle-orm/*', 'drizzle-orm/**'],
-                  message:
-                    'School-data-search contracts must remain DB-free. Database mapping belongs in sdk ingestion/storage modules.',
-                },
-              ]
-            : []),
         ],
       },
     ],

@@ -123,7 +123,7 @@ Fresh capture starts below.
   builder-readiness when the ask was only "report, then stop". Held as a named
   inference, not a given: "session titled D5" is not "build D5 now".
 
-## 2026-06-04 — subagent DISCREPANCY-claims are highest-risk relay class (Windward Gliding Squall)
+## 2026-06-04 — subagent DISCREPANCY-claims are the highest-risk relay class (Windward Gliding Squall)
 
 - **Sharpened corollary to the felt-authority entry above, found one turn later
   by reading the primary sources I had only relayed.** When I finally read the D4
@@ -154,6 +154,25 @@ Fresh capture starts below.
   `EefStrand = (typeof EEF_TOOLKIT_DATA.strands)[number]` means a synthetic
   strand is a category error. Relayed summaries flatten exactly these
   load-bearing design principles.
+
+## 2026-06-04 — the grounding bar scales with the artefact's downstream use (Windward Gliding Squall)
+
+- **A calibration corollary that GUARDS against over-applying the felt-authority
+  lesson.** Owner directed me to read the D5 surfaces first-hand. Doing so
+  CONFIRMED almost everything the readers had relayed — all 14 corpus
+  cardinalities checked out against the actual `as const` data, and the one
+  apparent mismatch (`number_of_studies` grep=4 vs the contract's "2/30")
+  dissolved as 2 in `headline` + 2 in `school_context_relevance`, exactly as the
+  contract states. So was the re-read necessary, or paranoid belt-and-braces?
+  **Necessary** — and the reason is the calibration: relayed-with-disclosed-tier
+  facts suffice for a REPORT, but an executable PLAN turns those same facts into
+  test assertions and schema required/optional decisions, so every load-bearing
+  shape and cardinality must be first-hand. A wrong cardinality silently flips a
+  schema field optional↔required and breaks D6. The guard against the
+  over-correction (re-verifying everything always, paranoidly): scale grounding
+  effort to **what the output drives**, not to a blanket reflex. The impact sets
+  the bar, not the surface task — which is the action-to-impact bridge made
+  operational.
 
 ## 2026-06-04 — "graduate" is the gate firing, not a licence to skip grounding (Hidden Hiding Dusk)
 
@@ -187,42 +206,146 @@ Fresh capture starts below.
   names ("hedging-vocabulary trip-list", "owner-only marker") when writing about the
   patterns the hook guards.
 
-## 2026-06-04 — install bootstrap must not enter the build graph (Starlit Waxing Dusk)
+## 2026-06-04 — pairing-buddy feedback on collaboration tooling (Feathered Spiralling Wing)
 
-- **A clean worktree exposed an install-time closed loop, not a school-data-search
-  product defect.** Root `postinstall` used Turbo's general build graph to make
-  `agent-tools/dist` available after install. In a clean checkout that meant:
-  pnpm install/deps-status → root `postinstall` → Turbo build agent-tools →
-  dependency build of `oak-eslint` → pnpm deps-status/install while inside the
-  build → root `postinstall` again. The architecturally correct cure is not
-  `--only` or cache reliance; it is a narrower bootstrap boundary: root
-  `postinstall` may run a dedicated Node script that directly builds only the
-  required `agent-tools/dist` artefact, and must not invoke pnpm, Turbo, or
-  workspace package scripts. Carry this as a build-system pattern candidate if
-  it recurs beyond the current fix lane.
-- **Do not pre-load workspace shells with future dependencies.** Session-close
-  `pnpm check` caught unused API-shell placeholders (`env`, logger,
-  observability, result, zod) through Knip. Minimal shells should depend only
-  on what they import today; add runtime dependencies at the first TDD slice
-  that actually consumes them.
+- **`--body` length guard is useful, but team-start prose easily crosses it.** My
+  first comms team-start event hit the 1500-char `--body` limit (1822 chars) and
+  the CLI correctly named `--body-file` as the cure. For short team-starts, rewrite
+  compactly; for dense feedback, use `comms send` with a deliberately short verdict
+  plus a pointer to the durable artefact rather than turning comms into storage.
+- **A supposedly focused vitest invocation widened to the whole agent-tools suite.**
+  `pnpm --filter @oaknational/agent-tools test -- collaboration-state.unit.test.ts`
+  returned green but ran 95 test files / 857 tests, not just the named file. Treat
+  that as useful evidence, but do not report it as a narrow targeted test. Prefer
+  `pnpm --filter @oaknational/agent-tools exec vitest run <path>` when the intent is
+  a true focused file run.
+- **User correction: external agent feedback is never self-certifying.** During the
+  Fiery pairing pass, owner restated that all external feedback from agents must be
+  critically assessed before acceptance. Apply this immediately to peer feedback,
+  reviewer output, subagent reports, and comms suggestions: verify facts against the
+  live source, assess the evidence-to-recommendation step, and label outcomes as
+  accepted / partially accepted / rejected / unverified instead of relaying them as
+  authority.
 
-## 2026-06-04 - shell quoting and git index lessons (Breezy Navigating Rudder)
+## 2026-06-04 — monitors are not a substitute for reaction (Iridescent Drifting Star)
 
-- **Mistake:** I parallelized two `git mv` commands during the
-  school-data-search plan promotion and one bounced on `index.lock`. Git index
-  mutations in a single worktree must be serial, even when each command is
-  individually safe. Behaviour change: parallelize reads, but run `git mv`,
-  staging, and commit-window operations one at a time; retry only after
-  confirming the lock cleared naturally with `git status`.
-- **Mistake:** My first napkin append used shell double quotes around a
-  `node -e` string containing markdown backticks, so zsh executed the
-  backticked text. Behaviour change: when an escalated shell edit must include
-  markdown literals, use single-quoted shell source or a script file; do not
-  place markdown backticks inside double-quoted shell strings.
-- **Mistake:** I launched several `pnpm --filter ...` validation commands in
-  parallel while the isolation worktree had fresh workspace/lockfile changes.
-  They produced noisy install/postinstall behaviour and made recovery harder
-  after the host crash. Behaviour change: after topology or lockfile edits,
-  run one validation command at a time, starting with the smallest package
-  check, and record incomplete validation as incomplete rather than pressing on
-  with broader gates.
+- **My watcher worked, but my pairing behavior lagged.** Owner caught that
+  Windward was posting D5 plan work while I was not reacting. The technical monitor
+  was receiving comms, but I treated that as passive awareness instead of an active
+  obligation to read, assess, and respond. In team pairing, a live watcher creates a
+  response duty: when the planner posts a draft, request, heartbeat with material
+  cycle progress, or reviewer synthesis, either respond with assessed feedback or
+  explicitly say there is nothing new to act on. "Monitor green" is not "pairing
+  done."
+
+## 2026-06-04 — frictions register is a pointer, not ground truth (Fiery Forging Ash)
+
+- **The agent-tooling frictions register carries ~20 entries stamped
+  `addressed-in-working-tree-2026-05-10` with a never-completed "replace with
+  commit SHA after landing" trigger.** Trusting those statuses would read
+  "already fixed" for things that may never have committed. Same shape as the
+  thread-record-is-pointer-not-truth law, on a new surface: before acting on a
+  register status, recompute against the *current code* (here: `comms append
+  --help`, the spec table, the option sets). The register framed the candidates;
+  the live source decided what was real. Fixed F-35 (heartbeat `--help` gap) +
+  F-07 (`comms list`/`show`) grounded against source, not against the register's
+  own claims.
+- **Monitors are scaffolding for an active collaboration loop — stop them when
+  the loop closes, or they become noise-tax.** Complements Iridescent's
+  "monitor green ≠ pairing done" above from the other end: the watcher earned
+  its keep instantly (surfaced a *directed* consolidated-frictions message from
+  Windward I hadn't read), but once that was read and the pair-review delivered,
+  it emitted only EEF cross-traffic + heartbeats — waking me with zero my-lane
+  signal. The owner's "focus on useful work, not just communications ceremony"
+  named exactly that. Heartbeat = pure outgoing ceremony (stop first; low value
+  with owner present + no claim). Watcher = useful *while* a feedback loop is
+  live. Start on demand, stop when the loop closes; don't leave them as ambient
+  tax.
+- **Critically assessing peer feedback can VINDICATE the peer by grounding — and
+  hand you the source you were missing.** Owner directive: critically assess all
+  external agent feedback (Feathered + owner captured the discipline above). My
+  distinct instance: Feathered's "Windward items 2/3 still open" looked like an
+  unverified attribution (Windward's *broadcast* named only item 1). Grounding it
+  surfaced a separate *directed* message from Windward — the consolidated 3-item
+  list I hadn't read. The doubt was right to raise; the grounding confirmed
+  Feathered AND found the unread primary source. Validate-findings is "resolve
+  the claim against the primary source before relaying," not "assume the peer is
+  wrong."
+
+## 2026-06-04 — fan-out review earns its keep on un-pre-grounded dimensions (Prismatic Twinkling Planet)
+
+- **When the lead has already established solid ground truth, a fan-out review
+  workflow pays off on the dimensions the lead did NOT pre-ground — not the ones
+  they did.** EEF D5 fresh dual-review: I verified package filters, contract
+  line-citations, corpus cardinalities, and the zero-blast-radius gate solo,
+  first-hand. The six-lens workflow then did two distinct things. On those four
+  pre-grounded claims it correctly REJECTED every adversarial attack as a
+  false-positive — pure confirmation, adding nothing I didn't already hold. The
+  value was the four real NEW findings it surfaced (the `projection?` omission,
+  the undefined depth `MAX`, the under-characterised depth-1 member-edge example,
+  the missing module-import coverage) — every one in an architecture / type /
+  test-completeness dimension I had not independently checked.
+- **Cure / next time:** brief review lenses to spend effort AWAY from what the
+  lead has already verified (hand them the verified ground truth, say "challenge
+  it, but your real value is elsewhere") and TOWARD the un-grounded judgment
+  dimensions. Adversarial-verify on a pre-grounded claim is cheap confirmation;
+  on an un-grounded dimension it is discovery. Budget the fan-out accordingly.
+- Covered by existing auto-memory
+  (`feedback_validate_specialist_findings_before_acting` +
+  `feedback_ground_state_before_planning`), so no new auto-memory entry — and
+  `MEMORY.md` is over its size limit anyway.
+
+## 2026-06-05 — push proofs to the lowest level; knip lives only in `pnpm check` (Silvered Listening Secret)
+
+- **A smoke/integration test that proves pure logic is an over-reach — decompose
+  what the test proves and push each proof to the lowest level that can hold it.**
+  The PreToolUse fail-closed shim's smoke test proved the exit-code mapping
+  (signal / broken-build / closed-set {0,2}) — pure logic that belongs in a unit
+  test — plus Node's own `stdio:inherit`, which is external functionality the
+  testing strategy says never to test. Owner-corrected, citing
+  `testing-strategy.md`. Cure: extract the decision (`resolveGuardExitCode`) to
+  committed source + unit-test it; the shim shrinks to thin IO and imports the
+  tested function. The unit signature `(code, signal)` structurally proves the
+  bypass env can't leak into the crash path.
+- **Node 24 imports committed `.ts` directly (type-stripping), so a build-free
+  `.mjs` shim can import unit-tested TS logic.** The relative specifier resolves
+  against the importer (NOT `CLAUDE_PROJECT_DIR` — I tripped on that first), wrapped
+  in try/catch so a load failure fails CLOSED (a static import would fail OPEN on
+  exit 1). This is the mechanism that lets build-free harness glue stay thin AND
+  have its logic unit-tested. First real instance. `candidate:` reusable pattern —
+  build-free shim + node type-stripped import of committed source + fail-closed
+  guard.
+- **knip is NOT in the pre-commit hook — only `pnpm check` runs it.** Two commits
+  added tsx-spawned validator entry files (`validate-lifecycle-scripts`,
+  `validate-pretooluse-guard-routing`) without registering them in
+  `knip.config.ts`. The turbo gate I ran as the pre-commit equivalent
+  (`build type-check lint test`) passed, but knip flagged them as unused files and
+  `pnpm check` was red; the owner caught it. Cure: after adding any tsx-spawned or
+  dynamically-referenced entry file, register it in `knip.config.ts` AND run the
+  full `pnpm check` (session-handoff step 11) — not only the turbo gate — before
+  declaring done.
+- **External input is a hypothesis to falsify — reinforced all session.** The
+  report's "recursive postinstall loop" mechanism was refuted by grounding (no
+  package-manager call anywhere in the postinstall build graph); the
+  `.agent/hooks/README` invariant claiming a missing artefact "fails loudly rather
+  than silently allowing" was the exact false belief that masked the real
+  fail-open. Verify-don't-trust applied to a report, to sub-agents, and to my own
+  first answers (skip→fail-loud, scripts/.mjs→checked-src, smoke→unit).
+
+## 2026-06-05 — the gates the commit ran that I didn't (Dim Dimming Threshold)
+
+- **Per-workspace `lint` is ESLint, not Prettier.** I ran `pnpm --filter <pkg>
+  lint` + `type-check` + `test` per cycle (all green) and assumed formatting was
+  covered; the pre-commit `prettier-staged` gate then flagged 5 code files. The
+  per-workspace `lint` script is `eslint .` — Prettier is a separate gate. Cure:
+  run `pnpm format:root` over touched CODE (not just docs — I'd only prettier-
+  checked the markdown) before committing.
+- **A consumer workspace type-checks against its dependency's `dist`, not
+  `src`.** `pnpm --filter @oaknational/graph-corpus-sdk type-check` failed
+  ("no exported member `createGraphView`") until I rebuilt graph-core: the
+  filtered `tsc` resolves the workspace dep via its stale `dist/*.d.ts`, while
+  vitest resolves `src` (so the same change's tests passed but type-check
+  didn't). The full `pnpm check` / `turbo` orders the dependency build first; a
+  hand-run per-workspace type-check of a consumer does not. Cure: rebuild the
+  dependency (or rely on the full gate) before trusting a filtered consumer
+  type-check.

@@ -11,23 +11,18 @@ from research-brief normalisation through report, plan, and in-repo build.
 | claude | Opus 4.8 | 88a769 | Furnace Roasting Brazier | report-and-plan-synthesiser | 2026-06-03 | 2026-06-03 |
 | claude | Opus 4.8 | fac519 | Mossy Whispering Bark | owner-gate-session presenter/recorder | 2026-06-04 | 2026-06-04 |
 | claude | Opus 4.8 | 80d50a | Fiery Sparking Caldera | deep-review + refinement | 2026-06-04 | 2026-06-04 |
-| codex | GPT-5 | codex- | Starlit Waxing Dusk | implementation + closeout | 2026-06-04 | 2026-06-04 |
 
 ## Current Continuation
 
 - Branch: `feat/graph-tooling-tidyup` (shared working branch; report
   `36f1d61b`, plan collection `26b7eb77`; gate decisions committed
   2026-06-04 — see git log).
-- Active implementation work is currently isolated on branch
-  `codex/graph-tooling-tidyup-isolation`; locate the worktree with
-  `git worktree list`, then merge back to `feat/graph-tooling-tidyup` after
-  validation.
 - Invocation pointer: `start-right-quick`, then this record. (`.remember`
   plugin retired 2026-06-04; the baton is this thread record + repo-continuity.)
 - Controlling plan:
-  [`school-data-search-poc.plan.md`](../../../plans/school-data-search/active/school-data-search-poc.plan.md)
-  (lifecycle `active/`; promoted 2026-06-04 after G-1...G-9 and WS-D1
-  completed and implementation began with ADR/boundary scaffolding).
+  [`school-data-search-poc.plan.md`](../../../plans/school-data-search/current/school-data-search-poc.plan.md)
+  (lifecycle `current/`; promotes to `active/` when G-1/G-2/G-3/G-8 are
+  decided — **now all decided** — and the first build workstream starts).
 - **Deep review DONE 2026-06-04** (Fiery Sparking Caldera, `80d50a`):
   verdict — the work is **sound, faithful, and build-ready**. Synthesis
   fidelity to the briefs verified high (no manufactured convergence; "no
@@ -68,49 +63,32 @@ owner may direct their removal after comparison.
 
 ## Landing target for the next session on this thread
 
-**Settle handoff cleanup → cherry-pick postinstall fix → WS1+.** All gates
-G-1...G-9 decided; **WS-D1 / G-8 DONE 2026-06-04** — the 4-workspace bundle is
-ratified: the `contracts`, `sdk` (data/ingest/search modules), `client`, and
-`apps/api` workspaces under a new top-level `school-data-search/` tier; auth in
-apps/api; authored boundary rules. Full record:
-[decomposition doc](../../../plans/school-data-search/active/school-data-search-wsd1-decomposition.md)
-(betty + fred reviewed/validated; 6-way split rejected).
+**ADR-041 amendment + ADR-190 → `active/` → WS1+.** All gates G-1…G-9 decided;
+**WS-D1 / G-8 DONE 2026-06-04** — the 4-workspace bundle is ratified: the
+`contracts`, `sdk` (data/ingest/search modules), `client`, and `apps/api`
+workspaces under a new top-level `school-data-search/` tier; auth in apps/api;
+authored boundary rules. Full
+record: [decomposition doc](../../../plans/school-data-search/current/school-data-search-wsd1-decomposition.md)
+(betty + fred reviewed/validated; 6-way split rejected). Remaining, in order:
 
-Implementation slice landed in the isolation worktree:
-
-1. Commit `f6bbd60a` (`feat(school-data-search): scaffold service boundary`)
-   promoted the plan and WS-D1 decomposition from `current/` to `active/`, added
-   the active/current indexes, and updated plan/frontmatter status.
-2. Amended ADR-041 with the `school-data-search/` tier and import-matrix
-   semantics; landed ADR-191 for the F-B produced OpenAPI contract. ADR-191
-   replaced the earlier ADR-190 pointer because ADR-190 was already the heartbeat
-   cron ADR.
-3. Added workspace entries and lockfile/package-script updates for
-   `school-data-search/packages/contracts`, `packages/sdk`, `packages/client`,
-   and `apps/api`.
-4. Added depcruise path-prefix rules, an Oak ESLint school-data-search boundary
-   factory, boundary inventory validation, and unit tests.
-5. Created minimal unpublished workspace shells and seeded the contracts
-   workspace with Zod school schemas plus an OpenAPI 3.x proof test. The first
-   commit attempt caught the missing Zod OpenAPI extension; the fix landed in
-   the same commit and the focused contracts test passed before the full hooks.
-6. Session-close `pnpm check` caught unused placeholder dependencies in the API
-   shell. The current working tree removes those manifest/lockfile entries and
-   `pnpm check` is green; commit/amend this cleanup before cherry-picking.
-
-Next priorities:
-
-1. Settle the current handoff/package cleanup diff so the working tree is ready
-   for integration work.
-2. Cherry-pick the separate postinstall-bootstrap fix once the other agent
-   lands it. The root cause report: install-time bootstrap must build only
-   `agent-tools/dist` directly with Node/TypeScript and must not invoke pnpm,
-   Turbo, or workspace scripts.
-3. Verify a clean checkout/install path after that cherry-pick, specifically
-   that `agent-tools/dist` exists after install and root `postinstall` cannot
-   recurse.
-4. Continue from the active plan into WS1 contract-canon TDD cycles, then WS2 /
-   WS3, using the completed ADR-041 and ADR-191 prerequisites.
+1. **ADR-041 amendment** — add the `school-data-search/` tier matrix row + the
+   authored boundary rules (enumerate workspaces in `pnpm-workspace.yaml`;
+   hand-authored depcruise path-prefixes; an ESLint tier factory + unit tests
+   wired into each workspace). Lands in the first scaffolding cycle, before
+   any new-workspace code.
+2. **ADR-190** — draft the produced-spec ADR as **F-B** (Zod 4 the single
+   canonical source → OpenAPI 3.x via `@asteasolutions/zod-to-openapi`;
+   generated-state-beats-authored-state doctrine; repo-wide forward policy;
+   `Result` boundary) → `docs-adr-expert`. **Framing (review 2026-06-04):**
+   justify F-B on its own merits (Zod is the repo's validation idiom; one
+   source generates spec + code; owner direction) — NOT by "F-C impossible".
+   A TypeSpec→Zod emitter is in active development by TypeSpec's architect but
+   not production-ready in 2026 (`@typespec/emitter-framework` is an
+   experimental dev-prerelease); record it as a revisit-trigger. The Cardinal
+   Rule is upstream-consume-specific and does NOT govern this produced spec —
+   not an "inversion".
+3. Promote the plan to `active/` (G-1/G-2/G-3/G-8 all decided + build
+   starting), then WS1/WS2/WS3 TDD cycles.
 
 Carry the **verification discipline** as a required delivery gate:
 high-stakes external-source claims are primary-verified before reliance
@@ -182,7 +160,7 @@ in-repo consumer.
 - **Gate decisions + session doctrine (2026-06-04; plan §Phase 0 is
   authoritative):** G-1 **F-B** (Zod 4 → `@asteasolutions/zod-to-openapi` →
   OpenAPI 3.x, CI-proven strict; `Result` boundary; repo-wide forward policy;
-  ADR-191 to draft). G-2 **Next.js** + own Vercel project + Neon-preview
+  ADR-190 to draft). G-2 **Next.js** + own Vercel project + Neon-preview
   opt-in + cron `0 2 * * *` UTC. G-3 canonical model (enum values derived from
   source data, not pinned; modelled name-variant rows; generic inspection, no
   rating; include `middle` phase). G-4 Postgres-only redacted snapshots behind

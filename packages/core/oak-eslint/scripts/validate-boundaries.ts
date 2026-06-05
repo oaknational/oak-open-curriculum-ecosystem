@@ -4,7 +4,6 @@ import {
   APP_PACKAGE_IMPORTS,
   LIB_PACKAGES,
   SDK_PACKAGE_IMPORTS,
-  SCHOOL_DATA_SEARCH_PACKAGE_IMPORTS,
   TOOLING_PACKAGE_IMPORTS,
 } from '../src/rules/boundary.js';
 
@@ -53,14 +52,6 @@ function assertEqual<T>(label: string, actual: readonly T[], expected: readonly 
   );
 }
 
-function readWorkspacePackageNamesFromPaths(relativePaths: readonly string[]): string[] {
-  return relativePaths
-    .map((relativePath) => resolve(repoRoot, relativePath, 'package.json'))
-    .filter((packageJsonPath) => existsSync(packageJsonPath))
-    .map((packageJsonPath) => readPackageName(packageJsonPath))
-    .sort((a, b) => a.localeCompare(b));
-}
-
 function main(): void {
   const actualLibPackageNames = readWorkspacePackageNames('packages/libs');
   const declaredLibPackageNames = [...LIB_PACKAGES]
@@ -80,18 +71,6 @@ function main(): void {
     'SDK boundary inventory',
     [...SDK_PACKAGE_IMPORTS].sort((a, b) => a.localeCompare(b)),
     actualSdkPackageNames,
-  );
-
-  const actualSchoolDataSearchPackageNames = readWorkspacePackageNamesFromPaths([
-    'school-data-search/packages/contracts',
-    'school-data-search/packages/sdk',
-    'school-data-search/packages/client',
-    'school-data-search/apps/api',
-  ]);
-  assertEqual(
-    'School-data-search boundary inventory',
-    [...SCHOOL_DATA_SEARCH_PACKAGE_IMPORTS].sort((a, b) => a.localeCompare(b)),
-    actualSchoolDataSearchPackageNames,
   );
 
   const toolingPackagePath = resolve(repoRoot, 'agent-tools/package.json');

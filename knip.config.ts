@@ -70,6 +70,8 @@ const config: KnipConfig = {
         'src/validators/fitness-vocabulary/validate-fitness-vocabulary.ts',
         'src/validators/collaboration-state/validate-collaboration-state.ts',
         'src/validators/stale-script-invocations/validate-no-stale-script-invocations.ts',
+        'src/validators/lifecycle-scripts/validate-lifecycle-scripts.ts',
+        'src/validators/pretooluse-guard-routing/validate-pretooluse-guard-routing.ts',
         'src/validators/portability/validate-portability.ts',
         'src/validators/subagents/validate-subagents.ts',
         'src/practice-fitness/validate-practice-fitness.ts',

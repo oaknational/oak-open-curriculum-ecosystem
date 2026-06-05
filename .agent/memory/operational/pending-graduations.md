@@ -29,6 +29,22 @@ windowed, backlog, split, or shard-like pending-graduation files. New capture,
 owner-gated items, and unresolved pending-graduation decisions belong here until
 they graduate, duplicate, become stale-withdrawn, or receive owner direction.
 
+## 2026-06-04 captures — Windward Gliding Squall (EEF D5 review)
+
+- **Felt-authority inversely correlates with grounding effort — one PDR unifying
+  the family.** Convergence among confident reviewers is not proof; a finding
+  pre-stamped "I confirmed X" is not verification (the claim-to-have-verified does
+  not transfer); no derived-authority surface — validated schema, green gate, clean
+  review, polished synthesis, a co-equal peer's verdict — self-certifies. Worked
+  instance: the EEF D5 acceptance-command package filter
+  `@oaknational/oak-curriculum-sdk` matched no project; THREE reviewers converged on
+  the wrong name (one claiming "confirmed in package.json"); only an empirical
+  `pnpm --filter` run found it (the pattern was not even uniform —
+  `oak-curriculum-mcp-streamable-http` keeps its prefix). Would unify
+  `feedback_validate_specialist_findings_before_acting`, don't-trust-the-clean-review,
+  report-compiles-not-certifies, and the peer-feedback extension into one PDR.
+  `[captured: 2026-06-04 | source: napkin + distilled 2026-06-04 Windward Gliding Squall + Claude auto-memory feedback_validate_specialist_findings_before_acting | target: pdr:felt-authority-grounding-discipline | trigger: owner direction (owner reinforced ~4x in one session) OR cross-platform recurrence | size: M | status: owner-gated]`
+
 ## 2026-06-04 captures — Arboreal Sprouting Branch curation pass
 
 Routed during the dedicated knowledge-curation pass (napkin rotation +

@@ -1,40 +1,29 @@
 /**
- * T7a inline-fixture compile-time smoke-test for `DeepKeyPath` array-stop
- * discipline (WS4.4 interface-contract half per the 2026-05-22 test-partition
- * amendment in `graph-stack.plan.md`).
+ * Compile-time + runtime contract test for the `graph-view` query layer.
  *
- * The constraint under test is **structural**: `DeepKeyPath<T, D>` must
- * stop at array boundaries — element-index paths like `'tags.0'` or
- * `'tags[number]'` MUST NOT appear in the resulting union, at any depth.
- * If the implementation regresses to recursing into array element types,
- * the negative `@ts-expect-error` assertions stop firing and the test
- * breaks loudly at compile time.
+ * Covers three invariants of the public contract:
  *
- * The inline `FixtureNode` exercises:
- * - Depth-2 nested-object path (positive).
- * - Depth-3 nested-object path (positive).
- * - Root-level array field (`tags`) — array-stop at depth 1 (negative).
- * - Nested-level array field (`headline.mechanisms`) — array-stop at
- *   depth 2 (negative). Without this, the test would only prove the
- *   root-level array-stop and would not exercise the inner-branch
- *   short-circuit in the recursion.
+ * 1. `DeepKeyPath<T, D>` array-stop discipline — the recursion MUST stop at
+ *    array boundaries: element-index paths like `'tags.0'` or `'tags[number]'`
+ *    MUST NOT appear in the resulting path union, at any depth. The negative
+ *    `@ts-expect-error` assertions break loudly at compile time if the
+ *    implementation regresses to recursing into array element types.
+ * 2. `NodeProjection<TNode>` accepts a list whose every element is a valid
+ *    `DeepKeyPath`.
+ * 3. `GraphView<TNode, TNodeId, TEdgeType>` is satisfiable by a minimal object
+ *    implementing the sole `subgraph` operation — the structural binding is
+ *    the load-bearing type check, and the runtime assertion proves the
+ *    construction path executes without throw (the "do not test types alone"
+ *    testing-strategy rule).
  *
- * The instantiation-contract half (T7a-b in graph-corpus-sdk WS4.5)
- * exercises the same constraint against the real `EefStrand` TNode.
- * Each home tests its own invariants per the addendum's
- * §Architectural amendment.
+ * The inline `FixtureNode` exercises `DeepKeyPath` at depths 1–3 plus
+ * root-level (`tags`) and nested-level (`headline.mechanisms`) array-stop.
  */
 
 import { ok, type Result } from '@oaknational/result';
 import { describe, expect, expectTypeOf, it } from 'vitest';
 
-import type {
-  DeepKeyPath,
-  GraphManifest,
-  GraphView,
-  NodeProjection,
-  SubgraphResult,
-} from './index.js';
+import type { DeepKeyPath, GraphView, NodeProjection, SubgraphResult } from './index.js';
 
 type FixtureNode = {
   readonly id: string;
@@ -52,7 +41,7 @@ type FixtureNode = {
 
 type ValidPaths = DeepKeyPath<FixtureNode, 4>;
 
-describe('DeepKeyPath array-stop discipline (T7a interface-contract half)', () => {
+describe('DeepKeyPath array-stop discipline', () => {
   it('admits depth-1 scalar paths', () => {
     expectTypeOf<'id'>().toExtend<ValidPaths>();
     expectTypeOf<'displayName'>().toExtend<ValidPaths>();
@@ -111,28 +100,20 @@ describe('NodeProjection accepts valid path lists', () => {
 });
 
 describe('GraphView interface implementation contract', () => {
-  it('admits a minimal object that satisfies the manifest + subgraph contract', () => {
-    const stubManifest: GraphManifest = {
-      nodeCount: 0,
-      edgeTypes: [],
-      edgeCount: 0,
-      version: 'fixture-0',
-      lastUpdated: '2026-05-22',
-      schemaHash: 'fixture-hash',
-      sparseRelationsByNodeId: [],
-    };
-
-    const view: GraphView<FixtureNode> = {
-      manifest: () => stubManifest,
-      subgraph: (): Result<SubgraphResult<FixtureNode>, never> => ok({ nodes: [], edges: [] }),
+  it('admits a minimal object that satisfies the subgraph-only contract', () => {
+    const view: GraphView<FixtureNode, string, string> = {
+      subgraph: (): Result<SubgraphResult<FixtureNode, string, string>, never> =>
+        ok({ nodes: [], edges: [] }),
     };
 
     // The structural assignment above is the load-bearing contract check —
-    // TypeScript rejects the binding at declaration if any method signature
-    // is wrong. The runtime expectation below proves the construction path
-    // executes without throw, satisfying the "do not test types alone"
-    // testing-strategy rule.
-    expectTypeOf(view).toExtend<GraphView<FixtureNode>>();
-    expect(typeof view.manifest).toBe('function');
+    // TypeScript rejects the binding at declaration if the method signature
+    // is wrong. The runtime expectations below prove the construction AND
+    // invocation paths execute without throw and yield a Result, satisfying
+    // the "do not test types alone" testing-strategy rule.
+    expectTypeOf(view).toExtend<GraphView<FixtureNode, string, string>>();
+    expect(typeof view.subgraph).toBe('function');
+    const result = view.subgraph({ rootIds: [], depth: 1 });
+    expect(result.ok).toBe(true);
   });
 });

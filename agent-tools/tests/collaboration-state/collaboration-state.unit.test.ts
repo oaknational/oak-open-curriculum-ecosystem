@@ -400,6 +400,39 @@ describe('runCollaborationStateCli', () => {
     expect(result.stdout).toContain('OAK_AGENT_IDENTITY_OVERRIDE');
   });
 
+  it('documents heartbeat-mode typed state args in comms append help', async () => {
+    const result = await runCollaborationStateCli({
+      argv: ['--', 'comms', 'append', '--help'],
+      env: {},
+    });
+
+    expect(result.exitCode).toBe(0);
+    expect(result.stdout).toContain('with --tag heartbeat');
+    expect(result.stdout).toContain('--body and --body-file are rejected');
+    expect(result.stdout).toContain('--claim-id <id>');
+    expect(result.stdout).toContain('--intent-id <id>');
+    expect(result.stdout).toContain('--branch <branch>');
+    expect(result.stdout).toContain('--current-cycle-label <label>');
+  });
+
+  it('documents heartbeat-mode typed state args in comms send help', async () => {
+    const result = await runCollaborationStateCli({
+      argv: ['--', 'comms', 'send', '--help'],
+      env: {},
+    });
+
+    expect(result.exitCode).toBe(0);
+    expect(result.stdout).toContain('with --tag heartbeat');
+    expect(result.stdout).toContain('--body and --body-file are rejected');
+    // Assert the full four-arg typed-state set the runtime requires (symmetric
+    // with the append test) so the help test protects the exact cure Windward
+    // needed — not just a subset of the heartbeat-mode flags.
+    expect(result.stdout).toContain('--claim-id <id>');
+    expect(result.stdout).toContain('--intent-id <id>');
+    expect(result.stdout).toContain('--branch <branch>');
+    expect(result.stdout).toContain('--current-cycle-label <label>');
+  });
+
   it('does not fall back to production IO for imported comms commands', async () => {
     const result = await runCollaborationStateCli({
       argv: ['--', 'comms', 'render', '--comms-dir', 'state/comms', '--output', 'state/log.md'],

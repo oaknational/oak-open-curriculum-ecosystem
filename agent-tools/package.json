@@ -35,6 +35,8 @@
     "validate-fitness-vocabulary": "cd .. && pnpm exec tsx agent-tools/src/validators/fitness-vocabulary/validate-fitness-vocabulary.ts",
     "validate-collaboration-state": "cd .. && pnpm exec tsx agent-tools/src/validators/collaboration-state/validate-collaboration-state.ts",
     "validate-no-stale-script-invocations": "cd .. && pnpm exec tsx agent-tools/src/validators/stale-script-invocations/validate-no-stale-script-invocations.ts",
+    "validate-lifecycle-scripts": "cd .. && pnpm exec tsx agent-tools/src/validators/lifecycle-scripts/validate-lifecycle-scripts.ts",
+    "validate-pretooluse-guard-routing": "cd .. && pnpm exec tsx agent-tools/src/validators/pretooluse-guard-routing/validate-pretooluse-guard-routing.ts",
     "validate-portability": "cd .. && pnpm exec tsx agent-tools/src/validators/portability/validate-portability.ts",
     "validate-portability:fix": "cd .. && pnpm exec tsx agent-tools/src/validators/portability/validate-portability.ts --fix",
     "validate-practice-fitness": "cd .. && pnpm exec tsx agent-tools/src/practice-fitness/validate-practice-fitness.ts",

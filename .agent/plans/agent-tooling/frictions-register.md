@@ -266,7 +266,12 @@ below is a cross-reference index, not a second source of truth.
   list` is the always-available poll for non-streaming platforms;
   `comms watch` is the optional streaming layer.
 - **Target surface**: `agent-tools/src/collaboration-state/cli-comms-commands.ts`
-- **Status**: open
+  (read path); narrative list/show landed in
+  `agent-tools/src/collaboration-state/cli-comms-query.ts`.
+- **Status**: partially-addressed — narrative `comms list`/`comms show`
+  landed-in-working-tree-2026-06-04 (Fiery Forging Ash); the directed-message
+  `comms watch` part landed 2026-05-12 (see Review below). Remaining: list
+  filters (`--since`/`--from`/`--audience`).
 - **Review 2026-05-10**: still open. `comms append`, `send`, and
   `render` exist; `comms list`, `show`, and `watch` do not.
 - **Review 2026-05-11**: B-10 working tree adds a narrow
@@ -287,6 +292,17 @@ below is a cross-reference index, not a second source of truth.
   `comms show <event-id>` should render the complete canonical JSON event and
   its body by id. This does not require a new substrate; it is a focused
   read-model over `.agent/state/collaboration/comms/`.
+- **Review 2026-06-04** (Fiery Forging Ash): the read-back core landed.
+  `comms list [--tail <n>]` (default 20) projects newest-first
+  `created_at  event_id  author/session_prefix  [kind] [tags]  title`, and
+  `comms show --event-id <id>` prints the full canonical JSON event including
+  body (mirroring `claims show --claim-id`). Both are read-only and need no
+  identity seed. New module `cli-comms-query.ts`; integration tests in
+  `tests/collaboration-state/comms-query.integration.test.ts`; verified against
+  the live 2886-event directory. Re-surfaced live by Windward Gliding Squall's
+  2026-06-04 consolidated frictions (item 2) and matches user-memory
+  `project_comms_cli_grounding_gap`. Deferred: `--since`/`--from`/`--audience`
+  filters and a `--format json` mode — open for a follow-on slice.
 - **Owner direction**: standing
 
 ### F-17 — No first-class directed-message authoring CLI
@@ -1072,6 +1088,70 @@ below is a cross-reference index, not a second source of truth.
 - **Target surface**: `agent-tools/src/collaboration-state/comms-relevant-events.ts`
   and comms watch/inbox rendering.
 - **Status**: open
+- **Owner direction status**: standing (agent-observed tooling friction is
+  first-class user feedback).
+
+### F-35 — `comms append`/`send --help` hides the `--tag heartbeat` typed-arg mode
+
+- **Source**: Windward Gliding Squall (`ab2bcd`) 2026-06-04 broadcast comms
+  event `fa7eb7df`; owner-relayed in-session.
+- **Surface**: `pnpm agent-tools:collaboration-state -- comms append --help`
+  (and the mirrored `comms send` path).
+- **Observed**: The `--help` usage line lists `(--body | --body-file)` as
+  required and `--tag` as accepting `[failure-mode, behaviour-note, heartbeat]`,
+  but does NOT surface that `--tag heartbeat` switches modes: it REJECTS
+  `--body`/`--body-file` and instead REQUIRES the typed state args
+  `--claim-id --intent-id --branch --current-cycle-label`. A heartbeat Monitor
+  built from `--help` plus the `liveness-heartbeat-cron` rule prose passed
+  `--body` and failed every cycle (exit 2) until the agent ran it manually to
+  read the (excellent) runtime error. The exact flag names lived only in the
+  runtime error, not in `--help`.
+- **Expected**: `comms append --help` reveals the heartbeat-mode flag set so an
+  agent building a heartbeat loop from `--help` alone composes a valid
+  invocation first time.
+- **Candidate cure**: document the heartbeat mode inline in the `comms append`
+  AND `comms send` help strings (both route `--tag heartbeat` through the same
+  typed-state body composer in `comms-heartbeat-cli.ts`). A static inline note
+  beats a dynamic branch — an agent reading `--help` with no flags sees both
+  modes.
+- **Target surface**:
+  `agent-tools/src/collaboration-state/cli-specs.ts` (help wiring) →
+  help strings extracted to
+  `agent-tools/src/collaboration-state/cli-spec-help.ts`;
+  regression tests in
+  `agent-tools/tests/collaboration-state/collaboration-state.unit.test.ts`.
+- **Status**: addressed-in-working-tree-2026-06-04 (Fiery Forging Ash) —
+  `comms append`/`send --help` now document `HEARTBEAT MODE` with the typed
+  state args and the `--body`/`--body-file` rejection; help text extracted to a
+  dedicated module so the spec table stays under its `max-lines` ceiling as
+  help text grows; CLI-level help tests assert both commands. Pending commit;
+  replace with `addressed-in-<commit-sha>` after landing.
+- **Owner direction status**: standing (F-09 discoverability family —
+  agent-observed tooling friction is first-class user feedback).
+
+### F-36 — `pnpm agent-tools:*` wrapper preamble pollutes captured stdout
+
+- **Source**: Windward Gliding Squall (`ab2bcd`) 2026-06-04 consolidated
+  frictions (item 3), directed event `50299513`.
+- **Surface**: `pnpm agent-tools:collaboration-state -- <cmd>` (the root
+  `agent-tools:*` script wrappers).
+- **Observed**: The pnpm wrapper prints two `$ ...` preamble lines (the
+  `--filter` line and the `cd .. && node agent-tools/dist/...` recipe) ahead of
+  the command's real stdout. Capturing a machine-readable value (e.g. a
+  returned `event_id`) needs `tail -n +3` or filtering, which is brittle for
+  scripting.
+- **Expected**: A scriptable path that emits only the command's own stdout.
+- **Candidate cure**: a `--quiet`/`--porcelain` mode emitting only
+  machine-readable output, and/or document the direct
+  `node agent-tools/dist/src/bin/agent-tools.js ...` invocation for scripting
+  (the direct invocation is already clean — it is what the all-channels
+  watcher and these read commands use — but it is not advertised for
+  scripting). Sibling to F-06 / F-23 (the build-prelude / hot-path family);
+  route through the same hot-path split rather than per-command.
+- **Target surface**: root `package.json` agent-tools scripts;
+  `agent-tools/README.md` §"CLI Norms"; possibly the P-Foundation hot-path
+  split named in F-19/F-23.
+- **Status**: open.
 - **Owner direction status**: standing (agent-observed tooling friction is
   first-class user feedback).
 

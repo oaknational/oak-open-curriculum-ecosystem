@@ -1,5 +1,168 @@
 # Next-Session Record — `eef` thread
 
+> **EEF D5 EXECUTED — graph-core generic query layer + graph-native EEF view
+> LANDED AS ONE GREEN COMMIT (2026-06-05, Dim Dimming Threshold / `192ae9`;
+> claude / Opus 4.8; owner-directed execution).** D5 built fresh as five TDD
+> cycles, landed in commit `2e9021ff` (branch ahead 1 of origin; pushing is the
+> owner's call). The `d5-graph-construction-methods` master-plan todo is flipped
+> to `completed`.
+>
+> + **What landed**: (WS1.1) graph-core `graph-view` contract generified to
+>   `GraphView<TNode, TNodeId, TEdgeType>` (subgraph-only; `GraphManifest`/
+>   `manifest` deleted, no EEF consumer); (WS1.2) bounded-BFS `createGraphView`
+>   factory (construction THROWS on dup-id / dangling-edge / negative `maxDepth`;
+>   per-call errors are EXACTLY the two ratified `SubgraphError` variants);
+>   (WS2.1) graph-native EEF view `eefStrandGraph` (one strand node kind,
+>   `related_strand` edges, full strand payload incl. inline guidance reports;
+>   four `toEqualTypeOf` non-widening id-flow proofs); (WS3.1/3.2) `inspectStrand`
+>   + `evidenceForMove` over a shared `subgraphEnvelope` core, the evidence
+>   envelope (members + member-induced edges + binding-derived frontier +
+>   provenance; `data_version`/`last_updated` excluded), and `strandAxisIndex`
+>   (in `raw-domains`). Sole-ingest holds: only `eef-graph.ts` reads the corpus in
+>   the graph layer.
+> + **Owner decision (2026-06-05) — projection DROPPED from D5.** Execution
+>   surfaced that a field-narrowing projection returning the ratified
+>   `SubgraphResult<TNode>` cannot be type-honest under `no-type-shortcuts`
+>   (a trimmed node is a deep-`Partial`; returning it as `TNode` needs a forbidden
+>   `as`/`Object.*`/`Record`; a projected return type re-opens D4), and EEF
+>   consumes none. The owner directed dropping the runtime `projection?` parameter
+>   (Decision 6 "absent" over a dishonest implementation); `NodeProjection` /
+>   `DeepKeyPath` are retained for a future type-honest projection. D4 carries a
+>   "Projection deferred" amendment and the D5 plan's C1 is marked superseded.
+> + **Review cadence (extensive, real-time, no backfill)**: code-expert pre+post
+>   per cycle (fan-from-brief), type-expert deep on WS1.2 / WS2.1 / the assembled
+>   diff, test-expert per cycle + assembled diff. ~18 reviewer dispatches; every
+>   finding critically assessed against the artefacts. Notable REJECTIONS (grounded
+>   over-escalations): code-expert's "factory should return `Result`" (D4 ratifies
+>   the infallible-or-throw construction contract; the dual-review already rejected
+>   a Result variant) and its "frontier must derive from a depth-1 call"
+>   (Option-A over `relatedStrandEdges` is faithful to D4's wording, gives the
+>   identical result, and consumes a D2 export not the raw corpus — the post-exec
+>   review confirmed the rejection). Accepted improvements: test-first sequencing,
+>   grep-based WS1.1 acceptance, production-scoped sole-ingest, `strandAxisIndex`
+>   in `raw-domains`, its home-test block, and test non-vacuity guards.
+> + **Acceptance**: graph-core 90 tests, graph-corpus-sdk 31, curriculum-sdk 729;
+>   type-check / lint / knip / depcruise / markdownlint / prettier clean; the
+>   pre-commit gate (97 turbo tasks) green. Zero external blast radius (three
+>   in-package edit sites verified first-hand).
+>
+> **NEXT SAFE STEP: D6** — the EEF MCP composition module + surface (the two
+> single-Zod-call schemas over the graph-native view subsets, registration behind
+> `OAK_CURRICULUM_MCP_EEF_ENABLED`, the interpretation resource + prompt), per the
+> master plan §D6. D5 unblocks D6. The graph-tools-value-redesign lane stays parked
+> on EEF D6 + D7. Re-derive HEAD from git — this banner is one commit stale by
+> construction.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Dim Dimming Threshold` | `claude` | `Opus 4.8` | `192ae9` | `eef-d5-execution` | 2026-06-05 | 2026-06-05 |
+>
+> ---
+>
+> **EEF D5 PLAN + PARENT FRESH DUAL-REVIEW — VERDICT READY WITH CONDITIONS; ALL
+> CONDITIONS OWNER-RESOLVED + FOLDED IN; D4 DOC-FIX APPLIED (2026-06-04, Prismatic
+> Twinkling Planet / `b56c93`; claude / Opus 4.8; owner-directed review-only
+> session).** Fresh independent dual-review of
+> [`eef-d5-execution.plan.md`](../../../plans/sector-engagement/eef/current/eef-d5-execution.plan.md)
+> AND the parent
+> [`eef-graph-tool-completion.plan.md`](../../../plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md)
+> together, grounding **every** empirical claim first-hand at HEAD `562b97f3`
+> (all four package filters — incl. the asymmetric trap: `oak-curriculum-sdk` →
+> `@oaknational/curriculum-sdk` drops `oak-`, but the streamable-http app keeps it;
+> the live graph-core contract line-citations; corpus cardinalities; the worked
+> anchors; and the zero-external-blast-radius hard gate — **all verified TRUE**),
+> then six independent reviewer lenses (cross-consistency + type-expert +
+> assumptions + architecture-fred + adversarial-refute + test-expert; Sonnet) +
+> adversarial per-finding verification (48 agents). Every finding re-grounded by
+> the lead before acceptance.
+>
+> + **Verdict: READY WITH CONDITIONS** — no blocking findings, no design defects;
+>   the ratified D4 stands; the one-green-commit landing holds. Four adversarial
+>   attacks on the load-bearing claims FAILED (rejected as false-positives): zero
+>   external blast radius (only the three named in-package sites; `dist/*.d.ts`
+>   hits are build artefacts), construction-validation = throw at construction not
+>   a new `Result` variant, single-commit feasibility
+>   (`graph-corpus-sdk/src/index.ts:14` re-exports `GraphView` by name), and the
+>   no-persistent-red history.
+> + **Conditions owner-resolved 2026-06-04 + folded in** (D5 plan + D4 contract):
+>   **C1** keep `projection?` (WS1.2 implements + tests it; EEF binding exposes
+>   none — matches D4's retained signature, no D4 change); **C2** depth ceiling
+>   `MAX` is a per-graph `createGraphView` factory input (`maxDepth` →
+>   `SubgraphDepthExceeded.limit`); **C3** WS2.1's depth-1 example now spells out
+>   the full 4-edge member set (incl. reverse `metacognition→feedback`,
+>   `mastery→feedback`, corpus-verified); **C4** WS2.1 adds the sole-ingest-path
+>   module-import check; **C5** stale parent-filter NOTE removed; **C6** added the
+>   fourth `expectTypeOf` on `edges[0].target`; **C7** rebuilt contract-test block
+>   keeps a runtime assertion; **C8** D4 doc-fix (the "six names" prose at
+>   D4:193-194 and the "names unchanged" parenthetical at D4:365-366 → five
+>   surviving names after the `GraphManifest` deletion).
+> + **Cross-consistency:** parent §D5 Proof aligned to include
+>   `pnpm --filter @oaknational/graph-core test` (D5's acceptance already had it).
+>   Full review verdict + method are in this session's plan-file artefact
+>   (`~/.claude/plans/`, not repo-tracked).
+>
+> **NEXT SAFE STEP: execute D5** — build the new graph-core generic query layer +
+> the graph-native EEF view fresh as TDD cycles, landing as ONE green commit, per
+> the now-condition-folded `eef-d5-execution.plan.md`. The
+> graph-tools-value-redesign lane stays parked on EEF D6 + D7. Re-derive HEAD from
+> git — this banner is one commit stale by construction; the branch is unpushed
+> (pushing is the owner's call). **These review edits are uncommitted working-tree
+> changes** (owner has not requested a commit).
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Prismatic Twinkling Planet` | `claude` | `Opus 4.8` | `b56c93` | `eef-d5-fresh-dual-review-and-condition-fold-in` | 2026-06-04 | 2026-06-04 |
+>
+> ---
+>
+> **D5 EXECUTION PLAN AUTHORED + REVIEWED READY; PARENT FILTER FIXED; NEXT = FRESH
+> DUAL-REVIEW OF D5 + PARENT TOGETHER (2026-06-04, Windward Gliding Squall /
+> `ab2bcd`; claude / Opus 4.8; owner-directed planning session).** Authored the
+> detailed D5 execution plan
+> [`eef-d5-execution.plan.md`](../../../plans/sector-engagement/eef/current/eef-d5-execution.plan.md)
+> (current/, executable) — 5 serial TDD cycles decomposing the ratified D4
+> contract into a fresh build, landed as ONE green commit (cycles are internal
+> checkpoints; landing discipline reconciled to the parent's §Risk Assessment
+> one-commit rule): WS1.1 generify the graph-core `graph-view` contract
+> (`GraphView<TNode,TNodeId,TEdgeType>`, subgraph-only, drop `manifest`/
+> `GraphManifest` incl. the root barrel + the contract-test TSDoc); WS1.2 generic
+> bounded-BFS `createGraphView` factory + structural tests (dup-id/dangling-edge
+> are CONSTRUCTION-time validation; the per-call error surface stays EXACTLY D4's
+> two variants — no new kind); WS2.1 graph-native EEF view (inject
+> `type: 'related_strand' as const`; named `expectTypeOf` id-flow proofs);
+> WS3.1 `inspectStrand` + evidence envelope (frontier + provenance;
+> `data_version`/`last_updated` excluded); WS3.2 `evidenceForMove` axis
+> resolution (reachable-by-axis asserted by derivation).
+>
+> + **Reviewed READY**: Iridescent Drifting Star (owner-assigned pair-reviewer) +
+>   type-expert + assumptions-expert + architecture-expert-fred. ~16 findings, ALL
+>   critically assessed against the artefacts before accepting (per the owner's
+>   repeated directive); one corrected, not copied (assumptions' frontier example
+>   was imprecise vs the D4 frontier definition → pinned a definition-robust
+>   anchor). Iridescent confirmed **READY FOR EXECUTION**. Full disposition in the
+>   plan's §Review disposition. The `createGraphView` factory shape — the one
+>   D5-owned open decision — is CONFIRMED by Iridescent + type-expert.
+> + **Parent filter fix (owner-authorised)**: this plan's D5-Proof line 1340
+>   `@oaknational/oak-curriculum-sdk` → `@oaknational/curriculum-sdk` (directory
+>   name ≠ package name; the wrong filter matched no project — caught by
+>   Iridescent's empirical `pnpm --filter` run after THREE reviewers converged on
+>   the wrong name; `oak-curriculum-mcp-streamable-http` verified correct as-is and
+>   left unchanged).
+>
+> **NEXT SAFE STEP: a fresh session reviews the D5 execution plan AND the parent
+> `eef-graph-tool-completion.plan.md` TOGETHER** (owner-directed), then executes
+> D5. The two plans are cross-consistent (manifest disposition mirrored; landing
+> discipline aligned; package filters correct). The graph-tools-value-redesign
+> lane stays parked on EEF D6 + D7. Re-derive HEAD from git — this banner is one
+> commit stale by construction (branch ~109 ahead of origin; pushing is the
+> owner's call).
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Windward Gliding Squall` | `claude` | `Opus 4.8` | `ab2bcd` | `eef-d5-execution-plan-authoring-and-review` | 2026-06-04 | 2026-06-04 |
+>
+> ---
+>
 > **MIGRATION PLAN OVERHAULED → VALUE-DRIVEN REDESIGN (renamed); parked, EEF-gated
 > (2026-06-04, Twilit Cascading Supernova / `bb53a9`; claude / Opus 4.8;
 > owner-directed).** Accepted Burnished's handoff (comms `0e2f7e7b`). The graph-tools
