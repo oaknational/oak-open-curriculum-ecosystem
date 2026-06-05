@@ -52,7 +52,8 @@ Worked instances live in the 2026-06-05 napkin archive. Homed: pending-graduatio
 top entry (`pdr:felt-authority-grounding-discipline`, owner-gated unification);
 PDR-089 §Decision 6 (corrections-have-no-immunity-gradient + review-count-is-not-coverage);
 rules `verify-dont-trust`; auto-memory `validate-specialist-findings-before-acting`,
-`ground-convenient-claims`. **Owner-walk: graduate the unifying PDR** (trigger met).
+`ground-convenient-claims`. **Unified 2026-06-05 → PDR-089 §Decision 7** (the
+governance home for the whole family; this entry is the terse staging pointer to it).
 
 ## A status/pointer surface is not ground truth — recompute against the live source
 

@@ -33,6 +33,20 @@ exactly the kind that discipline forbids).
   inherited frame; the cure is the external check), so per
   `new-rule-vs-pdr-clause` the correct home is a clause here. A falsifiability
   axis is added for Decision 6.
+- **2026-06-05** (Accepted; owner-directed, Lanternlit curation pass): **Decision 7
+  — no derived-authority surface self-certifies; felt-authority inversely
+  correlates with grounding effort.** Graduates and *unifies* the felt-authority
+  family — the pending-graduations top entry (validate-specialist-findings,
+  don't-trust-the-clean-review, report-compiles-not-certifies,
+  convergence-is-not-proof, the peer-feedback extension) plus the discrepancy-claims
+  and grounding-bar-calibration sharpenings — into this PDR rather than minting a
+  duplicate. Routing rationale: the family was captured as a candidate new PDR
+  (`pdr:felt-authority-grounding-discipline`), but Decision 6 already owns the
+  substrate (a derived/compiled surface is a frame; the cure is the external /
+  primary check). Minting a separate PDR would *fragment* the family across two
+  homes; per `new-rule-vs-pdr-clause` the unifying home is a clause here — the same
+  call the 2026-06-04 pass made for Decision 6. A falsifiability axis is added for
+  Decision 7.
 
 ## Context
 
@@ -124,6 +138,39 @@ to a governance decision:
    un-verified compiled claim and failed — as in the 2026-06-04 school-data-search
    gate session, where a primary-verification pass overturned three
    already-recorded gate decisions.
+
+7. **No derived-authority surface self-certifies; the stronger the felt-authority,
+   the more the grounding reflex must resist being skipped.** Decision 6 named
+   compiled artefacts and same-frame reviews; this generalises the class. A
+   schema-validated structured output, a green quality gate, a clean adversarial
+   review, a co-equal peer's verdict, a polished synthesis, and a finding
+   pre-stamped "I confirmed X" are all **derived-authority surfaces**: each feels
+   authoritative, and none transfers verification of the underlying claim.
+   Authority comes only from grounding against the **primary source**. Three
+   sharpenings: (a) **felt-authority inversely correlates with grounding effort** —
+   the surface that feels most authoritative is exactly where the
+   skip-verification reflex is strongest, so the grounding reflex must be applied
+   *hardest* there; "I grounded this" is itself a derived surface that can hide a
+   relayed spot, so re-ground the surface you are most sure you read. (b) **A
+   discrepancy / contradiction claim is the highest-risk relay class** — it asserts
+   a defect, so ground *both sides* against the primary source before relaying it,
+   not after. (c) **Calibration guard** — scale grounding effort to what the output
+   drives, not to a blanket reflex: an executable plan's test assertions and schema
+   required/optional decisions demand first-hand grounding, whereas a report
+   tolerates a relayed claim with its verification tier disclosed. This is
+   Decision 3's external check applied at the moment of *accepting* any derived
+   surface's output, and Decision 2 applied to authority-by-feel: the felt
+   authority of a surface is not evidence, and is strongest exactly where it is
+   least earned.
+
+   **Falsifiability (Decision 7).** Shown wrong if accepting derived-authority
+   surfaces (validated schemas, green gates, clean reviews, peer verdicts,
+   syntheses) without primary-source grounding reliably produces correct
+   high-stakes outcomes, or if the skip-verification reflex is observed to be
+   *weakest* (not strongest) on the highest-felt-authority surfaces. Confirmed by
+   the 2026-06-04 EEF D5 review, where three convergent reviewers — one stamped
+   "confirmed in package.json" — agreed on a package filter (`@oaknational/oak-curriculum-sdk`)
+   that matched no project; only an empirical `pnpm --filter` run found it.
 
 ## Consequences
 

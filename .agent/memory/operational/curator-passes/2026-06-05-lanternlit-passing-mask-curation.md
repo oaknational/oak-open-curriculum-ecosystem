@@ -125,21 +125,25 @@ ready-empty 0 · healthy 25 · soft 20 · **hard 3** · critical 0. HARD files:
   §Active Threads + thread banners (each closeout's insights already homed in
   distilled/auto-memory/experience/commits).
 
-## Owner-decision findings (surfaced, not actioned)
+## Owner-decision findings (owner-resolved this session)
 
 1. **ADR-121 ↔ `.husky/pre-commit` drift (quality-gate integrity).** ADR-121
    (authority) + build-system.md mandate knip + depcruise at pre-commit (design
    principle #2; ~2s each). The actual hook **omits knip + depcruise** and
    **adds build + repo-validators + lint:shell** (the ADR says "No builds" at
    pre-commit). Consequence: knip/depcruise defects pass pre-commit (exactly the
-   Silvered `981b3c9c`-era miss). Cure is owner's call — fix the hook to match
-   ADR-121, or amend ADR-121 to the hook's actual shape. Not a unilateral
-   curation edit; the matrix correctly mirrors the ADR design, so I left it.
-2. **felt-authority unification PDR** (pending-grad top entry) — trigger
-   ("owner direction, reinforced ~4×" + now strong cross-session subjective
-   recurrence across 6 experience files) is effectively met. Recommendation:
-   graduate `pdr:felt-authority-grounding-discipline`. Owner approval needed to
-   mint a PDR (PDR-003 care-and-consult). Substance is safe meanwhile.
+   Silvered `981b3c9c`-era miss). **Owner direction: freshly analyse the
+   speed/safety tradeoff — catch what we can at pre-commit.** → handled in a
+   separate gate-engineering work item (see the `pre-commit-gate-coverage`
+   analysis); not a curation edit.
+2. **felt-authority unification PDR** — **GRADUATED 2026-06-05 (owner-directed)**
+   → **PDR-089 §Decision 7**. Owner approved "graduate now"; grounding caught that
+   minting a new PDR would duplicate/fragment (Decision 6 already owned the
+   substrate), so per `new-rule-vs-pdr-clause` it landed as a unifying clause in
+   PDR-089, not a standalone PDR. pending-graduations top entry + the distilled
+   cluster pointer repointed to PDR-089 §Decision 7.
+3. **Push** — **DONE**: branch pushed `981b3c9c..80cfbeb5` (pre-push thorough gate
+   green; the waiting EEF D5 commits + this curation are now on origin).
 
 ## Owner-walk digest (pending-graduations owner-gated items)
 
