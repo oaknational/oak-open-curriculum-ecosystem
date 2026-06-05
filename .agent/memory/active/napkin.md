@@ -31,3 +31,29 @@ graduate-not-skip-grounding, pairing/monitors, the Dim/Silvered tooling gotchas
 (build-system.md covers SDK-build-before-consume + lint≠format).
 
 Fresh capture starts below.
+
+## 2026-06-05 — the lesson I documented bit me three times the same session (Lanternlit)
+
+- **The wrapped-list-marker trap (MD004/MD032) tripped me 3× in one session —
+  while consolidating the very distilled entry that documents it.** A prose line
+  using ` + ` or ` * ` enumerations wraps so a marker char lands at line-start;
+  markdownlint reads it as a list item. A live instance of PDR-089 obs-3 (naming a
+  lesson does not inoculate against it) and of passive-guidance-loses-to-artefact-gravity.
+  The reliable cure was NOT the lesson — it was the **mechanical gate**: the
+  pre-commit `markdownlint-staged` check caught all three before they landed.
+  Behavioural takeaway: when writing ` + `/` * ` enumerations in prose, use commas;
+  but rely on the gate, not vigilance.
+- **Owner approved "mint a new PDR"; grounding routed it to a clause instead — a
+  live instance of the doctrine being graduated.** The felt-authority family was
+  going to become `pdr:felt-authority-grounding-discipline`, but PDR-089 §Decision 6
+  already owned the substrate, so per `new-rule-vs-pdr-clause` it landed as PDR-089
+  §Decision 7 (a new PDR would have *fragmented* the unification it was meant to
+  achieve). The full-doctrine-estate non-duplication check fired correctly — and on
+  a graduation the owner had explicitly greenlit, confirming "owner-directed
+  graduation is still an independently-grounded act."
+- **A quality-gate ADR can silently drift from its own hook.** `.husky/pre-commit`
+  had dropped knip + depcruise (ADR-121-mandated) and added build; the drift was
+  invisible until a curation grounding pass cross-checked the hook against the ADR.
+  The matrix being *duplicated* in ADR-121 and build-system.md is the structural
+  cause (two copies diverge). Fixed the hook + reconciled both docs; flagged the
+  de-duplication as a follow-up.
