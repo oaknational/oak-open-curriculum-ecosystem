@@ -104,35 +104,15 @@ Core packages (`oak-eslint`, `openapi-zod-client-adapter`) are leaf nodes with n
 
 ## Quality Gate Surfaces
 
-Quality is enforced through five surfaces, each triggered at a different
-point in the development lifecycle. See
+Quality is enforced through five surfaces (pre-commit, pre-push, CI, `pnpm
+check`, and the commit-msg hook), each triggered at a different point in the
+development lifecycle. **The canonical coverage matrix — which check runs on
+which surface — is the single source of truth in
+[ADR-121 § Coverage matrix](../architecture/architectural-decisions/121-quality-gate-surfaces.md#coverage-matrix);
+it is deliberately not duplicated here** (a duplicated matrix drifts — the hook,
+this file, and the ADR diverged silently until the 2026-06-05 reconciliation). See
 [ADR-121](../architecture/architectural-decisions/121-quality-gate-surfaces.md)
-for the full decision record.
-
-| Check             | pre-commit | pre-push | CI workflow | pnpm check              |
-| ----------------- | ---------- | -------- | ----------- | ----------------------- |
-| secrets:scan      | --         | Yes      | Yes         | Yes                     |
-| clean             | --         | --       | --          | Yes                     |
-| sdk-codegen       | via build  | Yes      | Yes         | Yes                     |
-| build             | Yes        | Yes      | Yes         | Yes                     |
-| format-check      | Yes        | Yes      | Yes         | Yes (format:root)       |
-| markdownlint      | Staged     | Yes      | Yes         | Yes (markdownlint:root) |
-| subagents:check   | --         | Yes      | Yes         | Yes                     |
-| portability:check | --         | Yes      | Yes         | Yes                     |
-| knip              | Yes        | Yes      | Yes         | Yes                     |
-| depcruise         | Yes        | Yes      | Yes         | Yes                     |
-| repo-validators   | Yes        | Yes      | Yes         | Yes                     |
-| type-check        | Yes        | Yes      | Yes         | Yes                     |
-| lint              | Yes        | Yes      | Yes         | Yes (lint:fix)          |
-| lint:shell        | Yes        | Yes      | Yes         | Yes                     |
-| test              | Yes        | Yes      | Yes         | Yes                     |
-| test:widget       | --         | --       | --          | Yes                     |
-| test:widget:ui    | --         | --       | --          | Yes                     |
-| test:widget:a11y  | --         | --       | --          | Yes                     |
-| test:e2e          | --         | Yes      | Yes         | Yes                     |
-| test:ui           | --         | Yes      | Yes         | Yes                     |
-| test:a11y         | --         | --       | --          | Yes                     |
-| doc-gen           | --         | --       | --          | Yes                     |
+for the matrix, the per-check rationale, and the verify-vs-mutate rule.
 
 **Key principle**: pre-push and CI run the same check set. A CI-only failure
 indicates an environmental or configuration issue, not a missing check.
