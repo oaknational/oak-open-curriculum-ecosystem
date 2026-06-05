@@ -13078,7 +13078,7 @@ e1d76c54 chore(eef-evidence-corpus): mark t20-credits gate-1a Round 1 completed
 
 **Substance verification recorded in commit body**:
 
-- `package.json` contributors[2]: `{"name": "John Roberts", "email": "john.roberts@thenational.academy"}` ✓
+- `package.json` contributors[2]: John Roberts entry present (email in package.json only) ✓
 - `ATTRIBUTION.md` L38-41 ✓ + L20-37 (EEF Toolkit + Higgins et al.) ✓
 - `README.md` L401 ✓ + L399 (EEF Toolkit) ✓
 

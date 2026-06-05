@@ -34,8 +34,10 @@
 > Pupil-Premium weighting in a **server-side algorithm**, whereas the live plan's
 > **Decision 10** makes the server a deterministic evidence surface and the
 > **consuming agent the only reasoner** — no server-side ranking, no
-> situation→strand crosswalk. Decision 10 is the ratified resolution and answers
-> this brief's own open question §10.3. So where this brief says "recommend /
+> situation→strand crosswalk. Decision 10 is the ratified resolution (now
+> repo-wide doctrine as
+> [ADR-191](../../../../docs/architecture/architectural-decisions/191-deterministic-data-surface-agent-reasons.md))
+> and answers this brief's own open question §10.3. So where this brief says "recommend /
 > rank / score server-side", read: *the agent ranks; the server returns
 > deterministic facts plus the methodology and caveats the agent needs to reason
 > and show its working.* §5's curriculum-evidence crosswalk is a **distinct,

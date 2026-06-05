@@ -70,7 +70,7 @@ education data sources** into the MCP server:
    ([EEF](https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit))
    — 30 evidence-synthesised teaching approaches with quantified
    impact, cost, and evidence strength. EEF MCP server prototype by
-   John Roberts `<john.roberts@thenational.academy>`.
+   John Roberts.
 
 Together these three sources answer three questions that teachers ask:
 
@@ -266,8 +266,8 @@ As soon as WS-0 begins, add both contributors to `package.json`
 (or the repo's authors list), sorted alphabetically by last name:
 
 - Jim Cresswell (existing)
-- Mark Hodierne `<mark@markhodierne.com>` (ontology)
-- John Roberts `<john.roberts@thenational.academy>` (EEF prototype)
+- Mark Hodierne (ontology)
+- John Roberts (EEF prototype)
 
 ### ADR: Multi-Source Open Education Knowledge Integration
 
@@ -413,8 +413,8 @@ After all surfaces ship:
 | Source | Attribution | When |
 |---|---|---|
 | Education Endowment Foundation | Always attribute when citing data | All EEF surfaces |
-| John Roberts `<john.roberts@thenational.academy>` | Add to authors list | When EEF surface ships (WS-3) |
-| Mark Hodierne `<mark@markhodierne.com>` | Add to authors list | When Oak KG taxonomy ships (WS-4) |
+| John Roberts | Add to authors list | When EEF surface ships (WS-3) |
+| Mark Hodierne | Add to authors list | When Oak KG taxonomy ships (WS-4) |
 
 ## Exit Criteria (Parent Plan)
 

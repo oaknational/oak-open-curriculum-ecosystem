@@ -83,8 +83,7 @@ No work proceeds.
 
 ## Credits
 
-- **Oak Curriculum Ontology**: Mark Hodierne (MH)
-  `<mark@markhodierne.com>` — primary author (170 commits)
+- **Oak Curriculum Ontology**: Mark Hodierne (MH) — primary author (170 commits)
 
 When this plan ships, add MH to the repo's authors list.
 

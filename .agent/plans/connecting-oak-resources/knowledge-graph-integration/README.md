@@ -135,7 +135,7 @@ the `graph-core` / `graph-corpus-sdk` substrate.
 
 ## Credits and Attribution
 
-- **Oak Curriculum Ontology**: Mark Hodierne (MH) `<mark@markhodierne.com>`
+- **Oak Curriculum Ontology**: Mark Hodierne (MH)
   (primary author).
 
 **Author-addition requirement**: when any aspect of the ontology is integrated

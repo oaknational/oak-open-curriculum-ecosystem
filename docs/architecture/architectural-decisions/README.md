@@ -284,7 +284,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   surfaces deterministic projections of known data; relevance, ranking, scoring,
   and situation→item mapping belong to the consuming agent; no server-side
   scoring formula, recommendation engine, or request-time crosswalk — a
-  formal-ontology data crosswalk is out of scope, not forbidden; Proposed
+  formal-ontology data crosswalk is out of scope, not forbidden; Accepted
   2026-06-05)
 
 ## Key Architectural Decisions

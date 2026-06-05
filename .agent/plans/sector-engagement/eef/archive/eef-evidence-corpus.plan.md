@@ -381,8 +381,7 @@ notes.
   ([educationendowmentfoundation.org.uk](https://educationendowmentfoundation.org.uk/)).
   Original research authors: Higgins, S.; Katsipataki, M.;
   Kokotsaki, D.; Coleman, R.; Major, L.E.; Coe, R.
-- **EEF MCP server prototype**: John Roberts (JR)
-  `<john.roberts@thenational.academy>`. **JR must be added to the
+- **EEF MCP server prototype**: John Roberts (JR). **JR must be added to the
   repo's authors list (root README + ATTRIBUTION.md) when this plan
   ships its first commit.** See **T20**.
 
@@ -1111,7 +1110,7 @@ rest is honestly out of scope.
 
 ### Phase L: Credits (T20)
 
-**T20: Credits** — Add John Roberts (`<john.roberts@thenational.academy>`)
+**T20: Credits** — Add John Roberts
 to:
 
 - Root `README.md` authors section.

@@ -295,7 +295,8 @@ exploration is isolated to D3 and D4 and is named there as explicit steps.
    interpretation resource gives the agent the corpus's own methodology and caveats
    to reason well; the agent does the reasoning. This is the design root of the
    agent-side move selection in D3 and of the system carrying no server-side
-   crosswalk.
+   crosswalk. (Promoted to repo-wide doctrine:
+   [ADR-191](../../../../docs/architecture/architectural-decisions/191-deterministic-data-surface-agent-reasons.md).)
 
 ## Value And Impact
 
