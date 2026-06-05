@@ -41,8 +41,12 @@ export interface EefEvidenceProvenance {
 
 /**
  * The uniform EEF evidence envelope: the complete member strands, the
- * member-induced `related_strand` edges, the binding-derived frontier (related
- * strands outside the member set), and the once-per-envelope provenance.
+ * member-induced `related_strand` edges (edges whose BOTH endpoints are
+ * members — so a single-member envelope, e.g. `inspectStrand`, carries an
+ * empty `edges` list and surfaces the related strands only via `frontier`;
+ * `edges` is non-empty only when an axis query co-selects related strands as
+ * members), the binding-derived frontier (related strands outside the member
+ * set), and the once-per-envelope provenance.
  */
 export interface EefEvidenceEnvelope {
   readonly members: readonly EefStrand[];

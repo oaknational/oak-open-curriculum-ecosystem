@@ -1,6 +1,6 @@
 ---
 title: "EEF D5 execution — graph-core generic query layer + graph-native EEF view (TDD cycles)"
-status: current
+status: completed
 lane: current
 type: executable
 thread: eef
@@ -20,31 +20,39 @@ owner_scope: >-
   4.8); reviewed 2026-06-04 by Iridescent Drifting Star (pair-reviewer) plus
   type-expert / assumptions-expert / architecture-expert-fred — all conditions
   incorporated (see Review disposition).
-readiness: "READY FOR EXECUTION — original reviewer conditions incorporated 2026-06-04; a fresh dual-review (Prismatic Twinkling Planet, 2026-06-04) returned READY WITH CONDITIONS and all conditions are owner-resolved and folded in (C1 keep projection + implement/test; C2 per-graph depth-ceiling factory input; C3-C7 clarifications; C8 D4 doc-fix applied); landing-discipline reconciled to the parent plan (D5 lands in ONE green commit)."
+readiness: "LANDED 2026-06-04 in one green commit (2e9021ff); this is now a completed execution record. C1 was superseded at execution — the runtime projection? parameter AND the NodeProjection/DeepKeyPath utilities that typed it were dropped/removed (see the Fresh dual-review C1 note, since updated). The ws1-1/ws1-2 todo bodies predate that supersession and still say projection RETAINED; treat them as historical, not live instructions."
 todos:
   - id: ws1-1-generify-graph-core-contract
     content: "graph-core: delete and re-define the graph-view query contract carrying the new generic parameters. interface.ts -> GraphView<TNode, TNodeId extends string, TEdgeType extends string> with subgraph() only (manifest() removed; subgraph KEEPS its optional projection? : NodeProjection<TNode> parameter — projection is RETAINED, owner decision 2026-06-04). types.ts -> SubgraphResult<TNode, TNodeId, TEdgeType> (edges source/target -> TNodeId, type -> TEdgeType), SubgraphError<TNodeId> (rootId -> TNodeId; SubgraphDepthExceeded unchanged, depth/limit stay number); GraphManifest deleted; DeepKeyPath and NodeProjection retained unchanged; stale `GraphView<TNode, TEdgeType>` header comment fixed. Barrels: graph-view/index.ts drops GraphManifest, AND the graph-core root barrel graph-core/src/index.ts:61-66 drops its `type GraphManifest` re-export line (a deletion, not a signature change); graph-corpus-sdk/src/index.ts:14 TSDoc light touch. index.unit.test.ts REBUILT to the new arity: keep the DeepKeyPath array-stop and NodeProjection blocks (TNode-only, unaffected); rewrite the GraphView implementation-contract block to bind a stub GraphView<FixtureNode, string, string> with subgraph ONLY (no manifest, no GraphManifest stub) AND a runtime assertion (expect(typeof view.subgraph).toBe('function')) so the rebuilt block does not test types alone; refresh the file TSDoc and ALL describe/it labels to describe the rebuilt subgraph-only contract (drop the manifest / T7a / WS4.4 / graph-stack.plan.md provenance language — replace-don't-bridge applies to the file's own documentation, not just its code). No compatibility shim; no old name retained without fresh D4 justification."
-    status: pending
+    status: completed
     depends_on: []
   - id: ws1-2-generic-bfs-machinery
     content: "graph-core: build the domain-generic bounded-BFS machinery backing the subgraph primitive as a generic factory createGraphView<TNode, TNodeId extends string, TEdgeType extends string>(input) -> GraphView<TNode, TNodeId, TEdgeType>. Input: a node set, an edge set whose element type is { readonly source: TNodeId; readonly type: TEdgeType; readonly target: TNodeId }, an id-accessor typed (node: TNode) => TNodeId (NEVER => string — a string return widens the whole id-flow), and a per-graph depth ceiling maxDepth (the MAX in [0, MAX]; owner decision 2026-06-04 — a per-graph factory input, NOT a substrate-wide constant) carried into SubgraphDepthExceeded.limit. subgraph only; no list/manifest/stats/filter (factory stays no bigger than the ratified operation set). Keep the per-call subgraph error surface to EXACTLY D4's two variants (SubgraphRootNotFound, SubgraphDepthExceeded) — add no new subgraph error kind (D4 not re-opened). CONSTRUCTION-time input validation (per the construction contract — fail/throw before exposing the view): duplicate node ids FAIL construction; an edge whose source or target is absent from the node id set FAILS construction (protects the graph-native view from silent corpus drift). Reconciles with Decision 9: construction is infallible for the VALID fixed corpus (the WS2.1 construction test proves no dupes/dangling), so the guard fires only on malformed input/drift. CALL-time subgraph semantics: depth 0 = roots only plus member edges whose endpoints are both in the returned member set; depth 1 = roots plus one outgoing-hop target layer plus all member edges among returned members; a root absent from the node set = SubgraphRootNotFound (Result err); an isolated root (present, no outgoing edges) = ok with the single member node, NOT an error; depth outside [0, MAX] (negative OR above max) = SubgraphDepthExceeded (Result err — reuse the ratified variant, no new kind). Co-land structural tests over a synthetic node via a fresh generic makeNode (TNodeId = string): one per call-time semantic above, plus construction-validation tests (duplicate id fails; dangling edge fails), cycle / sparse-root, AND a projection test (subgraph with a projection returns member nodes narrowed to the projected key-paths — projection is RETAINED per owner decision 2026-06-04, so it is real-with-tests per Decision 6). No EEF/MCP names (ADR-179). Every operation real-with-tests or absent (Decision 6). The factory signature is CONFIRMED by type-expert + Iridescent (2026-06-04, see Review disposition) — this gate is satisfied."
-    status: pending
+    status: completed
     depends_on: [ws1-1-generify-graph-core-contract]
   - id: ws2-1-graph-native-eef-view
     content: "graph-corpus-sdk: build the graph-native EEF view as a deterministic typed projection over EefStrand / EefStrandById / EefStrandId + relatedStrandEdges, instantiating createGraphView<EefStrand, EefStrandId, 'related_strand'>. The edge input MUST inject the literal edge type the D2 RelatedStrandEdge lacks: relatedStrandEdges.map((e) => ({ ...e, type: 'related_strand' as const })) — RelatedStrandEdge carries only source/target, and the `as const` keeps TEdgeType inferring as the literal, not widening to string. Node payload = the ratified V1 field set (full EefStrandById[Id] or a named derived projection; related_guidance_reports inline per Decision B). Construction infallible for data shape; only an unknown root id fails at the request boundary. Tests over REAL corpus members only: a graph-constructor test over the whole corpus; a subgraph over pinned literal roots returns complete member nodes + all member edges as literal id sets (e.g. roots ['eef-tl-feedback'] depth 1 -> members {eef-tl-feedback, eef-tl-metacognition-and-self-regulation, eef-tl-mastery-learning}, and the member-edge set is EVERY edge whose endpoints are both members — FOUR edges: feedback->metacognition, feedback->mastery-learning, AND the reverse edges metacognition->feedback and mastery-learning->feedback (NOT just feedback's two outgoing edges; corpus-verified 2026-06-04)). Compile-time proof names the SPECIFIC expectTypeOf assertions (compilation alone does NOT prove non-widening — SubgraphResult<EefStrand, string, string> also compiles): (1) expectTypeOf(result.value.edges[0].type).toEqualTypeOf<'related_strand'>(); (2) expectTypeOf(result.value.edges[0].source).toEqualTypeOf<EefStrandId>(); (3) an assertion on the SubgraphError SubgraphRootNotFound rootId being EefStrandId; (4) expectTypeOf(result.value.edges[0].target).toEqualTypeOf<EefStrandId>() — both edge endpoints (source AND target) are typed TNodeId in the D4 generification table, so both are proven."
-    status: pending
+    status: completed
     depends_on: [ws1-2-generic-bfs-machinery]
   - id: ws3-1-inspect-strand-and-envelope
     content: "graph-corpus-sdk: build inspectStrand(strandId: EefStrandId) -> single-root subgraph, plus the binding-layer evidence-envelope constructor (eefEvidenceEnvelopeSubset): members (from SubgraphResult.nodes) + edges (related_strand) + binding-derived frontier (related_strand targets outside the member set, carrying EefStrandId) + provenance (corpusMeta source/licence + corpusCaveats, once per envelope; data_version/last_updated EXCLUDED). graph-core SubgraphResult is NOT extended with frontier/provenance (ADR-179). Tests over real corpus: a rich strand (eef-tl-feedback) and a floor-only strand (eef-tl-repeating-a-year, headline impact_months -2, no school_context_relevance, no related_strands) returning the floor with richer fields omitted, never fabricated; a frontier test pinned to roots ['eef-tl-setting-and-streaming'] depth 0 -> members {eef-tl-setting-and-streaming}, frontier {eef-tl-within-class-attainment-grouping} (its sole related strand, outside the member set — a definition-robust non-empty frontier); a provenance-on-envelope test asserting source/licence/caveats present and data_version/last_updated absent."
-    status: pending
+    status: completed
     depends_on: [ws2-1-graph-native-eef-view]
   - id: ws3-2-evidence-for-move-axis-resolution
     content: "graph-corpus-sdk: build evidenceForMove(selectors: { strandIds?, phase?, keyStage?, priority? }) -> resolve axis selectors to an EefStrandId root set via school_context_relevance.most_relevant_phases / most_relevant_key_stages / most_relevant_priorities, then subgraph-around-roots, returning the WS3.1 envelope. No server-side move->strand mapping (Decision 10). Tests over real corpus pin literal id sets for worked axis queries, and assert the reachable-by-axis property BY DERIVATION not a hard-coded count: the set of EefStrandIds reachable by any axis selector equals the set of strands where school_context_relevance is present (filter over EEF_TOOLKIT_DATA.strands at test time; happens to be 17/30) — so floor-only strands such as eef-tl-repeating-a-year are reachable only by inspectStrand / strandIds. inspectStrand(id) and evidenceForMove({ strandIds: [id] }) return the same envelope at cardinality one (overlap stated, not hidden)."
-    status: pending
+    status: completed
     depends_on: [ws3-1-inspect-strand-and-envelope]
 ---
 
 # EEF D5 execution — graph-core generic query layer + graph-native EEF view
+
+> **LANDED 2026-06-04 (commit `2e9021ff`) — completed execution record.** D5 is
+> built and green; the master plan's `d5-graph-construction-methods` todo is
+> flipped. This document is retained as the execution record, not a live plan.
+> One supersession to note when reading the cycle todos below: the `projection?`
+> parameter and the `NodeProjection`/`DeepKeyPath` utilities were dropped/removed
+> at execution (see the Fresh dual-review C1 note), so the `ws1-1`/`ws1-2` "projection
+> RETAINED" wording is historical. Next EEF step is **D6** (MCP composition).
 
 ## Context
 
@@ -487,9 +495,11 @@ Conditions — all owner-resolved 2026-06-04 and folded in above:
   would change the ratified D4 signature), and EEF consumes no projection. The
   owner directed dropping the runtime `projection?` parameter from D5's `subgraph`
   (Decision 6 "absent" over a dishonest implementation); the `NodeProjection` /
-  `DeepKeyPath` type utilities are retained for a future type-honest projection
-  when a real consumer exists. The D4 contract carries the matching "Projection
-  deferred" amendment. The EEF binding still exposes no projection parameter
+  `DeepKeyPath` type utilities — which only typed that parameter — were removed
+  with it (2026-06-05 review confirmed no consumer: the prior-knowledge DAG, owned
+  by `graph-tools-value-redesign.plan.md`, uses bounded subgraph retrieval, not
+  field projection). The D4 contract carries the matching "Projection deferred"
+  amendment. The EEF binding still exposes no projection parameter
   (D4:209 unchanged) — that part of C1 stands.
 - **C2 (per-graph depth ceiling):** `MAX` is a per-graph `createGraphView` factory
   input (`maxDepth`), carried into `SubgraphDepthExceeded.limit`; EEF passes a low

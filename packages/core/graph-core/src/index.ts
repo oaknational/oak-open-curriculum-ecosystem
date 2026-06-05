@@ -60,10 +60,8 @@ export {
 export {
   createGraphView,
   type CreateGraphViewInput,
-  type DeepKeyPath,
   type GraphEdge,
   type GraphView,
-  type NodeProjection,
   type SubgraphError,
   type SubgraphResult,
 } from './graph-view/index.js';

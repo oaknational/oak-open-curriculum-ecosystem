@@ -6,8 +6,7 @@
 > against Oak's HTTP MCP stack
 >
 > **Credits**: EEF Toolkit data from the Education Endowment Foundation.
-> EEF MCP server prototype by John Roberts (JR)
-> `<john.roberts@thenational.academy>`. See
+> EEF MCP server prototype by John Roberts (Oak National Academy). See
 > [`../future/evidence-integration-strategy.md`](../future/evidence-integration-strategy.md)
 > for full attribution and author-addition requirements.
 

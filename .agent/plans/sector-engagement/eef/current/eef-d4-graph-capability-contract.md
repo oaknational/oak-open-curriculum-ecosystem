@@ -126,9 +126,9 @@ absent (single invariant, plan Decision 6).
 Preserved from the existing contract (not changed by D4): the ADR-041 placement
 rationale, the `Result<T, E>` discipline (`subgraph` is fallible; `manifest` is a
 plain value produced at construction time), the infallible-or-throw construction
-contract, and the `DeepKeyPath`/`NodeProjection` projection types (these are
-shaped by `TNode` only and are **unaffected** by the `TNodeId`/`TEdgeType`
-threading).
+contract. (The `DeepKeyPath`/`NodeProjection` projection types the old contract
+carried were removed at execution together with the `projection?` parameter they
+typed — see the Projection-deferred amendment below.)
 
 **Generification — every node-id and edge-type field carries the new parameters**
 (grounded against the live files this session):
@@ -166,9 +166,15 @@ types carry `TNodeId`/`TEdgeType` all the way out — no `string` widening at th
 > forbidden `as`/`Object.*`/`Record`, and a per-call projected return type would
 > change this ratified signature. EEF consumes no projection (the binding exposes
 > none, below), so per Decision 6 the operation is **absent** rather than
-> dishonestly implemented. The `NodeProjection` / `DeepKeyPath` type utilities are
-> **retained** in graph-core for a future type-honest projection when a real
-> consumer exists. See the D5 plan's superseding note on condition C1.
+> dishonestly implemented. The `NodeProjection` / `DeepKeyPath` type utilities —
+> which existed only to type that dropped parameter — were **removed** with it
+> (2026-06-05 review): the named future consumer (the prior-knowledge DAG, owned
+> by `graph-tools-value-redesign.plan.md`) uses bounded subgraph retrieval, not
+> field projection, and `extending-graph-support-tooling.plan.md` records that a
+> graph-core field-projection is not needed for EEF and only becomes live for a
+> future corpus too large to return full nodes. A type-honest projection (and
+> these utilities) can be reintroduced when such a consumer is built. See the D5
+> plan's superseding note on condition C1.
 
 `manifest()` / `GraphManifest` carry **no EEF consumer** (verified this session:
 no D3 surface reads them — the resource's strand index is projected directly from
@@ -199,13 +205,13 @@ compatibility shim, no wrapper).
 | `SubgraphResult<TNode>` | `types.ts:83` | **Deleted and re-defined** as `SubgraphResult<TNode, TNodeId, TEdgeType>` (edge `source`/`target` → `TNodeId`, `type` → `TEdgeType`) |
 | `SubgraphError` | `types.ts:93` | **Deleted and re-defined** as `SubgraphError<TNodeId>` (`rootId` → `TNodeId`) |
 | `GraphManifest` | `types.ts:72` | **Absent from the D5 fresh contract** — no EEF consumer (Decision 6 / PDR-058 §Surface 2). The migration plan re-adds and owns `manifest()`/`GraphManifest` (generified as `GraphManifest<TNodeId, TEdgeType>`: `sparseRelationsByNodeId` → `TNodeId[]`, `edgeTypes` → `TEdgeType[]`) when its first consumer is built; D5 carries no dormant manifest surface |
-| `NodeProjection<TNode, Depth>` | `types.ts:61` | **Retained unchanged** — shaped by `TNode` only; justified: projection paths are independent of the id/edge-type space |
-| `DeepKeyPath<T, D>` | `types.ts:36` | **Retained unchanged** — same justification |
+| `NodeProjection<TNode, Depth>` | `types.ts` (removed) | **Removed (2026-06-05)** — existed only to type the dropped `projection?` parameter; no consumer (Projection-deferred amendment) |
+| `DeepKeyPath<T, D>` | `types.ts` (removed) | **Removed (2026-06-05)** — same reason |
 
-The barrel re-export list (`graph-view/index.ts:10-17` and the root barrel
-`index.ts:60-67`) drops `GraphManifest`, keeping five names; the `GraphView` /
-`SubgraphResult` / `SubgraphError` signatures change while `DeepKeyPath` /
-`NodeProjection` are unchanged. D5 rebuilds the contract test
+The barrel re-export list (`graph-view/index.ts` and the root barrel
+`index.ts`) drops `GraphManifest` and the now-removed `DeepKeyPath` /
+`NodeProjection` utilities; the surviving `GraphView` / `SubgraphResult` /
+`SubgraphError` signatures change as tabled. D5 rebuilds the contract test
 (`graph-view/index.unit.test.ts`) to instantiate the new generic parameters (its
 `GraphView<FixtureNode>` binding and the `SubgraphResult`/`GraphManifest` stub
 break under the new arity). D5's fresh rebuild of the contract files themselves
@@ -214,12 +220,12 @@ break under the new arity). D5's fresh rebuild of the contract files themselves
 pre-generification signature; they are part of the rebuilt contract, not separate
 consumer sites.
 
-**`NodeProjection` and the EEF `TNode`:** EEF's `TNode` is a single kind
-(`strand`), so the union-distribution concern (where `DeepKeyPath` over a
-heterogeneous `TNode` admits a path valid for only one kind) **does not arise for
-EEF v1**. It becomes relevant only for the deferred heterogeneous model and is
-flagged there (the migration plan's node/edge-model section). The EEF binding
-operations also expose no caller-facing `projection` parameter.
+**Projection and the EEF `TNode`:** with the `projection?` parameter and the
+`DeepKeyPath`/`NodeProjection` utilities removed (above), the union-distribution
+concern (a deep path valid for only one kind of a heterogeneous `TNode`) is moot
+for EEF v1; it becomes relevant only if a future heterogeneous model reintroduces
+projection (flagged in the migration plan's node/edge-model section). The EEF
+binding operations expose no caller-facing `projection` parameter.
 
 ## The graph-native EEF view contract (`graph-corpus-sdk`)
 

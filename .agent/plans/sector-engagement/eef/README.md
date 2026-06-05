@@ -154,22 +154,25 @@ ADR-038.
 - **EEF Toolkit data**: Education Endowment Foundation
   ([educationendowmentfoundation.org.uk](https://educationendowmentfoundation.org.uk/)).
   Original research authors: Higgins, Katsipataki, Kokotsaki, Coleman, Major, Coe.
-- **EEF MCP server prototype**: John Roberts (JR)
-  `<john.roberts@thenational.academy>`. **When the executable plan ships, JR
-  must be added to the repo's authors list per `evidence-integration-strategy.md`
-  §Credits.**
+- **EEF MCP server prototype**: John Roberts (Oak National Academy). **When the
+  executable plan ships (D6/D7), add JR to the package `contributors` per the
+  attribution policy — credited by name + Oak's public contact, not a personal
+  email.**
 
 ## Status of the Live Plan
 
-The live plan is decision-complete and in execution. D0 is complete and committed
-at `ce9745c7`; D1 is complete and owner-ratified in the live plan. On 2026-05-31
-the value model was reframed: EEF is evidence about teaching strategies and
-decisions, and relevance is a function of the pedagogical move (on EEF's own
+The live plan is decision-complete; **D0–D5 are complete** (D5 landed 2026-06-04,
+commit `2e9021ff`: the domain-generic graph-core query layer plus the graph-native
+EEF view, `inspectStrand` / `evidenceForMove`, and the evidence envelope). On
+2026-05-31 the value model was reframed: EEF is evidence about teaching strategies
+and decisions, and relevance is a function of the pedagogical move (on EEF's own
 finite axes), with the value intersecting Oak's tools — the misconception and
 prior-knowledge graphs — at the workflow level. The user-value trace has been
 folded into the live plan; its brief/report are archived as historical scratch
-artefacts. The next implementation move is D2, or D3's written MCP contract and
-SDK/app verification record if the owner chooses that lane.
+artefacts. **The next implementation move is D6** (the EEF MCP composition/surface
+behind `OAK_CURRICULUM_MCP_EEF_ENABLED`), then D7 (the teacher-value round trip).
+No EEF tool/resource/prompt is surfaced yet — the graph layer is built but not
+consumed until D6.
 
 The working Codex briefs and reports that de-risked D1/D3/D4 are archived as
 historical scratch artefacts. Their useful substance is folded into the live plan;

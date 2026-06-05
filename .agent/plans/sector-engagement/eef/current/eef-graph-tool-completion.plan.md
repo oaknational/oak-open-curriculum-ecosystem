@@ -1104,7 +1104,7 @@ structuredContent-only, not dual-content output.
 **Proof:** `non-code` (owner-ratified decisions, written MCP contract artefact,
 SDK/app verification record, and `mcp-expert` sign-off).
 
-### D4 - Graph capability shape (ratifiable; pending owner ratification; derived from D3; replaces the graph-core query contract)
+### D4 - Graph capability shape (RATIFIED 2026-06-04; derived from D3; replaces the graph-core query contract)
 
 **Artefact (RATIFIED by owner 2026-06-04; `type-expert` + architecture review run
 that session):** the ratified contract is written at
@@ -1256,7 +1256,7 @@ the shared primitives.
 of the operation set, the domain-generic no-stub contract, and the consumer-impact
 finding).
 
-### D5 - Deterministic graph projection + operation implementation
+### D5 - Deterministic graph projection + operation implementation (complete; landed 2026-06-04, commit 2e9021ff)
 
 **Purpose:** ingest D2's typed raw-data foundation into the graph-native EEF
 projection and implement the D4 operations. D2 has already deleted the
@@ -1719,7 +1719,8 @@ The plan is done when D0-D7 are complete and:
   RDF substrate. Mitigation: D4 records the consumer-impact finding (graph-ingest
   and graph-project use only the RDF substrate, so external-consumer blast radius
   is zero) and names the bounded in-package edits (graph-core's own `src/index.ts`
-  barrel and the `graph-view` contract test), built fresh in D5; the shared RDF
+  barrel, the `graph-view` contract test, and the `graph-corpus-sdk` root-barrel
+  `GraphView` re-export — three sites), built fresh in D5; the shared RDF
   substrate stays; an `architecture` reviewer and `type-expert` sign off before the
   new contract lands. A `SubgraphResult` name is freshly ratified from the new
   contract where it appears.

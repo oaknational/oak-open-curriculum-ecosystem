@@ -10,16 +10,39 @@
 > - **EEF Toolkit data**: Education Endowment Foundation
 >   (<https://educationendowmentfoundation.org.uk>). Original research
 >   authors: Higgins, Katsipataki, Kokotsaki, Coleman, Major, Coe.
-> - **EEF MCP server prototype**: John Roberts (JR)
->   `<john.roberts@thenational.academy>`. When any aspect of this work
->   is integrated functionally into the repo, JR must be added to the
->   authors list.
-> - **Oak Curriculum Ontology**: Mark Hodierne (MH)
->   `<mark@markhodierne.com>`. Primary author of the KG repo (170
->   commits). When any aspect of the KG is integrated, MH must be added
->   to the authors list.
+> - **EEF MCP server prototype**: John Roberts (Oak National Academy).
+>   When any aspect of this work is integrated functionally into the repo,
+>   credit JR in the package `contributors` (by name + Oak's public contact,
+>   not a personal email) per the attribution policy.
+> - **Oak Curriculum Ontology**: Mark Hodierne, primary author of the KG
+>   repo (170 commits). When any aspect of the KG is integrated, credit MH
+>   in the package `contributors` (by name + public profile, not a personal
+>   email) per the attribution policy.
 
 ---
+
+> **Reconciliation with the ratified EEF plan (2026-06-05).** This brief
+> (10 Apr 2026) is the originating strategic exploration; the ratified build is
+> [`current/eef-graph-tool-completion.plan.md`](../current/eef-graph-tool-completion.plan.md).
+> A clause-by-clause crosswalk found the two **agree on intent** for the impact
+> requirements **R1, R4, R5, R7, R8** (epistemic honesty, the no-cherry-picking
+> synthesis boundary, implementation guidance, professional-judgement framing,
+> partial-coverage honesty) — all carried by the live plan's Value contract and
+> evidence envelope. They **genuinely diverge on one mechanism**: this brief's
+> **R2/R3** "transparent composite scoring" and the "recommendation engine /
+> context-aware ranking" framing (§3, §9.4) put relevance, ranking, and
+> Pupil-Premium weighting in a **server-side algorithm**, whereas the live plan's
+> **Decision 10** makes the server a deterministic evidence surface and the
+> **consuming agent the only reasoner** — no server-side ranking, no
+> situation→strand crosswalk. Decision 10 is the ratified resolution and answers
+> this brief's own open question §10.3. So where this brief says "recommend /
+> rank / score server-side", read: *the agent ranks; the server returns
+> deterministic facts plus the methodology and caveats the agent needs to reason
+> and show its working.* §5's curriculum-evidence crosswalk is a **distinct,
+> future, ontology-level** artefact (EEF-strand→curriculum-content as KG data,
+> Level 4, gated on the formal ontology) — orthogonal to Decision 10's forbidden
+> situation→strand *server* mapping, not in conflict with it. Inline notes below
+> mark the superseded clauses; the rest of this brief stands as live context.
 
 ## 1. Problem and Intent
 
@@ -115,6 +138,13 @@ The recommendation algorithm MUST expose its weighting to the user:
 or override. Teachers must understand *why* an approach is ranked
 highly to exercise professional judgement about whether it applies to
 their context.
+
+> **Superseded by Decision 10 (R2/R3 mechanism).** The live plan keeps relevance,
+> ranking, and PP-weighting in the consuming agent, not a server-side scoring
+> formula. The server surfaces the deterministic evidence plus EEF's own
+> methodology and caveats, so the agent ranks transparently and shows its working;
+> the transparency goal of R2/R3 is met by the agent's exposed reasoning over
+> first-class facts, not by a server-side composite-score weighting.
 
 ### R3: Disadvantage Gap Priority
 
