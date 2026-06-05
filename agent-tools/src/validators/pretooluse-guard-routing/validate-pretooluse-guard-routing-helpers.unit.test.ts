@@ -1,18 +1,18 @@
 import { describe, expect, it } from 'vitest';
 
 import {
-  FAIL_CLOSED_SHIM,
+  GUARD_ROUTING_SHIM,
   GUARD_COMMAND_MARKER,
   findUnroutedGuardCommands,
 } from './validate-pretooluse-guard-routing-helpers.js';
 
-const routedBash = `node "\${CLAUDE_PROJECT_DIR}/${FAIL_CLOSED_SHIM}" agent-tools/dist/src/hook-policy/check-blocked-patterns.js`;
-const routedContent = `node "\${CLAUDE_PROJECT_DIR}/${FAIL_CLOSED_SHIM}" agent-tools/dist/src/hook-policy/check-blocked-content.js`;
+const routedBash = `node "\${CLAUDE_PROJECT_DIR}/${GUARD_ROUTING_SHIM}" agent-tools/dist/src/hook-policy/check-blocked-patterns.js`;
+const routedContent = `node "\${CLAUDE_PROJECT_DIR}/${GUARD_ROUTING_SHIM}" agent-tools/dist/src/hook-policy/check-blocked-content.js`;
 const directBash =
   'node "${CLAUDE_PROJECT_DIR}/agent-tools/dist/src/hook-policy/check-blocked-patterns.js"';
 
 describe('findUnroutedGuardCommands', () => {
-  it('returns nothing when every dist guard command routes through the fail-closed shim', () => {
+  it('returns nothing when every dist guard command routes through the shim', () => {
     expect(findUnroutedGuardCommands([routedBash, routedContent])).toStrictEqual([]);
   });
 
@@ -37,6 +37,6 @@ describe('findUnroutedGuardCommands', () => {
 
   it('exposes the marker and shim substrings it keys on', () => {
     expect(GUARD_COMMAND_MARKER).toBe('hook-policy/check-blocked');
-    expect(FAIL_CLOSED_SHIM).toBe('.claude/hooks/run-pretooluse-guard.mjs');
+    expect(GUARD_ROUTING_SHIM).toBe('.claude/hooks/run-pretooluse-guard.mjs');
   });
 });

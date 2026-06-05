@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import { resolveGuardExitCode } from './guard-runner-decisions.js';
+import {
+  decideMissingGuardArtifact,
+  GUARD_REBUILD_HINT,
+  resolveGuardExitCode,
+} from './guard-runner-decisions.js';
 
 describe('resolveGuardExitCode', () => {
   it('passes a clean allow (exit 0, no signal) through unchanged', () => {
@@ -25,5 +29,33 @@ describe('resolveGuardExitCode', () => {
 
   it('blocks (2) when neither a code nor a signal is available', () => {
     expect(resolveGuardExitCode(null, null)).toBe(2);
+  });
+});
+
+describe('decideMissingGuardArtifact', () => {
+  const guardRelative = 'agent-tools/dist/src/hook-policy/check-blocked-patterns.js';
+
+  it('fails OPEN (exit 0) so an unbuilt worktree can run the build instead of being bricked', () => {
+    expect(decideMissingGuardArtifact(guardRelative).exitCode).toBe(0);
+  });
+
+  it('warns loudly: the call is marked UNGUARDED', () => {
+    expect(decideMissingGuardArtifact(guardRelative).warning).toContain('UNGUARDED');
+  });
+
+  // Two distinct paths prove the artefact name is interpolated, not hardcoded.
+  it.each([
+    'agent-tools/dist/src/hook-policy/check-blocked-patterns.js',
+    'agent-tools/dist/src/hook-policy/check-blocked-content.js',
+  ])('warns loudly: names which guard artefact is missing (%s)', (path) => {
+    expect(decideMissingGuardArtifact(path).warning).toContain(path);
+  });
+
+  it('warns loudly: embeds the rebuild hint so recovery is actionable', () => {
+    expect(decideMissingGuardArtifact(guardRelative).warning).toContain(GUARD_REBUILD_HINT);
+  });
+
+  it('keeps the rebuild hint actionable: it names the build command', () => {
+    expect(GUARD_REBUILD_HINT).toContain('pnpm agent-tools:build');
   });
 });

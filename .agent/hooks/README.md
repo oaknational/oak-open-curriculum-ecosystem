@@ -12,7 +12,7 @@ and thin native activation lives in platform config.
 - `preToolUse` — natively enforced for Claude Code Bash calls by invoking the
   prebuilt runtime artefact
   (`agent-tools/dist/src/hook-policy/check-blocked-patterns.js`) through the
-  fail-closed shim `.claude/hooks/run-pretooluse-guard.mjs`; blocks
+  verdict shim `.claude/hooks/run-pretooluse-guard.mjs`; blocks
   shell commands that bypass safety guardrails or destroy history (force-push,
   hard reset, `--no-verify`)
 - `sessionStart` — documented policy only; grounding is already enforced
@@ -32,7 +32,7 @@ The hook layer follows a small Policy Spine. The layers are not peers.
    does not redefine the policy.
 3. **Workspace-owned runtime** — the prebuilt
    `agent-tools/dist/src/hook-policy/check-blocked-patterns.js` artefact,
-   invoked through the fail-closed shim `.claude/hooks/run-pretooluse-guard.mjs`
+   invoked through the verdict shim `.claude/hooks/run-pretooluse-guard.mjs`
    by the native activation (the
    `pnpm agent-tools:check-blocked-patterns` script remains as a manual /
    diagnostic entry point to the same TypeScript source).
@@ -65,20 +65,32 @@ build, and its freshness is guaranteed at two points:
 relying on the guard in the active session — until then the running hook
 executes the previously-compiled artefact. The failure direction is safe: a
 stale guard still blocks every already-published pattern; only a *newly added*
-pattern is unenforced until the next build. If the artefact is missing or fails
-to load, the fail-closed shim `.claude/hooks/run-pretooluse-guard.mjs` exits 2,
-**blocking** the tool call rather than letting it proceed unguarded. (Running
-the artefact directly would be unsafe here: `node <missing>.js` exits 1, which
-Claude Code treats as a non-blocking error and would *silently allow* the call.
-The shim is what makes the missing/broken-artefact case fail closed.) Set
-`OAK_ALLOW_MISSING_PRETOOLUSE_GUARDS=1` as a per-invocation break-glass to bypass
-the block while rebuilding — it emits a loud warning on every bypass.
+pattern is unenforced until the next build.
+
+The shim `.claude/hooks/run-pretooluse-guard.mjs` takes control of the verdict
+when the artefact does not run cleanly — something a direct `node <guard>.js`
+cannot do (a direct `node <missing>.js` exits 1, which Claude Code treats as
+non-blocking and would *silently allow* the call). It splits the two
+artefact-failure shapes:
+
+- **Present but broken** — the guard is built but crashes, is killed, fails its
+  module load, or is called with no path: the shim **fails closed** (exit 2),
+  blocking the tool call. A built guard that misbehaves is a suspicious signal.
+- **Not built** — the artefact is missing (a fresh checkout before install, or a
+  branch switch / deleted `dist`): the shim **fails open** (exit 0) and lets the
+  call proceed. Blocking here would brick the worktree — it would block the very
+  `pnpm install` / `pnpm agent-tools:build` needed to build the guard, an
+  unrecoverable catch-22. The allow is loud, not silent: a warning naming the
+  artefact and the rebuild command goes to stderr **and** is appended to
+  `.claude/logs/hook-errors.log` (the harness does not surface PreToolUse stderr
+  on an allow, so the log is the durable, auditable record).
 
 The Read / `UserPromptSubmit` secrets-scan hooks (via
 `.claude/hooks/_lib/log-hook-errors.sh`) are deliberately **best-effort /
 fail-open**: they `exit 0` when the scanner is unavailable so a session is never
-bricked by a missing optional tool. That is a different posture from the
-dangerous-command/content guards above, which fail closed by design.
+bricked by a missing optional tool. That is a broader fail-open posture than the
+dangerous-command/content guards above: those fail open *only* for the not-built
+case (loudly, as above) and fail **closed** whenever a built guard misbehaves.
 
 ## Platform Support
 

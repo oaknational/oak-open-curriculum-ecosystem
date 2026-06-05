@@ -21,9 +21,10 @@ Claude Code currently has native `PreToolUse` activation for Bash
 commands via the tracked project `.claude/settings.json`, backed by the
 canonical policy in `.agent/hooks/policy.json` and the prebuilt runtime
 artefact `agent-tools/dist/src/hook-policy/check-blocked-patterns.js`, invoked
-through the fail-closed shim `.claude/hooks/run-pretooluse-guard.mjs` so a
-missing or broken artefact blocks the tool call (exit 2) rather than letting it
-proceed unguarded, well within the per-tool-call hook timeout. Local additive
+through the verdict shim `.claude/hooks/run-pretooluse-guard.mjs` so a
+built-but-broken artefact blocks the tool call (exit 2), while a not-built
+artefact fails open (exit 0) with a loud, logged warning so a fresh checkout is
+not bricked — well within the per-tool-call hook timeout. Local additive
 overrides, when needed, live in `.claude/settings.local.json`.
 
 Status by platform:
@@ -52,7 +53,7 @@ This repo's hook and adapter surfaces follow a small Policy Spine:
 | --- | --- | --- |
 | Canonical policy (`.agent/`) | Declares intended behaviour and support | No |
 | Native activation (tracked `.claude/settings.json`) | Activates supported policy in the repo baseline | No |
-| Workspace runtime (`agent-tools/dist/src/hook-policy/check-blocked-patterns.js` via `.claude/hooks/run-pretooluse-guard.mjs`) | Enforces the active native hook path; fails closed if the artefact is missing or broken | No |
+| Workspace runtime (`agent-tools/dist/src/hook-policy/check-blocked-patterns.js` via `.claude/hooks/run-pretooluse-guard.mjs`) | Enforces the active native hook path; fails closed if a built artefact is broken, fails open (loud, logged) if not yet built | No |
 | Explanatory mirrors (this matrix, hook README) | Describe the live state and support contract | No |
 
 Failure semantics:

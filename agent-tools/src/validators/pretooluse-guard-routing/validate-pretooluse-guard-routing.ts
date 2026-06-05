@@ -10,12 +10,14 @@ import { findUnroutedGuardCommands } from './validate-pretooluse-guard-routing-h
 /**
  * Standalone validator that fails if any `PreToolUse` hook in
  * `.claude/settings.json` runs a dist-built hook-policy guard directly instead
- * of routing through the fail-closed shim `.claude/hooks/run-pretooluse-guard.mjs`.
+ * of routing through the shim `.claude/hooks/run-pretooluse-guard.mjs`.
  *
- * Direct invocation (`node <guard>.js`) fails OPEN when the artefact is missing
- * (node exits 1, which Claude Code treats as non-blocking). The shim converts
- * that to a block (exit 2). This gate locks in the fail-closed routing so a
- * silent revert cannot reopen the window.
+ * Direct invocation (`node <guard>.js`) fails OPEN *silently* when the artefact
+ * is missing (node exits 1, which Claude Code treats as non-blocking). The shim
+ * takes control of the verdict instead — fail closed (exit 2) for a
+ * built-but-broken guard, deliberate loud-and-logged fail open for a not-yet-built
+ * one. This gate locks in shim routing so a silent revert cannot reopen the
+ * uncontrolled window.
  *
  * Wired into root `repo-validators:check`, so it runs on every pre-commit and
  * pre-push alongside the sibling validators.
@@ -51,7 +53,7 @@ async function main(): Promise<void> {
 
   if (unrouted.length === 0) {
     writeLine(
-      'validate-pretooluse-guard-routing: OK (all PreToolUse guards route through the fail-closed shim)',
+      'validate-pretooluse-guard-routing: OK (all PreToolUse guards route through the shim)',
     );
     return;
   }
@@ -59,9 +61,10 @@ async function main(): Promise<void> {
   writeErrorLine(
     `validate-pretooluse-guard-routing: ${unrouted.length} PreToolUse guard(s) invoke a dist artefact directly.\n\n` +
       `${unrouted.map((command) => `  ${command}`).join('\n')}\n\n` +
-      `Route each through the fail-closed shim, e.g. ` +
+      `Route each through the shim, e.g. ` +
       `\`node "$\{CLAUDE_PROJECT_DIR}/.claude/hooks/run-pretooluse-guard.mjs" <guard-dist-path>\`. ` +
-      `Direct \`node <guard>.js\` fails OPEN when the artefact is missing.`,
+      `Direct \`node <guard>.js\` fails OPEN *silently* when the artefact is missing; ` +
+      `the shim makes the verdict controlled (loud + logged).`,
   );
   process.exit(1);
 }
