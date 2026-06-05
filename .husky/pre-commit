@@ -31,6 +31,19 @@ if ! pnpm lint:shell; then
   exit 1
 fi
 
+echo "🔗 Checking for unused code (knip)..."
+if ! pnpm knip; then
+  echo "❌ Knip found unused files, exports, or dependencies!"
+  echo "💡 Remove the unused code, or register intended entry points in knip.config.ts"
+  exit 1
+fi
+
+echo "🧱 Checking dependency boundaries (depcruise)..."
+if ! pnpm depcruise; then
+  echo "❌ Dependency-boundary violations found!"
+  exit 1
+fi
+
 echo "🧪 Running build, type-check, lint, and unit tests..."
 if ! pnpm turbo run --continue --output-logs=errors-only build type-check lint test; then
   echo "❌ Build, type-check, lint, or unit tests failed!"

@@ -113,18 +113,18 @@ for the full decision record.
 | ----------------- | ---------- | -------- | ----------- | ----------------------- |
 | secrets:scan      | --         | Yes      | Yes         | Yes                     |
 | clean             | --         | --       | --          | Yes                     |
-| sdk-codegen       | --         | Yes      | Yes         | Yes                     |
-| build             | --         | Yes      | Yes         | Yes                     |
+| sdk-codegen       | via build  | Yes      | Yes         | Yes                     |
+| build             | Yes        | Yes      | Yes         | Yes                     |
 | format-check      | Yes        | Yes      | Yes         | Yes (format:root)       |
 | markdownlint      | Staged     | Yes      | Yes         | Yes (markdownlint:root) |
 | subagents:check   | --         | Yes      | Yes         | Yes                     |
 | portability:check | --         | Yes      | Yes         | Yes                     |
 | knip              | Yes        | Yes      | Yes         | Yes                     |
 | depcruise         | Yes        | Yes      | Yes         | Yes                     |
-| repo-validators   | --         | Yes      | Yes         | Yes                     |
+| repo-validators   | Yes        | Yes      | Yes         | Yes                     |
 | type-check        | Yes        | Yes      | Yes         | Yes                     |
 | lint              | Yes        | Yes      | Yes         | Yes (lint:fix)          |
-| lint:shell        | --         | Yes      | Yes         | Yes                     |
+| lint:shell        | Yes        | Yes      | Yes         | Yes                     |
 | test              | Yes        | Yes      | Yes         | Yes                     |
 | test:widget       | --         | --       | --          | Yes                     |
 | test:widget:ui    | --         | --       | --          | Yes                     |
