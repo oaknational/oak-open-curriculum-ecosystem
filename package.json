@@ -48,7 +48,6 @@
     "agent-tools:test": "pnpm --filter @oaknational/agent-tools test",
     "agent-tools:test:e2e": "pnpm --filter @oaknational/agent-tools test:e2e",
     "agent-tools:smoke:collaboration-tui": "pnpm --filter @oaknational/agent-tools smoke:collaboration-tui",
-    "agent-tools:smoke:pretooluse-guard": "pnpm --filter @oaknational/agent-tools smoke:pretooluse-guard",
     "agent-tools": "pnpm --filter @oaknational/agent-tools agent-tools",
     "agent-tools:agent-identity": "pnpm --filter @oaknational/agent-tools agent-identity",
     "agent-tools:collaboration-state": "pnpm --filter @oaknational/agent-tools collaboration-state",

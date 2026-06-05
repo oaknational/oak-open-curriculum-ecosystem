@@ -6,15 +6,15 @@
 // treats as a NON-BLOCKING error — so a missing/broken guard would let the
 // dangerous tool call proceed UNGUARDED (fail open). This wrapper closes that:
 // it blocks (exit 2) unless the guard actually runs and returns a legitimate
-// verdict (exit 0 = allow / stdout deny-JSON, or exit 2 = fail closed). Any
-// other child exit — missing entry, crashed module load, signal — fails closed.
+// verdict (exit 0 = allow / stdout deny-JSON, or exit 2 = fail closed).
+//
+// The security-critical exit-code mapping lives in (and is unit-tested as)
+// agent-tools/src/hook-policy/guard-runner-decisions.ts — committed source that
+// Node imports directly (type-stripping). This file stays thin IO wiring.
 //
 // Build-free by necessity: it is the failsafe FOR a missing build artefact, so
-// it cannot itself live in that artefact. Mirrors the existing
-// .claude/scripts/statusline-identity.mjs shim, inverted from soft to closed.
-//
-// Usage (from .claude/settings.json):
-//   node "${CLAUDE_PROJECT_DIR}/.claude/hooks/run-pretooluse-guard.mjs" <guard-dist-relative-path>
+// it cannot itself live in that artefact. Must remain at .claude/hooks/ — the
+// repo-root depth ('..','..') is hardcoded.
 import { spawn } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
@@ -27,6 +27,20 @@ const repoRoot =
 const guardRelative = process.argv[2];
 const log = (message) => process.stderr.write(`[hook-policy] ${message}\n`);
 
+// Load the fail-closed exit-code decision from committed source, co-located with
+// this shim (the relative specifier resolves against this file, NOT
+// CLAUDE_PROJECT_DIR). Node strips the types at runtime. A dynamic import is used
+// so a load failure can be caught and made to fail closed — a static import that
+// threw would exit 1, which Claude Code treats as non-blocking (fail open).
+let resolveGuardExitCode;
+try {
+  ({ resolveGuardExitCode } =
+    await import('../../agent-tools/src/hook-policy/guard-runner-decisions.ts'));
+} catch (error) {
+  log(`could not load guard decision logic: ${error.message}; blocking.`);
+  process.exit(BLOCK);
+}
+
 if (!guardRelative) {
   log('run-pretooluse-guard: missing guard path argument; blocking.');
   process.exit(BLOCK);
@@ -36,7 +50,7 @@ const guardPath = resolve(repoRoot, guardRelative);
 
 if (!existsSync(guardPath)) {
   // Break-glass ONLY for the benign "not built yet" case. A guard that exists
-  // but crashes is handled below and always fails closed, even with this set.
+  // but crashes is handled by resolveGuardExitCode and always fails closed.
   if (process.env.OAK_ALLOW_MISSING_PRETOOLUSE_GUARDS === '1') {
     log(
       `BYPASSED — ${guardRelative} is not built and OAK_ALLOW_MISSING_PRETOOLUSE_GUARDS=1; this tool call runs UNGUARDED.`,
@@ -61,18 +75,5 @@ child.on('error', (error) => {
 });
 
 child.on('exit', (code, signal) => {
-  if (signal !== null) {
-    log(`guard ${guardRelative} was killed by ${signal}; blocking.`);
-    process.exit(BLOCK);
-  }
-  // The guards only ever exit 0 (allow / stdout-deny) or 2 (fail closed).
-  // Treat the legitimate verdicts as a closed set; anything else (1 from a
-  // broken module load, null, etc.) is an unavailable guard → fail closed.
-  if (code === 0 || code === 2) {
-    process.exit(code);
-  }
-  log(
-    `guard ${guardRelative} exited ${code ?? 'null'} (likely a broken build); blocking. Rebuild agent-tools.`,
-  );
-  process.exit(BLOCK);
+  process.exit(resolveGuardExitCode(code, signal));
 });
