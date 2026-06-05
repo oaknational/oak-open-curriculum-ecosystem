@@ -7,206 +7,136 @@ drain_strategy: "Extract settled entries to permanent docs (ADRs, PDRs, governan
 merge_class: curated-learning-register
 fitness_content_role: drainable-buffer
 fitness_rationale: >-
-  Lowered 2026-05-25 after owner-requested `distilled.md` processing through
-  `oak-consolidate-docs`: the 2026-05-14 multi-agent deep-dive and 2026-05-17
-  gate-stack entries graduated to permanent behavioural homes. The active file
-  now carries only the conservation role, graduation pointers, and held
-  validation entries; the larger 2026-05-17 envelope has served its purpose.
-  Falsifiability: if future napkin rotations add high-signal learning that has
-  no stable permanent home, preserve it first and revise the envelope by
-  substance rather than trimming the lesson.
+  Lowered 2026-05-25 after owner-requested processing through `oak-consolidate-docs`.
+  The active file carries the conservation role, graduation pointers, and held
+  validation entries. Falsifiability: if future napkin rotations add high-signal
+  learning that has no stable permanent home, preserve it first and revise the
+  envelope by substance rather than trimming the lesson.
 ---
 
-## Ready-Empty State (2026-06-02 baseline)
+## Ready-Empty State (2026-06-05 baseline — Lanternlit Passing Mask curation)
 
-All active entries present at the 2026-06-02 Lofty Sweeping Falcon continuation
-now have item-level dispositions in the 2026-06-02 Lofty curation ledger.
-The 2026-06-03 EEF D3 design-rationale entry graduated to
-`verify-data-supports-shape-before-building.md` and `invoke-mcp-expert.md`.
-Future high-signal lessons may be added here when they need the distilled
-staging surface; fitness remains a routing signal, not a reason to avoid capture.
+Processed in the 2026-06-05 dedicated curation pass: the napkin's 2026-06-04/05
+window rotated through the
+[ledger](../operational/curator-passes/2026-06-05-lanternlit-passing-mask-curation.md);
+the felt-authority cluster below was consolidated from five verbose entries to one
+pointer (substance homed in pending-graduations + PDR-089 + rules); three new
+terse lessons merged. Future high-signal lessons may be added here when they need
+the distilled staging surface; fitness is a routing signal, not a reason to avoid
+capture.
 
-## 2026-06-03 — curation and buffer disposition lessons
+## Felt-authority cluster — no derived-authority surface self-certifies
 
-- **Accepted does not mean one landing shape.** For pending graduations, ask
-  what future action changes because of the edit. Some accepted items amend
-  existing doctrine, some become future lanes because tooling does not exist
-  yet, and adjacent owner-gated items may correctly stay unmoved. If the only
-  outcome is a cleaner register, the graduation has not happened.
-- **Plugin- or platform-owned lifecycle is not knowledge-owned lifecycle.**
-  Vendor/platform surfaces (per-user memory, and the now-retired `.remember`
-  plugin) can own their own file rotation/deletion while the learning remains
-  repo-owned. Anything read by a repo process needs a disposition and a
-  new home when it matters; otherwise it remains live in the source buffer.
+The dominant recurring meta-theme (≥6 instances; owner reinforced ~4× in one
+session; strong subjective corroboration across the experience corpus). Authority
+comes only from grounding against the **primary source**; the stronger the
+felt-authority of a surface, the more the grounding reflex must resist being skipped.
 
-## 2026-06-03 — reviewer-brief scope protection (Lacustrine Swimming Beacon)
+- **No derived-authority surface self-certifies**: a validated schema, a green
+  gate, a clean review, a polished synthesis, a co-equal peer's verdict, a
+  "confirmed in X" pre-stamp, or N convergent reviewers — none transfers
+  verification. Convergence is not proof; an empirical check beats agreement.
+- **Discrepancy/contradiction claims are the highest-risk relay class** — they
+  assert a defect, so ground both sides against the primary source before relaying.
+- **Critically assess a finding's inference, not just its facts** — correct facts
+  can support the opposite of the recommendation (most of all when the facts check
+  out and the proposal is the more elaborate shape).
+- **Calibration guard (against over-applying):** scale grounding effort to **what
+  the output drives** (a test assertion / schema field demands first-hand; a report
+  tolerates relayed-with-disclosed-tier), not a blanket re-verify-everything reflex.
+- **Convenience is a warning sign** — a claim that makes the hard thing easy or the
+  boundary tidy correlates with motivated construction; specificity is not
+  verification; constraint-strictness is not data volume.
 
-- **"Decided scope protected" in reviewer briefs cites the NUMBERED ratified
-  decisions only — plan elaborations stay refutable.** At the D3
-  review-then-ratify session the briefs protected "owner-ratified decisions
-  and the Fully Specified End State", implicitly sweeping in §Do elaborations
-  (the metric-filter input enumeration) the owner had never specifically
-  ratified; that suppressed a legitimate PDR-058 no-consumer finding which the
-  owner's own settlement question then surfaced. Source: napkin 2026-06-03
-  Lacustrine entry. Routing: pending-graduations candidate (target: a clause
-  in the reviewer-brief discipline surface, e.g.
-  `memory/executive/invoke-code-experts.md` or the brief-authoring rule);
-  trigger-gated on a second instance or the next reviewer-brief authoring
-  pass.
+Worked instances live in the 2026-06-05 napkin archive. Homed: pending-graduations
+top entry (`pdr:felt-authority-grounding-discipline`, owner-gated unification);
+PDR-089 §Decision 6 (corrections-have-no-immunity-gradient + review-count-is-not-coverage);
+rules `verify-dont-trust`; auto-memory `validate-specialist-findings-before-acting`,
+`ground-convenient-claims`. **Owner-walk: graduate the unifying PDR** (trigger met).
 
-## 2026-06-03 — taxonomy design lessons (Blustery Lifting Gale)
+## A status/pointer surface is not ground truth — recompute against the live source
 
-- **When a candidate category lumps a quality-standard with a presentation
-  concern, split before naming.** Classifying `oak-brand` + `oak-tone-of-voice`
-  as one "org-voice" category would have swept Oak's pedagogical/factual-rigour
-  standards (evidence, provenance, caveats, teacher judgement) into branding —
-  demoting the core differentiator to styling. Owner split: rigour standards
-  are constraints that travel INSIDE capabilities (curriculum/evidence
-  governance); branding is a capability concern in its own right. Source:
-  napkin 2026-06-03 Blustery entry; enforcement home landed in the taxonomy
-  plan's ambiguous-case note; the general heuristic stages here for any
-  future classification work. Routing: fold into the taxonomy plan's audit
-  step at promotion, then delete here.
+Thread records, frictions registers, plan statuses, register markers: each is a
+pointer, not the fact. Before acting on a status, recompute against the current
+code/data/state. (Frictions register stamped "addressed-in-working-tree" with a
+never-completed "replace with SHA" trigger would read "fixed" for things that may
+never have committed; the live `comms append --help` / option sets decided what was
+real.) Sibling of validate-specialist-findings on a state-surface.
 
-## 2026-06-03 — curation enforcement and verifier lessons
+## Reviewer-brief scope protection cites NUMBERED ratified decisions only
 
-- **A curation archive move is not allowed until the ledger exists.** Intent to
-  process is not processing. In a buffer rotation, write the durable item-level
-  disposition ledger first, then perform any archive move only as preservation
-  of an already-processed source. Source: Opalescent archive-before-ledger
-  mistake; routing: pending-graduations candidate for a skill/rule tripwire.
-- **During live parallel curation, verify named surfaces immediately before
-  quoting or editing them.** Between-turn drift is normal: another agent may
-  graduate, rewrite, or close a surface while the current agent is mid-turn.
-  Cheap proof is `git status` plus targeted greps or reads before citing state.
-- **A green verifier with no extraction count proves nothing.** Shell loops,
-  especially zsh loops over multiline variables, can false-green by checking no
-  inputs. Verifiers that enumerate files or links must report the count they
-  checked before their green result is trusted.
-- **Literal private-use characters in scripts are unsafe capture material.**
-  When code needs PUA sentinels, write escaped forms such as `\ue200`, not
-  literal bytes; literal PUA text was stripped once and made a regex match
-  everywhere.
+"Decided scope protected" in a reviewer brief cites the numbered ratified
+decisions only — plan elaborations stay refutable. Sweeping §Do elaborations into
+"protected" suppressed a legitimate PDR-058 no-consumer finding the owner then
+surfaced. Routing: pending-graduations (clause in `invoke-code-experts` /
+brief-authoring rule); trigger-gated on a second instance or the next brief pass.
 
-## 2026-06-04 — verify before you build on it (Mossy Whispering Bark)
+## Split a candidate category before naming when it lumps a standard with a presentation concern
 
-- **A synthesis/research report COMPILES claims; it does not CERTIFY them.**
-  Before relying on a compiled artefact's claim for a decision or a build,
-  check its verification tier — primary-verified fact vs single-source claim
-  vs frame-dependent convergence. High-stakes external-source claims are
-  primary-verified before the artefact is "delivered" (owner directive
-  2026-06-04, school-data-search gate session — a verification pass overturned
-  three already-recorded gate decisions). Decide from requirements + primary
-  sources, never from precedent or compiled-framing as cover. Routing:
-  PDR candidate in pending-graduations; operational now in the
-  school-data-search plan's verification discipline + high-stakes register.
-- **Value-first; existing artefacts are malleable design surface** (2026-06-04,
-  EEF D4 session — owner corrected the same root ~5×, each in a different
-  costume). When we control the stack (we build the data objects AND the
-  substrate), the fixed points are the value constraints (here: maximise user
-  value; don't flood agents with irrelevant tokens) + our design agency — NOT the
-  existing code, the current/generated data shape, the consumer count, or even
-  owner-ratified decisions. Start every design decision from "what value must this
-  deliver, and what do we control?"; reshape existing artefacts when value demands
-  (openly, with reasoning, with ratification); reshape on frame-overturn, never
-  bolt-on. Routing: graduated to Claude auto-memory
-  (`feedback_value_first_existing_is_malleable`); PDR/rule candidate if it recurs
-  cross-platform. Connects to LTAE, premature-crystallization,
-  existence-is-not-correctness.
-- **Review from the artefact's own value, not by analogy** (2026-06-04,
-  school-data-search deep review — Fiery Sparking Caldera). In a review, reason
-  from THIS artefact's value + the owner's frame; do NOT import doctrines or
-  analogies from other threads. I twice imported a cross-thread frame —
-  value-trace "no consumer" as a blocker, and the EEF value-reckoning as a lens
-  — and was corrected both times; the need + value were owner-settled and the
-  work had nothing to do with EEF. "No named in-repo consumer" is not a defect
-  for horizontal infrastructure whose user-value is a self-evident action
-  serving a class of consumers. The convenient-claim failure surfaced as
-  pattern-completion: the empty consumer-grep *felt* like evidence because it
-  flattered the frame I arrived with. Routing: Claude auto-memory
-  (`feedback_no_cross_thread_analogy_in_review`); PDR/rule candidate (review or
-  metacognition surface) if it recurs. Connects to ground-convenient-claims,
-  value-first-existing-is-malleable, premature-crystallization.
+Classifying `oak-brand` + `oak-tone-of-voice` as one "org-voice" category would
+have swept Oak's pedagogical/factual-rigour standards (evidence, provenance,
+caveats) into branding. Rigour standards travel INSIDE capabilities; branding is a
+capability in its own right. Routing: fold into the taxonomy plan's audit step at
+promotion, then delete here.
 
-## 2026-06-04 — commit-window discipline under live parallel agents (Arboreal curation)
+## Curation enforcement and verifier lessons
+
+- **During live parallel curation, verify named surfaces immediately before quoting
+  or editing them.** Between-turn drift is normal; cheap proof is `git status` plus
+  targeted greps/reads before citing state.
+- **A green verifier with no extraction count proves nothing.** Shell loops
+  (especially zsh over multiline variables) false-green by checking no inputs;
+  verifiers that enumerate files/links must report the count before their result is
+  trusted.
+- **Literal private-use characters in scripts are unsafe capture material.** When a
+  script needs PUA sentinels, write them as escape sequences (a backslash, the
+  letter u, then the four hex digits), never literal bytes; literal PUA text was
+  stripped once by an editing tool and made a regex match everywhere.
+
+## Value-first; existing artefacts are malleable design surface
+
+When we control the stack, the fixed points are the value constraints + our design
+agency — NOT existing code, current/generated data shape, consumer count, or even
+owner-ratified decisions. Start each decision from "what value must this deliver,
+and what do we control?"; reshape on frame-overturn, never bolt-on. Homed: auto-memory
+`feedback_value_first_existing_is_malleable`; PDR/rule candidate if it recurs
+cross-platform. Connects to LTAE, premature-crystallization, existence-is-not-correctness.
+
+## Commit-window discipline under live parallel agents
 
 - **The commit window is a moving target; re-derive the staged set per chunk, not
-  per pass.** Across n=5+ sessions in the 2026-06-03/04 window (Moonlit, Blustery,
-  Burnished, Shadowed), peer files went dirty mid-commit-ceremony. Each chunk's
-  pathspec must come from a FRESH `git status`; explicit-pathspec staging +
-  per-chunk re-derivation carried 6+ agents on one branch with zero collisions.
-  Three corollaries, all repeatedly validated: (1) say "*I* haven't committed,"
-  never "*nothing* is committed" — a parallel commit can sweep your whole working
-  tree, so investigate git-state anomalies (reflog + per-file log) and surface
-  truthfully, but scope the claim to your own actions; (2) `git commit -F msg --
-  <intent files>` commits exactly your bundle and leaves a peer's staged entries
-  untouched (`git restore --staged`/`reset` are hook-blocked/forbidden); (3) the
-  `cannot lock ref 'HEAD'` ref-lock is the FINAL collision backstop — re-derive
-  and re-commit against the moved HEAD, never delete the lock. Rule/PDR
-  graduation stays owner-gated (pending-grad commit-window items 15/40); this is
-  the interim cross-session home.
-- **Critically assess a subagent's inference, not just its facts** (2026-06-04,
-  school-data-search WS-D1 — Fiery Sparking Caldera). validate-specialist-findings
-  usually checks facts and severity; this sharpens it. architecture-expert-betty's
-  facts were correct (`oak-search-sdk` really has retrieval and admin modules) but
-  her inference — "therefore split the new SDK into six workspaces" — contradicted
-  what that precedent demonstrates (it BUNDLES read and write in one SDK behind a
-  DI factory). A reviewer's own cited evidence can support the opposite of their
-  recommendation; verify the evidence-to-recommendation step, most of all when the
-  facts check out and the recommendation is the more decomposed/elaborate shape.
-  Routing: refines `feedback_validate_specialist_findings_before_acting`; PDR/rule
-  candidate on recurrence.
+  per pass.** Each chunk's pathspec comes from a FRESH `git status`; explicit-pathspec
+  staging + per-chunk re-derivation carried 6+ agents on one branch with zero
+  collisions. Corollaries: (1) say "*I* haven't committed," never "*nothing* is
+  committed" — scope the claim to your own actions; (2) `git commit -F msg -- <files>`
+  commits exactly your bundle; (3) the `cannot lock ref 'HEAD'` ref-lock is the final
+  collision backstop — re-derive and re-commit, never delete the lock.
+- **Verify content conservation by set-membership, not by edit-base.** On a shared
+  on-disk tree a peer may commit your working files mid-session; the question is not
+  "was my base stale?" but "was any content LOST?" — answered by checking every
+  source line is present across working-tree ∪ archives, not by diffing bases.
+- Rule/PDR graduation stays owner-gated (pending-grad commit-window items 15/40);
+  this is the interim cross-session home.
 
-## 2026-06-04 — convenient claims cluster at frame-fit points (Tempestuous Vaulting Gust)
+## A fired trigger is not "graduate standalone now"
 
-oak-kg/ontology deep review surfaced four convenient claims, each caught only by grounding:
-the phantom integer id-join (the bulk export has no numeric lesson id at all); "ontology
-misconceptions are sparse" (7,415 nodes on 8,394/8,399 lessons); "the Oak API holds both id
-and slug" (written into my *own* report, then falsified by the OpenAPI scan); the survey's
-"GraphView = 5 NotImplementedYet stubs" (it is `manifest()`+`subgraph()`, no stubs). Two
-sub-traps sharper than the general rule:
+When a pending-graduation's trigger fires, the next check is WHERE its permanent home
+lives. If that home (an ADR, contract, doc section) is owned by an active mid-flight
+thread, authoring a standalone artefact collides/duplicates — defer to the owning
+thread. Pairs with the full-doctrine-estate non-duplication check (survey the plan
+estate, not just the register, before authoring). Sibling of `respect-active-agent-claims`.
 
-- **Specificity is not verification.** A concrete detail ("integer `curric:id`") lends false
-  authority to the *inferred* half of a cross-cutting claim ("…matching the bulk ids") that
-  was never read. Split read-half from inferred-half; ground the convenient inferred half first.
-- **Constraint strictness is not data volume.** "SHACL `minCount` disabled → data sparse" is a
-  non-sequitur (disabled = not-required-per-record, not unpopulated).
+## markdown wrapped-line list-marker trap
 
-A claim's *convenience* (it makes the hard thing easy, or the boundary tidy) correlates with
-motivated construction; the fluency of a tidy narrative is itself the warning sign. Refines
-`ground-convenient-claims`, `present-key-is-not-graph-identity`,
-`validate-specialist-findings-before-acting`; connects to the Mossy verify-before-build entry.
+A wrapped prose line that begins with a list marker (`+`, `-`, `*` then a space)
+trips MD004/MD032 — markdownlint reads it as a nested list item. Never let a marker
+char start a wrapped line; reword, rewrap, or use commas.
 
-## 2026-06-04 — a fired trigger is not "graduate standalone now" (Hidden Hiding Dusk)
+## An IDE diagnostic flood is not automatically a repo warning
 
-When a pending-graduation's trigger fires, the next check is WHERE its permanent home lives — not
-"author it." If that home (an ADR, a contract, a doc section) is owned by an active thread that is
-mid-flight, authoring a standalone artefact in a consolidation session collides with or duplicates
-that thread's work. Defer to the owning thread's own landing instead. Worked instance: the
-graph-tool-category doctrine's trigger fired (EEF D4 ratified) but its ADR home is owned by the live
-graph-tools-value-redesign thread → deferred to that thread's promotion, not authored here. Sibling
-of `respect-active-agent-claims` and `ship-independent-coordinate-dependent` applied at graduation
-time. Pairs with the full-doctrine-estate non-duplication check: survey the plan estate, not just
-the register, before authoring — the same check that turned the action-time-interrupt lane into a
-general frame deferring to closure-pressure rather than a duplicate.
-
-## 2026-06-04 — convergence is not proof; a verification-claim is not verification (Windward Gliding Squall)
-
-EEF D5-plan review: the final acceptance command used `@oaknational/oak-curriculum-sdk`,
-which matches NO project — the directory is `oak-curriculum-sdk` but the package name
-drops the prefix (`@oaknational/curriculum-sdk`). THREE reviewers used the dir-name filter
-(type-expert, architecture-fred — who wrote "confirmed in package.json" — and my own draft
-inherited from the parent plan); only the pair-reviewer's empirical `pnpm --filter` run found
-it. Two sharpenings for accepting ANY external agent feedback (owner reinforced ~4x this session):
-
-- **Convergence is not proof.** N confident reviewers agreeing is not verification; an empirical
-  check beats agreement. The pattern was not even uniform — `oak-curriculum-mcp-streamable-http`
-  KEEPS its prefix as the package name — so the convergent inference was doubly wrong.
-- **A verification-claim is not verification.** A finding pre-stamped "confirmed in X" is the most
-  seductive form (it arrives looking grounded), yet the claim-to-have-verified does not transfer
-  the verification — re-ground it. Applies to peer feedback AND sub-agent feedback; peers carry
-  higher felt-authority. Routing: Claude auto-memory `feedback_validate_specialist_findings_before_acting`
-  (broadened to all external agent feedback); owner-gated PDR candidate (felt-authority unification).
-  Connects to ground-convenient-claims, the Mossy verify-before-build entry, and the Tempestuous
-  convenient-claims-cluster entry. (distilled HARD at write time — preserved per the conservation
-  invariant; drain routed to a dedicated curation pass.)
+Before treating an editor diagnostic flood as a no-warning-toleration obligation,
+verify the tool is a repo-influenced gate. ~30 cSpell diagnostics on legitimate
+domain terms came from the editor extension's default dictionary (no repo cspell
+config, none in the gate scripts) — local noise, not a repo warning.
+never-ignore-signals means investigate the signal; no-warning-toleration scopes to
+systems the repo influences.
