@@ -19,6 +19,27 @@ surface.
 
 ## Current State
 
+- **AGENT-TOOLS INFRASTRUCTURE HARDENING — 4 commits, my gates green, pushed
+  (2026-06-05, Silvered Listening Secret / `110bae`, claude / Opus 4.8,
+  owner-directed)** — a standalone agent-tools / build-infra session on the
+  `feat/graph-tooling-tidyup` branch (NOT an eef deliverable; interleaved with the
+  eef peer's `b34da870`). (1) Root `postinstall` moved off `turbo run build` onto a
+  checked `tsx`-run bootstrap (`7a869c99`) — narrower install lifecycle, no
+  orchestrator. The report's "recursive-install loop" was REFUTED by grounding (no
+  package-manager call anywhere in the postinstall build graph), so it landed as
+  hardening + a `validate-lifecycle-scripts` regression guard, not a loop fix.
+  (2) PreToolUse guards now FAIL CLOSED when the dist artefact is missing/broken
+  (`cb6f7a37`, `2078e0f0`) via a build-free shim
+  (`.claude/hooks/run-pretooluse-guard.mjs`) that exits 2 on any non-{0,2} child
+  exit; the security-critical decision (`resolveGuardExitCode`) is unit-tested and
+  imported by the shim via Node type-stripping; the false `.agent/hooks/README`
+  "fails loudly" invariant that masked the bug was corrected; a gated
+  `validate-pretooluse-guard-routing` validator blocks a silent revert. (3)
+  `knip.config.ts` registers both new validators as entries (`2ae88e6a`) — they are
+  tsx-spawned so knip could not trace them; latent because the pre-commit hook does
+  not run knip, only `pnpm check` does. My work's gates are green (turbo
+  build/type-check/lint/test, knip, depcruise, skills, portability, repo-validators,
+  markdownlint, prettier). No open next step for this infra lane.
 - **MIGRATION PLAN OVERHAULED → VALUE-DRIVEN REDESIGN, renamed + reframed
   (2026-06-04, Twilit Cascading Supernova / `bb53a9`, claude / Opus 4.8,
   owner-directed)** — accepted Burnished's handoff (comms `0e2f7e7b`) and ran the
@@ -368,6 +389,33 @@ authority.
 - Shared memory/state files are always writable and commit-includable when dirty.
 
 ## Deep Consolidation Status
+
+**ran this handoff → owner-directed (2026-06-05, Silvered Listening Secret /
+`110bae`, claude / Opus 4.8, agent-tools infrastructure session close;
+session-completion mode).** Owner asked for handoff + docs consolidation + commit +
+push. Landed: 4 commits (postinstall bootstrap off turbo; PreToolUse guards
+fail-closed + unit-tested decision; knip entry registration). Insights homed:
+napkin (push-proofs-to-lowest-level / smoke-over-reach; Node-24 type-stripped
+import for build-free shims, a `candidate:` reusable pattern; knip-not-in-pre-commit
+→ run full `pnpm check`; verify-don't-trust on external input); experience file
+(`2026-06-05-silvered-the-corrections-that-sharpened.md`). **No auto-memory write** —
+`MEMORY.md` is over its size limit; the testing-level lesson is the cited
+`testing-strategy.md` directive itself, and `feedback_scripts_dir_is_no_checks_zone`
+was already sharpened this session (importance-not-size test). **ADR/PDR candidates**:
+none qualify for promotion now — the fail-closed-hook-shim approach is one instance
+(captured as a napkin `candidate:` pattern, below the broadly-applicable bar); the
+install-bootstrap and guard-routing principles are already enforced by their
+validators + the `.agent/hooks/README` correction. **Claims**: none opened this
+session (solo, minimal-ceremony); nothing to close. Entry points (CLAUDE/AGENTS/
+GEMINI.md) swept — clean. **Deferred with reason**: the broad cross-thread +
+cross-platform (codex/cursor/gemini) curation drain and the napkin/this-file fitness
+drains are dedicated-curation work this single-lane infra close does not carry
+context for, and an active peer is building `graph-core` in the tree — falsifiable:
+the next curator can count the unread cross-platform surfaces + line counts.
+**`pnpm check`**: my work's gates are green; the full browser/e2e/widget suites were
+not run standalone because the working tree carries the peer's uncommitted
+`graph-core` changes — the pre-push hook is the authoritative whole-tree gate at
+push. Verdict: `partial slice landed`.
 
 **ran this handoff → owner-directed (2026-06-04, Prismatic Twinkling Planet /
 claude / Opus 4.8 / `b56c93`, EEF D5 + parent fresh dual-review + condition

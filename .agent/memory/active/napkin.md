@@ -294,3 +294,40 @@ Fresh capture starts below.
   (`feedback_validate_specialist_findings_before_acting` +
   `feedback_ground_state_before_planning`), so no new auto-memory entry — and
   `MEMORY.md` is over its size limit anyway.
+
+## 2026-06-05 — push proofs to the lowest level; knip lives only in `pnpm check` (Silvered Listening Secret)
+
+- **A smoke/integration test that proves pure logic is an over-reach — decompose
+  what the test proves and push each proof to the lowest level that can hold it.**
+  The PreToolUse fail-closed shim's smoke test proved the exit-code mapping
+  (signal / broken-build / closed-set {0,2}) — pure logic that belongs in a unit
+  test — plus Node's own `stdio:inherit`, which is external functionality the
+  testing strategy says never to test. Owner-corrected, citing
+  `testing-strategy.md`. Cure: extract the decision (`resolveGuardExitCode`) to
+  committed source + unit-test it; the shim shrinks to thin IO and imports the
+  tested function. The unit signature `(code, signal)` structurally proves the
+  bypass env can't leak into the crash path.
+- **Node 24 imports committed `.ts` directly (type-stripping), so a build-free
+  `.mjs` shim can import unit-tested TS logic.** The relative specifier resolves
+  against the importer (NOT `CLAUDE_PROJECT_DIR` — I tripped on that first), wrapped
+  in try/catch so a load failure fails CLOSED (a static import would fail OPEN on
+  exit 1). This is the mechanism that lets build-free harness glue stay thin AND
+  have its logic unit-tested. First real instance. `candidate:` reusable pattern —
+  build-free shim + node type-stripped import of committed source + fail-closed
+  guard.
+- **knip is NOT in the pre-commit hook — only `pnpm check` runs it.** Two commits
+  added tsx-spawned validator entry files (`validate-lifecycle-scripts`,
+  `validate-pretooluse-guard-routing`) without registering them in
+  `knip.config.ts`. The turbo gate I ran as the pre-commit equivalent
+  (`build type-check lint test`) passed, but knip flagged them as unused files and
+  `pnpm check` was red; the owner caught it. Cure: after adding any tsx-spawned or
+  dynamically-referenced entry file, register it in `knip.config.ts` AND run the
+  full `pnpm check` (session-handoff step 11) — not only the turbo gate — before
+  declaring done.
+- **External input is a hypothesis to falsify — reinforced all session.** The
+  report's "recursive postinstall loop" mechanism was refuted by grounding (no
+  package-manager call anywhere in the postinstall build graph); the
+  `.agent/hooks/README` invariant claiming a missing artefact "fails loudly rather
+  than silently allowing" was the exact false belief that masked the real
+  fail-open. Verify-don't-trust applied to a report, to sub-agents, and to my own
+  first answers (skip→fail-loud, scripts/.mjs→checked-src, smoke→unit).
