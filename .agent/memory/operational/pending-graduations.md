@@ -29,6 +29,20 @@ windowed, backlog, split, or shard-like pending-graduation files. New capture,
 owner-gated items, and unresolved pending-graduation decisions belong here until
 they graduate, duplicate, become stale-withdrawn, or receive owner direction.
 
+## 2026-06-05 capture — Lanternlit curation pass
+
+- **A coverage-matrix-vs-implementation drift validator (recur-proof cure for the
+  ADR-121 / pre-commit-hook drift).** This session found `.husky/pre-commit` had
+  silently drifted from ADR-121's coverage matrix (omitted knip + depcruise, added
+  build). The 2026-06-05 fixes — reconciling the hook + ADR + build-system.md, then
+  single-sourcing the matrix in ADR-121 — reduce *doc-to-doc* drift, but the matrix
+  still duplicates the *implementation* (the actual hook + `.github/workflows/ci.yml`
+  invocations). A repo-validator that parses ADR-121 §Coverage matrix and asserts each
+  surface column matches the live hook/CI command sets would make the documentation
+  verified-by-the-implementation (the metacognition structural-cure shape) and fail
+  loudly on the next drift instead of waiting for a curation pass to notice.
+  `[captured: 2026-06-05 | source: Lanternlit curation pass (ADR-121/hook drift fix 6f280f9f) | target: repo-validator:coverage-matrix-matches-hooks (under agent-tools/src/validators/) | trigger: a second matrix-vs-implementation drift instance OR owner direction to build it | size: M | status: owner-gated]`
+
 ## 2026-06-04 captures — Windward Gliding Squall (EEF D5 review)
 
 - **Felt-authority family — no derived-authority surface self-certifies.** Unified

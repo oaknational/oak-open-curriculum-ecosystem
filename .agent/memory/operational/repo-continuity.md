@@ -151,7 +151,7 @@ each thread record; this table is the repo-level index.
 | `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Dim Dimming Threshold / eef-d5-execution / 2026-06-05 (prior: Prismatic Twinkling Planet eef-d5-fresh-dual-review 2026-06-04, Windward Gliding Squall eef-d5-plan-authoring 2026-06-04, Shadowed Creeping Secret eef-d4-ratify 2026-06-04, Burnished Glowing Spark 2026-06-04, Lacustrine Swimming Beacon 2026-06-03, Seaworthy Swimming Sextant 2026-06-03, Galactic Glowing Prism + Opalescent Cascading Planet + Stellar Waning Planet + Silvered Lurking Mask 2026-06-02) |
 | `oak-kg-ontology-planning-review` | Plan the `oak-kg`/ontology work, starting with a deep review of the Oak Curriculum Ontology repo (separate concern from the bulk-derived graph redesign) | [record][oak-kg-ontology] | claude / Opus 4.8 / Twilit Cascading Supernova / thread-opener-brief-only / 2026-06-04 — **opened, not started; deep review is a fresh session** |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Blustery Lifting Gale / skills-taxonomy-and-distribution / 2026-06-03 (prior: Umbral Whispering Silhouette 2026-06-01) |
-| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 / Hidden Hiding Dusk / dedicated-consolidation+owner-directed-graduations / 2026-06-04 (prior: Arboreal Sprouting Branch 2026-06-04, Opalescent Illuminating Prism 2026-06-03, Lacustrine Swimming Beacon, Ashen Burning Magma, Solar Glowing Meteor, Stratospheric Buffeting Breeze, Lofty Sweeping Falcon, Shaded Veiling Mirror) |
+| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 / Lanternlit Passing Mask / dedicated-consolidation+owner-directed-graduations / 2026-06-05 (prior: Hidden Hiding Dusk 2026-06-04, Arboreal Sprouting Branch 2026-06-04, Opalescent Illuminating Prism 2026-06-03, Lacustrine Swimming Beacon, Ashen Burning Magma, Solar Glowing Meteor, Stratospheric Buffeting Breeze, Lofty Sweeping Falcon, Shaded Veiling Mirror) |
 | `repo-professionalism-assessment` | Repo professionalism / engineering-quality report → planability triage | [record][repo-professionalism-assessment] | codex / GPT-5 / Airy Whirling Wing / report-author-and-planability-router / 2026-06-03 |
 | `school-data-search` | Oak School Data Search service (POC MVP): briefs → report → plan → gate walk → **deep review complete** → build | [record][school-data-search] | claude / Opus 4.8 / Fiery Sparking Caldera / deep-review-and-refinement / 2026-06-04 (prior: Mossy Whispering Bark 2026-06-04, Furnace Roasting Brazier + Hushed Lurking Mask 2026-06-03) |
 | `semantic-search` | Search data foundations: upstream-schema alignment, bulk sourcing, minimal-adaptation arc | [record][semantic-search] | claude / Opus 4.8 / Moonlit Waxing Nebula / upstream-realignment-specialist / 2026-06-03 |
@@ -436,12 +436,21 @@ over-limit FIXED (26307→23006 B; 114 entries preserved; capture edge unblocked
 Cross-platform read (Codex/Cursor/Gemini + non-repo plans): near-empty harvest = all
 homed. Experience audit (6 new files): no drift, no stranded insight; emergent
 cross-read corroborates the felt-authority cluster. Audits 7c/7d/7e — see ledger.
-**Owner-decision items surfaced (not actioned):** (1) `.husky/pre-commit` drifted from
-ADR-121 — it omits knip + depcruise and adds build, so knip/depcruise defects pass
-pre-commit; cure is the owner's call (fix the hook or amend the ADR). (2) Graduate the
-felt-authority unification PDR (`pdr:felt-authority-grounding-discipline`) — trigger
-met. pending-graduations: 0 due; owner-gated items remain live per the contract.
-Verdict: `complete` for drainable buffers + fitness-at-rest; 2 owner items surfaced.
+**Owner-resolved this session (3 directives):** (1) felt-authority family **graduated
+→ PDR-089 §Decision 7** (`533c1fe3`; routed as a unifying clause, not a new PDR —
+PDR-089 §Decision 6 already owned the substrate). (2) `.husky/pre-commit` ↔ ADR-121
+drift **fixed** (`6f280f9f`): owner directed a fresh speed/safety re-decision; knip +
+depcruise added to the hook (measured ~1.7s/~1.9s; the new knip check immediately
+caught a peer's unused export), ADR-121 + build-system.md reconciled, config-expert
+reviewed, the stale lint:shell exception corrected. (3) **Pushed** — origin holds
+`981b3c9c..6f280f9f` and `043a984c` (the waiting EEF D5 commits and all curation).
+Session learnings captured to napkin (`043a984c`) and an experience file. **Held, not blocked-by-me:** the
+owner-directed build-system.md matrix **de-dup** (single-source → ADR-121) is done on
+disk + staged but its commit waits on a green-tree window — a very active multi-writer
+window (hook-policy guard + graph-view + graph-corpus-sdk peers in flight) has the
+full-tree gate transiently engaged; I will not force or touch peer work. Verdict:
+`complete` for the dedicated-curation goal + all 3 owner directives; the de-dup commit
+is the only deferred item, gated on tree-green.
 
 **Historical deep-consolidation closeout entries archived.** Closeout prose dated
 2026-05-31 → 2026-06-02 lives in the earlier companion archive; the 2026-06-03 →

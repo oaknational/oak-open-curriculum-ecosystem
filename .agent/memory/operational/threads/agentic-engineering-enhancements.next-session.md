@@ -1,5 +1,30 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Closeout (2026-06-05 — Lanternlit Passing Mask / claude / Opus 4.8 / `748c10`, dedicated knowledge curation + owner-directed graduations)
+
+Dedicated "consolidate until done" pass. **3 HARD fitness files → 0** through real
+curation (side-effect, not the goal): napkin rotated; distilled felt-authority cluster
+consolidated to one pointer; repo-continuity discharged-closeout prose archived (0 lines
+lost). Claude `MEMORY.md` over-limit fixed (capture edge unblocked); cross-platform +
+232-file experience corpus read (near-empty harvest = success). Full ledger:
+[`curator-passes/2026-06-05-lanternlit-passing-mask-curation.md`](../curator-passes/2026-06-05-lanternlit-passing-mask-curation.md).
+
+**Owner directives resolved:** (1) felt-authority family **graduated → PDR-089 §Decision 7**
+(`533c1fe3`; a unifying clause, not a new PDR — Decision 6 already owned the substrate);
+(2) `.husky/pre-commit` ↔ ADR-121 drift **fixed** (`6f280f9f`) — knip + depcruise added,
+ADR-121 + build-system.md reconciled, config-expert reviewed; (3) **pushed** (origin
+current). Commits: `80cfbeb5`, `533c1fe3`, `6f280f9f`, `043a984c`.
+
+**Next safe step:** no queued obligation for this thread. **Deferred (gated on tree-green):**
+the owner-directed build-system.md matrix de-dup is staged + held — a busy multi-writer
+window has the full-tree gate transiently engaged; it commits when the tree is green.
+**Follow-on captured this session:** a matrix-vs-implementation drift validator
+(pending-graduations) would recur-proof the ADR-121/hook drift class.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Lanternlit Passing Mask` | `claude` | `Opus 4.8` | `748c10` | `dedicated-consolidation+owner-directed-graduations` | 2026-06-05 | 2026-06-05 |
+
 ## Session Closeout (2026-06-04 — Hidden Hiding Dusk / claude / Opus 4.8 / `38dbaf`, dedicated consolidation + owner-directed graduations)
 
 Executed the Arboreal fresh-session queue (the two queued items). Sole-contributor;
