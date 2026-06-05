@@ -74,3 +74,30 @@ Fresh capture starts below.
   over-reach") and the surviving unit test only covers `resolveGuardExitCode` (the present-
   guard case). The honest move was extract-to-pure-fn + *create* the test, not "flip." A
   convenient premise that makes the work a one-liner is exactly the kind to ground first.
+
+## 2026-06-05 — EEF deep-review closeout (Masked Creeping Lantern)
+
+- **An adversarial verifier can false-NEGATIVE a true finding.** The review
+  workflow's verify stage REFUTED a real "atomic landing honoured" strength; a direct
+  `git show --stat 2e9021ff` proved test+code DID co-land. Two specialist readers also
+  over-escalated (test-expert HIGH on a deterministic Result-narrowing guard;
+  type-expert "widening" on a `ReadonlySet<string>` that is the correct predicate
+  idiom). Verification cuts both ways — re-ground every load-bearing verdict,
+  including the verifier's own, against source.
+- **A workflow `StructuredOutput` with an uncapped `findings[]` can run away.** The
+  master-plan reader made 45 emit attempts, failing schema validation because the
+  findings payload exceeded the tool-call size; it only succeeded by collapsing to one
+  finding. Next time: cap the array (top-N) and keep per-finding fields terse, or
+  paginate.
+- **A piped background command's reported exit is the PIPE's, not the command's.**
+  `pnpm check 2>&1 | tail` reported "exit 0" while `pnpm check` had actually FAILED on
+  an e2e flake. Read the captured output for the real gate verdict; never trust the
+  wrapper exit on a piped command.
+- **The shared working tree means another writer can land your changes mid-session.**
+  The session-start `git status: clean` snapshot went stale: a parallel `Jim Cresswell`
+  writer committed the bulk of my edits (`10c5aeac`, `0d99dc00`) with accurate
+  conventional messages + explicit pathspecs (correctly NOT grabbing the untracked
+  ADR-191 file). Re-run `git status` + `git log` before committing; never `git add -A`.
+- **The attribution-PII policy's home was an existing rule clause, not a new rule.**
+  `new-rule-vs-pdr-clause` routed it to `documentation-hygiene` §2, avoiding a 4-form
+  new-rule and the fragmentation it would have caused.

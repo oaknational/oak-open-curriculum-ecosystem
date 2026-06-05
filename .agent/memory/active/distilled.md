@@ -141,3 +141,19 @@ domain terms came from the editor extension's default dictionary (no repo cspell
 config, none in the gate scripts) — local noise, not a repo warning.
 never-ignore-signals means investigate the signal; no-warning-toleration scopes to
 systems the repo influences.
+
+## Crosswalk two drifted docs before reconciling — semantics vs intent
+
+When two documents appear to conflict (older brief vs ratified plan), crosswalk
+clause-by-clause first: separate shared-intent-in-different-words, genuine
+divergence, and orthogonal-only-looks-like-conflict. Reconcile surgically (banner +
+targeted supersession notes); never bulk-rewrite — that deletes still-valid and
+orthogonal content. 2026-06-05 EEF: R1/R4/R5/R7/R8 shared, R2/R3 superseded, §5
+ontology-crosswalk orthogonal. Sibling of validate-specialist-findings.
+
+## A piped command's reported exit is the pipe's, not the command's
+
+`cmd 2>&1 | tail` (and background-task wrappers over it) report the LAST pipeline
+stage's exit, masking a non-zero `cmd`. A full `pnpm check` once reported "exit 0"
+while it had actually failed. Read the captured output for the real gate verdict, or
+use `PIPESTATUS`/avoid the pipe, before trusting green.

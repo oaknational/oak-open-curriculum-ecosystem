@@ -19,6 +19,17 @@ surface.
 
 ## Current State
 
+- **EEF DEEP REVIEW + RESOLUTIONS + ADR-191 RATIFIED (2026-06-05, Masked Creeping
+  Lantern / `86584c`).** Deep citation-grounded review of all EEF plans/code found
+  the engineering sound; resolved post-D5 status drift, reconciled the strategy
+  brief to the agent-reasons model (crosswalk), removed unused
+  `NodeProjection`/`DeepKeyPath`, **ratified ADR-191** (deterministic data surface;
+  the agent is the only reasoner), and codified a contributor-attribution/PII policy
+  (emails only in `package.json`). Substantive set committed by the parallel
+  `Jim Cresswell` writer (`10c5aeac` + `0d99dc00`); ADR-191 file + PII-sweep
+  remainder + this handoff committed this session. EEF next step is **D6**.
+  Pre-existing unrelated e2e flake flagged (MCP-app web-security; green on re-run).
+
 - **AGENT-TOOLS PreToolUse GUARD — fails OPEN on an unbuilt artefact; working tree,
   scoped gates green, reviewed; UNCOMMITTED (2026-06-05, Skyward Lofting Breeze /
   `221aaa`, claude / Opus 4.8, owner-directed)** — continues the standalone agent-tools
@@ -168,7 +179,7 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Dim Dimming Threshold / eef-d5-execution / 2026-06-05 (prior: Prismatic Twinkling Planet eef-d5-fresh-dual-review 2026-06-04, Windward Gliding Squall eef-d5-plan-authoring 2026-06-04, Shadowed Creeping Secret eef-d4-ratify 2026-06-04, Burnished Glowing Spark 2026-06-04, Lacustrine Swimming Beacon 2026-06-03, Seaworthy Swimming Sextant 2026-06-03, Galactic Glowing Prism + Opalescent Cascading Planet + Stellar Waning Planet + Silvered Lurking Mask 2026-06-02) |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Masked Creeping Lantern / eef-deep-review-resolutions-adr191 / 2026-06-05 (prior: Dim Dimming Threshold eef-d5-execution 2026-06-05, Prismatic Twinkling Planet eef-d5-fresh-dual-review 2026-06-04, Windward Gliding Squall eef-d5-plan-authoring 2026-06-04, Shadowed Creeping Secret eef-d4-ratify 2026-06-04, Burnished Glowing Spark 2026-06-04, Lacustrine Swimming Beacon 2026-06-03, Seaworthy Swimming Sextant 2026-06-03, Galactic Glowing Prism + Opalescent Cascading Planet + Stellar Waning Planet + Silvered Lurking Mask 2026-06-02) |
 | `oak-kg-ontology-planning-review` | Plan the `oak-kg`/ontology work, starting with a deep review of the Oak Curriculum Ontology repo (separate concern from the bulk-derived graph redesign) | [record][oak-kg-ontology] | claude / Opus 4.8 / Twilit Cascading Supernova / thread-opener-brief-only / 2026-06-04 — **opened, not started; deep review is a fresh session** |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Blustery Lifting Gale / skills-taxonomy-and-distribution / 2026-06-03 (prior: Umbral Whispering Silhouette 2026-06-01) |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 / Lanternlit Passing Mask / dedicated-consolidation+owner-directed-graduations / 2026-06-05 (prior: Hidden Hiding Dusk 2026-06-04, Arboreal Sprouting Branch 2026-06-04, Opalescent Illuminating Prism 2026-06-03, Lacustrine Swimming Beacon, Ashen Burning Magma, Solar Glowing Meteor, Stratospheric Buffeting Breeze, Lofty Sweeping Falcon, Shaded Veiling Mirror) |
@@ -259,6 +270,16 @@ todo is `completed`; the runtime `projection?` param was dropped by owner decisi
 (see the `eef` thread banner + the D4 "Projection deferred" amendment). The
 graph-tools-value-redesign lane stays parked on EEF D6 + D7. The numbered history
 below is retained for context.
+
+**Post-D5 deep review (2026-06-05, Masked Creeping Lantern) — resolutions landed:**
+`NodeProjection`/`DeepKeyPath` removed (no consumer); status currency +
+strategy-brief reconciliation (crosswalk — shared-intent kept, server-scoring
+superseded, §5 orthogonal); **ADR-191 ratified** (deterministic data surface; the
+agent is the only reasoner — Decision 10 promoted repo-wide); contributor-
+attribution/PII policy codified (`documentation-hygiene` §2 + `ATTRIBUTION.md`;
+personal emails only in `package.json`). Substantive set landed via `10c5aeac` +
+`0d99dc00` (Jim Cresswell); ADR-191 file + PII-sweep remainder + handoff committed
+this session.
 
 1. Re-ground in the `eef` thread banner and current git state.
 2. D0 (fixed-data doctrine + validator removal + estate decontamination) and D1
@@ -450,6 +471,15 @@ authority.
 - Shared memory/state files are always writable and commit-includable when dirty.
 
 ## Deep Consolidation Status
+
+**session-completion this handoff (2026-06-05, Masked Creeping Lantern / `86584c`).**
+EEF deep-review closeout: ADR-191 ratified + homed, attribution-PII policy codified,
+crosswalk lesson distilled, surprises captured, `eef` thread + repo-continuity
+refreshed. No napkin rotation (76 lines, freshly rotated by Lanternlit earlier
+today). Partial slice by design: the deeper register/fitness/practice-core audits
+were NOT re-run — Lanternlit's dedicated pass (below) drained them hours earlier, so
+re-running is redundant ceremony (conservation invariant). `pnpm check` 107/108 green;
+the lone failure was a pre-existing unrelated MCP-app e2e flake (green on re-run).
 
 **COMPLETED — dedicated-knowledge-curation, owner goal "consolidate until done"
 (2026-06-05, Lanternlit Passing Mask / claude / Opus 4.8 / `748c10`).** Drained the

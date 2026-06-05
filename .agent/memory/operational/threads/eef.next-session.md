@@ -1,5 +1,42 @@
 # Next-Session Record — `eef` thread
 
+> **EEF DEEP REVIEW + RESOLUTIONS LANDED; ADR-191 RATIFIED (2026-06-05, Masked
+> Creeping Lantern / `86584c`; claude / Opus 4.8; owner-directed).** A full
+> citation-grounded review of every EEF plan + code (9-lens workflow + adversarial
+> per-finding verification; every load-bearing claim re-checked against source —
+> including catching a verifier false-negative and two specialist over-escalations)
+> found the engineering sound; defects were post-D5 status drift + one
+> reference-doc divergence. Resolutions (the substantive set committed by the
+> parallel `Jim Cresswell` writer in `10c5aeac` + `0d99dc00`; the remainder this
+> session):
+>
+> + **`NodeProjection`/`DeepKeyPath` removed** — no consumer (the prior-knowledge
+>   DAG, owned by `graph-tools-value-redesign`, uses bounded subgraph, not field
+>   projection); this completes the 2026-06-05 projection-drop; D4/D5 reconciled.
+> + **Status currency** swept (README/master/D4/D5); **strategy brief reconciled**
+>   to the agent-reasons model by crosswalk (shared-intent R1/R4/R5/R7/R8 kept;
+>   R2/R3 server-scoring superseded; §5 ontology crosswalk clarified orthogonal).
+> + **ADR-191 (deterministic data surface; the agent is the only reasoner)
+>   RATIFIED** — promotes Decision 10 to repo-wide doctrine; cross-linked from
+>   Decision 10 + the strategy banner.
+> + **Contributor-attribution/PII policy** codified (`documentation-hygiene` §2 +
+>   `ATTRIBUTION.md`): personal emails live only in `package.json`; prose credits
+>   by name + public/org contact. Personal emails swept from the live + KG estates,
+>   archives, and comms.
+>
+> **NEXT SAFE STEP: D6** (unchanged) — the EEF MCP composition module + surface
+> (master plan §D6), now governed by ADR-191. `pnpm check` is green-able: 107/108
+> tasks green; the lone failure was a pre-existing parallel-load flake in the
+> UNRELATED MCP-app web-security e2e (`Parse Error` on a deliberately malformed
+> Host header) — passes on re-run (131/131); flagged to owner as a separate
+> infra-flake to fix.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Masked Creeping Lantern` | `claude` | `Opus 4.8` | `86584c` | `eef-deep-review-resolutions-adr191` | 2026-06-05 | 2026-06-05 |
+>
+> ---
+>
 > **EEF D5 EXECUTED — graph-core generic query layer + graph-native EEF view
 > LANDED AS ONE GREEN COMMIT (2026-06-05, Dim Dimming Threshold / `192ae9`;
 > claude / Opus 4.8; owner-directed execution).** D5 built fresh as five TDD
@@ -27,8 +64,10 @@
 >   `as`/`Object.*`/`Record`; a projected return type re-opens D4), and EEF
 >   consumes none. The owner directed dropping the runtime `projection?` parameter
 >   (Decision 6 "absent" over a dishonest implementation); `NodeProjection` /
->   `DeepKeyPath` are retained for a future type-honest projection. D4 carries a
->   "Projection deferred" amendment and the D5 plan's C1 is marked superseded.
+>   `DeepKeyPath` — which only typed that parameter — were **removed** with it
+>   (2026-06-05 review: no consumer; the prior-knowledge DAG uses bounded subgraph,
+>   not field projection). D4 carries a "Projection deferred" amendment and the D5
+>   plan's C1 is marked superseded.
 > + **Review cadence (extensive, real-time, no backfill)**: code-expert pre+post
 >   per cycle (fan-from-brief), type-expert deep on WS1.2 / WS2.1 / the assembled
 >   diff, test-expert per cycle + assembled diff. ~18 reviewer dispatches; every
