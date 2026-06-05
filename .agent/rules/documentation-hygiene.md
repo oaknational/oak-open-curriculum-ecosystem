@@ -41,6 +41,19 @@ others' work names that work explicitly. Failing to cite is
 treated as a documentation defect of the same class as misleading
 docs.
 
+**Contributor and source-author attribution + personal data.** People
+(external contributors, source authors, prototype or repository authors)
+are credited **by name** wherever their contribution is named, with a link
+to the public upstream. Their **personal contact data (email addresses)
+belongs in exactly one place — the `contributors` field of the relevant
+`package.json`** — and MUST NOT be copied into prose, READMEs, ADRs, PDRs,
+plan bodies, rule files, distilled entries, or any other versioned document.
+Scattering a personal email across docs is a documentation defect of the
+same class as a missing citation. The canonical attribution surface is
+[`ATTRIBUTION.md`](../../ATTRIBUTION.md) (names + public references) plus
+`package.json` metadata (contact); name + public/org contact + source URL,
+never a personal email in the document body.
+
 ## 3. TSDoc presence and quality
 
 Per [`.agent/directives/principles.md` § Document Everywhere](../directives/principles.md):
