@@ -140,3 +140,39 @@ export const relatedStrandEdges: readonly RelatedStrandEdge[] = EEF_TOOLKIT_DATA
       ? strand.related_strands.map((target) => ({ source: strand.id, target }))
       : [],
 );
+
+// --- Per-strand observed axis index (for evidence-for-move root resolution) -
+
+/**
+ * The observed applicability axes a single strand carries. Present only for the
+ * 17 strands with `school_context_relevance`; floor-only strands are absent
+ * (reachable only by id, never by axis).
+ */
+export interface StrandAxisValues {
+  readonly phases: readonly ObservedPhase[];
+  readonly keyStages: readonly ObservedKeyStage[];
+  readonly priorities: readonly ObservedPriority[];
+}
+
+function deriveStrandAxisIndex(): ReadonlyMap<EefStrandId, StrandAxisValues> {
+  const index = new Map<EefStrandId, StrandAxisValues>();
+  for (const strand of EEF_TOOLKIT_DATA.strands) {
+    if (!('school_context_relevance' in strand)) {
+      continue;
+    }
+    const scr = strand.school_context_relevance;
+    index.set(strand.id, {
+      phases: scr.most_relevant_phases,
+      keyStages: scr.most_relevant_key_stages,
+      priorities: scr.most_relevant_priorities,
+    });
+  }
+  return index;
+}
+
+/**
+ * Per-strand observed axis values keyed by strand id — the source for
+ * `evidenceForMove` axis resolution. Keys are exactly the
+ * `school_context_relevance`-present strands; a floor-only strand has no entry.
+ */
+export const strandAxisIndex: ReadonlyMap<EefStrandId, StrandAxisValues> = deriveStrandAxisIndex();

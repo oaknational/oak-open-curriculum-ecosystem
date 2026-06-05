@@ -58,8 +58,10 @@ export {
   type CanonicalizedDataset,
 } from './canon/index.js';
 export {
+  createGraphView,
+  type CreateGraphViewInput,
   type DeepKeyPath,
-  type GraphManifest,
+  type GraphEdge,
   type GraphView,
   type NodeProjection,
   type SubgraphError,

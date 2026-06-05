@@ -4,13 +4,13 @@
  *
  * See `./interface.ts` for the GraphView interface and `./types.ts`
  * for the supporting type-level utilities — projection paths and the
- * manifest / subgraph return shapes.
+ * subgraph return shapes.
  */
 
+export { createGraphView, type CreateGraphViewInput, type GraphEdge } from './create-graph-view.js';
 export { type GraphView } from './interface.js';
 export {
   type DeepKeyPath,
-  type GraphManifest,
   type NodeProjection,
   type SubgraphError,
   type SubgraphResult,

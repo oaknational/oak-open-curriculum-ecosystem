@@ -152,11 +152,23 @@ types carry `TNodeId`/`TEdgeType` all the way out — no `string` widening at th
 
 **Operations (the minimal set EEF consumes, plan Decision 7 — no response cap):**
 
-- `subgraph({ rootIds, depth, projection? }): Result<SubgraphResult<TNode,
+- `subgraph({ rootIds, depth }): Result<SubgraphResult<TNode,
   TNodeId, TEdgeType>, SubgraphError<TNodeId>>` — bounded BFS from roots:
   complete member nodes + all member edges; depth-bounded; root-not-found and
   depth-exceeded as `Result` errors at the external boundary. **This is the one
   graph-core primitive EEF consumes.**
+
+> **Projection deferred (owner decision, 2026-06-05).** D5 execution dropped the
+> runtime `projection?: NodeProjection<TNode>` parameter from `subgraph`. A
+> field-narrowing projection that returns `SubgraphResult<TNode>` (`nodes:
+> readonly TNode[]`) cannot be made type-honest under `no-type-shortcuts` — a
+> trimmed node is statically a deep-`Partial`, so returning it as `TNode` needs a
+> forbidden `as`/`Object.*`/`Record`, and a per-call projected return type would
+> change this ratified signature. EEF consumes no projection (the binding exposes
+> none, below), so per Decision 6 the operation is **absent** rather than
+> dishonestly implemented. The `NodeProjection` / `DeepKeyPath` type utilities are
+> **retained** in graph-core for a future type-honest projection when a real
+> consumer exists. See the D5 plan's superseding note on condition C1.
 
 `manifest()` / `GraphManifest` carry **no EEF consumer** (verified this session:
 no D3 surface reads them — the resource's strand index is projected directly from
@@ -336,8 +348,8 @@ strand index, and the **prompt** is a template — neither calls a graph operati
 
 | Layer | Operation | Serves | Derivation |
 | --- | --- | --- | --- |
-| graph-core | `subgraph({ rootIds, depth, projection? })` | both tool functions | the generic bounded-BFS primitive (the one graph-core primitive EEF consumes; `manifest()` is not EEF-consumed — see above) |
-| EEF binding | `inspectStrand(strandId: EefStrandId)` | tool `inspect-strand` | by-id lookup (`strandById`) → single-root subgraph (members + edges + frontier) |
+| graph-core | `subgraph({ rootIds, depth })` | both tool functions | the generic bounded-BFS primitive (the one graph-core primitive EEF consumes; `manifest()` is not EEF-consumed — see above; `projection?` deferred 2026-06-05, see the operations note) |
+| EEF binding | `inspectStrand(strandId: EefStrandId)` | tool `inspect-strand` | single-root subgraph over the strand id (the view's own node index resolves the root; no separate `strandById` call needed) → members + edges + frontier |
 | EEF binding | `evidenceForMove(selectors)` | tool `evidence-for-move` | resolve `{ strandIds?, phase?, keyStage?, priority? }` to an `EefStrandId` root set, then subgraph-around-roots |
 | EEF binding | axis resolution (internal) | `evidence-for-move` selectors | match observed-axis values to `EefStrandId` via `school_context_relevance` (agent-side move→strand selection is **not** performed — Decision 10) |
 

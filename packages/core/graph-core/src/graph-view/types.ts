@@ -1,7 +1,7 @@
 /**
  * Type-level utilities for the `GraphView` query layer: projection paths
- * and the manifest / subgraph return shapes. See `./interface.ts` for the
- * `GraphView<TNode, TEdgeType>` interface itself.
+ * and the subgraph return shapes. See `./interface.ts` for the
+ * `GraphView<TNode, TNodeId, TEdgeType>` interface itself.
  */
 
 /**
@@ -61,37 +61,24 @@ export type DeepKeyPath<T, D extends number> = D extends 0
 export type NodeProjection<TNode, Depth extends number = 4> = readonly DeepKeyPath<TNode, Depth>[];
 
 /**
- * Adapter manifest — graph-level truth-telling produced once at adapter
- * construction time.
+ * Subgraph traversal result — bounded nodes + edges from a BFS.
  *
- * `sparseRelationsByNodeId` carries the identifiers of nodes whose
- * outgoing edge sets are empty by data (not by traversal limits). For
- * the EEF corpus this surfaces the 13 strands out of 30 that have no
- * `related_strands` entry.
+ * Edge endpoints carry the graph's node-id type `TNodeId` and edge labels
+ * carry `TEdgeType`, so a consumer's narrowed id/edge-type space flows to
+ * the boundary without widening to `string`.
  */
-export interface GraphManifest {
-  readonly nodeCount: number;
-  readonly edgeTypes: readonly string[];
-  readonly edgeCount: number;
-  readonly version: string;
-  readonly lastUpdated: string;
-  readonly schemaHash: string;
-  readonly sparseRelationsByNodeId: readonly string[];
-}
-
-/** Subgraph traversal result — bounded nodes + edges from a BFS. */
-export interface SubgraphResult<TNode> {
+export interface SubgraphResult<TNode, TNodeId extends string, TEdgeType extends string> {
   readonly nodes: readonly TNode[];
   readonly edges: readonly {
-    readonly source: string;
-    readonly type: string;
-    readonly target: string;
+    readonly source: TNodeId;
+    readonly type: TEdgeType;
+    readonly target: TNodeId;
   }[];
 }
 
 /** Subgraph traversal failure variants. */
-export type SubgraphError =
-  | { readonly kind: 'SubgraphRootNotFound'; readonly rootId: string }
+export type SubgraphError<TNodeId extends string> =
+  | { readonly kind: 'SubgraphRootNotFound'; readonly rootId: TNodeId }
   | {
       readonly kind: 'SubgraphDepthExceeded';
       readonly depth: number;

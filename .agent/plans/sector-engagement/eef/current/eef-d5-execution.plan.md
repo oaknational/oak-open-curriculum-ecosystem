@@ -173,8 +173,10 @@ set, the typed edge set (element `{ source: TNodeId; type: TEdgeType; target:
 TNodeId }`), an id-accessor `(node: TNode) => TNodeId`, and a per-graph depth
 ceiling (`maxDepth` — the `MAX` bounding subgraph depth; owner decision
 2026-06-04: a per-graph factory input, not a substrate-wide constant). `subgraph`
-retains its optional `projection?: NodeProjection<TNode>` parameter (kept per
-owner decision 2026-06-04; implemented and tested in WS1.2). It is the minimal
+takes only `{ rootIds, depth }` — the `projection?` parameter was dropped at
+execution (owner decision 2026-06-05; see the C1 supersession note below and the
+D4 "Projection deferred" amendment: a field-narrowing projection cannot be
+type-honest under `no-type-shortcuts`, and EEF consumes none). It is the minimal
 closed shape for the two named consumers (EEF now; the prerequisite/prior-
 knowledge DAG next, PDR-058 §Surface 2) and adds no operation beyond `subgraph`
 (Decision 6).
@@ -476,10 +478,19 @@ no-persistent-red history.
 
 Conditions — all owner-resolved 2026-06-04 and folded in above:
 
-- **C1 (keep projection):** the fresh `GraphView`/`subgraph` retains
-  `projection?: NodeProjection<TNode>` (matching D4's already-ratified signature);
-  WS1.2 implements AND tests projection application (Decision 6); the EEF binding
-  still exposes no caller-facing projection parameter (D4:209 unchanged).
+- **C1 (keep projection) — SUPERSEDED at execution (owner decision, 2026-06-05).**
+  C1 asked WS1.2 to keep and implement the `projection?` parameter. Execution
+  surfaced that a field-narrowing projection returning the ratified
+  `SubgraphResult<TNode>` (`nodes: readonly TNode[]`) cannot be type-honest under
+  `no-type-shortcuts` (a trimmed node is a deep-`Partial`; returning it as `TNode`
+  needs a forbidden `as`/`Object.*`/`Record`, and a per-call projected return type
+  would change the ratified D4 signature), and EEF consumes no projection. The
+  owner directed dropping the runtime `projection?` parameter from D5's `subgraph`
+  (Decision 6 "absent" over a dishonest implementation); the `NodeProjection` /
+  `DeepKeyPath` type utilities are retained for a future type-honest projection
+  when a real consumer exists. The D4 contract carries the matching "Projection
+  deferred" amendment. The EEF binding still exposes no projection parameter
+  (D4:209 unchanged) — that part of C1 stands.
 - **C2 (per-graph depth ceiling):** `MAX` is a per-graph `createGraphView` factory
   input (`maxDepth`), carried into `SubgraphDepthExceeded.limit`; EEF passes a low
   value (it uses depth 0/1).
