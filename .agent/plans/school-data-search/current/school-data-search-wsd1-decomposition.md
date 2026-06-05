@@ -74,10 +74,17 @@ hand-authored. These land BEFORE any new-workspace code:
    import core + foundation libs + sdks (for the reuse set); intra-tier
    `contracts → sdk → client → apps/api`, no reverse edges; no substrate-tier
    back-edges into the tier.
-2. **`pnpm-workspace.yaml`** — enumerate the four workspaces explicitly
-   (`school-data-search/packages/contracts|sdk|client`,
-   `school-data-search/apps/api`); the file enumerates, it does not glob
-   (only `packages/design/*` is a glob).
+2. **`pnpm-workspace.yaml`** — enumerate each workspace explicitly (the file
+   enumerates, it does not glob; only `packages/design/*` is a glob) **as that
+   workspace is built for real, not all four up front**. A workspace is added
+   here only when the workstream that gives it behaviour runs (`contracts` at
+   WS1, `sdk` at WS2/WS3, `apps/api` at WS7). Enumerating an empty shell forces
+   a marker-export stub to satisfy the all-green-gate footprint, which the
+   no-stub policy (`principles.md` §"WE DON'T HEDGE") forbids — this is the
+   defect that sank the first scaffold experiment (see the POC plan §Learnings).
+   The boundary infrastructure below (the ADR-041 row, depcruise rules, the
+   ESLint factory and its unit tests) references package *names* and may be
+   authored ahead of the workspace directories; only the directories wait.
 3. **`.dependency-cruiser.mjs`** — add path-prefix rules for the new tier
    (intra-tier direction + edges to/from `packages/`); the existing rules are
    `^packages/...`/`^apps/` prefixes that a new tier silently escapes.
