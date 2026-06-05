@@ -331,3 +331,21 @@ Fresh capture starts below.
   than silently allowing" was the exact false belief that masked the real
   fail-open. Verify-don't-trust applied to a report, to sub-agents, and to my own
   first answers (skip→fail-loud, scripts/.mjs→checked-src, smoke→unit).
+
+## 2026-06-05 — the gates the commit ran that I didn't (Dim Dimming Threshold)
+
+- **Per-workspace `lint` is ESLint, not Prettier.** I ran `pnpm --filter <pkg>
+  lint` + `type-check` + `test` per cycle (all green) and assumed formatting was
+  covered; the pre-commit `prettier-staged` gate then flagged 5 code files. The
+  per-workspace `lint` script is `eslint .` — Prettier is a separate gate. Cure:
+  run `pnpm format:root` over touched CODE (not just docs — I'd only prettier-
+  checked the markdown) before committing.
+- **A consumer workspace type-checks against its dependency's `dist`, not
+  `src`.** `pnpm --filter @oaknational/graph-corpus-sdk type-check` failed
+  ("no exported member `createGraphView`") until I rebuilt graph-core: the
+  filtered `tsc` resolves the workspace dep via its stale `dist/*.d.ts`, while
+  vitest resolves `src` (so the same change's tests passed but type-check
+  didn't). The full `pnpm check` / `turbo` orders the dependency build first; a
+  hand-run per-workspace type-check of a consumer does not. Cure: rebuild the
+  dependency (or rely on the full gate) before trusting a filtered consumer
+  type-check.

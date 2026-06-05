@@ -19,6 +19,26 @@ surface.
 
 ## Current State
 
+- **EEF D5 EXECUTED — graph-core generic query layer + graph-native EEF view,
+  ONE GREEN COMMIT (2026-06-05, Dim Dimming Threshold / `192ae9`, claude / Opus
+  4.8, owner-directed)** — D5 built fresh as five TDD cycles, landed in `2e9021ff`
+  (+ continuity `ac22efbb`); branch ahead 2 of origin, pushing is the owner's
+  call. graph-core `graph-view` generified to `GraphView<TNode, TNodeId,
+  TEdgeType>` (subgraph-only; `GraphManifest`/`manifest` deleted) + a bounded-BFS
+  `createGraphView` factory (construction throws on dup-id/dangling/negative-max;
+  per-call errors stay the two ratified `SubgraphError` variants); graph-corpus-sdk
+  `eefStrandGraph` + `inspectStrand` / `evidenceForMove` + evidence envelope
+  (members + member-induced edges + binding-derived frontier + provenance, no
+  `data_version`/`last_updated`) + `strandAxisIndex`. **Owner decision: the runtime
+  `projection?` param was DROPPED** — a field-narrowing projection can't be
+  type-honest under `no-type-shortcuts` and EEF consumes none; D4 carries a
+  "Projection deferred" amendment, D5-plan C1 is superseded, `NodeProjection`/
+  `DeepKeyPath` retained for a future type-honest projection. Extensive real-time
+  reviewer cadence (~18 dispatches; two grounded reviewer over-escalations rejected
+  and confirmed on re-review). Gates green on both commits (graph-core 90,
+  graph-corpus-sdk 31, curriculum-sdk 729 tests; turbo build/type-check/lint/test;
+  knip/depcruise/markdownlint/prettier). `d5-graph-construction-methods` master-plan
+  todo flipped; D6 unblocked. See the `eef` thread banner.
 - **AGENT-TOOLS INFRASTRUCTURE HARDENING — 4 commits, my gates green, pushed
   (2026-06-05, Silvered Listening Secret / `110bae`, claude / Opus 4.8,
   owner-directed)** — a standalone agent-tools / build-infra session on the
@@ -128,7 +148,7 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Prismatic Twinkling Planet / eef-d5-fresh-dual-review-and-condition-fold-in / 2026-06-04 (prior: Windward Gliding Squall eef-d5-plan-authoring-and-review 2026-06-04, Shadowed Creeping Secret eef-d4-whole-plan-review-then-ratify 2026-06-04, Twilit Cascading Supernova migration-plan-overhaul 2026-06-04, Burnished Glowing Spark 2026-06-04, Lacustrine Swimming Beacon 2026-06-03, Seaworthy Swimming Sextant 2026-06-03, Galactic Glowing Prism + Opalescent Cascading Planet + Stellar Waning Planet + Silvered Lurking Mask 2026-06-02) |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Dim Dimming Threshold / eef-d5-execution / 2026-06-05 (prior: Prismatic Twinkling Planet eef-d5-fresh-dual-review 2026-06-04, Windward Gliding Squall eef-d5-plan-authoring 2026-06-04, Shadowed Creeping Secret eef-d4-ratify 2026-06-04, Burnished Glowing Spark 2026-06-04, Lacustrine Swimming Beacon 2026-06-03, Seaworthy Swimming Sextant 2026-06-03, Galactic Glowing Prism + Opalescent Cascading Planet + Stellar Waning Planet + Silvered Lurking Mask 2026-06-02) |
 | `oak-kg-ontology-planning-review` | Plan the `oak-kg`/ontology work, starting with a deep review of the Oak Curriculum Ontology repo (separate concern from the bulk-derived graph redesign) | [record][oak-kg-ontology] | claude / Opus 4.8 / Twilit Cascading Supernova / thread-opener-brief-only / 2026-06-04 — **opened, not started; deep review is a fresh session** |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Blustery Lifting Gale / skills-taxonomy-and-distribution / 2026-06-03 (prior: Umbral Whispering Silhouette 2026-06-01) |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 / Hidden Hiding Dusk / dedicated-consolidation+owner-directed-graduations / 2026-06-04 (prior: Arboreal Sprouting Branch 2026-06-04, Opalescent Illuminating Prism 2026-06-03, Lacustrine Swimming Beacon, Ashen Burning Magma, Solar Glowing Meteor, Stratospheric Buffeting Breeze, Lofty Sweeping Falcon, Shaded Veiling Mirror) |
@@ -208,6 +228,17 @@ licensing guardrail. See the
    banner.
 
 ### EEF Graph-Tooling Rebuild
+
+**NEXT SAFE STEP (2026-06-05): D6** — the EEF MCP composition module + surface
+(two single-Zod-call schemas over the graph-native view subsets, registration
+behind `OAK_CURRICULUM_MCP_EEF_ENABLED`, interpretation resource + prompt), per
+the master plan §D6. **D5 LANDED green as one commit (`2e9021ff`; Dim Dimming
+Threshold, 2026-06-05)** — graph-core generic query layer + graph-native EEF view
+(`inspectStrand`/`evidenceForMove`/envelope); the `d5-graph-construction-methods`
+todo is `completed`; the runtime `projection?` param was dropped by owner decision
+(see the `eef` thread banner + the D4 "Projection deferred" amendment). The
+graph-tools-value-redesign lane stays parked on EEF D6 + D7. The numbered history
+below is retained for context.
 
 1. Re-ground in the `eef` thread banner and current git state.
 2. D0 (fixed-data doctrine + validator removal + estate decontamination) and D1
@@ -389,6 +420,35 @@ authority.
 - Shared memory/state files are always writable and commit-includable when dirty.
 
 ## Deep Consolidation Status
+
+**ran this handoff → owner-directed (2026-06-05, Dim Dimming Threshold /
+`192ae9`, claude / Opus 4.8, EEF D5 execution session close; session-completion
+mode).** Owner asked for full handoff + consolidate-docs + commit. Landed: D5 as
+one green commit `2e9021ff` + continuity `ac22efbb`; this closeout adds the
+repo-continuity updates above, a napkin entry (the gates the commit ran that I
+didn't: per-workspace `lint`≠Prettier; a consumer workspace type-checks against a
+dependency's stale `dist`), and an experience file
+(`2026-06-05-dim-the-ready-plan-that-still-collided.md`). **ADR/PDR candidates**:
+none — D5 is product work under existing ADR-179 / PDR-058; the projection-deferral
+is recorded in the D4 contract amendment, and the review-vs-execution-grounding
+lesson is a sharpening of existing premature-crystallization / surface-don't-paper
+doctrine (captured in the experience file), not new doctrine. **Open questions**:
+5 (< 10 drain trigger); the future type-honest projection is owned by the D4
+amendment, not a new entry. **Claims**: none opened this session (solo,
+minimal-ceremony); nothing to close. **Entry points** (CLAUDE/AGENTS/GEMINI.md)
+swept — clean. **No auto-memory write** — `MEMORY.md` is over its index limit and
+the session's lessons are applications of existing memory. **Deferred with reason
+(named constraint: session-completion mode is bounded; a dedicated-knowledge-
+curation pass is the correct venue)**: the fitness HARD-zone buffers — `napkin.md`
+(343/300), `distilled.md` (195/180), `repo-continuity.md` (602/525) — are
+pre-existing cross-session accumulation; this session's additions were small and
+were genuine learning the preserve-over-fitness doctrine mandates keeping.
+Remediation lane = a dedicated curation pass: rotate the napkin (nearing the 400
+trigger), refine distilled, and archive older `§ Current State` summaries per this
+file's `split_strategy`. Falsifiability: a future curator runs
+`pnpm practice:fitness:strict-hard` and rotates/archives accordingly. Verdict:
+`partial slice landed` — fresh learning homed; larger curation buffers left live
+with this named lane.
 
 **ran this handoff → owner-directed (2026-06-05, Silvered Listening Secret /
 `110bae`, claude / Opus 4.8, agent-tools infrastructure session close;
