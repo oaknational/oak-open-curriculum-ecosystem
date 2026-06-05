@@ -260,10 +260,14 @@ licensing guardrail. See the
 
 ### EEF Graph-Tooling Rebuild
 
-**NEXT SAFE STEP (2026-06-05): D6** — the EEF MCP composition module + surface
-(two single-Zod-call schemas over the graph-native view subsets, registration
-behind `OAK_CURRICULUM_MCP_EEF_ENABLED`, interpretation resource + prompt), per
-the master plan §D6. **D5 LANDED green as one commit (`2e9021ff`; Dim Dimming
+**NEXT SAFE STEP (2026-06-05): author the D6 execution plan** — a dedicated
+cycle-level plan (the D5 pattern; owner-directed 2026-06-05), then build the EEF
+MCP surface (two single-Zod-call schemas over the graph-native view subsets,
+registration behind `OAK_CURRICULUM_MCP_EEF_ENABLED`, interpretation resource +
+prompt), per master plan §D6. **D6 readiness: READY to author** (assessed
+2026-06-05; D3 verification record V1–V8 holds, substrate exposes the operations,
+the V5 change-surfaces confirmed present) — full verdict + six sharp edges in the
+`eef` next-session record. **D5 LANDED green as one commit (`2e9021ff`; Dim Dimming
 Threshold, 2026-06-05)** — graph-core generic query layer + graph-native EEF view
 (`inspectStrand`/`evidenceForMove`/envelope); the `d5-graph-construction-methods`
 todo is `completed`; the runtime `projection?` param was dropped by owner decision

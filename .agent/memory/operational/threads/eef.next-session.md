@@ -24,12 +24,35 @@
 >   by name + public/org contact. Personal emails swept from the live + KG estates,
 >   archives, and comms.
 >
-> **NEXT SAFE STEP: D6** (unchanged) — the EEF MCP composition module + surface
-> (master plan §D6), now governed by ADR-191. `pnpm check` is green-able: 107/108
-> tasks green; the lone failure was a pre-existing parallel-load flake in the
-> UNRELATED MCP-app web-security e2e (`Parse Error` on a deliberately malformed
-> Host header) — passes on re-run (131/131); flagged to owner as a separate
-> infra-flake to fix.
+> **NEXT SAFE STEP: author the D6 execution plan** (a dedicated cycle-level plan,
+> the D5 pattern — owner-directed 2026-06-05; do NOT write code first). **D6
+> readiness assessed 2026-06-05 (Masked Creeping Lantern): READY to author** — the
+> D3 contract is owner-ratified with a live SDK/app verification record (V1–V8,
+> version + `file:line` evidence: `registerTool` carries `outputSchema?`; `isError`
+> skips output validation; `registerAppTool` spreads its config into `registerTool`;
+> the gap is OUR config assembly, V4; V5 names the exact surfaces to change — all
+> confirmed present in the tree). The D5 substrate exposes
+> `inspectStrand`/`evidenceForMove`/`EefEvidenceEnvelope` + the finite input domains;
+> the flag is pre-wired (default OFF); D6 is NOT blocked by the output-schemas plan
+> (D6 lands that S0 seam's first use, first and alone).
+>
+> + **Six sharp edges the exec plan must decompose into cycles:** (1) **re-run the
+>   V1–V8 SDK checks at authoring time** — installed `@modelcontextprotocol/sdk` /
+>   `ext-apps` versions may have moved since 2026-06-03 (the D3 record line 292 says
+>   to). (2) The **`UniversalToolListEntry.inputSchema` type-widening**
+>   (`z.ZodRawShape` → accept a `z.object(...)` value) is the named `as`-cast stop
+>   signal and a cross-package change in `oak-curriculum-sdk` — its own cycle.
+>   (3) **ADR-191 governs** — deterministic facts + the interpretation resource;
+>   NO server-side ranking/scoring (the strategy brief's R2 is superseded).
+>   (4) Keep the **S0 seam additive** — generated tools unchanged; the generic
+>   mechanism stays owned by `output-schemas-for-mcp-tools.plan.md`. (5) **Sentry
+>   telemetry** — dispatch `sentry-expert` per `invoke-sentry-expert`. (6) **Dual-
+>   review the exec plan before coding** (type / assumptions / architecture / pair).
+>
+> `pnpm check` is green-able: 107/108 tasks green; the lone failure was a
+> pre-existing parallel-load flake in the UNRELATED MCP-app web-security e2e
+> (`Parse Error` on a deliberately malformed Host header) — passes on re-run
+> (131/131); flagged to owner as a separate infra-flake to fix.
 >
 > | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 > | --- | --- | --- | --- | --- | --- | --- |

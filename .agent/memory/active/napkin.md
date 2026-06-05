@@ -101,3 +101,12 @@ Fresh capture starts below.
 - **The attribution-PII policy's home was an existing rule clause, not a new rule.**
   `new-rule-vs-pdr-clause` routed it to `documentation-hygiene` §2, avoiding a 4-form
   new-rule and the fragmentation it would have caused.
+- **"Ready to implement" = four grounded checks, not a `decision-complete` label.**
+  Assessing D6 readiness: (1) contract ratified + the SURFACE specified; (2) the
+  substrate exposes the consumed operations/types; (3) vendor shapes verified by a
+  real evidence record (the D3 V1–V8: SDK version + `file:line`, not prose); (4) the
+  named change-surfaces actually exist in the tree. The D3 SDK/app verification
+  record is the exemplar — readiness lives in that artefact existing and checking
+  out, not in the plan calling itself complete. Re-run the vendor checks at exec-plan
+  authoring time (versions drift). Generalises `verify-vendor-call-shapes-at-plan-author-time`
+  from authoring to readiness-assessment.
