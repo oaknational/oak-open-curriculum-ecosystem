@@ -4,18 +4,18 @@ title: 'School Data Search POC MVP — in-repo build'
 type: executable
 status: queued
 lifecycle: current
-last_updated: 2026-06-03
+last_updated: 2026-06-05
 evidence_source: '../../../reports/school-data-search-synthesis-report-2026-06-03.md'
 thread: school-data-search
 todos:
   - id: g1-contract-layer
-    content: 'Gate G-1 (owner): contract layer = F-B code-first, Zod 4 single canonical source → OpenAPI 3.x via @asteasolutions/zod-to-openapi → client via hey-api/orval; CI proves strict 3.x; repo-wide forward policy; Result boundary; ADR-190 — DECIDED 2026-06-04 (F-C reopened post-verification: no neutral-def→Zod tooling)'
+    content: 'Gate G-1 (owner): contract layer = F-B code-first, Zod 4 single canonical source → OpenAPI 3.x via @asteasolutions/zod-to-openapi → client via hey-api/orval; CI proves strict 3.x; repo-wide forward policy; Result boundary; ADR-191 — DECIDED 2026-06-04 (F-C reopened post-verification: no neutral-def→Zod tooling)'
     status: completed
   - id: g2-runtime-topology
     content: 'Gate G-2 (owner): runtime = Next.js (D-16); own Vercel project; preview posture Neon-contingent (V-08); cron = `0 2 * * *` (02:00 UTC daily, D-06); WS-D1 authored this session — DECIDED 2026-06-04'
     status: completed
   - id: g3-canonical-model
-    content: 'Gate G-3 (owner): enum values derived from source data at mapping WS (minimal, source-reachable, sourceStatus/sourceType preserved); phase includes middle; special modelled once; name-variants = modelled rows (D-11, one-way door); generic inspection, no rating (D-15, V-03); dataset_versions (D-12); granularity minimal-now — DECIDED 2026-06-04'
+    content: 'Gate G-3 (owner): enum values derived from source data at mapping WS (minimal, source-reachable, sourceStatus/sourceType preserved); phase includes middle; phase/special vocabulary grounded at WS2/WS4 not pinned (earlier "special never a phase" note withdrawn); name-variants = modelled rows (D-11, one-way door); generic inspection, no rating (D-15, V-03); dataset_versions (D-12); granularity minimal-now — DECIDED 2026-06-04'
     status: completed
   - id: g4-storage-retention
     content: 'Gate G-4 (owner): substrate = Postgres-only redacted snapshots behind a storage-port interface (swap-ready, no Blob now); retention = env-config defaults snapshot 180d / change_events 90d (configurable via @oaknational/env); unredacted-quarantine excluded (NOT a config toggle — PII safety) — DECIDED 2026-06-04'
@@ -108,11 +108,18 @@ complete, coherent list, never a half-finished import) → fast, typo-tolerant,
 multilingual search. No personal data is stored or served; only open,
 clearly-licensed sources are used.
 
-**Where it stands (2026-06-04):** the research, design, and every decision
+**Where it stands (2026-06-05):** the research, design, and every decision
 gate (G-1…G-9 plus the workspace shape, G-8) are complete and owner-ratified.
-Next: draft two ADRs (the produced-spec contract and the workspace-tier
-amendment), then build the workstreams — England/GIAS first. It is a POC: at
-the end, the owner decides whether to take it forward.
+A first implementation slice was attempted on 2026-06-04 (commit `f6bbd60a` —
+scaffold, ADR-041 amendment, produced-spec ADR, four workspace shells, a
+contracts/OpenAPI proof) and **reverted on 2026-06-05**: it shipped empty
+workspace stubs (against `principles.md` §"WE DON'T HEDGE") and pinned an
+ungrounded `phase` vocabulary, and a prior review passed it as "build-ready"
+on green gates alone. Its lessons are folded into this plan (see §Learnings
+from the first scaffold experiment); the contracts schema, boundary rule, and
+ADRs were removed with the revert and are re-created — correctly — when the
+build resumes. Next: a clean WS1/WS2 start per the corrected approach. It is a
+POC: at the end, the owner decides whether to take it forward.
 
 **Status**: queued (`current/`). Promotion to `active/` happens when gates
 G-1, G-2, G-3, and G-8 are decided and the first build workstream starts.
@@ -152,6 +159,57 @@ MVP builds IN THIS repo and is not extracted until POC completion and a
 go/no-go decision; (2) ALL APIs MUST surface a strict, comprehensive
 OpenAPI specification fully compliant with the latest OpenAPI 3.x
 specification.
+
+## Learnings from the first scaffold experiment (2026-06-05)
+
+A first implementation slice (commit `f6bbd60a`) was built and then reverted on
+2026-06-05; the slice is gone. These are the concrete, separable corrections it
+bought — corrections to this plan, not a theory of the work.
+
+1. **No stub workspaces; enumerate-as-built.** The slice created four workspaces
+   but only `contracts` carried behaviour; `sdk`/`client`/`apps/api` were empty
+   shells exporting marker-string constants to make the build gate pass — a
+   violation of `principles.md` §"WE DON'T HEDGE" that green gates hid. A
+   workspace is enumerated in `pnpm-workspace.yaml` and scaffolded only when the
+   workstream that gives it behaviour runs, never to reserve a name. (The WS-D1
+   "enumerate the four workspaces in the first scaffolding cycle" step is amended
+   accordingly — see the decomposition doc. Boundary rules may still be authored
+   ahead of the workspaces they name; the workspace *directories* may not.)
+2. **Depend only on what is imported today.** The `apps/api` shell pre-declared
+   `env`/`logger`/`observability`/`result`/`zod` it did not use (Knip caught
+   them). Add a runtime dependency at the first TDD slice that consumes it.
+3. **`apps/api` is a real Next.js app or it does not exist.** G-2 says bootstrap
+   via `pnpm create next-app@latest`; the slice scaffolded a generic `tsup`
+   package instead.
+4. **Never pin a source-derived vocabulary from a plan note.** The slice removed
+   `special` from the `phase` enum on the strength of the (now-withdrawn) G-3
+   note "special is never a phase" and added negative tests to enforce that
+   inferred absence; DfE phase data can list `Special`. G-3's own rule — enum
+   values grounded at WS2/WS4, not pinned — governs `phase` too; the pin is
+   withdrawn (G-3 updated). No negative tests for an inferred absence; ground
+   against the primary source first.
+5. **Gate-green is not behaviour-bearing.** A prior deep review passed the slice
+   as "sound, build-ready" while it was mostly stubs. Readiness evidence for any
+   future slice must show observable behaviour per acceptance id, not gate
+   colour.
+6. **Contract-shape findings to apply at WS1/WS2** (the `contracts` package was
+   the one real artefact):
+   - model canonical `phase` as a closed enum filled by a per-source→canonical
+     mapping (fail-until-mapped), with the enum values grounded at WS2 — not
+     hand-pinned at the contract scaffold;
+   - the location model must carry the stated GIAS-hosted-overseas goal (e.g. a
+     `locationCountry`), which the slice's four-nation enum could not represent;
+   - the privacy test must assert the canonical field set *equals* the allowlist
+     (so adding a PII field fails), not merely that `.strict()` rejects an
+     arbitrary unknown key.
+7. **The produced-spec ADR is ADR-191** (ADR-190 is the heartbeat-cron ADR). It
+   and the ADR-041 tier amendment were reverted with the experiment and are
+   created when WS1 lands; the decisions themselves stand in G-1/G-8.
+8. **The boundary-rule design was validated and is cheap to redo.** The reverted
+   `school-data-search` ESLint boundary factory (per-role isolation, `contracts`
+   DB-free guard, bidirectional POC isolation) was reviewed sound by betty + fred
+   and is correct on its own merits; re-implementing it at WS1 is low-risk, not
+   new design.
 
 ## End goal, mechanism, means (PDR-018)
 
@@ -253,8 +311,8 @@ Whispering Bark, `fac519`). Architectural ratifications land as ADRs.
   reading = **repo-wide forward policy** (the ADR establishes
   produced-OpenAPI-from-Zod as the contract pattern for services this repo
   builds; existing surfaces not retrofitted). Client PUBLIC error surface =
-  **`Result<T, E>` at the boundary** (C-05). Produced-spec ADR → **ADR-190**
-  (drafted this session, as F-B). Unblocks WS1, WS7.
+  **`Result<T, E>` at the boundary** (C-05). Produced-spec ADR → **ADR-191**
+  (created at WS1, as F-B; ADR-190 is the heartbeat-cron ADR). Unblocks WS1, WS7.
 
 - **G-2 (runtime + topology) — DECIDED 2026-06-04.** App runtime =
   **Next.js App Router** — the briefs' 3/3 recommendation on the service's
@@ -275,14 +333,18 @@ Whispering Bark, `fac519`). Architectural ratifications land as ADRs.
   the gate walk
   (architecture-expert betty + fred review), then G-8.
 
-- **G-3 (canonical model) — DECIDED 2026-06-04.** Enum _values_ (status
+- **G-3 (canonical model) — DECIDED 2026-06-04.** Enum *values* (status
   D-01, type D-02, phase D-03) are derived from real source vocabularies at
   the per-nation mapping workstreams (WS2/WS4), not pinned from the briefs:
   minimal, each value source-reachable (fail-until-mapped), with raw
   `sourceStatus`/`sourceType` preserved verbatim alongside; ungrounded brief
   values (B2 `merged`/`temporarily_closed`) excluded pending V-12. Locked
-  correctness now: phase includes `middle` (England); `special` is modelled
-  once as establishment-type, never double-encoded as a phase. Name-variants
+  correctness now: phase includes `middle` (England). The phase vocabulary —
+  including whether `special` is a phase value — is grounded against source
+  data at WS2/WS4 per the rule above, not pinned here; the earlier "`special`
+  is never a phase" note was an ungrounded pin (DfE phase data can list
+  `Special`) and is withdrawn (see §Learnings from the first scaffold
+  experiment). Name-variants
   (D-11) = explicitly modelled rows (primary/official/previous/alternative),
   not jsonb — they feed indexed search; a one-way door, decided early.
   Inspection (D-15) = one generic `inspection` shape across all four
@@ -344,7 +406,7 @@ Whispering Bark, `fac519`). Architectural ratifications land as ADRs.
   is a documented best-effort gap (V-04). **Coordinates dropped entirely**
   across all nations (see §Non-goals — licensing guardrail). **Completeness
   is a first-class acceptance criterion** (owner directive 2026-06-04): every
-  _operating_ school across all four nations must be findable —
+  *operating* school across all four nations must be findable —
   non-negotiable, proven per-nation at WS4 (hard-fail validation +
   row-count-delta guards, §3.4); closed/historical completeness is
   best-effort. Unblocks WS4.
@@ -738,7 +800,7 @@ Outcome-level; each maps to WS-level proof contracts above:
   the Cardinal Rule governs CONSUMING the upstream Oak Open Curriculum spec —
   it does NOT govern this service's own produced contract (owner direction
   2026-06-04). Producing this service's Zod→OpenAPI spec is a separate
-  concern (G-1 = Zod-canonical, F-B), recorded as ADR-190. Not an inversion
+  concern (G-1 = Zod-canonical, F-B), recorded as ADR-191. Not an inversion
   of the Cardinal Rule.
 
 ## Plan-body first-principles check
