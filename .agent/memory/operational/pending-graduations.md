@@ -29,6 +29,21 @@ windowed, backlog, split, or shard-like pending-graduation files. New capture,
 owner-gated items, and unresolved pending-graduation decisions belong here until
 they graduate, duplicate, become stale-withdrawn, or receive owner direction.
 
+## 2026-06-05 capture — Skyward Lofting Breeze (PreToolUse guard fail-open)
+
+- **ADR-167 amendment: the PreToolUse guard shim now writes an exit-0 fail-open record to
+  `.claude/logs/hook-errors.log`.** The fail-open-on-unbuilt-artefact change makes
+  `.claude/hooks/run-pretooluse-guard.mjs` append a loud warning to the hook-error log on
+  an *allow* (exit 0). ADR-167's wrapper contract (`log-hook-errors.sh`) records only
+  NON-zero exits with a fixed exit/cmd/cwd/project/stderr block (Rule 5). The shim is a
+  *complementary* writer for the exit-0 case the wrapper is structurally blind to (ADR-167
+  §Limitation 6), in a deliberately simpler line format — it does not violate the ADR,
+  which governs the wrapper, not the file's exclusive schema. The candidate is whether to
+  record this second write-trigger as a short ADR-167 amendment. **Reviewer-recommended
+  amend; implementer-assessed NOT needed** (the shim comment already states the
+  complementary relationship); owner to adjudicate.
+  `[captured: 2026-06-05 | source: docs-adr-expert review of PreToolUse guard fail-open (Skyward Lofting Breeze) | target: ADR-167 amendment (Consequences/Limitations note) OR no-change | trigger: owner direction OR a second exit-0 writer to .claude/logs/hook-errors.log | size: S | status: owner-gated]`
+
 ## 2026-06-05 capture — Lanternlit curation pass
 
 - **A coverage-matrix-vs-implementation drift validator (recur-proof cure for the

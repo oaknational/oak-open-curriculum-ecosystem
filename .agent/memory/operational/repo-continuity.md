@@ -19,6 +19,26 @@ surface.
 
 ## Current State
 
+- **AGENT-TOOLS PreToolUse GUARD — fails OPEN on an unbuilt artefact; working tree,
+  scoped gates green, reviewed; UNCOMMITTED (2026-06-05, Skyward Lofting Breeze /
+  `221aaa`, claude / Opus 4.8, owner-directed)** — continues the standalone agent-tools
+  infra lane on `feat/graph-tooling-tidyup`. **Supersedes the missing-case posture in the
+  Silvered entry below** (`cb6f7a37`/`2078e0f0`): `.claude/hooks/run-pretooluse-guard.mjs`
+  now **fails OPEN (exit 0) + loud warning to stderr AND `.claude/logs/hook-errors.log`**
+  when the guard artefact is *not built*, so a fresh / branch-switched worktree no longer
+  bricks (the block also blocked the `pnpm install` / `pnpm agent-tools:build` that builds
+  it; the env break-glass was non-functional from inside the agent). A *built-but-broken*
+  guard still fails CLOSED (exit 2 via `resolveGuardExitCode`, unchanged). Decision
+  extracted to the pure, unit-tested `decideMissingGuardArtifact` (+ shared
+  `GUARD_REBUILD_HINT`); dead `OAK_ALLOW_MISSING_PRETOOLUSE_GUARDS` removed;
+  `FAIL_CLOSED_SHIM`→`GUARD_ROUTING_SHIM`. Docs lockstep (README freshness, surface-matrix,
+  validator TSDoc). 898 agent-tools tests pass, with build / eslint / routing-validator /
+  markdownlint green; 4 reviewers SHIP / SHIP-WITH-FIXES (two layers of over-escalation
+  rejected and grounded; in-scope fixes applied). Whole-tree `pnpm check` NOT run (no commit;
+  active multi-writer window — Lanternlit's consolidation status flags this very guard as
+  in-flight). **Owner-decision flagged:** ADR-167 amendment for the exit-0 fail-open log
+  write (recommended NOT to amend; the shim comment clarifies it complements the wrapper's
+  non-zero-only contract). Next safe step: commit when the owner greenlights.
 - **EEF D5 EXECUTED — graph-core generic query layer + graph-native EEF view,
   ONE GREEN COMMIT (2026-06-05, Dim Dimming Threshold / `192ae9`, claude / Opus
   4.8, owner-directed)** — D5 built fresh as five TDD cycles, landed in `2e9021ff`
@@ -389,6 +409,16 @@ to partially-addressed, F-36 added for pnpm-wrapper porcelain-stdout). **Next
 safe step: commit slice A (F-35) + slice B (F-07) — independently shippable —
 then F-36 / F-07 list-filters if the owner directs.**
 
+### Agent Tooling (PreToolUse guard)
+
+Fail-open-on-unbuilt-artefact change to `.claude/hooks/run-pretooluse-guard.mjs` (+ the
+pure `decideMissingGuardArtifact`, docs lockstep) is **verified WIP in the working tree,
+UNCOMMITTED** (2026-06-05, Skyward Lofting Breeze). Scoped gates green (898 agent-tools
+tests, build, eslint, routing validator, markdownlint); whole-tree `pnpm check` not run
+(no commit; active multi-writer window). **Next safe step: commit the 8-file slice when
+the owner greenlights and the tree is green; owner to decide the ADR-167 amendment**
+(recommended: not needed — see § Current State entry for the rationale).
+
 ## Open Owner-Decision Items
 
 1. `pending-graduations.md` contains owner-gated doctrine and follow-up decisions;
@@ -460,6 +490,14 @@ on 2026-06-05 to
 [`archive/repo-continuity-deep-consolidation-status-2026-06-05-lanternlit-history-trim.md`](archive/repo-continuity-deep-consolidation-status-2026-06-05-lanternlit-history-trim.md).
 The active status above (Lanternlit curation) plus § Current State and the thread
 banners are the current pickup state; the archives are evidence, not a live queue.
+
+**Session-handoff consolidation gate (2026-06-05, Skyward Lofting Breeze / `221aaa`):**
+`not due` — the full dedicated "consolidate until done" pass completed today (Lanternlit,
+above). This session's knowledge was homed via the handoff itself (napkin ×2; the
+fail-open lesson lives in `.agent/hooks/README.md` + the `decideMissingGuardArtifact`
+TSDoc; the ADR-167 amendment candidate is in `pending-graduations.md`; an experience
+file was written). A second full pass would re-tread the completed pass and collide with
+the active multi-writer window, so none was run.
 
 [main-critical]: threads/main-critical-sonar-remediation.next-session.md
 [mcp-analytics]: threads/mcp-product-analytics.next-session.md

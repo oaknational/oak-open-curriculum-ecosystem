@@ -57,3 +57,20 @@ Fresh capture starts below.
   The matrix being *duplicated* in ADR-121 and build-system.md is the structural
   cause (two copies diverge). Fixed the hook + reconciled both docs; flagged the
   de-duplication as a follow-up.
+
+## 2026-06-05 — a fail-closed gate with no working in-band recovery is fail-*bricked* (Skyward)
+
+- **The PreToolUse guard shim failed closed when its dist artefact was unbuilt — bricking
+  fresh/branch-switched worktrees**, because the block also stopped the `pnpm install` /
+  `pnpm agent-tools:build` that builds the guard. Its `OAK_ALLOW_MISSING_PRETOOLUSE_GUARDS`
+  break-glass was non-functional for the only actor that hits the catch-22 (the agent can't
+  set the hook process's own env per-invocation). Cure: split **missing/not-built** (fail
+  OPEN, loud + logged to `.claude/logs/hook-errors.log`) from **present-but-broken** (still
+  fail closed). Bricking doesn't serve the safety goal of guarding *mistakes*; it only
+  halts. Homed in `.agent/hooks/README.md` + the `decideMissingGuardArtifact` TSDoc.
+- **Verify a prompt's "it's already tested" premise before treating the work as a flip.**
+  The brief said the missing-artefact decision was unit-tested — flip the expectation. It
+  was not: the smoke test that covered it was dropped in `2078e0f0` ("drop the smoke
+  over-reach") and the surviving unit test only covers `resolveGuardExitCode` (the present-
+  guard case). The honest move was extract-to-pure-fn + *create* the test, not "flip." A
+  convenient premise that makes the work a one-liner is exactly the kind to ground first.
