@@ -275,6 +275,21 @@ Per [`plan-body-first-principles-check.md`](../../../rules/plan-body-first-princ
 - **docs-adr-expert** — the ADR-143/116/162/163 amendments + whether the foundational
   tension warrants a PDR.
 
+**Review (2026-06-06) — APPROVE-WITH-CONDITIONS** (assumptions-expert + test-expert,
+grounded against the directives). Apply before DECISION-COMPLETE:
+
+1. **Merge C1 + C2 into one atomic landing.** The forcing-function conformance test
+   and the tracer-decoupling land in ONE commit. The test is locally red against
+   current main (proving the gap) but the tree is never left red — a committed-red
+   C1 awaiting a C2 green violates the atomic-landing invariant (`tdd-as-design.md`).
+2. **Specify C1's level**: in-process integration with a DI-injected console/fake
+   sink asserting it receives the span record (network-free, CI-safe) — NOT a
+   process-spawn (that would be e2e/smoke, and spawning from an in-process test is
+   forbidden).
+3. **Reconcile the sink-enum drift BEFORE C3** (consumer migration), not in C5:
+   ADR-171 names `console`/`log-file`; live `sink-registry.ts:37` has `file` + the
+   un-listed stdout baseline. A mid-migration mismatch would block C3 in CI.
+
 ## Execution Preconditions
 
 Execution starts when the owner schedules it, and when: (1) the relevant feature
