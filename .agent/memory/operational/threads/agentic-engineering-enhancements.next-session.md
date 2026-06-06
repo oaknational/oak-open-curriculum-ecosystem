@@ -1,5 +1,43 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Closeout (2026-06-06 — Volcanic Blazing Magma / codex / GPT-5 / `019e9c`, identity + statusline docs)
+
+Owner-directed documentation slice landed in the working tree; no commit requested
+or made. Examined the repo-local identity derivation path, Claude statusline/title
+wiring, and the current Codex CLI statusline behaviour. Updated
+[`agent-identity.md`](../../../../agent-tools/docs/agent-identity.md) so future
+agents do not have to rediscover the separation between:
+
+- deterministic PDR-027 identity from a stable session seed;
+- statusline rendering as display only;
+- host session title changes such as Codex `/rename`.
+
+The docs now record the current-state Codex finding: `tui.status_line` stores
+selected footer item ids, but the allowlist is owned by the current Codex CLI
+build, with `/statusline` as the supported inspection/persistence path. The
+observed Codex CLI 0.137.0 item list is explicitly dated as a snapshot, not a
+contract. README quick-reference now points to this note.
+
+Validation run:
+
+- `pnpm exec markdownlint agent-tools/README.md agent-tools/docs/agent-identity.md`
+- `git diff --check -- agent-tools/README.md agent-tools/docs/agent-identity.md`
+- `pnpm agent-tools:collaboration-state -- comms validate`
+
+Deep consolidation status: not due. The only new insight was homed directly in
+permanent docs; no napkin rotation, pending-graduation, open-question, or track-card
+action remains. Current working tree residue from this session is
+`agent-tools/README.md`, `agent-tools/docs/agent-identity.md`, and
+`.agent/state/collaboration/closed-claims.archive.json`.
+
+**Next safe step:** commit the current docs/claim-state slice if the owner wants
+it persisted as a commit. Otherwise no open implementation follow-on from this
+session.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Volcanic Blazing Magma` | `codex` | `GPT-5` | `019e9c` | `identity-statusline-docs` | 2026-06-06 | 2026-06-06 |
+
 ## Session Closeout (2026-06-05 — Lanternlit Passing Mask / claude / Opus 4.8 / `748c10`, dedicated knowledge curation + owner-directed graduations)
 
 Dedicated "consolidate until done" pass. **3 HARD fitness files → 0** through real

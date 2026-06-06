@@ -233,14 +233,18 @@ pnpm agent-tools:smoke:collaboration-tui
 - `--seed <seed>` — explicit stable seed. If omitted, the CLI reads
   `PRACTICE_AGENT_SESSION_ID_CLAUDE`, then
   `PRACTICE_AGENT_SESSION_ID_CURSOR`, then
-  `PRACTICE_AGENT_SESSION_ID_CODEX`, then `CODEX_THREAD_ID`.
+  `PRACTICE_AGENT_SESSION_ID_GEMINI`, then
+  `PRACTICE_AGENT_SESSION_ID_CODEX`, then `CODEX_THREAD_ID`, then
+  Antigravity's stable `conversationId` surfaces.
 - `--format kebab|display|json` — output slug, display name, or full result.
 - `OAK_AGENT_IDENTITY_OVERRIDE` — bypasses wordlist derivation with a
   type-total override result.
 
 There is no `git config user.email` fallback. Platform wrappers or harness
-environments must pass an explicit session seed, and current
-Claude/Codex/Cursor wrapper status is documented in
+environments must pass an explicit session seed. Current wrapper status,
+including the difference between derived identity, Claude's statusline, and
+manual `/rename` title changes, plus the current-state Codex statusline item
+allowlist note, is documented in
 [docs/agent-identity.md](docs/agent-identity.md).
 
 Examples:

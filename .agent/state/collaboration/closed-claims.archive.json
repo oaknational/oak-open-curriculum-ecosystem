@@ -9000,6 +9000,181 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "532d8969-0f2c-4c21-abf9-441b3170b143",
+      "agent_id": {
+        "agent_name": "Volcanic Blazing Magma",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e9c",
+        "id": "83df0bc7-1481-5585-a7de-e651a6b9409f"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/README.md",
+            "agent-tools/docs/agent-identity.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-06T12:30:27Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Clarify agent identity seed, Claude statusline, and rename documentation.",
+      "archived_at": "2026-06-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-06T12:31:04Z",
+        "closed_by": {
+          "agent_name": "Volcanic Blazing Magma",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e9c",
+          "id": "83df0bc7-1481-5585-a7de-e651a6b9409f"
+        },
+        "summary": "Clarified agent identity seed precedence, Claude statusline rendering, and user-owned rename/title behaviour in docs.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "532d8969-0f2c-4c21-abf9-441b3170b143",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "41e502cd-abf6-46fe-bfab-93ffeed63fce",
+      "agent_id": {
+        "agent_name": "Volcanic Blazing Magma",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e9c",
+        "id": "83df0bc7-1481-5585-a7de-e651a6b9409f"
+      },
+      "thread": "019e9cdf-f7c3-7d72-add5-8b3856ee1140",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/docs/agent-identity.md",
+            "agent-tools/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-06T12:40:28Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Document current Codex statusline item allowlist mechanism",
+      "archived_at": "2026-06-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-06T12:41:08Z",
+        "closed_by": {
+          "agent_name": "Volcanic Blazing Magma",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e9c",
+          "id": "83df0bc7-1481-5585-a7de-e651a6b9409f"
+        },
+        "summary": "Documented current Codex statusline item allowlist ownership and snapshot caveat.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "41e502cd-abf6-46fe-bfab-93ffeed63fce",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "563480b6-92f2-40a1-8d67-cc98baabb11c",
+      "agent_id": {
+        "agent_name": "Volcanic Blazing Magma",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e9c",
+        "id": "83df0bc7-1481-5585-a7de-e651a6b9409f"
+      },
+      "thread": "019e9cdf-f7c3-7d72-add5-8b3856ee1140",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-06T12:43:39Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Light session handoff continuity update",
+      "archived_at": "2026-06-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-06T12:43:54Z",
+        "closed_by": {
+          "agent_name": "Volcanic Blazing Magma",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e9c",
+          "id": "83df0bc7-1481-5585-a7de-e651a6b9409f"
+        },
+        "summary": "Recorded light session handoff for identity/statusline docs slice.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "563480b6-92f2-40a1-8d67-cc98baabb11c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "65e8671b-7f30-4775-a8d1-df8fc3480ae8",
+      "agent_id": {
+        "agent_name": "Volcanic Blazing Magma",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e9c",
+        "id": "83df0bc7-1481-5585-a7de-e651a6b9409f"
+      },
+      "thread": "019e9cdf-f7c3-7d72-add5-8b3856ee1140",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-06T12:45:10Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit Codex identity statusline docs handoff.",
+      "archived_at": "2026-06-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-06T12:46:34Z",
+        "closed_by": {
+          "agent_name": "Volcanic Blazing Magma",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e9c",
+          "id": "83df0bc7-1481-5585-a7de-e651a6b9409f"
+        },
+        "summary": "closed in same commit: docs(agent-tools): document Codex statusline identity handling",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "65e8671b-7f30-4775-a8d1-df8fc3480ae8",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

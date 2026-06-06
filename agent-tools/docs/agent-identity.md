@@ -40,6 +40,43 @@ session-scoped environment by the corresponding platform hook (see
 that set the variable; the CLI does not care which one is present, only that
 exactly one of them resolves to a non-empty seed.
 
+## Identity, Statusline, And Title
+
+Three human-visible surfaces deliberately remain separate:
+
+1. **Derived identity** — `agent-identity` maps a stable session seed to a
+   deterministic display name. This name is the source for PDR-027
+   `agent_name` when the owner has not assigned one.
+2. **Statusline rendering** — Claude Code and Cursor CLI statuslines can render
+   the derived name as a prompt/status segment. This is a display surface only:
+   it does not rename the session title and it is not the shared-state
+   correctness surface.
+3. **Session title** — title changes are user-owned host behaviour. Claude Code
+   `SessionStart` injects a non-binding `/rename <name> - <intent>` suggestion;
+   Codex's `/rename` command changes the UI session label/statusline title when
+   the user invokes it. The repo tooling does not treat a title or statusline as
+   proof of identity.
+
+Current-state note for Codex CLI: `tui.status_line` in `config.toml` stores the
+selected footer item ids, but this repo does not own the allowlist. Use Codex's
+`/statusline` picker as the product-supported way to inspect and persist the
+current build's footer items. In the Codex CLI 0.137.0 build inspected on
+2026-06-06, the allowlist is compiled into the native Codex binary rather than
+loaded from repo-local config. Observed item ids included `thread-title`,
+`thread-id`, `model-with-reasoning`, `reasoning`, `context-remaining`,
+`context-used`, `context-window-size`, `five-hour-limit`, `weekly-limit`,
+`git-branch`, `current-dir`, `project`, `project-name`, `codex-version`,
+`used-tokens`, `total-input-tokens`, `total-output-tokens`, `fast-mode`,
+`pull-request-number`, `branch-changes`, `approval-mode`, and `raw-output`.
+Treat that list as a snapshot, not a contract: verify against `/statusline` or
+the current Codex source/build before changing automation or documentation that
+depends on a specific item id.
+
+For collaboration-state writes, the correctness surface is the full PDR-027
+identity block (`agent_name`, `id`, `platform`, `model`,
+`session_id_prefix`, and `seed_source`) produced by the appropriate preflight,
+not a title string or prompt decoration.
+
 ## Output
 
 Formats:

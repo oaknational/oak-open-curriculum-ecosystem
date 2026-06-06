@@ -19,6 +19,20 @@ surface.
 
 ## Current State
 
+- **AGENT IDENTITY / CODEX STATUSLINE DOCS UPDATED; SESSION COMPLETE
+  (2026-06-06, Volcanic Blazing Magma / `019e9c`, codex / GPT-5,
+  owner-directed).** Documented the current session-name/statusline mechanics in
+  `agent-tools/docs/agent-identity.md`: derived identity, statusline rendering,
+  and host session title are separate surfaces; Codex `/rename` changes the UI
+  label/title when invoked; and the current Codex CLI statusline item allowlist is
+  owned by the installed Codex build, with `/statusline` as the product-supported
+  inspection path. README quick-reference now points future agents to that note.
+  **Working tree uncommitted**: docs + closed-claims archive only. Validation:
+  markdownlint, `git diff --check`, and `collaboration-state comms validate` green.
+  **Deep consolidation status: not due** — the only new insight was homed directly
+  in permanent docs; no napkin rotation, track card, open-question drain, or
+  graduation trigger fired. **Next safe step:** commit the current docs/claim-state
+  slice if desired; otherwise no open implementation follow-on from this session.
 - **COLLABORATION-IS-VALUE-CONTINGENT RULE + START-RIGHT-TEAM IMPROVEMENTS LANDED;
   COMMIT WARDEN WITHDRAWN; SESSION COMPLETE (2026-06-06, Pearly Sailing Fjord / `50e03b`,
   claude / Opus 4.8, owner-directed).** Took over commit-warden from Dusky, then
@@ -73,7 +87,7 @@ each thread record; this table is the repo-level index.
 | `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Zephyrous Kiting Squall / d6-readiness-regrounding / 2026-06-06 (prior: Floating Darting Cloud d7-golive-plan-edit 2026-06-06, Dusky Dimming Candle author-d6-execution-plan 2026-06-06, Masked Creeping Lantern eef-deep-review-resolutions-adr191 2026-06-05, Dim Dimming Threshold eef-d5-execution 2026-06-05, Prismatic Twinkling Planet eef-d5-fresh-dual-review 2026-06-04, Windward Gliding Squall eef-d5-plan-authoring 2026-06-04, Shadowed Creeping Secret eef-d4-ratify 2026-06-04, Burnished Glowing Spark 2026-06-04, Lacustrine Swimming Beacon 2026-06-03, Seaworthy Swimming Sextant 2026-06-03, Galactic Glowing Prism + Opalescent Cascading Planet + Stellar Waning Planet + Silvered Lurking Mask 2026-06-02) |
 | `oak-kg-ontology-planning-review` | Plan the `oak-kg`/ontology work, starting with a deep review of the Oak Curriculum Ontology repo (separate concern from the bulk-derived graph redesign) | [record][oak-kg-ontology] | claude / Opus 4.8 / Twilit Cascading Supernova / thread-opener-brief-only / 2026-06-04 — **opened, not started; deep review is a fresh session** |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Blustery Lifting Gale / skills-taxonomy-and-distribution / 2026-06-03 (prior: Umbral Whispering Silhouette 2026-06-01) |
-| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 / Lanternlit Passing Mask / dedicated-consolidation+owner-directed-graduations / 2026-06-05 (prior: Hidden Hiding Dusk 2026-06-04, Arboreal Sprouting Branch 2026-06-04, Opalescent Illuminating Prism 2026-06-03, Lacustrine Swimming Beacon, Ashen Burning Magma, Solar Glowing Meteor, Stratospheric Buffeting Breeze, Lofty Sweeping Falcon, Shaded Veiling Mirror) |
+| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | codex / GPT-5 / Volcanic Blazing Magma / identity-statusline-docs / 2026-06-06 (prior: Lanternlit Passing Mask 2026-06-05, Hidden Hiding Dusk 2026-06-04, Arboreal Sprouting Branch 2026-06-04, Opalescent Illuminating Prism 2026-06-03, Lacustrine Swimming Beacon, Ashen Burning Magma, Solar Glowing Meteor, Stratospheric Buffeting Breeze, Lofty Sweeping Falcon, Shaded Veiling Mirror) |
 | `repo-professionalism-assessment` | Repo professionalism / engineering-quality report → planability triage | [record][repo-professionalism-assessment] | codex / GPT-5 / Airy Whirling Wing / report-author-and-planability-router / 2026-06-03 |
 | `school-data-search` | Oak School Data Search service (POC MVP): briefs → report → plan → gate walk → **deep review complete** → build | [record][school-data-search] | claude / Opus 4.8 / Fiery Sparking Caldera / deep-review-and-refinement / 2026-06-04 (prior: Mossy Whispering Bark 2026-06-04, Furnace Roasting Brazier + Hushed Lurking Mask 2026-06-03) |
 | `semantic-search` | Search data foundations: upstream-schema alignment, bulk sourcing, minimal-adaptation arc | [record][semantic-search] | claude / Opus 4.8 / Moonlit Waxing Nebula / upstream-realignment-specialist / 2026-06-03 |
