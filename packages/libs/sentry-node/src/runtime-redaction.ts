@@ -194,11 +194,17 @@ function redactSpanData(data: SentrySpanPayload['data']): SentrySpanPayload['dat
   return redacted;
 }
 
-export function redactSentryEvent(event: SentryErrorEvent): SentryErrorEvent {
+function redactEventWithCommonFields<T extends SentryErrorEvent | SentryTransactionEvent>(
+  event: T,
+): T {
   return {
     ...event,
     ...redactCommonEventFields(event),
   };
+}
+
+export function redactSentryEvent(event: SentryErrorEvent): SentryErrorEvent {
+  return redactEventWithCommonFields(event);
 }
 
 export function redactSentryBreadcrumb(breadcrumb: Breadcrumb): Breadcrumb {
@@ -206,10 +212,7 @@ export function redactSentryBreadcrumb(breadcrumb: Breadcrumb): Breadcrumb {
 }
 
 export function redactSentryTransaction(event: SentryTransactionEvent): SentryTransactionEvent {
-  return {
-    ...event,
-    ...redactCommonEventFields(event),
-  };
+  return redactEventWithCommonFields(event);
 }
 
 export function redactSentrySpan(span: SentrySpanPayload): SentrySpanPayload {

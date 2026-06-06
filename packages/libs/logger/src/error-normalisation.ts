@@ -77,17 +77,20 @@ function normaliseSymbol(error: symbol): NormalizedError {
   });
 }
 
+function primitiveToString(error: string | number | boolean | bigint): string {
+  if (typeof error === 'boolean') {
+    return error ? 'true' : 'false';
+  }
+  if (typeof error === 'bigint') {
+    return error.toString();
+  }
+  return String(error);
+}
+
 function normalisePrimitive(error: string | number | boolean | bigint): NormalizedError {
   return createNormalizedError({
     name: 'Error',
-    message:
-      typeof error === 'boolean'
-        ? error
-          ? 'true'
-          : 'false'
-        : typeof error === 'bigint'
-          ? error.toString()
-          : String(error),
+    message: primitiveToString(error),
   });
 }
 
