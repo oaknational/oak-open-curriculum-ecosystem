@@ -19,6 +19,22 @@ surface.
 
 ## Current State
 
+- **EEF D6 EXECUTION PLAN AUTHORED + DUAL-REVIEWED — UNCOMMITTED, commit deferred
+  behind Tidal (2026-06-06, Dusky Dimming Candle / `ef59e2`, claude / Opus 4.8,
+  owner-directed).** Authored
+  [`eef-d6-execution.plan.md`](../../plans/sector-engagement/eef/current/eef-d6-execution.plan.md)
+  (cycle-level, the D5 pattern): a **first-class** `get-eef-evidence`
+  universal-tools entry + two single-Zod-call schemas + the `eef-interpretation`
+  resource + the `adapt-lesson` prompt, co-gated behind
+  `OAK_CURRICULUM_MCP_EEF_ENABLED`. The dual-review caught a contract-violation
+  BLOCK (the first draft used a bespoke bypass; D3:53-57/312-315 mandate a
+  first-class entry) — corrected + re-confirmed before any code. **No D6 code
+  written.** Working tree (UNCOMMITTED): the plan + `eef.next-session.md` +
+  `napkin.md` + this continuity update + an experience file. Owner-directed:
+  commit once Tidal's commit lands (a background HEAD-advance waiter is armed; the
+  commit will run the pre-commit gate). **Next safe step: EXECUTE D6** per the
+  plan — run gate G0 (re-run V1–V8) first; land as two green commits.
+
 - **EEF DEEP REVIEW + RESOLUTIONS + ADR-191 RATIFIED (2026-06-05, Masked Creeping
   Lantern / `86584c`).** Deep citation-grounded review of all EEF plans/code found
   the engineering sound; resolved post-D5 status drift, reconciled the strategy
@@ -179,7 +195,7 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Masked Creeping Lantern / eef-deep-review-resolutions-adr191 / 2026-06-05 (prior: Dim Dimming Threshold eef-d5-execution 2026-06-05, Prismatic Twinkling Planet eef-d5-fresh-dual-review 2026-06-04, Windward Gliding Squall eef-d5-plan-authoring 2026-06-04, Shadowed Creeping Secret eef-d4-ratify 2026-06-04, Burnished Glowing Spark 2026-06-04, Lacustrine Swimming Beacon 2026-06-03, Seaworthy Swimming Sextant 2026-06-03, Galactic Glowing Prism + Opalescent Cascading Planet + Stellar Waning Planet + Silvered Lurking Mask 2026-06-02) |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Dusky Dimming Candle / author-d6-execution-plan / 2026-06-06 (prior: Masked Creeping Lantern eef-deep-review-resolutions-adr191 2026-06-05, Dim Dimming Threshold eef-d5-execution 2026-06-05, Prismatic Twinkling Planet eef-d5-fresh-dual-review 2026-06-04, Windward Gliding Squall eef-d5-plan-authoring 2026-06-04, Shadowed Creeping Secret eef-d4-ratify 2026-06-04, Burnished Glowing Spark 2026-06-04, Lacustrine Swimming Beacon 2026-06-03, Seaworthy Swimming Sextant 2026-06-03, Galactic Glowing Prism + Opalescent Cascading Planet + Stellar Waning Planet + Silvered Lurking Mask 2026-06-02) |
 | `oak-kg-ontology-planning-review` | Plan the `oak-kg`/ontology work, starting with a deep review of the Oak Curriculum Ontology repo (separate concern from the bulk-derived graph redesign) | [record][oak-kg-ontology] | claude / Opus 4.8 / Twilit Cascading Supernova / thread-opener-brief-only / 2026-06-04 — **opened, not started; deep review is a fresh session** |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Blustery Lifting Gale / skills-taxonomy-and-distribution / 2026-06-03 (prior: Umbral Whispering Silhouette 2026-06-01) |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 / Lanternlit Passing Mask / dedicated-consolidation+owner-directed-graduations / 2026-06-05 (prior: Hidden Hiding Dusk 2026-06-04, Arboreal Sprouting Branch 2026-06-04, Opalescent Illuminating Prism 2026-06-03, Lacustrine Swimming Beacon, Ashen Burning Magma, Solar Glowing Meteor, Stratospheric Buffeting Breeze, Lofty Sweeping Falcon, Shaded Veiling Mirror) |

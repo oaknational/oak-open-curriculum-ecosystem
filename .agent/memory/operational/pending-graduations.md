@@ -29,6 +29,23 @@ windowed, backlog, split, or shard-like pending-graduation files. New capture,
 owner-gated items, and unresolved pending-graduation decisions belong here until
 they graduate, duplicate, become stale-withdrawn, or receive owner direction.
 
+## 2026-06-06 capture — Dusky Dimming Candle (D6 plan dual-review)
+
+- **Re-adjudicate premise-bound reviewer verdicts when a peer reviewer overturns the
+  shared premise.** In a multi-reviewer synthesis, one reviewer's verdict can be
+  conditioned on a premise that another reviewer's finding overturns; mechanically
+  applying the premise-bound verdict carries a stale conclusion. This is distinct from
+  the existing reviewer-discipline doctrine (`review-count-is-not-coverage`,
+  `different-lens-reviewer-divergence`, verifier false-negatives — PDR-089 §Decision 6):
+  it is about *dependency between verdicts at the synthesis step*, not lens divergence or
+  coverage. Worked instance: architecture-expert-fred's R3 homing verdict ("home the EEF
+  composition in the app") was premised on the bypass architecture; mcp-expert's BLOCK
+  overturned that premise to a first-class universal-tools entry, which forced the homing
+  to a different split (def+schemas SDK-side via `import type`; handler app-side). The
+  synthesis step had to re-derive the premise-bound verdict, not apply it. Single instance
+  so far; the cure when graduated is likely a clause on reviewer synthesis.
+  `[captured: 2026-06-06 | source: napkin Dusky Dimming Candle 2026-06-06 (D6 plan dual-review) | target: amend:validate-specialist-findings-before-acting OR PDR-089 §Decision 6 (reviewer-synthesis discipline) OR a new reviewer-synthesis pattern | trigger: second premise-cascade instance OR next reviewer-dispatch/synthesis doctrine pass OR owner direction | size: S | status: pending]`
+
 ## 2026-06-05 capture — Skyward Lofting Breeze (PreToolUse guard fail-open)
 
 - **ADR-167 amendment: the PreToolUse guard shim now writes an exit-0 fail-open record to

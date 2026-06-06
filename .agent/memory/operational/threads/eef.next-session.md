@@ -24,30 +24,33 @@
 >   by name + public/org contact. Personal emails swept from the live + KG estates,
 >   archives, and comms.
 >
-> **NEXT SAFE STEP: author the D6 execution plan** (a dedicated cycle-level plan,
-> the D5 pattern — owner-directed 2026-06-05; do NOT write code first). **D6
-> readiness assessed 2026-06-05 (Masked Creeping Lantern): READY to author** — the
-> D3 contract is owner-ratified with a live SDK/app verification record (V1–V8,
-> version + `file:line` evidence: `registerTool` carries `outputSchema?`; `isError`
-> skips output validation; `registerAppTool` spreads its config into `registerTool`;
-> the gap is OUR config assembly, V4; V5 names the exact surfaces to change — all
-> confirmed present in the tree). The D5 substrate exposes
-> `inspectStrand`/`evidenceForMove`/`EefEvidenceEnvelope` + the finite input domains;
-> the flag is pre-wired (default OFF); D6 is NOT blocked by the output-schemas plan
-> (D6 lands that S0 seam's first use, first and alone).
+> **D6 EXECUTION PLAN AUTHORED + DUAL-REVIEWED (2026-06-06, Dusky Dimming Candle /
+> `ef59e2`; claude / Opus 4.8).** The cycle-level plan is
+> [`eef-d6-execution.plan.md`](../../../plans/sector-engagement/eef/current/eef-d6-execution.plan.md)
+> — **DECISION-COMPLETE**, dual-reviewed (mcp / architecture-fred / type /
+> assumptions / sentry) + mcp-expert re-confirmation.
 >
-> + **Six sharp edges the exec plan must decompose into cycles:** (1) **re-run the
->   V1–V8 SDK checks at authoring time** — installed `@modelcontextprotocol/sdk` /
->   `ext-apps` versions may have moved since 2026-06-03 (the D3 record line 292 says
->   to). (2) The **`UniversalToolListEntry.inputSchema` type-widening**
->   (`z.ZodRawShape` → accept a `z.object(...)` value) is the named `as`-cast stop
->   signal and a cross-package change in `oak-curriculum-sdk` — its own cycle.
->   (3) **ADR-191 governs** — deterministic facts + the interpretation resource;
->   NO server-side ranking/scoring (the strategy brief's R2 is superseded).
->   (4) Keep the **S0 seam additive** — generated tools unchanged; the generic
->   mechanism stays owned by `output-schemas-for-mcp-tools.plan.md`. (5) **Sentry
->   telemetry** — dispatch `sentry-expert` per `invoke-sentry-expert`. (6) **Dual-
->   review the exec plan before coding** (type / assumptions / architecture / pair).
+> **NEXT SAFE STEP: EXECUTE D6** per that plan. Run **gate G0 first** (re-run
+> V1–V8 against the then-installed SDK/ext-apps; STOP on drift from `sdk@1.29.0` /
+> `ext-apps@1.7.3` / `zod@4.4.3`). Land as **two green commits**: (1) `c0` — the
+> additive `oak-curriculum-sdk` universal-tools widening
+> (`UniversalToolListEntry.inputSchema` → `ZodRawShapeCompat | AnySchema` +
+> optional `outputSchema?`; lock-step on `AggregatedToolDefShape`); (2) `c1`–`c6`
+> (cross-package, atomic) — the first-class `get-eef-evidence` entry + the two
+> single-Zod-call schemas + the local-projection handler/discriminant branch +
+> the `eef-interpretation` resource + the `adapt-lesson` prompt + flag co-gating.
+>
+> + **The dual-review changed the architecture — a real catch.** The first draft
+>   registered the tool via a bespoke `eef-surface.ts` bypass; mcp-expert returned
+>   BLOCK and the owner-ratified D3 contract (53-57, 312-315) upholds it — the EEF
+>   tool is a **first-class universal-tools entry** ("exactly like every other
+>   aggregated tool", "not a bespoke bypass"), registered through a bounded
+>   discriminant branch in the shared `registerTools` loop. The six sharp edges
+>   are decomposed into the plan's cycles/gates; telemetry is **inherited** from
+>   the Sentry-wrapped server (no bespoke span); the app gains a `graph-corpus-sdk`
+>   dependency in `c3` (it had none — an earlier "already depends" claim was
+>   verified false). **Do NOT write D6 code until G0 passes against the
+>   then-current tree.**
 >
 > `pnpm check` is green-able: 107/108 tasks green; the lone failure was a
 > pre-existing parallel-load flake in the UNRELATED MCP-app web-security e2e
@@ -57,6 +60,8 @@
 > | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 > | --- | --- | --- | --- | --- | --- | --- |
 > | `Masked Creeping Lantern` | `claude` | `Opus 4.8` | `86584c` | `eef-deep-review-resolutions-adr191` | 2026-06-05 | 2026-06-05 |
+>
+| `Dusky Dimming Candle` | `claude` | `Opus 4.8` | `ef59e2` | `author-d6-execution-plan` | 2026-06-06 | 2026-06-06 |
 >
 > ---
 >

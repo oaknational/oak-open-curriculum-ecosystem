@@ -110,3 +110,51 @@ Fresh capture starts below.
   out, not in the plan calling itself complete. Re-run the vendor checks at exec-plan
   authoring time (versions drift). Generalises `verify-vendor-call-shapes-at-plan-author-time`
   from authoring to readiness-assessment.
+
+## 2026-06-06 — dual-review earns its keep at PLAN-author time, not just post-code (Dusky Dimming Candle)
+
+- **The most consequential finding on the whole D6-plan session was a
+  contract-conformance BLOCK, caught at plan-author time.** My first draft
+  registered the EEF tool via a bespoke `eef-surface.ts` bypass; mcp-expert
+  BLOCKed it, and reading D3:53-57/312-315 myself confirmed the contract mandates
+  a *first-class* universal-tools entry ("not a bespoke bypass"). Solo, I'd have
+  written the bypass into the plan and an executor would have built the wrong
+  thing. `no-backfill-reviews` + `extensive-reviewers` pay off in planning, not
+  only coding — review the *design* before it becomes the executable plan.
+- **I re-instanced `ground-convenient-claims` (the just-graduated grounding-bar
+  guard) — I asserted "the app already depends on graph-corpus-sdk" without
+  checking; it does not.** The re-review caught it; `c3` now adds the dep
+  explicitly. The convenient claim ("homing is easy, the dep's already there")
+  is exactly where the guard should have fired pre-emptively. The guard works —
+  *if applied before asserting*, not after a reviewer flags it.
+- **A reviewer premise can be overturned by the BLOCK fix — re-adjudicate, don't
+  carry the stale verdict.** fred's R3 "home in the app" was correct under the
+  bypass premise; once the bypass became a first-class entry, the homing *split*
+  (def+schemas SDK type-only; handler app-side) and was *forced* by constraints
+  (`listUniversalTools` enumerates the SDK registry; the handler needs runtime
+  graph-corpus-sdk). When one review overturns a premise, the others' premise-bound
+  verdicts need re-checking, not mechanical application.
+
+## 2026-06-06 — the grounding reflex skips hardest on my OWN artefacts (Tidal Plumbing Atoll)
+
+- **PDR-089 §D7 (felt-authority-grounding-discipline) re-instanced again — third
+  session running after Lanternlit (06-05) and Dusky (06-06).** Planning an MCP
+  test-harness I relayed second-hand three times before grounding: framing the current
+  state as "3 fragments", calling old-plan cycle 7 "unvetted inherited scope", and
+  reducing cycle 7 to "just appId". Each was wrong or imprecise; each was caught by the
+  OWNER asking ("is that the only thing in cycle 7?"), not by my own reflex. The novel
+  wrinkle: the high-felt-authority surface was not a vendor doc but **my own plan's
+  paraphrase** and a **structured sweep/reviewer summary** — both felt pre-grounded
+  ("my artefact" / "the subagent already read it") so the reflex skipped. Addition to
+  the homed doctrine: self-authored and structured-subagent outputs are
+  high-felt-authority relay surfaces too; the cure was external prompting, echoing
+  Lanternlit's "the gate, not the lesson."
+- **The pre-write hook caught me hedging a forced decision into a deferral framing.**
+  I'd concluded the ADR-161 E2E-boundary extension was architecturally forced
+  (spirit-preserving; ADR-128 already orphaned the stdio definition), then wrote it
+  into a permanent-doc deliverable as needing owner sign-off before action — the
+  cheap-deferral pattern the doctrine forbids. The hook (re-apply-first-question /
+  principles §Architectural Excellence Over Expediency) blocked the write. Same
+  meta-pattern as above: the mechanical gate corrected what the reflex didn't. When
+  excellence forces the answer, state the verdict; the owner overrides in conversation,
+  not via a deferral checkpoint baked into the doc.
