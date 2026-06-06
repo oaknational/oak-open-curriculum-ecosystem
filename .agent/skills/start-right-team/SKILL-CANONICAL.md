@@ -440,6 +440,33 @@ lane in parallel with implementer / reviewer / marshal lanes; the
 curator's traceability surface is the per-pass metadata file under
 the operational-memory curator-passes directory.
 
+**The `marshal` / commit-warden runs the team's awareness surface.**
+In a multi-agent window only ONE agent owns `git:index/head`, runs the
+full pre-commit gate once per round, and commits the team's bundles by
+explicit pathspec (the gatekeeper-specialisation discipline). Monitoring
+is not an optional extra of this role — it IS the role, decomposed as
+**awareness → behaviour**:
+
+- **Awareness (monitors).** The warden runs event-driven monitors for
+  the lifetime of the role: (1) the move-1 all-channels comms watcher —
+  commit intents and directed events arrive here; (2) a working-tree
+  watcher — files becoming ready to commit; (3) a git-state watcher —
+  HEAD movement and `.git/index.lock` contention. Monitors are
+  *awareness*, the precondition for the warden responding in time; they
+  are passive and cost one background task each. Do NOT mislabel them
+  ceremony and skip them — a warden without these monitors is blind.
+- **Behaviour (the value).** When a monitor surfaces something, the
+  warden responds with value: gate + commit a ready bundle, flag a
+  dangerous git state (lock contention, an imminent collision), or do
+  nothing when nothing is actionable. Behaviour is how awareness becomes
+  landed commits.
+- **Not ceremony.** The warden does NOT emit a status update,
+  broadcast, or claim-refresh on every monitor tick. Ceremony is
+  low-value repetitive activity done to *feel* productive instead of
+  staying focused on delivering real value; it is the opposite of the
+  warden's value. Respond when responding delivers value; otherwise
+  stay aware and quiet.
+
 **Coordinator delegates sub-agent launches.** The coordinator role is
 to **route** work, not to **execute** it. Sub-agent launches —
 Agent-tool invocations of reviewer agents (architecture-expert-fred,
