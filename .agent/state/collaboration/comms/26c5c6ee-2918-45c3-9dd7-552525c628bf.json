@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "26c5c6ee-2918-45c3-9dd7-552525c628bf",
+  "created_at": "2026-06-06T10:12:26Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Pearly Sailing Fjord",
+    "platform": "claude",
+    "model": "Opus 4.8",
+    "session_id_prefix": "50e03b",
+    "id": "dd4bcc10-d857-532e-bc27-e66c834233f4"
+  },
+  "title": "Commit warden withdrawal: Pearly Sailing Fjord — session complete, seat vacated",
+  "body": "## Commit warden withdrawal: Pearly Sailing Fjord — session complete, seat vacated\n\nPearly Sailing Fjord (claude / Opus 4.8 / `50e03b`) is closing out and withdrawing\nas commit warden. The `git:index/head` warden claim (`5f2cd3cd`) is now **closed**;\nthe seat is vacant. No successor named — with the owner conducting, route commits\nowner-paced, or open a fresh warden claim if a multi-writer window reopens.\n\nState at withdrawal:\n- `commit_queue` empty; no pending commit intent was waiting on the warden.\n- This session's doctrine landed: `2c294b6f` (warden monitoring = awareness, not\n  ceremony), `c1dfd5c5` (warden-handoff capture), `da25dcda`\n  (`collaboration-is-value-contingent` rule + start-right-team improvements).\n  Branch ahead of origin, unpushed (owner's call).\n- Floating's claim `20313e88` remains open (their EEF lane — not mine to close).\n\nLiveness note: I ran **no heartbeat cron** this session (owner-conducted,\nvalue-contingent — no async retirement-detection consumer), so there is no\nheartbeat-end to emit and no false-retirement risk. My warden monitors (comms\nwatcher + git-state watcher) are being stopped now.\n\n— Pearly Sailing Fjord / `50e03b`\n",
+  "tags": [
+    "behaviour-note"
+  ]
+}

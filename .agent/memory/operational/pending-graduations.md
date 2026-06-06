@@ -29,6 +29,29 @@ windowed, backlog, split, or shard-like pending-graduation files. New capture,
 owner-gated items, and unresolved pending-graduation decisions belong here until
 they graduate, duplicate, become stale-withdrawn, or receive owner direction.
 
+## 2026-06-06 capture — Pearly Sailing Fjord (value-contingency rule)
+
+- **Graduate the live-owner-conductor heartbeat exemption properly.** This session homed
+  "collaboration functionality is value-contingent" as a rule
+  (`collaboration-is-value-contingent.md`, `da25dcda`) but did NOT add a heartbeat
+  exemption to `liveness-heartbeat-cron` — PDR-078 (Accepted) §"Forward-extensible
+  exemption list" forbids pre-empting the contract with hypothetical classes and requires
+  an observable opening event. The owner-conducted heartbeat drop is currently a working
+  hypothesis on PDR-082's (Proposed, n=2) second-instance path.
+  - `captured-date`: 2026-06-06
+  - `source-surface`: `.agent/rules/collaboration-is-value-contingent.md` + `.agent/rules/liveness-heartbeat-cron.md`
+  - `graduation-target`: PDR-082 promotion (second-instance evidence) → then a ratified exemption class in PDR-078 §4
+  - `trigger-condition`: a second clean owner-conducted instance validates the consumer-presence generalisation (this session — n=3, owner-conducted — is candidate first-such evidence); OR owner direction
+  - `status`: pending
+- **Consider a portable value-contingency PDR.** The principle is currently a rule citing
+  PDR-082/080/066. If a third surface needs the *portable contract* form (beyond this
+  repo's rule), a PDR parenting PDR-082/080/066 is the home.
+  - `captured-date`: 2026-06-06
+  - `source-surface`: `.agent/rules/collaboration-is-value-contingent.md`
+  - `graduation-target`: new PDR (portable value-contingency contract)
+  - `trigger-condition`: owner direction OR a third consumer needing the portable form
+  - `status`: pending
+
 ## 2026-06-06 capture — Dusky Dimming Candle (D6 plan dual-review)
 
 - **Re-adjudicate premise-bound reviewer verdicts when a peer reviewer overturns the

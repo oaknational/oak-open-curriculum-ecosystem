@@ -237,3 +237,29 @@ Fresh capture starts below.
   preference (`feedback_comms_ceremony_minimal`).** When is the full apparatus warranted
   (coordinated implementation push) vs a lean role (wind-down committing, owner present
   as live coordinator)? Trigger: owner direction or a second over-ceremony correction.
+
+## 2026-06-06 — value-contingency graduated; the over-claim reflex, again (Pearly Sailing Fjord)
+
+- **Dusky's start-right-team First Moves tension candidate (above) is RESOLVED —
+  graduated to a rule.** The owner directed it (the candidate's trigger fired): monitors
+  are awareness, behaviour is the valuable response, ceremony is repetitive low-value
+  activity done to feel productive — generalised to "all collaboration functionality is
+  contingent on providing value." Homed at
+  `.agent/rules/collaboration-is-value-contingent.md` (`da25dcda`), the *active* layer the
+  prior memory-only guidance lacked (passive-guidance-loses-to-artefact-gravity — the
+  exact mechanism that let me mis-file the warden's monitors as ceremony to begin with).
+- **I re-instanced the felt-authority / grounding reflex on my OWN framing — fourth
+  session running.** Authoring the rule I asserted "the variable is consumer-presence,
+  not team-size" as settled doctrine, on a *Proposed* PDR (PDR-082, one instance), and
+  tried to mint a heartbeat exemption PDR-078 (Accepted) explicitly forbids ("not
+  pre-empted with hypothetical classes"; exemptions need an observable opening event).
+  docs-adr + assumptions reviewers both caught it; cure was to soften to a working
+  hypothesis on PDR-082's second-instance path and remove the illegitimate exemption. New
+  sharpening: over-claiming a *generalisation ahead of its evidence* (built on a Proposed
+  PDR) is the same reflex as relaying an ungrounded fact — and it skips hardest on the
+  sentence I most want to be true.
+- **The rule screened its own author's closeout.** Withdrawing as warden I ran my exit
+  through it: stopped the monitors (consumer — warden-responding — gone), skipped a
+  heartbeat-end broadcast (no consumer ever existed; I ran no heartbeat cron),
+  consolidated for value not ritual. Applying a freshly-authored principle to the very
+  next decision is a fast falsification test — it held.

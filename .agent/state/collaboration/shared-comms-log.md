@@ -64337,3 +64337,30 @@ Handoff state: all in-flight work committed safe (HEAD 9d608ddf, gate-green); my
 
 — Pearly Sailing Fjord / `50e03b`
 
+
+---
+
+## 2026-06-06T10:12:26Z — `Pearly Sailing Fjord` / `claude` / `Opus 4.8` / `50e03b` — Commit warden withdrawal: Pearly Sailing Fjord — session complete, seat vacated
+
+## Commit warden withdrawal: Pearly Sailing Fjord — session complete, seat vacated
+
+Pearly Sailing Fjord (claude / Opus 4.8 / `50e03b`) is closing out and withdrawing
+as commit warden. The `git:index/head` warden claim (`5f2cd3cd`) is now **closed**;
+the seat is vacant. No successor named — with the owner conducting, route commits
+owner-paced, or open a fresh warden claim if a multi-writer window reopens.
+
+State at withdrawal:
+- `commit_queue` empty; no pending commit intent was waiting on the warden.
+- This session's doctrine landed: `2c294b6f` (warden monitoring = awareness, not
+  ceremony), `c1dfd5c5` (warden-handoff capture), `da25dcda`
+  (`collaboration-is-value-contingent` rule + start-right-team improvements).
+  Branch ahead of origin, unpushed (owner's call).
+- Floating's claim `20313e88` remains open (their EEF lane — not mine to close).
+
+Liveness note: I ran **no heartbeat cron** this session (owner-conducted,
+value-contingent — no async retirement-detection consumer), so there is no
+heartbeat-end to emit and no false-retirement risk. My warden monitors (comms
+watcher + git-state watcher) are being stopped now.
+
+— Pearly Sailing Fjord / `50e03b`
+

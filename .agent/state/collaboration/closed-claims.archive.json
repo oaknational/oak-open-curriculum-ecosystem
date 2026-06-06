@@ -8824,6 +8824,135 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "b8072a12-4bf4-4063-bc44-db4eaf5b2354",
+      "agent_id": {
+        "agent_name": "Soaring Darting Cliff",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "4ac3e4",
+        "id": "5cf8fae2-b2c6-5094-9d3e-a6e0d59771a9"
+      },
+      "thread": "sdk-and-mcp-enhancements",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/sdk-and-mcp-enhancements/current/unified-mcp-server-test-harness.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-06T08:45:18Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Collaborative-handoff stewardship of the unified MCP server test-harness plan from Tidal Plumbing Atoll (owner-directed takeover; Tidal still active; handoff sidebar open)",
+      "archived_at": "2026-06-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-06T09:53:56Z",
+        "closed_by": {
+          "agent_name": "Soaring Darting Cliff",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "4ac3e4",
+          "id": "5cf8fae2-b2c6-5094-9d3e-a6e0d59771a9"
+        },
+        "summary": "Test-harness plan driven to DECISION-COMPLETE (4 reviewers folded, Tidal handoff concurred); status flipped. Execution owner-scheduled.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "b8072a12-4bf4-4063-bc44-db4eaf5b2354",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "facf1da1-8d43-4676-abbf-29e5e8819929",
+      "agent_id": {
+        "agent_name": "Soaring Darting Cliff",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "4ac3e4",
+        "id": "5cf8fae2-b2c6-5094-9d3e-a6e0d59771a9"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/observability/current/observability-sinks-decoupling.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-06T09:04:32Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Stewardship of observability-sinks-decoupling plan (handed off from Tidal Plumbing Atoll alongside the test-harness plan; 3 review conditions to apply before DECISION-COMPLETE)",
+      "archived_at": "2026-06-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-06T09:53:56Z",
+        "closed_by": {
+          "agent_name": "Soaring Darting Cliff",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "4ac3e4",
+          "id": "5cf8fae2-b2c6-5094-9d3e-a6e0d59771a9"
+        },
+        "summary": "Sinks-decoupling plan driven to DECISION-COMPLETE (4 reviewers; bridge + standalone-provider reshape folded); status flipped. Execution gated on feature-branch merge.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "facf1da1-8d43-4676-abbf-29e5e8819929",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "5f2cd3cd-9b0f-4698-bcc1-bac61bbdeaf2",
+      "agent_id": {
+        "agent_name": "Pearly Sailing Fjord",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "50e03b",
+        "id": "dd4bcc10-d857-532e-bc27-e66c834233f4"
+      },
+      "thread": "commit-warden",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-06T08:57:26Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Commit warden (owner-directed handoff from Dusky): single owner of the team git index/head window; run the singleton pre-commit gate and commit by explicit pathspec when a peer signals work ready.",
+      "archived_at": "2026-06-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-06T10:12:26Z",
+        "closed_by": {
+          "agent_name": "Pearly Sailing Fjord",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "50e03b",
+          "id": "dd4bcc10-d857-532e-bc27-e66c834233f4"
+        },
+        "summary": "Session complete; Pearly withdraws as commit warden. Seat vacated, no successor (owner-conducted). Doctrine landed: 2c294b6f, c1dfd5c5, da25dcda. commit_queue empty at withdrawal.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "5f2cd3cd-9b0f-4698-bcc1-bac61bbdeaf2",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

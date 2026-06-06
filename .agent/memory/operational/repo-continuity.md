@@ -19,6 +19,24 @@ surface.
 
 ## Current State
 
+- **COLLABORATION-IS-VALUE-CONTINGENT RULE + START-RIGHT-TEAM IMPROVEMENTS LANDED;
+  COMMIT WARDEN WITHDRAWN; SESSION COMPLETE (2026-06-06, Pearly Sailing Fjord / `50e03b`,
+  claude / Opus 4.8, owner-directed).** Took over commit-warden from Dusky, then
+  (owner-directed) homed the principle "all collaboration functionality is contingent and
+  conditional on providing value" as an always-on rule
+  ([`collaboration-is-value-contingent.md`](../../rules/collaboration-is-value-contingent.md),
+  `da25dcda`) — the awareness / behaviour / ceremony classifier + consumer test — applied
+  across the `start-right-team` SKILL (First Moves, commit-warden role definition,
+  role-definitions, cadence, singleton-role handoff), `liveness-heartbeat-cron`, and
+  `comms-all-channels-watcher`. Dual-reviewed (docs-adr + assumptions); the heartbeat
+  value-contingency is a working hypothesis on PDR-082's (Proposed) second-instance path,
+  NOT a standalone exemption (PDR-078 Accepted forbids pre-empting its exemption set). Also
+  landed `2c294b6f` (warden monitoring = awareness) + `c1dfd5c5` (warden-handoff capture).
+  Commit warden **withdrawn** (claim `5f2cd3cd` closed, seat vacant, owner-conducted).
+  Branch ahead of origin, unpushed (owner's call). **Next safe step: none on this lane** —
+  out-of-scope follow-ons in pending-graduations (graduate the live-owner-conductor
+  heartbeat exemption via PDR-082 second-instance → PDR-078 §4; consider a portable
+  value-contingency PDR if a third surface needs it).
 - **MCP TEST ESTATE + OBSERVABILITY SINKS PLANS → BOTH DECISION-COMPLETE; Tidal
   thread handoff absorbed (2026-06-06, Soaring Darting Cliff / `4ac3e4`, claude /
   Opus 4.8, owner-directed).** Took over Tidal Plumbing Atoll's MCP test-harness
@@ -530,6 +548,16 @@ authority.
 - Shared memory/state files are always writable and commit-includable when dirty.
 
 ## Deep Consolidation Status
+
+**session-completion this handoff (2026-06-06, Pearly Sailing Fjord / `50e03b`).**
+Value-contingency rule + start-right-team improvements landed (`da25dcda`); session-scoped
+insights homed — the principle to its rule (the strongest home), surprises to the napkin,
+two candidates to pending-graduations, subjective texture to
+`.agent/experience/2026-06-06-awareness-is-not-ceremony.md`, this continuity update. Full
+thread-scoped `consolidate-docs` (cross-session pattern extraction, napkin rotation, fitness
+management) NOT run: the multi-agent window is actively churning shared buffers, so a
+cross-session pass is not bounded for this closeout (conservation invariant — not mine to run
+mid-churn). Entry-point drift sweep clean (CLAUDE/AGENTS/GEMINI at canonical pointer shape).
 
 **session-completion this handoff (2026-06-05, Masked Creeping Lantern / `86584c`).**
 EEF deep-review closeout: ADR-191 ratified + homed, attribution-PII policy codified,
