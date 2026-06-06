@@ -94,7 +94,7 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Dusky Dimming Candle / author-d6-execution-plan / 2026-06-06 (prior: Masked Creeping Lantern eef-deep-review-resolutions-adr191 2026-06-05, Dim Dimming Threshold eef-d5-execution 2026-06-05, Prismatic Twinkling Planet eef-d5-fresh-dual-review 2026-06-04, Windward Gliding Squall eef-d5-plan-authoring 2026-06-04, Shadowed Creeping Secret eef-d4-ratify 2026-06-04, Burnished Glowing Spark 2026-06-04, Lacustrine Swimming Beacon 2026-06-03, Seaworthy Swimming Sextant 2026-06-03, Galactic Glowing Prism + Opalescent Cascading Planet + Stellar Waning Planet + Silvered Lurking Mask 2026-06-02) |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Zephyrous Kiting Squall / d6-readiness-regrounding / 2026-06-06 (prior: Floating Darting Cloud d7-golive-plan-edit 2026-06-06, Dusky Dimming Candle author-d6-execution-plan 2026-06-06, Masked Creeping Lantern eef-deep-review-resolutions-adr191 2026-06-05, Dim Dimming Threshold eef-d5-execution 2026-06-05, Prismatic Twinkling Planet eef-d5-fresh-dual-review 2026-06-04, Windward Gliding Squall eef-d5-plan-authoring 2026-06-04, Shadowed Creeping Secret eef-d4-ratify 2026-06-04, Burnished Glowing Spark 2026-06-04, Lacustrine Swimming Beacon 2026-06-03, Seaworthy Swimming Sextant 2026-06-03, Galactic Glowing Prism + Opalescent Cascading Planet + Stellar Waning Planet + Silvered Lurking Mask 2026-06-02) |
 | `oak-kg-ontology-planning-review` | Plan the `oak-kg`/ontology work, starting with a deep review of the Oak Curriculum Ontology repo (separate concern from the bulk-derived graph redesign) | [record][oak-kg-ontology] | claude / Opus 4.8 / Twilit Cascading Supernova / thread-opener-brief-only / 2026-06-04 — **opened, not started; deep review is a fresh session** |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Blustery Lifting Gale / skills-taxonomy-and-distribution / 2026-06-03 (prior: Umbral Whispering Silhouette 2026-06-01) |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 / Lanternlit Passing Mask / dedicated-consolidation+owner-directed-graduations / 2026-06-05 (prior: Hidden Hiding Dusk 2026-06-04, Arboreal Sprouting Branch 2026-06-04, Opalescent Illuminating Prism 2026-06-03, Lacustrine Swimming Beacon, Ashen Burning Magma, Solar Glowing Meteor, Stratospheric Buffeting Breeze, Lofty Sweeping Falcon, Shaded Veiling Mirror) |
@@ -175,14 +175,16 @@ licensing guardrail. See the
 
 ### EEF Graph-Tooling Rebuild
 
-**NEXT SAFE STEP (2026-06-05): author the D6 execution plan** — a dedicated
-cycle-level plan (the D5 pattern; owner-directed 2026-06-05), then build the EEF
-MCP surface (two single-Zod-call schemas over the graph-native view subsets,
-registration behind `OAK_CURRICULUM_MCP_EEF_ENABLED`, interpretation resource +
-prompt), per master plan §D6. **D6 readiness: READY to author** (assessed
-2026-06-05; D3 verification record V1–V8 holds, substrate exposes the operations,
-the V5 change-surfaces confirmed present) — full verdict + six sharp edges in the
-`eef` next-session record. **D5 LANDED green as one commit (`2e9021ff`; Dim Dimming
+**NEXT SAFE STEP (2026-06-06): EXECUTE D6** — the D6 execution plan is authored
+(Dusky Dimming Candle) and **independently re-grounded ready to execute**
+(Zephyrous Kiting Squall, 2026-06-06: every grounded fact / D3–D4 contract / corpus
+claim verified first-hand; verdict **GO**; six execution-precision refinements
+folded in + committed `93ee593f`; landing-page flag-gating owner-relaxed as low
+impact; the ADR-123 concern retracted as a pre-redesign fossil). Run **G0 first**,
+then `c0` + the atomic `c1`–`c6`, per
+[`eef-d6-execution.plan.md`](../../plans/sector-engagement/eef/current/eef-d6-execution.plan.md).
+Open execution-time items (not blockers — G0/TDD surface them) + the full verdict
+are in the `eef` next-session record banner. **D5 LANDED green as one commit (`2e9021ff`; Dim Dimming
 Threshold, 2026-06-05)** — graph-core generic query layer + graph-native EEF view
 (`inspectStrand`/`evidenceForMove`/envelope); the `d5-graph-construction-methods`
 todo is `completed`; the runtime `projection?` param was dropped by owner decision
@@ -414,6 +416,14 @@ convergence, not gaps. Corrected stale § Next Safe Steps (CLI/guard landed+push
 and archived discharged § Current State history. Full ledger + owner-decision
 digest:
 [`curator-passes/2026-06-06-starlit-scattering-twilight-curation.md`](curator-passes/2026-06-06-starlit-scattering-twilight-curation.md).
+
+**Session-handoff consolidation gate (2026-06-06, Zephyrous Kiting Squall / `e41262`):**
+`not due` — Starlit Scattering Twilight completed the dedicated `consolidate-docs`
+pass this window (above; `db574453`, `32ad9e7b`), draining the cross-session buffers.
+My D6-readiness-evaluation session added no repo-side buffer residue (outputs: plan
+refinements committed `93ee593f` + Claude auto-memory); session-scoped captures homed
+via this handoff (eef banner + napkin + an experience file). A second full pass would
+re-tread Starlit's completed pass.
 
 **session-completion this handoff (2026-06-06, Pearly Sailing Fjord / `50e03b`).**
 Value-contingency rule + start-right-team improvements landed (`da25dcda`); session-scoped

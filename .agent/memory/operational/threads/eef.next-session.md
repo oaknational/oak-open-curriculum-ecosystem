@@ -1,5 +1,47 @@
 # Next-Session Record — `eef` thread
 
+> **D6 EXECUTION PLAN INDEPENDENTLY RE-GROUNDED — READY TO EXECUTE; REFINEMENTS
+> COMMITTED `93ee593f` (2026-06-06, Zephyrous Kiting Squall / `e41262`; claude /
+> Opus 4.8; owner-directed evaluation).** Independent first-hand re-grounding of
+> [`eef-d6-execution.plan.md`](../../../plans/sector-engagement/eef/current/eef-d6-execution.plan.md)
+> against today's tree — every load-bearing grounded fact, D3/D4 contract claim,
+> and corpus claim (R5) verified directly (no drift; clean `c0` base; SDK carrier
+> `ZodRawShapeCompat | AnySchema` at `mcp.d.ts:150-154`; D5 substrate total +
+> envelope `edges:[]`/frontier contract; corpus `impact_months` null×4 / `-2`
+> `repeating-a-year` / `0` `setting-and-streaming`; cross-package commit clean via
+> `customConditions:['development']`; ADR-191/179 faithful). **Verdict: GO.** Six
+> execution-precision refinements folded into `c1`/`c2`/`c3`/`c4`/`c6` + committed
+> `93ee593f`: `graph-corpus-sdk` devDependency for the type-only import; the
+> `/eef-strands` import subpath; `c4`→`c3` ordering + `pnpm install`; the
+> `handlers-tool-registration` test reconciliation; explicit `expectTypeOf`
+> import; the source-resolution note.
+>
+> + **Owner decision (2026-06-06): landing-page flag-gating RELAXED** as low impact
+>   — the flag-off invariant binds the MCP protocol surface (`tools/list` +
+>   registration), NOT the human-facing landing-page HTML (which enumerates
+>   `listUniversalTools` directly). Recorded in master plan §D6 Done-when + `c6`.
+> + **ADR-123 concern RETRACTED** — it documents the pre-redesign
+>   `eef-explore-evidence-for-context` (deleted in D2 `9019bb86`), a fossil
+>   superseded by D3/D4/ADR-191; reconciling it (structural cure: generated table)
+>   is decoupled doc-hygiene, not a D6 task.
+> + **Open execution-time determinations (NOT blockers; G0 + TDD red tests surface
+>   them):** `c1` dev-vs-dependency by inspecting the emitted `.d.ts` — if
+>   `EefEvidenceEnvelope` leaks into a public SDK dep, ESCALATE (it reverses the
+>   homing decision); `c3` discriminant mechanism + `setTag` placement (forced by
+>   the `c3`/`c6` red tests); output-schemas S0.1 carrier reconciliation (D6 lands
+>   the seam first/alone — not blocking); `expectTypeOf` enforcement under the gate
+>   (`satisfies` covers the subtype direction regardless); G0 is a manual pass.
+>
+> **NEXT SAFE STEP unchanged: EXECUTE D6** (run G0 first), now with the refinements
+> in place. The refinements are execution-precision (no contract change), so the
+> dual-review verdict stands and no re-review is triggered.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Zephyrous Kiting Squall` | `claude` | `Opus 4.8` | `e41262` | `d6-readiness-regrounding` | 2026-06-06 | 2026-06-06 |
+>
+> ---
+>
 > **D7 SCOPE EXPANDED TO GO-LIVE (2026-06-06, Floating Darting Cloud / `0ef4c7`;
 > claude / Opus 4.8; owner-directed).** The owner moved the feature-flag flip from a
 > NON-GOAL into D7. The finishing plan's D7 now ships the surface live by moving
