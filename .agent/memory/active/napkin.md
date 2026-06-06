@@ -61,3 +61,19 @@ Fresh capture continues below.
   `feedback_pre_redesign_doc_clause_is_not_a_live_obligation`. Behavioural tell to
   catch next time: a fan-out / an inherited rule *feeling* like rigour is not
   evidence the rigour is first-hand.
+
+## 2026-06-06 — a skill can mandate the artefact a principle forbids (Starlit Scattering Twilight)
+
+- **Asked to run session-handoff + consolidate-docs right after I reconciled them to
+  stop producing accounting, the live test was whether I'd run the muscle-memory
+  version (closeout narrative, § Deep Consolidation entry, disposition ledger) or the
+  reconciled one.** A skill can mandate the very artefact a standing owner-principle
+  forbids — and the skill's density gives it artefact-gravity, so following its letter
+  reproduces the anti-pattern. The principle wins; the skill is the defect to fix (the
+  new `permanent-doc-is-the-consolidation-record` rule + the orientation authority
+  order). Run correctly, the handoff produced almost nothing: verify the knowledge is
+  homed, sweep entry points, leave minimal functional continuity — the commits ARE the
+  record. Reflex to carry: when a skill says "produce X", check X against the owner's
+  standing principles before producing it. Sibling of Starlit's artefact-gravity
+  capture above (the fitness number) — here the artefact with gravity is the skill
+  itself.

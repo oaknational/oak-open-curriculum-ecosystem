@@ -28,12 +28,14 @@ surface. Session handoff is the **capture edge** of this pipeline —
 it produces the surface `consolidate-docs` later distils.
 
 If a session-handoff discovers that a live buffer needs rotation or archive
-lifecycle work, it may record the need, but the first mutating action for that
-buffer belongs to the consolidation ledger: name or create the item-level
-disposition ledger before any archive, rename, park, supersession, or
-replacement move. Handoff must not turn "fitness is high" into "move the
-source"; the action is conserving and homing insight, and the validator is only
-evidence about routing and rest-state health.
+lifecycle work, it may record the need, but the first mutating action is to
+**verify the substance is live in its permanent home** before any archive,
+rename, park, supersession, or replacement move. Per
+[`permanent-doc-is-the-consolidation-record`](../../rules/permanent-doc-is-the-consolidation-record.md)
+do not create a disposition ledger; the commit and the permanent home are the
+record. Handoff must not turn "fitness is high" into "move the source"; the
+action is conserving and homing insight, and the validator is only evidence
+about routing and rest-state health.
 
 Lightweight end-of-session continuity update with a conditional
 consolidation gate.
@@ -172,10 +174,14 @@ there unless the owner or closeout owner gives a further assignment.
    - `Current session focus` (if distinct from the branch-primary lane)
    - `Repo-wide invariants / non-goals`
    - `Next safe step`
-   - `Deep consolidation status`
 
-   Keep it compact and operational. Active plans remain authoritative for
-   scope, sequencing, acceptance criteria, and validation.
+   Keep it compact and operational, answering only "what is live right now?".
+   Do not add a session-closeout narrative or a "deep consolidation status"
+   log: per
+   [`permanent-doc-is-the-consolidation-record`](../../rules/permanent-doc-is-the-consolidation-record.md)
+   the commit and the permanent docs are the record that the session happened.
+   Active plans remain authoritative for scope, sequencing, acceptance criteria,
+   and validation.
 
    **Role-boundary check before writing:** classify every proposed addition
    before it enters `repo-continuity.md`.

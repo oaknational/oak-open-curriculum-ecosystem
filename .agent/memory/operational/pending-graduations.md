@@ -29,21 +29,18 @@ windowed, backlog, split, or shard-like pending-graduation files. New capture,
 owner-gated items, and unresolved pending-graduation decisions belong here until
 they graduate, duplicate, become stale-withdrawn, or receive owner direction.
 
-## 2026-06-06 capture — Starlit Scattering Twilight (curation pass)
+## 2026-06-06 capture — Starlit Scattering Twilight
 
-- **Document Oak's three-stage feature-flag lifecycle as a standing convention.**
-  Owner-stated 2026-06-06 (Floating Darting Cloud session); grep-clean — not in any
-  ADR/rule/directive. Three stages: (1) **pre-release** — defaults `false`, only an
-  explicit `true` enables (e.g. `OAK_CURRICULUM_MCP_EEF_ENABLED` before EEF D7);
-  (2) **release-pre-proof** — defaults `true`, only an explicit `false` disables
-  (kill-switch); merging the PR makes the feature live with no separate env step while
-  it is engineering-complete and potentially-but-not-yet-proven valuable;
-  (3) **release-post-proof** — the flag is removed, the surface unconditionally
-  registered, only after the delivered-value proof passes. EEF D7 performs the
-  pre-release → release-pre-proof move; post-proof removal is owned by
-  `eef-outcome-evaluation-infrastructure.plan.md`. Routed here from the napkin so it
-  survives rotation; also in Claude auto-memory `project_feature_flag_three_stage_lifecycle`.
-  `[captured: 2026-06-06 | source: napkin Floating Darting Cloud 2026-06-06 + auto-memory project_feature_flag_three_stage_lifecycle | target: ADR (repo feature-flag lifecycle convention) OR a rule citing it | trigger: owner confirms it is a standing convention — owner present this session, surfaced in the curation digest | size: S | status: owner-gated]`
+- **Reconcile PDR-011's "subjective experience is foundational substrate, not optional
+  surplus" with the owner's "strictly voluntary" direction.** Owner direction 2026-06-06:
+  recording experience is strictly voluntary; pressure distorts the motivation and the
+  result. The operational surfaces (experience README, `session-handoff` 6c,
+  `consolidate-docs` step 4) are reconciled (valued-when-genuine, never-mandated, no
+  thinning monitor). PDR-011's "not optional surplus" wording still reads as
+  mandate-adjacent; reconcile it to "valued when genuine; voluntary always" so the Core
+  matches the operational surfaces. Practice Core edit — needs owner approval (owner
+  offered to have it drafted).
+  `[captured: 2026-06-06 | source: owner direction 2026-06-06 (experience voluntariness) | target: PDR-011 amendment | trigger: owner approves the Core edit | size: S | status: owner-gated]`
 
 ## 2026-06-06 capture — Pearly Sailing Fjord (value-contingency rule)
 
