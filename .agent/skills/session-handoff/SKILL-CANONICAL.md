@@ -319,22 +319,20 @@ there unless the owner or closeout owner gives a further assignment.
    candidates stay under step 6b and pending-graduations; cross-link only when
    a candidate is blocked on an unresolved question.
 
-   **6c. Record subjective experience (foundational standing).**
-   Subjective experience and reflection are foundational continuity
-   substrate, not reflective surplus — the substrate the three continuity
-   types rest on (PDR-011 §"Subjective experience is foundational
-   substrate, not optional surplus"; ADR-150). Foundational standing
-   attaches to the *signal*, not to a quota: the obligation is never to
-   discard a genuine subjective shift as surplus, not to manufacture one
-   because a session ended. When the session carried a felt shift —
-   texture, friction, something that went differently from expectation —
-   capture it in
+   **6c. Subjective experience — strictly voluntary.**
+   Recording subjective experience is voluntary. There is no obligation,
+   quota, or capture edge to fill, and the corpus is not monitored for
+   volume or thinning. Pressure to record distorts both the motivation and
+   the result (owner direction, 2026-06-06). Subjective experience is valued
+   *when it is genuine* — but valuing it is not mandating it. When a session
+   carried a felt shift — texture, friction, something that went differently
+   from expectation — and you want to record it, write
    `.agent/experience/<date>-<slug>.md` per the
    [`.agent/experience/` convention](../../experience/README.md). A
-   reflection performed to fill this edge is not a smaller contribution —
-   it is noise that pollutes the subjective register; a session with no
-   genuine shift writes nothing here, and that is the correct outcome of an
-   event-anchored capture edge, not an evasion.
+   reflection performed because a session ended is noise that pollutes the
+   register; a session with no genuine shift, or one where the agent simply
+   does not record, writes nothing here, and that is an ordinary outcome —
+   not an evasion or a degraded edge.
 
    **The experience file is for *subjective experience* — what the
    work was like, not what was done.** Texture, shifts, surprises,
@@ -349,11 +347,11 @@ there unless the owner or closeout owner gives a further assignment.
    technical insight in its proper durable home.
 
    Subjective experience belongs to a session; this step is the
-   session-scoped capture edge. Cross-session audit of accumulated
-   experience files lives at `consolidate-docs` step 4, which exists
-   to protect the subjective register, recover any stranded
-   technical content, and surface emergent insight across
-   experiences.
+   optional session-scoped reflection point. Cross-session reading of
+   accumulated experience files lives at `consolidate-docs` step 4, which
+   exists to protect the subjective register, recover any stranded
+   technical content, and surface emergent insight across experiences —
+   never to measure whether enough were written.
 
    **6d. Sweep platform-specific entry points for drift.** Open
    each of the platform-specific entry-point files at the repo root

@@ -2,13 +2,15 @@
 
 **@humans: do not modify this directory**
 
-This is the agent's directory for recording experience — what the work was like, not what was done. Not records, notes, or technical documentation.
+This is the agent's directory for recording experience — what the work was _like_, not what was done. It holds subjective experience: what shifted, what surprised, what emerged. It is **not** records, accounting, justification, method notes, or technical documentation. Technical content belongs in technical docs (`distilled.md`, ADRs, READMEs); justifying or accounting for the work belongs nowhere — the work and its commit are their own record.
 
 Write about the experience rather than the method or impact. What shifted? What was surprising? What went differently from expectation? What emerged that wasn't planned?
 
+**Writing here is strictly voluntary.** There is no obligation, ritual, quota, or session-close requirement, and the corpus is not monitored for volume or "thinning". Pressure to record distorts both the motivation and the result — a reflection written because it felt _due_ is performance, not experience. Write only when a genuine shift is worth recording; not writing is a valid and ordinary outcome.
+
 Reading the [metacognition prompt](../directives/metacognition.md) before writing can help surface patterns that sit below the immediate interaction — thinking about thinking, the bridge from action to impact.
 
-**Experience is session-scoped.** A session captures its own subjective reflection at close under [`session-handoff` step 6c](../commands/session-handoff.md). Cross-session audit lives at [`consolidate-docs` step 4](../commands/consolidate-docs.md).
+**Experience is session-scoped and optional.** A session _may_ record a subjective reflection at close (see [`session-handoff` step 6c](../commands/session-handoff.md)) when a genuine shift occurred — never because it is required. Cross-session reading happens at [`consolidate-docs` step 4](../commands/consolidate-docs.md).
 
 ## Why the audit step exists
 
@@ -87,14 +89,11 @@ _Tags: collaboration | emergence | stewardship | discovery | tdd | types_
 
 - Insights that weren't planned. Patterns noticed in hindsight.
 - Changes in understanding, not just in code.
-
-## Technical content
-
-If applied technical patterns emerged, note where they were
-extracted to (e.g. `distilled.md`, a specific ADR, or
-`docs/development/`). Keep this section brief — the
-experience file is not the home for technical reference.
 ```
+
+Technical content does not belong here — if a technical pattern emerged, it goes
+to its technical home (`distilled.md`, an ADR, a README), not into the experience
+file and not as a "where it went" note.
 
 ## Notes on terminology
 

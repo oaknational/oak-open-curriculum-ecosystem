@@ -211,40 +211,40 @@ in one sitting, record item-level disposition progress in a ledger; do not make
 another buffer file to stand in for that work.
 
 For each buffer item, read the source, understand the substance, route it, and
-record exactly one disposition in a ledger before any archive move:
+**classify its disposition as you go** — this is reasoning, not a record to
+persist:
 
-- `graduated` - durable home created or updated, with path evidence.
-- `duplicate` - already represented in a durable home, with path evidence.
-- `owner-gated` - cannot proceed without owner decision, with the question and
-  live holding location.
+- `graduated` - durable home created or updated (verify it is there).
+- `duplicate` - already represented in a durable home (verify it is there).
+- `owner-gated` - cannot proceed without owner decision; mark it owner-gated in
+  its live holding location, with the question.
 - `stale-withdrawn` - no longer valid, with reason.
 - `carried-forward` - still valid but not drainable in this pass, with trigger
   and next action. This is valid for honest mid-pass handoff or
   `session-completion`; it is not a final completion state for an owner goal
   that asks to continue until buffers are empty or explicitly owner-gated.
 
-The ledger may live in the touched buffer, an adjacent disposition note, a plan
-closeout section, or a curation report. It must be durable enough for the next
-agent to verify the item count and each route without rereading the whole
-source history.
+Per [`permanent-doc-is-the-consolidation-record`](../../rules/permanent-doc-is-the-consolidation-record.md),
+do **not** write these dispositions into a durable ledger, adjacent disposition
+note, curation report, or count line. The commit and the permanent home are the
+record; a ledger restating "item X went to home Y" is accounting, not value.
 
-**Pre-archive ledger gate**: before any command or edit that moves, renames,
-archives, parks, supersedes, or replaces a live buffer source, stop and name
-the ledger path that already records the source item set and each disposition.
-If no such ledger exists, the next mutating action must be the ledger write.
-Do not frame the action as making a fitness check pass; the action is
-conserving and homing knowledge, with the validator used only as routing and
-rest-state health evidence.
+**Pre-archive verification gate**: before any command or edit that moves,
+renames, archives, parks, supersedes, or replaces a live buffer source, stop and
+**verify the substance is live in its permanent home** — read the home, confirm
+it is there. That in-context verification is the knowledge-preservation screen;
+do not create a ledger to record it. Do not frame the action as making a fitness
+check pass; the action is conserving and homing knowledge.
 
 **Checklist failure / anti-example**: archiving a buffer or source file before
-read/extract/route/disposition evidence exists is not curation. An
+reading, extracting, routing, and verifying the home is not curation. An
 archive-only "drain" leaves the buffer live for completion purposes, even if
 the fitness report becomes softer afterward.
 
 **Fitness anti-pattern**: split, shard, archive, rename, or delete operations
 performed primarily to change the fitness category are self-delusion, not
-curation. They may appear in a correct pass only after the item ledger proves
-what happened to the knowledge.
+curation. Curation is verified by the homed substance and the commit, never by an
+accounting record of what was moved.
 
 ## Plan supersession discipline
 
@@ -362,7 +362,7 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
 
    Purpose (c) is the most valuable and the most easily skipped. Even when purposes (a) and (b) produce no work (no drift, no stranded content), purpose (c) still fires — read across the recent experiences with the cross-plane / cross-session lens, and record any emergent observation for the graduation scan.
 
-   The same cross-corpus read also protects the subjective register's *foundational standing* (PDR-011 §"Subjective experience is foundational substrate, not optional surplus"; ADR-150): reading the experiences as a whole makes *absence* legible, not just insight. A register that thins toward silence while sessions continue to do substantive work is a degraded capture edge — the observable guard against "no genuine shift" decaying back into the optional-surplus opt-out the reframe cures. An honest event-anchored null and a habitual opt-out look identical at a single session and are distinguishable only across the corpus, so flag a thinning corpus as a loop-health signal, not a null result.
+   Experience writing is **strictly voluntary** (see [`experience/README.md`](../../experience/README.md)): there is no quota, obligation, or session-close requirement, and the corpus is **not** monitored for volume or thinning. Pressure to record distorts the motivation and the result — a reflection written because it felt *due* is performance, not experience. Do **not** treat a quiet or thinning corpus as a problem, a degraded capture edge, or a loop-health signal; not writing is a valid, ordinary outcome. Purpose (c) reads across the experiences that *do* exist to surface emergent insight — it never measures whether enough were written.
 5. **Extract reusable patterns.** Review completed work for patterns that meet the barrier: broadly applicable, proven by implementation, prevents a recurring mistake, and stable. This covers all types of learning — code patterns, process patterns, architecture patterns, structural observations, agent operational concerns, behavioural rules, domain-specific gotchas — anything reusable that would change behaviour if read before similar work. Extract qualifying patterns to `.agent/memory/active/patterns/` as specific ecosystem-grounded instances (one pattern per file, markdown with frontmatter). See `.agent/memory/active/patterns/README.md` for the frontmatter schema, category options, and barrier criteria.
 
    **Three destinations, not one** (per PDR-007). The substance shape determines the home:
@@ -742,22 +742,21 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
 
 ## Closeout Proof
 
-Close every `consolidate-docs` invocation with proof that matches the declared
-mode. The closeout must report:
+Close every `consolidate-docs` invocation with a report of **value and impact**
+that matches the declared mode:
 
 - mode used;
-- fitness before and after, as routing evidence only;
-- buffer item count before and after for every selected drainable buffer;
-- disposition ledger pointer when any buffer was drained;
-- durable homes changed;
-- unresolved live items and blockers;
+- what knowledge reached which permanent home, and what behaviour it changes;
+- unresolved live items and blockers — including any fitness file still worse
+  than soft, named as a live signal (un-homed substance? structural debt?), not
+  as a before/after accounting table;
 - explicit verdict: `complete`, `partial slice landed`, or `pending`.
 
-Repeat the conservation invariant in the closeout: the pass curated knowledge,
-and any softer fitness report is evidence to explain, not the thing delivered.
-If the numbers improved, name the item-level dispositions that caused it. If
-they did not improve, do not weaken the verdict unless insight was unprocessed
-or unhomed.
+Per [`permanent-doc-is-the-consolidation-record`](../../rules/permanent-doc-is-the-consolidation-record.md):
+the commits and the permanent homes ARE the record the pass happened. Do not
+report before/after counts, a disposition-ledger pointer, a before/after fitness
+table, or provenance pointers. Fitness is a signal to explain when it points at
+real work, never the thing delivered.
 
 For `session-completion`, `partial slice landed` is acceptable when fresh
 learning was captured and obvious substance was routed while larger curation

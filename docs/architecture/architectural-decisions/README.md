@@ -286,6 +286,11 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   scoring formula, recommendation engine, or request-time crosswalk — a
   formal-ontology data crosswalk is out of scope, not forbidden; Accepted
   2026-06-05)
+- [ADR-192: Feature-Flag Three-Stage Lifecycle](192-feature-flag-three-stage-lifecycle.md)
+  (records the convention for env-var feature flags: pre-release defaults off
+  and explicit true enables; release-pre-proof defaults on with an explicit-false
+  kill-switch and goes live on merge; release-post-proof removes the flag after
+  the value proof passes; Accepted 2026-06-06)
 
 ## Key Architectural Decisions
 

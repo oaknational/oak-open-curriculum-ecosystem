@@ -1,0 +1,11 @@
+---
+description: >
+  When consolidation homes knowledge, the permanent doc plus the git commit ARE
+  the record that the work happened. Do not create disposition ledgers, closeout
+  narratives, before/after counts, consolidation-status logs, or provenance
+  pointers — the accounting is not the value; the impact is. A skill instruction
+  mandating such a record is itself the anti-pattern, not license.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/permanent-doc-is-the-consolidation-record.md`.

@@ -115,6 +115,7 @@ without proportional value.
 | `.agent/rules/no-warning-toleration.md`                                    | always-on      | —                                                                                                |
 | `.agent/rules/owner-attention-at-action-moments.md`                        | always-on      | —                                                                                                |
 | `.agent/rules/per-user-memory-is-a-buffer.md`                              | always-on      | —                                                                                                |
+| `.agent/rules/permanent-doc-is-the-consolidation-record.md`                | always-on      | —                                                                                                |
 | `.agent/rules/ping-before-escalate.md`                                     | always-on      | —                                                                                                |
 | `.agent/rules/plan-body-first-principles-check.md`                         | always-on      | —                                                                                                |
 | `.agent/rules/practice-core-portability.md`                                | always-on      | —                                                                                                |
