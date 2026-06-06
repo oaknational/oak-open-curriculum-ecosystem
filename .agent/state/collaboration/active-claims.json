@@ -3,30 +3,29 @@
   "commit_queue": [],
   "claims": [
     {
-      "claim_id": "20313e88-90ea-44d6-ab6d-c25d4decca5b",
+      "claim_id": "3ce85ae0-996b-4b9f-8de7-14df2d967ae0",
       "agent_id": {
-        "agent_name": "Floating Darting Cloud",
+        "agent_name": "Moonlit Orbiting Moon",
         "platform": "claude",
-        "model": "claude-opus-4-8",
-        "session_id_prefix": "0ef4c7",
-        "id": "376d56c1-aee9-5a40-b53e-6a7ed95bf88a"
+        "model": "Opus 4.8",
+        "session_id_prefix": "b6552f",
+        "id": "33e13885-fc20-50f4-8862-83f483f618af"
       },
       "thread": "eef",
       "areas": [
         {
           "kind": "files",
           "patterns": [
-            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md",
-            ".agent/plans/sector-engagement/eef/future/eef-outcome-evaluation-infrastructure.plan.md",
-            ".agent/plans/sector-engagement/eef/README.md",
-            ".agent/experience/2026-06-06-the-frame-moved-under-me.md"
+            "packages/sdks/oak-curriculum-sdk/src/mcp/**",
+            "packages/sdks/oak-curriculum-sdk/package.json",
+            "apps/oak-curriculum-mcp-streamable-http/src/**"
           ]
         }
       ],
-      "claimed_at": "2026-06-06T08:45:00Z",
+      "claimed_at": "2026-06-06T15:09:11Z",
       "freshness_seconds": 14400,
       "sidebar_open": false,
-      "intent": "EEF D7 go-live plan edits (owner-directed); ready for warden (Dusky) commit"
+      "intent": "EEF D6 execution: get-eef-evidence aggregated-family-peer tool + eef-interpretation resource + adapt-lesson prompt, flag-gated; c0 carrier widening on universal-tools (coordinated with output-schemas-for-mcp-tools plan)"
     }
   ]
 }

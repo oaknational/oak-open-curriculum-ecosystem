@@ -1,6 +1,59 @@
 # Next-Session Record — `eef` thread
 
-> **D6 EXECUTION PLAN INDEPENDENTLY RE-GROUNDED — READY TO EXECUTE; REFINEMENTS
+> **🤝 HANDOFF — EEF thread (2026-06-06, Dim Fading Hush / `1952e2`; claude /
+> Opus 4.8). D6 ARCHITECTURE CORRECTED (owner-ratified); FRESH READINESS REVIEW
+> OWED BEFORE EXECUTION.**
+>
+> **What changed.** `get-eef-evidence` is an aggregated graph-tool-family PEER —
+> the same family as `get-misconception-graph` / `get-prior-knowledge-graph`, which
+> already execute from locally-held data through the shared `AGGREGATED_HANDLERS`
+> dispatch (`oak-curriculum-sdk/src/mcp/universal-tools/executor.ts:164-176`) with
+> no API call and no bypass. EEF is the first graph tool on the new `graph-core` +
+> `graph-corpus-sdk` substrate, built in the bounded-query shape the existing
+> whole-corpus-dump tools will migrate to (`graph-tools-value-redesign.plan.md`).
+> Concretely: the handler is an `AGGREGATED_HANDLERS` entry homed SDK-side
+> (`aggregated-eef-evidence.ts`, parallel to `aggregated-misconception-graph.ts`);
+> `oak-curriculum-sdk` takes a **runtime** `graph-corpus-sdk` dependency (acyclic —
+> the SDK is its first consumer); auth is **uniform** via `securitySchemes` (no
+> special status); `outputSchema` is **required** for EEF (the carrier field stays
+> optional transitionally). There is **no** bespoke app-side handler, **no**
+> registration-loop discriminant, **no** bypass of `handleToolWithAuthInterception`.
+> The app owns only registration + flag co-gating + a uniform
+> `config`-carries-`outputSchema` change.
+>
+> **Why (brief; full history in the experience corpus + the c-cycle commits).** The
+> earlier shape (a bespoke app-side handler + a discriminant bypass) special-cased a
+> tool that is an ordinary family member. Root cause: the plan estate referenced the
+> registration/schema surface densely and the **execution** surface
+> (`AGGREGATED_HANDLERS`) not at all — the structural cure (plans must reference the
+> execution home) is routed to `seam-map-plan-template-archetype.plan.md`.
+>
+> **Edited this session (working tree; commit pending):**
+> [`eef-d6-execution.plan.md`](../../../plans/sector-engagement/eef/current/eef-d6-execution.plan.md)
+> (cycles c0–c6 re-derived to the corrected shape) and
+> [`eef-graph-tool-completion.plan.md`](../../../plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md)
+> (§D6 todo and registration record now name the `AGGREGATED_HANDLERS` execution
+> home and uniform auth).
+>
+> **NEXT SAFE STEP for the EEF thread:** run a **fresh readiness review** of the
+> corrected D6 (mcp-expert, architecture-expert-fred, type-expert — the prior
+> dual-review covered the superseded shape), then run **G0**, then execute D6. D7
+> (go-live, below) is unchanged and follows D6.
+>
+> **Scope boundary (do not duplicate):** the meta-work — routing the planning /
+> execution lessons to the agentic-engineering improvement plans, the "feedback
+> mechanisms must embody doctrine" general rule (owner-directed 2026-06-06), and the
+> architecture-pattern record + reviewer retune — stays with Dim Fading Hush's
+> resumed session, NOT the EEF execution agent.
+>
+> ---
+>
+> **[SUPERSEDED by the handoff banner above — the `READY/GO` verdict below reviewed
+> the now-replaced D6 shape. The grounded FACTS it verified (carrier, D5 substrate,
+> corpus R5, cross-package compile) still hold; the architecture they were attached
+> to does not.]**
+>
+> **D6 EXECUTION PLAN INDEPENDENTLY RE-GROUNDED — REFINEMENTS
 > COMMITTED `93ee593f` (2026-06-06, Zephyrous Kiting Squall / `e41262`; claude /
 > Opus 4.8; owner-directed evaluation).** Independent first-hand re-grounding of
 > [`eef-d6-execution.plan.md`](../../../plans/sector-engagement/eef/current/eef-d6-execution.plan.md)
@@ -32,9 +85,9 @@
 >   the seam first/alone — not blocking); `expectTypeOf` enforcement under the gate
 >   (`satisfies` covers the subtype direction regardless); G0 is a manual pass.
 >
-> **NEXT SAFE STEP unchanged: EXECUTE D6** (run G0 first), now with the refinements
-> in place. The refinements are execution-precision (no contract change), so the
-> dual-review verdict stands and no re-review is triggered.
+> **[NEXT SAFE STEP superseded — see the handoff banner at the top: the 2026-06-06
+> architecture correction DOES require a fresh readiness review of the corrected D6
+> shape before execution. The execution-precision refinements below still stand.]**
 >
 > | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 > | --- | --- | --- | --- | --- | --- | --- |

@@ -1,5 +1,77 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## 🤝 Session Handoff (2026-06-06 — Dim Fading Hush / claude / Opus 4.8 / `1952e2`): NON-EEF meta-work → fresh session
+
+**This hands off everything NON-EEF from the 2026-06-06 EEF-D6 reflection session.**
+The EEF thread itself is with `Moonlit Orbiting Moon` (D6 execution, per
+`eef.next-session.md`) — do NOT touch EEF here. This brief is self-contained; the
+fresh session needs nothing from the originating conversation.
+
+**Framing (read first).** The EEF arc surfaced a DOCUMENTED, RECURRING family of
+planning/execution failures — accepting an inherited frame without first-hand
+re-grounding; the convenience claim; review-vs-execution-grounding; the
+shrink-don't-eliminate reflex. They are already richly homed (distilled
+felt-authority cluster, PDR-089, `verify-dont-trust`, `ground-convenient-claims`,
+`passive-guidance-loses-to-artefact-gravity`). **So more prose will not help — this
+session is itself proof they recur despite documentation.** The leverage is turning
+them into STRUCTURAL FIRING SURFACES (template acceptance prompts, plan-readiness
+gates, reviewer checks, hook responses that embody doctrine). **"Doctrine without
+mechanism is debt"** (owner, 2026-06-06). Prioritise the firing-surface work over
+recording.
+
+**Discipline (this session's own lessons, applied to this work).** Route to the
+existing homes below — do NOT author a new plan; that is the duplication the lessons
+warn against. Crosswalk each home before editing (already-covered / route / genuine
+gap). Ground each lesson first-hand against its home AND the napkin source — do not
+relay this brief. The deliverable is firing surfaces, not prose.
+
+### Work stream 1 (LEAD) — feedback mechanisms must embody doctrine (owner-directed)
+
+An agent feedback mechanism that fires but only says "no" leaves the agent to find a
+synonym and route around it (this session reworded past a hook block on "carve-out"
+instead of reappraising). Every feedback mechanism — hooks, rules, eslint, all —
+MUST add POSITIVE reappraisal direction (step back, re-assess the concept) while
+keeping the block. Concrete: update the PreToolUse hook policy error responses
+(`.agent/hooks/policy.json` + the hook impl) to carry the reappraisal instruction;
+then audit rules/eslint/all feedback surfaces for "blocks without positive
+doctrine-embodying direction"; author the general rule. **Homes:**
+`future/action-time-structural-interrupt-design-space.plan.md` +
+`current/doctrine-enforcement-quick-wins.plan.md`. This is the purest instance of the
+firing-surface thesis (PDR-038: stated principles require structural enforcement).
+
+### Work stream 2 — route the planning/execution lessons to homes
+
+| Lesson | Home | Action |
+|---|---|---|
+| Plans must reference the EXECUTION surface, not only registration/schema (the EEF-D6 reference gap; the bypass was a "layering anti-seam") | `future/seam-map-plan-template-archetype.plan.md` (confirmed first-hand: already owns the seam taxonomy incl. layering anti-seams) | add the EEF-D6 worked instance + an acceptance prompt: "name the execution home for each tool/capability" |
+| Documentation does not fire; the gap is action-time enforcement of semantic pathogens — this session is fresh cross-session evidence | `future/action-time-structural-interrupt-design-space.plan.md` (confirmed: t2 semantic-pathogen inventory; its §Lifecycle says new instances are its evidence) | add this arc as t2 evidence; no new plan |
+| Shrink-don't-eliminate / closure-pressure to a clean verdict | `future/closure-pressure-remediation-design-space.plan.md` (candidate) | crosswalk; add the instance |
+| Review and execution-grounding are different organs → a plan-readiness gate | `current/planning-specialist-capability.plan.md` / `current/reviewer-gateway-upgrade.plan.md` (candidate) | crosswalk; propose an execution-grounding readiness check |
+
+### Work stream 3 — architecture-pattern record + reviewer retune (owner point 1)
+
+The aggregated-tool / graph-tool-family pattern is now established (EEF D6 is its
+first substrate instance). Record it as a referenceable architectural pattern
+(`docs/architecture` + `.agent/memory/active/patterns/`), retune the architecture
+reviewers (`architecture-expert-fred`/`betty`/`barney`/`wilma`) to know it, and
+update the architectural documentation + record of patterns. **Homes:**
+`current/reviewer-gateway-upgrade.plan.md` / `current/architectural-enforcement-adoption.plan.md`
+and the pattern record. Owner timing: "soon."
+
+**Sources (ground first-hand).** `.agent/memory/active/napkin.md` — the four
+2026-06-06 Dim Fading Hush entries carry the lessons, the disposition, and the
+feedback-mechanism directive in full. The EEF worked instance is
+`.agent/plans/sector-engagement/eef/current/eef-d6-execution.plan.md` (the
+reference-gap cure, applied).
+
+**Constraint note.** The originating session was plan-refinement-only; streams 1 and
+3 are implementation (hook config, reviewer defs, arch docs) — run them under the
+fresh session's own owner-set constraints.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Dim Fading Hush` | `claude` | `Opus 4.8` | `1952e2` | `eef-d6-reflection-and-meta-handoff` | 2026-06-06 | 2026-06-06 |
+
 ## Session Closeout (2026-06-06 — Volcanic Blazing Magma / codex / GPT-5 / `019e9c`, identity + statusline docs)
 
 Owner-directed documentation slice landed in the working tree; no commit requested

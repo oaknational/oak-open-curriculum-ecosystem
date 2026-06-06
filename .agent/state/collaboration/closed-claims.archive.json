@@ -9175,6 +9175,52 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "20313e88-90ea-44d6-ab6d-c25d4decca5b",
+      "agent_id": {
+        "agent_name": "Floating Darting Cloud",
+        "platform": "claude",
+        "model": "claude-opus-4-8",
+        "session_id_prefix": "0ef4c7",
+        "id": "376d56c1-aee9-5a40-b53e-6a7ed95bf88a"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md",
+            ".agent/plans/sector-engagement/eef/future/eef-outcome-evaluation-infrastructure.plan.md",
+            ".agent/plans/sector-engagement/eef/README.md",
+            ".agent/experience/2026-06-06-the-frame-moved-under-me.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-06T08:45:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "EEF D7 go-live plan edits (owner-directed); ready for warden (Dusky) commit",
+      "archived_at": "2026-06-06",
+      "closure": {
+        "kind": "stale",
+        "closed_at": "2026-06-06T14:33:59Z",
+        "closed_by": {
+          "agent_name": "Dim Fading Hush",
+          "platform": "claude",
+          "model": "claude-opus-4-8",
+          "session_id_prefix": "1952e2",
+          "id": "0b3ad7da-3255-5da1-bec8-b127bbf0a81b"
+        },
+        "summary": "Archived stale/orphaned claim after its freshness TTL expired.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "20313e88-90ea-44d6-ab6d-c25d4decca5b",
+            "summary": "Claim exceeded its type-specific freshness TTL."
+          }
+        ]
+      }
     }
   ]
 }

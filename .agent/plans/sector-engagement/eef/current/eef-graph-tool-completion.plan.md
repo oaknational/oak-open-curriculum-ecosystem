@@ -47,7 +47,7 @@ todos:
     status: completed
     depends_on: [d2-typed-raw-corpus-foundation, d4-graph-capability-contract]
   - id: d6-mcp-composition-eef-surface
-    content: "Build the EEF-specific MCP composition module in the curriculum consumer layer and register the ratified EEF tool/resource/prompt surface behind OAK_CURRICULUM_MCP_EEF_ENABLED with structuredContent-only tool results. Do not extract a generic corpus-tool factory until a real second consumer exists. The tool INPUT schema and OUTPUT schema are each derived by a SINGLE Zod call on a named subset/schema-builder value typed from the graph-native EEF view (a deterministic, type-strict projection of graph form, with graph form itself derived from the raw EEF data; not a direct raw-data transform, hand-maintained parallel shape, or plan-authored vocabulary; root `type: object`); use `satisfies` or equivalent compile-time proof tying declarations to `structuredContent`. These are the only Zod schemas in the EEF graph stack (Decision 2). Error returns use isError:true so the SDK skips output validation. Ensure `outputSchema` reaches the actual `server.registerTool`/`registerAppTool` call by replacing any current universal-tools segment that cannot carry it. Implement the EEF interpretation resource/template and update the user-facing EEF prompt from the ratified D3-D5 graph surface. Registration is only for real implemented surfaces: every registered tool, resource, and prompt has real graph-derived behaviour and tests, or it is absent. The module must not import MCP types into substrate packages (ADR-179) - an explicit acceptance check. Preserve flag co-gating of tool, resource, and prompt. D6 is not complete until the single-Zod-call graph-subset rule is implemented exactly; failure blocks D6 and requires correction of the D3/D4 contract."
+    content: "Build the EEF-specific MCP composition module in the curriculum consumer layer and register the ratified EEF tool/resource/prompt surface behind OAK_CURRICULUM_MCP_EEF_ENABLED with structuredContent-only tool results. Do not extract a generic corpus-tool factory until a real second consumer exists. The tool INPUT schema and OUTPUT schema are each derived by a SINGLE Zod call on a named subset/schema-builder value typed from the graph-native EEF view (a deterministic, type-strict projection of graph form, with graph form itself derived from the raw EEF data; not a direct raw-data transform, hand-maintained parallel shape, or plan-authored vocabulary; root `type: object`); use `satisfies` or equivalent compile-time proof tying declarations to `structuredContent`. These are the only Zod schemas in the EEF graph stack (Decision 2). Error returns use isError:true so the SDK skips output validation. Ensure `outputSchema` reaches the actual `server.registerTool`/`registerAppTool` call by replacing any current universal-tools segment that cannot carry it. Home the tool's handler SDK-side as an `AGGREGATED_HANDLERS` entry (`oak-curriculum-sdk/src/mcp/universal-tools/executor.ts`) exactly like `get-misconception-graph`/`get-prior-knowledge-graph` — `oak-curriculum-sdk` takes a runtime `graph-corpus-sdk` dependency (acyclic; the SDK is its first consumer) — so the tool registers AND executes through the shared universal-tools path with uniform auth (`securitySchemes`): no bespoke app-side handler, no registration-loop discriminant, no bypass, no special auth status. EEF is the first graph tool on the new substrate; the established `AGGREGATED_HANDLERS` execution surface (not just the registration config) is where the cycle plan ([`eef-d6-execution.plan.md`](eef-d6-execution.plan.md)) locates it. Implement the EEF interpretation resource/template and update the user-facing EEF prompt from the ratified D3-D5 graph surface. Registration is only for real implemented surfaces: every registered tool, resource, and prompt has real graph-derived behaviour and tests, or it is absent. The module must not import MCP types into substrate packages (ADR-179) - an explicit acceptance check. Preserve flag co-gating of tool, resource, and prompt. D6 is not complete until the single-Zod-call graph-subset rule is implemented exactly; failure blocks D6 and requires correction of the D3/D4 contract."
     status: pending
     depends_on: [d4-graph-capability-contract, d5-graph-construction-methods]
   - id: d7-teacher-value-round-trip
@@ -867,17 +867,22 @@ record are carried here directly: the registration config in `handlers.ts`
 record.
 The EEF tool is a graph universal tool — the same family as the existing
 `get-misconception-graph` and `get-prior-knowledge-graph` aggregated tools (both
-in `AggregatedToolName`, both already returning `structuredContent`) — so it
-registers through the universal-tools path, not a bespoke bypass. Carrying an
-`outputSchema` through that path is net-new (no existing universal tool declares
-one; the `handlers.ts` config and `listUniversalTools` projection carry
-`inputSchema` only). The exact universal-tools surfaces that must change to do so
-— the `AggregatedToolName` union, `AGGREGATED_TOOL_DEFS` /
-`AggregatedToolDefShape` (the `satisfies` guard), `UniversalToolListEntry`,
-`listUniversalTools`, and the `handlers.ts` config — are settled at D3
-verification together with the in-flight output-schema work, not fixed here; the
-extension is additive and leaves existing generated tools unchanged. The target is
-structuredContent-only, not dual-content output.
+in `AggregatedToolName`, both built on locally-held data, both already returning
+`structuredContent`) — so it registers through the universal-tools path, not a
+bespoke bypass, AND it executes through the same shared `AGGREGATED_HANDLERS`
+dispatch (`oak-curriculum-sdk/src/mcp/universal-tools/executor.ts`) as those
+tools, with its handler homed SDK-side and uniform auth (`securitySchemes`). The
+execution home, not only the registration config, is part of the contract.
+Carrying an `outputSchema` through that path is net-new (no existing universal
+tool declares one; the `handlers.ts` config and `listUniversalTools` projection
+carry `inputSchema` only). The exact universal-tools surfaces that must change —
+the `AggregatedToolName` union, `AGGREGATED_TOOL_DEFS` / `AggregatedToolDefShape`
+(the `satisfies` guard), `UniversalToolListEntry`, `listUniversalTools`, the
+`handlers.ts` config, and the `AGGREGATED_HANDLERS` execution map (a new SDK
+handler module, `aggregated-eef-evidence.ts`) — are settled at D3 verification
+together with the in-flight output-schema work; the extension is additive and
+leaves existing generated tools unchanged. The target is structuredContent-only,
+not dual-content output.
 
 **Do:**
 

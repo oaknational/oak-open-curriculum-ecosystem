@@ -13,7 +13,9 @@
  * combined definition map.
  */
 
-import type { z } from 'zod';
+// See `types.ts` for the carrier-union rationale (the MCP SDK's `registerTool`
+// shape, resolved via the SDK's `./*` wildcard export).
+import type { AnySchema, ZodRawShapeCompat } from '@modelcontextprotocol/sdk/server/zod-compat';
 import { FETCH_TOOL_DEF, FETCH_INPUT_SCHEMA } from '../aggregated-fetch/index.js';
 import {
   GET_CURRICULUM_MODEL_TOOL_DEF,
@@ -55,7 +57,7 @@ import type { AggregatedToolName } from './types.js';
  * description, securitySchemes, annotations, inputSchema, and _meta.
  * No-input tools still provide `inputSchema: {}` so registration stays uniform.
  */
-interface AggregatedToolDefShape {
+export interface AggregatedToolDefShape {
   readonly title: string;
   readonly description: string;
   readonly securitySchemes: readonly SecurityScheme[];
@@ -65,7 +67,13 @@ interface AggregatedToolDefShape {
     readonly idempotentHint: boolean;
     readonly openWorldHint: boolean;
   };
-  readonly inputSchema: z.ZodRawShape;
+  readonly inputSchema: ZodRawShapeCompat | AnySchema;
+  /**
+   * Output schema for `structuredContent` validation, when the tool declares
+   * one. Optional and additive: existing aggregated tools omit it. Always a
+   * constructed `z.object(...)` value.
+   */
+  readonly outputSchema?: AnySchema;
   readonly _meta: ToolMeta;
 }
 

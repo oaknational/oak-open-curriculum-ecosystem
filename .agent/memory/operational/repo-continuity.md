@@ -19,6 +19,16 @@ surface.
 
 ## Current State
 
+- **EEF-D6 REFLECTION SESSION — BOTH HALVES HANDED OFF (2026-06-06, Dim Fading
+  Hush / `1952e2`, claude / Opus 4.8).** EEF D6 architecture corrected to the
+  aggregated-tool-family pattern → handed to `Moonlit Orbiting Moon` for execution
+  (see `threads/eef.next-session.md` top banner; fresh readiness review owed before
+  execution). The NON-EEF meta-work — feedback-mechanisms-must-embody-doctrine
+  (lead), routing the planning/execution lessons to their homes, and the
+  architecture-pattern record + reviewer retune — handed to a fresh session (see
+  `threads/agentic-engineering-enhancements.next-session.md` top banner; lessons
+  sourced in `memory/active/napkin.md`). **Working tree uncommitted** (plan, thread,
+  napkin, claims/comms edits); commit only on owner request.
 - **AGENT IDENTITY / CODEX STATUSLINE DOCS UPDATED; SESSION COMPLETE
   (2026-06-06, Volcanic Blazing Magma / `019e9c`, codex / GPT-5,
   owner-directed).** Documented the current session-name/statusline mechanics in
