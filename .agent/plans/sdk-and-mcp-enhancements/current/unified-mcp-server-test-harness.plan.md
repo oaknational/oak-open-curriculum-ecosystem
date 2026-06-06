@@ -165,7 +165,7 @@ Re-derive at execution (concurrent changes move lines).
 | `auth-enforcement.e2e.test.ts` | Keep ONE auth-ON composition e2e; per-tool 401 repeats → middleware integration | B / WS3 |
 | `auth-bypass.e2e.test.ts` / `application-routing.e2e.test.ts` | Keep one composition proof per side; per-route 401 + correlation-header → integration | B / WS3 |
 | `enum-validation-failure` / `validation-failure` / `string-args-normalisation` (rejections) | Push to validator integration/unit | B / WS3 |
-| `live-mode` / `tool-call-success` / `string-args` success | Consolidate into ONE in-process live-executor test (protocol-level assert) | B / WS3 |
+| `live-mode` / `tool-call-success` / the success case of `string-args-normalisation.e2e.test.ts` | Consolidate into ONE in-process live-executor test | B / WS3 |
 | `server.e2e` / `stub-mode` / `prompts` / `documentation-resources` / `multi-request-session` / `ws3-fallback-proof` / `mcp-app-pipeline` | Keep at network-free e2e; rebalance any duplicated proof down | B / WS3 |
 | `web-security-selective.e2e.test.ts` | CORS/DNS-rebind/Helmet at the faithful level; fix its createApp-under-e2e-name mismatch | B / WS3 |
 | `built-server.e2e.test.ts` | **Delete** — misnamed in-process; its intent is realised by the real smoke harness | B / WS3 |
@@ -187,13 +187,19 @@ Tracks A and B do not block each other.
   real tools, auth-off, real creds, Sentry off-configurable, pre-selected port);
   smoke vitest config WITHOUT the no-network setup; SDK client + raw-HTTP surfaces.
   **First-principles check**: spawn the real built entry, interact only over the
-  socket — not re-assembled via `createApp` (that tests modules through a rig).
+  socket — not re-assembled via `createApp` (that tests modules through a rig). A
+  smoke test file MUST NOT import product code (classification is by behaviour
+  shape, not filename).
 - **WS1 (= EEF D7)** (Track A). The round trip on the smoke harness; behaviour
   assertions only (verbatim corpus values, structuredContent, non-claim, graceful
   collapse, multi-signal); telemetry post-release. Depends on EEF D6.
 - **WS2 — delete the superseded manual harness** (Track A). `replace-don't-bridge`.
 - **WS3 — rebalance the existing e2e suite** (Track B). Per the ledger; refactoring-
-  TDD; network-free; subsumes http-mcp-test-suite-improvements.
+  TDD; network-free; subsumes http-mcp-test-suite-improvements. Pushdowns are
+  **case-granular, not file-granular**: e.g. `auth-enforcement` per-tool 401 repeats
+  → middleware integration, but its OAuth-metadata + RFC-9728 conformance assertions
+  stay at e2e. Where one e2e file yields replacements at multiple levels, delete it
+  only in the commit that greens the LAST replacement (atomic-landing).
 - **WS4 — docs + directive**. Smoke target wiring (NOT in `pnpm check`); README;
   correct the stale `testing-strategy.md` System definition.
 
@@ -271,7 +277,9 @@ Per [`plan-body-first-principles-check.md`](../../../rules/plan-body-first-princ
 - **code-expert / config-expert** — the harness module + the smoke vitest config
   (no no-network setup; not wired to `pnpm check`).
 - **security-expert** — auth-off spawn ships no production bypass (prod guard at
-  `env.ts:77-89` holds); real-cred handling in a smoke run.
+  `env.ts:77-89` holds); real-cred handling in a smoke run; and the carried
+  phase-final question — whether repeated `wrapMcpServerWithSentry` under Sentry off
+  accumulates global handler state (record the verdict; if a defect, open a cycle).
 
 ## Execution Preconditions
 
@@ -295,11 +303,23 @@ ADR-117; update the completed-plans index.
 
 ## Supersession
 
-- **`http-mcp-test-suite-improvements.plan.md`** — subsumed into Track B (its
-  e2e-rebalance cycles 2–7 become the WS3 ledger; cycle-1 built-server file is
-  deleted in WS3; the appId concept is a separate observability decision, NOT
-  carried — see that plan's own scope). Archive to `archive/superseded/` on
-  activation with a reference back here.
+- **`http-mcp-test-suite-improvements.plan.md`** — subsumed into Track B. Cycle
+  mapping (no item dropped):
+  - cycle-1 (built-server immediate-fail assertions) → the file is **deleted** in
+    WS3 (its intent is realised by the smoke harness).
+  - cycles 2–5 (auth-enforcement duplicates, correlation-header, validation,
+    auth-bypass pushdowns) → the WS3 disposition ledger.
+  - cycle-6 (decide whether out-of-process e2e is needed) → **resolved
+    affirmative**: the smoke harness (WS0) IS the out-of-process shape.
+  - cycle-7 (eliminate `appId`) → **NOT carried**. It is a separable, low-severity
+    code-quality + observability decision (the constant `oak.bootstrap.app_id` is a
+    test-only product-code parameter, ~43 references); it is NOT test-estate work.
+    On archival, lift its finding to `.agent/plans/icebox/` so it is preserved, not
+    executed here.
+  - phase-final (security verdict on repeated `wrapMcpServerWithSentry` under Sentry
+    off) → **carried** to the security-expert Readiness Reviewer below.
+
+  Archive to `archive/superseded/` on activation with a reference back here.
 - **`architecture-and-infrastructure/future/stdio-http-server-alignment.md`** —
   independently stale via **ADR-128** (retired the stdio workspace), surfaced by the
   supersession sweep; archive with ADR-128 provenance (a separate cleanup, not this

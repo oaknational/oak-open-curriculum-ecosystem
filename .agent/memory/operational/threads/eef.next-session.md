@@ -1,5 +1,34 @@
 # Next-Session Record — `eef` thread
 
+> **D7 SCOPE EXPANDED TO GO-LIVE (2026-06-06, Floating Darting Cloud / `0ef4c7`;
+> claude / Opus 4.8; owner-directed).** The owner moved the feature-flag flip from a
+> NON-GOAL into D7. The finishing plan's D7 now ships the surface live by moving
+> `OAK_CURRICULUM_MCP_EEF_ENABLED` from pre-release (default OFF) to
+> **release-pre-proof** (default ON, explicit `=false` kill-switch), so merging the
+> PR makes the feature live — engineering-complete + *potentially* valuable, NOT the
+> full delivered-value proof. The full LLM-mediated faithfulness proof AND the
+> **release-post-proof** flag removal are deferred to
+> [`eef-outcome-evaluation-infrastructure.plan.md`](../../../plans/sector-engagement/eef/future/eef-outcome-evaluation-infrastructure.plan.md)
+> (a new flag-removal todo was added there).
+>
+> Edits (working tree, UNCOMMITTED — commit gated on Tidal + Dusky landing their
+> commits, per owner): the master plan D7 (frontmatter + prose) plus the coherent
+> consistency set the overturn forced (Non-Goals, Plan-DoD, End-State, Risk,
+> Lifecycle, owner_scope); the eval-plan flag-removal todo + prose; the README D7
+> line. markdownlint clean. `pnpm check` NOT run (owner: not-check handoff variant;
+> the gated commit's pre-commit hook runs the full gate).
+>
+> **NEXT SAFE STEP unchanged: EXECUTE D6** per Dusky's `eef-d6-execution.plan.md`
+> (D6 lands the surface gated at pre-release). When D6 completes and D7 is reached,
+> D7 now also includes the release-pre-proof flip + the live-on-merge / kill-switch
+> tests.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Floating Darting Cloud` | `claude` | `Opus 4.8` | `0ef4c7` | `d7-golive-plan-edit` | 2026-06-06 | 2026-06-06 |
+>
+> ---
+>
 > **EEF DEEP REVIEW + RESOLUTIONS LANDED; ADR-191 RATIFIED (2026-06-05, Masked
 > Creeping Lantern / `86584c`; claude / Opus 4.8; owner-directed).** A full
 > citation-grounded review of every EEF plan + code (9-lens workflow + adversarial

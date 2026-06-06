@@ -158,3 +158,31 @@ Fresh capture starts below.
   meta-pattern as above: the mechanical gate corrected what the reflex didn't. When
   excellence forces the answer, state the verdict; the owner overrides in conversation,
   not via a deferral checkpoint baked into the doc.
+
+## 2026-06-06 — plan-complete ≠ value-delivered (Floating Darting Cloud)
+
+- **The gap analysis that mattered: completing D6+D7 closes the EEF plan but does
+  NOT deliver user value.** D7 (as written) proved structural fidelity behind a flag
+  that was a NON-GOAL to flip; the real value proof (LLM-mediated faithfulness) plus
+  ACTIVE promotion were deferred to `eef-outcome-evaluation-infrastructure.plan.md`.
+  Lesson: when asked "does finishing X deliver the value", trace the runtime bridge
+  to the actual user, not just X's acceptance tests — the non-goals and the future/
+  plans are where the undelivered spans hide.
+- **The owner then overturned the frame (moved the flag-flip INTO D7).** A
+  frame-overturn is not a single-spot patch: D7 + Non-Goals + Plan-DoD + End-State +
+  Risk + Lifecycle + owner_scope ALL asserted the old "flag stays off" boundary and
+  ALL had to move together, or the plan self-contradicts. Editing only the named
+  section (D7) would have left six live contradictions. Reshape every surface the old
+  boundary lived on (replace-don't-bridge; never-carry-known-bad). Transparently
+  report the blast radius since the ask named only D7.
+- candidate: **The three-stage feature-flag lifecycle is undocumented.** Owner stated
+  it: pre-release (default false, explicit true enables) → release-pre-proof (default
+  true, explicit false = kill-switch) → release-post-proof (flag removed). Not in any
+  ADR/rule/directive (grep clean). Worth a rule or ADR so future go-live edits cite a
+  convention instead of re-deriving it. Trigger: owner confirms it is a standing convention.
+- **Multi-agent continuity collision is real here, not theoretical.** napkin,
+  repo-continuity, pending-graduations, and eef.next-session all went M *during* my
+  session (Dusky + Tidal live on the shared tree). Kept handoff edits strictly
+  ADDITIVE (new banner, appended section), skipped repo-continuity (no field
+  contradicted; peer-active), and gated the commit on the peers — the owner is the
+  live coordinator, so no comms ceremony was added.
