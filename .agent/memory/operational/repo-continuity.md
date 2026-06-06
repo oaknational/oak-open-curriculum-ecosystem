@@ -19,24 +19,6 @@ surface.
 
 ## Current State
 
-- **DEDICATED KNOWLEDGE-CURATION PASS COMPLETE (2026-06-06, Starlit Scattering
-  Twilight / `972acb`, claude / Opus 4.8, owner goal "consolidate until done").**
-  Drained the napkin (10 sections, 06-05/06-06; every section verified-homed
-  first-hand, archived verbatim) and completed the full thread-scoped
-  `consolidate-docs` Pearly deferred mid-churn (the window has since quieted).
-  Three genuinely un-homed items graduated: the uncapped-workflow-`findings[]`
-  gotcha → `distilled.md`; the **three-stage feature-flag lifecycle** →
-  `pending-graduations.md` (owner-gated, surfaced to owner — recommend ADR); the
-  "unless" cheap-cure tell → auto-memory. Audits (experience / cross-platform /
-  7c / 7d / 7e) run read-only and adjudicated: the 5 "emergent" experience
-  patterns are all confirming instances of already-homed doctrine (PDR-089
-  §D4/D6/D7 + the value-contingency rule) — a health signal, not a gap. Two stale
-  § Next Safe Steps entries corrected (CLI `562b97f3` + guard `89ec8dcf` landed +
-  pushed). Full ledger:
-  [`curator-passes/2026-06-06-starlit-scattering-twilight-curation.md`](curator-passes/2026-06-06-starlit-scattering-twilight-curation.md).
-  **Owner-decision digest** in the ledger (feature-flag ADR; experience-drift
-  follow-up lane; Q-002/Q-005). **Next safe step: none on this lane** — owner
-  decisions are surfaced, not blocking.
 - **COLLABORATION-IS-VALUE-CONTINGENT RULE + START-RIGHT-TEAM IMPROVEMENTS LANDED;
   COMMIT WARDEN WITHDRAWN; SESSION COMPLETE (2026-06-06, Pearly Sailing Fjord / `50e03b`,
   claude / Opus 4.8, owner-directed).** Took over commit-warden from Dusky, then
@@ -74,12 +56,6 @@ surface.
   Sentry-coupled cheap cure) + an ADR-171 amendment. Execution stays owner-scheduled
   (test-harness WS1 gated on EEF D6; sinks gated on the relevant feature branch(es)
   merging). Commit warden during the window: Dusky → **Pearly Sailing Fjord**.
-- **Older § Current State session-close summaries archived (2026-06-06, Starlit
-  Scattering Twilight)** — the EEF-D6-plan / EEF-deep-review / PreToolUse-guard /
-  EEF-D5 / agent-tools-infra / migration-redesign / `.remember` entries and their
-  predecessor archived-pointers (verified discharged; live pickup in § Next Safe
-  Steps + the thread banners) moved verbatim to
-  [`archive/repo-continuity-current-state-2026-06-06-starlit-history-trim.md`](archive/repo-continuity-current-state-2026-06-06-starlit-history-trim.md).
 - **Current product focus**: `eef` graph-tooling rebuild is the only active
   product lane. The `agentic-engineering-enhancements` activity in this window is
   a temporary knowledge-curation lane, not a product implementation thread.
@@ -397,100 +373,6 @@ authority.
   Curriculum HTTP API and generated SDK.
 - Knowledge preservation is absolute; fitness warnings route work, not deletion.
 - Shared memory/state files are always writable and commit-includable when dirty.
-
-## Deep Consolidation Status
-
-**COMPLETE — dedicated-knowledge-curation, owner goal "consolidate until done"
-(2026-06-06, Starlit Scattering Twilight / claude / Opus 4.8 / `972acb`).**
-Completed the full thread-scoped `consolidate-docs` pass Pearly (below) deferred
-mid-churn. Conservation invariant held throughout: every disposition is
-substance-led; fitness relaxation is a side effect, not the goal (owner reinforced
-this mid-pass — see the napkin's fresh capture). Drained the napkin (10 sections,
-all verified-homed first-hand, archived verbatim → fresh) and graduated 3
-genuinely un-homed items (workflow-`findings[]` → `distilled.md`; feature-flag
-lifecycle → register; "unless" tell → auto-memory); 1 candidate withdrawn (already
-resolved by Pearly's value-contingency rule). Read-only audits (experience /
-cross-platform / 7c / 7d / 7e) adjudicated against source: the experience corpus's
-recurring patterns are all already-homed (PDR-089 + value-contingency rule) —
-convergence, not gaps. Corrected stale § Next Safe Steps (CLI/guard landed+pushed)
-and archived discharged § Current State history. Full ledger + owner-decision
-digest:
-[`curator-passes/2026-06-06-starlit-scattering-twilight-curation.md`](curator-passes/2026-06-06-starlit-scattering-twilight-curation.md).
-
-**Session-handoff consolidation gate (2026-06-06, Zephyrous Kiting Squall / `e41262`):**
-`not due` — Starlit Scattering Twilight completed the dedicated `consolidate-docs`
-pass this window (above; `db574453`, `32ad9e7b`), draining the cross-session buffers.
-My D6-readiness-evaluation session added no repo-side buffer residue (outputs: plan
-refinements committed `93ee593f` + Claude auto-memory); session-scoped captures homed
-via this handoff (eef banner + napkin + an experience file). A second full pass would
-re-tread Starlit's completed pass.
-
-**session-completion this handoff (2026-06-06, Pearly Sailing Fjord / `50e03b`).**
-Value-contingency rule + start-right-team improvements landed (`da25dcda`); session-scoped
-insights homed — the principle to its rule (the strongest home), surprises to the napkin,
-two candidates to pending-graduations, subjective texture to
-`.agent/experience/2026-06-06-awareness-is-not-ceremony.md`, this continuity update. Full
-thread-scoped `consolidate-docs` (cross-session pattern extraction, napkin rotation, fitness
-management) NOT run: the multi-agent window is actively churning shared buffers, so a
-cross-session pass is not bounded for this closeout (conservation invariant — not mine to run
-mid-churn). Entry-point drift sweep clean (CLAUDE/AGENTS/GEMINI at canonical pointer shape).
-
-**session-completion this handoff (2026-06-05, Masked Creeping Lantern / `86584c`).**
-EEF deep-review closeout: ADR-191 ratified + homed, attribution-PII policy codified,
-crosswalk lesson distilled, surprises captured, `eef` thread + repo-continuity
-refreshed. No napkin rotation (76 lines, freshly rotated by Lanternlit earlier
-today). Partial slice by design: the deeper register/fitness/practice-core audits
-were NOT re-run — Lanternlit's dedicated pass (below) drained them hours earlier, so
-re-running is redundant ceremony (conservation invariant). `pnpm check` 107/108 green;
-the lone failure was a pre-existing unrelated MCP-app e2e flake (green on re-run).
-
-**COMPLETED — dedicated-knowledge-curation, owner goal "consolidate until done"
-(2026-06-05, Lanternlit Passing Mask / claude / Opus 4.8 / `748c10`).** Drained the
-backlog the single-lane closes deferred. Full ledger:
-[`curator-passes/2026-06-05-lanternlit-passing-mask-curation.md`](curator-passes/2026-06-05-lanternlit-passing-mask-curation.md).
-Fitness side-effect (not the goal): **3 HARD → 0 HARD** — napkin rotated
-(HARD→healthy; 13 sections dispositioned; source archived); distilled HARD→soft
-(felt-authority cluster consolidated from 5 verbose entries to one pointer — substance
-homed in pending-graduations + PDR-089 + rules; 3 terse lessons merged; 3 duplicates
-pruned; 0 PUA bytes); this file HARD→soft (2026-06-03→06-04 + today's Dim/Silvered
-closeouts archived verbatim; their pickup substance is in § Current State + thread
-banners, and their "deferred" backlog is what this pass drained). Claude `MEMORY.md`
-over-limit FIXED (26307→23006 B; 114 entries preserved; capture edge unblocked).
-Cross-platform read (Codex/Cursor/Gemini + non-repo plans): near-empty harvest = all
-homed. Experience audit (6 new files): no drift, no stranded insight; emergent
-cross-read corroborates the felt-authority cluster. Audits 7c/7d/7e — see ledger.
-**Owner-resolved this session (3 directives):** (1) felt-authority family **graduated
-→ PDR-089 §Decision 7** (`533c1fe3`; routed as a unifying clause, not a new PDR —
-PDR-089 §Decision 6 already owned the substrate). (2) `.husky/pre-commit` ↔ ADR-121
-drift **fixed** (`6f280f9f`): owner directed a fresh speed/safety re-decision; knip +
-depcruise added to the hook (measured ~1.7s/~1.9s; the new knip check immediately
-caught a peer's unused export), ADR-121 + build-system.md reconciled, config-expert
-reviewed, the stale lint:shell exception corrected. (3) **Pushed** — origin holds
-`981b3c9c..6f280f9f` and `043a984c` (the waiting EEF D5 commits and all curation).
-Session learnings captured to napkin (`043a984c`) and an experience file. **Held, not blocked-by-me:** the
-owner-directed build-system.md matrix **de-dup** (single-source → ADR-121) is done on
-disk + staged but its commit waits on a green-tree window — a very active multi-writer
-window (hook-policy guard + graph-view + graph-corpus-sdk peers in flight) has the
-full-tree gate transiently engaged; I will not force or touch peer work. Verdict:
-`complete` for the dedicated-curation goal + all 3 owner directives; the de-dup commit
-is the only deferred item, gated on tree-green.
-
-**Historical deep-consolidation closeout entries archived.** Closeout prose dated
-2026-05-31 → 2026-06-02 lives in the earlier companion archive; the 2026-06-03 →
-2026-06-05 closeouts (Dim, Silvered, Prismatic, Windward, Hidden, Arboreal
-`complete`, Fiery, Twilit, Burnished, Mossy, Moonlit, Opalescent) were moved verbatim
-on 2026-06-05 to
-[`archive/repo-continuity-deep-consolidation-status-2026-06-05-lanternlit-history-trim.md`](archive/repo-continuity-deep-consolidation-status-2026-06-05-lanternlit-history-trim.md).
-The active status above (Lanternlit curation) plus § Current State and the thread
-banners are the current pickup state; the archives are evidence, not a live queue.
-
-**Session-handoff consolidation gate (2026-06-05, Skyward Lofting Breeze / `221aaa`):**
-`not due` — the full dedicated "consolidate until done" pass completed today (Lanternlit,
-above). This session's knowledge was homed via the handoff itself (napkin ×2; the
-fail-open lesson lives in `.agent/hooks/README.md` + the `decideMissingGuardArtifact`
-TSDoc; the ADR-167 amendment candidate is in `pending-graduations.md`; an experience
-file was written). A second full pass would re-tread the completed pass and collide with
-the active multi-writer window, so none was run.
 
 [main-critical]: threads/main-critical-sonar-remediation.next-session.md
 [mcp-analytics]: threads/mcp-product-analytics.next-session.md
