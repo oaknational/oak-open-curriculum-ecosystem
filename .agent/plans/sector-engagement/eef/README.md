@@ -170,7 +170,10 @@ finite axes), with the value intersecting Oak's tools — the misconception and
 prior-knowledge graphs — at the workflow level. The user-value trace has been
 folded into the live plan; its brief/report are archived as historical scratch
 artefacts. **The next implementation move is D6** (the EEF MCP composition/surface
-behind `OAK_CURRICULUM_MCP_EEF_ENABLED`), then D7 (the teacher-value round trip).
+behind `OAK_CURRICULUM_MCP_EEF_ENABLED`), then D7 (the teacher-value round trip
+and go-live — D7 moves the flag to release-pre-proof so merging the PR ships the
+surface live, with the full delivered-value proof and the release-post-proof flag
+removal deferred to `future/eef-outcome-evaluation-infrastructure.plan.md`).
 No EEF tool/resource/prompt is surfaced yet — the graph layer is built but not
 consumed until D6.
 

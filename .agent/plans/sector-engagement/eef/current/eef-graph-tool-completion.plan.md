@@ -19,7 +19,8 @@ owner_scope: >-
   handler is implemented with real graph-derived logic and tests, or it is absent.
   D0 (doctrine + validator removal + decontamination) and D1 (value contract) are
   complete; D2-D7 build the typed raw foundation, the MCP contract, the
-  graph-native query layer, and the teacher-value round trip.
+  graph-native query layer, and the teacher-value round trip that ships the surface
+  live (moving the release flag from pre-release to release-pre-proof).
 todos:
   - id: d0-fixed-data-doctrine
     content: "Fixed-data doctrine, validator removal, and estate decontamination. Complete: the known-vs-unknown doctrine is set across the ADR estate (ADR-038 generalised to fully-known `as const` constants, ADR-153 predicate, ADR-157/173 corrected, ADR-175 withdrawn), the external-data validator is removed, the `as const` corpus types derive in graph-corpus-sdk strand-lookup, and EEF plans plus non-plan docs are decontaminated. Committed `ce9745c7`; dispositions in eef-d0-decontamination-ledger.md; repo-validators:check green."
@@ -50,7 +51,7 @@ todos:
     status: pending
     depends_on: [d4-graph-capability-contract, d5-graph-construction-methods]
   - id: d7-teacher-value-round-trip
-    content: "Prove the Sunday-night cover-lesson value path through MCP end to end: an agent uses Oak curriculum tools plus the EEF query/fetch tool and interpretation resource/template to assemble evidence-enhanced lesson material with EEF caveats and provenance preserved, with the user-facing EEF prompt available as the workflow starter. Verify against INDEPENDENT ground truth sourced through the typed raw/graph-native chain (a known strand's exact corpus values - caveat text, evidence strength, cost, impact - appear verbatim in the payload, not merely that the fields are present); capture telemetry for the EEF graph path; pnpm check green on a settled tree."
+    content: "Ship the EEF surface live and prove the Sunday-night cover-lesson value path through MCP end to end. SHIP LIVE (go-live): move the OAK_CURRICULUM_MCP_EEF_ENABLED flag from pre-release (defaults false; only an explicit true enables it) to release-pre-proof (defaults true; only an explicit false disables it — the kill-switch) by changing the resolution in apps/oak-curriculum-mcp-streamable-http (env.ts flag doc + runtime-config-from-validated-env.ts) so an unset env var resolves runtimeConfig.eefEnabled to true, making merging the PR make the feature live in deployed environments with no separate env step. Do NOT remove the flag — removal is the release-post-proof stage, after the delivered-value proof. Prove it: a test asserts the merged default (env var unset) registers the tool/resource/prompt and the tool executes, and the kill-switch (=false) removes all three. VALUE PATH (potentially-valuable proxy, NOT the full delivered-value proof): an agent uses Oak curriculum tools plus the EEF query/fetch tool and interpretation resource/template to assemble evidence-enhanced lesson material with EEF caveats and provenance preserved, the user-facing prompt available as the workflow starter; verify against INDEPENDENT ground truth sourced through the typed raw/graph-native chain (a known strand's exact corpus values — caveat text, evidence strength, cost, impact — appear verbatim in the payload, not merely that the fields are present), exercise more than one Oak signal type and an Insufficient/null-impact strand, and assert no teacher-replacing language. ENGINEERING-COMPLETE: registration, the single-Zod-call input/output schemas, structuredContent-only results, isError handling, and EEF-path telemetry are all green with the surface live; pnpm check green on a settled tree. The full proof that real LLM-mediated output preserves faithfulness across the estate, any human-outcome measurement, and the eventual release-post-proof flag removal are DEFERRED to ../future/eef-outcome-evaluation-infrastructure.plan.md and are not required to close this plan."
     status: pending
     depends_on: [d6-mcp-composition-eef-surface]
 ---
@@ -1441,19 +1442,47 @@ out of substrate packages.
 **Proof:** `integration` (registration + flag co-gating + structuredContent).
 Command: `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test`.
 
-### D7 - Teacher value round trip
+### D7 - Teacher value round trip and go-live
 
-**Purpose:** prove the system delivers the intended teacher value.
+**Purpose:** ship the EEF surface live and prove the intended teacher value path.
+D7 has two jobs that close the plan together: (1) **go-live** — flip the release
+flag so merging the PR makes the feature live in deployed environments, with the
+surface engineering-complete; and (2) **value proof** — demonstrate the
+Sunday-night cover-lesson value path end to end, to the bar of *at least
+potentially valuable* (a value-proxy), not the full delivered-value proof. The
+full proof that real LLM-mediated output preserves faithfulness across the estate,
+any human-outcome measurement, and the eventual flag removal are DEFERRED to
+[`../future/eef-outcome-evaluation-infrastructure.plan.md`](../future/eef-outcome-evaluation-infrastructure.plan.md)
+and are not required to close this plan. D7 makes the feature live and proves it
+*could* deliver value; that follow-on plan measures whether it *does*.
 
 **Folded detail:** D7 carries the verbatim-preservation set and the
 independent-ground-truth requirement directly: expected values are sourced through
-the typed raw/graph-native chain, not duplicated fixture text.
+the typed raw/graph-native chain, not duplicated fixture text. The flag follows the
+repo's three-stage lifecycle: **pre-release** (defaults `false`, explicit `true`
+enables — where the EEF flag sits today), **release-pre-proof** (defaults `true`,
+explicit `false` is the kill-switch), and **release-post-proof** (flag removed). D7
+moves the flag from pre-release to release-pre-proof; removal is the post-proof
+stage owned by the deferred outcome-evaluation follow-on. The resolution lives in
+`apps/oak-curriculum-mcp-streamable-http` (`env.ts` flag doc — "Default OFF" today;
+`runtime-config-from-validated-env.ts` parses it into `runtimeConfig.eefEnabled`).
 
 **Do (TDD cycles):**
 
+- **Flip the release flag pre-release → release-pre-proof (go-live).** Change the
+  `OAK_CURRICULUM_MCP_EEF_ENABLED` resolution so an unset env var enables the
+  surface (`runtimeConfig.eefEnabled` defaults to `true`), with
+  `OAK_CURRICULUM_MCP_EEF_ENABLED=false` retained as the explicit kill-switch.
+  Update the flag doc comment in `env.ts` (it currently states "Default OFF") to
+  describe the shipped default-ON-with-kill-switch behaviour. Do NOT remove the
+  flag — removal is the release-post-proof stage, after the deferred
+  delivered-value proof. Tests assert that with the env var unset the surface
+  registers (tool, resource, and prompt) and the tool executes, and that `=false`
+  removes all three.
 - Add an MCP-client e2e flow (StreamableHTTP transport: MCP client SDK +
   `StreamableHTTPClientTransport`, in
-  `apps/oak-curriculum-mcp-streamable-http/e2e-tests/`, `*.e2e.test.ts`):
+  `apps/oak-curriculum-mcp-streamable-http/e2e-tests/`, `*.e2e.test.ts`) against
+  the shipped (default-enabled) configuration:
   initialise the server; call the Oak curriculum tools that are live today — the
   `get-misconception-graph` and `get-prior-knowledge-graph` tools, plus the Oak
   API/search tools — to surface a pedagogical signal for a
@@ -1472,8 +1501,18 @@ the typed raw/graph-native chain, not duplicated fixture text.
 
 **Done when (acceptance):**
 
+- **The feature ships live on merge.** The flag is at release-pre-proof: a test
+  proves that with `OAK_CURRICULUM_MCP_EEF_ENABLED` unset the EEF
+  tool/resource/prompt register and the tool executes, so merging the PR makes the
+  surface live with no separate env step. The kill-switch is retained: a test
+  proves `OAK_CURRICULUM_MCP_EEF_ENABLED=false` removes all three. The `env.ts`
+  flag doc describes the shipped default-ON-with-kill-switch behaviour.
+- **The feature is engineering-complete with the surface live:** registration, the
+  single-Zod-call input/output schemas reaching the real registration path,
+  `structuredContent`-only results, `isError` handling, and EEF-path telemetry are
+  all green in the enabled configuration.
 - The e2e round trip proves graph retrieval, node/resource lookup, and subgraph
-  expansion through MCP.
+  expansion through MCP in the shipped configuration.
 - The proof exercises the Oak/EEF workflow seam on more than one signal type — a
   `get-misconception-graph` signal and a `get-prior-knowledge-graph` signal (the
   Oak tools live today) — so the agent's move -> strand selection is shown to
@@ -1495,6 +1534,10 @@ the typed raw/graph-native chain, not duplicated fixture text.
 - The proof asserts the evidence standard: the output frames EEF as
   population-level evidence that may inform teacher judgement, and does not claim
   or imply guaranteed local efficacy for the specific class, pupil, or adaptation.
+  This is the *potentially-valuable* bar — the value path demonstrably works and
+  could help a teacher; whether real LLM-mediated output reliably preserves
+  faithfulness across the estate is the deferred outcome-evaluation proof
+  ([`../future/eef-outcome-evaluation-infrastructure.plan.md`](../future/eef-outcome-evaluation-infrastructure.plan.md)).
 - At least one telemetry span is recorded for the EEF graph path. If this span
   moves a cell in
   [`plans/observability/what-the-system-emits-today.md`](../../../observability/what-the-system-emits-today.md)
@@ -1502,8 +1545,9 @@ the typed raw/graph-native chain, not duplicated fixture text.
   (start-right observability rule).
 - `pnpm check` is green on a settled tree.
 
-**Proof:** `e2e` + `value-proxy`. Command: the workspace e2e suite +
-`pnpm check`.
+**Proof:** `e2e` + `value-proxy` + `go-live` (the release-pre-proof default-ON
+resolution and kill-switch tests). Command: the workspace e2e suite + the app
+unit/integration suite + `pnpm check`.
 
 ## Carried Context From The 2026-05-30 Session
 
@@ -1562,6 +1606,9 @@ Artefacts already in the tree, so the next session does not rediscover them:
 ### User Value
 
 - The Sunday-night cover-lesson scenario is ratified as the first value proof.
+- The surface ships live on merge (flag at release-pre-proof, kill-switch
+  retained), so the proven value path reaches users; measuring whether it delivers
+  value is the deferred outcome-evaluation follow-on.
 - The assistant combines Oak material with EEF graph evidence so the teacher's
   answer is more useful than Oak retrieval alone.
 - Scenario output includes EEF attribution and caveats and preserves uncertainty
@@ -1611,10 +1658,12 @@ Artefacts already in the tree, so the next session does not rediscover them:
 - Graph tools return `structuredContent` only with `content: []` (a SETTLED Oak
   decision, not to be reopened); error returns use `isError: true`.
 - The only Zod on the MCP side is the input/output schema declarations.
-- With the flag off, no EEF tool, resource, or prompt appears.
-- With the flag on, every registered EEF tool, resource/template, and prompt is
-  implemented end to end with real graph-derived behaviour and tests (the single
-  invariant, Decision 6).
+- The surface ships enabled by default (the flag at release-pre-proof);
+  `OAK_CURRICULUM_MCP_EEF_ENABLED=false` is the explicit kill-switch that removes
+  the EEF tool, resource, and prompt.
+- Enabled (the shipped default), every registered EEF tool, resource/template, and
+  prompt is implemented end to end with real graph-derived behaviour and tests (the
+  single invariant, Decision 6).
 - Every externally supplied field is narrowed by its classified boundary rule
   before graph code sees it.
 - The configured `outputSchema` reaches the actual MCP registration path; tests
@@ -1691,7 +1740,15 @@ The plan is done when D0-D7 are complete and:
   invariant, Decision 6);
 - D2 builds the typed raw foundation; D5/D6
   build the graph projection and MCP surface from the ratified D1/D3/D4 contracts;
-- a Sunday-night cover-lesson scenario proves the teacher value path;
+- the release flag (`OAK_CURRICULUM_MCP_EEF_ENABLED`) is moved to release-pre-proof
+  (defaults to enabled so merging the PR makes the surface live, with `=false`
+  retained as a kill-switch), and the feature is engineering-complete behind real
+  graph-derived behaviour and tests;
+- a Sunday-night cover-lesson scenario proves the teacher value path as a
+  value-proxy — *at least potentially valuable* — with the full LLM-mediated
+  faithfulness proof, human-outcome measurement, and release-post-proof flag
+  removal deferred to
+  [`../future/eef-outcome-evaluation-infrastructure.plan.md`](../future/eef-outcome-evaluation-infrastructure.plan.md);
 - all tests and gates for the touched workspaces pass (`pnpm check` green).
 
 ## Non-Goals
@@ -1700,7 +1757,13 @@ The plan is done when D0-D7 are complete and:
   access this use case needs. Any future behaviour in that space is a separate
   owner decision after this graph surface proves value.
 - Building a UI widget.
-- Flipping `OAK_CURRICULUM_MCP_EEF_ENABLED` in any deployed environment.
+- Proving that real LLM-mediated teacher-facing output reliably preserves EEF
+  faithfulness (caveats, coverage, strength, attribution) across the estate,
+  measuring human teacher-trust / workflow-time outcomes, or removing the release
+  flag (the release-post-proof stage). D7 ships the surface live at
+  release-pre-proof and proves the value path is *potentially* valuable; the
+  delivered-value proof and the eventual flag removal are owned by
+  [`../future/eef-outcome-evaluation-infrastructure.plan.md`](../future/eef-outcome-evaluation-infrastructure.plan.md).
 - Building the next graph corpus before this first surface proves the pattern.
 - Re-validating the EEF value path against the new graph-corpus-sdk replacements
   of the live Oak graph tools. This plan's D7 proof runs on the Oak graph tools
@@ -1751,6 +1814,17 @@ The plan is done when D0-D7 are complete and:
   pass broad strings into typed graph code. Mitigation: D3 classifies every
   externally supplied field, and D6 boundary tests cover non-object envelopes,
   unknown properties, invalid ids, and invalid finite-vocabulary values.
+- **Going live (release-pre-proof) before the outcome-evaluation rubric exists.**
+  D7 flips the surface on for users while the LLM-mediated-faithfulness and
+  human-outcome proofs are still deferred. Mitigation: the surface is a read-only,
+  deterministic projection of a fixed corpus (low blast radius);
+  `OAK_CURRICULUM_MCP_EEF_ENABLED=false` is retained as a production kill-switch;
+  EEF-path telemetry lands in D7 so live usage is observable; the value-proxy proof
+  (verbatim preservation, multi-signal, insufficiency honesty, no teacher-replacing
+  language) gates merge; and
+  [`../future/eef-outcome-evaluation-infrastructure.plan.md`](../future/eef-outcome-evaluation-infrastructure.plan.md)
+  measures delivered value (and triggers release-post-proof flag removal) before any
+  further EEF expansion.
 
 ## Foundation Alignment
 
@@ -1839,5 +1913,6 @@ specialists it flags) run in the normal loop after product edits.
 - Lifecycle touch points per
   `.agent/plans/templates/components/lifecycle-triggers.md`: D0 ADR + decontamination
   edits invoke the docs/ADR reviewer; D4 graph-core query-contract replacement invokes architecture
-  review; D6 MCP-surface change invokes doc/onboarding review; D7 completion runs
-  the consolidation workflow.
+  review; D6 MCP-surface change invokes doc/onboarding review; D7 go-live invokes a
+  release-readiness review (the merged PR makes the surface live) and D7 completion
+  runs the consolidation workflow.
