@@ -157,3 +157,12 @@ ontology-crosswalk orthogonal. Sibling of validate-specialist-findings.
 stage's exit, masking a non-zero `cmd`. A full `pnpm check` once reported "exit 0"
 while it had actually failed. Read the captured output for the real gate verdict, or
 use `PIPESTATUS`/avoid the pipe, before trusting green.
+
+## An uncapped workflow `findings[]` array runs a StructuredOutput agent away
+
+A workflow `agent({schema})` whose array field is unbounded can exceed the
+tool-call size limit on emit, so the subagent fails schema validation and retries
+many times (one observed run made 45 attempts), succeeding only by collapsing to a
+single item and silently dropping the rest. Cap the array (top-N), keep per-finding
+fields terse, or paginate. Same family as the piped-exit gotcha above: a captured or
+emitted result is trustworthy only when its shape was bounded by construction.

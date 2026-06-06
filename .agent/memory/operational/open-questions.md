@@ -133,6 +133,12 @@ fitness_content_role: drainable-buffer
   D6 (the EEF MCP composition surface, where the `outputSchema` mechanism's first
   instance lands) is the next safe step but is **not yet built**. The D6/D7 gate
   and the substrate-migration promotion remain unfired; this question stays live.
+- **Progress (2026-06-06, Starlit Scattering Twilight curation pass)**: the D6
+  execution plan is authored + dual-reviewed (`eef-d6-execution.plan.md`, Dusky
+  Dimming Candle), with D6 re-grounding refinements folded (`93ee593f`); D6 **code
+  is still not written** (next safe step = EXECUTE D6). The `outputSchema`
+  mechanism's first instance therefore still has not landed; the gate stays unfired
+  and this question stays live.
 
 [q3-general]: ../../plans/sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md
 [q3-graph]: ../../plans/sdk-and-mcp-enhancements/archive/completed/graph-tool-output-schemas.plan.md
