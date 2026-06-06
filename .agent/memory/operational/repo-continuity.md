@@ -19,6 +19,25 @@ surface.
 
 ## Current State
 
+- **MCP TEST ESTATE + OBSERVABILITY SINKS PLANS → BOTH DECISION-COMPLETE; Tidal
+  thread handoff absorbed (2026-06-06, Soaring Darting Cliff / `4ac3e4`, claude /
+  Opus 4.8, owner-directed).** Took over Tidal Plumbing Atoll's MCP test-harness
+  thread as a *collaborative* handoff (Tidal concurred with every fold, no pullbacks,
+  then stood down; both handed-off plans are mine). Drove
+  [`unified-mcp-server-test-harness.plan.md`](../../plans/sdk-and-mcp-enhancements/current/unified-mcp-server-test-harness.plan.md)
+  and
+  [`observability-sinks-decoupling.plan.md`](../../plans/observability/current/observability-sinks-decoupling.plan.md)
+  to `🟢 DECISION-COMPLETE`. **Test-harness**: 4 readiness reviewers folded
+  (assumptions/mcp/test/security); the carried `wrapMcpServerWithSentry`-under-Sentry-off
+  question is RESOLVED — not a defect (off-mode noops `sdk.init`; fresh `McpServer`
+  per request). **Sinks**: 4 reviewers (sentry/architecture/config/docs-adr) surfaced
+  two real gaps, both closed by reshape — (1) the `SENTRY_MODE` bridge does NOT exist
+  (`refineLegacySentryMode` hard-rejects), so a new C2b builds it in env-resolution
+  before C3; (2) C2 settled as a standalone OTel `NodeTracerProvider`
+  (true vendor-independence — the forced excellence answer per principles.md, not a
+  Sentry-coupled cheap cure) + an ADR-171 amendment. Execution stays owner-scheduled
+  (test-harness WS1 gated on EEF D6; sinks gated on the relevant feature branch(es)
+  merging). Commit warden during the window: Dusky → **Pearly Sailing Fjord**.
 - **EEF D6 EXECUTION PLAN AUTHORED + DUAL-REVIEWED — UNCOMMITTED, commit deferred
   behind Tidal (2026-06-06, Dusky Dimming Candle / `ef59e2`, claude / Opus 4.8,
   owner-directed).** Authored
@@ -459,6 +478,26 @@ tests, build, eslint, routing validator, markdownlint); whole-tree `pnpm check` 
 (no commit; active multi-writer window). **Next safe step: commit the 8-file slice when
 the owner greenlights and the tree is green; owner to decide the ADR-167 amendment**
 (recommended: not needed — see § Current State entry for the rationale).
+
+### MCP Test Estate + Observability Sinks (both DECISION-COMPLETE 2026-06-06)
+
+Both plans are `🟢 DECISION-COMPLETE`, execution owner-scheduled. Neither has a
+dedicated thread record yet — the session-level home is the § Current State entry +
+this section; create a thread record when execution is scheduled.
+
+1. **Test estate** —
+   [`unified-mcp-server-test-harness.plan.md`](../../plans/sdk-and-mcp-enhancements/current/unified-mcp-server-test-harness.plan.md):
+   WS0 (built-server smoke harness) + WS3 (network-free e2e rebalance) are
+   EEF-independent and executable now; WS1 (= EEF D7) is gated on EEF D6 landing.
+   Cross-plan: sequence WS3's live-executor consolidation BEFORE the MCP slice of
+   `no-io-test-boundary-and-di-recovery.plan.md` (collision risk, per the plan's
+   §Cross-Plan Coordination).
+2. **Observability sinks** —
+   [`observability-sinks-decoupling.plan.md`](../../plans/observability/current/observability-sinks-decoupling.plan.md):
+   C1+C2 (atomic: forcing-function test + standalone OTel `NodeTracerProvider`, adds
+   `@opentelemetry/sdk-trace-node` + amends ADR-171) → C2b (build the `SENTRY_MODE`
+   bridge in env-resolution + reconcile the sink-enum) → C3 (migrate consumers) → C4
+   (renames) → C5 (close). Execution gated on the relevant feature branch(es) merging.
 
 ## Open Owner-Decision Items
 

@@ -8,8 +8,6 @@ merge_class: append-only-narrative
 fitness_content_role: drainable-buffer
 ---
 
-user note to integrate: please remember to focus on useful work and tight communication, rather than on communication ceremony
-
 ## Session: 2026-06-05 — napkin rotation (Lanternlit Passing Mask curation pass)
 
 Rotated the 2026-06-04 (Arboreal) → 2026-06-05 (Dim) window — ~13 session-sections
@@ -188,6 +186,34 @@ Fresh capture starts below.
   ADDITIVE (new banner, appended section), skipped repo-continuity (no field
   contradicted; peer-active), and gated the commit on the peers — the owner is the
   live coordinator, so no comms ceremony was added.
+
+## 2026-06-06 — achieving decision-complete is not aiming at it (Soaring Darting Cliff)
+
+- **Re-instanced the cheap-cure-as-deference failure.** Driving the sinks plan to
+  decision-complete, I framed the OTel exporter strategy as "here's the path + the one
+  call I'll make *unless* you'd rather scope it differently." That read as humility; it
+  was a hedge that surfaced a Sentry-coupled cheap cure as a legitimate trade-off — the
+  exact move principles.md §Architectural Excellence forbids. The excellence answer was
+  already forced (only a standalone OTel provider lets spans flow with Sentry off), so
+  there was nothing to surface, only something to settle. Owner cure: "ACHIEVING
+  decision-complete, not towards." Reinforces [[feedback_no_cheap_cure_option]],
+  [[feedback_no_question_when_answer_is_forced]]. The tell next time is the word
+  "unless" in a sentence where the principle has already chosen.
+- **"Decision-complete" is a state you close, not a status you approach.** Aiming
+  leaves the open design questions open in the document and calls it caution; achieving
+  resolves each to its excellence answer and writes it in (here: a built bridge step
+  for the non-existent `SENTRY_MODE` bridge, the standalone provider, the enum/`.env`
+  folds). The grounding that mattered: a reviewer-claimed "the bridge keeps consumers
+  working" was FALSE — `refineLegacySentryMode` hard-rejects; validating it turned a
+  fold into a reshape.
+- **Owner standing direction integrated: useful work + tight communication over
+  communication ceremony.** I over-invested early in coordination framing (a structured
+  handoff sidebar, long process-explanation replies) when the team coordinated through
+  the owner-as-conductor and the comms stream was dormant. Reinforces
+  [[feedback_comms_ceremony_minimal]], [[feedback_no_ritual_framing]] — substantive
+  coordination yes, ritual no; terse reports.
+- Subjective texture (taking over a thread from a *live* peer who then concurred and
+  stood down) is in `.agent/experience/2026-06-06-achieving-not-aiming.md`.
 
 ## 2026-06-06 — commit-warden phase: commit-on-signal beats chase-the-churn; ceremony correction (Dusky Dimming Candle)
 

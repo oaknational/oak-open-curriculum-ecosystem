@@ -13,7 +13,7 @@ overview: >
   rebalance to lowest faithful level). Two internally-independent tracks — smoke
   (real IO, on-demand) and e2e rebalance (network-free, CI) — under one consolidated
   plan, per the "replace the myriad half-plans with a single plan" brief.
-status: planning
+status: current
 supersedes:
   - .agent/plans/sdk-and-mcp-enhancements/current/http-mcp-test-suite-improvements.plan.md
 todos:
@@ -28,8 +28,12 @@ todos:
       PORT=n — server-runtime.ts logs the configured port, so PORT=0 is undiscoverable
       across the spawn). The smoke config must NOT load the no-network E2E setup
       (smoke wants real network). Expose a real MCP SDK Client
-      (StreamableHTTPClientTransport) + a raw-HTTP surface. RED: first smoke test —
-      built server boots → initialize → listTools returns the real tool surface.
+      (StreamableHTTPClientTransport, passing an explicit `fetch` so the vitest env
+      cannot intercept localhost — matches the mcp-app-composition precedent) + a
+      raw-HTTP surface. RED: first smoke test — built server boots, `client.connect()`
+      (which performs the MCP `initialize` handshake INTERNALLY per
+      `@modelcontextprotocol/sdk ^1.29.0`; there is no separate `initialize()` call),
+      then `listTools()` returns the real tool surface.
     status: pending
     depends_on: []
   - id: ws1-eef-d7-round-trip
@@ -71,21 +75,27 @@ todos:
     depends_on: []
   - id: ws4-docs-target-and-directive
     content: >
-      WS4 (docs): wire the smoke target as an on-demand script (package.json smoke:*),
-      explicitly NOT in pnpm check (real IO is smoke, not network-free CI per
-      ADR-161); document local + preview runs; update the e2e-tests/workspace README
-      (describe both tracks; correct the phantom header-redaction.e2e.test.ts entry);
-      correct the stale testing-strategy.md System definition (line 149: "stdio
-      transport" — ADR-128 retired the stdio workspace; the system under test is the
-      HTTP MCP server).
+      WS4 (docs): wire the smoke target under a distinct `smoke:*` script namespace,
+      structurally excluded from `pnpm check` (never in any `test:e2e` dependsOn
+      chain — a config-time control, not just convention; real IO is smoke, not
+      network-free CI per ADR-161); document local + preview runs AND that
+      `VERCEL_ENV` must not be `production` in `.env.local` (the auth-off guard at
+      env.ts:77-89 depends on its absence); update the e2e-tests/workspace README
+      (describe both tracks; correct the phantom header-redaction.e2e.test.ts entry —
+      this part lands best after WS3 so the description matches the rebalanced suite);
+      correct the stale testing-strategy.md System definition — BOTH the line-149
+      "stdio transport" System def AND the E2E protocol-channel block (~lines 184-200,
+      "stdio-transport systems (MCP stdio)"); ADR-128 retired the stdio workspace, so
+      the system under test is the HTTP MCP server (this doc correction is stale by
+      ADR-128 alone — unconditional, gated on nothing).
     status: pending
-    depends_on: [ws2-delete-superseded-manual-harness, ws3-rebalance-existing-e2e-suite]
+    depends_on: []
 ---
 
 # Unified MCP Server Test Estate
 
 **Last Updated**: 2026-06-06
-**Status**: 🟡 PLANNING (execution gated — see Execution Preconditions)
+**Status**: 🟢 DECISION-COMPLETE (execution gated — see Execution Preconditions)
 **Collection**: `sdk-and-mcp-enhancements`
 **Workspace**: `apps/oak-curriculum-mcp-streamable-http`
 **Supersedes**: `http-mcp-test-suite-improvements.plan.md` (absorbs its e2e-rebalance
@@ -142,6 +152,9 @@ superseded manual scripts are deleted.
   for a smoke run.
 - **`PORT=0` is undiscoverable across the spawn** (`server-runtime.ts:38` logs the
   configured port; no `address()` exposed) → globalSetup pre-selects a free port.
+  NOTE (Tidal reviewer note, non-blocking): bind-`:0`/read/close/pass carries a
+  small TOCTOU window between probe-close and server-bind; prefer a single-socket
+  `get-port`-style reservation at execution.
 - **Telemetry is Sentry-coupled today** (`http-observability.ts:152-154`); EEF
   telemetry is validated post-release from live Sentry data, not in the harness.
   The vendor-neutral decoupling is a separate, NON-blocking plan
@@ -325,7 +338,7 @@ ADR-117; update the completed-plans index.
   supersession sweep; archive with ADR-128 provenance (a separate cleanup, not this
   plan's doing).
 
-## Connection to EEF D7 and the Sinks-Decoupling Plan
+## Cross-Plan Coordination (EEF D7, Sinks-Decoupling, and test-estate neighbours)
 
 - **EEF D7**: WS1 IS D7; this harness is its vehicle. WS0 is EEF-independent and
   parallelises with EEF D6; they converge at WS1.
@@ -335,6 +348,17 @@ ADR-117; update the completed-plans index.
   post-release from live Sentry data. The decoupling independently lets a future
   smoke run assert span telemetry on the stdout baseline with Sentry off — a
   benefit, not a gate. **Ship-independent, coordinate-dependent.**
+- **`no-io-test-boundary-and-di-recovery.plan.md`** (`architecture-and-infrastructure/current/`)
+  — **real cross-plan collision risk** (Tidal handoff, highest-value residue item):
+  it overlaps Track B's live-executor / DI-seam consolidation (WS3). Sequence its
+  MCP-server slice AFTER WS3's consolidation lands; cross-reference both before
+  executing either against this workspace.
+- **`test-suite-audit-and-triage.plan.md`** (`architecture-and-infrastructure/future/`)
+  — monorepo-wide, independent; its promotion trigger (`feat/mcp_app` merged) may now
+  be met. Re-evaluate for promotion **separately** (not this plan's work).
+- **`test-ceremony-production-factory-audit.plan.md`** — may touch this workspace's
+  test files on a different concern (factory-import hygiene). No action here; flagged
+  for collision awareness only.
 
 ## First Question
 
@@ -345,3 +369,57 @@ scaffolding I had over-built, AND not fragmenting into separate plans (which wou
 leave half-plans and a half-baked harness lingering, against the brief). One plan,
 one harness, real behaviour, the old surfaces deleted, the existing suite rebalanced
 — that is the minimum that delivers the value proof and honours `replace-don't-bridge`.
+
+## Readiness Review Disposition (2026-06-06)
+
+Four readiness reviewers ran against this plan (assumptions, mcp, test, security;
+Sonnet). **All returned READY-WITH-CONDITIONS; none blocked.** Findings were
+re-grounded against the artefact and code before folding. Conditions resolved
+below; the two instruction-changing fixes are folded inline (WS0 `initialize`
+clarification; WS4 `depends_on` relaxation + scope widening).
+
+**DECISION-COMPLETE declared 2026-06-06** (owner-directed; Tidal Plumbing Atoll
+concurred with every fold, no pullbacks; all reviewer conditions resolved). The
+plan's remaining named reviewers — `code-expert` / `config-expert` — are
+**execution-stage**: there is no harness module or smoke vitest config to review at
+plan stage; they fire when those artefacts are written. Execution stays
+owner-scheduled (WS0/WS3 unblocked; WS1 gated on EEF D6).
+
+- **Carried question RESOLVED — not a defect** (security F3, supersedes the
+  §Supersession phase-final + §Readiness-Reviewers security carry): repeated
+  `wrapMcpServerWithSentry` under Sentry-off does NOT accumulate global handler
+  state. Evidence: `initialiseSentry` short-circuits to a noop runtime when
+  `mode === 'off'` (`sentry-node/src/runtime.ts:173-184`; `sdk.init()` never
+  called); the factory builds a fresh `McpServer` per request
+  (`core-endpoints.ts:83-103`); the wrap patches are instance-scoped and inert
+  without a live client (proven by `core-endpoints.integration.test.ts`). No
+  cycle needed.
+- **WS0 SDK call shape** (mcp F1, folded inline): `initialize` is internal to
+  `client.connect(transport)` in `@modelcontextprotocol/sdk ^1.29.0` — no public
+  `initialize()`. WS0 RED step reworded. Verified shape: `new Client(...)` →
+  `connect(transport)` → `listTools()`, matching `mcp-app-composition.e2e.test.ts`.
+- **WS0 explicit `fetch`** (mcp F3, folded inline): pass an explicit `fetch` to
+  `StreamableHTTPClientTransport` so the vitest env cannot intercept localhost.
+- **WS4 dependency overstated** (assumptions F1, folded inline): the
+  `testing-strategy.md` correction + `smoke:*` wiring are stale by ADR-128 alone
+  and gated on nothing; only the README-describes-rebalanced-suite item is best
+  done after WS3. `depends_on` relaxed to `[]`.
+- **WS4 scope widened** (assumptions F2, folded inline): correct BOTH the line-149
+  System def AND the E2E protocol-channel block (`testing-strategy.md:184-200`,
+  "stdio-transport systems") — the stdio framing lives in both.
+- **Smoke real-cred CI control** (security F2, folded into WS4): smoke wired under
+  a distinct `smoke:*` namespace, structurally excluded from any `test:e2e`
+  dependsOn chain (config-time control). Plus the `VERCEL_ENV` `.env.local` note
+  (security F1).
+- **WS3 `__ORIGINAL_FETCH__` ambient-global disposition** (test F1 — Option A,
+  the doctrinally-correct cure per "tests never touch global state"): the WS3
+  rebalance replaces the `globalThis.__ORIGINAL_FETCH__` read in
+  `mcp-app-composition.e2e.test.ts` with an injected `fetch` through the DI seam
+  and deletes the `getOriginalFetch()` helper. This also satisfies mcp F3 at the
+  e2e level.
+- **WS3 reclassification + assertion strength** (test F2/F3, execution-time
+  requirements): pushed-down variants are written as `*.integration.test.ts` (not
+  renamed e2e files) and the e2e originals deleted in the same commit; the
+  `string-args-normalisation` Zod v3/v4 substring assertion is replaced with a
+  Zod-version-aware ground truth (`satisfies` against the schema or a snapshot of
+  the boundary error shape), not a cross-version substring match.

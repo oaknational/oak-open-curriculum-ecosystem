@@ -12,63 +12,77 @@ overview: >
   the gap but does NOT block on this: EEF accepts a Sentry-off behaviour-validation
   run now and validates Sentry telemetry post-release from live data. This plan
   stands on its own ADR-162/171 vendor-independence merit.
-status: planning
+status: current
 supersedes:
   - .agent/plans/observability/future/replace-sentry-mode-with-observability-sinks.plan.damaged-paused-2026-05-04.md
 todos:
-  - id: c1-forcing-function-conformance-red
+  - id: c1-c2-forcing-function-and-standalone-provider
     content: >
-      C1 (forcing function — RED): add a conformance test that runs the HTTP MCP
-      server (and the Search CLI) with the Sentry sink OFF and a non-Sentry sink
-      active (console), and asserts that span telemetry for a known operation
-      persists to that sink. It FAILS today because `resolveTracer`
-      (http-observability.ts:152-154) only creates an OTel tracer when
-      `mode === 'sentry'` — with Sentry off, `createSpanFunctions(undefined)`
-      yields synthetic no-op spans (span-helpers.ts:186-203). This failing test is
-      the functional gate the damaged plan lacked. Coordinate with
-      multi-sink-vendor-independence-conformance.plan.md (its emission-persistence
-      test is the same shape — reuse, do not duplicate).
+      C1+C2 (ONE atomic landing — RED+GREEN, never committed-red): (RED) an
+      in-process integration conformance test with a DI-injected console/fake sink,
+      asserting span telemetry for a known operation persists to that sink with the
+      Sentry sink OFF — fails today because `resolveTracer`
+      (http-observability.ts:152-154) only tracers when `mode === 'sentry'` (else
+      synthetic no-op spans, span-helpers.ts:186-203). (GREEN) decouple span
+      generation by constructing a STANDALONE OTel `NodeTracerProvider` with per-sink
+      exporters (console / log-file / sentry), selected from OBSERVABILITY_SINKS
+      independent of the Sentry mode. A standalone provider is REQUIRED, not optional:
+      `trace.getTracer()` returns a no-op unless a provider is registered (Sentry's
+      `init()` registers one today), so true vendor-independence — Sentry-off must
+      still emit spans — cannot be achieved any other way. Adds
+      `@opentelemetry/sdk-trace-node` and AMENDS ADR-171 to sanction the standalone
+      provider as the vendor-independent span path (the provider is selected by sink
+      set: Sentry's when `sentry` ∈ sinks, else the standalone one). Coordinate with
+      multi-sink-vendor-independence-conformance.plan.md (same test shape — reuse).
     status: pending
     depends_on: []
-  - id: c2-decouple-span-generation-from-sentry
+  - id: c2b-build-bridge-and-reconcile-enum
     content: >
-      C2 (structural — GREEN for C1): make OTel span generation route to the
-      active sink set (console / log-file / sentry) independent of
-      `mode === 'sentry'`. The tracer/exporter is constructed from
-      OBSERVABILITY_SINKS, not from the Sentry mode. This is the substantive
-      change that closes the telemetry-coupling gap; the exact tracer/exporter
-      wiring is execution-time design (reviewer-gated). Greens C1.
+      C2b (migration prerequisites — BEFORE any consumer migrates): (1) BUILD the
+      `SENTRY_MODE`→axes transitional bridge in `@oaknational/env-resolution`
+      (ADR-171 §Decision 3) — map legacy `SENTRY_MODE` to OBSERVABILITY_SINKS/
+      FIXTURES and emit a deprecation warning via the reserved `warnings` channel
+      (resolve-env.ts) so non-migrated consumers keep working. It does NOT exist
+      today: `refineLegacySentryMode` (packages/core/env) hard-rejects `SENTRY_MODE`;
+      the bridge maps it upstream of that schema, and the hard-reject becomes the
+      permanent post-migration guard once C5 deletes the bridge. (2) RECONCILE the
+      sink-enum: `OBSERVABILITY_SINK_KINDS` (sink-registry.ts:37) `'file'`→`'log-file'`
+      and add `'console'`, propagating through the env schema + refinements
+      (the `'console'` sink carries no conditional-requirement rule, by design).
     status: pending
-    depends_on: [c1-forcing-function-conformance-red]
+    depends_on: [c1-c2-forcing-function-and-standalone-provider]
   - id: c3-migrate-consumers-via-bridge
     content: >
       C3 (incremental, per-consumer): migrate each consuming composition root from
       SENTRY_MODE consumption to OBSERVABILITY_SINKS / OBSERVABILITY_FIXTURES via
-      the env-resolution transitional bridge (ADR-171 §Decision 3) — HTTP MCP app
-      (http-observability.ts), then Search CLI(s) (cli-observability.ts). One
-      consumer per cycle, each landing green; the bridge keeps non-migrated
-      consumers working, so this is incremental, NOT one atomic cross-package
-      commit (the over-constraint that damaged the old plan). Re-derive the exact
-      consumer-site inventory at execution.
+      the C2b bridge — HTTP MCP app (http-observability.ts), then Search CLI(s)
+      (cli-observability.ts). One consumer per cycle, each landing green; the bridge
+      keeps non-migrated consumers working, so this is incremental, NOT one atomic
+      cross-package commit (the over-constraint that damaged the old plan). Re-derive
+      the exact consumer-site inventory at execution.
     status: pending
-    depends_on: [c2-decouple-span-generation-from-sentry]
+    depends_on: [c2b-build-bridge-and-reconcile-enum]
   - id: c4-cosmetic-renames
     content: >
-      C4 (cosmetic, separated): the mechanical renames the old plan mixed in with
-      the structural change — `mode` → `kind` discriminator, FixtureSentryStore →
-      FixtureCaptureStore, FixtureSentryCapture* → FixtureCaptureRecord*. Pure
-      rename cycles, each green, sequenced AFTER the structural decoupling so the
-      cosmetic-vs-structural axis stays separated (damaged-plan cause #3).
+      C4 (cosmetic, separated): the mechanical renames — `mode` → `kind`
+      discriminator, FixtureSentryStore → FixtureCaptureStore, FixtureSentryCapture*
+      → FixtureCaptureRecord*. This also removes the Sentry-specific `fixtureStore`
+      TYPE from the vendor-neutral `HttpObservability` interface (decompose-at-the-
+      tension: a Sentry-named type on the sink-independent surface is the coupling
+      smell). Pure rename cycles, each green, sequenced AFTER the structural
+      decoupling so the cosmetic-vs-structural axis stays separated.
     status: pending
     depends_on: [c3-migrate-consumers-via-bridge]
   - id: c5-bridge-removal-adr-amendments-docs
     content: >
       C5 (closure): delete the SENTRY_MODE transitional bridge once every consumer
-      has migrated (grep proves zero live SENTRY_MODE/SentryMode/SentryEnvSchema
-      outside historical doc refs); amend ADR-143/116/162/163 per ADR-171
-      §Consequences; reconcile the sink enum drift (ADR-171 names sentry/console/
-      log-file; live sink-registry.ts:37 has sentry/file + stdout baseline);
-      update .env.example + the affected READMEs.
+      has migrated (grep proves zero live SENTRY_MODE/SentryMode/SentryEnvSchema in
+      SOURCE + SCHEMA files — test-helper pinned literals e.g.
+      auth-error-test-helpers.ts:52 are migrated too, not exempted; historical doc
+      refs excluded); VERIFY-AND-COMPLETE the existing 2026-05-10 ADR amendment notes
+      on ADR-143/116/162/163 to record the post-migration state (the notes already
+      exist — this is not blank-slate authoring); update .env.example (remove
+      `SENTRY_MODE`, add OBSERVABILITY_SINKS/FIXTURES/FILE_PATH) + the affected READMEs.
     status: pending
     depends_on: [c4-cosmetic-renames]
 ---
@@ -76,7 +90,7 @@ todos:
 # Observability Sinks Decoupling — implement ADR-171
 
 **Last Updated**: 2026-06-06
-**Status**: 🟡 PLANNING (execution gated — see Execution Preconditions)
+**Status**: 🟢 DECISION-COMPLETE (execution gated — see Execution Preconditions)
 **Collection**: `observability`
 **Implements**: [ADR-171](../../../../docs/architecture/architectural-decisions/171-observability-configuration-orthogonal-axes.md) (Accepted 2026-05-10)
 **Subsumes**: `future/replace-sentry-mode-with-observability-sinks.plan.damaged-paused-2026-05-04.md`
@@ -106,16 +120,21 @@ EEF prerequisite (see Connection to the MCP Smoke Harness / EEF D7).
    functional gate (the dev server worked with or without the rename). A
    conformance test that fails until span telemetry persists with Sentry off
    (C1) is the gate that drives C2–C5 and prevents silent half-migration.
-3. **The transitional bridge makes migration incremental.** ADR-171 §Decision 3
-   keeps non-migrated consumers working via a `SENTRY_MODE` bridge in
-   env-resolution, so consumers migrate one green cycle at a time (C3) rather than
-   one big atomic cross-package commit.
+3. **A transitional bridge makes migration incremental — and it must be built.**
+   ADR-171 §Decision 3 mandates a `SENTRY_MODE`→axes bridge in
+   `@oaknational/env-resolution`. It does NOT exist yet: today `refineLegacySentryMode`
+   (packages/core/env) hard-rejects `SENTRY_MODE`. C2b builds the bridge (map +
+   deprecation warning via the reserved `warnings` channel) so consumers migrate one
+   green cycle at a time (C3); the hard-reject becomes the permanent post-migration
+   guard once C5 deletes the bridge.
 
 ## Grounded Current State (2026-06-06)
 
-- **ADR-171 (Accepted 2026-05-10)** defines the orthogonal axes; `SENTRY_MODE` is
-  retired as a primary concern via a transitional bridge, deleted once all
-  consumers migrate.
+- **ADR-171 (Accepted 2026-05-10)** defines the orthogonal axes; `SENTRY_MODE` is to
+  be retired via a transitional bridge (BUILT in C2b, deleted in C5). Today there is
+  NO bridge: `refineLegacySentryMode`
+  (`packages/core/env/.../observability-refinements.ts:79-93`) hard-rejects any
+  `SENTRY_MODE` — the C2b bridge maps it upstream of that schema during migration.
 - **WS1 landed (commit `a3a0222a`)**: the core types exist —
   `OBSERVABILITY_SINKS`/`OBSERVABILITY_FIXTURES` schemas (`packages/core/env`),
   `ObservabilitySinkKind` + `SinkRegistry` (`packages/core/observability/src/sink-registry.ts`),
@@ -157,18 +176,27 @@ amendment is the vehicle (docs-adr-expert decides at execution).
 ## Workstreams (linear cycles; each lands green)
 
 Per ADR-117 + `tdd-as-design.md`. The decomposition is deliberately linear and
-small (owner constraint: simple, straightforward). Each cycle is one green commit.
+small (owner constraint: simple, straightforward). Each cycle is one green commit
+(C1+C2 co-land atomically — never committed-red).
 
-- **C1 — forcing function (RED).** The conformance test above. Coordinate with
-  `multi-sink-vendor-independence-conformance.plan.md` (same shape — reuse).
-- **C2 — decouple span generation from Sentry (GREEN for C1).** Tracer/exporter
-  constructed from the active sink set, not `mode === 'sentry'`.
+- **C1+C2 — forcing function + standalone-provider decoupling (ONE atomic landing).**
+  In-process integration conformance test (DI console/fake sink) that fails with the
+  Sentry sink off; greened by a standalone OTel `NodeTracerProvider` with per-sink
+  exporters selected from `OBSERVABILITY_SINKS` (the provider is selected by sink set —
+  Sentry's when `sentry` ∈ sinks, else the standalone one). Adds
+  `@opentelemetry/sdk-trace-node`; amends ADR-171 to sanction the standalone provider.
+  Coordinate with `multi-sink-vendor-independence-conformance.plan.md` (same shape).
+- **C2b — build the bridge + reconcile the enum (before C3).** Build the
+  `SENTRY_MODE`→axes bridge in env-resolution (it does not exist today); reconcile the
+  sink-enum (`file`→`log-file`, add `console`).
 - **C3 — migrate consumers via the bridge.** HTTP MCP app, then Search CLI(s); one
   per cycle; bridge keeps the rest working.
-- **C4 — cosmetic renames.** `mode`→`kind`, FixtureSentryStore→FixtureCaptureStore,
-  etc. Mechanical, separated, green.
-- **C5 — closure.** Delete the bridge (grep-proven zero live `SENTRY_MODE`); ADR
-  amendments (143/116/162/163); sink-enum reconciliation; `.env.example` + READMEs.
+- **C4 — cosmetic renames.** `mode`→`kind`, FixtureSentryStore→FixtureCaptureStore;
+  also removes the Sentry-specific `fixtureStore` type from the vendor-neutral
+  `HttpObservability` interface. Mechanical, separated, green.
+- **C5 — closure.** Delete the bridge (grep-proven zero live `SENTRY_MODE` in
+  source+schema); verify-and-complete the ADR amendment notes (143/116/162/163);
+  `.env.example` (remove `SENTRY_MODE`, add the new axes) + READMEs.
 
 ## Supersession of the Damaged Plan
 
@@ -177,9 +205,9 @@ This plan subsumes
 per the standing 2026-05-04 owner direction ("create a new plan to finish the
 remaining actual work… mark the old plan as damaged and superseded"). Mapping:
 
-- Old cycle-1 (one atomic cross-package rename) → split across C2 (structural
-  decouple) + C3 (incremental per-consumer migration) + C4 (cosmetic renames),
-  with C1 as the forcing function it lacked.
+- Old cycle-1 (one atomic cross-package rename) → split across C1+C2 (forcing
+  function + standalone-provider decouple) + C2b (bridge + enum) + C3 (incremental
+  per-consumer migration) + C4 (cosmetic renames) — the forcing function it lacked.
 - Old cycle-2 (author ADR-171) → **already done** (ADR-171 Accepted 2026-05-10);
   C5 instead amends the ADRs ADR-171 §Consequences names (143/116/162/163).
 - Old cycle-3 (READMEs + `.env.example`) → C5.
@@ -195,7 +223,10 @@ this architectural work.)
 
 - **ADR-171 (blocking)** — Accepted; satisfied.
 - **WS1 core types (blocking)** — landed `a3a0222a`; satisfied.
-- **C1 forcing function (blocking)** for C2–C5 — it is the gate.
+- **C1+C2 atomic landing (blocking)** for C2b–C5 — the forcing function +
+  standalone-provider decoupling are the gate.
+- **C2b bridge + enum reconciliation (blocking)** for C3 — consumers cannot migrate
+  before the bridge exists and the enum is reconciled.
 - **Relevant feature branch(es) merged (blocking for execution)** — so the
   migration does not race branch closure (tension cause #4). Re-verify at execution.
 - **`multi-sink-vendor-independence-conformance.plan.md` (beneficial)** — its
@@ -289,6 +320,52 @@ grounded against the directives). Apply before DECISION-COMPLETE:
 3. **Reconcile the sink-enum drift BEFORE C3** (consumer migration), not in C5:
    ADR-171 names `console`/`log-file`; live `sink-registry.ts:37` has `file` + the
    un-listed stdout baseline. A mid-migration mismatch would block C3 in CI.
+
+**Review (2026-06-06, round 2 — sentry / architecture / config / docs-adr; Soaring
+Darting Cliff). All four READY-WITH-CONDITIONS; RESOLVED + folded by the reshape
+below — the plan is DECISION-COMPLETE.** Two load-bearing gaps, now closed in the
+re-cut cycles above:
+
+1. **The `SENTRY_MODE` bridge does not exist (decision-complete blocker, grounded).**
+   The plan's §Mechanism #3 + C3 assert a transitional bridge "keeps non-migrated
+   consumers working." The live code does the opposite: `refineLegacySentryMode`
+   (`packages/core/env/.../observability-refinements.ts:79-93` — NOT
+   `env-resolution` as the plan and ADR-171 §Decision 3 both say) **hard-rejects**
+   any `SENTRY_MODE`. ADR-171 §Decision 3 mandates the bridge, so the cure is to add
+   an explicit **bridge-construction step** (map `SENTRY_MODE`→axes in env-resolution,
+   upstream of the hard-fail) sequenced BEFORE C3. → **Resolved**: C2b builds the
+   bridge before C3 (§Mechanism #3, §Workstreams, `todos`).
+2. **C2 span-decoupling needs an exporter strategy (named checkpoint, possible ADR
+   touch).** `trace.getTracer()` returns a no-op unless a `TracerProvider` is
+   registered (Sentry's `init()` does this today). `@opentelemetry/sdk-trace-node`
+   is NOT a dependency. Architectural-excellence forces the answer (principles.md
+   §Architectural Excellence): a Sentry-hosted provider only works while Sentry is
+   on, so it cannot deliver "Sentry-off still emits spans" — only a standalone
+   `NodeTracerProvider` with per-sink exporters achieves true vendor-independence.
+   → **Resolved**: C1+C2 settles the standalone-provider design, adds
+   `@opentelemetry/sdk-trace-node`, and amends ADR-171 to sanction it.
+
+Foldable conditions (apply during the reshape):
+
+- **Plan-body contradiction**: `todos[4]`/§Workstreams still place enum
+  reconciliation at C5; condition 3 above says before C3. Move it in the body.
+- **`.env.example` hazard (live now)**: both `.env.example` files set
+  `SENTRY_MODE=off`, which hard-fails against the new schema. Enumerate the new
+  `OBSERVABILITY_SINKS`/`FIXTURES`/`FILE_PATH` entries for C5 and flag the hazard.
+- **C5 ADRs already amended**: 143/116/162/163 carry 2026-05-10 notes; reword C5
+  from "amend" to "verify-and-complete the post-migration state."
+- **`HttpObservability.fixtureStore: FixtureSentryStore`** is a Sentry-specific type
+  on the vendor-neutral interface — decide at C3/C4 whether it moves to a narrower
+  capabilities surface.
+- **C5 grep scope**: exclude (or explicitly treat) test-helper pinned `SENTRY_MODE`
+  literals, e.g. `auth-error-test-helpers.ts:52`.
+- **Foundational tension**: docs-adr verdict — plan-body capture is sufficient; no
+  PDR/ADR amendment warranted.
+
+All resolved + folded into the re-cut cycles (C1+C2 atomic + standalone provider;
+C2b bridge + enum; C3 premise now met; C4 fixtureStore; C5 reword/grep-scope/.env).
+**Plan is DECISION-COMPLETE 2026-06-06.** Execution stays owner-scheduled and gated on
+the relevant feature branch(es) being merged (no parallel-writer race).
 
 ## Execution Preconditions
 
