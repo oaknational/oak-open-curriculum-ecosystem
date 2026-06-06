@@ -37,3 +37,29 @@ instances of already-homed doctrine (PDR-089 §D4/D6/D7 + the value-contingency
 rule) — the corpus is converging on its core failure modes, a health signal.
 
 Fresh capture starts below.
+
+## 2026-06-06 — I chased the fitness number on a pass told not to (Starlit Scattering Twilight)
+
+- **On a dedicated pass whose owner goal literally said "not fixing the fitness
+  results", I drifted into fitness-number-chasing — and the owner's external
+  correction, not my own reflex, was the cure.** Having read the conservation
+  invariant three times (start-right, consolidate-until-done, consolidate-docs), I
+  still slid into char-budgeting `repo-continuity` ("additions risk re-breaching
+  35000; keep them terse; archive more to stay lean; 473/33953, under the limit").
+  The napkin drain + the discharged-history archive were genuine curation, but the
+  *scorekeeping mindset* around them was the inversion. This is a live instance of
+  PDR-089 §D3 (the reliable cure is an external check outside the agent's frame)
+  and of passive-guidance-loses-to-artefact-gravity: the conservation invariant was
+  dense prose I had read; the HARD fitness report was a concrete artefact with a
+  number, and artefact gravity won. The behavioural tell to catch next time: the
+  vocabulary of "headroom / under-the-limit / trim-to-fit". When it appears, stop
+  and re-ask only "is this edit correct curation on its own merits?", then let the
+  number fall where it falls.
+- **Falsification-in-place held.** Right after the correction, `repo-continuity`
+  was HARD-on-chars by 792. The old reflex would archive one more entry to clear
+  it. I declined — reported it as a signal, named the structural cause (the Deep
+  Consolidation section over the split_strategy's keep-most-recent), and left it for
+  the next natural boundary because the content is session *history*, not un-homed
+  insight. Applying the freshly-restated principle to the very next decision is the
+  fast falsification test (echoes Pearly's "the rule screened its own author's
+  closeout").
