@@ -1421,8 +1421,12 @@ out of substrate packages.
   tools return `structuredContent` only with `content: []`; error returns use
   `isError: true`; every registered tool/resource/prompt has real graph-derived
   behaviour and tests (the single invariant, Decision 6).
-- Flag off: no EEF tool, resource, or prompt appears in registration or the
-  landing page.
+- Flag off: no EEF tool, resource, or prompt appears in registration (the
+  agent-consumed MCP protocol surface — `tools/list` + resource/prompt
+  registration). The human-facing landing-page HTML listing is **owner-relaxed
+  (2026-06-06, low impact)**: it MAY show the EEF entries when the flag is off,
+  because it enumerates `listUniversalTools` directly and is not the protocol
+  surface agents consume.
 - Resource payloads match the ratified contract; descriptions explain evidence
   use, caveat preservation, and when not to use EEF.
 - The only Zod on the MCP side is the input/output schema declarations; tool input
