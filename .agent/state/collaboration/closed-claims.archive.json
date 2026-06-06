@@ -8781,6 +8781,49 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "ba4ec125-035e-4127-afa9-982000df171f",
+      "agent_id": {
+        "agent_name": "Dusky Dimming Candle",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "ef59e2",
+        "id": "44027085-e210-5c38-a821-2e21cb48c94d"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-06T08:46:17Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Commit warden: own the team commit window; run the singleton pre-commit gate and commit by explicit pathspec on behalf of the team.",
+      "archived_at": "2026-06-06",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-06T08:56:44Z",
+        "closed_by": {
+          "agent_name": "Dusky Dimming Candle",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "ef59e2",
+          "id": "44027085-e210-5c38-a821-2e21cb48c94d"
+        },
+        "summary": "Commit-warden stand-down: role handed to Pearly; all in-flight work committed safe (HEAD 9d608ddf).",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "ba4ec125-035e-4127-afa9-982000df171f",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

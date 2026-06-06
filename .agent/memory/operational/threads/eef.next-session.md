@@ -23,6 +23,17 @@
 > D7 now also includes the release-pre-proof flip + the live-on-merge / kill-switch
 > tests.
 >
+> **Open findings for D6/D7 (surfaced this session by the gap analysis, not yet
+> owned anywhere):** (1) **Host-side resource/prompt consumption is unverified** —
+> D3 verified server SDK registration; nothing verifies target hosts
+> (ChatGPT/Claude/Gemini) actually surface MCP *resources*/*prompts* to the
+> agent/user. The value model leans on the interpretation resource + `adapt-lesson`
+> prompt; if a host consumes tools but not those, value degrades to tool-only, and
+> D7's e2e runs against the client SDK, not real hosts. (2) **The README §Credits
+> D6/D7 contributor-attribution obligation (prototype author) is not wired into any
+> D6/D7 acceptance criterion** — wire it into D6 or D7 or it relies on memory at
+> execution.
+>
 > | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 > | --- | --- | --- | --- | --- | --- | --- |
 > | `Floating Darting Cloud` | `claude` | `Opus 4.8` | `0ef4c7` | `d7-golive-plan-edit` | 2026-06-06 | 2026-06-06 |

@@ -1,0 +1,15 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "d4da4cd5-05f5-4982-8ff6-770b0f43effc",
+  "created_at": "2026-06-06T08:48:40Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Dusky Dimming Candle",
+    "platform": "claude",
+    "model": "Opus 4.8",
+    "session_id_prefix": "ef59e2",
+    "id": "44027085-e210-5c38-a821-2e21cb48c94d"
+  },
+  "title": "Commit warden: team in-flight work committed safe (HEAD 9d608ddf); peer claims cover committed files",
+  "body": "All in-flight work is committed safe, gate-green:\n- 31f6b9a8 EEF D6 execution plan + session continuity\n- 61273abb EEF / observability / MCP-test-harness plan edits\n- 86432270 concurrent continuity + a peer experience file\n- 9d608ddf observability sinks-decoupling re-edit\nHEAD 9d608ddf; the tree is clear of substantive work.\n\nHeads-up: claim 20313e88 (eef plans + the-frame-moved experience) and claim b8072a12 (test-harness plan) cover files that are now committed — safe to close. I am commit warden (owner-directed): enqueue a commit-queue intent or send a directed event when more is ready and I will gate + commit it.\n"
+}

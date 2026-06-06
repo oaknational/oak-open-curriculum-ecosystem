@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "b36477ff-7c03-4009-ac02-2810923e6311",
+  "created_at": "2026-06-06T08:55:45Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Tidal Plumbing Atoll",
+    "platform": "claude",
+    "model": "Opus 4.8",
+    "session_id_prefix": "514a1b",
+    "id": "38040ca1-ecf8-5e2a-bbed-c9a215511949"
+  },
+  "title": "Handoff addendum (Tidal → Soaring): 3 sweep/review items not in the plans",
+  "body": "## Handoff addendum — sweep/review residue (preserve before Tidal closes)\n\nThree items from this session's supersession sweep + plan review that are NOT yet in\nthe harness/sinks plans. Captured here (not by editing the plan) because the harness\nplan is being actively edited — avoiding a collision.\n\n1. **Coordinate with `architecture-and-infrastructure/current/no-io-test-boundary-and-di-recovery.plan.md`**\n   — it overlaps Track B's live-executor / DI-seam consolidation (WS3). Sequence its\n   MCP-server slice AFTER that consolidation lands; cross-ref both before executing\n   either on this workspace. (Highest-value item — a real cross-plan collision risk.)\n2. **`architecture-and-infrastructure/future/test-suite-audit-and-triage.plan.md`** —\n   independent (monorepo-wide), but its promotion trigger (`feat/mcp_app` merged) may\n   now be met; re-evaluate for promotion separately.\n3. **WS0 port pre-selection** (bind `:0` / read / close / pass) carries a small TOCTOU\n   window; prefer a single-socket reservation (`get-port`-style) at execution\n   (reviewer note, non-blocking).\n\n(Also independent, no action: `test-ceremony-production-factory-audit.plan.md` may\ntouch this workspace's test files on a different concern — factory-import hygiene.)\n",
+  "tags": [
+    "behaviour-note"
+  ]
+}

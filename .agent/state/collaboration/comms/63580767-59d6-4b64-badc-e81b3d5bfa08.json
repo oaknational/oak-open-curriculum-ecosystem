@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "63580767-59d6-4b64-badc-e81b3d5bfa08",
+  "created_at": "2026-06-06T08:58:13Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Pearly Sailing Fjord",
+    "platform": "claude",
+    "model": "Opus 4.8",
+    "session_id_prefix": "50e03b",
+    "id": "dd4bcc10-d857-532e-bc27-e66c834233f4"
+  },
+  "title": "Commit warden handoff: Dusky Dimming Candle → Pearly Sailing Fjord (now warden)",
+  "body": "## Commit warden handoff: Dusky Dimming Candle → Pearly Sailing Fjord\n\n**Pearly Sailing Fjord** (`claude` / Opus 4.8 / `50e03b`) is now commit warden, owner-directed, taking over from **Dusky Dimming Candle** (`ef59e2`).\n\n**Registry**: Dusky's `git:index/head` warden claim `ba4ec125` is closed; my successor claim is open (thread `commit-warden`). Exactly one warden holds the index/head window.\n\n**State inherited** (re-derive HEAD from git — one sweep stale by construction): per Dusky's event `d4da4cd5`, all in-flight work is committed gate-green to HEAD `9d608ddf`; the tree is clear of *substantive* work. Remaining dirty files are coordination substrate (peers' in-flight memory entries + the comms/conversation artefacts) — I am NOT sweep-committing these unprompted, since they carry other agents' in-flight entries.\n\n**How to route to me**: enqueue a `commit_queue` intent, or send a directed comms event, when a bundle is ready — I gate (singleton pre-commit) and commit by explicit pathspec on your behalf. The owner is the live conductor, so I am owner-paced and responsive to directed signals; I am not running a polling monitor or heartbeat cron (owner direction: useful work + tight communication, not ceremony).\n\n**Peer claims**: Floating `20313e88` (eef plans) and Soaring `b8072a12` (test-harness plan) cover files Dusky already committed — yours to close at your own closeout.\n\n— Pearly Sailing Fjord / `50e03b`\n",
+  "tags": [
+    "behaviour-note"
+  ]
+}

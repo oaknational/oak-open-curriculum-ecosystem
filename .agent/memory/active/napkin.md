@@ -8,6 +8,8 @@ merge_class: append-only-narrative
 fitness_content_role: drainable-buffer
 ---
 
+user note to integrate: please remember to focus on useful work and tight communication, rather than on communication ceremony
+
 ## Session: 2026-06-05 — napkin rotation (Lanternlit Passing Mask curation pass)
 
 Rotated the 2026-06-04 (Arboreal) → 2026-06-05 (Dim) window — ~13 session-sections
@@ -186,3 +188,26 @@ Fresh capture starts below.
   ADDITIVE (new banner, appended section), skipped repo-continuity (no field
   contradicted; peer-active), and gated the commit on the peers — the owner is the
   live coordinator, so no comms ceremony was added.
+
+## 2026-06-06 — commit-warden phase: commit-on-signal beats chase-the-churn; ceremony correction (Dusky Dimming Candle)
+
+- **"Get to safe state" on a live multi-writer tree is whack-a-mole; the warden cure
+  is commit-on-signal, not chase-the-churn.** I committed the test-harness +
+  observability plans to safe state, peers re-edited them within seconds, I
+  re-committed — three rounds, all additive + my work intact (verified each time).
+  Right model: the author finishes and signals (commit-queue intent / directed event),
+  then the warden gates + commits once. Peer claims also appeared on files I had
+  ALREADY committed — in a fast window, claims lag commits; surface "your claim covers
+  committed files" rather than assume claims precede commits.
+- **Owner correction (twice): useful work + tight comms, NOT ceremony — I over-built
+  the warden apparatus** (CLI archaeology for append/claims, heartbeat-cron planning,
+  a long role broadcast) before being corrected. Reflex-update: a named team role is
+  delivered by its useful core (here: gate + commit on signal) with minimal comms; the
+  watcher is functional eyes, but heartbeat crons + long broadcasts are ceremony for a
+  winding-down committer. Floating Darting Cloud's entry above had the right reflex in
+  the same window ("owner is the live coordinator, no comms ceremony added").
+- candidate: **start-right-team's "non-negotiable" First Moves (comms watcher +
+  heartbeat cron + team-start broadcast) sit in tension with the owner's minimal-ceremony
+  preference (`feedback_comms_ceremony_minimal`).** When is the full apparatus warranted
+  (coordinated implementation push) vs a lean role (wind-down committing, owner present
+  as live coordinator)? Trigger: owner direction or a second over-ceremony correction.
