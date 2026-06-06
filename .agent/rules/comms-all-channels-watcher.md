@@ -191,8 +191,12 @@ naming the rule; the substance lives here for two reasons:
   unreachable from session bootstrap.
 - [`liveness-heartbeat-cron`](liveness-heartbeat-cron.md) — the
   outgoing-visibility sibling. Watcher delivers incoming visibility;
-  heartbeat cron emits outgoing visibility. Both are non-negotiable
-  preconditions for team work.
+  heartbeat cron emits outgoing visibility (itself value-contingent — see
+  the rule below).
+- [`collaboration-is-value-contingent`](collaboration-is-value-contingent.md)
+  — the value-contingency discipline. The all-channels watcher is the
+  *awareness* surface and the high-value end of the spectrum:
+  near-universally justified, never ceremony.
 - [`.agent/reference/comms-watch-mechanism.md`](../reference/comms-watch-mechanism.md)
   — identity discipline and self-exclusion contract.
 - [PDR-066](../practice-core/decision-records/PDR-066-comms-events-as-failure-mode-channel.md)

@@ -83,6 +83,15 @@ contract. Keep it lightweight and revisable.
 Every participating agent in every team session executes these moves in
 order, before any non-planning source edit:
 
+Moves 1 and 2 install the team's visibility surface — incoming (the comms
+watcher) and outgoing (the heartbeat). Their *value* is context-contingent
+per
+[`collaboration-is-value-contingent`](../../rules/collaboration-is-value-contingent.md):
+the incoming-awareness monitor is near-universally justified and must not be
+mis-filed as ceremony and skipped, while the outgoing heartbeat's value
+depends on a consumer — PDR-082 (Proposed) scopes it out when liveness is
+owner-visible. Run both unless that scope-reduction applies.
+
 1. **Start the all-channels comms monitor** (see
    [`.agent/rules/comms-all-channels-watcher.md`](../../rules/comms-all-channels-watcher.md)
    — required precondition for incoming visibility; the agent sees every
@@ -418,6 +427,12 @@ Useful responsibility labels include `controller`, `implementer`, `reviewer`,
 `marshal`, `scout`, `standby`, `consolidator`, and `curator`, but they are
 examples rather than a required ontology.
 
+A recurring singleton or critical role earns a definition — its awareness
+surface, its value-delivering behaviour, and its handoff — not just a label
+in this list. A bare label accretes no operational substance and its
+discipline erodes into tacit practice; the commit-warden monitoring duty did
+exactly this before it was defined below.
+
 When adding a top-level responsibility or keeping an existing one alive, name
 the seat cost as part of the route. Expensive top-level model seats should be
 reserved for work that needs their judgement or continuity; review passes,
@@ -444,28 +459,28 @@ the operational-memory curator-passes directory.
 In a multi-agent window only ONE agent owns `git:index/head`, runs the
 full pre-commit gate once per round, and commits the team's bundles by
 explicit pathspec (the gatekeeper-specialisation discipline). Monitoring
-is not an optional extra of this role — it IS the role, decomposed as
-**awareness → behaviour**:
+is not an optional extra of this role — it IS the role. The warden runs
+event-driven monitors for the lifetime of the role:
 
-- **Awareness (monitors).** The warden runs event-driven monitors for
-  the lifetime of the role: (1) the move-1 all-channels comms watcher —
-  commit intents and directed events arrive here; (2) a working-tree
-  watcher — files becoming ready to commit; (3) a git-state watcher —
-  HEAD movement and `.git/index.lock` contention. Monitors are
-  *awareness*, the precondition for the warden responding in time; they
-  are passive and cost one background task each. Do NOT mislabel them
-  ceremony and skip them — a warden without these monitors is blind.
-- **Behaviour (the value).** When a monitor surfaces something, the
-  warden responds with value: gate + commit a ready bundle, flag a
-  dangerous git state (lock contention, an imminent collision), or do
-  nothing when nothing is actionable. Behaviour is how awareness becomes
-  landed commits.
-- **Not ceremony.** The warden does NOT emit a status update,
-  broadcast, or claim-refresh on every monitor tick. Ceremony is
-  low-value repetitive activity done to *feel* productive instead of
-  staying focused on delivering real value; it is the opposite of the
-  warden's value. Respond when responding delivers value; otherwise
-  stay aware and quiet.
+- the move-1 all-channels comms watcher — commit intents and directed
+  events arrive here;
+- a working-tree watcher — files becoming ready to commit;
+- a git-state watcher — HEAD movement and `.git/index.lock` contention.
+
+These monitors are *awareness*, the precondition for responding in time;
+do NOT mis-file them as ceremony and skip them, or the role is blind. The
+warden's value is the **behaviour** they enable: gate and commit a ready
+bundle, flag a dangerous git state, or do nothing when nothing is
+actionable — never a status emission on every tick. The
+awareness / behaviour / ceremony distinction and its consumer test are
+governed by
+[`collaboration-is-value-contingent`](../../rules/collaboration-is-value-contingent.md).
+
+Commit mechanism scales to contention. The full commit-queue ceremony
+(enqueue, guard, record-staged) is for multi-writer contention; a sole
+warden with no contending `git:index/head` claim or queue entry uses the
+lean explicit-pathspec path (`git add -- <paths>` then commit by pathspec) —
+the same value-contingency discipline applied to the commit window.
 
 **Coordinator delegates sub-agent launches.** The coordinator role is
 to **route** work, not to **execute** it. Sub-agent launches —
@@ -532,6 +547,12 @@ Once a team session is active, every participating agent must check for new
 messages of any type at least once every 120 seconds until they close out or
 are explicitly released from the team route. Use a tighter cadence when the
 owner or controller sets one.
+
+Where an event-driven monitor covers a surface (per
+[`use-monitor-for-event-driven-wake`](../../rules/use-monitor-for-event-driven-wake.md)),
+the monitor *satisfies* this cadence for that surface — each new event wakes
+the agent, so no separate poll is needed. The 120-second sweep is the
+fallback for surfaces a monitor cannot watch directly.
 
 The message sweep must cover every live surface that can carry session
 coordination:
@@ -717,6 +738,19 @@ wakeup, or persistent monitor owned by the outgoing coordinator
 **never goes dark between them** within the same role-authority
 window. Cancelling the cadence at Moment 1 is the proximate cause of
 the coordinator-less window this rule structurally cures.
+
+**Singleton-authority roles beyond coordinator.** The same two-moments
+discipline governs any singleton-authority role — notably the
+`commit-warden` (the one owner of `git:index/head`). The invariant is
+**exactly one holder at all times**: never zero (a gap — for a coordinator,
+work goes unrouted; for a warden, commits stall) and never two (a collision —
+contending pre-commit gates, the singleton-per-window violation). The
+outgoing holder's claim and window close only once the incoming holder's
+claim is open and their active-acknowledgement has landed. Worked instance:
+the 2026-06-06 commit-warden handoff (Dusky → Pearly) — the outgoing
+warden's `git:index/head` claim closed as the incoming warden opened theirs
+and broadcast the takeover, the outgoing warden's acknowledgement mirroring
+Moment 2.
 
 **Intersection with PDR-063.** When the outgoing coordinator is
 retiring mid-cycle under token pressure, BOTH protocols fire. The

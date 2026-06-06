@@ -1,0 +1,11 @@
+---
+description: >
+  Every piece of collaboration functionality (monitor, heartbeat, broadcast,
+  claim, commit-queue ceremony, directed event) is justified only by the value
+  it provides in the current context. Monitors are awareness — keep them;
+  repetitive low-value emission is ceremony — drop it. Name the consumer that
+  relies on the output before reaching for the mechanism.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/collaboration-is-value-contingent.md`.

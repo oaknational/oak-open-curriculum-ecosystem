@@ -4,8 +4,16 @@ Liveness is observable, or it is not. Where the
 [all-channels comms watcher](comms-all-channels-watcher.md) ensures
 *incoming* visibility — every event the team emits reaches every agent —
 this rule ensures *outgoing* visibility — every agent's continued presence
-reaches the team. Both are non-negotiable preconditions; both must be
-running before any team-bootstrap step that follows.
+reaches the team. Both are required preconditions of the full protocol
+(PDR-078, Accepted); their *value* is context-contingent per
+[`collaboration-is-value-contingent`](collaboration-is-value-contingent.md).
+The incoming-awareness watcher is near-universally justified. The outgoing
+heartbeat's value depends on a consumer (async retirement-detection):
+PDR-082 (Proposed) already scopes it out in n=2 owner-visible mode, and
+whether that generalises to any live-owner-conducted session is a working
+hypothesis on PDR-082's second-instance path — not a standalone exemption
+added here (PDR-078 §"Forward-extensible exemption list" forbids pre-empting
+the contract with hypothetical classes).
 
 The portable contract — cadence, threshold, redundancy rule, exemption
 set, and the structural cure they compose — is authoritatively specified
