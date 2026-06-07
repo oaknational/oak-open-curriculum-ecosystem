@@ -1,5 +1,79 @@
 # Next-Session Record — `eef` thread
 
+> **🤝 HANDOFF — EEF thread (2026-06-07, Pelagic Charting Rudder / `39ff77`;
+> claude / Opus 4.8). c1–c3 AUTHORED (the `get-eef-evidence` MCP tool, strict-typed,
+> UNCOMMITTED); the strict-types-without-loss requirement + the type-flow diagram +
+> the correct LTAE fix are recorded. Commit is BLOCKED on a red full-tree gate that
+> clears only when the carrier fix + gating land. Self-contained; read the two
+> AUTHORITATIVE artefacts below, then re-derive git first-hand.**
+>
+> > **⚠️ READ THESE TWO FIRST (do not re-derive):**
+> > 1. [`.agent/reports/eef-get-eef-evidence-tool-and-strict-type-flow.report.md`](../../../reports/eef-get-eef-evidence-tool-and-strict-type-flow.report.md)
+> >    — the tool design, the **type-flow diagram**, the strict-types-without-loss
+> >    requirement, and the **correct LTAE fix** (carrier preservation + gating).
+> > 2. [`eef-d6-execution.plan.md` §"Execution corrections — READ FIRST"](../../../plans/sector-engagement/eef/current/eef-d6-execution.plan.md)
+> >    — the five corrections that supersede the prior c3/c6 shape.
+> > Everything in the banners BELOW this one is prior context; the c1 "prerequisite"
+> > Hidden Prowling Owl describes is now subsumed by the c1–c3 authoring here.
+>
+> **THE ABSOLUTE REQUIREMENT (owner, stated emphatically this session):** strict
+> types without loss throughout. From MCP input to MCP output the type is known at
+> every point; the ONLY narrowing is input validation (`safeParse` of `unknown` →
+> exact corpus literals), the ONLY erasure is JSON serialisation at the wire. No
+> `as`, no widening to `string`, no re-narrowing between. The corpus is `as const`,
+> so validated-input + corpus-data ⇒ every intermediate + the output are exact by
+> construction; the compiler proves the whole pipeline.
+>
+> **WHAT WAS AUTHORED (working tree, UNCOMMITTED, strict-typed, green at SDK level
+> — type-check + lint + 736 tests; graph-corpus-sdk 37 + build):**
+> `get-eef-evidence` as a NEW TYPE of aggregated tool — closed/known input (`z.enum`
+> over the corpus's finite domains; the schema IS the input contract), bounded query,
+> thin parse-and-dispatch handler returning the D5 envelope verbatim. Files (the
+> exact pathspec to stage — NOT `git add -A`):
+> `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-eef-evidence.ts` (+ `.unit.test.ts`),
+> `.../universal-tools/{types,definitions,executor}.ts`,
+> `.../oak-curriculum-sdk/package.json`, `pnpm-lock.yaml`,
+> `packages/sdks/graph-corpus-sdk/src/eef-strands/eef-evidence.ts` (interface→type),
+> `.agent/plans/sector-engagement/eef/current/eef-d6-execution.plan.md`,
+> `.agent/reports/eef-get-eef-evidence-tool-and-strict-type-flow.report.md`.
+>
+> **TREE STATE (re-derive first-hand; volatile):** branch `feat/graph-tooling-tidyup`,
+> HEAD **`c4e33e72`**, **14 ahead, UNPUSHED** (snapshot — re-derive). **FOREIGN
+> UNCOMMITTED WIP** is in the tree at `packages/core/oak-eslint/*` (another agent's
+> eslint-rule work; no active claim). **Stage EEF files by EXPLICIT pathspec (above);
+> NEVER `git add -A`** — it would sweep the peer's WIP into your commit.
+>
+> **COMMIT IS BLOCKED.** The full-tree `pnpm check` is RED on two items, both intrinsic
+> to the corrected design and both next-steps: (a) `graph-corpus-sdk` lint —
+> `@typescript-eslint/consistent-type-definitions` rejects the `EefEvidenceEnvelope`
+> `type` alias (which is REQUIRED for JSON index-signature assignability; do NOT revert
+> to interface, do NOT disable the check — OWNER DECISION on scoping the rule); (b) app
+> e2e `list_tools parity` — EEF is enumerated ungated (needs gating-at-registration).
+> Both clear when the carrier fix + gating land. Do NOT patch the e2e expected list.
+>
+> **NEXT SAFE STEP (the correct order; detail in report §4 + plan corrections):**
+> 1. **Carrier fix** — make the aggregated-handler chain (`executor.ts`
+>    `AGGREGATED_HANDLERS`) carry the precise `EefEvidenceEnvelope` to the wire,
+>    erasing to `Record<string, unknown>` ONLY at `registerTool`. Resolve the
+>    `consistent-type-definitions` lint decision with the owner.
+> 2. **Gating** — gate tool/resource/prompt at registration, default off, in the same
+>    change → the parity e2e passes with no list patch.
+> 3. **c4** `eef://interpretation` resource + **c5** `adapt-lesson` prompt (SDK content
+>    + app registration, flag-co-gated).
+> 4. Full `pnpm check` green → commit by explicit pathspec (peer WIP present).
+>
+> **DISCIPLINES (hard-won this session — the failure mode was symptom-patching):**
+> strict types without loss (above); EEF is a NEW tool type — derive from its closed
+> input, do NOT pattern-match the open-input family; the author citation is a
+> licence-required CITATION, not PII (emit verbatim); friction → trace the real cause,
+> do not descend into type/build plumbing or escalate a non-decision.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Pelagic Charting Rudder` | `claude` | `Opus 4.8` | `39ff77` | `c1-c3-authoring-and-strict-type-flow` | 2026-06-07 | 2026-06-07 |
+>
+> ---
+>
 > **🤝 HANDOFF — EEF thread (2026-06-07, Hidden Prowling Owl / `bcc138`; claude /
 > Opus 4.8). c1 FINITE-DOMAIN PREREQUISITE LANDED GREEN + STRICTLY TYPED; two
 > doctrine items graduated. The rest of c1 (the MCP-layer wiring) is next. Stopped

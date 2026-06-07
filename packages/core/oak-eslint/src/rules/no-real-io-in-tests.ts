@@ -1,6 +1,8 @@
 import path from 'node:path';
 import { minimatch } from 'minimatch';
-import type { TSESLint, TSESTree } from '@typescript-eslint/utils';
+import type { TSESTree } from '@typescript-eslint/utils';
+
+import { createMessage, type RuleWithReappraisingMessages } from '../reappraising-message.js';
 
 /**
  * ESLint rule banning real IO in test files.
@@ -178,7 +180,7 @@ function isProcessIdentifier(node: TSESTree.Node): boolean {
   return false;
 }
 
-const noRealIoInTestsRule: TSESLint.RuleModule<MessageId, [NoRealIoInTestsOptions?]> = {
+const noRealIoInTestsRule: RuleWithReappraisingMessages<MessageId, [NoRealIoInTestsOptions?]> = {
   meta: {
     type: 'problem',
     docs: {
@@ -198,22 +200,48 @@ const noRealIoInTestsRule: TSESLint.RuleModule<MessageId, [NoRealIoInTestsOption
       },
     ],
     messages: {
-      bannedModuleStaticImport:
-        'Real-IO module "{{specifier}}" must not be imported in test files. Inject a fake from a test-helpers/ or test-fakes/ surface instead. See .agent/rules/test-immediate-fails.md and ADR-078.',
-      bannedModuleDynamicImport:
-        'Real-IO module "{{specifier}}" must not be dynamically imported in test files. Inject a fake from a test-helpers/ or test-fakes/ surface instead. See .agent/rules/test-immediate-fails.md and ADR-078.',
-      bannedModuleRequire:
-        'Real-IO module "{{specifier}}" must not be required in test files. Inject a fake from a test-helpers/ or test-fakes/ surface instead. See .agent/rules/test-immediate-fails.md and ADR-078.',
-      processEnvAccess:
-        'Tests must not read or write process.env. Pass literal inputs via dependency injection (ADR-078). See .agent/rules/test-immediate-fails.md.',
-      processCwdCall:
-        'Tests must not call process.cwd(). Anchor paths at import.meta.dirname or inject a path resolver. See .agent/rules/test-immediate-fails.md.',
-      processChdirCall:
-        'Tests must not call process.chdir(). Mutating the working directory is shared global state forbidden by ADR-078. See .agent/rules/test-immediate-fails.md.',
-      fetchNonLocalhost:
-        'Tests must not call fetch() against non-localhost URLs. Allowed prefixes: http(s)://localhost, http(s)://127.0.0.1. Inject a fake fetch or use MSW for HTTP fakes.',
-      fetchNonLiteralArg:
-        'Tests must call fetch() with a string literal targeting localhost. A non-literal first argument cannot be verified statically; refactor to inject a fake fetch or pass a literal URL.',
+      bannedModuleStaticImport: createMessage({
+        prohibition: 'Real-IO module "{{specifier}}" must not be imported in test files.',
+        reappraisal:
+          'Inject a fake from a test-helpers/ or test-fakes/ surface instead. See .agent/rules/test-immediate-fails.md and ADR-078.',
+      }),
+      bannedModuleDynamicImport: createMessage({
+        prohibition:
+          'Real-IO module "{{specifier}}" must not be dynamically imported in test files.',
+        reappraisal:
+          'Inject a fake from a test-helpers/ or test-fakes/ surface instead. See .agent/rules/test-immediate-fails.md and ADR-078.',
+      }),
+      bannedModuleRequire: createMessage({
+        prohibition: 'Real-IO module "{{specifier}}" must not be required in test files.',
+        reappraisal:
+          'Inject a fake from a test-helpers/ or test-fakes/ surface instead. See .agent/rules/test-immediate-fails.md and ADR-078.',
+      }),
+      processEnvAccess: createMessage({
+        prohibition: 'Tests must not read or write process.env.',
+        reappraisal:
+          'Pass literal inputs via dependency injection (ADR-078). See .agent/rules/test-immediate-fails.md.',
+      }),
+      processCwdCall: createMessage({
+        prohibition: 'Tests must not call process.cwd().',
+        reappraisal:
+          'Anchor paths at import.meta.dirname or inject a path resolver. See .agent/rules/test-immediate-fails.md.',
+      }),
+      processChdirCall: createMessage({
+        prohibition:
+          'Tests must not call process.chdir() — mutating the working directory is shared global state forbidden by ADR-078.',
+        reappraisal:
+          'Inject a path resolver or pass explicit paths instead. See .agent/rules/test-immediate-fails.md.',
+      }),
+      fetchNonLocalhost: createMessage({
+        prohibition:
+          'Tests must not call fetch() against non-localhost URLs. Allowed prefixes: http(s)://localhost, http(s)://127.0.0.1.',
+        reappraisal: 'Inject a fake fetch or use MSW for HTTP fakes.',
+      }),
+      fetchNonLiteralArg: createMessage({
+        prohibition:
+          'Tests must call fetch() with a string literal targeting localhost — a non-literal first argument cannot be verified statically.',
+        reappraisal: 'Refactor to inject a fake fetch or pass a literal URL.',
+      }),
     },
   },
   defaultOptions: [{}],

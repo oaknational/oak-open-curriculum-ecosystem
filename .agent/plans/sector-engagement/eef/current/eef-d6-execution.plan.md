@@ -78,6 +78,57 @@ todos:
 > (teacher-value round-trip). The design history lives in the handoff note and the
 > experience corpus, not here.
 
+## Execution corrections — READ FIRST (2026-06-07, Pelagic Charting Rudder)
+
+Owner-driven corrections from the c1–c3 authoring session. The full analysis +
+type-flow diagram are in
+[`.agent/reports/eef-get-eef-evidence-tool-and-strict-type-flow.report.md`](../../../../reports/eef-get-eef-evidence-tool-and-strict-type-flow.report.md)
+(do not re-derive — read it).
+
+1. **Strict types without loss is the absolute requirement.** From MCP input to
+   MCP output the type is known at every point; the ONLY narrowing is the input
+   validation (`safeParse` of `unknown` → exact corpus literals), the ONLY erasure
+   is JSON serialisation at the wire. No `as`, no widening to `string`, no
+   re-narrowing in between. The corpus is `as const`, so validated-input +
+   corpus-data ⇒ every intermediate and the output are exact by construction.
+
+2. **EEF is a NEW TYPE of aggregated tool — closed, known input; bounded query.**
+   Not `search` (open input). The input schema is `z.enum` over the corpus's finite
+   domains; the schema IS the input contract. The handler is a thin parse-and-dispatch
+   that returns the D5 envelope verbatim. Do NOT pattern-match to the open-input
+   family's input handling.
+
+3. **THE carrier fix (the correct LTAE next step, supersedes the prior c3/c6 shape
+   where the result widened to `CallToolResult` at the `AGGREGATED_HANDLERS` map):**
+   `structuredContent` must stay the precise `EefEvidenceEnvelope` and erase to the
+   MCP `Record<string, unknown>` carrier ONLY at the wire (`registerTool`). The
+   `AGGREGATED_HANDLERS` result carrier (`executor.ts`) currently erases it
+   prematurely inside our own code — the family's persistent error. The fix preserves
+   the per-tool result type through the aggregated-handler chain to the wire. This is
+   a family-level change (touches `AggregatedHandler`/executor result typing), not
+   EEF-local. `EefEvidenceEnvelope` is correctly a `type` (not `interface`) for JSON
+   index-signature assignability. **OWNER DECISION PENDING**: the
+   `@typescript-eslint/consistent-type-definitions: interface` lint rule conflicts
+   with the required `type` alias — resolve by scoping that rule (do NOT disable the
+   check, do NOT revert to `interface`).
+
+4. **Gating is STRUCTURAL, at registration, default off (corrects "gate co-gated at
+   c6" reading).** Gate the tool/resource/prompt at the point of registration in the
+   SAME change that adds them — not bolted on last. Then the `list_tools parity` e2e
+   (`e2e-tests/server.e2e.test.ts:138`) passes because EEF is not exposed by default.
+   Do NOT patch the expected-tools list (buries the real cause).
+
+5. **The author citation is a citation, not PII** — emitted verbatim
+   (`provenance.source.original_authors`). The earlier omit-as-PII framing was wrong.
+
+**c1–c3 status**: authored + strict-typed in the working tree, UNCOMMITTED, green at
+the SDK level (type-check + lint + 736 tests; graph-corpus-sdk 37 + build). They are
+the foundation the carrier fix + gating build on (largely keepable; the carrier fix
+is adjacent in `executor.ts`, gating is additive). The working tree is currently
+gate-RED at the full-repo level (graph-corpus-sdk lint on the `type` alias [item 3
+decision]; app e2e parity [item 4 gating]) — both clear when 3+4 land. Commit is
+blocked until then.
+
 ## Context
 
 D0–D5 of the EEF graph tool are complete and owner-ratified; D5 landed

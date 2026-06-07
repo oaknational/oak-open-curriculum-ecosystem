@@ -31,6 +31,10 @@ import {
   GET_MISCONCEPTION_GRAPH_TOOL_DEF,
   GET_MISCONCEPTION_GRAPH_INPUT_SCHEMA,
 } from '../aggregated-misconception-graph.js';
+import {
+  GET_EEF_EVIDENCE_TOOL_DEF,
+  GET_EEF_EVIDENCE_INPUT_SCHEMA,
+} from '../aggregated-eef-evidence.js';
 import { SEARCH_TOOL_DEF, SEARCH_INPUT_SCHEMA } from '../aggregated-search/index.js';
 import { BROWSE_TOOL_DEF, BROWSE_INPUT_SCHEMA } from '../aggregated-browse/index.js';
 import { EXPLORE_TOOL_DEF, EXPLORE_INPUT_SCHEMA } from '../aggregated-explore/index.js';
@@ -125,6 +129,10 @@ export const AGGREGATED_TOOL_DEFS = {
   'get-misconception-graph': {
     ...GET_MISCONCEPTION_GRAPH_TOOL_DEF,
     inputSchema: GET_MISCONCEPTION_GRAPH_INPUT_SCHEMA,
+  },
+  'get-eef-evidence': {
+    ...GET_EEF_EVIDENCE_TOOL_DEF,
+    inputSchema: GET_EEF_EVIDENCE_INPUT_SCHEMA,
   },
   'browse-curriculum': {
     ...BROWSE_TOOL_DEF,

@@ -1,4 +1,4 @@
-import type { TSESLint } from '@typescript-eslint/utils';
+import { createMessage, type RuleWithReappraisingMessages } from '../reappraising-message.js';
 
 /**
  * ESLint rule that bans dynamic `import(...)`.
@@ -10,7 +10,7 @@ import type { TSESLint } from '@typescript-eslint/utils';
  * those boundaries explicitly with static imports and named entry
  * points instead.
  */
-const noDynamicImportRule: TSESLint.RuleModule<'dynamicImportBanned', []> = {
+const noDynamicImportRule: RuleWithReappraisingMessages<'dynamicImportBanned'> = {
   meta: {
     type: 'problem',
     docs: {
@@ -19,8 +19,10 @@ const noDynamicImportRule: TSESLint.RuleModule<'dynamicImportBanned', []> = {
     },
     schema: [],
     messages: {
-      dynamicImportBanned:
-        'Dynamic import(...) is banned. Use a static import or an explicit boundary module instead.',
+      dynamicImportBanned: createMessage({
+        prohibition: 'Dynamic import(...) is banned.',
+        reappraisal: 'Use a static import or an explicit boundary module instead.',
+      }),
     },
   },
   defaultOptions: [],

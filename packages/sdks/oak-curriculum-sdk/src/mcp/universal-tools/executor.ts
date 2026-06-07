@@ -20,6 +20,7 @@ import { runCurriculumModelTool } from '../aggregated-curriculum-model/index.js'
 import { runThreadProgressionsTool } from '../aggregated-thread-progressions.js';
 import { runPriorKnowledgeGraphTool } from '../aggregated-prior-knowledge-graph.js';
 import { runMisconceptionGraphTool } from '../aggregated-misconception-graph.js';
+import { runEefEvidenceTool } from '../aggregated-eef-evidence.js';
 import { validateSearchSdkArgs, runSearchSdkTool } from '../aggregated-search/index.js';
 import { validateBrowseArgs, runBrowseTool } from '../aggregated-browse/index.js';
 import { validateExploreArgs, runExploreTool } from '../aggregated-explore/index.js';
@@ -167,6 +168,7 @@ const AGGREGATED_HANDLERS: Readonly<Record<AggregatedToolName, AggregatedHandler
   'get-thread-progressions': () => Promise.resolve(runThreadProgressionsTool()),
   'get-prior-knowledge-graph': () => Promise.resolve(runPriorKnowledgeGraphTool()),
   'get-misconception-graph': () => Promise.resolve(runMisconceptionGraphTool()),
+  'get-eef-evidence': (input) => Promise.resolve(runEefEvidenceTool(input)),
   fetch: handleFetchTool,
   'browse-curriculum': handleBrowseTool,
   'explore-topic': handleExploreTool,

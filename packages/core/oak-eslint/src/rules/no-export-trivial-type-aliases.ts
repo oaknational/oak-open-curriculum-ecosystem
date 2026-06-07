@@ -1,5 +1,7 @@
 import { AST_NODE_TYPES } from '@typescript-eslint/utils';
-import type { TSESLint, TSESTree } from '@typescript-eslint/utils';
+import type { TSESTree } from '@typescript-eslint/utils';
+
+import { createMessage, type RuleWithReappraisingMessages } from '../reappraising-message.js';
 
 /**
  * ESLint rule to discourage exporting trivial type aliases.
@@ -15,7 +17,7 @@ import type { TSESLint, TSESTree } from '@typescript-eslint/utils';
  * // Valid
  * export { Foo as Bar } from './foo';
  */
-const noExportTrivialTypeAliasesRule: TSESLint.RuleModule<'aliasNotAllowed'> = {
+const noExportTrivialTypeAliasesRule: RuleWithReappraisingMessages<'aliasNotAllowed'> = {
   meta: {
     type: 'suggestion',
     docs: {
@@ -24,8 +26,10 @@ const noExportTrivialTypeAliasesRule: TSESLint.RuleModule<'aliasNotAllowed'> = {
     },
     schema: [],
     messages: {
-      aliasNotAllowed:
-        'Avoid exporting trivial aliases (`type {{alias}} = {{target}}`). Import the canonical type where it is required instead.',
+      aliasNotAllowed: createMessage({
+        prohibition: 'Avoid exporting trivial aliases (`type {{alias}} = {{target}}`).',
+        reappraisal: 'Import the canonical type where it is required instead.',
+      }),
     },
   },
   defaultOptions: [],

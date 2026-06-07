@@ -2,6 +2,8 @@ import path from 'node:path';
 import { minimatch } from 'minimatch';
 import type { TSESLint, TSESTree } from '@typescript-eslint/utils';
 
+import { createMessage, type RuleWithReappraisingMessages } from '../reappraising-message.js';
+
 /**
  * ESLint rule requiring a structured-observability emission in newly exported
  * async functions under `apps/**` and `packages/sdks/**`. Operationalises
@@ -228,7 +230,7 @@ function hasSentinel(anchor: TSESTree.Node, sourceCode: Readonly<TSESLint.Source
   return leading.some((comment) => SENTINEL_PATTERN.test(comment.value));
 }
 
-const requireObservabilityEmissionRule: TSESLint.RuleModule<'requireEmission', []> = {
+const requireObservabilityEmissionRule: RuleWithReappraisingMessages<'requireEmission'> = {
   meta: {
     type: 'suggestion',
     docs: {
@@ -237,8 +239,12 @@ const requireObservabilityEmissionRule: TSESLint.RuleModule<'requireEmission', [
     },
     schema: [],
     messages: {
-      requireEmission:
-        'Exported async function "{{name}}" has no observability emission. Per ADR-162, every runtime capability emits structured events. Add a logger.*, Sentry.*, or delegate-pattern emission, or tag with `// observability-emission-exempt: <reason>`.',
+      requireEmission: createMessage({
+        prohibition:
+          'Exported async function "{{name}}" has no observability emission. Per ADR-162, every runtime capability emits structured events.',
+        reappraisal:
+          'Add a logger.*, Sentry.*, or delegate-pattern emission, or tag with `// observability-emission-exempt: <reason>`.',
+      }),
     },
   },
   defaultOptions: [],

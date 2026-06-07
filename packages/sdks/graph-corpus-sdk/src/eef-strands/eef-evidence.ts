@@ -47,13 +47,19 @@ export interface EefEvidenceProvenance {
  * `edges` is non-empty only when an axis query co-selects related strands as
  * members), the binding-derived frontier (related strands outside the member
  * set), and the once-per-envelope provenance.
+ *
+ * Declared as a `type`, not an `interface`: the envelope is the structured
+ * content an MCP tool emits, so it must be assignable to the JSON record carrier
+ * (`Record<string, unknown>`). A type alias gains the implicit index signature
+ * that makes that assignment hold with the field types intact; an interface does
+ * not (it stays open to declaration merging). Keep it a `type`.
  */
-export interface EefEvidenceEnvelope {
+export type EefEvidenceEnvelope = {
   readonly members: readonly EefStrand[];
   readonly edges: readonly GraphEdge<EefStrandId, 'related_strand'>[];
   readonly frontier: readonly EefStrandId[];
   readonly provenance: EefEvidenceProvenance;
-}
+};
 
 /** Axis + explicit-id selectors for {@link evidenceForMove}. */
 export interface EvidenceForMoveSelectors {

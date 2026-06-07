@@ -541,3 +541,34 @@ never be delegated to, or conflated with, a fresh-reader audit.** Cured the live
 (session-handoff 6e.2); PDR-011/ADR-150 amendment captured in pending-graduations. Instance of
 passive skill-wording losing to the artefact-gravity of "the skill says externalise" — the same
 family this whole thread is about.
+
+## 2026-06-07 — symptom-patching by pattern-matching the family; the cure is strict types without loss (Pelagic Charting Rudder)
+
+Building the `get-eef-evidence` MCP tool, the owner corrected the SAME axis **five times** before
+it landed: (1) "why match the search precedent — search takes unknown input, EEF takes only known
+input from a set list"; (2) "forget PII, the author names are a deliberate CITATION not accidental
+PII"; (3) "preserve the strict types, everywhere, always — said over and over"; (4) "are you
+*avoiding* starting D6?" (after a day of grounding/re-framing instead of writing code); (5)
+"z.ZodRawShape / Record<string,unknown> is for genuinely-unknown content only — the 'precedent' is
+a persistent error, not something to propagate"; then "find the REAL cause not the symptom".
+
+The single root behind every correction: **I reflexively conformed to the existing family's
+patterns and then patched the friction** — reached for `Object.keys` (type-destroyer; repo has
+`typeSafeKeys`), a `{...spread}` to slip a strict type into an erased `Record<string,unknown>`
+slot, `interface→type` as a workaround, a "bounded fix now / carrier later" cheap-cure, and almost
+patched a parity-e2e expected-list (which would bury an ungated-exposure bug). Each was a
+**symptom-patch** masking the real cause: the aggregated-handler carrier erases `structuredContent`
+to `Record<string,unknown>` *inside our own code, before the wire* (the family's persistent error),
+and the gate was wired last so the flagged tool was exposed ungated.
+
+**Carry (now the operating constraint):** strict types without loss throughout — the ONLY narrowing
+is external-input validation (`unknown`→exact, anchored to the `as const` corpus), the ONLY erasure
+is JSON at the wire; a loose carrier is correct ONLY for genuinely-unknown data. When friction
+appears at a "precedent", ask whether the precedent is itself the error before conforming. When a
+tool's input/output is fully known, it is a NEW type — derive its shape from first principles, do
+not pattern-match. Full analysis + diagram + LTAE carrier fix in
+`.agent/reports/eef-get-eef-evidence-tool-and-strict-type-flow.report.md`. Same family as the
+entries above (passive guidance losing to artefact-gravity); here the gravity was "do what the
+family does". **NB napkin now 560+ lines — rotation due next consolidation (deferred: a deliberate
+extract/merge/prune/archive op, not safe to rush at a blocked-commit session-end; falsifiable via
+line count).**

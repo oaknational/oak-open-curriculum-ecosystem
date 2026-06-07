@@ -1,4 +1,4 @@
-import type { TSESLint } from '@typescript-eslint/utils';
+import { createMessage, type RuleWithReappraisingMessages } from '../reappraising-message.js';
 
 /**
  * Pattern matching `eslint-disable` directive variants but NOT `eslint-enable`.
@@ -63,7 +63,9 @@ const APPROVAL_MARKER_PATTERN = /--\s*jc:/iu;
  * `eslint-enable` comments are explicitly allowed; they undo prior
  * disable blocks and should not be restricted.
  */
-const noEslintDisableRule: TSESLint.RuleModule<'eslintDisableBanned' | 'tsDirectiveBanned', []> = {
+const noEslintDisableRule: RuleWithReappraisingMessages<
+  'eslintDisableBanned' | 'tsDirectiveBanned'
+> = {
   meta: {
     type: 'problem',
     docs: {
@@ -72,10 +74,16 @@ const noEslintDisableRule: TSESLint.RuleModule<'eslintDisableBanned' | 'tsDirect
     },
     schema: [],
     messages: {
-      eslintDisableBanned:
-        'eslint-disable is banned. Fix the root cause. Only the project owner can approve exceptions.',
-      tsDirectiveBanned:
-        '@ts-ignore and @ts-nocheck are banned. Fix the root cause — these TypeScript suppression directives are never permitted. For @ts-expect-error, use the @typescript-eslint/ban-ts-comment surface with a substantive description.',
+      eslintDisableBanned: createMessage({
+        prohibition: 'eslint-disable is banned.',
+        reappraisal: 'Fix the root cause. Only the project owner can approve exceptions.',
+      }),
+      tsDirectiveBanned: createMessage({
+        prohibition:
+          '@ts-ignore and @ts-nocheck are banned — these TypeScript suppression directives are never permitted.',
+        reappraisal:
+          'Fix the root cause. For @ts-expect-error, use the @typescript-eslint/ban-ts-comment surface with a substantive description.',
+      }),
     },
   },
   defaultOptions: [],

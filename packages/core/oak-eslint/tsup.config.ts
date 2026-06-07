@@ -24,5 +24,6 @@ export default createLibConfig({
     'typescript-eslint',
     'globals',
     'minimatch',
+    'zod',
   ],
 });

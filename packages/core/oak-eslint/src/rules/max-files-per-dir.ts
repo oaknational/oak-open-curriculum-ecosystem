@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { minimatch } from 'minimatch';
-import type { TSESLint } from '@typescript-eslint/utils';
+import { createMessage, type RuleWithReappraisingMessages } from '../reappraising-message.js';
 
 export interface DirectoryInventory {
   readonly directory: string;
@@ -99,7 +99,7 @@ export function evaluateMaxFilesPerDir({
   };
 }
 
-const maxFilesPerDirRule: TSESLint.RuleModule<'tooManyFiles', [MaxFilesPerDirOptions]> = {
+const maxFilesPerDirRule: RuleWithReappraisingMessages<'tooManyFiles', [MaxFilesPerDirOptions]> = {
   meta: {
     type: 'suggestion',
     docs: {
@@ -130,8 +130,11 @@ const maxFilesPerDirRule: TSESLint.RuleModule<'tooManyFiles', [MaxFilesPerDirOpt
       },
     ],
     messages: {
-      tooManyFiles:
-        '{{dir}} contains {{actual}} files matching "{{pattern}}", exceeding max {{max}}.',
+      tooManyFiles: createMessage({
+        prohibition: '{{dir}} contains {{actual}} files matching "{{pattern}}", exceeding max {{max}}.',
+        reappraisal:
+          'Group related files into a cohesive subdirectory, or extract a module, so each directory stays within the limit.',
+      }),
     },
   },
   defaultOptions: [{}],
