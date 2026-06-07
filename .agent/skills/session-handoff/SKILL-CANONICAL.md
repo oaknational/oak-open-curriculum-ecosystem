@@ -297,6 +297,34 @@ there unless the owner or closeout owner gives a further assignment.
    (cross-platform read at thread-scoped depth); session-handoff is
    the session-close edge of the same surface.
 
+   **6a.2. Conserve grounded execution knowledge.** Distinct from the
+   surprise capture (6a) and the cross-session lesson (6a.1): a session also
+   produces **grounded execution knowledge** — facts it verified first-hand to
+   do the work, plus failed-approach learnings — that the next agent or a
+   downstream plan would otherwise re-derive. This is not a surprise and not a
+   general lesson; it is consumed by a *specific* next executor, so conserve it
+   at the CONSUMER's durable home (the owning plan, the thread next-session
+   record), not only the napkin (per
+   [PDR-011 §Grounded execution knowledge is a second capture edge](../../practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md)).
+   Check, concretely:
+
+   - **Verified facts the next agent would re-derive** — a contract confirmed
+     at a named file:line, a dependency checked acyclic, a version or vendor
+     behaviour pinned, a data shape confirmed against the source.
+   - **Facts grounded by SUB-AGENTS this session** — a sub-agent's context is
+     already gone, so a fact a reviewer or explorer verified survives only if
+     you conserve it explicitly. These are the most loss-prone.
+   - **Failed-approach learnings** — what was tried and why it did not work, so
+     the next agent does not repeat the dead end.
+   - **Resolved-but-still-load-bearing knowledge** — knowledge whose triggering
+     surprise or change has since resolved (e.g. a reverted change) but which
+     stays load-bearing for a downstream consumer; a surprise-shaped sweep drops
+     it precisely because the surprise is gone.
+
+   Route each finding to the surface the consumer reads (the owning plan or the
+   thread next-session record), citing the durable home. "Nothing to conserve"
+   is a valid answer reached by checking, not by skipping.
+
    **6b. Surface ADR/PDR candidates.** Ask explicitly at every
    session close: *"Has this session surfaced an architectural
    decision worth an ADR? A Practice-governance decision worth a
@@ -409,6 +437,20 @@ there unless the owner or closeout owner gives a further assignment.
    the canonical surfaces authoritative and prevents the slower
    accumulation that `consolidate-docs` would otherwise discover at
    thread-scoped depth.
+
+   **6e. Adversarial loss-sweep — completeness backstop.** After the
+   categorical capture edges above (6a–6d), run one deliberate sweep *against
+   the grain of "it is all captured"*: *"If this context ceased now, what
+   valuable knowledge generated this session would be lost — and fits none of
+   the categories above (6a–6d)?"* The categorical edges catch the recurring
+   kinds; this backstop catches the long tail that fits no category. Route
+   anything it surfaces to its consumer's durable home (per 6a.2's routing).
+   This step fires **every** handoff: the loss it prevents is exactly the loss
+   that occurs when no one thinks to ask, so it is a mechanism, not a
+   recall-dependent courtesy (per
+   [PDR-011 §Grounded execution knowledge is a second capture edge](../../practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md)).
+   "Nothing survives the sweep" is a valid answer reached by asking, not by
+   skipping.
 
 7. **Refresh cross-session coordination surfaces** (session-scoped
    touch on cross-session artefacts the session affected).
@@ -549,6 +591,14 @@ there unless the owner or closeout owner gives a further assignment.
       commitments. Recorder/actor completion requires evidence; role
       handoff requires `handoff_to` plus evidence or a durable
       `next_action` reference.
+
+   **Multi-agent staging caution.** If this session-close commits on a shared
+   working tree while other agents are present, stage by explicit pathspec (per
+   [`stage-by-explicit-pathspec`](../../rules/stage-by-explicit-pathspec.md)) —
+   a broad `git add -A` at close sweeps a *paused* peer's uncommitted WIP into
+   your commit. Worked instance 2026-06-07: a peer's "commit all my files" close
+   swept another agent's paused WIP carrier change into the commit, landing
+   broken code that then needed a forward revert.
 
 9. **Run the consolidation gate.** Check the trigger checklist in
    [`consolidate-docs`](../consolidate-docs/SKILL-CANONICAL.md).

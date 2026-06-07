@@ -4,7 +4,7 @@ pdr_kind: governance
 
 # PDR-011: Continuity Surfaces and the Surprise Pipeline
 
-**Status**: Accepted (amended 2026-04-20, amended 2026-04-21, amended 2026-04-25, amended 2026-05-29)
+**Status**: Accepted (amended 2026-04-20, amended 2026-04-21, amended 2026-04-25, amended 2026-05-29, amended 2026-06-07)
 **Date**: 2026-04-18 (amended 2026-04-20 — contract host abstracted
 from "primary session-continuation prompt" to "canonical repo-local
 surface set"; field set split into portable minimum plus optional
@@ -128,6 +128,24 @@ unit).
   twin (ADR-150) mirrors this in its Amendment Log; the host
   `session-handoff` §6c capture edge is reframed from "reflective surplus
   (optional)" to foundational standing.
+- **2026-06-07 — grounded execution knowledge named as a second capture
+  edge at session-handoff, with an adversarial completeness backstop**
+  (owner direction 2026-06-07, evidenced by an EEF D6 session where
+  load-bearing verified facts — a vendor type-carrier divergence,
+  sub-agent-grounded dependency/acyclicity checks, a failed-approach
+  learning — would have been lost at the session boundary because they fit
+  none of the surprise-pipeline capture categories; the loss-sweep that
+  caught them was owner-prompted, not mechanism-fired). §Decision gains
+  "### Grounded execution knowledge is a second capture edge" after §"The
+  surprise-to-enforcement pipeline". The three continuity types and the
+  surprise pipeline are unchanged; what is added is a sibling capture
+  concern at the capture stage — verified facts a session produces that the
+  next agent (or a downstream consumer) would re-derive — conserved at the
+  consumer's durable home and backed by an adversarial completeness sweep so
+  the conservation fires structurally rather than on recall. The host
+  `session-handoff` realises it as two capture edges (§6a.2 categorical +
+  §6e backstop); the repo-bound twin (ADR-150) mirrors this in its
+  Amendment Log.
 
 ## Context
 
@@ -463,6 +481,56 @@ No automatic shortcut to permanent doctrine exists. The pipeline
 preserves the existing graduation bars at each stage. What it adds is
 **explicit entry**: a surprise enters the pipeline by being captured
 in structured form, not by being recounted in chat history.
+
+### Grounded execution knowledge is a second capture edge (2026-06-07 amendment)
+
+The surprise-to-enforcement pipeline captures **model-changing signal** —
+surprise, correction, contradiction. A session also produces a second kind of
+conservation-worthy output the pipeline does not name: **grounded execution
+knowledge** — the facts a session verified first-hand to do its work (a
+contract confirmed at a named location, a dependency checked acyclic, a version
+or vendor behaviour pinned, a data shape confirmed against the source) and the
+**failed-approach learnings** (what was tried, why it did not work). This is not
+a surprise (there need be no expectation-gap) and not a new continuity type — it
+serves operational and epistemic continuity. It is a distinct **capture
+concern**: when a session's context ceases, verified knowledge that fits no
+surprise/lesson/decision/question category is lost, and the next agent — or a
+downstream plan that inherits the work — re-derives it.
+
+Three properties make grounded execution knowledge especially loss-prone, and
+the capture edge must account for each:
+
+- **It is routed to the consumer, not the pipeline.** Surprise capture lands in
+  the ephemeral memory surface to be distilled into general rules. Grounded
+  execution knowledge is consumed by a *specific* next executor at a *specific*
+  surface — the owning plan, the thread next-session record — so it is conserved
+  *there*, where the consumer looks, not only in the napkin.
+- **Sub-agent-grounded facts are the most loss-prone of all.** A sub-agent's
+  context is already gone, so a fact a reviewer or explorer verified survives
+  only if the orchestrating session conserves it explicitly.
+- **A resolved surprise can leave load-bearing knowledge behind.** When the
+  triggering change is reverted or the surprise is settled, a surprise-shaped
+  capture drops the entry — yet the verified knowledge underneath it may still
+  be load-bearing for a downstream consumer.
+
+Conservation has two composed parts at session-handoff, because categorical
+capture and an open backstop catch different things:
+
+- **Categorical capture** — concrete check-items for the recurring kinds
+  (verified facts the next agent will re-derive; sub-agent-grounded facts;
+  failed-approach learnings; resolved-but-still-load-bearing knowledge). Cheap
+  and reliable: it catches the common cases without the agent having to generate
+  the frame.
+- **An adversarial completeness backstop** — run *after* the categorical edges,
+  against the grain of "it is all captured": *"if this context ceased now, what
+  valuable knowledge generated this session would be lost, and fits none of the
+  categories above?"* This catches the long tail that fits no category.
+
+The backstop must **fire every handoff as a mechanism, not on recall**: the loss
+it prevents is exactly the loss that occurs when no one thinks to ask, so a
+conservation step that depends on someone remembering to ask is debt. The host
+realises both parts as session-handoff capture edges (§6a.2 categorical + §6e
+backstop).
 
 ### Mid-session re-grounding (complementary, not a continuity surface)
 

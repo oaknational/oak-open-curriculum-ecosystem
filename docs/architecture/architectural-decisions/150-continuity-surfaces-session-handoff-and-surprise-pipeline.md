@@ -1,6 +1,6 @@
 # ADR-150: Continuity Surfaces, Session Handoff, and Surprise Pipeline
 
-**Status**: Accepted (amended 2026-04-20, 2026-04-21, 2026-05-29)
+**Status**: Accepted (amended 2026-04-20, 2026-04-21, 2026-05-29, 2026-06-07)
 **Date**: 2026-04-02 (amended 2026-04-20 — §3 abstracted from
 prompt-host to canonical repo-local surface; §4 generalised; Rationale
 and Consequences language aligned to the amendment per OAC Phase 4.3;
@@ -68,6 +68,23 @@ doctrine carried forward in the parallel PDR-011 amendment)
   Amendment Log and realised in the host `session-handoff` §6c capture edge
   (re-framed from optional reflective surplus to foundational standing).
   Doctrine otherwise unchanged.
+- **2026-06-07 — grounded execution knowledge named as a second capture
+  edge, with an adversarial completeness backstop.** Mirrors the portable
+  PDR-011 amendment
+  ([PDR-011 §Amendment Log 2026-06-07](../../../.agent/practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md#amendment-log)):
+  alongside the surprise-to-enforcement pipeline (which captures model-changing
+  signal), a session also produces **grounded execution knowledge** — facts
+  verified first-hand that the next agent or a downstream plan would re-derive,
+  plus failed-approach learnings. This is not a surprise and not a fourth
+  continuity type; it is a sibling capture concern conserved at the consumer's
+  durable home (the owning plan or thread next-session record) and backed by an
+  adversarial completeness sweep so it fires structurally rather than on recall.
+  Sub-agent-grounded facts are the most loss-prone (the sub-agent's context is
+  already gone). Realised in the host `session-handoff` capture edges §6a.2
+  (categorical) and §6e (adversarial backstop), plus the §8 multi-agent staging
+  caution. Owner direction 2026-06-07; evidenced by an EEF D6 session where the
+  loss-sweep that caught the at-risk facts was owner-prompted, not
+  mechanism-fired. Doctrine otherwise unchanged.
 
 ## Context
 
