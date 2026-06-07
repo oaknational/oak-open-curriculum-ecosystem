@@ -146,6 +146,18 @@ unit).
   `session-handoff` realises it as two capture edges (§6a.2 categorical +
   §6e backstop); the repo-bound twin (ADR-150) mirrors this in its
   Amendment Log.
+- **2026-06-07 — a handoff author cannot self-verify its completeness; both
+  cures are universal to every handoff** (owner direction 2026-06-07: "make all
+  handoffs high quality, not just high stakes ones"). §Decision gains "### A
+  handoff author cannot self-verify its completeness" after §"Grounded execution
+  knowledge is a second capture edge". The author holds the context whose loss the
+  handoff guards against, so a self-run completeness check re-affirms felt-true
+  claims; the cures are (a) first-hand verification of the handoff's own
+  load-bearing claims at write-time and (b) the completeness backstop run from a
+  context-less reader's state (externalised by default). Evidenced by the EEF D6
+  handoff session whose own banner's "branch unpushed" was false and whose
+  inherited peer "all gates green" was knip-red. Realised in host `session-handoff`
+  §6e (extended); ADR-150 mirrors. Pipeline and continuity types unchanged.
 
 ## Context
 
@@ -531,6 +543,42 @@ it prevents is exactly the loss that occurs when no one thinks to ask, so a
 conservation step that depends on someone remembering to ask is debt. The host
 realises both parts as session-handoff capture edges (§6a.2 categorical + §6e
 backstop).
+
+### A handoff author cannot self-verify its completeness (2026-06-07 amendment)
+
+The agent writing a handoff holds the very context whose loss the handoff guards
+against. A completeness check the author runs on themselves therefore operates
+from the wrong knowledge state — a claim that *feels* true is re-affirmed, not
+falsified. Empirically (2026-06-07): a deep, deliberately loss-proofed handoff its
+author believed complete asserted a false "branch unpushed" tree-state and
+imprecise file:line citations; a context-less reviewer that read only the durable
+artefacts and grounded each claim against source caught both. The same session
+inherited a peer handoff whose "all gates green" self-report was knip-red and
+prettier-dirty — a self-report does not transfer verification.
+
+Two disciplines follow, and both are **universal — every handoff, not only
+high-stakes ones** (owner direction 2026-06-07). A quality bar carved to
+"high-stakes only" decays to its lowest tier in practice: artefact-gravity makes
+the routine path the default and the rigorous path is forgotten. Excellence is the
+default; only the *means* scale to meet it, never the bar.
+
+- **Verify the handoff's own load-bearing claims first-hand, at write-time.** Tree
+  state, commit SHAs, ahead/behind, file:line citations, version and dependency
+  facts, gate green-ness — ground each against its source (the git command, the
+  file, the gate output) as it is written, never from memory. This is
+  `verify-dont-trust` turned on the handoff's own banner; it is the cheapest and
+  most universal catch.
+- **Run the completeness backstop from a context-less reader's state.** Because the
+  author cannot reliably simulate that state, the reliable form externalises it: a
+  fresh reviewer (or a genuinely context-isolated pass) reads only the durable
+  artefacts the next session will read and reports what it cannot determine, finds
+  ambiguous, or would be misled by — grounding each finding against source.
+  Externalise by default whenever the handoff carries load-bearing facts a fresh
+  agent will act on; a handoff with nothing load-bearing to lose has nothing to
+  review. Fill the gaps; fence stale content a fresh reader would misread.
+
+This makes the loss-sweep recur-proof rather than recall-dependent — the
+structural cure the surprise-to-enforcement pipeline prefers.
 
 ### Mid-session re-grounding (complementary, not a continuity surface)
 

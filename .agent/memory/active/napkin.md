@@ -432,3 +432,18 @@ blocked" note directly above). Deep handoff written to the eef thread banner.
   the Phase E handoff; rotation is a dedicated `consolidate-docs` pass, not a
   session-close edit. Falsifiable: the next consolidation rotates this window or
   the line count keeps climbing.
+
+## 2026-06-07 — a "high-stakes only" tier for a quality practice is a softening (Arboreal Shedding Canopy)
+
+When the owner asked whether this session's handoff rigour was standard practice, I
+correctly found it was not (6e was a self-run sweep) and recommended graduating it —
+but I TIERED the recommendation to "high-stakes handoffs only". Owner: "graduate it,
+but make ALL handoffs high quality, not just high stakes ones." The tier was a
+softening — the same shape as the "pre-existing / out-of-scope" gate-skipping the
+all-quality-gates-blocking rule forbids: a self-granted permission to skip rigour on
+the routine path, which artefact-gravity then makes the default. **Carry (beyond
+handoffs): when proposing any quality practice, excellence is the default; only the
+MEANS may scale to hit the bar, never the bar itself.** Instance of the
+no-cheap-cure / escape-hatch-generative-screen family. Graduated structurally to
+PDR-011 §"A handoff author cannot self-verify its completeness" + session-handoff
+§6e (universal) + ADR-150 mirror.

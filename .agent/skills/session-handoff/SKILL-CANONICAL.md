@@ -438,19 +438,34 @@ there unless the owner or closeout owner gives a further assignment.
    accumulation that `consolidate-docs` would otherwise discover at
    thread-scoped depth.
 
-   **6e. Adversarial loss-sweep — completeness backstop.** After the
-   categorical capture edges above (6a–6d), run one deliberate sweep *against
-   the grain of "it is all captured"*: *"If this context ceased now, what
-   valuable knowledge generated this session would be lost — and fits none of
-   the categories above (6a–6d)?"* The categorical edges catch the recurring
-   kinds; this backstop catches the long tail that fits no category. Route
-   anything it surfaces to its consumer's durable home (per 6a.2's routing).
-   This step fires **every** handoff: the loss it prevents is exactly the loss
-   that occurs when no one thinks to ask, so it is a mechanism, not a
-   recall-dependent courtesy (per
-   [PDR-011 §Grounded execution knowledge is a second capture edge](../../practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md)).
-   "Nothing survives the sweep" is a valid answer reached by asking, not by
-   skipping.
+   **6e. Loss-sweep + first-hand claim verification — every handoff,
+   context-less.** Two parts, both fire **every** handoff — universal, NOT
+   high-stakes-only (a quality bar tiered to "high-stakes" decays to its lowest
+   tier in practice; excellence is the default, only the *means* scale). Per
+   [PDR-011 §A handoff author cannot self-verify its completeness](../../practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md):
+   the author holds the context whose loss the handoff guards against, so a
+   self-run check re-affirms felt-true claims rather than falsifying them.
+
+   **6e.1 Verify the handoff's own load-bearing claims first-hand, at write-time.**
+   Ground every fact the handoff asserts — tree state, commit SHAs, ahead/behind,
+   file:line citations, version/dependency facts, gate green-ness — against its
+   source (the git command, the file, the gate output) AS YOU WRITE IT, never from
+   memory (`verify-dont-trust` on your own banner). Worked instance 2026-06-07: a
+   handoff's "branch unpushed" was false (4 ahead of a live origin) and its
+   executor.ts citations were off — both asserted from memory.
+
+   **6e.2 Run the completeness backstop from a context-less reader's state.** After
+   the categorical edges (6a–6d), sweep *against the grain of "it is all captured"*:
+   *"If this context ceased now, what would be lost — and fits none of 6a–6d?"*
+   Because the author cannot reliably simulate the fresh reader, the reliable form
+   externalises it: a fresh reviewer (or a genuinely context-isolated pass) reads
+   ONLY the durable artefacts the next session reads, grounds each claim against
+   source, and reports what it cannot determine, finds ambiguous, or would be
+   misled by. Externalise by default whenever the handoff carries load-bearing
+   facts a fresh agent will act on; a handoff with nothing load-bearing to lose has
+   nothing to review. Route findings to their consumer's durable home (per 6a.2);
+   fence stale content a fresh reader would misread. "Nothing survives the sweep"
+   is a valid answer reached by asking, not by skipping.
 
 7. **Refresh cross-session coordination surfaces** (session-scoped
    touch on cross-session artefacts the session affected).
