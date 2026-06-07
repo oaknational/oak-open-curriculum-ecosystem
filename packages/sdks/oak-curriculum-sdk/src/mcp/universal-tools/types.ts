@@ -9,11 +9,7 @@
  * to ensure consistent structure for tool listings and registration.
  */
 
-// `ZodRawShapeCompat | AnySchema` is the MCP SDK's own `registerTool` carrier
-// union (raw shape OR a constructed schema value); resolved via the SDK's `./*`
-// wildcard export to `dist/esm/server/zod-compat` — there is no explicit
-// `./server/zod-compat` export entry.
-import type { AnySchema, ZodRawShapeCompat } from '@modelcontextprotocol/sdk/server/zod-compat';
+import type { z } from 'zod';
 import type {
   ToolName,
   ToolDescriptorForName,
@@ -129,25 +125,14 @@ export interface UniversalToolListEntry {
   /** Human-readable description of what the tool does */
   readonly description: string;
   /**
-   * Input schema for MCP SDK `registerTool()` / `registerAppTool()`.
+   * Zod raw shape for MCP SDK `registerTool()` / `registerAppTool()`.
    *
-   * Most tools provide a Zod raw shape containing `.describe()` and
-   * `.meta({ examples })` calls that preserve parameter descriptions and
-   * examples through the MCP SDK's native `z.toJSONSchema()` conversion;
-   * no-input tools expose an empty shape (`{}`). Graph tools whose input is a
-   * single `z.object(...)` (a constructed schema value) pass it directly — the
-   * `AnySchema` arm of the carrier accepts it with no `as` cast.
+   * Tools with parameters provide a Zod raw shape containing `.describe()`
+   * and `.meta({ examples })` calls that preserve parameter descriptions
+   * and examples through the MCP SDK's native `z.toJSONSchema()` conversion.
+   * No-input tools expose an empty shape (`{}`).
    */
-  readonly inputSchema: ZodRawShapeCompat | AnySchema;
-  /**
-   * Output schema for MCP SDK `registerTool()` / `registerAppTool()`, when the
-   * tool declares one. The SDK validates the tool's `structuredContent` against
-   * it (and skips validation when a result is `isError`). Always a constructed
-   * `z.object(...)` value, never a raw shape. Optional on the carrier
-   * (transitional): tools acquire output schemas incrementally
-   * (`output-schemas-for-mcp-tools.plan.md`).
-   */
-  readonly outputSchema?: AnySchema;
+  readonly inputSchema: z.ZodRawShape;
   /** Security schemes required to invoke this tool */
   readonly securitySchemes?: readonly SecurityScheme[];
   /** MCP annotations providing behaviour hints */
@@ -174,13 +159,5 @@ export interface UniversalToolListEntry {
  * ```
  */
 export interface AppToolListEntry extends UniversalToolListEntry {
-  /**
-   * Widget/app tools always declare a raw input shape (or `{}`), never a
-   * constructed schema value, so this narrows the carrier's
-   * `ZodRawShapeCompat | AnySchema` to the raw-shape arm — the type
-   * `registerAppTool` accepts (its carrier is `ZodRawShapeCompat |
-   * StandardSchemaWithJSON`, which excludes the SDK's `AnySchema`).
-   */
-  readonly inputSchema: ZodRawShapeCompat;
   readonly _meta: ToolMeta & { readonly ui: { readonly resourceUri: string } };
 }

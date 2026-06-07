@@ -170,30 +170,16 @@ function registerTools(
       });
     };
 
+    const config = {
+      title: tool.title,
+      description: tool.description,
+      inputSchema: tool.inputSchema,
+      annotations: tool.annotations,
+    };
+
     if (isAppToolEntry(tool)) {
-      // `tool` is narrowed to `AppToolListEntry`, whose `inputSchema` is the
-      // raw-shape arm; build the config inline (not from the shared `config`
-      // below) so the narrowed type reaches `registerAppTool`, which accepts
-      // `ZodRawShapeCompat | StandardSchemaWithJSON` — not the SDK's `AnySchema`.
-      registerAppTool(
-        server,
-        tool.name,
-        {
-          title: tool.title,
-          description: tool.description,
-          inputSchema: tool.inputSchema,
-          annotations: tool.annotations,
-          _meta: { ...tool._meta },
-        },
-        handler,
-      );
+      registerAppTool(server, tool.name, { ...config, _meta: { ...tool._meta } }, handler);
     } else {
-      const config = {
-        title: tool.title,
-        description: tool.description,
-        inputSchema: tool.inputSchema,
-        annotations: tool.annotations,
-      };
       server.registerTool(tool.name, { ...config, _meta: { ...tool._meta } }, handler);
     }
   }

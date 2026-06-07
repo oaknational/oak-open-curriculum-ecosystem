@@ -7,7 +7,7 @@
  */
 
 import { typeSafeKeys } from '../../types/helpers/type-helpers.js';
-import { AGGREGATED_TOOL_DEFS, type AggregatedToolDefShape } from './definitions.js';
+import { AGGREGATED_TOOL_DEFS } from './definitions.js';
 import type { GeneratedToolRegistry, UniversalToolListEntry } from './types.js';
 import {
   requireGeneratedToolInputShape,
@@ -62,16 +62,12 @@ import {
 export function listUniversalTools(registry: GeneratedToolRegistry): UniversalToolListEntry[] {
   const aggregatedEntries: UniversalToolListEntry[] = typeSafeKeys(AGGREGATED_TOOL_DEFS).map(
     (name) => {
-      // Widen to the shared shape so the optional `outputSchema` is readable:
-      // `as const satisfies` keeps each entry at its narrow literal type, under
-      // which an entry that omits `outputSchema` has no such property.
-      const def: AggregatedToolDefShape = AGGREGATED_TOOL_DEFS[name];
+      const def = AGGREGATED_TOOL_DEFS[name];
       return {
         name,
         title: def.title,
         description: def.description,
         inputSchema: def.inputSchema,
-        ...(def.outputSchema !== undefined ? { outputSchema: def.outputSchema } : {}),
         securitySchemes: def.securitySchemes,
         annotations: def.annotations,
         _meta: def._meta,
