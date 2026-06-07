@@ -1,31 +1,5 @@
 {
   "schema_version": "1.3.0",
   "commit_queue": [],
-  "claims": [
-    {
-      "claim_id": "3ce85ae0-996b-4b9f-8de7-14df2d967ae0",
-      "agent_id": {
-        "agent_name": "Moonlit Orbiting Moon",
-        "platform": "claude",
-        "model": "Opus 4.8",
-        "session_id_prefix": "b6552f",
-        "id": "33e13885-fc20-50f4-8862-83f483f618af"
-      },
-      "thread": "eef",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            "packages/sdks/oak-curriculum-sdk/src/mcp/**",
-            "packages/sdks/oak-curriculum-sdk/package.json",
-            "apps/oak-curriculum-mcp-streamable-http/src/**"
-          ]
-        }
-      ],
-      "claimed_at": "2026-06-06T15:09:11Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "EEF D6 execution: get-eef-evidence aggregated-family-peer tool + eef-interpretation resource + adapt-lesson prompt, flag-gated; c0 carrier widening on universal-tools (coordinated with output-schemas-for-mcp-tools plan)"
-    }
-  ]
+  "claims": []
 }
