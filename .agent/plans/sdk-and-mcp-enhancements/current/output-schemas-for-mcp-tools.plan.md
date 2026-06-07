@@ -1,6 +1,6 @@
 ---
 name: "MCP Output Schemas and Response Validation"
-overview: "Declare a truthful, REQUIRED, object-rooted `outputSchema` on every MCP tool — composed at codegen time for the generated tools, hand-authored (reusing generated sub-schemas) for the aggregated tools, with the 3 existing graph tools receiving theirs as part of their substrate migration — and thread it through the canonical universal-tools descriptor surface to `registerTool`/`registerAppTool`, so MCP clients receive a machine-checkable contract for the `structuredContent` they get back. Delivery order is ratified: the EEF tool first (via EEF D6), the graph tools at migration, the rest per tool type, required/root promotion last."
+overview: "Declare a truthful, REQUIRED, object-rooted `outputSchema` on every MCP tool — composed at codegen time for the generated tools, hand-authored (reusing generated sub-schemas) for the aggregated tools (including the EEF tool, `get-eef-evidence`), with the existing graph tools receiving theirs as part of their substrate migration — and thread it through the canonical universal-tools descriptor surface to `registerTool`/`registerAppTool` (the carrier seam, including the SDK-`registerTool` vs ext-apps-`registerAppTool` divergence, solved ONCE here at the infra layer), so MCP clients receive a machine-checkable contract for the `structuredContent` they get back. Delivery order (revised 2026-06-07, owner-ratified 2026-06-06 — EEF D6 ships NO output schema; the EEF tool gains its output schema HERE with every other tool): generated tools via codegen, aggregated tools (incl. EEF) hand-authored, graph tools at migration, required/root promotion last."
 source_research:
   - "../../../reports/output-schema-mcp-plan-audit-2026-06-02.md"
   - "../roadmap.md"
@@ -232,19 +232,27 @@ it, so the schema must match what is **actually emitted** or the tool errors.
 
 ## Resolved Sequencing (owner, 2026-06-02)
 
-**S0 ownership is resolved:** this plan owns the **general S0 seam**; EEF D6
-lands the seam's first use for its one flag-gated tool. The topology was never
-open — the EEF tool registers through the universal-tools path, and both plans
-point at the one shared additive seam (`AggregatedToolName`,
+**S0 ownership is resolved (revised 2026-06-07):** this plan owns the **S0
+carrier seam ENTIRELY** — the carrier-widening (adding an `outputSchema` field to
+`UniversalToolListEntry`/`AggregatedToolDefShape` and accepting object schemas on
+`inputSchema`) AND reconciling the SDK `registerTool`
+(`ZodRawShapeCompat | AnySchema`) vs ext-apps `registerAppTool`
+(`ZodRawShapeCompat | StandardSchemaWithJSON`) carrier divergence — solved ONCE
+here at the infra layer. **EEF D6 does NOT land any output schema or carrier
+change** (owner-ratified 2026-06-06): the EEF tool's input is a `z.ZodRawShape`
+that fits the existing carrier, and it returns `structuredContent` with no
+`outputSchema`, uniform with every other aggregated graph tool. The shared
+additive seam (`AggregatedToolName`,
 `AGGREGATED_TOOL_DEFS`/`AggregatedToolDefShape` satisfies-guard,
-`UniversalToolListEntry`, `listUniversalTools`, the `handlers.ts` config),
-settled at EEF D3 verification together with this plan.
+`UniversalToolListEntry`, `listUniversalTools`, the `handlers.ts` config) is this
+plan's to widen.
 
 **The delivery order is ratified and firm:**
 
-1. **The EEF tool's `outputSchema` lands first and alone**, through EEF D6 —
-   the first instance of the projection→single-Zod-call mechanism — so the
-   EEF-dependent value ships with no delay from any work on existing tools.
+1. **The EEF tool's `outputSchema` is authored HERE as an ordinary aggregated
+   tool** (revised 2026-06-07 — it no longer "lands first via EEF D6"; EEF D6
+   ships `structuredContent` with no output schema). It carries no special
+   priority; it gains its output schema with the other aggregated tools.
 2. **The 3 existing graph tools** (`get-misconception-graph`,
    `get-prior-knowledge-graph`, `get-thread-progressions`) **receive their
    output schemas with their substrate migration**
@@ -546,7 +554,7 @@ against the real code before acting; relay a synthesised verified verdict.
 | `oakContextHint` conditionality assumed (`=== true`) instead of derived (`!== false`) | W1 derives the schema predicate off the exact runtime predicate; tested in cycle 1.1c |
 | `formatToolResponse` top-level spread mis-modelled | W1/W2 schemas encode the spread envelope explicitly; per-tool tests use real emitted output |
 | Schema strictness (`.strip`/`.passthrough`) interacts with envelope fields | Align with `schema-resilience…` OQ1/OQ2 before W1 finalises; envelope declares `summary`/`oakContextHint`/`status` so they are not "extra" |
-| S0 collides with active EEF D6 on `universal-tools/` | §Resolved Sequencing (EEF D6 lands the seam's first use) + active-claims coordination before editing the seam |
+| S0 collides with active EEF D6 on `universal-tools/` | NO collision (revised 2026-06-07): EEF D6 dropped its output schema and does NOT touch the carrier — this plan owns the seam outright. Standard active-claims coordination before editing the seam still applies. |
 | `download-asset` shape changes under W2 (URL → `_meta`) | W2 consumes the post-`download-asset-user-only-url` shape; sequence that change first |
 
 ---

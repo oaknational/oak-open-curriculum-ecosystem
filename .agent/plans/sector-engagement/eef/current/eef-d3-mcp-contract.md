@@ -184,27 +184,34 @@ Output rules:
 
 ### The schema rule (plan Decision 2 — controlling)
 
-Two named schema-builder values, both **D4-bound** and implemented in D6:
+> **Revised 2026-06-07 (owner-ratified 2026-06-06): the MCP `outputSchema` is
+> dropped from D6.** EEF matches its aggregated graph-tool family — a raw-shape
+> input + `structuredContent` with no `outputSchema` and no shared-carrier change.
+> The universal output-schema work (every tool, including EEF's eventual output
+> schema) is owned by `output-schemas-for-mcp-tools.plan.md`. Only the input rule
+> below is implemented in D6.
+
+One named schema-builder value, **D4-bound** and implemented in D6:
 
 - `eefToolInputSchemaSource` — typed from the graph-native view's key/domain
-  types (`EefStrandId`, observed domains);
-  `inputSchema` derives from it by ONE Zod call, `satisfies`-tied to the input
-  payload type.
-- `eefToolOutputSchemaSource` — typed from `eefEvidenceEnvelopeSubset`;
-  `outputSchema` derives from it by ONE Zod call, `satisfies`-tied to the
-  `structuredContent` type.
+  types (`EefStrandId`, observed domains). The tool's `inputSchema` is a
+  **`z.ZodRawShape`** (a record of field→Zod validator with `.describe()`,
+  exactly like the family's `SEARCH_INPUT_SCHEMA` — NOT a single `z.object(...)`
+  value, so it fits the existing `z.ZodRawShape` carrier with no widening),
+  `satisfies`-tied to the input payload type.
 
-Each schema root serialises to an object (`type: object`); these two
-declarations are the only Zod in the EEF graph stack. Results are
-`structuredContent`-only with `content: []` (settled Oak decision); error
-returns use `isError: true` so the SDK skips output validation.
+The input raw shape is the only Zod authored in the EEF graph stack for D6.
+Results are `structuredContent`-only with `content: []` (settled Oak decision);
+the `structuredContent` is the D5 `EefEvidenceEnvelope`, returned directly and
+unvalidated at the MCP layer (uniform with every aggregated graph tool); error
+returns use `isError: true`.
 
-Placement (ADR-179 / ADR-041): the schema-builder values and the Zod calls
-live in the curriculum MCP consumer layer — never in `graph-corpus-sdk` or
-`graph-core`. The substrate owns the corpus types and the graph-native view;
-the MCP-shaped schema sources are built downstream of it (the
-`graph-corpus-sdk` barrel TSDoc states the same boundary). D4 ratifies the
-subset names; it does not relocate them into the substrate.
+Placement (ADR-179 / ADR-041): the schema-builder value and the Zod live in the
+curriculum MCP consumer layer — never in `graph-corpus-sdk` or `graph-core`. The
+substrate owns the corpus types and the graph-native view; the MCP-shaped schema
+source is built downstream of it (the `graph-corpus-sdk` barrel TSDoc states the
+same boundary). D4 ratifies the subset names; it does not relocate them into the
+substrate.
 
 ## The resource: `eef://interpretation`
 
@@ -292,6 +299,19 @@ Verified against the installed packages and HEAD (`9fab8669`), 2026-06-02. The
 re-verification at D6 build time re-runs these checks against the then-current
 tree.
 
+> **Revised for D6 (2026-06-07, owner-ratified 2026-06-06):** the output-schema
+> portions of this record — V3 (`outputSchema` through `registerAppTool`), V4 (the
+> app config dropping `outputSchema`), V5 (the surfaces that must change for
+> `outputSchema` to reach registration / the `z.object` carrier widening), and the
+> `outputSchema` / `impact_months` parts of the carrier note below — are
+> SUPERSEDED for D6: the output schema was dropped from D6. The EEF tool ships a
+> `z.ZodRawShape` input (fits the existing carrier, no widening) and
+> `structuredContent` with no `outputSchema`; the universal output-schema + carrier
+> work is `output-schemas-for-mcp-tools.plan.md`'s. The INPUT/registration
+> verifications (V1's `inputSchema`, V4's `inputSchema: z.ZodRawShape` observation,
+> V6 co-gating, V7 the flag, V8 `structuredContent`) stand and are what D6
+> implements.
+
 | # | Claim | Verified state | Evidence |
 | --- | --- | --- | --- |
 | V1 | Installed SDK accepts Zod schemas for `inputSchema`/`outputSchema` | `@modelcontextprotocol/sdk@1.29.0` built against `zod@4.4.3` (workspaces pin `zod ^4.4.3`); `registerTool` config carries `outputSchema?` | pnpm store key `@modelcontextprotocol+sdk@1.29.0_zod@4.4.3`; `dist/esm/server/mcp.d.ts:154,283` |
@@ -302,6 +322,13 @@ tree.
 | V6 | Resources and prompts register on the same path D6 co-gates | `registerHandlers` calls `registerTools`, then `registerAllResources`, then `registerPrompts` — one site for flag co-gating of tool + resource + prompt | `handlers.ts:144-149`; `register-resources.ts`; `register-prompts.ts` |
 | V7 | The flag exists as a dormant seam | `OAK_CURRICULUM_MCP_EEF_ENABLED` is parsed and stored as `runtimeConfig.eefEnabled`; no production code path consumes it yet — D6 wires the co-gating | `apps/oak-curriculum-mcp-streamable-http/src/env.ts:47`; `runtime-config-from-validated-env.ts:39` |
 | V8 | `structuredContent`-carrying results are valid in this stack, and the SDK accepts an empty `content` array | The two live graph universal tools return `structuredContent` with a non-empty `content` array (summary + JSON text blocks via `formatToolResponse`) — they prove `structuredContent` works on this path, not the `content: []` shape. The EEF tool's `content: []` shape is the separately owner-ratified target (plan §Fully Specified End State, not re-opened); the SDK's `validateToolOutput` checks `structuredContent` presence and never requires `content` to be non-empty | `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tool-shared.ts:220` (`formatToolResponse`); SDK `dist/esm/server/mcp.js` (`validateToolOutput`) |
+
+> **Superseded for D6 (2026-06-07):** the output schema was dropped from D6 (see
+> the revised schema rule above). The carrier-widening discussion below is now the
+> universal `output-schemas-for-mcp-tools.plan.md`'s concern, NOT D6's: the EEF
+> input is a `z.ZodRawShape` that fits the existing carrier with no widening, and
+> the `impact_months` OUTPUT hazard noted below does not arise in D6 (no output
+> schema). The note is retained as the D3-time verification record.
 
 Schema carrier note for S0/D6: generated tools hand the SDK a
 `z.ZodRawShape`; the EEF tool's single-Zod-call schemas are `z.object(...)`
@@ -329,11 +356,13 @@ D4 ratifies the graph-native EEF view and binds (**eight names** — decision B
 `eefObservedPrioritySubset`,
 `eefEvidenceEnvelopeSubset` (member payload incl. inline `related_guidance_reports`,
 edge set, frontier refs), `eefProvenanceSubset` (source attribution +
-corpus caveats), `eefToolInputSchemaSource`, and `eefToolOutputSchemaSource` —
+corpus caveats), `eefToolInputSchemaSource`, and `eefToolOutputSchemaSource` (the output-schema
+source is deferred to the universal `output-schemas-for-mcp-tools.plan.md`; D6
+authors only `eefToolInputSchemaSource` — see the revised schema rule above) —
 together with the single-`strand` node id/kind policy, the `related_strand` edge
 type, and the provenance-envelope policy. D3 is complete when
-these names are ratified as the handed-off set; D6 implements the two Zod
-calls.
+these names are ratified as the handed-off set; D6 implements the one input Zod
+call (the output-schema source is the universal output-schemas plan's later work).
 
 ## Non-claims (restated as contract)
 

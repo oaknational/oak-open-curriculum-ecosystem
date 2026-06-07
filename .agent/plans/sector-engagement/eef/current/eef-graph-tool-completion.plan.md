@@ -47,7 +47,7 @@ todos:
     status: completed
     depends_on: [d2-typed-raw-corpus-foundation, d4-graph-capability-contract]
   - id: d6-mcp-composition-eef-surface
-    content: "Build the EEF-specific MCP composition module in the curriculum consumer layer and register the ratified EEF tool/resource/prompt surface behind OAK_CURRICULUM_MCP_EEF_ENABLED with structuredContent-only tool results. Do not extract a generic corpus-tool factory until a real second consumer exists. The tool INPUT schema and OUTPUT schema are each derived by a SINGLE Zod call on a named subset/schema-builder value typed from the graph-native EEF view (a deterministic, type-strict projection of graph form, with graph form itself derived from the raw EEF data; not a direct raw-data transform, hand-maintained parallel shape, or plan-authored vocabulary; root `type: object`); use `satisfies` or equivalent compile-time proof tying declarations to `structuredContent`. These are the only Zod schemas in the EEF graph stack (Decision 2). Error returns use isError:true so the SDK skips output validation. Ensure `outputSchema` reaches the actual `server.registerTool`/`registerAppTool` call by replacing any current universal-tools segment that cannot carry it. Home the tool's handler SDK-side as an `AGGREGATED_HANDLERS` entry (`oak-curriculum-sdk/src/mcp/universal-tools/executor.ts`) exactly like `get-misconception-graph`/`get-prior-knowledge-graph` — `oak-curriculum-sdk` takes a runtime `graph-corpus-sdk` dependency (acyclic; the SDK is its first consumer) — so the tool registers AND executes through the shared universal-tools path with uniform auth (`securitySchemes`): no bespoke app-side handler, no registration-loop discriminant, no bypass, no special auth status. EEF is the first graph tool on the new substrate; the established `AGGREGATED_HANDLERS` execution surface (not just the registration config) is where the cycle plan ([`eef-d6-execution.plan.md`](eef-d6-execution.plan.md)) locates it. Implement the EEF interpretation resource/template and update the user-facing EEF prompt from the ratified D3-D5 graph surface. Registration is only for real implemented surfaces: every registered tool, resource, and prompt has real graph-derived behaviour and tests, or it is absent. The module must not import MCP types into substrate packages (ADR-179) - an explicit acceptance check. Preserve flag co-gating of tool, resource, and prompt. D6 is not complete until the single-Zod-call graph-subset rule is implemented exactly; failure blocks D6 and requires correction of the D3/D4 contract."
+    content: "Build the EEF-specific MCP composition module in the curriculum consumer layer and register the ratified EEF tool/resource/prompt surface behind OAK_CURRICULUM_MCP_EEF_ENABLED with structuredContent-only tool results. Do not extract a generic corpus-tool factory until a real second consumer exists. The tool INPUT schema is a `z.ZodRawShape` (a raw shape like the family's aggregated tools — it fits the existing carrier with no widening), derived from a named subset/schema-builder value typed from the graph-native EEF view (a deterministic, type-strict projection of graph form, with graph form itself derived from the raw EEF data; not a direct raw-data transform, hand-maintained parallel shape, or plan-authored vocabulary); use `satisfies` tying it to the input payload type. The EEF tool returns `structuredContent` (the D5 envelope) with NO MCP `outputSchema` (revised 2026-06-07, owner-ratified 2026-06-06; the universal output-schema work — including EEF's eventual output schema — is `output-schemas-for-mcp-tools.plan.md`'s). Error returns use isError:true so the SDK skips output validation. Home the tool's handler SDK-side as an `AGGREGATED_HANDLERS` entry (`oak-curriculum-sdk/src/mcp/universal-tools/executor.ts`) exactly like `get-misconception-graph`/`get-prior-knowledge-graph` — `oak-curriculum-sdk` takes a runtime `graph-corpus-sdk` dependency (acyclic; the SDK is its first consumer) — so the tool registers AND executes through the shared universal-tools path with uniform auth (`securitySchemes`): no bespoke app-side handler, no registration-loop discriminant, no bypass, no special auth status. EEF is the first graph tool on the new substrate; the established `AGGREGATED_HANDLERS` execution surface (not just the registration config) is where the cycle plan ([`eef-d6-execution.plan.md`](eef-d6-execution.plan.md)) locates it. Implement the EEF interpretation resource/template and update the user-facing EEF prompt from the ratified D3-D5 graph surface. Registration is only for real implemented surfaces: every registered tool, resource, and prompt has real graph-derived behaviour and tests, or it is absent. The module must not import MCP types into substrate packages (ADR-179) - an explicit acceptance check. Preserve flag co-gating of tool, resource, and prompt. D6 is not complete until the single-Zod-call graph-subset rule is implemented exactly; failure blocks D6 and requires correction of the D3/D4 contract."
     status: pending
     depends_on: [d4-graph-capability-contract, d5-graph-construction-methods]
   - id: d7-teacher-value-round-trip
@@ -194,24 +194,30 @@ exploration is isolated to D3 and D4 and is named there as explicit steps.
    known-shape. Known-shape data is derived from; genuinely-unknown-shape data is
    narrowed at its boundary — two arms of one principle.
 
-2. **Zod appears only at the MCP tool input and output schemas.** Zod's job is
+2. **Zod appears at the MCP tool input schema (and, universally, the output
+   schema — owned separately).** Zod's job is
    parsing unknown *structure*. The corpus is a known constant, and every semantic
    input is a *value drawn from a known finite vocabulary* (a strand key, a
    phase value, a key-stage value, an EEF priority), narrowed by membership *predicate*
    (`value is T`, the ADR-153 house pattern; ADR-028 corroborating). The repo's
    validate-unknown doctrine (ADR-032/003) governs genuinely-unknown *structure*
    elsewhere. At the MCP protocol boundary the installed SDK
-   (`@modelcontextprotocol/sdk` v1.29, Zod 4) accepts Zod schemas for `inputSchema`
-   and `outputSchema` and runtime-validates the tool's `structuredContent` against
-   `outputSchema`. So each MCP tool has an input schema and an output schema, each
-   derived by a **single Zod call on the appropriate subset of the graph-native EEF
-   view** — the CONTROLLING definition of the tool-schema rule the rest of the plan
-   refers to: one Zod call per schema, over a named graph-native subset or
-   schema-builder value whose TypeScript type is derived from the graph-native
-   view, with `satisfies` or an equivalent compile-time proof tying the declared
-   schema to the corresponding `structuredContent` type. The schema root serialises
-   to an object (`type: object`). D3/D4/D5 prove the single-Zod-call graph-subset
-   rule before D6.
+   (`@modelcontextprotocol/sdk` v1.29, Zod 4) accepts Zod for `inputSchema` (a
+   `z.ZodRawShape`) and, when present, `outputSchema`. **For D6 (revised
+   2026-06-07, owner-ratified 2026-06-06): EEF authors the INPUT schema only** — a
+   `z.ZodRawShape` raw shape (matching the family's aggregated tools, so it fits the
+   existing carrier with no widening), derived from a named graph-native
+   subset/schema-builder value whose TypeScript type is derived from the
+   graph-native view, with `satisfies` tying it to the input payload type. EEF
+   returns `structuredContent` (the D5 envelope) with NO MCP `outputSchema`,
+   uniform with every aggregated graph tool. The universal output-schema work — a
+   required, object-rooted output schema on *every* tool, including EEF's eventual
+   one — is owned by `output-schemas-for-mcp-tools.plan.md`. D3/D4/D5 prove the
+   graph-subset input rule before D6. This is the CONTROLLING tool-schema rule the
+   rest of the plan refers to: where the plan body elsewhere says "input and output
+   schema", that describes the end-state across all tools (per the universal
+   output-schemas plan) — for **D6 specifically, only the input raw-shape schema is
+   authored here**.
 
 3. **The `.external-data.ts` convention.** A data file holds data; whether a
    consumer treats that data as known or narrows it is expressed at the consumer
@@ -1039,10 +1045,12 @@ not dual-content output.
   separate D3 verification record:
   `inputSchema`/`outputSchema` are Zod-compatible, `isError: true` skips
   output-schema validation, plus resources/resource templates and empty-`content`
-  `structuredContent` results. This verification must follow the actual
-  registration path used by D6 (`server.registerTool`/`registerAppTool` or any
-  universal-tools adapter); if that path drops `outputSchema`, D3/D6 must replace
-  that segment rather than merely declaring schemas locally.
+  `structuredContent` results. This verification follows the actual registration
+  path used by D6 (`server.registerTool` or any universal-tools adapter); for D6
+  the EEF tool's raw-shape `inputSchema` reaches registration via the existing
+  `z.ZodRawShape` carrier (no widening), and the EEF tool ships no `outputSchema` —
+  the universal `outputSchema` + carrier work is
+  `output-schemas-for-mcp-tools.plan.md`'s (revised 2026-06-07).
 
 **Done when (acceptance):**
 
@@ -1727,11 +1735,11 @@ Artefacts already in the tree, so the next session does not rediscover them:
 
 The plan is done when D0-D7 are complete and:
 
-- the only Zod in the EEF graph stack is the MCP input/output schema declarations,
-  each derived by a single Zod call on a named graph-native EEF view subset with a
-  compile-time tie to the corresponding input or `structuredContent` type (root
-  `type: object`), and the configured `outputSchema` reaches the actual MCP
-  registration path;
+- the only Zod authored in the EEF graph stack for D6 is the MCP input schema (a
+  `z.ZodRawShape` raw shape on a named graph-native EEF view subset, `satisfies`-tied
+  to the input payload type), and the EEF tool returns `structuredContent` with no
+  `outputSchema` — the universal output-schema work (every tool, incl. EEF's) is
+  `output-schemas-for-mcp-tools.plan.md`'s (revised 2026-06-07);
 - teacher value (D1) is ratified before the MCP and graph contracts are locked;
 - the MCP surface (D3) is designed as the user-facing surface before graph
   internals are implemented, and every externally supplied field is classified and
