@@ -19,6 +19,18 @@ surface.
 
 ## Current State
 
+- **EEF D6 RESHAPE LANDED + TWO INACTIVE-AGENT WORKSTREAMS COMMITTED (2026-06-07,
+  Arboreal Shedding Canopy / `8d289e`, claude / Opus 4.8, owner-directed).** The
+  owner-ratified D6 output-schema drop is reshaped into the four contracts and
+  committed (`f47471d5`); `eef-d6-execution.plan.md` is authoritative for Phase E.
+  Committed two prior inactive agents' uncommitted work on owner instruction:
+  Glittering's content-guard-reappraisal feature (`b271c2dd` — I completed its
+  knip/prettier gaps to land it green) and Moonlit's continuity trinity
+  (`28e91da7`). **HEAD `28e91da7`; 4 commits ahead of `origin`, unpushed (owner's
+  call).** A deep, adversarially-reviewed Phase-E handoff is in
+  `threads/eef.next-session.md` (top banner). Napkin rotation is due (deferred —
+  session stopped early for handoff). **Next safe step: execute EEF Phase E
+  (c1–c6)** per the reshaped plan.
 - **EEF-D6 REFLECTION SESSION — BOTH HALVES HANDED OFF (2026-06-06, Dim Fading
   Hush / `1952e2`, claude / Opus 4.8).** EEF D6 architecture corrected to the
   aggregated-tool-family pattern → handed to `Moonlit Orbiting Moon` for execution
@@ -94,7 +106,7 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Zephyrous Kiting Squall / d6-readiness-regrounding / 2026-06-06 (prior: Floating Darting Cloud d7-golive-plan-edit 2026-06-06, Dusky Dimming Candle author-d6-execution-plan 2026-06-06, Masked Creeping Lantern eef-deep-review-resolutions-adr191 2026-06-05, Dim Dimming Threshold eef-d5-execution 2026-06-05, Prismatic Twinkling Planet eef-d5-fresh-dual-review 2026-06-04, Windward Gliding Squall eef-d5-plan-authoring 2026-06-04, Shadowed Creeping Secret eef-d4-ratify 2026-06-04, Burnished Glowing Spark 2026-06-04, Lacustrine Swimming Beacon 2026-06-03, Seaworthy Swimming Sextant 2026-06-03, Galactic Glowing Prism + Opalescent Cascading Planet + Stellar Waning Planet + Silvered Lurking Mask 2026-06-02) |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Arboreal Shedding Canopy / d6-reshape-and-phase-e-handoff / 2026-06-07 (prior: Moonlit Orbiting Moon d6-execution-reshaped 2026-06-07, Zephyrous Kiting Squall d6-readiness-regrounding 2026-06-06, Floating Darting Cloud d7-golive-plan-edit 2026-06-06, Dusky Dimming Candle author-d6-execution-plan 2026-06-06, Masked Creeping Lantern eef-deep-review-resolutions-adr191 2026-06-05, Dim Dimming Threshold eef-d5-execution 2026-06-05, Prismatic Twinkling Planet eef-d5-fresh-dual-review 2026-06-04, Windward Gliding Squall eef-d5-plan-authoring 2026-06-04, Shadowed Creeping Secret eef-d4-ratify 2026-06-04, Burnished Glowing Spark 2026-06-04, Lacustrine Swimming Beacon 2026-06-03, Seaworthy Swimming Sextant 2026-06-03, Galactic Glowing Prism + Opalescent Cascading Planet + Stellar Waning Planet + Silvered Lurking Mask 2026-06-02) |
 | `oak-kg-ontology-planning-review` | Plan the `oak-kg`/ontology work, starting with a deep review of the Oak Curriculum Ontology repo (separate concern from the bulk-derived graph redesign) | [record][oak-kg-ontology] | claude / Opus 4.8 / Twilit Cascading Supernova / thread-opener-brief-only / 2026-06-04 — **opened, not started; deep review is a fresh session** |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Blustery Lifting Gale / skills-taxonomy-and-distribution / 2026-06-03 (prior: Umbral Whispering Silhouette 2026-06-01) |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | codex / GPT-5 / Volcanic Blazing Magma / identity-statusline-docs / 2026-06-06 (prior: Lanternlit Passing Mask 2026-06-05, Hidden Hiding Dusk 2026-06-04, Arboreal Sprouting Branch 2026-06-04, Opalescent Illuminating Prism 2026-06-03, Lacustrine Swimming Beacon, Ashen Burning Magma, Solar Glowing Meteor, Stratospheric Buffeting Breeze, Lofty Sweeping Falcon, Shaded Veiling Mirror) |

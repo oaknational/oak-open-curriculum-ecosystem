@@ -1,5 +1,139 @@
 # Next-Session Record — `eef` thread
 
+> **🤝 HANDOFF — EEF thread (2026-06-07, Arboreal Shedding Canopy / `8d289e`;
+> claude / Opus 4.8). PHASE R LANDED (the contract reshape is committed); PHASE E
+> (c1–c6) is the next step. The session stopped early — owner-directed — to
+> maximise this handoff. Self-contained; the fresh session needs nothing from the
+> originating conversation.**
+>
+> > **⚠️ READ ONLY THE TOP TWO BANNERS (this one + Moonlit's, immediately below).**
+> > This file is 3800+ lines; everything BELOW the Moonlit banner is SUPERSEDED
+> > history. In particular these are all DEAD pre-D3 / pre-reshape shapes — do NOT
+> > implement them: `_meta.attribution = EEF_ATTRIBUTION` ("CONFIRMED" near :2874),
+> > `src/mcp/evidence-corpus/`, `citation-shape.ts` / `CitationSchema`,
+> > `EvidenceCorpus` rank/explain/compare, and "outputSchema required for EEF". The
+> > authoritative spec is `eef-d6-execution.plan.md`; the live attribution shape is
+> > `_meta: { securitySchemes }` with EEF data attribution carried per the family
+> > precedent, NOT an `_meta.attribution` output field.
+>
+> **WHAT LANDED.** The owner-ratified D6 reshape (output schema dropped) is now
+> committed to the four contracts: **`f47471d5`** `docs(eef): reshape D6 contracts
+> to drop the MCP output schema`. The reshaped
+> [`eef-d6-execution.plan.md`](../../../plans/sector-engagement/eef/current/eef-d6-execution.plan.md)
+> is now **authoritative** for Phase E (c0 deleted; c1/c2/c6 reshaped; body
+> consistent). Also committed this session on owner instruction (prior inactive
+> agents' uncommitted work): **`b271c2dd`** `feat(hook-policy)` (Glittering Weaving
+> Comet's complete content-guard-reappraisal feature) and **`28e91da7`**
+> `docs(continuity)` (the session-handoff step-6e loss-sweep trinity).
+>
+> **TREE STATE: HEAD `28e91da7`, branch `feat/graph-tooling-tidyup`, GREEN
+> (full `pnpm check` ran in each commit's pre-commit hook — 97/97 turbo tasks).
+> The branch IS on origin (tip `ad649710`); HEAD is 4 commits AHEAD and UNPUSHED —
+> `3eec5524`, `b271c2dd`, `f47471d5`, `28e91da7`. Pushing is the owner's call; do
+> NOT treat origin as a clean slate.** Uncommitted at handoff: `napkin.md`,
+> `eef.next-session.md` (this banner), `active-claims.json` (claim closure).
+>
+> **NEXT SAFE STEP — execute Phase E (c1–c6)** per the reshaped
+> `eef-d6-execution.plan.md` (authoritative for the per-cycle spec; do NOT
+> re-derive it). The settled shape: `get-eef-evidence` is an aggregated
+> graph-tool-family PEER — a **raw-shape input** (`z.ZodRawShape`, like the family's
+> `SEARCH_INPUT_SCHEMA`, NOT a `z.object` value) + `structuredContent`, **NO MCP
+> `outputSchema`, NO carrier change, NO c0**. The code lands as **ONE atomic
+> cross-package commit** (c1+c2+c3 compile together via the `AggregatedToolName`
+> satisfies-guards; c6 must co-land or the app integration test goes red). Cycles
+> are authoring checkpoints, not separate commits.
+>
+> **HARD-WON UNDERSTANDING — the loss-prone core (verified first-hand this
+> session; this is the part that does not survive in the cycle spec alone):**
+>
+> - **c3 is a THIN validate-then-dispatch handler, not a transformation cycle**
+>   (the single fact the "small and uniform" thesis rests on). `inspectStrand(id)`
+>   and `evidenceForMove(selectors)` both return `EefEvidenceEnvelope`
+>   (`graph-corpus-sdk/src/eef-strands/eef-evidence.ts:51,123,159`) = `{ members[],
+>   edges[], frontier[], provenance }` — plain readonly arrays + a provenance
+>   object, JSON-serialisable AS-IS. c3 validates input → dispatches → wraps the
+>   envelope as `structuredContent` with `content: []`. Zero transformation. If c3
+>   ever feels like it needs to reshape the output, STOP — that is the dropped
+>   output-schema thinking trying to creep back.
+> - **c3 boundary validation** (the membership predicate, `no-type-shortcuts`):
+>   unknown strand id AND empty selector set must become `isError` at the request
+>   boundary, BEFORE the internally-unreachable `subgraphEnvelope` throw
+>   (`eef-evidence.ts:108-116`; selectors all optional at `:59-64`).
+> - **Input is `z.ZodRawShape`** because the carrier field is `z.ZodRawShape`
+>   (`definitions.ts:68`) — a `z.object` value is exactly what would force the
+>   deleted c0 widening. Author it like `SEARCH_INPUT_SCHEMA` (a record of
+>   field→validator, or `z.object({...}).shape` — both are `ZodRawShape`); confirm
+>   the exact `satisfies` tie against that precedent at execution.
+> - **EEF's handler is the input-taking pattern** — the `AggregatedHandler`
+>   signature `(input, deps) => Promise<CallToolResult>` (`executor.ts:159-162`);
+>   `search`/`browse`/`download-asset` are registered as such in `AGGREGATED_HANDLERS`
+>   (`:165,171,173`), NOT the no-arg graph dumper (`runMisconceptionGraphTool`). The
+>   `handleDownloadAssetTool` definition (`executor.ts:139-157`) is the
+>   validate-then-run template.
+> - **Dependency**: `oak-curriculum-sdk` gains a RUNTIME `graph-corpus-sdk` dep —
+>   acyclic, verified first-hand (`oak-curriculum-sdk` has none today;
+>   `graph-corpus-sdk`→{graph-core,result}, `graph-core`→{result,type-helpers,
+>   jsonld,rdf-canonize}, no back-edge; minor: the SDK runtime closure gains
+>   jsonld/rdf-canonize).
+> - **App registration is uniform**: `config = {title, description, inputSchema,
+>   annotations}` — no `outputSchema` (`handlers.ts:173-178`); EEF is not a widget
+>   tool so it takes the `server.registerTool` branch (`:183`). c6 is flag co-gating
+>   ONLY (no config change). The EEF `AGGREGATED_TOOL_DEFS` entry's `_meta` is the
+>   non-widget shape `{ securitySchemes }` (`_meta` is required by
+>   `AggregatedToolDefShape`; the `_meta` contract is at `definitions.ts:86-94`).
+> - **Dist gotcha**: a FOCUSED app type-check resolves SDK types via built `dist`,
+>   so run `pnpm --filter @oaknational/curriculum-sdk build` before one. It is a
+>   known one-liner — NEVER a thing to debug.
+> - **PII (ORG INSTRUCTION: never include PII)**: `EefEvidenceProvenance.source` is
+>   the whole `meta.source`, which carries SIX named academic authors. The org
+>   no-PII instruction settles the c4 open-decision toward OMIT the author names,
+>   keep org-level attribution (`meta.source` name/url/organisation +
+>   `meta.licence.attribution_note`). This governs what the c3 envelope emits AND
+>   the c4 resource. The org no-PII instruction makes OMIT the BINDING DEFAULT: if
+>   the owner is unreachable, omit the personal names (never emit them) and surface
+>   for confirmation — do not block on it.
+>
+> **THE EXECUTION META-GUARD — why Phase E needs it (this is the lesson the two
+> prior D6-execution attempts paid for).** Both prior attempts derailed not on the
+> EEF work but on DESCENDING into type/build plumbing when a detailed plan's
+> friction looked like a patch-target. The reshape removed the output-schema
+> requirement that caused it, but the failure family (`passive-guidance-loses-to-
+> artefact-gravity`) recurs. Carry one hard tripwire: **the moment you open a
+> terminal to investigate WHY something type/build-related won't resolve (dist
+> staleness, a narrowing not taking, turbo cache, vendor carrier types) — STOP.
+> That has no bridge to EEF value.** Ask: (a) what EEF value does this serve? (b) is
+> the family shaped like this? If the family does not do it, the friction is a
+> VERDICT (you have diverged) — surface it to the owner as a SHAPE question, do not
+> descend. The symmetric guard: do NOT re-run G0 or re-derive the precedent (it is
+> grounded above) — reserve grounding for the EEF code you write.
+>
+> **Reviewer cadence (owner wants extensive, real-time, no-backfill):** per cycle
+> `code-expert` POST + `type-expert`/`test-expert`/`mcp-expert` by substance;
+> `code-expert` PRE only on c1/c2/c3 (the shape cycles, not the copy-template
+> c4/c5/c6); a final adversarial multi-lens review of the assembled diff. Ground
+> every reviewer finding against source yourself before acting (first-hand means
+> you, not the subagent).
+>
+> **COORDINATION + A LESSON.** My EEF active claim is closed this handoff. When you
+> land Glittering's and the trinity work was committed on owner instruction:
+> **their thread banner self-reported "all gates green" but the tree was
+> knip-RED + prettier-dirty** — the full-tree pre-commit gate caught both; I
+> completed them (registered the validator as a knip entry point + de-exported an
+> internal-only type + `prettier --write`). Lesson (fresh instance of
+> no-derived-authority-self-certifies): a prior session's "all green" banner does
+> not transfer verification; the gate is the truth, re-run it yourself.
+>
+> **The reshape rationale + the full session arc** live in the napkin
+> (2026-06-07, Arboreal Shedding Canopy) and the commit bodies; the design history
+> (why EEF is a family peer) is in the experience corpus + Moonlit's banner below,
+> not re-narrated here.
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Arboreal Shedding Canopy` | `claude` | `Opus 4.8` | `8d289e` | `d6-reshape-and-phase-e-handoff` | 2026-06-07 | 2026-06-07 |
+>
+> ---
+>
 > **🤝 HANDOFF — EEF thread (2026-06-07, Moonlit Orbiting Moon / `b6552f`; claude /
 > Opus 4.8). D6 RESHAPED BY OWNER — OUTPUT SCHEMA DROPPED FROM D6. Fresh readiness
 > review RAN → GO; the accidental c0 was reverted; HEAD is GREEN. Ready to execute

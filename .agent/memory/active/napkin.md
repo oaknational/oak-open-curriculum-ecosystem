@@ -377,3 +377,58 @@ do not re-derive them.
   is closing while you hold paused WIP, commit or exclude your WIP first, or ensure
   the closer stages by explicit pathspec — a broad add at close is a sweep risk for
   any paused peer.
+
+## 2026-06-07 — session-close: handoff-skill amendments staged-but-blocked; claims cleared (Moonlit Orbiting Moon)
+
+The PDR-011 + `session-handoff` skill + ADR-150 amendments (the grounded-knowledge
+capture edge: §6a.2 categorical + §6e adversarial backstop + the §8 staging
+caution) are **STAGED but NOT committed**. The shared full-tree pre-commit gate is
+red on `@oaknational/agent-tools` — Glittering Weaving Comet's in-flight hook-policy
+WIP (lint/type/test), NOT my docs (markdown-only, markdownlint-green). Per the
+standing rules I did not bundle over the red gate, `--no-verify`, or touch the
+peer's WIP. **The next agent to commit on this tree should include my changes** —
+the three staged files (PDR-011, `session-handoff/SKILL-CANONICAL.md`, ADR-150) plus
+this napkin note; they are ready, just gated behind the agent-tools WIP going green.
+Owner-directed session-close cleanup: all active claims (Moonlit's stale one,
+Glittering's, Arboreal's) and the commit queue were cleared from
+`active-claims.json` — the agents re-register as needed.
+
+## 2026-06-07 — D6 reshape landed (3 commits); the gate caught a peer's false "all green" (Arboreal Shedding Canopy)
+
+**Arc.** Deep reflection on the EEF-D6 loss-prone failure family → a plan-mode plan
+with an explicit tripwire scaffold (assumptions-expert TRIM, folded) → Phase R: the
+owner-ratified output-schema drop reshaped into the four contracts (docs-adr-expert
+found 3 residual contradictions in untouched body prose, all confirmed first-hand +
+fixed) → committed `f47471d5`. Then committed two inactive agents' uncommitted work
+on owner instruction: Glittering's content-guard-reappraisal feature (`b271c2dd`)
+and Moonlit's staged continuity trinity (`28e91da7` — resolves the "staged-but-
+blocked" note directly above). Deep handoff written to the eef thread banner.
+
+- **SURPRISE (fresh instance of no-derived-authority-self-certifies + the
+  full-tree gate's worth).** Glittering's thread banner asserted "all gates green
+  (type-check, eslint, 910 tests, markdownlint, build, repo-validators,
+  portability)". The full-tree pre-commit gate caught TWO gaps it missed: knip-RED
+  (the new `validate-policy-reappraisal.ts` was not registered as a knip entry
+  point like its siblings in `knip.config.ts`; plus an internal-only exported type)
+  and prettier-dirty (2 hook-policy TS files). I completed both to land it green
+  (entry-point registration + de-export + `prettier --write`). Lesson: a prior
+  session's "all green" self-report does NOT transfer verification — the gate is
+  the truth; re-run it yourself when landing inherited work. The same full-tree
+  gating that "blocks my disjoint docs on a peer's WIP" is exactly what surfaced
+  the peer's real defects — the coupling is a feature here.
+- **The execution meta-guard HELD (now in the eef banner for Phase E).** No descent
+  into type/build plumbing this session. The one "descent-shaped" moment — the
+  knip/prettier fix — was bounded inherited-work-completion the owner asked for,
+  not the EEF-altitude trap. The over-correction guard fired: I declined to chase
+  all ~18 master-plan "single Zod call" mentions and instead made the controlling
+  Decision 2 govern them. Proportionality held against both failure directions.
+- **Grounded execution knowledge (homed, not duplicated):** c3-is-a-thin-dispatch
+  (D5 envelope → structuredContent, zero transformation), input-is-`z.ZodRawShape`,
+  the acyclic runtime dep, the dist-build one-liner, and the provenance-author PII
+  surface (org no-PII instruction → omit names) are all captured first-hand in the
+  `eef.next-session.md` Arboreal banner — the Phase E consumer's durable home.
+- **Napkin rotation is DUE** (394 lines > 300 hard limit; 2026-06-06/07 window).
+  Deferred — named constraint: session stopped early (owner-directed) to maximise
+  the Phase E handoff; rotation is a dedicated `consolidate-docs` pass, not a
+  session-close edit. Falsifiable: the next consolidation rotates this window or
+  the line count keeps climbing.
