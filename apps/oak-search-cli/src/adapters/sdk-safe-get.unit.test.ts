@@ -47,10 +47,10 @@ describe('safeGet', () => {
       }
     });
 
-    it('should return Err(network_error) when operation rejects with non-Error', async () => {
-      const nonErrorValue = 'string error message';
+    it('should return Err(network_error) when operation rejects with Error', async () => {
+      const errorValue = new Error('string error message');
 
-      const result = await safeGet(() => Promise.reject(nonErrorValue), 'unit-slug', 'unit');
+      const result = await safeGet(() => Promise.reject(errorValue), 'unit-slug', 'unit');
 
       expect(result.ok).toBe(false);
       if (!result.ok) {

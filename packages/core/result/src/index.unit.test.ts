@@ -227,15 +227,15 @@ describe('unwrapOrElse', () => {
   });
 });
 
+function divide(a: number, b: number): Result<number, string> {
+  if (b === 0) {
+    return err('Division by zero');
+  }
+  return ok(a / b);
+}
+
 describe('Result type integration', () => {
   it('works in real-world divide function', () => {
-    function divide(a: number, b: number): Result<number, string> {
-      if (b === 0) {
-        return err('Division by zero');
-      }
-      return ok(a / b);
-    }
-
     const success = divide(10, 2);
     expect(isOk(success)).toBe(true);
     if (isOk(success)) {

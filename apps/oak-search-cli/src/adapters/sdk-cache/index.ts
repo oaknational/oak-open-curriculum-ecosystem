@@ -20,4 +20,9 @@
 
 export { createRedisClient, withRedisConnection } from './redis-connection';
 export { calculateTtlWithJitter } from './ttl-jitter';
-export { withCache, withCacheAndNegative, type CacheOperations } from './cache-wrapper';
+export {
+  withCache,
+  withCacheAndNegative,
+  type CacheOperations,
+  type WithCacheAndNegativeOptions,
+} from './cache-wrapper';

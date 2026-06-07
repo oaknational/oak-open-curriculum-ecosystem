@@ -48,6 +48,26 @@ function isString(value: unknown): value is string {
   return typeof value === 'string';
 }
 
+/**
+ * Type guard for transcript cache entry.
+ */
+function isTranscriptCacheData(value: unknown): value is TranscriptCacheEntry {
+  if (value === null || typeof value !== 'object') {
+    return false;
+  }
+  if (!('status' in value)) {
+    return false;
+  }
+  const obj: { status: unknown; transcript?: unknown; vtt?: unknown } = value;
+  if (obj.status === 'available') {
+    return typeof obj.transcript === 'string' && typeof obj.vtt === 'string';
+  }
+  if (obj.status === 'no_video' || obj.status === 'not_found') {
+    return true;
+  }
+  return false;
+}
+
 // =============================================================================
 // buildCacheKey tests
 // =============================================================================
@@ -145,12 +165,14 @@ describe('withCacheAndNegative', () => {
     const wrapped = withCacheAndNegative(
       underlying,
       ops,
-      'transcript',
-      14,
-      stats,
-      isString,
-      false,
-      () => 86400,
+      {
+        cacheKeyPrefix: 'transcript',
+        baseTtlDays: 14,
+        stats,
+        isValidCached: isString,
+        ignoreCached404: false,
+        ttlCalculator: () => 86400,
+      },
     );
 
     const result = await wrapped('lesson1');
@@ -170,12 +192,14 @@ describe('withCacheAndNegative', () => {
     const wrapped = withCacheAndNegative(
       underlying,
       ops,
-      'transcript',
-      14,
-      stats,
-      isString,
-      false,
-      () => 86400,
+      {
+        cacheKeyPrefix: 'transcript',
+        baseTtlDays: 14,
+        stats,
+        isValidCached: isString,
+        ignoreCached404: false,
+        ttlCalculator: () => 86400,
+      },
     );
 
     const result = await wrapped('lesson1');
@@ -198,12 +222,14 @@ describe('withCacheAndNegative', () => {
     const wrapped = withCacheAndNegative(
       underlying,
       ops,
-      'transcript',
-      14,
-      stats,
-      isString,
-      false,
-      () => 86400,
+      {
+        cacheKeyPrefix: 'transcript',
+        baseTtlDays: 14,
+        stats,
+        isValidCached: isString,
+        ignoreCached404: false,
+        ttlCalculator: () => 86400,
+      },
     );
 
     const result = await wrapped('lesson1');
@@ -226,12 +252,14 @@ describe('withCacheAndNegative', () => {
     const wrapped = withCacheAndNegative(
       underlying,
       ops,
-      'transcript',
-      14,
-      stats,
-      isString,
-      true,
-      () => 86400,
+      {
+        cacheKeyPrefix: 'transcript',
+        baseTtlDays: 14,
+        stats,
+        isValidCached: isString,
+        ignoreCached404: true,
+        ttlCalculator: () => 86400,
+      },
     );
 
     const result = await wrapped('lesson1');
@@ -254,12 +282,14 @@ describe('withCacheAndNegative', () => {
     const wrapped = withCacheAndNegative(
       underlying,
       ops,
-      'transcript',
-      14,
-      stats,
-      isString,
-      false,
-      () => 86400,
+      {
+        cacheKeyPrefix: 'transcript',
+        baseTtlDays: 14,
+        stats,
+        isValidCached: isString,
+        ignoreCached404: false,
+        ttlCalculator: () => 86400,
+      },
     );
 
     await wrapped('lesson1');
@@ -276,12 +306,14 @@ describe('withCacheAndNegative', () => {
     const wrapped = withCacheAndNegative(
       underlying,
       ops,
-      'transcript',
-      14,
-      stats,
-      isString,
-      false,
-      () => 86400,
+      {
+        cacheKeyPrefix: 'transcript',
+        baseTtlDays: 14,
+        stats,
+        isValidCached: isString,
+        ignoreCached404: false,
+        ttlCalculator: () => 86400,
+      },
     );
 
     await wrapped('lesson1');
@@ -299,26 +331,6 @@ describe('withCacheAndNegative', () => {
 // =============================================================================
 
 describe('withCacheAndNegative with structured TranscriptCacheEntry format', () => {
-  /**
-   * Type guard for transcript cache entry.
-   */
-  function isTranscriptCacheData(value: unknown): value is TranscriptCacheEntry {
-    if (value === null || typeof value !== 'object') {
-      return false;
-    }
-    if (!('status' in value)) {
-      return false;
-    }
-    const obj: { status: unknown; transcript?: unknown; vtt?: unknown } = value;
-    if (obj.status === 'available') {
-      return typeof obj.transcript === 'string' && typeof obj.vtt === 'string';
-    }
-    if (obj.status === 'no_video' || obj.status === 'not_found') {
-      return true;
-    }
-    return false;
-  }
-
   it('should handle structured "available" cache format', async () => {
     const entry: TranscriptCacheEntry = {
       status: 'available',
@@ -335,12 +347,14 @@ describe('withCacheAndNegative with structured TranscriptCacheEntry format', () 
     const wrapped = withCacheAndNegative(
       underlying,
       ops,
-      'transcript',
-      14,
-      stats,
-      isTranscriptCacheData,
-      false,
-      () => 86400,
+      {
+        cacheKeyPrefix: 'transcript',
+        baseTtlDays: 14,
+        stats,
+        isValidCached: isTranscriptCacheData,
+        ignoreCached404: false,
+        ttlCalculator: () => 86400,
+      },
     );
 
     const result = await wrapped('lesson1');
@@ -365,12 +379,14 @@ describe('withCacheAndNegative with structured TranscriptCacheEntry format', () 
     const wrapped = withCacheAndNegative(
       underlying,
       ops,
-      'transcript',
-      14,
-      stats,
-      isTranscriptCacheData,
-      false,
-      () => 86400,
+      {
+        cacheKeyPrefix: 'transcript',
+        baseTtlDays: 14,
+        stats,
+        isValidCached: isTranscriptCacheData,
+        ignoreCached404: false,
+        ttlCalculator: () => 86400,
+      },
     );
 
     const result = await wrapped('lesson1');
@@ -396,12 +412,14 @@ describe('withCacheAndNegative with structured TranscriptCacheEntry format', () 
     const wrapped = withCacheAndNegative(
       underlying,
       ops,
-      'transcript',
-      14,
-      stats,
-      isTranscriptCacheData,
-      false,
-      () => 86400,
+      {
+        cacheKeyPrefix: 'transcript',
+        baseTtlDays: 14,
+        stats,
+        isValidCached: isTranscriptCacheData,
+        ignoreCached404: false,
+        ttlCalculator: () => 86400,
+      },
     );
 
     const result = await wrapped('lesson1');

@@ -139,16 +139,22 @@ export function withCache<T>(
  * );
  * ```
  */
+export interface WithCacheAndNegativeOptions<T> {
+  readonly cacheKeyPrefix: string;
+  readonly baseTtlDays: number;
+  readonly stats: CacheStats;
+  readonly isValidCached: (value: unknown) => value is T;
+  readonly ignoreCached404: boolean;
+  readonly ttlCalculator: (days: number) => number;
+}
+
 export function withCacheAndNegative<T>(
   fn: (id: string) => Promise<Result<T, SdkFetchError>>,
   ops: CacheOperations,
-  cacheKeyPrefix: string,
-  baseTtlDays: number,
-  stats: CacheStats,
-  isValidCached: (value: unknown) => value is T,
-  ignoreCached404: boolean,
-  ttlCalculator: (days: number) => number,
+  options: WithCacheAndNegativeOptions<T>,
 ): (id: string) => Promise<Result<T, SdkFetchError>> {
+  const { cacheKeyPrefix, baseTtlDays, stats, isValidCached, ignoreCached404, ttlCalculator } =
+    options;
   return async (id: string): Promise<Result<T, SdkFetchError>> => {
     const key = buildCacheKey(cacheKeyPrefix, id);
     const rawCached = await tryReadRaw(ops, key);
