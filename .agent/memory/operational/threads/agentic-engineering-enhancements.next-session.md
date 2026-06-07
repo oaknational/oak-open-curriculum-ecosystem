@@ -6,8 +6,8 @@
 Continues the Glittering Weaving Comet handoff below (the four owner-approved follow-ons).
 Owner-agreed sequence: **4 → 1 → 2 → 3**.
 
-**What landed this session** (branch `feat/graph-tooling-tidyup`; **11 commits ahead of origin,
-0 behind — UNPUSHED, owner-paced**):
+**What landed this session** (branch `feat/graph-tooling-tidyup`; **13 commits ahead of origin,
+0 behind — UNPUSHED, owner-paced** — see the "Window state at session close" note below):
 
 - **Item 4 — `225268d2`** `refactor(hook-policy): derive types.ts shapes from Zod schemas via
   z.infer`. The three dual-declared shapes in `agent-tools/src/hook-policy/types.ts`
@@ -110,21 +110,22 @@ in the Owl's own plan draft and improved it.
 - **Sequencing item 4 before item 1 paid off:** on the schema-first base, item 1 added
   `concept`/`reappraisal` to the schema once and `z.infer` carried them to the type for free.
 
-**Parallel-window state at handoff (NOT mine — do not touch).** Hidden Prowling Owl (eef thread) +
-a curation agent are actively editing many UNCOMMITTED files — `eef-strands/*`, ADR-028/038/153,
-PDR-029, `metacognition.md`, `typescript-practice.md`, `eef.next-session.md`, `repo-continuity.md`.
-The Owl hands off to a successor shortly who lands them. My 3 commits used explicit pathspec and
-included **none** of these.
+**Window state at session close (UPDATED — everything committed; tree clean).** At owner
+direction this session committed the entire working tree. My session work landed in `eae6245c`
+(`docs(continuity)`); the parallel session's in-flight work landed in `b8f17d6a` (`chore(eef)`):
+the no-type-widening plan + comms `0021b0bc` (**no longer untracked**), the type-widening doctrine
+(`typescript-practice.md`, ADR-028/038/153), the EEF c1 code (`eef-strands/*`),
+`eef.next-session.md`, and the `metacognition.md` / PDR-029 friction clauses. Branch is **13
+commits ahead of origin, 0 behind — UNPUSHED** (owner-paced). The earlier "UNTRACKED / at-risk"
+caveat is **RESOLVED** — all of it is durable.
 
-**⚠ Durability caveats (handoff loss-scan, verified 2026-06-07 — confirm before relying):** the
-no-type-widening **plan file and its comms event `0021b0bc` are UNTRACKED in git** (`??`, not merely
-uncommitted) — the task's sole carrier is lost on any `git clean` / fresh clone until committed; the
-"already landed this session" EEF doctrine/code (`typescript-practice.md`, ADR-028/038/153,
-`eef-strands/*`) is uncommitted and in **no** ahead-commit, so the Owl's successor must land all of
-it or it is lost. Workspace identity: `@oaknational/eslint-plugin-standards` **is**
-`packages/core/oak-eslint` (one workspace — do not hunt for an `eslint-plugin-standards/` dir). The
-"parallel-window state" snapshot above is point-in-time; re-derive current git/claim state rather
-than trust it.
+**Reconcile note for the EEF / Owl successor.** The parallel work above was committed by THIS
+session (`b8f17d6a`), not by its authors, with two mechanical repairs so the staged bundle passed
+the gate (`raw-domains.unit.test.ts` Prettier-formatted; `eef.next-session.md` markdownlint
+list-style). If Hidden Prowling Owl was still mid-edit, **reconcile your working tree against
+`b8f17d6a`** rather than assuming that work is uncommitted. Workspace identity (still useful):
+`@oaknational/eslint-plugin-standards` **is** `packages/core/oak-eslint` (one workspace — do not
+hunt for an `eslint-plugin-standards/` dir).
 
 **Context-holder loss-scan (decisions held in my session context that reached no other surface —
 the part a context-isolated reader cannot recover, by definition):** (1) the two
