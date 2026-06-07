@@ -324,3 +324,56 @@ the reliable cure is the external check). **Behavioural tell to catch next time:
 disproportionate, ESCALATING type/build friction from a plan step is the signal to
 step back to value/impact and question the SHAPE — not to descend into plumbing. What
 WORKED: halting on the hook block rather than synonym-routing around it.
+
+## 2026-06-07 — adversarial loss-sweep: technical specifics to carry forward (Moonlit Orbiting Moon)
+
+Owner asked, at session close, to adversarially check what dies when this context
+ceases. The decisions, tree state, and lesson are committed (above + the eef thread
+banner + `a67ca941` / `ad649710`). These TECHNICAL specifics were only in session
+context; recording them so the reshaped D6 and the now-universal output-schemas plan
+do not re-derive them.
+
+- **The registerTool / registerAppTool carrier divergence — the c0 root cause, now
+  the OUTPUT-SCHEMAS plan's problem to solve universally.** The MCP SDK's
+  `registerTool` accepts `ZodRawShapeCompat | AnySchema` (installed
+  `@modelcontextprotocol/sdk` `dist/esm/server/mcp.d.ts:150`, `outputSchema?` at
+  `:154`). ext-apps' `registerAppTool` accepts the NARROWER
+  `ZodRawShapeCompat | StandardSchemaWithJSON` (`@modelcontextprotocol/ext-apps`
+  `dist/src/server/index.d.ts:47-48`, generic at `:184`; `StandardSchemaWithJSON` at
+  `dist/src/standard-schema.d.ts:14`). `AnySchema` (`z3.ZodTypeAny | z4.$ZodType`) is
+  NOT assignable to `StandardSchemaWithJSON`. The app loop (`handlers.ts`) builds ONE
+  `config` and branches to BOTH register fns, so widening the shared carrier to
+  `AnySchema` breaks the registerAppTool (widget-tool) branch. My AppToolListEntry
+  narrowing fix FAILED because `config` is built before the `isAppToolEntry`
+  narrowing AND the app type-checks the SDK against built dist. Only widget tools hit
+  `registerAppTool` and they always use raw shapes; the universal output-schemas work
+  must reconcile the two vendor carriers (or narrow the app-tool carrier + build the
+  config per-branch), once, at the infra layer.
+- **Cross-package dist-staleness — GENERAL, not EEF-specific.** The streamable-http
+  app (and any SDK consumer) type-checks the SDK via its BUILT `dist/*.d.ts`: the SDK
+  `package.json` exports list the `types` condition BEFORE `development`, so
+  `customConditions:['development']` does NOT yield source-resolution for TYPES. After
+  changing SDK source you MUST `pnpm --filter @oaknational/curriculum-sdk build`
+  before a consumer's FOCUSED type-check reflects it. The full `pnpm check` builds
+  deps in order so the commit gate is fine; only focused per-package type-checks go
+  stale. OPEN QUESTION (candidate Q-NNN for the next curation): is the
+  `types`-before-`development` ordering intended, or a config defect defeating live
+  source-resolution for types across the monorepo? A config-expert / build-system look.
+- **c1 runtime dep is acyclic + ADR-041-clean (verified first-hand this session).**
+  `graph-core` deps = {result, type-helpers}; `graph-corpus-sdk` deps = {graph-core,
+  result}; `oak-curriculum-sdk` has no back-edge and does NOT yet depend on
+  `graph-corpus-sdk`. Adding the runtime `graph-corpus-sdk` dependency in c1 is safe.
+- **c6 app-registration facts (verified first-hand this session; survive the
+  reshape).** `registerPrompts` is called UNCONDITIONALLY in `handlers.ts` (~`:149`)
+  so c6 must make it flag-aware; the loop `config` is built at `handlers.ts:173-178`;
+  `AGGREGATED_TOOL_ORDER` lives in `render-tools-section.ts:23-31` (add the EEF entry
+  or it sorts last); `handlers-tool-registration.integration.test.ts` iterates
+  `listUniversalTools` and asserts every entry registers, so make it flag-aware;
+  telemetry is inherited (Sentry-wrapped server + `setTag` at `handlers.ts:160`), no
+  bespoke span.
+- **Coordination lesson (an instance of stage-by-explicit-pathspec).** A peer's
+  session-close "commit all my files" used a broad `git add` and swept my paused
+  uncommitted WIP into their commit `c238f507`, committing broken code. When a peer
+  is closing while you hold paused WIP, commit or exclude your WIP first, or ensure
+  the closer stages by explicit pathspec — a broad add at close is a sweep risk for
+  any paused peer.
