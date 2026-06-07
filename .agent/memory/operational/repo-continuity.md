@@ -19,6 +19,19 @@ surface.
 
 ## Current State
 
+- **EEF c1 FINITE-DOMAIN PREREQUISITE LANDED (strict-typed) + TYPE-WIDENING
+  DOCTRINE STRENGTHENED (2026-06-07, Hidden Prowling Owl / `bcc138`, claude /
+  Opus 4.8, owner-directed).** graph-corpus-sdk finite-domain runtime constants
+  (`EEF_STRAND_IDS`, `OBSERVED_*`) landed for c1's `z.enum` (37/37 green, zero type
+  widening). Type-widening doctrine strengthened (`typescript-practice.md` +
+  ADR-153/038/028 examples made strict); the active-enforcement task is handed to
+  the agentic-engineering strand
+  (`agentic-engineering-enhancements/future/no-type-widening-enforcement.plan.md`;
+  directed comms → Eclipsed Watching Veil). Metacognition gained a friction clause
+  (+ PDR-029 amendment). **All UNCOMMITTED** (commit on owner request); a parallel
+  agent (Eclipsed) holds disjoint hook-policy WIP — stage EEF by explicit pathspec.
+  **Next safe step: resume EEF c1 (the MCP-layer wiring)** per
+  `threads/eef.next-session.md` top banner; the finite-domain prerequisite is done.
 - **EEF D6 RESHAPE LANDED + TWO INACTIVE-AGENT WORKSTREAMS COMMITTED (2026-06-07,
   Arboreal Shedding Canopy / `8d289e`, claude / Opus 4.8, owner-directed).** The
   owner-ratified D6 output-schema drop is reshaped into the four contracts and
@@ -106,10 +119,10 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Arboreal Shedding Canopy / d6-reshape-and-phase-e-handoff / 2026-06-07 (prior: Moonlit Orbiting Moon d6-execution-reshaped 2026-06-07, Zephyrous Kiting Squall d6-readiness-regrounding 2026-06-06, Floating Darting Cloud d7-golive-plan-edit 2026-06-06, Dusky Dimming Candle author-d6-execution-plan 2026-06-06, Masked Creeping Lantern eef-deep-review-resolutions-adr191 2026-06-05, Dim Dimming Threshold eef-d5-execution 2026-06-05, Prismatic Twinkling Planet eef-d5-fresh-dual-review 2026-06-04, Windward Gliding Squall eef-d5-plan-authoring 2026-06-04, Shadowed Creeping Secret eef-d4-ratify 2026-06-04, Burnished Glowing Spark 2026-06-04, Lacustrine Swimming Beacon 2026-06-03, Seaworthy Swimming Sextant 2026-06-03, Galactic Glowing Prism + Opalescent Cascading Planet + Stellar Waning Planet + Silvered Lurking Mask 2026-06-02) |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Hidden Prowling Owl / c1-finite-domain-prereq-and-type-widening-doctrine / 2026-06-07 (prior: Arboreal Shedding Canopy d6-reshape-and-phase-e-handoff 2026-06-07, Moonlit Orbiting Moon d6-execution-reshaped 2026-06-07, Zephyrous Kiting Squall d6-readiness-regrounding 2026-06-06, Floating Darting Cloud d7-golive-plan-edit 2026-06-06, Dusky Dimming Candle author-d6-execution-plan 2026-06-06, Masked Creeping Lantern eef-deep-review-resolutions-adr191 2026-06-05, Dim Dimming Threshold eef-d5-execution 2026-06-05, Prismatic Twinkling Planet eef-d5-fresh-dual-review 2026-06-04, Windward Gliding Squall eef-d5-plan-authoring 2026-06-04, Shadowed Creeping Secret eef-d4-ratify 2026-06-04, Burnished Glowing Spark 2026-06-04, Lacustrine Swimming Beacon 2026-06-03, Seaworthy Swimming Sextant 2026-06-03, Galactic Glowing Prism + Opalescent Cascading Planet + Stellar Waning Planet + Silvered Lurking Mask 2026-06-02) |
 | `oak-kg-ontology-planning-review` | Plan the `oak-kg`/ontology work, starting with a deep review of the Oak Curriculum Ontology repo (separate concern from the bulk-derived graph redesign) | [record][oak-kg-ontology] | claude / Opus 4.8 / Twilit Cascading Supernova / thread-opener-brief-only / 2026-06-04 — **opened, not started; deep review is a fresh session** |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Blustery Lifting Gale / skills-taxonomy-and-distribution / 2026-06-03 (prior: Umbral Whispering Silhouette 2026-06-01) |
-| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 / Glittering Weaving Comet / feedback-mechanism-reappraisal / 2026-06-07 (prior: Volcanic Blazing Magma 2026-06-06, Lanternlit Passing Mask 2026-06-05, Hidden Hiding Dusk 2026-06-04, Arboreal Sprouting Branch 2026-06-04, Opalescent Illuminating Prism 2026-06-03, Lacustrine Swimming Beacon, Ashen Burning Magma, Solar Glowing Meteor, Stratospheric Buffeting Breeze, Lofty Sweeping Falcon, Shaded Veiling Mirror) |
+| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 / Eclipsed Watching Veil / feedback-mechanism-follow-ons (items 4+1 landed) / 2026-06-07 (prior: Glittering Weaving Comet 2026-06-07, Volcanic Blazing Magma 2026-06-06, Lanternlit Passing Mask 2026-06-05, Hidden Hiding Dusk 2026-06-04, Arboreal Sprouting Branch 2026-06-04, Opalescent Illuminating Prism 2026-06-03, Lacustrine Swimming Beacon, Ashen Burning Magma, Solar Glowing Meteor, Stratospheric Buffeting Breeze, Lofty Sweeping Falcon, Shaded Veiling Mirror) |
 | `repo-professionalism-assessment` | Repo professionalism / engineering-quality report → planability triage | [record][repo-professionalism-assessment] | codex / GPT-5 / Airy Whirling Wing / report-author-and-planability-router / 2026-06-03 |
 | `school-data-search` | Oak School Data Search service (POC MVP): briefs → report → plan → gate walk → **deep review complete** → build | [record][school-data-search] | claude / Opus 4.8 / Fiery Sparking Caldera / deep-review-and-refinement / 2026-06-04 (prior: Mossy Whispering Bark 2026-06-04, Furnace Roasting Brazier + Hushed Lurking Mask 2026-06-03) |
 | `semantic-search` | Search data foundations: upstream-schema alignment, bulk sourcing, minimal-adaptation arc | [record][semantic-search] | claude / Opus 4.8 / Moonlit Waxing Nebula / upstream-realignment-specialist / 2026-06-03 |
@@ -187,14 +200,14 @@ licensing guardrail. See the
 
 ### EEF Graph-Tooling Rebuild
 
-**NEXT SAFE STEP (2026-06-06): EXECUTE D6** — the D6 execution plan is authored
-(Dusky Dimming Candle) and **independently re-grounded ready to execute**
-(Zephyrous Kiting Squall, 2026-06-06: every grounded fact / D3–D4 contract / corpus
-claim verified first-hand; verdict **GO**; six execution-precision refinements
-folded in + committed `93ee593f`; landing-page flag-gating owner-relaxed as low
-impact; the ADR-123 concern retracted as a pre-redesign fossil). Run **G0 first**,
-then `c0` + the atomic `c1`–`c6`, per
-[`eef-d6-execution.plan.md`](../../plans/sector-engagement/eef/current/eef-d6-execution.plan.md).
+**NEXT SAFE STEP (2026-06-07): RESUME D6 c1 (the MCP-layer wiring)** — there is
+**no c0**; G0 is re-confirmed; the c1 finite-domain prerequisite (graph-corpus-sdk
+runtime constants) landed strict-typed this session (Hidden Prowling Owl). Resume
+the atomic `c1`+`c2`+`c3` (+`c6`) per
+[`eef-d6-execution.plan.md`](../../plans/sector-engagement/eef/current/eef-d6-execution.plan.md)
+and the `eef` next-session banner (which carries the MCP-wiring steps, the
+corrected graph-corpus-sdk constraint, and the strict no-widening requirement for
+c2's `z.enum`).
 Open execution-time items (not blockers — G0/TDD surface them) + the full verdict
 are in the `eef` next-session record banner. **D5 LANDED green as one commit (`2e9021ff`; Dim Dimming
 Threshold, 2026-06-05)** — graph-core generic query layer + graph-native EEF view

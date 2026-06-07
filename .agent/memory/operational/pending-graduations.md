@@ -2082,3 +2082,39 @@ feedback (sidebar shape is the lightest); composes with `coordinator-role-thresh
   review, OR the graph-tools-value-redesign promotion (EEF D6 + D7), whichever
   first reopens the substrate boundary as settled architecture.
 - **status**: pending (KG-work-gated)
+
+## Generated-doc drift detection missing from the blocking commit gate (skills:check → husky)
+
+- **captured-date**: 2026-06-07
+- **source-surface**: agentic-engineering-enhancements items 4 + 1 session
+  (Eclipsed Watching Veil); the `oak-consolidate-until-done` adapter drift
+  (`a4c4c047`) that red-lit `pnpm check` yet had landed committed because
+  `.husky/pre-commit` does not run `skills-adapter-generate --check`.
+- **graduation-target**: a build-config / ADR-121-adjacent decision — wire the
+  generated-adapter drift check (`skills-adapter-generate --check`, plus any
+  sibling generator-vs-source checks) into the BLOCKING commit gate
+  (`.husky/pre-commit`), mirroring the `knip`+`depcruise`→pre-commit fix that
+  closed the prior ADR-121 drift class. A check that lives only in the
+  comprehensive `pnpm check` but not the commit gate lets generated-doc drift
+  land committed (the "doctrine without mechanism" shape, in the gate-config
+  domain).
+- **trigger-condition**: a second instance of generated-doc drift landing
+  committed, OR the next `.husky` / `build-system.md` gate-coverage pass.
+- **status**: pending
+
+## Context-loss detection is holder-exclusive; only verification externalises (session-handoff 6e / PDR-011)
+
+- **captured-date**: 2026-06-07
+- **source-surface**: owner correction 2026-06-07 (Eclipsed Watching Veil session); the
+  session-handoff 6e.2 loss-scan was outsourced to a context-isolated sub-agent per the skill's
+  "externalise by default" wording, which inverts the loss-scan's ownership.
+- **graduation-target**: amend PDR-011 §"A handoff author cannot self-verify its completeness"
+  (and ADR-150, its host mirror) to SPLIT the two operations: (a) claim VERIFICATION — author bias
+  is real, externalising to a context-isolated reader helps (6e.1); (b) context-loss DETECTION —
+  holder-EXCLUSIVE by definition (loss = `context − artefacts`; a context-isolated reader sees only
+  the artefacts and cannot enumerate what is absent relative to the holder's knowledge), so it must
+  never be delegated or conflated with a fresh-reader audit (6e.2). The session-handoff SKILL 6e.2
+  is already corrected; this graduates the correction into the governing PDR/ADR.
+- **trigger-condition**: the next `continuity-practice` / PDR-011 / ADR-150 amendment pass, OR a
+  second instance of a loss-scan being outsourced to a third party.
+- **status**: pending

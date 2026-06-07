@@ -454,18 +454,31 @@ there unless the owner or closeout owner gives a further assignment.
    handoff's "branch unpushed" was false (4 ahead of a live origin) and its
    executor.ts citations were off — both asserted from memory.
 
-   **6e.2 Run the completeness backstop from a context-less reader's state.** After
-   the categorical edges (6a–6d), sweep *against the grain of "it is all captured"*:
-   *"If this context ceased now, what would be lost — and fits none of 6a–6d?"*
-   Because the author cannot reliably simulate the fresh reader, the reliable form
-   externalises it: a fresh reviewer (or a genuinely context-isolated pass) reads
-   ONLY the durable artefacts the next session reads, grounds each claim against
-   source, and reports what it cannot determine, finds ambiguous, or would be
-   misled by. Externalise by default whenever the handoff carries load-bearing
-   facts a fresh agent will act on; a handoff with nothing load-bearing to lose has
-   nothing to review. Route findings to their consumer's durable home (per 6a.2);
-   fence stale content a fresh reader would misread. "Nothing survives the sweep"
-   is a valid answer reached by asking, not by skipping.
+   **6e.2 Run the loss-scan from inside your own context — it cannot be delegated.**
+   After the categorical edges (6a–6d), sweep *against the grain of "it is all
+   captured"*: *"If this context ceased now, what would be lost — and fits none of
+   6a–6d?"* This is **the context-holder's exclusive job, by definition.** Loss is
+   `(what you hold in context) − (what the durable artefacts capture)`; only the
+   holder can see the left side of that subtraction. A context-isolated reader sees
+   only the artefacts (the right side), so it can VERIFY them — ground each claim
+   against source, flag what is ambiguous, stale, or internally inconsistent — but it
+   **cannot detect loss**: it never had access to your context to subtract from, so it
+   can only report gaps *within* the written record, never what is absent from the
+   record relative to your knowledge. Asking a third party "what would be lost?"
+   returns an artefact audit, not a loss-scan; the two must never be conflated or
+   substituted. So enumerate, from inside your own context, the decisions, rationale,
+   rejected alternatives, and grounded knowledge you are still holding that reached no
+   durable surface — and route each to its consumer's durable home (per 6a.2); fence
+   stale content a fresh reader would misread. The externalised fresh-reader pass
+   remains valuable as the **verification** complement to 6e.1 (it grounds the claims
+   and surfaces reader-facing ambiguity) — run it for that, never as the loss-scan.
+   Owner correction 2026-06-07: this replaces the prior "externalise by default"
+   framing, which inverted the loss-scan's ownership. (The PDR-011 §"a handoff author
+   cannot self-verify" rationale governs 6e.1 *verification* — where author bias is
+   real and externalising helps; it does **not** govern loss-detection, which is the
+   one analysis the author alone can perform. PDR-011 / ADR-150 amendment pending —
+   see pending-graduations.) "Nothing survives the sweep" is a valid answer reached by
+   asking, not by skipping.
 
 7. **Refresh cross-session coordination surfaces** (session-scoped
    touch on cross-session artefacts the session affected).

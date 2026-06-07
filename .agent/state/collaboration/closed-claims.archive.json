@@ -9221,6 +9221,141 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "05a169ce-98ee-4bbb-87b1-67aeddfb194a",
+      "agent_id": {
+        "agent_name": "Hidden Prowling Owl",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "bcc138",
+        "id": "eff15f1c-320b-5fd7-a414-4e76b7bd86f2"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/sdks/oak-curriculum-sdk/src/mcp/**",
+            "packages/sdks/oak-curriculum-sdk/package.json",
+            "apps/oak-curriculum-mcp-streamable-http/src/**",
+            ".agent/plans/observability/what-the-system-emits-today.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-07T11:40:47Z",
+      "freshness_seconds": 28800,
+      "sidebar_open": false,
+      "intent": "Execute EEF Phase E (c1-c6): get-eef-evidence aggregated graph-tool-family peer + eef-interpretation resource + adapt-lesson prompt, flag co-gated; one atomic cross-package commit",
+      "archived_at": "2026-06-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-07T14:19:27Z",
+        "closed_by": {
+          "agent_name": "Hidden Prowling Owl",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "bcc138",
+          "id": "eff15f1c-320b-5fd7-a414-4e76b7bd86f2"
+        },
+        "summary": "EEF c1 finite-domain prerequisite landed (graph-corpus-sdk runtime constants EEF_STRAND_IDS/OBSERVED_*, strict-typed, 37/37 green); type-widening doctrine strengthened (typescript-practice + ADR-153/038/028); enforcement task handed to agentic strand (future plan + comms to Eclipsed). Handed off via eef.next-session.md top banner; c1 MCP wiring continues in a fresh session.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "05a169ce-98ee-4bbb-87b1-67aeddfb194a",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "faa5f5ad-73e4-4bf1-9c67-975ffd4d3b49",
+      "agent_id": {
+        "agent_name": "Eclipsed Watching Veil",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "077e31",
+        "id": "150c7152-79bb-51a6-998a-da493c77e86a"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/hook-policy/types.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-07T10:57:57Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Item 4: types.ts schema-first consolidation — converge interface+schema pairs onto z.infer, settle readonly via z.readonly()",
+      "archived_at": "2026-06-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-07T14:51:13Z",
+        "closed_by": {
+          "agent_name": "Eclipsed Watching Veil",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "077e31",
+          "id": "150c7152-79bb-51a6-998a-da493c77e86a"
+        },
+        "summary": "Item 4 landed: commit 225268d2 (types.ts schema-first z.infer consolidation); gate-green, type-expert ACCEPT",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "faa5f5ad-73e4-4bf1-9c67-975ffd4d3b49",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "3b00c2c4-3473-4127-b3ec-e7f59e8ba2dc",
+      "agent_id": {
+        "agent_name": "Eclipsed Watching Veil",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "077e31",
+        "id": "150c7152-79bb-51a6-998a-da493c77e86a"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/hook-policy/blocked-patterns.ts",
+            "agent-tools/src/hook-policy/types.ts",
+            ".agent/hooks/policy.json",
+            "agent-tools/src/validators/policy-reappraisal/validate-policy-reappraisal.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-07T13:01:43Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Item 1: Bash-side reappraisal — teach positive direction in preToolUse.blocked_patterns deny messages + validator coverage",
+      "archived_at": "2026-06-07",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-07T14:51:13Z",
+        "closed_by": {
+          "agent_name": "Eclipsed Watching Veil",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "077e31",
+          "id": "150c7152-79bb-51a6-998a-da493c77e86a"
+        },
+        "summary": "Item 1 landed: commit 1e6abb0a (Bash-guard reappraisal + validator enforcement); gate-green, 3 reviewers ACCEPT",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "3b00c2c4-3473-4127-b3ec-e7f59e8ba2dc",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

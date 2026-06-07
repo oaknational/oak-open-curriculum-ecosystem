@@ -447,3 +447,97 @@ MEANS may scale to hit the bar, never the bar itself.** Instance of the
 no-cheap-cure / escape-hatch-generative-screen family. Graduated structurally to
 PDR-011 §"A handoff author cannot self-verify its completeness" + session-handoff
 §6e (universal) + ADR-150 mirror.
+
+## 2026-06-07 — an `&&`-chained gate that aborts early masks downstream findings (Eclipsed Watching Veil)
+
+Item-4 (`types.ts` schema-first consolidation) was green on agent-tools type-check +
+910 tests + a type-equality probe + type-expert ACCEPT, so I ran `pnpm check` to
+confirm the full gate. It failed at `skills-adapter-generate --check` (a PRE-EXISTING,
+unrelated drift: `oak-consolidate-until-done` adapters stale vs canonical since
+`a4c4c047`). I fixed that as its own `fix(skills)` commit (`85776ca0`) — but I'd
+wrongly inferred "knip isn't in `pnpm check`". It IS; `pnpm check` is a sequential
+`&&` chain (skills-check BEFORE knip), so the first run aborted at the skills failure
+and NEVER REACHED knip. The husky pre-commit (which has NO skills-check) then reached
+knip on commit and caught a real defect in my code: `BlockedPatternEntrySchema` was an
+exported-but-unused symbol (used only in-file). De-exported it (`225268d2`). **Carry:
+when a gate aborts early on a pre-existing failure, the downstream gates did NOT pass —
+they didn't run. Fix the early failure and RE-RUN the whole chain before claiming
+green; never infer downstream coverage from a short-circuited run.**
+
+**Gate-coverage facts found (structural-cure candidates, flagged to owner):**
+`.husky/pre-commit` runs `knip`+`depcruise` but NOT `skills-adapter-generate --check`;
+`pnpm check` has skills-check but aborts before knip on an early failure. Generated-doc
+drift (the `a4c4c047` class) lands committed precisely because the blocking commit gate
+lacks the drift check. Cure family = wire the drift check into the blocking tier
+(mirrors the knip+depcruise→pre-commit fix that closed the ADR-121 drift class).
+
+## 2026-06-07 — I escalated a non-fork into an owner question (Hidden Prowling Owl)
+
+- **EEF Phase E c1. Friction: `z.enum` needs runtime tuples of the EEF finite
+  domains (strand ids, observed axes); graph-corpus-sdk exposes them as types only
+  (`STRAND_IDS`/`OBSERVED` are private). I inflated this into an owner SHAPE
+  question ("authorize touching graph-corpus-sdk vs re-decide D3"), justified by
+  pattern-matching the META-GUARD ("substrate-boundary friction → surface").** The
+  owner's correction: the EEF corpus is fixed, static `as const` data — every valid
+  input value is known at *compile time* — so surfacing them as runtime constants is
+  not a decision, it is the obvious, correct implementation. Nothing was blocked; I
+  invented a blocker.
+- **The general lesson: there are TWO rabbit-hole shapes at a turning point, not
+  one.** (1) descending into mechanism (the META-GUARD's classic target); (2)
+  *escalating a soluble detail into a fork/owner-question*. Both share one root —
+  failing to trace friction to its actual, usually-trivial cause, and inflating it
+  (into a debug spiral, or a decision). The cure is the same and is the owner's
+  question verbatim: **"what value delivery is blocked, why do we care?"** Trace to
+  value first; the friction usually dissolves into an obvious small step.
+- **Pre-surface filter (the guard that should have fired):** before raising a SHAPE
+  question, ask *"is this a genuine decision (multiple defensible outcomes with real
+  tradeoffs only the owner can weigh), or an obvious implementation I'm inflating?"*
+  For static / compile-time-known data, exposing it as a runtime constant is never a
+  decision. Refines harness tripwire T1: friction-as-verdict is for *fighting the
+  type system in a way the family never had to*, NOT for *a trivial constant that
+  isn't written yet*.
+- **Also a fresh instance of value-first-existing-is-malleable + the Zephyrous
+  "inherited framing as authority" capture above:** I let the literal spec phrase
+  "MUST NOT touch graph-corpus-sdk" override my own already-grounded finding that
+  ADR-179 forbids only *transport-shaped* code (so a corpus-data tuple export is
+  within its intent). Deferring to literal constraint text over verified value
+  reasoning is the same root. Resolution carried forward: expose the static
+  finite-domains as runtime constants in graph-corpus-sdk (the corpus's home,
+  mirroring `SUBJECTS`/`KEY_STAGES` and the existing private `STRAND_IDS`), `z.enum`
+  over them downstream — no fork, no authorization gate.
+- **Type widening = the same friction→workaround reflex, in the type domain — and
+  a doctrine that EXISTED but didn't fire.** Building the constants I wrote
+  `new Set<string>(OBSERVED_PHASES)` and kept the pre-existing
+  `STRAND_IDS: ReadonlySet<string>` — widening so `.has()` accepts wider/arbitrary
+  args. Widening is information loss (a deferred bug). The owner caught it; strict
+  cures: `Set<DeclaredPhase>` (the exact query domain) and
+  `.some((id) => id === value)` (zero widening — narrow `unknown` by equality over
+  the exactly-typed array, no `string`, no cast). The sharp part:
+  `docs/governance/typescript-practice.md` ALREADY forbids widening (lines 18/32)
+  AND carries my exact anti-pattern as a worked example (line 83:
+  `Set<string>(ALLOWED_COLORS).has(s) — widens at lookup, not definition`), and
+  code-expert *rationalised* it as "legitimate pragmatic." So this is
+  `passive-guidance-loses-to-artefact-gravity` in types: the documented rule lost
+  to the gravity of "make the type error go away." Owner directive (STANDING): type
+  widening is NEVER allowed (only narrowing); ANY instance = immediate
+  STOP-and-reassess. Real cure target = the active layer (enforcement / a firing
+  tripwire), not more prose — routed to the agentic-engineering thread. NB the
+  ADR-153 example itself sanctions a *local* widening ("at lookup, not definition")
+  the absolute directive now tightens → prefer the zero-widening `.some(===)` form.
+
+## 2026-06-07 — a loss-scan of context CANNOT be outsourced to a context-isolated reader (Eclipsed Watching Veil)
+
+Running session-handoff 6e.2, I dispatched a context-isolated sub-agent to do the "what would be
+lost if my context ceased?" scan — following the skill's "externalise by default" wording. Owner
+corrected: **ALL adversarial analysis of context loss must be done by the agent WITH the context;
+by definition a third party CANNOT do it.** Loss = `(what I hold in context) − (what the durable
+artefacts capture)`; a context-isolated reader sees only the artefacts, so it can VERIFY them
+(ground claims, flag ambiguity/staleness) but cannot DETECT loss — it never had my context to
+subtract from. My sub-agent proved the point: it found untracked files + stale surfaces (an
+artefact audit) but could NOT have found "I deliberately kept the shadowed `git restore` policy
+entries after a code-expert flag" — that decision lived only in my context. **Carry: 6e.1
+verification externalises (author bias is real); 6e.2 loss-detection is holder-EXCLUSIVE and must
+never be delegated to, or conflated with, a fresh-reader audit.** Cured the live skill
+(session-handoff 6e.2); PDR-011/ADR-150 amendment captured in pending-graduations. Instance of
+passive skill-wording losing to the artefact-gravity of "the skill says externalise" — the same
+family this whole thread is about.

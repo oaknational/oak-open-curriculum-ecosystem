@@ -1,5 +1,154 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## 🤝 Session Handoff (2026-06-07 — Eclipsed Watching Veil / claude / Opus 4.8 / `077e31`): items 4 + 1 landed; items 2, 3 + a new no-type-widening task remain
+
+**Self-contained brief; the fresh session needs nothing from the originating conversation.**
+Continues the Glittering Weaving Comet handoff below (the four owner-approved follow-ons).
+Owner-agreed sequence: **4 → 1 → 2 → 3**.
+
+**What landed this session** (branch `feat/graph-tooling-tidyup`; **11 commits ahead of origin,
+0 behind — UNPUSHED, owner-paced**):
+
+- **Item 4 — `225268d2`** `refactor(hook-policy): derive types.ts shapes from Zod schemas via
+  z.infer`. The three dual-declared shapes in `agent-tools/src/hook-policy/types.ts`
+  (`ScopedContentBlockGroup`, `PreToolUseDenyResponse`, the blocked-pattern pair) now derive via
+  `z.infer` — schema is the single source of truth, drift structurally impossible. The
+  blocked-pattern pair was **not** 1:1 (the old `RawBlockedPatternSchema` infers the *union*, not
+  the entry), so an internal `BlockedPatternEntrySchema` was split out and both
+  `BlockedPatternEntry` + `RawBlockedPattern` derive from it. Readonly preserved exactly via
+  `.readonly()` (Zod **v4**, `^4.4.3`), verified by a throwaway `Equal<>` type-equality probe
+  (deleted before commit). Zero behaviour change; `type-expert` ACCEPT.
+- **`85776ca0`** `fix(skills): regenerate oak-consolidate-until-done adapters from canonical`. A
+  **pre-existing** drift (`a4c4c047` updated the canonical SKILL frontmatter but its adapter regen
+  missed the line) red-lit `pnpm check` at `skills-adapter-generate --check`. Canonical is source
+  of truth; regen touched only the 2 stale adapters. Landed as its own commit
+  (`ship-independent-coordinate-dependent`).
+- **Item 1 — `1e6abb0a`** `feat(hook-policy): teach reappraisal in the Bash command guard deny
+  messages`. Mirrors L1+L2 (content guard) for the **Bash** guard: `policy.json`
+  `preToolUse.blocked_patterns` — all 18 entries are now teaching objects across **5 concepts**
+  (`history-destruction`, `gate-bypass`, `worktree-destruction`, `stash-discard`,
+  `wildcard-staging`), each with a rule `citation` + `reappraisal`. `blocked-patterns.ts`
+  `buildPreToolUseDenyResponse` frames a concept-bearing entry with its reappraisal (+ a
+  `DEFAULT_BASH_REAPPRAISAL` safety net) and steers away from sibling destructive commands;
+  concept-less entries keep the legacy reason (back-compat). `validate-policy-reappraisal` extended
+  to enforce, at commit-time, that every Bash entry is an object carrying a non-empty `concept` +
+  `reappraisal` (runtime schema stays permissive for brick-safety). **Matching/blocking
+  byte-for-byte unchanged** (verified first-hand). TDD test-first; `code-expert` + `test-expert` +
+  `type-expert` all ACCEPT; live dist guard verified end-to-end.
+
+**Remaining thread work:**
+
+1. **Item 2 — cross-surface generalisation.** Extend `validate-policy-reappraisal` (or a sibling)
+   to assert positive reappraisal direction on **ESLint custom-rule messages**
+   (`packages/core/oak-eslint`) and **`.agent/rules/*.md` prose**; then generalise the **PDR-044
+   amendment** past the hard-block altitude once those surfaces are enforced. New ESLint rules wire
+   at `warn` first; read the PDR-044 amendment first-hand before widening. Entry:
+   `pending-graduations.md` 2026-06-07 capture (owner-approved). Largest item — likely splits into
+   sub-passes (ESLint / rules-prose / PDR-widening).
+2. **Item 3 — Stream-2/3 routing crosswalk.** Route the EEF-arc planning lessons to their six
+   existing plan homes (`seam-map-plan-template-archetype`,
+   `action-time-structural-interrupt-design-space` as t2 evidence,
+   `closure-pressure-remediation-design-space`, `planning-specialist-capability`,
+   `reviewer-gateway-upgrade` / `architectural-enforcement-adoption`) + a
+   `.agent/memory/active/patterns/` record for the aggregated-tool / graph-tool-family pattern.
+   Crosswalk each home first; ground each lesson first-hand; **no new plan**. Lowest leverage
+   (recording); heaviest reading.
+3. **NEW — no-type-widening active enforcement** (`future/no-type-widening-enforcement.plan.md`,
+   authored by **Hidden Prowling Owl** / eef thread; directed comms `0021b0bc`; owner **standing**
+   directive 2026-06-07: *type widening is NEVER allowed — external input → validation → known
+   types → strict; ANY widening = immediate stop-and-reassess*). The doctrine exists
+   (`typescript-practice.md`, ADR-034/038/153, `no-type-shortcuts.md`) but is PASSIVE. Feasibility
+   verdict: a *general* no-widening lint rule is impractical; a **targeted type-aware rule in
+   `@oaknational/eslint-plugin-standards`** for the recurring smells (`Set<string>` /
+   `readonly string[]` views over an `as const` literal-union array) IS feasible — **WS1** lint
+   rule starts at `warn`, escalates to `error` once false-positive precision is established
+   (precision is the gate, *not* a reason to settle for advisory); **WS2** tripwire wiring
+   coordinates with `action-time-structural-interrupt-design-space.plan.md`. Lands on the strand's
+   **validators + eslint-plugin-standards surface**. Promotion trigger: **when the lane has
+   capacity**; execution finalised at promotion to `current/`. Already done this session (do NOT
+   redo): `typescript-practice.md` strengthened, ADR-153/038/028 worked examples rewritten to the
+   zero-widening `xs.some((x) => x === value)` form, the EEF trigger code fixed — **all UNCOMMITTED
+   in the Owl's WIP; the Owl's successor lands them.**
+
+**The interlock (act on this).** Item 2's generalisation = *every ESLint custom-rule message must
+carry a positive reappraisal direction*. The Owl's new no-type-widening rule is itself a new ESLint
+custom rule → its message must satisfy item 2's validator (teach "narrow at the boundary
+validator", not only refuse). **Sequence item 2's ESLint-message enforcement to land before/with
+the no-type-widening rule so the new rule is born teaching.** Item 2 + the no-type-widening rule +
+`action-time-structural-interrupt-design-space` (item 3's t2 home) are **three instances of one
+thesis**: passive doctrine → active firing surface ("doctrine without mechanism is debt";
+`passive-guidance-loses-to-artefact-gravity`). A `code-expert` review *rationalising* the Owl's
+widening (a false-negative) is the type-domain confirmation that the cure is an active layer, not
+"review harder". Live proof the thesis works: L1+L2 (the content guard) caught an expediency-hedge
+in the Owl's own plan draft and improved it.
+
+**Disciplines / lessons carried (worked instances this session):**
+
+- **An `&&`-chained gate that aborts early masks downstream findings.** `pnpm check` runs
+  `skills-adapter-check` *before* `knip`; the first run aborted at the pre-existing skills drift
+  and never reached `knip`, so a real `knip` unused-export in my own code surfaced only at husky
+  commit-time. Fix the early failure and **RE-RUN the whole chain**; never infer downstream
+  coverage from a short-circuited run.
+- **Gate-coverage asymmetry (structural-cure candidate, in `pending-graduations`).**
+  `.husky/pre-commit` runs `knip`+`depcruise` but **not** `skills-adapter-generate --check` — which
+  is exactly how `a4c4c047`'s generated-adapter drift landed committed. Candidate cure: wire
+  `skills:check` into the blocking commit gate (mirrors the `knip`+`depcruise`→pre-commit fix that
+  closed the ADR-121 drift class).
+- **Brick-safe migration for a dist-run guard.** The live Bash guard runs from
+  `agent-tools/dist/...` (`.claude/settings.json` → `run-pretooluse-guard.mjs`) and **fails closed
+  (exit 2)** on a parse throw. Safe order: edit schema+builder → **rebuild dist** → *then* edit
+  `policy.json`.
+- **The Bash matcher's loose token-subsequence catch** fires on innocent *compound* commands
+  containing the token subsequence (`git` … `checkout` … `--` across unrelated parts of one shell
+  line) — pre-existing behaviour, not changed by item 1; it ironically gave live proof the new
+  teaching message fires.
+- **Multi-writer gate-collision: only shared-build-graph TS collides.** A peer's uncommitted TS WIP
+  (same `turbo` graph) transiently red-lights the full-tree gate; doc-curation WIP does **not**
+  (markdownlint is staged-only; markdown never reaches type-check/lint/test). **Never
+  touch/revert/commit a peer's actively-edited files**; a failed commit is non-destructive (husky
+  refuses, tree intact) — surface, do not remediate others' files, do not `--no-verify`.
+- **Sequencing item 4 before item 1 paid off:** on the schema-first base, item 1 added
+  `concept`/`reappraisal` to the schema once and `z.infer` carried them to the type for free.
+
+**Parallel-window state at handoff (NOT mine — do not touch).** Hidden Prowling Owl (eef thread) +
+a curation agent are actively editing many UNCOMMITTED files — `eef-strands/*`, ADR-028/038/153,
+PDR-029, `metacognition.md`, `typescript-practice.md`, `eef.next-session.md`, `repo-continuity.md`.
+The Owl hands off to a successor shortly who lands them. My 3 commits used explicit pathspec and
+included **none** of these.
+
+**⚠ Durability caveats (handoff loss-scan, verified 2026-06-07 — confirm before relying):** the
+no-type-widening **plan file and its comms event `0021b0bc` are UNTRACKED in git** (`??`, not merely
+uncommitted) — the task's sole carrier is lost on any `git clean` / fresh clone until committed; the
+"already landed this session" EEF doctrine/code (`typescript-practice.md`, ADR-028/038/153,
+`eef-strands/*`) is uncommitted and in **no** ahead-commit, so the Owl's successor must land all of
+it or it is lost. Workspace identity: `@oaknational/eslint-plugin-standards` **is**
+`packages/core/oak-eslint` (one workspace — do not hunt for an `eslint-plugin-standards/` dir). The
+"parallel-window state" snapshot above is point-in-time; re-derive current git/claim state rather
+than trust it.
+
+**Context-holder loss-scan (decisions held in my session context that reached no other surface —
+the part a context-isolated reader cannot recover, by definition):** (1) the two
+`git restore --worktree` / `git restore --staged` entries in `policy.json` are deliberately KEPT
+despite being shadowed by the generic `git restore` (token-subsequence first-match-wins — the
+specific entries never fire) — a `code-expert` finding; kept as pre-existing + security-guard-scope
+discipline + benign (all three share concept/citation/reappraisal), NOT an oversight; a future edit
+should know this was a conscious decision. (2) Two deferred item-1 reviewer follow-ons: a DI-seam
+(optional policy-path arg) on `loadBlockedPatterns` so integration tests can use a fixture rather
+than the live `policy.json` (test-expert); and an optional security-guard-scoped removal of the two
+shadowed restore entries (code-expert). Neither blocks; both are lane-capacity follow-ons.
+
+**Open fitness note (for consolidation, not this handoff):** this thread record is ~700 KB —
+a rotation/archive candidate; flagged, not actioned (rotation is consolidation work, and the
+window is multi-writer).
+
+**Next safe step:** take **item 2** (next in the 4 → 1 → 2 → 3 sequence) — or the no-type-widening
+plan when the lane has capacity, sequenced after/with item 2's ESLint-message enforcement per the
+interlock. Each item gets a shape + excellence-bar pre-brief before execution (owner's pattern).
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Eclipsed Watching Veil` | `claude` | `Opus 4.8` | `077e31` | `feedback-mechanism-follow-ons (items 4 + 1)` | 2026-06-07 | 2026-06-07 |
+
 ## 🤝 Session Handoff (2026-06-07 — Glittering Weaving Comet / claude / Opus 4.8 / `47e009`): feedback-mechanism reappraisal — L1+L2 landed; approved follow-ons → fresh session
 
 **Self-contained brief; the fresh session needs nothing from the originating conversation.**
