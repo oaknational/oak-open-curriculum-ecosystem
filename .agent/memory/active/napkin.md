@@ -216,3 +216,111 @@ Fresh capture continues below.
   `action-time-structural-interrupt-design-space` + `doctrine-enforcement-quick-wins`;
   candidate principle/rule). NOT done this turn — the session pauses at the EEF
   handoff; this is the first item on resume.
+
+## 2026-06-06 — D6 execution: I rabbit-holed on carrier type-plumbing; owner reshaped the contract (Moonlit Orbiting Moon)
+
+**Session intent:** execute EEF D6 per `eef-d6-execution.plan.md` (cycles c0–c6) +
+master §D6. Grounded thoroughly first: **G0 PASSED** (sdk@1.29.0 / ext-apps@1.7.3 /
+zod@4.4.3; V1–V8 registration anchors re-verified first-hand — registerTool generic
+is `ZodRawShapeCompat | AnySchema` at mcp.d.ts:150,154; flag at env.ts:47; the app
+loop config at handlers.ts:173-178 drops outputSchema). Ran a fresh readiness review
+(mcp-expert, architecture-expert-fred, type-expert) of the corrected
+aggregated-family-peer architecture → **GO, no blocker** (every load-bearing finding
+re-grounded by me). Grounded the execution surface first-hand (executor.ts
+`AGGREGATED_HANDLERS`, the misconception precedent, the carrier types).
+
+**What I built, then where it broke.** Started c0 (the carrier widening):
+`UniversalToolListEntry.inputSchema` + `AggregatedToolDefShape.inputSchema`
+`z.ZodRawShape` → `ZodRawShapeCompat | AnySchema`, plus optional `outputSchema?`,
+forwarded in list-tools. **Green in the SDK** (731 tests, type-check; code-expert
+GO-WITH-CONDITIONS, type-expert GO on the diff). **Then the app type-check broke:**
+the SDK's `registerTool` accepts `ZodRawShapeCompat | AnySchema`, but ext-apps'
+`registerAppTool` accepts `ZodRawShapeCompat | StandardSchemaWithJSON`, and the app
+loop (handlers.ts:173-191) feeds the SHARED carrier into BOTH register functions.
+Widening to `AnySchema` broke the registerAppTool branch (`AnySchema` is not a
+`StandardSchemaWithJSON`).
+
+**MY ERROR (what the owner stopped):** I treated the type error as a patch-target and
+DESCENDED — narrowed `AppToolListEntry.inputSchema` to `ZodRawShapeCompat`, rebuilt
+the handlers branch inline, then chased a phantom ("why isn't the narrowing taking?")
+through TS narrowing semantics, then `dist`-vs-source resolution (the app resolves SDK
+types via the `types` export condition → STALE `dist/*.d.ts`, listed BEFORE
+`development`, so cross-package source edits need a REBUILD to be seen),
+`customConditions`, turbo cache, file mtimes. **Wrong abstraction level** (build/
+resolution plumbing has no bridge to the EEF value); I had crystallized on the
+detailed c0 plan and read its friction as bugs to fix, not as a verdict on the shape.
+
+**OWNER CORRECTION (mid-rabbit-hole):** "I don't feel comfortable with the direction
+or complexity… wrong level of abstraction AND the wrong layer of the code… step back,
+evaluate what impact we are trying to achieve to provide what value."
+
+**Diagnosis (owner-accepted):** D3 Decision 2's schema rule — a single `z.object` input
+plus a REQUIRED `outputSchema` — is what makes EEF DIVERGE from its own family. Every
+existing aggregated graph tool uses a raw-shape input and returns `structuredContent`
+with NO MCP `outputSchema`; EEF's would be the FIRST in the estate. That divergence is
+what forces the shared-carrier widening (the output-schemas plan's S0 seam — another
+plan's infrastructure), which breaks the registerAppTool consumer. So **wrong layer** =
+D6 doing shared-infra work; **wrong abstraction** = me debugging build resolution. The
+architecture's own "EEF is just another peer" thesis argues AGAINST the divergence.
+
+**OWNER DECISION (settled — next session implements it):**
+
+1. **Drop the output-schema requirement for D6.** EEF = raw-shape input (like the
+   family) + `structuredContent` output, NO MCP `outputSchema`. → c0 disappears
+   entirely (no carrier change); the registerTool/registerAppTool divergence never
+   arises; the type-expert's two blocking findings (expectTypeOf enforcement,
+   toEqualTypeOf target) DISSOLVE (both were output-schema concerns); c2 collapses to
+   an input schema only. D6 becomes pure EEF-domain work, uniform with
+   get-misconception-graph: c1 (entry + runtime graph-corpus-sdk dep + input
+   raw-shape) → c3 (handler) → c4 (resource) → c5 (prompt) → c6 (flag gating only).
+   Value is NOT lost — the handler still builds typed `structuredContent` from
+   `EefEvidenceEnvelope`.
+2. **Make the output-schemas future plan UNIVERSAL** — outcome = output schemas
+   REQUIRED for EVERY tool (generated tools via codegen from their OpenAPI response
+   schemas; aggregated tools incl. EEF authored; the registerTool/registerAppTool
+   carrier divergence solved once at the infra layer; carrier field flipped
+   `outputSchema?` → required). Relocates the infra to its rightful owner; ends the
+   special case in both directions.
+
+**TREE STATE AT HANDOFF — UPDATED (the c0 got committed by accident).** I left my c0
+edits uncommitted intending the next session to discard them (my `git restore` was
+correctly hook-blocked; I halted rather than routing around). But **Dim Fading Hush's
+session-close commit `c238f507` then SWEPT IN my uncommitted c0 edits** — a broad
+`git add` despite my explicit stage-by-pathspec flag. So
+`universal-tools/{types.ts, definitions.ts, list-tools.ts}` +
+`apps/oak-curriculum-mcp-streamable-http/src/handlers.ts` + the new
+`universal-tools/output-schema-carrier.unit.test.ts` are now **COMMITTED at local
+HEAD** (branch ahead of origin, **NOT pushed**). **HEAD is RED:**
+`pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http type-check` fails at
+`handlers.ts:184` (the registerAppTool `AnySchema` vs `StandardSchemaWithJSON`
+divergence; the `AppToolListEntry` narrowing did NOT resolve it). The SDK type-check
+is green. So the c0 disposition was a **committed-change undo**, not a working-tree
+discard. **RESOLVED (owner-authorised this session):** a surgical forward fix-commit
+`a67ca941` (`fix(mcp): revert accidentally-committed output-schema carrier widening`)
+restored the four c0 files to their pre-c0 content (read from `c238f507^` — NOT a
+`git revert`/`reset`, so Dim's legitimate work in `c238f507` is untouched) and
+removed the test. The full pre-commit gate passed (97/97 turbo tasks; SDK + app
+type-checks green). **HEAD is green.** Lesson within the lesson: the app type-checks
+the SDK against its built `dist/*.d.ts` (the `types` export condition beats
+`development`), so after reverting SDK source I had to `pnpm --filter
+@oaknational/curriculum-sdk build` before the app type-check would clear — the
+dist-staleness that confused my earlier debugging.
+
+**PLAN-DOCS OWED (the reshape, next session):** D3 Decision 2 (two-single-Zod-call /
+required-outputSchema rule → input schema only); master §D6 todo;
+`eef-d6-execution.plan.md` (delete c0; c2 → input-only; drop outputSchema from c1/c6;
+the registerAppTool concern dissolves); `output-schemas-for-mcp-tools.plan.md`
+(universalize to required-for-every-tool). Owner-ratified contracts reshaped on a
+frame-overturn (value-first-existing-is-malleable) — legitimate, not drift.
+
+**THE LESSON (durable; Nth instance of a documented family):** accepting a detailed
+plan's frame and treating its escalating type/build friction as patch-targets —
+descending to the wrong abstraction level — until the OWNER'S EXTERNAL CHECK was the
+cure. Same root as Dim "the plan's missing reference shaped my blind spot," Zephyrous
+"accepting inherited framing," the felt-authority cluster, premature-crystallization,
+and friction-is-a-verdict-not-a-patch-target. The doctrine was IN my context and STILL
+lost to the artefact-gravity of the detailed plan at the decision moment (PDR-089 §D3:
+the reliable cure is the external check). **Behavioural tell to catch next time:**
+disproportionate, ESCALATING type/build friction from a plan step is the signal to
+step back to value/impact and question the SHAPE — not to descend into plumbing. What
+WORKED: halting on the hook block rather than synonym-routing around it.
