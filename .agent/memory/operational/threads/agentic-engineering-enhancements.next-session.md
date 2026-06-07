@@ -1,5 +1,81 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## 🤝 Session Handoff (2026-06-07 — Glittering Weaving Comet / claude / Opus 4.8 / `47e009`): feedback-mechanism reappraisal — L1+L2 landed; approved follow-ons → fresh session
+
+**Self-contained brief; the fresh session needs nothing from the originating conversation.**
+
+**What landed this session** (the LEAD stream from the Dim Fading Hush handoff below). The
+PreToolUse **content guard** now teaches conceptual reappraisal instead of only refusing — the
+cure for the recurring "reword past the block" failure:
+
+- `.agent/hooks/policy.json` `preToolUseContent.scoped_blocks` reshaped flat → 3 **concept
+  groups** (`expediency-hedging`, `sha-in-permanent-doc`, `menu-framing`), each carrying a
+  `reappraisal` (the positive direction the firing signals) beside its `citation`.
+- The deny message frames *a concept to reappraise, not a word to rephrase*, names the actual
+  matched text (not the regex source), and no longer mislabels doctrine blocks as owner-only.
+- Enforcement: a `validate-policy-reappraisal` repo validator (in `repo-validators:check` →
+  pre-commit/pre-push/CI) fails the run if any group lacks a `reappraisal`. The load-time schema
+  leaves it optional so a missing value never fails the guard closed (brick-safety).
+- Doctrine: **PDR-044 §Innate immunity** amended (2026-06-07), scoped to the enforced altitude.
+- Files: `agent-tools/src/hook-policy/{types,matchers,policy-loader,check-blocked-content}.ts`,
+  new `content-deny-response.ts`, new `agent-tools/src/validators/policy-reappraisal/`,
+  `agent-tools/tests/hook-policy/*`, both `package.json`, `.agent/hooks/README.md`,
+  `PDR-044`, `pending-graduations.md`.
+- **Status: complete; all gates green** (type-check, eslint, 910 tests, markdownlint, build,
+  repo-validators, portability); **7 reviewers positive**. Commit state at the bottom.
+
+**APPROVED follow-on work (owner-approved 2026-06-07) — execute in THIS fresh session.** The
+owner approved all the work deferred from the landing session; it was held out only for safety,
+not doubt. Three items, all routing to EXISTING homes — do NOT author a new plan:
+
+1. **Bash-side reappraisal** — extend the discipline to `preToolUse.blocked_patterns` (the Bash
+   command guard) + its builder in `agent-tools/src/hook-policy/blocked-patterns.ts`. The
+   constraint that forced deferral: Bash entries are bare strings today
+   (`RawBlockedPatternSchema` = `string | {pattern, citation?}`), the `check-blocked-patterns`
+   tests assert that shape, and a stale Bash dist guard reading a new shape blocks **every**
+   command including the rebuild — a harder brick than the content guard. Safe shape: add an
+   optional reappraisal to the object-arm entries (group by concept: history-destruction /
+   work-removal / wildcard-staging) WITHOUT breaking bare-string parsing.
+2. **Cross-surface generalisation** — extend `validate-policy-reappraisal` (or a sibling) to
+   assert positive direction on ESLint custom-rule messages and the prose of `.agent/rules/*.md`
+   (each rule states the positive move, not only the prohibition), then generalise the PDR-044
+   amendment past the hard-block altitude once those surfaces are enforced. Register entry:
+   `pending-graduations.md` 2026-06-07 capture (now owner-approved).
+3. **Stream-2/3 routing crosswalk** (the disposition ledger from the landing session's plan) —
+   route the EEF-arc planning lessons to existing homes: `seam-map-plan-template-archetype`
+   (execution-surface acceptance prompt + EEF-D6 worked instance); `action-time-structural-
+   interrupt-design-space` (this arc as t2 evidence — first occupant of its empty quadrant's
+   *response axis*); `closure-pressure-remediation-design-space` (shrink-don't-eliminate
+   instance); `planning-specialist-capability` (execution-grounding readiness check);
+   `reviewer-gateway-upgrade` / `architectural-enforcement-adoption` + a
+   `.agent/memory/active/patterns/` record for the aggregated-tool / graph-tool-family pattern.
+
+**Disciplines carried (lessons applied this session):**
+
+- Migration brick — a stale dist guard + new-shape policy fails closed on the NEXT Edit/Write.
+  Write the policy via a path/tool that does not trip the live guard, then rebuild dist
+  immediately with no Edit/Write between; the Bash guard reads only
+  `preToolUse.blocked_patterns`, so Bash stays usable to run the rebuild.
+- After any schema/API reshape, run the FULL workspace test suite + `type-check` (not a narrow
+  `vitest src/<dir>/` scope) BEFORE authoring tests; glob for existing `*.test.ts` first — the
+  canonical content-guard tests live in `tests/hook-policy/`, not `src/hook-policy/`.
+- Stage by explicit pathspec.
+
+**Entry points:** the `pending-graduations.md` 2026-06-07 capture; PDR-044 §2026-06-07
+amendment; `.agent/hooks/README.md` §"Content guard: concept-grouped doctrine blocks"; the
+`validate-policy-reappraisal` validator as the enforcement template to extend.
+
+**Commit state at handoff:** L1+L2 is complete + green in the WORKING TREE, **uncommitted**, as
+a clean slice (the files listed above, all under `agent-tools/`, `.agent/hooks/`, `PDR-044`,
+`pending-graduations.md`, both `package.json`). A parallel agent's owner-directed session-close
+was concurrently editing this tree (its own staged docs + napkin + `active-claims.json`; my
+claim was cleared). Commit my slice by **explicit pathspec**; do not bundle the peer's staged
+files.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Glittering Weaving Comet` | `claude` | `Opus 4.8` | `47e009` | `feedback-mechanism-reappraisal (L1+L2)` | 2026-06-07 | 2026-06-07 |
+
 ## 🤝 Session Handoff (2026-06-06 — Dim Fading Hush / claude / Opus 4.8 / `1952e2`): NON-EEF meta-work → fresh session
 
 **This hands off everything NON-EEF from the 2026-06-06 EEF-D6 reflection session.**

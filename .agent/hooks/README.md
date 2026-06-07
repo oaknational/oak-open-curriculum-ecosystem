@@ -15,6 +15,11 @@ and thin native activation lives in platform config.
   verdict shim `.claude/hooks/run-pretooluse-guard.mjs`; blocks
   shell commands that bypass safety guardrails or destroy history (force-push,
   hard reset, `--no-verify`)
+- `preToolUseContent` — natively enforced for Claude Code Edit/Write calls
+  through the same verdict shim, running
+  `agent-tools/dist/src/hook-policy/check-blocked-content.js`; blocks the
+  path-agnostic owner-approval marker and path-scoped doctrine block groups
+  (see "Content guard: concept-grouped doctrine blocks" below)
 - `sessionStart` — documented policy only; grounding is already enforced
   through the entry-point chain and start-right skills
 - `preCommit` — documented policy only; quality-gate reminders already
@@ -46,6 +51,54 @@ Failure semantics:
 - `prune` — a missing native surface removes a local activation path without
   changing canonical intent
 - `block` — the runtime or validator rejects an unsafe or incoherent state
+
+## Content guard: concept-grouped doctrine blocks
+
+`preToolUseContent` guards Edit/Write content. It has two surfaces:
+
+- `blocked_patterns` — the path-agnostic owner-approval marker; only the
+  project owner may author it.
+- `scoped_blocks` — path-scoped doctrine block **groups**. Each group gathers
+  the surface patterns for one **concept**, so the citation and the reappraisal
+  are authored once per concept rather than once per pattern:
+
+  ```jsonc
+  {
+    "concept": "expediency-hedging", // names the pattern family
+    "kind": "literal", // or "regex"; group-level
+    "patterns": ["carve out", "good enough"],
+    "include_paths": ["**/*.plan.md"],
+    "exclude_paths": ["archive/"], // optional
+    "excludes_inline_code": true, // optional; regex groups
+    "excludes_lines_with": ["(historical reference)"], // optional; regex groups
+    "citation": "PDR-044; principles.md §...", // the doctrinal anchor
+    "reappraisal": "Re-assess whether the design is uniform ..." // positive direction
+  }
+  ```
+
+  `kind` and the `excludes_*` options are group-level — every pattern in a group
+  shares them.
+
+**The deny message carries the reappraisal.** When a group fires, the message
+names the concept the matched text is a fingerprint of, states the `reappraisal`
+(the positive direction the firing signals), adds the meta-instruction that the
+firing is about the concept and not the wording, and ends with the `citation`.
+This is the content of PDR-044 §Innate immunity (as amended 2026-06-07): a block
+that only says "no" leaves the agent to find a synonym and route around it; a
+block that says "no, and here is the concept to reappraise" triggers the right
+response. Detection — whether a block fires — depends only on `patterns` +
+path-scope + the added-not-in-prior check, never on the `reappraisal`.
+
+**`reappraisal` is enforced at commit-time, not load time.** The load-time
+schema (`agent-tools/src/hook-policy/types.ts` `ScopedContentBlockGroupSchema`)
+leaves `reappraisal` optional, so a missing value never throws and fails the
+guard closed — which would brick the worktree on a stale-`dist`/new-policy
+mismatch. Presence is enforced where blocking is safe instead: the
+`validate-policy-reappraisal` repo validator
+(`agent-tools/src/validators/policy-reappraisal/`), wired into
+`repo-validators:check`, fails the commit/push/CI run if any group lacks a
+non-empty `reappraisal`. The deny builder defaults a generic reappraisal as a
+runtime safety net if one is ever absent.
 
 ## Build-Artefact Freshness
 

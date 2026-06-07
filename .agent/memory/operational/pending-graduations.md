@@ -29,6 +29,26 @@ windowed, backlog, split, or shard-like pending-graduation files. New capture,
 owner-gated items, and unresolved pending-graduation decisions belong here until
 they graduate, duplicate, become stale-withdrawn, or receive owner direction.
 
+## 2026-06-07 capture — Glittering Weaving Comet (feedback-mechanism reappraisal generalisation)
+
+- **Generalise "feedback mechanisms carry positive reappraisal direction" across every
+  feedback surface, not only the PreToolUse content guard.** PDR-044 §Innate immunity was
+  amended (2026-06-07) so a hard block's surfaced detection pairs its citation with a
+  positive reappraisal direction; the first and only ENFORCED instance is the PreToolUse
+  content guard (concept-grouped `preToolUseContent.scoped_blocks`, each concept carrying a
+  `reappraisal`, presence enforced at commit-time by the `validate-policy-reappraisal` repo
+  validator). The amendment is deliberately scoped to that surface. The same discipline
+  should extend to the other feedback surfaces: the Bash command-block guard
+  (`preToolUse.blocked_patterns` — mostly bare strings today; regrouping breaks bare-string
+  backward-compat and risks a harder brick, so deferred this arc), ESLint custom-rule
+  messages, and the prose of the always-applied `.agent/rules/*.md` corpus (each rule should
+  state the positive move, not only the prohibition). Candidate enforcement surface: extend
+  `validate-policy-reappraisal` (or a sibling validator) to assert positive direction across
+  those surfaces. Owner directive origin: every agent feedback mechanism — hooks, rules,
+  eslint — must include positive reappraisal direction, not only a negative assessment;
+  doctrine without mechanism is debt (owner, 2026-06-06).
+  `[captured: 2026-06-07 | source: PDR-044 §2026-06-07 amendment + owner directive 2026-06-06 (feedback mechanisms embody doctrine) | target: extend validate-policy-reappraisal across Bash/ESLint/.agent-rules surfaces + the corresponding doctrine | trigger: FIRED — owner direction 2026-06-07 | size: M | status: owner-approved 2026-06-07; execute in a fresh session (handoff: agentic-engineering-enhancements.next-session.md)]`
+
 ## 2026-06-06 capture — Starlit Scattering Twilight
 
 - **Reconcile PDR-011's "subjective experience is foundational substrate, not optional

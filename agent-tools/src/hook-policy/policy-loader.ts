@@ -9,9 +9,9 @@ import { resolveRepoRoot } from '../core/repo-root.js';
 
 import {
   RawBlockedPatternSchema,
-  ScopedContentBlockSchema,
+  ScopedContentBlockGroupSchema,
   type RawBlockedPattern,
-  type ScopedContentBlock,
+  type ScopedContentBlockGroup,
 } from './types.js';
 
 const REPO_ROOT = resolveRepoRoot(import.meta.url);
@@ -51,7 +51,7 @@ export function parseBlockedContentPolicy(policy: unknown): string[] {
  * `scoped_blocks` section, so callers do not have to special-case
  * legacy policy files.
  */
-export function parseScopedContentBlocks(policy: unknown): readonly ScopedContentBlock[] {
+export function parseScopedContentBlocks(policy: unknown): readonly ScopedContentBlockGroup[] {
   if (
     !isJsonObject(policy) ||
     !isJsonObject(policy.hooks) ||
@@ -65,7 +65,7 @@ export function parseScopedContentBlocks(policy: unknown): readonly ScopedConten
     return [];
   }
 
-  const parsed = z.array(ScopedContentBlockSchema).safeParse(section.scoped_blocks);
+  const parsed = z.array(ScopedContentBlockGroupSchema).safeParse(section.scoped_blocks);
   if (!parsed.success) {
     throw new Error(
       'The canonical hook policy hooks.preToolUseContent.scoped_blocks was malformed.',
@@ -89,7 +89,7 @@ export async function loadBlockedContentPatterns(policyUrl: URL = POLICY_URL): P
  */
 export async function loadScopedContentBlocks(
   policyUrl: URL = POLICY_URL,
-): Promise<readonly ScopedContentBlock[]> {
+): Promise<readonly ScopedContentBlockGroup[]> {
   const policyText = await fs.readFile(policyUrl, 'utf8');
   const policy: unknown = JSON.parse(policyText);
   return parseScopedContentBlocks(policy);

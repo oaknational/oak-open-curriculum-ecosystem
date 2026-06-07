@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
+import { buildPreToolUseDenyResponse } from './content-deny-response.js';
 import {
   extractContentChange,
   parseHookInput,
@@ -13,12 +14,7 @@ import {
   loadBlockedContentPatterns,
   loadScopedContentBlocks,
 } from './policy-loader.js';
-import {
-  PRE_TOOL_USE_EVENT_NAME,
-  type PreToolUseDenyResponse,
-  type RunPreToolUseContentGuardOptions,
-  type ScopedContentBlock,
-} from './types.js';
+import { type RunPreToolUseContentGuardOptions, type ScopedContentBlockGroup } from './types.js';
 
 export type { PreToolUseDenyResponse, RunPreToolUseContentGuardOptions } from './types.js';
 
@@ -39,26 +35,7 @@ export {
   parseScopedContentBlocks,
 } from './policy-loader.js';
 
-/**
- * Build the structured deny payload Claude expects for `PreToolUse`.
- *
- * The optional citation surfaces the doctrinal anchor in the deny reason
- * so the agent learns *why* the pattern is forbidden, not only *that* it is.
- */
-export function buildPreToolUseDenyResponse(
-  blockedPattern: string,
-  citation?: string,
-): PreToolUseDenyResponse {
-  const baseReason = `Blocked by repo hook policy: content contains forbidden pattern "${blockedPattern}". Only the project owner can use this pattern.`;
-  const reason = citation === undefined ? baseReason : `${baseReason} Citation: ${citation}.`;
-  return {
-    hookSpecificOutput: {
-      hookEventName: PRE_TOOL_USE_EVENT_NAME,
-      permissionDecision: 'deny',
-      permissionDecisionReason: reason,
-    },
-  };
-}
+export { buildPreToolUseDenyResponse } from './content-deny-response.js';
 
 /**
  * Read prior file content for the real hook adapter.
@@ -81,7 +58,7 @@ function applyGuardDefaults(options: RunPreToolUseContentGuardOptions): {
   readonly stderr: { write(text: string): void };
   readonly policyUrl: URL;
   readonly blockedPatterns: readonly string[] | undefined;
-  readonly scopedBlocks: readonly ScopedContentBlock[] | undefined;
+  readonly scopedBlocks: readonly ScopedContentBlockGroup[] | undefined;
   readonly readPriorContent: (filePath: string) => string | null;
 } {
   return {
@@ -134,7 +111,9 @@ function denyOnBlockedPattern(
   if (blockedPattern === null) {
     return false;
   }
-  stdout.write(`${JSON.stringify(buildPreToolUseDenyResponse(blockedPattern))}\n`);
+  stdout.write(
+    `${JSON.stringify(buildPreToolUseDenyResponse({ kind: 'owner-marker', pattern: blockedPattern }))}\n`,
+  );
   return true;
 }
 
@@ -146,15 +125,23 @@ function denyOnScopedBlock(
   newContent: string,
   priorContent: string,
   filePath: string | undefined,
-  blocks: readonly ScopedContentBlock[],
+  blocks: readonly ScopedContentBlockGroup[],
   stdout: { write(text: string): void },
 ): void {
-  const matchedBlock = findAddedScopedBlock(newContent, priorContent, filePath, blocks);
-  if (matchedBlock === null) {
+  const matched = findAddedScopedBlock(newContent, priorContent, filePath, blocks);
+  if (matched === null) {
     return;
   }
   stdout.write(
-    `${JSON.stringify(buildPreToolUseDenyResponse(matchedBlock.pattern, matchedBlock.citation))}\n`,
+    `${JSON.stringify(
+      buildPreToolUseDenyResponse({
+        kind: 'concept',
+        pattern: matched.matchedText,
+        concept: matched.group.concept,
+        citation: matched.group.citation,
+        reappraisal: matched.group.reappraisal,
+      }),
+    )}\n`,
   );
 }
 

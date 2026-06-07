@@ -41,8 +41,23 @@
       ],
       "scoped_blocks": [
         {
-          "pattern": "carve out",
+          "concept": "expediency-hedging",
           "kind": "literal",
+          "patterns": [
+            "carve out",
+            "carve-out",
+            "carve around",
+            "an exception to",
+            "with the exception of",
+            "make an exception",
+            "for these arcs",
+            "honest framing for",
+            "permitted variant",
+            "land it then iterate",
+            "cheap cure",
+            "good enough",
+            "quick fix"
+          ],
           "include_paths": [
             ".agent/practice-core/",
             ".agent/plans/",
@@ -61,287 +76,15 @@
             "/tests/",
             ".test.ts"
           ],
-          "citation": "PDR-044; principles.md §Architectural Excellence Over Expediency"
+          "citation": "PDR-044; principles.md §Architectural Excellence Over Expediency",
+          "reappraisal": "Re-assess whether the design is actually uniform — in which case state it positively — or whether you are about to encode expediency."
         },
         {
-          "pattern": "carve-out",
-          "kind": "literal",
-          "include_paths": [
-            ".agent/practice-core/",
-            ".agent/plans/",
-            "docs/architecture/",
-            "docs/governance/",
-            "**/*.plan.md"
-          ],
-          "exclude_paths": [
-            "principles.md",
-            "distilled.md",
-            "PDR-043",
-            "PDR-044",
-            "PDR-047",
-            "archive/",
-            "fixtures/",
-            "/tests/",
-            ".test.ts"
-          ],
-          "citation": "PDR-044; principles.md §Architectural Excellence Over Expediency"
-        },
-        {
-          "pattern": "carve around",
-          "kind": "literal",
-          "include_paths": [
-            ".agent/practice-core/",
-            ".agent/plans/",
-            "docs/architecture/",
-            "docs/governance/",
-            "**/*.plan.md"
-          ],
-          "exclude_paths": [
-            "principles.md",
-            "distilled.md",
-            "PDR-043",
-            "PDR-044",
-            "PDR-047",
-            "archive/",
-            "fixtures/",
-            "/tests/",
-            ".test.ts"
-          ],
-          "citation": "PDR-044; principles.md §Architectural Excellence Over Expediency"
-        },
-        {
-          "pattern": "an exception to",
-          "kind": "literal",
-          "include_paths": [
-            ".agent/practice-core/",
-            ".agent/plans/",
-            "docs/architecture/",
-            "docs/governance/",
-            "**/*.plan.md"
-          ],
-          "exclude_paths": [
-            "principles.md",
-            "distilled.md",
-            "PDR-043",
-            "PDR-044",
-            "PDR-047",
-            "archive/",
-            "fixtures/",
-            "/tests/",
-            ".test.ts"
-          ],
-          "citation": "PDR-044; principles.md §Architectural Excellence Over Expediency"
-        },
-        {
-          "pattern": "with the exception of",
-          "kind": "literal",
-          "include_paths": [
-            ".agent/practice-core/",
-            ".agent/plans/",
-            "docs/architecture/",
-            "docs/governance/",
-            "**/*.plan.md"
-          ],
-          "exclude_paths": [
-            "principles.md",
-            "distilled.md",
-            "PDR-043",
-            "PDR-044",
-            "PDR-047",
-            "archive/",
-            "fixtures/",
-            "/tests/",
-            ".test.ts"
-          ],
-          "citation": "PDR-044; principles.md §Architectural Excellence Over Expediency"
-        },
-        {
-          "pattern": "make an exception",
-          "kind": "literal",
-          "include_paths": [
-            ".agent/practice-core/",
-            ".agent/plans/",
-            "docs/architecture/",
-            "docs/governance/",
-            "**/*.plan.md"
-          ],
-          "exclude_paths": [
-            "principles.md",
-            "distilled.md",
-            "PDR-043",
-            "PDR-044",
-            "PDR-047",
-            "archive/",
-            "fixtures/",
-            "/tests/",
-            ".test.ts"
-          ],
-          "citation": "PDR-044; principles.md §Architectural Excellence Over Expediency"
-        },
-        {
-          "pattern": "for these arcs",
-          "kind": "literal",
-          "include_paths": [
-            ".agent/practice-core/",
-            ".agent/plans/",
-            "docs/architecture/",
-            "docs/governance/",
-            "**/*.plan.md"
-          ],
-          "exclude_paths": [
-            "principles.md",
-            "distilled.md",
-            "PDR-043",
-            "PDR-044",
-            "PDR-047",
-            "archive/",
-            "fixtures/",
-            "/tests/",
-            ".test.ts"
-          ],
-          "citation": "PDR-044; principles.md §Architectural Excellence Over Expediency"
-        },
-        {
-          "pattern": "honest framing for",
-          "kind": "literal",
-          "include_paths": [
-            ".agent/practice-core/",
-            ".agent/plans/",
-            "docs/architecture/",
-            "docs/governance/",
-            "**/*.plan.md"
-          ],
-          "exclude_paths": [
-            "principles.md",
-            "distilled.md",
-            "PDR-043",
-            "PDR-044",
-            "PDR-047",
-            "archive/",
-            "fixtures/",
-            "/tests/",
-            ".test.ts"
-          ],
-          "citation": "PDR-044; principles.md §Architectural Excellence Over Expediency"
-        },
-        {
-          "pattern": "permitted variant",
-          "kind": "literal",
-          "include_paths": [
-            ".agent/practice-core/",
-            ".agent/plans/",
-            "docs/architecture/",
-            "docs/governance/",
-            "**/*.plan.md"
-          ],
-          "exclude_paths": [
-            "principles.md",
-            "distilled.md",
-            "PDR-043",
-            "PDR-044",
-            "PDR-047",
-            "archive/",
-            "fixtures/",
-            "/tests/",
-            ".test.ts"
-          ],
-          "citation": "PDR-044; principles.md §Architectural Excellence Over Expediency"
-        },
-        {
-          "pattern": "land it then iterate",
-          "kind": "literal",
-          "include_paths": [
-            ".agent/practice-core/",
-            ".agent/plans/",
-            "docs/architecture/",
-            "docs/governance/",
-            "**/*.plan.md"
-          ],
-          "exclude_paths": [
-            "principles.md",
-            "distilled.md",
-            "PDR-043",
-            "PDR-044",
-            "PDR-047",
-            "archive/",
-            "fixtures/",
-            "/tests/",
-            ".test.ts"
-          ],
-          "citation": "PDR-044; principles.md §Architectural Excellence Over Expediency"
-        },
-        {
-          "pattern": "cheap cure",
-          "kind": "literal",
-          "include_paths": [
-            ".agent/practice-core/",
-            ".agent/plans/",
-            "docs/architecture/",
-            "docs/governance/",
-            "**/*.plan.md"
-          ],
-          "exclude_paths": [
-            "principles.md",
-            "distilled.md",
-            "PDR-043",
-            "PDR-044",
-            "PDR-047",
-            "archive/",
-            "fixtures/",
-            "/tests/",
-            ".test.ts"
-          ],
-          "citation": "PDR-044; principles.md §Architectural Excellence Over Expediency"
-        },
-        {
-          "pattern": "good enough",
-          "kind": "literal",
-          "include_paths": [
-            ".agent/practice-core/",
-            ".agent/plans/",
-            "docs/architecture/",
-            "docs/governance/",
-            "**/*.plan.md"
-          ],
-          "exclude_paths": [
-            "principles.md",
-            "distilled.md",
-            "PDR-043",
-            "PDR-044",
-            "PDR-047",
-            "archive/",
-            "fixtures/",
-            "/tests/",
-            ".test.ts"
-          ],
-          "citation": "PDR-044; principles.md §Architectural Excellence Over Expediency"
-        },
-        {
-          "pattern": "quick fix",
-          "kind": "literal",
-          "include_paths": [
-            ".agent/practice-core/",
-            ".agent/plans/",
-            "docs/architecture/",
-            "docs/governance/",
-            "**/*.plan.md"
-          ],
-          "exclude_paths": [
-            "principles.md",
-            "distilled.md",
-            "PDR-043",
-            "PDR-044",
-            "PDR-047",
-            "archive/",
-            "fixtures/",
-            "/tests/",
-            ".test.ts"
-          ],
-          "citation": "PDR-044; principles.md §Architectural Excellence Over Expediency"
-        },
-        {
-          "pattern": "\\b(?=[0-9a-f]*[a-f])[0-9a-f]{7,40}\\b",
+          "concept": "sha-in-permanent-doc",
           "kind": "regex",
+          "patterns": [
+            "\\b(?=[0-9a-f]*[a-f])[0-9a-f]{7,40}\\b"
+          ],
           "include_paths": [
             ".agent/practice-core/",
             ".agent/rules/",
@@ -360,11 +103,17 @@
           "excludes_lines_with": [
             "(historical reference)"
           ],
-          "citation": "Moving targets do not belong in permanent docs (PDR-079 portable surfaces only — ADRs are repo-bound and out of scope)"
+          "citation": "Moving targets do not belong in permanent docs (PDR-079 portable surfaces only — ADRs are repo-bound and out of scope)",
+          "reappraisal": "State the durable fact rather than this pointer; if a genuine historical reference is needed, mark it explicitly as one. The fix removes the dependence on a moving target."
         },
         {
-          "pattern": "for owner verdict",
+          "concept": "menu-framing",
           "kind": "literal",
+          "patterns": [
+            "for owner verdict",
+            "for owner decision",
+            "for owner ratification"
+          ],
           "include_paths": [
             ".agent/practice-core/",
             ".agent/plans/",
@@ -384,58 +133,11 @@
             ".test.ts",
             "re-apply-first-question-at-elaboration-boundaries.md"
           ],
-          "citation": "re-apply-first-question-at-elaboration-boundaries.md; principles.md §Architectural Excellence Over Expediency"
-        },
-        {
-          "pattern": "for owner decision",
-          "kind": "literal",
-          "include_paths": [
-            ".agent/practice-core/",
-            ".agent/plans/",
-            "docs/architecture/",
-            "docs/governance/",
-            "**/*.plan.md"
-          ],
-          "exclude_paths": [
-            "principles.md",
-            "distilled.md",
-            "PDR-043",
-            "PDR-044",
-            "PDR-047",
-            "archive/",
-            "fixtures/",
-            "/tests/",
-            ".test.ts",
-            "re-apply-first-question-at-elaboration-boundaries.md"
-          ],
-          "citation": "re-apply-first-question-at-elaboration-boundaries.md; principles.md §Architectural Excellence Over Expediency"
-        },
-        {
-          "pattern": "for owner ratification",
-          "kind": "literal",
-          "include_paths": [
-            ".agent/practice-core/",
-            ".agent/plans/",
-            "docs/architecture/",
-            "docs/governance/",
-            "**/*.plan.md"
-          ],
-          "exclude_paths": [
-            "principles.md",
-            "distilled.md",
-            "PDR-043",
-            "PDR-044",
-            "PDR-047",
-            "archive/",
-            "fixtures/",
-            "/tests/",
-            ".test.ts",
-            "re-apply-first-question-at-elaboration-boundaries.md"
-          ],
-          "citation": "re-apply-first-question-at-elaboration-boundaries.md; principles.md §Architectural Excellence Over Expediency"
+          "citation": "re-apply-first-question-at-elaboration-boundaries.md; principles.md §Architectural Excellence Over Expediency",
+          "reappraisal": "If you have analysed the situation to a verdict, present the verdict with its evidence; reserve owner questions for genuine permission gates and decisions only the owner can make."
         }
       ],
-      "description": "Block agents from writing user-approved markers into file content (only the project owner can approve eslint-disable approvals with the JC: prefix). The path-scoped scoped_blocks are write-time fingerprints per PDR-044 §Innate immunity. Three kinds: (literal) the hedging-vocabulary trip-list — language that means 'I know the rule applies, but this situation is special' rejected on doctrine surfaces (PDRs, plans, ADRs, governance), with doctrine-defining surfaces excluded so principles.md, distilled.md, PDR-043 and PDR-044 may catalogue the words they forbid; (regex) the SHA-in-permanent-doc fingerprint — 7- to 40-character hex tokens with at least one a-f character on portable-permanent-doc paths (practice-core, rules, memory/active/patterns, principles.md, testing-strategy.md; ADRs are repo-bound and out of scope per PDR-079), with fenced code blocks, inline-code spans, and `(historical reference)` marker lines excluded so the discipline 'moving targets do not belong in permanent docs' (distilled.md) is enforced at write-time without tripping intentional code-block examples or explicit historical citations; (literal) the menu-framing trip-list — owner-decision phrasings ('for owner verdict' / 'for owner decision' / 'for owner ratification') rejected on architectural surfaces ('for owner approval' was considered and rejected at design time — too high false-positive rate in legitimate governance prose) (plans, PDRs, ADRs, governance) so menu-shaped option-sets do not slip past the re-apply-first-question-at-elaboration-boundaries discipline; the rule file itself is excluded so it may catalogue the phrases it forbids. PDR-044 names false positives as a design property of the innate layer."
+      "description": "Block agents from writing into Edit/Write content. Two surfaces: (blocked_patterns) the owner-approval marker, path-agnostic, which only the project owner may author; (scoped_blocks) path-scoped doctrine block GROUPS per PDR-044 §Innate immunity. Each group gathers the surface patterns for one concept and carries the doctrinal `citation` PLUS a `reappraisal` — the positive direction the firing signals — so a block teaches the agent to step back and re-assess the concept rather than to reword around the wall (PDR-044 §Innate immunity, as amended; the doctrine that an enforcement surface must carry the advisory-response content, not only a refusal). `kind` and the `excludes_*` options are group-level: every pattern in a group shares them. The three concepts: (literal) `expediency-hedging` — language that means 'I know the rule applies, but this situation is special' rejected on doctrine surfaces (PDRs, plans, ADRs, governance), with doctrine-defining surfaces excluded so principles.md, distilled.md, PDR-043/044/047 may catalogue the words they forbid; (regex) `sha-in-permanent-doc` — 7- to 40-character hex tokens with at least one a-f character on portable-permanent-doc paths (practice-core, rules, memory/active/patterns, principles.md, testing-strategy.md; ADRs are repo-bound and out of scope per PDR-079), with fenced code blocks, inline-code spans, and `(historical reference)` marker lines excluded; (literal) `menu-framing` — owner-decision phrasings rejected on architectural surfaces so menu-shaped option-sets do not slip past the re-apply-first-question-at-elaboration-boundaries discipline (the rule file itself is excluded so it may catalogue the phrases it forbids). `reappraisal` is enforced present at commit-time by the `validate-policy-reappraisal` repo validator; it is optional at load time so a missing value never fails the guard closed. PDR-044 names false positives as a design property of the innate layer."
     },
     "sessionStart": {
       "grounding_reminder": "Read .agent/directives/AGENT.md and .agent/memory/active/distilled.md before starting work.",

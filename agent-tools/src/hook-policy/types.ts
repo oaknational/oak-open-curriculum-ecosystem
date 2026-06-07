@@ -4,18 +4,42 @@ import { z } from 'zod';
 export const PRE_TOOL_USE_EVENT_NAME = 'PreToolUse';
 
 /**
- * A path-scoped doctrine block in the canonical hook policy. Carries a
- * citation that surfaces in the deny payload so the agent learns *why*
- * the pattern is forbidden, not only *that* it is.
+ * A path-scoped doctrine block *group* in the canonical hook policy. One
+ * group gathers every surface pattern that signals the same underlying
+ * concept, so the citation and the reappraisal direction are authored once
+ * per concept rather than once per pattern.
+ *
+ * The deny payload surfaces three things so a firing teaches the agent what
+ * to do, not only that a word is forbidden:
+ * - `citation` — the doctrinal anchor (the rule, principle, ADR, or PDR that
+ *   names the pathogen);
+ * - `reappraisal` — the positive direction the firing signals (step back and
+ *   re-assess the concept), so the agent reappraises rather than rewording to
+ *   route around the block;
+ * - `concept` — the name of the pattern family, so the message frames a
+ *   concept to reappraise, not a word to rephrase.
+ *
+ * `kind` and the `excludes_*` options are group-level: every pattern in a
+ * group shares them.
  */
-export interface ScopedContentBlock {
-  readonly pattern: string;
+export interface ScopedContentBlockGroup {
+  readonly concept: string;
+  readonly patterns: readonly string[];
   readonly kind?: 'literal' | 'regex';
   readonly include_paths: readonly string[];
   readonly exclude_paths?: readonly string[];
   readonly excludes_inline_code?: boolean;
   readonly excludes_lines_with?: readonly string[];
   readonly citation: string;
+  /**
+   * The positive reappraisal direction surfaced when a pattern in this group
+   * fires. Optional at the load-time trust boundary so a missing value never
+   * throws and fails the guard closed (which would brick the worktree); the
+   * `validate-policy-reappraisal` repo validator enforces presence at
+   * commit-time, and the deny builder defaults a generic reappraisal if it is
+   * ever absent.
+   */
+  readonly reappraisal?: string;
 }
 
 /** Resolved content-change shape extracted from a Claude Edit/Write payload. */
@@ -34,6 +58,28 @@ export interface PreToolUseDenyResponse {
     readonly permissionDecisionReason: string;
   };
 }
+
+/**
+ * Discriminated input for the content guard's deny-message builder. The two
+ * variants produce deliberately different framings:
+ * - `owner-marker` — the path-agnostic owner-approval marker, which only the
+ *   project owner may author; the message states that permission fact;
+ * - `concept` — a path-scoped doctrine block group; the message names the
+ *   concept and carries the citation plus the positive reappraisal direction,
+ *   so it frames a concept to reappraise rather than a word to rephrase.
+ *
+ * The discriminant makes the branch total and type-checked: no string-sniffing
+ * and no `unknown` are needed to decide which framing applies.
+ */
+export type ContentDenyInput =
+  | { readonly kind: 'owner-marker'; readonly pattern: string }
+  | {
+      readonly kind: 'concept';
+      readonly pattern: string;
+      readonly concept: string;
+      readonly citation: string;
+      readonly reappraisal?: string;
+    };
 
 /**
  * Zod schema for `PreToolUseDenyResponse`. Provides schema-driven runtime
@@ -57,7 +103,7 @@ export interface RunPreToolUseContentGuardOptions {
   readonly stderr?: { write(text: string): void };
   readonly policyUrl?: URL;
   readonly blockedPatterns?: readonly string[];
-  readonly scopedBlocks?: readonly ScopedContentBlock[];
+  readonly scopedBlocks?: readonly ScopedContentBlockGroup[];
   readonly readPriorContent?: (filePath: string) => string | null;
 }
 
@@ -98,33 +144,39 @@ export interface RunPreToolUseBlockedPatternGuardOptions {
 }
 
 /**
- * Zod schema for `ScopedContentBlock`. Used at the policy-load trust
- * boundary to parse `.agent/hooks/policy.json` entries into typed,
- * validated blocks. The schema's `.superRefine` also verifies that
- * `kind: 'regex'` patterns are syntactically valid RegExp source — the
- * validation that used to live inside the hand-written type guard.
+ * Zod schema for `ScopedContentBlockGroup`. Used at the policy-load trust
+ * boundary to parse `.agent/hooks/policy.json` entries into typed, validated
+ * groups. `reappraisal` is optional here so a missing value never throws at
+ * load time (which would fail the guard closed and brick the worktree);
+ * presence is enforced at commit-time by the `validate-policy-reappraisal`
+ * repo validator. The `.superRefine` verifies that every pattern in a
+ * `kind: 'regex'` group is syntactically valid RegExp source.
  */
-export const ScopedContentBlockSchema = z
+export const ScopedContentBlockGroupSchema = z
   .object({
-    pattern: z.string(),
+    concept: z.string(),
+    patterns: z.array(z.string()).min(1),
     kind: z.enum(['literal', 'regex']).optional(),
     include_paths: z.array(z.string()).min(1),
     exclude_paths: z.array(z.string()).optional(),
     excludes_inline_code: z.boolean().optional(),
     excludes_lines_with: z.array(z.string()).optional(),
     citation: z.string(),
+    reappraisal: z.string().optional(),
   })
   .superRefine((entry, ctx) => {
     if (entry.kind !== 'regex') {
       return;
     }
-    try {
-      new RegExp(entry.pattern, 'u');
-    } catch {
-      ctx.addIssue({
-        code: 'custom',
-        message: `scoped_block kind 'regex' has invalid pattern: ${entry.pattern}`,
-        path: ['pattern'],
-      });
+    for (const pattern of entry.patterns) {
+      try {
+        new RegExp(pattern, 'u');
+      } catch {
+        ctx.addIssue({
+          code: 'custom',
+          message: `scoped_block group '${entry.concept}' kind 'regex' has invalid pattern: ${pattern}`,
+          path: ['patterns'],
+        });
+      }
     }
   });

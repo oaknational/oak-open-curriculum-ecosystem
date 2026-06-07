@@ -180,6 +180,42 @@ This prevents autoimmunity in the innate layer: the scanner still
 catches the pattern, while legitimate doctrine work remains possible
 through an explicit approval path.
 
+### 2026-06-07 amendment — surfaced detections carry positive reappraisal direction
+
+The §Innate immunity **Surface** responsibility above requires surfacing a
+detection with its doctrinal **citation**. A citation names *why* a pattern is
+forbidden; it does not, on its own, tell the agent *what to do instead*. A hard
+block that fires but only says "no" leaves the agent to find a synonym and route
+around it — the firing is then read as a wording obstacle rather than the
+conceptual signal it is.
+
+**Amendment:** where an innate-immunity surface *hard-blocks*, its surfaced
+detection MUST pair the citation with a **positive reappraisal direction** — the
+conceptual reassessment the firing signals (step back, re-assess the concept; do
+not reword to bypass). The reappraisal is a property of the *concept* the pattern
+is a fingerprint of, not of the individual pattern, so it is authored once per
+concept and framed to point the agent at the concept to reappraise rather than
+the word to rephrase.
+
+**Enforcement and the load-permissive split.** The reappraisal travels with the
+fingerprint registry, so a detection cannot surface without one. Where requiring
+the reappraisal at the point the surface *loads* its registry would risk failing
+the guard closed — and so blocking the very recovery that would repair a
+transient mismatch — presence is enforced one step later, at the commit-time
+gate where blocking is safe, rather than at load time. This mirrors the
+fail-open-on-not-built discipline the innate layer already applies to a missing
+scanner artefact.
+
+**Scope and the pending generalisation.** This amendment is stated at the
+altitude it is enforced: the innate layer's hard-block surface. Extending the
+same discipline to the practice's other feedback surfaces — command-level
+blocks, lint-rule messages, and the prose of the always-applied rule corpus — is
+a deliberate, trigger-gated generalisation carried in the pending-graduations
+register, not an unenforced claim made here. Stating doctrine more broadly than
+its enforcement reaches is the liability PDR-038 names; scoping the amendment to
+the enforced surface keeps it from being an instance of the failure it guards
+against.
+
 ## Rationale
 
 **Why two layers, not one.** A single deterministic scanner cannot
@@ -285,4 +321,13 @@ bridged via the practice-index Rules and Patterns sections.
 
 ## Amendment Log
 
-None yet.
+- **2026-05-21 — refusal vs approval (recorded retroactively).** The innate
+  layer distinguishes irreducible blocks from approval-trigger detections; some
+  fingerprints protect owner-only or context-sensitive language and preserve a
+  route to owner approval rather than absolute impossibility.
+- **2026-06-07 — surfaced detections carry positive reappraisal direction.** A
+  hard block's surfaced detection must pair its citation with the positive
+  reappraisal direction the firing signals, so the block triggers conceptual
+  reappraisal rather than a synonym-substitution route-around. Stated at the
+  altitude it is enforced (the innate hard-block surface); cross-surface
+  generalisation is trigger-gated in the pending-graduations register.
