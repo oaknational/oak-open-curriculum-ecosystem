@@ -14,6 +14,7 @@
 export {
   strandById,
   isValidStrandKey,
+  EEF_STRAND_IDS,
   type EefToolkitData,
   type EefStrand,
   type EefStrandId,
@@ -22,6 +23,9 @@ export {
 
 export {
   declaredVsObservedDivergence,
+  OBSERVED_PHASES,
+  OBSERVED_KEY_STAGES,
+  OBSERVED_PRIORITIES,
   relatedStrandEdges,
   strandAxisIndex,
   type DeclaredPhase,

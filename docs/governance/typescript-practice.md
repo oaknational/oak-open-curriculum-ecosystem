@@ -29,10 +29,18 @@ Operationalises
   They are permitted only at named external boundaries and are
   forbidden as stand-ins for known shapes. See
   `.agent/rules/unknown-is-type-destruction.md`.
-- **Preserve type information** — do not widen literal types into
-  broad annotations such as `string` or `number` when the exact
-  literal matters. Let information flow from data structures with
-  `as const` through to use sites.
+- **Preserve type information — no widening, ever** — the type flow is
+  `external input → validation → known types → strictly typed system`. The ONLY
+  function that takes `unknown` (or otherwise-untyped) input is the boundary
+  validator, which narrows to known types; **past that boundary nothing widens**.
+  Never widen literal types into broad annotations such as `string` or `number`
+  — including a `Set<string>` or a `readonly string[]` view over an
+  `as const`-derived value to make a lookup type-check. Widening is information
+  loss and a deferred bug. Let information flow from `as const` data structures
+  through to use sites. **Any widening is an immediate stop-and-reassess trigger**:
+  trace to the exact domain type — the strict cure is almost always the precise
+  union (e.g. `Set<DeclaredPhase>`), or a zero-widening membership check
+  (`ids.some((id) => id === value)`), never a `string` view.
 - **Single source of truth for types** — define each type once,
   preferably from the OpenAPI schema, generated SDK contract, or
   external library, then import it everywhere. Do not redefine later
@@ -77,10 +85,12 @@ const ALLOWED_COLORS = ['red', 'green', 'blue'] as const;
 type AllowedColor = (typeof ALLOWED_COLORS)[number];
 
 function isAllowedColor(color: string): color is AllowedColor {
-  const stringAllowedColors: readonly string[] = ALLOWED_COLORS;
-  return stringAllowedColors.includes(color);
+  // Zero-widening membership: narrow by equality over the exactly-typed constant.
+  return ALLOWED_COLORS.some((allowed) => allowed === color);
 }
-// Alternative: Set<string>(ALLOWED_COLORS).has(s) — widens at lookup, not definition
+// Forbidden: a `readonly string[]` view or `new Set<string>(ALLOWED_COLORS).has(color)`
+// — both widen the constant's literal type to `string`. Widening anywhere is forbidden,
+// even when scoped to a lookup; `.some((x) => x === value)` needs no widening.
 ```
 
 ## Zod v4 Patterns

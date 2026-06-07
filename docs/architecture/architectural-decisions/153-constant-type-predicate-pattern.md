@@ -81,27 +81,30 @@ boundaries (forcing the `typeof === 'string'` runtime check) and
 in the generated code: `isSearchScope(value: unknown)` at boundaries,
 `isKeyStage(value: string)` in already-validated contexts.
 
-### The Intermediate Narrowing Trick
+### Membership Without Widening
 
 `Array.prototype.includes` on a `readonly` literal tuple has the
 signature `includes(searchElement: LiteralUnion)`, so passing an
-arbitrary `string` fails because `string` is not assignable to the
-literal union. The standard workaround is an intermediate assignment
-that widens the element type:
+arbitrary `string`/`unknown` does not type-check directly. Do **not**
+widen to work around this — a `readonly string[]` view, or
+`new Set<string>(...)`, discards the literal types and is forbidden
+(widening is information loss; see
+`../../governance/typescript-practice.md`). Narrow the input by equality
+instead, which needs no widening:
 
 ```typescript
 const SCOPES = ['lessons', 'units', 'sequences'] as const;
 type Scope = (typeof SCOPES)[number];
 
 function isScope(value: unknown): value is Scope {
-  const strings: readonly string[] = SCOPES; // widen just enough
-  return typeof value === 'string' && strings.includes(value);
+  return SCOPES.some((scope) => scope === value);
 }
 ```
 
-The intermediate `readonly string[]` widens the array type enough for
-`.includes()` to accept the `string` parameter while preserving the
-type predicate's narrow return type.
+`scope === value` compares each literal to the input (always permitted
+against `string`/`unknown`), so the runtime membership test makes the
+type predicate sound while every type stays exact — no `string`, no
+widening, at the lookup or anywhere else.
 
 ### Decision Tree: When to Use What
 

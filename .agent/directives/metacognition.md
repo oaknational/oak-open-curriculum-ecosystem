@@ -54,6 +54,38 @@ Would you like to do anything differently?
 
 What is the bridge from action to impact?
 
+## Friction Is Rarely the Thing It First Looks Like
+
+Friction — a type error, a missing value, a constraint that seems to bite, a
+tool that won't do what you expect — is information, but rarely the thing it
+first appears to be. Under friction the reflex is to **inflate** it, in one of
+two opposite directions:
+
+- **Descend into mechanism** — treat it as a deep problem to debug, and follow
+  it down into plumbing that has no bridge to the impact you were asked to
+  deliver.
+- **Escalate into a decision** — treat it as a fork that needs permission or
+  authority, and surface a question that is not actually a question.
+
+Both skip the cheap move that usually resolves it: **trace the friction to its
+actual cause, which is usually trivial.** The diagnostic is the bridge question
+itself — *what value delivery is blocked, and why do we care?* Trace from there,
+and most friction collapses to a one-line fix.
+
+Only after tracing does the friction reveal which of three things it is:
+
+1. **A trivial gap** — an obvious step not yet taken. This is the common case;
+   just take it.
+2. **A genuine divergence** — you are fighting something the established pattern
+   never had to fight, which means you have diverged from it. This is the case
+   where friction is a verdict to surface.
+3. **A genuine decision** — multiple defensible outcomes with real trade-offs
+   that only the owner can weigh.
+
+Surfacing is for (2) and (3). Inflating (1) into a debug spiral or a question is
+the failure mode, and the tell is reaching for a terminal to investigate *why*,
+or drafting a question, before asking what is actually blocked.
+
 ## Cure Shape — Structural, Not Doc-Patch
 
 When metacognition surfaces a defect whose root cause is

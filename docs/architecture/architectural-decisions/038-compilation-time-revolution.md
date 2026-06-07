@@ -87,8 +87,7 @@ type Client = OakApiPathBasedClient['/lessons/{lesson}/transcript']['GET'];
 const allowedKeyStageValues = ['ks1', 'ks2', 'ks3', 'ks4'] as const;
 type KeyStageValue = (typeof allowedKeyStageValues)[number];
 function isKeyStageValue(value: string): value is KeyStageValue {
-  const stringKeyStageValue: readonly string[] = allowedKeyStageValues;
-  return stringKeyStageValue.includes(value);
+  return allowedKeyStageValues.some((keyStage) => keyStage === value);
 }
 
 // Two-executor pattern

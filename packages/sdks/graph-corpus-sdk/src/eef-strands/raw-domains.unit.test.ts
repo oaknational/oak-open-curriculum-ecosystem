@@ -3,6 +3,9 @@ import { describe, expect, it } from 'vitest';
 import { EEF_TOOLKIT_DATA } from './eef-toolkit.external-data.js';
 import {
   declaredVsObservedDivergence,
+  OBSERVED_KEY_STAGES,
+  OBSERVED_PHASES,
+  OBSERVED_PRIORITIES,
   relatedStrandEdges,
   strandAxisIndex,
 } from './raw-domains.js';
@@ -77,6 +80,51 @@ describe('strandAxisIndex', () => {
       expect(axis?.phases).toEqual(strand.school_context_relevance.most_relevant_phases);
       expect(axis?.keyStages).toEqual(strand.school_context_relevance.most_relevant_key_stages);
       expect(axis?.priorities).toEqual(strand.school_context_relevance.most_relevant_priorities);
+    }
+  });
+});
+
+describe('observed-domain runtime constants (D6 schema enumeration)', () => {
+  it('OBSERVED_PHASES is the declared phases that some strand actually carries', () => {
+    expect([...OBSERVED_PHASES].sort((a, b) => a.localeCompare(b))).toEqual([
+      'early_years',
+      'primary',
+      'secondary',
+    ]);
+  });
+
+  it('OBSERVED_KEY_STAGES is the declared key stages some strand carries (excludes KS5)', () => {
+    expect([...OBSERVED_KEY_STAGES].sort((a, b) => a.localeCompare(b))).toEqual([
+      'EYFS',
+      'KS1',
+      'KS2',
+      'KS3',
+      'KS4',
+    ]);
+    expect(OBSERVED_KEY_STAGES).not.toContain('KS5');
+  });
+
+  it('OBSERVED_PRIORITIES are declared priorities some strand carries (excludes the known-unobserved)', () => {
+    const declared = EEF_TOOLKIT_DATA.school_context_schema.properties.priorities.items.enum;
+    expect(OBSERVED_PRIORITIES.length).toBeGreaterThan(0);
+    // every observed value is a real declared priority (grounded against the schema enum)
+    for (const priority of OBSERVED_PRIORITIES) {
+      expect(declared).toContain(priority);
+    }
+    // the two declared priorities no strand carries, named as literals
+    expect(OBSERVED_PRIORITIES).not.toContain('improving_attendance');
+    expect(OBSERVED_PRIORITIES).not.toContain('teacher_retention');
+  });
+
+  it('reports no value the declared-vs-observed divergence marks unobserved', () => {
+    for (const phase of declaredVsObservedDivergence.phase) {
+      expect(OBSERVED_PHASES).not.toContain(phase);
+    }
+    for (const keyStage of declaredVsObservedDivergence.keyStage) {
+      expect(OBSERVED_KEY_STAGES).not.toContain(keyStage);
+    }
+    for (const priority of declaredVsObservedDivergence.priority) {
+      expect(OBSERVED_PRIORITIES).not.toContain(priority);
     }
   });
 });

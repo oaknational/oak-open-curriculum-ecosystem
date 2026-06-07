@@ -69,11 +69,14 @@ export type EefStrandById = {
 };
 
 /**
- * The single runtime set of every real strand `id`, derived once from the
- * snapshot. Backs {@link isValidStrandKey}; never hand-maintained.
+ * The single runtime list of every real strand `id`, in corpus order, derived
+ * once from the snapshot — the finite domain the D6 MCP input schema enumerates
+ * AND the membership source backing {@link isValidStrandKey}. Never
+ * hand-maintained: add or remove a strand in the snapshot and this tracks it.
+ * {@link EefStrandId}-typed because the source is `as const` — no widening.
  */
-const STRAND_IDS: ReadonlySet<string> = new Set(
-  EEF_TOOLKIT_DATA.strands.map((strand) => strand.id),
+export const EEF_STRAND_IDS: readonly EefStrandId[] = EEF_TOOLKIT_DATA.strands.map(
+  (strand) => strand.id,
 );
 
 /**
@@ -87,15 +90,16 @@ const STRAND_IDS: ReadonlySet<string> = new Set(
  * over the fixed key space and cannot miss.
  *
  * This is a type *predicate* (`value is EefStrandId`), not a type assertion:
- * the compiler trusts the return, and the runtime `STRAND_IDS.has` check makes
- * the claim sound (ADR-153 house pattern).
+ * the compiler trusts the return, and the runtime membership check over
+ * {@link EEF_STRAND_IDS} (strict equality against the exactly-typed ids — no
+ * widening to `string`) makes the claim sound (ADR-153 house pattern).
  *
  * @param value - Any value, typically a key reaching this boundary from a JS
  *   edge or an external request.
  * @returns `true` iff `value` is a string that is a real corpus strand id.
  */
 export function isValidStrandKey(value: unknown): value is EefStrandId {
-  return typeof value === 'string' && STRAND_IDS.has(value);
+  return EEF_STRAND_IDS.some((id) => id === value);
 }
 
 /**

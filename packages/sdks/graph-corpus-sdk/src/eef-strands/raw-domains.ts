@@ -75,14 +75,14 @@ export interface DeclaredVsObservedDivergence {
   readonly priority: readonly DeclaredPriority[];
 }
 
-function deriveObservedDomains(): {
-  readonly phases: ReadonlySet<string>;
-  readonly keyStages: ReadonlySet<string>;
-  readonly priorities: ReadonlySet<string>;
+function deriveObservedAxisArrays(): {
+  readonly phases: readonly ObservedPhase[];
+  readonly keyStages: readonly ObservedKeyStage[];
+  readonly priorities: readonly ObservedPriority[];
 } {
-  const phases = new Set<string>();
-  const keyStages = new Set<string>();
-  const priorities = new Set<string>();
+  const phases = new Set<ObservedPhase>();
+  const keyStages = new Set<ObservedKeyStage>();
+  const priorities = new Set<ObservedPriority>();
   for (const strand of EEF_TOOLKIT_DATA.strands) {
     if (!('school_context_relevance' in strand)) {
       continue;
@@ -98,10 +98,34 @@ function deriveObservedDomains(): {
       priorities.add(priority);
     }
   }
-  return { phases, keyStages, priorities };
+  return { phases: [...phases], keyStages: [...keyStages], priorities: [...priorities] };
 }
 
-const OBSERVED = deriveObservedDomains();
+const observedAxisArrays = deriveObservedAxisArrays();
+
+/**
+ * The distinct observed values per axis, in first-seen corpus order — the finite
+ * domains the D6 MCP input schema enumerates for `evidence-for-move` selectors.
+ * "Observed" = values some strand actually carries (equivalently, the declared
+ * enum minus {@link declaredVsObservedDivergence}); never hand-maintained.
+ */
+export const OBSERVED_PHASES: readonly ObservedPhase[] = observedAxisArrays.phases;
+export const OBSERVED_KEY_STAGES: readonly ObservedKeyStage[] = observedAxisArrays.keyStages;
+export const OBSERVED_PRIORITIES: readonly ObservedPriority[] = observedAxisArrays.priorities;
+
+/**
+ * Membership sets over the observed arrays, used to compute
+ * {@link declaredVsObservedDivergence} (a declared value is divergent iff it is
+ * not in the observed set). Typed by the DECLARED unions — the exact domain of the
+ * `.has()` query, which asks of each *declared* value whether it is observed. The
+ * observed values are a subset of the declared ones, so the observed arrays
+ * populate these sets with no widening (and no `string`).
+ */
+const OBSERVED = {
+  phases: new Set<DeclaredPhase>(OBSERVED_PHASES),
+  keyStages: new Set<DeclaredKeyStage>(OBSERVED_KEY_STAGES),
+  priorities: new Set<DeclaredPriority>(OBSERVED_PRIORITIES),
+};
 
 /**
  * Declared enum values that no strand carries, computed by comparing each

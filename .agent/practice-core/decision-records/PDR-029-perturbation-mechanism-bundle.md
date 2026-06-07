@@ -38,6 +38,21 @@ accumulation signal).
 
 ## Amendment Log
 
+- **2026-06-07 — metacognition directive sharpened: friction-handling clause
+  (Hidden Prowling Owl / claude / claude-opus-4-8; owner-directed graduation of a
+  session lesson).** The metacognition directive gains a **"Friction Is Rarely the
+  Thing It First Looks Like"** section. Friction is rarely the thing it first
+  appears; the reflex is to *inflate* it in one of two opposite directions —
+  descend into mechanism, or escalate into a decision — and the cure is to trace
+  it to its actual (usually trivial) cause via the bridge question before doing
+  either, then route by the three post-trace outcomes (trivial gap / genuine
+  divergence / genuine decision), reserving surfacing for the latter two. This is
+  a **within-frame elaboration of the action-to-impact bridge** already ratified
+  here — it generalises the friction-as-verdict cue (the divergence case) to the
+  full picture — not a new mechanism and not a new always-applied rule. Sourced
+  from a retrospective metacognition pass after an escalate-a-non-fork failure;
+  portable by construction (no repo paths in the clause body).
+
 - **2026-05-29 — fourth clause added to the A.1 rule (Furnace Melting Bellows
   / claude / claude-opus-4-8; Lane E PDR-058 optionality graduation,
   owner-reviewed).** The `plan-body-first-principles-check` rule has gained a

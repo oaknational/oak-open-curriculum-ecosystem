@@ -31,8 +31,7 @@ Our generated type predicates provide basic runtime validation:
 
 ```typescript
 export function isKeyStage(value: string): value is KeyStage {
-  const keyStages: readonly string[] = KEY_STAGES;
-  return keyStages.includes(value);
+  return KEY_STAGES.some((keyStage) => keyStage === value);
 }
 ```
 
