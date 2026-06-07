@@ -77,20 +77,55 @@ export function findBlockedPattern(
 }
 
 /**
+ * The default reappraisal direction surfaced when a concept-bearing entry has no
+ * `reappraisal` of its own. The load-time schema leaves `reappraisal` optional
+ * so a missing value never fails the guard closed; the
+ * `validate-policy-reappraisal` repo validator enforces presence on object
+ * entries at commit-time, so this default is a safety net, not the intended
+ * path.
+ */
+const DEFAULT_BASH_REAPPRAISAL =
+  'Step back and reappraise whether this operation is the right move before proceeding.';
+
+/**
+ * Build the deny reason for a matched Bash pattern.
+ *
+ * When the entry names the `concept` the command is a fingerprint of, the reason
+ * TEACHES: it carries the positive `reappraisal` direction (defaulted if absent)
+ * and steers the agent away from swapping in a sibling destructive command,
+ * rather than only refusing. A concept-less entry (the legacy/bare form) falls
+ * back to the plain matched-pattern reason, with the citation appended when
+ * present.
+ */
+function buildBlockedPatternReason(entry: BlockedPatternEntry): string {
+  if (entry.concept === undefined) {
+    const baseReason = `Blocked by repo hook policy: matched dangerous pattern "${entry.pattern}".`;
+    return entry.citation === undefined ? baseReason : `${baseReason} Citation: ${entry.citation}.`;
+  }
+  const reappraisal = entry.reappraisal ?? DEFAULT_BASH_REAPPRAISAL;
+  const citation = entry.citation === undefined ? '' : ` Citation: ${entry.citation}.`;
+  return (
+    `Blocked by repo hook policy: "${entry.pattern}" is a ${entry.concept} operation. ` +
+    `${reappraisal} The block signals a concept to reappraise, not a command to swap for a ` +
+    `sibling — do not reach for an equivalent destructive command to bypass it.${citation}`
+  );
+}
+
+/**
  * Build the structured deny payload Claude expects for `PreToolUse`.
  *
- * When the entry carries a citation, it is appended to the reason so the
- * doctrinal anchor travels to the agent at the moment of denial.
+ * The reason teaches when the entry carries a concept (positive reappraisal
+ * direction plus citation) and otherwise falls back to the plain matched-pattern
+ * reason. The concept framing exists because a block that only says "no" leaves
+ * the agent to reach for a sibling destructive command rather than reappraise
+ * the operation (PDR-044 §Innate immunity, as amended).
  */
 export function buildPreToolUseDenyResponse(entry: BlockedPatternEntry): PreToolUseDenyResponse {
-  const baseReason = `Blocked by repo hook policy: matched dangerous pattern "${entry.pattern}".`;
-  const reason =
-    entry.citation === undefined ? baseReason : `${baseReason} Citation: ${entry.citation}.`;
   return {
     hookSpecificOutput: {
       hookEventName: PRE_TOOL_USE_EVENT_NAME,
       permissionDecision: 'deny',
-      permissionDecisionReason: reason,
+      permissionDecisionReason: buildBlockedPatternReason(entry),
     },
   };
 }

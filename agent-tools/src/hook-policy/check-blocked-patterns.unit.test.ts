@@ -177,4 +177,35 @@ describe('buildPreToolUseDenyResponse', () => {
       },
     });
   });
+
+  it('frames the block as a concept to reappraise when the entry carries a concept', () => {
+    const response = buildPreToolUseDenyResponse({
+      pattern: 'git reset --hard',
+      concept: 'history-destruction',
+      reappraisal:
+        'Preserve in-flight work; never use git to remove work — make forward-going filesystem changes instead.',
+      citation: '.agent/rules/never-use-git-to-remove-work.md',
+    });
+
+    expect(response.hookSpecificOutput.permissionDecision).toBe('deny');
+    const reason = response.hookSpecificOutput.permissionDecisionReason;
+    // The reason must TEACH, not only refuse: name the pattern and its concept,
+    // carry the positive reappraisal direction and the citation, and steer the
+    // agent away from swapping in a sibling destructive command.
+    expect(reason).toContain('git reset --hard');
+    expect(reason).toContain('history-destruction');
+    expect(reason).toContain('never use git to remove work');
+    expect(reason).toContain('not a command to swap for a sibling');
+    expect(reason).toContain('Citation: .agent/rules/never-use-git-to-remove-work.md');
+  });
+
+  it('falls back to a default reappraisal when a concept entry omits its own', () => {
+    const reason = buildPreToolUseDenyResponse({
+      pattern: 'git clean -fd',
+      concept: 'worktree-destruction',
+    }).hookSpecificOutput.permissionDecisionReason;
+
+    expect(reason).toContain('worktree-destruction');
+    expect(reason).toContain('Step back and reappraise');
+  });
 });

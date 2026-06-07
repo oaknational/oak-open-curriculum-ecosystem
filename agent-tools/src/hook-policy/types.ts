@@ -148,20 +148,38 @@ export interface RunPreToolUseContentGuardOptions {
 
 /**
  * Zod schema for the object arm of a blocked Bash-command policy entry: a
- * token-sequence `pattern` plus an optional doctrinal `citation` surfaced in
- * the deny payload. Module-internal composition helper (not part of the public
- * surface): {@link BlockedPatternEntry} is derived from it via `z.infer`, and
- * the exported {@link RawBlockedPatternSchema} union composes it with the
- * bare-string arm. `.readonly()` derives the readonly contract on the entry.
+ * token-sequence `pattern` plus optional doctrine metadata surfaced in the deny
+ * payload —
+ * - `citation` — the doctrinal anchor (the rule, principle, ADR, or PDR);
+ * - `concept` — the pattern family the command is a fingerprint of (e.g.
+ *   `history-destruction`), so the deny message frames a concept to reappraise;
+ * - `reappraisal` — the positive direction the firing signals, so the block
+ *   teaches the agent to step back and re-assess the concept rather than reach
+ *   for a sibling destructive command to bypass it.
+ *
+ * Module-internal composition helper (not part of the public surface):
+ * {@link BlockedPatternEntry} is derived from it via `z.infer`, and the exported
+ * {@link RawBlockedPatternSchema} union composes it with the bare-string arm.
+ * `concept` and `reappraisal` are optional at this load-time trust boundary so a
+ * missing value never fails the guard closed (which would brick the worktree on
+ * a stale-dist/new-policy mismatch); the `validate-policy-reappraisal` repo
+ * validator enforces their presence on object entries at commit-time, and the
+ * deny builder defaults a generic reappraisal if one is ever absent.
+ * `.readonly()` derives the readonly contract on the entry.
  */
 const BlockedPatternEntrySchema = z
-  .object({ pattern: z.string(), citation: z.string().optional() })
+  .object({
+    pattern: z.string(),
+    citation: z.string().optional(),
+    concept: z.string().optional(),
+    reappraisal: z.string().optional(),
+  })
   .readonly();
 
 /**
- * A normalised blocked Bash-command pattern: a token-sequence pattern plus an
- * optional doctrinal citation surfaced in the deny payload. Derived from the
- * internal `BlockedPatternEntrySchema`.
+ * A normalised blocked Bash-command pattern: a token-sequence pattern plus
+ * optional doctrine metadata (`citation`, `concept`, `reappraisal`) surfaced in
+ * the deny payload. Derived from the internal `BlockedPatternEntrySchema`.
  */
 export type BlockedPatternEntry = z.infer<typeof BlockedPatternEntrySchema>;
 
@@ -169,17 +187,19 @@ export type BlockedPatternEntry = z.infer<typeof BlockedPatternEntrySchema>;
  * Zod schema for a raw blocked-pattern policy entry, used at the
  * `.agent/hooks/policy.json` trust boundary. A raw entry may be a bare pattern
  * string (legacy) or an object carrying a required `pattern` and optional
- * `citation`. Validates the shape without transforming it, so the parsed array
- * preserves the policy file's original entry forms; entries are normalised to
- * {@link BlockedPatternEntry} only at match time. {@link RawBlockedPattern} is
- * derived from this schema via `z.infer`.
+ * `citation`, `concept`, and `reappraisal`. Validates the shape without
+ * transforming it, so the parsed array preserves the policy file's original
+ * entry forms; entries are normalised to {@link BlockedPatternEntry} only at
+ * match time. {@link RawBlockedPattern} is derived from this schema via
+ * `z.infer`.
  */
 export const RawBlockedPatternSchema = z.union([z.string(), BlockedPatternEntrySchema]);
 
 /**
  * A raw blocked-pattern policy entry. Derived from
  * {@link RawBlockedPatternSchema}: a bare pattern string (legacy) or an object
- * carrying a required `pattern` and optional `citation`.
+ * carrying a required `pattern` and optional `citation`, `concept`, and
+ * `reappraisal`.
  */
 export type RawBlockedPattern = z.infer<typeof RawBlockedPatternSchema>;
 
