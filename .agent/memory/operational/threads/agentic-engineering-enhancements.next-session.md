@@ -26,7 +26,7 @@ cure for the recurring "reword past the block" failure:
 
 **APPROVED follow-on work (owner-approved 2026-06-07) — execute in THIS fresh session.** The
 owner approved all the work deferred from the landing session; it was held out only for safety,
-not doubt. Three items, all routing to EXISTING homes — do NOT author a new plan:
+not doubt. Four items — items 1–3 route to existing homes, item 4 is a direct code cleanup; do NOT author a new plan for any:
 
 1. **Bash-side reappraisal** — extend the discipline to `preToolUse.blocked_patterns` (the Bash
    command guard) + its builder in `agent-tools/src/hook-policy/blocked-patterns.ts`. The
@@ -49,6 +49,16 @@ not doubt. Three items, all routing to EXISTING homes — do NOT author a new pl
    instance); `planning-specialist-capability` (execution-grounding readiness check);
    `reviewer-gateway-upgrade` / `architectural-enforcement-adoption` + a
    `.agent/memory/active/patterns/` record for the aggregated-tool / graph-tool-family pattern.
+4. **`types.ts` schema-first consolidation** (type-expert backlog, owner-approved 2026-06-07) —
+   `agent-tools/src/hook-policy/types.ts` declares each shape twice: a hand-written `interface`
+   plus a separate Zod schema (`ScopedContentBlockGroup` + `ScopedContentBlockGroupSchema`;
+   `PreToolUseDenyResponse` + `…Schema`; `BlockedPatternEntry` + `RawBlockedPatternSchema`), with
+   no `z.infer` link — a drift hazard (a field added to one half compiles clean until a consumer
+   trips). Convert all three pairs to `export type X = z.infer<typeof XSchema>` in one reviewed
+   pass; settle the `readonly` stance once (`z.readonly()` preserves the current readonly
+   contract); relocate the interface TSDoc onto the schemas. Zero live defect today (tsc clean) —
+   schema-first hygiene per the repo's types-flow-from-schema doctrine. Do it as its own pass with
+   a `type-expert` review, not bolted onto the other items.
 
 **Disciplines carried (lessons applied this session):**
 
@@ -59,18 +69,22 @@ not doubt. Three items, all routing to EXISTING homes — do NOT author a new pl
 - After any schema/API reshape, run the FULL workspace test suite + `type-check` (not a narrow
   `vitest src/<dir>/` scope) BEFORE authoring tests; glob for existing `*.test.ts` first — the
   canonical content-guard tests live in `tests/hook-policy/`, not `src/hook-policy/`.
+- Run the FULL pre-commit gate (`pnpm check`, or at least the husky set incl. `knip` +
+  `depcruise`) before declaring commit-ready — NOT a hand-picked subset. This session's slice
+  was knip-RED at commit: a new validator file is a `knip.config.ts` **entry point** (it is
+  invoked via a package.json script, not imported), and an unused export must be de-exported.
+  Mirror the sibling validators' knip registration when the cross-surface work adds a validator.
 - Stage by explicit pathspec.
 
 **Entry points:** the `pending-graduations.md` 2026-06-07 capture; PDR-044 §2026-06-07
 amendment; `.agent/hooks/README.md` §"Content guard: concept-grouped doctrine blocks"; the
 `validate-policy-reappraisal` validator as the enforcement template to extend.
 
-**Commit state at handoff:** L1+L2 is complete + green in the WORKING TREE, **uncommitted**, as
-a clean slice (the files listed above, all under `agent-tools/`, `.agent/hooks/`, `PDR-044`,
-`pending-graduations.md`, both `package.json`). A parallel agent's owner-directed session-close
-was concurrently editing this tree (its own staged docs + napkin + `active-claims.json`; my
-claim was cleared). Commit my slice by **explicit pathspec**; do not bundle the peer's staged
-files.
+**Commit state:** L1+L2 landed at commit `b271c2dd` — gate-green through the husky pre-commit
+hook (build, type-check, lint, test, knip, depcruise, repo-validators). The committer also
+registered the new validator as a `knip.config.ts` entry point and de-exported an internal-only
+type (the originating tree was knip-red — see the knip discipline above). The four follow-on
+items above are this thread's next session; nothing from L1+L2 is outstanding.
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
