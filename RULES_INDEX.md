@@ -120,6 +120,7 @@ without proportional value.
 | `.agent/rules/plan-body-first-principles-check.md`                         | always-on      | —                                                                                                |
 | `.agent/rules/practice-core-portability.md`                                | always-on      | —                                                                                                |
 | `.agent/rules/pre-execution-code-expert-review-per-loop-cycle.md`          | always-on      | —                                                                                                |
+| `.agent/rules/precedence-is-not-approval.md`                               | always-on      | —                                                                                                |
 | `.agent/rules/present-verdicts-not-menus.md`                               | always-on      | —                                                                                                |
 | `.agent/rules/pre-merge-divergence-analysis.md`                            | trigger-loaded | Pre-merge of two diverged feature branches (100+ files, 10+ conflicts, core interface refactor)  |
 | `.agent/rules/re-apply-first-question-at-elaboration-boundaries.md`        | always-on      | —                                                                                                |
