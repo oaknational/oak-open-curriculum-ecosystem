@@ -13,9 +13,9 @@ merge_class: index-narrative-tables
 
 - **Branch**: `feat/graph-tooling-tidyup` — **ahead 10 of origin, UNPUSHED** (re-derive
   first-hand: `git rev-list --left-right --count @{u}...HEAD`).
-- **Controlling plan**:
-  [`eef-d6-execution.plan.md`](../../../plans/sector-engagement/eef/current/eef-d6-execution.plan.md)
-  (D6 done) + master `eef-graph-tool-completion.plan.md` (D7 is the open todo).
+- **Controlling plan**: master
+  [`eef-graph-tool-completion.plan.md`](../../../plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md)
+  — **D0–D7 ALL COMPLETE** (D7 owner-marked 2026-06-08); the EEF build arc is delivered.
 - **D6 COMPLETE and the EEF surface is LIVE BY DEFAULT** (2026-06-08): c4
   `eef://interpretation` resource + c5 `adapt-lesson` prompt landed (`dcf46e6f`), with the
   tool-prefix / dual-attribution / WCAG guidance added (`6913aa47`); the flag is flipped to
@@ -27,10 +27,15 @@ merge_class: index-narrative-tables
   banner below. Real output confirmed: `get-eef-evidence` returns the evidence envelope with
   attribution pass-through; the resource + prompt render; the no-selector error path returns
   `isError`.
-- **Next safe step (owner-directed): exercise the running MCP app via the standard MCP tools**
-  (the recipe below), then complete **D7** — the teacher-value round trip (the go-live flag
-  mechanism is done; what remains is the delivered-value proof: an LLM-mediated round trip
-  verified against independent ground truth per the master `d7-teacher-value-round-trip` todo).
+- **D7 COMPLETE (owner-marked 2026-06-08).** The surface is engineering-complete + live-by-default;
+  potential value was demonstrated this session via a real LLM-mediated round trip (multi-signal
+  Oak↔EEF, verbatim corpus values, honest insufficiency, no teacher-replacing language) on the
+  running server AND via the MCP Inspector CLI. Owner reshaped the value-proof: value is proven by
+  **release-and-observe**, not a codified test (delivered-value owned by
+  [`eef-outcome-evaluation-infrastructure.plan.md`](../../../plans/sector-engagement/eef/future/eef-outcome-evaluation-infrastructure.plan.md)).
+- **Next safe step**: session handoff + docs consolidation, then **merge the PR**. Marking D7 green
+  fires the [`graph-tools-value-redesign`](../../../plans/connecting-oak-resources/knowledge-graph-integration/future/graph-tools-value-redesign.plan.md)
+  promotion trigger (EEF D6 + D7 green) — `get-keywords` was added to that plan this session.
 - **Acceptance bar carried**: every tool/resource/prompt is real graph-derived logic with
   tests, or it is absent; strict types (no widening on finite-domain `z.enum`); source
   attribution never filtered; no `--no-verify`.
