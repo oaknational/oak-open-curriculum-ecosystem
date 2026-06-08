@@ -44,18 +44,20 @@ surface.
   this §Current State curated. **Residual signals (reported, not chased):** a few small
   paused/retired records keep minor link-dominated or barely-over width. **Next safe step: none
   on this lane.**
-- **EEF `get-eef-evidence` — D6 c1–c3 + c6 tool-gating LANDED; c4/c5 REMAIN (latest 2026-06-08,
-  Lanternlit Shrouding Raven).** Vendor-type-boundary decided +
-  [ADR-193](../../../docs/architecture/architectural-decisions/193-system-vendor-type-boundary-membrane.md):
-  strict domain types hold to a per-primitive egress function; the vendor's
-  `Record<string, unknown>` is the external contract at the membrane only. **DEAD — do NOT
-  re-explore (ADR-193 §Alternatives): carrier fix / index signature / preserve-to-`registerTool` /
-  generic-spine.** **c4/c5 need NO egress membrane** (resource crosses as `text`, prompt as
-  `PromptMessage[]` — neither originates from a strict domain type). Branch
-  `feat/graph-tooling-tidyup` is **clean + pushed at `934d5c21`**. **Next safe step: c4 resource
-  → c5 prompt (SDK-side, no egress fns) → co-gate in `registerHandlers` → full `pnpm check` green
-  → one commit by explicit pathspec, no `--no-verify` → D6 done → D7** — the authoritative,
-  self-contained banner is the [`eef` record](threads/eef.next-session.md).
+- **EEF `get-eef-evidence` — D6 COMPLETE; the surface is LIVE BY DEFAULT and EXERCISED
+  (2026-06-08, Briny Charting Lagoon).** c4 `eef://interpretation` resource + c5 `adapt-lesson`
+  prompt landed (`dcf46e6f`) + tool-prefix/dual-attribution/WCAG guidance (`6913aa47`); the flag
+  flipped to the **kill-switch posture — default ON, `OAK_CURRICULUM_MCP_EEF_ENABLED=false`
+  disables** — via a `feature-flags.ts` engine (`d3109d7c`). Per owner doctrine the flag
+  **engine** is unit-tested, not per-flag configuration. The tool/resource/prompt were
+  **exercised live over MCP HTTP** (no-auth dev server on port 3333): real evidence, attribution
+  pass-through (authors + URLs), the markdown guide, the prompt, and the no-selector `isError`
+  path all confirmed. ADR-193 boundary holds (c4/c5 needed no egress; carrier-fix / index-sig /
+  generic-spine remain DEAD). Branch `feat/graph-tooling-tidyup` is **ahead 10 of origin,
+  UNPUSHED**. **Next safe step (owner-directed): exercise the running app via the standard MCP
+  tools — the EXERCISE RECIPE banner in the [`eef` record](threads/eef.next-session.md) — then
+  D7, the teacher-value round-trip proof (the go-live flag mechanism is done; the delivered-value
+  proof remains).**
 - **MCP test estate + observability sinks plans → both `🟢 DECISION-COMPLETE`; execution
   owner-scheduled.**
   [`unified-mcp-server-test-harness.plan.md`](../../plans/sdk-and-mcp-enhancements/current/unified-mcp-server-test-harness.plan.md)
@@ -77,7 +79,7 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Lanternlit Shrouding Raven / c4-c5-reflection-and-attribution-fix / 2026-06-08 (prior: Luminous Drifting Dawn c6-tool-gating-fix 2026-06-08, Evergreen Blossoming Copse adr-193-vendor-boundary-and-egress-membrane 2026-06-08, Pelagic Charting Rudder c1-c3-authoring-and-strict-type-flow 2026-06-07, Hidden Prowling Owl c1-finite-domain-prereq-and-type-widening-doctrine 2026-06-07, Arboreal Shedding Canopy d6-reshape-and-phase-e-handoff 2026-06-07, Moonlit Orbiting Moon d6-execution-reshaped 2026-06-07, Zephyrous Kiting Squall d6-readiness-regrounding 2026-06-06, Floating Darting Cloud d7-golive-plan-edit 2026-06-06, Dusky Dimming Candle author-d6-execution-plan 2026-06-06, Masked Creeping Lantern eef-deep-review-resolutions-adr191 2026-06-05, Dim Dimming Threshold eef-d5-execution 2026-06-05, Prismatic Twinkling Planet eef-d5-fresh-dual-review 2026-06-04, Windward Gliding Squall eef-d5-plan-authoring 2026-06-04, Shadowed Creeping Secret eef-d4-ratify 2026-06-04, Burnished Glowing Spark 2026-06-04, Lacustrine Swimming Beacon 2026-06-03, Seaworthy Swimming Sextant 2026-06-03, Galactic Glowing Prism + Opalescent Cascading Planet + Stellar Waning Planet + Silvered Lurking Mask 2026-06-02) |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Briny Charting Lagoon / d6-completion-attribution-flag-default-on-and-live-exercise / 2026-06-08 (prior: Lanternlit Shrouding Raven c4-c5-reflection-and-attribution-fix 2026-06-08, Luminous Drifting Dawn c6-tool-gating-fix 2026-06-08, Evergreen Blossoming Copse adr-193-vendor-boundary-and-egress-membrane 2026-06-08, Pelagic Charting Rudder c1-c3-authoring-and-strict-type-flow 2026-06-07, Hidden Prowling Owl c1-finite-domain-prereq-and-type-widening-doctrine 2026-06-07, Arboreal Shedding Canopy d6-reshape-and-phase-e-handoff 2026-06-07, Moonlit Orbiting Moon d6-execution-reshaped 2026-06-07, Zephyrous Kiting Squall d6-readiness-regrounding 2026-06-06, Floating Darting Cloud d7-golive-plan-edit 2026-06-06, Dusky Dimming Candle author-d6-execution-plan 2026-06-06, Masked Creeping Lantern eef-deep-review-resolutions-adr191 2026-06-05, Dim Dimming Threshold eef-d5-execution 2026-06-05, Prismatic Twinkling Planet eef-d5-fresh-dual-review 2026-06-04, Windward Gliding Squall eef-d5-plan-authoring 2026-06-04, Shadowed Creeping Secret eef-d4-ratify 2026-06-04, Burnished Glowing Spark 2026-06-04, Lacustrine Swimming Beacon 2026-06-03, Seaworthy Swimming Sextant 2026-06-03, Galactic Glowing Prism + Opalescent Cascading Planet + Stellar Waning Planet + Silvered Lurking Mask 2026-06-02) |
 | `oak-kg-ontology-planning-review` | Plan the `oak-kg`/ontology work, starting with a deep review of the Oak Curriculum Ontology repo (separate concern from the bulk-derived graph redesign) | [record][oak-kg-ontology] | claude / Opus 4.8 / Twilit Cascading Supernova / thread-opener-brief-only / 2026-06-04 — **opened, not started; deep review is a fresh session** |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Blustery Lifting Gale / skills-taxonomy-and-distribution / 2026-06-03 (prior: Umbral Whispering Silhouette 2026-06-01) |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 / Coppery Crackling Crucible / pending-graduations-drain-and-pdr-091 / 2026-06-08 (prior: Cosmic Illuminating Planet dedicated-continuity-surface-consolidation 2026-06-08, Lofty Spiralling Plume continuity-surface-fitness-and-prose-awareness 2026-06-08, Briny Plumbing Beacon feedback-mechanism-follow-ons 2026-06-07, Eclipsed Watching Veil items-4+1 2026-06-07, Glittering Weaving Comet 2026-06-07, Volcanic Blazing Magma 2026-06-06, Lanternlit Passing Mask 2026-06-05, Hidden Hiding Dusk 2026-06-04, Arboreal Sprouting Branch 2026-06-04, Opalescent Illuminating Prism 2026-06-03, Lacustrine Swimming Beacon, Ashen Burning Magma, Solar Glowing Meteor, Stratospheric Buffeting Breeze, Lofty Sweeping Falcon, Shaded Veiling Mirror) |
@@ -158,14 +160,14 @@ licensing guardrail. See the
 
 ### EEF Graph-Tooling Rebuild
 
-**NEXT SAFE STEP (2026-06-07): RESUME D6 c1 (the MCP-layer wiring)** — there is
-**no c0**; G0 is re-confirmed; the c1 finite-domain prerequisite (graph-corpus-sdk
-runtime constants) landed strict-typed this session (Hidden Prowling Owl). Resume
-the atomic `c1`+`c2`+`c3` (+`c6`) per
-[`eef-d6-execution.plan.md`](../../plans/sector-engagement/eef/current/eef-d6-execution.plan.md)
-and the `eef` next-session banner (which carries the MCP-wiring steps, the
-corrected graph-corpus-sdk constraint, and the strict no-widening requirement for
-c2's `z.enum`).
+**NEXT SAFE STEP (2026-06-08): D6 COMPLETE; the EEF surface is LIVE BY DEFAULT (kill-switch
+flag, default ON) and was EXERCISED live over MCP HTTP this session (Briny Charting Lagoon).**
+The owner-directed next step is to **exercise the running app via the standard MCP tools** —
+the EXERCISE RECIPE banner in the [`eef` record](threads/eef.next-session.md) carries the
+server-start command (port 3333, no-auth) and the four working JSON-RPC calls — then **D7**,
+the teacher-value round-trip proof (the go-live flag mechanism is done; the delivered-value
+proof against independent ground truth remains, per the master `d7-teacher-value-round-trip`
+todo). The numbered history below is retained for context.
 Open execution-time items (not blockers — G0/TDD surface them) + the full verdict
 are in the `eef` next-session record banner. **D5 LANDED green as one commit (`2e9021ff`; Dim Dimming
 Threshold, 2026-06-05)** — graph-core generic query layer + graph-native EEF view

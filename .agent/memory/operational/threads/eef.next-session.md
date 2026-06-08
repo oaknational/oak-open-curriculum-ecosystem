@@ -11,22 +11,56 @@ merge_class: index-narrative-tables
 
 ## Current Continuation
 
-- **Branch**: `feat/graph-tooling-tidyup` — re-derive git first-hand.
+- **Branch**: `feat/graph-tooling-tidyup` — **ahead 10 of origin, UNPUSHED** (re-derive
+  first-hand: `git rev-list --left-right --count @{u}...HEAD`).
 - **Controlling plan**:
-  [`eef-d6-execution.plan.md`](../../../plans/sector-engagement/eef/current/eef-d6-execution.plan.md).
-- **D6 IS COMPLETE** (2026-06-08, Briny Charting Lagoon): **c4** (`eef://interpretation`
-  `text/markdown` resource) and **c5** (`adapt-lesson` prompt) authored SDK-side in
-  `oak-curriculum-sdk/src/mcp/` (no egress functions — ADR-193 §Scope: a `string` / a
-  `PromptMessage[]` do not originate from a strict domain type), co-gated app-side behind
-  `OAK_CURRICULUM_MCP_EEF_ENABLED`. The c3 provenance was corrected to pass the full corpus
-  `source` through (authors + URLs retained — see Standing Decisions). c1–c3 + c6 tool-gating
-  landed earlier. All workspace gates green; the c4 strand index carries each strand's
-  `eef_url`.
-- **Next safe step: D7** — the teacher-value round trip (free-form lesson context → finite EEF
-  tool inputs → research-grounded options, caveats + attribution intact), per the master plan.
+  [`eef-d6-execution.plan.md`](../../../plans/sector-engagement/eef/current/eef-d6-execution.plan.md)
+  (D6 done) + master `eef-graph-tool-completion.plan.md` (D7 is the open todo).
+- **D6 COMPLETE and the EEF surface is LIVE BY DEFAULT** (2026-06-08): c4
+  `eef://interpretation` resource + c5 `adapt-lesson` prompt landed (`dcf46e6f`), with the
+  tool-prefix / dual-attribution / WCAG guidance added (`6913aa47`); the flag is flipped to
+  the **kill-switch posture** — default ON, `OAK_CURRICULUM_MCP_EEF_ENABLED=false` disables —
+  via a `feature-flags.ts` engine (`d3109d7c`). c3 provenance passes the full corpus `source`
+  through (authors + URLs retained — Standing Decisions).
+- **EXERCISED LIVE this session** (Briny Charting Lagoon): the no-auth dev server was started
+  and all four surfaces called over the real MCP HTTP protocol — see the **EXERCISE RECIPE**
+  banner below. Real output confirmed: `get-eef-evidence` returns the evidence envelope with
+  attribution pass-through; the resource + prompt render; the no-selector error path returns
+  `isError`.
+- **Next safe step (owner-directed): exercise the running MCP app via the standard MCP tools**
+  (the recipe below), then complete **D7** — the teacher-value round trip (the go-live flag
+  mechanism is done; what remains is the delivered-value proof: an LLM-mediated round trip
+  verified against independent ground truth per the master `d7-teacher-value-round-trip` todo).
 - **Acceptance bar carried**: every tool/resource/prompt is real graph-derived logic with
   tests, or it is absent; strict types (no widening on finite-domain `z.enum`); source
   attribution never filtered; no `--no-verify`.
+
+> **🤝 EXERCISE RECIPE — verified live 2026-06-08 (Briny Charting Lagoon). The next session
+> exercises the running app via the standard MCP tools; this is the grounded path.**
+>
+> **Start the server (no auth, local):**
+> `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http dev:observe:noauth`
+> → listens on **port 3333**, `DANGEROUSLY_DISABLE_AUTH=true`, MCP endpoint
+> `http://localhost:3333/mcp`. (Root `pnpm app:mcp` is the WITH-auth variant; `qa:oauth` runs
+> the built server with auth.) The EEF flag is unset in dev env → kill-switch → **ON**.
+>
+> **Call shape** (streamable HTTP, stateless — no initialize handshake needed): POST JSON-RPC
+> with header `Accept: application/json, text/event-stream`; the reply is SSE — parse the
+> `data:` line (`grep '^data:' | sed 's/^data: //' | jq`).
+>
+> **The four surfaces (all confirmed working):**
+>
+> - `tools/list` → `get-eef-evidence` is present (position ~7).
+> - `tools/call` `get-eef-evidence` `{function:'inspect-strand', strandId:'eef-tl-feedback'}`
+>   → envelope: Feedback +6mo / Very Low / Extensive, `frontier`, full `provenance.source`
+>   (name/url/organisation/**original_authors**), caveats.
+> - `tools/call` `get-eef-evidence` `{function:'evidence-for-move', phase:'primary'}` → axis
+>   query; **no selector → `isError:true`** ("requires at least one selector…").
+> - `resources/read` `{uri:'eef://interpretation'}` → `text/markdown` guide.
+> - `prompts/get` `adapt-lesson` `{topic, yearGroup}` → workflow messages.
+>
+> **Stop:** `lsof -ti:3333 | xargs kill`. Strand ids/axes are the corpus finite domains
+> (`EEF_STRAND_IDS` / observed phase·keyStage·priority); an unknown key → `isError`.
 
 ## Standing Decisions (pointers — the cited homes are authoritative)
 
@@ -129,7 +163,7 @@ session narrative for each is in git history; this table is the durable identity
 | `Evergreen Blossoming Copse` | `claude` | `Opus 4.8` | `3479e1` | `adr-193-vendor-boundary-and-egress-membrane` | 2026-06-08 | 2026-06-08 |
 | `Luminous Drifting Dawn` | `claude` | `Opus 4.8` | `a143b3` | `c6-tool-gating-fix` | 2026-06-08 | 2026-06-08 |
 | `Lanternlit Shrouding Raven` | `claude` | `Opus 4.8` | `7636f9` | `c4-c5-reflection-and-attribution-fix` | 2026-06-08 | 2026-06-08 |
-| `Briny Charting Lagoon` | `claude` | `Opus 4.8` | `4dae1b` | `d6-c4-c5-completion-and-attribution-passthrough-correction` | 2026-06-08 | 2026-06-08 |
+| `Briny Charting Lagoon` | `claude` | `Opus 4.8` | `4dae1b` | `d6-completion-attribution-passthrough-flag-default-on-and-live-exercise` | 2026-06-08 | 2026-06-08 |
 
 ## Cross-Plan and Cross-Thread Links
 

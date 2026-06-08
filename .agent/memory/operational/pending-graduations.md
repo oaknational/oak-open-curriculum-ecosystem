@@ -37,6 +37,37 @@ windowed, backlog, split, or shard-like pending-graduation files. New capture,
 owner-gated items, and unresolved pending-graduation decisions belong here until
 they graduate, duplicate, become stale-withdrawn, or receive owner direction.
 
+## 2026-06-08 capture — Briny Charting Lagoon (EEF go-live: flag-engine + verification doctrine)
+
+- **Test the feature-flag ENGINE, not the configuration.** Owner doctrine (2026-06-08): stop
+  testing a flag's default/posture/gated-surfaces; test the resolution mechanism once. Applied:
+  extracted `feature-flags.ts` (opt-in + kill-switch resolvers), unit-tested generically, removed
+  the per-surface EEF on/off gating tests + the exact prompt-count. This is testing-strategy's
+  "assert effects, not configuration collections" specialised to flags.
+  - `captured-date`: 2026-06-08
+  - `source-surface`: this session's owner direction; `.agent/directives/testing-strategy.md` §Rules
+  - `graduation-target`: testing-strategy.md amendment (feature-flag clause) or an always-applied rule
+  - `trigger-condition`: a second feature flag is added, or a session re-adds flag-config tests
+  - `status`: pending
+- **"Tests pass" ≠ "the feature works" — run the assembled system, don't flag the gap.** Owner:
+  "the tool has never been used" — after I shipped EEF D6 green and repeatedly *flagged* the
+  value-path proof as "open" rather than invoking it. Starting the no-auth server and calling the
+  four MCP surfaces proved it in seconds. A gap I can close this session is not "open", it's undone.
+  - `captured-date`: 2026-06-08
+  - `source-surface`: this session's owner direction; auto-memory `feedback_run_the_thing_dont_flag_the_gap`
+  - `graduation-target`: ADR-150 / PDR-011 amendment (verification edge) or a `run-the-feature-before-done` rule
+  - `trigger-condition`: a second "shipped green but never exercised" instance, or the next handoff revising ADR-150
+  - `status`: pending
+- **Refine "Precedence is NOT approval" (PDR-091) with the forced-by-my-interpretation clause.** A
+  verdict that feels "forced" only because of *my* reading of an owner/org directive (here: the org
+  "no PII" instruction → "omit authors", reversed by the owner) is not forced — it's a question I
+  owe the owner first. Sits between PDR-091 and the no-question-when-forced rule.
+  - `captured-date`: 2026-06-08
+  - `source-surface`: this session's owner correction; auto-memory `feedback_forced_verdict_resting_on_my_interpretation_is_a_question`
+  - `graduation-target`: PDR-091 amendment or the no-question-when-answer-is-forced rule
+  - `trigger-condition`: a second instance of an owner/org-directive interpretation treated as a forced verdict
+  - `status`: pending
+
 ## 2026-06-08 capture — Lofty Spiralling Plume (continuity-surface disposition doctrine)
 
 - **Graduate the continuity-surface disposition doctrine to a PDR.** Owner stated as standing

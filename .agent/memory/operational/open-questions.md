@@ -192,3 +192,38 @@ fitness_content_role: drainable-buffer
   plan work.
 
 [q5-report]: ../../reports/oak-repo-professionalism-engineering-quality-report-2026-06-03.md
+
+## Q-006 — should the in-process mock runtime-config mirror the production EEF default?
+
+- **Captured**: 2026-06-08 (Briny Charting Lagoon / claude / Opus 4.8 / `4dae1b`).
+- **Question**: EEF is now default-ON in production resolution (kill-switch posture). The e2e
+  fixture (`e2e-tests/helpers/test-config.ts`) was flipped to `eefEnabled: true` to mirror that,
+  but the in-process `createMockRuntimeConfig` (`src/test-helpers/auth-error-test-helpers.ts`)
+  still defaults `eefEnabled: false`. Should the in-process mock default also mirror production
+  (true), or stay false as an explicit minimal fixture?
+- **Why it shapes future work**: a mock default that diverges from production can let a real
+  default-on regression pass in-process tests; aligning it is more faithful but has a blast
+  radius across integration tests that build the server via the mock without setting the flag.
+- **Why not answerable cheaply now**: requires assessing every in-process test that uses the mock
+  default and asserts tool/resource counts, to size the change safely.
+- **Owning artefact / discussion home**: the [`eef` thread record](threads/eef.next-session.md);
+  decide alongside D7 work.
+- **Status**: open — trigger is the next EEF/test-harness session touching these fixtures.
+
+## Q-007 — should the e2e list-parity test derive its expected tool set from the SDK enumeration?
+
+- **Captured**: 2026-06-08 (Briny Charting Lagoon / claude / Opus 4.8 / `4dae1b`).
+- **Question**: `server.e2e.test.ts`'s `list_tools parity` asserts against a hardcoded
+  `aggregatedTools` array (I added `get-eef-evidence` to it). Should it instead derive the
+  expected set from `listUniversalTools(...)` so it proves "no projection drift" config-agnostically
+  and stops needing a manual edit per new tool?
+- **Why it shapes future work**: the hardcoded list re-breaks on every tool add/rename and
+  couples the parity test to the live flag configuration; deriving it would make the test prove
+  the mechanism (app registers exactly what the SDK enumerates) rather than a frozen inventory.
+- **Why not answerable cheaply now**: needs care around flag-gated tools (the app skips gated
+  entries when off; the derivation must account for the e2e fixture's flag state) and a check that
+  the derived assertion still catches real projection drift.
+- **Owning artefact / discussion home**: the
+  [`unified-mcp-server-test-harness.plan.md`](../../plans/sdk-and-mcp-enhancements/current/unified-mcp-server-test-harness.plan.md)
+  (WS0 smoke/parity) or the `eef` thread record.
+- **Status**: open — trigger is the next test-harness (WS0/WS3) session.
