@@ -150,9 +150,9 @@ export function registerAllResources(
   registerGraphResource(server, PRIOR_KNOWLEDGE_GRAPH_RESOURCE, getPriorKnowledgeGraphJson);
   registerGraphResource(server, THREAD_PROGRESSIONS_RESOURCE, getThreadProgressionsJson);
   registerGraphResource(server, MISCONCEPTION_GRAPH_RESOURCE, getMisconceptionGraphJson);
-  // EEF is co-gated at registration (OAK_CURRICULUM_MCP_EEF_ENABLED, default OFF):
-  // skip the unreleased resource rather than expose it. The tool and prompt are
-  // gated by the same flag (D6 c6).
+  // EEF is co-gated at registration (OAK_CURRICULUM_MCP_EEF_ENABLED, kill-switch,
+  // default ON): register the resource unless an explicit `=false` disables it. The
+  // tool and prompt are gated by the same flag (D6 c6).
   if (options.eefEnabled) {
     registerEefInterpretationResource(server);
   }

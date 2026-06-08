@@ -191,6 +191,8 @@ mapping them to Oak design tokens where equivalents exist.
 [MCPJam](https://www.mcpjam.com/) is an MCP Apps-compatible host useful
 for visual design review and acceptance testing. Connect it to the local
 server at `http://localhost:3333/mcp` (requires `dev:observe:noauth` running).
+For a tool-by-tool manual walkthrough against any server, see the
+[manual UAT guide](./docs/manual-uat-guide.md).
 
 ## Observability
 
@@ -261,20 +263,17 @@ Vercel production builds have an additional repo-owned gate:
 
 **Important**: This server uses **stateless mode** by default, which is correct for Vercel's serverless architecture. Session state is not maintained between requests. See `docs/vercel-environment-config.md` for detailed explanation of transport modes.
 
-### Smoke-test checklist (post-deploy)
+### Manual test guide (any server)
 
-Manual agent test checklist (replaces retired `pnpm smoke:remote`):
+A rough manual UAT walkthrough — run by an engineer or an AI agent
+against any running server (local dev or a deployed preview/production)
+to gain end-to-end confidence before trusting it. Replaces the retired
+`pnpm smoke:remote` harness (ADR-121).
 
-- [Agent preview test checklist](./docs/agent-preview-test-checklist.md) — what to test, how to run each check, and expected results (Cursor or curl)
-
-Infrastructure checks still worth doing:
-
-- Confirm Node runtime (not Edge) in project settings
-- Verify envs set: `OAK_API_KEY`, `ALLOWED_HOSTS`
-- Curl `/.well-known/oauth-protected-resource` returns resource + auth servers
-- POST `/mcp` without auth returns 401 with `WWW-Authenticate` containing `resource` and `authorization_uri`
-- POST `/mcp` with a valid Bearer token returns 200 and SSE-wrapped JSON-RPC
-- Disallowed or malformed `Host` headers return 403 on OAuth metadata and `/mcp` auth challenge path
+- [Manual UAT guide](./docs/manual-uat-guide.md) — what to test, how to
+  run each check, and expected results (host or curl). Covers the
+  curriculum tools, the graph tools, and the EEF evidence surface, plus
+  the deployed-server infrastructure checks.
 
 ### OAuth discovery
 

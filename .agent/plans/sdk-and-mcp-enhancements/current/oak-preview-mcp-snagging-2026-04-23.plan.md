@@ -245,7 +245,7 @@ but did **not** populate canonical URLs.
 - MCP `search(scope: suggest)` and CLI `search suggest` both benefit without
   MCP-layer special casing.
 - Preview checklist row D5 and sign-off quirk note in
-  [`apps/oak-curriculum-mcp-streamable-http/docs/agent-preview-test-checklist.md`](../../../../apps/oak-curriculum-mcp-streamable-http/docs/agent-preview-test-checklist.md)
+  [`apps/oak-curriculum-mcp-streamable-http/docs/manual-uat-guide.md`](../../../../apps/oak-curriculum-mcp-streamable-http/docs/manual-uat-guide.md)
   are updated when the behaviour is fixed (or the quirk is narrowed to
   documented exceptions only).
 
@@ -295,7 +295,7 @@ but did **not** populate canonical URLs.
   - [`../../sector-engagement/ooc-issues/oak-open-curriculum-api-issues-2026-04-23.md`](../../sector-engagement/ooc-issues/oak-open-curriculum-api-issues-2026-04-23.md)
 - Predecessor in-repo snagging pass (provenance):
   - [`../archive/completed/oak-preview-mcp-snagging.execution.plan.md`](../archive/completed/oak-preview-mcp-snagging.execution.plan.md)
-- Preview UAT checklist (manual black-box procedure):
-  - [`../../../../apps/oak-curriculum-mcp-streamable-http/docs/agent-preview-test-checklist.md`](../../../../apps/oak-curriculum-mcp-streamable-http/docs/agent-preview-test-checklist.md)
+- Manual UAT guide (manual black-box procedure, any server):
+  - [`../../../../apps/oak-curriculum-mcp-streamable-http/docs/manual-uat-guide.md`](../../../../apps/oak-curriculum-mcp-streamable-http/docs/manual-uat-guide.md)
 - 2026-05-25 oak-preview-1 UAT evidence (thread record):
   - [`.agent/memory/operational/threads/connecting-oak-resources.next-session.md`](../../../memory/operational/threads/connecting-oak-resources.next-session.md)

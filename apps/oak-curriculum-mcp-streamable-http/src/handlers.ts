@@ -169,8 +169,8 @@ function registerTools(
 ): void {
   for (const tool of listUniversalTools(generatedToolRegistry)) {
     // EEF is gated at registration (OAK_CURRICULUM_MCP_EEF_ENABLED → runtimeConfig.eefEnabled,
-    // default OFF): skip the entry rather than expose an unreleased tool. The SDK enumerator
-    // stays transport-agnostic; the app owns the flag. Extension point: add a second EEF tool
+    // kill-switch, default ON): register the entry unless an explicit `=false` disables it. The
+    // SDK enumerator stays transport-agnostic; the app owns the flag. Extension point: add a second EEF tool
     // name here to co-gate it under the same flag (the typed constant fails compilation on a
     // tool-name rename).
     if (EEF_FLAG_GATED_TOOL_NAMES.has(tool.name) && !options.runtimeConfig.eefEnabled) {

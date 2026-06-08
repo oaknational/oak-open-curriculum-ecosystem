@@ -68,9 +68,9 @@ const PROMPT_REGISTRATIONS = [
 
 /**
  * Prompt names co-gated behind `OAK_CURRICULUM_MCP_EEF_ENABLED`. Mirrors the
- * tool gating in `handlers.ts`: the EEF prompt is an unreleased surface, skipped
- * at registration when the flag is off (D6 c6). Typed against the registered
- * prompt names so a rename is a compile error here, not a silently-stale string.
+ * tool gating in `handlers.ts`: the EEF prompt is live by default and skipped
+ * at registration only when an explicit `=false` disables it (D6 c6). Typed against
+ * the registered prompt names so a rename is a compile error here, not a silently-stale string.
  */
 type RegisteredPromptName = (typeof PROMPT_REGISTRATIONS)[number]['name'];
 const EEF_FLAG_GATED_PROMPT_NAMES: ReadonlySet<RegisteredPromptName> =
@@ -110,8 +110,8 @@ interface PromptRegistrar {
  *
  * @param server - MCP server instance (only `registerPrompt` is used)
  * @param eefEnabled - Whether the EEF surface is on
- *   (`OAK_CURRICULUM_MCP_EEF_ENABLED`, default OFF). The `adapt-lesson` prompt is
- *   co-gated by this flag and skipped when off (D6 c6).
+ *   (`OAK_CURRICULUM_MCP_EEF_ENABLED`, kill-switch, default ON). The `adapt-lesson`
+ *   prompt is co-gated by this flag and skipped only when an explicit `=false` disables it (D6 c6).
  *
  * @example
  * ```typescript
