@@ -46,13 +46,13 @@ function findRegisteredConfig(calls: readonly (readonly unknown[])[], toolName: 
  * (module replacement). The McpServer is passed as an argument to
  * registerHandlers(), making this DI-compliant per ADR-078.
  */
-function registerAndCapture() {
+function registerAndCapture(runtimeConfigOverrides: { readonly eefEnabled?: boolean } = {}) {
   const server = new McpServer({ name: 'test-server', version: '0.0.0' });
   const registerToolSpy = vi.spyOn(server, 'registerTool');
   const registerPromptSpy = vi.spyOn(server, 'registerPrompt');
 
   registerHandlers(server, {
-    runtimeConfig: createMockRuntimeConfig(),
+    runtimeConfig: createMockRuntimeConfig(runtimeConfigOverrides),
     logger: createFakeLogger(),
     observability: createFakeHttpObservability(),
     searchRetrieval: createFakeSearchRetrieval(),
@@ -62,9 +62,17 @@ function registerAndCapture() {
   return { server, registerToolSpy, registerPromptSpy };
 }
 
+/** True when registerTool was called for the named tool. */
+function wasRegistered(calls: readonly (readonly unknown[])[], toolName: string): boolean {
+  return calls.some((c) => c[0] === toolName);
+}
+
 describe('Tool Registration (Integration)', () => {
   it('every universal tool is registered with the server', () => {
-    const { registerToolSpy } = registerAndCapture();
+    // eefEnabled:true so the full SDK enumeration registers — this test proves the
+    // registration mechanism wires every enumerated tool, orthogonal to flag gating
+    // (which has its own describe block below).
+    const { registerToolSpy } = registerAndCapture({ eefEnabled: true });
     const tools = listUniversalTools(generatedToolRegistry);
 
     for (const tool of tools) {
@@ -74,7 +82,7 @@ describe('Tool Registration (Integration)', () => {
   });
 
   it('non-UI tools are registered with title, description, inputSchema, and annotations', () => {
-    const { registerToolSpy } = registerAndCapture();
+    const { registerToolSpy } = registerAndCapture({ eefEnabled: true });
     const tools = listUniversalTools(generatedToolRegistry);
 
     for (const tool of tools) {
@@ -130,5 +138,26 @@ describe('Tool Registration (Integration)', () => {
     expect(config).toHaveProperty('inputSchema', modelTool?.inputSchema);
     expect(config).toHaveProperty('inputSchema', {});
     expect(modelTool?.inputSchema).toEqual({});
+  });
+});
+
+describe('EEF flag gating (Integration)', () => {
+  it('get-eef-evidence is not registered when eefEnabled is off (default)', () => {
+    const { registerToolSpy } = registerAndCapture({ eefEnabled: false });
+
+    expect(wasRegistered(registerToolSpy.mock.calls, 'get-eef-evidence')).toBe(false);
+  });
+
+  it('get-eef-evidence is registered when eefEnabled is on', () => {
+    const { registerToolSpy } = registerAndCapture({ eefEnabled: true });
+
+    expect(wasRegistered(registerToolSpy.mock.calls, 'get-eef-evidence')).toBe(true);
+  });
+
+  it('non-EEF tools are registered regardless of the EEF flag', () => {
+    const { registerToolSpy } = registerAndCapture({ eefEnabled: false });
+
+    expect(wasRegistered(registerToolSpy.mock.calls, 'search')).toBe(true);
+    expect(wasRegistered(registerToolSpy.mock.calls, 'get-eef-evidence')).toBe(false);
   });
 });

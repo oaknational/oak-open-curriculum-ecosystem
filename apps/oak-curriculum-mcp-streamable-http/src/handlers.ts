@@ -21,6 +21,7 @@ import {
   generatedToolRegistry,
   isAppToolEntry,
   type SearchRetrievalService,
+  type UniversalToolName,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { handleToolWithAuthInterception } from './tool-handler-with-auth.js';
 import { registerAllResources, registerPrompts } from './register-resources.js';
@@ -149,6 +150,16 @@ export function registerHandlers(
   registerPrompts(server);
 }
 
+/**
+ * Tool names co-gated behind `OAK_CURRICULUM_MCP_EEF_ENABLED`. Typed as
+ * `UniversalToolName` so a tool-name rename is a compile error here, not a
+ * silently-stale string. EEF is one tool today; this is the single extension
+ * point for further EEF surfaces (D6 plan c6).
+ */
+const EEF_FLAG_GATED_TOOL_NAMES: ReadonlySet<UniversalToolName> = new Set<UniversalToolName>([
+  'get-eef-evidence',
+]);
+
 /** Iterates over universal tools and registers each with the server. */
 function registerTools(
   server: Pick<McpServer, 'registerTool'>,
@@ -156,6 +167,15 @@ function registerTools(
   options: RegisterHandlersOptions,
 ): void {
   for (const tool of listUniversalTools(generatedToolRegistry)) {
+    // EEF is gated at registration (OAK_CURRICULUM_MCP_EEF_ENABLED → runtimeConfig.eefEnabled,
+    // default OFF): skip the entry rather than expose an unreleased tool. The SDK enumerator
+    // stays transport-agnostic; the app owns the flag. Extension point: add a second EEF tool
+    // name here to co-gate it under the same flag (the typed constant fails compilation on a
+    // tool-name rename).
+    if (EEF_FLAG_GATED_TOOL_NAMES.has(tool.name) && !options.runtimeConfig.eefEnabled) {
+      continue;
+    }
+
     const handler = async (params: unknown, extra: Parameters<ToolCallback>[0]) => {
       options.observability.setTag('mcp.tool_name', tool.name);
       return handleToolWithAuthInterception({
