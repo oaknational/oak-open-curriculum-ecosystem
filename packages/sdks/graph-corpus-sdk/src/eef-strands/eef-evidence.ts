@@ -28,17 +28,17 @@ import type { EefStrand, EefStrandId } from './strand-lookup.js';
 
 /**
  * Source attribution carried once per envelope (additive teacher value, not a
- * freshness obligation): the corpus `source` at ORGANISATION level
- * (`name` / `url` / `organisation`) + `licence` + `caveats`. The individual
- * research authors (`source.original_authors`) are deliberately NOT emitted in
- * runtime responses — personal names belong in the EEF tool documentation, not
- * in every tool result (owner decision; org no-PII instruction). The licence's
- * attribution obligation is met by the organisation-level source plus each
- * strand's `eef_url`. `data_version` / `last_updated` are likewise excluded —
- * internal debugging metadata (D1 V2), not governance or freshness semantics.
+ * freshness obligation): the full corpus `source` (organisation, url, and the
+ * named research authors — all attribution data) + `licence` + `caveats`. Source
+ * names AND urls pass through whole; free access to sources is a trust
+ * requirement, so nothing is filtered. The README is the primary attribution
+ * surface; this carries the same attribution on every response. The licence's
+ * attribution obligation is met by the source plus each strand's `eef_url`.
+ * `data_version` / `last_updated` are excluded — internal debugging metadata
+ * (D1 V2), not governance or freshness semantics.
  */
 export interface EefEvidenceProvenance {
-  readonly source: Omit<CorpusMeta['source'], 'original_authors'>;
+  readonly source: CorpusMeta['source'];
   readonly licence: CorpusMeta['licence'];
   readonly caveats: readonly CorpusCaveat[];
 }
@@ -75,13 +75,12 @@ export interface EvidenceForMoveSelectors {
 
 /** Built once: the corpus-level provenance, identical for every envelope. */
 const eefProvenance: EefEvidenceProvenance = {
-  // Organisation-level attribution only — individual author names are not
-  // emitted in runtime responses (see EefEvidenceProvenance).
-  source: {
-    name: corpusMeta.source.name,
-    url: corpusMeta.source.url,
-    organisation: corpusMeta.source.organisation,
-  },
+  // Whole-object pass-through, never a field-by-field rebuild: a rebuild silently
+  // strips any field it does not re-list (it had already dropped `url` and the
+  // authors). Source attribution — organisation, url, and named authors — is
+  // attribution data carried in full; free access to sources is a trust
+  // requirement.
+  source: corpusMeta.source,
   licence: corpusMeta.licence,
   caveats: corpusCaveats,
 };

@@ -234,11 +234,12 @@ function expectJsonContent(content: McpUiReadResourceResult['contents'][number] 
   }).not.toThrow();
 }
 
-/** Shared options for all registration tests. */
+/** Shared options for all registration tests (EEF off by default, mirroring prod). */
 function createTestOptions(
   getWidgetHtml: ResourceRegistrationOptions['getWidgetHtml'] = () => TEST_WIDGET_HTML,
+  eefEnabled = false,
 ): ResourceRegistrationOptions {
-  return { getWidgetHtml };
+  return { getWidgetHtml, eefEnabled };
 }
 
 describe('registerDocumentationResources', () => {
@@ -450,6 +451,27 @@ describe('registerAllResources registers supplementary data resources', () => {
     expect(resource?.metadata.annotations?.audience).toContain('assistant');
     const content = await readResource('curriculum://thread-progressions');
     expectJsonContent(content.contents[0]);
+  });
+});
+
+describe('registerAllResources co-gates the EEF interpretation resource', () => {
+  it('does not register eef://interpretation when the EEF flag is off', async () => {
+    const mock = createMockServer();
+    registerAllResources(mock.server, createTestOptions(undefined, false));
+    await mock.flush();
+
+    expect(Array.from(mock.registeredResources.keys())).not.toContain('eef://interpretation');
+  });
+
+  it('registers eef://interpretation as text/markdown when the EEF flag is on', async () => {
+    const mock = createMockServer();
+    registerAllResources(mock.server, createTestOptions(undefined, true));
+    await mock.flush();
+
+    expect(Array.from(mock.registeredResources.keys())).toContain('eef://interpretation');
+    const content = await mock.readResource('eef://interpretation');
+    expect(content.contents[0]?.mimeType).toBe('text/markdown');
+    expect(getTextContent(content.contents[0]).length).toBeGreaterThan(0);
   });
 });
 

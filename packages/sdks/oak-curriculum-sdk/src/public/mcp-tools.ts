@@ -105,6 +105,11 @@ export {
   getMisconceptionGraphJson,
 } from '../mcp/misconception-graph-resource.js';
 
+export {
+  EEF_INTERPRETATION_RESOURCE,
+  getEefInterpretationMarkdown,
+} from '../mcp/eef-interpretation-resource.js';
+
 export { MCP_PROMPTS, getPromptMessages, type McpPrompt } from '../mcp/mcp-prompts.js';
 
 export { SERVER_INSTRUCTIONS } from '../mcp/prerequisite-guidance.js';

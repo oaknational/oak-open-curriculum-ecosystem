@@ -16,6 +16,7 @@ import {
   getLessonPlanningMessages,
   getExploreCurriculumMessages,
   getLearningProgressionMessages,
+  getAdaptLessonMessages,
 } from './mcp-prompt-messages.js';
 
 /**
@@ -111,6 +112,18 @@ export const MCP_PROMPTS: readonly McpPrompt[] = [
       requiredArgument('subject', 'The subject area (e.g., "maths", "science", "english")'),
     ],
   },
+  {
+    name: 'adapt-lesson',
+    description:
+      'Adapt an Oak lesson grounded in EEF Teaching and Learning Toolkit evidence: surface the pedagogical signals, retrieve the relevant EEF evidence, and present evidence-calibrated options with caveats and attribution intact.',
+    arguments: [
+      requiredArgument(
+        'topic',
+        'The topic for the lesson (e.g., "adding fractions", "the water cycle")',
+      ),
+      requiredArgument('yearGroup', 'The year group (e.g., "Year 4", "Year 9")'),
+    ],
+  },
 ] as const;
 
 /**
@@ -136,6 +149,8 @@ export function getPromptMessages(
       return getExploreCurriculumMessages(args);
     case 'learning-progression':
       return getLearningProgressionMessages(args);
+    case 'adapt-lesson':
+      return getAdaptLessonMessages(args);
     default:
       return [];
   }

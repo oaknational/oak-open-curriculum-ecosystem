@@ -45,6 +45,20 @@ export const lessonPlanningArgsSchema = {
 };
 
 /**
+ * Schema for adapt-lesson prompt arguments.
+ *
+ * Used when adapting an Oak lesson grounded in EEF Toolkit evidence. Free-form
+ * values are legitimate here — the prompt instructs the agent to convert them
+ * into Oak retrieval inputs and finite EEF tool inputs before any tool call.
+ */
+export const adaptLessonArgsSchema = {
+  topic: z
+    .string()
+    .describe('The topic for the lesson (e.g., "adding fractions", "the water cycle")'),
+  yearGroup: z.string().describe('The year group (e.g., "Year 4", "Year 9")'),
+};
+
+/**
  * Schema for explore-curriculum prompt arguments.
  *
  * Used when exploring what Oak has on a topic across the whole curriculum.

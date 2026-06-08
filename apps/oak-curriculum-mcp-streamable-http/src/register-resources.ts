@@ -18,6 +18,8 @@ import {
   getThreadProgressionsJson,
   MISCONCEPTION_GRAPH_RESOURCE,
   getMisconceptionGraphJson,
+  EEF_INTERPRETATION_RESOURCE,
+  getEefInterpretationMarkdown,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 import {
@@ -65,6 +67,26 @@ export function registerCurriculumModelResource(server: ResourceRegistrar): void
         uri,
         mimeType: CURRICULUM_MODEL_RESOURCE.mimeType,
         text: getCurriculumModelJson(),
+      },
+    ],
+  }));
+}
+
+/**
+ * Registers the EEF interpretation resource (`eef://interpretation`).
+ *
+ * A static `text/markdown` reasoning scaffold for the EEF Toolkit evidence
+ * (content built SDK-side; ADR-179). Registered only when the EEF flag is on —
+ * see `registerAllResources`.
+ */
+function registerEefInterpretationResource(server: ResourceRegistrar): void {
+  const { name, uri, ...metadata } = EEF_INTERPRETATION_RESOURCE;
+  server.registerResource(name, uri, metadata, () => ({
+    contents: [
+      {
+        uri,
+        mimeType: EEF_INTERPRETATION_RESOURCE.mimeType,
+        text: getEefInterpretationMarkdown(),
       },
     ],
   }));
@@ -128,6 +150,12 @@ export function registerAllResources(
   registerGraphResource(server, PRIOR_KNOWLEDGE_GRAPH_RESOURCE, getPriorKnowledgeGraphJson);
   registerGraphResource(server, THREAD_PROGRESSIONS_RESOURCE, getThreadProgressionsJson);
   registerGraphResource(server, MISCONCEPTION_GRAPH_RESOURCE, getMisconceptionGraphJson);
+  // EEF is co-gated at registration (OAK_CURRICULUM_MCP_EEF_ENABLED, default OFF):
+  // skip the unreleased resource rather than expose it. The tool and prompt are
+  // gated by the same flag (D6 c6).
+  if (options.eefEnabled) {
+    registerEefInterpretationResource(server);
+  }
   registerWidgetResource(server, options.getWidgetHtml);
 }
 

@@ -146,8 +146,9 @@ export function registerHandlers(
 
   registerAllResources(server, {
     getWidgetHtml: options.getWidgetHtml,
+    eefEnabled: options.runtimeConfig.eefEnabled,
   });
-  registerPrompts(server);
+  registerPrompts(server, options.runtimeConfig.eefEnabled);
 }
 
 /**

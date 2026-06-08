@@ -25,6 +25,7 @@ import {
   lessonPlanningArgsSchema,
   exploreCurriculumArgsSchema,
   learningProgressionArgsSchema,
+  adaptLessonArgsSchema,
 } from './prompt-schemas.js';
 
 const PROMPT_REGISTRATIONS = [
@@ -56,7 +57,24 @@ const PROMPT_REGISTRATIONS = [
       'Understand how a concept builds across year groups by searching progression threads and mapping dependencies.',
     argsSchema: learningProgressionArgsSchema,
   },
+  {
+    name: 'adapt-lesson',
+    title: 'Adapt Lesson with EEF Evidence',
+    description:
+      'Adapt an Oak lesson grounded in EEF Teaching and Learning Toolkit evidence, presenting evidence-calibrated options with caveats and attribution intact.',
+    argsSchema: adaptLessonArgsSchema,
+  },
 ] as const;
+
+/**
+ * Prompt names co-gated behind `OAK_CURRICULUM_MCP_EEF_ENABLED`. Mirrors the
+ * tool gating in `handlers.ts`: the EEF prompt is an unreleased surface, skipped
+ * at registration when the flag is off (D6 c6). Typed against the registered
+ * prompt names so a rename is a compile error here, not a silently-stale string.
+ */
+type RegisteredPromptName = (typeof PROMPT_REGISTRATIONS)[number]['name'];
+const EEF_FLAG_GATED_PROMPT_NAMES: ReadonlySet<RegisteredPromptName> =
+  new Set<RegisteredPromptName>(['adapt-lesson']);
 
 /**
  * Formats SDK prompt messages for MCP response structure.
@@ -91,15 +109,22 @@ interface PromptRegistrar {
  * message generation delegated to the SDK's `getPromptMessages()`.
  *
  * @param server - MCP server instance (only `registerPrompt` is used)
+ * @param eefEnabled - Whether the EEF surface is on
+ *   (`OAK_CURRICULUM_MCP_EEF_ENABLED`, default OFF). The `adapt-lesson` prompt is
+ *   co-gated by this flag and skipped when off (D6 c6).
  *
  * @example
  * ```typescript
  * const server = new McpServer({ name: 'curriculum', version: '1.0.0' });
- * registerPrompts(server);
+ * registerPrompts(server, false);
  * ```
  */
-export function registerPrompts(server: PromptRegistrar): void {
+export function registerPrompts(server: PromptRegistrar, eefEnabled: boolean): void {
   for (const prompt of PROMPT_REGISTRATIONS) {
+    if (EEF_FLAG_GATED_PROMPT_NAMES.has(prompt.name) && !eefEnabled) {
+      continue;
+    }
+
     const handler = (args: Readonly<Record<string, string | undefined>>) =>
       formatPromptResponse(prompt.name, args);
 

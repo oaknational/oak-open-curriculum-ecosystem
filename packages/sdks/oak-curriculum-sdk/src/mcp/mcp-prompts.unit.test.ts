@@ -21,8 +21,16 @@ describe('MCP_PROMPTS', () => {
     expect(prompt?.description).toContain('plan');
   });
 
-  it('has exactly 4 prompts', () => {
-    expect(MCP_PROMPTS).toHaveLength(4);
+  it('has exactly 5 prompts', () => {
+    expect(MCP_PROMPTS).toHaveLength(5);
+  });
+
+  it('has adapt-lesson prompt with topic and yearGroup arguments', () => {
+    const prompt = MCP_PROMPTS.find((p) => p.name === 'adapt-lesson');
+    expect(prompt).toBeDefined();
+    const argNames = prompt?.arguments?.map((a) => a.name) ?? [];
+    expect(argNames).toContain('topic');
+    expect(argNames).toContain('yearGroup');
   });
 
   it('has explore-curriculum prompt', () => {
@@ -179,6 +187,47 @@ describe('getPromptMessages', () => {
       const content = messages.map((m) => m.content.text).join(' ');
       expect(content).toContain('get-thread-progressions');
       expect(content).toContain('get-prior-knowledge-graph');
+    });
+  });
+
+  describe('adapt-lesson prompt', () => {
+    it('returns messages naming the topic, year group, and the Oak→EEF workflow', () => {
+      const messages = getPromptMessages('adapt-lesson', {
+        topic: 'adding fractions',
+        yearGroup: 'Year 4',
+      });
+      expect(messages.length).toBeGreaterThan(0);
+      const content = messages.map((m) => m.content.text).join(' ');
+      expect(content).toContain('adding fractions');
+      expect(content).toContain('Year 4');
+      expect(content).toContain('get-eef-evidence');
+      expect(content).toContain('eef://interpretation');
+    });
+
+    it('instructs converting free-form input to finite EEF tool inputs at the boundary', () => {
+      const messages = getPromptMessages('adapt-lesson', {
+        topic: 'photosynthesis',
+        yearGroup: 'Year 9',
+      });
+      const content = messages.map((m) => m.content.text).join(' ');
+      expect(content).toContain('finite');
+      // Surfaces the pedagogical signal via Oak's own graphs.
+      expect(content).toContain('misconception');
+      expect(content).toContain('prior-knowledge');
+    });
+
+    it('instructs preserving caveats/attribution and presenting options, not selections', () => {
+      const messages = getPromptMessages('adapt-lesson', {
+        topic: 'photosynthesis',
+        yearGroup: 'Year 9',
+      });
+      const content = messages
+        .map((m) => m.content.text)
+        .join(' ')
+        .toLowerCase();
+      expect(content).toContain('caveat');
+      expect(content).toContain('attribut');
+      expect(content).toContain('options');
     });
   });
 

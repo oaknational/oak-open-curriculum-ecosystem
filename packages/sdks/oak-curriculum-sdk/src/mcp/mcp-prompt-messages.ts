@@ -88,6 +88,42 @@ Please provide:
 }
 
 /**
+ * Generates messages for the adapt-lesson prompt — the evidence-grounded lesson
+ * adaptation workflow (EEF Toolkit). Evidence-grounding is how Oak adapts
+ * lessons; the prompt instructs the agent to convert the free-form topic/year
+ * group into finite EEF tool inputs, ground options in the EEF evidence, and
+ * preserve caveats and attribution. The agent is the only reasoner (ADR-191).
+ *
+ * @param args - User-provided arguments (topic, yearGroup)
+ * @returns Messages guiding the model through evidence-grounded adaptation
+ */
+export function getAdaptLessonMessages(
+  args: Readonly<Record<string, string | undefined>>,
+): PromptMessage[] {
+  const topic = args.topic ?? 'the topic';
+  const yearGroup = args.yearGroup ?? 'the year group';
+
+  return [
+    {
+      role: 'user',
+      content: {
+        type: 'text',
+        text: `I'm adapting a lesson on "${topic}" for ${yearGroup} and want it grounded in the EEF Teaching and Learning Toolkit evidence.
+
+Call get-curriculum-model first for domain definitions and tool guidance.
+
+Workflow:
+1. Use search (scope "lessons") to find the Oak material for "${topic}" at ${yearGroup}, then get the lesson summary, transcript, and quiz.
+2. Surface the pedagogical signals: use get-misconception-graph and get-prior-knowledge-graph (plus the quiz and transcript) to see the likely misconceptions and prerequisite gaps for this lesson.
+3. Name the pedagogical move each signal raises (this is your reasoning, not EEF data). Pick the real EEF strands for those moves from the strand index in the eef://interpretation resource — convert your free-form reasoning into the finite strand ids and axis values the tool accepts at the boundary.
+4. Call get-eef-evidence with those finite inputs. Read eef://interpretation when applying the evidence so you interpret impact, cost, evidence strength, and caveats faithfully.
+5. Give me the adapted lesson as evidence-calibrated options and trade-offs — not a single recommendation or selection. For each option, preserve the EEF caveats and attribution (organisation, the EEF page link, and the named authors), and add a short rationale. The decision is mine to make.`,
+      },
+    },
+  ];
+}
+
+/**
  * Generates messages for the explore-curriculum prompt.
  *
  * @param args - User-provided arguments (topic, optional subject)

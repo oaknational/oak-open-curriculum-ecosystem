@@ -49,16 +49,17 @@ describe('inspectStrand — single-strand evidence envelope', () => {
     expect(envelope.frontier).toEqual(['eef-tl-within-class-attainment-grouping']);
   });
 
-  it('carries provenance once with org-level source/licence/caveats, excluding data_version, last_updated, and individual author names', () => {
+  it('carries the full corpus source (organisation, url, and named authors — nothing stripped), licence, and caveats once, excluding data_version and last_updated', () => {
     const { provenance } = inspectStrand('eef-tl-feedback');
-    expect(provenance.source.organisation).toBe('Education Endowment Foundation');
-    expect(provenance.licence.url).toBeDefined();
+    // Source attribution passes through whole — this single deep-equal proves the
+    // organisation, the url, AND the named research authors are all retained
+    // (nothing filtered; free access to sources is a trust requirement).
+    expect(provenance.source).toEqual(EEF_TOOLKIT_DATA.meta.source);
+    expect(provenance.licence).toEqual(EEF_TOOLKIT_DATA.meta.licence);
     expect(provenance.caveats.length).toBeGreaterThan(0);
+    // data_version / last_updated are internal metadata, not carried as provenance.
     expect('data_version' in provenance).toBe(false);
     expect('last_updated' in provenance).toBe(false);
-    // Organisation-level attribution only: individual author names are never
-    // emitted in runtime responses (no-PII; named in the EEF tool docs instead).
-    expect('original_authors' in provenance.source).toBe(false);
   });
 });
 

@@ -11,111 +11,22 @@ merge_class: index-narrative-tables
 
 ## Current Continuation
 
-- **Branch**: `feat/graph-tooling-tidyup` — **clean and pushed** at HEAD `934d5c21`
-  (re-derive git first-hand; this supersedes the Lanternlit banner's "2 ahead / UNPUSHED"
-  TREE STATE line, which was true only at that session's write-time).
+- **Branch**: `feat/graph-tooling-tidyup` — re-derive git first-hand.
 - **Controlling plan**:
   [`eef-d6-execution.plan.md`](../../../plans/sector-engagement/eef/current/eef-d6-execution.plan.md).
-- **Next safe step**: complete **D6** — author **c4** (`eef://interpretation` resource) and
-  **c5** (`adapt-lesson` prompt) as SDK-side builders with **no egress functions** (ADR-193
-  §Scope is conditional; neither content crosses from a strict domain type), co-gate both
-  behind `OAK_CURRICULUM_MCP_EEF_ENABLED` in the single `registerHandlers` site, run full
-  `pnpm check` GREEN, land ONE commit by explicit pathspec (no `--no-verify`), flip the
-  `d6-mcp-composition-eef-surface` todo, then **D7** (teacher-value round trip).
-- **Completed prerequisites**: D0–D5 landed; c1–c3 authored + c6 tool-gating committed +
-  pushed (`bebca689`); c4/c5 reflection + the attribution/no-PII decision + the
-  sparse-curation caveat landed (`7c0eb907`) and handed off (`02f2bd41`).
-- **Acceptance bar**: every tool/resource/prompt is real graph-derived logic with tests, or
-  it is absent; strict types (no widening on finite-domain `z.enum`); no `--no-verify`.
-- The detailed live handoff (the full c4/c5 reasoning, the SDK call-shape references, the
-  reviewer set) is the Lanternlit banner immediately below.
-
-> **🤝 HANDOFF — EEF thread (2026-06-08, Lanternlit Shrouding Raven / `7636f9`;
-> claude / Opus 4.8). c4/c5 REFLECTION + TWO LANDED REFINEMENTS. The owner-directed
-> attribution decision is SETTLED and enforced; the sparse-curation safety caveat now
-> travels on the tool surface. Next session COMPLETES D6 (c4 resource + c5 prompt).
-> Self-contained; re-derive git first-hand.**
->
-> **WHAT LANDED THIS SESSION (commit `7c0eb907` "fix(eef): emit org-level attribution
-> only and note sparse axis coverage" — gate-green at commit, 97/97 turbo):**
->
-> 1. **Attribution / no-PII (owner-settled this session).** Decision: *do not cite the
->    individual research authors in every response; name them in EEF tool documentation.*
->    The emitted `EefEvidenceProvenance.source` is narrowed to
->    `Omit<CorpusMeta['source'], 'original_authors'>` and constructed as
->    `{ name, url, organisation }` only (strict, no cast) in
->    `graph-corpus-sdk/src/eef-strands/eef-evidence.ts`. The six author names STAY in the
->    corpus `as const` (`eef-toolkit.external-data.ts`) and in the EEF README — they are
->    simply not emitted at runtime. A behaviour-anchored test asserts
->    `'original_authors' in provenance.source === false` (`eef-evidence.unit.test.ts`), so a
->    re-add fails the suite. The c4 resource MUST emit org-level attribution only, to match
->    (it is a runtime response, not "documentation about the tools").
-> 2. **Sparse-curation safety caveat moved onto the reliable surface.** Added one sentence
->    to the `get-eef-evidence` description (`aggregated-eef-evidence.ts`): axis filters
->    (`phase`/`keyStage`/`priority`) match only the strands the corpus tags for school
->    context — they focus, they do not bound coverage, and a missing tag is not evidence of
->    inapplicability. This was previously reliable ONLY via the (pull-based,
->    maybe-never-fetched) `eef://interpretation` resource; it now reaches every agent that
->    sees the tool. ADR-191-clean (a coverage fact, not server-side reasoning).
->
-> **c4/c5 REFLECTION — THE LOAD-BEARING CONCLUSION (grounded first-hand against the
-> precedents + ADR-193; do NOT re-derive):**
->
-> - **c4/c5 need NO egress membrane.** ADR-193's egress function is for the ONE crossing
->   where a strict named interface meets the vendor's `Record<string, unknown>` (the tool
->   envelope -> `structuredContent`). ADR-193 §Scope is conditional: a primitive crosses via
->   an egress function only if it *"originates from a strict domain type"*. c4 resource
->   content crosses as `text: string` (markdown); c5 prompt content crosses as
->   `PromptMessage[]` (strings). Neither originates from a strict domain type -> **author NO
->   `*ToReadResourceResult` / `*ToGetPromptResult` egress functions.** Adding them would be
->   doctrine-by-analogy (the failure mode this thread keeps hitting).
-> - **c4 does NOT use `graph-resource-factory.ts` / `createGraphResource`** — that factory
->   emits `application/json` and `JSON.stringify`s a data graph. c4 is authored, layered
->   `text/markdown`. The right SDK-call-shape reference for a MARKDOWN resource is
->   `documentation-resources.ts` (`docs://oak/*`) — read it as a vendor-call-shape FACT, not
->   as authority. (`curriculum-model-resource.ts:20-25` already documents the same "do not
->   reuse the JSON factory for a different responsibility" call.)
-> - **Existing files are EVIDENCE of the SDK call shape, never AUTHORITY for correctness.**
->   The recent pain was precedent-as-authority. Verify the call shape against working code;
->   derive content/structure from D3 + the corpus.
->
-> **c4 — `eef://interpretation` resource (D3 §resource, ratified):** a static `text/markdown`
-> builder that projects the corpus `as const` into the three labelled layers (corpus-cited
-> methodology/caveats/source/licence/coverage + 30-strand index; agent-side interpretation
-> guidance, tagged; graph-structural field names). Input none, output `string`. Homed
-> SDK-side (corpus projection is domain logic); registered app-side via the read handler
-> returning `{ contents: [{ uri, mimeType: 'text/markdown', text }] }`. Attribution =
-> org-level only (per the settled decision above).
->
-> **c5 — `adapt-lesson` prompt (D3 §prompt, ratified):** message builder
-> `{ topic, yearGroup } -> PromptMessage[]` instantiating the workflow (free-form -> finite
-> tool inputs; use Oak material + misconception/prior-knowledge graphs; name the move
-> agent-side; call `get-eef-evidence`; preserve caveats/attribution; options not selections).
-> `argsSchema` (topic, yearGroup) is MCP prompt-argument validation — OUTSIDE the EEF tool
-> input-schema rule (D3/R4). Reference `mcp-prompt-messages.ts` for the `PromptMessage` call
-> shape (fact, not authority). Homed SDK-side; registered app-side.
->
-> **c6 co-gating (existing site):** both c4/c5 register only when `eefEnabled`, in the single
-> `registerHandlers` site (`handlers.ts:144-149`: `registerTools` -> `registerAllResources`
-> -> `registerPrompts`), behind `OAK_CURRICULUM_MCP_EEF_ENABLED` (default OFF). The tool
-> gating is ALREADY committed + pushed (`bebca689`).
->
-> **TREE STATE:** see **Current Continuation** above — branch is clean and pushed at
-> `934d5c21`. When you implement c4/c5, stage by EXPLICIT pathspec; NEVER `git add -A`. No
-> `--no-verify`.
->
-> **NEXT SAFE STEPS (complete D6):**
->
-> 1. **c4 resource** + **c5 prompt** (SDK-side builders, NO egress functions) — author
->    test-first per D3.
-> 2. Co-gate c4/c5 in the `registerHandlers` site behind the flag.
-> 3. Full `pnpm check` GREEN -> ONE commit by explicit pathspec -> D6 complete -> flip the
->    master plan `d6-mcp-composition-eef-surface` todo, then D7 (teacher-value round trip).
->
-> **REVIEWERS (D6 plan readiness):** `mcp-expert` (resource/prompt registration
-> contract-faithful), `architecture-expert-fred` (SDK-side homing; acyclic runtime dep),
-> `type-expert`; adversarial diff review before the green commit. Ground every finding
-> first-hand (first-hand = you, not the sub-agent).
+- **D6 IS COMPLETE** (2026-06-08, Briny Charting Lagoon): **c4** (`eef://interpretation`
+  `text/markdown` resource) and **c5** (`adapt-lesson` prompt) authored SDK-side in
+  `oak-curriculum-sdk/src/mcp/` (no egress functions — ADR-193 §Scope: a `string` / a
+  `PromptMessage[]` do not originate from a strict domain type), co-gated app-side behind
+  `OAK_CURRICULUM_MCP_EEF_ENABLED`. The c3 provenance was corrected to pass the full corpus
+  `source` through (authors + URLs retained — see Standing Decisions). c1–c3 + c6 tool-gating
+  landed earlier. All workspace gates green; the c4 strand index carries each strand's
+  `eef_url`.
+- **Next safe step: D7** — the teacher-value round trip (free-form lesson context → finite EEF
+  tool inputs → research-grounded options, caveats + attribution intact), per the master plan.
+- **Acceptance bar carried**: every tool/resource/prompt is real graph-derived logic with
+  tests, or it is absent; strict types (no widening on finite-domain `z.enum`); source
+  attribution never filtered; no `--no-verify`.
 
 ## Standing Decisions (pointers — the cited homes are authoritative)
 
@@ -125,8 +36,14 @@ merge_class: index-narrative-tables
   [ADR-193](../../../../docs/architecture/architectural-decisions/193-system-vendor-type-boundary-membrane.md).
   **DEAD — do NOT re-explore** (ADR-193 §Alternatives): carrier fix / index signature /
   preserve-to-`registerTool` / generic-spine.
-- **Attribution: org-level only at runtime**; the six author names live in the corpus
-  `as const` + the EEF README only (enforced by the `eef-evidence.unit.test.ts` assertion).
+- **Attribution passes through whole at runtime** (owner-corrected 2026-06-08, Briny Charting
+  Lagoon): the corpus `source` — organisation, url, AND the named authors — travels in every
+  envelope and on the `eef://interpretation` resource. Authors are attribution data, not PII;
+  source URLs are never stripped (free access to sources is a trust requirement). The EEF
+  README is the primary attribution surface. Enforced by the `eef-evidence.unit.test.ts`
+  pass-through assertion (`provenance.source` deep-equals the corpus source). **The earlier
+  "org-level only / omit authors" decision and its `Omit<…,'original_authors'>` filter +
+  absence-test are REVERSED — do not reinstate.**
 - **Strict no-widening** on finite-domain `z.enum` (graph-corpus-sdk runtime constants;
   `typescript-practice.md` + ADR-153/038/028 examples).
 
@@ -212,6 +129,7 @@ session narrative for each is in git history; this table is the durable identity
 | `Evergreen Blossoming Copse` | `claude` | `Opus 4.8` | `3479e1` | `adr-193-vendor-boundary-and-egress-membrane` | 2026-06-08 | 2026-06-08 |
 | `Luminous Drifting Dawn` | `claude` | `Opus 4.8` | `a143b3` | `c6-tool-gating-fix` | 2026-06-08 | 2026-06-08 |
 | `Lanternlit Shrouding Raven` | `claude` | `Opus 4.8` | `7636f9` | `c4-c5-reflection-and-attribution-fix` | 2026-06-08 | 2026-06-08 |
+| `Briny Charting Lagoon` | `claude` | `Opus 4.8` | `4dae1b` | `d6-c4-c5-completion-and-attribution-passthrough-correction` | 2026-06-08 | 2026-06-08 |
 
 ## Cross-Plan and Cross-Thread Links
 
