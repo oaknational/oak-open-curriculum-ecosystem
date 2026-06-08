@@ -37,32 +37,24 @@ surface.
   observability) now correctly flag critical as a consolidation-due signal; the owner will run a
   dedicated curation session. **Deep consolidation: NOT run this session (owner-deferred to a
   dedicated session).**
-- **EEF `get-eef-evidence` — c6 TOOL-GATING DONE; the single `pnpm check` red (app
-  e2e `list_tools` parity) CLEARED; UNCOMMITTED, green (2026-06-08, Luminous Drifting
-  Dawn / `a143b3`, claude / Opus 4.8, owner-directed). ADR-193 + egress membrane by
-  Evergreen Blossoming Copse / `3479e1`.** The vendor-type-boundary question is decided +
-  documented in
+- **EEF `get-eef-evidence` — c1–c3 + c6 TOOL-GATING COMMITTED; c4/c5 REMAIN to complete
+  D6 (latest 2026-06-08, Lanternlit Shrouding Raven / `7636f9`, claude / Opus 4.8).** The
+  vendor-type-boundary is decided +
   [ADR-193](../../../docs/architecture/architectural-decisions/193-system-vendor-type-boundary-membrane.md):
-  strict domain types hold from the `as const` corpus to a per-primitive EGRESS
-  function; the vendor's `Record<string, unknown>` is the external contract at the
-  membrane, never in domain code. `EefEvidenceEnvelope` is a strict `interface`
-  (`consistent-type-definitions` GREEN); egress `eefEvidenceToCallToolResult` built +
-  green at SDK. **DEAD — do NOT re-explore (ADR-193 §Alternatives): carrier fix / index
-  signature / preserve-to-`registerTool` / generic-spine.** Committed (prior sessions):
-  egress `496ea7ca`, ADR-193 `83d791e8`, handoff + plan reconciliations `1917f0ea`.
-  **THIS SESSION (uncommitted): c6 tool-gating** — `registerTools` skips `get-eef-evidence`
-  when `!runtimeConfig.eefEnabled` (default OFF); `handlers-tool-registration` test
-  reconciled (off→absent / on→present). The flag existed but was never consumed — a dead
-  seam. The landing page is **catalog by design** (owner 2026-06-08; NOT flag-gated). **GATE:
-  EEF slice green first-hand (app type-check; 725/725 unit+int; 131/131 e2e incl. the
-  previously-red parity; lint clean). Full root `pnpm check` NOT run — peers active
-  (`check-singleton-per-window`); no commit this session.** HEAD `072375e1` (peer
-  Stormbound's Sonar commit), 20 ahead of upstream, UNPUSHED. **Stage EEF by EXPLICIT
-  pathspec — `handlers.ts` + `handlers-tool-registration.integration.test.ts` only; NEVER
-  `git add -A` (live peer WIP: Stormbound `agent-tools/**`, Ferny `.agent/memory/**`).
-  Next safe step: c4 resource → c5 prompt → co-gate both in the c6 loop → full `pnpm check`
-  GREEN → one commit by explicit pathspec — NO `--no-verify`** — per
-  `threads/eef.next-session.md` top banner (authoritative + self-contained).
+  strict domain types hold to a per-primitive EGRESS function; the vendor's
+  `Record<string, unknown>` is the external contract at the membrane only. **DEAD — do NOT
+  re-explore (ADR-193 §Alternatives): carrier fix / index signature / preserve-to-`registerTool`
+  / generic-spine.** Committed: egress `496ea7ca`, ADR-193 `83d791e8`, plan reconciliations
+  `1917f0ea`, c6 tool-gating `bebca689`, attribution-no-PII + sparse-curation caveat
+  `7c0eb907`. **c4/c5 need NO egress membrane** (resource crosses as `text: string`, prompt
+  as `PromptMessage[]` — neither originates from a strict domain type; ADR-193 §Scope is
+  conditional). **GATE: green at the `7c0eb907` commit (97/97 turbo).** HEAD `8496535c` (peer
+  practice-fitness commit), my EEF commit one below; 2 ahead of upstream, UNPUSHED. **Stage
+  EEF by EXPLICIT pathspec; NEVER `git add -A` (live peer WIP in
+  `graph-corpus-sdk/.../strand-lookup.ts`). Next safe step: c4 resource → c5 prompt
+  (SDK-side builders, no egress fns) → co-gate both in the `registerHandlers` site → full
+  `pnpm check` GREEN → one commit by explicit pathspec — NO `--no-verify` → D6 done → D7**
+  — per `threads/eef.next-session.md` top banner (authoritative + self-contained).
 - **EEF c1 FINITE-DOMAIN PREREQUISITE LANDED (strict-typed) + TYPE-WIDENING
   DOCTRINE STRENGTHENED (2026-06-07, Hidden Prowling Owl / `bcc138`, claude /
   Opus 4.8, owner-directed).** graph-corpus-sdk finite-domain runtime constants
@@ -163,7 +155,7 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Luminous Drifting Dawn / c6-tool-gating-fix / 2026-06-08 (prior: Evergreen Blossoming Copse adr-193-vendor-boundary-and-egress-membrane 2026-06-08, Pelagic Charting Rudder c1-c3-authoring-and-strict-type-flow 2026-06-07, Hidden Prowling Owl c1-finite-domain-prereq-and-type-widening-doctrine 2026-06-07, Arboreal Shedding Canopy d6-reshape-and-phase-e-handoff 2026-06-07, Moonlit Orbiting Moon d6-execution-reshaped 2026-06-07, Zephyrous Kiting Squall d6-readiness-regrounding 2026-06-06, Floating Darting Cloud d7-golive-plan-edit 2026-06-06, Dusky Dimming Candle author-d6-execution-plan 2026-06-06, Masked Creeping Lantern eef-deep-review-resolutions-adr191 2026-06-05, Dim Dimming Threshold eef-d5-execution 2026-06-05, Prismatic Twinkling Planet eef-d5-fresh-dual-review 2026-06-04, Windward Gliding Squall eef-d5-plan-authoring 2026-06-04, Shadowed Creeping Secret eef-d4-ratify 2026-06-04, Burnished Glowing Spark 2026-06-04, Lacustrine Swimming Beacon 2026-06-03, Seaworthy Swimming Sextant 2026-06-03, Galactic Glowing Prism + Opalescent Cascading Planet + Stellar Waning Planet + Silvered Lurking Mask 2026-06-02) |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Lanternlit Shrouding Raven / c4-c5-reflection-and-attribution-fix / 2026-06-08 (prior: Luminous Drifting Dawn c6-tool-gating-fix 2026-06-08, Evergreen Blossoming Copse adr-193-vendor-boundary-and-egress-membrane 2026-06-08, Pelagic Charting Rudder c1-c3-authoring-and-strict-type-flow 2026-06-07, Hidden Prowling Owl c1-finite-domain-prereq-and-type-widening-doctrine 2026-06-07, Arboreal Shedding Canopy d6-reshape-and-phase-e-handoff 2026-06-07, Moonlit Orbiting Moon d6-execution-reshaped 2026-06-07, Zephyrous Kiting Squall d6-readiness-regrounding 2026-06-06, Floating Darting Cloud d7-golive-plan-edit 2026-06-06, Dusky Dimming Candle author-d6-execution-plan 2026-06-06, Masked Creeping Lantern eef-deep-review-resolutions-adr191 2026-06-05, Dim Dimming Threshold eef-d5-execution 2026-06-05, Prismatic Twinkling Planet eef-d5-fresh-dual-review 2026-06-04, Windward Gliding Squall eef-d5-plan-authoring 2026-06-04, Shadowed Creeping Secret eef-d4-ratify 2026-06-04, Burnished Glowing Spark 2026-06-04, Lacustrine Swimming Beacon 2026-06-03, Seaworthy Swimming Sextant 2026-06-03, Galactic Glowing Prism + Opalescent Cascading Planet + Stellar Waning Planet + Silvered Lurking Mask 2026-06-02) |
 | `oak-kg-ontology-planning-review` | Plan the `oak-kg`/ontology work, starting with a deep review of the Oak Curriculum Ontology repo (separate concern from the bulk-derived graph redesign) | [record][oak-kg-ontology] | claude / Opus 4.8 / Twilit Cascading Supernova / thread-opener-brief-only / 2026-06-04 — **opened, not started; deep review is a fresh session** |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Blustery Lifting Gale / skills-taxonomy-and-distribution / 2026-06-03 (prior: Umbral Whispering Silhouette 2026-06-01) |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 / Lofty Spiralling Plume / continuity-surface-fitness-and-prose-awareness / 2026-06-08 (prior: Briny Plumbing Beacon feedback-mechanism-follow-ons 2026-06-07, Eclipsed Watching Veil items-4+1 2026-06-07, Glittering Weaving Comet 2026-06-07, Volcanic Blazing Magma 2026-06-06, Lanternlit Passing Mask 2026-06-05, Hidden Hiding Dusk 2026-06-04, Arboreal Sprouting Branch 2026-06-04, Opalescent Illuminating Prism 2026-06-03, Lacustrine Swimming Beacon, Ashen Burning Magma, Solar Glowing Meteor, Stratospheric Buffeting Breeze, Lofty Sweeping Falcon, Shaded Veiling Mirror) |
