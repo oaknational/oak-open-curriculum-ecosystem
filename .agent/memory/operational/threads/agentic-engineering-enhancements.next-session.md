@@ -159,6 +159,7 @@ passes) is in git history and the [`curator-passes/`](../curator-passes/) ledger
 | `Briny Plumbing Beacon` | `claude` | `Opus 4.8` | `5dd58c` | `feedback-mechanism-follow-ons (item 2a landed; WS1 next)` | 2026-06-07 | 2026-06-07 |
 | `Lofty Spiralling Plume` | `claude` | `Opus 4.8` | `891aa5` | `continuity-surface-fitness-wiring + prose-line-awareness + ADR-193-fold` | 2026-06-08 | 2026-06-08 |
 | `Cosmic Illuminating Planet` | `claude` | `Opus 4.8` | `773ea1` | `dedicated-continuity-surface-consolidation` | 2026-06-08 | 2026-06-08 |
+| `Coppery Crackling Crucible` | `claude` | `Opus 4.8` | `a28ee6` | `pending-graduations-drain + recalibration + PDR-091 (precedence-is-not-approval)` | 2026-06-08 | 2026-06-08 |
 
 ## Cross-Plan and Cross-Thread Links
 
