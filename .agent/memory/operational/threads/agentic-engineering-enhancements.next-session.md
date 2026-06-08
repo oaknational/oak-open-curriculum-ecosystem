@@ -45,7 +45,15 @@ unchanged — read the Briny banner for the work brief, this banner for the corr
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
-| `Lofty Spiralling Plume` | `claude` | `Opus 4.8` | `891aa5` | `continuity-hygiene (ADR-193 correction folded; redundant opener deleted)` | 2026-06-08 | 2026-06-08 |
+| `Lofty Spiralling Plume` | `claude` | `Opus 4.8` | `891aa5` | `continuity-hygiene (ADR-193 fold; opener deleted; continuity-surface fitness wired + prose-line awareness fixed)` | 2026-06-08 | 2026-06-08 |
+
+**Also this session (2026-06-08, Lofty Spiralling Plume):** continuity surfaces gained fitness
+frontmatter + the `continuity-practice.md` §Disposition doctrine (leave-if-live / curate-and-delete,
+never archive/split); thread-record limits are function-derived (`700/1100/70000`, owner: "Latest +
+recent context"); `fitness_line_length: 100` uniform (anti-gaming); the prose-line check now
+discounts inline-link/URL spans (`measurableProseWidth`) so links don't false-flag while genuine
+long prose still does. Doctrine + frontmatter in `982947f5`; awareness fix + line-length normalise
+committed this handoff. See `repo-continuity.md` § Current State.
 
 ## 🤝 Session Handoff (2026-06-07 — Briny Plumbing Beacon / claude / Opus 4.8 / `5dd58c`): item 2a LANDED (ESLint reappraisal enforcement); WS1 next
 

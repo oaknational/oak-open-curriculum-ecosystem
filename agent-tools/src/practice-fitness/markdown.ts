@@ -91,3 +91,32 @@ export function extractFitnessContentText(content: string): string {
     .map((line) => line.text)
     .join('\n');
 }
+
+/**
+ * Measure the *wrappable* width of a prose line.
+ *
+ * The line-length check exists to flag prose a human could and should wrap.
+ * Inline markdown link targets and bare/auto-linked URLs are not wrappable —
+ * a URL cannot be broken across lines — so they must not count toward the
+ * width. Inline links keep their visible text (which is wrappable prose); the
+ * `(target)`, autolinks, and bare URLs are removed before measuring. A line
+ * that is long only because of a link or URL therefore measures short, while a
+ * genuinely long prose sentence is unaffected and still flagged.
+ */
+export function measurableProseWidth(text: string): number {
+  // Inline links and images — `[text](target)` / `![alt](target)`. Keep the
+  // visible text/alt (wrappable); drop the unwrappable target. The target may
+  // contain one level of balanced parentheses (e.g. a Wikipedia URL such as
+  // `.../Foo_(bar)`) and an optional `"title"`; the optional leading `!`
+  // (image marker) is consumed so it leaves no stray character.
+  const withoutInlineLinkTargets = text.replaceAll(
+    /!?\[([^\]]*)\]\((?:[^()]|\([^()]*\))*\)/g,
+    '$1',
+  );
+  // Autolinked URLs — `<https://…>`.
+  const withoutAutolinks = withoutInlineLinkTargets.replaceAll(/<https?:\/\/[^>]*>/g, '');
+  // Bare URLs in prose. Stop at whitespace or a closing bracket/paren so a URL
+  // wrapped in author punctuation does not consume that punctuation.
+  const withoutBareUrls = withoutAutolinks.replaceAll(/https?:\/\/[^\s)\]]+/g, '');
+  return withoutBareUrls.length;
+}

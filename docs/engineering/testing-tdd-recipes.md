@@ -2,7 +2,7 @@
 fitness_line_target: 350
 fitness_line_limit: 500
 fitness_char_limit: 28000
-fitness_line_length: 120
+fitness_line_length: 100
 fitness_doc_kind: recipe
 split_strategy: 'Split recipes by test level if this grows past 500 lines'
 ---

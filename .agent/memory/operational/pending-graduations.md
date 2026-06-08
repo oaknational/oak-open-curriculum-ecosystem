@@ -2,7 +2,7 @@
 fitness_line_target: 1500
 fitness_line_limit: 2200
 fitness_char_limit: 200000
-fitness_line_length: 500
+fitness_line_length: 100
 lifecycle_model: >-
   canonical pending-graduations register — owner-gated and pending items live
   here until graduated, duplicated, stale-withdrawn, or owner-resolved
@@ -28,6 +28,24 @@ This is the canonical pending-graduations register. Do not create dated,
 windowed, backlog, split, or shard-like pending-graduation files. New capture,
 owner-gated items, and unresolved pending-graduation decisions belong here until
 they graduate, duplicate, become stale-withdrawn, or receive owner direction.
+
+## 2026-06-08 capture — Lofty Spiralling Plume (continuity-surface disposition doctrine)
+
+- **Graduate the continuity-surface disposition doctrine to a PDR.** Owner stated as standing
+  doctrine (2026-06-08): a continuity surface's fitness pressure is a routing signal, never a
+  trim/archive trigger; the only two dispositions are (1) work live → content stays in place
+  verbatim, (2) work finished → conserve the insight to its permanent home and delete the residue.
+  Archiving (moving a blob verbatim to a companion file) is NOT knowledge preservation — curation is.
+  Now homed in `.agent/directives/continuity-practice.md` §Disposition of Continuity Surfaces (a
+  host directive); the candidate is to lift it to a **portable PDR** so it travels with the Practice.
+  Two adjacent owner-stated principles belong with it: *classify continuity surfaces by intended
+  function, not by current file stats* (limits are a property of the function class), and
+  *`fitness_line_length: 100` is uniform everywhere to prevent per-file gaming*.
+  - `captured-date`: 2026-06-08
+  - `source-surface`: `.agent/directives/continuity-practice.md` §Disposition; this session's owner direction
+  - `graduation-target`: a new PDR (continuity-surface disposition + function-classification + uniform line-length)
+  - `trigger-condition`: owner opens the dedicated continuity-curation session, or a second Practice-bearing repo needs the doctrine
+  - `status`: pending
 
 ## 2026-06-07 capture — Glittering Weaving Comet (feedback-mechanism reappraisal generalisation)
 

@@ -19,6 +19,7 @@ import {
   extractFrontmatter,
   getFrontmatterNumber,
   getFrontmatterString,
+  measurableProseWidth,
   type ClassifiedLine,
 } from './markdown.js';
 import { buildAllZoneMessages } from './messages.js';
@@ -92,7 +93,7 @@ function measureProse(
 
   for (const line of classified) {
     if (line.kind === 'prose') {
-      const lineLength = line.text.length;
+      const lineLength = measurableProseWidth(line.text);
       if (lineLength > maxProseLen) {
         maxProseLen = lineLength;
         maxProseLineNum = line.lineNumber;

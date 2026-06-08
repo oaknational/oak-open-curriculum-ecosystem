@@ -213,6 +213,40 @@ describe('evaluateFitnessFile', () => {
     expect(criticalResult.overallZone).toBe('critical');
   });
 
+  it('does not flag a prose line that is long only because of an inline link', () => {
+    const content = [
+      '---',
+      'fitness_line_target: 100',
+      'fitness_line_limit: 200',
+      'fitness_line_length: 10',
+      '---',
+      '[x](../../../this/is/a/very/long/and/entirely/unwrappable/target/path.md)',
+    ].join('\n');
+
+    const result = evaluateFitnessFile('link-only.md', content);
+
+    // Visible width is 'x' (1), well under the 10-char limit.
+    expect(result.maxProseLen).toBe(1);
+    expect(result.proseZone).toBe('healthy');
+    expect(result.proseViolationCount).toBe(0);
+  });
+
+  it('still flags a genuinely long prose line that contains no links', () => {
+    const content = [
+      '---',
+      'fitness_line_target: 100',
+      'fitness_line_limit: 200',
+      'fitness_line_length: 10',
+      '---',
+      'this prose line is plainly longer than ten characters and should be flagged',
+    ].join('\n');
+
+    const result = evaluateFitnessFile('long-prose.md', content);
+
+    expect(result.proseZone).toBe('critical');
+    expect(result.proseViolationCount).toBe(1);
+  });
+
   it('takes the worst zone across all declared metrics as the overall zone', () => {
     const content = [
       '---',

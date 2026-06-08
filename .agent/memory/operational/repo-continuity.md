@@ -2,7 +2,7 @@
 fitness_line_target: 400
 fitness_line_limit: 525
 fitness_char_limit: 35000
-fitness_line_length: 200
+fitness_line_length: 100
 fitness_content_role: reference
 overflow_disposition: 'leave-if-live; else conserve-insight-and-delete — never archive/split/rotate/shard (see continuity-practice.md §Disposition of Continuity Surfaces)'
 merge_class: index-narrative-tables
@@ -20,6 +20,23 @@ surface.
 
 ## Current State
 
+- **CONTINUITY-SURFACE FITNESS WIRED + PROSE-LINE AWARENESS FIXED (2026-06-08, Lofty
+  Spiralling Plume / `891aa5`, claude / Opus 4.8, owner-directed).** Continuity surfaces
+  (`repo-continuity.md` + all `threads/*.next-session.md`) now carry fitness frontmatter +
+  `fitness_content_role: reference` + an `overflow_disposition` note pointing to the new
+  `continuity-practice.md` §Disposition doctrine (leave-if-live; else conserve-insight-and-delete;
+  never archive/split/rotate). Thread-record limits are function-derived (`700/1100/70000`,
+  "Latest + recent context"), not stats-fit. `fitness_line_length: 100` is now uniform on every
+  declared surface (anti-gaming). The fitness checker only **surfaces signals** — no apparatus
+  change. Fixed the prose-line awareness: `measurableProseWidth` (`agent-tools/.../markdown.ts`)
+  discounts inline-link targets + URLs so they no longer false-flag, while genuine long prose still
+  flags (test-first; 71 practice-fitness tests green; type-check + lint clean; test-expert +
+  code-expert reviewed, findings actioned). The doctrine + thread frontmatter committed `982947f5`;
+  this session's awareness fix + line-length normalisation committed THIS handoff (see git log).
+  **Next safe step: none on this lane** — the four bloated records (agentic/eef/connecting/
+  observability) now correctly flag critical as a consolidation-due signal; the owner will run a
+  dedicated curation session. **Deep consolidation: NOT run this session (owner-deferred to a
+  dedicated session).**
 - **EEF `get-eef-evidence` — c6 TOOL-GATING DONE; the single `pnpm check` red (app
   e2e `list_tools` parity) CLEARED; UNCOMMITTED, green (2026-06-08, Luminous Drifting
   Dawn / `a143b3`, claude / Opus 4.8, owner-directed). ADR-193 + egress membrane by
@@ -149,7 +166,7 @@ each thread record; this table is the repo-level index.
 | `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Luminous Drifting Dawn / c6-tool-gating-fix / 2026-06-08 (prior: Evergreen Blossoming Copse adr-193-vendor-boundary-and-egress-membrane 2026-06-08, Pelagic Charting Rudder c1-c3-authoring-and-strict-type-flow 2026-06-07, Hidden Prowling Owl c1-finite-domain-prereq-and-type-widening-doctrine 2026-06-07, Arboreal Shedding Canopy d6-reshape-and-phase-e-handoff 2026-06-07, Moonlit Orbiting Moon d6-execution-reshaped 2026-06-07, Zephyrous Kiting Squall d6-readiness-regrounding 2026-06-06, Floating Darting Cloud d7-golive-plan-edit 2026-06-06, Dusky Dimming Candle author-d6-execution-plan 2026-06-06, Masked Creeping Lantern eef-deep-review-resolutions-adr191 2026-06-05, Dim Dimming Threshold eef-d5-execution 2026-06-05, Prismatic Twinkling Planet eef-d5-fresh-dual-review 2026-06-04, Windward Gliding Squall eef-d5-plan-authoring 2026-06-04, Shadowed Creeping Secret eef-d4-ratify 2026-06-04, Burnished Glowing Spark 2026-06-04, Lacustrine Swimming Beacon 2026-06-03, Seaworthy Swimming Sextant 2026-06-03, Galactic Glowing Prism + Opalescent Cascading Planet + Stellar Waning Planet + Silvered Lurking Mask 2026-06-02) |
 | `oak-kg-ontology-planning-review` | Plan the `oak-kg`/ontology work, starting with a deep review of the Oak Curriculum Ontology repo (separate concern from the bulk-derived graph redesign) | [record][oak-kg-ontology] | claude / Opus 4.8 / Twilit Cascading Supernova / thread-opener-brief-only / 2026-06-04 — **opened, not started; deep review is a fresh session** |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Blustery Lifting Gale / skills-taxonomy-and-distribution / 2026-06-03 (prior: Umbral Whispering Silhouette 2026-06-01) |
-| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 / Briny Plumbing Beacon / feedback-mechanism-follow-ons (item 2a landed; WS1 next) / 2026-06-07 (prior: Eclipsed Watching Veil items-4+1 2026-06-07, Glittering Weaving Comet 2026-06-07, Volcanic Blazing Magma 2026-06-06, Lanternlit Passing Mask 2026-06-05, Hidden Hiding Dusk 2026-06-04, Arboreal Sprouting Branch 2026-06-04, Opalescent Illuminating Prism 2026-06-03, Lacustrine Swimming Beacon, Ashen Burning Magma, Solar Glowing Meteor, Stratospheric Buffeting Breeze, Lofty Sweeping Falcon, Shaded Veiling Mirror) |
+| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 / Lofty Spiralling Plume / continuity-surface-fitness-and-prose-awareness / 2026-06-08 (prior: Briny Plumbing Beacon feedback-mechanism-follow-ons 2026-06-07, Eclipsed Watching Veil items-4+1 2026-06-07, Glittering Weaving Comet 2026-06-07, Volcanic Blazing Magma 2026-06-06, Lanternlit Passing Mask 2026-06-05, Hidden Hiding Dusk 2026-06-04, Arboreal Sprouting Branch 2026-06-04, Opalescent Illuminating Prism 2026-06-03, Lacustrine Swimming Beacon, Ashen Burning Magma, Solar Glowing Meteor, Stratospheric Buffeting Breeze, Lofty Sweeping Falcon, Shaded Veiling Mirror) |
 | `repo-professionalism-assessment` | Repo professionalism / engineering-quality report → planability triage | [record][repo-professionalism-assessment] | codex / GPT-5 / Airy Whirling Wing / report-author-and-planability-router / 2026-06-03 |
 | `school-data-search` | Oak School Data Search service (POC MVP): briefs → report → plan → gate walk → **deep review complete** → build | [record][school-data-search] | claude / Opus 4.8 / Fiery Sparking Caldera / deep-review-and-refinement / 2026-06-04 (prior: Mossy Whispering Bark 2026-06-04, Furnace Roasting Brazier + Hushed Lurking Mask 2026-06-03) |
 | `semantic-search` | Search data foundations: upstream-schema alignment, bulk sourcing, minimal-adaptation arc | [record][semantic-search] | claude / Opus 4.8 / Moonlit Waxing Nebula / upstream-realignment-specialist / 2026-06-03 |
