@@ -17,7 +17,38 @@ Every behaviour-changing entry was verified live in a permanent home before
 rotation; the commit and those homes are the record. Fresh capture continues
 below.
 
-## Session: 2026-06-08 — PR #131 Sonar remediation + cross-repo boundary correction (Stormbound Streaming Zephyr / cursor / Opus 4.8)
+## 2026-06-08 — continuity-surface consolidation (Cosmic Illuminating Planet)
+
+Dedicated curation session (this one). Curated the four critical thread records (`eef`,
+`agentic-engineering-enhancements`, `observability`, `connecting-oak`) to their pickup
+function per `continuity-practice.md` §Disposition — conserving each live pickup + the
+additive identity trail + un-homed insight (e.g. Briny's "decisions held in my context"),
+deleting homed/superseded session narrative (git retains the literal record). Also reflowed
+`agent-collaboration-research` (live research spec, just over-wide) and de-drifted the
+`repo-professionalism` opener.
+
+- **The disposition doctrine works per-content-block, not per-file.** The clean question is
+  "what is the state of the work this block describes?" — live → verbatim; finished → conserve
+  to its home, verify, delete. The identity table is durable content (not residue); the
+  session *narrative* is the residue.
+- **Critical-zone post-mortem (ADR-144):** the records flagged critical because fitness was
+  only just wired onto continuity surfaces (Lofty, 2026-06-08) — detection surfaced
+  *accumulated* debt, not a new failure. Limits are function-derived and correct; the content
+  was wrong-shaped (append-logs, not pickup surfaces).
+- **Identity-trail rule that emerged:** active thread with a coherent arc (`eef`) → keep the
+  full trail (the session_id_prefixes live only there); large or paused threads → keep the
+  recent stretch + a git/ledger pointer (git is the doctrine's own retention mechanism).
+- **`pending-graduations` is a drainable buffer, NOT a continuity surface** (the §Disposition
+  scope is `repo-continuity` + thread records only). Its ~25 `status: graduated` tombstones
+  violate `no-provenance-pointers` and should leave cleanly — but that is a dedicated
+  register-drain, not part of the continuity-surface focus. Its owner-gated backlog legitimately
+  stays per its `lifecycle_model`.
+- **Proportionality on width (owner: "fitness is a signal not a goal"):** most small-record
+  over-width lines are link/URL-dominated (the checker discounts them) or barely-over prose;
+  micro-rewrapping 104→100 is the number-chasing to avoid. Fixed only genuine readability/drift
+  defects.
+
+## 2026-06-08 — PR #131 Sonar + cross-repo boundary correction (Stormbound Streaming Zephyr)
 
 **Landed (PR #131, branch `feat/graph-tooling-tidyup`, all UNPUSHED):** `76f5855d`
 typedoc devDep (unblocks a pre-existing knip failure: oak-sdk-codegen used the
@@ -42,7 +73,7 @@ folder, create a new folder + fresh doc. Done — `ooc-api-wishlist/` → `archi
 new `sector-engagement/upstream-api-feature-requests/README.md` (item 1 = reusable
 enum `$ref` components), registered in `sector-engagement/README.md`.
 
-## Session: 2026-06-08 — EEF type boundary → ADR-193 + the egress membrane (Evergreen Blossoming Copse)
+## 2026-06-08 — EEF type boundary → ADR-193 + the egress membrane (Evergreen Blossoming Copse)
 
 **Decision landed.** The strict-types-vs-MCP-vendor question resolved into
 [ADR-193](../../../docs/architecture/architectural-decisions/193-system-vendor-type-boundary-membrane.md)

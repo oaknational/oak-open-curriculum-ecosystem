@@ -12,8 +12,8 @@ merge_class: index-narrative-tables
 ## Current Continuation
 
 - Branch: `feat/graph-tooling-tidyup`
-- Invocation pointer:
-  `$oak-start-right-quick continue repo-professionalism-assessment from .agent/memory/operational/threads/repo-professionalism-assessment.next-session.md. Treat this opener as a hypothesis until live grounding confirms it.`
+- Invocation pointer: `start-right-quick`, then continue this thread from this record
+  (treat the opener as a hypothesis until live grounding confirms it).
 - Controlling report:
   [`oak-repo-professionalism-engineering-quality-report-2026-06-03.md`](../../reports/oak-repo-professionalism-engineering-quality-report-2026-06-03.md)
 - Controlling plan: none yet — the report is an assessment input, not an

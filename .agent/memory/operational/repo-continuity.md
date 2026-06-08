@@ -20,130 +20,42 @@ surface.
 
 ## Current State
 
-- **CONTINUITY-SURFACE FITNESS WIRED + PROSE-LINE AWARENESS FIXED (2026-06-08, Lofty
-  Spiralling Plume / `891aa5`, claude / Opus 4.8, owner-directed).** Continuity surfaces
-  (`repo-continuity.md` + all `threads/*.next-session.md`) now carry fitness frontmatter +
-  `fitness_content_role: reference` + an `overflow_disposition` note pointing to the new
-  `continuity-practice.md` §Disposition doctrine (leave-if-live; else conserve-insight-and-delete;
-  never archive/split/rotate). Thread-record limits are function-derived (`700/1100/70000`,
-  "Latest + recent context"), not stats-fit. `fitness_line_length: 100` is now uniform on every
-  declared surface (anti-gaming). The fitness checker only **surfaces signals** — no apparatus
-  change. Fixed the prose-line awareness: `measurableProseWidth` (`agent-tools/.../markdown.ts`)
-  discounts inline-link targets + URLs so they no longer false-flag, while genuine long prose still
-  flags (test-first; 71 practice-fitness tests green; type-check + lint clean; test-expert +
-  code-expert reviewed, findings actioned). The doctrine + thread frontmatter committed `982947f5`;
-  this session's awareness fix + line-length normalisation committed THIS handoff (see git log).
-  **Next safe step: none on this lane** — the four bloated records (agentic/eef/connecting/
-  observability) now correctly flag critical as a consolidation-due signal; the owner will run a
-  dedicated curation session. **Deep consolidation: NOT run this session (owner-deferred to a
-  dedicated session).**
-- **EEF `get-eef-evidence` — c1–c3 + c6 TOOL-GATING COMMITTED; c4/c5 REMAIN to complete
-  D6 (latest 2026-06-08, Lanternlit Shrouding Raven / `7636f9`, claude / Opus 4.8).** The
-  vendor-type-boundary is decided +
+- **CONTINUITY-SURFACE CONSOLIDATION RUN (2026-06-08, Cosmic Illuminating Planet / `773ea1`,
+  claude / Opus 4.8, owner-directed).** The dedicated curation session the prior fitness-wiring
+  anticipated. The four critical thread records (`eef`, `agentic-engineering-enhancements`,
+  `observability`, `connecting-oak`) were curated to their pickup function per
+  [`continuity-practice.md` §Disposition](../../directives/continuity-practice.md) —
+  conserving each live pickup + the additive identity trail + un-homed insight, deleting
+  homed/superseded session narrative (git retains the literal record).
+  `agent-collaboration-research` reflowed to width; `repo-professionalism` opener de-drifted;
+  this §Current State curated. **Residual signals (reported, not chased):**
+  `pending-graduations.md` (a drainable buffer, not a continuity surface) still carries ~25
+  `status: graduated` tombstones to remove in a dedicated register-drain, plus a deep
+  owner-gated backlog that legitimately stays per its `lifecycle_model`; a few small
+  paused/retired records keep minor link-dominated or barely-over width. **Next safe step: none
+  on this lane.**
+- **EEF `get-eef-evidence` — D6 c1–c3 + c6 tool-gating LANDED; c4/c5 REMAIN (latest 2026-06-08,
+  Lanternlit Shrouding Raven).** Vendor-type-boundary decided +
   [ADR-193](../../../docs/architecture/architectural-decisions/193-system-vendor-type-boundary-membrane.md):
-  strict domain types hold to a per-primitive EGRESS function; the vendor's
+  strict domain types hold to a per-primitive egress function; the vendor's
   `Record<string, unknown>` is the external contract at the membrane only. **DEAD — do NOT
-  re-explore (ADR-193 §Alternatives): carrier fix / index signature / preserve-to-`registerTool`
-  / generic-spine.** Committed: egress `496ea7ca`, ADR-193 `83d791e8`, plan reconciliations
-  `1917f0ea`, c6 tool-gating `bebca689`, attribution-no-PII + sparse-curation caveat
-  `7c0eb907`. **c4/c5 need NO egress membrane** (resource crosses as `text: string`, prompt
-  as `PromptMessage[]` — neither originates from a strict domain type; ADR-193 §Scope is
-  conditional). **GATE: green at the `7c0eb907` commit (97/97 turbo).** HEAD `8496535c` (peer
-  practice-fitness commit), my EEF commit one below; 2 ahead of upstream, UNPUSHED. **Stage
-  EEF by EXPLICIT pathspec; NEVER `git add -A` (live peer WIP in
-  `graph-corpus-sdk/.../strand-lookup.ts`). Next safe step: c4 resource → c5 prompt
-  (SDK-side builders, no egress fns) → co-gate both in the `registerHandlers` site → full
-  `pnpm check` GREEN → one commit by explicit pathspec — NO `--no-verify` → D6 done → D7**
-  — per `threads/eef.next-session.md` top banner (authoritative + self-contained).
-- **EEF c1 FINITE-DOMAIN PREREQUISITE LANDED (strict-typed) + TYPE-WIDENING
-  DOCTRINE STRENGTHENED (2026-06-07, Hidden Prowling Owl / `bcc138`, claude /
-  Opus 4.8, owner-directed).** graph-corpus-sdk finite-domain runtime constants
-  (`EEF_STRAND_IDS`, `OBSERVED_*`) landed for c1's `z.enum` (37/37 green, zero type
-  widening). Type-widening doctrine strengthened (`typescript-practice.md` +
-  ADR-153/038/028 examples made strict); the active-enforcement task is handed to
-  the agentic-engineering strand
-  (`agentic-engineering-enhancements/future/no-type-widening-enforcement.plan.md`;
-  directed comms → Eclipsed Watching Veil). Metacognition gained a friction clause
-  (+ PDR-029 amendment). **All UNCOMMITTED** (commit on owner request); a parallel
-  agent (Eclipsed) holds disjoint hook-policy WIP — stage EEF by explicit pathspec.
-  **Next safe step: resume EEF c1 (the MCP-layer wiring)** per
-  `threads/eef.next-session.md` top banner; the finite-domain prerequisite is done.
-- **EEF D6 RESHAPE LANDED + TWO INACTIVE-AGENT WORKSTREAMS COMMITTED (2026-06-07,
-  Arboreal Shedding Canopy / `8d289e`, claude / Opus 4.8, owner-directed).** The
-  owner-ratified D6 output-schema drop is reshaped into the four contracts and
-  committed (`f47471d5`); `eef-d6-execution.plan.md` is authoritative for Phase E.
-  Committed two prior inactive agents' uncommitted work on owner instruction:
-  Glittering's content-guard-reappraisal feature (`b271c2dd` — I completed its
-  knip/prettier gaps to land it green) and Moonlit's continuity trinity
-  (`28e91da7`). **HEAD `28e91da7`; 4 commits ahead of `origin`, unpushed (owner's
-  call).** A deep, adversarially-reviewed Phase-E handoff is in
-  `threads/eef.next-session.md` (top banner). Napkin rotation is due (deferred —
-  session stopped early for handoff). **Next safe step: execute EEF Phase E
-  (c1–c6)** per the reshaped plan.
-- **EEF-D6 REFLECTION SESSION — BOTH HALVES HANDED OFF (2026-06-06, Dim Fading
-  Hush / `1952e2`, claude / Opus 4.8).** EEF D6 architecture corrected to the
-  aggregated-tool-family pattern → handed to `Moonlit Orbiting Moon` for execution
-  (see `threads/eef.next-session.md` top banner; fresh readiness review owed before
-  execution). The NON-EEF meta-work — feedback-mechanisms-must-embody-doctrine
-  (lead), routing the planning/execution lessons to their homes, and the
-  architecture-pattern record + reviewer retune — handed to a fresh session (see
-  `threads/agentic-engineering-enhancements.next-session.md` top banner; lessons
-  sourced in `memory/active/napkin.md`). **Working tree uncommitted** (plan, thread,
-  napkin, claims/comms edits); commit only on owner request.
-- **AGENT IDENTITY / CODEX STATUSLINE DOCS UPDATED; SESSION COMPLETE
-  (2026-06-06, Volcanic Blazing Magma / `019e9c`, codex / GPT-5,
-  owner-directed).** Documented the current session-name/statusline mechanics in
-  `agent-tools/docs/agent-identity.md`: derived identity, statusline rendering,
-  and host session title are separate surfaces; Codex `/rename` changes the UI
-  label/title when invoked; and the current Codex CLI statusline item allowlist is
-  owned by the installed Codex build, with `/statusline` as the product-supported
-  inspection path. README quick-reference now points future agents to that note.
-  **Working tree uncommitted**: docs + closed-claims archive only. Validation:
-  markdownlint, `git diff --check`, and `collaboration-state comms validate` green.
-  **Deep consolidation status: not due** — the only new insight was homed directly
-  in permanent docs; no napkin rotation, track card, open-question drain, or
-  graduation trigger fired. **Next safe step:** commit the current docs/claim-state
-  slice if desired; otherwise no open implementation follow-on from this session.
-- **COLLABORATION-IS-VALUE-CONTINGENT RULE + START-RIGHT-TEAM IMPROVEMENTS LANDED;
-  COMMIT WARDEN WITHDRAWN; SESSION COMPLETE (2026-06-06, Pearly Sailing Fjord / `50e03b`,
-  claude / Opus 4.8, owner-directed).** Took over commit-warden from Dusky, then
-  (owner-directed) homed the principle "all collaboration functionality is contingent and
-  conditional on providing value" as an always-on rule
-  ([`collaboration-is-value-contingent.md`](../../rules/collaboration-is-value-contingent.md),
-  `da25dcda`) — the awareness / behaviour / ceremony classifier + consumer test — applied
-  across the `start-right-team` SKILL (First Moves, commit-warden role definition,
-  role-definitions, cadence, singleton-role handoff), `liveness-heartbeat-cron`, and
-  `comms-all-channels-watcher`. Dual-reviewed (docs-adr + assumptions); the heartbeat
-  value-contingency is a working hypothesis on PDR-082's (Proposed) second-instance path,
-  NOT a standalone exemption (PDR-078 Accepted forbids pre-empting its exemption set). Also
-  landed `2c294b6f` (warden monitoring = awareness) + `c1dfd5c5` (warden-handoff capture).
-  Commit warden **withdrawn** (claim `5f2cd3cd` closed, seat vacant, owner-conducted).
-  Branch ahead of origin, unpushed (owner's call). **Next safe step: none on this lane** —
-  out-of-scope follow-ons in pending-graduations (graduate the live-owner-conductor
-  heartbeat exemption via PDR-082 second-instance → PDR-078 §4; consider a portable
-  value-contingency PDR if a third surface needs it).
-- **MCP TEST ESTATE + OBSERVABILITY SINKS PLANS → BOTH DECISION-COMPLETE; Tidal
-  thread handoff absorbed (2026-06-06, Soaring Darting Cliff / `4ac3e4`, claude /
-  Opus 4.8, owner-directed).** Took over Tidal Plumbing Atoll's MCP test-harness
-  thread as a *collaborative* handoff (Tidal concurred with every fold, no pullbacks,
-  then stood down; both handed-off plans are mine). Drove
+  re-explore (ADR-193 §Alternatives): carrier fix / index signature / preserve-to-`registerTool` /
+  generic-spine.** **c4/c5 need NO egress membrane** (resource crosses as `text`, prompt as
+  `PromptMessage[]` — neither originates from a strict domain type). Branch
+  `feat/graph-tooling-tidyup` is **clean + pushed at `934d5c21`**. **Next safe step: c4 resource
+  → c5 prompt (SDK-side, no egress fns) → co-gate in `registerHandlers` → full `pnpm check` green
+  → one commit by explicit pathspec, no `--no-verify` → D6 done → D7** — the authoritative,
+  self-contained banner is the [`eef` record](threads/eef.next-session.md).
+- **MCP test estate + observability sinks plans → both `🟢 DECISION-COMPLETE`; execution
+  owner-scheduled.**
   [`unified-mcp-server-test-harness.plan.md`](../../plans/sdk-and-mcp-enhancements/current/unified-mcp-server-test-harness.plan.md)
-  and
+  (WS0 + WS3 executable now; WS1 = EEF D7) and
   [`observability-sinks-decoupling.plan.md`](../../plans/observability/current/observability-sinks-decoupling.plan.md)
-  to `🟢 DECISION-COMPLETE`. **Test-harness**: 4 readiness reviewers folded
-  (assumptions/mcp/test/security); the carried `wrapMcpServerWithSentry`-under-Sentry-off
-  question is RESOLVED — not a defect (off-mode noops `sdk.init`; fresh `McpServer`
-  per request). **Sinks**: 4 reviewers (sentry/architecture/config/docs-adr) surfaced
-  two real gaps, both closed by reshape — (1) the `SENTRY_MODE` bridge does NOT exist
-  (`refineLegacySentryMode` hard-rejects), so a new C2b builds it in env-resolution
-  before C3; (2) C2 settled as a standalone OTel `NodeTracerProvider`
-  (true vendor-independence — the forced excellence answer per principles.md, not a
-  Sentry-coupled cheap cure) + an ADR-171 amendment. Execution stays owner-scheduled
-  (test-harness WS1 gated on EEF D6; sinks gated on the relevant feature branch(es)
-  merging). Commit warden during the window: Dusky → **Pearly Sailing Fjord**.
-- **Current product focus**: `eef` graph-tooling rebuild is the only active
-  product lane. The `agentic-engineering-enhancements` activity in this window is
-  a temporary knowledge-curation lane, not a product implementation thread.
+  (C1+C2 atomic → C2b `SENTRY_MODE` bridge → C3 → C4 → C5; gated on the relevant feature
+  branch merging). Neither has a dedicated thread record yet; see § Next Safe Steps.
+- **Current product focus**: `eef` graph-tooling rebuild is the only active product lane. The
+  `agentic-engineering-enhancements` activity is a temporary knowledge-curation lane — its live
+  WS1→2b→2c→WS2 feedback-mechanism work lives in its thread record, not a product thread.
 - **Collaboration-state lifecycle**: `.agent/state/` files are live signal
   sources, not long-term documentation. Outside explicit owner-gated research
   windows, process useful substance into memory/docs/plans and clear stale state.
@@ -158,7 +70,7 @@ each thread record; this table is the repo-level index.
 | `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Lanternlit Shrouding Raven / c4-c5-reflection-and-attribution-fix / 2026-06-08 (prior: Luminous Drifting Dawn c6-tool-gating-fix 2026-06-08, Evergreen Blossoming Copse adr-193-vendor-boundary-and-egress-membrane 2026-06-08, Pelagic Charting Rudder c1-c3-authoring-and-strict-type-flow 2026-06-07, Hidden Prowling Owl c1-finite-domain-prereq-and-type-widening-doctrine 2026-06-07, Arboreal Shedding Canopy d6-reshape-and-phase-e-handoff 2026-06-07, Moonlit Orbiting Moon d6-execution-reshaped 2026-06-07, Zephyrous Kiting Squall d6-readiness-regrounding 2026-06-06, Floating Darting Cloud d7-golive-plan-edit 2026-06-06, Dusky Dimming Candle author-d6-execution-plan 2026-06-06, Masked Creeping Lantern eef-deep-review-resolutions-adr191 2026-06-05, Dim Dimming Threshold eef-d5-execution 2026-06-05, Prismatic Twinkling Planet eef-d5-fresh-dual-review 2026-06-04, Windward Gliding Squall eef-d5-plan-authoring 2026-06-04, Shadowed Creeping Secret eef-d4-ratify 2026-06-04, Burnished Glowing Spark 2026-06-04, Lacustrine Swimming Beacon 2026-06-03, Seaworthy Swimming Sextant 2026-06-03, Galactic Glowing Prism + Opalescent Cascading Planet + Stellar Waning Planet + Silvered Lurking Mask 2026-06-02) |
 | `oak-kg-ontology-planning-review` | Plan the `oak-kg`/ontology work, starting with a deep review of the Oak Curriculum Ontology repo (separate concern from the bulk-derived graph redesign) | [record][oak-kg-ontology] | claude / Opus 4.8 / Twilit Cascading Supernova / thread-opener-brief-only / 2026-06-04 — **opened, not started; deep review is a fresh session** |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Blustery Lifting Gale / skills-taxonomy-and-distribution / 2026-06-03 (prior: Umbral Whispering Silhouette 2026-06-01) |
-| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 / Lofty Spiralling Plume / continuity-surface-fitness-and-prose-awareness / 2026-06-08 (prior: Briny Plumbing Beacon feedback-mechanism-follow-ons 2026-06-07, Eclipsed Watching Veil items-4+1 2026-06-07, Glittering Weaving Comet 2026-06-07, Volcanic Blazing Magma 2026-06-06, Lanternlit Passing Mask 2026-06-05, Hidden Hiding Dusk 2026-06-04, Arboreal Sprouting Branch 2026-06-04, Opalescent Illuminating Prism 2026-06-03, Lacustrine Swimming Beacon, Ashen Burning Magma, Solar Glowing Meteor, Stratospheric Buffeting Breeze, Lofty Sweeping Falcon, Shaded Veiling Mirror) |
+| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 / Cosmic Illuminating Planet / dedicated-continuity-surface-consolidation / 2026-06-08 (prior: Lofty Spiralling Plume continuity-surface-fitness-and-prose-awareness 2026-06-08, Briny Plumbing Beacon feedback-mechanism-follow-ons 2026-06-07, Eclipsed Watching Veil items-4+1 2026-06-07, Glittering Weaving Comet 2026-06-07, Volcanic Blazing Magma 2026-06-06, Lanternlit Passing Mask 2026-06-05, Hidden Hiding Dusk 2026-06-04, Arboreal Sprouting Branch 2026-06-04, Opalescent Illuminating Prism 2026-06-03, Lacustrine Swimming Beacon, Ashen Burning Magma, Solar Glowing Meteor, Stratospheric Buffeting Breeze, Lofty Sweeping Falcon, Shaded Veiling Mirror) |
 | `repo-professionalism-assessment` | Repo professionalism / engineering-quality report → planability triage | [record][repo-professionalism-assessment] | codex / GPT-5 / Airy Whirling Wing / report-author-and-planability-router / 2026-06-03 |
 | `school-data-search` | Oak School Data Search service (POC MVP): briefs → report → plan → gate walk → **deep review complete** → build | [record][school-data-search] | claude / Opus 4.8 / Fiery Sparking Caldera / deep-review-and-refinement / 2026-06-04 (prior: Mossy Whispering Bark 2026-06-04, Furnace Roasting Brazier + Hushed Lurking Mask 2026-06-03) |
 | `semantic-search` | Search data foundations: upstream-schema alignment, bulk sourcing, minimal-adaptation arc | [record][semantic-search] | claude / Opus 4.8 / Moonlit Waxing Nebula / upstream-realignment-specialist / 2026-06-03 |
