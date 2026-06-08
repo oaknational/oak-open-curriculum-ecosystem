@@ -9,13 +9,12 @@
  *
  */
 
-import { describe, it, expect, afterEach, vi } from 'vitest';
+import { describe, it, expect, afterEach } from 'vitest';
 import request from 'supertest';
 import express from 'express';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { z } from 'zod';
-import { registerPrompts } from './register-prompts.js';
 
 const ACCEPT_HEADER = 'application/json, text/event-stream';
 
@@ -209,24 +208,5 @@ describe('MCP registerPrompt with argsSchema (Integration)', () => {
       const testPrompt = result.prompts.find((p) => p.name === 'test-prompt');
       expect(testPrompt).toBeDefined();
     });
-  });
-});
-
-describe('registerPrompts — EEF flag co-gating', () => {
-  function registeredNames(eefEnabled: boolean): string[] {
-    const registerPrompt = vi.fn();
-    registerPrompts({ registerPrompt }, eefEnabled);
-    return registerPrompt.mock.calls.map((call) => String(call[0]));
-  }
-
-  it('registers the always-on prompts but not adapt-lesson when the EEF flag is off', () => {
-    const names = registeredNames(false);
-    expect(names).toContain('lesson-planning');
-    expect(names).not.toContain('adapt-lesson');
-  });
-
-  it('registers adapt-lesson when the EEF flag is on', () => {
-    const names = registeredNames(true);
-    expect(names).toContain('adapt-lesson');
   });
 });

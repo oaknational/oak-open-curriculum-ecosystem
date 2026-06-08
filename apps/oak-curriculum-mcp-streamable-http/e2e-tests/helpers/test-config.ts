@@ -73,7 +73,8 @@ export function createMockRuntimeConfig(
 
   const shared = {
     useStubTools: false,
-    eefEnabled: false,
+    // Mirror the production default: the EEF surface is live (kill-switch posture).
+    eefEnabled: true,
     version: '0.0.0-test',
     versionSource: 'APP_VERSION_OVERRIDE' as const,
     vercelHostnames: [],

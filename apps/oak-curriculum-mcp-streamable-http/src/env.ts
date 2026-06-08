@@ -39,10 +39,10 @@ const BaseEnvSchema = OakApiKeyEnvSchema.extend(ElasticsearchEnvSchema.shape)
     OAK_CURRICULUM_MCP_USE_STUB_TOOLS: z.enum(['true', 'false']).optional(),
     /**
      * Gates the EEF evidence surface: the graph-derived EEF tool, resource, and
-     * prompt register behind this flag, which is their release seam. The surface
-     * ships in a later increment of the EEF graph-tool plan. Parsed into
-     * `runtimeConfig.eefEnabled`. Default OFF — production exposure is an
-     * owner-timed flip.
+     * prompt register behind this flag. Parsed into `runtimeConfig.eefEnabled` via
+     * the kill-switch posture (`feature-flags.ts`). **Default ON** — the surface
+     * is live by default (release-pre-proof); an explicit `false` is the
+     * kill-switch that disables all three.
      */
     OAK_CURRICULUM_MCP_EEF_ENABLED: z.enum(['true', 'false']).optional(),
     ALLOWED_HOSTS: z.string().optional(),

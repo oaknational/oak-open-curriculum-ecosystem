@@ -128,6 +128,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       'explore-topic',
       'fetch',
       'get-curriculum-model',
+      'get-eef-evidence',
       'get-misconception-graph',
       'get-prior-knowledge-graph',
       'get-thread-progressions',

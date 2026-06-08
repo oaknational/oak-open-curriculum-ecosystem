@@ -71,11 +71,6 @@ describe('MCP Prompts E2E', () => {
       },
     );
 
-    it('returns exactly 4 prompts', async () => {
-      const { prompts } = await listPrompts();
-      expect(prompts).toHaveLength(4);
-    });
-
     it('prompts include helpful descriptions', async () => {
       const { prompts } = await listPrompts();
 

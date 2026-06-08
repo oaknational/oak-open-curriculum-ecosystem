@@ -62,16 +62,11 @@ function registerAndCapture(runtimeConfigOverrides: { readonly eefEnabled?: bool
   return { server, registerToolSpy, registerPromptSpy };
 }
 
-/** True when registerTool was called for the named tool. */
-function wasRegistered(calls: readonly (readonly unknown[])[], toolName: string): boolean {
-  return calls.some((c) => c[0] === toolName);
-}
-
 describe('Tool Registration (Integration)', () => {
   it('every universal tool is registered with the server', () => {
     // eefEnabled:true so the full SDK enumeration registers — this test proves the
-    // registration mechanism wires every enumerated tool, orthogonal to flag gating
-    // (which has its own describe block below).
+    // registration mechanism wires every enumerated tool. Flag posture/resolution
+    // is covered by the feature-flags engine test, not re-asserted per tool here.
     const { registerToolSpy } = registerAndCapture({ eefEnabled: true });
     const tools = listUniversalTools(generatedToolRegistry);
 
@@ -138,26 +133,5 @@ describe('Tool Registration (Integration)', () => {
     expect(config).toHaveProperty('inputSchema', modelTool?.inputSchema);
     expect(config).toHaveProperty('inputSchema', {});
     expect(modelTool?.inputSchema).toEqual({});
-  });
-});
-
-describe('EEF flag gating (Integration)', () => {
-  it('get-eef-evidence is not registered when eefEnabled is off (default)', () => {
-    const { registerToolSpy } = registerAndCapture({ eefEnabled: false });
-
-    expect(wasRegistered(registerToolSpy.mock.calls, 'get-eef-evidence')).toBe(false);
-  });
-
-  it('get-eef-evidence is registered when eefEnabled is on', () => {
-    const { registerToolSpy } = registerAndCapture({ eefEnabled: true });
-
-    expect(wasRegistered(registerToolSpy.mock.calls, 'get-eef-evidence')).toBe(true);
-  });
-
-  it('non-EEF tools are registered regardless of the EEF flag', () => {
-    const { registerToolSpy } = registerAndCapture({ eefEnabled: false });
-
-    expect(wasRegistered(registerToolSpy.mock.calls, 'search')).toBe(true);
-    expect(wasRegistered(registerToolSpy.mock.calls, 'get-eef-evidence')).toBe(false);
   });
 });

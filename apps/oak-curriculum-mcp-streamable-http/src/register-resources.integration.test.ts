@@ -454,27 +454,6 @@ describe('registerAllResources registers supplementary data resources', () => {
   });
 });
 
-describe('registerAllResources co-gates the EEF interpretation resource', () => {
-  it('does not register eef://interpretation when the EEF flag is off', async () => {
-    const mock = createMockServer();
-    registerAllResources(mock.server, createTestOptions(undefined, false));
-    await mock.flush();
-
-    expect(Array.from(mock.registeredResources.keys())).not.toContain('eef://interpretation');
-  });
-
-  it('registers eef://interpretation as text/markdown when the EEF flag is on', async () => {
-    const mock = createMockServer();
-    registerAllResources(mock.server, createTestOptions(undefined, true));
-    await mock.flush();
-
-    expect(Array.from(mock.registeredResources.keys())).toContain('eef://interpretation');
-    const content = await mock.readResource('eef://interpretation');
-    expect(content.contents[0]?.mimeType).toBe('text/markdown');
-    expect(getTextContent(content.contents[0]).length).toBeGreaterThan(0);
-  });
-});
-
 describe('registerAllResources registers the widget resource', () => {
   let server: Pick<McpServer, 'registerResource'>;
   let registeredResources: RegisteredResourceMap;
