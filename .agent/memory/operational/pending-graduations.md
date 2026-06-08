@@ -1,6 +1,6 @@
 ---
-fitness_line_target: 1500
-fitness_line_limit: 2200
+fitness_line_target: 1100
+fitness_line_limit: 1467
 fitness_char_limit: 200000
 fitness_line_length: 100
 lifecycle_model: >-
@@ -13,11 +13,19 @@ drain_strategy: >-
   Graduate items to PDRs/ADRs/rules/permanent docs; keep owner-gated items here
   until owner direction resolves them; do not split, shard, or hide buffer depth
 fitness_rationale: >-
-  Recalibrated 2026-05-27 on owner direction to collapse legacy
-  pending-graduations pseudo-shards back into this canonical register. The
-  register is intentionally allowed to hold owner-gated decisions and compact
-  recovery-file disposition evidence in one place; fitness is routing evidence,
-  not permission to create sidecar buffer files.
+  Recalibrated 2026-06-08 on owner direction: hard limit 2200 -> 1467 and target
+  1500 -> 1100 (target lowered below the new hard limit for zone coherence) so
+  critical (hard x 1.5, the global ADR-144 ratio) lands at ~2200. The tighter hard
+  band is deliberate back-pressure for a consolidation-pass-only drainable buffer:
+  it keeps the register reading `hard` until the owner-gated backlog is genuinely
+  walked down with the owner present, rather than going green on tombstone-removal
+  alone. A fitness limit on a drainable buffer is a drain-cadence signal, not a
+  size cap. Fitness here is informational-only (not wired into any commit/push
+  hook), so the standing `hard` never blocks a commit and must be reported, not
+  chased: owner-gated items that legitimately wait are never trimmed to clear it.
+  Prior note: recalibrated 2026-05-27 to collapse legacy pseudo-shards back into
+  this one canonical register; fitness is routing evidence, not permission to
+  create sidecar buffer files.
 merge_class: mostly-append-register
 fitness_content_role: drainable-buffer
 ---
@@ -174,14 +182,6 @@ Progress + new candidates on the Glittering capture above (feedback-mechanism re
   loudly on the next drift instead of waiting for a curation pass to notice.
   `[captured: 2026-06-05 | source: Lanternlit curation pass (ADR-121/hook drift fix 6f280f9f) | target: repo-validator:coverage-matrix-matches-hooks (under agent-tools/src/validators/) | trigger: a second matrix-vs-implementation drift instance OR owner direction to build it | size: M | status: owner-gated]`
 
-## 2026-06-04 captures — Windward Gliding Squall (EEF D5 review)
-
-- **Felt-authority family — no derived-authority surface self-certifies.** Unified
-  validate-specialist-findings, don't-trust-the-clean-review, report-compiles-not-certifies,
-  convergence-is-not-proof, the peer-feedback extension, discrepancy-claims-highest-risk,
-  and grounding-bar-calibration.
-  `[captured: 2026-06-04 | source: napkin + distilled Windward Gliding Squall + auto-memory validate-specialist-findings | target: PDR-089 §Decision 7 | trigger: owner direction (reinforced ~4x) + 6-file experience corroboration | size: M | status: graduated 2026-06-05 -> PDR-089 §Decision 7 (owner-directed Lanternlit pass; routed as a clause not a new PDR — Decision 6 already owned the substrate, per new-rule-vs-pdr-clause)]`
-
 ## 2026-06-04 captures — Arboreal Sprouting Branch curation pass
 
 Routed during the dedicated knowledge-curation pass (napkin rotation +
@@ -216,31 +216,6 @@ adding. Disposition ledger:
   routes back to synthesis and EDITS the gate row itself — a different recording
   shape from a park, which only dates it.
   `[captured: 2026-06-04 | source: napkin Mossy Whispering Bark 2026-06-03 opener-as-artefact | target: amend:PDR-058 (gate-outcome vocabulary) | trigger: second mis-posed-gate instance OR owner direction | size: S | status: owner-gated]`
-- **Retiring a lossy mirror = mine-then-verify-against-canon; a near-empty
-  harvest is the SUCCESS case.** When retiring an unversioned/lossy knowledge
-  mirror, mine the corpus and verify EVERY candidate against canon before
-  deletion; a near-empty harvest proves the capture→graduate pipeline already
-  caught everything (success, not a failed search). An unversioned mirror that
-  resurrects overturned decisions is a liability. Worked twice this curation
-  family: the `.remember` retirement (~1,400 lines → 0 orphans) and this pass's
-  cross-platform memory read (Codex/Cursor/Gemini → ~everything already homed).
-  `[captured: 2026-06-04 | source: napkin Moonlit Waxing Nebula 2026-06-03 (.remember mining) + Arboreal cross-platform memory read | target: pattern-or-rule:retire-lossy-mirror-by-mining-then-verify (connects to knowledge-preservation-over-fitness-warnings) | trigger: second lossy-mirror retirement OR owner direction | size: S | status: graduated 2026-06-04 (owner-directed) -> .agent/rules/knowledge-preservation-over-fitness-warnings.md §"Retiring a lossy or unversioned mirror"]`
-- **Corrections are high-risk re-instantiation moments — no immunity gradient.**
-  The general form behind no-tombstones-recursion: every correction is a new
-  first act with respect to the failure mode it addresses; the corrective act is
-  the highest-risk moment for re-instantiating the original error, and there is
-  NO immunity from having just fixed something adjacent ("the lesson is always
-  one level deeper than wherever I've just pinned it"). Distinct from
-  `no-tombstones-for-removed-ideas` (one instance of this general shape).
-  `[captured: 2026-06-04 | source: experience-corpus cross-read Pattern 4 (≥4 files; see curation ledger) | target: amend:no-tombstones-for-removed-ideas OR metacognition/correction-discipline | trigger: owner direction OR next metacognition/correction-discipline authoring pass | size: S | status: graduated 2026-06-04 -> PDR-089 §Decision 6 (folded: corrections-have-no-immunity-gradient)]`
-- **Independence over review-count: a same-frame reviewer amplifies the author's
-  confidence without providing independent coverage.** A reviewer briefed inside
-  the author's frame polishes confidence rather than testing the claim; "zero
-  findings" from a same-frame group means "clean with recall < 1", not "clean."
-  The value is an independent frame (or a single contrary fact), not review
-  volume — the most dangerous verdict is the confident one that SURVIVED
-  unchallenged review.
-  `[captured: 2026-06-04 | source: experience-corpus cross-read Pattern 5 (≥5 files; see curation ledger) | target: amend:validate-specialist-findings-before-acting OR reviewer-dispatch-doctrine (cf. different-lens-reviewer-divergence + thoroughness-texture per-check-attestation) | trigger: owner direction OR next reviewer-dispatch doctrine pass | size: M | status: graduated 2026-06-04 -> PDR-089 §Decision 6 (folded: review-count-is-not-coverage)]`
 
 **Cross-experience meta-signal (owner-walk, not a new candidate):** Patterns 2–5
 above are facets of one deep structure — *the failure mode hides inside the
@@ -254,22 +229,6 @@ trigger (cross-session recurrence) is now strongly met — surfaced to owner.
 
 ## 2026-06-03 captures — Opalescent curation enforcement pass
 
-- **Curation archive moves need a pre-archive ledger tripwire.** Three
-  invoked workflows already said "process before archive", but the agent still
-  performed `git mv` before writing the disposition ledger. The failure shape is
-  an action-sequencing gap: passive prose did not stop the lifecycle primitive.
-  Graduated cure: `consolidate-docs`, `consolidate-until-done`, and
-  `session-handoff` now carry a pre-archive ledger gate: the first mutating
-  step in any buffer lifecycle move must create or update the durable
-  disposition ledger, and archive/rename commands are forbidden until the
-  ledger path exists and names the source item set. `[captured: 2026-06-03 |
-  source: Opalescent Illuminating Prism owner-corrected curation pass |
-  target: skill-amend:consolidate-docs+consolidate-until-done+session-handoff
-  | trigger: owner direction and current curation-skill amendment pass |
-  size: M | status: graduated 2026-06-03 ->
-  .agent/skills/consolidate-docs/SKILL-CANONICAL.md +
-  .agent/skills/consolidate-until-done/SKILL-CANONICAL.md +
-  .agent/skills/session-handoff/SKILL-CANONICAL.md]`
 - **Commit-queue write-command help must expose the full identity tuple.**
   `commit-queue enqueue` and `guard` require identity `--id`, but usage text
   displayed agent name/platform/model/session-prefix and omitted the UUID field.
@@ -280,67 +239,8 @@ trigger (cross-session recurrence) is now strongly met — surfaced to owner.
   lane | trigger: owner direction or next commit-queue tool touch | size: S |
   status: owner-gated]`
 
-## 2026-06-03 capture — chatgpt-report-normalisation PDF-only protocol (Hushed Lurking Mask)
-
-- **Deep-research PDF exports now carry an exact positional citation map; the
-  skill should document the PDF-only recovery protocol.** captured-date:
-  2026-06-03; source-surface: napkin 2026-06-03 citation-audit entry (Hushed
-  Lurking Mask); graduation-target:
-  `.agent/skills/chatgpt-report-normalisation/SKILL-CANONICAL.md` +
-  `.agent/memory/active/patterns/chatgpt-report-normalisation.md`;
-  trigger-condition: next invocation of the skill OR next consolidation pass,
-  whichever first; status: graduated 2026-06-03 ->
-  `.agent/skills/chatgpt-report-normalisation/SKILL-CANONICAL.md` and
-  `.agent/memory/active/patterns/chatgpt-report-normalisation.md`. Substance:
-  current ChatGPT deep-research PDFs (WeasyPrint 68 generation) render inline
-  citations as NUMBERED 12pt chip link-annotations and append a numbered source
-  list whose number-chips are themselves link annotations — giving number→URL
-  mapping cross-verifiable against each inline chip's own annotation URL
-  (verified exact on two documents, 56+42 positions, zero mismatches). This is
-  stronger than the DOCX `_rels` set (URL set only, no positions); the skill's
-  DOCX-first default now has a documented PDF-only path. Bundle included the
-  tooling warning: literal PUA characters in agent-written files are
-  non-deterministically stripped by editing tools — scripts must use `\ueNNN`
-  escapes, and the skill's PUA guidance now says so.
-
 ## 2026-06-02 captures — napkin rotation doctrine routes (Shaded Veiling Mirror)
 
-- **Curation reads for live-unique substance before archive or park framing.**
-  Graph-estate t1 proved the failure mode: the initial "archive/park the
-  superseded estate" frame would have lost independent live work in
-  `kg-alignment-audit`, `kg-integration-quick-wins`, and
-  `agent-guidance-consolidation`. The durable curation lens is substance-loss
-  first; archive/park is a later lifecycle action only after that lens is
-  satisfied. **Trigger fired 2026-06-02 (Opalescent Cascading Planet)**: the
-  graph-estate t2–t5+t7 execution WAS the next archive/park-shaped pass; the
-  lens held as confirm-at-move discipline (every disposition re-checked
-  against current file content at the move; both assumptions-expert
-  substance-preservation conditions honoured at the t4 move; landed at
-  `c3b78eec`). Second worked instance — ready for graduation drafting.
-  `[captured: 2026-06-02 | source: napkin rotation from Glittering Soaring Meteor | target: amend:consolidate-docs OR rule:knowledge-preservation-over-fitness-warnings | trigger: FIRED 2026-06-02 (archive/park-shaped pass executed with the lens applied) | size: M | status: graduated 2026-06-02 -> .agent/rules/knowledge-preservation-over-fitness-warnings.md]`
-- **Archive is a terminal sink: de-link live references, never repoint;
-  one index note.** Owner-corrected discipline (2026-06-01, commit `5063456a`)
-  with a second full worked instance 2026-06-02 (`c3b78eec`): the graph-estate
-  consolidation de-linked 24 surviving live references to moved plans as plain
-  text "(since archived)", repointed ONLY completed-plan historical citations
-  to `archive/completed/` per ADR-117, and kept `completed-plans.md` as the
-  single sanctioned inbound index. Tension to resolve at graduation: ADR-117's
-  "fix all cross-references to point directly to archive/completed" wording
-  reads as repoint-everything; the executed split (superseded → de-link;
-  completed → may cite archive) needs encoding in the ADR or a rule.
-  `[captured: 2026-06-02 | source: distilled.md Hearthlit entry + graph-estate execution worked instance | target: rule (archive-terminal-sink) or ADR-117 amendment | trigger: owner direction (two instances accumulated) | size: M | status: graduated 2026-06-02 -> ADR-117 plan archival cross-reference role split + .agent/plans/README.md lifecycle note]`
-- **Plans that de-stratify an estate must not re-stratify themselves.** A
-  consolidation plan that accumulates dated "Inbound from ..." sections recreates
-  the stratified narrative it exists to remove. Durable shape: one derived
-  current-state section; session handoff details live in thread records, not new
-  plan strata.
-  `[captured: 2026-06-02 | source: napkin rotation from graph-estate plan flattening | target: plan-hygiene doctrine or oak-plan template amendment | trigger: owner direction or second plan-consolidation instance | size: M | status: graduated 2026-06-03 -> .agent/memory/active/patterns/collapse-authoritative-frames-when-settled.md]`
-- **Decontamination distinguishes history from live residue.** Dated amendment
-  summaries and changelogs can retain retired terms as history; live current-tense
-  claims must be superseded or removed. The fix is not a flat sweep but a
-  classification pass that names whether a token is history-retained or
-  live-residue.
-  `[captured: 2026-06-02 | source: napkin rotation from ADR-173 Inc.3 handling | target: amend:verify-dont-trust OR decontamination pattern | trigger: owner direction or second decontamination pass with history/current classification | size: S | status: graduated 2026-06-03 -> .agent/memory/active/patterns/contamination-scan-method.md]`
 - **Shared-window handoffs should scan for convergence, not only collision.** A
   parallel agent may have produced the dependency or answer your lane needed. At
   handoff, actively look for live peer outputs that answer open questions and wire
@@ -351,11 +251,6 @@ trigger (cross-session recurrence) is now strongly met — surfaced to owner.
   the file is untracked and uncommitted. Reports that say "created X" should carry
   path plus current `git status` evidence in no-commit sessions.
   `[captured: 2026-06-02 | source: napkin rotation from graph-tool-output-schemas plan creation | target: amend:session-handoff OR verify-dont-trust | trigger: owner direction or second owner-invisible untracked artefact incident | size: S | status: owner-gated]`
-- **Assertion-time verification and label liveness checks.** A claim becomes
-  true only when the proving surface is current and visible; cheap checks belong
-  at assertion time, including whether a cited label, status, section, or row is
-  still live rather than merely present in a contaminated or in-flight artefact.
-  `[captured: 2026-06-02 | source: distilled.md June 2 assertion-time checks | target: amend:verify-dont-trust OR contamination-scan-method | trigger: owner direction or second assertion-time liveness failure | size: S | status: graduated 2026-06-03 -> .agent/rules/verify-dont-trust.md]`
 - **Projection provenance for data-as-source-of-truth work.** A hand-authored
   mirror inside codegen is still a mirror; durable data shapes should be static
   data projected through a type-strict schema boundary, with `satisfies` tying
@@ -372,23 +267,12 @@ trigger (cross-session recurrence) is now strongly met — surfaced to owner.
   together; after manifests and lockfiles are current, check current/future plans
   so old dependency-update plans stop advertising completed work.
   `[captured: 2026-06-02 | source: distilled.md June 2 dependency refresh cleanup | target: dependency-refresh closeout checklist OR plan-hygiene doctrine | trigger: owner direction or next workspace-wide dependency refresh | size: S | status: owner-gated]`
-- **Completeness checks must enumerate from the source side, not the claim.** A
-  spot-check scoped to the files a claim names cannot find unclaimed consumers or
-  siblings; for symbol/import/file-set completeness, enumerate from the code or
-  source corpus side before accepting the claim boundary.
-  `[captured: 2026-06-02 | source: distilled.md independent-eyes/claim-selection lesson | target: amend:verify-dont-trust OR pattern:source-side-completeness-enumeration | trigger: owner direction or second claim-scoped completeness miss | size: S | status: graduated 2026-06-03 -> .agent/rules/verify-dont-trust.md]`
 - **Cursor identity seed observability needs a machine-level check.** Ashen's
   Cursor session could not claim or broadcast because
   `PRACTICE_AGENT_SESSION_ID_CURSOR` was absent from the shell, so a broad sweep
   was invisible to active-claims/comms. This looks like a host hook/environment
   gap rather than an agent-level behaviour failure.
   `[captured: 2026-06-02 | source: napkin rotation from Ashen Igniting Hearth sweep | target: cursor-hook/agent-tools identity observability check | trigger: owner direction or next Cursor session with missing identity seed | size: S | status: owner-gated]`
-- **Relative-link integrity needs a live-lane validator.** A scoped t8
-  link-integrity sweep over the `.agent` estate found 14 pre-existing broken
-  relative links that markdownlint, Prettier, and the full gate chain do not
-  catch. Structural cure shape: a repo validator over live lanes, excluding
-  `archive/`, wired at `warn` first per the new-rule/new-validator convention.
-  `[captured: 2026-06-02 | source: active napkin / Galactic Glowing Prism JC4 plan authoring | target: repo-validator:relative-link-integrity-live-lanes | trigger: owner direction or next link-integrity remediation/validator touch | size: M | status: graduated 2026-06-03 -> .agent/plans/agent-tooling/future/relative-link-integrity-live-lanes-validator.plan.md]`
 
 ## Register Rule
 
@@ -397,20 +281,6 @@ were collapsed back into this file on 2026-05-27 by owner direction. The
 substance that still needed a live queue home is preserved below. Processed
 source files were deleted after extraction so the repository does not carry
 pseudo-shards that hide the true buffer state.
-
-## 2026-06-02 capture — contamination-scan method pattern (Stellar Waning Planet)
-
-- **The contamination-scan method is a reusable pattern: token+concept
-  inventory → mechanical sweep classified by current-truth-vs-history →
-  refutation-briefed reviewer fan-out (verifiable facts, never conclusions) →
-  per-finding adversarial verification → author-level grounding of every
-  survivor AND every refutation, with one withheld known-answer probe as a
-  recall measurement.** Third+ worked instance on this estate (D0 ledger
-  sweeps, the 2026-06-02 estate corrections, the mandate-1 scan); the probe
-  and refutation-validation edges are new in the mandate-1 instance. Worked
-  ledger: `.agent/reports/mandate-1-contamination-scan-2026-06-02.md`;
-  distilled entry 2026-06-02.
-  `[captured: 2026-06-02 | source: mandate-1 scan session + distilled.md | target: pattern:.agent/memory/active/patterns/contamination-scan-method.md | trigger: next scan-shaped mandate or owner direction | size: M | status: graduated 2026-06-02]`
 
 ## 2026-06-02 capture — substrate-migration doctrine (Silvered Lurking Mask)
 
@@ -427,103 +297,19 @@ pseudo-shards that hide the true buffer state.
   when its owning plan exists.
   `[captured: 2026-06-02 | source: owner direction in-session + the two plans above | target: adr:graph-substrate-migration-doctrine OR amendment:ADR-173 | trigger: authoring of the unified substrate-migration plan (graph-estate Judgement call 4) | size: M | status: owner-gated 2026-06-02 — trigger not fired; hold until the unified substrate-migration plan exists or owner directs ADR authoring]`
 
-## 2026-06-01 capture — curation-pass doctrine candidates (Moonless Lurking Dusk)
+## 2026-05-31 capture — negation-contrast detection enforcement increment
 
-Surfaced to the owner during the dedicated knowledge-curation pass; staged in
-`distilled.md`. Capture-only — owner reviews before promotion.
-
-- **One law, three faces.** Derive-from-the-single-source-of-truth-never-bridge
-  (code), seams-compose-never-reconciled (architecture), and
-  state-what-is-no-monuments (writing) are one principle seen from three sides; a
-  frame-slip's cure is always the same shape (return to the source of truth, fix
-  upstream, state what is).
-  `[captured: 2026-06-01 | source: distilled.md + EEF thread synthesis | target: pdr:one-law-three-faces (unifying principle) | trigger: owner approval | size: M | status: graduated 2026-06-04 (owner-directed) -> PDR-090 (One Law, Three Faces — A Frame-Slip's Cure Is Always Return to the Source)]`
-- **Opening statements and handoff artefacts teach by their form.** Loaded-first
-  surfaces train the next agent by their voice; written as present-truth +
-  destination they teach that, written as remediation-recap they teach that.
-  Validated twice across sessions; pairs with `no-tombstones-for-removed-ideas`.
-  Opalescent curation pass refinement, 2026-06-03: opener staleness is
-  structural, not merely an authoring defect; a good opener self-instructs
-  cheap re-derivation from git and live surfaces instead of asking the next
-  agent to believe it.
-  Further facets (2026-06-04, Arboreal curation pass): **openers degrade in
-  transit** — the pattern now holds at n=3 (Furnace, Mossy ×2): pasted openers
-  arrive duplicated/garbled mid-token; the thread record + plan carry the exact
-  text, so launch from canonical files and treat chat paste as lossy transport.
-  And **openers may compress canon, never silently extend it** — a net-new
-  commitment in an opener with no durable source is a proposal and must be marked
-  as such (sibling of no-unauthorised-scope-invention for the opener genre).
-  `[captured: 2026-06-01 | source: distilled.md + Shaded/Windswept worked instances | target: clause:no-tombstones-for-removed-ideas OR continuity-practice | trigger: owner approval | size: S | status: graduated 2026-06-04 (owner-directed) -> .agent/rules/handoff-messages-self-contained.md §"Handoff artefacts teach by their form" (present-truth-plus-destination form, transit-degradation, compress-but-never-extend)]`
-
-## 2026-06-01 capture — seam-mapping plan template/archetype (Windswept Floating Summit)
-
-- **A reusable "seam map" archetype for fully planning complex features, with the
-  law that seams compose and are never reconciled.** Worked out on the EEF plan
-  (`## Sequencing`) and owner-confirmed as intended for a plan template/archetype.
-  A deliverable chain is a DAG, not the linear Dn-1/Dn handoff it reads as, and the
-  adjacent handoffs are the least important. The taxonomy to template: **fan-out
-  seams** (one producer, two consumers, different artifacts), **confluence seams**
-  (one consumer, non-adjacent producers — the skip-level input is usually the
-  deepest), **closure arc** (first-contract deliverable ⇒ last-proof deliverable —
-  the seam across the whole DAG, guarded by nothing adjacent), **orthogonal runtime
-  axis** (design/runtime path crossing the execution DAG perpendicularly),
-  **layering anti-seams** (boundaries held by nothing crossing them), **cross-cutting
-  ledger** (one artifact auditing every data-derivation seam at once), and
-  **temporal seam** (a designed span between a removal landing green and its
-  replacement landing green — each boundary lands atomically green per the
-  atomic-landing invariant; committed history carries no persistent red window).
-  The governing law: because
-  every junction input is a projection of one source of truth, junctions compose by
-  construction; friction at a junction is the signal that an input has drifted from
-  the root, fixed upstream at the source, never bridged at the seam
-  (`replace-dont-bridge`, `rules-have-no-exceptions`). Owner framing: "no sections
-  should need reconciling; an architectural tension is a signal we have misaligned a
-  fundamental concept, not a legitimate hard thing to match up."
-  `[captured: 2026-06-01 | source: EEF plan Sequencing rewrite + owner direction | target: .agent/plans/agentic-engineering-enhancements/future/seam-map-plan-template-archetype.plan.md | trigger: schedule a focused authoring session | size: L | status: graduated 2026-06-02 — future strategic lane created for focused authoring]`
-
-## 2026-06-01 capture — cross-platform rules generator (Twilit Threading Satellite)
-
-- **No generator exists for the rules' cross-platform forms; one was intended,
-  for consistency.** Each canonical `.agent/rules/<name>.md` is hand-mirrored
-  into `.claude/rules/`, `.cursor/rules/<name>.mdc`, `.agents/rules/`, and a
-  `RULES_INDEX.md` row, with `portability:check` validating alignment after the
-  fact. A generator would author every form from the canonical file so the forms
-  cannot drift and the index stays in lockstep. (The index header already drifted:
-  it says "three on-disk forms" while listing four.)
-  `[captured: 2026-06-01 | source: rules-have-no-exceptions authoring | target: .agent/plans/agent-tooling/future/rules-cross-platform-generator.plan.md | trigger: owner-direction-or-next-rule-authoring | size: M | status: graduated 2026-06-02 — future strategic lane created for the fired implementation trigger]`
-
-## 2026-05-31 captures — EEF value reframe (Fruited Regrowing Copse)
-
-Captured by Fruited Regrowing Copse (claude / Opus 4.8 / `abec59`) during the EEF
-value reframe. Capture-only; graduation deferred to a future consolidation when
-triggers fire.
-
-- **No tombstones for removed ideas.** `[captured: 2026-05-31 | source:
-  distilled.md + feedback_no_tombstones_for_removed_ideas | target:
-  .agent/rules/no-tombstones-for-removed-ideas.md | trigger: FIRED 2026-06-01 —
-  owner restated and directed graduation | size: S | status: graduated 2026-06-01]`
-  GRADUATED to `.agent/rules/no-tombstones-for-removed-ideas.md` (canonical, with
-  `.claude` / `.cursor` / `.agents` loader pointers + a RULES_INDEX entry) — now in
-  the always-applied rule tier. When an idea is wrong, describe the correct design
-  and stop; do not memorialise it via rejection labels, negation-contrast framing
-  ("X, not Y"), or dead-shape prohibition lists. Allowed exception: real-code
-  deletion instructions until the code is gone. **Remaining enforcement increment
-  (owner decision pending, NOT graduated):** the write-time innate-immunity hook
-  (`.agent/hooks/policy.json`). The negation-contrast form is a structural pattern,
-  not a clean literal — a naive block on "never / rather than / instead of" would
-  false-positive heavily — so the hook can carry only a narrow high-signal banner
-  set, and catching the structural form needs a smarter detector or an output-time
-  review pass.
-
-- **Trace user value before tool design.** `[captured: 2026-05-31 | source:
-  distilled.md + feedback_trace_user_value_before_tool_design | target:
-  pdr-or-directive:value-trace-before-tool-design | trigger: FIRED — owner approval
-  2026-06-01 + second instance (the value-trace inversion) | size: S |
-  status: graduated 2026-06-01 → .agent/rules/verify-data-supports-shape-before-building.md
-  (consolidated with the fingerprint-data candidate into one design-time rule)]`
-  Trace the user journey + value end to end and check data-support at each hop
-  before designing/building. The EEF tools-as-envisioned were impossible because
-  the data never supported the subject/topic join.
+- **A structural detector or output-time review pass for the negation-contrast form
+  of tombstoning.** `.agent/rules/no-tombstones-for-removed-ideas.md` is the
+  always-applied rule and the write-time innate-immunity hook
+  (`.agent/hooks/policy.json`) is the intended hard-enforcement layer, but it can
+  carry only a narrow set of high-signal banner literals. The negation-contrast form
+  ("X, not Y"; "built fresh, never a bridge") is a *structural* pattern (a negation
+  bound to a dead concept), not a fixed literal — a naive block on "never" /
+  "rather than" / "instead of" would false-positive unacceptably. The open increment
+  is a smarter structural detector or an output-time review pass. The rule's §"Why
+  This Rule Is Strict" names this register as the home that tracks the increment.
+  `[captured: 2026-05-31 | source: .agent/rules/no-tombstones-for-removed-ideas.md §"Why This Rule Is Strict" | target: negation-contrast structural detector OR output-time review pass | trigger: owner direction OR a viable low-false-positive detector design | size: M | status: owner-gated]`
 
 ## 2026-05-31 captures — agent-tools PreToolUse hooks + scripts→src migration
 
@@ -647,13 +433,6 @@ that the source buffers were validly drained.
   trigger: second platform seed/context mismatch or owner direction | size: S |
   status: owner-gated (TRIGGER FIRED 2026-06-04: the 2026-06-02 "Cursor identity seed observability needs a machine-level check" entry is the second instance — same PRACTICE_AGENT_SESSION_ID_CURSOR-absent failure, different agent; ready for the agent-tooling identity-observability implementation lane; surfaced to owner)]`
   Route to agent-tools/platform identity work if it recurs.
-- **Claim-pattern glob expansion is duplicate tooling friction.**
-  `[captured: 2026-05-31 | source: napkin 2026-05-31 Eclipsed entry |
-  target: duplicate-of:agent-tooling-frictions-register-F-04/F-14 |
-  trigger: none | size: S | status: duplicate (verified 2026-06-04: F-04/F-14 in .agent/plans/agent-tooling/frictions-register.md genuinely cover --area-pattern cardinality/quoting; withdraw-ready, owner holding)]`
-  Existing homes already cover quoting and `--area-pattern` affordance gaps; the
-  active napkin entry remains restored as a fresh worked instance until a valid
-  future disposition removes it.
 
 ## 2026-05-31 longitudinal napkin-review gates
 
@@ -979,20 +758,6 @@ Total live owner-gated items: 56.
   The remaining decision is whether to author that ADR/rule now, keep a
   retrospective watch, or withdraw because the plan and implementation are
   enough.
-- 2026-05-11; **Pre-flight fingerprint scan before shape decisions**.
-  `[captured: 2026-05-11 | source: smouldering-crackling-pyre | target: rule-or-pattern:fingerprint-data-before-shaping-fix | trigger: FIRED — owner approval 2026-06-01 | size: S | status: graduated 2026-06-01 → .agent/rules/verify-data-supports-shape-before-building.md]`
-  A cheap data-corpus fingerprint scan refuted a migration-plan premise before
-  code landed and let the owner redirect the shape. Graduated as the fix/migration
-  face of the new design-time rule (consolidated with the value-trace candidate so
-  the two facets — verify value-support before building, fingerprint data before
-  shaping a fix — share one home rather than fragmenting).
-- 2026-05-11; **Owner re-decision on evidence-refuted premise**.
-  `[captured: 2026-05-11 | source: deciduous-twining-dew | target: pdr-or-rule:re-surface-dont-override-on-evidence-correction | trigger: FIRED — owner approval 2026-06-01 | size: S | status: graduated 2026-06-01 → .agent/rules/owner-attention-at-action-moments.md §"Evidence that refutes an owner-approved premise is an action-moment" + worked instance]`
-  When reviewer evidence refutes an owner-approved premise, the healthy move is
-  to re-surface the corrected evidence and let the owner decide again, not to
-  silently reshape the design. Graduated as a clause on the existing
-  owner-attention rule (the premise refutation is a named owner-class
-  action-moment) rather than a new rule.
 - 2026-05-10; **evaluateParityChecks focused unit coverage**.
   `[captured: 2026-05-10 | source: commands-retirement-reviewer-follow-up | target: test-cycle:agent-tools/src/core/health-probe-parity.ts | trigger: owner-direction-or-next-touch | size: M | status: owner-gated]`
   `evaluateParityChecks` still lacks focused unit coverage for reviewer adapter
@@ -1061,36 +826,6 @@ Total live owner-gated items: 56.
   The remaining decision is whether to graduate the pattern now, keep watching
   for a second named-receiver diagnostic handoff, or withdraw because PDR-048
   and PDR-046 already carry enough capture-at-the-moment guidance.
-- 2026-05-10; **Design optionality standalone rule sibling**.
-  `[captured: 2026-05-10 | source: legacy-backlog+pdr-058-surface-2 | target: rule:closed-shape-design-optionality | trigger: FIRED 2026-06-04 — owner-directed + 2nd named instance (Burnished EEF decision B) with cure draft | size: S | status: graduated 2026-06-04 -> .agent/rules/closed-shape-design-optionality.md (+ .claude/.cursor/.agents mirrors + RULES_INDEX)]`
-  PDR-058 Surface 2 names the design-optionality failure mode and cure:
-  author the closed shape the known instances need, and defer configurability
-  until a real second instance forces decomposition. PDR-058 also says the
-  rule sibling requires its own evidence trail and is not pre-graduated by the
-  PDR. The owner decision is whether to graduate the standalone rule now, keep
-  watching for a second named instance with a concrete cure draft, or withdraw
-  because PDR-058 plus existing consolidation rules are enough.
-  **Second-instance evidence (2026-06-04, Burnished Glowing Spark, EEF decision B):**
-  a `guidance_report` node kind that deduplicated exactly one leaf corpus-wide
-  (`{title,url}`, no body/edges) and bought no v1 user value was the single
-  biggest complexity driver (heterogeneous `TNodeId`, second id type, second edge
-  type); inlining it collapsed all of that — the closed shape the one instance
-  needed, configurability deferred until a real second instance forces it. This is
-  a concrete second named instance WITH a cure draft, which is exactly the trigger
-  condition above; surfaced to owner this pass (does the trigger now fire?).
-- 2026-04-30; **Graduation-trigger criteria refinement — OWNER-RESOLVED 2026-06-04**.
-  `[captured: 2026-04-30 | source: legacy-backlog | target: consolidate-docs owner-walk discipline | trigger: FIRED 2026-06-04 — owner directed "owner-gated should be collapsed into owner-directed" | size: M | status: graduated 2026-06-04 (owner-directed)]`
-  Owner observation: the default "second instance OR owner direction" trigger can
-  leave strong single-instance candidates waiting too long. **Owner resolution
-  (2026-06-04, Arboreal pass):** the owner is happy to give input on owner-gated
-  items, so they are ACTIVELY WALKED with the owner when present, not parked
-  waiting for an external second instance — "owner-gated" must not function as a
-  graveyard. This collapses the owner-gated status into owner-directed: with the
-  owner present, the consolidate-docs owner-walk covers every owner-gated item
-  (owner may graduate, withdraw, or confirm genuinely-event-gated), not only those
-  whose sole trigger is owner-direction. Applied this pass via a
-  recommendation-first backlog digest; the consolidate-docs step-7 owner-walk
-  clause is the durable home.
 - 2026-04-29; **Trinity Active Principles and bootstrap structural
   extensions**.
   `[captured: 2026-04-29 | source: legacy-backlog+trinity-drift-report | target: core:practice+practice-lineage+practice-bootstrap+practice-verification | trigger: owner-approval-for-core-amendments | size: M | status: owner-gated]`
@@ -1786,54 +1521,6 @@ Cross-references:
 
 ---
 
-### Heartbeat-cron health-monitoring via watcher-staleness substrate (cure for platform-wide cron-drift episodes)
-
-[captured: 2026-05-25 | source: napkin 2026-05-25 Misty entry + DM event `8c6bd26a` (Misty to Lunar cron-drift correlation) |
-graduation-target: adr-draft:heartbeat-cron-health-monitoring OR amendment to ADR-186 §Migration discipline |
-trigger: second-instance — confirmed (Misty 20-min + Lunar 17-min concurrent gaps 23:28-23:47Z 2026-05-24) |
-size: M — substrate amendment to heartbeat emitter + watcher-staleness substrate |
-status: graduated 2026-06-04 (owner-directed) -> ADR-190 (Proposed) heartbeat-cron health-monitoring via watcher-staleness substrate]
-
-Context: Misty heartbeat cron silent 20 min (23:26 → 23:47Z) AND Lunar's
-silent 17 min (23:28 → 23:45Z) in the same window. Two independent
-Claude-platform Monitor cron loops degraded concurrently — strongly suggests
-platform/harness-side cause, not agent-side. Mistbound's silence-without-
-work-evidence at 23:11-onwards may have been the same episode (never
-broadcast a recovery).
-
-Cure shape: heartbeat-cron health-monitoring via the existing
-`agent-tools/src/collaboration-state/watcher-staleness.ts` substrate — the
-same surface ADR-186 §Substrate-as-API reserves for C5. The substrate
-already supports staleness-file writes per-tick (watcher already uses it for
-self-liveness); extending the heartbeat emitter to write the same kind of
-per-tick staleness file would let peers detect "cron loop alive, just
-silent" vs "cron loop dead". The retirement-detection rule could compose:
-silence past 10-min threshold AND staleness-file last-written > 5× expected
-cadence ago = retired; silence past 10-min AND staleness-file fresh =
-cron-degraded false-positive.
-
-Why pending: depends on whether the substrate extension is a sibling ADR to
-ADR-186 or an in-place amendment; needs ground-state check of
-`watcher-staleness.ts` to confirm the extension shape is non-breaking.
-
-Falsifiability: post-cure, a Director's retirement-detection decision can
-be made deterministically from (silence + staleness-file age) without
-relying on git work-evidence cross-check (the current ping-before-escalate
-cure). The current cure becomes belt-and-braces, not primary.
-
-Cross-references:
-
-- Composes with the PDR-078 / ADR-186 contract above and with the
-  heartbeat-content-state-binding candidate above. Together they form a
-  three-part cure family: (1) what heartbeat body says (state-binding), (2)
-  how peers detect heartbeat-loop liveness (staleness-substrate), (3) what
-  the contract specifies (PDR-078 cadence/threshold/exemptions).
-- Adjacent worked-instance: see Misty napkin entry 2026-05-25 §Surprises;
-  DM event `8c6bd26a` Misty → Lunar; cross-correlation observable in
-  comms-event timestamps for both agents' heartbeat streams.
-
----
-
 ## Napkin Tail Gates
 
 ### Heterogeneous working-tree owner direction splits by attribution
@@ -1993,49 +1680,6 @@ feedback (sidebar shape is the lightest); composes with `coordinator-role-thresh
 (n≤3 is peer-collaboration default; n=2 is the lightest case); composes with PDR-082
 (n=2 collaboration mode, drafted by Stormy Surfing Dock 2026-05-25 on this substrate).
 
-## EEF cite-or-tag corpus-grounding discipline → real rule
-
-- **captured-date**: 2026-06-01
-- **status**: **graduated 2026-06-01** (Moonless Lurking Dusk, claude / Opus 4.8 /
-  `0641a3`, dedicated knowledge-curation pass).
-- **home**: `.agent/rules/eef-corpus-grounding.md` (canonical) + `.claude` / `.cursor`
-  (`alwaysApply: false`) / `.agents` loaders + a `RULES_INDEX.md` row classified
-  `trigger-loaded`. The stopgap doc `eef/reference/eef-corpus-grounding.md` was
-  deleted after the substance graduated; `eef/README.md` now points at the rule.
-- **open question resolved**: the premise was false — the `.agent/rules/` tier is not
-  always-on by construction. `RULES_INDEX.md` carries a designed `Classification`
-  column and 13 rules were already `trigger-loaded`. A not-always-on, domain-scoped
-  rule lives as a `trigger-loaded` rule: only the one-line forwarder + index row sit
-  in baseline (negligible); the canonical content is read when the trigger fires
-  (here: authoring/editing an `EEF_TOOLKIT_DATA` claim or EEF-thread work). No new
-  mechanism (`replace-dont-bridge`).
-- **note**: the rejected regex detector decision is preserved in the rule's failure-mode
-  section as the human/agent disposition pass; origin remains auto-memory
-  `harvest-from-deleted-is-contamination-vector`.
-
-## Design-rationale cite-or-strike + MCP-brief target pinning
-
-- **captured-date**: 2026-06-03
-- **source-surface**: `napkin.md` 2026-06-03 entry + `distilled.md` 2026-06-03 entry
-  (Seaworthy Swimming Sextant, EEF D3 owner-directed adversarial audit).
-- **graduation-target**: two small candidates sharing one root. (1) A rule (or a
-  clause of an authoring rule) — *design-rationale cite-or-strike*: at contract/
-  design authoring time every surface element cites the governing-plan text that
-  assigns it to that primitive, or it is struck; an element whose rationale must
-  be invented is deleted, not justified. (2) A clause in
-  `.agent/rules/invoke-mcp-expert.md` — MCP reviewer briefs pin Oak's real
-  deployment targets (Claude.ai + ChatGPT per the compliance plan) and pre-reject
-  findings premised on hypothetical/legacy hosts; the pinned-register brief
-  demonstrably cured the recurring "older hosts" reviewer import (worked instance
-  2026-06-03: re-pass returned SIGN-OFF with zero ecosystem-hedging findings).
-- **trigger-condition**: a second observed instance of a fabricated design
-  rationale or an ecosystem-hedging reviewer finding reaching an artefact, OR the
-  next dedicated consolidation pass — whichever first.
-- **status**: graduated 2026-06-03 ->
-  `.agent/rules/verify-data-supports-shape-before-building.md` +
-  `.agent/rules/invoke-mcp-expert.md` (owner-directed first-batch
-  consolidation; `distilled.md` staging entry cleared).
-
 ## Reviewer-brief scope protection cites numbered ratified decisions only
 
 - **captured-date**: 2026-06-03
@@ -2053,32 +1697,6 @@ feedback (sidebar shape is the lightest); composes with `coordinator-role-thresh
   suppressing a legitimate finding, OR the next authoring pass over the
   reviewer-brief discipline surface — whichever first.
 - **status**: pending
-
-## Synthesis/research artefacts must tier claims by verification status
-
-- **captured-date**: 2026-06-04
-- **source-surface**: `napkin.md` 2026-06-04 Mossy Whispering Bark gate-session
-  closeout entry; experience file
-  `2026-06-04-mossy-the-report-was-a-map-not-the-ground.md`; the
-  school-data-search high-stakes verification pass (plan §Phase 0 register).
-- **graduation-target**: PDR-shaped (Practice-governance: how compiled
-  evidence bases — synthesis reports, research syntheses — are built and
-  consumed). Doctrine: a compiled artefact must distinguish (a)
-  primary-verified facts from (b) single-source claims from (c)
-  frame-dependent convergences, and high-stakes (b)/(c) claims are
-  primary-verified before the artefact is "delivered" / relied on for build.
-  Operationalised this session as the plan's verification-discipline note +
-  the high-stakes register (delivery gate). Generalises
-  `verify-data-supports-shape-before-building`, `verify-dont-trust`, and the
-  "convergence inherits its frame" napkin pattern (n≥2).
-- **trigger-condition**: owner ratification (owner mandated the discipline
-  this session — an owner-present consolidation is the venue), OR a second
-  thread where a compiled artefact's unverified claim reaches build.
-- **status**: graduated 2026-06-04 -> PDR-089 §Decision 6 (compiled evidence
-  bases are frames; tier claims by verification status before relying). Routed as
-  a clause on PDR-089, not a new PDR, because that PDR already owned the substrate
-  (frame-capture; cure is the external check). Remains operational in the
-  school-data-search plan.
 
 ## Precedent-hunting / source-framing as an optionality-invention engine
 
