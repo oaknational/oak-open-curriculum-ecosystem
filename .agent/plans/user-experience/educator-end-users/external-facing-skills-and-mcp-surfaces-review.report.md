@@ -85,9 +85,17 @@ selections — the teacher decides"*, ADR-191) — re-derived in three places (s
 body, prompt message, resource guidance): a latent shared-invariant seam.
 
 **Gap:** oak-skills' MCP-grounded skills enumerate Oak tools but none mention
-`get-eef-evidence`, `eef://interpretation`, or `adapt-lesson`; EEF ships
-flag-gated OFF. At release, a new server capability appears that the client
-skills don't route to, and reciprocal announcement is unmet.
+`get-eef-evidence`, `eef://interpretation`, or `adapt-lesson`. The EEF surface is
+now default-ON in this repo's MCP app (commit `d3109d7c`); the operative release
+gate is **deployment to the live Oak Curriculum MCP**, not the repo flag. Until
+the skills reference it, the deepest evidence-grounding surface stays invisible to
+the client skills and reciprocal announcement is unmet.
+
+Reciprocal announcement splits across the repo boundary: the oak-skills-side half
+(the skills referencing EEF once it is deployed) is an **upstream request** —
+[`reference-eef-evidence-once-live.md`](../../upstream-feature-requests/oak-skills/reference-eef-evidence-once-live.md)
+(oak-skills is a separate repo, not edited from here); the MCP-side half (the
+server `instructions` announcing the installable skills) is implementable here.
 
 ## Part 4 — Emerging synthesis thesis (for the next step, with owner)
 
@@ -118,3 +126,11 @@ oak-skills `SKILL.md` files; EEF `mcp-prompts.ts` / `mcp-prompt-messages.ts` /
 taxonomy / distribution docs (now in `previous-materials/`); and current official
 docs — Anthropic Agent Skills + Claude Code skills/plugins, OpenAI Apps SDK +
 **Codex plugins** — read first-hand.
+
+Official sources (verified 2026-06-08; re-verify at synthesis — platform features
+move fast):
+
+- Claude Agent Skills: <https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview>
+- Claude Code skills + plugins: <https://code.claude.com/docs/en/skills>, <https://claude.com/plugins/plugin-dev>
+- ChatGPT Apps SDK (MCP-based): <https://developers.openai.com/apps-sdk>
+- OpenAI Codex plugins (marketplace, launched 2026-03-26): <https://developers.openai.com/codex/plugins>

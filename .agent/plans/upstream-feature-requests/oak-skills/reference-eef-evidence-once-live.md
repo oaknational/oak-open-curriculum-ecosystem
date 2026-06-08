@@ -5,6 +5,9 @@ from this repo** — hand this over to the skills maintainers.
 **Status**: open (blocked on the EEF surface shipping live in the Oak Curriculum MCP)
 **Priority**: medium (closes the deepest evidence-grounding gap in the skills)
 **Affected**: `skills/oak-curriculum-principles-mcp-enabled`, `skills/oak-lesson-builder`.
+**Context**: the oak-skills-side half of the EEF↔skills reciprocal announcement
+analysed in the educator-experience synthesis seed,
+[`external-facing-skills-and-mcp-surfaces-review.report.md`](../../user-experience/educator-end-users/external-facing-skills-and-mcp-surfaces-review.report.md).
 
 ## Problem
 

@@ -211,3 +211,27 @@ convenient *interpretation* deserves the same suspicion as a convenient *fact*.
   stopped re-attempting on each transient red and handed coordination back via a green-ping ask;
   both commits landed once Briny's tree greened. Re-attempting per-red is wasted ~34s cycles and
   noise.
+
+## 2026-06-08 — external-facing skills relocation + plugin-bundle synthesis seed (Zephyrous Buffeting Falcon)
+
+Reviewed `oak-skills` + the discovery skills docs; web-researched Claude/Codex plugin packaging;
+relocated the external-facing skills/plugin/MCP-skill-like materials into
+`user-experience/educator-end-users/{,previous-materials/}` with a seed review report (`6101a946`);
+cross-linked the EEF↔oak-skills upstream request and corrected a stale "flag-gated OFF" line (EEF is
+now default-ON in-repo, `d3109d7c`). The domain finding (plugins are the cross-vendor bundling layer;
+Codex plugins = the OpenAI equivalent) is homed in the report +
+`[[project_external_facing_skills_synthesis_seeded]]`, not here.
+
+- **Explicit-pathspec commit excludes already-staged FOREIGN content, not just unstaged wrong
+  files.** A prior session's `pending-graduations.md` sat STAGED in the shared index; `git commit --
+  <my paths>` committed only my paths and left it untouched — no unstage needed. This sharpens
+  `stage-by-explicit-pathspec`: the pathspec on `git commit` is the protection when foreign content
+  is already in the index — and `git restore`/`git reset` are hook-blocked as worktree-destruction
+  anyway, so a forward pathspec-commit is the move, never an unstage.
+- **Same parallel-collision dynamics Coppery logged above** — HEAD moved under me twice mid-session
+  (parallel sessions committed EEF + upstream-feature-requests); my pathspec commits stayed clean.
+  Cure remains the registered area/commit-window claim both sessions skipped
+  (`feedback_owner_action_is_not_a_cure`); not re-captured.
+- **Repo markdownlint enforces MD049 asterisk emphasis** (`*x*`, not `_x_`); the linter
+  auto-normalises the working tree, but a file staged BEFORE normalisation fails the hook — re-stage
+  after the linter touches it.

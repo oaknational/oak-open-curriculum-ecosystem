@@ -214,6 +214,7 @@ trust model before writing the executable `current/` plan.
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| Zephyrous Buffeting Falcon | claude | Opus 4.8 | 2de7a7 | skills-lane-relocated-to-educator-end-users | 2026-06-08 | 2026-06-08 |
 | Blustery Lifting Gale | claude | Opus 4.8 | 9b33b0 | skills-taxonomy-and-distribution | 2026-06-03 | 2026-06-03 |
 | Umbral Whispering Silhouette | codex | GPT-5 | 019e83 | promotion-and-root-docs-author | 2026-06-01 | 2026-06-01 |
 | Luminous Dancing Aurora | codex | GPT-5 | 019e82 | research-and-plan-author | 2026-06-01 | 2026-06-01 |
