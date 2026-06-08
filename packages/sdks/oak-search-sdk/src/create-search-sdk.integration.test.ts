@@ -169,6 +169,24 @@ function extractSourceExcludes(client: Client): readonly string[] {
   });
 }
 
+function createSdk(): SearchSdk {
+  return createSearchSdk({
+    deps: createTestDeps(),
+    config: createTestConfig(),
+  });
+}
+
+function createObservabilitySdk(): SearchSdk {
+  return createSearchSdk({
+    deps: createTestDeps(),
+    config: {
+      indexTarget: 'primary',
+      indexVersion: 'v-test',
+      zeroHit: { persistenceEnabled: false },
+    },
+  });
+}
+
 // ---------------------------------------------------------------------------
 // Factory tests
 // ---------------------------------------------------------------------------
@@ -217,13 +235,6 @@ describe('createSearchSdk', () => {
 // ---------------------------------------------------------------------------
 
 describe('RetrievalService', () => {
-  function createSdk(): SearchSdk {
-    return createSearchSdk({
-      deps: createTestDeps(),
-      config: createTestConfig(),
-    });
-  }
-
   describe('searchLessons', () => {
     it('returns ok with a LessonsSearchResult containing scope, results, and metadata', async () => {
       const { retrieval } = createSdk();
@@ -420,13 +431,6 @@ describe('RetrievalService', () => {
 // ---------------------------------------------------------------------------
 
 describe('AdminService', () => {
-  function createSdk(): SearchSdk {
-    return createSearchSdk({
-      deps: createTestDeps(),
-      config: createTestConfig(),
-    });
-  }
-
   describe('setup', () => {
     it('returns ok with a SetupResult containing synonym and index info', async () => {
       const { admin } = createSdk();
@@ -587,20 +591,9 @@ describe('AdminService', () => {
 // ---------------------------------------------------------------------------
 
 describe('ObservabilityService', () => {
-  function createSdk(): SearchSdk {
-    return createSearchSdk({
-      deps: createTestDeps(),
-      config: {
-        indexTarget: 'primary',
-        indexVersion: 'v-test',
-        zeroHit: { persistenceEnabled: false },
-      },
-    });
-  }
-
   describe('recordZeroHit', () => {
     it('returns ok when recording a zero-hit event', async () => {
-      const { observability } = createSdk();
+      const { observability } = createObservabilitySdk();
 
       const result = await observability.recordZeroHit({
         scope: 'lessons',
@@ -615,7 +608,7 @@ describe('ObservabilityService', () => {
 
   describe('getRecentZeroHits', () => {
     it('returns an array of zero-hit events', () => {
-      const { observability } = createSdk();
+      const { observability } = createObservabilitySdk();
 
       const recent = observability.getRecentZeroHits(10);
 
@@ -625,7 +618,7 @@ describe('ObservabilityService', () => {
 
   describe('getZeroHitSummary', () => {
     it('returns a summary with total and per-scope breakdown', () => {
-      const { observability } = createSdk();
+      const { observability } = createObservabilitySdk();
 
       const summary = observability.getZeroHitSummary();
 
@@ -639,7 +632,7 @@ describe('ObservabilityService', () => {
 
   describe('persistZeroHitEvent', () => {
     it('returns ok when persistence is disabled', async () => {
-      const { observability } = createSdk();
+      const { observability } = createObservabilitySdk();
 
       const result = await observability.persistZeroHitEvent({
         timestamp: Date.now(),
@@ -655,7 +648,7 @@ describe('ObservabilityService', () => {
 
   describe('fetchTelemetry', () => {
     it('returns ok with telemetry containing summary and recent events', async () => {
-      const { observability } = createSdk();
+      const { observability } = createObservabilitySdk();
 
       const result = await observability.fetchTelemetry({
         limit: 50,
