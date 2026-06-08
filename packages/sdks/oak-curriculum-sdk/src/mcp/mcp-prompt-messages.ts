@@ -110,14 +110,16 @@ export function getAdaptLessonMessages(
         type: 'text',
         text: `I'm adapting a lesson on "${topic}" for ${yearGroup} and want it grounded in the EEF Teaching and Learning Toolkit evidence.
 
-Call get-curriculum-model first for domain definitions and tool guidance.
+Call get-curriculum-model first for domain definitions and tool guidance. MCP tool names may appear prefixed (e.g. mcp__<id>__get-eef-evidence); match them by the suffix.
 
 Workflow:
 1. Use search (scope "lessons") to find the Oak material for "${topic}" at ${yearGroup}, then get the lesson summary, transcript, and quiz.
 2. Surface the pedagogical signals: use get-misconception-graph and get-prior-knowledge-graph (plus the quiz and transcript) to see the likely misconceptions and prerequisite gaps for this lesson.
 3. Name the pedagogical move each signal raises (this is your reasoning, not EEF data). Pick the real EEF strands for those moves from the strand index in the eef://interpretation resource — convert your free-form reasoning into the finite strand ids and axis values the tool accepts at the boundary.
 4. Call get-eef-evidence with those finite inputs. Read eef://interpretation when applying the evidence so you interpret impact, cost, evidence strength, and caveats faithfully.
-5. Give me the adapted lesson as evidence-calibrated options and trade-offs — not a single recommendation or selection. For each option, preserve the EEF caveats and attribution (organisation, the EEF page link, and the named authors), and add a short rationale. The decision is mine to make.`,
+5. Give me the adapted lesson as evidence-calibrated options and trade-offs — not a single recommendation or selection, with a short rationale for each. The decision is mine to make.
+
+Preserve attribution and caveats: cite EEF for the evidence (organisation, the EEF page link, and the named authors), and credit Oak National Academy under the Open Government Licence v3.0 for any reproduced Oak material, linking to the lesson. If you produce slides, worksheets, or quizzes, meet WCAG 2.2 AA (alt text, heading/reading order, contrast).`,
       },
     },
   ];

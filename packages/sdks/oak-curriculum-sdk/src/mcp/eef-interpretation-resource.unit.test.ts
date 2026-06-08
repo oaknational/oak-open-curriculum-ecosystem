@@ -91,4 +91,8 @@ describe('getEefInterpretationMarkdown — agent-side and graph-structural layer
       expect(md).toContain(field);
     }
   });
+
+  it('notes that MCP tool names may be prefixed (match by suffix)', () => {
+    expect(md).toContain('match tools by their suffix');
+  });
 });

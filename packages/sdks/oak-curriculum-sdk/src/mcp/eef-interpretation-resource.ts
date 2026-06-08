@@ -161,6 +161,8 @@ function graphStructural(): string {
     '- `provenance`: `source` (name, url, organisation, authors), `licence`, and `caveats`, carried once per envelope.',
     '',
     'Input selectors are finite and drawn from the corpus: strand ids, and the observed phase, key stage, and priority axes.',
+    '',
+    'MCP tool names may appear prefixed by the client (e.g. `mcp__<server>__get-eef-evidence`); match tools by their suffix.',
   ].join('\n');
 }
 
