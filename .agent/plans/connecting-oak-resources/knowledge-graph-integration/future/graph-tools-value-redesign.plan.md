@@ -1,6 +1,6 @@
 ---
 name: "Graph Tools Value Redesign (unified)"
-overview: "ONE plan owning the value-driven (re)design of all existing graph MCP tools (misconception, prior-knowledge, thread-progressions) onto the graph-corpus-sdk substrate. Governing premise: bounded, relevant, token-efficient retrieval under full design agency over BOTH the generated data-object shape AND the retrieval mechanism — not behaviour-preservation. Per tool, the landing unit is data/type re-emission + the input-interface and bounded-retrieval shape + tool rewrite, together; it ships NO MCP outputSchema (the tool works without one, as today) — every tool's outputSchema is authored uniformly in output-schemas-for-mcp-tools.plan.md W2, so no tool is a special case (owner 2026-06-08). Authored under graph-estate-consolidation Judgement call 4 (owner-ratified 2026-06-02); reframed from behaviour-preservation to design-in-our-power (owner-directed 2026-06-04). Single upstream of the EEF re-validation gate. Parked until the named promotion trigger: EEF D6 landed + EEF D7 green."
+overview: "ONE plan owning the value-driven (re)design of all existing whole-corpus Oak MCP tools (misconception, prior-knowledge, thread-progressions, keywords) onto the graph-corpus-sdk substrate — a list or ordered sequence is a simple DAG, still a graph (owner 2026-06-08), so frequency-ranked keywords and thread sequences belong on the same substrate and in this one plan. Governing premise: bounded, relevant, token-efficient retrieval under full design agency over BOTH the generated data-object shape AND the retrieval mechanism — not behaviour-preservation. Per tool, the landing unit is data/type re-emission + the input-interface and bounded-retrieval shape + tool rewrite, together; it ships NO MCP outputSchema (the tool works without one, as today) — every tool's outputSchema is authored uniformly in output-schemas-for-mcp-tools.plan.md W2, so no tool is a special case (owner 2026-06-08). Authored under graph-estate-consolidation Judgement call 4 (owner-ratified 2026-06-02); reframed from behaviour-preservation to design-in-our-power (owner-directed 2026-06-04). Single upstream of the EEF re-validation gate. Parked until the named promotion trigger: EEF D6 landed + EEF D7 green."
 plan_id: graph-tools-value-redesign
 type: strategic
 status: future
@@ -30,8 +30,12 @@ todos:
     content: "Thread-progressions redesign unit: bounded by-thread / by-subject projection. Anchor = threadSlug (or subject+keyStage); return that thread's ordered unit sequence, never all 164 threads. Data is already as-const type authority. Add the input schema, rewrite get-thread-progressions + the curriculum://thread-progressions resource, repoint the three stats-interpolation consumers (ontology-data.ts, tool-guidance-data.ts, tool-guidance-workflows.ts) in the same unit. Ships NO MCP outputSchema (authored later in `output-schemas-for-mcp-tools.plan.md` W2 against this unit's emitted structuredContent; owner 2026-06-08). Sequence projection is the value-serving token-bounded shape; not graph-forced, not graph-barred."
     status: pending
     depends_on: [settle-mechanism-at-promotion]
+  - id: redesign-keywords
+    content: "Keywords redesign unit (added owner-directed 2026-06-08 — a frequency-ranked list is a simple DAG, still a graph; the whole-corpus flood is identical, confirmed live 2026-06-08: get-keywords at subject+keyStage returns ~205 KB and overflows an MCP host token cap). Anchor = subject+keyStage, narrowable by unit or lesson; return the bounded, frequency-ranked keyword set for the anchor, never every keyword in the subject/key stage. Keywords are bulk-derived (the `vocab-gen` keyword extractor, `oak-sdk-codegen/src/bulk/extractors/keyword-extractor.ts`, from lesson keyword data in the bulk source), so re-project `keyword` as a node kind with the `lesson->keyword` edge per the node/edge model, add the anchor input schema, rewrite get-keywords onto the substrate. Ships NO MCP outputSchema (authored later in `output-schemas-for-mcp-tools.plan.md` W2 against this unit's emitted structuredContent; owner 2026-06-08). Frequency ranking is the value-serving order over the bounded set; the exact bulk keyword field + per-anchor density are a promotion-time data-grounding check."
+    status: pending
+    depends_on: [settle-mechanism-at-promotion, define-heterogeneous-node-edge-model]
   - id: define-heterogeneous-node-edge-model
-    content: "Define ONE bulk curriculum graph's heterogeneous node/edge model — node kinds (misconception, unit, lesson, thread) and typed inter-kind edges (unit->thread, unit<->lesson, lesson->misconception, unit->unit prerequisite), all re-projected from the bulk source. Identity is a DELIBERATE design item, NOT slug-as-id: stable entity ids; unit<->lesson placement modelled as an edge (a lesson can be placed in >1 unit; slugs not assumed unique). The three tools are bounded query VIEWS over this one graph (GraphView ops: subgraph / neighbours / path), NOT a single polymorphic god-primitive and NOT three independently re-emitted corpora; any shared view mechanics consolidate as a third-consumer decision (consolidate-at-third-consumer), never presupposed. DEFERRED from EEF D4 (homogeneous single-kind strand graph, decision B 2026-06-04). The model's CORE is mechanism-INDEPENDENT and derivable now; only its reconciliation with the landed EEF D4 homogeneous contract depends on landed code (lands at promotion). Bulk-id<->ontology-IRI reconciliation is a separate concern. Must NOT be assumed-inherited from EEF nor dropped."
+    content: "Define ONE bulk curriculum graph's heterogeneous node/edge model — node kinds (misconception, unit, lesson, thread, keyword) and typed inter-kind edges (unit->thread, unit<->lesson, lesson->misconception, lesson->keyword, unit->unit prerequisite), all re-projected from the bulk source. Identity is a DELIBERATE design item, NOT slug-as-id: stable entity ids; unit<->lesson placement modelled as an edge (a lesson can be placed in >1 unit; slugs not assumed unique). The four tools are bounded query VIEWS over this one graph (GraphView ops: subgraph / neighbours / path), NOT a single polymorphic god-primitive and NOT four independently re-emitted corpora; any shared view mechanics consolidate as a third-consumer decision (consolidate-at-third-consumer), never presupposed. DEFERRED from EEF D4 (homogeneous single-kind strand graph, decision B 2026-06-04). The model's CORE is mechanism-INDEPENDENT and derivable now; only its reconciliation with the landed EEF D4 homogeneous contract depends on landed code (lands at promotion). Bulk-id<->ontology-IRI reconciliation is a separate concern. Must NOT be assumed-inherited from EEF nor dropped."
     status: pending
     depends_on: [settle-mechanism-at-promotion]
   - id: amend-adr-086
@@ -39,9 +43,9 @@ todos:
     status: pending
     depends_on: [settle-mechanism-at-promotion]
   - id: signal-eef-revalidation
-    content: "On each redesign-unit landing, raise the landing signal to eef-revalidate-on-new-graph-tools (name the redesigned tool + commit + the new bounded-retrieval contract). The value re-proof is owned by that plan; this plan completes when all three units have landed and signalled."
+    content: "On each redesign-unit landing, raise the landing signal to eef-revalidate-on-new-graph-tools (name the redesigned tool + commit + the new bounded-retrieval contract). The value re-proof is owned by that plan; this plan completes when all four units have landed and signalled."
     status: pending
-    depends_on: [redesign-prior-knowledge, redesign-misconception, redesign-thread-progressions]
+    depends_on: [redesign-prior-knowledge, redesign-misconception, redesign-thread-progressions, redesign-keywords]
 ---
 
 # Graph Tools Value Redesign (unified)
@@ -62,9 +66,11 @@ todos:
 
 ## Problem and intent
 
-The existing graph tools each return their **whole generated corpus** with **no input**:
-`get-misconception-graph` returns a 6.0 MB / 12,858-node blob, `get-prior-knowledge-graph`
-returns 1.8 MB, `get-thread-progressions` returns all 164 threads. That whole-corpus
+The existing whole-corpus tools each return their **whole generated corpus** with **little or
+no scoping input**: `get-misconception-graph` returns a 6.0 MB / 12,858-node blob,
+`get-prior-knowledge-graph` returns 1.8 MB, `get-thread-progressions` returns all 164 threads,
+and `get-keywords` returns every keyword for a whole subject + key stage (~205 KB for maths KS2,
+confirmed live 2026-06-08 — large enough to overflow an MCP host's token cap). That whole-corpus
 return floods the calling agent with mostly-irrelevant tokens — it is the central problem.
 
 This plan was first authored under a **behaviour-preservation** frame — *"same observable
@@ -100,6 +106,13 @@ the value needs. Graph form is used when it is the most direct bounded-relevant 
 is neither forced nor barred by anything other than the two constraints. **Value, not graph
 form, is the test.**
 
+**A list is a simple DAG — still a graph (owner-directed 2026-06-08).** A frequency-ranked
+keyword list and a thread's ordered unit sequence are trivially-shaped graphs (a ranking; a
+path), and they carry the same whole-corpus-flood problem as the richer graph tools. They
+therefore belong on this one substrate and in this one plan, surfaced as bounded views like the
+rest — the trivial shape is not a reason to treat them as a separate concern, and the bounded
+view (not graph machinery) is what the value needs.
+
 ## Scope and source boundaries (owner-directed 2026-06-04)
 
 - **Two data sources, one substrate, separate concerns.** This plan builds graphs from the
@@ -116,9 +129,9 @@ form, is the test.**
   graph is **one graph with a single identity model**, surfaced through many bounded query views.
   Separate per-domain graphs would duplicate and de-identify the shared entities and turn
   cross-domain queries into a self-inflicted join. "One graph" is an identity/target statement,
-  **not** build-it-all-up-front: the graph grows incrementally — the three redesigned tools are
-  its first three views, adding only the node kinds and edges they need.
-- **Scope stays the three tools (delivery discipline).** This plan does **not** expand into the
+  **not** build-it-all-up-front: the graph grows incrementally — the four redesigned tools are
+  its first four views, adding only the node kinds and edges they need.
+- **Scope stays the four tools (delivery discipline).** This plan does **not** expand into the
   foundational curriculum-KG. The owner-directed **review of the entire `oak-kg` / ontology
   estate** is a **distinct activity**, not folded here (recorded in
   [`graph-kg-estate-and-two-source-survey-2026-06-04.md`](../../../../reports/graph-kg-estate-and-two-source-survey-2026-06-04.md)).
@@ -130,7 +143,7 @@ Nothing is silently dropped.
 
 | # | Old decision | Disposition |
 | --- | --- | --- |
-| 1 | One plan owns all existing graph-tool work | **retained** — re-grounded: one plan owns the *redesign* of all three tools. |
+| 1 | One plan owns all existing graph-tool work | **retained** — re-grounded: one plan owns the *redesign* of all four whole-corpus tools. |
 | 2 | Per tool, migration is ONE replacement unit (re-emit + rewrite + outputSchema) | **reshaped** (twice) — the atomic landing unit now carries the **input schema + bounded-retrieval shape** (not just a re-platform); and the **outputSchema is removed from the unit** (owner 2026-06-08): the tool ships with no MCP outputSchema and its schema is authored uniformly in `output-schemas-for-mcp-tools.plan.md` W2, so no tool is a special case. |
 | 3 | Existing tools untouched / behaviour preserved | **replaced** — behaviour-preservation is not the premise; whole-corpus return is the problem being removed. The tools keep working *until* their redesign lands (so D7 can run on them), which is sequencing, not a preservation goal. |
 | 4 | Sequencing by consumer-readiness (ADR-173) | **retained**. |
@@ -208,7 +221,21 @@ whatever unit/thread path reaches it, correctly even when a lesson is placed in 
 (its own type authority). **Shape**: anchor = `threadSlug` (or `subject`+`keyStage`); return
 that thread's ordered unit sequence. **Value**: "what's the learning path for this thread",
 one thread instead of all 164. A sequence projection is the most token-efficient relevant
-shape; graph form is neither needed nor barred.
+shape; graph form is neither needed nor barred (an ordered sequence is itself a simple DAG).
+
+### keywords — bounded frequency-ranked retrieval (added owner-directed 2026-06-08)
+
+`get-keywords` returns every keyword across a whole subject + key stage today — ~205 KB for
+maths KS2 (confirmed live 2026-06-08; it overflows an MCP host token cap, the same flood the
+graph tools have). Keywords are bulk-derived by the `vocab-gen` keyword extractor
+(`oak-sdk-codegen/src/bulk/extractors/keyword-extractor.ts`) from lesson keyword data, so a
+`keyword` node with a `lesson->keyword` edge re-projects from the **same bulk source** as the
+other edges — no external sourcing. **Shape**: anchor = `subject`+`keyStage`, narrowable by
+`unit` or `lesson`; return the bounded, frequency-ranked keyword set for that anchor. **Value**:
+"what vocabulary does this unit/lesson introduce", or a bounded ranked set for a subject + key
+stage, instead of the whole subject dump. A ranked list is a simple DAG — the bounded view, not
+graph machinery, is what the value needs. The exact bulk keyword field and per-anchor density
+are a promotion-time data-grounding check.
 
 ## Input-interface design surface (new, first-class)
 
@@ -216,7 +243,8 @@ Removing whole-corpus return introduces a design surface the behaviour-preservat
 none of. Per tool, the redesign unit must design:
 
 - **The anchor input schema** — `lessonSlug` (misconception), `unitSlug[]` + bound
-  (prior-knowledge), `threadSlug` / `subject`+`keyStage` (thread-progressions). Strict and
+  (prior-knowledge), `threadSlug` / `subject`+`keyStage` (thread-progressions),
+  `subject`+`keyStage` narrowable by `unit`/`lesson` (keywords). Strict and
   Complete, projection-derived where the values are generated-domain literals. The arity
   difference across tools (singular `lessonSlug`; plural `unitSlug[]` + depth; singular
   `threadSlug` with a `subject`+`keyStage` set-broadening fallback) is **corpus-justified and
@@ -270,14 +298,15 @@ landed code):
   `misconception → concept`: **concepts live in the ontology** (its SKOS knowledge taxonomy), a
   separate source and concern, so a concept-anchored capability is a **cross-source** matter
   (gated on the bulk↔ontology alignment audit) and is **out of scope here**.
-- **Bounded query views over the one graph — not three bespoke algorithms, and not one god-primitive.**
+- **Bounded query views over the one graph — not four bespoke algorithms, and not one god-primitive.**
   Under the owner's one-graph direction the views are **queries over the single bulk curriculum
   graph**: misconception-retrieval and prerequisite-retrieval are both **bounded subgraph
-  traversals** (differing only in seed node + which edge types they follow), and thread-progressions
-  is a **bounded path/sequence** over thread→unit ordering. These map directly onto the typed
+  traversals** (differing only in seed node + which edge types they follow), thread-progressions
+  is a **bounded path/sequence** over thread→unit ordering, and keyword-retrieval is a **bounded
+  neighbourhood** over `lesson→keyword` edges. These map directly onto the typed
   operations the substrate's `GraphView` interface already provides (`subgraph` / `neighbours` /
   `manifest`), parameterised by seed + edge-type — so there is neither a single overloaded
-  `boundedRetrieval()` god-function nor three unrelated bespoke accessors. Each view shares the
+  `boundedRetrieval()` god-function nor four unrelated bespoke accessors. Each view shares the
   structural discipline (seed-input, bounded result, well-formed empty); any genuinely shared
   mechanics consolidate as a **third-consumer decision** (`consolidate-at-third-consumer`), never
   presupposed.
@@ -293,19 +322,21 @@ or are absent** (ADR-173 §2026-06-01 real-operations-only) — no stubs.
 
 ## The tool set, pinned from code (verified 2026-06-04)
 
-Inclusion criterion: a live aggregated MCP tool whose payload is a bulk-derived generated
-graph corpus (`packages/sdks/oak-sdk-codegen/src/generated/vocab/`). The live registry carries
-35 tools; exactly three meet the criterion. **Landing is staged per tool/view** — each tool's
+Inclusion criterion: a live aggregated MCP tool whose payload is a bulk-derived whole-corpus
+flood — a generated graph corpus (`packages/sdks/oak-sdk-codegen/src/generated/vocab/`) or another
+bulk-extracted whole-corpus return (the keyword extractor). The live registry carries 35 tools;
+four meet the criterion — the three graph corpora plus keywords (added owner-directed 2026-06-08,
+on the "a list is a simple DAG" principle). **Landing is staged per tool/view** — each tool's
 rewrite moves every consumer of its surface at once (tool, resource twin, interpolation
 consumers), otherwise the estate splits a surface across two authorities.
 
 > **Execution-structure note (reconciling with one-graph).** The per-tool todos below speak of
 > "re-emit data/types per Decision A" — inherited execution-sketch wording from the migration
 > framing. Under the owner's one-graph direction the data layer is **one bulk curriculum graph
-> ingested from the source with a single identity model**, and the three tools are **views** over
-> it (the staged landing adds each view's node kinds/edges + the view itself). It is **not** three
+> ingested from the source with a single identity model**, and the four tools are **views** over
+> it (the staged landing adds each view's node kinds/edges + the view itself). It is **not** four
 > independently re-emitted corpus type authorities. The flat hand-written `types.ts` files still go
-> away; their replacement is the one graph + typed views, not three parallel re-emissions. Whether
+> away; their replacement is the one graph + typed views, not four parallel re-emissions. Whether
 > the executable plan stages this as "ingest-then-view per tool" is a promotion-time decision the
 > one-graph architecture governs; the todos are re-derived there under it.
 
@@ -314,9 +345,11 @@ consumers), otherwise the estate splits a surface across two authorities.
 | misconception | `misconception-graph/data.json` — 6.0 MB, 12,858 nodes, **no edges**; nodes carry `lessonSlug`/`subject`/`keyStage` | Hand-written interface (`types.ts`) — no validation | `get-misconception-graph` + `curriculum://misconception-graph` resource | curriculum-anchored bounded subgraph (graph-shaped, owner-directed); `lessonSlug` filter = leaf case |
 | prior-knowledge | `prior-knowledge-graph/data.json` — 1.8 MB, 1,607 nodes, **3,452 `prerequisiteFor` edges** | Hand-written types + two-step runtime edge-literal narrowing | `get-prior-knowledge-graph` + `curriculum://prior-knowledge-graph` resource | bounded subgraph (anchor `unitSlug` + depth) |
 | thread-progressions | `thread-progression-data.ts` — 190 KB, 164 threads, ordered unit sequences | **Already `as const` + `typeof`-derived** | `get-thread-progressions` + `curriculum://thread-progressions` resource + stats interpolations in `ontology-data.ts`, `tool-guidance-data.ts`, `tool-guidance-workflows.ts` | bounded sequence projection (anchor `threadSlug`) |
+| keywords | bulk-extracted via `keyword-extractor.ts` — whole subject+keyStage keyword set, ~205 KB for maths KS2 (live 2026-06-08), overflows host token cap | `vocab-gen` keyword extractor (bulk-derived) | `get-keywords` | bounded frequency-ranked set (anchor `subject`+`keyStage`, narrowable by `unit`/`lesson`) |
 
-All three are produced by the `vocab-gen` pipeline in `oak-sdk-codegen` from the same bulk
-download set (bulk-data authority, ADR-173 §Corpus source authority). The bulk source schema is
+All three graph corpora — and the keyword set — are produced by the `vocab-gen` pipeline in
+`oak-sdk-codegen` from the same bulk download set (bulk-data authority, ADR-173 §Corpus source
+authority). The bulk source schema is
 `apps/oak-search-cli/bulk-downloads/schema.json` (+ `manifest.json`): each subject-sequence
 carries `sequence[]` (units, each with `threads`, `unitLessons`, `priorKnowledgeRequirements`) and
 `lessons[]` (each with `unitSlug` + `misconceptionsAndCommonMistakes`). All three generated corpora
@@ -383,7 +416,7 @@ features plan is updated to record this boundary move (its §1 status), preservi
 
 Each names its single observable signal; verdicts land at promotion + per-unit landing.
 
-1. **Bounded retrieval per corpus (×3)**: each tool takes its decided anchor input and returns
+1. **Bounded retrieval per corpus (×4)**: each tool takes its decided anchor input and returns
    only the bounded relevant subset (signal: an e2e call with an anchor returns the subset; a
    call exercising an empty anchor returns a well-formed empty result; no whole-corpus path
    remains). The tool returns `structuredContent` and the `isError` path carries none. The MCP
@@ -393,17 +426,17 @@ Each names its single observable signal; verdicts land at promotion + per-unit l
 2. **Type authority**: the hand-written `misconception-graph/types.ts` and
    `prior-knowledge-graph/types.ts` are deleted; no hand-maintained type parallel to a generated
    corpus remains (signal: files absent and `pnpm sdk-codegen && pnpm build` reproduces the tree).
-3. **Value re-proof signalled**: all three landings raise the named signal to
+3. **Value re-proof signalled**: all four landings raise the named signal to
    `eef-revalidate-on-new-graph-tools` with the new bounded-retrieval contract (signal: that
-   plan's tracking todo cites the three commits). The value re-proof itself is that plan's
+   plan's tracking todo cites the four commits). The value re-proof itself is that plan's
    acceptance.
 4. **ADR-086 amended** in the first re-emission commit (signal: the amendment section exists
    citing Decision A).
 5. **Node/edge model**: the heterogeneous model (kinds, cross-kind id policy, typed edges) is
-   defined and consumed by all three units via their own typed accessors sharing one structural
+   defined and consumed by all four units via their own typed accessors sharing one structural
    discipline (not a single polymorphic primitive), reconciled with the landed EEF D4 homogeneous
    case; any shared accessor mechanics ship with real operations + tests or are absent — no stubs
-   (signal: the model doc + the three accessors in `graph-corpus-sdk`).
+   (signal: the model doc + the four accessors in `graph-corpus-sdk`).
 
 ## Risks and unknowns
 
@@ -411,7 +444,7 @@ Each names its single observable signal; verdicts land at promotion + per-unit l
 | --- | --- |
 | Misconception graph-shaping (owner-directed) — does the data support the chosen anchor? | Verified 2026-06-04 against `bulk-downloads/schema.json`: the full `thread→unit→lesson→misconception` chain is in the bulk source, so thread/unit/lesson anchors are supported with no external sourcing. The residual check at promotion is population/density (how large a typical anchored subgraph is), not existence. `concept`-anchoring is the one unsupported case (no concept node) and is out of scope. The exact anchor/journey is confirmed with the owner before the edges are built. |
 | Type-emission scale: 6.0 MB corpus breaks compile budget (TS7056 class) | Decision A structural emission + structural (not value-literal) shape; falsifiable compile check at promotion. With bounded retrieval the *returned* payload also shrinks dramatically. |
-| Anchor design diverges across the three tools (inconsistent input idiom) | The input-interface surface is a single shared deliverable; anchors are generated-corpus keys with one resolution idiom. |
+| Anchor design diverges across the four tools (inconsistent input idiom) | The input-interface surface is a single shared deliverable; anchors are generated-corpus keys with one resolution idiom. |
 | Mechanism divergence from EEF (two parallel projection mechanisms) | Blocking D6 dependency; Decision B ONE-mechanism constraint; co-design recorded in the EEF plan. |
 | Dependency-direction violation at the adapter boundary | ADR-041 check named in Decision B; architecture review at promotion. |
 | Silent `outputSchema` drop at the universal-tools seam (Q-003 asymmetric-drop) | Not this plan's concern (owner 2026-06-08): the graph tools ship with no MCP outputSchema; the seam, every tool's outputSchema, and the drop-catch conformance proof are all owned by `output-schemas-for-mcp-tools.plan.md` (S0 + the registry countdown test). |
@@ -440,7 +473,7 @@ instance. At promotion: record the trigger evidence, settle the mechanism decisi
 (`settle-mechanism-at-promotion`) and the node/edge-model reconciliation with architecture +
 assumptions review, author the executable plan in `current/` with TDD cycles per redesign unit,
 and re-verify the pinned tool/consumer sets and corpus structures against the tree at that time
-(this plan's pins are verified-2026-06-04 facts, re-checked at execution start). Three named
+(this plan's pins are verified-2026-06-04 facts, re-checked at execution start). Four named
 data-grounding checks gate the shapes at that re-verification: (a) the prior-knowledge
 prerequisite-edge out-degree / depth distribution (confirm a depth bound yields a meaningfully
 bounded subgraph, not a near-complete graph); (b) `lessonSlug` population density and stability
@@ -448,7 +481,10 @@ on misconception nodes (confirm the primary anchor is reliable and complete per 
 the anchored-subgraph population/density for the misconception graph (the `thread→unit→lesson→
 misconception` chain is schema-confirmed present in the bulk source 2026-06-04, so this is a
 size/density check — how large a typical thread/unit-anchored subgraph is — not an existence
-check).
+check); and (d) keyword per-anchor density and the exact bulk keyword field — confirm a
+subject+key-stage anchor (narrowable by unit/lesson) yields a meaningfully bounded,
+frequency-ranked set, and pin the bulk field the `keyword` node and `lesson->keyword` edge
+re-project from.
 
 The ratified arc (owner, 2026-06-02): **finish the EEF plan → redesign the graph tools onto the
 new substrate → then decide what to do next.** This plan is the middle step; its completion opens

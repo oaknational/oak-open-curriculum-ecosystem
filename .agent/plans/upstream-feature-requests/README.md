@@ -25,6 +25,10 @@ as local workarounds.
 
 - [`oak-open-api/reusable-enum-ref-components.md`](oak-open-api/reusable-enum-ref-components.md)
   — register shared enums as reusable component schemas (`$ref`).
+- [`oak-open-api/quiz-image-alt-text-quality.md`](oak-open-api/quiz-image-alt-text-quality.md)
+  — quiz image `alt` text is auto-generated and frequently broken (repetition
+  loops, hallucination, function-blind); a WCAG 1.1.1 accessibility fix with
+  reproducible examples.
 
 ### `oak-skills` — the Oak Agent Skills library (`oak-skills`)
 
