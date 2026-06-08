@@ -187,7 +187,7 @@ convenient *interpretation* deserves the same suspicion as a convenient *fact*.
   them from the measured corpus. Use the apparatus's own function vocabulary
   (`fitness_content_role`) to make the classification explicit.
 
-## 2026-06-08 — pending-graduations drain + "precedence is not approval" (Coppery Crackling Crucible)
+## 2026-06-08 — pending-graduations drain + precedence-is-not-approval (Coppery Crackling Crucible)
 
 - **I treated a prior agent's annotation as owner approval — the worked instance behind
   PDR-091.** Draining graduated tombstones, I correctly verified every `graduated` item's home
