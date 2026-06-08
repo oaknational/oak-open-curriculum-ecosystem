@@ -99,6 +99,10 @@ export const EEF_STRAND_IDS: readonly EefStrandId[] = EEF_TOOLKIT_DATA.strands.m
  * @returns `true` iff `value` is a string that is a real corpus strand id.
  */
 export function isValidStrandKey(value: unknown): value is EefStrandId {
+  // `.some` with an explicit `===`, not `.includes(value)`: `includes` expects
+  // an `EefStrandId` argument, so passing `unknown` would not typecheck without
+  // an `as` cast — the one widening this module exists to avoid. The predicate
+  // form compares `unknown` against each exactly-typed id soundly.
   return EEF_STRAND_IDS.some((id) => id === value);
 }
 
