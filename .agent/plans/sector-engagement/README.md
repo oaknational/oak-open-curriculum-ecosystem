@@ -67,7 +67,7 @@ implementation collection when promoted.
 
 | [knowledge-graph-adoption/](knowledge-graph-adoption/) | Adoption thread | Support model for external organisations using Oak KG assets |
 | [castr/](castr/) | Partner/reference pack | Requirements for an external OpenAPI/codegen tool to support Oak's schema-first pipeline |
-| [ooc-api-wishlist/](ooc-api-wishlist/) | Upstream coordination | Oak Open Curriculum API wishlist, examples, and enhancement proposals |
+| [upstream-api-feature-requests/](upstream-api-feature-requests/) | Upstream coordination | Live, evidence-backed feature requests for the Oak Open Curriculum API (historic wishlist archived to [archive/ooc-api-wishlist/](archive/ooc-api-wishlist/)) |
 | [ooc-issues/](ooc-issues/) | External issue reports | Standalone issue reports for upstream API teams |
 | [oeai/](oeai/) | Partner thread | Open Education AI review and future engagement notes |
 
@@ -79,7 +79,7 @@ implementation collection when promoted.
 4. [external-material-triage.md](external-material-triage.md)
 5. [eef/README.md](eef/README.md)
 6. [knowledge-graph-adoption/README.md](knowledge-graph-adoption/README.md)
-7. [ooc-api-wishlist/index.md](ooc-api-wishlist/index.md)
+7. [upstream-api-feature-requests/README.md](upstream-api-feature-requests/README.md)
 8. [ooc-issues/README.md](ooc-issues/README.md)
 9. [oeai/README.md](oeai/README.md)
 

@@ -92,3 +92,16 @@ convenient *interpretation* deserves the same suspicion as a convenient *fact*.
   type; the fitness checker only *surfaces signals*, agents act — strategy notes are
   guidance for the agent, not apparatus law. Cure landed: §Disposition re-scoped to
   continuity surfaces; no fitness-system code touched.
+
+- **Follow-on (same session): classify by intended function, not current stats.** Asked
+  to "find balance" for thread-record fitness limits, I curve-fit the numbers to the
+  current file-size distribution — which bakes existing bloat into the "healthy" band and
+  drifts as the corpus drifts. Owner: "classify by intended function, not current stats."
+  The limit is a property of the surface's *function class* (a thread-continuation record =
+  compact pickup surface: identity + current state + landing target + standing decisions +
+  the latest still-live handoff banner), derived from what that function should occupy, set
+  once, independent of today's sizes. The bloated full-log records are function violations,
+  not large healthy threads — they *should* trip the signal. Behaviour change: derive
+  fitness thresholds from the documented function of the surface; never reverse-engineer
+  them from the measured corpus. Use the apparatus's own function vocabulary
+  (`fitness_content_role`) to make the classification explicit.

@@ -3,6 +3,7 @@ fitness_line_target: 400
 fitness_line_limit: 525
 fitness_char_limit: 35000
 fitness_line_length: 200
+fitness_content_role: reference
 overflow_disposition: 'leave-if-live; else conserve-insight-and-delete — never archive/split/rotate/shard (see continuity-practice.md §Disposition of Continuity Surfaces)'
 merge_class: index-narrative-tables
 ---
