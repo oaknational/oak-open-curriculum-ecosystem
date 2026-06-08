@@ -78,19 +78,21 @@ todos:
 > (teacher-value round-trip). The design history lives in the handoff note and the
 > experience corpus, not here.
 
-## Execution corrections — READ FIRST (2026-06-07, Pelagic Charting Rudder)
+## Execution corrections — READ FIRST (2026-06-07 Pelagic; superseded + reconciled 2026-06-08, Evergreen Blossoming Copse)
 
-Owner-driven corrections from the c1–c3 authoring session. The full analysis +
-type-flow diagram are in
-[`.agent/reports/eef-get-eef-evidence-tool-and-strict-type-flow.report.md`](../../../../reports/eef-get-eef-evidence-tool-and-strict-type-flow.report.md)
-(do not re-derive — read it).
+The architecture is now recorded in
+[ADR-193](../../../../docs/architecture/architectural-decisions/193-system-vendor-type-boundary-membrane.md)
+— the system↔vendor type boundary. **Read it first; it is authoritative.** The report
+[`eef-get-eef-evidence-tool-and-strict-type-flow.report.md`](../../../../reports/eef-get-eef-evidence-tool-and-strict-type-flow.report.md)
+holds accurate vendor facts + the type-flow diagram, but its §4 "carrier fix" is
+**SUPERSEDED by ADR-193** — read it for the facts, not the fix.
 
-1. **Strict types without loss is the absolute requirement.** From MCP input to
-   MCP output the type is known at every point; the ONLY narrowing is the input
-   validation (`safeParse` of `unknown` → exact corpus literals), the ONLY erasure
-   is JSON serialisation at the wire. No `as`, no widening to `string`, no
-   re-narrowing in between. The corpus is `as const`, so validated-input +
-   corpus-data ⇒ every intermediate and the output are exact by construction.
+1. **Strict types are an INTERNAL invariant, with one egress membrane (ADR-193).**
+   Exact types hold from the `as const` corpus → input validation (the only narrowing)
+   → the strict `EefEvidenceEnvelope` (proven at construction). The vendor's
+   `CallToolResult.structuredContent: Record<string, unknown>` is the EXTERNAL contract,
+   met at a per-primitive EGRESS function (the only erasure). No `as`, no widening, no
+   `Record`/index-signature fallback, no disabled check, anywhere in the domain.
 
 2. **EEF is a NEW TYPE of aggregated tool — closed, known input; bounded query.**
    Not `search` (open input). The input schema is `z.enum` over the corpus's finite
@@ -98,36 +100,36 @@ type-flow diagram are in
    that returns the D5 envelope verbatim. Do NOT pattern-match to the open-input
    family's input handling.
 
-3. **THE carrier fix (the correct LTAE next step, supersedes the prior c3/c6 shape
-   where the result widened to `CallToolResult` at the `AGGREGATED_HANDLERS` map):**
-   `structuredContent` must stay the precise `EefEvidenceEnvelope` and erase to the
-   MCP `Record<string, unknown>` carrier ONLY at the wire (`registerTool`). The
-   `AGGREGATED_HANDLERS` result carrier (`executor.ts`) currently erases it
-   prematurely inside our own code — the family's persistent error. The fix preserves
-   the per-tool result type through the aggregated-handler chain to the wire. This is
-   a family-level change (touches `AggregatedHandler`/executor result typing), not
-   EEF-local. `EefEvidenceEnvelope` is correctly a `type` (not `interface`) for JSON
-   index-signature assignability. **OWNER DECISION PENDING**: the
-   `@typescript-eslint/consistent-type-definitions: interface` lint rule conflicts
-   with the required `type` alias — resolve by scoping that rule (do NOT disable the
-   check, do NOT revert to `interface`).
+3. **THE egress membrane (ADR-193) — REPLACES the prior "carrier fix" (now DEAD).**
+   The strict `EefEvidenceResult` crosses to `CallToolResult` at the DOMAIN→TRANSPORT
+   seam via a per-primitive egress function (`eefEvidenceToCallToolResult`,
+   `aggregated-eef-evidence.ts`), which constructs a fresh object (`{ ...envelope }`) —
+   structurally `Record<string, unknown>`-assignable with no cast / index-sig / fork.
+   The executor / auth / registration are vendor-facing TRANSPORT (their currency is
+   `CallToolResult`); strict types are NOT threaded through them to `registerTool`.
+   **DEAD — do NOT re-explore (ADR-193 §Alternatives):** preserving the precise type to
+   `registerTool` (the "carrier fix"); the `EefEvidenceEnvelope` index signature; the
+   generic-spine-through-transport; forking/augmenting the SDK.
+   **`consistent-type-definitions` — RESOLVED:** `EefEvidenceEnvelope` is a strict clean
+   `interface` (no index signature); the rule passes with NO scoping and NO disable. The
+   prior "OWNER DECISION PENDING / scope the rule" framing is void.
 
-4. **Gating is STRUCTURAL, at registration, default off (corrects "gate co-gated at
-   c6" reading).** Gate the tool/resource/prompt at the point of registration in the
-   SAME change that adds them — not bolted on last. Then the `list_tools parity` e2e
-   (`e2e-tests/server.e2e.test.ts:138`) passes because EEF is not exposed by default.
+4. **Gating is STRUCTURAL, at registration, default off (still the next step).** Gate
+   the tool/resource/prompt at the point of registration (skip the EEF entry in the
+   `registerTools` loop when `!runtimeConfig.eefEnabled`). Then the `list_tools parity`
+   e2e (`e2e-tests/server.e2e.test.ts`) passes because EEF is not exposed by default.
    Do NOT patch the expected-tools list (buries the real cause).
 
 5. **The author citation is a citation, not PII** — emitted verbatim
    (`provenance.source.original_authors`). The earlier omit-as-PII framing was wrong.
 
-**c1–c3 status**: authored + strict-typed in the working tree, UNCOMMITTED, green at
-the SDK level (type-check + lint + 736 tests; graph-corpus-sdk 37 + build). They are
-the foundation the carrier fix + gating build on (largely keepable; the carrier fix
-is adjacent in `executor.ts`, gating is additive). The working tree is currently
-gate-RED at the full-repo level (graph-corpus-sdk lint on the `type` alias [item 3
-decision]; app e2e parity [item 4 gating]) — both clear when 3+4 land. Commit is
-blocked until then.
+**c1–c3 status (2026-06-08):** DONE in the corrected ADR-193 shape and COMMITTED
+(`496ea7ca` — the egress code + strict-interface envelope; ADR-193 in `83d791e8`). The
+envelope is a strict `interface`; the egress membrane is built + green at the SDK level
+(type-check + lint + tests incl. the egress guard). Remaining: **c6 gating** (item 4 —
+the only `pnpm check` red, the app e2e parity), **c4 resource**, **c5 prompt** (each
+crossing via its own egress membrane). Commit by explicit pathspec (peer `oak-eslint`
+WIP is live).
 
 ## Context
 

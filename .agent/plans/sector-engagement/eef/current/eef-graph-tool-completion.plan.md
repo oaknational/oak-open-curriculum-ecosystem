@@ -1363,6 +1363,24 @@ If D5/D6 co-land, also run
 
 **Purpose:** expose the EEF graph as the ratified MCP tool/resource/prompt surface.
 
+> **⚠️ RECONCILIATION (2026-06-08, Evergreen Blossoming Copse) — the body below
+> predates three corrections; the frontmatter §D6 todo, the D6 execution plan, and
+> [ADR-193](../../../../docs/architecture/architectural-decisions/193-system-vendor-type-boundary-membrane.md)
+> are authoritative for the actual shape.** DEAD in the body below: (a) the
+> **`outputSchema`-required** framing ("one Zod-call output schema", "two
+> declarations are the only Zod", "`outputSchema` reaches `registerTool`", "SDK
+> validates `structuredContent`") — D6 ships NO `outputSchema` (owner-ratified
+> 2026-06-07; the universal output-schema work is `output-schemas-for-mcp-tools.plan.md`'s);
+> (b) the bespoke **`eef-surface.ts` bypass** — superseded by the uniform
+> `AGGREGATED_HANDLERS` family-peer shape (no bypass, no discriminant, no special
+> auth). CURRENT shape: a `z.ZodRawShape` INPUT schema only; the strict
+> `EefEvidenceEnvelope` crosses to `CallToolResult.structuredContent` via a
+> per-primitive **egress membrane** (ADR-193) — the one erasure — while transport
+> (executor / auth / registration) legitimately speaks the vendor type. The egress
+> for the tool (`eefEvidenceToCallToolResult`) is built + green; c4 resource and c5
+> prompt each get their own egress; c6 gating is the only remaining `pnpm check`
+> red. See the D6 execution plan §"Execution corrections" for the per-cycle spec.
+
 **Folded detail:** D6 carries the dual-content `universal-tool-shared.ts` path,
 the `outputSchema` registration gap this deliverable must replace/extend, the
 `related_guidance_reports` value (inline in the strand member payload per decision

@@ -20,9 +20,9 @@ Building the `get-eef-evidence` MCP tool surfaced a hard question about the **ot
 
 - The tool callback return type is `CallToolResult`, whose `structuredContent` is `Record<string, unknown>` (`types.d.ts:2601`, `mcp.d.ts:261`). The callback type is **not** parameterised by `outputSchema` (`OutputArgs` reaches only the config object, never `cb: ToolCallback<InputArgs>`), so providing an output schema does **not** type the response — the SDK validates `structuredContent` against the schema at **runtime** (`mcp.js:200-201`) and advertises it on the wire, but the static type is always the generic record. The shape is known to the SDK and deliberately dropped from the type.
 - A strict interface is **not** assignable to `Record<string, unknown>` (it lacks the index signature). So the exact envelope cannot enter the vendor's `structuredContent` slot without an index signature, an `as` cast, a runtime launder, or a `Record`/intersection fallback — every one of which is forbidden doctrine. There is no SDK API to provide a precisely-typed `structuredContent`, and 1.29.0 is the latest version.
-- **We never consume `structuredContent`.** A first-hand grep of all production (non-test) code in `oak-curriculum-sdk`, the MCP HTTP app, and `graph-corpus-sdk` found zero reads of `.structuredContent`. Our code only *produces* it and hands it to the SDK; the only field our pipeline inspects is `isError`. The sole consumer is the **calling agent**, across the wire, in its own type system (ADR-191).
+- **We never consume `structuredContent`.** A first-hand grep of all production (non-test) code in `oak-curriculum-sdk`, the MCP HTTP app, and `graph-corpus-sdk` found zero reads of `.structuredContent`. Our code only _produces_ it and hands it to the SDK; the only field our pipeline inspects is `isError`. The sole consumer is the **calling agent**, across the wire, in its own type system (ADR-191).
 
-The first instinct — make the envelope `Record`-assignable (an index signature), or thread strict types through the executor/auth/registration to `server.registerTool` — was wrong in two ways: the index signature pulls the vendor's allow-anything shape *into* our strict domain type, and threading strict types through transport infrastructure adds large complexity (a generic executor/auth chain plus per-tool registration to defeat runtime union-dispatch) for type-purity in code whose currency is already the vendor type.
+The first instinct — make the envelope `Record`-assignable (an index signature), or thread strict types through the executor/auth/registration to `server.registerTool` — was wrong in two ways: the index signature pulls the vendor's allow-anything shape _into_ our strict domain type, and threading strict types through transport infrastructure adds large complexity (a generic executor/auth chain plus per-tool registration to defeat runtime union-dispatch) for type-purity in code whose currency is already the vendor type.
 
 ## Decision
 
@@ -30,16 +30,16 @@ We define an explicit, first-class **type boundary (membrane) between our system
 
 ### The governing value principle
 
-**Strict types exist for developer experience and excellence *within our code*. Forcing a strict type into a junction with external (vendor) code is justified only by significant, clear value.** Where it provides no such value — as here, because we never read the value back and the vendor validates it at runtime and the agent consumes it in its own type system — we accept the vendor's type at the boundary. The vendor's loose type is the **external contract**, not a fallback of our design; the "no allow-anything types" rule governs *our* design, not the external API we are handing data to.
+**Strict types exist for developer experience and excellence _within our code_. Forcing a strict type into a junction with external (vendor) code is justified only by significant, clear value.** Where it provides no such value — as here, because we never read the value back and the vendor validates it at runtime and the agent consumes it in its own type system — we accept the vendor's type at the boundary. The vendor's loose type is the **external contract**, not a fallback of our design; the "no allow-anything types" rule governs _our_ design, not the external API we are handing data to.
 
 ### Two symmetric membranes
 
 The system has exactly two type membranes with external code, mirror images of each other:
 
-| Membrane | Direction | The one operation | Type movement |
-|---|---|---|---|
+| Membrane              | Direction     | The one operation        | Type movement                           |
+| --------------------- | ------------- | ------------------------ | --------------------------------------- |
 | **Ingress** (ADR-032) | external → us | validation (`safeParse`) | `unknown` → strict (the only narrowing) |
-| **Egress** (this ADR) | us → external | egress construction | strict → vendor type (the only erasure) |
+| **Egress** (this ADR) | us → external | egress construction      | strict → vendor type (the only erasure) |
 
 Between the two membranes, **everything is strict**: exact domain types, no `unknown` (except the ingress validator's input), no `Record<string, unknown>`, no index signatures, no `as`, no disabled checks.
 
@@ -48,13 +48,13 @@ Between the two membranes, **everything is strict**: exact domain types, no `unk
 The membrane sits at the **domain → transport seam**, not at the call into the vendor SDK:
 
 - **Data-handling (domain) code** is strict. It produces and operates on exact domain types built from known data (e.g. the EEF binding layer → `EefEvidenceEnvelope`; `runEefEvidenceTool` → the strict `EefEvidenceResult`).
-- **Transport code** is vendor-facing: its currency *is* the vendor's types. The MCP executor, the auth-interception layer, and the registration loop traffic in `CallToolResult`. The decisive tell that they are transport, not domain: the auth-error path **produces** `CallToolResult` directly (`auth-error-response.ts`) — error responses are vendor-shaped by nature. Transport code legitimately speaks the vendor's type; it is not "our strict domain leaking."
+- **Transport code** is vendor-facing: its currency _is_ the vendor's types. The MCP executor, the auth-interception layer, and the registration loop traffic in `CallToolResult`. The decisive tell that they are transport, not domain: the auth-error path **produces** `CallToolResult` directly (`auth-error-response.ts`) — error responses are vendor-shaped by nature. Transport code legitimately speaks the vendor's type; it is not "our strict domain leaking."
 - The **egress membrane** is the named seam between them: a per-primitive egress function whose input is a strict domain type and whose output is the vendor's type.
 
 ### The nature of types crossing the egress membrane
 
 - On the domain side, the value has its exact type (e.g. `EefEvidenceResult` with `structuredContent: EefEvidenceEnvelope`), proven correct **at construction**.
-- The egress function performs the one erasure by **constructing a fresh object** from the strict value (e.g. `{ ...envelope }`), which is structurally assignable to the vendor's `Record<string, unknown>` slot. This needs **no `as` cast, no index signature on our domain types, no `any`, no SDK fork** — a fresh object literal *is* a record; a named interface is the strict constraint on that shape; the spread is the honest act of dropping the name as the value crosses out. It is necessarily **per concrete type** (a generic `<T extends object>` spread is not record-assignable), which is correct for a per-primitive boundary.
+- The egress function performs the one erasure by **constructing a fresh object** from the strict value (e.g. `{ ...envelope }`), which is structurally assignable to the vendor's `Record<string, unknown>` slot. This needs **no `as` cast, no index signature on our domain types, no `any`, no SDK fork** — a fresh object literal _is_ a record; a named interface is the strict constraint on that shape; the spread is the honest act of dropping the name as the value crosses out. It is necessarily **per concrete type** (a generic `<T extends object>` spread is not record-assignable), which is correct for a per-primitive boundary.
 - Beyond the membrane, the value is the vendor's type. The vendor serialises it to JSON (its true wire form, where types do not exist) and delivers it to the calling agent.
 
 ### We do not reach inside the vendor SDK

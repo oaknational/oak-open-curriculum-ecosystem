@@ -1,5 +1,22 @@
 # Next-session opener — agentic-engineering-enhancements (WS1: no-type-widening rule)
 
+> **⚠️ EEF-LANE PRECONDITION SUPERSEDED (2026-06-08, Evergreen Blossoming Copse, EEF lane).**
+> The PRECONDITION inside the block below — "HEAD 2cd529b5 was RED on a pre-existing
+> graph-corpus-sdk lint … `EefEvidenceEnvelope` as a deliberate `type` … must NOT be
+> 'fixed' to `interface` … every commit blocked … do NOT --no-verify" — is **STALE**.
+> The EEF lane resolved it via
+> [ADR-193](../../../../docs/architecture/architectural-decisions/193-system-vendor-type-boundary-membrane.md):
+> `EefEvidenceEnvelope` is now a strict **`interface`** (no index signature) plus an
+> **egress membrane** (`eefEvidenceToCallToolResult`), so
+> `@typescript-eslint/consistent-type-definitions` is **GREEN** — making it an
+> interface was correct; the "must NOT fix to interface" instruction is void. The
+> EEF/2a work is **COMMITTED** (`496ea7ca` + `83d791e8`), not staged-uncommitted.
+> The only remaining EEF red is the app e2e `list_tools` parity (the EEF gating
+> step, separate). So that lint no longer blocks any commit. WS1 / 2b / 2c / WS2
+> below stand unchanged — and WS1's "`new Set<string>(OBSERVED_PHASES)` fixture"
+> note should be re-verified first-hand (the EEF membership sets are now
+> zero-widening `Set<EefStrandId>` / `Set<DeclaredPhase>`, not `Set<string>`).
+
 Paste the block below into a fresh session.
 
 ```text
