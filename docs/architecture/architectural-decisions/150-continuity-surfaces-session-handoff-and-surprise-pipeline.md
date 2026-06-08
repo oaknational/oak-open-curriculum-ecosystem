@@ -1,6 +1,6 @@
 # ADR-150: Continuity Surfaces, Session Handoff, and Surprise Pipeline
 
-**Status**: Accepted (amended 2026-04-20, 2026-04-21, 2026-05-29, 2026-06-07)
+**Status**: Accepted (amended 2026-04-20, 2026-04-21, 2026-05-29, 2026-06-07, 2026-06-08)
 **Date**: 2026-04-02 (amended 2026-04-20 — §3 abstracted from
 prompt-host to canonical repo-local surface; §4 generalised; Rationale
 and Consequences language aligned to the amendment per OAC Phase 4.3;
@@ -98,6 +98,17 @@ doctrine carried forward in the parallel PDR-011 amendment)
   host `session-handoff` §6e (extended). Evidenced by an EEF D6 handoff whose own
   "branch unpushed" claim was false and whose inherited peer "all gates green" was
   knip-red. Doctrine otherwise unchanged.
+- **2026-06-08 — disposition of continuity-surface content under fitness pressure.**
+  Mirrors the portable PDR-011 amendment
+  ([PDR-011 §Amendment Log 2026-06-08](../../../.agent/practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md#amendment-log)):
+  a continuity surface's fitness pressure is a routing signal, not a trim trigger; the only
+  dispositions are leave-live-verbatim or conserve-insight-and-delete (never
+  archive/split/rotate/shard); classify by intended function, not by current stats; a uniform
+  line-length across declared surfaces prevents per-file gaming. The repo realisation is
+  [`continuity-practice.md` §Disposition of Continuity Surfaces](../../../.agent/directives/continuity-practice.md)
+  (the section each continuity surface's `overflow_disposition` frontmatter points at) plus the
+  practice-fitness apparatus that surfaces the signal. First exercised in the 2026-06-08
+  dedicated continuity-curation session. Doctrine otherwise unchanged.
 
 ## Context
 

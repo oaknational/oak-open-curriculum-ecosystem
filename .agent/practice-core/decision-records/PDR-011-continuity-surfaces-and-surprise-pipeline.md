@@ -4,7 +4,7 @@ pdr_kind: governance
 
 # PDR-011: Continuity Surfaces and the Surprise Pipeline
 
-**Status**: Accepted (amended 2026-04-20, amended 2026-04-21, amended 2026-04-25, amended 2026-05-29, amended 2026-06-07)
+**Status**: Accepted (amended 2026-04-20, amended 2026-04-21, amended 2026-04-25, amended 2026-05-29, amended 2026-06-07, amended 2026-06-08)
 **Date**: 2026-04-18 (amended 2026-04-20 — contract host abstracted
 from "primary session-continuation prompt" to "canonical repo-local
 surface set"; field set split into portable minimum plus optional
@@ -158,6 +158,18 @@ unit).
   handoff session whose own banner's "branch unpushed" was false and whose
   inherited peer "all gates green" was knip-red. Realised in host `session-handoff`
   §6e (extended); ADR-150 mirrors. Pipeline and continuity types unchanged.
+- **2026-06-08 — disposition of continuity-surface content under fitness pressure named**
+  (owner direction 2026-06-08: a continuity surface's fitness pressure is a routing signal,
+  never a trim or archive trigger; the only dispositions are leave-live-verbatim or
+  conserve-insight-and-delete; classify surfaces by intended function, not by current stats;
+  a uniform line-length across declared surfaces prevents per-file gaming). §Decision gains
+  "### Disposition of continuity-surface content under fitness pressure" after "### The
+  continuity contract". The three continuity types, the surprise pipeline, and the contract's
+  fields are unchanged; what is added is the lifecycle discipline for continuity-surface
+  *content* under fitness pressure. The host realises it in its continuity directive's
+  disposition section plus the fitness apparatus; the repo-bound twin (ADR-150) mirrors this in
+  its Amendment Log. Graduated from the host pending-graduations register, whose trigger — a
+  dedicated continuity-curation session — fired 2026-06-08.
 
 ## Context
 
@@ -437,6 +449,54 @@ remain covered in aggregate across the contract + per-thread
 records. Multiple next-session records are not multiple
 continuity contracts — there is still one canonical contract;
 the per-thread records are satellites scoped by thread.
+
+### Disposition of continuity-surface content under fitness pressure (2026-06-08 amendment)
+
+A continuity surface — the canonical repo-level active-state index and the
+per-thread next-session records — is a compact **pickup** surface, classified
+by its intended **function**, not by its current size. Its function is to carry
+what the next session needs to recover orientation (identity, current state,
+landing target, the standing decisions the thread carries, and the latest
+still-live handoff), not a session-by-session log.
+
+A fitness signal on a continuity surface is therefore a **routing signal, not a
+trim trigger**. The question is never "how is this file made smaller" but "what
+is the state of the work this content describes?" Two dispositions only, applied
+per content block:
+
+1. **Live** — the work still needs doing (including paused-but-unfinished). The
+   content **stays in place, verbatim, however large.** A truthful record of
+   live work is worth more than a tidy file.
+2. **Finished** — landed, superseded, or abandoned. **Curate it**: conserve the
+   durable *insight* into its permanent home (a decision record, governance doc,
+   plan, pattern, rule, or — for still-live operational facts — the compact
+   current-state surface), **verify it is there**, then **delete the curated
+   residue.** Version control retains the literal record; the live surface
+   carries only what the next session needs.
+
+These are the only two dispositions. Do **not** relieve a continuity surface's
+fitness pressure by splitting it across files, rotating it, sharding it, or
+renaming it for score: moving content elsewhere is not the same as conserving
+its insight, and a split, shard, archive, or rename performed primarily to
+change a fitness category is self-delusion, not curation. Two companion
+principles hold:
+
+- **Classify by function, not by current statistics.** A continuity surface's
+  fitness limits are a property of its **function class**, derived once from
+  what that function should occupy and held independent of today's file sizes.
+  Reverse-engineering a limit from the measured corpus bakes existing bloat into
+  the "healthy" band and drifts as the corpus drifts; a surface that has
+  accumulated finished-work residue is a function violation that *should* trip
+  the signal, not a large healthy surface to re-baseline around.
+- **Uniform line-length across declared surfaces.** The per-line width limit is
+  uniform across every fitness-declaring surface so that no single file can be
+  tuned to a softer width band.
+
+The fitness checker only **surfaces a signal**; the agent who sees it chooses
+the disposition. The host realises this doctrine in its continuity directive
+(the disposition section each continuity surface's `overflow_disposition`
+frontmatter points at) and in its fitness apparatus; the repo-bound twin mirrors
+it.
 
 ### Live coordination state (2026-04-25 amendment)
 
