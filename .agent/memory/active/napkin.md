@@ -48,6 +48,31 @@ deleting homed/superseded session narrative (git retains the literal record). Al
   micro-rewrapping 104→100 is the number-chasing to avoid. Fixed only genuine readability/drift
   defects.
 
+**Metacognition (closeout, ultrathink):**
+
+- **The correction reflex fired post-commit, not pre-commit — a live instance of
+  "corrections are high-risk re-instantiation, no immunity gradient" (PDR-089 §Decision 6).** I
+  had just READ that register entry, then committed before→after line counts in the commit
+  message + repo-continuity + this napkin — the exact `no-provenance-pointers` violation, in the
+  surfaces I was curating *per that doctrine*. A self-check caught it; I amended (unpushed).
+  Reading the lesson did not fire the reflex — a deliberate post-hoc scan did (textbook
+  `passive-guidance-loses-to-artefact-gravity`). Behaviour change: when curating per a doctrine,
+  run that doctrine's own check over my OWN commit message + continuity edits *before* committing.
+  `candidate:` the `no-moving-targets` write-time hook did NOT catch the count-citations in
+  repo-continuity / napkin / the commit message — verify whether it covers those surfaces; if not,
+  that is a gap for the next register-drain to assess.
+- **Held the surface-class distinction loosely under a transient owner answer.** The register is a
+  drainable buffer (a curator-pass surface), categorically NOT a continuity surface; the plan said
+  "don't force-drain" it. An interim "drain now" answer pulled me into execution-deliberation
+  (full-vs-partial, read-cost, Write-vs-Edit) before the owner reconsidered: "normal processing →
+  next session" — which validated the plan's original stance. Behaviour change: hold the
+  surface-class distinction firmly; a buffer-drain is a dedicated effort even when picked "now", not
+  something to cram into a continuity-surface session's tail.
+- **The disposition doctrine was the session's generator AND graduated in the same session** —
+  captured by Lofty, exercised then lifted to PDR-011 by this pass. A good doctrine *produces*
+  correct moves (keep/delete, which identity rows survive), not merely filters them; the
+  capture→enforce loop closed in one session.
+
 ## 2026-06-08 — PR #131 Sonar + cross-repo boundary correction (Stormbound Streaming Zephyr)
 
 **Landed (PR #131, branch `feat/graph-tooling-tidyup`, all UNPUSHED):** `76f5855d`
