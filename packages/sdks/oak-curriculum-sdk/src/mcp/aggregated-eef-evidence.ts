@@ -105,7 +105,7 @@ Use this when the teacher asks for the evidence behind an approach, or when you 
 
 Do NOT use for plain curriculum retrieval (use 'search'/'fetch'), for guaranteed-outcome claims, for individual-pupil causal claims, or to make a teacher-replacing selection. The evidence is population-level; carry its caveats and attribution into anything drafted from it.
 
-Inputs are a closed set drawn from the corpus's own vocabulary — read \`eef://interpretation\` for the strand index and how to read the evidence faithfully.`,
+Inputs are a closed set drawn from the corpus's own vocabulary. Axis filters (\`phase\`/\`keyStage\`/\`priority\`) match only the strands the corpus tags for school context — they focus the result, they do not bound coverage, and a missing tag is not evidence of inapplicability. Use \`eef://interpretation\` for the full strand index and how to read the evidence faithfully.`,
   securitySchemes: [{ type: 'oauth2', scopes: [...SCOPES_SUPPORTED] }] as const,
   annotations: {
     readOnlyHint: true,

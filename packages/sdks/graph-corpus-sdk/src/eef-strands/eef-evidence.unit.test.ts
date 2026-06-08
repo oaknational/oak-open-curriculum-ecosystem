@@ -49,13 +49,16 @@ describe('inspectStrand — single-strand evidence envelope', () => {
     expect(envelope.frontier).toEqual(['eef-tl-within-class-attainment-grouping']);
   });
 
-  it('carries provenance once with source/licence/caveats, excluding data_version and last_updated', () => {
+  it('carries provenance once with org-level source/licence/caveats, excluding data_version, last_updated, and individual author names', () => {
     const { provenance } = inspectStrand('eef-tl-feedback');
     expect(provenance.source.organisation).toBe('Education Endowment Foundation');
     expect(provenance.licence.url).toBeDefined();
     expect(provenance.caveats.length).toBeGreaterThan(0);
     expect('data_version' in provenance).toBe(false);
     expect('last_updated' in provenance).toBe(false);
+    // Organisation-level attribution only: individual author names are never
+    // emitted in runtime responses (no-PII; named in the EEF tool docs instead).
+    expect('original_authors' in provenance.source).toBe(false);
   });
 });
 
