@@ -59,20 +59,23 @@ surface.
   than assuming them, NOT assuming oak-skills remains the source of truth). The oak-skills-side EEF
   reference is an
   [upstream request](../../plans/upstream-feature-requests/oak-skills/reference-eef-evidence-once-live.md).
-- **EEF `get-eef-evidence` — D6 COMPLETE; the surface is LIVE BY DEFAULT and EXERCISED
-  (2026-06-08, Briny Charting Lagoon).** c4 `eef://interpretation` resource + c5 `adapt-lesson`
-  prompt landed (`dcf46e6f`) + tool-prefix/dual-attribution/WCAG guidance (`6913aa47`); the flag
-  flipped to the **kill-switch posture — default ON, `OAK_CURRICULUM_MCP_EEF_ENABLED=false`
-  disables** — via a `feature-flags.ts` engine (`d3109d7c`). Per owner doctrine the flag
-  **engine** is unit-tested, not per-flag configuration. The tool/resource/prompt were
-  **exercised live over MCP HTTP** (no-auth dev server on port 3333): real evidence, attribution
-  pass-through (authors + URLs), the markdown guide, the prompt, and the no-selector `isError`
-  path all confirmed. ADR-193 boundary holds (c4/c5 needed no egress; carrier-fix / index-sig /
-  generic-spine remain DEAD). Branch `feat/graph-tooling-tidyup` is **ahead 10 of origin,
-  UNPUSHED**. **Next safe step (owner-directed): exercise the running app via the standard MCP
-  tools — the EXERCISE RECIPE banner in the [`eef` record](threads/eef.next-session.md) — then
-  D7, the teacher-value round-trip proof (the go-live flag mechanism is done; the delivered-value
-  proof remains).**
+- **EEF `get-eef-evidence` — D6 + D7 COMPLETE; the EEF build arc (D0–D7) is DELIVERED
+  (D7 owner-marked 2026-06-08).** The surface is LIVE BY DEFAULT (kill-switch posture: default ON,
+  `OAK_CURRICULUM_MCP_EEF_ENABLED=false` disables — `feature-flags.ts` engine, `d3109d7c`; the
+  engine is unit-tested, not per-flag config). c4 `eef://interpretation` resource + c5
+  `adapt-lesson` prompt (`dcf46e6f`) + guidance (`6913aa47`); ADR-193 boundary holds (carrier-fix /
+  index-sig / generic-spine remain DEAD). Engineering-complete + `pnpm check` green; the SDK e2e
+  suite (130 tests) is validated and pre-push-gated. Potential teacher value was demonstrated live
+  this session via a real LLM-mediated round trip over MCP — on the running auth-enabled server AND
+  via the MCP Inspector CLI (multi-signal Oak↔EEF, verbatim corpus values, honest insufficiency,
+  no teacher-replacing language). **Value-proof reshaped (owner 2026-06-08): potential value is
+  proven by release-and-observe, not a codified test**; delivered-value stays with
+  [`eef-outcome-evaluation-infrastructure.plan.md`](../../plans/sector-engagement/eef/future/eef-outcome-evaluation-infrastructure.plan.md).
+  Marking D7 green fires the
+  [`graph-tools-value-redesign`](../../plans/connecting-oak-resources/knowledge-graph-integration/future/graph-tools-value-redesign.plan.md)
+  promotion trigger (`get-keywords` added to that plan this session). **Next safe step: session
+  handoff + docs consolidation (this pass), then merge the PR** (branch `feat/graph-tooling-tidyup`;
+  re-derive ahead-count first-hand).
 - **MCP test estate + observability sinks plans → both `🟢 DECISION-COMPLETE`; execution
   owner-scheduled.**
   [`unified-mcp-server-test-harness.plan.md`](../../plans/sdk-and-mcp-enhancements/current/unified-mcp-server-test-harness.plan.md)

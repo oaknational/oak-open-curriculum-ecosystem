@@ -17,6 +17,49 @@ Every behaviour-changing entry was verified live in a permanent home before
 rotation; the commit and those homes are the record. Fresh capture continues
 below.
 
+## 2026-06-08 — EEF UAT + inspector + D7 closeout (Galactic Drifting Twilight, 64c8e4)
+
+Arc: live-exercised the EEF surface over the authenticated MCP; rewrote the MCP manual
+test guide (renamed `agent-preview-test-checklist.md` → `manual-uat-guide.md`, any-server,
+EEF section, discoverability); ran the whole UAT live (sections A–H) and fixed it from the
+results; demonstrated the **MCP Inspector CLI** driving the local server end to end; validated
+the SDK e2e suite (130 green, pre-push-gated); added `get-keywords` to the graph-tools
+migration plan; filed an upstream alt-text-quality feedback doc; **marked EEF D7 complete**
+(D0–D7 delivered) and authored an agent-tools `mcp-inspector-smoke` plan.
+
+- **Owner: a "could we add X" is an exploration — never veto on absence.** I reached for "agent-tools
+  has no MCP dep / single consumer / we already have an adjacent thing" as reasons NOT to add the
+  inspector. All absence-based vetoes. Object on **substance** (value/risk/engineering), not on
+  not-being-there-yet; new deps are allowed. Homed in [[feedback_explore_means_explore_not_veto_on_absence]].
+- **Owner: value is proven by release-and-observe, NOT a codified value-proxy test.** D7's
+  "value-proxy test" obligation was reshaped — engineering-complete + ship-live + a real
+  LLM-mediated demonstration is the bar; delivered-value is the deferred outcome-eval plan. Homed in
+  the D7 banner + [[feedback_value_proven_by_release_not_test]].
+- **A peer's blind wildcard staging can sweep MY uncommitted work, not just theirs.** A parallel
+  agent committed `787dc21c "fix(mcp): fixing prompt and resource registration"` that swept all my
+  uncommitted MCP-app edits (guide, README, 4 comment files) under a message describing none of
+  them. Nothing lost (verified verbatim) but mislabeled + entangled. Cure that held:
+  **explicit-pathspec staging + `git commit -- <paths>`** kept every one of my commits clean while
+  HEAD moved under me 3×. Reinforces stage-by-explicit-pathspec from the other direction.
+- **"Untried/unknown" ≠ "doesn't exist", and existence-of-code ≠ verified value.** I overstated the
+  e2e suite as "CI-gated, regression-grade" before validating it; ran it → 130 green, genuinely
+  gated. Verify before citing in-repo existence as evidence either for OR against a move.
+- **Inspector findings (grounded):** `--cli <url> --transport http --method …` works headless;
+  wrap it via **pinned npx, not a dependency** (it's a heavyweight UI app); its CLI **does not
+  parallelise** (batched sequential runs emptied the output files — its internal proxy); auth-on
+  server → `Unauthorized`, so local exercise uses the no-auth dev server (`PORT` override boots a
+  second instance on :3334).
+- **Live UAT found two real product gaps (homed, not fixed here):** bulk tools overflow the MCP host
+  token cap (`get-keywords` ~205 KB, graph tools ~1.5 MB+) → added `get-keywords` to
+  `graph-tools-value-redesign` ("a list is a simple DAG"); auto-generated quiz-image `alt` text is
+  broken (repetition/hallucination/function-blind) → upstream feedback doc with reproducible examples.
+
+**Metacognition (closeout):** the session's manual work (UAT + inspector round trip) WAS the D7
+value-proxy, executed by hand — which is exactly why the owner's "release, don't test" reshape
+lands: a real LLM did the round trip, so potential value is shown; codifying it as a synthetic test
+would prove less. Marking D7 complete was an action with bridges (fires the graph-tools promotion
+trigger, opens the merge), not a status tick.
+
 ## 2026-06-08 — continuity-surface consolidation (Cosmic Illuminating Planet)
 
 Dedicated curation session (this one). Curated the four critical thread records (`eef`,
