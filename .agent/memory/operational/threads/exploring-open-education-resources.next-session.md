@@ -40,8 +40,10 @@ moved to `.agent/plans/exploring-open-education-resources/external-knowledge-sou
 - `.agent/plans/exploring-open-education-resources/external-knowledge-sources/`
   — was `.agent/plans/sector-engagement/external-knowledge-sources/`
   pre-2026-05-01 restructure. Currently contains:
-  - `future/education-skills-mcp-surface.plan.md`
   - `future/external-knowledge-graph-data-source-integration.plan.md`
+  - *`education-skills-mcp-surface.plan.md` relocated 2026-06-08 to
+    `user-experience/educator-end-users/previous-materials/` (external-facing
+    skills/plugins synthesis).*
 
 ## Cross-Plan Links
 

@@ -45,8 +45,7 @@ runtime tools, remote agents, registries, or generic service-discovery drafts.
 | Child Plan / Report | Owned Surface | Status | Relationship |
 | --- | --- | --- | --- |
 | [mcp-server-cards.plan.md](mcp-server-cards.plan.md) | Pre-connection metadata for public remote MCP servers | Strategic tracking | Discovers the server endpoint; runtime capabilities remain MCP |
-| [agent-skills-discovery.plan.md](agent-skills-discovery.plan.md) | Oak-authored workflow skills and skills index | Strategic tracking | Discovers workflow artifacts; live facts remain MCP/SDK/search/graph |
-| [agent-skills-discovery-research.report.md](agent-skills-discovery-research.report.md) | Research synthesis for skills discovery direction | Research report | Evidence base for the skills child plan |
+| _Agent Skills lane (skills discovery + research + taxonomy + distribution)_ | Oak-authored workflow skills, index, audience taxonomy, distribution channels | **Relocated 2026-06-08** | Moved to [user-experience/educator-end-users/previous-materials/](../../user-experience/educator-end-users/previous-materials/) to seed an educator synthesis; this parent retains the cross-surface layer map |
 | [dns-aid-discovery.plan.md](dns-aid-discovery.plan.md) | Optional DNS-layer discovery entry point | Strategic tracking | DNS accelerator only; apex catalog remains source of truth |
 | [aila-a2a-agent-card.plan.md](aila-a2a-agent-card.plan.md) | Conditional Aila remote-agent discovery | Strategic tracking | Only relevant if Aila becomes an A2A server |
 | [webmcp-human-site-operability.plan.md](webmcp-human-site-operability.plan.md) | Optional browser-native page actions | Strategic tracking | Human-site operability, not headless MCP |
@@ -144,12 +143,12 @@ Blocking prerequisites for baseline parent readiness:
 
 Beneficial prerequisites:
 
-- **`beneficial`** - A partner-facing "agent readiness" page exists. *Without
-  it:* child plans can still document their public paths and references.
+- **`beneficial`** - A partner-facing "agent readiness" page exists. _Without
+  it:_ child plans can still document their public paths and references.
 - **`beneficial`** - MCP Server Cards and Agent Skills Discovery both stabilise.
-  *Without them:* keep the parent as a tracking and comparison surface.
-- **`beneficial`** - Oak has a public remote agent suitable for A2A. *Without
-  it:* keep A2A as watched context only.
+  _Without them:_ keep the parent as a tracking and comparison surface.
+- **`beneficial`** - Oak has a public remote agent suitable for A2A. _Without
+  it:_ keep A2A as watched context only.
 
 ## Strategic Acceptance Criteria And Success Signals
 

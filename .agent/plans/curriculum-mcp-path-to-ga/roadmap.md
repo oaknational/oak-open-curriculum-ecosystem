@@ -115,7 +115,7 @@ Cross-axis index: [`.agent/plans/observability/high-level-observability-plan.md`
 ### `compliance/`
 
 - [`compliance/roadmap.md`](../compliance/roadmap.md) — collection roadmap
-- [`current/claude-and-chatgpt-app-submission-compliance.plan.md`](../compliance/current/claude-and-chatgpt-app-submission-compliance.plan.md) — host-platform submission
+- [`claude-and-chatgpt-app-submission-compliance.plan.md`](../user-experience/educator-end-users/previous-materials/claude-and-chatgpt-app-submission-compliance.plan.md) — host-platform submission (relocated 2026-06-08 to the external-facing skills/plugins synthesis)
 
 ### `architecture-and-infrastructure/`
 

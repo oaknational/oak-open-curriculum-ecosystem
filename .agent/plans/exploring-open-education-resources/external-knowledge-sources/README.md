@@ -41,7 +41,7 @@ _None currently queued. EEF was previously here and now lives in [`../eef/curren
 
 | Plan | Source | Status | Notes |
 |---|---|---|---|
-| [future/education-skills-mcp-surface.plan.md](future/education-skills-mcp-surface.plan.md) | Agent Skills ecosystem | Strategic | External pedagogy/skills corpus surfaced as prompts and discovery tools |
+| _education-skills-mcp-surface.plan.md_ | Agent Skills ecosystem | **Relocated 2026-06-08** | Moved to [user-experience/educator-end-users/previous-materials/](../../user-experience/educator-end-users/previous-materials/) (external-facing skills synthesis); surfaced external pedagogy skills as MCP prompts + discovery tools |
 | [future/external-knowledge-graph-data-source-integration.plan.md](future/external-knowledge-graph-data-source-integration.plan.md) | Future external KGs | Strategic | Intake model for third-party knowledge graphs as Oak application data sources |
 
 ## Related Sector Sources

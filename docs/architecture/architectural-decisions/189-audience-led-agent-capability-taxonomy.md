@@ -28,9 +28,9 @@ guidance being framed as teacher workflow or vice versa.
 The vocabulary itself is defined in
 [`agent-capability-vocabulary.md`](../../../.agent/memory/executive/agent-capability-vocabulary.md);
 the application pass is owned by the
-[skills-classification-taxonomy plan](../../../.agent/plans/discovery/future/skills-classification-taxonomy.plan.md);
+[skills-classification-taxonomy plan](../../../.agent/plans/user-experience/educator-end-users/previous-materials/skills-classification-taxonomy.plan.md);
 the supporting ecosystem survey is the
-[skills-distribution-channels report](../../../.agent/plans/discovery/future/skills-distribution-channels-suggestions.report.md).
+[skills-distribution-channels report](../../../.agent/plans/user-experience/educator-end-users/previous-materials/skills-distribution-channels-suggestions.report.md).
 
 ## Decision
 

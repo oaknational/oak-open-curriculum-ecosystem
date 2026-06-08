@@ -21,10 +21,10 @@ merge_class: index-narrative-tables
   Strategic source and gated child lanes remain under
   [`agentic-mechanisms-discovery.plan.md`](../../../plans/discovery/future/agentic-mechanisms-discovery.plan.md).
 - Related future child plans:
-  [`agent-skills-discovery.plan.md`](../../../plans/discovery/future/agent-skills-discovery.plan.md),
-  [`skills-classification-taxonomy.plan.md`](../../../plans/discovery/future/skills-classification-taxonomy.plan.md)
+  [`agent-skills-discovery.plan.md`](../../../plans/user-experience/educator-end-users/previous-materials/agent-skills-discovery.plan.md),
+  [`skills-classification-taxonomy.plan.md`](../../../plans/user-experience/educator-end-users/previous-materials/skills-classification-taxonomy.plan.md)
   (with its companion
-  [distribution-channels report](../../../plans/discovery/future/skills-distribution-channels-suggestions.report.md)),
+  [distribution-channels report](../../../plans/user-experience/educator-end-users/previous-materials/skills-distribution-channels-suggestions.report.md)),
   [`mcp-server-cards.plan.md`](../../../plans/discovery/future/mcp-server-cards.plan.md),
   [`dns-aid-discovery.plan.md`](../../../plans/discovery/future/dns-aid-discovery.plan.md),
   [`aila-a2a-agent-card.plan.md`](../../../plans/discovery/future/aila-a2a-agent-card.plan.md),
@@ -64,16 +64,16 @@ executive
 carries both axes plus the teacher-facing avoid-list.
 
 Estate moves (owner-directed): the
-[skills-classification-taxonomy plan](../../../plans/discovery/future/skills-classification-taxonomy.plan.md)
+[skills-classification-taxonomy plan](../../../plans/user-experience/educator-end-users/previous-materials/skills-classification-taxonomy.plan.md)
 landed in this collection's `future/` beside the owner-supplied
-[skills-distribution-channels report](../../../plans/discovery/future/skills-distribution-channels-suggestions.report.md)
+[skills-distribution-channels report](../../../plans/user-experience/educator-end-users/previous-materials/skills-distribution-channels-suggestions.report.md)
 (final of four homes: agent-tooling → educator-end-users → user-experience →
 discovery — the wandering was the taxonomy discovering that classification
 and distribution are one problem). The first-party `oaknational/oak-skills`
 library (private at time of writing; six user-facing skills, Claude plugin
 shape, validation + evals) is wired in as promotion-trigger evidence and as
 the reconciliation baseline for this thread's skill-catalogue table.
-[`agent-skills-discovery.plan.md`](../../../plans/discovery/future/agent-skills-discovery.plan.md)
+[`agent-skills-discovery.plan.md`](../../../plans/user-experience/educator-end-users/previous-materials/agent-skills-discovery.plan.md)
 gained §Installation Messaging Redundancy (owner requirement: hosts demand
 opt-in installs, so every published capability names redundant announcement
 surfaces; mutual announcement between capability tiers satisfies the
@@ -191,8 +191,8 @@ future-plan gates are explicitly promoted.
 Skills Discovery against live official standards context, reflected on Oak
 mission impact, and wrote the discovery future-planning bundle:
 
-- [`agent-skills-discovery-research.report.md`](../../../plans/discovery/future/agent-skills-discovery-research.report.md)
-- [`agent-skills-discovery.plan.md`](../../../plans/discovery/future/agent-skills-discovery.plan.md)
+- [`agent-skills-discovery-research.report.md`](../../../plans/user-experience/educator-end-users/previous-materials/agent-skills-discovery-research.report.md)
+- [`agent-skills-discovery.plan.md`](../../../plans/user-experience/educator-end-users/previous-materials/agent-skills-discovery.plan.md)
 - [`agentic-mechanisms-discovery.plan.md`](../../../plans/discovery/future/agentic-mechanisms-discovery.plan.md)
 
 The existing
@@ -222,8 +222,8 @@ trust model before writing the executable `current/` plan.
 
 - **Owning plans:**
   [`agentic-mechanisms-discovery.plan.md`](../../../plans/discovery/future/agentic-mechanisms-discovery.plan.md),
-  [`agent-skills-discovery.plan.md`](../../../plans/discovery/future/agent-skills-discovery.plan.md),
-  [`skills-classification-taxonomy.plan.md`](../../../plans/discovery/future/skills-classification-taxonomy.plan.md),
+  [`agent-skills-discovery.plan.md`](../../../plans/user-experience/educator-end-users/previous-materials/agent-skills-discovery.plan.md),
+  [`skills-classification-taxonomy.plan.md`](../../../plans/user-experience/educator-end-users/previous-materials/skills-classification-taxonomy.plan.md),
   [`mcp-server-cards.plan.md`](../../../plans/discovery/future/mcp-server-cards.plan.md),
   [`dns-aid-discovery.plan.md`](../../../plans/discovery/future/dns-aid-discovery.plan.md),
   [`aila-a2a-agent-card.plan.md`](../../../plans/discovery/future/aila-a2a-agent-card.plan.md),

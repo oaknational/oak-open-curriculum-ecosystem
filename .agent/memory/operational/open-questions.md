@@ -164,7 +164,7 @@ fitness_content_role: drainable-buffer
 - **Status**: open — trigger is the first external capability publication or
   the oak-skills integration decision.
 
-[q4-taxonomy]: ../../plans/discovery/future/skills-classification-taxonomy.plan.md
+[q4-taxonomy]: ../../plans/user-experience/educator-end-users/previous-materials/skills-classification-taxonomy.plan.md
 
 ## Q-005 — can the repo professionalism assessment be cut into practical plans?
 

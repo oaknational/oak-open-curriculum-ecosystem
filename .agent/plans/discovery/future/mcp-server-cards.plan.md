@@ -34,7 +34,7 @@ Parent and sibling planning context:
 - Parent plan:
   [agentic-mechanisms-discovery.plan.md](agentic-mechanisms-discovery.plan.md)
 - Sibling skills lane:
-  [agent-skills-discovery.plan.md](agent-skills-discovery.plan.md)
+  [agent-skills-discovery.plan.md](../../user-experience/educator-end-users/previous-materials/agent-skills-discovery.plan.md)
 
 ## Problem, end goal, mechanism, and means
 
@@ -73,7 +73,7 @@ Parent and sibling planning context:
 
 This plan answers: "where is the Oak MCP server and how do I connect?"
 
-The sibling [Agent Skills Discovery plan](agent-skills-discovery.plan.md)
+The sibling [Agent Skills Discovery plan](../../user-experience/educator-end-users/previous-materials/agent-skills-discovery.plan.md)
 answers: "which Oak-authored workflows can I load?"
 
 The parent [Agentic Mechanisms Discovery plan](agentic-mechanisms-discovery.plan.md)

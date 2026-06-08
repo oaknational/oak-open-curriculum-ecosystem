@@ -12,9 +12,15 @@ Strategic phase sequence for external policy compliance covering both the
 Anthropic Software Directory Policy and the OpenAI ChatGPT App Submission
 Guidelines. Execution detail lives in lifecycle plans.
 
+> **Relocated 2026-06-08.** The execution plan moved to
+> [user-experience/educator-end-users/previous-materials/](../user-experience/educator-end-users/previous-materials/claude-and-chatgpt-app-submission-compliance.plan.md).
+> Directory/store submission is part of the external-facing distribution story,
+> so its requirements belong in that synthesis as inputs and are carried forward
+> there; this collection retains the policy-audit history.
+
 Authoritative execution sources:
 
-1. [current/claude-and-chatgpt-app-submission-compliance.plan.md](current/claude-and-chatgpt-app-submission-compliance.plan.md)
+1. [claude-and-chatgpt-app-submission-compliance.plan.md](../user-experience/educator-end-users/previous-materials/claude-and-chatgpt-app-submission-compliance.plan.md)
 
 ---
 
@@ -54,7 +60,7 @@ Phase 3: Submission readiness (both platforms)          FUTURE (process, not cod
 
 ### Phase 0 — Governance Documentation
 
-- Plan: [current/claude-and-chatgpt-app-submission-compliance.plan.md](current/claude-and-chatgpt-app-submission-compliance.plan.md) (WS1)
+- Plan: [claude-and-chatgpt-app-submission-compliance.plan.md](../user-experience/educator-end-users/previous-materials/claude-and-chatgpt-app-submission-compliance.plan.md) (WS1)
 - Done when:
   - ADR-159 records the decision to comply with both policies
   - 15 permanent architectural requirements codified
@@ -65,7 +71,7 @@ Phase 3: Submission readiness (both platforms)          FUTURE (process, not cod
 
 ### Phase 1 — Privacy Policy Integration
 
-- Plan: [current/claude-and-chatgpt-app-submission-compliance.plan.md](current/claude-and-chatgpt-app-submission-compliance.plan.md) (WS2)
+- Plan: [claude-and-chatgpt-app-submission-compliance.plan.md](../user-experience/educator-end-users/previous-materials/claude-and-chatgpt-app-submission-compliance.plan.md) (WS2)
 - Done when:
   - Privacy and cookie policy links surfaced in server metadata, README,
     and OAuth discovery endpoints
@@ -74,7 +80,7 @@ Phase 3: Submission readiness (both platforms)          FUTURE (process, not cod
 
 ### Phase 2 — Graph Sub-Querying for Token Efficiency
 
-- Plan: [current/claude-and-chatgpt-app-submission-compliance.plan.md](current/claude-and-chatgpt-app-submission-compliance.plan.md) (WS3-WS5)
+- Plan: [claude-and-chatgpt-app-submission-compliance.plan.md](../user-experience/educator-end-users/previous-materials/claude-and-chatgpt-app-submission-compliance.plan.md) (WS3-WS5)
 - Done when:
   - All three graph tools accept per-surface filter params and
     `mode: 'summary'`

@@ -28,10 +28,7 @@ It is deliberately distinct from:
 | [current/standards-verification-2026-06-01.report.md](current/standards-verification-2026-06-01.report.md) | Verification report | Re-checks repo discovery plans and the Oak ticket against live standards and public Oak endpoints |
 | [future/README.md](future/README.md) | Future index | Strategic / later discovery briefs |
 | [future/agentic-mechanisms-discovery.plan.md](future/agentic-mechanisms-discovery.plan.md) | Future strategic parent | Owns the broader discovery thread and layer map across skills, MCP server cards, A2A, registry metadata, and adjacent agent-web proposals |
-| [future/agent-skills-discovery-research.report.md](future/agent-skills-discovery-research.report.md) | Future research report | Synthesises Agent Skills Discovery, MCP, A2A, and Oak mission/value implications |
-| [future/agent-skills-discovery.plan.md](future/agent-skills-discovery.plan.md) | Future strategic brief | Prepare Oak to publish a trusted Agent Skills Library via a `.well-known/agent-skills/index.json` surface |
-| [future/skills-classification-taxonomy.plan.md](future/skills-classification-taxonomy.plan.md) | Future strategic brief | Apply the ADR-189 audience-led capability vocabulary across live docs; owns the taxonomy lane |
-| [future/skills-distribution-channels-suggestions.report.md](future/skills-distribution-channels-suggestions.report.md) | Future strategy report | Owner-supplied survey of Skills/MCP/plugin packaging and distribution channels, with suggested capability-pack directions |
+| *Agent Skills lane (4 docs)* | Relocated 2026-06-08 | Moved to [../user-experience/educator-end-users/previous-materials/](../user-experience/educator-end-users/previous-materials/) to seed an educator synthesis; ADR-189 + executive capability vocabulary remain the ratified homes |
 | [future/mcp-server-cards.plan.md](future/mcp-server-cards.plan.md) | Future strategic brief | Track the draft MCP Server Cards spec (SEP-2127) and prepare a discoverable `.well-known` server card for Oak's public remote MCP server once the spec stabilises |
 | [future/dns-aid-discovery.plan.md](future/dns-aid-discovery.plan.md) | Future strategic brief | Track optional DNS-AID publication and keep DNS discovery from drifting from the apex catalog |
 | [future/aila-a2a-agent-card.plan.md](future/aila-a2a-agent-card.plan.md) | Future strategic brief | Conditional Aila A2A Agent Card plan if Oak exposes Aila to third-party agents |
@@ -45,12 +42,10 @@ It is deliberately distinct from:
 3. [current/agent-readiness-discovery-hub.plan.md](current/agent-readiness-discovery-hub.plan.md)
 4. [future/README.md](future/README.md)
 5. [future/agentic-mechanisms-discovery.plan.md](future/agentic-mechanisms-discovery.plan.md)
-6. [future/agent-skills-discovery-research.report.md](future/agent-skills-discovery-research.report.md)
-7. [future/agent-skills-discovery.plan.md](future/agent-skills-discovery.plan.md)
-8. [future/skills-classification-taxonomy.plan.md](future/skills-classification-taxonomy.plan.md)
-9. [future/skills-distribution-channels-suggestions.report.md](future/skills-distribution-channels-suggestions.report.md)
-10. [future/mcp-server-cards.plan.md](future/mcp-server-cards.plan.md)
-11. Relevant conditional child plans in [future/README.md](future/README.md)
+6. [future/mcp-server-cards.plan.md](future/mcp-server-cards.plan.md)
+7. Relevant conditional child plans in [future/README.md](future/README.md)
+
+*(The Agent Skills lane relocated 2026-06-08 to [../user-experience/educator-end-users/previous-materials/](../user-experience/educator-end-users/previous-materials/).)*
 
 ## Status Legend
 

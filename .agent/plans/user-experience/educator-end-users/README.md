@@ -5,6 +5,21 @@ ChatGPT, Claude, Gemini).
 
 ---
 
+## Skills, Plugins & MCP Surfaces (synthesis in progress)
+
+A fresh synthesis of Oak's external-facing skills, plugins, and MCP skill-like
+surfaces is underway in this persona's home — curriculum-assistance is the
+primary external skills audience.
+
+- Seed review: [external-facing-skills-and-mcp-surfaces-review.report.md](external-facing-skills-and-mcp-surfaces-review.report.md)
+- Prior materials (relocated 2026-06-08): [previous-materials/](previous-materials/README.md)
+
+The synthesis target is an Oak plugin/bundle (skills + MCP app) emitted to both
+the Claude and OpenAI Codex plugin marketplaces from one capability source of
+truth. New plans land here.
+
+---
+
 ## Public-Alpha Scope
 
 Educator experience is in-scope for Milestone 2 open public alpha.
