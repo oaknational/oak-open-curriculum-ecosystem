@@ -1,3 +1,11 @@
+---
+fitness_line_target: 500
+fitness_line_limit: 800
+fitness_char_limit: 60000
+fitness_line_length: 400
+overflow_disposition: 'leave-if-live; else conserve-insight-and-delete — never archive/split/rotate/shard (see continuity-practice.md §Disposition of Continuity Surfaces)'
+merge_class: index-narrative-tables
+---
 > **RETIRED — thread completed 2026-04-29.** PR #90 (`fix/build_issues` →
 > `main`) landed as part of the TS6/Sentry migration (PRs #90–92);
 > agent-completable closure work finished (Phases 0–5, five commits) per the

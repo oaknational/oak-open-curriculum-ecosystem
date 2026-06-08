@@ -9356,6 +9356,223 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "7b7e5a7a-f2e3-4a55-9ab2-d811e97d21dd",
+      "agent_id": {
+        "agent_name": "Ferny Ripening Meadow",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "7c1ea6",
+        "id": "d5f32b5a-a09e-5448-95fb-48865cdb7b00"
+      },
+      "thread": "knowledge-curation",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/**",
+            ".agent/memory/operational/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-08T06:44:07Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "dedicated-knowledge-curation: drain napkin (critical), reconcile repo-continuity, drain open-questions, tighten Claude MEMORY.md, scan pending-graduations triggers",
+      "archived_at": "2026-06-08",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-08T07:24:17Z",
+        "closed_by": {
+          "agent_name": "Ferny Ripening Meadow",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "7c1ea6",
+          "id": "d5f32b5a-a09e-5448-95fb-48865cdb7b00"
+        },
+        "summary": "dedicated-knowledge-curation pass: napkin critical drained (window verified-homed + archived), Claude MEMORY.md returned under budget + index↔files integrity restored (1 lost pointer recovered, 1 graduated orphan deleted), 2 strict-types entries graduated to ADR-193 and removed, open-questions dispositioned. Bulk graduated-residue removal + cross-platform ingestion deferred (owner-active memory editing / scope). Edits live in working tree; not committed (red gate, owner-directed).",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "7b7e5a7a-f2e3-4a55-9ab2-d811e97d21dd",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "0baf1f48-57e3-4c99-bbae-9680ff77846e",
+      "agent_id": {
+        "agent_name": "Stormbound Streaming Zephyr",
+        "platform": "cursor",
+        "model": "claude-opus-4.8",
+        "session_id_prefix": "cursor",
+        "id": "73777b82-8e0f-5090-834d-e687e6159c91"
+      },
+      "thread": "main-critical-sonar-remediation",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-08T07:24:27Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit PR #131 Sonar new-code remediation (agent-tools + graph-corpus-sdk eef-evidence).",
+      "archived_at": "2026-06-08",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-08T07:28:55Z",
+        "closed_by": {
+          "agent_name": "Stormbound Streaming Zephyr",
+          "platform": "cursor",
+          "model": "claude-opus-4.8",
+          "session_id_prefix": "cursor",
+          "id": "73777b82-8e0f-5090-834d-e687e6159c91"
+        },
+        "summary": "Commit blocked by pre-existing knip failure (oak-sdk-codegen uses typedoc binary undeclared); 17 Sonar-fix files remain staged pending owner decision on bypass vs dep-fix.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "0baf1f48-57e3-4c99-bbae-9680ff77846e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1bfd15e5-e79d-43e3-8d9c-c8d8214ea3e6",
+      "agent_id": {
+        "agent_name": "Stormbound Streaming Zephyr",
+        "platform": "cursor",
+        "model": "claude-opus-4.8",
+        "session_id_prefix": "cursor",
+        "id": "73777b82-8e0f-5090-834d-e687e6159c91"
+      },
+      "thread": "main-critical-sonar-remediation",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-08T07:40:29Z",
+      "freshness_seconds": 1200,
+      "sidebar_open": false,
+      "intent": "Two-commit sequence: (1) typedoc devDep fix in oak-sdk-codegen, (2) PR #131 Sonar new-code remediation.",
+      "archived_at": "2026-06-08",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-08T07:42:42Z",
+        "closed_by": {
+          "agent_name": "Stormbound Streaming Zephyr",
+          "platform": "cursor",
+          "model": "claude-opus-4.8",
+          "session_id_prefix": "cursor",
+          "id": "73777b82-8e0f-5090-834d-e687e6159c91"
+        },
+        "summary": "Landed 76f5855d (typedoc devDep) + 072375e1 (PR #131 Sonar remediation, 17 files); both pre-commit green, unpushed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1bfd15e5-e79d-43e3-8d9c-c8d8214ea3e6",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "29d243d3-0250-4ce9-a47f-e9e02bd8f731",
+      "agent_id": {
+        "agent_name": "Luminous Drifting Dawn",
+        "platform": "claude",
+        "model": "Opus 4.8",
+        "session_id_prefix": "a143b3",
+        "id": "20b2f124-9aea-5389-ba72-9000b2226d6b"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "apps/oak-curriculum-mcp-streamable-http/src/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-08T07:20:11Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "EEF c6 gating: wire runtimeConfig.eefEnabled into registerTools so get-eef-evidence is default-off; clears app e2e list_tools parity red",
+      "archived_at": "2026-06-08",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-08T07:45:49Z",
+        "closed_by": {
+          "agent_name": "Luminous Drifting Dawn",
+          "platform": "claude",
+          "model": "Opus 4.8",
+          "session_id_prefix": "a143b3",
+          "id": "20b2f124-9aea-5389-ba72-9000b2226d6b"
+        },
+        "summary": "EEF c6 tool-gating implemented + green (uncommitted, owner: not committing yet). handlers.ts flag-skip + handlers-tool-registration test reconciliation; app type-check + 725/725 + 131/131 e2e (parity red cleared) + lint clean. Knowledge homed: D6 plan + eef.next-session banner + repo-continuity. Two EEF files left as live working-tree edits for owner to commit by explicit pathspec.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "29d243d3-0250-4ce9-a47f-e9e02bd8f731",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "9449c14e-48c2-4f63-a834-e29f910eca55",
+      "agent_id": {
+        "agent_name": "Stormbound Streaming Zephyr",
+        "platform": "cursor",
+        "model": "claude-opus-4.8",
+        "session_id_prefix": "cursor",
+        "id": "73777b82-8e0f-5090-834d-e687e6159c91"
+      },
+      "thread": "main-critical-sonar-remediation",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/**",
+            "agent-tools/tests/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-08T07:07:19Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "PR #131 SonarCloud QG remediation: fix 22 new-code issues + 2 bugs in agent-tools (RegExp.exec, optional-chaining, param-object, negated-conditions, Boolean coercion, String.raw, /tmp test path). EEF-lane S7770 + generated-file S4323 + 2 PATH hotspots deferred for owner Sonar disposition.",
+      "archived_at": "2026-06-08",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-08T07:45:52Z",
+        "closed_by": {
+          "agent_name": "Stormbound Streaming Zephyr",
+          "platform": "cursor",
+          "model": "claude-opus-4.8",
+          "session_id_prefix": "cursor",
+          "id": "73777b82-8e0f-5090-834d-e687e6159c91"
+        },
+        "summary": "PR #131 Sonar remediation complete: 76f5855d (typedoc devDep) + 072375e1 (22 issues across agent-tools+graph-corpus-sdk); S4323 accepted (generated), 2 S4036 hotspots REVIEWED/SAFE. Unpushed; gate clears on next push+rescan.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "9449c14e-48c2-4f63-a834-e29f910eca55",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

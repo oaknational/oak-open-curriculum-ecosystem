@@ -178,8 +178,11 @@ proceed independently on any branch.
 ### Output schema follow-up
 
 [current/output-schemas-for-mcp-tools.plan.md](current/output-schemas-for-mcp-tools.plan.md)
-remains valid follow-on work. It can advance independently where transport
-exposure does not depend on unfinished MCP Apps execution.
+remains valid follow-on work. Serial order (owner-resolved 2026-06-08, see the
+plan's §Resolved Sequencing): it runs AFTER EEF D6/D7 and the graph-tools
+migration, then authors every tool's `outputSchema` uniformly in one place (no
+special case), with the required field as the closing ratchet. Its W1 (codegen)
+preparation and test design are not gated and can advance earlier.
 
 ### Tool token economy and progressive discovery
 

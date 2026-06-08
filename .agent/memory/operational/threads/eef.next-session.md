@@ -1,5 +1,100 @@
+---
+fitness_line_target: 500
+fitness_line_limit: 800
+fitness_char_limit: 60000
+fitness_line_length: 400
+overflow_disposition: 'leave-if-live; else conserve-insight-and-delete — never archive/split/rotate/shard (see continuity-practice.md §Disposition of Continuity Surfaces)'
+merge_class: index-narrative-tables
+---
 # Next-Session Record — `eef` thread
 
+> **🤝 HANDOFF — EEF thread (2026-06-08, Luminous Drifting Dawn / `a143b3`;
+> claude / Opus 4.8). c6 TOOL-GATING DONE — the single `pnpm check` red (app e2e
+> `list_tools` parity) is CLEARED. UNCOMMITTED working-tree edits, green. Self-contained.**
+>
+> **WHAT THIS SESSION DID (the c6 tool-gating slice of the Evergreen banner's "NEXT
+> SAFE STEPS #1"):** the EEF tool was enumerated in `AGGREGATED_TOOL_DEFS` and
+> registered UNCONDITIONALLY by the app's `registerTools` loop, so it appeared in
+> `tools/list` while the parity e2e's expected list (correctly) omits it → the only
+> `pnpm check` red. Root cause: the `OAK_CURRICULUM_MCP_EEF_ENABLED` →
+> `runtimeConfig.eefEnabled` flag (default OFF) existed but was NEVER consumed by
+> registration — a dead seam. **Fix (2 files, app-layer):**
+>
+> - `apps/oak-curriculum-mcp-streamable-http/src/handlers.ts` — the `registerTools`
+>   loop skips a tool whose name is in `EEF_FLAG_GATED_TOOL_NAMES` (a typed
+>   `ReadonlySet<UniversalToolName>` = `{'get-eef-evidence'}`, the single extension point
+>   per D6 plan c6's "single named constant") when `!options.runtimeConfig.eefEnabled`
+>   (the app owns the flag; the SDK enumerator `listUniversalTools` stays
+>   transport-agnostic and still enumerates EEF — the protocol filter is the loop). NO
+>   patch to the e2e expected list (that would bury the cause).
+> - `...src/handlers-tool-registration.integration.test.ts` — reconciled per the D6 c6
+>   spec: threaded the flag through `registerAndCapture`, ran the two full-enumeration
+>   tests with `eefEnabled:true` (their purpose is per-tool config correctness, orthogonal
+>   to gating), and added an `EEF flag gating` describe block (off→not registered,
+>   on→registered, non-EEF unaffected).
+>
+> **PROOF (first-hand, this session):** app `pnpm type-check` clean; `pnpm test`
+> 725/725; `pnpm test:e2e` 131/131 (incl. the previously-red parity test); `pnpm lint:fix`
+> clean on both files. NOT the full root `pnpm check` (see GATE note).
+>
+> **LANDING-PAGE DECISION (owner, 2026-06-08):** the public landing page
+> (`render-tools-section.ts`, enumerates the same SDK list) is **catalog by design** —
+> NOT flag-gated; advertising EEF when the tool is off is acceptable. No change. This
+> matches the D6 plan's owner-relaxed landing-page note. So there is NO asymmetry to fix.
+>
+> **TREE STATE (verified first-hand at write-time):** branch `feat/graph-tooling-tidyup`,
+> HEAD `072375e1` ("fix(sonar): clear new-code quality-gate findings in agent-tools and
+> graph-corpus-sdk" — a PEER commit, Stormbound Streaming Zephyr / cursor, NOT EEF),
+> **20 ahead of upstream, 0 behind, UNPUSHED.** My EEF slice is UNCOMMITTED (owner: "not
+> quite yet"): `handlers.ts` + `handlers-tool-registration.integration.test.ts` are the
+> only EEF dirty files. **LIVE PARALLEL ACTIVITY — re-derive git before any commit:**
+> Stormbound (cursor, `agent-tools/**`, PR #131 Sonar) is actively committing; Ferny
+> Ripening Meadow (claude, `.agent/memory/**`) holds an active curation claim with
+> uncommitted edits to `napkin.md` / `repo-continuity.md` / `pending-graduations.md`.
+> **Stage the EEF slice by EXPLICIT pathspec — NEVER `git add -A`** (it would sweep both
+> peers' WIP).
+>
+> **GATE STATE:** the EEF slice is green (proof above). Did NOT run the full root
+> `pnpm check`: (a) two peers hold live WIP/commits on `agent-tools/**` + `.agent/memory/**`,
+> so a full-tree run gates on their in-flight work, and the `check-singleton-per-window`
+> rule says defer when peers are active; (b) no commit is happening this session. The
+> EEF code that will be committed is proven green at the app level first-hand.
+>
+> **NEXT SAFE STEPS (unchanged from the Evergreen banner except #1 is now done):**
+>
+> 1. ~~Gating (c6) — tool~~ **DONE this session.**
+> 2. **c4 resource** (`eef://interpretation`) — content SDK-side, registered app-side,
+>    flag-CO-gated in the same `registerTools`/resource path; cross to the vendor resource
+>    result via its OWN egress function (the ADR-193 membrane pattern).
+> 3. **c5 prompt** (`adapt-lesson`) — message SDK-side; egress to the vendor prompt result;
+>    flag-co-gated.
+> 4. When c4/c5 land: extend the c6 flag-skip to co-gate the resource + prompt, then full
+>    `pnpm check` green → ONE commit by EXPLICIT pathspec.
+> 5. Settle the ADR-193 demarcation convention (egress marker + `*ToCallToolResult` naming;
+>    consider a lint rule). Open ADR-193 item.
+>
+> **REVIEWERS — `code-expert` DISPATCHED this session: APPROVED (no critical/important
+> defects).** It validated the guard is type-safe (`tool.name: UniversalToolName`,
+> `'get-eef-evidence'` a union member — rename is a compile error), `options.runtimeConfig`
+> in scope, tests use `vi.spyOn` on an injected dep (no global state), and the SDK-enumerates
+> / app-filters separation is the correct altitude. Its #1 suggestion (named constant for the
+> gated name) was APPLIED this session. **REQUIRED before the green commit (code-expert
+> named, NOT yet run — the change is uncommitted so they attach to the commit boundary):**
+> `type-expert` (verify `tool.name === gated` stays type-safe under `AggregatedToolName`
+> evolution; no widening to `string` in the chain); `security-expert` (verify the flag gates
+> *visibility* not just callability — `tools/list` omits EEF when off; no env-spoof path
+> enables it on prod; no fallback registration re-exposes EEF metadata when off);
+> `test-expert` (confirm the `EEF flag gating` tests would FAIL if the guard were removed —
+> behaviour-anchored, not implementation-mirroring). Plus `mcp-expert` on c4/c5 registration
+> and an adversarial diff review before the green commit. code-expert's per-specialist
+> delegation snapshots are in this session's transcript (agentId `a5ab5ef963324e5c9`).
+>
+> | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | `Luminous Drifting Dawn` | `claude` | `Opus 4.8` | `a143b3` | `c6-tool-gating-fix` | 2026-06-08 | 2026-06-08 |
+>
+> ---
+>
 > **🤝 HANDOFF — EEF thread (2026-06-08, Evergreen Blossoming Copse / `3479e1`;
 > claude / Opus 4.8). ARCHITECTURE DECIDED + DOCUMENTED — the system↔vendor type
 > boundary, [ADR-193](../../../../docs/architecture/architectural-decisions/193-system-vendor-type-boundary-membrane.md).

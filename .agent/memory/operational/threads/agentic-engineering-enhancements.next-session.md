@@ -1,4 +1,50 @@
+---
+fitness_line_target: 500
+fitness_line_limit: 800
+fitness_char_limit: 60000
+fitness_line_length: 400
+overflow_disposition: 'leave-if-live; else conserve-insight-and-delete — never archive/split/rotate/shard (see continuity-practice.md §Disposition of Continuity Surfaces)'
+merge_class: index-narrative-tables
+---
 # Next-Session Record — `agentic-engineering-enhancements` thread
+
+## 🤝 Session Handoff (2026-06-08 — Lofty Spiralling Plume / claude / Opus 4.8 / `891aa5`): EEF precondition in the banner below is VOID (ADR-193); WS1 unblocked
+
+**Self-contained correction; supersedes the EEF-lint precondition in the Briny Plumbing Beacon
+banner below. WS1 → 2b → 2c → WS2 sequence and the WS1/2b/2c/WS2 descriptions are otherwise
+unchanged — read the Briny banner for the work brief, this banner for the corrected gate picture.**
+
+- **The EEF precondition is VOID.** The Briny banner below says HEAD `2cd529b5` is RED on a
+  `graph-corpus-sdk:lint` conflict (`EefEvidenceEnvelope` as a deliberate `type`), that it must NOT
+  be "fixed" to `interface`, and that every commit is blocked. **All of that is now stale.** The EEF
+  lane resolved it via
+  [ADR-193](../../../../docs/architecture/architectural-decisions/193-system-vendor-type-boundary-membrane.md):
+  `EefEvidenceEnvelope` is now a strict **`interface`** (no index signature) plus an **egress
+  membrane** (`eefEvidenceToCallToolResult`), so `@typescript-eslint/consistent-type-definitions`
+  is **GREEN-resolved**. Making it an interface was correct; the "must NOT fix to interface"
+  instruction no longer applies. That lint blocks no commit.
+- **The Briny "STAGED but UNCOMMITTED, awaiting a green HEAD" handoff edits are resolved** — the
+  EEF/2a sweep committed (`496ea7ca` + `83d791e8`), ADR-193 + reconciliations in `1917f0ea`. **WS1
+  is UNBLOCKED.** The only remaining EEF red is the app e2e `list_tools` parity (the EEF gating
+  step, a separate lane) — it does not gate WS1 work on this thread's surface.
+- **For live tree / gate / ahead-count state, read `repo-continuity.md` § Current State (top entry)
+  and `eef.next-session.md` top banner — authoritative.** Do not trust any SHA / ahead-count / "tree
+  clean" assertion in the Briny banner below; those were write-time snapshots and have moved on.
+- **WS1 fixture caveat — re-verify first-hand.** The Briny banner offers the EEF
+  `new Set<string>(OBSERVED_PHASES)` widening as a "free test fixture". The EEF membership sets were
+  since made zero-widening (`Set<DeclaredPhase>` / `Set<EefStrandId>`), so that exact widening may no
+  longer exist in the EEF code. Confirm against `graph-corpus-sdk/src/eef-strands/` before relying on
+  it; author a dedicated fixture if it is gone.
+- **A redundant standalone opener was folded here and deleted.**
+  `agentic-engineering-enhancements/current/2026-06-08-no-type-widening-ws1-opener.md` duplicated the
+  Briny brief and carried this correction as a stapled-on banner. Per `threads/README.md` ("the
+  preferred opener is a pointer, not a state dump"), the thread record is the pickup surface; the
+  opener was a state-dump anti-pattern. Its only non-redundant content was this correction, now homed
+  here.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Lofty Spiralling Plume` | `claude` | `Opus 4.8` | `891aa5` | `continuity-hygiene (ADR-193 correction folded; redundant opener deleted)` | 2026-06-08 | 2026-06-08 |
 
 ## 🤝 Session Handoff (2026-06-07 — Briny Plumbing Beacon / claude / Opus 4.8 / `5dd58c`): item 2a LANDED (ESLint reappraisal enforcement); WS1 next
 

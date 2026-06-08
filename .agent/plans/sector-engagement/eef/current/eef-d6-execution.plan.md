@@ -114,22 +114,31 @@ holds accurate vendor facts + the type-flow diagram, but its §4 "carrier fix" i
    `interface` (no index signature); the rule passes with NO scoping and NO disable. The
    prior "OWNER DECISION PENDING / scope the rule" framing is void.
 
-4. **Gating is STRUCTURAL, at registration, default off (still the next step).** Gate
-   the tool/resource/prompt at the point of registration (skip the EEF entry in the
-   `registerTools` loop when `!runtimeConfig.eefEnabled`). Then the `list_tools parity`
-   e2e (`e2e-tests/server.e2e.test.ts`) passes because EEF is not exposed by default.
-   Do NOT patch the expected-tools list (buries the real cause).
+4. **Gating is STRUCTURAL, at registration, default off — TOOL-GATING DONE (2026-06-08,
+   uncommitted, green).** The `registerTools` loop now skips the `get-eef-evidence` entry
+   when `!options.runtimeConfig.eefEnabled` (`handlers.ts:158-164`); the
+   `handlers-tool-registration.integration.test.ts` reconciliation landed (flag threaded
+   through `registerAndCapture`; full-enumeration tests run with the flag on; a dedicated
+   `EEF flag gating` block proves off→absent / on→present). The `list_tools parity` e2e
+   (`server.e2e.test.ts`) is GREEN — the expected-tools list was NOT patched (that would
+   bury the real cause). App proof first-hand: type-check clean, 725/725 unit+integration,
+   131/131 e2e, lint clean. **Remaining for c6:** co-gate the c4 resource + c5 prompt at
+   registration once they exist. The human-facing landing page is owner-relaxed (catalog
+   by design — confirmed 2026-06-08, NOT flag-gated).
 
 5. **The author citation is a citation, not PII** — emitted verbatim
    (`provenance.source.original_authors`). The earlier omit-as-PII framing was wrong.
 
-**c1–c3 status (2026-06-08):** DONE in the corrected ADR-193 shape and COMMITTED
-(`496ea7ca` — the egress code + strict-interface envelope; ADR-193 in `83d791e8`). The
-envelope is a strict `interface`; the egress membrane is built + green at the SDK level
-(type-check + lint + tests incl. the egress guard). Remaining: **c6 gating** (item 4 —
-the only `pnpm check` red, the app e2e parity), **c4 resource**, **c5 prompt** (each
-crossing via its own egress membrane). Commit by explicit pathspec (peer `oak-eslint`
-WIP is live).
+**c1–c3 + c6-tool status (2026-06-08):** c1–c3 DONE in the corrected ADR-193 shape and
+COMMITTED (`496ea7ca` — the egress code + strict-interface envelope; ADR-193 in
+`83d791e8`). **c6 TOOL-gating DONE 2026-06-08 (item 4 — UNCOMMITTED working-tree edits,
+green):** `handlers.ts` flag-skip + the `handlers-tool-registration` reconciliation; the
+app e2e `list_tools parity` red is cleared (the prior single `pnpm check` red). Remaining:
+**c4 resource**, **c5 prompt** (each crossing via its own egress membrane), then co-gate
+those in the c6 loop, then the green commit. Commit by explicit pathspec — the EEF slice
+is `apps/oak-curriculum-mcp-streamable-http/src/handlers.ts` +
+`...handlers-tool-registration.integration.test.ts` (peer `agent-tools/**` + `.agent/memory/**`
+WIP from concurrent agents is live in the tree — NEVER `git add -A`).
 
 ## Context
 

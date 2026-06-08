@@ -3,7 +3,7 @@ fitness_line_target: 200
 fitness_line_limit: 270
 fitness_char_limit: 16000
 fitness_line_length: 100
-split_strategy: 'Split by workflow surface if continuity doctrine grows beyond one page'
+overflow_disposition: 'leave-if-live; else conserve-insight-and-delete — never archive/split/rotate/shard (see §Disposition of Continuity Surfaces)'
 ---
 
 # Continuity Practice
@@ -37,6 +37,38 @@ and historical explanation collapse into one file.
 The rule of thumb: if a claim should remain true across many sessions,
 it belongs here or in permanent doctrine. If it answers "what is live
 right now?", it belongs in operational memory.
+
+## Disposition of Continuity Surfaces
+
+This section is scoped to the **continuity surfaces** —
+`repo-continuity.md` and `threads/<slug>.next-session.md`. Other surface
+types (the napkin, distilled, buffers) have their own disposition notes
+and lifecycles; nothing here changes them or the fitness apparatus.
+
+The fitness checker **only surfaces a signal** when a surface crosses its
+thresholds — it takes no action. The agent who sees the signal decides
+what to do, guided by the surface's `overflow_disposition` note. For a
+continuity surface, crossing a threshold is a routing signal, not a
+trigger to shrink the file; the question is "what is the state of the
+work this content describes?". Two dispositions:
+
+1. **The work is live** — it still needs doing. The content **stays in
+   place**, verbatim, however large. A truthful record of live work is
+   worth more than a tidy file.
+2. **The work is finished** — landed, abandoned, or superseded. **Curate
+   it**: conserve the durable *insight* into its permanent home (ADR,
+   PDR, governance doc, plan, pattern, rule, or — for still-live
+   operational facts — the compact current-state surface), then **delete
+   the curated residue** from the continuity surface. Git retains the
+   literal record; the live surface carries only what the next session
+   needs.
+
+For a continuity surface these are the two dispositions: do not relieve
+its fitness pressure by splitting it across files, rotating it, sharding
+it, or renaming it for score. Moving its content elsewhere is not the
+same as conserving its insight. Each continuity surface's
+`overflow_disposition` frontmatter field points here; this section is the
+canonical statement for that surface type.
 
 ## Continuity Questions
 

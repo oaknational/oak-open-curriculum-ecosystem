@@ -1,3 +1,11 @@
+---
+fitness_line_target: 500
+fitness_line_limit: 800
+fitness_char_limit: 60000
+fitness_line_length: 400
+overflow_disposition: 'leave-if-live; else conserve-insight-and-delete — never archive/split/rotate/shard (see continuity-practice.md §Disposition of Continuity Surfaces)'
+merge_class: index-narrative-tables
+---
 # Next-Session Record — `mcp-product-analytics` thread
 
 ## Landing target (per PDR-026) — refreshed 2026-05-26 (Stellar Glowing Satellite, claude, claude-opus-4-7, `9a2967`)

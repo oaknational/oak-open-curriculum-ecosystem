@@ -3,7 +3,7 @@ fitness_line_target: 400
 fitness_line_limit: 525
 fitness_char_limit: 35000
 fitness_line_length: 200
-split_strategy: 'Archive historical session-close summaries to a companion archive file; keep only live operational state and most recent session summary here'
+overflow_disposition: 'leave-if-live; else conserve-insight-and-delete — never archive/split/rotate/shard (see continuity-practice.md §Disposition of Continuity Surfaces)'
 merge_class: index-narrative-tables
 ---
 
@@ -19,25 +19,32 @@ surface.
 
 ## Current State
 
-- **EEF `get-eef-evidence` c1–c3 AUTHORED (strict-typed) + STRICT-TYPES-WITHOUT-LOSS
-  REQUIREMENT + TYPE-FLOW DIAGRAM + LTAE CARRIER FIX RECORDED; ALL IN SAFETY COMMIT
-  `2cd529b5` (2026-06-07, Pelagic Charting Rudder / `39ff77`, claude / Opus 4.8,
-  owner-directed).** The EEF MCP tool was authored as a NEW type of aggregated tool
-  (closed/known input; the schema IS the contract; thin parse-and-dispatch returning the
-  D5 envelope verbatim), strict-typed and green at SDK level (type-check + lint + 736
-  tests; graph-corpus-sdk 37 + build). Analysis + diagram + the correct fix are in
-  `.agent/reports/eef-get-eef-evidence-tool-and-strict-type-flow.report.md` and the
-  `eef-d6-execution.plan.md` §"Execution corrections — READ FIRST". **GATE RED at the
-  safety commit `2cd529b5`** (a checkpoint, not a green landing — DO NOT PUSH until
-  green): full-tree `pnpm check` fails on (a) graph-corpus-sdk lint rejecting the required
-  `EefEvidenceEnvelope` `type` alias (`consistent-type-definitions` — owner decision to
-  scope), (b) app e2e `list_tools parity` (EEF enumerated ungated). Both clear with the
-  carrier fix + gating-at-registration. The safety commit also swept a parallel agent's
-  `packages/core/oak-eslint/*` WIP, and **more live `oak-eslint` WIP remains uncommitted**
-  (that agent is active) — stage EEF by EXPLICIT pathspec, never `git add -A`. **Next safe
-  step: the carrier fix (preserve `structuredContent` to the wire) + the lint decision,
-  then gating-at-registration, then c4/c5, then a GREEN commit** — per
-  `threads/eef.next-session.md` top banner.
+- **EEF `get-eef-evidence` — c6 TOOL-GATING DONE; the single `pnpm check` red (app
+  e2e `list_tools` parity) CLEARED; UNCOMMITTED, green (2026-06-08, Luminous Drifting
+  Dawn / `a143b3`, claude / Opus 4.8, owner-directed). ADR-193 + egress membrane by
+  Evergreen Blossoming Copse / `3479e1`.** The vendor-type-boundary question is decided +
+  documented in
+  [ADR-193](../../../docs/architecture/architectural-decisions/193-system-vendor-type-boundary-membrane.md):
+  strict domain types hold from the `as const` corpus to a per-primitive EGRESS
+  function; the vendor's `Record<string, unknown>` is the external contract at the
+  membrane, never in domain code. `EefEvidenceEnvelope` is a strict `interface`
+  (`consistent-type-definitions` GREEN); egress `eefEvidenceToCallToolResult` built +
+  green at SDK. **DEAD — do NOT re-explore (ADR-193 §Alternatives): carrier fix / index
+  signature / preserve-to-`registerTool` / generic-spine.** Committed (prior sessions):
+  egress `496ea7ca`, ADR-193 `83d791e8`, handoff + plan reconciliations `1917f0ea`.
+  **THIS SESSION (uncommitted): c6 tool-gating** — `registerTools` skips `get-eef-evidence`
+  when `!runtimeConfig.eefEnabled` (default OFF); `handlers-tool-registration` test
+  reconciled (off→absent / on→present). The flag existed but was never consumed — a dead
+  seam. The landing page is **catalog by design** (owner 2026-06-08; NOT flag-gated). **GATE:
+  EEF slice green first-hand (app type-check; 725/725 unit+int; 131/131 e2e incl. the
+  previously-red parity; lint clean). Full root `pnpm check` NOT run — peers active
+  (`check-singleton-per-window`); no commit this session.** HEAD `072375e1` (peer
+  Stormbound's Sonar commit), 20 ahead of upstream, UNPUSHED. **Stage EEF by EXPLICIT
+  pathspec — `handlers.ts` + `handlers-tool-registration.integration.test.ts` only; NEVER
+  `git add -A` (live peer WIP: Stormbound `agent-tools/**`, Ferny `.agent/memory/**`).
+  Next safe step: c4 resource → c5 prompt → co-gate both in the c6 loop → full `pnpm check`
+  GREEN → one commit by explicit pathspec — NO `--no-verify`** — per
+  `threads/eef.next-session.md` top banner (authoritative + self-contained).
 - **EEF c1 FINITE-DOMAIN PREREQUISITE LANDED (strict-typed) + TYPE-WIDENING
   DOCTRINE STRENGTHENED (2026-06-07, Hidden Prowling Owl / `bcc138`, claude /
   Opus 4.8, owner-directed).** graph-corpus-sdk finite-domain runtime constants
@@ -138,7 +145,7 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Evergreen Blossoming Copse / adr-193-vendor-boundary-and-egress-membrane / 2026-06-08 (prior: Pelagic Charting Rudder c1-c3-authoring-and-strict-type-flow 2026-06-07, Hidden Prowling Owl c1-finite-domain-prereq-and-type-widening-doctrine 2026-06-07, Arboreal Shedding Canopy d6-reshape-and-phase-e-handoff 2026-06-07, Moonlit Orbiting Moon d6-execution-reshaped 2026-06-07, Zephyrous Kiting Squall d6-readiness-regrounding 2026-06-06, Floating Darting Cloud d7-golive-plan-edit 2026-06-06, Dusky Dimming Candle author-d6-execution-plan 2026-06-06, Masked Creeping Lantern eef-deep-review-resolutions-adr191 2026-06-05, Dim Dimming Threshold eef-d5-execution 2026-06-05, Prismatic Twinkling Planet eef-d5-fresh-dual-review 2026-06-04, Windward Gliding Squall eef-d5-plan-authoring 2026-06-04, Shadowed Creeping Secret eef-d4-ratify 2026-06-04, Burnished Glowing Spark 2026-06-04, Lacustrine Swimming Beacon 2026-06-03, Seaworthy Swimming Sextant 2026-06-03, Galactic Glowing Prism + Opalescent Cascading Planet + Stellar Waning Planet + Silvered Lurking Mask 2026-06-02) |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Opus 4.8 / Luminous Drifting Dawn / c6-tool-gating-fix / 2026-06-08 (prior: Evergreen Blossoming Copse adr-193-vendor-boundary-and-egress-membrane 2026-06-08, Pelagic Charting Rudder c1-c3-authoring-and-strict-type-flow 2026-06-07, Hidden Prowling Owl c1-finite-domain-prereq-and-type-widening-doctrine 2026-06-07, Arboreal Shedding Canopy d6-reshape-and-phase-e-handoff 2026-06-07, Moonlit Orbiting Moon d6-execution-reshaped 2026-06-07, Zephyrous Kiting Squall d6-readiness-regrounding 2026-06-06, Floating Darting Cloud d7-golive-plan-edit 2026-06-06, Dusky Dimming Candle author-d6-execution-plan 2026-06-06, Masked Creeping Lantern eef-deep-review-resolutions-adr191 2026-06-05, Dim Dimming Threshold eef-d5-execution 2026-06-05, Prismatic Twinkling Planet eef-d5-fresh-dual-review 2026-06-04, Windward Gliding Squall eef-d5-plan-authoring 2026-06-04, Shadowed Creeping Secret eef-d4-ratify 2026-06-04, Burnished Glowing Spark 2026-06-04, Lacustrine Swimming Beacon 2026-06-03, Seaworthy Swimming Sextant 2026-06-03, Galactic Glowing Prism + Opalescent Cascading Planet + Stellar Waning Planet + Silvered Lurking Mask 2026-06-02) |
 | `oak-kg-ontology-planning-review` | Plan the `oak-kg`/ontology work, starting with a deep review of the Oak Curriculum Ontology repo (separate concern from the bulk-derived graph redesign) | [record][oak-kg-ontology] | claude / Opus 4.8 / Twilit Cascading Supernova / thread-opener-brief-only / 2026-06-04 — **opened, not started; deep review is a fresh session** |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Blustery Lifting Gale / skills-taxonomy-and-distribution / 2026-06-03 (prior: Umbral Whispering Silhouette 2026-06-01) |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 / Briny Plumbing Beacon / feedback-mechanism-follow-ons (item 2a landed; WS1 next) / 2026-06-07 (prior: Eclipsed Watching Veil items-4+1 2026-06-07, Glittering Weaving Comet 2026-06-07, Volcanic Blazing Magma 2026-06-06, Lanternlit Passing Mask 2026-06-05, Hidden Hiding Dusk 2026-06-04, Arboreal Sprouting Branch 2026-06-04, Opalescent Illuminating Prism 2026-06-03, Lacustrine Swimming Beacon, Ashen Burning Magma, Solar Glowing Meteor, Stratospheric Buffeting Breeze, Lofty Sweeping Falcon, Shaded Veiling Mirror) |

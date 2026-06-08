@@ -1,3 +1,11 @@
+---
+fitness_line_target: 500
+fitness_line_limit: 800
+fitness_char_limit: 60000
+fitness_line_length: 400
+overflow_disposition: 'leave-if-live; else conserve-insight-and-delete — never archive/split/rotate/shard (see continuity-practice.md §Disposition of Continuity Surfaces)'
+merge_class: index-narrative-tables
+---
 # Next-Session Record — `connecting-oak-resources` thread
 
 ## 2026-06-02 — Galactic Glowing Prism / claude / Opus 4.8 / `cd7389` — JC4 unified substrate-migration plan authored (committed `9fab8669`, pushed)

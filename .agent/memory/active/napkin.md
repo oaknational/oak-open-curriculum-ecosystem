@@ -58,3 +58,37 @@ convenient *interpretation* deserves the same suspicion as a convenient *fact*.
 - Three under-described safety commits (`2cd529b5`, `496ea7ca` "chore: safety commit",
   `83d791e8` "--amend" — a mangled message) carry EEF work mixed with peer/other-thread
   content; decoded in `threads/eef.next-session.md`.
+
+**Closeout learnings (handoff):**
+
+- **`--no-verify` is OFF (owner directive, this session).** The remaining EEF commits
+  must land GREEN — gating (c6) clears the only red (app e2e parity); do not reach for
+  `--no-verify`.
+- **The agentic hook blocks the *agent's* `git commit --no-verify` even with in-chat
+  owner authorisation** — the owner must run the commit (or `! <command>`). In-chat
+  authorisation is necessary but the hook still intercepts the agent's invocation.
+- **Staging a file that holds another agent's uncommitted work sweeps it.** My
+  `napkin.md` carried Ferny's rotation entangled with my entry in one file, so it rode
+  into `1917f0ea`; explicit pathspec protects against staging the *wrong files*, not
+  against multiple agents' edits *within one file*. The rotated-out window is recoverable
+  from `496ea7ca`; its archive `archive/napkin-2026-06-08-ferny-curation.md` is untracked
+  (dangling link in the committed napkin).
+- **Uncommitted doc-polish carried into the handoff (this turn):** the
+  `repo-continuity.md` Current-State EEF bullet (re-pointed from the dead carrier-fix to
+  ADR-193) and this napkin addendum are UNCOMMITTED (gate red, `--no-verify` off). The
+  next session should stage them into its first GREEN commit (after gating).
+
+**Over-generalisation correction (Lofty Spiralling Plume, 2026-06-08):**
+
+- **Expected:** owner rejecting "archive/rotate" as the disposition for continuity
+  surfaces meant the archive apparatus + `/archive/` fitness exclusion were wrong.
+  **Actual:** owner scoped it — the strategy was unsuitable *for continuity surfaces
+  only*; the apparatus is fine. **Why it failed:** I escalated a surface-scoped note
+  correction into a system-wide condemnation (doctrine-by-analogy: "big systemic cure"
+  when the situation was "narrow surface note"). I had written a blanket "archiving is
+  not knowledge preservation" into `continuity-practice.md` §Disposition and was about to
+  propose flipping the checker's `/archive/` exclusion. **Behaviour change:** when an
+  owner rejects a strategy for a named surface type, scope the correction to that surface
+  type; the fitness checker only *surfaces signals*, agents act — strategy notes are
+  guidance for the agent, not apparatus law. Cure landed: §Disposition re-scoped to
+  continuity surfaces; no fitness-system code touched.

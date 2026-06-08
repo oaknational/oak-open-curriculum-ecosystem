@@ -1,6 +1,6 @@
 ---
 name: "MCP Output Schemas and Response Validation"
-overview: "Declare a truthful, REQUIRED, object-rooted `outputSchema` on every MCP tool — composed at codegen time for the generated tools, hand-authored (reusing generated sub-schemas) for the aggregated tools (including the EEF tool, `get-eef-evidence`), with the existing graph tools receiving theirs as part of their substrate migration — and thread it through the canonical universal-tools descriptor surface to `registerTool`/`registerAppTool` (the carrier seam, including the SDK-`registerTool` vs ext-apps-`registerAppTool` divergence, solved ONCE here at the infra layer), so MCP clients receive a machine-checkable contract for the `structuredContent` they get back. Delivery order (revised 2026-06-07, owner-ratified 2026-06-06 — EEF D6 ships NO output schema; the EEF tool gains its output schema HERE with every other tool): generated tools via codegen, aggregated tools (incl. EEF) hand-authored, graph tools at migration, required/root promotion last."
+overview: "Declare a truthful, REQUIRED, object-rooted `outputSchema` on EVERY MCP tool, authored in ONE place so no tool is a special case — composed at codegen time for the generated tools, hand-authored (reusing generated sub-schemas) for ALL aggregated tools including the EEF tool (`get-eef-evidence`) and the three existing graph tools — and thread it through the canonical universal-tools descriptor surface to `registerTool`/`registerAppTool` (the carrier seam, including the SDK-`registerTool` vs ext-apps-`registerAppTool` divergence, solved ONCE here at the infra layer), so MCP clients receive a machine-checkable contract for the `structuredContent` they get back. Serial delivery (owner-ratified 2026-06-08): (1) EEF D6/D7 first — the EEF tool ships `structuredContent` with NO output schema; (2) the graph tools migrate onto the substrate (`graph-tools-value-redesign`), shipping bounded retrieval only with NO MCP output schema (they work as today); (3) THEN this plan runs, at the point where every tool already exists on its final substrate: introduce the carrier field, author the output schema for every tool uniformly (generated + all aggregated + EEF + the three graph tools), and land the REQUIRED ratchet LAST — proven by a registry-driven conformance test that counts the schema-less surface down to zero. Authoring all schemas at the point where all tools exist is what avoids the special case. Discovery of unschema'd tools is that conformance test, not a red type-check; the required field is the anti-regression ratchet. Single-branch temporary red is permitted (green before merge); no optional `outputSchema` is ever merged."
 source_research:
   - "../../../reports/output-schema-mcp-plan-audit-2026-06-02.md"
   - "../roadmap.md"
@@ -14,20 +14,19 @@ todos:
     status: pending
     depends_on: [w1-cycle-1]
   - id: w2-cycle-1
-    content: "W2 cycle 1 (aggregated, ATOMIC): author the in-scope aggregated tools' output shapes matching each tool's real structuredContent (reusing generated sub-schemas where the payload embeds generated types; search modelled as a single object with mode-specific fields optional, NOT a root union); per-tool conformance unit tests. Scope and the required-field landing shape follow §Resolved Sequencing: the 3 existing graph tools are excluded (their schemas land with their substrate migration), and requiredness lands at the per-type promotion point. Re-cut at execution start. One commit. Tree green."
+    content: "W2 cycle 1 (aggregated, ATOMIC): author EVERY aggregated tool's output shape matching its real structuredContent (reusing generated sub-schemas where the payload embeds generated types; search modelled as a single object with mode-specific fields optional, NOT a root union); per-tool conformance unit tests. Scope is ALL aggregated tools — the 8 non-graph tools, the EEF tool (`get-eef-evidence`), AND the three existing graph tools (`get-misconception-graph`, `get-prior-knowledge-graph`, `get-thread-progressions`) — authored uniformly here so no tool is a special case. The three graph tools are authored against their POST-migration structuredContent, so the graph-tool portion is gated on `graph-tools-value-redesign` having landed (the tools must exist on the substrate first); the EEF portion is gated on EEF D6 having landed. One commit. Tree green."
     status: pending
     depends_on: []
   - id: s0-cycle-1
-    content: "S0 cycle 1 (seam): add REQUIRED outputSchema (z.ZodRawShape) to ToolRegistryDescriptor and UniversalToolListEntry + a requireGeneratedToolOutputShape helper; forward outputSchema in listUniversalTools() from both the aggregated defs and generated descriptors; add `outputSchema: tool.outputSchema` to the single registerTool/registerAppTool config in handlers.ts. Integration test: the registration config carries outputSchema for all 35 tools (spy-observation pattern). One commit. Tree green."
+    content: "S0 cycle 1 (seam + closing ratchet): add REQUIRED outputSchema (z.ZodRawShape) to ToolRegistryDescriptor and UniversalToolListEntry + a requireGeneratedToolOutputShape helper; forward outputSchema in listUniversalTools() from both the aggregated defs and generated descriptors; add `outputSchema: tool.outputSchema` to the single registerTool/registerAppTool config in handlers.ts (reconciling the SDK-registerTool vs ext-apps-registerAppTool carrier divergence once, here). The required field lands LAST as the closing ratchet, after W1 + W2 have populated every producer; it is the anti-regression lock, not the discovery instrument. Integration test: the registration config carries outputSchema for every registered tool (spy-observation pattern). One commit. Tree green."
     status: pending
     depends_on: [w1-cycle-2, w2-cycle-1]
-    decision_gate: "Re-cut to §Resolved Sequencing (owner, 2026-06-02) before execution — S0's required promotion executes last"
   - id: s0-cycle-2
-    content: "S0 cycle 2 (proof): integration/E2E test proving (a) tools/list exposes outputSchema for all 35; (b) real emitted structuredContent validates against the declared outputSchema for a representative generated and a representative aggregated tool; (c) every tool's success return carries structuredContent (the required-outputSchema invariant); (d) an isError:true path skips output validation. One commit. Tree green."
+    content: "S0 cycle 2 (registry countdown conformance proof — discovery + closing proof): a registry-driven test iterates the LIVE tool registry and asserts every tool exposes an object-rooted outputSchema that VALIDATES its real emitted structuredContent, enumerating (counting down to zero) any tool still missing a truthful schema — so 'where the schema-less surface lives' is computed from the registry, never inferred from a red type-check. Plus: (a) tools/list exposes outputSchema for every tool; (b) the structuredContent-present invariant on every non-error return; (c) an isError:true path skips output validation. One commit. Tree green."
     status: pending
     depends_on: [s0-cycle-1]
   - id: ws-docs
-    content: "Docs: remove the stale 'download-asset on stdio' TSDoc (list-tools.ts:25-26) and update the list-tools @example to include outputSchema; TSDoc on the new fields and the requireGeneratedToolOutputShape helper; update any README enumerating the tool surface to 35 (24 + 11). Land alongside the cycles whose behaviour they document."
+    content: "Docs: remove the stale 'download-asset on stdio' TSDoc (list-tools.ts:25-26) and update the list-tools @example to include outputSchema; TSDoc on the new fields and the requireGeneratedToolOutputShape helper; update any README enumerating the tool surface to 36 (24 generated + 12 aggregated incl. EEF). Land alongside the cycles whose behaviour they document."
     status: pending
     depends_on: [s0-cycle-2]
   - id: ws-gates
@@ -47,8 +46,8 @@ isProject: false
 
 # MCP Output Schemas and Response Validation
 
-**Last Updated**: 2026-06-02
-**Status**: 🟢 DECISION-COMPLETE — S0 ownership and the delivery order are owner-resolved (2026-06-02, see [§Resolved Sequencing](#resolved-sequencing-owner-2026-06-02)). The W1/W2/S0 cycle decomposition below predates that resolution (it decomposes by populate-all-then-wire); the cycles are re-cut to the ratified order at execution-session start, before any cycle runs.
+**Last Updated**: 2026-06-08
+**Status**: 🟢 DECISION-COMPLETE — the serial delivery order and the uniform "every tool schema'd in one place" shape are owner-resolved (2026-06-08, see [§Resolved Sequencing](#resolved-sequencing-owner-2026-06-08)). This plan authors the `outputSchema` for **every** tool, including the three existing graph tools, so there is no special case; the graph migration ships substrate + bounded retrieval only (no MCP output schema). The required field is the closing ratchet; discovery of unschema'd tools is the registry-driven conformance test, not a red type-check.
 **Scope**: Give every MCP tool a truthful, required, object-rooted `outputSchema` and expose it through the live registration path.
 
 > **Provenance**: this plan was fully re-grounded on 2026-06-02 against live
@@ -82,13 +81,16 @@ all of it; the facts below are verified against live code.
 - **One transport.** `StreamableHTTPServerTransport`, instantiated per-request
   (`apps/oak-curriculum-mcp-streamable-http/src/app/core-endpoints.ts:101`).
   **There is no stdio transport** — zero `StdioServerTransport` occurrences.
-- **35 tools total**, all registered through one loop
+- **35 tools total today (pre-EEF; rises to 36 once the EEF tool lands)**, all
+  registered through one loop
   (`handlers.ts:158`): **24 generated** (`MCP_TOOL_ENTRIES`,
   `oak-sdk-codegen/.../mcp-tools/definitions.ts:41-66`) + **11 aggregated**
   (`AggregatedToolName`, `universal-tools/types.ts:76-87`): `search`, `fetch`,
   `get-curriculum-model`, `get-thread-progressions`, `get-prior-knowledge-graph`,
   `get-misconception-graph`, `browse-curriculum`, `explore-topic`,
-  `download-asset`, `user-search`, `user-search-query`.
+  `download-asset`, `user-search`, `user-search-query`. The EEF tool
+  (`get-eef-evidence`) becomes the 12th aggregated tool at D6, so the surface this
+  plan schemas in full is **36** (24 generated + 12 aggregated).
 - **`outputSchema` is absent from the entire wire path** — not on
   `ToolRegistryDescriptor` (`types.ts:31-40`), `UniversalToolListEntry`
   (`types.ts:120-142`), `AggregatedToolDefShape` (`definitions.ts:58-70`),
@@ -180,17 +182,21 @@ it, so the schema must match what is **actually emitted** or the tool errors.
    emits `structuredContent`. The field is a required `z.ZodRawShape` on
    `ToolRegistryDescriptor`, `AggregatedToolDefShape`, and `UniversalToolListEntry`.
    **Entailment (SDK-enforced):** a required `outputSchema` makes a non-error
-   `structuredContent` **mandatory** on every success return of all 35 tools.
-   This holds today (every tool routes success through `formatToolResponse`,
+   `structuredContent` **mandatory** on every success return of every registered
+   tool. This holds today (every tool routes success through `formatToolResponse`,
    which always builds `structuredContent`); S0.2 proves it as an invariant.
    *(principles.md §Strict and Complete; "WE DON'T HEDGE".)*
 
-2. **Populate first, wire last.** A required field cannot land before its
-   producers populate it. W1 (24 generated) and W2 (the 8 in-scope aggregated —
-   the 3 graph tools' schemas land with their substrate migration) populate
-   independently; S0 introduces the required `UniversalToolListEntry` field and
-   the wire **last**, as the convergence. *(Inverts the audit's "S0 first", which
-   assumed an optional additive field.)*
+2. **Populate first, wire required last.** The required field is the convergence,
+   not the opener: W1 (24 generated) and W2 (every aggregated tool — the 8
+   non-graph tools, EEF, and the three migrated graph tools) populate every
+   producer; S0 then promotes `outputSchema` to required across the carrier and
+   wires it **last**, as the closing ratchet. Declaring the field required up
+   front buys nothing — it is a one-line type change either way, while the value
+   is in authoring truthful schemas — and a globally-red type-check would mask
+   real errors; so requiredness lands at the convergence, and discovery of
+   unpopulated tools is the registry conformance test (S0.2), not the red tree.
+   *(Inverts the audit's "S0 first", which assumed an optional additive field.)*
 
 3. **Generator-first for generated tools (Cardinal Rule).** The generated
    envelope schema is **composed at `sdk-codegen` time** from the existing
@@ -217,61 +223,77 @@ it, so the schema must match what is **actually emitted** or the tool errors.
 
 - **Not** changing upstream API payloads or Contract A validation.
 - **Not** retrofitting the EEF "single-Zod-call graph-native-view" doctrine onto
-  the 35 existing tools — that doctrine is EEF-tool-specific (see §EEF).
-- **Not** building the new EEF graph tool — owned by the EEF plan.
+  the existing tools — that doctrine is EEF-tool-specific (see
+  [§Relationship to the EEF graph-tool plan](#relationship-to-the-eef-graph-tool-plan)).
+- **Not** building the new EEF graph tool (owned by the EEF plan, D6); this plan
+  authors its `outputSchema` only, in W2.
+- **Not** rebuilding the three existing graph tools (owned by
+  `graph-tools-value-redesign`); this plan authors their `outputSchema` only, in
+  W2, against their post-migration `structuredContent`.
 - **Not** changing the envelope `formatToolResponse` emits. (The `status` field
   in `structuredContent` is inherited from the formatter and declared truthfully
   here, not endorsed; a separate envelope-cleanup could later remove it. Out of
   scope.)
-- **Not** introducing any compatibility layer, optional-then-required migration,
-  or transport-specific output-schema path.
+- **Not** shipping an optional `outputSchema` as a released compatibility window:
+  the field is introduced and promoted to required within one pre-merge
+  integration (in-branch temporary red is permitted), and what is forbidden is
+  *merging* a state where the field is optional or partially populated. No
+  transport-specific output-schema path; no permanent compatibility layer.
 - **Not** re-opening the `download-asset` URL placement (owned by
   `download-asset-user-only-url.plan.md`; W2 consumes its post-change shape).
 
 ---
 
-## Resolved Sequencing (owner, 2026-06-02)
+## Resolved Sequencing (owner, 2026-06-08)
 
-**S0 ownership is resolved (revised 2026-06-07):** this plan owns the **S0
-carrier seam ENTIRELY** — the carrier-widening (adding an `outputSchema` field to
-`UniversalToolListEntry`/`AggregatedToolDefShape` and accepting object schemas on
-`inputSchema`) AND reconciling the SDK `registerTool`
+**This plan owns the S0 carrier seam ENTIRELY** — adding the `outputSchema`
+field to `UniversalToolListEntry`/`AggregatedToolDefShape`/`ToolRegistryDescriptor`,
+forwarding it through `listUniversalTools`, wiring the single `handlers.ts`
+config line, and reconciling the SDK `registerTool`
 (`ZodRawShapeCompat | AnySchema`) vs ext-apps `registerAppTool`
 (`ZodRawShapeCompat | StandardSchemaWithJSON`) carrier divergence — solved ONCE
-here at the infra layer. **EEF D6 does NOT land any output schema or carrier
-change** (owner-ratified 2026-06-06): the EEF tool's input is a `z.ZodRawShape`
-that fits the existing carrier, and it returns `structuredContent` with no
-`outputSchema`, uniform with every other aggregated graph tool. The shared
-additive seam (`AggregatedToolName`,
-`AGGREGATED_TOOL_DEFS`/`AggregatedToolDefShape` satisfies-guard,
-`UniversalToolListEntry`, `listUniversalTools`, the `handlers.ts` config) is this
-plan's to widen.
+here at the infra layer. **It also owns the `outputSchema` for EVERY tool**, so
+no tool is a special case (revised 2026-06-08).
 
-**The delivery order is ratified and firm:**
+**The delivery is serial across three phases:**
 
-1. **The EEF tool's `outputSchema` is authored HERE as an ordinary aggregated
-   tool** (revised 2026-06-07 — it no longer "lands first via EEF D6"; EEF D6
-   ships `structuredContent` with no output schema). It carries no special
-   priority; it gains its output schema with the other aggregated tools.
-2. **The 3 existing graph tools** (`get-misconception-graph`,
-   `get-prior-knowledge-graph`, `get-thread-progressions`) **receive their
-   output schemas with their substrate migration**
-   (`graph-estate-consolidation.plan.md` Judgement call 4: per tool, the
-   data/type re-emission, the tool rewrite, and its `outputSchema` land as one
-   replacement unit). They are untouched before that migration — they work
-   today, and the schema arrives when the tool is rebuilt, never before.
-3. **The remaining tools follow per tool type** (the other aggregated tools,
-   then the generated/API and search tools), with the **required-field
-   promotion to the root `UniversalToolListEntry` last**, once every type
-   carries it. The all-35 counts in the S0 cycles describe that final state and
-   are evaluated when S0 executes (last), against the tool set live at that
-   time.
+1. **EEF D6/D7 (priority, first).** The EEF tool ships `structuredContent` with
+   **no** `outputSchema`, uniform with every other aggregated tool, and does not
+   touch the carrier. EEF gains its output schema in this plan (phase 3), not at
+   D6.
+2. **The graph tools migrate (`graph-tools-value-redesign`).** Each graph tool is
+   rebuilt onto the `graph-corpus-sdk` substrate with bounded retrieval, shipping
+   **no MCP `outputSchema`** — they work exactly as they do today (an MCP tool
+   without an `outputSchema` is valid). The migration owns substrate + retrieval;
+   it does **not** touch the output-schema carrier.
+3. **This plan runs last, at the point where every tool exists on its final
+   substrate, and schemas them all uniformly.** Generated tools at codegen (W1);
+   every aggregated tool — the 8 non-graph tools, the EEF tool, and the three
+   migrated graph tools — hand-authored (W2); then the carrier field is promoted
+   to **required** and proven by the registry-driven conformance test (S0). The
+   three graph tools are authored against their post-migration `structuredContent`,
+   which is why this plan runs after the migration; the EEF tool against its D6
+   `structuredContent`.
 
-The governing rule in one line: **a tool's schema arrives when the tool is
-built or rebuilt, never before.** The W1/W2/S0 cycles are re-cut to this order
-at execution-session start, coordinated with EEF D3 verification on the shared
-seam and with active-claim coordination before either side edits
-`universal-tools/`.
+**Why this avoids the special case:** authoring every tool's `outputSchema` in
+one place, at one time, means there is no tool whose schema lives in a different
+plan or arrives on a different schedule. The migration's job is the tool's data
+and retrieval shape; this plan's job is the MCP output contract for all tools at
+once.
+
+**The required field is the closing ratchet, not a discovery tool.** It lands
+LAST, once every producer is populated, as the anti-regression lock (no future
+tool can register without a schema). The exhaustive "which tools still lack a
+truthful schema" worklist is the **registry-driven conformance test** (S0.2),
+which counts the schema-less surface down to zero by iterating the live
+registry and validating each tool's real `structuredContent` — truth, not mere
+presence, and without a globally-red type-check that would mask real errors.
+
+**Single-branch execution.** Temporary in-branch red is permitted (the whole
+sequence is green before merge), but cycles stay incrementally green where they
+can, and **no optional `outputSchema` is ever merged** — the field is introduced
+and promoted within one integration; what is forbidden is shipping a released
+state where the field is optional.
 
 ---
 
@@ -279,16 +301,20 @@ seam and with active-claim coordination before either side edits
 
 - **The 3 existing graph tools** (`get-thread-progressions`,
   `get-prior-knowledge-graph`, `get-misconception-graph`) are ordinary aggregated
-  tools (`definitions.ts:117-128`); **their output schemas land with their
-  substrate migration** (`graph-estate-consolidation.plan.md` Judgement call 4 —
-  per tool: data/type re-emission + tool rewrite + `outputSchema`, one
-  replacement unit), not in W2. They are untouched before that migration.
-- **The new EEF graph tool** (flag-gated `OAK_CURRICULUM_MCP_EEF_ENABLED`, does
-  not exist yet) is owned **exclusively** by the EEF plan (D3/D4/D6). Its
-  single-Zod-call graph-native-view derivation is intrinsic to its chain and must
-  not be fractured across two plans. **This plan scopes it out.**
-- **The shared seam** is the S0/D6 coordination above — coordinate, do not
-  transfer ownership.
+  tools (`definitions.ts:117-128`). `graph-tools-value-redesign` **rebuilds** them
+  onto the substrate with bounded retrieval and ships **no MCP `outputSchema`**;
+  **their output schemas are authored HERE, in W2** (revised 2026-06-08 — moved
+  out of the migration to keep every tool's schema in one place), against their
+  post-migration `structuredContent`. They work without a schema in the interim,
+  exactly as today.
+- **The new EEF graph tool** (flag-gated `OAK_CURRICULUM_MCP_EEF_ENABLED`) is
+  **built** by the EEF plan (D3/D4/D6) and ships `structuredContent` with no
+  output schema at D6; **its `outputSchema` is authored HERE, in W2**. The tool's
+  single-Zod-call graph-native-view derivation stays with the EEF plan; only the
+  MCP output contract is this plan's.
+- **One seam, one schema owner.** This plan owns the carrier seam AND every
+  tool's `outputSchema`; the EEF and graph-migration plans own their tools'
+  construction. Coordinate on the seam; ownership does not transfer.
 
 ---
 
@@ -314,9 +340,9 @@ Acceptance ids are the todo ids. Each names its proof level and proving command.
 |---------------|-------------|-----------|
 | `w1-cycle-1` | unit | emitter unit tests (single/multi-status, oakContextHint predicate); `pnpm test --filter @oaknational/sdk-codegen` + `pnpm sdk-codegen && pnpm build` |
 | `w1-cycle-2` | integration | conformance test over all 24 generated descriptors; `pnpm test` |
-| `w2-cycle-1` | unit | per-tool conformance unit tests for the 8 in-scope aggregated tools (the 3 graph tools' schemas land with their migration) + `satisfies` guard holds; `pnpm type-check && pnpm test` |
-| `s0-cycle-1` | integration | registration-config carries `outputSchema` for all 35 (spy pattern); `pnpm test --filter oak-curriculum-mcp-streamable-http` |
-| `s0-cycle-2` | e2e | `tools/list` exposes `outputSchema` (35); real `structuredContent` validates; structuredContent-present invariant (35); `isError` skips; `pnpm test:e2e` |
+| `w2-cycle-1` | unit | per-tool conformance unit tests for every aggregated tool (8 non-graph + EEF + the 3 migrated graph tools) + `satisfies` guard holds; `pnpm type-check && pnpm test` |
+| `s0-cycle-1` | integration | registration-config carries `outputSchema` for every registered tool (spy pattern); `pnpm test --filter oak-curriculum-mcp-streamable-http` |
+| `s0-cycle-2` | e2e | registry countdown conformance: `tools/list` exposes `outputSchema` for every tool, real `structuredContent` validates, structuredContent-present invariant on every non-error return, `isError` skips; `pnpm test:e2e` |
 | `ws-docs` | non-code | TSDoc/README accurate; `pnpm markdownlint:root` |
 
 The plan is `complete` only when every acceptance id above is proven; a landed
@@ -333,15 +359,17 @@ slice is not completion.
   `ToolDescriptor` contract makes all 24 generated files fail `type-check` until
   regenerated, so the contract change + emitter + `pnpm sdk-codegen` regeneration
   land in **one** commit. Cycle 1.2 (cross-tool conformance test) follows.
-- **W2 is one atomic cycle** — `definitions.ts` is a shared convergence file;
-  incremental landing forces either unused exports (knip) or a
-  transient-optional field (both forbidden). Authoring the in-scope schemas is
-  parallelisable *preparation*; the landing is atomic, with the required-field
-  landing shape set by the execution-start re-cut (§Resolved Sequencing).
+- **W2 is one atomic cycle covering every aggregated tool** — `definitions.ts` is
+  a shared convergence file; incremental landing forces either unused exports
+  (knip) or a transient-optional field. Authoring each tool's schema is
+  parallelisable *preparation*; the landing is atomic. The three graph tools'
+  schemas are authored against their post-migration `structuredContent`, so W2 is
+  gated on `graph-tools-value-redesign` having landed; the EEF tool's on EEF D6.
 - **S0 depends on W1 + W2** — it forwards `descriptor.outputSchema` (W1) and
-  `def.outputSchema` (W2). `s0-cycle-1` additionally gated on the
-  execution-start re-cut to **§Resolved Sequencing** (S0's required promotion
-  executes last, after the migrated graph tools carry schemas).
+  `def.outputSchema` (W2), then promotes the field to required **last**, once
+  every producer (including the migrated graph tools and EEF) carries a schema.
+  The required promotion is the closing ratchet; S0.2 is the registry countdown
+  conformance proof.
 
 ---
 
@@ -395,21 +423,27 @@ missing a declared field.
 
 ---
 
-## W2 — Aggregated-tool output schemas (ATOMIC; scope per §Resolved Sequencing)
+## W2 — Aggregated-tool output schemas (ATOMIC; every aggregated tool)
 
-> The 3 existing graph tools are out of W2's scope — their schemas land with
-> their substrate migration (§Resolved Sequencing). One commit for the in-scope
-> set. Authoring the schemas is parallelisable preparation; the landing is
-> atomic, and the required-field landing shape follows the per-type promotion
-> order at the execution-start re-cut.
+> W2 covers EVERY aggregated tool — the 8 non-graph tools, the EEF tool
+> (`get-eef-evidence`), and the three migrated graph tools — authored uniformly
+> here so no tool is a special case (§Resolved Sequencing). The graph-tool
+> portion is gated on `graph-tools-value-redesign` having landed and the EEF
+> portion on EEF D6, because each schema is authored against that tool's REAL
+> post-migration / post-D6 `structuredContent`. Authoring the schemas is
+> parallelisable preparation; the landing is atomic (one commit). The required
+> field is promoted in S0 (the closing ratchet), not here.
 
 **File scope** (permitted to touch):
 
-- `universal-tools/definitions.ts` — add `outputSchema: z.ZodRawShape` to `AggregatedToolDefShape` (`:58-70`) per the re-cut landing shape; wire the in-scope entries.
-- Each in-scope aggregated module (`aggregated-search/`, `aggregated-fetch/`,
+- `universal-tools/definitions.ts` — add `outputSchema: z.ZodRawShape` to `AggregatedToolDefShape` (`:58-70`); wire every aggregated entry.
+- Each aggregated module (`aggregated-search/`, `aggregated-fetch/`,
   `aggregated-curriculum-model/`, `aggregated-browse/`, `aggregated-explore/`,
-  `aggregated-asset-download/`, `aggregated-user-search/`) — export an
-  object-rooted output raw shape.
+  `aggregated-asset-download/`, `aggregated-user-search/`), the three migrated
+  graph-tool modules (`get-misconception-graph`, `get-prior-knowledge-graph`,
+  `get-thread-progressions`), and the EEF tool module (`get-eef-evidence`) —
+  export an object-rooted output raw shape. Exact module paths confirmed at
+  execution against the post-migration / post-D6 tree.
 - `*.unit.test.ts` beside each module.
 
 **File scope NOT to touch**: `list-tools.ts`, `types.ts`, `handlers.ts` (S0);
@@ -430,13 +464,14 @@ truths:
 | `download-asset` | `{ downloadUrl, lesson, type, summary, oakContextHint }` — **no `status`**; consume post-`download-asset-user-only-url` shape if landed |
 | `user-search` | `summary` + user-search payload; widget tool |
 | `user-search-query` | `summary` + query payload; app-only (`_meta.ui.visibility:['app']`) |
+| `get-misconception-graph`, `get-prior-knowledge-graph`, `get-thread-progressions` | the post-migration bounded-retrieval `structuredContent` defined by `graph-tools-value-redesign`; author against the real emitted output, never a speculative shape |
+| `get-eef-evidence` | the D6 `structuredContent` envelope (the `EefEvidenceEnvelope` projection); author against the real emitted output |
 
-**Product code (Green)**: `outputSchema` on `AggregatedToolDefShape` per the
-re-cut landing shape; author each in-scope module's object-rooted shape
-(reusing generated Zod sub-schemas as property values where the payload embeds
-generated types); wire the in-scope entries.
+**Product code (Green)**: `outputSchema` on `AggregatedToolDefShape`; author each
+aggregated module's object-rooted shape (reusing generated Zod sub-schemas as
+property values where the payload embeds generated types); wire every entry.
 
-**Acceptance**: all in-scope conformance tests pass; the
+**Acceptance**: all aggregated conformance tests pass; the
 `as const satisfies Record<AggregatedToolName, …>` guard (`:149`) holds;
 `pnpm type-check` + `pnpm test` green; tree green.
 
@@ -447,9 +482,9 @@ sub-schema reuse type-compatibility), `mcp-expert`, `code-expert`.
 
 ## S0 — Seam: thread the required `outputSchema` to the wire
 
-> Gated on the execution-start re-cut to **§Resolved Sequencing** — S0's
-> required promotion executes last, after the migrated graph tools carry
-> schemas. Depends on W1 + W2.
+> S0 is the **closing ratchet** (§Resolved Sequencing): it promotes `outputSchema`
+> to required and wires it **last**, after W1 + W2 have populated every producer
+> (including the migrated graph tools and EEF). Depends on W1 + W2.
 
 ### Cycle S0.1 — Required field + projection + registration
 
@@ -462,11 +497,11 @@ sub-schema reuse type-compatibility), `mcp-expert`, `code-expert`.
 
 **Test (Red)**: extend `handlers-tool-registration.integration.test.ts` (spy
 pattern, `:76-89`) to assert the captured `registerTool`/`registerAppTool` config
-carries an object-rooted `outputSchema` for **all 35** tools.
+carries an object-rooted `outputSchema` for **every registered tool**.
 
 **Product code (Green)**: the fields + helper + forwards + the one `config` line.
 
-**Acceptance**: registration config carries `outputSchema` for all 35;
+**Acceptance**: registration config carries `outputSchema` for every registered tool;
 `pnpm type-check` + `pnpm test --filter oak-curriculum-mcp-streamable-http` green;
 tree green.
 
@@ -474,13 +509,16 @@ tree green.
 `ToolRegistryDescriptor` cross-package boundary), `test-expert` (the spy-pattern
 assertion: field presence, not type shape), `code-expert`.
 
-### Cycle S0.2 — Wire + runtime conformance proof
+### Cycle S0.2 — Registry countdown conformance proof
 
 **File scope**: integration/E2E test files only.
 
 **Test (Red)**:
 
-1. `tools/list` exposes an object-rooted `outputSchema` for all 35 tools;
+1. a registry-driven test iterates the LIVE tool registry and asserts every tool
+   exposes an object-rooted `outputSchema`, counting the schema-less surface down
+   to zero — the "which tools still lack a schema" worklist is computed from the
+   registry, never inferred from a red type-check;
 2. invoke a representative generated and a representative aggregated tool
    end-to-end; the emitted `structuredContent` **validates** against the
    advertised `outputSchema` (the SDK's own runtime validation must not reject a
@@ -504,7 +542,7 @@ or W2 author), never loosen the test.
 - Remove the stale `download-asset on stdio` reference (`list-tools.ts:25-26`)
   and update its `@example` to include `outputSchema` (`:53-58`).
 - TSDoc on the new `outputSchema` fields and `requireGeneratedToolOutputShape`.
-- Update any README enumerating the tool surface to **35** (24 + 11).
+- Update any README enumerating the tool surface to **36** (24 generated + 12 aggregated incl. EEF).
 
 ---
 
@@ -550,11 +588,12 @@ against the real code before acting; relay a synthesised verified verdict.
 |------|------------|
 | Declared schema ≠ real `structuredContent` → SDK rejects a real success response at runtime | S0.2 conformance test proves real output validates; schemas built from real fixtures |
 | A root union slips into an output schema → SDK silently drops it from `tools/list` and throws on validate | Principle 6 forbids root unions; W1/W2 tests assert object root; `search` modelled as one object with optional mode fields |
-| Required `outputSchema` makes `structuredContent` mandatory on every success return | S0.2 invariant test across all 35; every tool already routes success through `formatToolResponse` |
+| Required `outputSchema` makes `structuredContent` mandatory on every success return | S0.2 invariant test across every registered tool; every tool already routes success through `formatToolResponse` |
 | `oakContextHint` conditionality assumed (`=== true`) instead of derived (`!== false`) | W1 derives the schema predicate off the exact runtime predicate; tested in cycle 1.1c |
 | `formatToolResponse` top-level spread mis-modelled | W1/W2 schemas encode the spread envelope explicitly; per-tool tests use real emitted output |
 | Schema strictness (`.strip`/`.passthrough`) interacts with envelope fields | Align with `schema-resilience…` OQ1/OQ2 before W1 finalises; envelope declares `summary`/`oakContextHint`/`status` so they are not "extra" |
-| S0 collides with active EEF D6 on `universal-tools/` | NO collision (revised 2026-06-07): EEF D6 dropped its output schema and does NOT touch the carrier — this plan owns the seam outright. Standard active-claims coordination before editing the seam still applies. |
+| S0 collides with active EEF D6 / the graph migration on `universal-tools/` | NO collision (revised 2026-06-08): both EEF D6 and the graph migration ship WITHOUT touching the output-schema carrier, and both precede this plan in the serial order — this plan owns the seam and every schema outright. Standard active-claims coordination before editing the seam still applies. |
+| W2 runs before the graph tools or EEF exist on their final substrate → nothing truthful to author against | Serial order (§Resolved Sequencing): W2's graph-tool portion is gated on `graph-tools-value-redesign` landing, its EEF portion on EEF D6 landing; schemas are authored from real post-migration / D6 `structuredContent`, never speculatively |
 | `download-asset` shape changes under W2 (URL → `_meta`) | W2 consumes the post-`download-asset-user-only-url` shape; sequence that change first |
 
 ---
@@ -612,10 +651,12 @@ ADR-117, and update `current/README.md` + the completed-plans index.
 
 ## Dependencies
 
-**Blocking**: the execution-start re-cut to §Resolved Sequencing — the EEF
-tool's schema is authored HERE as an ordinary aggregated tool (EEF D6 ships no
-output schema), and the 3 graph tools' schemas land with their substrate
-migration. W1, W2 (in-scope set), and S0.2's test design are not design-blocked.
+**Blocking**: the serial order (§Resolved Sequencing). This plan runs after EEF
+D6/D7 has landed (so the EEF tool exists) and after `graph-tools-value-redesign`
+has landed (so the three graph tools exist on the substrate). W2 authors every
+aggregated tool's `outputSchema` against its real `structuredContent`, so those
+tools must exist first. W1 (codegen) and S0.2's test design are not blocked on
+them and can be prepared earlier.
 
 **Beneficial** (minimum shippable shape without each):
 
@@ -633,6 +674,11 @@ migration. W1, W2 (in-scope set), and S0.2's test design are not design-blocked.
   the new EEF graph tool. EEF D6 ships no output schema and does not touch the
   carrier, so it no longer shares the S0 seam; this plan owns the seam outright
   and authors the EEF tool's output schema as an ordinary aggregated tool.
+- `../../connecting-oak-resources/knowledge-graph-integration/future/graph-tools-value-redesign.plan.md`
+  — rebuilds the three existing graph tools onto the substrate (substrate +
+  bounded retrieval only, **no** MCP output schema); this plan authors their
+  `outputSchema` in W2 against their post-migration `structuredContent`. Blocking
+  upstream for the graph-tool portion of W2.
 - `../active/upstream-api-reference-metadata.plan.md` — sibling codegen-seam
   change; serialise with W1 at the emitter, never concurrent.
 - `../aggregated-tool-result-type-remediation.plan.md` (collection root) — if it
