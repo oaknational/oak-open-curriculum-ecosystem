@@ -235,3 +235,15 @@ Codex plugins = the OpenAI equivalent) is homed in the report +
 - **Repo markdownlint enforces MD049 asterisk emphasis** (`*x*`, not `_x_`); the linter
   auto-normalises the working tree, but a file staged BEFORE normalisation fails the hook — re-stage
   after the linter touches it.
+- **Authored the external-facing-capability synthesis plan** (`current/external-facing-capability-distribution.plan.md`,
+  `fccc8607`) — executable, consolidates our scattered external-facing skills/plugin/MCP plan docs
+  into one coherent set; `assumptions-expert` reviewed the prior draft (validated facts; flagged the
+  7-vs-6 skill count → now `t1`).
+- **Altitude correction (owner-directed, "good catch").** Asked to "plan the next steps", I first
+  planned the downstream PRODUCT (a `future/` Oak-plugin-bundle strategy) and baked "extend
+  oak-skills' generator" in as the load-bearing thesis. Owner reframed: the executable next step is
+  synthesising OUR plan estate into a coherent set (`current/`, no blocking dep), and "do not assume
+  the external skills repo remains the source of truth." Homed in
+  `[[feedback_surface_altitude_before_planning]]`: surface the altitude fork before drafting; keep
+  open decisions named, never baked as a thesis. A reviewer validated my facts but cannot catch a
+  wrong altitude — frame is the owner's.
