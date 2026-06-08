@@ -38,9 +38,9 @@ brand, tone) that route agents through Oak's MCP tools.
 ## Related (separate artefacts, not part of this log)
 
 - A larger, older `oak-openapi` endpoint-additions proposal lives separately at
-  [`../../../proposals/upstream-api-endpoint-additions/`](../../../proposals/upstream-api-endpoint-additions/)
+  [`../../proposals/upstream-api-endpoint-additions/`](../../proposals/upstream-api-endpoint-additions/)
   — a different concern (new endpoints / `x-oak-*` extensions), not consolidated
   here.
 - The earlier exploratory API wishlist was archived to
-  [`../archive/ooc-api-wishlist/`](../archive/ooc-api-wishlist/) on 2026-06-08;
+  [`../sector-engagement/archive/ooc-api-wishlist/`](../sector-engagement/archive/ooc-api-wishlist/) on 2026-06-08;
   carry forward only live, evidence-backed requests.

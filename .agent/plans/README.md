@@ -55,6 +55,7 @@ that deserve explicit triage before any practical plan is cut from them.
 | [connecting-oak-resources/](connecting-oak-resources/) | Oak-owned resource integration: ontology, graph surfaces, Aila/reference repos, and internal Oak KG work | 🔄 Active |
 | [exploring-open-education-resources/](exploring-open-education-resources/) | Third-party and non-Oak knowledge sources that Oak applications may consume | 📋 Planned |
 | [sector-engagement/](sector-engagement/) | External data sources, partner review, upstream coordination, EEF, and KG adoption support | 📋 Reference + active subthreads |
+| [upstream-feature-requests/](upstream-feature-requests/) | Feature requests this repo raises for other Oak teams' repositories (Oak Open Curriculum API, Oak Skills) — one folder per team, one file per request; recorded here and handed over | 📋 Reference + coordination |
 | [discovery/](discovery/) | Public discoverability of Oak machine surfaces: API catalog, Agent Skills, MCP Server Cards, A2A, DNS-AID, WebMCP, Web Bot Auth, robots/sitemaps, and `.well-known` metadata | 🔄 Active + queued execution |
 | [agentic-engineering-enhancements/](agentic-engineering-enhancements/) | Practice/governance layer: how agents collaborate, plan, communicate, review, learn, and improve the repo | 🔄 Active + queued execution |
 | [agent-tooling/](agent-tooling/) | Implementation layer for the `agent-tools/` workspace, collaboration-state substrate, hooks, CLIs, schemas, and adapter generation | 🔄 Active + queued execution |
