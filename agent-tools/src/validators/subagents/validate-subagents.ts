@@ -42,7 +42,7 @@ async function exists(relPath: string): Promise<boolean> {
 
 /** Extract the YAML frontmatter block content from a markdown file. */
 function extractFrontmatter(content: string): string | null {
-  const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  const match = /^---\r?\n([\s\S]*?)\r?\n---/.exec(content);
   return match?.[1] ?? null;
 }
 
@@ -50,7 +50,7 @@ function extractFrontmatter(content: string): string | null {
 function getFrontmatterValue(frontmatter: string, key: string): string {
   const escapedKey = key.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
   const regex = new RegExp(String.raw`^${escapedKey}:\s*(.+)$`, 'm');
-  const match = frontmatter.match(regex);
+  const match = regex.exec(frontmatter);
   return match?.[1]?.trim() ?? '';
 }
 
@@ -110,7 +110,7 @@ for (const wrapperFile of wrapperFiles) {
     );
   }
 
-  const templateLoadMatch = content.match(TEMPLATE_LOAD_REGEX);
+  const templateLoadMatch = TEMPLATE_LOAD_REGEX.exec(content);
   if (!templateLoadMatch?.[1]) {
     addIssue(
       `${wrapperFile}: missing required template loading line ("Your first action MUST be to read and internalise ...")`,

@@ -134,6 +134,29 @@ function validateRegistrationSync(
 // ---------------------------------------------------------------------------
 
 /**
+ * Inputs for {@link validateAdapterFields}, bundled into a single object so
+ * the field validator stays within the project parameter-count budget.
+ */
+export interface ValidateAdapterFieldsParams {
+  /** Repository-relative path to the adapter TOML file. */
+  adapterFile: string;
+  /** Filename without extension (the expected agent name). */
+  adapterBasename: string;
+  /** The `name` value from the adapter TOML, or `null`. */
+  declaredName: string | null;
+  /** The `description` value from the adapter TOML, or `null`. */
+  declaredDescription: string | null;
+  /** The matching registry entry, or `null`. */
+  registeredAgent: CodexRegistration | null;
+  /** Full text content of the adapter TOML file. */
+  content: string;
+  /** Settings pairs to validate. */
+  requiredSettings: readonly (readonly [string, string])[];
+  /** Repository-relative path to the Codex config file. */
+  configPath: string;
+}
+
+/**
  * Validates the top-level TOML fields (`name`, `description`, required
  * settings, and registry cross-reference) of a Codex adapter file.
  *
@@ -141,27 +164,21 @@ function validateRegistrationSync(
  * {@link validateRegistrationSync} into a single collected-issues array.
  * Developer-instructions validation is handled separately by the caller.
  *
- * @param adapterFile - Repository-relative path to the adapter TOML file.
- * @param adapterBasename - Filename without extension (the expected agent name).
- * @param declaredName - The `name` value from the adapter TOML, or `null`.
- * @param declaredDescription - The `description` value from the adapter TOML,
- *   or `null`.
- * @param registeredAgent - The matching registry entry, or `null`.
- * @param content - Full text content of the adapter TOML file.
- * @param requiredSettings - Settings pairs to validate.
- * @param configPath - Repository-relative path to the Codex config file.
+ * @param params - The adapter fields to validate; see
+ *   {@link ValidateAdapterFieldsParams}.
  * @returns Array of issue strings collected from all field checks.
  */
-export function validateAdapterFields(
-  adapterFile: string,
-  adapterBasename: string,
-  declaredName: string | null,
-  declaredDescription: string | null,
-  registeredAgent: CodexRegistration | null,
-  content: string,
-  requiredSettings: readonly (readonly [string, string])[],
-  configPath: string,
-): string[] {
+export function validateAdapterFields(params: ValidateAdapterFieldsParams): string[] {
+  const {
+    adapterFile,
+    adapterBasename,
+    declaredName,
+    declaredDescription,
+    registeredAgent,
+    content,
+    requiredSettings,
+    configPath,
+  } = params;
   const nameIssues: string[] = [];
   if (declaredName === null) {
     nameIssues.push(`${adapterFile}: missing required TOML key "name"`);

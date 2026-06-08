@@ -104,7 +104,7 @@ export async function runProfile(args: readonly string[]): Promise<number> {
   const startTime = performance.now();
   const captured = captureOutput ? runCapturedCheck() : null;
   const exitCode =
-    captured !== null ? captured.exitCode : await runInheritedProcess('pnpm', ['check']);
+    captured === null ? await runInheritedProcess('pnpm', ['check']) : captured.exitCode;
 
   await writeAndLogProfile({
     dryRunArtifactPath: dryRun.artifactPath,

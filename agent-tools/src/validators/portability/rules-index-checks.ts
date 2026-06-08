@@ -155,7 +155,7 @@ export function getSkillsLockEntries(skillsLock: unknown): [string, JsonObject][
   const result: [string, JsonObject][] = [];
 
   for (const key in skills) {
-    if (!Object.prototype.hasOwnProperty.call(skills, key)) {
+    if (!Object.hasOwn(skills, key)) {
       continue;
     }
     const entry = skills[key];

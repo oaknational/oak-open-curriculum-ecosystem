@@ -14,7 +14,7 @@ export interface ResolveRepoRootOptions {
    * `process.env.CLAUDE_PROJECT_DIR` at call time; pass an explicit value
    * (including `undefined`) to keep tests off global state.
    */
-  readonly projectDir?: string | undefined;
+  readonly projectDir?: string;
   /** Filesystem-existence probe. Defaults to `node:fs` `existsSync`. */
   readonly exists?: (path: string) => boolean;
 }

@@ -53,7 +53,7 @@ const CANONICAL_PATH_REGEX = /`(\.agent\/[^`]+)`/gu;
  * @returns The trimmed developer instructions body, or `""` if absent.
  */
 export function readCodexDeveloperInstructions(content: string): string {
-  return content.match(CODEX_DEVELOPER_INSTRUCTIONS_REGEX)?.[1]?.trim() ?? '';
+  return CODEX_DEVELOPER_INSTRUCTIONS_REGEX.exec(content)?.[1]?.trim() ?? '';
 }
 
 // ---------------------------------------------------------------------------

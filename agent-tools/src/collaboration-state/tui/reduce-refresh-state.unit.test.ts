@@ -120,9 +120,7 @@ describe('reduceRefreshState', () => {
 });
 
 function apply(state: RefreshState, events: readonly RefreshEvent[]): RefreshState {
-  // S7727 false-positive: reduceRefreshState is a free (state, event) => state
-  // function, correctly used as Array.reduce callback; no this-binding risk.
-  return events.reduce(reduceRefreshState, state);
+  return events.reduce((accumulator, event) => reduceRefreshState(accumulator, event), state);
 }
 
 function snapshotAt(generatedAt: string, body: string): CollaborationTuiSnapshot {

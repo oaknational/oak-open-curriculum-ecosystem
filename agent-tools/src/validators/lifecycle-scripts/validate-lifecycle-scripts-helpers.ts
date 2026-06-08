@@ -53,7 +53,7 @@ export interface LifecycleScriptViolation {
 }
 
 function matchesTerm(script: string, term: string): boolean {
-  return new RegExp(`\\b${term}\\b`, 'i').test(script);
+  return new RegExp(String.raw`\b${term}\b`, 'i').test(script);
 }
 
 /**

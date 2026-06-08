@@ -86,7 +86,7 @@ function parseTomlBasicString(rawValue: string): string {
  */
 export function readTomlBasicStringValue(content: string, key: string): string | null {
   for (const rawLine of content.split(/\r?\n/u)) {
-    const match = rawLine.trim().match(TOML_BASIC_STRING_REGEX);
+    const match = TOML_BASIC_STRING_REGEX.exec(rawLine.trim());
     if (match !== null && match[1] === key && match[2] !== undefined) {
       return parseTomlBasicString(match[2]);
     }
@@ -118,15 +118,17 @@ function isBlankOrComment(line: string): boolean {
  * @returns An updated (or unchanged) `CodexRegistration`.
  */
 function processRegistrationLine(current: CodexRegistration, line: string): CodexRegistration {
-  const m = line.match(TOML_BASIC_STRING_REGEX);
-  if (m === null || m[1] === undefined || m[2] === undefined) {
+  const m = TOML_BASIC_STRING_REGEX.exec(line);
+  const key = m?.[1];
+  const rawValue = m?.[2];
+  if (key === undefined || rawValue === undefined) {
     return current;
   }
-  const value = parseTomlBasicString(m[2]);
-  if (m[1] === 'description') {
+  const value = parseTomlBasicString(rawValue);
+  if (key === 'description') {
     return { ...current, description: value };
   }
-  if (m[1] === 'config_file') {
+  if (key === 'config_file') {
     return { ...current, configFile: value };
   }
   return current;
@@ -151,12 +153,13 @@ export function parseCodexRegistrations(content: string): CodexRegistration[] {
     if (isBlankOrComment(line)) {
       continue;
     }
-    const sectionMatch = line.match(/^\[agents\."([^"]+)"\]$/u);
-    if (sectionMatch !== null && sectionMatch[1] !== undefined) {
+    const sectionMatch = /^\[agents\."([^"]+)"\]$/u.exec(line);
+    const sectionName = sectionMatch?.[1];
+    if (sectionName !== undefined) {
       if (current !== null) {
         registrations.push(current);
       }
-      current = { name: sectionMatch[1], description: '', configFile: '' };
+      current = { name: sectionName, description: '', configFile: '' };
     } else if (current !== null) {
       current = processRegistrationLine(current, line);
     }

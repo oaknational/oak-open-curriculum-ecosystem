@@ -103,7 +103,7 @@ describe('collaboration JSON atomic writes', () => {
     });
 
     await expect(
-      writeAtomically('/tmp/state.json', 'new text', { exclusiveCreate: true }),
+      writeAtomically('state.json', 'new text', { exclusiveCreate: true }),
     ).rejects.toThrow('publish failed');
 
     expect(Array.from(writes)).toStrictEqual([]);

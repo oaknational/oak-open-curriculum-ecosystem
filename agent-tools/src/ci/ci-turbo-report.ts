@@ -114,9 +114,9 @@ export async function findLatestSummaryFile(
   );
 
   datedFiles.sort((left, right) =>
-    right.mtimeMs !== left.mtimeMs
-      ? right.mtimeMs - left.mtimeMs
-      : right.filePath.localeCompare(left.filePath),
+    right.mtimeMs === left.mtimeMs
+      ? right.filePath.localeCompare(left.filePath)
+      : right.mtimeMs - left.mtimeMs,
   );
 
   const newest = datedFiles[0];

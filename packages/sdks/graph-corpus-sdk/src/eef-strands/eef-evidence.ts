@@ -142,7 +142,7 @@ function matchesAxis(axis: StrandAxisValues, selectors: EvidenceForMoveSelectors
   if (selectors.priority !== undefined) {
     checks.push(axis.priorities.includes(selectors.priority));
   }
-  return checks.length > 0 && checks.every((check) => check);
+  return checks.length > 0 && checks.every(Boolean);
 }
 
 /** Resolve selectors to a root set: explicit `strandIds` unioned with the axis-matching strands. */

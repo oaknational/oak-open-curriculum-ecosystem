@@ -161,7 +161,7 @@ export async function listSubdirs(repoRoot: string, relDir: string): Promise<str
  *   no frontmatter block is present.
  */
 export function extractFrontmatter(content: string): string | null {
-  const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  const match = /^---\r?\n([\s\S]*?)\r?\n---/.exec(content);
   return match?.[1] ?? null;
 }
 
@@ -178,7 +178,7 @@ export function extractFrontmatter(content: string): string | null {
  */
 export function getFrontmatterValue(frontmatter: string, key: string): string {
   const escapedKey = key.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
-  const match = frontmatter.match(new RegExp(String.raw`^${escapedKey}:\s*(.+)$`, 'm'));
+  const match = new RegExp(String.raw`^${escapedKey}:\s*(.+)$`, 'm').exec(frontmatter);
   return match?.[1]?.trim().replaceAll(/^['"]|['"]$/g, '') ?? '';
 }
 

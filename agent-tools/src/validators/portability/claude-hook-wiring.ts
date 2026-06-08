@@ -119,22 +119,38 @@ function collectSupportedHookIssues(
 }
 
 /**
+ * Inputs for {@link collectHookIssues}, bundled into a single object so the
+ * routing helper stays within the project parameter-count budget.
+ */
+interface CollectHookIssuesParams {
+  status: string | null;
+  wired: boolean;
+  claudeSettingsExists: boolean;
+  hookPolicyPath: string;
+  claudeSettingsPath: string;
+  surfaceMatrixPath: string;
+  hookCommand: string;
+  surfaceMatrix: string;
+}
+
+/**
  * Routes hook issue collection based on the policy status value.
  *
  * When `status` is `'supported'`, delegates to
  * {@link collectSupportedHookIssues}.  When the status is anything else but
  * the settings file already wires the hook, reports the inverse mismatch.
  */
-function collectHookIssues(
-  status: string | null,
-  wired: boolean,
-  claudeSettingsExists: boolean,
-  hookPolicyPath: string,
-  claudeSettingsPath: string,
-  surfaceMatrixPath: string,
-  hookCommand: string,
-  surfaceMatrix: string,
-): string[] {
+function collectHookIssues(params: CollectHookIssuesParams): string[] {
+  const {
+    status,
+    wired,
+    claudeSettingsExists,
+    hookPolicyPath,
+    claudeSettingsPath,
+    surfaceMatrixPath,
+    hookCommand,
+    surfaceMatrix,
+  } = params;
   if (status === 'supported') {
     return collectSupportedHookIssues(
       wired,
@@ -179,7 +195,7 @@ export function getClaudeHookPortabilityIssues(opts: ClaudeHookPortabilityIssues
     opts.claudeSettingsText ?? null,
     opts.claudeSettings,
   );
-  return collectHookIssues(
+  return collectHookIssues({
     status,
     wired,
     claudeSettingsExists,
@@ -187,6 +203,6 @@ export function getClaudeHookPortabilityIssues(opts: ClaudeHookPortabilityIssues
     claudeSettingsPath,
     surfaceMatrixPath,
     hookCommand,
-    opts.surfaceMatrix,
-  );
+    surfaceMatrix: opts.surfaceMatrix,
+  });
 }

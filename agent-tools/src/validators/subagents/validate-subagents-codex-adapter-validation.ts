@@ -148,8 +148,8 @@ export function getCodexAdapterValidation({
   const adapterBasename = stripBasename(codexAdapterFile, '.toml');
   const declaredName = readTomlBasicStringValue(content, 'name');
   const declaredDescription = readTomlBasicStringValue(content, 'description');
-  const issues: string[] = validateAdapterFields(
-    codexAdapterFile,
+  const issues: string[] = validateAdapterFields({
+    adapterFile: codexAdapterFile,
     adapterBasename,
     declaredName,
     declaredDescription,
@@ -157,7 +157,7 @@ export function getCodexAdapterValidation({
     content,
     requiredSettings,
     configPath,
-  );
+  });
   const developerInstructions = readCodexDeveloperInstructions(content);
   if (!developerInstructions) {
     issues.push(`${codexAdapterFile}: missing triple-quoted developer_instructions block`);

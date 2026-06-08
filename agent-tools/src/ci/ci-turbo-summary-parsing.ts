@@ -170,7 +170,9 @@ export function parseTurboSummary(summaryJson: unknown): ParseResult {
   try {
     const summary = readRecord(summaryJson, 'Turbo summary');
     const execution = readRecord(summary['execution'], 'Turbo summary field "execution"');
-    const tasks = readArray(summary['tasks'], 'Turbo summary field "tasks"').map(parseTask);
+    const tasks = readArray(summary['tasks'], 'Turbo summary field "tasks"').map(
+      (taskValue, index) => parseTask(taskValue, index),
+    );
     const exitCode = readNumber(execution['exitCode'], 'Turbo summary field "execution.exitCode"');
 
     const passedCount = tasks.filter((task) => task.exitCode === 0).length;

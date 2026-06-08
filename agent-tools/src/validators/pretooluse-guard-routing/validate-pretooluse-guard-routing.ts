@@ -58,9 +58,10 @@ async function main(): Promise<void> {
     return;
   }
 
+  const guardList = unrouted.map((command) => `  ${command}`).join('\n');
   writeErrorLine(
     `validate-pretooluse-guard-routing: ${unrouted.length} PreToolUse guard(s) invoke a dist artefact directly.\n\n` +
-      `${unrouted.map((command) => `  ${command}`).join('\n')}\n\n` +
+      `${guardList}\n\n` +
       `Route each through the shim, e.g. ` +
       `\`node "$\{CLAUDE_PROJECT_DIR}/.claude/hooks/run-pretooluse-guard.mjs" <guard-dist-path>\`. ` +
       `Direct \`node <guard>.js\` fails OPEN *silently* when the artefact is missing; ` +
