@@ -11,12 +11,14 @@ A fresh synthesis of Oak's external-facing skills, plugins, and MCP skill-like
 surfaces is underway in this persona's home — curriculum-assistance is the
 primary external skills audience.
 
+- **Active plan:** [current/external-facing-capability-distribution.plan.md](current/external-facing-capability-distribution.plan.md)
+  — synthesise our scattered plan documents into one coherent, current set.
 - Seed review: [external-facing-skills-and-mcp-surfaces-review.report.md](external-facing-skills-and-mcp-surfaces-review.report.md)
 - Prior materials (relocated 2026-06-08): [previous-materials/](previous-materials/README.md)
 
-The synthesis target is an Oak plugin/bundle (skills + MCP app) emitted to both
-the Claude and OpenAI Codex plugin marketplaces from one capability source of
-truth. New plans land here.
+The active plan consolidates our estate and **frames** the downstream product
+decisions (where the capability source-of-truth lives, packaging, which hosts)
+rather than assuming them. New plans land here.
 
 ---
 

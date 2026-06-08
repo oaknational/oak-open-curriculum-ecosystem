@@ -52,9 +52,12 @@ surface.
   with a seed review report (`6101a946`); cross-linked the EEF↔oak-skills upstream request and
   corrected a stale EEF-status line. Web-verified finding: **plugins are the cross-vendor bundling
   layer** — Claude plugins and OpenAI **Codex plugins** both bundle skills + MCP via a marketplace.
-  **Next safe step (owner-gated): synthesise an Oak plugin/bundle** (oak-skills' skills + this repo's
-  MCP app incl. EEF) emitted from one capability source-of-truth to both marketplaces; the
-  oak-skills-side EEF reference is an
+  **Next safe step: execute**
+  [`current/external-facing-capability-distribution.plan.md`](../../plans/user-experience/educator-end-users/current/external-facing-capability-distribution.plan.md)
+  — synthesise our scattered plan documents into one coherent, current set (executable now; it
+  FRAMES the downstream product decisions — source-of-truth location, packaging, hosts — rather
+  than assuming them, NOT assuming oak-skills remains the source of truth). The oak-skills-side EEF
+  reference is an
   [upstream request](../../plans/upstream-feature-requests/oak-skills/reference-eef-evidence-once-live.md).
 - **EEF `get-eef-evidence` — D6 COMPLETE; the surface is LIVE BY DEFAULT and EXERCISED
   (2026-06-08, Briny Charting Lagoon).** c4 `eef://interpretation` resource + c5 `adapt-lesson`
