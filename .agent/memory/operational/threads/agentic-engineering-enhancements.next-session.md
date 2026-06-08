@@ -1,5 +1,120 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## 🤝 Session Handoff (2026-06-07 — Briny Plumbing Beacon / claude / Opus 4.8 / `5dd58c`): item 2a LANDED (ESLint reappraisal enforcement); WS1 next
+
+**Self-contained brief; the fresh session needs nothing from the originating conversation.**
+Continues the Eclipsed Watching Veil handoff below. Owner-agreed sequence was 4 → 1 → 2 → 3;
+items 4 + 1 landed last session, **item 2a landed this session**, and the owner expanded scope:
+**do item 2 (all sub-passes) AND the no-type-widening rule, and do NOT wait for the EEF lane.**
+
+**State (verified first-hand at write-time):** branch `feat/graph-tooling-tidyup`, HEAD `2cd529b5`,
+**15 ahead of origin / 0 behind — UNPUSHED** (owner-paced).
+
+**GATE STATE — read before committing.** HEAD `2cd529b5` is **RED on the full-tree gate**: a
+PRE-EXISTING `graph-corpus-sdk:lint` conflict — `eef-evidence.ts` declares `EefEvidenceEnvelope`
+as a deliberate `type` (documented: it must be assignable to `Record<string, unknown>`) which trips
+`@typescript-eslint/consistent-type-definitions`. This is the EEF-lane **owner-scoped decision**
+already flagged in `repo-continuity.md`; it is NOT item 2a (oak-eslint is green on its own surface)
+and it must NOT be "fixed" by switching to `interface` (that breaks the envelope's carrier
+assignability). **Every commit is blocked until that lint is scoped green.** (A prior `pnpm check`
+exit-0 this session was a turbo **cache-hit false-green**; the pre-commit cache-missed and exposed
+the real red — verify the gate from a cache-miss run, not a cached exit code.)
+
+**This session's handoff edits are written + STAGED but UNCOMMITTED**, awaiting a green HEAD. Before
+committing them: re-stage `repo-continuity.md` and `packages/core/oak-eslint/package.json` (the owner
+made concurrent edits — EEF Current State + dependency patch-bumps — after this bundle was staged), so
+the commit captures the working-tree superset, then commit by explicit pathspec.
+
+**What landed — item 2a (ESLint custom-rule reappraisal enforcement):**
+
+- **Mechanism = compile-time-by-construction (NOT a validator, NOT a factory).**
+  `packages/core/oak-eslint/src/reappraising-message.ts`: a zod-branded `ReappraisingMessage`
+  type, minted only by `createMessage({prohibition, reappraisal})` via `z.string().brand().parse()`,
+  plus a `RuleWithReappraisingMessages<MessageIds, Options>` rule type that narrows `meta.messages`
+  to the brand. A **plain prohibition-only string now fails `tsc`** in any rule typed this way —
+  non-bypassable, no separate validator to drift, no bypass-guard needed.
+- **Why zod, not a hand-rolled brand:** the shared config bans assertions outright
+  (`@typescript-eslint/consistent-type-assertions: { assertionStyle: 'never' }`,
+  `packages/core/oak-eslint/src/configs/recommended.ts`), and the repo had **no existing branded
+  types**. A hand-rolled `as` brand is illegal; zod's `.parse()` is the only assertion-free mint and
+  matches the repo's z.infer / types-flow-from-schema doctrine. This is the **first branded type in
+  the repo**. Added `zod@^4.4.3` to `oak-eslint` deps + `tsup.config.ts` `external` (zod is NOT
+  inlined — verified `from 'zod'` in dist, 0 inlined source).
+- **All 6 `meta.messages` rules migrated** (`no-dynamic-import`, `no-eslint-disable`,
+  `no-export-trivial-type-aliases`, `require-observability-emission`, `max-files-per-dir`,
+  `no-real-io-in-tests`). Composed messages are behaviourally identical to the originals EXCEPT
+  `max-files-per-dir`, which **gained a cure it never had** ("Group related files into a cohesive
+  subdirectory…") — the owner's whole thesis, confirmed in the smallest case. `boundary.ts` uses
+  `no-restricted-imports` config `message:` strings (not `meta.messages`) and is **out of scope**.
+- **Green:** oak-eslint type-check, lint, 202 tests, build. TDD test-first
+  (`reappraising-message.unit.test.ts`, red→green). Reviewed at the unit boundary (not backfill):
+  **type-expert SAFE** (all 5 guarantees verified — brand truly rejects plain strings, meta-override
+  sound, no widening), **code-expert APPROVED**, **test-expert PASS**. Applied: test assertions
+  pinned to product-owned substrings; zod externalised. **Caught one false positive** — code-expert's
+  "zod inlines ~46KB" did not hold (dist unchanged at 62KB; tsup externalises deps by default).
+- **Commit provenance:** owner's `2cd529b5 chore: safety commit` swept this session's 2a **and** the
+  EEF peer's WIP into one commit (the multi-writer sweep the handoff skill warns about). It is
+  **coherent** (both `package.json` changes + the lockfile landed together, so no frozen-lockfile
+  mismatch), but my 2a is entangled with EEF files in that SHA, not its own commit.
+
+**Decisions held in my context (loss-scan — reached no other durable surface):**
+
+- **Option C beat the factory** (assumptions-expert + architecture-expert-betty converged): a
+  rule-wrapping factory over-reached the M-sized approved capture and needed a fragile no-bypass
+  guard; compile-time brand is lighter AND stronger. Then zod-brand beat a hand-rolled brand because
+  of the `as` ban (above). Do not "simplify" this back to a hand-rolled brand — it will not lint.
+- **2b is RESHAPED and OWNER-EXPANDED.** The capture sized it "M"; it is actually an **89-file
+  corpus change** (`.agent/rules/*.md`), many flat-prose with no positive-direction section, so
+  "states a positive move" is **not mechanically checkable** without first imposing a structured slot
+  (a keyword heuristic was rejected as false-positive noise). **Owner approved the full 89-file pass
+  now.** Reframed as **doctrine cartography, not data-entry** (owner insight: *rules sharing the same
+  positive suggestion are collapse candidates*): (1) discover — author a sharp cure per rule; (2)
+  cluster by cure; (3) discriminate+surface each collision as genuine-redundancy (collapse candidate,
+  owner decides — do NOT auto-collapse, knowledge-preservation) vs coarse-cure-prose (sharpen, don't
+  merge) vs same-cure-different-concept (keep). The reappraisal is a **concept-key**: the cure-space
+  is lower-dimensional than the detection-space. Let collision density decide 2b's structure (dense →
+  shared concept→cure registry; sparse → per-rule section).
+- **Collision signal already found (feeds 2b):** within the ESLint surface, `no-real-io-in-tests`'s
+  three `bannedModule*` messages share one cure ("inject a fake instead"); `eslintDisableBanned` +
+  `tsDirectiveBanned` both cure to "fix the root cause".
+- **2c (PDR-044 widening) is PER-SURFACE**, not all-or-nothing: ESLint widening lands once 2a
+  enforces; rules-prose widening waits for 2b. Never state doctrine wider than enforcement reaches
+  (the amendment's own §Scope / PDR-038).
+- **The interlock is finer-grained than the prior banner stated:** it binds the no-type-widening rule
+  to the 2a **enforcer existing** (now true), so **WS1's message is authored via `createMessage` and
+  is born teaching by construction** — costs nothing extra.
+
+**Remaining work (sequence): WS1 → 2b → 2c → WS2.** Tasks tracked in the session task list.
+
+1. **No-type-widening WS1** (next; promoted to `current/` this session — see below). A type-aware
+   rule in `oak-eslint` flagging `Set<string>` / `readonly string[]` views over an `as const`
+   literal-union array, steering to `xs.some((x) => x === value)`. **Author its message via
+   `createMessage`** (born teaching). **The hard part** (owner + plan flagged): distinguishing a
+   literal-union widening from a legitimate arbitrary-`string` collection via typescript-eslint's
+   type-checker — precision gates `warn → error`; a permanently-advisory rule is not acceptable,
+   surface-with-evidence if precision proves unreachable. Free test fixture: the EEF
+   `new Set<string>(OBSERVED_PHASES)` widening that started this thread. Do NOT redo the doctrine
+   already strengthened (typescript-practice.md, ADR-153/038/028, EEF graph-corpus-sdk code).
+2. **Item 2b** — the 89-file cartography pass above.
+3. **Item 2c** — per-surface PDR-044 widening (ESLint now-eligible once 2a is confirmed enforcing;
+   rules-prose after 2b).
+4. **No-type-widening WS2** — tripwire wiring; coordinate with
+   `action-time-structural-interrupt-design-space.plan.md`; beneficial, not blocking; lowest priority.
+5. **Follow-on (not 2a scope):** `toPosix` is duplicated across `max-files-per-dir`,
+   `require-observability-emission`, `no-real-io-in-tests` (third consumer → consolidate-at-third-
+   consumer); extract to `oak-eslint/src/utils/path.ts`.
+
+**Disciplines carried (worked this session):** an `as`-ban + a live multi-writer lockfile turns a
+mechanism choice into a coordination problem — surface it (done; owner chose zod + accepted the
+lockfile coordination); ground specialist findings first-hand before acting (caught the zod-bloat
+false positive by checking the dist size); reviewers at the unit boundary, not backfill; the owner's
+safety-commit can sweep your green WIP in with a peer's — verify HEAD is green, do not assume your
+work landed as its own commit.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Briny Plumbing Beacon` | `claude` | `Opus 4.8` | `5dd58c` | `feedback-mechanism-follow-ons (item 2a landed; WS1 next)` | 2026-06-07 | 2026-06-07 |
+
 ## 🤝 Session Handoff (2026-06-07 — Eclipsed Watching Veil / claude / Opus 4.8 / `077e31`): items 4 + 1 landed; items 2, 3 + a new no-type-widening task remain
 
 **Self-contained brief; the fresh session needs nothing from the originating conversation.**

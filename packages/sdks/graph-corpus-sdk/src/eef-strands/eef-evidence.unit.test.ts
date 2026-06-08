@@ -11,11 +11,14 @@
  * the corpus at test time), never a hard-coded count.
  */
 
-import { describe, expect, it } from 'vitest';
+import { describe, expect, expectTypeOf, it } from 'vitest';
 
+import type { GraphEdge } from '@oaknational/graph-core/graph-view';
 import { EEF_TOOLKIT_DATA } from './eef-toolkit.external-data.js';
 import { evidenceForMove, inspectStrand } from './eef-evidence.js';
+import type { EefEvidenceEnvelope, EefEvidenceProvenance } from './eef-evidence.js';
 import { strandAxisIndex } from './raw-domains.js';
+import type { EefStrand, EefStrandId } from './strand-lookup.js';
 
 const byLocale = (a: string, b: string): number => a.localeCompare(b);
 
@@ -100,5 +103,16 @@ describe('evidenceForMove — axis-resolved evidence envelope', () => {
     expect(envelope.members).toEqual([]);
     expect(envelope.edges).toEqual([]);
     expect(envelope.frontier).toEqual([]);
+  });
+});
+
+describe('EefEvidenceEnvelope — strict-type-flow invariants', () => {
+  it('preserves the exact field types (no widening to unknown)', () => {
+    expectTypeOf<EefEvidenceEnvelope['members']>().toEqualTypeOf<readonly EefStrand[]>();
+    expectTypeOf<EefEvidenceEnvelope['edges']>().toEqualTypeOf<
+      readonly GraphEdge<EefStrandId, 'related_strand'>[]
+    >();
+    expectTypeOf<EefEvidenceEnvelope['frontier']>().toEqualTypeOf<readonly EefStrandId[]>();
+    expectTypeOf<EefEvidenceEnvelope['provenance']>().toEqualTypeOf<EefEvidenceProvenance>();
   });
 });

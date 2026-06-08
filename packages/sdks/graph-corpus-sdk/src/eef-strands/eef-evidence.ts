@@ -48,18 +48,18 @@ export interface EefEvidenceProvenance {
  * members), the binding-derived frontier (related strands outside the member
  * set), and the once-per-envelope provenance.
  *
- * Declared as a `type`, not an `interface`: the envelope is the structured
- * content an MCP tool emits, so it must be assignable to the JSON record carrier
- * (`Record<string, unknown>`). A type alias gains the implicit index signature
- * that makes that assignment hold with the field types intact; an interface does
- * not (it stays open to declaration merging). Keep it a `type`.
+ * Declared as a strict `interface` — every field exact, NO index signature and
+ * NO `unknown`/`Record` fallback. (The MCP SDK's structured-content carrier is
+ * `Record<string, unknown>`; reconciling this strict envelope with that vendor
+ * carrier WITHOUT any allow-anything type, cast, or disabled check is an open
+ * boundary question — see the EEF strict-type-flow plan.)
  */
-export type EefEvidenceEnvelope = {
+export interface EefEvidenceEnvelope {
   readonly members: readonly EefStrand[];
   readonly edges: readonly GraphEdge<EefStrandId, 'related_strand'>[];
   readonly frontier: readonly EefStrandId[];
   readonly provenance: EefEvidenceProvenance;
-};
+}
 
 /** Axis + explicit-id selectors for {@link evidenceForMove}. */
 export interface EvidenceForMoveSelectors {

@@ -49,6 +49,31 @@ they graduate, duplicate, become stale-withdrawn, or receive owner direction.
   doctrine without mechanism is debt (owner, 2026-06-06).
   `[captured: 2026-06-07 | source: PDR-044 §2026-06-07 amendment + owner directive 2026-06-06 (feedback mechanisms embody doctrine) | target: extend validate-policy-reappraisal across Bash/ESLint/.agent-rules surfaces + the corresponding doctrine | trigger: FIRED — owner direction 2026-06-07 | size: M | status: owner-approved 2026-06-07; execute in a fresh session (handoff: agentic-engineering-enhancements.next-session.md)]`
 
+## 2026-06-07 capture — Briny Plumbing Beacon (item 2a landed; 2b reshaped; reappraising-message pattern)
+
+Progress + new candidates on the Glittering capture above (feedback-mechanism reappraisal generalisation):
+
+- **Item 2a (ESLint surface) LANDED — but NOT as the "extend validate-policy-reappraisal" validator the
+  capture proposed.** ESLint rules are TypeScript source, so enforcement moved to the **type system**:
+  `packages/core/oak-eslint/src/reappraising-message.ts` — a zod-branded `ReappraisingMessage` minted
+  only by `createMessage({prohibition, reappraisal})`, plus a `RuleWithReappraisingMessages` rule type;
+  a prohibition-only string fails `tsc`. All 6 `meta.messages` rules migrated. Committed (entangled with
+  EEF WIP) in `2cd529b5`. The validator is the right mechanism for the JSON policy guards (fail-open
+  registry); the type system is the right mechanism for TS rules (PDR-038, at the cheaper layer).
+- **Item 2b (rules-prose) RESHAPED + owner-expanded.** It is an **89-file** `.agent/rules/*.md` change
+  (not "M"); "states a positive move" is not mechanically checkable without first imposing a structured
+  slot (keyword heuristic rejected as false-positive noise). Owner approved the full pass. Reframed as
+  doctrine cartography: shared cures reveal rule-collapse candidates (owner insight).
+- **Item 2c is PER-SURFACE** — widen the PDR-044 amendment for ESLint once 2a is confirmed enforcing;
+  for rules-prose after 2b. Never wider than enforcement reaches.
+- **NEW pattern candidate:** *compile-time enforcement that a feedback surface teaches the positive
+  reappraisal direction* (the `reappraising-message` shape) — a reusable instance of "feedback mechanisms
+  embody doctrine" for any TS-authored feedback surface. **NEW precedent:** the **first branded type in
+  the repo**, minted via zod `.brand().parse()` (the assertion-free mint forced by
+  `consistent-type-assertions: 'never'`) — candidate for a short note in the type doctrine if a second
+  branded type appears.
+  `[captured: 2026-06-07 | source: item-2a execution (Briny Plumbing Beacon) | target: (a) PDR-044 cross-surface widening per-surface as each enforces; (b) pattern record for compile-time-feedback-teaching + zod-brand-mint precedent | trigger: 2a landed; 2b/WS1 next; pattern record at second consumer | status: 2a landed 2026-06-07; 2b owner-approved full pass; WS1 next]`
+
 ## 2026-06-06 capture — Starlit Scattering Twilight
 
 - **Reconcile PDR-011's "subjective experience is foundational substrate, not optional

@@ -131,7 +131,8 @@ const maxFilesPerDirRule: RuleWithReappraisingMessages<'tooManyFiles', [MaxFiles
     ],
     messages: {
       tooManyFiles: createMessage({
-        prohibition: '{{dir}} contains {{actual}} files matching "{{pattern}}", exceeding max {{max}}.',
+        prohibition:
+          '{{dir}} contains {{actual}} files matching "{{pattern}}", exceeding max {{max}}.',
         reappraisal:
           'Group related files into a cohesive subdirectory, or extract a module, so each directory stays within the limit.',
       }),

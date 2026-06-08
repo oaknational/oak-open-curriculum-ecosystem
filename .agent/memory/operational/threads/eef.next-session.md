@@ -1,11 +1,12 @@
 # Next-Session Record — `eef` thread
 
 > **🤝 HANDOFF — EEF thread (2026-06-07, Pelagic Charting Rudder / `39ff77`;
-> claude / Opus 4.8). c1–c3 AUTHORED (the `get-eef-evidence` MCP tool, strict-typed,
-> UNCOMMITTED); the strict-types-without-loss requirement + the type-flow diagram +
-> the correct LTAE fix are recorded. Commit is BLOCKED on a red full-tree gate that
-> clears only when the carrier fix + gating land. Self-contained; read the two
-> AUTHORITATIVE artefacts below, then re-derive git first-hand.**
+> claude / Opus 4.8). c1–c3 AUTHORED (the `get-eef-evidence` MCP tool, strict-typed) +
+> the strict-types-without-loss requirement + the type-flow diagram + the correct LTAE
+> fix recorded. All COMMITTED in safety checkpoint **`2cd529b5`** ("chore: safety
+> commit") — a RED checkpoint, NOT a green landing: the gate stays red until the carrier
+> fix + gating land. Self-contained; read the two AUTHORITATIVE artefacts below, then
+> re-derive git first-hand.**
 >
 > > **⚠️ READ THESE TWO FIRST (do not re-derive):**
 > > 1. [`.agent/reports/eef-get-eef-evidence-tool-and-strict-type-flow.report.md`](../../../reports/eef-get-eef-evidence-tool-and-strict-type-flow.report.md)
@@ -24,8 +25,8 @@
 > so validated-input + corpus-data ⇒ every intermediate + the output are exact by
 > construction; the compiler proves the whole pipeline.
 >
-> **WHAT WAS AUTHORED (working tree, UNCOMMITTED, strict-typed, green at SDK level
-> — type-check + lint + 736 tests; graph-corpus-sdk 37 + build):**
+> **WHAT WAS AUTHORED (committed in safety commit `2cd529b5`, strict-typed, green at SDK
+> level — type-check + lint + 736 tests; graph-corpus-sdk 37 + build):**
 > `get-eef-evidence` as a NEW TYPE of aggregated tool — closed/known input (`z.enum`
 > over the corpus's finite domains; the schema IS the input contract), bounded query,
 > thin parse-and-dispatch handler returning the D5 envelope verbatim. Files (the
@@ -38,13 +39,17 @@
 > `.agent/reports/eef-get-eef-evidence-tool-and-strict-type-flow.report.md`.
 >
 > **TREE STATE (re-derive first-hand; volatile):** branch `feat/graph-tooling-tidyup`,
-> HEAD **`c4e33e72`**, **14 ahead, UNPUSHED** (snapshot — re-derive). **FOREIGN
-> UNCOMMITTED WIP** is in the tree at `packages/core/oak-eslint/*` (another agent's
-> eslint-rule work; no active claim). **Stage EEF files by EXPLICIT pathspec (above);
-> NEVER `git add -A`** — it would sweep the peer's WIP into your commit.
+> HEAD **`2cd529b5`** (the safety commit), **~15 ahead, UNPUSHED** (snapshot — re-derive).
+> The safety commit was made via the safety route while the gate is red; **DO NOT PUSH
+> until the gate is green.** It also swept a parallel agent's `packages/core/oak-eslint/*`
+> WIP into the commit, and **more live `oak-eslint` WIP remains uncommitted** (that agent
+> is active). **Stage EEF files by EXPLICIT pathspec (above); NEVER `git add -A`** — it
+> would sweep the peer's WIP.
 >
-> **COMMIT IS BLOCKED.** The full-tree `pnpm check` is RED on two items, both intrinsic
-> to the corrected design and both next-steps: (a) `graph-corpus-sdk` lint —
+> **THE GATE IS RED AT THE SAFETY COMMIT** (so it is a checkpoint, not a landing; the
+> next GREEN commit — after the carrier fix + gating — supersedes this red state). The
+> full-tree `pnpm check` fails on two items, both intrinsic to the corrected design and
+> both next-steps: (a) `graph-corpus-sdk` lint —
 > `@typescript-eslint/consistent-type-definitions` rejects the `EefEvidenceEnvelope`
 > `type` alias (which is REQUIRED for JSON index-signature assignability; do NOT revert
 > to interface, do NOT disable the check — OWNER DECISION on scoping the rule); (b) app
@@ -66,7 +71,15 @@
 > strict types without loss (above); EEF is a NEW tool type — derive from its closed
 > input, do NOT pattern-match the open-input family; the author citation is a
 > licence-required CITATION, not PII (emit verbatim); friction → trace the real cause,
-> do not descend into type/build plumbing or escalate a non-decision.
+> do not descend into type/build plumbing or escalate a non-decision. **Carrier-fix
+> bridges already tried and REJECTED — do NOT re-explore (report §4a):** the `{ ...envelope }`
+> spread, the `isStructuredContent` guard at the call site, reverting the envelope to
+> `interface`, a mapped-type lint dodge, and the "bounded fix now / carrier later"
+> cheap-cure.
+>
+> **REVIEWERS:** `code-expert` + `type-expert` on the carrier fix; `mcp-expert` on the
+> gating/registration; a final adversarial diff review before the GREEN commit. Ground
+> every finding first-hand (first-hand means you, not the subagent).
 >
 > | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 > | --- | --- | --- | --- | --- | --- | --- |

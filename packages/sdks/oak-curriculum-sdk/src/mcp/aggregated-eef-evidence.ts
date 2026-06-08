@@ -20,7 +20,7 @@
  *   the consumer layer).
  */
 
-import type { TextContent } from '@modelcontextprotocol/sdk/types';
+import type { CallToolResult, TextContent } from '@modelcontextprotocol/sdk/types';
 import { z } from 'zod';
 import {
   EEF_STRAND_IDS,
@@ -192,4 +192,33 @@ export function runEefEvidenceTool(input: unknown): EefEvidenceResult {
     );
   }
   return { content: [], structuredContent: evidenceForMove(selectors) };
+}
+
+// ─── EGRESS MEMBRANE (ADR-193) ───────────────────────────────────────────────
+// Everything above is strict EEF DOMAIN code: exact types derived from the fixed
+// `as const` corpus, no `unknown`/`Record`/index-signature/`as`. The function
+// below is the single seam where that strict result crosses into the MCP vendor
+// TRANSPORT type. Everything that consumes its output (the executor, the auth
+// layer, registration) is vendor-facing transport whose currency is the SDK's
+// `CallToolResult`.
+
+/**
+ * Egress membrane (ADR-193): cross the strict {@link EefEvidenceResult} produced
+ * by {@link runEefEvidenceTool} into the vendor's `CallToolResult`.
+ *
+ * On success the envelope crosses as `structuredContent` via a fresh object
+ * (`{ ...envelope }`). That fresh object is structurally assignable to the
+ * vendor's `Record<string, unknown>` slot with **no `as` cast, no index
+ * signature on the strict domain type, no `any`, and no disabled check** — a
+ * fresh object literal *is* a record; the strict interface is the named
+ * constraint on that shape; the spread is the one erasure as the value crosses
+ * out. `isError` results pass through unchanged. Beyond this function the value
+ * is the vendor's; the SDK serialises it to JSON for the calling agent, which is
+ * its only consumer (ADR-191).
+ */
+export function eefEvidenceToCallToolResult(result: EefEvidenceResult): CallToolResult {
+  if (result.isError) {
+    return { content: result.content, isError: true };
+  }
+  return { content: [], structuredContent: { ...result.structuredContent } };
 }

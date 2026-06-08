@@ -572,3 +572,32 @@ entries above (passive guidance losing to artefact-gravity); here the gravity wa
 family does". **NB napkin now 560+ lines — rotation due next consolidation (deferred: a deliberate
 extract/merge/prune/archive op, not safe to rush at a blocked-commit session-end; falsifiable via
 line count).**
+
+## 2026-06-07 — compile-time-by-construction hit the `as` ban; the cure is zod's brand (Briny Plumbing Beacon)
+
+Building item 2a (every ESLint custom-rule message must teach a positive reappraisal direction), the
+reviewer-blessed shape was a compile-time brand: a `ReappraisingMessage` type only a `createMessage`
+builder can mint, so a prohibition-only string fails `tsc`. **Surprise:** minting a branded primitive
+needs a type assertion, and the repo bans `as` outright (`consistent-type-assertions: 'never'`) with
+NO existing branded types to copy. Reaching for `eslint-disable` would have tripped the very
+`no-eslint-disable` rule I was migrating — the system refused the shortcut correctly. **Cure:** zod's
+`z.string().brand().parse()` is the only assertion-free mint, and it matches the repo's z.infer
+doctrine — so 2a introduced the **first branded type in the repo**, minted via zod, not `as`.
+
+**Carry:** when you need a nominal/branded type in this repo, the mint is zod `.brand().parse()`, never
+a hand-rolled `as` cast (it will not lint). A "compile-time-by-construction" design can still hit a
+lint wall the reviewers did not flag — verify the mechanism lints before declaring the shape.
+
+**Two more carries, same session:**
+
+- **The reappraisal is a concept-key (owner insight).** Rules sharing the same positive suggestion are
+  collapse candidates: the cure-space is lower-dimensional than the detection-space. So the rules-prose
+  pass (item 2b) is doctrine *cartography* — author a sharp cure per rule, cluster by cure, then
+  discriminate genuine-redundancy (collapse, owner decides) vs coarse-cure (sharpen, don't merge) vs
+  same-cure-different-concept (keep). Never auto-collapse. A generic cure ("fix it") manufactures false
+  collisions and hides real ones — sharpness is the quality bar that makes a collision *signal*.
+- **A safety-commit can sweep your green WIP in with a peer's.** The owner's `chore: safety commit`
+  (`2cd529b5`) bundled my green item-2a and the EEF peer's WIP into one commit — coherent but entangled.
+  Verify HEAD is green and check what the commit actually swept; do not assume your work landed as its
+  own commit. (Also: code-expert claimed zod inlines ~46KB into the bundle; grounding the dist size
+  refuted it — tsup externalises deps. Ground build/size claims against the artefact.)

@@ -613,9 +613,9 @@ ADR-117, and update `current/README.md` + the completed-plans index.
 ## Dependencies
 
 **Blocking**: the execution-start re-cut to §Resolved Sequencing — the EEF
-tool's schema lands first via EEF D6, and the 3 graph tools' schemas land with
-their substrate migration. W1, W2 (in-scope set), and S0.2's test design are
-not design-blocked.
+tool's schema is authored HERE as an ordinary aggregated tool (EEF D6 ships no
+output schema), and the 3 graph tools' schemas land with their substrate
+migration. W1, W2 (in-scope set), and S0.2's test design are not design-blocked.
 
 **Beneficial** (minimum shippable shape without each):
 
@@ -630,7 +630,9 @@ not design-blocked.
 **Related Plans**:
 
 - `../../sector-engagement/eef/current/eef-graph-tool-completion.plan.md` — owns
-  the new EEF graph tool and the D6 half of the S0 sequencing decision.
+  the new EEF graph tool. EEF D6 ships no output schema and does not touch the
+  carrier, so it no longer shares the S0 seam; this plan owns the seam outright
+  and authors the EEF tool's output schema as an ordinary aggregated tool.
 - `../active/upstream-api-reference-metadata.plan.md` — sibling codegen-seam
   change; serialise with W1 at the emitter, never concurrent.
 - `../aggregated-tool-result-type-remediation.plan.md` (collection root) — if it

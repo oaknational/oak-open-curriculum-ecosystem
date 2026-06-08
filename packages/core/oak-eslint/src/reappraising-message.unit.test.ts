@@ -26,7 +26,8 @@ describe('createMessage', () => {
   it('preserves interpolation placeholders untouched for ESLint runtime substitution', () => {
     const message = createMessage({
       prohibition: 'Exported async function "{{name}}" has no observability emission.',
-      reappraisal: 'Add a logger.* emission, or tag with `// observability-emission-exempt: <reason>`.',
+      reappraisal:
+        'Add a logger.* emission, or tag with `// observability-emission-exempt: <reason>`.',
     });
 
     expect(message).toContain('{{name}}');

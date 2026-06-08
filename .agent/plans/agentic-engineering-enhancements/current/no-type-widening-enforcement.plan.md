@@ -1,7 +1,7 @@
 ---
 title: "No type-widening: an active enforcement layer for the strict-typing doctrine"
-status: future
-lane: future
+status: current
+lane: current
 type: strategic
 thread: agentic-engineering-enhancements
 date: 2026-06-07
@@ -13,6 +13,12 @@ owner_scope: >-
   Captures the owner's standing directive, the feasibility analysis, and what has
   already landed this session so the strand does not re-derive it. Execution
   decisions are finalised at promotion to current/.
+  PROMOTED to current/ 2026-06-07 (Briny Plumbing Beacon): owner collapsed the
+  promotion gate ("do item 2 AND the no-type-widening rule; do not wait for the
+  EEF lane"). WS1 is the immediate next step; its message is authored via the 2a
+  `createMessage` helper (born teaching). The WS1 type-checker predicate
+  (literal-union widening vs legitimate arbitrary-string collection) is designed
+  test-first at WS1 start; precision gates warn → error.
 ---
 
 # No type-widening: an active enforcement layer

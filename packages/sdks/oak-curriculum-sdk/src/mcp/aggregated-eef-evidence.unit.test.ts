@@ -9,6 +9,7 @@ import { typeSafeKeys } from '../types/helpers/type-helpers.js';
 import {
   GET_EEF_EVIDENCE_INPUT_SCHEMA,
   GET_EEF_EVIDENCE_TOOL_DEF,
+  eefEvidenceToCallToolResult,
   runEefEvidenceTool,
 } from './aggregated-eef-evidence.js';
 
@@ -84,5 +85,22 @@ describe('runEefEvidenceTool (thin parse-and-dispatch over the D5 bindings)', ()
 describe('get-eef-evidence tool definition', () => {
   it('carries the ratified title', () => {
     expect(GET_EEF_EVIDENCE_TOOL_DEF.title).toBe('EEF Evidence (Teaching and Learning Toolkit)');
+  });
+});
+
+describe('eefEvidenceToCallToolResult (egress membrane — ADR-193)', () => {
+  it('crosses a success envelope into structuredContent faithfully (data preserved, no error)', () => {
+    const domain = runEefEvidenceTool({ function: 'inspect-strand', strandId: firstStrandId });
+    const vendor = eefEvidenceToCallToolResult(domain);
+    expect(vendor.content).toEqual([]);
+    expect(vendor.structuredContent).toEqual(inspectStrand(firstStrandId));
+    expect(vendor.isError).toBeUndefined();
+  });
+
+  it('passes an isError result through unchanged (no structuredContent on the error path)', () => {
+    const domain = runEefEvidenceTool({ function: 'evidence-for-move' });
+    const vendor = eefEvidenceToCallToolResult(domain);
+    expect(vendor.isError).toBe(true);
+    expect(vendor.structuredContent).toBeUndefined();
   });
 });

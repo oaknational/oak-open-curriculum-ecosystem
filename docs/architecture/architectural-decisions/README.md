@@ -291,6 +291,14 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   and explicit true enables; release-pre-proof defaults on with an explicit-false
   kill-switch and goes live on merge; release-post-proof removes the flag after
   the value proof passes; Accepted 2026-06-06)
+- [ADR-193: System–Vendor Type Boundary — Strict Domain Types, Vendor Types at the Membrane](193-system-vendor-type-boundary-membrane.md)
+  (the outgoing mirror of ADR-032: strict domain types hold from the `as const`
+  corpus through validation to a per-primitive egress membrane; the vendor's
+  loose types — e.g. MCP `CallToolResult.structuredContent: Record<string, unknown>` —
+  are the external contract, confined to egress functions, never inside domain
+  code; transport code legitimately speaks the vendor type; strict types serve
+  internal DX and cross an external junction only for significant clear value;
+  Accepted 2026-06-08)
 
 ## Key Architectural Decisions
 
