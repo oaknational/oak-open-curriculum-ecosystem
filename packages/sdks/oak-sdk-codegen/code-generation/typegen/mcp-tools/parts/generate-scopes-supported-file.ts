@@ -33,7 +33,8 @@ const BANNER = `/**
  */
 export function generateScopesSupportedFile(): string {
   const scopes = getScopesSupported();
-  const scopesLiteral = `[${scopes.map((s) => `'${s}'`).join(', ')}]`;
+  const quotedScopes = scopes.map((s) => `'${s}'`).join(', ');
+  const scopesLiteral = `[${quotedScopes}]`;
 
   return [
     BANNER,

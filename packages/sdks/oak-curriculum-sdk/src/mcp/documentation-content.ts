@@ -61,13 +61,14 @@ export function getToolsReferenceMarkdown(): string {
     name: string,
     category: (typeof toolCategories)[keyof typeof toolCategories],
   ): string => {
+    const toolsList = category.tools.map((t) => `\`${t}\``).join(', ');
     return `### ${name}
 
 ${category.description}
 
 **When to use**: ${category.whenToUse}
 
-**Tools**: ${category.tools.map((t) => `\`${t}\``).join(', ')}`;
+**Tools**: ${toolsList}`;
   };
 
   return `# Tool Reference

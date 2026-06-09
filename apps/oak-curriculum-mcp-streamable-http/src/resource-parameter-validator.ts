@@ -46,7 +46,10 @@ function isJwtFormat(token: string): boolean {
  * Extract audiences from JWT payload.
  */
 function getAudiences(aud: string | string[] | undefined): string[] {
-  return Array.isArray(aud) ? aud : aud ? [aud] : [];
+  if (Array.isArray(aud)) {
+    return aud;
+  }
+  return aud ? [aud] : [];
 }
 
 /**
@@ -69,11 +72,18 @@ function isResourceInAudiences(
 /**
  * Log JWT structure information (without sensitive data).
  */
+function getAudienceCount(aud: JwtPayload['aud']): number {
+  if (Array.isArray(aud)) {
+    return aud.length;
+  }
+  return aud ? 1 : 0;
+}
+
 function logJWTStructure(logger: Logger, payload: JwtPayload): void {
   logger.debug('JWT decoded', {
     hasAudience: !!payload.aud,
     audienceType: Array.isArray(payload.aud) ? 'array' : 'string',
-    audienceCount: Array.isArray(payload.aud) ? payload.aud.length : payload.aud ? 1 : 0,
+    audienceCount: getAudienceCount(payload.aud),
     issuer: payload.iss,
     expiresAt: payload.exp,
   });

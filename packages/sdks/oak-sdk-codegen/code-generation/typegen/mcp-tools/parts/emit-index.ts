@@ -34,9 +34,8 @@ function buildExports({
       if (scheme.type === 'noauth') {
         return "{ type: 'noauth' }";
       }
-      const scopesArray = scheme.scopes
-        ? `[${scheme.scopes.map((s) => `'${s}'`).join(', ')}]`
-        : '[]';
+      const scopesList = (scheme.scopes ?? []).map((s) => `'${s}'`).join(', ');
+      const scopesArray = `[${scopesList}]`;
       return `{ type: 'oauth2', scopes: ${scopesArray} }`;
     })
     .join(', ')}]`;
