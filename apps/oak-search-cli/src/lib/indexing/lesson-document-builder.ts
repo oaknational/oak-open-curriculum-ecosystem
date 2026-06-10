@@ -56,7 +56,7 @@ function resolveUnitsForLesson(
   const units: LessonUnitInfo[] = [];
   for (const unitSlug of unitSlugs) {
     const summary = unitSummaries.get(unitSlug);
-    if (summary && summary.oakUrl) {
+    if (summary?.oakUrl) {
       units.push({
         unitSlug: summary.unitSlug,
         unitTitle: summary.unitTitle,
