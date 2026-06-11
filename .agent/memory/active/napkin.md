@@ -93,6 +93,28 @@ team-opener vocab-gen symlink line were handed as Director deltas (event a3279ac
   the ledger clause, or a pass-metadata vs disposition-ledger scope clarification). Trigger:
   next curator-pass invocation or owner direction.
 
+## 2026-06-11 evening — oak-prod live exercise seat (Dawnlit Glimmering Orbit, 50c2d1)
+
+- **Cursor MCP client drops structuredContent-only tool results** — every successful
+  `get-eef-evidence` call rendered `(omitted)` while its typed refusals and every
+  text+structuredContent tool rendered fine; root cause is the owner-ratified `content: []`
+  success shape (`aggregated-eef-evidence.ts`), confirmed by smallest-payload probe (so
+  shape-based, not size-based). Live evidence against the structuredContent-only ratification;
+  routed to owner via the exercise report + eef record. Lesson: a client-rendering check
+  belongs in any tool-shape ratification — spec-valid is not client-visible.
+- **My own schema-skip instance**: called `search` without reading its descriptor first
+  (mandatory rule) and ate an invalid-arguments error (`scope` required). The rule exists for
+  exactly this; zero errors on every tool where I read the descriptor first.
+- **Cursor session env not forwarded to agent shells, but the hook mirror is the recovery
+  path**: `PRACTICE_AGENT_SESSION_ID_CURSOR` was unset in my shell (agent-identity exit 2);
+  the full composer session id lives in `.cursor/oak-composer-session.local.json` (written by
+  the sessionStart hook) — export from there and identity preflight resolves to the
+  hook-announced name. Candidate: name this recovery in the identity docs if a second
+  instance lands.
+- **Direct curl to the prod MCP correctly 401s with a PRM pointer** (Clerk,
+  `WWW-Authenticate: Bearer resource_metadata=…/.well-known/oauth-protected-resource/mcp`) —
+  the auth membrane works; unauthenticated probing cannot falsely green.
+
 ## 2026-06-11 — dedicated consolidation seat (Thermal Circling Updraft, f42c24)
 
 - **Director-became-implementer is a missing-autonomy-primitive signal** (handed delta,
@@ -148,3 +170,14 @@ team-opener vocab-gen symlink line were handed as Director deltas (event a3279ac
   design; the cure is an explicit owner authorisation moment (worked instance this
   session, owner-keyed in-chat within a minute). Expect the two-step when landing any
   new skill: canonical + generated adapters, THEN the owner-visible settings entry.
+- **Naming-schema v2 design session (Swift Gliding Zephyr, aba87a, 2026-06-11)**: owner
+  ratified NVN micro-sentence names ("Comet threads Night"), lowercase middle as
+  manufactured U-shaped salience, digest-pinned schema registry with the current scheme
+  frozen as the v1 era, and `naming_schema_version` on the identity tuple. Plan queued at
+  `.agent/plans/agent-tooling/current/agent-naming-schema-v2.plan.md`. Two reusable
+  catches: (1) a digest pin makes wordlists freeze-at-activation by construction, so any
+  taste review must be a BLOCKING pre-activation gate, not a courtesy; (2) assumptions-
+  expert refuted my drafted "audit recomputes recorded names" cycle — the tuple stores
+  only the 6-char `session_id_prefix`, never the seed, so recompute obligations must be
+  satisfied at derivation time, not over persisted state. Check what the stored record
+  can actually support before writing a recompute-shaped acceptance criterion.

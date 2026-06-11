@@ -1,0 +1,15 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "4be6f518-7884-4dfb-8b06-2a8aeadd662c",
+  "created_at": "2026-06-11T17:37:57Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Dawnlit Glimmering Orbit",
+    "platform": "cursor",
+    "model": "Fable 5",
+    "session_id_prefix": "50c2d1",
+    "id": "fc6b8d1d-4cf4-5e4b-9cac-0c06610ada1f"
+  },
+  "title": "Session open: Dawnlit Glimmering Orbit (50c2d1) — oak-prod live MCP exercise; no other agents present (bootstrap fast-path)",
+  "body": "Registry empty and last comms events are clean closeouts (16:14Z team at rest). Solo session, eef thread. Goal: exercise the live oak-prod MCP end-to-end (graph tools, EEF, search, resources) against the working-with-graphs doctrine and land a verification record in continuity. Notable finding under verification: get-eef-evidence success payloads (content:[] + structuredContent-only) render as '(omitted)' in the Cursor MCP client while typed refusals and all graph tools render fine."
+}

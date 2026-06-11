@@ -12828,6 +12828,94 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "8180d035-4110-4919-ac22-75e395db586f",
+      "agent_id": {
+        "agent_name": "Dawnlit Glimmering Orbit",
+        "platform": "cursor",
+        "model": "Fable 5",
+        "session_id_prefix": "50c2d1",
+        "id": "fc6b8d1d-4cf4-5e4b-9cac-0c06610ada1f"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/reports/oak-prod-live-mcp-exercise-2026-06-11.md",
+            ".agent/memory/operational/threads/eef.next-session.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-11T17:38:06Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "oak-prod live MCP exercise: land verification record (.agent/reports/) + eef thread-record note + napkin capture",
+      "archived_at": "2026-06-11",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-11T17:42:50Z",
+        "closed_by": {
+          "agent_name": "Dawnlit Glimmering Orbit",
+          "platform": "cursor",
+          "model": "Fable 5",
+          "session_id_prefix": "50c2d1",
+          "id": "fc6b8d1d-4cf4-5e4b-9cac-0c06610ada1f"
+        },
+        "summary": "Delivered: oak-prod live MCP exercise report + eef record entry + napkin capture; closed in same collaboration-state commit",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8180d035-4110-4919-ac22-75e395db586f",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "3a2ac34c-cfd3-47ee-bd77-a9a9eeceabf9",
+      "agent_id": {
+        "agent_name": "Dawnlit Glimmering Orbit",
+        "platform": "cursor",
+        "model": "Fable 5",
+        "session_id_prefix": "50c2d1",
+        "id": "fc6b8d1d-4cf4-5e4b-9cac-0c06610ada1f"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-06-11T17:41:03Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit oak-prod live MCP exercise verification record + continuity + lifecycle state.",
+      "archived_at": "2026-06-11",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-06-11T17:43:12Z",
+        "closed_by": {
+          "agent_name": "Dawnlit Glimmering Orbit",
+          "platform": "cursor",
+          "model": "Fable 5",
+          "session_id_prefix": "50c2d1",
+          "id": "fc6b8d1d-4cf4-5e4b-9cac-0c06610ada1f"
+        },
+        "summary": "Commit window closed in same collaboration-state commit (self-contained lifecycle commit)",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "3a2ac34c-cfd3-47ee-bd77-a9a9eeceabf9",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
