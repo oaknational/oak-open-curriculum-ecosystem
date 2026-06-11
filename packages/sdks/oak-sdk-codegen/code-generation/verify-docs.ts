@@ -139,8 +139,10 @@ async function main(): Promise<void> {
   }
 }
 
-main().catch((err: unknown) => {
+try {
+  await main();
+} catch (err: unknown) {
   const message = err instanceof Error ? err.message : String(err);
   logger.error(message, normalizeError(err));
   process.exitCode = 1;
-});
+}
