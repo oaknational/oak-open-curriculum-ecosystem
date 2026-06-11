@@ -114,6 +114,17 @@ team-opener vocab-gen symlink line were handed as Director deltas (event a3279ac
 - **Direct curl to the prod MCP correctly 401s with a PRM pointer** (Clerk,
   `WWW-Authenticate: Bearer resource_metadata=…/.well-known/oauth-protected-resource/mcp`) —
   the auth membrane works; unauthenticated probing cannot falsely green.
+- **Cursor-Shell stream artefact now hits pre-PUSH too (turbo SIGABRT)**: `git push` streamed
+  live killed the hook's `pnpm turbo run …` with SIGABRT twice (reproduced at load 2.5, so not
+  host pressure); the identical turbo command exited 0 standalone, and the push succeeded with
+  the commit-skill's file-redirect workaround (`>/tmp/… 2>&1`) — transfer line + ls-remote
+  proven. The commit skill documents this family for `git commit` only; extend to `git push`
+  if a second instance lands.
+- **Piped-exit gotcha, lived at my own hand**: `enqueue | rg` exited 1 because rg found no
+  match in the success output — the enqueue had SUCCEEDED, creating a duplicate queue entry on
+  blind retry (caught by registry read; duplicate abandoned with notes). The distilled rule
+  covers this; the new wrinkle is filter-pipes manufacturing false REDS as well as false
+  greens.
 
 ## 2026-06-11 — dedicated consolidation seat (Thermal Circling Updraft, f42c24)
 
