@@ -1,5 +1,6 @@
 ---
 name: commit-window-discipline-under-parallel-agents
+use_this_when: "Committing on a shared on-disk checkout where other agents may stage or commit concurrently — re-derive the staged set per chunk from a fresh git status, stage by explicit pathspec, and verify the staged set immediately before each commit; 'solo window' is a point-in-time read, not a session property."
 polarity: pattern
 category: process
 status: stable

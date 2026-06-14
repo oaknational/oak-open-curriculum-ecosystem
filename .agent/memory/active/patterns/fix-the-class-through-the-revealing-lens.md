@@ -1,5 +1,6 @@
 ---
 name: fix-the-class-through-the-revealing-lens
+use_this_when: "A fix addresses a class of defect, not one incident — before declaring it done, enumerate the other members of the class and run the lens (fresh checkout, CI, cold start) that reveals them; the instance you saw is visible in the lens you already have, the others often are not."
 polarity: pattern
 category: process
 status: emerging

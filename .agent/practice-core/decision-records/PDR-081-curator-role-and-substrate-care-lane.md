@@ -96,7 +96,8 @@ A curator pass:
 5. Drains graduation buffers; routes graduated substance to permanent
    homes; does not allow the buffer to accumulate records of what
    graduated or records of curation work (the buffer is buffer only).
-6. Logs the pass in the per-pass curation log (metadata only).
+6. Records the pass via its commit plus the close-of-pass comms broadcast (the
+   per-pass log surface is superseded — see §Amendment Log).
 
 ### Authority
 
@@ -107,8 +108,8 @@ The curator MAY:
   pattern / directive / skill / canon surface) — through the normal
   owner-decision gates that govern principle-class changes; the
   curator does not bypass those gates.
-- Maintain the per-pass curation log (metadata-only contract; see
-  below).
+- Record the pass via its commit and the close-of-pass comms broadcast
+  (the per-pass log surface is superseded — see §Amendment Log).
 - Surface home-gaps and structural defects as routing events.
 
 The curator MUST NOT:
@@ -154,7 +155,14 @@ A curator engages when any of:
    sessions, multi-cycle pushes) where the active memory surfaces
    have absorbed substance worth routing.
 
-### Per-pass log contract (metadata only)
+### Per-pass log contract (SUPERSEDED — see §Amendment Log)
+
+> **Superseded 2026-06-14** by
+> [`permanent-doc-is-the-consolidation-record`](../../rules/permanent-doc-is-the-consolidation-record.md):
+> do **not** author a per-pass log file. The commit plus the homed substance are the
+> curator's record; git history is the pass-navigation index; the pass's observable claim
+> is a normal active claim. The contract below is retained as historical proposal context
+> only — it is not operative.
 
 Each curator pass writes one log file. The log file is **metadata
 only**. It records the structural facts of the pass:

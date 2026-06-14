@@ -11,7 +11,8 @@ description: Run one curator pass on the repo's knowledge substrate. Use when al
 Run one curator pass under PDR-081: survey the knowledge substrate,
 route durable knowledge to permanent homes, surface home-gaps and
 structural defects as routing events, drain graduation buffers,
-and log the pass in the per-pass curation log (metadata only).
+and record the pass via its commit plus a close-of-pass comms broadcast (the
+per-pass log surface is superseded — see §Per-Pass Log).
 
 The canonical role key is `curator`; `Knowledge Curator` is the
 descriptive session label for the same substrate-care responsibility.
@@ -50,15 +51,10 @@ substance to stale homes.
 
 ### Step 1 — Open the pass
 
-Author the per-pass log file at the operational-memory
-`curator-passes/` directory before substantive work begins. The
-file's existence is the observable claim on the lane.
-
-File naming convention: `<date>-<agent-codename-kebab>.md`.
-
-Initial content: frontmatter only, plus pass kind. The file grows
-as the pass progresses; never write substance into it, only
-metadata.
+Open a normal active claim on the substrate-care lane
+(`register-active-areas-at-session-open`) before substantive work begins —
+that claim, not a per-pass log file, is the observable claim on the lane.
+(The per-pass log surface is superseded — see §Per-Pass Log; do not author one.)
 
 ### Step 2 — Survey
 
@@ -145,17 +141,12 @@ substance.
 
 ### Step 8 — Close the pass
 
-Finalise the per-pass log file with:
-
-- carry-forward items (what the next curator pass picks up)
-- summary outcome (substrate-care signals: what changed health-wise)
-- pointers to the comms events emitted during the pass
-
-Emit a single comms broadcast naming the pass and pointing at the
-pass log file. The broadcast carries the substance the pass
-surfaced (defect descriptions, adoption-gap findings, home-gap
-proposals); the pass log points at the broadcast, not the other
-way around.
+Emit a single comms broadcast naming the pass. The broadcast carries the
+substance the pass surfaced (defect descriptions, adoption-gap findings,
+home-gap proposals) plus any carry-forward for the next pass and the
+substrate-care signals (what changed health-wise). The commit(s) plus the
+homed substance are the durable record — do **not** author a per-pass log
+file (see §Per-Pass Log).
 
 ## Per-Pass Log — Superseded
 

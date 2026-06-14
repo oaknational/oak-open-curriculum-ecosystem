@@ -1,5 +1,6 @@
 ---
 name: check-code-invariants-before-designing-a-field
+use_this_when: "Adding a new field, enum, taxonomy, or discriminator to existing code — enumerate the invariants the surrounding code already maintains first, then choose the new shape's axis to preserve them (the invariant-safe axis is often non-obvious)."
 polarity: pattern
 category: architecture
 status: emerging

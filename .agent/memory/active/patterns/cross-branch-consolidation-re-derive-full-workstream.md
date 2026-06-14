@@ -1,5 +1,6 @@
 ---
 name: cross-branch-consolidation-re-derive-full-workstream
+use_this_when: "Consolidating a lane or workstream from one branch onto another — drive completeness from the workstream's full definition (code plus the activating skills, rules, tests, and lessons), not just the source files you copied across."
 polarity: pattern
 category: process
 status: emerging
