@@ -164,8 +164,9 @@ A curator engages when any of:
 > is a normal active claim. The contract below is retained as historical proposal context
 > only — it is not operative.
 
-Each curator pass writes one log file. The log file is **metadata
-only**. It records the structural facts of the pass:
+The superseded contract specified one metadata-only log file per pass,
+recording the structural facts of the pass (retained here as historical
+proposal detail only — not an instruction to author one):
 
 - pass identity (date, agent, platform, model, session id prefix)
 - pass kind (e.g. due-drain, second-instance graduation,

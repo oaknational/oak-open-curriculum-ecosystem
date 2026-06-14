@@ -107,18 +107,6 @@ register before adding.
   §Sequencing + owner-confirmed intent | target: plan template/archetype
   component | trigger: the next multi-seam plan authoring, or owner direction |
   size: M | status: pending]`
-- **PDR-081 curator-ledger clause contradicts
-  `permanent-doc-is-the-consolidation-record`.** The curator-pass team SKILL
-  §3 (citing PDR-081) names a per-pass metadata file under the
-  operational-memory curator-passes directory as the curator's traceability
-  surface, while the newer canonical rule forbids disposition ledgers (the
-  commit and the permanent home are the record). Recent passes followed the
-  RULE. Resolution shapes: PDR-081 amendment retiring the ledger clause, or
-  a pass-metadata vs disposition-ledger scope clarification.
-  `[captured: 2026-06-11 | source: Pearly curation-seat napkin candidate
-  (first-hand read of both surfaces) | target: PDR-081 amendment or scope
-  clarification | trigger: owner decision (surfaced at the 2026-06-12
-  consolidation closeout) | size: S | status: owner-gated]`
 
 ## 2026-06-11 capture — Pearly Snorkelling Compass (doctrine-curation pass: fired triggers)
 
