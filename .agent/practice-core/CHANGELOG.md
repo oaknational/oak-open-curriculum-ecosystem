@@ -4,6 +4,26 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-06-14 — comms-research closeout consolidation (Marlin weaves Marsh)
+
+The dedicated consolidation closing the comms-corpus research thread graduated its flagship
+findings into Core doctrine (owner-approved at the closeout walk; the measure of impact is
+use and observation triggering refinement through the knowledge flow, not pre-review):
+
+- **Amended**: PDR-089 — the two-reader mutual-first-hand loop named as the external-check
+  *phenotype* for sustained research/verification work (a standing reciprocal reader, not an
+  ad-hoc pass; corpus-scale evidence from the thread). Sharpens Decision 3.
+- **Amended**: PDR-011 — Amendment Log: a thread is a multi-lane container (concurrent,
+  independently-pickup-able lanes, each its own state/branch/trigger; no single "Next safe
+  step"). Operative format-definer: `threads/README.md` §"Concurrent lanes"; the
+  `session-handoff` step-3 field and `continuity-practice.md` align on next touch.
+- **Amended**: PDR-081 (Proposed) — the per-pass log's disposition-pointer surface superseded
+  by `permanent-doc-is-the-consolidation-record` (the commit plus homed substance are the
+  curator's record); the `curator-pass` SKILL §Per-Pass Log aligned.
+- **Related host directive**: `directives/metacognition.md` gained §"Fluency Is a Warning,
+  Not a Confirmation" (dual of the friction section — smoothness is the trigger to ground the
+  situational fact first; passive lessons need a firing gate).
+
 ## [oak-open-curriculum-ecosystem] 2026-06-12 — owner-approved amendment queue authored (Thyme wakes Canopy dedicated consolidation)
 
 The amendment queue the owner approved at the 2026-06-11 register walk

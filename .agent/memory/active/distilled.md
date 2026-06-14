@@ -35,29 +35,6 @@ Still maturing here:
 - **Co-Authored-By trailers must land BEFORE the first push** — amending a pushed commit needs
   a blocked force-push; once merged the decision is forced.
 
-## A "to be synthesised" holding pen — migrate-don't-drop (2026-06-08, Starless Prowling Veil)
-
-A "relocate to synthesise/supersede" holding pen silently absorbs adjacent-collection
-**live** intent, then its framing presents everything as disposable. Before deleting such
-a directory: verify per-file conservation, separating useful-forward intent from spent
-working-out whose conclusions are already homed elsewhere. **Migrate-don't-drop on any
-judgment call** — migration is cheap and reversible, deletion is the loss; restore live
-intent to its value-home (often origin), delete only the genuinely-spent. Second-order:
-deleting *part* of a coherent set orphans survivors' companion links — run a repo-wide ref
-sweep, not just the deleted paths. Agent/workflow verdicts are input-to-verify: a
-"deletion-safe" verdict correct in one frame can be wrong once the surrounding disposition
-changes. Routing: pattern-candidate in the harvest/disposition family; full instance in
-napkin archive 2026-06-08.
-
-## A landed invariant in code you're extending is a hard constraint on a new field's shape
-
-When designing a new field or taxonomy on existing code, check the invariants the
-code already holds BEFORE designing the field, not after. EEF's `answerType` taxonomy:
-the obvious single-strand-vs-explicit-set split would have broken the D4 overlap
-invariant (`inspectStrand(id) === evidenceForMove({strandIds:[id]})`); the
-invariant-safe axis was coverage (`strand-lookup` vs `context-subset`). The existing
-invariant is design input, discovered first.
-
 ## Don't pile new scope onto a plan pending its readiness review (2026-06-09)
 
 A plan whose whole pending job is review → decision-complete → execution-ready
@@ -130,59 +107,6 @@ promotion, then delete here.
 - **Research whose conclusion contradicts a pending/ratified decision in ANOTHER thread
   needs an explicit cross-thread surfacing step** — a filed report does not flow into
   sibling decision threads by itself (the structuredContent-only rediscovery, ten days).
-
-## A conditional in a test is unfalsifiable for exactly the case it guards
-
-`if (shape ok) { expect(...) }` silently passes when the guard fails, while READING as
-proof. Root cause is usually self-erased types upstream (a loose recording fake fighting
-the real seam — the overload type error was the tell). Cure: DELETE the capture test;
-prove the behaviour at the level where it is real (e2e through the real transport; Zod
-`.parse` as the fail-loud record check; deterministic enumeration; zero conditionals).
-Throw-guards, not if-guards, for shape checks that must narrow.
-
-## Value-first; existing artefacts are malleable design surface
-
-When we control the stack, the fixed points are the value constraints + our design
-agency — NOT existing code, current/generated data shape, consumer count, or even
-owner-ratified decisions. Start each decision from "what value must this deliver,
-and what do we control?"; reshape on frame-overturn, never bolt-on. Homed: auto-memory
-`feedback_value_first_existing_is_malleable`; PDR/rule candidate if it recurs
-cross-platform. Connects to LTAE, premature-crystallization, existence-is-not-correctness.
-
-## Commit-window discipline under live parallel agents
-
-- **The commit window is a moving target; re-derive the staged set per chunk, not
-  per pass.** Each chunk's pathspec comes from a FRESH `git status`; explicit-pathspec
-  staging + per-chunk re-derivation carried 6+ agents on one branch with zero
-  collisions. Corollaries: (1) say "*I* haven't committed," never "*nothing* is
-  committed"; (2) `git commit -F msg -- <files>` commits exactly your bundle; (3) the
-  `cannot lock ref 'HEAD'` ref-lock is the final collision backstop — re-derive and
-  re-commit, never delete the lock.
-- **"Solo window" is a point-in-time observation, not a session property** — a registry
-  empty at open can carry a peer's staged bundle by mid-session; verify
-  `git diff --cached --name-only` against the intended bundle IMMEDIATELY before every
-  `git commit`, halt on any foreign entry.
-- **A granted commit window is exclusive until the grantee's PUSH closes it** — the window
-  spans the whole gate chain, not just the staging moment; ONE gate chain at a time per
-  checkout/worktree (check-singleton applies to the whole commit/push window).
-- **Whole-tree pre-commit gates bind you to a live peer's WIP** — a pre-push "branch
-  failure" can be a TREE failure (root format/markdownlint gates inspect the working tree,
-  not the pushed commits); diagnose by separating tree state from branch content, and
-  don't leave bundles staged-but-uncommitted in a shared checkout longer than necessary.
-- **Verify content conservation by set-membership, not by edit-base.** On a shared
-  on-disk tree a peer may commit your working files mid-session; the question is not
-  "was my base stale?" but "was any content LOST?"
-- Rule/PDR graduation stays owner-gated (pending-grad commit-window items 15/40);
-  this is the interim cross-session home.
-
-## Crosswalk two drifted docs before reconciling — semantics vs intent
-
-When two documents appear to conflict (older brief vs ratified plan), crosswalk
-clause-by-clause first: separate shared-intent-in-different-words, genuine
-divergence, and orthogonal-only-looks-like-conflict. Reconcile surgically (banner +
-targeted supersession notes); never bulk-rewrite — that deletes still-valid and
-orthogonal content. 2026-06-05 EEF: R1/R4/R5/R7/R8 shared, R2/R3 superseded, §5
-ontology-crosswalk orthogonal. Sibling of validate-specialist-findings.
 
 ## Operational gotchas (2026-06-11→12, single-instance unless noted)
 

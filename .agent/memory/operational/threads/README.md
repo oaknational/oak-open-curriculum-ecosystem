@@ -165,6 +165,31 @@ by owner direction or live coordination. Avoid `ready to land` wording in
 continuation records unless the work is genuinely uncommitted and pending; once
 landed, cite the commit instead.
 
+### Concurrent lanes — a thread is a multi-lane container
+
+A thread holds one or more **concurrent lanes**: independently pickup-able arcs, each
+with its own state, branch, and pickup trigger, **active OR deferred**. There is no single
+thread-level "next safe step" — several lanes can be "next" at once, picked up in parallel
+by different checkouts, separate agents, or collaborators. When a thread carries more than
+one live arc, record each as a first-class lane rather than collapsing to one pointer:
+
+```markdown
+## Lanes
+
+### Lane: <name> — active | deferred (trigger: <what reactivates it>)
+- Branch:
+- Controlling plan:
+- Next safe step:
+- Acceptance bar:
+```
+
+A deferred lane still belongs here (marked deferred, with its trigger), not only in an
+owner-gated register — a lane entry records *takeable work*. The single-`Next safe step`
+`## Current Continuation` block above stays valid for a genuinely single-lane thread;
+multi-lane threads use `## Lanes`. (Owner-confirmed general principle 2026-06-14; the
+continuity-surface authority is PDR-011. Existing records reconcile to this shape as they
+are next touched — not a mass rewrite.)
+
 ### Read, in order
 
 1. [`../repo-continuity.md`](../repo-continuity.md) end-to-end —

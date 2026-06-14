@@ -157,17 +157,19 @@ surfaced (defect descriptions, adoption-gap findings, home-gap
 proposals); the pass log points at the broadcast, not the other
 way around.
 
-## Per-Pass Log Contract
+## Per-Pass Log — Superseded
 
-**The per-pass log file is metadata only.** It records the
-structural facts of the pass; substance lives at its permanent
-home (PDR / ADR / rule / pattern / directive / skill / napkin /
-comms event / archive). The log file is a navigation index, not
-a substance store.
-
-Violations of this contract recreate the buffer-as-dump failure
-mode the curator role exists to cure. See PDR-081 §Per-pass log
-contract for the full enumeration.
+The former per-pass log file (a "surfaces surveyed → disposition" /
+"concept → home" pointer index) is **superseded** by
+[`permanent-doc-is-the-consolidation-record`](../../rules/permanent-doc-is-the-consolidation-record.md)
+(comms-research closeout consolidation, 2026-06-14; PDR-081 §Amendment Log):
+the commit plus the homed substance are the curator's record, and git history
+is the pass-navigation index. The pass's observable claim is a normal active
+claim (`register-active-areas-at-session-open`); its surfaced substance rides
+the close-of-pass comms broadcast and lands in its permanent home. **Do not
+author a per-pass disposition-pointer log file.** The step-prose above that
+still mentions "the per-pass log" references this superseded surface and
+aligns to a commit-plus-broadcast record on next curator use.
 
 ## Forbidden moves
 

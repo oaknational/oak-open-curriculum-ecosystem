@@ -22,6 +22,20 @@ exactly the kind that discipline forbids).
 
 ## Amendment Log
 
+- **2026-06-14** (Accepted; owner-approved at the comms-research closeout consolidation):
+  **The two-reader mutual-first-hand loop is the external-check phenotype for sustained
+  research and verification work** (sharpens Decision 3; graduates the comms-research thread's
+  most load-bearing methodological finding). When work is a long arc of claims over a corpus
+  (research, verification, audit), the reliable external check is not an ad-hoc pass but a
+  **standing reciprocal reader**: two agents each ground the other's load-bearing claims against
+  the primary source first-hand, and each runs the adversarial shape over its OWN output before
+  the other sees it. Corpus-scale evidence (comms-research thread, 2026-06-13): the loop caught,
+  in BOTH directions, errors a single pass would have ratified — a phantom "93.7% dangling-citation"
+  metric (a measurement artefact), an over-accepted count (5→4), a reboot-confounded swap finding
+  (retracted), and several of the researchers' own convenient claims. The mechanism is Decision 3's
+  external check made symmetric and standing; treating corpus events (and any source) as
+  input-to-verify, never truth, is its companion discipline. Sibling: the auto-memory
+  `first-hand-means-me-not-subagents` (the reader must be the agent itself, not a relayed report).
 - **2026-06-04** (Accepted; owner-directed, Arboreal curation pass): **Decision 6
   — compiled evidence bases are frames; tier their claims by verification
   status.** Graduates the synthesis-tier-claims doctrine (pending-graduations

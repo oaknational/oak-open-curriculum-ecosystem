@@ -31,6 +31,17 @@ unit).
 
 ## Amendment Log
 
+- **2026-06-14** (Accepted; owner-confirmed general principle at the comms-research closeout
+  consolidation): **a thread is a multi-lane container, not a single linear pointer.** A thread
+  holds one or more concurrent lanes — independently pickup-able arcs, each with its own state,
+  branch, and pickup trigger, active OR deferred — and several can be "next" at once (parallel
+  pickup by different checkouts, separate agents, or collaborators). The singular "Next safe step"
+  field encodes a single-lane assumption; multi-lane threads use a `## Lanes` section (each lane a
+  first-class pickup point, deferred lanes included with their trigger). Operative format-definer:
+  [`threads/README.md` §"Concurrent lanes"](../../memory/operational/threads/README.md); the
+  `session-handoff` step-3 lane-state field and `continuity-practice.md` align to it as next
+  touched (existing records reconcile lazily, never a mass rewrite). Cures the recurring collapse
+  of the concurrent continuity graph (threads × lanes × identities × checkouts) into linear singletons.
 - **2026-04-20**: §"The continuity contract" host language abstracted;
   field set restructured into a portable minimum plus optional
   epistemic fields; §Host-local context updated to reflect the

@@ -109,6 +109,18 @@ deleted and its dispatch-allowlist guard re-expressed IO-free; see
 `agent-tools-test-io-compliance.plan.md` for the remaining pre-existing test-IO
 elsewhere in agent-tools.)
 
+Open hypothesis (routed from the comms-research napkin, 2026-06-14 dedicated
+consolidation — UNVERIFIED): the ArcAngel **wing indicator went DARK while two
+agents collaborated heavily on a channel** (owner read it as "not in a channel").
+Hypothesis: the wing keys on channel **recency** and/or only re-evaluates on a
+turn-render, so it goes stale-dark during idle "holding" gaps; it should reflect
+channel **membership** (filename substring — both full names are in the channel
+filename), static, not render-recency. Needs first-hand verification against
+`resolveArcActive` **as it stands after the `da8cbd7d6` resolver/module split** (a
+later resolver correctness fix may already have addressed it). Cure direction:
+detect on membership independent of render-recency, or re-evaluate the wing on a
+cadence. Also a research-relevant collaboration-visibility failure mode.
+
 ## Participating agent identities
 
 | Platform | Model | Agent name | Role on this thread | last_session |

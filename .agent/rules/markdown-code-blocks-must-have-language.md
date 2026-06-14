@@ -57,6 +57,20 @@ When adding or editing a fenced block:
    touched file's bare fences unless the owner has explicitly scoped
    the edit away from that content.
 
+## Prose conjunctions: never a line-wrapped `+` (the MD004 autofix trap)
+
+A sibling markdown-source-authoring hazard. In prose, write the word **"and"**
+(preferred) or a bare `&` for conjunction — never `+`. A `+` meaning "and" that
+line-wraps to the start of a line parses as a `ul`-style list bullet (MD004), and a
+blind `markdownlint --fix` then silently rewrites it to `-`, **corrupting the
+sentence's meaning before commit**. (`&amp;` is wrong for raw-read agent Markdown —
+it renders as the literal five characters.) The load-bearing half is process: when
+MD004 (or any structural lint) fires on a prose line, **reword the line; never blind
+`--fix` a prose-bearing file** — review an auto-fixer's diff before trusting it. Use
+the check-only gate `pnpm markdownlint-check:root` to find these; `pnpm markdownlint:root`
+mutates. (Owner-surfaced 2026-06-14; same family as the unlanguaged-fence hazard above —
+soft guidance loses to artefact gravity, so the gate plus a reword discipline is the cure.)
+
 ## Enforcement
 
 - Markdownlint MD040 is enabled explicitly in `.markdownlint.json`.

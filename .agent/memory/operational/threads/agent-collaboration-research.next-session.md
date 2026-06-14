@@ -9,13 +9,20 @@ merge_class: index-narrative-tables
 ---
 # Next-Session Record — `agent-collaboration-research` thread
 
-> **BLIND-PASS FENCE (read this before anything below).** Agents executing the companion
-> plan's open-discovery cold read defer BOTH `§Candidate Themes` sections until their WS1
-> surprises log is recorded — see `§Resume Contract`. A start-right full-record read
-> contaminates the cold read (worked instance 2026-06-12, Katydid hunts Roost, comms events
-> `37523113` / `8cefbe36`): if your session may execute WS1, stop here and read the opener
-> prompt at `.agent/prompts/agentic-engineering/comms-corpus-research-session.prompt.md`
-> FIRST.
+> **THREAD RETIRED — comms-corpus research concluded 2026-06-14.** WS0–WS7 complete and
+> MERGED to main (PR #208, `a6b14a8a3`). The class-tiered archive-not-delete rotation is
+> ratified and homed as **PDR-094** (portable contract) + **ADR-199** (repo phenotype); the
+> research findings live in `reports/agentic-engineering/` (WS2 corpus survey, WS3 failure-mode
+> taxonomy, WS5 rotation proposal, WS6 synthesis) and the rightsizing keystone M4; theme 1
+> (substrate-pointer) graduated to the `substrate-pointer-read-as-current-state` pattern. The
+> candidate-themes catalogue below is conserved here as **research substrate** (a floor for what
+> counts as a pattern, not a live lane). This record is retired — absent from the Active/Paused
+> thread indexes. The one **standing** residual is the steady-state curator-pass obligation (the
+> coordination-tier archive-move; see §"WS7 Closeout — Conserved Findings"), wired into the
+> lifecycle skills (`consolidate-docs` step 3a + `oak-curator-pass`) — fired by retention-window
+> elapse, not by reopening this thread. (The historical WS1 blind-pass fence — defer both
+> Candidate Themes sections during a cold read — is preserved in §Resume Contract; it is moot
+> now the research is concluded.)
 
 ## Status
 

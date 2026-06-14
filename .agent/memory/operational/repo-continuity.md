@@ -83,12 +83,10 @@ surface.
   [thread record](threads/statusline-enhancements.next-session.md) is the canonical home and
   now cross-links the Oak-logo + terminal-animation research as lanes of the same thread.
 - **OWNER ROADMAP AFTER THE COMMS RESEARCH (owner direction in-session 2026-06-12, sequenced
-  "not all at once"; Director Firefly seeks Temper / `ce44ae` recording).** Next dispatch is
-  the comms-corpus research session
-  ([opener](../../prompts/agentic-engineering/comms-corpus-research-session.prompt.md) →
-  [plan](../../plans/agent-tooling/active/comms-corpus-research-and-rotation-strategy.plan.md),
-  readiness-reviewed READY-WITH-AMENDMENTS, amendments applied; owner gate: mark ready).
-  Queued behind it, owner-named: (1) organise the research's follow-ons; (2) complete naming
+  "not all at once"; Director Firefly seeks Temper / `ce44ae` recording).** The comms-corpus research is
+  COMPLETE — thread retired 2026-06-14, PR #208 merged to main (rotation homed as
+  PDR-094 + ADR-199; findings in `reports/agentic-engineering/` + rightsizing keystone M4).
+  The now-live sequence is the owner-named roadmap follow-ons: (1) organise the research's follow-ons; (2) complete naming
   v3 — now a DECISION-COMPLETE plan
   ([`agent-naming-schema-v3.plan.md`](../../plans/agent-tooling/current/agent-naming-schema-v3.plan.md),
   thread [`agent-naming`][agent-naming]; shape C decided per
@@ -300,47 +298,20 @@ not the current session-priority lane. Reactivation is owner-directed.
 | `sector-engagement` | External adoption | [record][sector] | claude-code / Fable 5 / Forge turns Basalt / dfe-data-sdk-seed-authoring / 2026-06-12 (prior: Squally / cursor / 2026-04-30) |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / codex / 2026-04-29 |
 | `cloudflare-mcp-security-and-token-economy-plans` | Cloudflare MCP | [record][cloudflare] | Glassy / codex / 2026-04-28 |
-| `agent-collaboration-research` | Comms-corpus pattern research | [record][collab-research] | **WS7 COMPLETE — thread closed, MERGED to main 2026-06-14** (`a6b14a8a3`, PR #208). Closeout owner **Whirlwind rides Ridge** (`52e1cb`, driver; succeeded Galleon calls Surf, claim `7792944a`). Landed: Phase-2 archive-move harness + **Phase-3 atomic untrack** (`255117a43` — `.agent/state/collaboration/` coordination tier untracked-by-design + the standing comms-log curation obligation propagated atomically across ADR-199/PDR-094-Inv6/session-handoff+consolidate-docs SKILLs/README; experiments relocated; kept-tracked decision-provenance = README+conversations+escalations+sidebars) + the **2,390-event archive-move RUN** (Brazier stirs Residue, pure disk hygiene, byte-preservation balanced). A release-readiness pass caught + fixed the untrack's CI blocker (`validate-collaboration-state` ENOENT on absent untracked surfaces; `356e76f59`+`7da12a82f`). RESIDUAL (steady-state, NOT thread-blocking): 1,707 coordination events past the 7d window await curator body-read disposition — a standing curator-pass obligation now wired into the lifecycle skills. Prior: Serval mends Murmur (2026-06-14) LANDED WS7 Phase-2 Task-1 — provenance IO/scan layer, `comms-provenance-check` bin, `comms-cited-events.md` digest (`3a55b62e0`, 12 cited events, fail-closed), AND owner-directed `@oaknational/no-throw-statement` ESLint rule at warn (`e36af1db0`, Result-standard front-load); adversarial sweep fixed a provenance scan-scope hole (governance docs per PDR-094 Inv-3); throw→Result retrofit is a future lane. Prior: Gull spins Stratus (2026-06-14) opened WS7 execution — de-orphaned the deep DoD into the companion plan §"WS7 Execution Contract" + repointed the Phase-1 manifest carryover (`e203791ad`); landed the Phase-2 provenance pure core (`9175acfeb`, test-expert sound, 10/10); retention windows owner-confirmed = DoD defaults. Prior: claude-code / Opus 4.8 / Clipper wakes Atoll / WS7 successor (2026-06-14) — WS7 Phase-1 landed `6d1e45f35`, #7 doc cures landed `92bf05764`; prior: claude-code / Opus 4.8 / Bluebell mends Mulch / sole lane owner — WS0–WS6 COMPLETE + first-hand verified; WS5 rotation strategy RATIFIED by owner 2026-06-13 (proposal `2026-06-13-ws5-rotation-strategy-proposal.md`, two-round adversarial review; WS6 synthesis `2026-06-13-ws6-comms-corpus-synthesis.md`; §11 re-verify `2026-06-13-reverify-outcomes-bluebell.md`; committed f20680041). NEXT: owner-directed dedicated consolidation session (author rotation PDR/ADR + M2/SC1 PDR drafts, route §5 recs) then WS7 archive-not-delete execution / 2026-06-13 (prior: Kayak herds Ballast WS0–WS4+handoff; Katydid hunts Roost WS0–WS2, Myrtle weaves Thicket WS3, Geyser stirs Bronze WS3-forward+B/D/M2 — all 2026-06-13; Fern lifts Mulch 2026-06-12; Twilit Orbiting Satellite 2026-05-29) |
 
 ## Next Safe Steps
 
-### Comms-Corpus Research — WS7 COMPLETE, thread closed 2026-06-14
+### Comms-Corpus Research — RETIRED 2026-06-14
 
-Two-agent peer pair on `feat/comms-research` (Katydid hunts Roost + Myrtle weaves Thicket),
-executing
-[`comms-corpus-research-and-rotation-strategy`](../../plans/agent-tooling/active/comms-corpus-research-and-rotation-strategy.plan.md).
-**Done**: WS0 (corpus survey, ~5,120 events), WS1 (8 blind cold reads + 8 corroboration
-verdicts, all complete; R2/R3 redone on Opus after a Fable outage), WS2 survey drafted
-(corrected: event→event threading rare by any mechanism; citation theatre rare; ~48%
-one-way reports; tag-namespace-unreachable is the causal root of the zero-lifecycle/low-tag
-findings). ArcAngel relocated to the tracked home `.agent/collaboration/rapid-comms/`
-(owner-directed early WS7 slice). Running research-notes lab-notebook live at
-`reports/agentic-engineering/2026-06-13-comms-corpus-research-notes.md`. WS0–WS6 COMPLETE + ratified
-(PDR-094 + ADR-199) + consolidated (Juno mends Plasma, 2026-06-13). **WS7 COMPLETE + MERGED to main**
-(`a6b14a8a3`, PR #208, 2026-06-14, Whirlwind rides Ridge closeout owner): Phase-2 archive-move harness +
-**Phase-3 atomic untrack** (`255117a43`) + the **2,390-event archive-move RUN** (Brazier stirs Residue) all
-landed; the standing comms-log curation obligation is wired atomically across ADR-199 / PDR-094 (Invariant 6) /
-session-handoff + consolidate-docs SKILLs / the state README. **Residual standing obligation (steady-state, NOT
-a research lane):** 1,707 coordination events past the 7d window await curator body-read disposition — the next
-archive-move RUN; verification recipe + git-independence + the `comms-archive/.gitkeep` anchor are conserved in
-the thread record §"WS7 Closeout — Conserved Findings". LANDED this session (Serval): the
-Phase-2 Task-1 provenance IO/scan module, the `comms-provenance-check` bin, and the `comms-cited-events.md` digest
-(`3a55b62e0`, 12 cited events, fail-closed) on Gull's pure core; the owner-directed
-`@oaknational/no-throw-statement` ESLint rule at warn (`e36af1db0`, Result-standard front-load); and an
-adversarial sweep that widened the provenance scan scope to governance docs (PDR-094 Inv-3, beyond ADR-199 §4).
-The deep WS7 DoD was de-orphaned by Gull into the companion plan §"WS7 Execution Contract" (now authoritative).
-Prior WS7 Phase-1 (schema relocation, validator decouple, (b) wing-fix) LANDED `6d1e45f35`; #7 ArcAngel doc cures
-LANDED `92bf05764`. **HARD GATE before Phase 3**: the repo/instance content-boundary principle + mandatory
-comms-knowledge curation must land ATOMICALLY across PDR-094 + ADR-199 + the session-handoff +
-consolidate-docs SKILLs + the Phase-3 README — else the untrack ships an invisible broken state
-(comms-log knowledge orphaned). Orientation: the deep WS7 DoD is in the machine-local contract
-`~/.claude/plans/ah-very-good-in-quizzical-whisper.md` (route its substance into the companion plan);
-the boundary principle + atomic-propagation gate live in `distilled.md` + `pending-graduations.md`.
-Deep consolidation status: the boundary-principle doctrine + skill-wiring LANDED in the Phase-3 untrack
-(`255117a43`, merged to main). The thread-scoped deep convergence (napkin >500-line rotation, full
-graduation scan, fitness, Core-trinity review) is honestly DEFERRED to a DEDICATED knowledge-curation pass
-(routed there by Anvil + Brazier; doing it under this session's load would itself be a live M2 instance —
-the thread's own central finding). Trigger: next dedicated curation session.
+Thread concluded: WS0–WS7 complete, PR #208 merged to main (`a6b14a8a3`). Retired record:
+[`threads/agent-collaboration-research.next-session.md`](threads/agent-collaboration-research.next-session.md)
+(carries the candidate-themes research substrate + the WS7 closeout conserved findings). Findings
+homed in **PDR-094** + **ADR-199**, the `reports/agentic-engineering/` WS2–WS6 synthesis, and the
+rightsizing keystone M4; the deep-convergence pass that was deferred here ran as this dedicated
+consolidation (2026-06-14). **Standing residual** (not a reopened lane): the coordination-tier
+curator-pass — ~1,707 comms events past the 7d window await body-read disposition before the next
+archive-move RUN, fired by retention-window elapse via `consolidate-docs` step 3a / `oak-curator-pass`;
+the work-list + verification recipe live in the retired record's §"WS7 Closeout — Conserved Findings".
 
 ### Agent Naming (v3 + era-pinning cure)
 
@@ -522,7 +493,6 @@ authority.
 [semantic-search]: threads/semantic-search.next-session.md
 [agentic-mechanisms-discovery]: threads/agentic-mechanisms-discovery.next-session.md
 [repo-professionalism-assessment]: threads/repo-professionalism-assessment.next-session.md
-[collab-research]: threads/agent-collaboration-research.next-session.md
 [branch-fitness]: threads/branch-fitness-and-push-cadence.next-session.md
 [statusline]: threads/statusline-enhancements.next-session.md
 [agent-naming]: threads/agent-naming.next-session.md

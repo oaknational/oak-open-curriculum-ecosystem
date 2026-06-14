@@ -44,37 +44,6 @@ reading `routed 2026-06-11` belong to the agent-tools implementation lane; items
 still reading `owner-gated` or `pending` below were confirmed at the walk as
 genuinely waiting on their named external event or trigger.
 
-## 2026-06-13 capture — Juno mends Plasma (comms-corpus research consolidation)
-
-Routed during the dedicated consolidation session for the comms-corpus research
-(WS0–WS6 complete; rotation decision ratified and homed as PDR-094 + ADR-199; M2
-and SC1 routed into the rightsizing keystone M4; the WS6 §5 recommendations routed
-to their consumer plans). The one finding below has no fired trigger and is held
-here. Verified absent from this register before adding.
-
-- **The two-reader mutual-first-hand-correction loop is a reliability MECHANISM,
-  not a diligence habit — corpus-scale evidence for PDR-089.** The research's
-  single most load-bearing methodological finding (WS6 synthesis §1): treating
-  corpus events as input-to-verify (ground every load-bearing claim by reading the
-  cited event first-hand) plus running an independent first-hand reader over one's
-  own output caught errors a single pass would have ratified, **in both
-  directions** — a phantom "93.7% dangling-citation" metric, an over-accepted T7
-  count (5→4), a reboot-confounded swap finding (retracted), and several of the
-  researchers' *own* convenient claims. This is corpus-scale worked evidence for
-  PDR-089 (the Conservation Reflex — frame-capture recurs at every stage; the cure
-  is an external check) and sharpens it with a concrete mechanism: build the
-  external check IN (a second independent FH reader), do not rely on single-pass
-  diligence; the most dangerous claim is a convenient causal one that supports the
-  claimant's thesis. **Reconcile, do not mint:** the likely home is a PDR-089
-  worked-instance citation or a small amendment naming the mutual-FH loop as the
-  external-check phenotype for research/verification work; overlaps
-  `verify-dont-trust` and the auto-memory `first-hand-means-me`. Conserved here so
-  the doctrine-candidacy survives beyond the WS6 report.
-  `[captured: 2026-06-13 | source: 2026-06-13-ws6-comms-corpus-synthesis.md §1 +
-  Kayak handoff §1 | target: PDR-089 worked-instance citation or amendment (the
-  mutual-FH external-check phenotype) | trigger: owner direction OR the next
-  reviewer-doctrine / verification-doctrine pass | size: S | status: pending]`
-
 ## 2026-06-12 capture — Thyme wakes Canopy (dedicated consolidation; napkin-rotation routes)
 
 Routed during the 2026-06-12 napkin rotation. Each verified absent from this
@@ -2065,31 +2034,6 @@ feedback (sidebar shape is the lightest); composes with `coordinator-role-thresh
   committed, OR the next `.husky` / `build-system.md` gate-coverage pass.
 - **status**: pending
 
-## Comms-corpus research — deep-consolidation graduation candidates (Bluebell mends Mulch)
-
-- **captured-date**: 2026-06-13
-- **source-surface**: comms-corpus research lane closeout — the WS6 synthesis
-  (`reports/agentic-engineering/2026-06-13-ws6-comms-corpus-synthesis.md` §5 routed
-  recommendations), the WS5 rotation proposal (owner-ratified 2026-06-13), and the WS3
-  failure-mode taxonomy. Routed forward to the owner-directed dedicated consolidation session
-  (the thread record next-session lists the same; this is the canonical register entry).
-- **graduation-target**: three distinct artefacts the dedicated consolidation authors —
-  (1) **DUE (owner ratified):** a rotation **PDR** (portable contract: five invariants,
-  class-tiers, the §4.3 absorption gate, archive-not-delete, inline-quote-first + tracked
-  cited-events digest + pre-archive-move guard) + an **ADR** (repo phenotype: paths,
-  curator-pass cadence, gitignore, guard script) — also WS7's mandated-first step;
-  (2) **M2** (learning-loop-doesn't-fire-under-pressure) → a PDR on active-vs-passive
-  enforcement (`passive-guidance-loses-to-artefact-gravity`), carrying the self-reference
-  corollary that deep consolidation under load is itself an M2 instance → defer to a fresh
-  session when capture-first has already conserved the signal;
-  (3) **SC1** (reply/lifecycle/addressing fields unreachable from the authoring CLI) →
-  rightsizing-M4 enforce-or-remove + `comms-event-write-integrity` (wire
-  `comms reply --to-event-id` → `in_response_to`, or remove the dead affordances).
-- **trigger-condition**: the owner-directed dedicated consolidation + WS7 session (next agent).
-- **status**: due (rotation PDR/ADR — owner-ratified) / pending (M2, SC1 — dedicated
-  consolidation drafts them). Note: this register is in the critical fitness zone (2035+
-  lines); the dedicated consolidation is its drain, not a trim trigger.
-
 ## 2026-06-14 capture — Clipper wakes Atoll (WS7 content-boundary principle + atomic propagation)
 
 Verified absent from this register before adding.
@@ -2129,44 +2073,6 @@ Verified absent from this register before adding.
   Inputs ready: the gap ledger in `current/skills-standardisation-and-adapter-generator.plan.md`
   §Reality Reconciliation; friction F-37. Two enhancement briefs already authored (oversized-core
   decomposition; skills eval harness) sit in `agent-tooling/future/`.
-
-- **Threads are multi-lane containers — generalise the continuity model past a singular "Next safe step".**
-  `captured-date`: 2026-06-14. `source-surface`: owner correction during the skills-planning closeout
-  (Margay wakes Whisper) — stated as **generally applicable to all threads**, not a one-record fix.
-  `graduation-target`: a continuity-doctrine amendment establishing that a thread holds multiple concurrent
-  arcs/lanes, each carrying its own state + branch + pickup trigger (active OR deferred), independently
-  pickup-able in parallel by different checkouts, separate agents, or collaborators — there is no single
-  thread-level next-step. Affected-reader surfaces that currently encode the singular assumption and MUST be
-  reconciled in one tranche (atomic propagation — a doctrine change absent from the operational surfaces
-  agents read is an invisible half-broken state): `.agent/skills/session-handoff/SKILL-CANONICAL.md` step 3
-  lane-state field list (singular `Next safe step`); `.agent/memory/operational/threads/README.md`
-  (thread-record convention + template, ~line 154); `.agent/directives/continuity-practice.md`; and the
-  PDR home (a clause on PDR-027 threads/sessions or PDR-011 continuity-surfaces, or a small dedicated PDR —
-  decide at authoring). Existing thread records then reconcile to a per-lane shape as they are next touched
-  (not a mass rewrite). `trigger-condition`: owner directs the doctrine tranche, OR the next dedicated
-  consolidation pass. `status`: due (owner-confirmed general principle 2026-06-14; awaiting authoring slot).
-  Worked instance: the `agentic-engineering-enhancements` record gained a "Concurrent lanes" framing
-  (Lane A feedback-mechanism active; Lane B skills review deferred) 2026-06-14 as the first per-lane example.
-  Meta-pattern noted (napkin): repeatedly collapsing the concurrent continuity graph
-  (threads × lanes × identities × checkouts) into linear singletons.
-
-- **Prose `+`-for-"and" misparses as a list bullet at line-wrap (MD004) — authoring convention plus
-  autofix-discipline candidate.** `captured-date`: 2026-06-14. `source-surface`: owner aside during the
-  Gull spins Stratus → Serval mends Murmur WS7 handoff closeout (owner states it "happens a lot"). Worked
-  instance: a wrapped prose line beginning with a `+` then a space (the `+` meant "and") tripped
-  MD004/ul-style, and a blind
-  `markdownlint --fix` silently rewrote the `+` to `-`, corrupting the sentence's meaning before commit.
-  `graduation-target`: a lightweight markdown-authoring convention (a clause, NOT a new always-loaded rule —
-  skill/directive budget, `new-rule-vs-pdr-clause`) in two paired parts. (1) AUTHORING — in prose use the
-  word "and" (preferred) or a bare `&` for conjunction, never `+`, so a line-wrap that lands the conjunction
-  at line-start cannot be read as a `+` / `-` / `*` list bullet; `&amp;` is WRONG for raw-read agent markdown
-  (it renders literally as the five characters "&amp;"). (2) PROCESS, the load-bearing half — when MD004 (or
-  any structural lint) fires on prose, REWORD the line; never blind `markdownlint --fix` on prose-bearing
-  files, because the autofix changes semantics silently. Generalises: review an auto-fixer's diff before
-  trusting it (sibling of trust-the-checker-after-a-negative-control and the literal-control-character source
-  hazard in `distilled.md`). `home`: a clause near `markdown-code-blocks-must-have-language` (the
-  markdown-source-authoring rule family) or a markdown style-guidance doc — decide at authoring.
-  `trigger-condition`: owner directs, or the next consolidation pass. `status`: due (owner-surfaced 2026-06-14).
 
 ## 2026-06-14 capture — Whirlwind rides Ridge (WS7 closeout + Brazier's loss-scan §6)
 

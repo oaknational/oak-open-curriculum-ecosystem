@@ -19,6 +19,21 @@ pdr_kind: governance
 (knowledge curation as autonomic learning; the principle this PDR
 operationalises).
 
+## Amendment Log
+
+- **2026-06-14** (comms-research closeout consolidation; PDR still Proposed):
+  **The per-pass log's disposition-pointer surface is superseded by**
+  [`permanent-doc-is-the-consolidation-record`](../../rules/permanent-doc-is-the-consolidation-record.md).
+  The curator's record is the commit plus the homed substance — git history is the
+  pass-navigation index — NOT a per-pass file of "surfaces surveyed → disposition" and
+  "concept → home" pointers, which are exactly the disposition/provenance ledger that rule
+  forbids. Recent curator passes already followed the rule (no log written). The
+  §"Per-pass log contract" below is retained as historical proposal context but is **not
+  operative**; the `curator-pass` SKILL's §Per-Pass Log is superseded in step (its step-prose
+  references the superseded surface and aligns to a commit-plus-broadcast record on next
+  use). If pass-coverage tracking ever
+  proves needed in use, it is a substrate state/fitness concern, not a disposition ledger.
+
 ## Context
 
 PDR-072 names knowledge curation as one of two real output-accounting

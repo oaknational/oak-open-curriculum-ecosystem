@@ -86,6 +86,29 @@ Surfacing is for (2) and (3). Inflating (1) into a debug spiral or a question is
 the failure mode, and the tell is reaching for a terminal to investigate *why*,
 or drafting a question, before asking what is actually blocked.
 
+## Fluency Is a Warning, Not a Confirmation
+
+The dual of friction. Where friction is information you are tempted to *under*-read,
+fluency — a move or justification that arrives *smoothly* — is information you are tempted
+to *over*-trust. The easier a justification arrives, the less it was actually grounded:
+smoothness is precisely what bypasses the situational check. So treat a fluent move as the
+**trigger to ground the situational fact first**, not as confirmation to proceed.
+
+Fluency wears ordinary clothes: a local convention obvious to match ("match the surrounding
+code"), an owner statement that seems to license a shortcut ("they said *only agent* → stand
+down the watcher"), a claim that feels true ("commits pushed" — said before the push), an "of
+course X" framing. None of these are ignorance — a smooth frame arrived and was acted on
+before the situation it presupposes was checked. Ground that situation before acting: *was the
+convention ever ratified? is the precondition constitutive regardless of the stated situation?
+is the claim true right now?*
+
+Naming this does not inoculate against it (the conservation reflex — PDR-089 — recurs even
+while you document it): a fluent move under context pressure overrides a passively-held lesson.
+So the cure is structural, not vigilance — the fluent arrival is *itself* the tripwire to
+re-ground, and the smoother the move, the harder the check must be. See
+[`passive-guidance-loses-to-artefact-gravity`](../memory/active/patterns/passive-guidance-loses-to-artefact-gravity.md):
+a passive lesson needs an active firing gate.
+
 ## Cure Shape — Structural, Not Doc-Patch
 
 When metacognition surfaces a defect whose root cause is
