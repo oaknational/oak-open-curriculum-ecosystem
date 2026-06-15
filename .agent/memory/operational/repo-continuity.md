@@ -20,24 +20,27 @@ surface.
 
 ## Current State
 
-- **DEDICATED CONSOLIDATION IN PROGRESS — handed off mid-session (2026-06-15,
-  Europa binds Perihelion).** Owner-gated dedicated knowledge-curation goal (Stop
-  hook): all drainable buffers empty, zero pending-graduations, zero open-questions,
-  insight conserved. **Landed (7 commits on `docs/planning-and-validation`,
-  `9e8c943e5`→`b3bf2f83f`):** open-questions register drained to EMPTY (all 9
-  homed); four owner-approved Core PDRs graduated + reviewed (PDR-078 §4 heartbeat
-  consumer-absent exemption; PDR-082 → Adopted; PDR-098 doctrine-traction
-  reconciliation; PDR-099 change-rate governor) + the wrapped-exit-codes
-  verify-dont-trust clause; the statusline lane (Hearth) feature + docs committed
-  under owner-directed full-tree ownership. **Remaining (next session):** the bulk
-  of `pending-graduations.md` (~68 items — agent-tools routing, ~30 owner-gated
-  watches, Team-Autonomy Director primitives, standalone items), then napkin +
-  distilled rotation, then a residual-fitness re-read and closeout. **Pickup
-  surface = the `napkin.md` "dedicated consolidation IN-FLIGHT (Europa binds
-  Perihelion)" baton** (committed homes, load-bearing cautions, the
-  disposition method). Plan: `~/.claude/plans/nested-wiggling-lollipop.md`.
-  Curation judgement first-hand; verify a lesson's home before any withdrawal
-  (Tempestuous: 15/18 "covered" claims were false).
+- **DEDICATED CONSOLIDATION IN PROGRESS — relay handoff to Snapper binds Coral
+  (2026-06-15; Europa binds Perihelion → Rigel binds Meridian → Snapper binds
+  Coral).** Owner-gated dedicated knowledge-curation goal (Stop hook): all
+  drainable buffers empty, zero pending-graduations, zero open-questions, insight
+  conserved. **Landed (9 commits on `docs/planning-and-validation`,
+  `9e8c943e5`→ batch 1):** open-questions drained to EMPTY (all 9 homed); four
+  owner-approved Core PDRs graduated + reviewed (PDR-078 §4; PDR-082 → Adopted;
+  PDR-098; PDR-099) + the wrapped-exit-codes verify-dont-trust clause; statusline
+  lane (Hearth) committed; **batch 1 (`40b5750aa`): three uncovered agent-tooling
+  items migrated to `agent-tooling/frictions-register.md` (F-38/39/40) and drained
+  from pending-graduations.** **Remaining (Snapper continues):** the bulk of
+  `pending-graduations.md` (~64 items — Class R agent-tools routing, the ~40
+  Class-O single-instance forks, Team-Autonomy primitives, standalones), then
+  napkin + distilled rotation, then residual-fitness re-read and closeout.
+  **Pickup surface = the `napkin.md` "HANDOFF BATON → successor consolidator"
+  block** (full R/W/G/O classification, verified route-homes, the owner "delegate
+  with reported verdicts" Class-O policy, the Team-Autonomy disposition shape, the
+  cautions). Plan: `~/.claude/plans/nested-wiggling-lollipop.md`. Curation
+  judgement first-hand; verify a lesson's home before any withdrawal (Tempestuous:
+  15/18 "covered" claims were false); audit your own grep/glob filters with a
+  positive control.
 - **FITNESS-VALIDATOR SCOPING + DISPOSITION-CATEGORY GROUPING — landing on
   `docs/planning-and-validation` (2026-06-15, Peregrine turns Airstream).** The
   practice-fitness and fitness-vocabulary walkers now exclude foreign git
