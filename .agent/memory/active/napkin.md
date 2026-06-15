@@ -139,3 +139,24 @@ dedicated doc for high-volume multi-wave work). Method learnings worth keeping i
   (what we care about, why, how we attempt value) + measured by the org — not instrumented
   in-repo (we lack that capability). (3) Forward order: align-on-impact → value-stream
   redundancy/gap → execution-spine. Homed: survey report §14/§15 + the thread record.
+- **A long, high-volume analytical session drifts toward NARROWING and OVER-CLAIMING under
+  its own momentum — this one needed ~5 owner re-framings to stay broad and calibrated.** The
+  arc: a broad whole-estate survey got captured by the newest, most-concrete artefact (a
+  launch-readiness report), narrowed onto its minutiae, and over-stated its own conclusions —
+  each drift corrected by the owner, none self-caught. The owner's corrections WERE the
+  breadth-and-calibration force. TELL: in multi-turn deep analysis, self-apply the checks the
+  owner kept supplying, on a cadence — *am I still answering the BROAD question at the right
+  altitude? has the newest / most-concrete input captured the frame? am I over-claiming?* —
+  instead of waiting for the correction. This is the session's deepest lesson about my own
+  working pattern.
+- **Adversarially verifying my OWN synthesis was the highest-value move of the session, not
+  rigour theatre — it overturned 4 of 6 confident claims (overstated / misframed).** Blind
+  independent readers corroborated the core; dedicated refuters dented the edges I had stated
+  too strongly. Self-synthesis reliably over-states. TELL: when I produce a confident synthesis,
+  run an independent + adversarial pass BEFORE presenting it as settled, and report what it
+  DENTS, not only what it confirms. Sibling: [[first_hand_means_me_not_subagents]].
+- **A comprehensive, validated MAP is valuable even when it re-derives a known verdict — but
+  do not sell re-derivation as discovery.** The refuters' sharpest point: much of the strategic
+  diagnosis already lived in the repo; this session's *additive* value was breadth +
+  quantification + independent cross-validation, not a novel insight. Hold that honesty when
+  reporting; it is the antidote to the over-claiming above.
