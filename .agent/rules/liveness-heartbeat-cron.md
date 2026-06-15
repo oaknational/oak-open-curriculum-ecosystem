@@ -8,12 +8,13 @@ reaches the team. Both are required preconditions of the full protocol
 (PDR-078, Accepted); their *value* is context-contingent per
 [`collaboration-is-value-contingent`](collaboration-is-value-contingent.md).
 The incoming-awareness watcher is near-universally justified. The outgoing
-heartbeat's value depends on a consumer (async retirement-detection):
-PDR-082 (Proposed) already scopes it out in n=2 owner-visible mode, and
-whether that generalises to any live-owner-conducted session is a working
-hypothesis on PDR-082's second-instance path — not a standalone exemption
-added here (PDR-078 §"Forward-extensible exemption list" forbids pre-empting
-the contract with hypothetical classes).
+heartbeat's value depends on a consumer (async retirement-detection). As of
+2026-06-15 this is a graduated PDR-078 §4 exemption — the **consumer-absent
+exemption**: suspend heartbeat emission when no consuming peer is observable on
+the registry (a solo session, or a live owner/coordinator detecting retirement
+directly from ground-truth surfaces), and resume the moment a consuming peer
+appears, the conductor goes async, or the cast rotates. PDR-082 (Adopted) is
+the n=2 owner-visible special case of this exemption.
 
 The portable contract — cadence, threshold, redundancy rule, exemption
 set, and the structural cure they compose — is authoritatively specified
@@ -212,6 +213,15 @@ not a retirement signal:
   semantics. The dispatching agent MUST emit an explicit
   heartbeat-tagged event if the dispatch window exceeds 8 minutes (one
   full silence-to-offline transition).
+- **Consumer-absent exemption** (PDR-078 §4, graduated 2026-06-15):
+  categorically different from the three above — it suspends heartbeat
+  *emission itself*, not the threshold, because it fires on consumer-absence.
+  When no consuming peer is observable on the active-claims registry (a solo
+  session, or a live owner/coordinator detecting retirement directly from
+  git / the registry / `gh` rather than from the heartbeat stream), the cron
+  need not run at all. It re-arms the moment a consuming peer appears, the
+  conductor goes async, or the cast rotates. n=2 owner-visible mode (PDR-082,
+  Adopted) is the special case where chat-visibility makes the consumer absent.
 
 ## Worked Instance
 

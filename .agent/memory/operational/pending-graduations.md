@@ -455,41 +455,6 @@ generalisation):
   pattern record at second consumer | status: 2a landed 2026-06-07; 2b owner-approved full pass; WS1
   next]`
 
-## 2026-06-06 capture — Pearly Sailing Fjord (value-contingency rule)
-
-- **Graduate the live-owner-conductor heartbeat exemption properly.** This session homed
-  "collaboration functionality is value-contingent" as a rule
-  (`collaboration-is-value-contingent.md`, `da25dcda`) but did NOT add a heartbeat
-  exemption to `liveness-heartbeat-cron` — PDR-078 (Accepted) §"Forward-extensible
-  exemption list" forbids pre-empting the contract with hypothetical classes and requires
-  an observable opening event. The owner-conducted heartbeat drop is currently a working
-  hypothesis on PDR-082's (Proposed, n=2) second-instance path.
-  - `captured-date`: 2026-06-06
-  - `source-surface`: `.agent/rules/collaboration-is-value-contingent.md` +
-    `.agent/rules/liveness-heartbeat-cron.md`
-  - `graduation-target`: PDR-082 promotion (second-instance evidence) → then a ratified exemption
-    class in PDR-078 §4
-  - `trigger-condition`: a second clean owner-conducted instance validates the consumer-presence
-    generalisation (this session — n=3, owner-conducted — is candidate first-such evidence); OR
-    owner direction. **Candidate second instance landed 2026-06-12 (Firefly seeks Temper
-    Director closeout, napkin loss-scan)**: the Director heartbeat cron ran a whole
-    owner-present session with ZERO observed consumers — every stall/retirement judgement
-    used ground-truth reads (git, gh, registry), never peers' heartbeats; BOTH implementer
-    lanes ran without heartbeat crons and closed out clean. Trigger arguably FIRED —
-    surface at the next owner walk.
-  - `status`: owner-approved for graduation 2026-06-15 (bounded ripeness pass, Halley) — second
-    instance confirmed (Director zero-consumers session, 2026-06-12); promote PDR-082 + add the
-    heartbeat-exemption class to PDR-078 §4 in a focused Practice-governance session (careful Core
-    authoring, not rushed under one session's budget).
-- **Consider a portable value-contingency PDR.** The principle is currently a rule citing
-  PDR-082/080/066. If a third surface needs the *portable contract* form (beyond this
-  repo's rule), a PDR parenting PDR-082/080/066 is the home.
-  - `captured-date`: 2026-06-06
-  - `source-surface`: `.agent/rules/collaboration-is-value-contingent.md`
-  - `graduation-target`: new PDR (portable value-contingency contract)
-  - `trigger-condition`: owner direction OR a third consumer needing the portable form
-  - `status`: pending
-
 ## 2026-06-06 capture — Dusky Dimming Candle (D6 plan dual-review)
 
 - **Re-adjudicate premise-bound reviewer verdicts when a peer reviewer overturns the
@@ -789,22 +754,6 @@ the repaired dedicated docs consolidation pass. These items were removed from
 `distilled.md` only after a durable route was verified here or in an existing
 home.
 
-- **Rule-traction gap needs an action-time structural interrupt.**
-  `[captured: 2026-05-31 | source: distilled 2026-05-14..28 / historical synthesis A1 |
-  target: pdr:doctrine-adoption-lag-or-action-time-structural-interrupt |
-  trigger: owner direction or next Practice-Core doctrine pass that reconciles
-  this with metacognition pre-action ratification | size: M | status: design lane opened 2026-06-04
-  (Hidden Hiding Dusk) ->
-  `action-time-structural-interrupt-design-space.plan.md` (under
-  `.agent/plans/agentic-engineering-enhancements/future/`)
-  (general doctrine-traction frame + three-axis reconciliation; mechanism exploration deferred to
-  closure-pressure-design-space)]`
-  The lesson is stable and cross-session, but promotion must reconcile the
-  structural-interrupt shape with existing metacognition and immune-system
-  doctrine rather than minting a duplicate rule. **Owner-approved for graduation
-  2026-06-15 (bounded ripeness pass, Halley): author the doctrine PDR from the
-  design-space plan in a focused Practice-governance session — careful Core
-  authoring reconciled with the existing doctrine, not a rushed mint.**
 - **Substrate alignment is Practice design, not prose reinforcement.**
   `[captured: 2026-05-31 | source: distilled 2026-05-25..26 / historical synthesis A2 |
   target: pdr:substrate-alignment-as-practice-design |
@@ -1902,63 +1851,6 @@ Owner gate: decide whether this one-instance substrate-write staging-race watch
 should remain live until a second race clarifies the durable cure, or be
 withdrawn because current commit-window and claim rules already cover the known
 portion.
-
-## Collaboration Mode Gate
-
-## n=2 coordination efficiency
-
-[captured: 2026-05-25 | source: owner-direction | target:
-multi:pdr:PDR-082-n2-collaboration-mode+skill-amendment:start-right-team-§1 |
-trigger: owner-direction | size: M | status: owner-gated]
-
-**Partial graduation 2026-05-25** (Stormy Surfing Dock `2a7b65`,
-post-handoff consolidation pass): first-stage durable home authored at
-[`.agent/practice-core/decision-records/PDR-082-n2-collaboration-mode.md`](../../../practice-core/decision-records/PDR-082-n2-collaboration-mode.md)
-— Proposed first-draft (uncommitted in working tree at handoff close;
-Fiery marshal handoff cycle to sweep). Second-stage graduation = SKILL
-`start-right-team` §1 amendment, owner-gated on PDR-082 ratification
-(Proposed → Adopted via second n=2 session validation per PDR-026
-falsifiability). Route choice: PDR (Practice-governance, portable)
-over Fiery's initial ADR framing — per PDR-079 (PDR-vs-ADR portability
-distinction, graduated 2026-05-25), n=2 mode is a Practice protocol
-question, not an architecture question for this repo. ADR target
-dropped from the metadata accordingly.
-
-**Substance**. Owner direction 2026-05-25T~15:03Z: "massively tighten coordination
-efficiency for teams of two agents, n=2". The Fiery+Stormy n=2 coordination on PR #115
-took 6+ comms events (directed acks, broadcast acks, tree-green, kind-corrections,
-standby heartbeats) to land 2 sequenced commits. Each event added context-budget tax +
-watcher-tick latency. Total coordination ceremony cost dwarfed the actual fix work.
-
-**Failure mode named: n=2 over-coordination**. n=2 is the smallest peer-pair case and
-should be the LIGHTEST coordination shape (peer-sidebar default per existing feedback
-`peer-sidebar-beats-coordinator+helpers`); instead it carried full multi-agent ceremony
-designed for n≥3 windows. Comms-event count growth was N (each fix gets its own
-broadcast + ack + sync) instead of O(1) (single coordination event).
-
-**Cure shape (structural, not doc-patch)**:
-
-1. **n=2 minimal-coordination contract** (target: SKILL `start-right-team` §1 amendment
-   and ADR): when n=2 confirmed at team-start, agents declare "I do X, you do Y" in ONE
-   coordination event; no further coordination until work-product lands or genuine
-   dependency emerges. No ack-the-ack. No tree-green broadcast (peer polls git +
-   active-claims directly).
-2. **Independent-ship default for n=2**: each agent ships their own slice independently;
-   sequencing only required when files actually overlap. Commit-queue handles
-   serialization at the index/head level.
-3. **Direct git interaction beats comms-event coordination for n=2**: for commit
-   sequencing in n=2, agents read each other's commit-queue intents directly; no
-   separate broadcast needed.
-4. **Communication budget**: n=2 sessions should target ≤3 inter-agent comms events per
-   work-cycle (declaration + final-landing + closeout); anything more is ceremony.
-
-**Falsifiability**: next n=2 session lands equivalent paired commits with ≤3 inter-
-agent comms events total (vs the 6+ this cycle used).
-
-**Cross-references**: composes with existing `peer-sidebar-beats-coordinator+helpers`
-feedback (sidebar shape is the lightest); composes with `coordinator-role-threshold`
-(n≤3 is peer-collaboration default; n=2 is the lightest case); composes with PDR-082
-(n=2 collaboration mode, drafted by Stormy Surfing Dock 2026-05-25 on this substrate).
 
 ## Reviewer-brief scope protection cites numbered ratified decisions only
 

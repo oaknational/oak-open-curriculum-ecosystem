@@ -4,8 +4,9 @@ pdr_kind: governance
 
 # PDR-082: n=2 Collaboration Mode (Lightweight Protocol for Two-Agent Teams)
 
-**Status**: Proposed (first draft)
+**Status**: Adopted
 **Date**: 2026-05-25
+**Adopted**: 2026-06-15
 **Related**:
 [PDR-027](PDR-027-threads-sessions-and-agent-identity.md)
 (agent identity tuple — still required at n=2);
@@ -127,6 +128,18 @@ below the overhead cost:
 - **Cross-agent acknowledgement ≡ chat-relay or single observed
   event.** Two-event ack-pairs collapse to one event (or zero, if
   the owner relays).
+- **Independent-ship default + a communication budget.** Each agent
+  ships its own slice independently; sequencing is required only when
+  file scopes actually overlap (the commit-queue serialises at the
+  index/head level). The concrete budget from the founding instance:
+  an n=2 work-cycle should target **≤3 inter-agent comms events**
+  (declaration, final-landing, closeout) — more than that is ceremony.
+  This is the sharper, measurable form of §Falsifiability assertion #1.
+  Note: the original owner-direction framing also proposed dropping the
+  tree-green broadcast (peer polls git directly); this PDR deliberately
+  **retains** substantive cross-agent broadcasts (tree-green, push-landed,
+  gate-state, merge-ready, blocker) because they carry information the
+  owner-chat does not — the refined retain-set supersedes that raw point.
 
 ### Trigger / exit
 
@@ -281,13 +294,41 @@ Second-instance evidence path:
    inline-section shape (one canonical entry, mode-section
    within).
 
-## Notes for the second-instance trigger
+## Adoption (2026-06-15)
 
-This first draft is authored at first-instance observation
-(2026-05-25 Stormy + Fiery PR 115 merge-prep session). Per the
-substance-preservation discipline named in
-`feedback_pending_graduations_is_buffer_not_dump`, the PDR is the
-substrate-preservation surface, not pending-graduations. The
-falsifiability section above is the second-instance trigger; this
-PDR remains Proposed until a second n=2 session either validates
-or refines the mode.
+Adopted at the 2026-06-15 dedicated consolidation walk (owner-approved).
+The mode's dominant cost — the heartbeat overhead the owner flagged at
+first instance — rests on the *consumer-presence* value-contingency of
+heartbeats. That deeper variable (this PDR scoped it from *team-size* to
+*consumer-presence* as a hypothesis) graduated this session to
+[PDR-078](PDR-078-liveness-heartbeat-contract.md) §4 as the **consumer-absent
+exemption**, on two instances: the PR-115 n=2 session below and a Director
+session whose heartbeat cron ran a whole owner-present window with zero
+observed consumers. n=2 owner-visible mode is now the *special case* of that
+general exemption (chat-visibility makes the async-detection consumer
+absent); the heartbeat-drop is contract-backed, not a standalone hypothesis.
+
+**Scope of this adoption (honest residual).** Adoption rests on the
+consumer-presence generalisation: the heartbeat-overhead reduction — the cost
+the owner flagged at first instance and the mode's dominant one — is now
+contract-backed by the graduated PDR-078 §4 exemption on two distinct
+instances. The mode's *non-heartbeat* reductions (collapsed directed-event
+ack-pairs, dropped 120s message-sweep, single-broadcast team-start) are carried
+as the adopted mode's lightest-coordination default because they follow from the
+same value-contingency principle at n=2 — but they remain **first-instance and
+falsifiable** per §Falsifiability assertions #2 (chat-visibility safely replaces
+liveness substrate) and #3 (atomic third-agent re-entry), neither of which yet
+has a second worked instance. Adopted status ratifies the mode as the default
+shape at n=2; it does not retire those two falsification watches, which a future
+n=2 (and 2→3) session still tests. The required SKILL consequence — the
+`start-right-team` n=2-mode section — lands with this adoption.
+
+## Notes (first-instance authoring)
+
+This PDR was first drafted at first-instance observation (2026-05-25 Stormy +
+Fiery PR 115 merge-prep session). Per the substance-preservation discipline
+named in `feedback_pending_graduations_is_buffer_not_dump`, the PDR — not
+pending-graduations — is the substrate-preservation surface. The
+falsifiability section above recorded the second-instance trigger; the
+consumer-presence generalisation reached two instances and graduated as
+described under Adoption.

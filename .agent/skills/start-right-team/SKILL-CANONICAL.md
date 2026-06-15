@@ -25,6 +25,24 @@ remains background.
   per §Closeout Contract "Team member closeout" (the boundary-scoped
   synthesis, not the full handoff workflow).
 
+### n=2 mode (overlay on team-member modes)
+
+When the team has exactly two active participants both visible in the same
+owner-chat surface (or one chat-relayed via the owner) and no third-agent join
+is in scope, activate **n=2 collaboration mode** per
+[PDR-082 (Adopted)](../../practice-core/decision-records/PDR-082-n2-collaboration-mode.md),
+which is the doctrine source for the full trigger / drop-set / retain-set / exit.
+In short: **drop** the heartbeat cron and periodic/standby heartbeats (the
+PDR-078 §4 consumer-absent exemption — at n=2 chat-visibility makes the
+async-detection consumer absent), the directed events between the two agents,
+the 120s message-sweep, and the multi-section team-start ceremony (one concise
+registration broadcast suffices); **retain** identity preflight, the
+all-channels comms watcher, claims on substantive source/doctrine edits,
+commit-queue intents, the substantive cross-agent broadcasts (tree-green,
+push-landed, gate-state, merge-ready, blocker), mid-cycle retirement, and
+closeout broadcasts. A third agent joining re-activates the full protocol
+atomically; declare the mode in your team-start broadcast.
+
 ## Goal
 
 Run the same shared repository foundation as `start-right-quick`, then add the
@@ -89,8 +107,10 @@ per
 [`collaboration-is-value-contingent`](../../rules/collaboration-is-value-contingent.md):
 the incoming-awareness monitor is near-universally justified and must not be
 mis-filed as ceremony and skipped, while the outgoing heartbeat's value
-depends on a consumer — PDR-082 (Proposed) scopes it out when liveness is
-owner-visible. Run both unless that scope-reduction applies.
+depends on a consumer — the PDR-078 §4 consumer-absent exemption suspends it
+when no consuming peer is observable (a solo session, or a live owner/coordinator
+detecting retirement directly), with n=2 owner-visible mode (PDR-082, Adopted)
+the special case. Run both unless that exemption applies.
 
 1. **Start the all-channels comms monitor** (see
    [`.agent/rules/comms-all-channels-watcher.md`](../../rules/comms-all-channels-watcher.md)

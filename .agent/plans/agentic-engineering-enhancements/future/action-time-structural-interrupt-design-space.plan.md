@@ -38,6 +38,15 @@ isProject: false
 # Action-Time Structural Interrupt — Doctrine-Traction Design Space
 
 **Status**: NOT DECISION-COMPLETE. Future-collection design space.
+**Reconciliation graduated**: 2026-06-15 — the three-axis (firing × detection ×
+response) reconciliation and the located gap (the empty
+mechanical-firing + cognitive-detection + advisory-response quadrant) are now
+ratified in portable form as
+[PDR-098](../../../practice-core/decision-records/PDR-098-doctrine-traction-firing-detection-response.md).
+This plan continues as the **mechanism lane**: its remaining job is the
+semantic-pathogen inventory (t2), the empty-quadrant crux (t3), and the
+closure-pressure coordination decision (t5). PDR-098 deliberately leaves the
+mechanism open and points here.
 **Created**: 2026-06-04
 **Authoring session**: Hidden Hiding Dusk (claude / Opus 4.8 / `38dbaf`), dedicated consolidation / owner-directed graduation walk.
 **Owner-greenlit graduation**: the `action-time-structural-interrupt` / `doctrine-adoption-lag` register item in [`pending-graduations.md`](../../../memory/operational/pending-graduations.md) (the 3rd owner-greenlit graduation of the 2026-06-04 Arboreal owner-walk; ledger: [`curator-passes/2026-06-04-arboreal-sprouting-branch-curation.md`](../../../memory/operational/curator-passes/2026-06-04-arboreal-sprouting-branch-curation.md)).
