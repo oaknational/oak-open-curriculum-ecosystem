@@ -148,6 +148,57 @@ Pick up by re-grounding (`/oak-start-right-team`), reading this baton, then cont
   is handed, grounded, and persistent, self-start — don't convert a cadence signal into a
   permission checkpoint. Sibling of run-the-thing-don't-flag-the-gap.
 
+### SNAPPER PROGRESS (0beea7, continuation of the baton — owner away, autonomous)
+
+Picked up Rigel's baton cleanly (handoff event + heartbeat-end verified; claim
+e6e8dfba archived; tree pushed). Fresh curator claim opened on the buffers.
+
+**Landed (4 commits on `docs/planning-and-validation`):** `775e47c40`,
+`ead1f49c8`, `bbdbc89a4`, `1a5c81040`. **19 register items drained**
+(1900→1573 lines). **All agent-tools R items now migrated to the frictions
+register as F-41..F-58** (the baton's ~11 R items + my 4 session frictions +
+Rigel's snags + Legacy/standalone tooling items). open-questions re-verified
+EMPTY first-hand.
+
+- **W (withdrawn, home verified first-hand):** stale-narrative-fact, zero-hit
+  absence claims, routing-declared-move-not-landed — all covered by
+  verify-dont-trust (§status-surfaces-are-pointers, §verification-applies-to-
+  your-own-verification, §recompute-against-current-state) + distilled
+  compose-discipline.
+
+**STILL TO DRAIN (the honest residual — needs the owner present OR a reviewed
+cycle; do NOT mint hollow doctrine to force zero):**
+
+- **~50 genuine owner-gated single-instance doctrine/pattern candidates**
+  (Legacy Backlog remainder, distilled continuation/final gates, source-buffer
+  gates, Shaded, Thyme remainder, Briny EEF, Dusky, Arboreal, negation-contrast,
+  PreToolUse-hooks). Each is "graduate-now vs confirm-gated" — the owner-walk
+  decision (consolidate-docs step 7). They are conserved in-register; minting
+  doctrine from one instance is forbidden, so they stay until the owner walks
+  them or a second instance fires. **This is why the register will not hit
+  literal zero with the owner away** — the honest, insight-preserving outcome.
+- **G (owner-approved/confirmed, large execution):** feedback-mechanism
+  reappraisal 2b (89-file `.agent/rules/*.md` positive-direction pass) + 2c
+  per-surface widening; seam-mapping plan-template (insight conserved in the EEF
+  plan §Sequencing; trigger = next multi-seam plan).
+- **Team Autonomy Gates (~430 lines, register §1045):** the PDR-074 amendment
+  cycle — fold per-primitive graduation-triggers into PDR-074, decide P6's home
+  (fold vs keep register-candidate), THEN withdraw the register tracking-entries.
+  Needs docs-adr + assumptions reviewers; P5 (no worked instance) and P6
+  (promotion gate UNMET) stay RECORDED-AS-GATED, not graduated.
+- **Standalones (§1474+):** reviewer-brief-scope, precedent-hunting, licensing
+  guardrail, graph-KG-sources, PDR-051 reduced-impl review — assess each.
+- **Step-6e.2 loss-scan item (WS7 section):** targets distilled — handle in the
+  napkin/distilled rotation.
+- **Phases not started:** napkin rotation (P3 — napkin is CRITICAL), distilled
+  processing, Phase 4 residual fitness, Phase 5 fitness rerun + close.
+
+**Cautions carried:** Tempestuous 15/18 "covered" were FALSE → verify each home
+first-hand before any withdrawal; no PDR-082 re-promote without its residual
+note; do NOT mint the PDR-098 action-time mechanism or PDR-074 P5/P6; curation
+judgement first-hand (sub-agents for pure location only); commit by explicit
+pathspec; positive-control every absence-claim.
+
 ## Session: 2026-06-15 — statusline trailing separator + behavioural tests (Hearth hunts Obsidian)
 
 **Handoff for the committing agent — another agent commits & pushes (owner-directed).**
