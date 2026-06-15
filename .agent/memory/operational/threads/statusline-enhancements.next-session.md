@@ -136,6 +136,7 @@ cadence. Also a research-relevant collaboration-visibility failure mode.
 
 | Platform | Model | Agent name | Role on this thread | last_session |
 | --- | --- | --- | --- | --- |
+| claude-code | Opus 4.8 | Cutter spins Quay | Re-grounded the successor plan session-state-first (session owns collaboration state; solo is the floor; owner-presence opinion; team state derived); consolidated and cross-referenced the statusline lane; ran docs and four architecture reviewers and recorded validated dispositions; added the logo-modularisation plan | 2026-06-15 |
 | claude-code | Opus 4.8 | Orbit stirs Spectrum | Interim session-relative resolver + `observing` shape + ansi/indicators/render module split; refined the successor register plan (claim-independent active-agent set) + readiness pass; seeded PDR-095 | 2026-06-14 |
 | claude-code | Opus 4.8 | Skylark wakes Summit | Re-fit WS1–WS3 onto the 4-row layout; unknown-vs-solo resolver fix; WS4 glyphs verified; test-IO compliance; corrected this record + plan | 2026-06-13 |
 | claude-code | Opus 4.8 | Bilby hunts Eventide | Oak mark landed; lane unified; thread opened | 2026-06-13 |
@@ -146,11 +147,19 @@ Monsoon guards Cirrus authored WS1–WS3 against the single-line layout, and the
 
 ## Landing target for the next session
 
-The narrow lane is complete and rides `feat/comms-research`'s push/merge, but
-**do NOT archive this record** — the thread is live via the successor register
-plan. The narrow controlling plan is already archived. A fresh session opening
-this thread picks up the register plan (resolve its readiness Conditions A/B/C-D)
-or commits the pending interim resolver improvement. Archive this record only
-when the register plan itself completes. Unrelated follow-on: the pre-existing
-agent-tools test-IO compliance tracked in
+**Landed 2026-06-15 (commit `ed563765d`):** the successor plan is re-grounded
+session-state-first (collaboration state belongs to the session; solo is the
+floor — never `unknown` for one's own session; the agent holds an owner-presence
+opinion; team state is the derivation of the collective), renamed
+`session-and-team-state-statusline-icons.plan.md`, held as experimental discovery
+(no PDR/ADR). The statusline lane is consolidated and cross-referenced; the docs
+and four architecture reviews (barney, betty, fred, wilma) are recorded as
+validated dispositions in both plans. A sibling
+`statusline-logo-modularisation.plan.md` was added.
+
+**Next safe step:** a fresh readiness pass on the re-grounded plan (the 2026-06-14
+verdict predates the re-grounding), then execute WS1 (the session-state model).
+Both plans are `current/`, unassigned. **Do NOT archive this record** — the
+thread is live. Unrelated follow-on: the pre-existing agent-tools test-IO
+compliance tracked in
 [`agent-tools-test-io-compliance.plan.md`](../../../plans/agent-tooling/current/agent-tools-test-io-compliance.plan.md).

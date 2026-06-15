@@ -8,6 +8,31 @@ merge_class: append-only-narrative
 fitness_content_role: drainable-buffer
 ---
 
+## Session: 2026-06-15 — statusline plan re-grounding (Cutter spins Quay)
+
+- **YAGNI / over-building is corporate-delivery doctrine, NOT innovation doctrine
+  (owner correction).** I relayed reviewers' "speculative optionality / no consumer yet →
+  narrow" findings and accepted the narrowing ones. Owner: "in a corporate environment they
+  would be correct, but I absolutely do have consumers in mind, this is INNOVATION and
+  discovery work, I am not breaching YAGNI, I am creating." TELL: when a finding says
+  narrow/close/defer/descope *because no current consumer*, that is a firing gate — screen
+  against the innovation context first, and check the doctrine's own precondition (closed-shape
+  fires only when you cannot name a second instantiation; the owner often can). Conserved to
+  distilled and user-memory.
+- **Never use `+` as a prose connector (owner, emphatic).** A line-wrapped `+` becomes a
+  markdown list marker (markdownlint MD004/MD032) and is poor writing. Use "and" or "&";
+  reserve `+` for code in fenced blocks. Self-lint authored markdown for `+` before declaring
+  done.
+- **The Bash tool-output display filter silently mangled search results.** `rg`/`grep` output
+  had substrings collapsed ("session-shape-indicators" → "ln-lns", "lines" → "li") and a `+`
+  shown as `-`/`--` in Read. The FILE bytes were correct — only the rendered output was
+  corrupted. TELL: when search output looks garbled, trust `od`/byte views and markdownlint
+  (they read real bytes), confirm filenames via `find`, and do not author edits from the
+  mangled display.
+- **Agent-authored plan markdown repeatedly tripped lint** (escaped-pipe table cells,
+  line-start `+`, an MD037 `**`-glob, cSpell jargon). TELL: run `pnpm exec markdownlint` on
+  every authored plan before declaring it done; the diagnostics stream lags.
+
 ## Session: 2026-06-15 — dedicated consolidation (Halley tracks Plasma)
 
 - **Content tiering is THREE tiers, not two (owner refinement, mid-session).** The

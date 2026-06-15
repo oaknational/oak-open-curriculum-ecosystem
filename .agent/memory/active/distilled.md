@@ -14,6 +14,18 @@ fitness_rationale: >-
   envelope by substance rather than trimming the lesson.
 ---
 
+## Innovation vs corporate-delivery doctrine (2026-06-15, Cutter spins Quay)
+
+- **YAGNI / over-building / speculative-optionality is corporate-delivery doctrine; it does
+  NOT govern the owner's innovation and discovery work, where consumers are in mind and
+  forward design is *creating*.** When a reviewer (or you) proposes to narrow, close, defer,
+  or descope something *because no current consumer exists*, that is a firing gate: screen
+  against the innovation context first, and check the doctrine's own precondition (e.g. the
+  closed-shape rule fires only when no second instantiation can be named — the owner often
+  can). Keep correctness, factual, and structural-enforcement findings; reject only the
+  no-consumer narrowing. Source: owner correction on the statusline session-state plan;
+  aligns with the assumptions-expert "Condition A" resolution and `feedback_explore_means_explore`.
+
 ## Shared-checkout and tooling gotchas (2026-06-09→12 window)
 
 Operational gotchas still accumulating evidence:
