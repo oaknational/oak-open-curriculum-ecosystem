@@ -1423,6 +1423,44 @@ below is a cross-reference index, not a second source of truth.
 - **Status**: open (low priority).
 - **Owner direction status**: standing.
 
+### F-50 — Relative-link + anchor resolution check missing from the gate tier
+
+- **Source**: `pending-graduations.md` (Scorched candidate 0d8138; PR 177 shipped
+  three off-by-one `../../../` report links through a 103-task green pre-push
+  chain, caught by a review bot not a gate). Migrated 2026-06-15.
+- **Surface**: markdownlint / repo-validators gate tier.
+- **Observed**: markdownlint checks style, never link resolution, so dead
+  relative links and bad anchors ride a green gate chain. Once-fix landed
+  fe35219d8; the recur-proof cure is unbuilt.
+- **Expected**: a relative-link + anchor resolution check fails loudly in the
+  gate tier on a dead link.
+- **Candidate cure**: a link-resolution + anchor check at the
+  repo-validators/markdownlint tier (sibling of F-38/F-40 unbuilt gate checks).
+- **Target surface**: `agent-tools/src/validators/` or markdownlint tier.
+- **Status**: open.
+- **Owner direction status**: standing.
+
+### F-51 — Worktree vocab-gen needs the gitignored bulk-downloads (symlink setup)
+
+- **Source**: `pending-graduations.md` (Prismatic closeout 62d747c4 / event
+  f305c720; worked once, PR-180 cycle). Migrated 2026-06-15.
+- **Surface**: worktree setup for `apps/oak-search-cli` vocab-gen; team-opener
+  §Worktree setup (Director-owned prompt file).
+- **Observed**: vocab-gen in a worktree needs
+  `apps/oak-search-cli/bulk-downloads` (gitignored, machine-local); symlinking
+  the data files from the primary checkout into the worktree skeleton works and
+  stays git-invisible. The drafted opener line was handed to the Director but its
+  landing is unverified. Sibling gotcha: turbo FULL-TURBO replay on sdk-codegen
+  masked that `data.json` is written by vocab-gen — know the generator→task
+  mapping before assuming a regen ran.
+- **Expected**: the team opener documents the worktree bulk-downloads symlink
+  step; the generator→task mapping is discoverable.
+- **Candidate cure**: add the symlink line to the team-opener §Worktree setup;
+  document the vocab-gen→data.json mapping.
+- **Target surface**: team-opener prompt (Director-owned) / build-system docs.
+- **Status**: open.
+- **Owner direction status**: standing.
+
 ---
 
 ## Mitigated / Addressed Frictions
