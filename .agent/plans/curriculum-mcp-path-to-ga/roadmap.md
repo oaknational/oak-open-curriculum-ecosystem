@@ -2,7 +2,7 @@
 title: "Curriculum MCP Path-to-GA Programme"
 type: strategic-index
 status: active
-last_updated: 2026-05-26
+last_updated: 2026-06-15
 foundational_adrs:
   - "docs/architecture/architectural-decisions/112-per-request-mcp-transport.md"
   - "docs/architecture/architectural-decisions/117-plan-templates-and-components.md"
@@ -142,6 +142,13 @@ Owner-direction-gated artefacts that this programme tracks but does not author. 
 | **A4** | `.agent/milestones/m4-general-availability.md` (or equivalent) | Define M4/GA milestone gates: prod stability evidence, alerting in place, DSAR proven, observability operationalised, MCP spec current | Owner direction |
 | **A5** | Exploration 10 formal ruling backfill at `docs/explorations/2026-04-19-redaction-policy-clerk-identity-downstream.md` | Per-sink Clerk identity projection ruling — unblocks identified production analytics | Owner + legal |
 
+> **A4 scaffold.** The [Launch-Readiness Framework](./launch-readiness-framework.md)
+> is the pre-decision substrate for A4. It names the launch-readiness dimensions,
+> the keystone owner decisions, and candidate M4/GA gates (each mapped to a
+> "how we'd know it's met" and a candidate owner), grounded in the target React
+> MCP App experience rather than current state. A4 is the owner's ratification of
+> that framework into the M4/GA milestone definition.
+
 ---
 
 ## 7. Decision register
@@ -191,5 +198,8 @@ Load-bearing decisions feeding this programme. Outbound links only; no content d
 
 - [`.agent/plans/high-level-plan.md`](../high-level-plan.md) — repo-wide strategic index
 - [`.agent/plans/observability/high-level-observability-plan.md`](../observability/high-level-observability-plan.md) — observability cross-axis index
+- [`launch-readiness-framework.md`](./launch-readiness-framework.md) — launch-readiness framework feeding A4 (M4/GA definition); keystones K1–K3 decided 2026-06-15
+- [`future/launch-readiness-and-milestone-redefinition.plan.md`](./future/launch-readiness-and-milestone-redefinition.plan.md) — future stub: impact-first milestone redraft (promotion trigger: owner direction)
+- [`mcp-app-live-product-readiness-assessment-2026-06-15.md`](../../reports/mcp-app-live-product-readiness-assessment-2026-06-15.md) — session assessment report (full findings + milestone re-assessment verdict)
 - [`.agent/milestones/README.md`](../../milestones/README.md) — milestone definitions
 - [`docs/explorations/2026-05-26-mcp-analytics-identity-and-event-emission.md`](../../../docs/explorations/2026-05-26-mcp-analytics-identity-and-event-emission.md) — design record driving §6 backlog A1–A2

@@ -20,6 +20,41 @@ surface.
 
 ## Current State
 
+- **STRATEGY & PLAN-ESTATE HOLISTIC SURVEY — durable report LANDED, uncommitted
+  (2026-06-15, Baobab lifts Topsoil `3be248`).** Multi-wave whole-estate survey (413
+  docs; 143+124 agents) + 6-agent adversarial verification → a vision→value→action
+  holistic reading. Report + all raw/refined data:
+  [`reports/plan-estate-survey-2026-06-15/`](../../reports/plan-estate-survey-2026-06-15/README.md).
+  **Owner corrections (report §14)**: (1) ~40% inward (substrate+Practice) is
+  deliberate — the Practice is a value stream in its own right; (2) impact is
+  articulated here + measured by Oak, not instrumented in-repo; (3) forward order =
+  align-on-impact → value-stream redundancy/gap → execution-spine. **Next safe step**:
+  Step A (align on impact), report §15 +
+  [thread record](threads/strategy-and-plan-estate-holistic-review.next-session.md).
+  Research in progress; next session continues.
+- **MCP LIVE-PRODUCT READINESS — framework + assessment report + future stub LANDED,
+  uncommitted (2026-06-15, Quoll weaves Dreamscape `dec917`).** Read-only strategic session
+  (owner-lifted for doc writes; no code, no commit) on "what would it take to make the MCP app
+  a live product." Keystones recorded as owner-decided (CORRECTION 2026-06-15 — per
+  owner, these are agent INPUT, NOT owner-ratified; input-to-verify, see survey report
+  §12/§14): **K1** "live" = full GA with real
+  teachers/curriculum-leaders + *observed* positive impact (an evidence state — value-proof is
+  a GA precondition); **K2** primary audience = teachers + curriculum leaders; **K3** scope =
+  MCP app in ChatGPT/Claude ⇒ the whole estate beneath must be GA-ready. Created the
+  [launch-readiness framework](../../plans/curriculum-mcp-path-to-ga/launch-readiness-framework.md),
+  the self-contained
+  [assessment report](../../reports/mcp-app-live-product-readiness-assessment-2026-06-15.md)
+  (first-hand verification, right/wrong/missing, full milestone re-assessment), and a
+  [future stub](../../plans/curriculum-mcp-path-to-ga/future/launch-readiness-and-milestone-redefinition.plan.md)
+  (promotion trigger: owner direction to schedule the redraft). **Fresh-eyes verdict: the prior
+  M0→M3→GA milestone ladder does NOT stand** — auth-posture-shaped, no value-proof/safeguarding
+  gate, not whole-estate; replace with the impact-first Stage 1–4 ladder (report §8). Wired into
+  discovery surfaces (plans/README, high-level-plan, roadmap.md, milestones/README flagged
+  provisional, reports/README). **No quality gates run** (owner direction; markdown-only — needs
+  `markdownlint:root` + `format:root` when the branch is next committed). No active thread owns
+  this lane (repo-level + path-to-ga collection); no claim opened; deep consolidation not due.
+  **Next safe step**: owner ratifies the impact-first ladder → promote the stub to redraft the
+  milestone files + Programme matrix; and/or commit these docs to `docs/planning-and-validation`.
 - **MCP UAT VALIDATION RUNBOOK — landed (2026-06-15, Sirius binds Spectrum / `0557ef`).**
   Branch `docs/planning-and-validation`, commit `95ec2708a`: elevated
   [UAT validation runbook](../../apps/oak-curriculum-mcp-streamable-http/docs/manual-uat-guide.md)
@@ -289,6 +324,7 @@ each thread record; this table is the repo-level index.
 | `semantic-search` | Search data foundations: upstream-schema alignment, bulk sourcing, minimal-adaptation arc | [record][semantic-search] | claude / Opus 4.8 / Moonlit Waxing Nebula / upstream-realignment-specialist / 2026-06-03 |
 | `statusline-enhancements` | Claude Code statusline: Oak-mark + session-shape indicators LANDED; interim session-relative/`observing` resolver + ansi/indicators/render split landed (`da8cbd7d6`); team-state register successor (DRAFT, ready-with-conditions); logo + terminal-animation research cross-linked in the record | [record][statusline] | claude-code / Opus 4.8 / Orbit stirs Spectrum / session-relative-resolver+PDR-095+register-refinement / 2026-06-14 (prior: Bilby hunts Eventide oak-mark-landed 2026-06-13) |
 | `agent-naming` | PDR-027 display-name derivation: versioned schema registry, session-hook identity surfaces, wordlist eras (v2 landed; v3 + era-pinning cure queued) | [record][agent-naming] | claude / Opus 4.8 / Squall hunts Troposphere / thread-open + v3-plan-author / 2026-06-13 (prior: Moss weaves Blossom v2-landing 2026-06-12, Swift Gliding Zephyr v2-build 2026-06-11) |
+| `strategy-and-plan-estate-holistic-review` | Holistic survey + analysis of vision, strategy & the whole planning estate (413-doc multi-wave census + adversarial verification; vision→value→action) | [record](threads/strategy-and-plan-estate-holistic-review.next-session.md) | claude-code / Opus 4.8 / Baobab lifts Topsoil / surveyor-synthesist / 2026-06-15 |
 
 ## Paused Threads
 

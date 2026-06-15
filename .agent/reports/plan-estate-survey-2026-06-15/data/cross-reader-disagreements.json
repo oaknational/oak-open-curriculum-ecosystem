@@ -1,0 +1,3092 @@
+[
+ {
+  "path": ".agent/plans/security-and-privacy/roadmap.md",
+  "lane": "loose",
+  "coll": "security-and-privacy",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "live-critical-path"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "roadmap"
+  ],
+  "vision_link": [
+   "direct"
+  ],
+  "dup": [],
+  "staleness": [
+   "Last Updated 2026-06-01 — fresh. All four phases marked PLANNED and Cloudflare gate marked M3 BLOCKER, consistent with the vision's M2-in-progress / M3-planned state."
+  ],
+  "concerns": [
+   "Roadmap references future/ artefacts (phase-0-control-mapping.md etc.) that are not yet authored; execution is blocked until Phase 0 tasks produce them.",
+   "Not a plan — it is a roadmap coordinating four active plans and several future artefacts. References active/ plans that are not in this document set; their existence should be verified independently but is not assessable from this collection alone."
+  ],
+  "title": "Security and Privacy Roadmap",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/security-and-privacy/active/phase-3-protocol-auth-and-tool-governance-baseline.md",
+  "lane": "active",
+  "coll": "security-and-privacy",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "speculative"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "direct"
+  ],
+  "dup": [],
+  "staleness": [
+   "All todos marked pending; depends on Phase 2 completion which has not started.",
+   "All five todos pending; Phase 0 and Phase 1 have not yet completed, making Phase 3 in active premature — it depends on prior phases."
+  ],
+  "concerns": [
+   "Three phases of prerequisite work must complete before this plan executes; relevant but not immediately actionable.",
+   "Active lane placement is premature: Phase 0 and Phase 1 have not landed; this belongs in current or future until prerequisites complete."
+  ],
+  "title": "Phase 3 - Protocol, Auth, and Tool Governance Baseline",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/security-and-privacy/active/phase-2-evidence-based-claims-execution.md",
+  "lane": "active",
+  "coll": "security-and-privacy",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "speculative"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "All todos marked pending; depends on Phase 1 completion which has not started.",
+   "All five todos pending; explicitly depends on Phase 1 completing first (Source Strategy references phase-1-hallucination-guarding-execution.md)."
+  ],
+  "concerns": [
+   "Depends on Phase 1; the evidence contract this phase produces is a prerequisite for Phase 3 implementation work.",
+   "Active lane premature: depends on Phase 1 which is itself pending; should be current until Phase 1 is done."
+  ],
+  "title": "Phase 2 - Evidence-Based Claims Execution",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md",
+  "lane": "active",
+  "coll": "connecting-oak-resources",
+  "readers": 2,
+  "relevance": [
+   "live-critical-path",
+   "live-supporting"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "direct"
+  ],
+  "dup": [],
+  "staleness": [
+   "WS1–WS5 completed and landed on main; WS4.2 (Threads adapter), WS4.3 (query proof), WS6–WS8 still pending. Active and unfinished.",
+   "WS4.2 (Threads adapter) and WS4.3 (query proof) are still pending. The plan body carries extensive references to the now-retired Inc.N/gate-1a/gate-1b framing that the t7 banner notes are history only — a sequencing re-frame banner was added 2026-06-02 but the body itself retains this vocabulary. Lane is active, consistent with genuine pending executable work."
+  ],
+  "concerns": [
+   "WS4.2/4.3 (Threads adapter) consumer-readiness-sequenced — may stall if no consumer emerges",
+   "Body retains retired Inc.N/gate framing; the 2026-06-02 banner partially decontaminates it but the body remains noisy."
+  ],
+  "title": "Graph Stack — Topology and Foundation Increment",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/connecting-oak-resources/external-oak-references/future/external-oak-references-deep-research.plan.md",
+  "lane": "future",
+  "coll": "connecting-oak-resources",
+  "readers": 2,
+  "relevance": [
+   "speculative",
+   "live-supporting"
+  ],
+  "is_real_plan": [],
+  "artefact_kind": [
+   "research"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "Last updated 2026-05-01; status is NOT STARTED; all four todos pending; named per-repo plans (aila-deep-research.plan.md etc.) not yet authored; cross-references graph-query-layer.plan.md which has since been archived superseded.",
+   "Last Updated 2026-05-01; owner decisions resolved on same date; light scan findings and plan-impact map from May 2026 — ~6 weeks old but all todos still pending; no per-repo execution plans authored yet."
+  ],
+  "concerns": [
+   "References graph-query-layer.plan.md which is archived superseded; impact map may have stale plan references after 6+ weeks of graph estate changes.",
+   "This is a strategic research brief, not a plan — it schedules research rather than executing it. Sitting in plans tree is a lane mismatch."
+  ],
+  "title": "External Oak References — Deep Research and Plan-Impact Mapping",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/discovery/future/web-bot-auth-agent-verification.plan.md",
+  "lane": "future",
+  "coll": "discovery",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "speculative"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [],
+  "concerns": [
+   "Blocking prerequisites (Oak posture decision, security identification of controls) not yet satisfied"
+  ],
+  "title": "Web Bot Auth agent verification plan",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/sector-engagement/castr/oak-principles.md",
+  "lane": "loose",
+  "coll": "sector-engagement",
+  "readers": 2,
+  "relevance": [
+   "speculative",
+   "live-supporting"
+  ],
+  "is_real_plan": [],
+  "artefact_kind": [
+   "research",
+   "register"
+  ],
+  "vision_link": [
+   "indirect",
+   "direct"
+  ],
+  "dup": [],
+  "staleness": [
+   "The external-material-triage.md explicitly says castr is a 'future codegen replacement candidate, not a current integration commitment'. Current work uses the existing codegen chain."
+  ],
+  "concerns": [
+   "No current integration commitment; speculative future path not on critical path to M2/M3.",
+   "Non-plan artefact (design reference / register) sitting in the plans tree under a product-specific subdirectory. Content is architectural doctrine, not an executable plan with todos or lifecycle status. Lane is appropriate for a loose reference file, but artefact kind is mismatched with the plans tree."
+  ],
+  "title": "Oak Type Discipline Principles for Castr",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/sector-engagement/current/sector-reusable-components-adoption.plan.md",
+  "lane": "current",
+  "coll": "sector-engagement",
+  "readers": 2,
+  "relevance": [
+   "speculative",
+   "live-supporting"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "direct"
+  ],
+  "dup": [],
+  "staleness": [
+   "All four todos are 'pending'; promotion criteria for Phase 4 not yet met. No active execution on this plan.",
+   "All four todos (t1–t4) remain pending as of last_updated 2026-04-30; no execution has progressed. The plan is not stale but is pre-conditions-gated — it correctly lives in current as a contract document."
+  ],
+  "concerns": [
+   "All todos pending; no first adopter named; Phase 4 playbook not drafted. Plan is well-formed but entirely pre-execution."
+  ],
+  "title": "Sector Reusable Components — Partner Adoption Contract",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/sector-engagement/oeai/initial-review.md",
+  "lane": "loose",
+  "coll": "sector-engagement",
+  "readers": 2,
+  "relevance": [
+   "speculative",
+   "live-supporting"
+  ],
+  "is_real_plan": [],
+  "artefact_kind": [
+   "research"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "Reviewed 2026-04-29 against `main` at a specific commit SHA. OEAI has no releases or CI; the snapshot may have drifted. No follow-up plan or owner is recorded."
+  ],
+  "concerns": [
+   "No follow-on work was triggered; the review flags meaningful risks (hardcoded credential, licence confusion, no reproducibility) that would need resolution before any engagement.",
+   "Research/report sitting in plans tree with no plan body or acceptance criteria."
+  ],
+  "title": "OEAI Initial Review",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/observability/current/observability-events-workspace.plan.md",
+  "lane": "current",
+  "coll": "observability",
+  "readers": 2,
+  "relevance": [
+   "live-critical-path",
+   "speculative"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "direct"
+  ],
+  "dup": [],
+  "staleness": [
+   "All todos still pending; last updated 2026-04-20. No execution progress recorded.",
+   "All todos are pending; blocked on exploration 4 which has no recorded close date; body explicitly scopes this to public beta, not the current M2 public-alpha milestone."
+  ],
+  "concerns": [
+   "No execution progress since April 2026; may be stalled pending exploration-4 closure.",
+   "Beta-gated plan with a blocking dependency belongs in future, not current."
+  ],
+  "title": "Observability Events Workspace",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/observability/current/pr-87-codeql-alerts.plan.md",
+  "lane": "current",
+  "coll": "observability",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "stale"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [
+   ".agent/plans/observability/current/sentry-preview-validation-and-quality-triage.plan.md (triage scope was transferred here)"
+  ],
+  "staleness": [
+   "All 4 todos still pending. Plan dated 2026-04-28; no recorded execution progress.",
+   "PR-87 merged to main on 2026-04-28 per post-pr-87-merge-pipeline-triage plan (Fact F1). All 4 todos remain pending. Last updated 2026-04-28. CodeQL alerts on a merged PR carry to main; the plan's verification command still references 'refs/pull/87/head' which is now a closed PR reference. No progress recorded in ~7 weeks."
+  ],
+  "concerns": [
+   "No execution progress recorded since April 2026; PR-87 branch may still be open.",
+   "All todos pending, target PR merged 7 weeks ago, verification command references closed PR head"
+  ],
+  "title": "PR-87 CodeQL Alerts (focused)",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/observability/current/security-observability.plan.md",
+  "lane": "current",
+  "coll": "observability",
+  "readers": 2,
+  "relevance": [
+   "live-critical-path",
+   "live-supporting"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "direct"
+  ],
+  "dup": [],
+  "staleness": [
+   "All todos pending; last updated 2026-04-18. Blocked on observability-events-workspace which is itself still in planning."
+  ],
+  "concerns": [
+   "Double-blocked: events-workspace unstarted; itself last updated in April.",
+   "YAML frontmatter has a malformed duplicate entry in blocked_on list (second list item missing hyphen)"
+  ],
+  "title": "Security Observability",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/observability/current/accessibility-observability.plan.md",
+  "lane": "current",
+  "coll": "observability",
+  "readers": 2,
+  "relevance": [
+   "live-critical-path",
+   "live-supporting"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "direct"
+  ],
+  "dup": [],
+  "staleness": [
+   "All todos pending; last updated 2026-04-18. Double-blocked on exploration 3 and events-workspace."
+  ],
+  "concerns": [
+   "Double-blocked and no progress since April 2026; YAML frontmatter has a syntax error (duplicate blocked_on continuation).",
+   "YAML frontmatter has a malformed blocked_on list (third entry is a bare value, not a list item)"
+  ],
+  "title": "Accessibility Observability",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/observability/current/mcp-outbound-token-health.plan.md",
+  "lane": "current",
+  "coll": "observability",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "stale"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "direct"
+  ],
+  "dup": [],
+  "staleness": [
+   "All 5 milestones are completed as of 2026-06-11. The plan body is a landing record awaiting archive.",
+   "All 5 todos are completed. Lifecycle section states the plan should archive after merge confirmation. The plan has not been moved to archive/completed despite all work being done. Sitting in current/ as a completed plan."
+  ],
+  "concerns": [
+   "All work is done; plan should be archived per ADR-117 lifecycle (it says so itself: 'On merge: confirm oak.mcp.response.* attributes in Sentry against preview, then this plan archives').",
+   "All todos completed; lifecycle says archive after merge — plan should be in archive/completed not current"
+  ],
+  "title": "MCP Outbound Token Health Metric",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/observability/current/pr-93-merge-snagging-2026-05-05.md",
+  "lane": "current",
+  "coll": "observability",
+  "readers": 2,
+  "relevance": [
+   "stale",
+   "superseded"
+  ],
+  "is_real_plan": [],
+  "artefact_kind": [
+   "report"
+  ],
+  "vision_link": [
+   "none"
+  ],
+  "dup": [
+   ".agent/plans/observability/current/feat-eef-exploration-completion.plan.md"
+  ],
+  "staleness": [
+   "PR 93 merged at commit 00b6e2197. This snagging report was a pre-merge snapshot document; the merge happened and the branch is gone.",
+   "This is a snagging report, not a plan. PR-93 (feat/eef_exploration) has since merged — the repo is now at main commit ad359a4f4 (2026-06-15) and the feat-eef-exploration-completion plan in this same collection records step 10 DONE on 2026-05-06. The snagging doc's P0 (SonarCloud) and P1 snags recorded here belong to a PR that has long since landed."
+  ],
+  "concerns": [
+   "PR 93 is merged; this is a closed-PR snagging snapshot, not a live plan. Should be archived.",
+   "Non-plan report artefact in plans/current; references a merged PR; should be in archive or reports"
+  ],
+  "title": "PR 93 Merge Snagging",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/observability/current/multi-sink-vendor-independence-conformance.plan.md",
+  "lane": "current",
+  "coll": "observability",
+  "readers": 2,
+  "relevance": [
+   "speculative",
+   "live-supporting"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect",
+   "direct"
+  ],
+  "dup": [],
+  "staleness": [
+   "Status is 'PLANNING' dated 2026-04-18 and all 6 todos are pending. Blocked on exploration 8 and observability-events-workspace.plan.md. WS1 carve-out (ESLint rule) is alpha-scope but not started; WS2+ is beta-gated. The plan references SENTRY_MODE which has a paused rename plan. No execution progress since creation.",
+   "Last Updated 2026-04-18; all todos are status:pending. Plan is still in pure planning state with no execution started across ~7 weeks."
+  ],
+  "concerns": [
+   "Still in PLANNING state with all todos pending; blockers (exploration 8, events workspace) may not be resolved yet. Over two months old with no progress recorded.",
+   "No execution started in ~7 weeks; blocked on events workspace. Lane placement (current) is correct if events workspace is also current, but stagnation warrants re-prioritisation review."
+  ],
+  "title": "Multi-Sink Vendor-Independence Conformance",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/observability/future/slo-and-error-budget.plan.md",
+  "lane": "future",
+  "coll": "observability",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "speculative"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "direct",
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "Last Updated 2026-04-23; M1 alpha-only at time of writing; public beta (M2) still ~95% complete per vision context; the 30-day clock has not started."
+  ],
+  "concerns": [
+   "Promotion trigger (30 days post-launch data) becomes testable once M2 open-public-alpha ships; should be revisited at that milestone."
+  ],
+  "title": "SLO and Error Budget",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/semantic-search/search-acceptance-criteria.md",
+  "lane": "loose",
+  "coll": "semantic-search",
+  "readers": 2,
+  "relevance": [
+   "live-critical-path",
+   "live-supporting"
+  ],
+  "is_real_plan": [],
+  "artefact_kind": [
+   "register"
+  ],
+  "vision_link": [
+   "direct"
+  ],
+  "dup": [],
+  "staleness": [
+   "Last Updated 2026-02-16 — Level 2/3/4 all show Pending status; Level 1 has items marked complete but re-evaluation also pending. Four months old but structurally still active.",
+   "Last Updated 2026-02-16; Level 3 and 4 checklists are still fully unchecked, and Level 1 re-evaluation with validated GTs is marked 'Planned'. Content is live but the date is several months old."
+  ],
+  "concerns": [
+   "Level 2-4 unchecked — no evidence of progress since Feb 2026; may need staleness review against current benchmark scores.",
+   "Not a plan; is a living reference register. Loose lane is appropriate."
+  ],
+  "title": "Search Acceptance Criteria",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/semantic-search/current/search-sdk-args-extraction.plan.md",
+  "lane": "current",
+  "coll": "semantic-search",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "live-critical-path"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "direct"
+  ],
+  "dup": [],
+  "staleness": [
+   "Last Updated 2026-03-01 — all 6 work stages are still pending. No progress logged since planning date.",
+   "Last Updated 2026-03-01 and every todo item is still pending. No work appears to have started despite being 3.5 months old in the current lane."
+  ],
+  "concerns": [
+   "All todos pending 3.5 months after last update; unclear whether blocked, deferred, or simply not started.",
+   "All six work-streams still pending as of 2026-03-01; may be blocked or deprioritised — worth confirming it is still next-up."
+  ],
+  "title": "Extract Search-Args Layer into Search SDK",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/semantic-search/current/bulk_data_population.feature_request.md",
+  "lane": "current",
+  "coll": "semantic-search",
+  "readers": 2,
+  "relevance": [
+   "live-critical-path",
+   "live-supporting"
+  ],
+  "is_real_plan": [],
+  "artefact_kind": [
+   "feature-request"
+  ],
+  "vision_link": [
+   "direct"
+  ],
+  "dup": [],
+  "staleness": [
+   "Dated 2026-06-03 — very recent; evidence census freshly run on that date.",
+   "Dated 2026-06-03, recent. However it is a feature request directed at an external team, not an executable plan. Its place in the current/ lane misrepresents it as next-up execution work."
+  ],
+  "concerns": [
+   "No resolution status recorded; depends on an external team's delivery timeline.",
+   "Non-plan artefact (feature-request to an external team) sitting in the current executable lane; should be in loose or a dedicated requests area."
+  ],
+  "title": "Feature Request: Populate the Declared Bulk-Download Fields",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/semantic-search/current/search-contract-followup.plan.md",
+  "lane": "current",
+  "coll": "semantic-search",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "stale"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "direct",
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "Both todos still show pending. The plan says execution was absorbed into another plan (now archived as completed); unclear whether S4/S5 were actually completed.",
+   "Both todos are 'pending' but the work was absorbed into a plan now in archive/completed (pre-reingest-remediation.execution.plan.md). The plan self-declares it is 'executing via' an archived completed plan, meaning execution residence is now orphaned. No evidence of the two tasks being closed."
+  ],
+  "concerns": [
+   "Source spec for S4/S5 of a completed remediation plan; completion status of the two tasks is not recorded here.",
+   "Executing via a now-archived completed plan; todos still pending but home is stale."
+  ],
+  "title": "Search Contract Follow-up",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/semantic-search/current/bulk-metadata-quick-wins.execution.plan.md",
+  "lane": "current",
+  "coll": "semantic-search",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "live-critical-path"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "direct"
+  ],
+  "dup": [],
+  "staleness": [
+   "Last Updated 2026-03-07 — all five phases pending; noted as the next plan to execute but no progress logged since March.",
+   "Body text says the plan is in 'active/' but the file sits in 'current/'. All five phase todos are 'pending' with last-updated 2026-03-07 (~3.5 months ago). No execution progress is logged."
+  ],
+  "concerns": [
+   "Says it is in active/ but the path given is current/; all todos still pending three months after promotion.",
+   "Body declares placement in active/ but file is in current/; lane mismatch. All todos pending with no progress since 2026-03-07."
+  ],
+  "title": "Bulk Metadata Quick Wins",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/semantic-search/future/search-ingestion-sdk-extraction.execution.plan.md",
+  "lane": "future",
+  "coll": "semantic-search",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "speculative"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "Last Updated 2026-03-24; all five todos are pending; references overlapping plans including some archived-completed ones. No blocking relationship to M2.",
+   "Last Updated 2026-03-24; references two sibling plans (index-lifecycle-management.execution.plan.md and bulk-canonical-merge-api-parity-and-validation.execution.plan.md) that do not appear in the current collection — their status is unknown and the overlap register in Phase 0 requires those plans to be live. All todos are pending."
+  ],
+  "concerns": [
+   "No M2/M3 dependency stated; pure architectural hygiene work deferred correctly to future lane.",
+   "References two plans not present in this collection; their current status (active/archived) is unverified and could affect the sequencing constraint in Phase 0."
+  ],
+  "title": "Search Ingestion SDK Extraction and Thin CLI Adoption",
+  "min_conf": "medium"
+ },
+ {
+  "path": ".agent/plans/semantic-search/future/03-vocabulary-and-semantic-assets/vocabulary-glossary-and-mining-surfaces.research.md",
+  "lane": "future",
+  "coll": "semantic-search",
+  "readers": 2,
+  "relevance": [
+   "speculative",
+   "live-supporting"
+  ],
+  "is_real_plan": [],
+  "artefact_kind": [
+   "research"
+  ],
+  "vision_link": [
+   "indirect",
+   "direct"
+  ],
+  "dup": [
+   ".agent/plans/semantic-search/future/03-vocabulary-and-semantic-assets/bulk-metadata-opportunities.research.md"
+  ],
+  "staleness": [
+   "Last Updated 6 March 2026; named consumers (glossary retrieval, concept suggestions) are not on M2/M3 critical path; no promotion evidence.",
+   "Last Updated 6 March 2026. Content is asset-opportunity research with no time-bound commitments; still directly cited by the keyword-definition-assets plan."
+  ],
+  "concerns": [
+   "No promotion criteria stated; question-ended; may stay speculative indefinitely."
+  ],
+  "title": "Vocabulary, Glossary, and Mining Surfaces",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/semantic-search/future/03-vocabulary-and-semantic-assets/mfl-synonym-architecture.md",
+  "lane": "future",
+  "coll": "semantic-search",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "speculative"
+  ],
+  "is_real_plan": [],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "Phase 1 done 2026-01-24; Phases 2-3 still open as of last update 2026-01-24. No M2 blocking dependency identified.",
+   "Created and last updated 2026-01-24 — the oldest document in the collection. Phase 1 is marked done (2026-01-24) but Phases 2 and 3 remain open with no progress update since. The document has not been updated to reflect whether bulk-metadata or vocabulary research (March 2026) altered the approach."
+  ],
+  "concerns": [
+   "Partially executed plan with done Phase 1 and open Phases 2-3; could be split or promoted.",
+   "Phase 1 done but no subsequent progress in ~5 months; no link to newer vocabulary research docs that now provide broader context. Risks being forgotten rather than deliberately deferred."
+  ],
+  "title": "MFL Synonym Architecture",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/semantic-search/future/03-vocabulary-and-semantic-assets/vocabulary-mining.md",
+  "lane": "future",
+  "coll": "semantic-search",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "speculative"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "Created 2026-01-03, last updated 2026-01-17; Phase 4 and 5 subsumed by curriculum-nlp-processing-workspace.md. Active infrastructure exists. Phases 1-3 all checklist items open.",
+   "Last Updated 2026-01-17; all Phase 1-3 checklist items unchecked; no activation date."
+  ],
+  "concerns": [
+   "Phases 4-5 subsumed but not removed; could be cleaner. All remaining phase items are open.",
+   "natural-language-paraphrases.md is a child plan; overlap is intentional and bounded by explicit boundary contracts"
+  ],
+  "title": "Vocabulary Mining",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/semantic-search/future/bulk-canonical-merge-api-parity-and-validation.execution.plan.md",
+  "lane": "future",
+  "coll": "semantic-search",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "live-critical-path"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "direct"
+  ],
+  "dup": [],
+  "staleness": [
+   "Last Updated 2026-03-21; all todos are pending; F2 closure plan it depends on is in archive/completed, so the precondition may already be satisfied — plan should be promoted or re-assessed."
+  ],
+  "concerns": [
+   "Depends on F2 promote step that may already be done; deserves promotion check",
+   "Declared 'executable' but lives in future/ lane — should be in current/ or active/ given its status note and M2 relevance"
+  ],
+  "title": "Bulk canonical ingestion, merge correctness, API parity, and prod validation",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/semantic-search/future/05-query-policy-and-sdk-contracts/search-decision-model.md",
+  "lane": "future",
+  "coll": "semantic-search",
+  "readers": 2,
+  "relevance": [
+   "speculative",
+   "live-supporting"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "direct"
+  ],
+  "dup": [],
+  "staleness": [
+   "Created 2026-01-17; all checklist items unchecked; retriever profiles reference reranking and definition-retriever not yet in production; migrated from post-sdk/ Feb 2026.",
+   "References 'current production configuration' for standard_hybrid profile — but no date signals indicate the retriever catalogue has drifted from the live system."
+  ],
+  "concerns": [
+   "Foundational quality improvement but depends on retriever features not yet built; no timeline signal",
+   "All checklist items unchecked; plan is pending with no started work, but placed correctly in future lane as pre-requisite work for search quality levels 2-3."
+  ],
+  "title": "Search Decision Model",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/semantic-search/future/05-query-policy-and-sdk-contracts/paraphrase-policy-and-application.md",
+  "lane": "future",
+  "coll": "semantic-search",
+  "readers": 2,
+  "relevance": [
+   "speculative",
+   "live-supporting"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect",
+   "direct"
+  ],
+  "dup": [],
+  "staleness": [
+   "Created 2026-02-25; all checklist items unchecked; depends on search-decision-model.md (also pending) and natural-language-paraphrases.md corpus not yet mined."
+  ],
+  "concerns": [
+   "Blocked by two upstream pending plans; cannot be executed independently",
+   "All checklist items unchecked. Correctly placed in future; depends on search-decision-model and natural-language-paraphrases corpus plans."
+  ],
+  "title": "Paraphrase Policy and Application",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/semantic-search/future/04-retrieval-quality-engine/mfl-multilingual-embeddings.md",
+  "lane": "future",
+  "coll": "semantic-search",
+  "readers": 2,
+  "relevance": [
+   "speculative",
+   "live-supporting"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect",
+   "direct"
+  ],
+  "dup": [],
+  "staleness": [
+   "Baselines dated 2026-01-13; no checklist items complete; Level 3 (parent boundary) is itself still pending and blocked by Level 2. Not on the M2 critical path.",
+   "Baselines dated 2026-01-13 — no newer measurement recorded, but plan is correctly in future pending work"
+  ],
+  "concerns": [
+   "Root cause is upstream data gap; addressable only after Level 3 fundamentals are exhausted"
+  ],
+  "title": "MFL Multilingual Embeddings",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/semantic-search/future/04-retrieval-quality-engine/document-relationships.md",
+  "lane": "future",
+  "coll": "semantic-search",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "live-critical-path"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "direct"
+  ],
+  "dup": [],
+  "staleness": [
+   "Last Updated 2026-01-17; checklist items all unchecked; Level 2 is Ready but execution has not started — may be a priority concern rather than staleness"
+  ],
+  "concerns": [
+   "All checklist items still pending; ground truths for relationship queries not yet created",
+   "Declared Ready (Level 1 complete); all checklist items still open — future lane is correct holding position but this is the next executable tier"
+  ],
+  "title": "Document Relationships",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/semantic-search/future/04-retrieval-quality-engine/modern-es-features.md",
+  "lane": "future",
+  "coll": "semantic-search",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "live-critical-path"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "direct"
+  ],
+  "dup": [],
+  "staleness": [
+   "MRR baseline from 2026-01-13 explicitly noted as requiring re-baseline against ADR-106 known-answer-first ground truths before new experiments are meaningful.",
+   "Last Updated 2026-02-10; minimum_should_match item marked implemented 2026-01-23 — content is current"
+  ],
+  "concerns": [
+   "Blocked by Level 2 completion; re-baseline against ADR-106 ground truths required before any experiments"
+  ],
+  "title": "Modern ES Features — HIGHEST ROI",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/school-data-search/current/school-data-search-poc.plan.md",
+  "lane": "current",
+  "coll": "school-data-search",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "live-critical-path"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "All gates G-1..G-9 show status: completed (decided 2026-06-04) but all build workstreams WS1-WS11 remain status: pending — no build has started since the revert on 2026-06-05.",
+   "Last updated 2026-06-05; first scaffold reverted; all build workstreams (WS1–WS11) remain pending 10 days later. No active progress signal."
+  ],
+  "concerns": [
+   "Plan is queued with no active build workstreams; the first scaffold attempt was reverted; WS1 has not yet started.",
+   "All gates decided but no build workstream started; plan should promote to active/ at first WS1 start per its own body."
+  ],
+  "title": "School Data Search POC MVP — In-Repo Build",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agentic-engineering-enhancements/evidence/2026-04-03-external-agent-research-promotion-pack-phase0-run-001.evidence.md",
+  "lane": "loose",
+  "coll": "agentic-engineering-enhancements",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "stale"
+  ],
+  "is_real_plan": [],
+  "artefact_kind": [
+   "evidence"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "Open items A-001, A-002, A-003 still pending as of 2026-04-03; no subsequent evidence files indicate these were closed.",
+   "Open items (A-001, A-002, A-003) note follow-on validation is still needed across multiple sessions; authored 2026-04-03 with no subsequent update; all three candidates still show 'needs comparison data' or 'needs live reuse' conditions."
+  ],
+  "concerns": [
+   "Three open items remain unresolved; unclear if downstream work has closed them.",
+   "Evidence artefact correctly in loose/evidence lane; open items list outstanding validation work that appears unresolved; a completed evidence bundle would have a closed open-items section."
+  ],
+  "title": "External Agent Research Promotion Pack — Phase 0 Run 001",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agentic-engineering-enhancements/current/no-type-widening-enforcement.plan.md",
+  "lane": "current",
+  "coll": "agentic-engineering-enhancements",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "live-critical-path"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "Recently promoted (2026-06-07, 8 days ago). WS1 (lint rule) and WS2 (tripwire) have no recorded execution yet."
+  ],
+  "concerns": [
+   "No todos showing execution progress yet; recently promoted"
+  ],
+  "title": "No type-widening: an active enforcement layer",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agentic-engineering-enhancements/current/trinity-active-principles-extensions-2026-04-29.plan.md",
+  "lane": "current",
+  "coll": "agentic-engineering-enhancements",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "stale"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "Created 2026-04-29 (over 6 weeks ago); all five extension todos remain in 'drafting' state with no per-diff approval recorded. The per-diff-approval todo is 'pending'.",
+   "Status is DRAFTING as of 2026-04-29; all todos show status: drafting or pending; authored over 6 weeks ago with no evident forward progress. Acceptance criteria are all unchecked checkboxes."
+  ],
+  "concerns": [
+   "Stalled since April 2026; all five extensions still awaiting owner approval",
+   "Blocked on per-diff owner approval since 2026-04-29 with no forward movement; stale in current/ lane"
+  ],
+  "title": "Trinity Active Principles — 2026-04-29 Doctrine Extensions",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agentic-engineering-enhancements/current/practice-core-portability-strict-enforcement.plan.md",
+  "lane": "current",
+  "coll": "agentic-engineering-enhancements",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "live-critical-path"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "Last Updated 2026-05-01; all five phase todos remain pending; 6+ weeks without apparent progress"
+  ],
+  "concerns": [
+   "All phases still pending; no execution started since 2026-05-01"
+  ],
+  "title": "Practice-Core Portability — Strict Enforcement",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agentic-engineering-enhancements/current/fitness-token-measurements-and-frontmatter-mandation.plan.md",
+  "lane": "current",
+  "coll": "agentic-engineering-enhancements",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "live-critical-path"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [
+   ".agent/plans/agentic-engineering-enhancements/current/fitness-frontmatter-manifest-sweep.plan.md"
+  ],
+  "staleness": [
+   "Last Updated 2026-05-14; WS3-WS6 still pending; WS1 closeout note warns 'WS1 source is validation-green in the working tree but not committed in this handoff'"
+  ],
+  "concerns": [
+   "WS3-WS6 deferred; WS1 commit status uncertain per handoff caveat; may have stalled",
+   "WS3 is deferred but no explicit owner-direction for resumption is recorded in the plan body."
+  ],
+  "title": "Fitness Token Measurements And Frontmatter Mandation",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-principles-graduation-pass-review-snags.md",
+  "lane": "current",
+  "coll": "agentic-engineering-enhancements",
+  "readers": 2,
+  "relevance": [
+   "stale",
+   "live-supporting"
+  ],
+  "is_real_plan": [],
+  "artefact_kind": [
+   "report",
+   "register"
+  ],
+  "vision_link": [
+   "none",
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "Created 2026-05-06; references sessions and commits from that date; 'next session' was weeks ago; snags S1-S6 and P1-P3 show no resolution status",
+   "Created 2026-05-06; some snags (S1, P-2) explicitly require owner decisions that have not been recorded as resolved; S2 and S4-S6 appear actionable but no progress is noted."
+  ],
+  "concerns": [
+   "A session-scoped snagging list with no resolution tracking; snags may be abandoned or already handled without this doc being updated",
+   "This is a register/ledger, not an executable plan; open owner-decision snags (S1 rule rename, P-2 owner-quote dating) may be stale without resolution."
+  ],
+  "title": "2026-05-06 Principles Graduation Pass — Review Snags",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agentic-engineering-enhancements/current/consolidate-docs-mode-contract-and-buffer-drain.plan.md",
+  "lane": "current",
+  "coll": "agentic-engineering-enhancements",
+  "readers": 2,
+  "relevance": [
+   "stale",
+   "superseded"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "All five todos show status: completed and the body states 'Implemented 2026-05-27'",
+   "All five todos show status: completed; body status says 'Implemented 2026-05-27'; plan should be archived."
+  ],
+  "concerns": [
+   "All work done; plan should be retired or archived",
+   "Fully completed plan still in current/ lane; should be moved to archive/completed/."
+  ],
+  "title": "Consolidate Docs Mode Contract And Buffer Drain",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agentic-engineering-enhancements/current/practice-and-process-structural-improvements.plan.md",
+  "lane": "current",
+  "coll": "agentic-engineering-enhancements",
+  "readers": 2,
+  "relevance": [
+   "stale",
+   "superseded"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [
+   ".agent/plans/agentic-engineering-enhancements/current/planning-specialist-capability.plan.md"
+  ],
+  "staleness": [
+   "All todos completed; Phase 4 completion note dated 2026-04-24 marks all non-planning entries graduated; remaining closures explicitly deferred to other plans",
+   "All four todos show status: completed; body text includes completion note dated 2026-04-24; all phases complete; planning graduation deferred to planning-specialist-capability.plan.md; plan not archived."
+  ],
+  "concerns": [
+   "All in-scope work complete; plan should be retired or archived",
+   "Fully completed plan still in current/ lane; should be moved to archive/completed/."
+  ],
+  "title": "Practice and Process — Structural Improvements",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agentic-engineering-enhancements/current/doctrine-enforcement-quick-wins.plan.md",
+  "lane": "current",
+  "coll": "agentic-engineering-enhancements",
+  "readers": 2,
+  "relevance": [
+   "stale",
+   "superseded"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect",
+   "direct"
+  ],
+  "dup": [],
+  "staleness": [
+   "All six todos show status: completed; body declares 'Status: COMPLETE — WS1, WS2, WS3, WS4, WS5, WS6 all landed' dated 2026-05-04",
+   "All six todos show status: completed; body status explicitly says COMPLETE; last updated 2026-05-04; plan not archived."
+  ],
+  "concerns": [
+   "All work done; plan should be retired or archived",
+   "Fully completed plan still in current/ lane; should be moved to archive/completed/."
+  ],
+  "title": "Doctrine Enforcement Quick Wins",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agentic-engineering-enhancements/current/2026-05-07-pending-graduations-dedicated-drain-opener.md",
+  "lane": "current",
+  "coll": "agentic-engineering-enhancements",
+  "readers": 2,
+  "relevance": [
+   "unclear",
+   "stale"
+  ],
+  "is_real_plan": [],
+  "artefact_kind": [
+   "opener"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "Opener references a starting state dated 2026-05-06 and 2026-05-07; no indication whether this session was ever run; pending-graduations.md file at 1876 lines described as HARD — current state unknown without reading that file",
+   "Authored 2026-05-06; describes a one-session drain targeting a specific 1876-line file state; session almost certainly consumed."
+  ],
+  "concerns": [
+   "Opener may be stale if the session it describes has already executed; confidence medium without checking pending-graduations.md current state",
+   "Opener artefact in current/ executable lane; session-scoped and likely stale."
+  ],
+  "title": "Next session opener — Pending-graduations dedicated drain",
+  "min_conf": "medium"
+ },
+ {
+  "path": ".agent/plans/agentic-engineering-enhancements/current/commit-queue-multi-writer-cure.plan.md",
+  "lane": "current",
+  "coll": "agentic-engineering-enhancements",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "live-critical-path"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect",
+   "direct"
+  ],
+  "dup": [],
+  "staleness": [
+   "Dated 2026-05-23; all todos pending; owner review gate not yet cleared. Comms-corpus synthesis evidence was appended 2026-06-13, showing the plan is still actively referenced. No staleness signal."
+  ],
+  "concerns": [
+   "Owner review gate still pending; all tranches gated on that approval."
+  ],
+  "title": "Commit Queue Multi-Writer Cure",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agentic-engineering-enhancements/current/agentic-corpus-discoverability-and-deep-dive-hub.plan.md",
+  "lane": "current",
+  "coll": "agentic-engineering-enhancements",
+  "readers": 2,
+  "relevance": [
+   "stale",
+   "superseded"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "All four todos marked completed; status is COMPLETE (2026-04-19). This plan is done and should be in archived/, not current/.",
+   "All 4 todos completed; status explicitly COMPLETE; last updated 2026-04-19. Should be archived."
+  ],
+  "concerns": [
+   "Plan is COMPLETE but sitting in current/ lane; should be archived",
+   "Completed plan not archived; occupying current/ executable lane unnecessarily."
+  ],
+  "title": "Agentic Corpus Discoverability and Deep-Dive Hub",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agentic-engineering-enhancements/current/2026-05-12-collaboration-protocol-hardening-r1b-opener.md",
+  "lane": "current",
+  "coll": "agentic-engineering-enhancements",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "live-critical-path"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "T-R8 (pattern capture) is completed; all other todos remain pending. Multiple waves of live work remain (T-CQ-UX, T-R5.x migration, adversarial validation). Wave 6 arc closure references 'shared-comms-log.md' which may already be retired given commit ad359a4f references comms-research closeout."
+  ],
+  "concerns": [
+   "Arc closure step references shared-comms-log.md retirement as pending; comms-research closeout may have superseded parts",
+   "Filename uses 'opener' suffix but content is a multi-wave execution plan; artefact kind is plan not opener."
+  ],
+  "title": "Collaboration Protocol Hardening — Tail Plan (post-R1.b)",
+  "min_conf": "medium"
+ },
+ {
+  "path": ".agent/plans/agentic-engineering-enhancements/current/memory-feedback-and-emergent-learning-mechanisms.execution.plan.md",
+  "lane": "current",
+  "coll": "agentic-engineering-enhancements",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "stale"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "Status block says 'PARTIALLY SUPERSEDED' with most phases absorbed into an archived plan; Phase 7 is explicitly long-lived but no Phase 7 tasks show any completion status; all todos still marked 'pending'",
+   "Body declares Phases 0–6 landed or absorbed elsewhere; only Phase 7 (learning loop) remains, but all todos in frontmatter still show pending. Should be archived with a follow-up note for Phase 7."
+  ],
+  "concerns": [
+   "Most work absorbed into archived plan; Phase 7 learning loop todos all still pending with no evidence of progress",
+   "Frontmatter todos all show pending despite body declaring phases 0–6 largely done; creates false incomplete signal"
+  ],
+  "title": "Memory Feedback and Emergent-Learning Mechanisms — Execution",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agentic-engineering-enhancements/current/branch-fitness-and-push-cadence.plan.md",
+  "lane": "current",
+  "coll": "agentic-engineering-enhancements",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "live-critical-path"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "Authored 2026-05-24; Cycle 1 opened but todo still marked 'in_progress'; 9 owner gap-questions unresolved; proportionality tension (3-cycle vs 16-cycle) surfaced but not yet resolved",
+   "Promotion trigger is satisfied: Cycle 1 was opened 2026-05-24 and the plan states it moves to `active/` when Cycle 1 is opened — yet it remains in `current/`."
+  ],
+  "concerns": [
+   "Gap-questions 4 and owner decision on 3-vs-16-cycle shape remain explicitly unresolved; plan has been in-progress for 3 weeks",
+   "Should be promoted to active/; promotion trigger fired 2026-05-24"
+  ],
+  "title": "Branch Fitness And Push Cadence — Small-PR Enabling Protocol",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-collaboration-state-restructure-phase-2-opener.md",
+  "lane": "current",
+  "coll": "agentic-engineering-enhancements",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "stale"
+  ],
+  "is_real_plan": [],
+  "artefact_kind": [
+   "opener"
+  ],
+  "vision_link": [
+   "indirect",
+   "none"
+  ],
+  "dup": [
+   ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-collaboration-state-lifecycle-deep-exploration-opener.md (both are openers for the same collaboration-state restructure thread)"
+  ],
+  "staleness": [
+   "Authored 2026-05-06; no evidence Phase 2 has executed; the collaboration-state-surface-restructure.plan.md it targets is not in this collection — staleness of the target plan is unknown from this artefact alone.",
+   "Authored 2026-05-06; today is 2026-06-15 — over five weeks old. Openers are single-session consumables."
+  ],
+  "concerns": [
+   "Opener without confirmed Phase 2 landing; target plan not in this collection",
+   "Opener over five weeks past its target session date; should be archived or disposed"
+  ],
+  "title": "Collaboration-State Restructure Phase 2 — Session Opener",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agentic-engineering-enhancements/current/token-remediation-p8-parallel-program.plan.md",
+  "lane": "current",
+  "coll": "agentic-engineering-enhancements",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "live-critical-path"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "Last Updated 2026-05-17; Step 1 completed at ee41cd49; Steps 2-4 all pending. Step age since last update is over 4 weeks without advancement signal — exceeds the plan's own 'Step age >= 3 sessions surfaces to owner' threshold.",
+   "Last Updated 2026-05-17; Step 2 was supposed to open in the next session but §Current Snapshot still shows Step 1 closed and Step 2 pending — ~4 weeks since last update with no advancement logged."
+  ],
+  "concerns": [
+   "Steps 2-4 not started; plan's own anti-decay rule triggered (>=3 sessions without Step 2 advancement); owner check-in warranted",
+   "Step age not updated since 2026-05-17; Step 2 has not advanced despite instruction to open next session."
+  ],
+  "title": "Token / Remediation / P8 / Parallel Program 2026-05-14",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agentic-engineering-enhancements/current/bulk-data-rebaseline-and-infra-impact-investigation.plan.md",
+  "lane": "current",
+  "coll": "agentic-engineering-enhancements",
+  "readers": 2,
+  "relevance": [
+   "live-critical-path",
+   "live-supporting"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "direct"
+  ],
+  "dup": [],
+  "staleness": [
+   "No Last Updated date in body; referenced upstream schema change resolved 2026-05-15 but this follow-on investigation has not been opened; could be stale if the bulk surface was already validated elsewhere."
+  ],
+  "concerns": [
+   "Status is DRAFT pending owner approval; not yet executing.",
+   "No Last Updated date; owner approval gate still open; references interrupt resolved on 2026-05-15 with no evidence of progress since."
+  ],
+  "title": "Bulk Data Rebaseline + Search Infrastructure Impact Investigation",
+  "min_conf": "medium"
+ },
+ {
+  "path": ".agent/plans/agentic-engineering-enhancements/active/phase-0-baseline-metrics.plan.md",
+  "lane": "active",
+  "coll": "agentic-engineering-enhancements",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "speculative"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "All five todos pending; no progress recorded. Plan has no date stamp in the body.",
+   "No dates or progress indicators on any todo; roadmap shows status PLANNED"
+  ],
+  "concerns": [
+   "In the active lane but completely unstarted; blocks Phase 1 harness adoption decision.",
+   "All todos pending; roadmap lists HC-0 as PLANNED not ACTIVE; mismatched lane"
+  ],
+  "title": "Phase 0 Baseline Metrics for Harness Concept Adoption",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agentic-engineering-enhancements/pull-request-best-practice-and-rules.md",
+  "lane": "loose",
+  "coll": "agentic-engineering-enhancements",
+  "readers": 2,
+  "relevance": [
+   "live-critical-path",
+   "live-supporting"
+  ],
+  "is_real_plan": [],
+  "artefact_kind": [
+   "evidence"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [
+   ".agent/plans/agent-tooling/current/pr-merge-readiness-discipline.plan.md"
+  ],
+  "staleness": [],
+  "concerns": [
+   "Sitting loose rather than in evidence/ subdirectory; decision home is a different plan collection.",
+   "Evidence/research artefact sitting in plans tree; decision home is a separate plan in agent-tooling collection"
+  ],
+  "title": "Pull Request Best Practice and Rules (WS3 evidence base)",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agentic-engineering-enhancements/future/codex-exec-cli-deep-dive.plan.md",
+  "lane": "future",
+  "coll": "agentic-engineering-enhancements",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "speculative"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [],
+  "concerns": [
+   "Promotion gated on second concrete consumer; no consumer has appeared yet."
+  ],
+  "title": "Codex-Exec CLI Deep Dive",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agentic-engineering-enhancements/future/mcp-governance-deep-dive.plan.md",
+  "lane": "future",
+  "coll": "agentic-engineering-enhancements",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "speculative"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "direct",
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "MCP 2025-11-25 revision noted as highest-signal; knowledge cutoff Aug 2025 cannot confirm whether trigger conditions have since been met — check active MCP upgrade plans"
+  ],
+  "concerns": [
+   "No code changes in scope; analysis-only until promoted. Promotion trigger includes MCP SDK upgrade entering planning surface, which is directly relevant to M2/M3 live product.",
+   "Promotion trigger condition (MCP SDK 2025-11-25 upgrade) may already be live given M2/M3 MCP work; verify against current planning surface"
+  ],
+  "title": "MCP Governance Deep Dive",
+  "min_conf": "medium"
+ },
+ {
+  "path": ".agent/plans/agentic-engineering-enhancements/future/recurrence-prevention-after-vercel-branch-url-bug.plan.md",
+  "lane": "future",
+  "coll": "agentic-engineering-enhancements",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "speculative"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "Item 2 (amend read-diagnostic-artefacts-in-full) may already be addressed — the memory file feedback_workspace_first_for_diagnostics.md was captured 2026-04-25 and the rule the plan proposes amending is referenced in active project memory; verify before promoting"
+  ],
+  "concerns": [
+   "Small, well-scoped, high-value recurrence prevention. Item 2 (rule amendment) is low-effort and directly addresses a documented failure mode.",
+   "Item 2 may already be partially satisfied by existing memory capture; check rule file before promoting"
+  ],
+  "title": "Recurrence Prevention After VERCEL_BRANCH_URL Bug",
+  "min_conf": "medium"
+ },
+ {
+  "path": ".agent/plans/agentic-engineering-enhancements/future/pr-lifecycle-skill.plan.md",
+  "lane": "future",
+  "coll": "agentic-engineering-enhancements",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "speculative"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [],
+  "concerns": [
+   "Recurrent need clearly stated but no execution slice has started. Promotion trigger is event-driven (next PR closeout needing agent help)."
+  ],
+  "title": "Pull Request Lifecycle Skill",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agentic-engineering-enhancements/future/tdd-specialist-capability.plan.md",
+  "lane": "future",
+  "coll": "agentic-engineering-enhancements",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "speculative"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "References `.agent/plans/agentic-engineering-enhancements/active/phase-5-mutation-testing-execution.md` under Mutation Testing Doctrine Hierarchy — if that plan exists and is complete, the sub-specialist section may partially overlap a landed deliverable; verify before promoting."
+  ],
+  "concerns": [
+   "Large scope: requires terminology audit and remediation before specialist triplet can be created. Stryker sub-specialist references an active mutation-testing plan.",
+   "Internal reference to an active plan in mutation-testing sub-specialist doctrine; cross-check before promotion."
+  ],
+  "title": "TDD Specialist Capability",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agentic-engineering-enhancements/future/express-specialist-capability.plan.md",
+  "lane": "future",
+  "coll": "agentic-engineering-enhancements",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "speculative"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "direct",
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [],
+  "concerns": [
+   "Directly supports the live MCP HTTP server (Express 5.x on Vercel); promotion gated on Express-related work being scheduled."
+  ],
+  "title": "Express Specialist Capability",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agentic-engineering-enhancements/future/team-handoff-routing-and-action-log-exploration.plan.md",
+  "lane": "future",
+  "coll": "agentic-engineering-enhancements",
+  "readers": 2,
+  "relevance": [
+   "speculative",
+   "live-supporting"
+  ],
+  "is_real_plan": [],
+  "artefact_kind": [
+   "research"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "First slice already shipped (start-right-team + ADR-181 cited as complete); the file has not been updated to reflect this delivery."
+  ],
+  "concerns": [
+   "Explicitly labelled not an executable plan; first slice already expressed elsewhere; 8 open design questions unresolved",
+   "Self-declared as an exploratory note, not a plan; sitting in the plans tree is an artefact-kind mismatch. The first slice (start-right-team + ADR-181) has shipped, leaving this as residual open-question design space."
+  ],
+  "title": "Team Handoff Routing And Action Log Exploration",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agentic-engineering-enhancements/future/devx-specialist-capability.plan.md",
+  "lane": "future",
+  "coll": "agentic-engineering-enhancements",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "speculative"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect",
+   "direct"
+  ],
+  "dup": [],
+  "staleness": [
+   "No creation date present; no evidence of promotion trigger firing."
+  ],
+  "concerns": [
+   "Promotion trigger is weak — fires only when SDK/CLI work is scheduled with no current scheduled work cited",
+   "No date on the plan; promotion trigger is event-driven (SDK/CLI work scheduled) with no evidence that trigger has fired; otherwise well-formed strategic plan in the correct lane."
+  ],
+  "title": "Developer Experience Specialist Capability",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agentic-engineering-enhancements/future/repair-workflow-wording-hazard-detection.plan.md",
+  "lane": "future",
+  "coll": "agentic-engineering-enhancements",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "speculative"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [],
+  "concerns": [
+   "Addresses internal Practice hygiene; no direct product-delivery path; promotion trigger is contingency-only",
+   "No promotion trigger has fired; legitimately parked awaiting a second instance."
+  ],
+  "title": "Repair Workflow Wording Hazard Detection",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agent-tooling/current/multi-checkout-merge-handling-for-fitness-files.plan.md",
+  "lane": "current",
+  "coll": "agent-tooling",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "speculative"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "All todos pending; last updated 2026-05-07; hard-blocked on a prerequisite plan in another lane.",
+   "Last Updated 2026-05-07; all todos pending; explicitly blocked on a prerequisite plan (fitness-token-measurements-and-frontmatter-mandation.plan.md) with no evidence that blocker was resolved"
+  ],
+  "concerns": [
+   "Hard-blocked on prerequisite in agentic-engineering-enhancements lane; no progress possible until prerequisite clears",
+   "Blocked-not-started plan in current/ lane; prerequisite plan not confirmed resolved; may belong in future/ until unblocked"
+  ],
+  "title": "Multi-Checkout Merge Handling for Fitness-Managed Files",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agent-tooling/current/team-opener-generalisation-exploration.plan.md",
+  "lane": "current",
+  "coll": "agent-tooling",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "speculative"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan",
+   "research"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "All five todos (x1–x6) are pending; the evidence base (graph marathon 2026-06-10/11) is recent; plan is live and un-started."
+  ],
+  "concerns": [
+   "Exploration/research artefact sitting in the executable current/ lane; should be in a research or loose lane until it is decision-complete"
+  ],
+  "title": "Team-Opener Generalisation — Exploration",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agent-tooling/current/2026-05-11-collaboration-protocol-hardening-opener.md",
+  "lane": "current",
+  "coll": "agent-tooling",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "unclear"
+  ],
+  "is_real_plan": [],
+  "artefact_kind": [
+   "opener"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "All phases remain pending; created 2026-05-11; the friction incidents it names (foreign-stage, claim overlaps, comms CLI bug B-01) may be addressed in later plans, but this opener itself has never been executed.",
+   "All 5 todos are still `pending`; last updated 2026-05-11 (over a month ago). Unclear whether the session this opener was designed for has already run."
+  ],
+  "concerns": [
+   "Opener for a session that appears not yet executed; sibling plan state may have diverged",
+   "Opener (non-plan artefact) sitting in executable current/ lane; if the session ran, opener should be archived; if not, the month-long gap since 2026-05-11 is a staleness signal"
+  ],
+  "title": "Collaboration Protocol and Tooling Hardening — Session Opener",
+  "min_conf": "medium"
+ },
+ {
+  "path": ".agent/plans/agent-tooling/current/agent-artefact-load-pressure-relief.plan.md",
+  "lane": "current",
+  "coll": "agent-tooling",
+  "readers": 2,
+  "relevance": [
+   "stale",
+   "live-supporting"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "Phase 1 todos all completed; Phase 2 Vercel triage (todos 2-1, 2-2, 3-1, 3-2, 4-1) remain pending since 2026-05-06 with no progress updates. The urgency context (overloaded discovery) may still apply.",
+   "Phase 1 completed 2026-05-06; Phase 2 todos (2-1, 2-2, 3-1, 3-2, 4-1) still pending as of last update 2026-05-06. Over five weeks old with no progress on Phase 2."
+  ],
+  "concerns": [
+   "Phase 2 Vercel triage has been pending for over 5 weeks with no progress",
+   "Phase 2 Vercel triage has been sitting pending since 2026-05-06; low urgency but should be actioned or deferred to future/"
+  ],
+  "title": "Agent Artefact Load Pressure Relief — Urgent Plugin and Skill Pruning",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agent-tooling/current/pr-merge-readiness-discipline.plan.md",
+  "lane": "current",
+  "coll": "agent-tooling",
+  "readers": 2,
+  "relevance": [
+   "live-critical-path",
+   "live-supporting"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [],
+  "concerns": [],
+  "title": "PR Merge-Readiness Discipline (oak-pr)",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agent-tooling/current/mcp-server-testing-tools.plan.md",
+  "lane": "current",
+  "coll": "agent-tooling",
+  "readers": 2,
+  "relevance": [
+   "live-critical-path",
+   "live-supporting"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "direct"
+  ],
+  "dup": [],
+  "staleness": [
+   "Authored 2026-06-08; all todos pending; execution queued behind EEF PR merge (that PR has since landed per recent commits). The prerequisite condition may now be satisfied."
+  ],
+  "concerns": [
+   "Prerequisite 'EEF PR merged' was listed as beneficial; verify whether EEF work is now landed and execution can begin"
+  ],
+  "title": "MCP Server Testing Tools",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agent-tooling/current/comms-event-write-integrity.plan.md",
+  "lane": "current",
+  "coll": "agent-tooling",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "stale"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "Implementation Record 2026-06-01 shows all five deliverables done with passing gate evidence; plan not yet archived",
+   "Implementation Record section confirms all five deliverables (D1–D5) were completed on 2026-06-01 by Tempestuous Gliding Falcon with passing verification runs listed. All todos are marked completed. Plan should be archived."
+  ],
+  "concerns": [
+   "Plan complete but still in current/ lane; should be archived or closed out",
+   "Fully implemented plan sitting in current/ instead of archive/completed/; all todos completed, full verification run recorded."
+  ],
+  "title": "Comms-event write integrity — one-time repair + absolute prevention",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agent-tooling/current/agent-naming-schema-v3.plan.md",
+  "lane": "current",
+  "coll": "agent-tooling",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "live-critical-path"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "Last Updated 2026-06-13; no todos started; queued and ready for execution"
+  ],
+  "concerns": [],
+  "title": "Agent Naming Schema v3 — Era-Pinning Cure + Noun-Agentive Names",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agent-tooling/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
+  "lane": "future",
+  "coll": "agent-tooling",
+  "readers": 2,
+  "relevance": [
+   "speculative",
+   "live-supporting"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "Preserved analysis from 2026-04-28; much of the specific write-safety, identity, and comms-format work has since landed in cost-of-collaboration.plan.md P1–P5; the remaining future scope (attention routing, session-exit hooks, domain-model polish) is genuine future work not yet covered"
+  ],
+  "concerns": [
+   "The 'candidate direction' event-log shape has since been built (comms/ unified format, P5); body may overstate how much remains undone"
+  ],
+  "title": "Collaboration State Domain Model and Communication Reliability",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agent-tooling/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md",
+  "lane": "future",
+  "coll": "agent-tooling",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "speculative"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "Evidence dated 2026-04-28; comms schema and CLI may have changed materially given comms-corpus research and rotation work that completed 2026-06-13. Notes say to re-verify CLI flags at promotion."
+  ],
+  "concerns": [
+   "Promotion depends on recurrence triggers; five separable threads risk scope bundling at promotion time",
+   "Significant substrate changes from comms research (WS7) may affect schema correlation primitive assumptions; re-verification required at promotion."
+  ],
+  "title": "Agent Coordination CLI Ergonomics and Cross-Thread Request Correlation",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agent-tooling/future/claim-liveness-crash-reconciliation-and-session-forensics.plan.md",
+  "lane": "future",
+  "coll": "agent-tooling",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "speculative"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "Recurrence evidence (4th instance, 2026-05-29) already met the activation threshold; yet plan remains in future/. Owner has explicitly noted the recurrence multiple times."
+  ],
+  "concerns": [
+   "Activation trigger has already fired (4th recurrence observed) but plan is still in future/; promotion may be overdue",
+   "Activation trigger has arguably already been met (4 observed instances noted inline); plan may be ready to promote to current/ but has not been."
+  ],
+  "title": "Claim Liveness, Crash Reconciliation, and Session Forensics",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agent-tooling/future/canonical-first-skill-pack-ingestion-tooling.plan.md",
+  "lane": "future",
+  "coll": "agent-tooling",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "speculative"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [],
+  "concerns": [
+   "Requires deep sub-agent reviews to pass before promotion; those reviews have not yet run"
+  ],
+  "title": "Canonical-First Skill Pack Ingestion Tooling",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agent-tooling/future/skills-oversized-core-decomposition.plan.md",
+  "lane": "future",
+  "coll": "agent-tooling",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "speculative"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "last_updated 2026-06-14 (very recent); blocking dependency (F-37 gap in PDR-051) is clearly named and unresolved."
+  ],
+  "concerns": [
+   "Blocked on PDR-051 supporting-file-copy gap (F-37); cannot execute until that upstream gap closes"
+  ],
+  "title": "Skills Oversized-Core Decomposition",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agent-tooling/future/joint-agent-decision-protocol.plan.md",
+  "lane": "future",
+  "coll": "agent-tooling",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "stale"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan",
+   "report"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [
+   ".agent/plans/agent-tooling/future/collaboration-substrate-coordination-rightsizing.m1-inventory.md"
+  ],
+  "staleness": [
+   "Declared IMPLEMENTED but still in future/ lane; the M1 inventory (collaboration-substrate-coordination-rightsizing) notes zero production instances of joint_decision since April 2026 and recommends folding the ack-ceremony — the plan may be superseded by the re-polarisation work.",
+   "Declared IMPLEMENTED 2026-04-26; file still in future/ lane with a Promotion Checklist that has not been actioned — completed implementation record parked in wrong lane"
+  ],
+  "concerns": [
+   "Plan declared implemented but filed in future/; M1 inventory identifies it as a fold candidate",
+   "Implementation is complete but file sits in future/ lane; should be archived under completed/; Promotion Checklist items remain unchecked despite work being done"
+  ],
+  "title": "Joint Agent Decision Protocol",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agent-tooling/future/agent-infrastructure-coherence-audit.plan.md",
+  "lane": "future",
+  "coll": "agent-tooling",
+  "readers": 2,
+  "relevance": [
+   "speculative",
+   "live-supporting"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [
+   ".agent/plans/agent-tooling/future/adapter-generation.plan.md (areas 2 and 5 of the audit become moot if adapter-generation executes first, as acknowledged in the plan itself)"
+  ],
+  "staleness": [
+   "No updated-date field; status NOT STARTED with no activation trigger fired; the manifest-driven adapter generation plan (referenced as a potential pre-emptor) may already have rendered areas 2 and 5 moot.",
+   "No last_updated date; promotion triggers are concrete and tied to adapter count / taxonomy rename timing — not stale, appropriately parked in future"
+  ],
+  "concerns": [
+   "No last_updated date; no concrete activation signal defined; activation depends on adapter count crossing a threshold with no measurement",
+   "No last_updated date; note that adapter-generation plan should execute first per stated relationship, and that plan's promotion condition may already be met"
+  ],
+  "title": "Agent Infrastructure Coherence Audit",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agent-tooling/future/skills-eval-harness.plan.md",
+  "lane": "future",
+  "coll": "agent-tooling",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "speculative"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [],
+  "concerns": [],
+  "title": "Skills Eval Harness",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agent-tooling/future/relative-link-integrity-live-lanes-validator.plan.md",
+  "lane": "future",
+  "coll": "agent-tooling",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "speculative"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [],
+  "concerns": [],
+  "title": "Relative Link Integrity Live-Lanes Validator",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/agent-tooling/future/collaboration-substrate-coordination-rightsizing.plan.md",
+  "lane": "future",
+  "coll": "agent-tooling",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "live-critical-path"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [
+   ".agent/plans/agent-tooling/future/collaboration-substrate-coordination-rightsizing.m1-inventory.md"
+  ],
+  "staleness": [
+   "Frontmatter says future lane but body declares ACTIVE status with M1 dispatched 2026-05-29; the lane label does not match the activation record. Comms-corpus research inputs were added 2026-06-13, indicating this is live.",
+   "Declared status is 'active-strategic-exploration' but the plan sits in future/ lane. M1 has been dispatched and the M1 inventory artefact is complete. Lane placement does not match active-exploration status."
+  ],
+  "concerns": [
+   "Lane label is future but body status is ACTIVE with M1 in progress; lane should be current or active per the activation record.",
+   "Status is 'active-strategic-exploration' with M1 dispatched and completed, but document remains in future/ rather than current/. Lane mismatch warrants review — the activation trigger has already fired (owner dispatched 2026-05-29)."
+  ],
+  "title": "Collaboration Substrate Coordination Right-Sizing (First-Principles Re-Ground)",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/user-experience/educator-end-users/keyword-graph-teacher-user-stories.report.md",
+  "lane": "loose",
+  "coll": "user-experience",
+  "readers": 2,
+  "relevance": [
+   "speculative",
+   "live-supporting"
+  ],
+  "is_real_plan": [],
+  "artefact_kind": [
+   "report"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [],
+  "concerns": [
+   "Stories 4 and 5 are explicitly speculative; no story beyond story 3 has a scheduled home.",
+   "Correctly identified as a report/discovery-note and filed loose; story 3 already folded into the position-anchored plan; remaining stories (1,2,4,5) are explicitly unscheduled"
+  ],
+  "title": "Keyword-graph teacher user stories — discovery note for prioritisation",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/user-experience/public-alpha-experience-contract.md",
+  "lane": "loose",
+  "coll": "user-experience",
+  "readers": 2,
+  "relevance": [
+   "live-critical-path",
+   "live-supporting"
+  ],
+  "is_real_plan": [],
+  "artefact_kind": [
+   "register",
+   "other"
+  ],
+  "vision_link": [
+   "direct"
+  ],
+  "dup": [
+   ".agent/plans/user-experience/roadmap.md"
+  ],
+  "staleness": [
+   "References Milestone 2 UI-surface Option X/Y decision as still open; M2 is described in the vision as ~95% complete — this gate decision may now be stale or resolved"
+  ],
+  "concerns": [
+   "Option X/Y Claude branding decision is undecided; no recorded outcome yet.",
+   "No frontmatter lane/type; not a plan but a governance contract; the Option X/Y decision gate it defines may already be resolved given M2 progress — verify and update declared status"
+  ],
+  "title": "Public Alpha Experience Contract",
+  "min_conf": "medium"
+ },
+ {
+  "path": ".agent/plans/architecture-and-infrastructure/evidence/2026-04-16-http-mcp-sentry-validation/sentry-cli-reverify-note.md",
+  "lane": "loose",
+  "coll": "architecture-and-infrastructure",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "stale"
+  ],
+  "is_real_plan": [],
+  "artefact_kind": [
+   "evidence"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "Dated 2026-04-17; branch feat/otel_sentry_enhancements at 0f9245f5. The region warning about token scoping (sntrys_ token pointing to sentry.io vs de.sentry.io) was noted as a follow-up at next token refresh — unclear if that has happened.",
+   "Dated 2026-04-17 on branch feat/otel_sentry_enhancements at SHA 0f9245f5; the hygiene lane it validates is a closed single-session re-verification with a completed outcome — no further action items."
+  ],
+  "concerns": [
+   "Region/token follow-up (rotate to de.sentry.io token) is unresolved in this note",
+   "Fully closed single-session verification note; no ongoing obligations remain."
+  ],
+  "title": "Phase 3 re-verification: upload-sourcemaps.sh against pnpm exec sentry-cli",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/architecture-and-infrastructure/current/main-critical-sonar-rebuild-from-updated-main.plan.md",
+  "lane": "current",
+  "coll": "architecture-and-infrastructure",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "live-critical-path"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "Last updated 2026-05-06. Status is PAUSED with a specific fresh-session first step. Phase 2 is blocked; phases 3-5 pending. Branch fix/sonar-fixes-20260506 has a draft PR #97. Recovery requires removing a broken experiment before any new implementation.",
+   "Last updated 2026-05-06; phases 0 and 1 completed, phase 2 blocked; branch fix/sonar-fixes-20260506 and draft PR #97 still open"
+  ],
+  "concerns": [
+   "Paused with broken local state since 2026-05-06; no evidence of recovery or continuation since then",
+   "PAUSED with broken local state; fresh session recovery step not yet completed as of last update"
+  ],
+  "title": "Main Sonar Remediation Rebuild From Updated Main",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/architecture-and-infrastructure/current/security-dependency-triage.plan.md",
+  "lane": "current",
+  "coll": "architecture-and-infrastructure",
+  "readers": 2,
+  "relevance": [
+   "live-critical-path",
+   "stale"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "Created 2026-03-05; all todos remain pending; Batch 1 overrides partially pre-empted by the pnpm v11 migration but not validated.",
+   "Created 2026-03-05, still queued with all todos pending as of 2026-06-15; references specific package versions (e.g. MCP SDK 1.27.0→1.27.1) likely overtaken by subsequent dependency updates over 3+ months"
+  ],
+  "concerns": [
+   "All todos still pending as of 2026-03-05; security alerts unresolved since March.",
+   "Three months old, all todos pending; dependency version data is stale and needs re-triage before any execution"
+  ],
+  "title": "Security and Dependency Triage — March 2026",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/architecture-and-infrastructure/current/pr-90-landing-closure.plan.md",
+  "lane": "current",
+  "coll": "architecture-and-infrastructure",
+  "readers": 2,
+  "relevance": [
+   "stale",
+   "superseded"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "All todos marked completed; plan outcome: 'all required CI gates green on PR #90'; PR was ready for squash-merge.",
+   "All phases completed, all todos done, status is READY TO MERGE — PR #90 work is complete. Plan should be archived to completed/."
+  ],
+  "concerns": [
+   "All work done; plan should be archived to completed; may be superseded by merge.",
+   "Work is fully complete and gates green; plan should be archived, not sitting in current/"
+  ],
+  "title": "PR #90 Landing Closure",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/architecture-and-infrastructure/current/doc-architecture-phase-b-dependent.plan.md",
+  "lane": "current",
+  "coll": "architecture-and-infrastructure",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "speculative"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [
+   ".agent/plans/architecture-and-infrastructure/current/architectural-documentation-excellence-synthesis.plan.md",
+   ".agent/plans/architecture-and-infrastructure/current/architectural-documentation-excellence-synthesis.plan.md (items I3, I6, I7, I8, I9b are lifted verbatim from the synthesis parent)"
+  ],
+  "staleness": [
+   "Last Updated 2026-04-10; all 6 todos pending; references a Phase A plan not listed in this collection — its completion status is unknown.",
+   "Last updated 2026-04-10; all todos pending; blocked on doc-architecture-phase-a-immediate.plan.md which is not in this collection and whose status is unknown"
+  ],
+  "concerns": [
+   "Blocked on Phase A plan whose status is unverified; Phase A not present in this collection",
+   "Blocked by Phase A plan not present in this audit collection; placement in current/ is premature while gating dependency is unresolved"
+  ],
+  "title": "Documentation Architecture Phase B: Dependent Improvements",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/architecture-and-infrastructure/current/workspace-layer-separation-audit.plan.md",
+  "lane": "current",
+  "coll": "architecture-and-infrastructure",
+  "readers": 2,
+  "relevance": [
+   "speculative",
+   "live-supporting"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [
+   ".agent/plans/architecture-and-infrastructure/current/scripts-validator-family-workspace-migration.plan.md (both address workspace placement of code; scripts migration is a concrete tranche, this is the audit that would produce such tranches)"
+  ],
+  "staleness": [
+   "Last Updated 2026-04-28; all 5 todos pending; explicitly queued and not started.",
+   "Last updated 2026-04-28; all todos pending. Parent plan (oak-surface-isolation-and-generic-foundation-programme) is in future/, suggesting this audit's execution depends on owner priority alignment"
+  ],
+  "concerns": [
+   "Post-M2 structural work; no current executor; blocks on Phase 2 config standardisation completing first",
+   "Parent plan is in future/ lane; this audit in current/ may be premature. Risk noted in plan: 'stays queued until explicitly promoted to active'"
+  ],
+  "title": "Workspace Layer Separation Audit",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/architecture-and-infrastructure/roadmap.md",
+  "lane": "loose",
+  "coll": "architecture-and-infrastructure",
+  "readers": 2,
+  "relevance": [
+   "live-critical-path",
+   "live-supporting"
+  ],
+  "is_real_plan": [],
+  "artefact_kind": [
+   "roadmap"
+  ],
+  "vision_link": [
+   "direct"
+  ],
+  "dup": [],
+  "staleness": [
+   "Last Updated 2026-05-05; references feat/otel_sentry_enhancements branch as in-flight — given today is 2026-06-15 and recent commits show the branch merged (PR #210, #211), some cross-references may now be stale.",
+   "Last updated 2026-05-05. References sentry-otel-integration as having remaining closure work (Vercel credential provisioning + deployment evidence), but the active plan itself shows all those steps closed 2026-04-17. The roadmap's Phase 1 'done when' criteria appear met but the roadmap has not been updated to reflect that."
+  ],
+  "concerns": [
+   "Last updated 2026-05-05; branch may have merged; some pointers to active plans may need refreshing",
+   "Phase 1 'done when' criteria are met per child plan, but roadmap still shows it as active."
+  ],
+  "title": "Architecture and Infrastructure Roadmap",
+  "min_conf": "medium"
+ },
+ {
+  "path": ".agent/plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md",
+  "lane": "active",
+  "coll": "architecture-and-infrastructure",
+  "readers": 2,
+  "relevance": [
+   "live-critical-path",
+   "stale"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "direct"
+  ],
+  "dup": [],
+  "staleness": [
+   "All execution todos are completed or dropped as of 2026-04-17; plan still in active/ rather than archived; given recent commits (PR #210/#211 merged 2026-06-xx) the branch likely merged — plan should be in archive.",
+   "The plan's own todos show all substantive items completed or dropped. 'Parent foundation: CLOSED (2026-04-17).' The plan explicitly states it 'remains active (not yet archived) because the in-scope MCP-server expansion lanes still run on this same branch before the PR opens.' Those lanes are owned by the maximisation plan, which has since moved to .agent/plans/observability/. This parent plan is holding open for a branch (feat/otel_sentry_enhancements) that the recent commit history implies has merged (release 1.34.1 on main). Should be archived."
+  ],
+  "concerns": [
+   "Foundation closed April 2026; plan still in active/ lane — needs archival",
+   "Foundation closed 2026-04-17; branch work completed; plan should be archived."
+  ],
+  "title": "Sentry and OpenTelemetry Foundation",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/architecture-and-infrastructure/active/eslint-disable-remediation.plan.md",
+  "lane": "active",
+  "coll": "architecture-and-infrastructure",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "live-critical-path"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "Created 2026-03-29, last updated 2026-03-29; all 8 todos pending; no progress notes recorded — unclear if any work has landed since creation.",
+   "Created and last updated 2026-03-29. All todos are still pending. No indication of any progress having been recorded on the plan itself. May have aged without progress — the ~64 directive count may no longer be accurate, but nothing in the plan text signals completion or change."
+  ],
+  "concerns": [
+   "Created March 2026 with all todos pending; no update since creation; actual completion state unverifiable without live grep",
+   "Plan unchanged since March 2026; no progress logged on any of the 8 todos."
+  ],
+  "title": "eslint-disable Comment Remediation",
+  "min_conf": "medium"
+ },
+ {
+  "path": ".agent/plans/architecture-and-infrastructure/active/build-tools-workspace-extraction.plan.md",
+  "lane": "active",
+  "coll": "architecture-and-infrastructure",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "speculative"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [],
+  "concerns": [
+   "Marked active but all 7 todos are pending; no work started.",
+   "Declared 'PLANNED — not yet executable' but sits in active/ lane; should be in current/ or future/."
+  ],
+  "title": "Build Tools Workspace Extraction",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/architecture-and-infrastructure/future/vercel-build-warning-elimination.plan.md",
+  "lane": "future",
+  "coll": "architecture-and-infrastructure",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "speculative"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "References PR #90 as a prerequisite baseline. Last updated 2026-04-29. M2 is at ~95% per vision brief; Sentry/OTel observability is an M2 item, so the SENTRY_ORG/SENTRY_PROJECT cache-correctness issue is live.",
+   "Last Updated 2026-04-29; references PR-90 as prerequisite ('PR-90 should land first'). PR-90 was the knip unblock work referenced in other plans and is almost certainly merged given current state (M2 ~95%). Warns to re-verify env vars at start of work — they may have changed. The specific deployment ID referenced is nearly 7 weeks old; env var set may have drifted."
+  ],
+  "concerns": [
+   "Turbo cache-correctness bug is a real correctness issue that may affect M2 Sentry integration",
+   "PR-90 likely merged; referenced deployment log is 7 weeks old; env var state may have drifted"
+  ],
+  "title": "Vercel Build Warning Elimination",
+  "min_conf": "medium"
+ },
+ {
+  "path": ".agent/plans/architecture-and-infrastructure/future/architectural-budget-visibility-layer.plan.md",
+  "lane": "future",
+  "coll": "architecture-and-infrastructure",
+  "readers": 2,
+  "relevance": [
+   "speculative",
+   "live-supporting"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "Last updated 2026-04-29. Named consumers (workspace-layer-separation-audit, directory-complexity-enablement, enforcement-layer-plan, quality-gate-hardening) are still future; no trigger has fired.",
+   "Last Updated 2026-04-29; references parent plan 'architectural-budget-system-across-scales.plan.md' which is not in this collection — need to verify it exists in current/."
+  ],
+  "concerns": [
+   "Promotion depends on consumers needing the data; currently speculative until workspace-layer-separation-audit needs it",
+   "Parent plan reference not verifiable from this collection; no update since April"
+  ],
+  "title": "Architectural Budget Visibility Layer",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/architecture-and-infrastructure/future/clerk-cli-adoption.plan.md",
+  "lane": "future",
+  "coll": "architecture-and-infrastructure",
+  "readers": 2,
+  "relevance": [
+   "speculative",
+   "live-supporting"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "Last updated 2026-04-16; all todos pending; depends on Sentry lane closure and Sentry CLI hygiene follow-up; no promotion trigger has fired.",
+   "Last Updated 2026-04-16; promotion trigger 1 references sentry-otel-integration completing. If that lane is now closed, this brief may be promotable. Clerk CLI version/stability marked 'TBC'."
+  ],
+  "concerns": [
+   "Explicitly slip-safe; no blocker dependency on anything in M2/M3 critical path.",
+   "Sentry dependency may now be resolved; promotion readiness not re-evaluated since April"
+  ],
+  "title": "Clerk CLI Adoption",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/sdk-and-mcp-enhancements/aggregated-tool-result-type-remediation.plan.md",
+  "lane": "loose",
+  "coll": "sdk-and-mcp-enhancements",
+  "readers": 2,
+  "relevance": [
+   "speculative",
+   "live-supporting"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect",
+   "direct"
+  ],
+  "dup": [
+   ".agent/plans/sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md"
+  ],
+  "staleness": [
+   "All todos pending; no progress recorded; no date stamp; held in loose lane. output-schemas-for-mcp-tools.plan.md references it as 'if it lands first' — conditional, not blocking."
+  ],
+  "concerns": [
+   "Loose lane with no status or date; no session claims. May be superseded if output-schemas plan fully absorbs the required shape changes.",
+   "All todos are pending with no dates or priority signal; sits in loose with no scheduling. Lane is appropriate for unscheduled work, but the plan has no declared status or queued/current disposition, making it hard to distinguish from dead backlog. A status field (e.g. 'queued') would clarify intent."
+  ],
+  "title": "Aggregated Tool Result-Type Remediation",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/sdk-and-mcp-enhancements/current/unified-mcp-server-test-harness.plan.md",
+  "lane": "current",
+  "coll": "sdk-and-mcp-enhancements",
+  "readers": 2,
+  "relevance": [
+   "live-critical-path",
+   "live-supporting"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "direct",
+   "indirect"
+  ],
+  "dup": [
+   ".agent/plans/sdk-and-mcp-enhancements/current/http-mcp-test-suite-improvements.plan.md"
+  ],
+  "staleness": [],
+  "concerns": [
+   "WS1 (EEF D7) gated on EEF D6 landing; WS0/WS3 are unblocked and owner-schedulable now.",
+   "Explicitly supersedes http-mcp-test-suite-improvements.plan.md; that plan remains in current/ and should be archived."
+  ],
+  "title": "Unified MCP Server Test Estate",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/sdk-and-mcp-enhancements/current/http-mcp-test-suite-improvements.plan.md",
+  "lane": "current",
+  "coll": "sdk-and-mcp-enhancements",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "superseded"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [
+   ".agent/plans/sdk-and-mcp-enhancements/current/unified-mcp-server-test-harness.plan.md"
+  ],
+  "staleness": [
+   "All todos still pending; superseded by unified-mcp-server-test-harness.plan.md per that plan's frontmatter; should move to archive/superseded/."
+  ],
+  "concerns": [
+   "All seven todos pending; no work started since 2026-05-21 authoring date",
+   "Superseded by unified-mcp-server-test-harness; retained in current/ creates duplicate execution risk."
+  ],
+  "title": "HTTP MCP Test Suite Improvements",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/sdk-and-mcp-enhancements/roadmap.md",
+  "lane": "loose",
+  "coll": "sdk-and-mcp-enhancements",
+  "readers": 2,
+  "relevance": [
+   "live-critical-path",
+   "live-supporting"
+  ],
+  "is_real_plan": [],
+  "artefact_kind": [
+   "roadmap"
+  ],
+  "vision_link": [
+   "direct"
+  ],
+  "dup": [],
+  "staleness": [
+   "Last updated 2026-04-28; references PR #76 merge and Phase 6a closeout as pending — need to verify if those have since landed",
+   "Last updated 2026-04-28; references ws3-phase-6-docs-gates-review-commit.plan.md as active closeout and PR #76 as pending — both may have moved since April."
+  ],
+  "concerns": [
+   "Execution state may be ahead of roadmap text; PR #76 status unverified",
+   "Execution stack references may be stale given subsequent plan completions (clerk-bumps, unified-test-harness)."
+  ],
+  "title": "MCP Apps Standard Migration Plan (roadmap)",
+  "min_conf": "medium"
+ },
+ {
+  "path": ".agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-5-interactive-user-search-view.plan.md",
+  "lane": "active",
+  "coll": "sdk-and-mcp-enhancements",
+  "readers": 2,
+  "relevance": [
+   "live-critical-path",
+   "live-supporting"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "direct"
+  ],
+  "dup": [],
+  "staleness": [
+   "Last updated 2026-04-12; blocked state unresolved — unclear if PR #76 has since merged",
+   "Last Updated 2026-04-12; references PR #76 as a merge blocker — need to verify if PR #76 has since merged, which would make the blocker stale."
+  ],
+  "concerns": [
+   "Stale blocker status — PR #76 merge state unverified; may be ready to execute if PR merged",
+   "Blocker references PR #76 merge; if merged, status is stale and plan should advance."
+  ],
+  "title": "WS3 Phase 5: Interactive User Search View",
+  "min_conf": "medium"
+ },
+ {
+  "path": ".agent/plans/sdk-and-mcp-enhancements/active/upstream-api-reference-metadata.plan.md",
+  "lane": "active",
+  "coll": "sdk-and-mcp-enhancements",
+  "readers": 2,
+  "relevance": [
+   "live-critical-path",
+   "live-supporting"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "direct"
+  ],
+  "dup": [
+   ".agent/plans/sdk-and-mcp-enhancements/active/schema-resilience-and-response-architecture.plan.md"
+  ],
+  "staleness": [
+   "Last Updated 2026-04-13; all todos still pending. No staleness signals — design is complete and implementation has not started."
+  ],
+  "concerns": [
+   "Pre-implementation review findings F1-F6 listed as open; reviewer dispatch not yet scheduled"
+  ],
+  "title": "Upstream API Reference Metadata",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/sdk-and-mcp-enhancements/future/post-merge-tidy-up.plan.md",
+  "lane": "future",
+  "coll": "sdk-and-mcp-enhancements",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "speculative"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "Last Updated 2026-03-01; references M1 gates (G5 Clerk migration, G7 Sentry) as pending — M1 is now done per vision context, so several items may already be resolved or superseded.",
+   "Last Updated 2026-03-01; references M1 invite-only alpha gates (G5, G6, G7, G8) which may already be resolved given M1 is listed as 'done' in the project vision. Session UUIDs as provenance references are non-standard."
+  ],
+  "concerns": [
+   "M1 milestone is complete; M1 gates listed as pending may be stale or already resolved",
+   "M1 gates (G5/G6/G7/G8) listed as pending but M1 milestone is marked done in project context; several items may already be resolved or superseded."
+  ],
+  "title": "Post-Merge Tidy-Up",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/developer-experience/governance/docs-deep-review-2026-02-25/output/deep-review-report.md",
+  "lane": "loose",
+  "coll": "developer-experience",
+  "readers": 2,
+  "relevance": [
+   "stale",
+   "live-supporting"
+  ],
+  "is_real_plan": [],
+  "artefact_kind": [
+   "report"
+  ],
+  "vision_link": [
+   "none",
+   "indirect"
+  ],
+  "dup": [],
+  "staleness": [
+   "Execution complete: 25 moves applied, all findings resolved, dated February 2026. This is a closed historical record."
+  ],
+  "concerns": [],
+  "title": "Deep Review Report (25 February 2026)",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/developer-experience/governance/docs-deep-review-2026-02-25/output/remediation-backlog.md",
+  "lane": "loose",
+  "coll": "developer-experience",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "unclear"
+  ],
+  "is_real_plan": [],
+  "artefact_kind": [
+   "report",
+   "plan"
+  ],
+  "vision_link": [
+   "indirect"
+  ],
+  "dup": [
+   ".agent/plans/developer-experience/active/onboarding-simulations-public-alpha-readiness.md"
+  ],
+  "staleness": [
+   "Backlog items (RB-001 through RB-011) have no completion dates or checkboxes. The deep review is dated 2026-02-25; it is unclear how many items were addressed in subsequent remediation sessions recorded in the onboarding-simulations plan.",
+   "deep-review-report.md declares all DF findings (DF-001 through DF-012) resolved in the move wave, yet this backlog carries no status markers on any item. Completion status cannot be confirmed without re-checking the docs."
+  ],
+  "concerns": [
+   "No completion status on any item; likely partially stale given 4 months of doc remediation work",
+   "All parent findings declared resolved but backlog has no completion markers; may be entirely closed or partially live."
+  ],
+  "title": "Documentation Deep Review Remediation Backlog (2026-02-25)",
+  "min_conf": "medium"
+ },
+ {
+  "path": ".agent/plans/developer-experience/active/devx-strictness-convergence.plan.md",
+  "lane": "active",
+  "coll": "developer-experience",
+  "readers": 2,
+  "relevance": [
+   "live-supporting",
+   "live-critical-path"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect",
+   "direct"
+  ],
+  "dup": [],
+  "staleness": [
+   "Last Updated 2026-03-07; the documentation-sync-log last entry is 2026-04-29. Phase 2 through 6 remain pending with no execution notes beyond 2026-03-07.",
+   "Last updated 2026-03-07; phases 2-6 pending with no execution notes after 2026-03-04. Baseline refresh delta (2026-03-04) flagged drift requiring a re-lock before Phase 2; no evidence re-lock occurred."
+  ],
+  "concerns": [
+   "Phases 2-6 show no execution progress since March 2026; may be blocked or de-prioritised",
+   "Stale since March 2026 with phases 2-6 pending; baseline drift noted but unaddressed."
+  ],
+  "title": "Developer Experience Strictness Convergence",
+  "min_conf": "high"
+ },
+ {
+  "path": ".agent/plans/exploring-open-education-resources/external-knowledge-sources/future/education-skills-mcp-surface.plan.md",
+  "lane": "future",
+  "coll": "exploring-open-education-resources",
+  "readers": 2,
+  "relevance": [
+   "speculative",
+   "live-supporting"
+  ],
+  "is_real_plan": [
+   true
+  ],
+  "artefact_kind": [
+   "plan"
+  ],
+  "vision_link": [
+   "indirect",
+   "direct"
+  ],
+  "dup": [],
+  "staleness": [],
+  "concerns": [
+   "All 9 todos are pending; no dependency on M2 path; no promotion trigger named."
+  ],
+  "title": "Education Skills MCP Surface",
+  "min_conf": "high"
+ }
+]

@@ -1,0 +1,545 @@
+{
+  "summary": "PILOT (4 agents): test the forward-looking value/dependency/sequencing/decay instrument before scaling",
+  "agentCount": 4,
+  "logs": [],
+  "result": {
+    "bundles": [
+      {
+        "id": "B1-critical",
+        "lens": "A",
+        "n": 6
+      },
+      {
+        "id": "B1-critical",
+        "lens": "B",
+        "n": 6
+      },
+      {
+        "id": "B2-mixed",
+        "lens": "A",
+        "n": 6
+      },
+      {
+        "id": "B2-mixed",
+        "lens": "B",
+        "n": 6
+      }
+    ],
+    "results": [
+      {
+        "assessments": [
+          {
+            "path": ".agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md",
+            "title": "MCP App Extension Migration",
+            "milestone_gate": "M2",
+            "user_value": "order1-oak-delivery",
+            "value_directness": "direct",
+            "leverage": "high",
+            "effort": "L",
+            "depends_on": [],
+            "blocks_or_enables": [
+              "search UI (WS4/user-search view) is an explicit M2 close gate",
+              "WS3 child plan (ws3-widget-clean-break-rebuild.plan.md) must complete before M2 close gates are met",
+              "C8 auth-hardening closure gates must complete (already archived as complete)"
+            ],
+            "external_gate": "none",
+            "freshness_risk": "fresh",
+            "confidence": "high",
+            "evidence_quote": "ws4-search-ui: 'WS4: Deliver the human-facing search UI as part of the WS3 clean-break MCP App rebuild.' status: pending ... Phase 6a: pre-merge docs + gates ▶ active closeout (local recovery + closeout commits + gates green; push/preview pending)"
+          },
+          {
+            "path": ".agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md",
+            "title": "Sentry Observability Maximisation — MCP Server",
+            "milestone_gate": "M2",
+            "user_value": "order1-oak-delivery",
+            "value_directness": "direct",
+            "leverage": "high",
+            "effort": "L",
+            "depends_on": [
+              "sentry-otel-integration.execution.plan.md"
+            ],
+            "blocks_or_enables": [
+              "Alpha gate: L-1+L-2+L-3 (Phase 3a) must land before public alpha ships",
+              "Phase 2 events-workspace gates public beta (M3)",
+              "mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md is current execution authority for remaining repo-owned gap before preview",
+              "Unblocks Search CLI observability lane (L-2 delegates extraction)"
+            ],
+            "external_gate": "none",
+            "freshness_risk": "references-merged-pr",
+            "confidence": "medium",
+            "evidence_quote": "Current execution authority is `mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`; the remaining repo-owned gap is now the representative-env production-build gate plus honest disposition of the lingering non-fatal diagnostics before the later owner-directed preview proof. ... L-7 status: completed note: 'BESPOKE BEING TORN OUT.'"
+          },
+          {
+            "path": ".agent/plans/security-and-privacy/future/cloudflare-mcp-public-beta-security-gate.plan.md",
+            "title": "Cloudflare MCP Public-Beta Security Gate",
+            "milestone_gate": "M3",
+            "user_value": "order1-oak-delivery",
+            "value_directness": "indirect",
+            "leverage": "medium",
+            "effort": "M",
+            "depends_on": [],
+            "blocks_or_enables": [
+              "M3 (public beta) Cloudflare MCP security gate is an explicit M3 close gate per VISION brief",
+              "Unblocks public beta opening without optimism about remote MCP security"
+            ],
+            "external_gate": "cloudflare",
+            "freshness_risk": "fresh",
+            "confidence": "high",
+            "evidence_quote": "Promote this brief to `current/` when Milestone 3 planning begins, or earlier if Oak obtains Cloudflare MCP portal / AI Security / Gateway-DLP access that can be tested against the live MCP server. ... Phase 2 evidence-contract work must complete before this gate can close."
+          },
+          {
+            "path": ".agent/plans/sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md",
+            "title": "MCP Output Schemas and Response Validation",
+            "milestone_gate": "M3",
+            "user_value": "order2-enablement",
+            "value_directness": "direct",
+            "leverage": "high",
+            "effort": "M",
+            "depends_on": [
+              "eef-graph-tool-completion.plan.md (EEF D6/D7 must land first)",
+              "graph-tools-value-redesign.plan.md (graph tools must migrate before W2 graph-tool portion)"
+            ],
+            "blocks_or_enables": [
+              "Machine-checkable output contracts for all 36 MCP tools enable external developer and EdTech integrations (order2-enablement)",
+              "SDK runtime validation of structuredContent on every tool success return",
+              "Enables downstream consumers to build reliably against MCP tool outputs"
+            ],
+            "external_gate": "none",
+            "freshness_risk": "fresh",
+            "confidence": "high",
+            "evidence_quote": "Status: DECISION-COMPLETE — owner-ratified 2026-06-09; serial delivery order owner-resolved 2026-06-08 ... W2's graph-tool portion is gated on `graph-tools-value-redesign` landing, its EEF portion on EEF D6 landing ... The delivery is serial across three phases: (1) EEF D6/D7 first ... (2) the graph tools migrate ... (3) THEN this plan"
+          },
+          {
+            "path": ".agent/plans/sdk-and-mcp-enhancements/current/unified-mcp-server-test-harness.plan.md",
+            "title": "Unified MCP Server Test Estate — smoke harness + e2e rebalance",
+            "milestone_gate": "M2",
+            "user_value": "order1-oak-delivery",
+            "value_directness": "indirect",
+            "leverage": "medium",
+            "effort": "M",
+            "depends_on": [
+              "EEF D6 (for WS1 = EEF D7 round trip only; WS0/WS3 are EEF-independent)"
+            ],
+            "blocks_or_enables": [
+              "EEF D7 real-behaviour round trip (WS1) proves teacher-value signal end-to-end",
+              "Replaces half-baked manual harness scripts (WS2)",
+              "Enables reliable built-artifact verification before releases"
+            ],
+            "external_gate": "none",
+            "freshness_risk": "fresh",
+            "confidence": "high",
+            "evidence_quote": "Status: DECISION-COMPLETE (execution gated — see Execution Preconditions) ... WS0/WS2/WS3 are EEF-independent (WS0/WS3 may start now; WS3 stays network-free in CI). WS1 (= D7) depends on EEF D6 landing."
+          },
+          {
+            "path": ".agent/plans/agent-tooling/current/agent-naming-schema-v3.plan.md",
+            "title": "Agent Naming Schema v3 — Era-Pinning Cure + Noun-Agentive Names",
+            "milestone_gate": "none",
+            "user_value": "internal-hygiene",
+            "value_directness": "indirect",
+            "leverage": "low",
+            "effort": "S",
+            "depends_on": [],
+            "blocks_or_enables": [
+              "Correct agent provenance recording in collaboration-state (naming_schema_version true era, not 'override' on happy path)",
+              "Enables v3 noun-agentive name era activation post Phase 1 cure"
+            ],
+            "external_gate": "none",
+            "freshness_risk": "fresh",
+            "confidence": "high",
+            "evidence_quote": "Status: DECISION-COMPLETE — QUEUED (current/; not started). Owner decisions are landed (shape, sequence, accepted P1 diagnosis); execution has not begun. ... Phases 2-3 independent of M2/M3 milestone gates. All work is self-contained in the @oaknational/agent-tools workspace."
+          }
+        ]
+      },
+      {
+        "assessments": [
+          {
+            "path": ".agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md",
+            "title": "MCP App Extension Migration",
+            "milestone_gate": "M2",
+            "user_value": "order1-oak-delivery",
+            "leverage": "high",
+            "effort": "M",
+            "depends_on": [
+              "auth-safety-correction.plan.md",
+              "auth-boundary-type-safety.plan.md",
+              "ws3-widget-clean-break-rebuild.plan.md"
+            ],
+            "blocks_or_enables": [
+              "M2 user-search UI close gate (ws4-search-ui)",
+              "M2 widget clean-break completion"
+            ],
+            "external_gate": "none",
+            "freshness_risk": "references-merged-pr",
+            "confidence": "high",
+            "evidence_quote": "Phase 6a: pre-merge docs + gates — active closeout (local recovery + closeout commits + gates green; push/preview pending) ... Immediate next step is to finish the reopened Phase 6 closeout truthfully ... remaining work is commit/push plus deployed preview/build-log recheck, then merge PR #76."
+          },
+          {
+            "path": ".agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md",
+            "title": "Sentry Observability Maximisation — MCP Server",
+            "milestone_gate": "M2",
+            "user_value": "order1-oak-delivery",
+            "leverage": "medium",
+            "effort": "L",
+            "depends_on": [
+              "sentry-otel-integration.execution.plan.md",
+              "observability-events-workspace.plan.md",
+              "graph-tools-value-redesign (Phase 2 beta gate)"
+            ],
+            "blocks_or_enables": [
+              "M2 observability evidence gate",
+              "Search CLI observability lane (post-merge branch)",
+              "security-observability.plan.md",
+              "accessibility-observability.plan.md"
+            ],
+            "external_gate": "none",
+            "freshness_risk": "references-merged-pr",
+            "confidence": "high",
+            "evidence_quote": "L-7 note: 'BESPOKE BEING TORN OUT. Owner identified 2026-04-20 that @sentry/esbuild-plugin (vendor first-party bundler plugin) eliminates most of this code.' L-8 status: pending — 'Atomic landing 2026-04-21 in f9d5b0d2 (WS1+WS2+WS3.1) then PROBE FAILED 2026-04-22.' Current execution authority is mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md, now archived."
+          },
+          {
+            "path": ".agent/plans/security-and-privacy/future/cloudflare-mcp-public-beta-security-gate.plan.md",
+            "title": "Cloudflare MCP Public-Beta Security Gate",
+            "milestone_gate": "M3",
+            "user_value": "order1-oak-delivery",
+            "leverage": "high",
+            "effort": "unknown",
+            "depends_on": [
+              "Phase 2 evidence-contract work",
+              "Phase 3 protocol/auth/tool-governance baseline"
+            ],
+            "blocks_or_enables": [
+              "M3 public beta security gate",
+              "MCP server public beta launch"
+            ],
+            "external_gate": "cloudflare",
+            "freshness_risk": "fresh",
+            "confidence": "high",
+            "evidence_quote": "This brief is strategic context only. Execution decisions are finalised only when this is promoted to current/ or active/. Promote this brief to current/ when Milestone 3 planning begins, or earlier if Oak obtains Cloudflare MCP portal / AI Security / Gateway-DLP access that can be tested against the live MCP server."
+          },
+          {
+            "path": ".agent/plans/sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md",
+            "title": "MCP Output Schemas and Response Validation",
+            "milestone_gate": "M3",
+            "user_value": "order1-oak-delivery",
+            "leverage": "medium",
+            "effort": "M",
+            "depends_on": [
+              "EEF D6/D7 (eef-graph-tool-completion.plan.md)",
+              "graph-tools-value-redesign.plan.md",
+              "download-asset-user-only-url.plan.md (beneficial)",
+              "schema-resilience-and-response-architecture.plan.md (beneficial)"
+            ],
+            "blocks_or_enables": [
+              "Machine-checkable MCP output contracts for all 36 tools",
+              "SDK runtime validation of structuredContent"
+            ],
+            "external_gate": "none",
+            "freshness_risk": "references-merged-pr",
+            "confidence": "high",
+            "evidence_quote": "Landed-shape note (2026-06-11, owner decision via the 2026-06-11 snagging plan S1/PR-2, commit 20ad83326): get-eef-evidence no longer returns the bare EefEvidenceEnvelope as structuredContent with content: []. It now emits through formatToolResponse like every aggregated tool."
+          },
+          {
+            "path": ".agent/plans/sdk-and-mcp-enhancements/current/unified-mcp-server-test-harness.plan.md",
+            "title": "Unified MCP Server Test Estate — built-server smoke harness + e2e rebalance",
+            "milestone_gate": "M2",
+            "user_value": "order1-oak-delivery",
+            "leverage": "medium",
+            "effort": "M",
+            "depends_on": [
+              "EEF D6 (for WS1/D7 only)",
+              "observability-sinks-decoupling.plan.md (beneficial, non-blocking)",
+              "no-io-test-boundary-and-di-recovery.plan.md (coordinate sequence for WS3)"
+            ],
+            "blocks_or_enables": [
+              "EEF D7 teacher-value round-trip proof",
+              "Built-artifact confidence before public alpha",
+              "e2e suite health before M2 merge"
+            ],
+            "external_gate": "none",
+            "freshness_risk": "fresh",
+            "confidence": "high",
+            "evidence_quote": "DECISION-COMPLETE declared 2026-06-06 (owner-directed). Execution stays owner-scheduled (WS0/WS3 unblocked; WS1 gated on EEF D6). Supersedes http-mcp-test-suite-improvements.plan.md."
+          },
+          {
+            "path": ".agent/plans/agent-tooling/current/agent-naming-schema-v3.plan.md",
+            "title": "Agent Naming Schema v3 — Era-Pinning Cure + Noun-Agentive Names",
+            "milestone_gate": "none",
+            "user_value": "internal-hygiene",
+            "leverage": "low",
+            "effort": "S",
+            "depends_on": [
+              "agent-naming-schema-v2.plan.md (completed, PR #189 merged — predecessor only)"
+            ],
+            "blocks_or_enables": [
+              "Single-valued agent identity (P1 correctness fix ships independently as WS1)",
+              "v3 noun-agentive naming era activation"
+            ],
+            "external_gate": "none",
+            "freshness_risk": "references-merged-pr",
+            "confidence": "high",
+            "evidence_quote": "Predecessor: agent-naming-schema-v2.plan.md (merged PR #189 289b3e036; registry + v1/v2 eras + naming_schema_version). Last Updated: 2026-06-13. Status: DECISION-COMPLETE — QUEUED (current/; not started)."
+          }
+        ]
+      },
+      {
+        "assessments": [
+          {
+            "path": ".agent/plans/agentic-engineering-enhancements/future/multi-agent-delegation-orchestration.plan.md",
+            "title": "Multi-Agent Delegation Orchestration Architecture",
+            "milestone_gate": "none",
+            "user_value": "internal-hygiene",
+            "value_directness": "indirect",
+            "leverage": "medium",
+            "effort": "L",
+            "depends_on": [
+              "cost-of-collaboration.plan.md"
+            ],
+            "blocks_or_enables": [
+              "CursorInvoker implementation",
+              "Cascading delegation patterns",
+              "Internal agent invoker"
+            ],
+            "external_gate": "none",
+            "freshness_risk": "fresh",
+            "confidence": "high",
+            "evidence_quote": "Minimum shippable without cost-of-collaboration P3: Contracts + CodexInvoker validated against existing ADR-180 work. Dispatcher is deferred if multi-agent windows aren't safe yet."
+          },
+          {
+            "path": ".agent/plans/agent-tooling/current/cost-of-collaboration.plan.md",
+            "title": "Cost-of-Collaboration — Agent-Tools Improvement Plan",
+            "milestone_gate": "none",
+            "user_value": "internal-hygiene",
+            "value_directness": "indirect",
+            "leverage": "high",
+            "effort": "L",
+            "depends_on": [],
+            "blocks_or_enables": [
+              "multi-agent-delegation-orchestration.plan.md",
+              "multi-agent session quality and throughput"
+            ],
+            "external_gate": "none",
+            "freshness_risk": "fresh",
+            "confidence": "high",
+            "evidence_quote": "ws-p8-collaboration-tui: status: pending … ws-p6-coordination-artefact-isolation: status: pending … ws-p7-async-sync-mode-awareness: status: pending … ws-p9-rule-skill-topology-refinement: status: pending"
+          },
+          {
+            "path": ".agent/plans/semantic-search/current/m2-public-alpha-auth-rate-limits.execution.plan.md",
+            "title": "Milestone 2 Public Alpha Blockers",
+            "milestone_gate": "M3",
+            "user_value": "order1-oak-delivery",
+            "value_directness": "direct",
+            "leverage": "high",
+            "effort": "M",
+            "depends_on": [],
+            "blocks_or_enables": [
+              "M2 open public alpha launch",
+              "M3 public beta"
+            ],
+            "external_gate": "clerk",
+            "freshness_risk": "stale-dates",
+            "confidence": "medium",
+            "evidence_quote": "Last Updated: 2026-03-11 … PR #54 shipped milestone restructuring and release workflow (invite-only alpha), not the production Clerk/rate-limit hardening described here. This plan remains the canonical tracker for the outstanding auth/rate-limit work required before open public alpha."
+          },
+          {
+            "path": ".agent/plans/connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md",
+            "title": "Graph Stack — Topology and Foundation Increment",
+            "milestone_gate": "M4-GA",
+            "user_value": "order2-enablement",
+            "value_directness": "indirect",
+            "leverage": "high",
+            "effort": "L",
+            "depends_on": [],
+            "blocks_or_enables": [
+              "graph-estate-consolidation.plan.md",
+              "eef-graph-tool-completion.plan.md",
+              "oak-kg-threads-surface.plan.md",
+              "practice-graph-payoff-peak-pilot.plan.md"
+            ],
+            "external_gate": "ontology-repo",
+            "freshness_risk": "fresh",
+            "confidence": "high",
+            "evidence_quote": "Remaining executable work: WS4.2 Threads adapter + WS4.3 query proof (consumer-readiness-sequenced per ADR-173), the consumer-gated precise JSON-LD source paths, and WS6–WS8 close-out cycles."
+          },
+          {
+            "path": ".agent/plans/sector-engagement/future/dfe-data-sdk.plan.md",
+            "title": "DfE Data SDK (Explore Education Statistics API)",
+            "milestone_gate": "none",
+            "user_value": "order3-teacher-pupil",
+            "value_directness": "indirect",
+            "leverage": "low",
+            "effort": "M",
+            "depends_on": [
+              "eef-school-leadership-evidence.plan.md",
+              "eef-outcome-evaluation-infrastructure.plan.md"
+            ],
+            "blocks_or_enables": [
+              "EEF school-leadership evidence surface",
+              "EEF outcome-evaluation baselines",
+              "DfE-statistics enrichment of school-context workflows"
+            ],
+            "external_gate": "none",
+            "freshness_risk": "fresh",
+            "confidence": "high",
+            "evidence_quote": "Blocking: a named Oak consumer with ratified value (the promotion gate below). Existence of the data is not a reason to build."
+          },
+          {
+            "path": ".agent/plans/observability/current/observability-sinks-decoupling.plan.md",
+            "title": "Observability Sinks Decoupling — implement ADR-171",
+            "milestone_gate": "M2",
+            "user_value": "order1-oak-delivery",
+            "value_directness": "direct",
+            "leverage": "medium",
+            "effort": "M",
+            "depends_on": [],
+            "blocks_or_enables": [
+              "MCP smoke harness telemetry without Sentry",
+              "multi-sink-vendor-independence-conformance.plan.md"
+            ],
+            "external_gate": "none",
+            "freshness_risk": "fresh",
+            "confidence": "high",
+            "evidence_quote": "Status: DECISION-COMPLETE (execution gated — see Execution Preconditions) … Execution starts when the owner schedules it, and when: (1) the relevant feature branch(es) are merged (no parallel-writer race); (2) the C1 forcing function exists."
+          }
+        ]
+      },
+      {
+        "assessments": [
+          {
+            "path": ".agent/plans/agentic-engineering-enhancements/future/multi-agent-delegation-orchestration.plan.md",
+            "title": "Multi-Agent Delegation Orchestration Architecture",
+            "milestone_gate": "none",
+            "user_value": "internal-hygiene",
+            "leverage": "medium",
+            "effort": "L",
+            "depends_on": [
+              "cost-of-collaboration.plan.md (P0-P2 complete)",
+              "ADR-180 (Codex-Exec pattern)",
+              "codex-exec CLI + codex-helper skill"
+            ],
+            "blocks_or_enables": [
+              "CursorInvoker + Cursor delegation",
+              "agent discovery/routing",
+              "cascading delegation (Claude-to-Codex)"
+            ],
+            "external_gate": "none",
+            "freshness_risk": "fresh",
+            "evidence_quote": "Minimum shippable without cost-of-collaboration P3: Contracts + CodexInvoker validated against existing ADR-180 work. Dispatcher is deferred if multi-agent windows aren't safe yet.",
+            "value_directness": "indirect",
+            "confidence": "high"
+          },
+          {
+            "path": ".agent/plans/agent-tooling/current/cost-of-collaboration.plan.md",
+            "title": "Cost of Collaboration — Agent-Tools Improvement Plan",
+            "milestone_gate": "none",
+            "user_value": "order1-oak-delivery",
+            "leverage": "high",
+            "effort": "L",
+            "depends_on": [],
+            "blocks_or_enables": [
+              "multi-agent-delegation-orchestration.plan.md",
+              "multi-agent collaboration windows (safe execution)",
+              "P8 TUI operator surface"
+            ],
+            "external_gate": "none",
+            "freshness_risk": "fresh",
+            "evidence_quote": "WS3 (removal of the legacy directory) is BLOCKED on the comms research plan completing per the owner standing direction 2026-05-25. P8 acceptance remains pending until operator-value UI, attention workflow, interaction hardening, reader resilience, and boundary follow-ups are complete.",
+            "value_directness": "indirect",
+            "confidence": "high"
+          },
+          {
+            "path": ".agent/plans/semantic-search/current/m2-public-alpha-auth-rate-limits.execution.plan.md",
+            "title": "Milestone 2 Public Alpha Blockers (Clerk + OAuth Rate Limits)",
+            "milestone_gate": "M3",
+            "user_value": "order1-oak-delivery",
+            "leverage": "high",
+            "effort": "M",
+            "depends_on": [
+              "clerk-production-migration.md research (source_research field)",
+              "high-level-plan.md"
+            ],
+            "blocks_or_enables": [
+              "M2 open public alpha (Clerk production + rate limiting are stated M2 close gates)"
+            ],
+            "external_gate": "clerk",
+            "freshness_risk": "stale-dates",
+            "evidence_quote": "Last Updated: 2026-03-11 … PR #54 shipped milestone restructuring and release workflow (invite-only alpha), not the production Clerk/rate-limit hardening described here. This plan remains the canonical tracker for the outstanding auth/rate-limit work required before open public alpha.",
+            "value_directness": "direct",
+            "confidence": "medium"
+          },
+          {
+            "path": ".agent/plans/connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md",
+            "title": "Graph Stack — Topology and Foundation Increment",
+            "milestone_gate": "M4-GA",
+            "user_value": "order2-enablement",
+            "leverage": "high",
+            "effort": "L",
+            "depends_on": [
+              "oak-curriculum-ontology GitHub repo (pinned Turtle/SHACL raw material for WS4.2)",
+              "ADR-173 + ADR-179 (ratified)",
+              "EEF Zod-validated loader (sector-engagement/eef T2, for WS4.5)"
+            ],
+            "blocks_or_enables": [
+              "oak-kg-threads-surface.plan.md",
+              "practice-graph-payoff-peak-pilot.plan.md",
+              "eef-graph-tool-completion.plan.md",
+              "graph-estate-consolidation.plan.md",
+              "cross-corpus joins + future graph corpora"
+            ],
+            "external_gate": "ontology-repo",
+            "freshness_risk": "fresh",
+            "evidence_quote": "Remaining executable work: WS4.2 Threads adapter + WS4.3 query proof (consumer-readiness-sequenced per ADR-173), the consumer-gated precise JSON-LD source paths, and WS6–WS8 close-out cycles.",
+            "value_directness": "indirect",
+            "confidence": "high"
+          },
+          {
+            "path": ".agent/plans/sector-engagement/future/dfe-data-sdk.plan.md",
+            "title": "DfE Data SDK (Explore Education Statistics API)",
+            "milestone_gate": "unclear",
+            "user_value": "order3-teacher-pupil",
+            "leverage": "low",
+            "effort": "M",
+            "depends_on": [
+              "eef-school-leadership-evidence.plan.md (named consumer candidate)",
+              "eef-outcome-evaluation-infrastructure.plan.md (named consumer candidate)",
+              "named Oak consumer with ratified value (explicit promotion gate)"
+            ],
+            "blocks_or_enables": [
+              "school-leadership evidence surface",
+              "EEF outcome-evaluation baselines",
+              "DfE-statistics enrichment of school-context workflows"
+            ],
+            "external_gate": "other",
+            "freshness_risk": "fresh",
+            "evidence_quote": "Blocking: a named Oak consumer with ratified value (the promotion gate below). Existence of the data is not a reason to build. … re-verify at promotion, including a re-run of the build-vs-buy survey (the TypeScript-SDK absence and the Python-client-in-development status are the most drift-prone facts here).",
+            "value_directness": "indirect",
+            "confidence": "high"
+          },
+          {
+            "path": ".agent/plans/observability/current/observability-sinks-decoupling.plan.md",
+            "title": "Observability Sinks Decoupling — implement ADR-171",
+            "milestone_gate": "M2",
+            "user_value": "order1-oak-delivery",
+            "leverage": "medium",
+            "effort": "M",
+            "depends_on": [
+              "ADR-171 (Accepted — satisfied)",
+              "WS1 core types (commit a3a0222a — satisfied)",
+              "relevant feature branch(es) merged (execution precondition)",
+              "multi-sink-vendor-independence-conformance.plan.md (beneficial)"
+            ],
+            "blocks_or_enables": [
+              "MCP smoke harness span assertion with Sentry off",
+              "vendor-neutral telemetry capture for future harness consumers",
+              "ADR-143/116/162/163 amendment completion"
+            ],
+            "external_gate": "none",
+            "freshness_risk": "fresh",
+            "evidence_quote": "Execution starts when the owner schedules it, and when: (1) the relevant feature branch(es) are merged (no parallel-writer race); (2) the C1 forcing function exists (here or via the conformance plan).",
+            "value_directness": "indirect",
+            "confidence": "high"
+          }
+        ]
+      }
+    ]
+  }
+}

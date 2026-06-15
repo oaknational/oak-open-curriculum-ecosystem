@@ -8,6 +8,28 @@ merge_class: append-only-narrative
 fitness_content_role: drainable-buffer
 ---
 
+## Session: 2026-06-15 — MCP live-product readiness (Quoll weaves Dreamscape)
+
+Read-only strategic session (owner-lifted for doc writes); no code, no commit. Three
+corrections worth carrying — all instances of already-homed doctrine, logged as TELLs:
+
+- **Started to relay the planning estate as the answer.** Owner: "do not assume the docs
+  are complete/correct… find what is right, wrong, MISSING." TELL: a doc-relay returns only
+  what the docs already considered and *by construction cannot surface what is missing*; for
+  a readiness / "what's needed" ask, treat docs as one fallible input and verify load-bearing
+  facts first-hand (live server, README, code). Instance of [[ground-convenient-claims]] /
+  verify-dont-trust.
+- **Waved graphical UX away on the strength of the as-is widget.** Framed "UI is a small
+  host-owned rectangle → UX is mostly conversational", minimising the design layer. Owner:
+  "ground it in what we are going to build, not what we have today." TELL: a half-built
+  current state is not a structural constraint; a readiness framework grounds in the TARGET
+  build. Instance of existence-is-not-correctness / value-first-existing-is-malleable.
+- **Wrote "parked" for the deferred milestone redraft → hook block (no-hedging-vocabulary).**
+  Cure was conceptual, not a synonym swap: name the gate. The deferral is legitimate only
+  because it has a promotion trigger (owner direction to schedule the redraft); stated that
+  everywhere instead of an indefinite hold. TELL: indefinite-deferral vocab signals the
+  *gate* is unnamed, not that the word needs replacing.
+
 ## Session: 2026-06-14 — napkin rotated (dedicated comms-research-closeout consolidation, Marlin weaves Marsh)
 
 Rotated at the end of the comms-research thread during the owner's dedicated
@@ -76,3 +98,44 @@ the documented trigger). Remaining live candidates, for other threads:
 - **UAT runbook elevation landed** (commit `95ec2708a`, branch `docs/planning-and-validation`):
   whole-server validation runbook, `uat-reports/` with first prod record, live oak-prod GO. The
   runbook's `limit:0` row was corrected after live probe showed `-32602` not handler refusal.
+
+## Session: 2026-06-15 — multi-wave plan-estate survey (Baobab lifts Topsoil / claude-code)
+
+Running notes + evidence live in the dedicated doc
+`.agent/reports/plan-estate-survey-2026-06-15/README.md` (not the napkin — owner-directed:
+dedicated doc for high-volume multi-wave work). Method learnings worth keeping independently:
+
+- **Workflow `args` did not reach the script as an object** — a 143-agent run produced 0
+  survey bundles because `(args && args.live)` was empty; only the hardcoded meta tier ran.
+  Cure: embed the work-list manifest as a `const` in the script; do not rely on `args`. TELL:
+  after launching a fan-out, check the returned `scope`/agent-count matches intent before
+  trusting results.
+- **Pilot a structured-output instrument on ~4 agents before scaling to hundreds** (owner).
+  The full run's `is_real_plan` boolean was never set false across 409 docs × 2 readers, and
+  `lowConfidence` came back 0 — silent field-population failures a 4-agent pilot exposes cheaply.
+- **First-hand validation caught a foundation-invalidating agent misconception.** A sub-agent
+  reported "M2 blocked on an unmerged 357-file Sentry branch"; the branch was 1,447 commits
+  BEHIND main (abandoned) and the Sentry foundation was already live on `main`. Verifying the
+  load-bearing claim myself (git + the app tree) refuted it. Sibling: [[first_hand_means_me_not_subagents]].
+- **`no-hedging-vocabulary` fires on report prose, and the deferred-ideas collection's own
+  directory name is in the indefinite-deferral regex family** — naming that path on any
+  in-scope surface (`.agent/reports/`, `.agent/plans/`) is blocked at write. Real
+  established-name-vs-doctrine tension; routed as a finding in the survey doc §4.
+- **A peer artefact's "owner-ratified" stamp is itself a claim to verify, not a gate to
+  relay.** I imported a concurrent session's self-applied "K1–K3 owner-ratified" straight
+  into my durable synthesis; owner corrected: "an agent wrote that, it is not user-ratified,
+  it is input into the system." I had verified the artefact's FACTUAL claims (README, tool
+  count) but not its AUTHORITY claims. TELL: apply input-to-verify to the ratification stamp,
+  not just the facts. Sibling: [[peer_status_claims_are_input_to_verify]], [[gates_must_be_citable]].
+- **Recency ≠ authority ≠ correctness — a fresh narrow artefact can hijack a broad session.**
+  A same-day launch-readiness report became the gravitational frame of a broad whole-estate
+  survey; I amplified the narrowing over several turns (even elevating a minor MCP tool-handling
+  debt to "headline"). Owner: "newer doesn't make it better or more important"; "I wish I hadn't
+  created that report, it distorted a broad valuable session." TELL: mid-broad-analysis, weigh a
+  fresh narrow input as ONE slice by evidence; do not let recency re-frame the breadth.
+- **Owner reframes that corrected my evaluative charge (2026-06-15, carry forward).** (1) The
+  ~40% on substrate + Practice is DELIBERATE — the Practice is a value stream in its own right;
+  modest monthly gains compound. "Inward skew" was my mis-frame. (2) Impact is ARTICULATED here
+  (what we care about, why, how we attempt value) + measured by the org — not instrumented
+  in-repo (we lack that capability). (3) Forward order: align-on-impact → value-stream
+  redundancy/gap → execution-spine. Homed: survey report §14/§15 + the thread record.

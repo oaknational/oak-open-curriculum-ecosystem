@@ -1,0 +1,592 @@
+[
+ {
+  "collection": "security-and-privacy",
+  "organisation_verdict": "mislaned",
+  "critical_path_role": "This collection is a hard M3 (public beta) blocker. The Cloudflare MCP security gate at .agent/plans/security-and-privacy/future/cloudflare-mcp-public-beta-security-gate.plan.md is explicitly listed as an M3 BLOCKER in the roadmap and README. The four-phase programme (Phase 0 through Phase 3) is the prerequisite chain for that gate. Nothing in this collection has executed yet — the entire security hardening programme is pre-execution, meaning the product cannot reach public beta until this collection delivers.",
+  "non_plan_in_executable_lanes": [],
+  "stale_executable": [],
+  "top_duplications": [
+   {
+    "plans": [
+     ".agent/plans/security-and-privacy/future/phase-3-baseline-control-cut-list.md",
+     ".agent/plans/security-and-privacy/future/cloudflare-mcp-public-beta-security-gate.plan.md"
+    ],
+    "overlap": "Both address Phase 3 public-beta security controls. The cut list enumerates the control set to be implemented; the gate brief evaluates Cloudflare-specific controls against the same threat model. They are intended to be complementary (implementation scope vs vendor gate evaluation), but the boundary between what belongs in each is not crisply defined and they should be reconciled when Phase 3 executes."
+   }
+  ],
+  "relevance_rollup": "critical: 1 (Cloudflare MCP public-beta security gate — explicit M3 BLOCKER) / supporting: 11 (phase-0-foundation-and-baseline, phase-1-hallucination-guarding-execution, phase-0-control-mapping, phase-1-security-claim-contract, phase-2-evidence-merge-readiness-rules, phase-3-baseline-control-cut-list, developing-secure-mcp-servers.research, evidence-bundle.template, deferred-controls-register, documentation-sync-log, roadmap) / speculative: 2 (phase-2-evidence-based-claims-execution and phase-3-protocol-auth-and-tool-governance-baseline are multi-phase-dependent and not independently actionable) / stale-or-superseded: 0",
+  "recommendation": "Reorganise: move .agent/plans/security-and-privacy/active/phase-1-hallucination-guarding-execution.md, .agent/plans/security-and-privacy/active/phase-2-evidence-based-claims-execution.md, and .agent/plans/security-and-privacy/active/phase-3-protocol-auth-and-tool-governance-baseline.md out of the active lane and into a current/ or future/ lane. Only .agent/plans/security-and-privacy/active/phase-0-foundation-and-baseline.md is unblocked and legitimately active. Placing sequentially-blocked phases in active creates a false signal that all four are simultaneously actionable. Additionally, flag .agent/plans/security-and-privacy/developing-secure-mcp-servers.research.md for a re-validation pass against current MCP auth spec before Phase 3 execution — it is four months old in a fast-moving normative space and acknowledges this itself. No pruning or knowledge-preservation actions needed; the collection is structurally sound, well-indexed, and correctly cross-referenced. The primary defect is lane hygiene: active should mean unblocked and in-flight, not the full phase sequence staged ahead of time.",
+  "confidence": "high"
+ },
+ {
+  "collection": "connecting-oak-resources",
+  "organisation_verdict": "coherent",
+  "critical_path_role": "This collection is the graph substrate and Oak-owned surface foundation for M2/M3. graph-stack.plan.md (WS4.2 Threads adapter) is the prerequisite for the onto-threads surface — the ratified threads-first direction. graph-tools-value-redesign.plan.md (S3 skills-as-prompts) is the sole remaining item gating the value-redesign milestone. graph-estate-consolidation.plan.md is the live estate cleanup record. Together these three plans gate the graph layer of the public alpha and beta. The future/parked plans are correctly held back and do not block the critical path. external-oak-references is a live research intent with no execution yet started.",
+  "recommendation": "Reorganise with targeted body repairs — do not prune or merge. Four actions: (1) Refresh agent-guidance-consolidation.plan.md body at execution start — it references the deleted graph-resource-factory and removed curriculum:// resources; the 11 todos are untouched since April 2026 and the body needs a sweep before any agent picks it up. (2) Clean the graph-stack.plan.md body of retired Inc.N/gate-1a/gate-1b vocabulary — the 2026-06-02 banner partially decontaminates it but executors will read stale framing; a body decontamination pass is due. (3) Excise the §1 prior-art block from oak-misconceptions-graph-features.plan.md — the substance has moved to graph-tools-value-redesign.plan.md and retaining it as prior art creates dual-location confusion; delete the section and replace with a one-line pointer. (4) Reclassify external-oak-references-deep-research.plan.md in its header as a research brief (not a plan) — the file sits in a future lane which is acceptable, but the .plan.md extension misrepresents it; rename to .research.md or add a prominent type header. The knowledge-graph-integration/research/ artefact and the future/extending-graph-support-tooling candidate buffer are correctly placed; no moves needed. Archive eligibility: graph-tools-value-redesign is near archival once S3 (owner-gated) resolves; graph-estate-consolidation is near archival once EEF D7 delivers and t6/t8 close.",
+  "confidence": "high",
+  "non_plan_in_executable_lanes": [],
+  "stale_executable": [
+   ".agent/plans/connecting-oak-resources/knowledge-graph-integration/active/agent-guidance-consolidation.plan.md"
+  ],
+  "top_duplications": [
+   {
+    "plans": [
+     ".agent/plans/connecting-oak-resources/knowledge-graph-integration/future/oak-misconceptions-graph-features.plan.md",
+     ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-tools-value-redesign.plan.md"
+    ],
+    "overlap": "§1 (bounded sub-graph extraction) was moved into graph-tools-value-redesign on 2026-06-04 but the full section is retained in oak-misconceptions-graph-features as prior art — consumers cannot tell which copy is authoritative without reading both bodies."
+   }
+  ],
+  "relevance_rollup": "critical: 2 (graph-stack.plan.md, graph-tools-value-redesign.plan.md) / supporting: 4 (graph-estate-consolidation.plan.md, agent-guidance-consolidation.plan.md, elasticsearch-neo4j-oak-ontology-synthesis.research.md, external-oak-references-deep-research.plan.md) / speculative: 5 (cross-source-journeys.plan.md, nc-knowledge-taxonomy-surface.plan.md, oak-kg-threads-surface.plan.md, oak-misconceptions-graph-features.plan.md, extending-graph-support-tooling.plan.md) / stale-or-superseded: 0"
+ },
+ {
+  "collection": "discovery",
+  "organisation_verdict": "mislaned",
+  "critical_path_role": "Owns how external clients, registries, crawlers, and agent runtimes find Oak's public machine surfaces (MCP server, skills index, OpenAPI). The one executable plan (agent-readiness-discovery-hub) delivers the apex discovery hub, skills index, OpenAPI auth guidance, robots/sitemap baseline, and Content Signals routing — all prerequisites for M2/M3 discoverability. Nothing in this collection blocks the live MCP server itself, but without it Oak's surfaces are invisible to automated discovery. The collection is a near-term enabler, not a blocker for M2 launch.",
+  "non_plan_in_executable_lanes": [
+   ".agent/plans/discovery/current/standards-verification-2026-06-01.report.md"
+  ],
+  "stale_executable": [
+   ".agent/plans/discovery/future/skills-classification-taxonomy.plan.md"
+  ],
+  "top_duplications": [
+   {
+    "plans": [
+     ".agent/plans/discovery/future/agent-skills-discovery.plan.md",
+     ".agent/plans/discovery/future/skills-classification-taxonomy.plan.md",
+     ".agent/plans/discovery/future/skills-distribution-channels-suggestions.report.md"
+    ],
+    "overlap": "All three address the same post-ADR-189 concern: vocabulary ratification, cataloguing, and publication paths for Oak agent skills. The taxonomy plan defines the vocabulary; the discovery plan operationalises it into a .well-known surface; the distribution report covers install/announcement paths. Together they are three slices of one promotion-ready body of work that should be consolidated into a single executable plan now that ADR-189 is ratified and oak-skills library is live."
+   },
+   {
+    "plans": [
+     ".agent/plans/discovery/future/agent-skills-discovery-research.report.md",
+     ".agent/plans/discovery/future/agent-skills-discovery.plan.md"
+    ],
+    "overlap": "The research report is the direct input document for the discovery plan and references it by name. The research report's 'recommended next step' is already captured in the plan. The report belongs as evidence cited by the plan, not as a peer artefact at the same level in future/."
+   }
+  ],
+  "relevance_rollup": "critical: 1 / supporting: 6 / speculative: 5 / stale-or-superseded: 0 (but 1 promotion-trigger missed: skills-classification-taxonomy.plan.md)",
+  "recommendation": "Reorganise with three targeted actions. First, reconcile the hub plan's ar1 todo: mark it complete — the paired verification report (standards-verification-2026-06-01.report.md) already delivered the standards refresh on 2026-06-01; the todo is a status lie that will confuse an execution agent. Second, trigger promotion evaluation for skills-classification-taxonomy.plan.md: its own stated trigger (ADR-189 ratified, oak-skills library live) is met as of 2026-06-03; it should move to current/ or be merged into agent-skills-discovery.plan.md as a combined executable plan, since the three skills artefacts (taxonomy plan, discovery plan, distribution report) now constitute one coherent body of ready work. Third, leave the four fully speculative plans (aila-a2a-agent-card, webmcp-human-site-operability, dns-aid-discovery, mcp-server-cards) exactly where they are in future/ — their prerequisites are genuinely unmet and their lane placement is correct. The standards-verification report in current/ is correctly signalled as evidence by the current/README.md; no move needed, but the artefact_kind mismatch is worth noting in the next README pass. No pruning is warranted: all speculative plans carry forward-looking surveillance value for fast-moving specs and should be preserved.",
+  "confidence": "high"
+ },
+ {
+  "collection": "sector-engagement",
+  "organisation_verdict": "mislaned",
+  "critical_path_role": "Indirect supporting role. The EEF subthread holds ratified contracts and the completed D5–D7 execution record that proved the graph-native EEF surface shipped in M2. The sector-reusable-components adoption contract is the live contract for Phase 4 partner playbooks targeted at M3/post-beta. The upstream API issue register feeds upstream coordination. No plan in this collection is itself on the M2/M3 critical path — engineering execution lives in sdk-and-mcp-enhancements/, developer-experience/, and semantic-search/. The collection's value is as the external-engagement bridge: naming partners, surfacing adoption prerequisites, and holding the EEF evidence corpus that underpins the sector credibility story at open alpha and beyond.",
+  "recommendation": "Reorganise with targeted archiving. Four completed execution plans and one closed audit ledger are mislaned in eef/current/ and should be moved to eef/archive/ (eef-d5-execution.plan.md, eef-d6-execution.plan.md, eef-revalidate-on-new-graph-tools.plan.md, eef-graph-tool-completion.plan.md, eef-d0-decontamination-ledger.md). The three non-plan reference artefacts in eef/current/ (eef-d3-mcp-contract.md, eef-d4-graph-capability-contract.md, eef-d2-source-path-table.md) should move to eef/reference/ as permanent ratification records. The stale ooc-issues/upstream-500-errors.md needs a one-line status check against the live API and a resolution note added; ooc-issues/keywords-ordering-mismatch.md should be annotated as resolved-with-residual and moved to an archive or reference lane. The ten unowned action items in eef/reference/eef-data-surfacing-gap-research-2026-06-12.md must be assigned owners or explicitly deferred into named future plans to prevent evaporation. No content should be deleted: the completed EEF execution records are durable evidence of the graph-native surface design and must be preserved in archive, not pruned.",
+  "confidence": "high",
+  "non_plan_in_executable_lanes": [
+   ".agent/plans/sector-engagement/eef/current/eef-d3-mcp-contract.md",
+   ".agent/plans/sector-engagement/eef/current/eef-d4-graph-capability-contract.md",
+   ".agent/plans/sector-engagement/eef/current/eef-d2-source-path-table.md",
+   ".agent/plans/sector-engagement/eef/current/eef-d0-decontamination-ledger.md"
+  ],
+  "stale_executable": [
+   ".agent/plans/sector-engagement/eef/current/eef-revalidate-on-new-graph-tools.plan.md",
+   ".agent/plans/sector-engagement/eef/current/eef-d6-execution.plan.md",
+   ".agent/plans/sector-engagement/eef/current/eef-d5-execution.plan.md",
+   ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+  ],
+  "top_duplications": [
+   {
+    "plans": [
+     ".agent/plans/sector-engagement/ooc-issues/upstream-500-errors.md",
+     ".agent/plans/sector-engagement/ooc-issues/oak-open-curriculum-api-issues-2026-04-23.md"
+    ],
+    "overlap": "Both cover upstream API 500 errors: the issues file records Issue 1 (threads endpoint 500) and Issue 5 (500 response doctrine); upstream-500-errors.md focuses on the transcript endpoint 500. Partial thematic overlap but distinct enough to retain separately — the issues file is the canonical tracker, the standalone 500 file is a narrower incident record."
+   },
+   {
+    "plans": [
+     ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md",
+     ".agent/plans/sector-engagement/eef/future/evidence-integration-strategy.md"
+    ],
+    "overlap": "Both articulate the EEF value sequence and graph-tool integration rationale. The evidence-integration-strategy.md is explicitly crosswalked to the completion plan and ADR-191/ADR-194 via a 2026-06-05 reconciliation note; superseded clauses are annotated inline. Overlap is managed but the strategy doc carries historical content now partially superseded by the completion plan's ratified decisions."
+   },
+   {
+    "plans": [
+     ".agent/plans/sector-engagement/castr/oak-principles.md",
+     ".agent/plans/sector-engagement/castr/expected-outputs.md"
+    ],
+    "overlap": "Companion documents for the same speculative Castr codegen-replacement evaluation; oak-principles.md is the doctrine reference, expected-outputs.md is the requirements spec. Neither is a plan; both are speculative and neither has a promotion trigger. Could be merged into a single castr reference document without loss."
+   }
+  ],
+  "relevance_rollup": "critical 0 / supporting 12 / speculative 8 / stale-or-superseded 7"
+ },
+ {
+  "collection": "observability",
+  "organisation_verdict": "cluttered",
+  "critical_path_role": "This collection is the entire observability delivery system for the live product milestone M2 (open public alpha, ~95% complete) and M3 (public beta). The active plan sentry-observability-maximisation-mcp.plan.md drives the engineering axis; the current/ queue holds the product, accessibility, security, and vendor-independence lanes that must land before the public-beta launch criterion is met. Without these plans executing and archiving cleanly, the M2-to-M3 transition has no traceable evidence base.",
+  "non_plan_in_executable_lanes": [
+   ".agent/plans/observability/current/pr-93-merge-snagging-2026-05-05.md"
+  ],
+  "stale_executable": [
+   ".agent/plans/observability/current/mcp-outbound-token-health.plan.md",
+   ".agent/plans/observability/current/sentry-preview-validation-and-quality-triage.plan.md",
+   ".agent/plans/observability/current/post-pr-87-merge-pipeline-triage.plan.md",
+   ".agent/plans/observability/current/feat-eef-exploration-completion.plan.md",
+   ".agent/plans/observability/current/pr-93-sonar-quality-gate-resolution.plan.md",
+   ".agent/plans/observability/current/pr-87-codeql-alerts.plan.md",
+   ".agent/plans/observability/future/pr-93-sonar-oak-eslint-claim-overlap.plan.md"
+  ],
+  "top_duplications": [
+   {
+    "plans": [
+     ".agent/plans/observability/future/statuspage-integration.plan.md",
+     ".agent/plans/observability/future/customer-facing-status-page.plan.md"
+    ],
+    "overlap": "Both target the same status-page surface; the consolidation memo explicitly flags these two as merge candidates with overlapping scope."
+   },
+   {
+    "plans": [
+     ".agent/plans/observability/future/sentry-observability-maximisation.plan.md",
+     ".agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md"
+    ],
+    "overlap": "The future plan is the pre-split strategic parent brief; the active plan is the live execution vehicle. The consolidation memo recommends archiving the future plan as superseded — it is intentionally retained as cross-branch context per the high-level index but is non-executable."
+   },
+   {
+    "plans": [
+     ".agent/plans/observability/current/pr-93-merge-snagging-2026-05-05.md",
+     ".agent/plans/observability/current/feat-eef-exploration-completion.plan.md"
+    ],
+    "overlap": "Both cover the PR-93 / feat/eef_exploration closure arc; the snagging report is a non-plan pre-merge snapshot that belongs in archive, duplicating context already recorded in the completion plan."
+   }
+  ],
+  "relevance_rollup": "critical: 5 (sentry-observability-maximisation-mcp, observability-sinks-decoupling, sentry-release-identifier-single-source-of-truth, security-observability, accessibility-observability) / supporting: 9 (search-observability, observability-events-workspace, multi-sink-vendor-independence-conformance, gate-recovery-cadence, what-the-system-emits-today, second-backend-evaluation, slo-and-error-budget, no-problem-hiding-patterns-rule-reinstatement, mcp-outbound-token-health) / speculative: 12 (customer-facing-status-page, statuspage-integration, cost-and-capacity-telemetry, cross-system-correlated-tracing, ai-telemetry-wiring, deployment-impact-bisection, curriculum-content-observability, feature-flag-provider-selection, mcp-http-runtime-canonicalisation, security-observability-phase-2, sentry-observability-maximisation-future, feature-flag-provider-selection) / stale-or-superseded: 8 (sentry-preview-validation-and-quality-triage, post-pr-87-merge-pipeline-triage, pr-93-merge-snagging, feat-eef-exploration-completion, pr-93-sonar-quality-gate-resolution, pr-87-codeql-alerts, pr-93-sonar-oak-eslint-claim-overlap, replace-sentry-mode-with-observability-sinks-damaged)",
+  "recommendation": "Reorganise and prune-with-knowledge-preservation. The collection's architecture and lane definitions are sound; the problem is accumulation of completed and superseded plans in active/current/future lanes. Execute seven moves: (1) archive mcp-outbound-token-health.plan.md to archive/completed — it declares its own archive trigger and all todos are done; (2) archive sentry-preview-validation-and-quality-triage.plan.md to archive/completed — execution is done, only a mechanical closeout step remains; (3) archive post-pr-87-merge-pipeline-triage.plan.md to archive/completed — the problem it tracked was fixed by PR-90 and the repo is now at v1.34.1; (4) archive feat-eef-exploration-completion.plan.md to archive/completed — PR-93 merged, branch gone, steps 10-12 remain pending in name only; (5) archive pr-93-sonar-quality-gate-resolution.plan.md to archive/completed — all todos completed and status declared COMPLETE; (6) archive pr-87-codeql-alerts.plan.md to archive/superseded — the target PR merged 7 weeks ago and the verification command references a closed PR head; (7) move pr-93-sonar-oak-eslint-claim-overlap.plan.md from future/ to archive/completed — status is completed with evidence dated 2026-05-05. Additionally, move the non-plan pr-93-merge-snagging-2026-05-05.md from current/ to archive (it is a closed-PR snapshot report). Finally, update what-the-system-emits-today.md matrix (currently 3/13 cells populated as of 2026-05-26) to reflect observability work that landed post-PR-93. The live critical-path plans (sentry-observability-maximisation-mcp, observability-sinks-decoupling, sentry-release-identifier-single-source-of-truth) need re-grounding checks before resumption given the 7-week gap since their last recorded progress.",
+  "confidence": "high"
+ },
+ {
+  "collection": "compliance",
+  "organisation_verdict": "mislaned",
+  "critical_path_role": "Compliance provides the policy gate for Anthropic and OpenAI directory listing, which is the distribution mechanism for the live MCP product. Phases 0-2 (governance docs, privacy policy surfacing, graph sub-query token efficiency) must complete before Phase 3 submission readiness can unblock public directory presence. The collection is therefore a prerequisite for post-M2 distribution reach, making it supporting-to-critical depending on whether directory submission is in-scope for M2/M3. However, the actual executable plan lives in user-experience/educator-end-users/current/, not here — so this collection's critical-path role is currently discharged by proxy.",
+  "non_plan_in_executable_lanes": [
+   ".agent/plans/compliance/current/upstream-api-requests.md"
+  ],
+  "stale_executable": [
+   ".agent/plans/compliance/roadmap.md"
+  ],
+  "top_duplications": [],
+  "relevance_rollup": "critical: 0 / supporting: 2 / speculative: 0 / stale-or-superseded: 1",
+  "recommendation": "Two actions required. First, move upstream-api-requests.md out of current/ into a non-executable home — either a dedicated comms/ or companion/ subdirectory, or the future/ lane with a note on resolution status, since it is a dated handoff letter (2026-04-14) with no tracked outcome, not an executable plan. Second, update roadmap.md status immediately: M2 is ~95% complete as of June 2026 yet the roadmap still reads \"Phase 0 ready to start\" from April 2026 — each phase that has completed or partially completed must be marked accordingly. No consolidation or pruning is warranted beyond these two corrections; the collection is small, clean, and well-scoped with clear coordination boundaries documented in the README.",
+  "confidence": "high"
+ },
+ {
+  "collection": "semantic-search",
+  "organisation_verdict": "cluttered",
+  "critical_path_role": "The semantic-search collection is the operational and quality backbone of the live Curriculum MCP product. It owns the Elasticsearch Serverless ingestion pipeline, search SDK, search quality benchmarks (MRR/NDCG ground truths), the versioned index lifecycle, and the auth/rate-limit hardening required for M2 open public alpha. Without these plans resolving, M2 cannot close and M3 cannot open. The collection is not a supporting concern — it gates the live product milestone sequence directly.",
+  "non_plan_in_executable_lanes": [
+   ".agent/plans/semantic-search/current/category-integration-remediation.md",
+   ".agent/plans/semantic-search/current/bulk_data_for_semantic_search.feature_request.md",
+   ".agent/plans/semantic-search/current/bulk_data_population.feature_request.md",
+   ".agent/plans/semantic-search/current/sequence-retrieval-architecture-followup.plan.md",
+   ".agent/plans/semantic-search/future/INFORMATION-RETENTION-CHECK.md",
+   ".agent/plans/semantic-search/future/TRANSFER-MANIFEST.md",
+   ".agent/plans/semantic-search/future/08-experience-surfaces-and-extensions/widget-renderer-reactivation.md"
+  ],
+  "stale_executable": [
+   ".agent/plans/semantic-search/current/unified-versioned-ingestion.plan.md",
+   ".agent/plans/semantic-search/current/search-sdk-args-extraction.plan.md",
+   ".agent/plans/semantic-search/current/bulk-metadata-quick-wins.execution.plan.md",
+   ".agent/plans/semantic-search/current/search-contract-followup.plan.md",
+   ".agent/plans/semantic-search/current/m2-public-alpha-auth-rate-limits.execution.plan.md",
+   ".agent/plans/semantic-search/current/semantic-search-scheduled-refresh.operations.plan.md",
+   ".agent/plans/semantic-search/future/bulk-canonical-merge-api-parity-and-validation.execution.plan.md",
+   ".agent/plans/semantic-search/future/bulk-schema-driven-code-generation.md",
+   ".agent/plans/semantic-search/future/09-evaluation-and-evidence/ground-truth-expansion-plan.md",
+   ".agent/plans/semantic-search/future/05-query-policy-and-sdk-contracts/filter-testing.md"
+  ],
+  "top_duplications": [
+   {
+    "plans": [
+     ".agent/plans/semantic-search/future/03-vocabulary-and-semantic-assets/bulk-metadata-opportunities.research.md",
+     ".agent/plans/semantic-search/future/03-vocabulary-and-semantic-assets/vocabulary-glossary-and-mining-surfaces.research.md"
+    ],
+    "overlap": "Both map the vocabulary and metadata opportunity space from the same bulk curriculum schema; findings appear in both with no clear boundary between them."
+   },
+   {
+    "plans": [
+     ".agent/plans/semantic-search/future/02-schema-authority-and-codegen/move-search-domain-knowledge-to-codegen-time.md",
+     ".agent/plans/semantic-search/future/02-schema-authority-and-codegen/bulk-schema-driven-code-generation.md"
+    ],
+    "overlap": "Both address moving schema domain knowledge into codegen-time type generation; the second supersedes the first in scope and owner-ratification but both are live."
+   },
+   {
+    "plans": [
+     ".agent/plans/semantic-search/future/03-vocabulary-and-semantic-assets/natural-language-paraphrases.md",
+     ".agent/plans/semantic-search/future/03-vocabulary-and-semantic-assets/vocabulary-mining.md"
+    ],
+    "overlap": "vocabulary-mining.md subsumes paraphrase corpus work (Phases 4-5 noted as subsumed) but those phases were not removed; natural-language-paraphrases.md repeats the same scope as a child plan without a clear exclusive boundary."
+   },
+   {
+    "plans": [
+     ".agent/plans/semantic-search/current/sequence-retrieval-architecture-followup.plan.md",
+     ".agent/plans/semantic-search/current/thread-sequence-semantic-surfaces.execution.plan.md"
+    ],
+    "overlap": "Both address sequence-level semantic surfaces; the architecture-followup's execution was consolidated into an archived plan leaving a residual reference that overlaps in scope with the active thread-sequence surfaces plan."
+   }
+  ],
+  "relevance_rollup": "critical: 7 / supporting: 19 / speculative: 9 / stale-or-superseded: 5",
+  "recommendation": "Reorganise with targeted pruning and three immediate lane corrections. (1) Archive the seven non-plan artefacts identified above: category-integration-remediation.md and sequence-retrieval-architecture-followup.plan.md to archive/completed (both self-declare completion/supersession); the two feature-request files to a dedicated requests/ or loose/ holding area; INFORMATION-RETENTION-CHECK.md, TRANSFER-MANIFEST.md, and widget-renderer-reactivation.md to archive. (2) Promote the three plans that have passed their own stated promotion gates but are sitting in the wrong lane: bulk-schema-driven-code-generation.md (owner-ratified, 12-day lag), bulk-canonical-merge-api-parity-and-validation.execution.plan.md (F2 precondition met), ground-truth-expansion-plan.md (Phase 1 self-documented as complete) — all move from future/ to current/. (3) Promote filter-testing.md from future/ to current/ because its stated precondition ('AFTER SDK extraction') is satisfied by M1 completion. (4) Resolve the m2-public-alpha-auth-rate-limits.execution.plan.md ambiguity first-hand: if M2 auth/rate-limit work shipped outside this plan, archive it; if not, it is the single highest-priority active item for M2 closure. (5) Add explicit ordering and dependency annotations to the current/ README so the queue sequence (bulk-metadata-quick-wins → keyword-definition-assets → thread-sequence-semantic-surfaces) is navigable without reading each plan body. (6) Merge bulk-metadata-opportunities.research.md and vocabulary-glossary-and-mining-surfaces.research.md into a single vocabulary-and-metadata-opportunities.research.md to eliminate the research duplication in 03-vocabulary-and-semantic-assets/. The active/ lane emptiness is structurally correct given no plan is being executed right now; the core problem is that the current/ lane has accumulated 11 files that mix executable plans, deferred operations, superseded notes, and external requests — making it impossible to identify the next-up item at a glance.",
+  "confidence": "high"
+ },
+ {
+  "collection": "school-data-search",
+  "organisation_verdict": "mislaned",
+  "critical_path_role": "Indirect future critical path. The school-data-search service (privacy-conservative UK schools register, typed REST client) is sector infrastructure that fits the compositional curriculum intelligence vision but is not on the M2 milestone. It is queued pending an owner go/no-go decision after POC completion. No build workstream has started. It becomes relevant at M3/GA or when a second consumer for the school-register dataset materialises.",
+  "non_plan_in_executable_lanes": [
+   ".agent/plans/school-data-search/current/school-data-search-wsd1-decomposition.md"
+  ],
+  "stale_executable": [
+   ".agent/plans/school-data-search/current/school-data-search-poc.plan.md"
+  ],
+  "top_duplications": [],
+  "relevance_rollup": "critical: 0 / supporting: 1 / speculative: 0 / stale-or-superseded: 1",
+  "recommendation": "Reorganise. Two moves are warranted. First, relocate `.agent/plans/school-data-search/current/school-data-search-wsd1-decomposition.md` out of the executable `current/` lane — it is a G-8 ratified reference register, not a queued plan. The collection README already acknowledges it as an input artefact; it belongs in a `reference/` or `archive/decided/` sub-directory, or promoted inline into the POC plan body as an appendix, so the `current/` lane contains only actionable plans. Second, the POC plan itself is correctly laned (queued, gates decided, awaiting build start) but is 10+ days dormant with no progress signal — add an explicit owner-decision record or dated hold note to the plan header to distinguish deliberate deferral from neglect. No pruning or consolidation is needed: the plan body is dense with decided gate content and workspace decomposition that must be preserved. The synthesis report (referenced but stored under `.agent/reports/`) is authoritative and should not be touched.",
+  "confidence": "high"
+ },
+ {
+  "collection": "agentic-engineering-enhancements",
+  "organisation_verdict": "cluttered",
+  "critical_path_role": "Indirect but load-bearing. This collection owns the agentic-engineering Practice substrate — reviewer specialists, doctrine enforcement, commit discipline, collaboration protocols, and learning loops. Its direct M2 touch-points are: sentry-specialist-capability (Sentry+OTel observability, named ~95% of M2), no-type-widening-enforcement, commit-queue-multi-writer-cure, and branch-fitness-and-push-cadence. The bulk of the estate is Practice meta-work: it raises engineering quality and agent reliability across the whole product but does not itself ship user-facing features. The live active/ phase sequence (Phases 1-3, 5) has been stalled since February-March 2026 and is not on the immediate M2 critical path.",
+  "recommendation": "Reorganise with knowledge preservation. Three actions are warranted: (1) Archive sweep — move the 10 completed/implemented plans out of current/ into archive/completed/: claude-insight-report-2026-05-10-disposition.plan.md, agent-entrypoint-content-homing.plan.md, governance-concepts-and-agentic-mechanism-integration.plan.md, agentic-corpus-discoverability-and-deep-dive-hub.plan.md, collaboration-state-surface-restructure.plan.md, consolidate-docs-mode-contract-and-buffer-drain.plan.md, practice-and-process-structural-improvements.plan.md, doctrine-enforcement-quick-wins.plan.md, memory-state-substrate-portable-contracts.plan.md, open-questions-memory-system.plan.md. Also move fitness-frontmatter-manifest-sweep.plan.md (self-declared superseded) to archive/. (2) Opener purge — the 10 session-opener artefacts in current/ (all dated 2026-05-06 to 2026-05-11) are single-use consumables from sessions that have passed; they should be moved to archive/openers/ or deleted, keeping content only if unique knowledge exists that has not been consolidated. The four napkin/graduation openers describing the same session category are redundant with each other. (3) Active/ lane correction — four plans in active/ (plan-collection-structural-consistency, phase-0-baseline-metrics, phase-1-hallucination-guarding-execution, phase-5-mutation-testing-execution) are effectively stalled or mislaned; phase-1 should be surfaced to owner for a go/park decision given 3+ months without progress; phase-5 should move to current/ pending phase-2/3 completion. The roadmap (last updated 2026-04-30) needs a refresh pass to reflect the work that has landed since April. No knowledge destruction: all completed plans should be archived not deleted, and all opener content should be harvested into napkin or pending-graduations before disposal.",
+  "confidence": "high",
+  "non_plan_in_executable_lanes": [
+   ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-residual-fitness-graduation-opener.md",
+   ".agent/plans/agentic-engineering-enhancements/current/2026-05-07-pending-graduations-dedicated-drain-opener.md",
+   ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-full-napkin-and-comms-graduation-pass-opener.md",
+   ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-five-layer-restart-opener.md",
+   ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-napkin-and-pending-graduations-processing-opener.md",
+   ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-docs-consolidation-opener.md",
+   ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-collaboration-state-restructure-phase-2-opener.md",
+   ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-collaboration-state-lifecycle-deep-exploration-opener.md",
+   ".agent/plans/agentic-engineering-enhancements/current/2026-05-11-graduation-candidates-drain-opener.md",
+   ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-principles-compiler-types-extraction-opener.md",
+   ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-principles-graduation-pass-review-snags.md",
+   ".agent/plans/agentic-engineering-enhancements/current/2026-04-29-deferred-items-coordination.md",
+   ".agent/plans/agentic-engineering-enhancements/future/memory-feedback-and-emergent-learning-mechanisms.metacognition.md",
+   ".agent/plans/agentic-engineering-enhancements/future/team-handoff-routing-and-action-log-exploration.plan.md"
+  ],
+  "stale_executable": [
+   ".agent/plans/agentic-engineering-enhancements/current/claude-insight-report-2026-05-10-disposition.plan.md",
+   ".agent/plans/agentic-engineering-enhancements/current/agent-entrypoint-content-homing.plan.md",
+   ".agent/plans/agentic-engineering-enhancements/current/governance-concepts-and-agentic-mechanism-integration.plan.md",
+   ".agent/plans/agentic-engineering-enhancements/current/agentic-corpus-discoverability-and-deep-dive-hub.plan.md",
+   ".agent/plans/agentic-engineering-enhancements/current/collaboration-state-surface-restructure.plan.md",
+   ".agent/plans/agentic-engineering-enhancements/current/consolidate-docs-mode-contract-and-buffer-drain.plan.md",
+   ".agent/plans/agentic-engineering-enhancements/current/practice-and-process-structural-improvements.plan.md",
+   ".agent/plans/agentic-engineering-enhancements/current/doctrine-enforcement-quick-wins.plan.md",
+   ".agent/plans/agentic-engineering-enhancements/current/memory-state-substrate-portable-contracts.plan.md",
+   ".agent/plans/agentic-engineering-enhancements/current/open-questions-memory-system.plan.md",
+   ".agent/plans/agentic-engineering-enhancements/current/fitness-frontmatter-manifest-sweep.plan.md",
+   ".agent/plans/agentic-engineering-enhancements/current/memory-feedback-and-emergent-learning-mechanisms.execution.plan.md",
+   ".agent/plans/agentic-engineering-enhancements/current/practice-graph-payoff-peak-pilot.plan.md",
+   ".agent/plans/agentic-engineering-enhancements/current/knowledge-flow-pipeline-mechanisms.plan.md",
+   ".agent/plans/agentic-engineering-enhancements/active/plan-collection-structural-consistency.plan.md",
+   ".agent/plans/agentic-engineering-enhancements/active/phase-0-baseline-metrics.plan.md",
+   ".agent/plans/agentic-engineering-enhancements/active/phase-1-hallucination-guarding-execution.md",
+   ".agent/plans/agentic-engineering-enhancements/active/phase-5-mutation-testing-execution.md"
+  ],
+  "top_duplications": [
+   {
+    "plans": [
+     ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-full-napkin-and-comms-graduation-pass-opener.md",
+     ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-five-layer-restart-opener.md",
+     ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-napkin-and-pending-graduations-processing-opener.md",
+     ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-residual-fitness-graduation-opener.md",
+     ".agent/plans/agentic-engineering-enhancements/current/2026-05-07-pending-graduations-dedicated-drain-opener.md"
+    ],
+    "overlap": "All five are session-opener artefacts targeting the same category of napkin/pending-graduations drain work, authored within two days of each other (2026-05-05 to 2026-05-07). They reference overlapping session state, fitness figures, and agent context from the same period."
+   },
+   {
+    "plans": [
+     ".agent/plans/agentic-engineering-enhancements/current/fitness-frontmatter-manifest-sweep.plan.md",
+     ".agent/plans/agentic-engineering-enhancements/current/fitness-token-measurements-and-frontmatter-mandation.plan.md"
+    ],
+    "overlap": "Superseder/superseded pair covering fitness frontmatter enforcement. The sweep plan is self-declared SUPERSEDED by the mandation plan, which absorbed and extends its scope. Both remain in current/."
+   },
+   {
+    "plans": [
+     ".agent/plans/agentic-engineering-enhancements/future/memory-feedback-and-emergent-learning-mechanisms.plan.md",
+     ".agent/plans/agentic-engineering-enhancements/current/memory-feedback-and-emergent-learning-mechanisms.execution.plan.md"
+    ],
+    "overlap": "Future intent/rationale plan and its current/ execution counterpart. The future plan's status says NOT STARTED despite the execution plan existing and phases 0-6 being largely done; the relationship note clarifies this but the duplication creates a false signal about completion state."
+   },
+   {
+    "plans": [
+     ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-collaboration-state-restructure-phase-2-opener.md",
+     ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-collaboration-state-lifecycle-deep-exploration-opener.md"
+    ],
+    "overlap": "Both are openers for the same collaboration-state restructure thread authored 2026-05-06. The deep-exploration opener is self-declared superseded by the restructure plan; Phase 2 opener is its intended successor. Substantial context overlap."
+   },
+   {
+    "plans": [
+     ".agent/plans/agentic-engineering-enhancements/current/planning-specialist-capability.plan.md",
+     ".agent/plans/agentic-engineering-enhancements/current/practice-and-process-structural-improvements.plan.md"
+    ],
+    "overlap": "Partially overlapping scope: the structural-improvements plan explicitly defers Planning discipline graduation to the planning-specialist plan; both remain in current/ with the structural-improvements plan now fully completed."
+   }
+  ],
+  "relevance_rollup": "critical: 7 / supporting: 35 / speculative: 10 / stale-or-superseded: 12"
+ },
+ {
+  "collection": "agent-tooling",
+  "organisation_verdict": "cluttered",
+  "critical_path_role": "Practice-infrastructure backbone: not a direct product-feature lane but load-bearing for M2/M3 delivery velocity. PR merge-readiness discipline, MCP server testing tools, skills standardisation, comms-watch hardening, and agent naming v3 are the nearest-term executables with M2/M3 adjacency. The comms-corpus research plan (active/) is the knowledge anchor for the comms substrate redesign. Without this substrate, parallel agent execution is unreliable and the agentic-engineering Practice degrades.",
+  "non_plan_in_executable_lanes": [
+   ".agent/plans/agent-tooling/current/2026-05-11-collaboration-protocol-hardening-final-opener.md",
+   ".agent/plans/agent-tooling/current/2026-05-11-collaboration-protocol-hardening-opener.md",
+   ".agent/plans/agent-tooling/current/cost-of-collaboration.flaky-tests.md",
+   ".agent/plans/agent-tooling/current/agent-artefact-portability-audit-2026-05-06.report.md",
+   ".agent/plans/agent-tooling/current/start-right-team-singleton-lane-remediation.ws0-disposition.md",
+   ".agent/plans/agent-tooling/future/collaboration-substrate-coordination-rightsizing.m1-inventory.md",
+   ".agent/plans/agent-tooling/future/third-party-skill-reimport-targets.md",
+   ".agent/plans/agent-tooling/pnpm-check-profiling-deep-dive-2026-05-12.md"
+  ],
+  "stale_executable": [
+   ".agent/plans/agent-tooling/current/sub-agent-rename-and-skill-integration.plan.md",
+   ".agent/plans/agent-tooling/current/primary-agent-tooling-enhancements.plan.md",
+   ".agent/plans/agent-tooling/current/pr-102-snagging.plan.md",
+   ".agent/plans/agent-tooling/current/multi-agent-collaboration-sidebar-and-escalation.plan.md",
+   ".agent/plans/agent-tooling/current/context-cost-cli.plan.md",
+   ".agent/plans/agent-tooling/current/collaboration-state-write-safety.plan.md",
+   ".agent/plans/agent-tooling/current/collaboration-doc-fitness-remediation.plan.md",
+   ".agent/plans/agent-tooling/current/comms-event-write-integrity.plan.md",
+   ".agent/plans/agent-tooling/current/agent-infrastructure-portability-remediation.plan.md",
+   ".agent/plans/agent-tooling/future/joint-agent-decision-protocol.plan.md",
+   ".agent/plans/agent-tooling/future/routing-legacy-fallback-sunset.plan.md",
+   ".agent/plans/agent-tooling/future/collaboration-substrate-coordination-rightsizing.plan.md"
+  ],
+  "top_duplications": [
+   {
+    "plans": [
+     ".agent/plans/agent-tooling/current/skills-standardisation-and-adapter-generator.plan.md",
+     ".agent/plans/agent-tooling/current/agent-artefact-lifecycle-cli.plan.md"
+    ],
+    "overlap": "Both address the skills/artefact lifecycle surface (PDR-051 canonicalisation, skill-pack wrapping, command retirement). agent-artefact-lifecycle-cli supersedes the generator scope but the generator plan was partially executed; gap ledger F-37 records the unresolved seam."
+   },
+   {
+    "plans": [
+     ".agent/plans/agent-tooling/future/adapter-generation.plan.md",
+     ".agent/plans/agent-tooling/future/rules-cross-platform-generator.plan.md"
+    ],
+    "overlap": "Both cover manifest-driven generation of agent adapter outputs (adapter-generation for skill/agent wrappers, rules-cross-platform-generator for rules mirroring). Plans explicitly acknowledge each other as complementary but the execution boundary is not yet cleanly drawn."
+   },
+   {
+    "plans": [
+     ".agent/plans/agent-tooling/future/collaboration-substrate-coordination-rightsizing.plan.md",
+     ".agent/plans/agent-tooling/future/coordination-watcher-canonicalisation.plan.md"
+    ],
+    "overlap": "Rightsizing M4 may absorb or supersede the watcher canonicalisation plan entirely; the watcher plan's activation trigger may never fire independently."
+   },
+   {
+    "plans": [
+     ".agent/plans/agent-tooling/current/agent-commands-retirement.plan.md",
+     ".agent/plans/agent-tooling/current/skills-standardisation-and-adapter-generator.plan.md"
+    ],
+    "overlap": "Command retirement is both a deliverable of PDR-051 skills standardisation and a standalone plan; F-37 gap directly straddles both."
+   },
+   {
+    "plans": [
+     ".agent/plans/agent-tooling/future/agent-infrastructure-coherence-audit.plan.md",
+     ".agent/plans/agent-tooling/future/adapter-generation.plan.md"
+    ],
+    "overlap": "Areas 2 and 5 of the coherence audit become moot if adapter-generation executes first, as the plan itself acknowledges; sequencing is owner-gated but not yet resolved."
+   }
+  ],
+  "relevance_rollup": "critical: 6 (comms-corpus-research, comms-watch-hang-hardening, skills-standardisation-and-adapter-generator, agent-commands-retirement, pr-merge-readiness-discipline, mcp-server-testing-tools) / supporting: 22 / speculative: 10 / stale-or-superseded: 12",
+  "recommendation": "Reorganise with knowledge preservation as the first move. (1) Archive immediately — 9 completed/superseded plans and reports that self-declare done: sub-agent-rename-and-skill-integration, primary-agent-tooling-enhancements, pr-102-snagging, multi-agent-collaboration-sidebar-and-escalation, context-cost-cli, collaboration-state-write-safety, collaboration-doc-fitness-remediation, comms-event-write-integrity, agent-infrastructure-portability-remediation. (2) Relocate non-plan artefacts: both opener files, cost-of-collaboration.flaky-tests.md, agent-artefact-portability-audit-2026-05-06.report.md, and start-right-team-singleton-lane-remediation.ws0-disposition.md belong in archive/ or .agent/reports/; pnpm-check-profiling-deep-dive-2026-05-12.md belongs in .agent/reports/. (3) Promote collaboration-substrate-coordination-rightsizing.plan.md from future/ to current/ — its status is ACTIVE with M1 dispatched and M1 inventory complete; the lane label is wrong. (4) Archive joint-agent-decision-protocol.plan.md and routing-legacy-fallback-sunset.plan.md from future/ — both are complete with implementation commits cited. (5) Promote claim-liveness-crash-reconciliation-and-session-forensics.plan.md from future/ to current/ — its activation trigger (4th recurrence observed) has already fired. (6) Assess adapter-generation.plan.md for promotion — its own text says the condition 'is arguably already the case now'. (7) Do not merge the agent-artefact-lifecycle-cli and skills-standardisation plans prematurely — the F-37 gap ledger disposition session must happen first. After this pass the current/ lane drops from 35 files to approximately 20, all executable and lane-appropriate, and the future/ lane retains 15 correctly staged strategic plans.",
+  "confidence": "high"
+ },
+ {
+  "collection": "user-experience",
+  "organisation_verdict": "mislaned",
+  "critical_path_role": "This collection serves two distinct functions that are currently conflated in one estate: (1) the UX governance layer — the experience contract, roadmap, and persona briefs that define what \"alpha-ready\" means for each user segment, and (2) the active execution estate for educator-end-user distribution features (plugin packaging, skills ingest, app-submission standards, capability-distribution map). The governance layer is a direct M2 gate: it owns the Option X/Y branding decision that must be resolved before public alpha is declared open, and defines the no-go conditions against which readiness is assessed. The execution plans (educator-end-users/current/) are also M2-critical-path because they deliver the cross-vendor plugin and skills surfaces that back the educator promise. The engineering-end-user execution plan (Search SDK GitHub release) is a supporting dependency whose motivating driver needs re-verification. The collection is therefore load-bearing for M2 but its roadmap and experience-contract governance documents are significantly stale relative to the ~95% M2 completion state.",
+  "non_plan_in_executable_lanes": [
+   ".agent/plans/user-experience/educator-end-users/external-facing-capability-corpus-synthesis.report.md",
+   ".agent/plans/user-experience/educator-end-users/external-facing-skills-and-mcp-surfaces-review.report.md",
+   ".agent/plans/user-experience/educator-end-users/keyword-graph-teacher-user-stories.report.md"
+  ],
+  "stale_executable": [
+   ".agent/plans/user-experience/roadmap.md (last updated 2026-02-25; shows Phase 0 as planned but public-alpha-experience-contract.md is drafted and M2 is ~95% complete; Option X/Y decision gate references Milestone 1 in one section and Milestone 2 in another — naming inconsistency on a live gate)",
+   ".agent/plans/user-experience/engineering-end-users/current/search-sdk-github-release-asset-distribution.execution.plan.md (last updated 2026-03-05; all six workstreams pending; motivating driver — upstream OOC API needing the SDK without npm — must be re-verified; may no longer be current/)",
+   ".agent/plans/user-experience/educator-end-users/current/position-anchored-teaching-continuity.plan.md (W1 PR #178 and W2 PR #181 merged; W3 is a future-cycle item and explicitly non-blocking for M2; plan is substantially complete and should be archived or have W3 promoted to future/)"
+  ],
+  "top_duplications": [
+   {
+    "plans": [
+     ".agent/plans/user-experience/educator-end-users/external-facing-skills-and-mcp-surfaces-review.report.md",
+     ".agent/plans/user-experience/educator-end-users/external-facing-capability-corpus-synthesis.report.md"
+    ],
+    "overlap": "Both are discovery/synthesis reports covering the external-facing skills, plugin, and MCP capability surface produced in the same session. The review report is the input analysis; the corpus synthesis is the consolidation output. They cover identical subject matter and together constitute a two-document duplication in the loose lane. One of the two should be retained as the canonical synthesis record and the other archived or merged into it."
+   },
+   {
+    "plans": [
+     ".agent/plans/user-experience/public-alpha-experience-contract.md",
+     ".agent/plans/user-experience/roadmap.md"
+    ],
+    "overlap": "The Option X/Y Claude-branding gate decision is defined in both documents as an open decision owned by this collection. The roadmap calls this the Milestone 1 UI-Surface Decision Gate; the experience contract calls it the Milestone 2 UI-Surface Decision Gate. The naming conflict and dual ownership of the same open gate constitutes a real duplication risk: if the decision is recorded in one document it will not automatically propagate to the other."
+   },
+   {
+    "plans": [
+     ".agent/plans/user-experience/educator-end-users/future/plugin-bundle-distribution.plan.md",
+     ".agent/plans/user-experience/educator-end-users/current/plugin-package-creation.plan.md",
+     ".agent/plans/user-experience/educator-end-users/current/external-facing-capability-distribution.plan.md"
+    ],
+    "overlap": "All three plans describe aspects of the same cross-vendor plugin distribution problem. plugin-bundle-distribution.plan.md is the strategic brief that prompted plugin-package-creation.plan.md (execution) and external-facing-capability-distribution.plan.md (corpus map). The corpus map exists to prevent this overlap, but the three plans have overlapping rationale sections; anyone reading only one of the three does not get the full picture. The corpus map's role as the canonical index of the other two needs to be surfaced more prominently."
+   }
+  ],
+  "relevance_rollup": "critical: 4 (app-submission-standards, plugin-package-creation, oak-skills-ingest-and-resurfacing, public-alpha-experience-contract) / supporting: 6 (external-facing-capability-distribution, position-anchored-teaching-continuity, plugin-bundle-distribution, external-facing-capability-corpus-synthesis, external-facing-skills-and-mcp-surfaces-review, keyword-graph-teacher-user-stories) / speculative: 1 (keyword-graph-teacher-user-stories stories 4 and 5 explicitly unscheduled) / stale-or-superseded: 2 (roadmap, search-sdk-github-release-asset-distribution)",
+  "recommendation": "Reorganise with targeted knowledge-preservation actions in four moves. (1) Resolve the Option X/Y gate staleness: read the current M2 state against the no-go conditions in public-alpha-experience-contract.md, record the selected option with rationale in that document, and update roadmap.md to reflect Phase 0 complete and fix the Milestone 1/2 naming inconsistency. This is the highest-priority action because the gate is nominally still open on a milestone that is ~95% done. (2) Archive position-anchored-teaching-continuity.plan.md: move W3 into a new future/ plan or a holding note in keyword-graph-teacher-user-stories.report.md and archive the rest; the plan is substantially complete and occupying a current/ slot unnecessarily. (3) Re-verify search-sdk-github-release-asset-distribution.execution.plan.md against the current upstream need: if the motivating driver has been satisfied another way, demote to future/ or archive; if it persists, record that explicitly and unblock the first workstream. (4) Collapse the two loose educator discovery reports (external-facing-skills-and-mcp-surfaces-review.report.md and external-facing-capability-corpus-synthesis.report.md) into a single canonical synthesis document — the review was the input and the synthesis is the output; retain the synthesis, preserve the review's unique findings inline, then remove the review. The three non-plan artefacts sitting outside of current/ or future/ (the report files and keyword-graph note) are correctly placed loose; no relaning needed. The educator-end-users/current/ active plan cluster (plugin-package-creation, oak-skills-ingest-and-resurfacing, app-submission-standards, external-facing-capability-distribution) is coherent and correctly organised; the corpus-map plan's role as the canonical index of the other three should be called out explicitly in the educator-end-users/current/README.md to prevent the overlap from resurfacing.",
+  "confidence": "high"
+ },
+ {
+  "collection": "architecture-and-infrastructure",
+  "organisation_verdict": "mixed",
+  "critical_path_role": "This collection owns the cross-cutting quality and operability foundations that every milestone depends on: Sentry+OTel observability (M2 blocker, now done but unarchived), quality gate hardening (gates the ESLint/Sonar/knip health that every PR must clear), and the security/dependency triage that underlies safe releases. The roadmap's 4-phase sequence (foundation → config standardisation → workspace layer separation → quality hardening) is the structural skeleton for all post-M2 scale-up work. Without this collection's plans executing, the product cannot safely open the public alpha (M2) or harden toward beta (M3).",
+  "non_plan_in_executable_lanes": [
+   ".agent/plans/architecture-and-infrastructure/current/architectural-documentation-excellence-synthesis.plan.md",
+   ".agent/plans/architecture-and-infrastructure/codegen/sdk-codegen-architecture-analysis.md",
+   ".agent/plans/architecture-and-infrastructure/codegen/sdk-codegen-reviewer-findings.md"
+  ],
+  "stale_executable": [
+   ".agent/plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md",
+   ".agent/plans/architecture-and-infrastructure/current/pr-90-landing-closure.plan.md",
+   ".agent/plans/architecture-and-infrastructure/current/observability-strategy-restructure.plan.md",
+   ".agent/plans/architecture-and-infrastructure/static-analysis-tool-promotion.plan.md",
+   ".agent/plans/architecture-and-infrastructure/active/eslint-disable-remediation.plan.md",
+   ".agent/plans/architecture-and-infrastructure/current/security-dependency-triage.plan.md"
+  ],
+  "top_duplications": [
+   {
+    "plans": [
+     ".agent/plans/architecture-and-infrastructure/current/no-io-test-boundary-and-di-recovery.plan.md",
+     ".agent/plans/architecture-and-infrastructure/current/test-ceremony-production-factory-audit.plan.md",
+     ".agent/plans/architecture-and-infrastructure/current/config-architecture-standardisation-plan.md"
+    ],
+    "overlap": "All three address DI seams and test-isolation boundaries with no explicit sequencing between them; no-io is the widest, test-ceremony is a narrow slice of it, and config-standardisation overlaps on the DI/env injection pattern. Three plans in the same queue covering the same architectural concern without a stated execution order."
+   },
+   {
+    "plans": [
+     ".agent/plans/architecture-and-infrastructure/current/scripts-validator-family-workspace-migration.plan.md",
+     ".agent/plans/architecture-and-infrastructure/future/scripts-validator-family-workspace-migration.plan.md"
+    ],
+    "overlap": "Identical title, same subject (scripts/ workspace migration), one in current/ and one in future/. Exact title collision creates confusion about which is the live executable and which is the strategic brief."
+   },
+   {
+    "plans": [
+     ".agent/plans/architecture-and-infrastructure/future/architectural-budget-enforcement-layer.plan.md",
+     ".agent/plans/architecture-and-infrastructure/future/architectural-budget-system-across-scales.plan.md"
+    ],
+    "overlap": "Parent/child pair listed as sibling peers in future/; the enforcement layer is a child of the across-scales system but both appear at the same level without the hierarchy being visible from the lane index."
+   },
+   {
+    "plans": [
+     ".agent/plans/architecture-and-infrastructure/future/search-cli-ingestion-pipeline-consolidation.plan.md",
+     ".agent/plans/architecture-and-infrastructure/future/oak-search-cli-command-surface-rationalisation.plan.md"
+    ],
+    "overlap": "Same workspace (search CLI), overlapping scope; ingestion pipeline vs CLI surface are different layers but share significant context, dependency on the same extraction prerequisite, and no stated sequencing between them."
+   },
+   {
+    "plans": [
+     ".agent/plans/architecture-and-infrastructure/future/monorepo-workspace-topology-adr-and-canonical-plan.plan.md",
+     ".agent/plans/architecture-and-infrastructure/future/oak-surface-isolation-and-generic-foundation-programme.plan.md"
+    ],
+    "overlap": "Both define the long-term workspace/layer separation strategy; monorepo-topology is owner-parked and oak-surface-isolation is the working replacement, but neither explicitly supersedes the other, leaving two strategic umbrellas for the same Post-M2 programme."
+   }
+  ],
+  "relevance_rollup": "critical: 3 / supporting: 22 / speculative: 7 / stale-or-superseded: 6",
+  "recommendation": "Reorganise with targeted archival and three structural fixes. (1) Archive immediately: sentry-otel-integration.execution.plan.md (foundation closed 2026-04-17, branch merged), pr-90-landing-closure.plan.md (all gates green, READY TO MERGE), observability-strategy-restructure.plan.md (all phases complete), and static-analysis-tool-promotion.plan.md (SUPERSEDED 2026-04-12) — none of these should be visible to executors. (2) Demote or relabel: build-tools-workspace-extraction.plan.md must leave active/ — it is self-declared PLANNED and not yet executable, so move to current/ or future/. eslint-disable-remediation.plan.md has had zero recorded progress in 2.5 months while sitting in active/ — demote to current/ or mark explicitly stalled with a recovery trigger. (3) Relocate non-plan artefacts: architectural-documentation-excellence-synthesis.plan.md, sdk-codegen-architecture-analysis.md, and sdk-codegen-reviewer-findings.md are research reports and evidence, not executable plans; move to .agent/research/ or the evidence/ subtree. (4) Resolve the DI triple: add an explicit sequencing note to no-io-test-boundary-and-di-recovery.plan.md naming it as the umbrella, with test-ceremony-production-factory-audit.plan.md as the narrower slice and config-architecture-standardisation-plan.md as the config-layer prerequisite — the three can coexist but need a declared order. (5) Resolve the scripts-validator-family title collision: rename or consolidate the current/ and future/ copies so their relationship (current = executable, future = strategic brief, or vice versa) is unambiguous. (6) Re-triage security-dependency-triage.plan.md: all version data is 3+ months stale; either re-run the triage and update before executing, or mark as needs-retriage with a note that batch version numbers must be recomputed before any action is taken.",
+  "confidence": "high"
+ },
+ {
+  "collection": "sdk-and-mcp-enhancements",
+  "organisation_verdict": "mislaned",
+  "critical_path_role": "This collection is the direct execution spine for the live MCP HTTP server at curriculum-mcp-alpha.oaknational.dev and for M2 completion. It owns the MCP Apps migration (WS3 Phase 5 still pending), the MCP output-schema contract (gating EEF and graph-tool surfaces), upstream API alignment (v0.7.0 blocked on owner A4 decision), schema resilience (OQ1 settled but not yet implemented), upstream API reference metadata, the unified test estate, and all snagging loops against the live prod server. Without unblocking the A4 variant-info decision, the output-schemas plan, and the schema-resilience implementation todos, M2 cannot truthfully close and M3 (production Clerk, Cloudflare gate) cannot start.",
+  "non_plan_in_executable_lanes": [
+   ".agent/plans/sdk-and-mcp-enhancements/roadmap.md"
+  ],
+  "stale_executable": [
+   ".agent/plans/sdk-and-mcp-enhancements/current/ws3-oak-url-augmentable-codegen-fix.plan.md",
+   ".agent/plans/sdk-and-mcp-enhancements/current/upstream-sequences-api-realignment.plan.md",
+   ".agent/plans/sdk-and-mcp-enhancements/current/ws3-contrast-validation-prerequisite.plan.md",
+   ".agent/plans/sdk-and-mcp-enhancements/current/ws3-local-widget-development.plan.md",
+   ".agent/plans/sdk-and-mcp-enhancements/current/clerk-mcp-tools-and-ext-apps-bumps.plan.md",
+   ".agent/plans/sdk-and-mcp-enhancements/current/http-mcp-test-suite-improvements.plan.md"
+  ],
+  "top_duplications": [
+   {
+    "plans": [
+     ".agent/plans/sdk-and-mcp-enhancements/current/unified-mcp-server-test-harness.plan.md",
+     ".agent/plans/sdk-and-mcp-enhancements/current/http-mcp-test-suite-improvements.plan.md"
+    ],
+    "overlap": "http-mcp-test-suite-improvements is explicitly superseded by unified-mcp-server-test-harness per the latter's frontmatter; both sit in current/ creating duplicate execution risk on test estate work"
+   },
+   {
+    "plans": [
+     ".agent/plans/sdk-and-mcp-enhancements/active/schema-resilience-and-response-architecture.plan.md",
+     ".agent/plans/sdk-and-mcp-enhancements/active/upstream-api-reference-metadata.plan.md"
+    ],
+    "overlap": "Both plans govern generated tool descriptor shape and upstream API contract fidelity; schema-resilience owns validation mode and drift detection, upstream-api-reference-metadata owns the upstreamApi field — adjacent concerns on the same codegen surface with cross-cutting implementation risk"
+   },
+   {
+    "plans": [
+     ".agent/plans/sdk-and-mcp-enhancements/aggregated-tool-result-type-remediation.plan.md",
+     ".agent/plans/sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md"
+    ],
+    "overlap": "output-schemas-for-mcp-tools references aggregated-tool-result-type-remediation as a conditional predecessor ('if it lands first'); if the output-schemas plan absorbs the required shape changes, the aggregated-type plan becomes redundant without a status update"
+   },
+   {
+    "plans": [
+     ".agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md",
+     ".agent/plans/sdk-and-mcp-enhancements/roadmap.md"
+    ],
+    "overlap": "Both track the same WS3 execution state and Phase 5 pending status; roadmap.md references plans that have since completed or moved to archive without updating its own execution stack, creating a stale mirror of the umbrella plan"
+   }
+  ],
+  "relevance_rollup": "critical: 5 (oak-prod-mcp-snagging-2026-06-11, output-schemas-for-mcp-tools, upstream-api-v0.7.0-alignment, unified-mcp-server-test-harness, schema-resilience-and-response-architecture) / supporting: 12 (mcp-apps-support.research, mcp-app-extension-migration, ws3-phase-5-interactive-user-search-view, upstream-api-reference-metadata, schema-change-minimal-adaptation, download-asset-user-only-url, mcp-prompt-grouping-taxonomy, meta-oak-namespace-cleanup, canonical-url-enforcement, oak-preview-mcp-snagging-2026-04-23, aggregated-tool-result-type-remediation, http-mcp-test-suite-improvements) / speculative: 5 (workspace_topology_exploration, post-merge-tidy-up, mcp-protocol-adoption-roadmap, mcp-tool-token-economy-and-progressive-discovery, ws2-ws3-pedagogical-review-checkpoint) / stale-or-superseded: 6 (ws3-oak-url-augmentable-codegen-fix, upstream-sequences-api-realignment, ws3-contrast-validation-prerequisite, ws3-local-widget-development, clerk-mcp-tools-and-ext-apps-bumps, http-mcp-test-suite-improvements)",
+  "recommendation": "Reorganise. Six completed or superseded plans are occupying current/ and active/ lanes and should be moved to archive immediately: ws3-oak-url-augmentable-codegen-fix.plan.md, upstream-sequences-api-realignment.plan.md, ws3-contrast-validation-prerequisite.plan.md, ws3-local-widget-development.plan.md (superseded), clerk-mcp-tools-and-ext-apps-bumps.plan.md, and http-mcp-test-suite-improvements.plan.md (superseded by unified-mcp-server-test-harness). The roadmap.md sits in the loose lane but is referenced as a live-critical-path anchor; it needs an execution-state refresh to reflect PR #76 merge, the settled OQ1 on schema-resilience, and the completed clerk/sequences plans before it can serve as a reliable orientation document. The oak-preview-mcp-snagging-2026-04-23.plan.md is self-declared QUEUED but placed in current/; its status is consistent with current/ given the README treats it as queued next-up, so no lane move is required, but its WS5 blocker should be confirmed still live. The active/workspace_topology_exploration.plan.md has all todos pending and no execution evidence; it belongs in current/ or future/ rather than active/. The active/schema-resilience-and-response-architecture.plan.md declared status ('PENDING — open questions require owner decisions') is stale since OQ1 was settled 2026-06-03; update the status to reflect that implementation todos are now unblocked. The future/post-merge-tidy-up.plan.md references M1 gates as pending but M1 is complete; it needs a triage pass to identify which items are already resolved before it is next promoted. No plans need splitting or merging beyond the http-mcp-test-suite-improvements deduplication with unified-mcp-server-test-harness.",
+  "confidence": "high"
+ },
+ {
+  "collection": "developer-experience",
+  "organisation_verdict": "mislaned",
+  "critical_path_role": "Enabler collection; not directly on the live M2 critical path except for onboarding-simulations-public-alpha-readiness.md, which carries open M2 blockers (R9 Clerk, R10 Sentry, R13 rate-limiting). Strictness convergence and directory-complexity work unblock clean SDK publishing (M5) but are not gating the current alpha launch. The collection's primary near-term value is closing the onboarding readiness gap for public alpha.",
+  "non_plan_in_executable_lanes": [],
+  "stale_executable": [
+   ".agent/plans/developer-experience/active/devx-strictness-convergence.plan.md",
+   ".agent/plans/developer-experience/current/directory-complexity-enablement.execution.plan.md"
+  ],
+  "top_duplications": [
+   {
+    "plans": [
+     ".agent/plans/developer-experience/future/generated-document-pipeline-extraction-plan.md",
+     ".agent/plans/developer-experience/future/tsdoc-generated-docs-overhaul.plan.md"
+    ],
+    "overlap": "Both target pnpm doc-gen, TypeDoc config overhaul, and a zero-warning documentation baseline; sequencing between them is unresolved and neither has progressed since creation."
+   }
+  ],
+  "relevance_rollup": "critical: 1 / supporting: 3 / speculative: 3 / stale-or-superseded: 8",
+  "recommendation": "Reorganise with targeted pruning. (1) Move the entire .agent/plans/developer-experience/governance/docs-deep-review-2026-02-25/ subtree (5 files: evidence-summary.md, doc-findings.md, artefact-schemas.md, cross-boundary-claims-matrix.md, acceptance-checks.md, deep-review-report.md) to archive — all findings are resolved, the review wave is closed, and these artefacts have no live role; remediation-backlog.md should follow once its items are confirmed closed. (2) Resolve the M1/M2 stall: devx-strictness-convergence.plan.md has had phases 2–6 pending since March 2026 with a noted baseline drift that was never re-locked; either execute the baseline re-lock and advance phases, or formally move the plan to future/ and reset current/ to reflect the true queue state. directory-complexity-enablement.execution.plan.md cannot advance until this is resolved. (3) Merge the two future TypeDoc plans (generated-document-pipeline-extraction-plan.md and tsdoc-generated-docs-overhaul.plan.md) into one canonical plan with explicit phase ordering, preserving all content. (4) Update documentation-sync-log.md with the June 2026 events (oak-onboard-me skill landing 2026-06-12, B4/B5 governance dispositions) to close the 47-day gap. (5) Run a freshness pass on sdk-publishing-and-versioning-plan.md before any M5 promotion: the repo URL, Node version (now 24), and package version assumptions (repo is at 1.34.1, not 0.0.0) are all stale.",
+  "confidence": "high"
+ },
+ {
+  "collection": "exploring-open-education-resources",
+  "organisation_verdict": "coherent",
+  "critical_path_role": "Off the critical path. Neither plan has a dependency on M2 (ES re-index, MCP Apps infra, KG alignment, Sentry+OTel, widget search UI). The collection is strategic preparation for post-M2 work: it preserves a licence-boundary design and an intake model so that when a specific external source is selected, no redesign is needed. It becomes relevant at M3 or later when a concrete external knowledge source is chosen and a promotion trigger is met.",
+  "non_plan_in_executable_lanes": [],
+  "stale_executable": [],
+  "top_duplications": [
+   {
+    "plans": [
+     ".agent/plans/exploring-open-education-resources/external-knowledge-sources/future/education-skills-mcp-surface.plan.md",
+     ".agent/plans/exploring-open-education-resources/external-knowledge-sources/future/external-knowledge-graph-data-source-integration.plan.md"
+    ],
+    "overlap": "Intentional and structural, not a defect. The generic intake plan defines provenance, validation, licence, and promotion gates that the specific education-skills plan is the first instantiation of. Risk: if the specific plan promotes to current without revisiting the generic brief, the generic plan becomes an orphan. Not a present consolidation concern — a future editorial action at promotion time."
+   }
+  ],
+  "relevance_rollup": "critical: 0 / supporting: 0 / speculative: 2 / stale-or-superseded: 0",
+  "recommendation": "Keep as-is. The collection is correctly structured: both plans are rightly in future/, neither has a promotion trigger met, and the external-knowledge-sources/README.md promotion gate is a sound guard against premature execution. The two READMEs (.agent/plans/exploring-open-education-resources/README.md and .agent/plans/exploring-open-education-resources/external-knowledge-sources/README.md) are accurate navigation artefacts. One forward action to capture: when education-skills-mcp-surface.plan.md is promoted to current/, the external-knowledge-graph-data-source-integration.plan.md brief should be reviewed at the same time to confirm it still accurately governs the intake model, so it does not become a dormant orphan.",
+  "confidence": "high"
+ }
+]

@@ -1,0 +1,437 @@
+[
+ {
+  "question_id": "G1-missing-plans",
+  "headline": "Seven GA-implied deliverables have no owning execution plan; the launch-readiness framework names most as candidate gates but explicitly owns no execution, and the privacy/safeguarding/operations cluster is the highest-risk hole because several items are statutory for a public body",
+  "findings": [
+   {
+    "claim": "Performance axis has no plan (known hole confirmed). roadmap.md §4 lists Performance (cold-start, fan-out cost, retry budget within Vercel envelope) as owned by architecture-and-infrastructure with 'No dedicated active plan'. A full filename scan for perf/latency/cold-start/load-test/throughput/benchmark across .agent/plans returned zero matches outside the GA roadmap and launch-readiness framework themselves. The only related artefact (slo-and-error-budget.plan.md) is a strategic brief gated on '≥30 days baseline data POST-launch' — yet launch-readiness C3 explicitly says to INVERT that and set SLO/latency budget BEFORE launch, and K1 makes observed value a GA precondition. So the pre-launch performance/SLO deliverable is both unowned and in direct tension with its only adjacent plan.",
+    "severity": "high",
+    "evidence_paths": [
+     ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md",
+     ".agent/plans/observability/future/slo-and-error-budget.plan.md",
+     ".agent/plans/curriculum-mcp-path-to-ga/launch-readiness-framework.md"
+    ]
+   },
+   {
+    "claim": "Privacy/compliance LEGAL artefacts (DPIA, DSAR/deletion runbook, privacy notice, T&Cs/acceptable-use) have no execution plan. roadmap.md §6 backlog A2 names a working-name plan 'security-and-privacy/future/mcp-analytics-privacy-gate.plan.md' that does NOT exist (the future/ dir holds only cloudflare + phase-0..3 control files). A repo-wide grep for dpia/dsar/deletion runbook/subject access returned hits ONLY in the GA roadmap, the launch-readiness framework, and an unrelated oeai review — never an owned execution plan. The framework B3 states plainly: 'The privacy engineering ... is sound; the legal artefacts are unwritten.' For a public body these are statutory (UK GDPR + Children's Code), making this the highest-stakes hole.",
+    "severity": "critical",
+    "evidence_paths": [
+     ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md",
+     ".agent/plans/security-and-privacy/future/",
+     ".agent/plans/curriculum-mcp-path-to-ga/launch-readiness-framework.md"
+    ]
+   },
+   {
+    "claim": "MCP spec 2026-07-28 GA migration (roadmap §6 A3) has no plan. The only MCP-spec plan, sdk-and-mcp-enhancements/future/mcp-protocol-adoption-roadmap.plan.md, is audited against the OLD 2025-06-18 and 2025-11-25 specs and covers additive features (resource templates, prompt completion, downloads, icons). It does NOT cover the breaking 2026-07-28 changes the roadmap names as the A3 deliverable: stateless-handshake removal, removed Mcp-Session-Id, W3C traceparent via _meta, JSON Schema 2020-12, error-code changes. A3's owning collection is itself marked 'deferred to A3 promotion'. Confirmed unowned.",
+    "severity": "high",
+    "evidence_paths": [
+     ".agent/plans/sdk-and-mcp-enhancements/future/mcp-protocol-adoption-roadmap.plan.md",
+     ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md"
+    ]
+   },
+   {
+    "claim": "Reusable-components EXECUTION has no plan (known hole confirmed, with the precise seam). VISION 'What We Deliver' enumerates six canonical reusable components (OpenAPI-to-MCP pipeline, SDK-generation flow, hybrid-search config/tooling, MCP/MCP-App scaffolds, graph projection patterns, the Practice). The only owner, sector-engagement/current/sector-reusable-components-adoption.plan.md, states it owns 'the MEANING ... and the evidence gates' and that 'Execution of implementation work remains owned by engineering collections' — but no engineering-collection plan packages/publishes those components as adoptable artefacts, and the supported/experimental maturity labels are 'yet to be defined'. This is order-2 enablement (the VISION's second order of effect) with no execution owner.",
+    "severity": "high",
+    "evidence_paths": [
+     "docs/foundation/VISION.md",
+     ".agent/plans/sector-engagement/current/sector-reusable-components-adoption.plan.md"
+    ]
+   },
+   {
+    "claim": "Safeguarding / editorial-correctness / harm-response has no execution home. The launch-readiness framework B1 (assessed at the pupil boundary) requires a named editorial owner for curriculum-guidance correctness, a safeguarding/content-safety assessment, and a tested harm-response runbook — and routes them to 'a new safeguarding/editorial home' that does not exist. The user-experience roadmap treats safeguarding only as an M3 LEARNER-scope promotion decision, not the teacher-product-at-pupil-boundary safety the framework's three structural facts demand. Grep for safeguard/harm-response/editorial-owner found only agentic-Practice governance docs, not a product-safeguarding plan.",
+    "severity": "high",
+    "evidence_paths": [
+     ".agent/plans/curriculum-mcp-path-to-ga/launch-readiness-framework.md",
+     ".agent/plans/user-experience/roadmap.md"
+    ]
+   },
+   {
+    "claim": "Operations-for-launch (support channel, harm/incident response, on-call, cost/funding envelope, deprecation policy) has no execution plan. Launch-readiness D1 requires these 'configured before launch'. The only operational plans found are two status-page strategic briefs (statuspage-integration + customer-facing-status-page), both explicitly post-beta-gated (promotion_trigger 'post-beta when usage volume makes outage transparency a product concern') and chained to each other — neither closes an alpha/beta gate. There is no plan for the cost ceiling the framework flags ('unlimited upstream key + serverless + ES has no cost ceiling') nor a versioning/deprecation policy for the third-party-consumed tool surface.",
+    "severity": "medium",
+    "evidence_paths": [
+     ".agent/plans/curriculum-mcp-path-to-ga/launch-readiness-framework.md",
+     ".agent/plans/observability/future/statuspage-integration.plan.md",
+     ".agent/plans/observability/future/customer-facing-status-page.plan.md"
+    ]
+   },
+   {
+    "claim": "M4/GA milestone definition is undefined (known per roadmap, but the dependency ordering matters). roadmap §3 marks M4/GA 'Undefined — see §6 backlog item A4'; only future/launch-readiness-and-milestone-redefinition.plan.md (a stub, promotion trigger 'owner direction') and the launch-readiness-framework (keystones K1-K3 decided 2026-06-15, milestone ladder 'under fresh-eyes re-assessment') exist. A4 is the upstream blocker for the prior six holes: the framework's K1 (live = observed real-teacher impact) and K3 (whole-estate readiness) re-derive the ladder away from auth-posture, so until A4 ratifies the impact-first ladder, the privacy/safeguarding/performance/operations gaps cannot be correctly sequenced into M-gates.",
+    "severity": "medium",
+    "evidence_paths": [
+     ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md",
+     ".agent/plans/curriculum-mcp-path-to-ga/future/launch-readiness-and-milestone-redefinition.plan.md",
+     ".agent/plans/curriculum-mcp-path-to-ga/launch-readiness-framework.md"
+    ]
+   }
+  ],
+  "recommendation": "Sequence the gap closure around the A4 keystone, because M4/GA definition is the upstream blocker that determines how the other holes map to milestone gates. Order: (1) Ratify A4 — promote launch-readiness-framework's impact-first ladder (K1-K3 already decided) into .agent/milestones/m4-general-availability.md so the remaining deliverables have a gate to attach to. (2) Open the statutory privacy/legal cluster FIRST among execution work — author the A2 security-and-privacy/future/mcp-analytics-privacy-gate.plan.md (DPIA + DSAR/deletion runbook + privacy notice/T&Cs/acceptable-use + Children's-Code applicability ruling); it is critical, statutory, and the privacy engineering is already done so this is artefact-authoring not new infra. (3) Stand up the missing safeguarding/editorial home (framework B1) — a small but genuinely-new collection naming the editorial-correctness owner and a tested harm-response runbook. (4) Create a pre-launch performance/SLO execution plan in architecture-and-infrastructure that inverts the 30-day-post-launch deferral (set latency budget + SLO targets before GA per framework C3), and reconcile it against slo-and-error-budget.plan.md's trigger. (5) Author the reusable-components publishing/packaging execution plan in the engineering collections with the supported/experimental maturity matrix the sector contract's t3 awaits — this is the order-2 enablement the VISION promises. (6) Author the A3 MCP 2026-07-28 breaking-change migration plan distinct from the additive mcp-protocol-adoption-roadmap. (7) Bring the operations cluster (support channel, on-call, cost/funding envelope, deprecation policy) forward from post-beta into a pre-GA operations plan; the status-page briefs already exist downstream of it. Treat the 177-file decay set and the dead Sentry/OTel branches as orthogonal hygiene — judge each plan by its body against current main (Sentry/OTel foundation is already on main), not by stale frontmatter dates.",
+  "confidence": "high"
+ },
+ {
+  "question_id": "G1-missing-plans",
+  "headline": "Seven plan-less implied deliverables confirmed; four are on the M2/M3 critical path with no owning execution plan in any lane.",
+  "findings": [
+   {
+    "claim": "Production Clerk execution plan is missing. The M3 gate lists 'Production Clerk instance deployed and configured' as a hard gate, and .agent/research/auth/clerk-production-migration.md is research-complete (status: RESEARCH — Complete, dated 2026-02-22), but no execution plan exists in any collection lane. The roadmap.md §3 milestone matrix cites 'production Clerk migration research' at .agent/research/auth/ as the sub-plan, which is a research document, not an executable plan. The compliance/ and security-and-privacy/ collections have no file covering Clerk production deployment execution.",
+    "severity": "critical",
+    "evidence_paths": [
+     ".agent/milestones/m3-tech-debt-and-hardening.md",
+     ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md",
+     ".agent/research/auth/clerk-production-migration.md"
+    ]
+   },
+   {
+    "claim": "MCP spec 2026-07-28 GA upgrade has no execution plan (Programme A3). The roadmap.md §6 explicitly tracks it as a backlog item gated on spec GA and owner direction. The sdk-and-mcp-enhancements/future/mcp-protocol-adoption-roadmap.plan.md covers unused MCP features (resource templates, prompt completion, downloads, icons) against the 2025 spec, not the 2026-07-28 GA transport migration (stateless handshake removal, W3C traceparent via _meta, removed Mcp-Session-Id, JSON Schema 2020-12, error code changes). No plan in any lane owns the spec-GA migration. Spec target is 2026-07-28 — less than 6 weeks from today.",
+    "severity": "critical",
+    "evidence_paths": [
+     ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md",
+     ".agent/plans/sdk-and-mcp-enhancements/future/mcp-protocol-adoption-roadmap.plan.md"
+    ]
+   },
+   {
+    "claim": "Privacy/compliance execution (DPIA, DSAR runbook, legal notices) has no execution plan. The roadmap.md §6 tracks Programme A2 (mcp-analytics-privacy-gate.plan.md) as deferred and unwritten, gated on Owner + DPO. The launch-readiness framework B3 explicitly names DPIA for Clerk + PostHog + Sentry, DSAR/deletion runbook, ICO Children's Code applicability, and legal notices as statutory obligations — none have an execution plan. The compliance/ collection future lane is empty (only a README and an upstream-api-requests.md in current). The roadmap also tracks A5 (Exploration 10 formal Clerk identity ruling backfill) as unwritten.",
+    "severity": "critical",
+    "evidence_paths": [
+     ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md",
+     ".agent/plans/curriculum-mcp-path-to-ga/launch-readiness-framework.md",
+     ".agent/plans/compliance/future/README.md",
+     ".agent/plans/compliance/current/upstream-api-requests.md"
+    ]
+   },
+   {
+    "claim": "Performance axis has no active or current plan. The roadmap.md §4 cross-cutting axes table explicitly marks 'Performance' (cold-start, fan-out cost, retry budget within Vercel runtime envelope) as 'No dedicated active plan'. The launch-readiness framework C3 (Quality of Experience) names latency/performance, SLO/availability targets, and token efficiency as gate dimensions — all without a plan home. The cost-and-capacity-telemetry.plan.md is a strategic brief (status: strategic, not yet executable) that opens only on a cost-pressure event, not a pre-launch baseline. No plan owns cold-start measurement, p95 latency targets, or fan-out budget definition.",
+    "severity": "high",
+    "evidence_paths": [
+     ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md",
+     ".agent/plans/curriculum-mcp-path-to-ga/launch-readiness-framework.md",
+     ".agent/plans/observability/future/cost-and-capacity-telemetry.plan.md"
+    ]
+   },
+   {
+    "claim": "MCP analytics execution (Programme A1: AnalyticsEnvelope threading, PostHog Sink 3 adapter, dependency_call emission) has no execution plan. The roadmap.md §6 A1 explicitly marks it as owner-deferred. The observability/future/second-backend-evaluation.plan.md and second-backend-evaluation covers warehouse/PostHog selection but is future-gated, not the analytics threading plan. No current or active plan threads the AnalyticsEnvelope or wires PostHog as Sink 3.",
+    "severity": "high",
+    "evidence_paths": [
+     ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md",
+     ".agent/plans/observability/future/second-backend-evaluation.plan.md"
+    ]
+   },
+   {
+    "claim": "Whole-estate production-readiness checklist (K3 consequence) has no plan. The launch-readiness framework C4 explicitly states that declaring the MCP app live asserts every workspace beneath it is at production quality — SDK/codegen, search+Elasticsearch, graph tooling, auth, observability, MCP server runtime, React experience — each requiring a per-workspace production-readiness checklist. No plan in any collection owns authoring or executing this cross-workspace gate. The future stub launch-readiness-and-milestone-redefinition.plan.md names the intention but is promotion-gated on owner direction and carries no execution detail.",
+    "severity": "high",
+    "evidence_paths": [
+     ".agent/plans/curriculum-mcp-path-to-ga/launch-readiness-framework.md",
+     ".agent/plans/curriculum-mcp-path-to-ga/future/launch-readiness-and-milestone-redefinition.plan.md"
+    ]
+   },
+   {
+    "claim": "Product and interaction design for the graphical widget experience (launch-readiness framework C1/C2) has no plan. The launch-readiness framework identifies C1 (product and content design — information architecture, curriculum navigation, microcopy, Oak voice, teacher-specific journeys) and C2 (interaction and visual design on the Oak design-token system, WCAG 2.2 AA in real hosts, graceful degradation) as first-class launch dimensions. No plan in sdk-and-mcp-enhancements, user-experience, or any other collection covers product design engagement, teacher usability testing, or design-system conformance review. The mcp-app-extension-migration plan covers the engineering rebuild; design input is named as a gate but has no owning plan.",
+    "severity": "high",
+    "evidence_paths": [
+     ".agent/plans/curriculum-mcp-path-to-ga/launch-readiness-framework.md",
+     ".agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md"
+    ]
+   },
+   {
+    "claim": "Reusable-components execution has no delivery plan. The VISION 'What We Deliver' section names six reusable components (OpenAPI-to-MCP pipeline, SDK generation flow, hybrid-search configuration, MCP/MCP App scaffolds, graph projection patterns, the Practice) as first-class sector deliverables with partner-facing adoption claims. sector-engagement/current/sector-reusable-components-adoption.plan.md owns only the contract/meaning layer (todos t1-t4 are all pending documentation and contract work). No execution plan covers packaging, versioning, maturity labelling, or a playbook for any single component line — t3 (supported/experimental matrix) and t4 (playbook scaffold) are both pending with no child plan.",
+    "severity": "medium",
+    "evidence_paths": [
+     "docs/foundation/VISION.md",
+     ".agent/plans/sector-engagement/current/sector-reusable-components-adoption.plan.md"
+    ]
+   }
+  ],
+  "recommendation": "Prioritise in this order, which matches the M2/M3/GA gate sequence: (1) Create a production-Clerk execution plan in security-and-privacy/current/ (or sdk-and-mcp-enhancements/current/) immediately — the research is complete and M3 cannot exit without it; (2) Create the MCP spec 2026-07-28 upgrade plan in sdk-and-mcp-enhancements/current/ now — the spec GA date is 2026-07-28, under six weeks away, and ADR-112 already aligns with the direction; (3) Create the privacy/compliance execution plan (Programme A2) in compliance/current/ with DPO input — statutory obligations (DPIA, ICO Children's Code, DSAR runbook) must be authored before public launch; (4) Create a performance baseline plan in architecture-and-infrastructure/current/ that defines and measures cold-start, p95 latency, and fan-out budgets before M3 exits — deferring SLOs to post-launch inverts the accountability required by K1 (GA = observed positive impact, not assumed); (5) Stub a product-design engagement plan in user-experience/current/ that gates the WS3/WS4 widget rebuild on design-system conformance review and teacher usability testing — the engineering plan is active but design input has no owning artefact; (6) Promote the launch-readiness-and-milestone-redefinition.plan.md stub to current/ on owner direction to unlock the whole-estate production-readiness checklist (C4) and M4/GA milestone definition (Programme A4); (7) Defer the analytics execution plan (A1) and reusable-components playbook — both are correctly owner-gated and not on the M2/M3 critical path.",
+  "confidence": "high"
+ },
+ {
+  "question_id": "G2-hidden-blockers",
+  "headline": "Every M3 gate (Cloudflare, production Clerk, MCP-spec GA) sits behind an unsequenced external lead-time, and the highest-fan-in prerequisite (upstream Oak API) is an unowned outbound ask — the critical path is gated on things with no start date and no internal owner.",
+  "findings": [
+   {
+    "claim": "The M3 Cloudflare security gate is a hard blocker whose internal prerequisite chain has not started and whose external prerequisite (Cloudflare account entitlement + feature availability) is unsequenced. The gate explicitly depends on Phase 2 evidence-contract and Phase 3 baseline-control work, but the security-and-privacy roadmap shows Phase 0 is only 'ready to start' (PLANNED) with 'No non-planning security hardening implementation has started yet'. The gate brief itself states promotion requires that 'Cloudflare account access and feature availability can be tested' — an external entitlement nobody has confirmed Oak holds. So M3 is gated on a four-phase chain (0->1->2->3) that is unstarted, plus a vendor-entitlement check with unknown lead time, none of which is sequenced against a date.",
+    "evidence_paths": [
+     ".agent/plans/security-and-privacy/roadmap.md",
+     ".agent/plans/security-and-privacy/future/cloudflare-mcp-public-beta-security-gate.plan.md",
+     ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md"
+    ],
+    "severity": "critical"
+   },
+   {
+    "claim": "Production Clerk migration (the other named M3 gate) has a 'must be resolved before any other migration work' fork (Section 0: shared-vs-independent Clerk instance, with ADR-053 amendment if departing from the shared mandate) plus two unbounded external lead-times — Google OAuth app verification (app name/logo/scope review; 'Testing' status caps at 100 users) and DNS propagation 'up to 48 hours' — yet the migration is only research-complete (2026-02-22) with NO execution plan promoted and no start date. The owner decision (Section 0) is a low-cost-looking but blocking prerequisite that nothing in the roadmap sequences, and Google verification has no internal owner who can shorten it.",
+    "evidence_paths": [
+     ".agent/research/auth/clerk-production-migration.md",
+     ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md"
+    ],
+    "severity": "critical"
+   },
+   {
+    "claim": "The MCP 2026-07-28 spec-GA upgrade (Programme backlog A3) is pinned to a hard external publication date (2026-07-28) but has no execution plan and no owning collection (roadmap says 'collection choice deferred to A3 promotion'). The only MCP-protocol plan on file, mcp-protocol-adoption-roadmap.plan.md (2026-04-08), targets the 2025-06-18 and 2025-11-25 specs (resource templates, prompt completion, icons) — NOT the 2026-07-28 GA migration A3 describes (stateless-handshake removal, removed Mcp-Session-Id, JSON Schema 2020-12, error-code changes). A3 is a long-pole with a fixed deadline, no owner, and no plan: it cannot be compressed once the spec lands.",
+    "evidence_paths": [
+     ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md",
+     ".agent/plans/sdk-and-mcp-enhancements/future/mcp-protocol-adoption-roadmap.plan.md"
+    ],
+    "severity": "high"
+   },
+   {
+    "claim": "The GA host mcp.thenational.academy does not resolve in DNS, and this single missing prerequisite blocks multiple downstream high-value plans that are NOT sequenced behind it. The standards-verification report states the GA host 'does not currently resolve' (only the alpha host curriculum-mcp-alpha.oaknational.dev exists). The MCP Server Cards plan lists 'mcp.thenational.academy GA host must exist' as blocking, and the Clerk migration requires a production custom domain (with the same up-to-48h DNS propagation). DNS zone ownership/DNSSEC posture is also flagged unconfirmed in dns-aid-discovery. No plan owns standing up the GA host or carries its lead time, so it is an invisible critical-path item feeding both discovery and auth.",
+    "evidence_paths": [
+     ".agent/plans/discovery/current/standards-verification-2026-06-01.report.md",
+     ".agent/plans/discovery/future/mcp-server-cards.plan.md",
+     ".agent/research/auth/clerk-production-migration.md"
+    ],
+    "severity": "high"
+   },
+   {
+    "claim": "Upstream Oak API is the single highest-fan-in external dependency in the estate (24 plans depend on it per the survey index) yet it is governed by an outbound request file addressed to 'Remy and Aakesh' with NO owned internal timeline and an explicit 'this is an outbound ask, not internal work' framing. compliance/current/upstream-api-requests.md (directory-compliance fixes) and two semantic-search bulk-data feature requests (bulk_data_population, bulk_data_for_semantic_search) all wait on an external team Oak does not control. The compliance file even self-describes the requests as 'not blocking our current development' while the survey shows 24 plans depend on the upstream API — a mismatch where a low-urgency-framed outbound ask sits under a high-leverage dependency chain (ingestion -> search quality -> the M2 widget search experience).",
+    "evidence_paths": [
+     ".agent/plans/compliance/current/upstream-api-requests.md",
+     ".agent/plans/semantic-search/current/bulk_data_population.feature_request.md",
+     ".agent/plans/semantic-search/current/bulk_data_for_semantic_search.feature_request.md"
+    ],
+    "severity": "high"
+   },
+   {
+    "claim": "The named M2 close-gate — the user-facing widget SEARCH UI — is entirely unstarted: every todo in ws3-phase-5-interactive-user-search-view.plan.md and the WS3/WS4 todos in mcp-app-extension-migration.plan.md are status: pending. M2 is reported ~95% but the remaining 5% is a from-scratch React MCP App rebuild (WS3 'delete the dead widget framework and build one fresh') plus the WS4 search UI, which the launch-readiness framework now scopes as whole-estate production-readiness (K3). The '95%' figure understates the residual long-pole: a clean-break UI build plus its accessibility-in-a-host-iframe testing in 'at least two real hosts'.",
+    "evidence_paths": [
+     ".agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-5-interactive-user-search-view.plan.md",
+     ".agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md",
+     ".agent/plans/curriculum-mcp-path-to-ga/launch-readiness-framework.md"
+    ],
+    "severity": "high"
+   },
+   {
+    "claim": "A large fan of high-leverage graph/sector plans converges on a single prerequisite that is treated as a contextual 'park trigger' rather than an owned, sequenced dependency. At least six knowledge-graph future plans (nc-knowledge-taxonomy-surface, cross-source-journeys, oak-kg-threads-surface, oak-misconceptions-graph-features, extending-graph-support-tooling) plus the EEF outcome/leadership/standalone plans and dfe-data-sdk all gate on 'EEF graph tool completion D7' or graph-tools-value-redesign. The dfe-data-sdk plan additionally waits on a 'Named Oak consumer with ratified value statement' whose only candidate consumers are themselves D7-gated EEF plans — a chain where a strategic-leverage plan (DfE data SDK, an order-2 ecosystem play) waits on an unowned value-ratification that waits on EEF D7. The convergence concentrates schedule risk on one tool's completion and one owner decision.",
+    "evidence_paths": [
+     ".agent/plans/sector-engagement/future/dfe-data-sdk.plan.md",
+     ".agent/plans/connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md",
+     ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-tools-value-redesign.plan.md"
+    ],
+    "severity": "medium"
+   },
+   {
+    "claim": "Legal/DPO is the thinnest-covered external gate (legal-dpo appears once in the survey) yet the launch-readiness framework makes it statutory and a GA precondition under K1. Programme backlog A2 (DPIA + DSAR/deletion runbook for PostHog+Sentry+Clerk) and A5 (per-sink Clerk-identity ruling backfill) are both owner+DPO/legal-gated with no execution plan, and the framework flags ICO Children's Code applicability and public-sector accessibility statement as 'unwritten legal artefacts'. Legal review also blocks agent-skills-discovery and aila-a2a-agent-card. With only one DPO and statutory artefacts unwritten, this is an underweighted long-pole on the GA (not just M3) path.",
+    "evidence_paths": [
+     ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md",
+     ".agent/plans/curriculum-mcp-path-to-ga/launch-readiness-framework.md"
+    ],
+    "severity": "medium"
+   }
+  ],
+  "recommendation": "Sequence the external-lead-time items NOW, ahead of the internal work that nominally precedes them, because their clocks run independently of Oak: (1) Start the Clerk Section-0 owner decision (shared vs independent instance + ADR-053 amendment) and kick off Google OAuth app verification and GA-host DNS (mcp.thenational.academy) immediately — these are weeks-long external clocks with no internal owner to compress them, and they gate M3. Promote the 2026-02-22 Clerk research into an execution plan with a start date. (2) Confirm Cloudflare MCP-feature entitlement against Oak's actual account this week; if unavailable, the M3 Cloudflare gate's disposition (enable/decline-with-evidence) can proceed in parallel with — not after — the unstarted Phase 0->3 security chain, so the gate is not silently waiting on four unstarted phases. (3) Create the A3 MCP-2026-07-28 execution plan and assign its collection now, before the spec publishes, so the fixed external deadline has lead time rather than a scramble. (4) Re-frame the upstream Oak API requests: the compliance file's 'not blocking' self-assessment contradicts the 24-plan fan-in — escalate the bulk-data and directory-compliance asks with an owned follow-up cadence and a named Oak-side liaison, since they sit under ingestion->search->the M2 widget. (5) Replace the EEF-D7 'park trigger' framing on the six+ graph/sector plans with an explicit single sequenced dependency edge and one owner, so the convergence risk is visible. (6) Open A2/A5 (DPIA, DSAR runbook, per-sink identity ruling) with the DPO now: under K1, observed-impact-plus-statutory-compliance is a GA precondition, and the single-DPO bottleneck on unwritten statutory artefacts is the most underweighted long-pole. Net: the binding constraint on M3->GA is not engineering throughput, it is the set of external/owner clocks (Cloudflare entitlement, Google verification, DNS, spec-GA date, upstream API team, DPO) — start all of them before completing their nominal internal predecessors.",
+  "confidence": "high"
+ },
+ {
+  "question_id": "G2-hidden-blockers",
+  "headline": "Five unsequenced external-gate chains threaten M3 and beyond; the Cloudflare gate has no execution plan yet, Clerk production migration is stalled at Phase 0, the MCP 2026-07-28 spec upgrade has no owner or plan, ontology-repo pinning is an open prerequisite for a substantial graph work-stream, and upstream API changes are unactioned and undated.",
+  "findings": [
+   {
+    "claim": "The Cloudflare MCP public-beta security gate is the named M3 hard blocker yet has zero execution work underway. The plan is still in future/ as a strategic brief (last_updated 2026-04-28). Its promotion trigger requires Phase 2 (evidence contract) and Phase 3 (protocol/auth/tool-governance baseline) to be complete — but both of those plans also have every todo item pending. The entire four-phase security hardening chain (Phase 0 through Phase 3 plus Cloudflare gate) has not started implementation. The security roadmap explicitly states: 'No non-planning security hardening implementation has started yet.' Nothing in any active plan sequences the Cloudflare account-access and feature-availability verification that the brief lists as a hard prerequisite for promotion.",
+    "evidence_paths": [
+     ".agent/plans/security-and-privacy/future/cloudflare-mcp-public-beta-security-gate.plan.md",
+     ".agent/plans/security-and-privacy/roadmap.md",
+     ".agent/plans/security-and-privacy/active/phase-0-foundation-and-baseline.md",
+     ".agent/plans/security-and-privacy/active/phase-3-protocol-auth-and-tool-governance-baseline.md",
+     ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md"
+    ],
+    "severity": "critical"
+   },
+   {
+    "claim": "Production Clerk migration (the other named M2 blocker) is classified as a current execution plan but every Phase 0 through Phase 4 todo remains pending. The plan was last updated 2026-03-11 and carries a freshness note acknowledging that a subsequent PR shipped unrelated restructuring work, leaving production Clerk and OAuth edge rate-limiting untouched. The programme roadmap lists 'Production Clerk' as the M3 gate; the m2-public-alpha-auth-rate-limits plan keeps this as an M2 gate. The two milestones' interpretations of this gate are inconsistent and neither has active execution.",
+    "evidence_paths": [
+     ".agent/plans/semantic-search/current/m2-public-alpha-auth-rate-limits.execution.plan.md",
+     ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md"
+    ],
+    "severity": "critical"
+   },
+   {
+    "claim": "The MCP specification 2026-07-28 GA upgrade is a named programme gate (backlog item A3) with no plan, no collection assignment, and no owner. The target date is six weeks away. The programme roadmap explicitly defers collection choice to owner direction and notes the upgrade touches SDK and transport migration: stateless handshake removal, W3C traceparent ingestion, removed Mcp-Session-Id, JSON Schema 2020-12, and error code changes. This is a breaking-change migration with no sequencing anywhere in the active plan estate. The mcp-protocol-adoption-roadmap.plan.md covers future protocol features (resource templates, prompt completion) but explicitly scopes to current non-blocking features, not the spec GA migration.",
+    "evidence_paths": [
+     ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md",
+     ".agent/plans/sdk-and-mcp-enhancements/future/mcp-protocol-adoption-roadmap.plan.md"
+    ],
+    "severity": "high"
+   },
+   {
+    "claim": "The Oak Curriculum Ontology pinned TTL release (WS4.2 in graph-stack.plan.md) is listed as a blocking prerequisite for the Threads adapter inside graph-corpus-sdk and is still pending. The graph-stack plan is active with WS4.2 and WS4.3 pending. Multiple downstream plans (nc-knowledge-taxonomy-surface, oak-kg-threads-surface, cross-source-journeys, evidence-integration-strategy) are explicitly parked on this. The ontology-repo dependency appears 8 times in the external gate index. No current plan owns the step of obtaining and pinning a stable TTL release from the external oak-curriculum-ontology repository; the plan body notes this as a WS4.2 prerequisite without a sequenced delivery date or owner contact. The EEF tool completion chain (D7 and beyond) also gates multiple future plans and external-sector engagement work, though D7 was noted as completing 2026-06-08.",
+    "evidence_paths": [
+     ".agent/plans/connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md",
+     ".agent/plans/connecting-oak-resources/knowledge-graph-integration/future/nc-knowledge-taxonomy-surface.plan.md",
+     ".agent/plans/connecting-oak-resources/knowledge-graph-integration/future/oak-kg-threads-surface.plan.md",
+     ".agent/plans/sector-engagement/eef/future/evidence-integration-strategy.md"
+    ],
+    "severity": "high"
+   },
+   {
+    "claim": "Upstream Oak API changes submitted to Remy and Aakesh (fix of swapped limit/offset descriptions and pagination on asset endpoints) have no response date, no escalation path, and no owner follow-up sequenced. The upstream-api-requests.md document is classified M4-GA in the DAG, but both changes are required for directory compliance (Anthropic and OpenAI submission readiness), which the app-submission-standards plan (WS1-WS8) is actively targeting. The app-submission-standards plan has every todo pending (last updated 2026-06-08, status: queued, not yet started) and the upstream pagination gap is explicitly noted as likely to be flagged at directory review. Separately, bulk data endpoint additions (bulk_data_population.feature_request.md) are also handed to the upstream API team with no confirmed timeline, and these gate the unified ingestion pipeline Phase 3 operation.",
+    "evidence_paths": [
+     ".agent/plans/compliance/current/upstream-api-requests.md",
+     ".agent/plans/user-experience/educator-end-users/current/app-submission-standards.plan.md",
+     ".agent/plans/semantic-search/current/bulk_data_population.feature_request.md",
+     ".agent/plans/semantic-search/current/unified-versioned-ingestion.plan.md"
+    ],
+    "severity": "high"
+   },
+   {
+    "claim": "The widget search UI (WS3 Phase 5 interactive user search view) is the other named M2 completion gate alongside observability evidence, and it is in a pending state blocked on PR #76 merge. The plan was last updated 2026-04-12 and still lists pre-phase blockers including removal of the search tool's _meta.ui claim and tool consolidation. No plan body shows this unblocked. With M2 at approximately 95%, this and the Sentry/OTel evidence bundle are the two remaining gates — but the widget plan is in active/ while its pre-phase blockers remain open, creating a dependency that is sequenced nowhere.",
+    "evidence_paths": [
+     ".agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-5-interactive-user-search-view.plan.md",
+     ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md"
+    ],
+    "severity": "medium"
+   },
+   {
+    "claim": "Legal and DPO gates (backlog items A2 and A5 in the programme roadmap) cover the DPIA register, legal notice updates, and per-sink Clerk identity projection ruling. These are listed as owner+DPO decisions with no active execution plan, no DPO engagement timeline, and no trigger other than owner direction. The external gate index records legal-dpo with count 1 — suggesting only a single tracking point — but the programme roadmap A2 scope (PostHog, Sentry MCP DPIA coverage, DSAR runbook) is an M3 prerequisite for production analytics. No plan currently owns this engagement sequence. Low confidence that this is truly tracked, given the planning estate's overwhelmingly internal focus.",
+    "evidence_paths": [
+     ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md"
+    ],
+    "severity": "medium"
+   }
+  ],
+  "recommendation": "Sequence the external gates explicitly before continuing internal feature work. The four actions with the highest leverage are: (1) Treat the Cloudflare gate as a long-pole and start Phase 0 security hardening immediately — every phase is a prerequisite in the Cloudflare chain and none has started; create a concrete lead-time estimate for Cloudflare account access and feature verification. (2) Unblock Production Clerk migration by treating the stalled m2-public-alpha-auth-rate-limits plan as the current sprint's only M2 obligation — Phase 0 decision lock is one session's work and nothing else can close M2 without it. (3) Name an owner and create a draft plan for the MCP 2026-07-28 spec upgrade now; the breaking-change surface (transport, session, schema, error codes) needs a sizing pass before the spec drops, not after. (4) Contact the oak-curriculum-ontology repository maintainers to pin a dated TTL release that WS4.2 can consume; this unblocks the entire Threads adapter chain and the downstream M4 sector-engagement plans. The upstream API requests and legal-DPO engagement should each have a follow-up date set and a named human owner, even if Oak cannot control the external party's timeline.",
+  "confidence": "high"
+ },
+ {
+  "question_id": "G3-critical-path-order",
+  "headline": "The minimal critical path is ~6 plans: finish the user-search widget VIEW (only M2-close gate left) -> consolidate search ingestion behind it -> Sentry observability MVP (foundation already on main) -> M3 production Clerk + Cloudflare security gate -> GA, BUT the 2026-06-15 owner-ratified readiness assessment supersedes the old M2/M3 ladder, making value-proof and pupil-safeguarding the real GA-blocking gates the inherited path omits.",
+  "findings": [
+   {
+    "claim": "M2 close has exactly ONE genuinely-unstarted on-path gate: the user-facing widget search VIEW (Phase 5). The widget framework rebuild itself is NOT unstarted — PR #76 (fresh React MCP App with Oak branding, design tokens, SDK alignment) is merged to main (commit 028dc2171). What remains is ws3-phase-5-interactive-user-search-view.plan.md, status PENDING, blocked only on PR #76 merge (now satisfied), with all three todos (RED tests, user-search UI via app.callServerTool, helper-tool policy) still pending. This is plan-set position #1 and the true M2 close gate.",
+    "evidence_paths": [
+     ".agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-5-interactive-user-search-view.plan.md",
+     ".agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md"
+    ],
+    "severity": "high"
+   },
+   {
+    "claim": "The note's 'observability foundation ALREADY ON MAIN' is correct and verified first-hand: PR #73 (Sentry+OTel foundation for HTTP MCP server, commit 54309a6a2) and PR #87 (Sentry/OTel public-alpha foundations, commit 05f994c09) are both merged. The remaining on-path observability plan is observability/active/sentry-observability-maximisation-mcp.plan.md — but its M2-load-bearing lanes L-7 (release/deploy linkage) and L-12-prereq (redaction primitives) are COMPLETED, and the genuinely-blocking M2 lanes (L-1 free integrations, L-3 mcp context, L-4b metrics adapter) are a thin remainder. L-12 widget Sentry, L-13 alerts, L-14 trace propagation are all explicitly DEFERRED to public beta. So observability is plan-set position #3 but mostly a finishing pass, not a from-scratch build.",
+    "evidence_paths": [
+     ".agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md",
+     ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md"
+    ],
+    "severity": "medium"
+   },
+   {
+    "claim": "The search backend feeding the widget is on the critical path and carries a real freshness/operational risk. unified-versioned-ingestion.plan.md has Phases 0-2 merged (PR #61) but Phase 3 (live stage/promote/verify) is still PENDING and Phase 4 (review+docs) not started; last_updated 2026-03-11. The widget user-search VIEW renders results from this pipeline, so a non-operational blue/green reindex is a latent blocker. search-sdk-args-extraction.plan.md (last_updated 2026-03-01, still PLANNING) is the canonical search-args surface the widget+CLI share. These are plan-set position #2 (must be operational before/under the widget). FRESHNESS_RISK: both plans are ~3 months stale relative to the EEF-live, graph-tools-landed current main.",
+    "evidence_paths": [
+     ".agent/plans/semantic-search/current/unified-versioned-ingestion.plan.md",
+     ".agent/plans/semantic-search/current/search-sdk-args-extraction.plan.md",
+     ".agent/plans/semantic-search/search-acceptance-criteria.md"
+    ],
+    "severity": "high"
+   },
+   {
+    "claim": "The M3 critical path is two hard gates, in this order: (1) production Clerk migration — research exists at .agent/research/auth/clerk-production-migration.md (35KB, present) but there is NO execution plan promoted yet (roadmap A-backlog and m3 milestone reference research only); (2) cloudflare-mcp-public-beta-security-gate.plan.md, which is the named M3 blocker but is a FUTURE strategic brief (status 'Future strategic brief', last_updated 2026-04-28), NOT an executable plan, and its own §Dependencies require Phase 2 evidence-contract + Phase 3 protocol/auth baseline to complete first. So security-and-privacy active phases 0->1->2->3 are genuine upstream dependencies of the Cloudflare gate. These are plan-set positions #5-6.",
+    "evidence_paths": [
+     ".agent/plans/security-and-privacy/future/cloudflare-mcp-public-beta-security-gate.plan.md",
+     ".agent/milestones/m3-tech-debt-and-hardening.md",
+     ".agent/research/auth/clerk-production-migration.md"
+    ],
+    "severity": "high"
+   },
+   {
+    "claim": "The question's own framing (old M2->M3->GA gate ladder) is partially STALE and must be flagged. The owner-ratified readiness assessment dated TODAY (2026-06-15) at .agent/reports/mcp-app-live-product-readiness-assessment-2026-06-15.md states in §8.4: 'The prior milestone definitions do not stand.' Keystones K1-K3 are owner-ratified: K1 'live = full GA with real users demonstrating positive impact' makes VALUE-PROOF a precondition of GA, not a post-launch measurement; K3 makes readiness WHOLE-ESTATE not app-scoped. The assessment names two GA-blocking gates the inherited ladder has NO home for: pupil-boundary SAFEGUARDING/content-safety (largest gap) and VALUE-PROOF with a real teacher cohort. The minimal critical path to a 'live, growing product' therefore cannot be only the 6 infra plans — it must add a safeguarding clearance and an instrumented value-proof gate before GA.",
+    "evidence_paths": [
+     ".agent/reports/mcp-app-live-product-readiness-assessment-2026-06-15.md",
+     ".agent/plans/curriculum-mcp-path-to-ga/launch-readiness-framework.md",
+     ".agent/plans/curriculum-mcp-path-to-ga/future/launch-readiness-and-milestone-redefinition.plan.md"
+    ],
+    "severity": "critical"
+   },
+   {
+    "claim": "The vast majority of liveCritical entries are SUPPORTING NOISE relative to the minimal path, and several carry decay signals that confirm they are off-path. The entire EEF tranche (eef-d3 through eef-d6, eef-graph-tool-completion, eef-revalidate) shows risk 'references-merged-pr' because EEF shipped live by default (commit d9f0d9061, D0-D7) — that work is DONE, not pending; it is order2/sector-engagement value, not an M2-close/M3/GA gate. The knowledge-graph-integration future plans (cross-source-journeys, oak-kg-threads-surface, nc-knowledge-taxonomy-surface, oak-misconceptions-graph-features) all carry 'references-removed-code'/'references-dead-branch' decay and are M4-GA/unclear milestone — explicitly parked behind EEF D7. graph-tools-value-redesign.plan.md is the only KG plan with M2 milestone and is fresh, but it is order2/order3 enrichment, not an M2-close gate. The discovery/* future plans (mcp-server-cards, web-bot-auth, dns-aid, agent-skills-discovery, aila-a2a) are all owner-decision-gated 'blocking' triggers with no live dependency — pure noise for the critical path.",
+    "evidence_paths": [
+     ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-tools-value-redesign.plan.md",
+     ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md",
+     ".agent/plans/discovery/current/agent-readiness-discovery-hub.plan.md"
+    ],
+    "severity": "medium"
+   },
+   {
+    "claim": "FRESHNESS_RISK decay flags on the genuinely on-path plans: (a) cloudflare-mcp-public-beta-security-gate.plan.md carries 'fresh,stale-dates' and is a 2026-04-28 brief that PREDATES the EEF ship and graph-tools landing — the readiness report §4.6 explicitly says 'the plans predate reality... their status snapshots (e.g. M2 ~95%) are unaudited'. (b) unified-versioned-ingestion (2026-03-11) and search-sdk-args-extraction (2026-03-01) predate the current estate by ~3 months. (c) observability-events-workspace.plan.md (decaySample: 'fresh,stale-dates') is an M3 dependency of security-observability/accessibility-observability. None of these are abandoned-branch artefacts (the note's warning about 1400+commit-behind Sentry branches does NOT apply to these — the live foundation is the merged PR #73/#87, not the stale feat/otel branches), but each needs a re-audit against current main before being trusted as execution-ready.",
+    "evidence_paths": [
+     ".agent/plans/security-and-privacy/future/cloudflare-mcp-public-beta-security-gate.plan.md",
+     ".agent/plans/semantic-search/current/unified-versioned-ingestion.plan.md",
+     ".agent/reports/mcp-app-live-product-readiness-assessment-2026-06-15.md"
+    ],
+    "severity": "medium"
+   }
+  ],
+  "recommendation": "MINIMAL CRITICAL-PATH PLAN-SET (dependency order), distinguishing the ~6 on-path plans from noise:\\n\\nM2 CLOSE (the only remaining M2 gate is the widget search VIEW; observability foundation is already on main):\\n1. semantic-search/current/unified-versioned-ingestion.plan.md (Phase 3 live promote) + search-sdk-args-extraction.plan.md — the search backend the widget renders. FRESHNESS_RISK: ~3 months stale; re-audit against current main first.\\n2. sdk-and-mcp-enhancements/active/ws3-phase-5-interactive-user-search-view.plan.md — the user-facing widget search UI; the single genuinely-unstarted M2-close gate (PR #76 shell already merged).\\n3. observability/active/sentry-observability-maximisation-mcp.plan.md — finishing pass only (L-7/L-12-prereq done; L-1/L-3/L-4b remain; widget-Sentry/alerts deferred to beta).\\n\\nM3:\\n4. security-and-privacy/active phase-0 -> phase-1 -> phase-2 -> phase-3 (sequential; upstream of the Cloudflare gate).\\n5. Production Clerk execution plan — MUST BE PROMOTED from .agent/research/auth/clerk-production-migration.md (no executable plan exists yet — this is a gap).\\n6. security-and-privacy/future/cloudflare-mcp-public-beta-security-gate.plan.md — the named M3 blocker; promote from FUTURE brief to executable, gated on Cloudflare entitlement evidence. FRESHNESS_RISK: 2026-04-28, predates EEF ship.\\n\\nGA (the load-bearing gates the inherited ladder OMITS — per the owner-ratified 2026-06-15 readiness assessment):\\n7. Pupil-boundary SAFEGUARDING / content-safety clearance — currently has NO plan home (largest gap).\\n8. Instrumented VALUE-PROOF with a real teacher/curriculum-leader cohort — K1 makes this a precondition of GA, not a post-launch measurement.\\n\\nMOST IMPORTANT ACTION: do not treat the inherited M2->M3->GA gate list as the path. Promote the launch-readiness-and-milestone-redefinition.plan.md (the stub future plan) to rewrite the ladder into the impact-first Stages 1-4, because the owner has already ratified (2026-06-15) that the prior milestone definitions do not stand. The 6 infra plans above are necessary but not sufficient: safeguarding clearance and value-proof are the real GA blockers. Everything else in liveCritical (the EEF tranche — already shipped live; the KG future surfaces — parked behind EEF D7 with references-removed-code decay; the discovery/* owner-decision-gated briefs; the agentic-engineering specialist-capability plans) is supporting noise for THIS critical path.",
+  "confidence": "high"
+ },
+ {
+  "question_id": "G3-critical-path-order",
+  "headline": "Six plans form the genuine M2-close to GA critical path; four carry freshness risk; the Cloudflare gate is the single hardest M3 dependency",
+  "findings": [
+   {
+    "claim": "M2 close has two genuine remaining blockers: (1) the sentry-observability-maximisation-mcp plan (L-1 through L-8 pending/in-progress on feat/otel_sentry_enhancements) and (2) the mcp-app-extension-migration WS3/WS4 widget rebuild. The roadmap.md milestone matrix names these explicitly. sentry-otel-integration is substantially complete (all foundation todos: completed or dropped); it is not itself a blocker, but it is the parent foundation plan that the maximisation child depends on.",
+    "severity": "critical",
+    "evidence_paths": [
+     ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md",
+     ".agent/milestones/m2-extension-surfaces.md",
+     ".agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md",
+     ".agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md"
+    ]
+   },
+   {
+    "claim": "The six genuinely on-path plans in dependency order are: (1) architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md [M2, largely done — parent foundation]; (2) observability/active/sentry-observability-maximisation-mcp.plan.md [M2 close — L-1/L-2/L-3/L-4b/L-8 still pending]; (3) sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md [M2 close — WS3 in-progress, WS4 pending, unblocks widget search UI]; (4) security-and-privacy/future/cloudflare-mcp-public-beta-security-gate.plan.md [M3 hard blocker, not yet promoted to current]; (5) security-and-privacy/active/phase-3-protocol-auth-and-tool-governance-baseline.md [M3, all todos pending]; (6) observability/current/observability-events-workspace.plan.md [M3, all WS todos pending — owns MVP event-schema contract that security-observability, accessibility-observability, and multi-sink-conformance plans all depend on].",
+    "severity": "critical",
+    "evidence_paths": [
+     ".agent/plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md",
+     ".agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md",
+     ".agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md",
+     ".agent/plans/security-and-privacy/future/cloudflare-mcp-public-beta-security-gate.plan.md",
+     ".agent/plans/security-and-privacy/active/phase-3-protocol-auth-and-tool-governance-baseline.md",
+     ".agent/plans/observability/current/observability-events-workspace.plan.md"
+    ]
+   },
+   {
+    "claim": "sentry-release-identifier-single-source-of-truth.plan.md is on the M2 path (WS4 and WS5 in-progress, WS6 pending owner push) and is a dependency of multi-sink-vendor-independence-conformance which gates M3 observability. It is a near-term execution item, not background noise. Decay signal: stale-dates absent from the survey sample but the branch it references (feat/otel_sentry_enhancements) is active and not yet merged.",
+    "severity": "high",
+    "evidence_paths": [
+     ".agent/plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md"
+    ]
+   },
+   {
+    "claim": "The m2-public-alpha-auth-rate-limits.execution.plan.md (production Clerk migration and OAuth rate-limiting) has ALL todos pending and its last_updated is 2026-03-11 — over three months stale. However the roadmap.md milestone matrix defers production Clerk to M3. This plan either needs its milestone re-labelled to M3 or an explicit owner decision that dev Clerk is acceptable through M2. As written it creates a false urgency signal for M2 close.",
+    "severity": "high",
+    "evidence_paths": [
+     ".agent/plans/semantic-search/current/m2-public-alpha-auth-rate-limits.execution.plan.md",
+     ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md"
+    ]
+   },
+   {
+    "claim": "The cloudflare-mcp-public-beta-security-gate.plan.md (M3 hard blocker) remains a future/strategic-brief with last_updated 2026-04-28 and all execution undefined — it has not been promoted to current. The DAG shows it depends on phase-2-evidence-merge-readiness-rules AND phase-3-baseline-control-cut-list, both of which are also in future with all todos pending. This chain (phase-0 -> phase-1 -> phase-2 -> phase-3 -> cloudflare-gate) has no active execution at any link below phase-0, making M3 the most under-resourced milestone on the path.",
+    "severity": "critical",
+    "evidence_paths": [
+     ".agent/plans/security-and-privacy/future/cloudflare-mcp-public-beta-security-gate.plan.md",
+     ".agent/plans/security-and-privacy/active/phase-0-foundation-and-baseline.md",
+     ".agent/plans/security-and-privacy/active/phase-3-protocol-auth-and-tool-governance-baseline.md",
+     ".agent/plans/security-and-privacy/roadmap.md"
+    ]
+   },
+   {
+    "claim": "Plans that are supporting noise rather than on-path: the EEF D3-D6 execution plans are referenced-merged-pr (already landed); graph-tools-value-redesign is an M2 value add but not a gate-closure blocker per the roadmap; discovery/agent-readiness-discovery-hub is M2 informational (standards-verification already complete as of 2026-06-01); semantic-search/current/unified-versioned-ingestion is infrastructure hygiene, not a milestone gate. All have decay signals (references-merged-pr or stale-dates) confirming they are trailing rather than leading.",
+    "severity": "medium",
+    "evidence_paths": [
+     ".agent/plans/sector-engagement/eef/current/eef-d6-execution.plan.md",
+     ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-tools-value-redesign.plan.md",
+     ".agent/plans/discovery/current/agent-readiness-discovery-hub.plan.md",
+     ".agent/plans/semantic-search/current/unified-versioned-ingestion.plan.md"
+    ]
+   },
+   {
+    "claim": "Freshness risk on four on-path plans: (1) sentry-observability-maximisation-mcp — branch feat/otel_sentry_enhancements referenced throughout; if this branch is over 30 days unmerged the L-8 esbuild migration notes already mention a failed Vercel probe (2026-04-22), raising staleness risk. (2) cloudflare-mcp-public-beta-security-gate — last_updated 2026-04-28, stale-dates in decay sample, still in future with no promotion trigger fired. (3) phase-3-protocol-auth-and-tool-governance-baseline — all five todos pending with no dates, depends on phase-2 which is also all-pending. (4) observability-events-workspace — all WS todos pending, blocked_on an exploration doc; if that exploration is still open it gates the whole events-schema chain.",
+    "severity": "high",
+    "evidence_paths": [
+     ".agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md",
+     ".agent/plans/security-and-privacy/future/cloudflare-mcp-public-beta-security-gate.plan.md",
+     ".agent/plans/security-and-privacy/active/phase-3-protocol-auth-and-tool-governance-baseline.md",
+     ".agent/plans/observability/current/observability-events-workspace.plan.md"
+    ]
+   }
+  ],
+  "recommendation": "Immediate actions in dependency order: (1) Merge feat/otel_sentry_enhancements — close the sentry-observability-maximisation-mcp remaining lanes (L-1 through L-8) to clear the M2 observability gate; the sentry-otel-integration parent plan is complete and waiting. (2) Ship WS3/WS4 of mcp-app-extension-migration to deliver the widget search UI — this is the other named M2 close gap. (3) Promote sentry-release-identifier-single-source-of-truth WS5/WS6 to close the release-attribution loop before M2 exit evidence is bundled. (4) Immediately after M2 closes: promote security-and-privacy phase-0 through phase-3 to active execution and start the Cloudflare gate promotion — the entire M3 security chain has zero active execution and Cloudflare feature availability is an external dependency with unknown lead time. (5) Start observability-events-workspace WS1 in parallel with the security chain — it is the upstream dependency for security-observability, accessibility-observability, and multi-sink-conformance, all of which are M3 gates. (6) Resolve the m2-public-alpha-auth-rate-limits milestone label ambiguity — the roadmap defers production Clerk to M3, but the plan's name claims M2; a stale mislabelled plan will corrupt any automated gate-coverage count. Ignore for M2 sequencing purposes until the label is corrected. M4/GA is undefined (roadmap §6 item A4) and requires owner direction before any plan work can be sequenced against it.",
+  "confidence": "high"
+ }
+]

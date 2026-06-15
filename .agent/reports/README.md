@@ -42,6 +42,12 @@ research notes or investigation logs.
   engineering quality, effectiveness, operational friction, verification
   posture, and agentic-practice substrate; includes blunt ratings, evidence
   snapshot, risk modes, and ordered improvement recommendations
+- [mcp-app-live-product-readiness-assessment-2026-06-15.md](./mcp-app-live-product-readiness-assessment-2026-06-15.md)
+  — first-principles assessment of what it would take to make the Curriculum MCP
+  app a live product: first-hand verification, right/wrong/missing, the
+  launch-concern framework, the owner-decided keystones (audience, definition of
+  "live", whole-estate scope), and a fresh-eyes verdict that the prior milestone
+  ladder does not stand
 - [graph-team-first-worktree-run-analysis-2026-06-10.md](./graph-team-first-worktree-run-analysis-2026-06-10.md)
   — Director's witness synthesis of the worktree-team shape's first live run:
   the three structurally-dissolved failure modes validated, the rotation

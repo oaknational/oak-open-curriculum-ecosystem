@@ -1,0 +1,1552 @@
+{
+ "scope": {
+  "collections": 15,
+  "documents": 409,
+  "bundleAgents": 118,
+  "coverage2x": 409,
+  "B": 8
+ },
+ "globalRollup": {
+  "totalDocs": 409,
+  "relevanceDistribution": {
+   "live-supporting": 249,
+   "live-critical-path": 65,
+   "speculative": 112,
+   "stale": 71,
+   "unclear": 4,
+   "superseded": 14
+  },
+  "visionDistribution": {
+   "direct": 146,
+   "indirect": 306,
+   "none": 37
+  },
+  "pollution": [],
+  "staleExecutable": [
+   ".agent/plans/sector-engagement/eef/current/eef-revalidate-on-new-graph-tools.plan.md",
+   ".agent/plans/sector-engagement/eef/current/eef-d6-execution.plan.md",
+   ".agent/plans/sector-engagement/eef/current/eef-d5-execution.plan.md",
+   ".agent/plans/sector-engagement/eef/current/eef-d0-decontamination-ledger.md",
+   ".agent/plans/observability/current/sentry-preview-validation-and-quality-triage.plan.md",
+   ".agent/plans/observability/current/pr-87-codeql-alerts.plan.md",
+   ".agent/plans/observability/current/mcp-outbound-token-health.plan.md",
+   ".agent/plans/observability/current/post-pr-87-merge-pipeline-triage.plan.md",
+   ".agent/plans/observability/current/pr-93-merge-snagging-2026-05-05.md",
+   ".agent/plans/observability/current/feat-eef-exploration-completion.plan.md",
+   ".agent/plans/observability/current/pr-93-sonar-quality-gate-resolution.plan.md",
+   ".agent/plans/semantic-search/current/search-contract-followup.plan.md",
+   ".agent/plans/semantic-search/current/category-integration-remediation.md",
+   ".agent/plans/semantic-search/current/sequence-retrieval-architecture-followup.plan.md",
+   ".agent/plans/agentic-engineering-enhancements/current/claude-insight-report-2026-05-10-disposition.plan.md",
+   ".agent/plans/agentic-engineering-enhancements/current/trinity-active-principles-extensions-2026-04-29.plan.md",
+   ".agent/plans/agentic-engineering-enhancements/current/agent-entrypoint-content-homing.plan.md",
+   ".agent/plans/agentic-engineering-enhancements/current/governance-concepts-and-agentic-mechanism-integration.plan.md",
+   ".agent/plans/agentic-engineering-enhancements/current/fitness-frontmatter-manifest-sweep.plan.md",
+   ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-residual-fitness-graduation-opener.md",
+   ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-principles-graduation-pass-review-snags.md",
+   ".agent/plans/agentic-engineering-enhancements/current/consolidate-docs-mode-contract-and-buffer-drain.plan.md",
+   ".agent/plans/agentic-engineering-enhancements/current/practice-and-process-structural-improvements.plan.md",
+   ".agent/plans/agentic-engineering-enhancements/current/doctrine-enforcement-quick-wins.plan.md",
+   ".agent/plans/agentic-engineering-enhancements/current/2026-05-07-pending-graduations-dedicated-drain-opener.md",
+   ".agent/plans/agentic-engineering-enhancements/current/agentic-corpus-discoverability-and-deep-dive-hub.plan.md",
+   ".agent/plans/agentic-engineering-enhancements/current/collaboration-state-surface-restructure.plan.md",
+   ".agent/plans/agentic-engineering-enhancements/current/memory-feedback-and-emergent-learning-mechanisms.execution.plan.md",
+   ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-full-napkin-and-comms-graduation-pass-opener.md",
+   ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-five-layer-restart-opener.md",
+   ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-napkin-and-pending-graduations-processing-opener.md",
+   ".agent/plans/agentic-engineering-enhancements/current/2026-05-11-graduation-candidates-drain-opener.md",
+   ".agent/plans/agentic-engineering-enhancements/current/memory-state-substrate-portable-contracts.plan.md",
+   ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-collaboration-state-restructure-phase-2-opener.md",
+   ".agent/plans/agentic-engineering-enhancements/current/open-questions-memory-system.plan.md",
+   ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-docs-consolidation-opener.md",
+   ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-collaboration-state-lifecycle-deep-exploration-opener.md",
+   ".agent/plans/agent-tooling/current/sub-agent-rename-and-skill-integration.plan.md",
+   ".agent/plans/agent-tooling/current/2026-05-11-collaboration-protocol-hardening-final-opener.md",
+   ".agent/plans/agent-tooling/current/primary-agent-tooling-enhancements.plan.md",
+   ".agent/plans/agent-tooling/current/pr-102-snagging.plan.md",
+   ".agent/plans/agent-tooling/current/cost-of-collaboration.flaky-tests.md",
+   ".agent/plans/agent-tooling/current/multi-agent-collaboration-sidebar-and-escalation.plan.md",
+   ".agent/plans/agent-tooling/current/context-cost-cli.plan.md",
+   ".agent/plans/agent-tooling/current/agent-artefact-load-pressure-relief.plan.md",
+   ".agent/plans/agent-tooling/current/collaboration-state-write-safety.plan.md",
+   ".agent/plans/agent-tooling/current/comms-event-write-integrity.plan.md",
+   ".agent/plans/agent-tooling/current/collaboration-doc-fitness-remediation.plan.md",
+   ".agent/plans/agent-tooling/current/agent-infrastructure-portability-remediation.plan.md",
+   ".agent/plans/architecture-and-infrastructure/current/security-dependency-triage.plan.md",
+   ".agent/plans/architecture-and-infrastructure/current/pr-90-landing-closure.plan.md",
+   ".agent/plans/architecture-and-infrastructure/current/observability-strategy-restructure.plan.md",
+   ".agent/plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md",
+   ".agent/plans/sdk-and-mcp-enhancements/current/ws3-oak-url-augmentable-codegen-fix.plan.md",
+   ".agent/plans/sdk-and-mcp-enhancements/current/upstream-sequences-api-realignment.plan.md",
+   ".agent/plans/sdk-and-mcp-enhancements/current/ws3-contrast-validation-prerequisite.plan.md",
+   ".agent/plans/sdk-and-mcp-enhancements/current/ws3-local-widget-development.plan.md",
+   ".agent/plans/sdk-and-mcp-enhancements/current/clerk-mcp-tools-and-ext-apps-bumps.plan.md",
+   ".agent/plans/sdk-and-mcp-enhancements/current/http-mcp-test-suite-improvements.plan.md"
+  ],
+  "duplicationCandidates": [
+   {
+    "path": ".agent/plans/security-and-privacy/future/phase-3-baseline-control-cut-list.md",
+    "overlaps": [
+     ".agent/plans/security-and-privacy/future/cloudflare-mcp-public-beta-security-gate.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/discovery/future/skills-distribution-channels-suggestions.report.md",
+    "overlaps": [
+     ".agent/plans/discovery/future/skills-classification-taxonomy.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/discovery/future/skills-classification-taxonomy.plan.md",
+    "overlaps": [
+     ".agent/plans/discovery/future/agent-skills-discovery.plan.md",
+     ".agent/plans/discovery/future/skills-distribution-channels-suggestions.report.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/discovery/future/agent-skills-discovery.plan.md",
+    "overlaps": [
+     ".agent/plans/discovery/future/skills-classification-taxonomy.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/sector-engagement/ooc-issues/upstream-500-errors.md",
+    "overlaps": [
+     ".agent/plans/sector-engagement/ooc-issues/oak-open-curriculum-api-issues-2026-04-23.md (Issue 1 in that file covers a related 500 on /threads endpoint; Issue 5 discusses the cross-cutting 500 response doctrine — partial thematic overlap but transcript-500 is a distinct issue)"
+    ]
+   },
+   {
+    "path": ".agent/plans/sector-engagement/ooc-issues/oak-open-curriculum-api-issues-2026-04-23.md",
+    "overlaps": [
+     ".agent/plans/sector-engagement/ooc-issues/upstream-500-errors.md (partial thematic overlap on 500 errors and response doctrine, but that file focuses on the transcript endpoint only)"
+    ]
+   },
+   {
+    "path": ".agent/plans/sector-engagement/castr/expected-outputs.md",
+    "overlaps": [
+     ".agent/plans/sector-engagement/castr/oak-principles.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/sector-engagement/eef/future/evidence-integration-strategy.md",
+    "overlaps": [
+     ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/observability/current/sentry-preview-validation-and-quality-triage.plan.md",
+    "overlaps": [
+     ".agent/plans/observability/current/pr-87-codeql-alerts.plan.md (CodeQL scope was superseded and transferred)"
+    ]
+   },
+   {
+    "path": ".agent/plans/observability/current/pr-87-codeql-alerts.plan.md",
+    "overlaps": [
+     ".agent/plans/observability/current/sentry-preview-validation-and-quality-triage.plan.md (triage scope was transferred here)"
+    ]
+   },
+   {
+    "path": ".agent/plans/observability/current/pr-93-merge-snagging-2026-05-05.md",
+    "overlaps": [
+     ".agent/plans/observability/current/feat-eef-exploration-completion.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/observability/current/feat-eef-exploration-completion.plan.md",
+    "overlaps": [
+     ".agent/plans/observability/current/pr-93-merge-snagging-2026-05-05.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/observability/current/pr-93-sonar-quality-gate-resolution.plan.md",
+    "overlaps": [
+     ".agent/plans/observability/current/pr-93-merge-snagging-2026-05-05.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/observability/future/customer-facing-status-page.plan.md",
+    "overlaps": [
+     ".agent/plans/observability/future/statuspage-integration.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/observability/future/statuspage-integration.plan.md",
+    "overlaps": [
+     ".agent/plans/observability/future/customer-facing-status-page.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/observability/future/sentry-observability-maximisation.plan.md",
+    "overlaps": [
+     ".agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/semantic-search/current/sequence-retrieval-architecture-followup.plan.md",
+    "overlaps": [
+     ".agent/plans/semantic-search/archive/completed/pre-reingest-remediation.execution.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/semantic-search/current/thread-sequence-semantic-surfaces.execution.plan.md",
+    "overlaps": [
+     ".agent/plans/semantic-search/current/sequence-retrieval-architecture-followup.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/semantic-search/future/03-vocabulary-and-semantic-assets/bulk-metadata-opportunities.research.md",
+    "overlaps": [
+     ".agent/plans/semantic-search/future/03-vocabulary-and-semantic-assets/vocabulary-glossary-and-mining-surfaces.research.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/semantic-search/future/03-vocabulary-and-semantic-assets/vocabulary-glossary-and-mining-surfaces.research.md",
+    "overlaps": [
+     ".agent/plans/semantic-search/future/03-vocabulary-and-semantic-assets/bulk-metadata-opportunities.research.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/semantic-search/future/03-vocabulary-and-semantic-assets/natural-language-paraphrases.md",
+    "overlaps": [
+     ".agent/plans/semantic-search/future/03-vocabulary-and-semantic-assets/vocabulary-mining.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/semantic-search/future/02-schema-authority-and-codegen/move-search-domain-knowledge-to-codegen-time.md",
+    "overlaps": [
+     ".agent/plans/semantic-search/future/02-schema-authority-and-codegen/bulk-schema-driven-code-generation.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/semantic-search/future/02-schema-authority-and-codegen/bulk-schema-driven-code-generation.md",
+    "overlaps": [
+     ".agent/plans/semantic-search/future/02-schema-authority-and-codegen/move-search-domain-knowledge-to-codegen-time.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/semantic-search/future/08-experience-surfaces-and-extensions/widget-renderer-reactivation.md",
+    "overlaps": [
+     ".agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/school-data-search/current/school-data-search-wsd1-decomposition.md",
+    "overlaps": [
+     ".agent/plans/school-data-search/current/school-data-search-poc.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/agentic-engineering-enhancements/current/fitness-frontmatter-manifest-sweep.plan.md",
+    "overlaps": [
+     ".agent/plans/agentic-engineering-enhancements/current/fitness-token-measurements-and-frontmatter-mandation.plan.md",
+     ".agent/plans/agentic-engineering-enhancements/current/fitness-token-measurements-and-frontmatter-mandation.plan.md (referenced superseder, path inferred)"
+    ]
+   },
+   {
+    "path": ".agent/plans/agentic-engineering-enhancements/current/fitness-token-measurements-and-frontmatter-mandation.plan.md",
+    "overlaps": [
+     ".agent/plans/agentic-engineering-enhancements/current/fitness-frontmatter-manifest-sweep.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/agentic-engineering-enhancements/current/planning-specialist-capability.plan.md",
+    "overlaps": [
+     ".agent/plans/agentic-engineering-enhancements/current/practice-and-process-structural-improvements.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/agentic-engineering-enhancements/current/practice-and-process-structural-improvements.plan.md",
+    "overlaps": [
+     ".agent/plans/agentic-engineering-enhancements/current/planning-specialist-capability.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-five-layer-restart-opener.md",
+    "overlaps": [
+     ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-full-napkin-and-comms-graduation-pass-opener.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-napkin-and-pending-graduations-processing-opener.md",
+    "overlaps": [
+     ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-full-napkin-and-comms-graduation-pass-opener.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-collaboration-state-restructure-phase-2-opener.md",
+    "overlaps": [
+     ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-collaboration-state-lifecycle-deep-exploration-opener.md (both are openers for the same collaboration-state restructure thread)"
+    ]
+   },
+   {
+    "path": ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-collaboration-state-lifecycle-deep-exploration-opener.md",
+    "overlaps": [
+     ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-collaboration-state-restructure-phase-2-opener.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/agentic-engineering-enhancements/pull-request-best-practice-and-rules.md",
+    "overlaps": [
+     ".agent/plans/agent-tooling/current/pr-merge-readiness-discipline.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/agentic-engineering-enhancements/future/privacy-specialist-capability.plan.md",
+    "overlaps": [
+     ".agent/plans/agentic-engineering-enhancements/future/web-api-gdpr-specialist-capability.plan.md (explicitly scoped apart; overlap boundaries are well-defined)"
+    ]
+   },
+   {
+    "path": ".agent/plans/agentic-engineering-enhancements/future/web-api-gdpr-specialist-capability.plan.md",
+    "overlaps": [
+     ".agent/plans/agentic-engineering-enhancements/future/privacy-specialist-capability.plan.md (explicitly scoped apart; overlap boundaries are well-defined)"
+    ]
+   },
+   {
+    "path": ".agent/plans/agentic-engineering-enhancements/future/web-api-security-specialist-capability.plan.md",
+    "overlaps": [
+     ".agent/plans/agentic-engineering-enhancements/future/web-api-gdpr-specialist-capability.plan.md (explicitly scoped apart; overlap boundaries are well-defined)"
+    ]
+   },
+   {
+    "path": ".agent/plans/agentic-engineering-enhancements/future/memory-feedback-and-emergent-learning-mechanisms.plan.md",
+    "overlaps": [
+     ".agent/plans/agentic-engineering-enhancements/current/memory-feedback-and-emergent-learning-mechanisms.execution.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/agent-tooling/current/2026-05-11-collaboration-protocol-hardening-final-opener.md",
+    "overlaps": [
+     ".agent/plans/agent-tooling/current/primary-agent-tooling-enhancements.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/agent-tooling/current/agent-artefact-lifecycle-cli.plan.md",
+    "overlaps": [
+     ".agent/plans/agent-tooling/current/skills-standardisation-and-adapter-generator.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/agent-tooling/current/skills-standardisation-and-adapter-generator.plan.md",
+    "overlaps": [
+     ".agent/plans/agent-tooling/current/agent-artefact-lifecycle-cli.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/agent-tooling/current/agent-commands-retirement.plan.md",
+    "overlaps": [
+     ".agent/plans/agent-tooling/current/skills-standardisation-and-adapter-generator.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/agent-tooling/current/start-right-team-singleton-lane-remediation.ws0-disposition.md",
+    "overlaps": [
+     ".agent/plans/agent-tooling/current/start-right-team-singleton-lane-remediation.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/agent-tooling/current/agent-artefact-portability-audit-2026-05-06.report.md",
+    "overlaps": [
+     ".agent/plans/agent-tooling/current/agent-infrastructure-portability-remediation.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/agent-tooling/current/agent-infrastructure-portability-remediation.plan.md",
+    "overlaps": [
+     ".agent/plans/agent-tooling/current/agent-artefact-portability-audit-2026-05-06.report.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/agent-tooling/future/rules-cross-platform-generator.plan.md",
+    "overlaps": [
+     ".agent/plans/agent-tooling/future/adapter-generation.plan.md (adapter-generation covers the broader manifest-driven generation of agent adapters; this plan is narrowly scoped to rules cross-platform mirroring — overlapping concern but distinct scope; adapter-generation plan explicitly names this as a sibling lane via portability:check evolution)"
+    ]
+   },
+   {
+    "path": ".agent/plans/agent-tooling/future/adapter-generation.plan.md",
+    "overlaps": [
+     ".agent/plans/agent-tooling/future/rules-cross-platform-generator.plan.md (partial overlap on rules adapter generation, but adapter-generation focuses on agent/skill wrappers and rules-cross-platform-generator focuses on rules mirroring — plan explicitly distinguishes them as complementary lanes)"
+    ]
+   },
+   {
+    "path": ".agent/plans/agent-tooling/future/joint-agent-decision-protocol.plan.md",
+    "overlaps": [
+     ".agent/plans/agent-tooling/future/collaboration-substrate-coordination-rightsizing.m1-inventory.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/agent-tooling/future/agent-infrastructure-coherence-audit.plan.md",
+    "overlaps": [
+     ".agent/plans/agent-tooling/future/adapter-generation.plan.md (areas 2 and 5 of the audit become moot if adapter-generation executes first, as acknowledged in the plan itself)"
+    ]
+   },
+   {
+    "path": ".agent/plans/agent-tooling/future/collaboration-substrate-coordination-rightsizing.plan.md",
+    "overlaps": [
+     ".agent/plans/agent-tooling/future/collaboration-substrate-coordination-rightsizing.m1-inventory.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/agent-tooling/future/coordination-watcher-canonicalisation.plan.md",
+    "overlaps": [
+     ".agent/plans/agent-tooling/future/collaboration-substrate-coordination-rightsizing.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/user-experience/educator-end-users/external-facing-skills-and-mcp-surfaces-review.report.md",
+    "overlaps": [
+     ".agent/plans/user-experience/educator-end-users/external-facing-capability-corpus-synthesis.report.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/user-experience/educator-end-users/external-facing-capability-corpus-synthesis.report.md",
+    "overlaps": [
+     ".agent/plans/user-experience/educator-end-users/external-facing-skills-and-mcp-surfaces-review.report.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/user-experience/public-alpha-experience-contract.md",
+    "overlaps": [
+     ".agent/plans/user-experience/roadmap.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/user-experience/roadmap.md",
+    "overlaps": [
+     ".agent/plans/user-experience/public-alpha-experience-contract.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/user-experience/educator-end-users/future/plugin-bundle-distribution.plan.md",
+    "overlaps": [
+     ".agent/plans/user-experience/educator-end-users/current/plugin-package-creation.plan.md",
+     ".agent/plans/user-experience/educator-end-users/current/external-facing-capability-distribution.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/architecture-and-infrastructure/static-analysis-tool-promotion.plan.md",
+    "overlaps": [
+     ".agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/architecture-and-infrastructure/codegen/sdk-codegen-reviewer-findings.md",
+    "overlaps": [
+     ".agent/plans/architecture-and-infrastructure/codegen/sdk-codegen-architecture-analysis.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md",
+    "overlaps": [
+     ".agent/plans/architecture-and-infrastructure/static-analysis-tool-promotion.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/architecture-and-infrastructure/current/config-architecture-standardisation-plan.md",
+    "overlaps": [
+     ".agent/plans/architecture-and-infrastructure/current/no-io-test-boundary-and-di-recovery.plan.md (both address DI/env patterns)"
+    ]
+   },
+   {
+    "path": ".agent/plans/architecture-and-infrastructure/current/test-ceremony-production-factory-audit.plan.md",
+    "overlaps": [
+     ".agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md",
+     ".agent/plans/architecture-and-infrastructure/current/no-io-test-boundary-and-di-recovery.plan.md (both address test boundary hygiene and DI seams)"
+    ]
+   },
+   {
+    "path": ".agent/plans/architecture-and-infrastructure/current/no-io-test-boundary-and-di-recovery.plan.md",
+    "overlaps": [
+     ".agent/plans/architecture-and-infrastructure/current/test-ceremony-production-factory-audit.plan.md",
+     ".agent/plans/architecture-and-infrastructure/current/test-ceremony-production-factory-audit.plan.md (both fix test DI boundaries; test-ceremony plan is the narrower slice, this is wider)"
+    ]
+   },
+   {
+    "path": ".agent/plans/architecture-and-infrastructure/current/architectural-documentation-excellence-synthesis.plan.md",
+    "overlaps": [
+     ".agent/plans/architecture-and-infrastructure/current/doc-architecture-phase-b-dependent.plan.md",
+     ".agent/plans/architecture-and-infrastructure/current/doc-architecture-phase-b-dependent.plan.md (this synthesis parents both phase-a and phase-b; items I3, I6, I7, I8, I9b appear verbatim in phase-b)"
+    ]
+   },
+   {
+    "path": ".agent/plans/architecture-and-infrastructure/current/doc-architecture-phase-b-dependent.plan.md",
+    "overlaps": [
+     ".agent/plans/architecture-and-infrastructure/current/architectural-documentation-excellence-synthesis.plan.md",
+     ".agent/plans/architecture-and-infrastructure/current/architectural-documentation-excellence-synthesis.plan.md (items I3, I6, I7, I8, I9b are lifted verbatim from the synthesis parent)"
+    ]
+   },
+   {
+    "path": ".agent/plans/architecture-and-infrastructure/current/workspace-layer-separation-audit.plan.md",
+    "overlaps": [
+     ".agent/plans/architecture-and-infrastructure/current/scripts-validator-family-workspace-migration.plan.md (both address workspace placement of code; scripts migration is a concrete tranche, this is the audit that would produce such tranches)"
+    ]
+   },
+   {
+    "path": ".agent/plans/architecture-and-infrastructure/future/architectural-budget-enforcement-layer.plan.md",
+    "overlaps": [
+     ".agent/plans/architecture-and-infrastructure/future/architectural-budget-system-across-scales.plan.md",
+     ".agent/plans/architecture-and-infrastructure/future/architectural-budget-system-across-scales.plan.md (child of that parent)"
+    ]
+   },
+   {
+    "path": ".agent/plans/architecture-and-infrastructure/future/architectural-budget-system-across-scales.plan.md",
+    "overlaps": [
+     ".agent/plans/architecture-and-infrastructure/future/architectural-budget-enforcement-layer.plan.md",
+     ".agent/plans/architecture-and-infrastructure/future/architectural-budget-enforcement-layer.plan.md (child plan of this parent)"
+    ]
+   },
+   {
+    "path": ".agent/plans/architecture-and-infrastructure/future/search-cli-ingestion-pipeline-consolidation.plan.md",
+    "overlaps": [
+     ".agent/plans/architecture-and-infrastructure/future/oak-search-cli-command-surface-rationalisation.plan.md (overlapping workspace; different layer — ingestion vs CLI surface)"
+    ]
+   },
+   {
+    "path": ".agent/plans/architecture-and-infrastructure/future/oak-search-cli-command-surface-rationalisation.plan.md",
+    "overlaps": [
+     ".agent/plans/architecture-and-infrastructure/future/search-cli-ingestion-pipeline-consolidation.plan.md (same workspace, different layer — CLI surface vs ingestion pipeline)"
+    ]
+   },
+   {
+    "path": ".agent/plans/architecture-and-infrastructure/future/monorepo-workspace-topology-adr-and-canonical-plan.plan.md",
+    "overlaps": [
+     ".agent/plans/architecture-and-infrastructure/future/oak-surface-isolation-and-generic-foundation-programme.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/architecture-and-infrastructure/future/oak-surface-isolation-and-generic-foundation-programme.plan.md",
+    "overlaps": [
+     ".agent/plans/architecture-and-infrastructure/future/monorepo-workspace-topology-adr-and-canonical-plan.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/sdk-and-mcp-enhancements/aggregated-tool-result-type-remediation.plan.md",
+    "overlaps": [
+     ".agent/plans/sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/sdk-and-mcp-enhancements/current/ws3-local-widget-development.plan.md",
+    "overlaps": [
+     ".agent/plans/sdk-and-mcp-enhancements/archive/completed/ws3-branding-alignment-and-merge.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/sdk-and-mcp-enhancements/current/unified-mcp-server-test-harness.plan.md",
+    "overlaps": [
+     ".agent/plans/sdk-and-mcp-enhancements/current/http-mcp-test-suite-improvements.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/sdk-and-mcp-enhancements/current/http-mcp-test-suite-improvements.plan.md",
+    "overlaps": [
+     ".agent/plans/sdk-and-mcp-enhancements/current/unified-mcp-server-test-harness.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/sdk-and-mcp-enhancements/active/schema-resilience-and-response-architecture.plan.md",
+    "overlaps": [
+     ".agent/plans/sdk-and-mcp-enhancements/active/upstream-api-reference-metadata.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md",
+    "overlaps": [
+     ".agent/plans/sdk-and-mcp-enhancements/roadmap.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/sdk-and-mcp-enhancements/active/upstream-api-reference-metadata.plan.md",
+    "overlaps": [
+     ".agent/plans/sdk-and-mcp-enhancements/active/schema-resilience-and-response-architecture.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/developer-experience/governance/docs-deep-review-2026-02-25/evidence/evidence-summary.md",
+    "overlaps": [
+     ".agent/plans/developer-experience/governance/docs-deep-review-2026-02-25/output/deep-review-report.md",
+     ".agent/plans/developer-experience/governance/docs-deep-review-2026-02-25/output/doc-findings.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/developer-experience/governance/docs-deep-review-2026-02-25/output/doc-findings.md",
+    "overlaps": [
+     ".agent/plans/developer-experience/governance/docs-deep-review-2026-02-25/evidence/evidence-summary.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/developer-experience/governance/docs-deep-review-2026-02-25/output/remediation-backlog.md",
+    "overlaps": [
+     ".agent/plans/developer-experience/active/onboarding-simulations-public-alpha-readiness.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/developer-experience/future/generated-document-pipeline-extraction-plan.md",
+    "overlaps": [
+     ".agent/plans/developer-experience/future/tsdoc-generated-docs-overhaul.plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/developer-experience/future/tsdoc-generated-docs-overhaul.plan.md",
+    "overlaps": [
+     ".agent/plans/developer-experience/future/generated-document-pipeline-extraction-plan.md"
+    ]
+   },
+   {
+    "path": ".agent/plans/exploring-open-education-resources/external-knowledge-sources/future/external-knowledge-graph-data-source-integration.plan.md",
+    "overlaps": [
+     ".agent/plans/exploring-open-education-resources/external-knowledge-sources/future/education-skills-mcp-surface.plan.md"
+    ]
+   }
+  ],
+  "speculativeCount": 112,
+  "perCollectionCounts": {
+   "security-and-privacy": 14,
+   "connecting-oak-resources": 11,
+   "discovery": 12,
+   "sector-engagement": 29,
+   "observability": 35,
+   "compliance": 2,
+   "semantic-search": 43,
+   "school-data-search": 2,
+   "agentic-engineering-enhancements": 98,
+   "agent-tooling": 61,
+   "user-experience": 12,
+   "architecture-and-infrastructure": 44,
+   "sdk-and-mcp-enhancements": 28,
+   "developer-experience": 16,
+   "exploring-open-education-resources": 2
+  },
+  "disagreementCount": 106
+ },
+ "staleExecutable": [
+  {
+   "path": ".agent/plans/sector-engagement/eef/current/eef-revalidate-on-new-graph-tools.plan.md",
+   "staleness": [
+    "All todos completed 2026-06-11; plan is a closed execution record with no open work",
+    "Both todos are status: completed. Frontmatter declares status completed and promoted 2026-06-11. The plan is fully executed and should not be in the current/ lane."
+   ]
+  },
+  {
+   "path": ".agent/plans/sector-engagement/eef/current/eef-d6-execution.plan.md",
+   "staleness": [
+    "All six cycles (c1–c6) marked completed; 2026-06-11 supersession note records shape reversal now landed elsewhere",
+    "All six cycles (c1–c6) are marked completed in frontmatter todos. Body states 'D6 COMPLETE (2026-06-08)'. A supersession note (2026-06-11) records the content:[] reversal via a follow-on PR. The plan is fully executed and should not be in current/."
+   ]
+  },
+  {
+   "path": ".agent/plans/sector-engagement/eef/current/eef-d5-execution.plan.md",
+   "staleness": [
+    "All todos completed; landed as one green commit 2026-06-04; ws1-1/ws1-2 projection-retained wording superseded at execution",
+    "All five todos status=completed; frontmatter readiness=LANDED; body explicitly says 'This document is retained as the execution record, not a live plan.' A completed execution record sitting in current/ is a lifecycle mismatch."
+   ]
+  },
+  {
+   "path": ".agent/plans/sector-engagement/eef/current/eef-d0-decontamination-ledger.md",
+   "staleness": [
+    "D0 fully complete as of 2026-06-01 re-open sweep; all work landed in commits; retained as audit trail only",
+    "The ledger's own closing statement declares D0 decontamination complete; no open items remain. This is a closed audit ledger, not an executable plan or live reference, and should not sit in current/."
+   ]
+  },
+  {
+   "path": ".agent/plans/observability/current/sentry-preview-validation-and-quality-triage.plan.md",
+   "staleness": [
+    "Phases 1 and 2 findings are fully populated and accepted as of 2026-04-26; phases 3-5 superseded. Only Phase 6 (continuity refresh) remains, which is a mechanical closeout step.",
+    "Todo statuses for phases 1-2 still read 'pending' but the findings sections show all phases 1-4 fully executed with timestamped empirical data from 2026-04-26. Phase 5 routing decisions are also recorded. Only Phase 6 (continuity refresh) is genuinely outstanding. The referenced 'receiving plan' pr-87-quality-finding-resolution.plan.md is itself noted as superseded by pr-87-architectural-cleanup.plan.md."
+   ]
+  },
+  {
+   "path": ".agent/plans/observability/current/pr-87-codeql-alerts.plan.md",
+   "staleness": [
+    "All 4 todos still pending. Plan dated 2026-04-28; no recorded execution progress.",
+    "PR-87 merged to main on 2026-04-28 per post-pr-87-merge-pipeline-triage plan (Fact F1). All 4 todos remain pending. Last updated 2026-04-28. CodeQL alerts on a merged PR carry to main; the plan's verification command still references 'refs/pull/87/head' which is now a closed PR reference. No progress recorded in ~7 weeks."
+   ]
+  },
+  {
+   "path": ".agent/plans/observability/current/mcp-outbound-token-health.plan.md",
+   "staleness": [
+    "All 5 milestones are completed as of 2026-06-11. The plan body is a landing record awaiting archive.",
+    "All 5 todos are completed. Lifecycle section states the plan should archive after merge confirmation. The plan has not been moved to archive/completed despite all work being done. Sitting in current/ as a completed plan."
+   ]
+  },
+  {
+   "path": ".agent/plans/observability/current/post-pr-87-merge-pipeline-triage.plan.md",
+   "staleness": [
+    "PR-90 (fix(build): unblock Vercel release pipeline) merged at commit 54f07f63d — the Vercel build failure and pipeline issues this plan targets are resolved. All todos remain 'pending' in the plan body but the code fix has landed.",
+    "All 4 todos pending, last updated 2026-04-28, today is 2026-06-15 (~7 weeks). References specific Vercel deployment ID dpl_9CmqChJi9Y3KA8DmAHSX8XvEyTn6 from the 1.6.0 release. Current repo is at 1.34.1, implying many subsequent releases succeeded — the targeted failure may have resolved or been superseded entirely."
+   ]
+  },
+  {
+   "path": ".agent/plans/observability/current/pr-93-merge-snagging-2026-05-05.md",
+   "staleness": [
+    "PR 93 merged at commit 00b6e2197. This snagging report was a pre-merge snapshot document; the merge happened and the branch is gone.",
+    "This is a snagging report, not a plan. PR-93 (feat/eef_exploration) has since merged — the repo is now at main commit ad359a4f4 (2026-06-15) and the feat-eef-exploration-completion plan in this same collection records step 10 DONE on 2026-05-06. The snagging doc's P0 (SonarCloud) and P1 snags recorded here belong to a PR that has long since landed."
+   ]
+  },
+  {
+   "path": ".agent/plans/observability/current/feat-eef-exploration-completion.plan.md",
+   "staleness": [
+    "PR 93 merged at commit 00b6e2197, which was the feat/eef_exploration branch. Steps 1–9 are completed; steps 10–12 (MCP live exercise, divergence analysis, merge declaration) remain 'pending' in the plan but the merge has already landed.",
+    "Steps 1-10 completed; steps 11 (divergence analysis) and 12 (owner-gated merge declaration) remain pending. The plan's own lifecycle triggers say it should have been promoted to active/ when step 2 landed (commit 75dbcdb6, 2026-05-04). Remains in current/ despite being mid-execution. Additionally the feat/eef_exploration branch has very likely merged given repository is now at v1.34.1 and the branch's PR-93 snagging doc was last updated 2026-05-05 — if merged, this plan should be in archive/completed."
+   ]
+  },
+  {
+   "path": ".agent/plans/observability/current/pr-93-sonar-quality-gate-resolution.plan.md",
+   "staleness": [
+    "PR 93 merged; this was the Sonar resolution companion to the snagging report. All four todos are marked completed and the stated outcome was 'new_violations=0', duplication deferred to codegen roadmap.",
+    "Last Updated 2026-05-05; all four todos are status:completed; declared status is COMPLETE. Work is done but plan has not been archived."
+   ]
+  },
+  {
+   "path": ".agent/plans/semantic-search/current/search-contract-followup.plan.md",
+   "staleness": [
+    "Both todos still show pending. The plan says execution was absorbed into another plan (now archived as completed); unclear whether S4/S5 were actually completed.",
+    "Both todos are 'pending' but the work was absorbed into a plan now in archive/completed (pre-reingest-remediation.execution.plan.md). The plan self-declares it is 'executing via' an archived completed plan, meaning execution residence is now orphaned. No evidence of the two tasks being closed."
+   ]
+  },
+  {
+   "path": ".agent/plans/semantic-search/current/category-integration-remediation.md",
+   "staleness": [
+    "Explicitly self-declares superseded; core wiring completed via commit 4ccfbba0.",
+    "Self-declares superseded; the fix commit is recorded (4ccfbba0). No frontmatter todos, no phased structure — this is a problem/options note, not an active plan. Should be archived."
+   ]
+  },
+  {
+   "path": ".agent/plans/semantic-search/current/sequence-retrieval-architecture-followup.plan.md",
+   "staleness": [
+    "All phase-1 through phase-4 todos marked cancelled/superseded; parent plan is in archive/completed as of 2026-03-22; last updated 2026-03-22.",
+    "All execution work items are cancelled/superseded into a plan now in archive/completed. Phase 0 is 'done'. The plan functions only as a locked recipe reference, not an active execution tracker. Its reason-to-exist in current/ is weak — it's a reference document for a completed plan."
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/current/claude-insight-report-2026-05-10-disposition.plan.md",
+   "staleness": [
+    "Status is explicitly COMPLETE. All todos marked completed. Last updated 2026-05-10. This is a completed disposal/ledger document that should be archived.",
+    "All four phases marked completed; body states 'Status: COMPLETE' with 2026-05-10 as last updated — should be archived."
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/current/trinity-active-principles-extensions-2026-04-29.plan.md",
+   "staleness": [
+    "Created 2026-04-29 (over 6 weeks ago); all five extension todos remain in 'drafting' state with no per-diff approval recorded. The per-diff-approval todo is 'pending'.",
+    "Status is DRAFTING as of 2026-04-29; all todos show status: drafting or pending; authored over 6 weeks ago with no evident forward progress. Acceptance criteria are all unchecked checkboxes."
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/current/agent-entrypoint-content-homing.plan.md",
+   "staleness": [
+    "Explicitly marked COMPLETED, last updated 2026-04-24. All 5 todos show completed status. This completed plan is still in current/ rather than archive/completed/.",
+    "All five todos show status: completed; body states 'Status: COMPLETED' with 'Last Updated: 2026-04-24'."
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/current/governance-concepts-and-agentic-mechanism-integration.plan.md",
+   "staleness": [
+    "Explicitly marked COMPLETE, last updated 2026-04-19. All 5 todos show completed status. The plan is a source/strategy plan whose execution authority lives in active/governance-concepts-and-agentic-mechanism-integration.execution.plan.md. Should be archived.",
+    "All five todos show status: completed; body states 'Status: COMPLETE' with 'Last Updated: 2026-04-19'."
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/current/fitness-frontmatter-manifest-sweep.plan.md",
+   "staleness": [
+    "Explicitly superseded by another plan in the same lane; all todos still pending",
+    "Body explicitly states 'Status: SUPERSEDED BY fitness-token-measurements-and-frontmatter-mandation.plan.md' with a 2026-05-14 supersession note."
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-residual-fitness-graduation-opener.md",
+   "staleness": [
+    "Authored 2026-05-05; references session context from that date (agents, commit SHAs, fitness numbers) that are 6 weeks stale; the session it was written for has already happened",
+    "Frontmatter declares 'status: opener'; authored 2026-05-05 for a session that was to be started imminently; references specific comms-events, commits, and fitness state from May 2026 — all ephemeral context now stale."
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-principles-graduation-pass-review-snags.md",
+   "staleness": [
+    "Created 2026-05-06; references sessions and commits from that date; 'next session' was weeks ago; snags S1-S6 and P1-P3 show no resolution status",
+    "Created 2026-05-06; some snags (S1, P-2) explicitly require owner decisions that have not been recorded as resolved; S2 and S4-S6 appear actionable but no progress is noted."
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/current/consolidate-docs-mode-contract-and-buffer-drain.plan.md",
+   "staleness": [
+    "All five todos show status: completed and the body states 'Implemented 2026-05-27'",
+    "All five todos show status: completed; body status says 'Implemented 2026-05-27'; plan should be archived."
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/current/practice-and-process-structural-improvements.plan.md",
+   "staleness": [
+    "All todos completed; Phase 4 completion note dated 2026-04-24 marks all non-planning entries graduated; remaining closures explicitly deferred to other plans",
+    "All four todos show status: completed; body text includes completion note dated 2026-04-24; all phases complete; planning graduation deferred to planning-specialist-capability.plan.md; plan not archived."
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/current/doctrine-enforcement-quick-wins.plan.md",
+   "staleness": [
+    "All six todos show status: completed; body declares 'Status: COMPLETE — WS1, WS2, WS3, WS4, WS5, WS6 all landed' dated 2026-05-04",
+    "All six todos show status: completed; body status explicitly says COMPLETE; last updated 2026-05-04; plan not archived."
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/current/2026-05-07-pending-graduations-dedicated-drain-opener.md",
+   "staleness": [
+    "Opener references a starting state dated 2026-05-06 and 2026-05-07; no indication whether this session was ever run; pending-graduations.md file at 1876 lines described as HARD — current state unknown without reading that file",
+    "Authored 2026-05-06; describes a one-session drain targeting a specific 1876-line file state; session almost certainly consumed."
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/current/agentic-corpus-discoverability-and-deep-dive-hub.plan.md",
+   "staleness": [
+    "All four todos marked completed; status is COMPLETE (2026-04-19). This plan is done and should be in archived/, not current/.",
+    "All 4 todos completed; status explicitly COMPLETE; last updated 2026-04-19. Should be archived."
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/current/collaboration-state-surface-restructure.plan.md",
+   "staleness": [
+    "All todos completed. The plan's own lifecycle clause states it moves to archived/ after Phase 4 acceptance. No pending work remains visible in the todos block.",
+    "All 9 todos are status: completed; the file declares no archive trigger has fired yet but all acceptance criteria are met. Belongs in archive/completed per ADR-117."
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/current/memory-feedback-and-emergent-learning-mechanisms.execution.plan.md",
+   "staleness": [
+    "Status block says 'PARTIALLY SUPERSEDED' with most phases absorbed into an archived plan; Phase 7 is explicitly long-lived but no Phase 7 tasks show any completion status; all todos still marked 'pending'",
+    "Body declares Phases 0–6 landed or absorbed elsewhere; only Phase 7 (learning loop) remains, but all todos in frontmatter still show pending. Should be archived with a follow-up note for Phase 7."
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-full-napkin-and-comms-graduation-pass-opener.md",
+   "staleness": [
+    "Authored 2026-05-05 as a paste-able chat opener for a specific next session; the session it describes (full napkin + comms-logs graduation pass, three steps) has almost certainly completed given it is 6+ weeks past its authored date",
+    "Dated 2026-05-05; describes a single-session pass that was clearly intended to execute immediately. Over six weeks old with no indication the session it targets is still pending."
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-five-layer-restart-opener.md",
+   "staleness": [
+    "Authored 2026-05-05 for a specific next session; cites predecessor commits (1513474e, 53fffe74, 368e5aff) and names specific agents active at that moment; 6+ weeks have elapsed",
+    "Dated 2026-05-05; six weeks old; references specific agent sessions and commits that are already historical."
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-napkin-and-pending-graduations-processing-opener.md",
+   "staleness": [
+    "Authored 2026-05-06 for a specific next session; names five sessions from that day (Briny Plumbing Fjord, Cindery Charring Pyre etc.); napkin.md was 382 lines then — current state is unknown but the session it describes is clearly past",
+    "Dated 2026-05-06; six weeks old; references specific fitness states (napkin 382 lines, pending-graduations 2047 lines) that will have changed."
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/current/2026-05-11-graduation-candidates-drain-opener.md",
+   "staleness": [
+    "Authored 2026-05-11 for a specific next session; the two 'due' items it targets (ADR-041 amendment, PDR-054/ADR-177 hook-chain amendment) were time-sensitive blockers — ADR-041 was blocking ADR-173 ratification which was blocking graph-stack ACTIVE promotion; 5+ weeks elapsed",
+    "Authored 2026-05-11; today is 2026-06-15 — over a month old. Openers are single-session consumables; this session has passed."
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/current/memory-state-substrate-portable-contracts.plan.md",
+   "staleness": [
+    "All five todos show status: completed; last updated 2026-05-07; the body says 'IN PROGRESS' but the todo list shows every phase complete — the plan is effectively done but has not been moved to archive",
+    "All 5 todos are `completed` and Phase 5 criteria explicitly state the plan is ready for archive, yet it remains in current/."
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-collaboration-state-restructure-phase-2-opener.md",
+   "staleness": [
+    "Authored 2026-05-06; no evidence Phase 2 has executed; the collaboration-state-surface-restructure.plan.md it targets is not in this collection — staleness of the target plan is unknown from this artefact alone.",
+    "Authored 2026-05-06; today is 2026-06-15 — over five weeks old. Openers are single-session consumables."
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/current/open-questions-memory-system.plan.md",
+   "staleness": [
+    "All four cycles (plan-and-surface-contract, validator, workflow-wiring, verification) are status: completed; plan body declares 'Status: IMPLEMENTED'; only a pre-existing schema defect residual remains outside this plan's scope.",
+    "All 4 cycles completed; body declares IMPLEMENTED; no remaining open todos. Should be archived."
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-docs-consolidation-opener.md",
+   "staleness": [
+    "Authored 2026-05-05/06 referencing specific napkin fitness state (CRITICAL prose line, HARD limits) and pending-graduations entries from that date; substance-state map is months old; the referenced napkin and distilled.md fitness figures are stale.",
+    "Authored 2026-05-05; today is 2026-06-15 — over six weeks old. References fitness state from 2026-05-05 which is no longer current."
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-collaboration-state-lifecycle-deep-exploration-opener.md",
+   "staleness": [
+    "Frontmatter declares 'status: superseded' and 'superseded_by: collaboration-state-surface-restructure.plan.md' at 2026-05-06; body opens with a supersession notice; preserved only as historical context.",
+    "Frontmatter and body both declare superseded on 2026-05-06; the deep-exploration step ran and produced its deliverable."
+   ]
+  },
+  {
+   "path": ".agent/plans/agent-tooling/current/sub-agent-rename-and-skill-integration.plan.md",
+   "staleness": [
+    "All todos completed; anchored commits present for all phases; plan explicitly marked COMPLETE",
+    "Frontmatter status is 🟢 COMPLETE; all three phases (1A, 1B, 2) have anchored_commits and are marked completed in todos; plan body section heading says 'Last updated: 2026-05-10'. Plan has not been archived."
+   ]
+  },
+  {
+   "path": ".agent/plans/agent-tooling/current/2026-05-11-collaboration-protocol-hardening-final-opener.md",
+   "staleness": [
+    "Frontmatter declares superseded on 2026-05-11; all todos still marked pending but work has moved on (R1.b landed b529fa6e, per primary-agent-tooling-enhancements plan)",
+    "Frontmatter declares status: superseded-2026-05-11 and all todos are 'pending', yet the body records R1.b as already landed at b529fa6e and B-01 fixed — the opener's own todos are overtaken by events captured in the parent plan"
+   ]
+  },
+  {
+   "path": ".agent/plans/agent-tooling/current/primary-agent-tooling-enhancements.plan.md",
+   "staleness": [
+    "Frontmatter explicitly declares superseded; retained only as back-pointer; several todos still pending but re-homed",
+    "Frontmatter name starts 'SUPERSEDED 2026-05-11'; plan body says 'archive to archive/' after cost-of-collaboration plan's first review pass — that trigger likely passed months ago"
+   ]
+  },
+  {
+   "path": ".agent/plans/agent-tooling/current/pr-102-snagging.plan.md",
+   "staleness": [
+    "All 8 phases completed; final evidence recorded; PR #102 closeout confirmed complete 2026-05-08",
+    "All 8 todos marked 'completed'; body declares 'COMPLETE' with evidence dated 2026-05-07/08; PR #102 closeout finished months ago"
+   ]
+  },
+  {
+   "path": ".agent/plans/agent-tooling/current/cost-of-collaboration.flaky-tests.md",
+   "staleness": [
+    "Last updated 2026-05-12; every entry in every table has Disposed disposition. No open items.",
+    "Every row in the investigation list is marked 'Disposed' or 'Not reproduced'; last updated 2026-05-12; no open items remain"
+   ]
+  },
+  {
+   "path": ".agent/plans/agent-tooling/current/multi-agent-collaboration-sidebar-and-escalation.plan.md",
+   "staleness": [
+    "All todos have status: completed; plan declares itself complete. Should be archived to archive/completed/.",
+    "All 5 todos are `completed`; status is IMPLEMENTED 2026-04-26; last updated 2026-04-26. The plan itself says 'This plan is complete'."
+   ]
+  },
+  {
+   "path": ".agent/plans/agent-tooling/current/context-cost-cli.plan.md",
+   "staleness": [
+    "All six workstreams marked completed; status is IMPLEMENTED as of 2026-05-14; plan body says post-completion consolidation task is remaining.",
+    "All 6 todos are `completed`; status is IMPLEMENTED; last updated 2026-05-14. Implementation note records commit 7bf05c6b."
+   ]
+  },
+  {
+   "path": ".agent/plans/agent-tooling/current/agent-artefact-load-pressure-relief.plan.md",
+   "staleness": [
+    "Phase 1 todos all completed; Phase 2 Vercel triage (todos 2-1, 2-2, 3-1, 3-2, 4-1) remain pending since 2026-05-06 with no progress updates. The urgency context (overloaded discovery) may still apply.",
+    "Phase 1 completed 2026-05-06; Phase 2 todos (2-1, 2-2, 3-1, 3-2, 4-1) still pending as of last update 2026-05-06. Over five weeks old with no progress on Phase 2."
+   ]
+  },
+  {
+   "path": ".agent/plans/agent-tooling/current/collaboration-state-write-safety.plan.md",
+   "staleness": [
+    "All four phases completed as of 2026-04-28; status is IMPLEMENTED; only a final archive pass and plan retirement remain. Plan has been in current/ since April with no further action.",
+    "Status is 'IMPLEMENTED / CLOSURE PENDING FINAL ARCHIVE PASS'; all five phases completed; implementation landed as commits 11f0320f, da21284d, ddcfa19e; dated 2026-04-28. Should have been archived."
+   ]
+  },
+  {
+   "path": ".agent/plans/agent-tooling/current/comms-event-write-integrity.plan.md",
+   "staleness": [
+    "Implementation Record 2026-06-01 shows all five deliverables done with passing gate evidence; plan not yet archived",
+    "Implementation Record section confirms all five deliverables (D1–D5) were completed on 2026-06-01 by Tempestuous Gliding Falcon with passing verification runs listed. All todos are marked completed. Plan should be archived."
+   ]
+  },
+  {
+   "path": ".agent/plans/agent-tooling/current/collaboration-doc-fitness-remediation.plan.md",
+   "staleness": [
+    "Explicitly marked Complete as of 2026-04-27; all todos completed; should be in archive/completed not current/",
+    "All todos status: completed; declared complete 2026-04-27; should be archived"
+   ]
+  },
+  {
+   "path": ".agent/plans/agent-tooling/current/agent-infrastructure-portability-remediation.plan.md",
+   "staleness": [
+    "All todos show status: completed; Completion Note dated 2026-04-24 explicitly closes all phases",
+    "All todos completed; completion note dated 2026-04-24; plan has remained in current lane for over 7 weeks"
+   ]
+  },
+  {
+   "path": ".agent/plans/architecture-and-infrastructure/current/security-dependency-triage.plan.md",
+   "staleness": [
+    "Created 2026-03-05; all todos remain pending; Batch 1 overrides partially pre-empted by the pnpm v11 migration but not validated.",
+    "Created 2026-03-05, still queued with all todos pending as of 2026-06-15; references specific package versions (e.g. MCP SDK 1.27.0→1.27.1) likely overtaken by subsequent dependency updates over 3+ months"
+   ]
+  },
+  {
+   "path": ".agent/plans/architecture-and-infrastructure/current/pr-90-landing-closure.plan.md",
+   "staleness": [
+    "All todos marked completed; plan outcome: 'all required CI gates green on PR #90'; PR was ready for squash-merge.",
+    "All phases completed, all todos done, status is READY TO MERGE — PR #90 work is complete. Plan should be archived to completed/."
+   ]
+  },
+  {
+   "path": ".agent/plans/architecture-and-infrastructure/current/observability-strategy-restructure.plan.md",
+   "staleness": [
+    "All five substantive phases completed 2026-04-19; four remaining todos (ws-quality-gates, ws-adversarial-review, ws-doc-propagation, ws-consolidation) are housekeeping closeout that appears unarchived.",
+    "All five phases are marked completed (latest 2026-04-19). Four pending todos (ws-quality-gates, ws-adversarial-review, ws-doc-propagation, ws-consolidation) are close-out ceremony items, not substantive work. Plan states 'Scope of this restructure: Phases 1-5 of THIS plan do not execute the waves. This plan closes when Phase 5 lands.' Phase 5 has landed. Plan should be archived."
+   ]
+  },
+  {
+   "path": ".agent/plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md",
+   "staleness": [
+    "All execution todos are completed or dropped as of 2026-04-17; plan still in active/ rather than archived; given recent commits (PR #210/#211 merged 2026-06-xx) the branch likely merged — plan should be in archive.",
+    "The plan's own todos show all substantive items completed or dropped. 'Parent foundation: CLOSED (2026-04-17).' The plan explicitly states it 'remains active (not yet archived) because the in-scope MCP-server expansion lanes still run on this same branch before the PR opens.' Those lanes are owned by the maximisation plan, which has since moved to .agent/plans/observability/. This parent plan is holding open for a branch (feat/otel_sentry_enhancements) that the recent commit history implies has merged (release 1.34.1 on main). Should be archived."
+   ]
+  },
+  {
+   "path": ".agent/plans/sdk-and-mcp-enhancements/current/ws3-oak-url-augmentable-codegen-fix.plan.md",
+   "staleness": [
+    "Last Updated 2026-04-03. Phases 0–5 all marked completed; only Phase 6 (validation and review) formally remains but contains no new status entries. No active session claims or recent updates indicate this may be effectively done but unarchived.",
+    "All six todos are marked `completed` in frontmatter; body status line reads 'PHASES 0–5 COMPLETE'. The only outstanding item (Phase 6 full gates + review + consolidation) is checked off as `completed` in the frontmatter, indicating this is done work sitting in the current lane."
+   ]
+  },
+  {
+   "path": ".agent/plans/sdk-and-mcp-enhancements/current/upstream-sequences-api-realignment.plan.md",
+   "staleness": [
+    "All todos completed 2026-06-03; work fully executed and verified. Plan is effectively closed but not archived.",
+    "All three todos (ground-and-regenerate, decide-delete-vs-adapt, execute-cure) are status: completed. The execute-cure todo explicitly records 'DONE 2026-06-03 (Moonlit Waxing Nebula)... All gates green'. No remaining work."
+   ]
+  },
+  {
+   "path": ".agent/plans/sdk-and-mcp-enhancements/current/ws3-contrast-validation-prerequisite.plan.md",
+   "staleness": [
+    "Status: COMPLETE — all tasks done; Last Updated: 2026-04-04; all todos marked done. This plan belongs in archive/completed, not current/.",
+    "All nine todos marked `done` in frontmatter. Body status reads 'COMPLETE — all tasks done, pending commit and review closure'. Last Updated 2026-04-04. The parent plan is ws3-widget-clean-break-rebuild which is a different collection. This plan has no remaining executable work."
+   ]
+  },
+  {
+   "path": ".agent/plans/sdk-and-mcp-enhancements/current/ws3-local-widget-development.plan.md",
+   "staleness": [
+    "Frontmatter superseded_by set; Status: SUPERSEDED; Last Updated: 2026-04-06; all todos done. Should be in archive/superseded.",
+    "Frontmatter declares superseded_by: ../archive/completed/ws3-branding-alignment-and-merge.plan.md. All four todos are `done`. Body status reads 'SUPERSEDED — work completed in ws3-branding-alignment-and-merge.plan.md P0'. Still in current/ lane — should be moved to archive."
+   ]
+  },
+  {
+   "path": ".agent/plans/sdk-and-mcp-enhancements/current/clerk-mcp-tools-and-ext-apps-bumps.plan.md",
+   "staleness": [
+    "All four todos marked completed; completion note dated 2026-06-02 confirms everything landed; explicitly awaiting archive",
+    "All five todos marked completed; execution complete as of 2026-06-02; explicitly awaiting archive."
+   ]
+  },
+  {
+   "path": ".agent/plans/sdk-and-mcp-enhancements/current/http-mcp-test-suite-improvements.plan.md",
+   "staleness": [
+    "All todos still pending; superseded by unified-mcp-server-test-harness.plan.md per that plan's frontmatter; should move to archive/superseded/."
+   ]
+  }
+ ],
+ "duplicationCandidates": [
+  {
+   "path": ".agent/plans/security-and-privacy/future/phase-3-baseline-control-cut-list.md",
+   "overlaps": [
+    ".agent/plans/security-and-privacy/future/cloudflare-mcp-public-beta-security-gate.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/discovery/future/skills-distribution-channels-suggestions.report.md",
+   "overlaps": [
+    ".agent/plans/discovery/future/skills-classification-taxonomy.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/discovery/future/skills-classification-taxonomy.plan.md",
+   "overlaps": [
+    ".agent/plans/discovery/future/agent-skills-discovery.plan.md",
+    ".agent/plans/discovery/future/skills-distribution-channels-suggestions.report.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/discovery/future/agent-skills-discovery.plan.md",
+   "overlaps": [
+    ".agent/plans/discovery/future/skills-classification-taxonomy.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/sector-engagement/ooc-issues/upstream-500-errors.md",
+   "overlaps": [
+    ".agent/plans/sector-engagement/ooc-issues/oak-open-curriculum-api-issues-2026-04-23.md (Issue 1 in that file covers a related 500 on /threads endpoint; Issue 5 discusses the cross-cutting 500 response doctrine — partial thematic overlap but transcript-500 is a distinct issue)"
+   ]
+  },
+  {
+   "path": ".agent/plans/sector-engagement/ooc-issues/oak-open-curriculum-api-issues-2026-04-23.md",
+   "overlaps": [
+    ".agent/plans/sector-engagement/ooc-issues/upstream-500-errors.md (partial thematic overlap on 500 errors and response doctrine, but that file focuses on the transcript endpoint only)"
+   ]
+  },
+  {
+   "path": ".agent/plans/sector-engagement/castr/expected-outputs.md",
+   "overlaps": [
+    ".agent/plans/sector-engagement/castr/oak-principles.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/sector-engagement/eef/future/evidence-integration-strategy.md",
+   "overlaps": [
+    ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/observability/current/sentry-preview-validation-and-quality-triage.plan.md",
+   "overlaps": [
+    ".agent/plans/observability/current/pr-87-codeql-alerts.plan.md (CodeQL scope was superseded and transferred)"
+   ]
+  },
+  {
+   "path": ".agent/plans/observability/current/pr-87-codeql-alerts.plan.md",
+   "overlaps": [
+    ".agent/plans/observability/current/sentry-preview-validation-and-quality-triage.plan.md (triage scope was transferred here)"
+   ]
+  },
+  {
+   "path": ".agent/plans/observability/current/pr-93-merge-snagging-2026-05-05.md",
+   "overlaps": [
+    ".agent/plans/observability/current/feat-eef-exploration-completion.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/observability/current/feat-eef-exploration-completion.plan.md",
+   "overlaps": [
+    ".agent/plans/observability/current/pr-93-merge-snagging-2026-05-05.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/observability/current/pr-93-sonar-quality-gate-resolution.plan.md",
+   "overlaps": [
+    ".agent/plans/observability/current/pr-93-merge-snagging-2026-05-05.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/observability/future/customer-facing-status-page.plan.md",
+   "overlaps": [
+    ".agent/plans/observability/future/statuspage-integration.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/observability/future/statuspage-integration.plan.md",
+   "overlaps": [
+    ".agent/plans/observability/future/customer-facing-status-page.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/observability/future/sentry-observability-maximisation.plan.md",
+   "overlaps": [
+    ".agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/semantic-search/current/sequence-retrieval-architecture-followup.plan.md",
+   "overlaps": [
+    ".agent/plans/semantic-search/archive/completed/pre-reingest-remediation.execution.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/semantic-search/current/thread-sequence-semantic-surfaces.execution.plan.md",
+   "overlaps": [
+    ".agent/plans/semantic-search/current/sequence-retrieval-architecture-followup.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/semantic-search/future/03-vocabulary-and-semantic-assets/bulk-metadata-opportunities.research.md",
+   "overlaps": [
+    ".agent/plans/semantic-search/future/03-vocabulary-and-semantic-assets/vocabulary-glossary-and-mining-surfaces.research.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/semantic-search/future/03-vocabulary-and-semantic-assets/vocabulary-glossary-and-mining-surfaces.research.md",
+   "overlaps": [
+    ".agent/plans/semantic-search/future/03-vocabulary-and-semantic-assets/bulk-metadata-opportunities.research.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/semantic-search/future/03-vocabulary-and-semantic-assets/natural-language-paraphrases.md",
+   "overlaps": [
+    ".agent/plans/semantic-search/future/03-vocabulary-and-semantic-assets/vocabulary-mining.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/semantic-search/future/02-schema-authority-and-codegen/move-search-domain-knowledge-to-codegen-time.md",
+   "overlaps": [
+    ".agent/plans/semantic-search/future/02-schema-authority-and-codegen/bulk-schema-driven-code-generation.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/semantic-search/future/02-schema-authority-and-codegen/bulk-schema-driven-code-generation.md",
+   "overlaps": [
+    ".agent/plans/semantic-search/future/02-schema-authority-and-codegen/move-search-domain-knowledge-to-codegen-time.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/semantic-search/future/08-experience-surfaces-and-extensions/widget-renderer-reactivation.md",
+   "overlaps": [
+    ".agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/school-data-search/current/school-data-search-wsd1-decomposition.md",
+   "overlaps": [
+    ".agent/plans/school-data-search/current/school-data-search-poc.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/current/fitness-frontmatter-manifest-sweep.plan.md",
+   "overlaps": [
+    ".agent/plans/agentic-engineering-enhancements/current/fitness-token-measurements-and-frontmatter-mandation.plan.md",
+    ".agent/plans/agentic-engineering-enhancements/current/fitness-token-measurements-and-frontmatter-mandation.plan.md (referenced superseder, path inferred)"
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/current/fitness-token-measurements-and-frontmatter-mandation.plan.md",
+   "overlaps": [
+    ".agent/plans/agentic-engineering-enhancements/current/fitness-frontmatter-manifest-sweep.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/current/planning-specialist-capability.plan.md",
+   "overlaps": [
+    ".agent/plans/agentic-engineering-enhancements/current/practice-and-process-structural-improvements.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/current/practice-and-process-structural-improvements.plan.md",
+   "overlaps": [
+    ".agent/plans/agentic-engineering-enhancements/current/planning-specialist-capability.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-five-layer-restart-opener.md",
+   "overlaps": [
+    ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-full-napkin-and-comms-graduation-pass-opener.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-napkin-and-pending-graduations-processing-opener.md",
+   "overlaps": [
+    ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-full-napkin-and-comms-graduation-pass-opener.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-collaboration-state-restructure-phase-2-opener.md",
+   "overlaps": [
+    ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-collaboration-state-lifecycle-deep-exploration-opener.md (both are openers for the same collaboration-state restructure thread)"
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-collaboration-state-lifecycle-deep-exploration-opener.md",
+   "overlaps": [
+    ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-collaboration-state-restructure-phase-2-opener.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/pull-request-best-practice-and-rules.md",
+   "overlaps": [
+    ".agent/plans/agent-tooling/current/pr-merge-readiness-discipline.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/future/privacy-specialist-capability.plan.md",
+   "overlaps": [
+    ".agent/plans/agentic-engineering-enhancements/future/web-api-gdpr-specialist-capability.plan.md (explicitly scoped apart; overlap boundaries are well-defined)"
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/future/web-api-gdpr-specialist-capability.plan.md",
+   "overlaps": [
+    ".agent/plans/agentic-engineering-enhancements/future/privacy-specialist-capability.plan.md (explicitly scoped apart; overlap boundaries are well-defined)"
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/future/web-api-security-specialist-capability.plan.md",
+   "overlaps": [
+    ".agent/plans/agentic-engineering-enhancements/future/web-api-gdpr-specialist-capability.plan.md (explicitly scoped apart; overlap boundaries are well-defined)"
+   ]
+  },
+  {
+   "path": ".agent/plans/agentic-engineering-enhancements/future/memory-feedback-and-emergent-learning-mechanisms.plan.md",
+   "overlaps": [
+    ".agent/plans/agentic-engineering-enhancements/current/memory-feedback-and-emergent-learning-mechanisms.execution.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/agent-tooling/current/2026-05-11-collaboration-protocol-hardening-final-opener.md",
+   "overlaps": [
+    ".agent/plans/agent-tooling/current/primary-agent-tooling-enhancements.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/agent-tooling/current/agent-artefact-lifecycle-cli.plan.md",
+   "overlaps": [
+    ".agent/plans/agent-tooling/current/skills-standardisation-and-adapter-generator.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/agent-tooling/current/skills-standardisation-and-adapter-generator.plan.md",
+   "overlaps": [
+    ".agent/plans/agent-tooling/current/agent-artefact-lifecycle-cli.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/agent-tooling/current/agent-commands-retirement.plan.md",
+   "overlaps": [
+    ".agent/plans/agent-tooling/current/skills-standardisation-and-adapter-generator.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/agent-tooling/current/start-right-team-singleton-lane-remediation.ws0-disposition.md",
+   "overlaps": [
+    ".agent/plans/agent-tooling/current/start-right-team-singleton-lane-remediation.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/agent-tooling/current/agent-artefact-portability-audit-2026-05-06.report.md",
+   "overlaps": [
+    ".agent/plans/agent-tooling/current/agent-infrastructure-portability-remediation.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/agent-tooling/current/agent-infrastructure-portability-remediation.plan.md",
+   "overlaps": [
+    ".agent/plans/agent-tooling/current/agent-artefact-portability-audit-2026-05-06.report.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/agent-tooling/future/rules-cross-platform-generator.plan.md",
+   "overlaps": [
+    ".agent/plans/agent-tooling/future/adapter-generation.plan.md (adapter-generation covers the broader manifest-driven generation of agent adapters; this plan is narrowly scoped to rules cross-platform mirroring — overlapping concern but distinct scope; adapter-generation plan explicitly names this as a sibling lane via portability:check evolution)"
+   ]
+  },
+  {
+   "path": ".agent/plans/agent-tooling/future/adapter-generation.plan.md",
+   "overlaps": [
+    ".agent/plans/agent-tooling/future/rules-cross-platform-generator.plan.md (partial overlap on rules adapter generation, but adapter-generation focuses on agent/skill wrappers and rules-cross-platform-generator focuses on rules mirroring — plan explicitly distinguishes them as complementary lanes)"
+   ]
+  },
+  {
+   "path": ".agent/plans/agent-tooling/future/joint-agent-decision-protocol.plan.md",
+   "overlaps": [
+    ".agent/plans/agent-tooling/future/collaboration-substrate-coordination-rightsizing.m1-inventory.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/agent-tooling/future/agent-infrastructure-coherence-audit.plan.md",
+   "overlaps": [
+    ".agent/plans/agent-tooling/future/adapter-generation.plan.md (areas 2 and 5 of the audit become moot if adapter-generation executes first, as acknowledged in the plan itself)"
+   ]
+  },
+  {
+   "path": ".agent/plans/agent-tooling/future/collaboration-substrate-coordination-rightsizing.plan.md",
+   "overlaps": [
+    ".agent/plans/agent-tooling/future/collaboration-substrate-coordination-rightsizing.m1-inventory.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/agent-tooling/future/coordination-watcher-canonicalisation.plan.md",
+   "overlaps": [
+    ".agent/plans/agent-tooling/future/collaboration-substrate-coordination-rightsizing.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/user-experience/educator-end-users/external-facing-skills-and-mcp-surfaces-review.report.md",
+   "overlaps": [
+    ".agent/plans/user-experience/educator-end-users/external-facing-capability-corpus-synthesis.report.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/user-experience/educator-end-users/external-facing-capability-corpus-synthesis.report.md",
+   "overlaps": [
+    ".agent/plans/user-experience/educator-end-users/external-facing-skills-and-mcp-surfaces-review.report.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/user-experience/public-alpha-experience-contract.md",
+   "overlaps": [
+    ".agent/plans/user-experience/roadmap.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/user-experience/roadmap.md",
+   "overlaps": [
+    ".agent/plans/user-experience/public-alpha-experience-contract.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/user-experience/educator-end-users/future/plugin-bundle-distribution.plan.md",
+   "overlaps": [
+    ".agent/plans/user-experience/educator-end-users/current/plugin-package-creation.plan.md",
+    ".agent/plans/user-experience/educator-end-users/current/external-facing-capability-distribution.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/architecture-and-infrastructure/static-analysis-tool-promotion.plan.md",
+   "overlaps": [
+    ".agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/architecture-and-infrastructure/codegen/sdk-codegen-reviewer-findings.md",
+   "overlaps": [
+    ".agent/plans/architecture-and-infrastructure/codegen/sdk-codegen-architecture-analysis.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md",
+   "overlaps": [
+    ".agent/plans/architecture-and-infrastructure/static-analysis-tool-promotion.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/architecture-and-infrastructure/current/config-architecture-standardisation-plan.md",
+   "overlaps": [
+    ".agent/plans/architecture-and-infrastructure/current/no-io-test-boundary-and-di-recovery.plan.md (both address DI/env patterns)"
+   ]
+  },
+  {
+   "path": ".agent/plans/architecture-and-infrastructure/current/test-ceremony-production-factory-audit.plan.md",
+   "overlaps": [
+    ".agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md",
+    ".agent/plans/architecture-and-infrastructure/current/no-io-test-boundary-and-di-recovery.plan.md (both address test boundary hygiene and DI seams)"
+   ]
+  },
+  {
+   "path": ".agent/plans/architecture-and-infrastructure/current/no-io-test-boundary-and-di-recovery.plan.md",
+   "overlaps": [
+    ".agent/plans/architecture-and-infrastructure/current/test-ceremony-production-factory-audit.plan.md",
+    ".agent/plans/architecture-and-infrastructure/current/test-ceremony-production-factory-audit.plan.md (both fix test DI boundaries; test-ceremony plan is the narrower slice, this is wider)"
+   ]
+  },
+  {
+   "path": ".agent/plans/architecture-and-infrastructure/current/architectural-documentation-excellence-synthesis.plan.md",
+   "overlaps": [
+    ".agent/plans/architecture-and-infrastructure/current/doc-architecture-phase-b-dependent.plan.md",
+    ".agent/plans/architecture-and-infrastructure/current/doc-architecture-phase-b-dependent.plan.md (this synthesis parents both phase-a and phase-b; items I3, I6, I7, I8, I9b appear verbatim in phase-b)"
+   ]
+  },
+  {
+   "path": ".agent/plans/architecture-and-infrastructure/current/doc-architecture-phase-b-dependent.plan.md",
+   "overlaps": [
+    ".agent/plans/architecture-and-infrastructure/current/architectural-documentation-excellence-synthesis.plan.md",
+    ".agent/plans/architecture-and-infrastructure/current/architectural-documentation-excellence-synthesis.plan.md (items I3, I6, I7, I8, I9b are lifted verbatim from the synthesis parent)"
+   ]
+  },
+  {
+   "path": ".agent/plans/architecture-and-infrastructure/current/workspace-layer-separation-audit.plan.md",
+   "overlaps": [
+    ".agent/plans/architecture-and-infrastructure/current/scripts-validator-family-workspace-migration.plan.md (both address workspace placement of code; scripts migration is a concrete tranche, this is the audit that would produce such tranches)"
+   ]
+  },
+  {
+   "path": ".agent/plans/architecture-and-infrastructure/future/architectural-budget-enforcement-layer.plan.md",
+   "overlaps": [
+    ".agent/plans/architecture-and-infrastructure/future/architectural-budget-system-across-scales.plan.md",
+    ".agent/plans/architecture-and-infrastructure/future/architectural-budget-system-across-scales.plan.md (child of that parent)"
+   ]
+  },
+  {
+   "path": ".agent/plans/architecture-and-infrastructure/future/architectural-budget-system-across-scales.plan.md",
+   "overlaps": [
+    ".agent/plans/architecture-and-infrastructure/future/architectural-budget-enforcement-layer.plan.md",
+    ".agent/plans/architecture-and-infrastructure/future/architectural-budget-enforcement-layer.plan.md (child plan of this parent)"
+   ]
+  },
+  {
+   "path": ".agent/plans/architecture-and-infrastructure/future/search-cli-ingestion-pipeline-consolidation.plan.md",
+   "overlaps": [
+    ".agent/plans/architecture-and-infrastructure/future/oak-search-cli-command-surface-rationalisation.plan.md (overlapping workspace; different layer — ingestion vs CLI surface)"
+   ]
+  },
+  {
+   "path": ".agent/plans/architecture-and-infrastructure/future/oak-search-cli-command-surface-rationalisation.plan.md",
+   "overlaps": [
+    ".agent/plans/architecture-and-infrastructure/future/search-cli-ingestion-pipeline-consolidation.plan.md (same workspace, different layer — CLI surface vs ingestion pipeline)"
+   ]
+  },
+  {
+   "path": ".agent/plans/architecture-and-infrastructure/future/monorepo-workspace-topology-adr-and-canonical-plan.plan.md",
+   "overlaps": [
+    ".agent/plans/architecture-and-infrastructure/future/oak-surface-isolation-and-generic-foundation-programme.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/architecture-and-infrastructure/future/oak-surface-isolation-and-generic-foundation-programme.plan.md",
+   "overlaps": [
+    ".agent/plans/architecture-and-infrastructure/future/monorepo-workspace-topology-adr-and-canonical-plan.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/sdk-and-mcp-enhancements/aggregated-tool-result-type-remediation.plan.md",
+   "overlaps": [
+    ".agent/plans/sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/sdk-and-mcp-enhancements/current/ws3-local-widget-development.plan.md",
+   "overlaps": [
+    ".agent/plans/sdk-and-mcp-enhancements/archive/completed/ws3-branding-alignment-and-merge.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/sdk-and-mcp-enhancements/current/unified-mcp-server-test-harness.plan.md",
+   "overlaps": [
+    ".agent/plans/sdk-and-mcp-enhancements/current/http-mcp-test-suite-improvements.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/sdk-and-mcp-enhancements/current/http-mcp-test-suite-improvements.plan.md",
+   "overlaps": [
+    ".agent/plans/sdk-and-mcp-enhancements/current/unified-mcp-server-test-harness.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/sdk-and-mcp-enhancements/active/schema-resilience-and-response-architecture.plan.md",
+   "overlaps": [
+    ".agent/plans/sdk-and-mcp-enhancements/active/upstream-api-reference-metadata.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md",
+   "overlaps": [
+    ".agent/plans/sdk-and-mcp-enhancements/roadmap.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/sdk-and-mcp-enhancements/active/upstream-api-reference-metadata.plan.md",
+   "overlaps": [
+    ".agent/plans/sdk-and-mcp-enhancements/active/schema-resilience-and-response-architecture.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/developer-experience/governance/docs-deep-review-2026-02-25/evidence/evidence-summary.md",
+   "overlaps": [
+    ".agent/plans/developer-experience/governance/docs-deep-review-2026-02-25/output/deep-review-report.md",
+    ".agent/plans/developer-experience/governance/docs-deep-review-2026-02-25/output/doc-findings.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/developer-experience/governance/docs-deep-review-2026-02-25/output/doc-findings.md",
+   "overlaps": [
+    ".agent/plans/developer-experience/governance/docs-deep-review-2026-02-25/evidence/evidence-summary.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/developer-experience/governance/docs-deep-review-2026-02-25/output/remediation-backlog.md",
+   "overlaps": [
+    ".agent/plans/developer-experience/active/onboarding-simulations-public-alpha-readiness.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/developer-experience/future/generated-document-pipeline-extraction-plan.md",
+   "overlaps": [
+    ".agent/plans/developer-experience/future/tsdoc-generated-docs-overhaul.plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/developer-experience/future/tsdoc-generated-docs-overhaul.plan.md",
+   "overlaps": [
+    ".agent/plans/developer-experience/future/generated-document-pipeline-extraction-plan.md"
+   ]
+  },
+  {
+   "path": ".agent/plans/exploring-open-education-resources/external-knowledge-sources/future/external-knowledge-graph-data-source-integration.plan.md",
+   "overlaps": [
+    ".agent/plans/exploring-open-education-resources/external-knowledge-sources/future/education-skills-mcp-surface.plan.md"
+   ]
+  }
+ ]
+}

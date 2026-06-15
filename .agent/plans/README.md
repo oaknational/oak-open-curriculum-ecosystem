@@ -20,6 +20,8 @@ For the strategic overview, use [high-level-plan.md](high-level-plan.md).
 |---|---|
 | [high-level-plan.md](high-level-plan.md) | Strategic cross-collection overview |
 | [curriculum-mcp-path-to-ga/roadmap.md](curriculum-mcp-path-to-ga/roadmap.md) | MCP HTTP server M1 → M2 → M3 → GA coordination |
+| [curriculum-mcp-path-to-ga/launch-readiness-framework.md](curriculum-mcp-path-to-ga/launch-readiness-framework.md) | What "live product" means for the MCP app: readiness dimensions, keystone owner decisions, candidate M4/GA gates |
+| [curriculum-mcp-path-to-ga/future/launch-readiness-and-milestone-redefinition.plan.md](curriculum-mcp-path-to-ga/future/launch-readiness-and-milestone-redefinition.plan.md) | Future stub: redraft the milestone ladder impact-first and drive launch-readiness to GA (owner-promotion gated) |
 | [discovery/README.md](discovery/README.md) | Agent/web discoverability of Oak machine surfaces |
 | [milestones/](../milestones/) | Per-milestone summaries: audience, value, gates |
 | [completed-plans.md](completed-plans.md) | Completed plan index |
@@ -36,6 +38,7 @@ that deserve explicit triage before any practical plan is cut from them.
 | Assessment | Planning question | Likely owning surfaces |
 |---|---|---|
 | [Oak Repository Professionalism and Engineering Quality Report — 2026-06-03](../reports/oak-repo-professionalism-engineering-quality-report-2026-06-03.md) | Can its improvement roadmap become one or more practical plans without weakening the repo's existing engineering discipline? | [architecture-and-infrastructure/current](architecture-and-infrastructure/current/README.md), [developer-experience/current](developer-experience/current/README.md), [agentic-engineering-enhancements/current](agentic-engineering-enhancements/current/README.md), [agent-tooling](agent-tooling/README.md) |
+| [MCP App Live-Product Readiness — 2026-06-15](../reports/mcp-app-live-product-readiness-assessment-2026-06-15.md) | What must be true (product, safety, compliance, experience, operations, whole-estate) before the MCP app is a live product, and does the milestone ladder still stand? | [curriculum-mcp-path-to-ga/](curriculum-mcp-path-to-ga/roadmap.md), [milestones/](../milestones/), [security-and-privacy/](security-and-privacy/README.md), [observability/](observability/README.md) |
 
 ---
 
