@@ -181,3 +181,17 @@ to the real path.
   channels moved to rapid-comms/), and the wing-detection never told the n>=3 roster-accretion filename
   convention. Cure: enumerate every affected-reader surface and land the change across all of them in one
   tranche.
+
+- **In long, high-volume analytical/research work, self-monitor for NARROWING and
+  OVER-CLAIMING, and adversarially verify your OWN synthesis** (source: 2026-06-15
+  plan-estate survey; took ~5 owner re-framings to catch in-flight). Deep multi-turn
+  analysis drifts under its own momentum — a newer/narrower artefact captures the frame,
+  and confident self-synthesis reliably over-states. Two habits, self-applied on a cadence
+  rather than waiting for the owner: (a) re-ask *am I still answering the BROAD question at
+  the right altitude? has the newest/most-concrete input captured the frame? am I
+  over-claiming?*; (b) run an independent + adversarial pass on your OWN conclusions before
+  presenting them as settled, and report what it DENTS — a refuter pass overturned 4 of 6
+  of this session's synthesis claims. A validated map is valuable even when it re-derives a
+  known verdict — don't sell re-derivation as discovery. Siblings:
+  [[premature-crystallization]], [[fluency-is-a-failure-vector]]; verify-dont-trust turned
+  on one's own synthesis, not just external inputs.
