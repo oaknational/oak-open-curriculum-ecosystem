@@ -462,7 +462,10 @@ generalisation):
     used ground-truth reads (git, gh, registry), never peers' heartbeats; BOTH implementer
     lanes ran without heartbeat crons and closed out clean. Trigger arguably FIRED —
     surface at the next owner walk.
-  - `status`: pending — second-instance evidence recorded 2026-06-12, awaiting owner walk
+  - `status`: owner-approved for graduation 2026-06-15 (bounded ripeness pass, Halley) — second
+    instance confirmed (Director zero-consumers session, 2026-06-12); promote PDR-082 + add the
+    heartbeat-exemption class to PDR-078 §4 in a focused Practice-governance session (careful Core
+    authoring, not rushed under one session's budget).
 - **Consider a portable value-contingency PDR.** The principle is currently a rule citing
   PDR-082/080/066. If a third surface needs the *portable contract* form (beyond this
   repo's rule), a PDR parenting PDR-082/080/066 is the home.
@@ -783,7 +786,10 @@ home.
   closure-pressure-design-space)]`
   The lesson is stable and cross-session, but promotion must reconcile the
   structural-interrupt shape with existing metacognition and immune-system
-  doctrine rather than minting a duplicate rule.
+  doctrine rather than minting a duplicate rule. **Owner-approved for graduation
+  2026-06-15 (bounded ripeness pass, Halley): author the doctrine PDR from the
+  design-space plan in a focused Practice-governance session — careful Core
+  authoring reconciled with the existing doctrine, not a rushed mint.**
 - **Substrate alignment is Practice design, not prose reinforcement.**
   `[captured: 2026-05-31 | source: distilled 2026-05-25..26 / historical synthesis A2 |
   target: pdr:substrate-alignment-as-practice-design |
@@ -2022,32 +2028,9 @@ feedback (sidebar shape is the lightest); composes with `coordinator-role-thresh
   committed, OR the next `.husky` / `build-system.md` gate-coverage pass.
 - **status**: pending
 
-## 2026-06-14 capture — Clipper wakes Atoll (WS7 content-boundary principle + atomic propagation)
+## 2026-06-14 capture — Clipper wakes Atoll (PDR-051 reduced-implementation reconciliation review)
 
 Verified absent from this register before adding.
-
-- **Repo/instance content-tiering boundary + mandatory comms-knowledge curation.**
-  `captured-date`: 2026-06-14. `source-surface`: owner direction during the WS7 deep-dive + the
-  machine-local WS7 execution contract. `graduation-target`: PDR-094 (portable principle) + ADR-199 (repo
-  phenotype) amendment, AND wired into the `session-handoff` + `consolidate-docs` SKILLs + the Phase-3
-  README. `trigger-condition`: lands ATOMICALLY with/before WS7 Phase 3 (the `.agent/state/` untrack) —
-  the untrack ships an invisible broken state without it. `status`: DUE.
-  Substance: untracking comms state crystallises a repo-tier (shared by every clone: memory/docs/ADR/PDR/
-  patterns/plans) vs instance-tier (one checkout's comms/claims/heartbeats/channels) boundary; the untrack
-  removes the accidental git safety net, so comms-log knowledge curation into repo-tier homes becomes a
-  standing lifecycle obligation, not best-effort (PDR-066 capture surface; rides PDR-014 / PDR-080 / the
-  curator lane PDR-081).
-  HARD GATE: the affected-reader surfaces (PDR-094, ADR-199, session-handoff SKILL, consolidate-docs SKILL,
-  Phase-3 README) MUST land in one tranche — a protocol change recorded only in the decision record but
-  absent from the operational surfaces agents actually read is an invisible half-way broken state (third
-  instance of the pattern this session).
-  Loss-risk flagged: the full deep WS7 definition-of-done lives only in the machine-local execution
-  contract `~/.claude/plans/ah-very-good-in-quizzical-whisper.md` (boundary principle, provenance scope =
-  9 cited / 6 uncovered live events, the comms-archive-not-yet-gitignored sequencing gap, corpus
-  composition 5290 = 2464 heartbeat / 346 research-precious / ~2480 coordination, the deep DoD). That
-  substance MUST be routed into the repo companion plan (`comms-corpus-research-and-rotation-strategy`)
-  before the instance ends, else it is instance-tier-orphaned — a live worked instance of the boundary
-  principle above.
 
 - **PDR-051 reduced-implementation reconciliation review.**
   `captured-date`: 2026-06-14. `source-surface`: 2026-06-14 skills audit (this session); owner direction to

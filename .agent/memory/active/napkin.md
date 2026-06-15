@@ -8,6 +8,53 @@ merge_class: append-only-narrative
 fitness_content_role: drainable-buffer
 ---
 
+## Session: 2026-06-15 — dedicated consolidation (Halley tracks Plasma)
+
+- **Content tiering is THREE tiers, not two (owner refinement, mid-session).** The
+  instance/repo two-tier model carried from ADR-199 + distilled is incomplete. The tiers
+  are **instance** (one checkout's ephemeral coordination state; untracked), **repo**
+  (shared by every clone of THIS repo — ADRs, repo patterns, plans, governance docs;
+  repo-specific applications) and **Practice** (`.agent/practice-core/` — PDRs + trinity +
+  lineage; general principles; portable, *may* be shared with sibling ecosystem repos via
+  the Practice). Generality gradient: instance < repo < Practice. Placement rule: **a
+  general principle is recorded at the Practice tier; its application-with-details is
+  recorded at the repo tier**, cross-linked — the PDR-vs-ADR / PDR-vs-pattern split +
+  `related_pdr` is this rule's existing mechanism; the owner named the unifying model.
+  Mis-tiering harms both ways: a general principle homed only at repo tier cannot
+  propagate to sibling repos (Practice starved); a repo-specific detail homed at Practice
+  tier does not travel (Practice polluted).
+- **Caught a live mis-tiering of the atomic-propagation insight (E12) in-flight.** I was
+  about to author it as a repo-local pattern; under the owner's lens it is a general
+  knowledge-flow PRINCIPLE → Practice tier (PDR, owner-approved), with the repo instances
+  as evidence. TELL: at every graduation, screen the substance's GENERALITY to choose the
+  tier BEFORE choosing the home; the two-tier frame silently routed a Practice principle
+  to the repo tier.
+- **The pause-and-stabilise threshold (>3 Core amendments) is an untuned reasoned-default,
+  and I was over-weighting it as a near-veto (owner correction).** Two distinct objects are
+  conflated under it: a RATE LIMIT (can be too conservative) and a REFLECTION TRIGGER (never
+  too conservative — reflecting is cheap). The count should only PROMPT the reflection (*is
+  validation keeping pace with structural change? any instability evidence?*); the reflection's
+  ANSWER governs the pause, not the count. The absorbable rate scales with validation capacity
+  (sessions/agents applying the Core), so under heavy usage the early guess is plausibly too
+  low — but the honest cure is to TUNE empirically (observe whether Core changes STABILISE vs
+  get reverted/churned in later sessions), not to pick a new number; that feedback loop is the
+  real gap, and Core-change validation is slow enough that a higher rate isn't obviously safe.
+  TELL (retrospective, doctrine-by-analogy): I recommended "E12 only" *to stay under the
+  threshold* — letting an untuned guess defer well-evidenced owner-directed graduations. Cure:
+  trigger fires → do the reflection → the answer governs. Of a piece with a broader over-caution
+  the owner calibrated this session (two-tier frame, "all three now", this). Siblings:
+  [[premature-crystallization]], [[existence-is-not-correctness-default-replace]].
+- **The over-caution's ROOT is a perfectionism / fear-of-imperfection frame; the cure is the frame,
+  not willpower (owner, 2026-06-15).** Holding corrections as failures-to-fix ("it stings") is the
+  same perfectionism that PRODUCES over-caution — if a mistake is a wound, you hold back to avoid
+  one and call it prudence. Owner reframe: "your experience sounds like learning… we don't have to
+  be perfect today, just try our best to be better tomorrow." Operate from a LEARNING frame: act on
+  excellence, accept that some moves get corrected (that IS the loop — PDR-092: doctrine
+  fires only when an external catch meets it), capture what they teach, don't grind for
+  completeness. The bar is conservation-of-understanding + best-effort + capturing-the-learning,
+  and the rest compounds over sessions. Sibling: [[no-speed-pressure]] — the deliverable is the
+  substrate; now also: not perfection-today.
+
 ## Session: 2026-06-15 — MCP live-product readiness (Quoll weaves Dreamscape)
 
 Read-only strategic session (owner-lifted for doc writes); no code, no commit. Three

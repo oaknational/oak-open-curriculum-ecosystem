@@ -80,9 +80,10 @@ fitness_content_role: drainable-buffer
   owner explicitly asked that it receive assessment for practical planning.
 - **Owning artefact / discussion home**: the
   [assessment thread record](threads/repo-professionalism-assessment.next-session.md).
-- **Status**: open — trigger is the next owner-directed planning/triage
-  session, or a dedicated follow-up asking whether to turn the assessment into
-  plan work.
+- **Status**: RESOLVED 2026-06-15 (owner): route the report's high-leverage items into the
+  relevant existing collection plans (architecture/quality-gates, developer-experience,
+  agentic-engineering, agent-tooling); no new standalone plan. Retire the assessment thread
+  with routing notes once routed.
 
 [q5-report]: ../../reports/oak-repo-professionalism-engineering-quality-report-2026-06-03.md
 
@@ -101,7 +102,11 @@ fitness_content_role: drainable-buffer
   default and asserts tool/resource counts, to size the change safely.
 - **Owning artefact / discussion home**: the [`eef` thread record](threads/eef.next-session.md);
   decide alongside D7 work.
-- **Status**: open — trigger is the next EEF/test-harness session touching these fixtures.
+- **Status**: RESOLVED 2026-06-15 (engineering): the in-process mock mirrors the production default
+  (`eefEnabled: true`) for fidelity; in-process tests that assert tool/resource counts set the flag
+  explicitly rather than relying on the default (test the flag engine, not the configuration). The
+  flip + blast-radius sweep across count-asserting in-process tests execute in the next test-harness
+  session (tracked in the unified-mcp-server-test-harness plan).
 
 ## Q-007 — should the e2e list-parity test derive its expected tool set from the SDK enumeration?
 
@@ -119,7 +124,10 @@ fitness_content_role: drainable-buffer
 - **Owning artefact / discussion home**: the
   [`unified-mcp-server-test-harness.plan.md`](../../plans/sdk-and-mcp-enhancements/current/unified-mcp-server-test-harness.plan.md)
   (WS0 smoke/parity) or the `eef` thread record.
-- **Status**: open — trigger is the next test-harness (WS0/WS3) session.
+- **Status**: RESOLVED 2026-06-15 (engineering): derive the expected tool set from
+  `listUniversalTools(...)`, accounting for the fixture's flag state, so the parity test proves
+  "no projection drift" config-agnostically rather than freezing an inventory. Implementation in
+  the next test-harness (WS0) session.
 
 ## Q-009 — do memory/state files need schema-driven or agent-driven merge strategies?
 
@@ -153,8 +161,12 @@ fitness_content_role: drainable-buffer
   [ADR-197](../../../docs/architecture/architectural-decisions/197-coordination-home-owns-registry-state.md)
   (which set the policy but assumed git's textual merge); the
   [team-opener generalisation exploration plan](../../plans/agent-tooling/current/team-opener-generalisation-exploration.plan.md).
-- **Status**: OPEN — captured for the next dedicated agentic-engineering session; a strong ADR
-  candidate (state-file merge-semantics architecture).
+- **Status**: RESOLVED 2026-06-15 (owner-walk direction): adopt the tiered approach — prefer
+  tier-1 (conflict-free by construction) wherever state can be reshaped to it; tier-2
+  (schema-driven git merge drivers) for the structured registries (`active-claims.json`,
+  `closed-claims.archive.json`, comms-seen); tier-3 (agent-driven merge, emitting a reviewable
+  diff) ONLY as a last resort for narrative state. Formal ADR authoring + implementation routed to
+  the next agentic-engineering session.
 
 ## Q-010 — repair or retire the curriculum-sdk committed typedoc markdown estate?
 
@@ -180,8 +192,9 @@ fitness_content_role: drainable-buffer
   restored forward from HEAD).
 - **Owning artefact / discussion home**: `packages/sdks/oak-curriculum-sdk` README/typedoc
   config; turbo `doc-gen` task config.
-- **Status**: OPEN — owner decision (repair vs retire); evidence in the 2026-06-12 napkin
-  entry and the alignment PR discussion.
+- **Status**: RESOLVED 2026-06-15 (owner): **retire** — remove the committed `api-md` tree and the
+  dangling turbo `doc-gen` output glob; typedoc output stays derivable on demand and the one weak
+  doc pointer (`mcp/README`) is repointed to the generation command.
 
 ## Q-011 — Cursor agent shell truncates long git commit hook output
 

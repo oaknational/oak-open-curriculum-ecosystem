@@ -238,6 +238,36 @@ repo's learning loop runs locally, producing learnings shaped by local context. 
 returns to its origin via the Practice Box, it may carry patterns that the origin's own loop
 hadn't surfaced — different work, different mistakes, different discoveries.
 
+### Content Tiers and the Placement Rule
+
+Knowledge in a Practice-bearing repo sits at one of three tiers, ordered by
+generality:
+
+- **Instance tier** — one running checkout's ephemeral coordination state (comms
+  events, claims, heartbeats, session channels). Local to a single clone, and
+  untracked-by-design where a host adopts that boundary (PDR-094 Invariant 6).
+  Its durable substance must be curated UP before the instance ends, or it is lost.
+- **Repo tier** — knowledge shared by every clone of _this_ repo: host
+  architectural decisions, repo-grounded pattern instances, plans, governance
+  docs, READMEs, code and TSDoc. Specific to this repo's product and context; its
+  adopter is the next contributor in this repo (PDR-019).
+- **Practice tier** — `.agent/practice-core/` (PDRs, the trinity, lineage).
+  General principles about how work is done. Portable: it _may_ be shared with
+  sibling repos across the ecosystem via [plasmid exchange](#plasmid-exchange),
+  and is by construction more generally applicable than repo knowledge; its
+  adopter is the next Practice-bearing repo that hydrates the Core (PDR-019).
+
+**The placement rule.** A general principle is recorded at the Practice tier; an
+application of that principle, with its repo-specific detail, is recorded at the
+repo tier — cross-linked, never flattened into one. This is why a portable
+governance decision is a PDR while its concrete repo realisation is a host
+decision record or a pattern instance (`related_pdr:`), and why one insight can
+legitimately span tiers (PDR-007, PDR-019). Mis-tiering cuts both ways: a general
+principle recorded only at the repo tier cannot propagate to sibling repos (the
+Practice is starved); a repo-specific detail recorded at the Practice tier does
+not travel (the Practice is polluted). Screen a graduation's generality first,
+then choose the home.
+
 ### Artefact Locations
 
 - **Napkin** — `.agent/memory/active/napkin.md` — written continuously during every session

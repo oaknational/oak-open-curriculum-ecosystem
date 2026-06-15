@@ -16,11 +16,7 @@ fitness_rationale: >-
 
 ## Shared-checkout and tooling gotchas (2026-06-09→12 window)
 
-Re-derive/commit-window/push-proof/checker-control families graduated to patterns
-(`re-derive-session-persistent-state`, `wrapped-exit-codes-false-green`,
-`pr-monitor-to-merge`, `bounded-structured-output-for-workflows`,
-`fan-out-verify-gatekeeper-execute`, `prove-the-checker-with-a-negative-control`).
-Still maturing here:
+Operational gotchas still accumulating evidence:
 
 - **Byte-compare against `origin/main` before classifying generated-file drift** — a
   long-lived branch lagging main reads as "new upstream drift" until
@@ -159,28 +155,6 @@ to the real path.
   exported `unknownValueOptions(options, spec)` over the real parser + command spec, with NO IO. (The
   lesson originally shipped an IO temp-registry integration test as the cure; that was removed per
   testing-strategy and re-expressed IO-free 2026-06-13 — see `cli-dispatch-allowlist.unit.test.ts`.)
-
-- **Repo tier vs instance tier — instance-local knowledge must be curated UP before the instance ends**
-  (source: 2026-06-14 comms-corpus WS7, owner). A git repo is shared by every clone (the repo tier:
-  memory, docs, ADRs/PDRs, patterns, plans); a running collaboration instance accretes operational state
-  (comms events, claims, heartbeats, channels — the instance tier) local to one checkout. Comms logs are
-  a real knowledge-capture surface (PDR-066), so once `.agent/state/` is untracked (WS7 Phase 3) any
-  insight left only in the comms log is ORPHANED — invisible to every other instance the moment the
-  instance ends or the event rotates to the gitignored archive. Committing comms state to git was an
-  accidental safety net; untracking removes it. So curating comms-log knowledge into repo-tier homes is
-  MANDATORY, not best-effort, wired into session-handoff + consolidate-docs + dedicated consolidation.
-  Generalises: any instance-tier capture surface needs its durable knowledge curated up before close.
-
-- **A protocol change must propagate ATOMICALLY to every surface its affected parties read — else an
-  invisible broken state** (source: 2026-06-14, owner; third instance of this pattern in one session).
-  Recording a changed obligation only in its decision record (PDR/ADR) is the trap: affected parties read
-  the OPERATIONAL surfaces (skills, rules, READMEs, resolver code), not the decision record. If the change
-  lands in doctrine but not those surfaces, every surface looks internally consistent while the system is
-  broken and nobody has visibility they are in a half-way state. Same shape as the schema relocation that
-  did not repoint its readers, the ArcAngel home-drift (doc + statusline scan still on experiments/ after
-  channels moved to rapid-comms/), and the wing-detection never told the n>=3 roster-accretion filename
-  convention. Cure: enumerate every affected-reader surface and land the change across all of them in one
-  tranche.
 
 - **In long, high-volume analytical/research work, self-monitor for NARROWING and
   OVER-CLAIMING, and adversarially verify your OWN synthesis** (source: 2026-06-15
