@@ -72,12 +72,16 @@ three claims above is a claim on a *different* axis, and they compose:
 **The gap is an empty quadrant.** The installed estate couples the axes: the
 PDR-044 innate scanner occupies *mechanical-fire + surface-detect +
 (block-or-soft-report)*; the PDR-029 advisory markdown-ritual and PDR-044 adaptive
-layer occupy *cognitive-detect + recall-or-consolidation-fire*. The one place
-cognitive content has been given a mechanical firing cadence is PDR-029 Class A.1
-(the plan-body-first-principles-check). Everywhere else, **mechanical-FIRING with
-cognitive-DETECTION at action time does not exist**. So the unresolved gap is one
-quadrant: **mechanical-firing + cognitive-detection + advisory-response, for
-semantic pathogens at action time** — the failure modes behind doctrine such as
+layer occupy *cognitive-detect + recall-or-consolidation-fire*. The closest
+installed approximation is PDR-029 Class A.1 (the plan-body-first-principles-check):
+it gives cognitive content a *defined firing moment* (shape-entry), but it fires by
+recall-gated markdown-ritual (an always-applied trigger the agent applies at the
+moment), not mechanically — there is no environment hook (`.agent/hooks/policy.json`)
+that fires it without agent recall. So **mechanical-FIRING with cognitive-DETECTION
+at action time does not exist anywhere** — the quadrant is fully empty, and A.1 is
+merely the closest the estate reaches. So the unresolved gap is one quadrant:
+**mechanical-firing + cognitive-detection + advisory-response, for semantic
+pathogens at action time** — the failure modes behind doctrine such as
 `verify-dont-trust`, `present-verdicts-not-menus`, `ground-convenient-claims`, and
 `validate-specialist-findings-before-acting`, none of which has a surface string a
 deterministic scanner can match.
@@ -145,13 +149,16 @@ advisory-nor-enforcing — or if the "apparent conflict dissolves" claim fails
 because two of the three source doctrines genuinely contradict on the *same* axis.
 The located gap is falsified if a counter-example shows mechanical-firing +
 cognitive-detection + advisory-response *already* installed at action time
-somewhere other than the single plan-body Class A.1 instance.
+anywhere (Class A.1 does not count — it is recall-fired at a defined moment, not
+mechanically fired).
 
 ## Cross-references
 
 - The mechanism lane: the action-time-structural-interrupt design-space plan
   (reconciliation home → now this PDR; mechanism exploration → closure-pressure)
   and its self-referential-trap success criterion (t6).
-- PDR-029 Class A.1 (plan-body-first-principles-check) — the lone installed proof
-  that cognitive content can be given a mechanical firing cadence; the existence
-  proof the design lane generalises from.
+- PDR-029 Class A.1 (plan-body-first-principles-check) — the closest installed
+  approximation: cognitive content bound to a *defined firing moment* (shape-entry)
+  via recall-gated ritual, not a mechanical fire. The existence proof that cognitive
+  detection can be bound to a defined action-moment at all; the design lane's task is
+  to give that binding a *mechanical* firing cadence.

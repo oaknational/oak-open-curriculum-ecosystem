@@ -44,21 +44,6 @@ reading `routed 2026-06-11` belong to the agent-tools implementation lane; items
 still reading `owner-gated` or `pending` below were confirmed at the walk as
 genuinely waiting on their named external event or trigger.
 
-## 2026-06-15 capture — Halley tracks Plasma (dedicated consolidation)
-
-- **Change-rate governor as a tuned reflection-trigger, not an untuned cap (PDR candidate).**
-  This session reframed consolidate-docs's `> 3 Core amendments` pause-and-stabilise count
-  (the repo-tier application) from a hard cap into an untuned reflection-trigger, tuned
-  empirically by observing whether Core changes stabilise vs revert in subsequent sessions. The
-  general PRINCIPLE — a self-modifying Practice's change-rate governor is a reflection-trigger
-  whose threshold is tuned by observed stabilisation, never a guessed fixed cap — is Practice-tier
-  (re-derived in any Practice-bearing repo) and has no portable home yet.
-  `[captured: 2026-06-15 | source: owner direction (the threshold is untuned under heavy
-  usage) and the consolidate-docs step-8 reframe this session | target: a PDR (change-rate
-  or self-modification governor doctrine), reconciled with ADR-131 §Self-Referential and
-  ADR-144 §Loop Health | trigger: second instance OR owner direction OR the next
-  Practice-governance pass | size: M | status: pending]`
-
 ## 2026-06-12 capture — Thyme wakes Canopy (dedicated consolidation; napkin-rotation routes)
 
 Routed during the 2026-06-12 napkin rotation. Each verified absent from this
