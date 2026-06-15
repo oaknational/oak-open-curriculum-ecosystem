@@ -8,6 +8,141 @@ merge_class: append-only-narrative
 fitness_content_role: drainable-buffer
 ---
 
+## Session: 2026-06-15 — statusline trailing separator + behavioural tests (Hearth hunts Obsidian)
+
+**Handoff for the committing agent — another agent commits & pushes (owner-directed).**
+
+- **Statusline work is GREEN and fixed** (was briefly RED mid-session; resolved).
+  The logo layout appends a trailing separator row; the branch renders bold blue.
+- **Fixed BUG 1 (branch not bold):** `BLUE = '\x1b[0;34m'`'s leading `0;` is
+  SGR-0 reset-all, so `${BOLD}${BLUE}` cancelled the bold. Cure: render the branch
+  colour-before-bold — `${BLUE}${BOLD}${branch}${RESET}${dirty}` — so the colour's
+  reset can't clear the bold; keeps the palette's uniform `0;`-prefixed convention.
+  Verified live: `\x1b[0;34m\x1b[1mdocs/planning-and-validation\x1b[0m`.
+- **Fixed BUG 2 (`RESET_BOLD = '\x1b[21m'`):** SGR 21 is double-underline in
+  ECMA-48 (bold-off is 22), and it sat after a full `${RESET}` so it was dead.
+  Deleted `RESET_BOLD` (and the unused `BLACK`) from `statusline-ansi.ts`.
+- **GOTCHA for next agent on statusline colours:** a colour constant that embeds
+  a reset (`0;XX`) cannot compose with an attribute like BOLD — the reset clears
+  the attribute. Either order colour-then-attribute, or make the colour pure
+  (`\x1b[34m`). Order matters in ANSI SGR composition.
+- **Made the branch tests behavioural:** dropped the `BOLD_BLUE` byte-pinning;
+  branch tests now assert content + placement + clean/dirty contrast. Kept the
+  ctx green/yellow/red threshold tests (colour-as-LOGIC is an effect worth
+  asserting; colour-as-style is not). Deleted the redundant exact-string
+  full-payload test (duplicated the behavioural separate-lines test).
+- **`statusline-ansi.ts` + `statusline-render.test.ts` converted to `\x1b` hex
+  escapes** (were literal ESC bytes — the control-byte hazard the napkin flags).
+  Runtime-identical; ASCII source; editable. `cat -v`/grep confirm 0 literal ESC.
+- **Sound parts (kept):** trailing separator `${DIM}${separator}${RESET}` — the
+  theme-robust default-foreground approach (terminal theme is NOT knowable from a
+  statusline; see the linked research doc). `LOGO_COLOUR = GREEN` with the
+  "should live with the logo asset" note is intended debt; keep it.
+- **Files this session touched:** statusline code/tests
+  (`statusline-render.ts`, `statusline-ansi.ts`, both render test files — owner +
+  me), now GREEN; PLUS continuity edits I made: linked
+  [`statusline-inputs-research.md`](../../research/statusline-inputs-research.md)
+  in both `current/` statusline plans
+  (`statusline-logo-modularisation`, `session-and-team-state-statusline-icons`)
+  and recorded that grounding requirement in the `statusline-enhancements` thread
+  record (owner direction: every statusline plan links the research doc; the
+  terminal theme is not knowable, named ANSI colours are theme-mapped —
+  `\x1b[0;30m` "black" renders aubergine). `dist/` is gitignored.
+- **Gate status:** my slice is GREEN — canonical `pnpm test` 43/43 (agent-tools
+  1192), `pnpm type-check` 43/43, `pnpm lint` 43/43 (0 errors; 213 pre-existing
+  warn-level `no-throw` warnings, none mine), `pnpm build` ok, live render
+  confirmed. Full `pnpm check` not run — the tree carries unrelated other-lane
+  work; the pre-push gate is the committing agent's.
+- **COMMITTING AGENT — triage the tree, don't assume one change.** Dirty/staged
+  files NOT from this session and NOT verified by me: `PDR-078`, `PDR-082`,
+  `collaboration-is-value-contingent.md`, `liveness-heartbeat-cron.md`,
+  `verify-dont-trust.md`, `start-right-team/SKILL-CANONICAL.md`, `ADR-144`,
+  `open-questions.md`, `repo-continuity.md`, the `agentic-engineering-enhancements`
+  & `repo-professionalism-assessment` thread records, `skills-classification-taxonomy.plan.md`,
+  `unified-mcp-server-test-harness.plan.md`, and the new
+  `retire-curriculum-sdk-api-md.plan.md`. Stage by explicit pathspec.
+
+**Corrections this session (both now in auto-memory):** (1) I dismissed a red
+root `pnpm vitest` run as a "harness artifact" — it was my non-canonical command;
+validate via root Turbo gates and trace every red, never blame the harness
+(`feedback_canonical_root_gates_never_blame_harness`). (2) I pinned the owner's
+chosen separator glyph (`---`/`______`) in test assertions twice — tests must
+inject a probe and prove the mechanism, never assert an owner-tunable value
+(`feedback_never_pin_owner_tunable_values_in_tests`). Common generator:
+optimising for the fastest mechanical path to "looks green" over behaviour/value.
+
+## Session: 2026-06-15 — dedicated consolidation IN-FLIGHT (Europa binds Perihelion)
+
+Goal-gated dedicated consolidation (drain every buffer to zero, conserve insight).
+Owner transferred FULL commit ownership of the whole tree mid-session (statusline
+lane included); the earlier foreign-WIP block dissolved.
+
+**HANDOFF (owner-directed 2026-06-15): this session is deep in context; a fresh
+session continues the bulk register drain + rotation. Goal-gated (Stop hook) —
+the goal (all buffers empty, zero pending-graduations, zero open-questions)
+persists; resume against THIS baton.**
+
+- **COMMITTED (7 commits on `docs/planning-and-validation`):** batch 1 —
+  open-questions → zero (`9e8c943e5`); batches 2+3 — three Core graduations
+  (`2ee18d58c`); statusline feature (`0d15d7bdd`) and docs (`062c1e092`,
+  Hearth lane, owner-directed full-tree ownership); batch 4 — change-rate PDR-099
+  and the PDR-098 A.1 correction (`0d456aeca`); batch 5 — wrapped-exit-codes clause
+  (`b3bf2f83f`). All Core PDRs reviewed (docs-adr-expert and assumptions-expert) and
+  corrected.
+  - open-questions (register EMPTY): Q-006/Q-007 → test-harness plan; Q-009 and
+    Q-002 → agentic-engineering thread lanes C/D; Q-005 → professionalism thread
+    RETIRED and de-indexed; Q-004 → taxonomy plan; Q-011 → verify-dont-trust;
+    Q-012 → ADR-144;
+    Q-010 → new focused future plan (api-md retire — NOT a clean 3-step; live
+    generator code, do not half-execute).
+  - Core graduations DONE: heartbeat consumer-absent exemption → **PDR-078 §4**;
+    **PDR-082 → Adopted** (honest-residual: §Falsifiability 2 and 3 stay
+    first-instance — DO NOT re-promote without the residual note);
+    doctrine-traction reconciliation → **PDR-098** (mechanism deliberately OPEN,
+    its lane the action-time design-space plan — do NOT mint a mechanism; A.1 is
+    recall-fired ritual, NOT mechanical); change-rate governor → **PDR-099**
+    (reflection-trigger; item 3 empirical claim held falsifiable, not ratified);
+    wrapped-exit-codes clause → verify-dont-trust. All these register items drained.
+- **STILL TO DRAIN — pending-graduations.md (~1960 lines, ~68 status-marked
+  items):** the bulk. Sections (current line refs approximate — re-grep headers):
+  2026-06-12/06-11/06-08/06-07/06-05/06-04/06-03/06-02 captures; "Owner-Gated
+  Pending Graduations"; "Legacy Backlog Gates" (~20 items); "Team Autonomy Gates"
+  (Director P1–P6 + first-out-closeout + ratification-checklist); "Napkin Tail
+  Gates"; and standalone items (reviewer-brief-scope, precedent-hunting, licensing
+  guardrail, graph-KG-sources, generated-doc-drift gate, PDR-051 review, step-6e
+  loss-scan, untracked-state-readers, seam-mapping template, mcp-expert review).
+  Disposition each first-hand: graduate (ripe), route (agent-tools items → confirm
+  an existing agent-tooling plan carries the substance, then remove; create/extend
+  a plan if none), or withdraw (verify the lesson's home FIRST — Tempestuous: 15/18
+  "covered" claims were FALSE). Then Phase 3 (napkin + distilled rotation — archive
+  the processed window byte-identical, graduate the lessons in THIS block), Phase 4
+  (re-read residual fitness signals — home/decompose/reflow-newlines-only/report;
+  NEVER trim), Phase 5 (rerun `pnpm practice:fitness:informational`, verify, close).
+- **CAUTIONS for the continuing session:** curation judgement stays first-hand
+  (sub-agents only for pure location; even "is it covered" needs adversarial
+  first-hand check). Commit by explicit pathspec. The owner holds full commit
+  ownership-transfer for the tree this session. The plan file:
+  `~/.claude/plans/nested-wiggling-lollipop.md`.
+
+- **LESSON — "structural fitness repairs" is an inversion trap even when qualified
+  (owner caught it in my own plan's vocabulary).** A phase/task labelled "repair the
+  [fitness] signal" is what a context-pressured agent acts on, reaching for the
+  cheapest lever (trim/reword-shorter) — the qualifier "don't trim" doesn't save it.
+  Reframe to "what does the signal POINT AT?": un-homed substance → home it; a real
+  seam → decompose along the boundary; pure width on homed content → reflow
+  (newlines only); else report-not-chase. New facet of [[fluency-is-a-failure-vector]]
+  and the napkin's "limit-label is the highest-risk inversion moment" — the trap can
+  be self-authored into a plan's own framing.
+- **LESSON — "Adopted" does not mean every falsifiability assertion is validated.**
+  Promoting a multi-assertion PDR to Adopted on evidence for ONE assertion over-claims
+  the others (assumptions-expert caught PDR-082). Cure: when promoting, state which
+  assertion the evidence supports and which remain first-instance/falsifiable; "adopt
+  with it" smuggles untested claims through. Sibling of [[ground-convenient-claims]].
+- **LESSON — the "parked" hook fires on the literal token even when the sentence
+  asserts the opposite.** Cure is conceptual (name the disposition), and here also
+  just state the positive ("every question reached a disposition") — confirms the
+  Quoll lesson.
+
 ## Session: 2026-06-15 — fitness-validator worktree exclusion (Peregrine turns Airstream)
 
 - **The fitness validators walked the raw filesystem and ignored `.gitignore`.** `practice-fitness`

@@ -20,6 +20,24 @@ surface.
 
 ## Current State
 
+- **DEDICATED CONSOLIDATION IN PROGRESS — handed off mid-session (2026-06-15,
+  Europa binds Perihelion).** Owner-gated dedicated knowledge-curation goal (Stop
+  hook): all drainable buffers empty, zero pending-graduations, zero open-questions,
+  insight conserved. **Landed (7 commits on `docs/planning-and-validation`,
+  `9e8c943e5`→`b3bf2f83f`):** open-questions register drained to EMPTY (all 9
+  homed); four owner-approved Core PDRs graduated + reviewed (PDR-078 §4 heartbeat
+  consumer-absent exemption; PDR-082 → Adopted; PDR-098 doctrine-traction
+  reconciliation; PDR-099 change-rate governor) + the wrapped-exit-codes
+  verify-dont-trust clause; the statusline lane (Hearth) feature + docs committed
+  under owner-directed full-tree ownership. **Remaining (next session):** the bulk
+  of `pending-graduations.md` (~68 items — agent-tools routing, ~30 owner-gated
+  watches, Team-Autonomy Director primitives, standalone items), then napkin +
+  distilled rotation, then a residual-fitness re-read and closeout. **Pickup
+  surface = the `napkin.md` "dedicated consolidation IN-FLIGHT (Europa binds
+  Perihelion)" baton** (committed homes, load-bearing cautions, the
+  disposition method). Plan: `~/.claude/plans/nested-wiggling-lollipop.md`.
+  Curation judgement first-hand; verify a lesson's home before any withdrawal
+  (Tempestuous: 15/18 "covered" claims were false).
 - **FITNESS-VALIDATOR SCOPING + DISPOSITION-CATEGORY GROUPING — landing on
   `docs/planning-and-validation` (2026-06-15, Peregrine turns Airstream).** The
   practice-fitness and fitness-vocabulary walkers now exclude foreign git
