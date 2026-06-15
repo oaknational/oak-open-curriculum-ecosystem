@@ -667,31 +667,6 @@ Total live owner-gated items: 56.
   The remaining decision is whether to author that ADR/rule now, keep a
   retrospective watch, or withdraw because the plan and implementation are
   enough.
-- 2026-05-10; **evaluateParityChecks focused unit coverage**.
-  `[captured: 2026-05-10 | source: commands-retirement-reviewer-follow-up | target:
-  test-cycle:agent-tools/src/core/health-probe-parity.ts | trigger: owner-direction-or-next-touch |
-  size: M | status: owner-gated]`
-  `evaluateParityChecks` still lacks focused unit coverage for reviewer adapter
-  and registration parity; it is only exercised through the composed
-  health-probe path. The remaining decision is whether to schedule the test
-  cycle, keep as a next-touch watch, or withdraw because integration coverage is
-  sufficient.
-- 2026-05-10; **getSkillPermissionIssues live skill-dir test path**.
-  `[captured: 2026-05-10 | source: commands-retirement-reviewer-follow-up | target:
-  code-cleanup+test-cycle:validate-portability-helpers | trigger: owner-direction-or-next-touch |
-  size: S | status: owner-gated]`
-  `getSkillPermissionIssues` live calls use `claudeCommandFiles: []` plus
-  `claudeSkillDirs`, while existing tests still cover command-file inputs. The
-  remaining decision is whether to schedule the helper cleanup/test cycle, keep
-  as a next-touch watch, or withdraw.
-- 2026-05-10; **Pre-commit skills/portability gate coverage**.
-  `[captured: 2026-05-10 | source: commands-retirement-config-review | target:
-  pre-commit-hook-coverage-or-adr-121-amendment | trigger:
-  owner-direction-or-adapter-drift-past-pre-commit | size: S | status: owner-gated]`
-  `.husky/pre-commit` still does not run `pnpm portability:check` or
-  `pnpm skills:check`; pre-push and full `pnpm check` cover adjacent routes.
-  The remaining decision is whether to add pre-commit coverage, keep this as
-  pre-push/full-gate discipline, or withdraw.
 - 2026-05-10; **Generated insight artefact decay/honesty discipline**.
   `[captured: 2026-05-10 | source: insight-report-2026-05-10 | target:
   pattern:generated-insight-artefact-discipline-or-rule:no-moving-targets-amendment | trigger:
@@ -796,21 +771,6 @@ Total live owner-gated items: 56.
   parser/rendering surfaces still treat `sync` / `urgency` as ADR-planned
   work rather than supported event protocol. Keep this residual live until
   the schema, parser, renderer, authoring commands, and activation notes land.
-- 2026-05-21; **Two-participant invariant write-side validator (rule candidate)**.
-  `[captured: 2026-05-21 | source: owner-direction+agent-tools-cli-landing+honest-scope-flag |
-  target: rule:comms-write-refuses-self-addressed | trigger: owner-direction | size: S | status:
-  owner-gated]`
-  Owner direction 2026-05-21: *private messages must have at least two
-  participants*. Today the `classifyEventForAgent` classifier handles
-  the read-side correctly (a `directed`-kind event from `self.to.self`
-  passes self-exclusion before to-match runs because the author is
-  self). The write-side does NOT currently refuse a narrative event
-  whose `addressed_to === author.agent_name`, nor a directed event
-  whose `from === to`. The structural cure is a write-side validator
-  in `agent-tools/src/collaboration-state/comms-messages.ts` (and
-  wherever narrative events are constructed) that refuses self-only
-  addressing at write time. Trigger: owner-direction to land the
-  validator. Size S — single validator function plus unit tests.
 - 2026-05-13; **Coordinator role-label ontology residual**
   `[captured: 2026-05-13 | source: napkin+napkin-archive+historical-synthesis | target:
   pdr:pressure-to-role-mapping-protocol-or-persistent-role-labels | trigger:
@@ -850,35 +810,6 @@ Total live owner-gated items: 56.
   protocol after the collaboration hardening tail has another validation pass,
   so the PDR/ADR layer carries the complete three-direction commit-boundary
   model without hiding the in-session promotions already made.
-- 2026-05-12; **Collaboration tooling operator UX backlog**
-  (Volcanic Charring Furnace distilled-stage processing of
-  `napkin-2026-05-12b.md` learning).
-  `[captured: 2026-05-12 | source: distilled.md+napkin-archive/napkin-2026-05-12b.md | target:
-  plan:cost-of-collaboration-p5-p8 | trigger: plan-execution-gated | size: L | status: owner-gated]`
-  Operator friction from the P5/P8 collaboration-tooling work belongs in the
-  implementation backlog rather than staying as durable distilled prose. The
-  candidate bundle: every collaboration-state verb that requires `--active`
-  must advertise it or safely default to canonical paths; directed-message
-  targeting needs discoverable presence from fresh claims and recent comms;
-  shared-log mentions must either become inbox-visible or be replaced by
-  directed messages; `comms send`, `direct`, and `append` need
-  `--body-file`/`--subject-file` for long content (second-instance evidence
-  2026-05-21 Celestial Glimmering Moon `46d23a`: ~3300-char `--body`
-  triggered `[ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL] Command "agent-tools:
-collaboration-state" not found` despite the script being present and
-  working before/after on short bodies; root cause is shell argv corruption
-  from auto-escaped `'"'"'` apostrophe sequences in long directly-quoted
-  multi-line `--body` values; CLI never reached; CLI's own
-  fail-fast-with-helpful-error discipline confirmed sound on
-  missing-required-option test; `--body-file` would eliminate this entire
-  failure class — DELIVERED: verified 2026-06-11, `send`/`direct`/`append`
-  all accept `--body-file`); agents need a
-  protocol-position command reporting current intent, phase, and next action;
-  missing `--seen-file` should mean an empty seen set; built-CLI smoke must
-  cover help paths and real read/write paths; missing or stale built output
-  should produce an operator message, not a Node stack. Trigger: drain through
-  the cost-of-collaboration P5/P8 implementation lane or split into separate
-  tool tickets if the lane narrows.
 - 2026-05-12; **Skill and documentation surface audit follow-ups**
   (Volcanic Charring Furnace distilled-stage processing of
   `napkin-2026-05-12b.md` learning).

@@ -1461,6 +1461,84 @@ below is a cross-reference index, not a second source of truth.
 - **Status**: open.
 - **Owner direction status**: standing.
 
+### F-52 — `evaluateParityChecks` lacks focused unit coverage
+
+- **Source**: `pending-graduations.md` Legacy Backlog (2026-05-10
+  commands-retirement reviewer follow-up). Migrated 2026-06-15.
+- **Surface**: `agent-tools/src/core/health-probe-parity.ts`.
+- **Observed**: `evaluateParityChecks` is only exercised through the composed
+  health-probe path; no focused unit coverage for reviewer-adapter and
+  registration parity.
+- **Expected**: focused unit tests over the parity evaluator at a pure seam.
+- **Candidate cure**: add a unit test cycle for `evaluateParityChecks`.
+- **Target surface**: `agent-tools` test suite.
+- **Status**: open.
+- **Owner direction status**: standing.
+
+### F-53 — `getSkillPermissionIssues` live skill-dir test path uncovered
+
+- **Source**: `pending-graduations.md` Legacy Backlog (2026-05-10
+  commands-retirement reviewer follow-up). Migrated 2026-06-15.
+- **Surface**: `validate-portability-helpers` / `getSkillPermissionIssues`.
+- **Observed**: live calls use `claudeCommandFiles: []` plus `claudeSkillDirs`,
+  while existing tests still cover only command-file inputs.
+- **Expected**: tests cover the live skill-dir path.
+- **Candidate cure**: helper cleanup + test cycle for the skill-dir path.
+- **Target surface**: `agent-tools` portability helpers + tests.
+- **Status**: open.
+- **Owner direction status**: standing.
+
+### F-54 — Pre-commit hook omits `portability:check` / `skills:check`
+
+- **Source**: `pending-graduations.md` Legacy Backlog (2026-05-10
+  commands-retirement config review). Migrated 2026-06-15.
+- **Surface**: `.husky/pre-commit` vs ADR-121 coverage matrix.
+- **Observed**: `.husky/pre-commit` does not run `pnpm portability:check` or
+  `pnpm skills:check`; pre-push and full `pnpm check` cover adjacent routes, so
+  adapter/portability drift can pass the commit gate.
+- **Expected**: the commit gate covers portability/skills drift, or ADR-121
+  documents the deliberate omission.
+- **Candidate cure**: add the two checks to pre-commit, or an ADR-121 amendment
+  (pairs with F-40 coverage-matrix validator).
+- **Target surface**: `.husky/pre-commit` / ADR-121.
+- **Status**: open.
+- **Owner direction status**: standing.
+
+### F-55 — Comms write-side must refuse self-only addressing (two-participant invariant)
+
+- **Source**: `pending-graduations.md` Legacy Backlog (owner direction
+  2026-05-21: "private messages must have at least two participants"). Migrated
+  2026-06-15.
+- **Surface**: `agent-tools/src/collaboration-state/comms-messages.ts`.
+- **Observed**: the read-side `classifyEventForAgent` self-excludes correctly,
+  but the write-side does NOT refuse a narrative event whose
+  `addressed_to === author.agent_name`, nor a directed event whose `from === to`.
+- **Expected**: a write-side validator refuses self-only addressing at write
+  time.
+- **Candidate cure**: a write-side validator (single function plus unit tests).
+- **Target surface**: `agent-tools` comms message construction.
+- **Status**: open (owner-directed).
+- **Owner direction status**: standing.
+
+### F-56 — collaboration-state operator-UX backlog (residual)
+
+- **Source**: `pending-graduations.md` Legacy Backlog (2026-05-12 Volcanic
+  distilled-stage; cost-of-collaboration P5/P8). Migrated 2026-06-15.
+- **Surface**: collaboration-state CLI operator ergonomics.
+- **Observed**: residual UX gaps beyond those already captured — a
+  protocol-position command (report current intent/phase/next action); built-CLI
+  smoke must cover help paths and real read/write paths; a missing `--seen-file`
+  should mean an empty seen set (not an error); directed-message targeting needs
+  discoverable presence from fresh claims and recent comms. (Already covered
+  elsewhere: `--active` default = F-41; long-content `--body-file` DELIVERED
+  2026-06-11; pnpm-wrapper / flag UX = F-49.)
+- **Expected**: the operator can self-locate and the CLI defaults safely.
+- **Candidate cure**: route through the cost-of-collaboration P5/P8 lane or
+  split into tool tickets.
+- **Target surface**: agent-tools collaboration-state CLI.
+- **Status**: open.
+- **Owner direction status**: standing.
+
 ---
 
 ## Mitigated / Addressed Frictions
