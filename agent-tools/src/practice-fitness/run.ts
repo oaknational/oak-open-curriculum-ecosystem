@@ -12,10 +12,10 @@ import {
 import {
   formatFitnessResponseDiscipline,
   formatFitnessInventory,
-  formatFitnessResult,
   formatSummary,
   summariseResults,
 } from './format.js';
+import { formatFitnessResultsByCategory } from './categories.js';
 import { discoverFitnessFiles } from './paths.js';
 
 interface PracticeFitnessIo {
@@ -44,10 +44,7 @@ async function readFitnessResults(
 }
 
 function writeFileResults(io: PracticeFitnessIo, results: readonly FitnessResult[]): void {
-  for (const result of results) {
-    io.log(formatFitnessResult(result));
-    io.log();
-  }
+  io.log(formatFitnessResultsByCategory(results));
 }
 
 function writeSummary(

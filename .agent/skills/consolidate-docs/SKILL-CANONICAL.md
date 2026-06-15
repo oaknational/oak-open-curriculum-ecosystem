@@ -197,6 +197,11 @@ has a recorded disposition. It does not mean the content was moved into an
 archive, made smaller, split into another buffer, renamed, or hidden from the
 live surface.
 
+The fitness report surfaces these as its **Drainable buffers** disposition group
+(ADR-144 Amendment Log, 2026-06-15), the buffer-inventory starting point for this
+protocol. Buffer identity still follows the role, not the report's grouping — the
+next paragraph governs.
+
 Buffer identity follows the role, not the filename. Split, child, adjacent,
 dated, windowed, backlog, or so-called shard files still count as part of the
 same buffer inventory until their items are dispositioned. Do not exclude a file

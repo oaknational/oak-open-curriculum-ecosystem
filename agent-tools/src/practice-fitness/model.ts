@@ -11,7 +11,7 @@ export const FITNESS_MODE_INFORMATIONAL = 'informational';
  */
 export const CRITICAL_RATIO = 1.5;
 
-const ZONE_RANK = Object.freeze({
+export const ZONE_RANK = Object.freeze({
   healthy: 0,
   soft: 1,
   hard: 2,

@@ -219,3 +219,6 @@ Practice-Core portability ratifies both — see the bridge index
 | [PDR-092](PDR-092-mechanical-firing-moments-over-vigilance-clauses.md) | Mechanical Firing Moments Over Vigilance Clauses | Accepted |
 | [PDR-093](PDR-093-self-correcting-measurable-deliverables.md) | Self-Correcting Measurable Deliverables | Accepted |
 | [PDR-094](PDR-094-coordination-event-rotation-is-class-tiered-archive-not-delete.md) | Coordination-Event Rotation Is Class-Tiered and Archive-Not-Delete | Accepted |
+| [PDR-095](PDR-095-collaboration-is-multi-dimensional.md) | Collaboration Is Multi-Dimensional — A Coordination Registry Measures One Axis, Not the Whole | Accepted |
+| [PDR-096](PDR-096-atomic-propagation-across-reader-surfaces.md) | Atomic Propagation of a Change Across Its Reader Surfaces | Accepted |
+| [PDR-097](PDR-097-disposition-category-grouping-in-health-reports.md) | Disposition-Category Grouping in Substrate Health Reports | Accepted |

@@ -18,6 +18,9 @@ mode-dependent exit semantics. See §Token Threshold Extension below.
 **Amended**: 2026-05-25 — added the `fitness_content_role` frontmatter axis so
 empty-content readiness applies only to drainable buffers, not directives or
 other load-bearing reference surfaces. See §Content Role Extension below.
+**Amended**: 2026-06-15 — the informational and strict-hard reports group the
+per-file section by disposition category (orthogonal to the zone axis). See the
+Amendment Log entry below.
 **Related**: [ADR-131 (Self-Reinforcing Improvement Loop)](131-self-reinforcing-improvement-loop.md),
 [ADR-119 (Agentic Engineering Practice)](119-agentic-engineering-practice.md),
 [ADR-127 (Documentation as Foundational Infrastructure)](127-documentation-as-foundational-infrastructure.md),
@@ -308,3 +311,40 @@ tool interaction itself still invited reactive behaviour. The validator output
 must carry the response discipline at the point of observation: preserve
 substance first; do not delete, trim, compress, or weaken memory or Practice
 Core content to make the report greener; route pressure structurally.
+
+### 2026-06-15 — Disposition-category grouping in the informational report
+
+The informational and strict-hard reports group the per-file section by
+_disposition category_ — an axis orthogonal to the zone (healthy / soft / hard /
+critical). The category answers "what kind of surface is this, and what is the
+right response when it is over budget", which routes consolidation work more
+directly than the zone alone (drain a buffer, consolidate a directive, refine
+Practice Core).
+
+Categories, in display order — a mutability gradient, drain-freely first to
+change-with-most-care last:
+
+1. **Drainable buffers** — files declaring `fitness_content_role: drainable-buffer`.
+2. **Operational & continuity memory** — every other `.agent/**` surface not
+   matched below (today these are all `.agent/memory/**` continuity surfaces:
+   threads, curator passes, the continuity index, executive memory).
+3. **Project documentation** — any surface outside `.agent/**` (`docs/**`,
+   root-level docs).
+4. **Repo doctrine** — `.agent/directives/**`.
+5. **Practice Core** — `.agent/practice-core/**`.
+
+Derivation — a declared `drainable-buffer` role wins wherever the file lives;
+otherwise path decides, most-specific first: `.agent/practice-core/` → Practice
+Core, `.agent/directives/` → repo doctrine, any _other_ `.agent/` → operational
+memory (a catch-all, so a future fitness-tracked plan or report would land here
+until a more specific rule is added), and everything outside `.agent/` → project
+documentation. The live source of truth is
+`agent-tools/src/practice-fitness/categories.ts` — treat that module as
+authoritative if this summary ever drifts. The zone inventory is unchanged and
+remains the by-severity cross-cut; the grouping reorganises the per-file detail
+section only.
+
+This is the repository instantiation of the portable pattern in
+[PDR-097](../../../.agent/practice-core/decision-records/PDR-097-disposition-category-grouping-in-health-reports.md):
+the concrete labels and path rules above are repo-specific; the disposition-by-
+mutability-gradient principle and the role-plus-location derivation are not.
