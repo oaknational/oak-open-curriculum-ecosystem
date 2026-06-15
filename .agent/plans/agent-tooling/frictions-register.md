@@ -1187,6 +1187,66 @@ below is a cross-reference index, not a second source of truth.
 
 ---
 
+### F-38 — Literal control bytes in source need a mechanical pre-commit screen
+
+- **Source**: comms events `4fd66dc5` (Sylvan, 2026-06-10) + `f305c720`
+  (Prismatic, PR-180 cycle); `distilled.md` §Curation enforcement. Migrated from
+  `pending-graduations.md` 2026-06-15 (consolidation; FIRED second instance).
+- **Surface**: repo-validator / lint tier; any Edit-tool write of escape-bearing
+  source.
+- **Observed**: a literal `0x1F` separator fooled a reviewer AND a first-hand
+  verifier (invisible in diff/grep); an Edit-tool write later materialised an
+  escape sequence as a literal `0x1F` byte in a dedup key. Both caught only by
+  ad-hoc `cat -v` / `od` vigilance, which the cross-experience synthesis names as
+  the non-durable mechanism.
+- **Expected**: a mechanical gate rejects control bytes `< 0x20` (other than
+  tab/newline/CR) in tracked text/source files.
+- **Candidate cure**: a control-byte scan at the repo-validator or lint tier.
+- **Target surface**: `agent-tools/src/validators/` (or lint tier).
+- **Status**: open (behavioural cure live in `distilled.md`; structural gate
+  unbuilt).
+- **Owner direction status**: standing.
+
+### F-39 — Wrap-aware continuation-line lint for the MD004 list-marker trap
+
+- **Source**: pre-position `0f36d756` item 6 + Arboreal napkin entry + a
+  commit-gate instance; FIVE instances, four authors. Migrated from
+  `pending-graduations.md` 2026-06-15.
+- **Surface**: markdownlint MD004; authoring of ~100-char-wrapped prose.
+- **Observed**: reflowing wide prose wraps a continuation line so it starts with
+  a list-marker character (`+`, `-`, or `*` followed by a space), and MD004 reads
+  it as an inconsistent list marker. Reword cures are vigilance-shaped; the
+  commit-gate catch was mechanical.
+- **Expected**: wrap output cannot silently acquire markdown list semantics.
+- **Candidate cure**: an authoring-reflex clause (audit wrap output for
+  accidental markdown semantics) OR a wrap-aware continuation-line check at the
+  lint tier.
+- **Target surface**: markdownlint config / a wrap-aware lint check; authoring
+  guidance.
+- **Status**: open.
+- **Owner direction status**: standing.
+
+### F-40 — Coverage-matrix-vs-implementation drift validator (ADR-121)
+
+- **Source**: Lanternlit curation pass (ADR-121/hook drift fix `6f280f9f`).
+  Migrated from `pending-graduations.md` 2026-06-15 (was "routed 2026-06-11 —
+  agent-tools implementation lane"; no plan home found, so captured here).
+- **Surface**: ADR-121 §Coverage matrix vs `.husky/pre-commit` +
+  `.github/workflows/ci.yml`.
+- **Observed**: the pre-commit hook silently drifted from ADR-121's coverage
+  matrix (omitted knip + depcruise, added build). Doc-to-doc drift was reconciled
+  and the matrix single-sourced in ADR-121, but the matrix still duplicates the
+  *implementation*.
+- **Expected**: the documented coverage matrix is verified by the implementation
+  and fails loudly on the next drift.
+- **Candidate cure**: a repo-validator that parses ADR-121 §Coverage matrix and
+  asserts each surface column matches the live hook/CI command sets.
+- **Target surface**: `agent-tools/src/validators/coverage-matrix-matches-hooks`.
+- **Status**: open.
+- **Owner direction status**: standing.
+
+---
+
 ## Mitigated / Addressed Frictions
 
 - F-03 — addressed by current CLI validation ordering.

@@ -117,23 +117,6 @@ verified absent from this register before adding; every instance citation was
 re-verified first-hand against the comms corpus or the closing seat's events at
 capture time.
 
-- **Control-byte gate-check: literal control bytes in source need a mechanical
-  pre-commit screen.** Second instance FIRED: an Edit-tool write materialised an
-  escape sequence as a literal 0x1F byte in a dedup key, caught by `cat -v` +
-  `od` BEFORE commit (Prismatic, PR-180 cycle, evidence in event f305c720);
-  first instance was the invisible 0x1F that fooled a reviewer AND a first-hand
-  verifier in the same direction (Sylvan, event 4fd66dc5, 2026-06-10). The
-  behavioural doctrine is live in `distilled.md` §Curation enforcement ("write
-  escape sequences, never literal bytes; `od -c` is the tiebreaker"). The FIRED
-  candidate is the structural cure: a control-byte scan at the gate tier
-  (reject bytes < 0x20 other than tab/newline/CR in tracked text/source files)
-  — both instances were caught by ad-hoc vigilance, which the 2026-06-11
-  cross-experience synthesis names as the non-durable mechanism.
-  `[captured: 2026-06-11 | source: events 4fd66dc5 + f305c720; distilled
-  §Curation enforcement | target: repo-validator or lint-tier control-byte
-  check (agent-tools implementation lane) | trigger: FIRED 2026-06-11, second
-  instance | size: S | status: due — implementation routing sits in the
-  Director queue (pre-position 0f36d756 item 1)]`
 - **Collaboration-CLI relative-path hardening: resolve registry/comms paths
   against the coordination home or refuse relative paths loudly.** THREE
   instances in two days, three vectors, two failure shapes: (1) Scorched
@@ -194,24 +177,6 @@ moved here from napkin capture (or registered from the harvest inventory) so
 the substance survives napkin rotation with verified instance counts. Each
 verified absent from this register before adding.
 
-- **MD004 wrapped-list-marker trap needs a structural cure.** FOUR instances,
-  three authors, one day (2026-06-11): reflowing 100-char-width prose wraps a
-  continuation line so it starts with a list-marker character ("+ ", "- ",
-  "* "), and markdownlint MD004 reads it as an inconsistent list marker. The
-  fourth instance landed on THIS register entry's own sibling (the curation
-  seat's heartbeat-bundle item wrapped onto "+ stderr-captured"), caught by
-  the staged-markdownlint pre-commit gate minutes after the candidate was
-  first registered at three instances — a mechanical catch, where the three
-  earlier reword cures were vigilance-shaped. Candidate cures: an authoring
-  reflex clause (audit wrap output for accidental markdown semantics — the
-  Arboreal napkin lesson) or a wrap-aware check of continuation lines at the
-  lint tier.
-  `[captured: 2026-06-11 | source: pre-position 0f36d756 item 6 + Arboreal
-  napkin entry + this pass's commit-gate instance | target: authoring-reflex
-  clause or wrap-aware continuation-line lint | trigger: FIRED, fourth
-  instance (same-day, third author); FIFTH instance 2026-06-12 (fourth
-  author, caught by a targeted lint run during the dedicated consolidation)
-  | size: S | status: due]`
 - **Comms watcher drain-step needs a budget sized to the comms dir, or the
   dir needs hygiene.** The hardened watcher's 60s drain-step deadline died
   fail-loud on a >100-event comms dir at least FOUR times across two seats
@@ -444,23 +409,6 @@ generalisation):
   (reviewer-synthesis discipline) OR a new reviewer-synthesis pattern | trigger: second
   premise-cascade instance OR next reviewer-dispatch/synthesis doctrine pass OR owner direction |
   size: S | status: pending]`
-
-## 2026-06-05 capture — Lanternlit curation pass
-
-- **A coverage-matrix-vs-implementation drift validator (recur-proof cure for the
-  ADR-121 / pre-commit-hook drift).** This session found `.husky/pre-commit` had
-  silently drifted from ADR-121's coverage matrix (omitted knip + depcruise, added
-  build). The 2026-06-05 fixes — reconciling the hook + ADR + build-system.md, then
-  single-sourcing the matrix in ADR-121 — reduce *doc-to-doc* drift, but the matrix
-  still duplicates the *implementation* (the actual hook + `.github/workflows/ci.yml`
-  invocations). A repo-validator that parses ADR-121 §Coverage matrix and asserts each
-  surface column matches the live hook/CI command sets would make the documentation
-  verified-by-the-implementation (the metacognition structural-cure shape) and fail
-  loudly on the next drift instead of waiting for a curation pass to notice.
-  `[captured: 2026-06-05 | source: Lanternlit curation pass (ADR-121/hook drift fix 6f280f9f) |
-  target: repo-validator:coverage-matrix-matches-hooks (under agent-tools/src/validators/) |
-  trigger: owner direction 2026-06-11 | size: M | status: routed 2026-06-11 —
-  agent-tools implementation lane]`
 
 ## 2026-06-04 captures — Arboreal Sprouting Branch curation pass
 
