@@ -20,8 +20,8 @@ surface.
 
 ## Current State
 
-- **STRATEGY & PLAN-ESTATE HOLISTIC SURVEY — durable report LANDED, uncommitted
-  (2026-06-15, Baobab lifts Topsoil `3be248`).** Multi-wave whole-estate survey (413
+- **STRATEGY & PLAN-ESTATE HOLISTIC SURVEY — durable report LANDED (2026-06-15,
+  Baobab lifts Topsoil `3be248`).** Multi-wave whole-estate survey (413
   docs; 143+124 agents) + 6-agent adversarial verification → a vision→value→action
   holistic reading. Report + all raw/refined data:
   [`reports/plan-estate-survey-2026-06-15/`](../../reports/plan-estate-survey-2026-06-15/README.md).
@@ -32,8 +32,8 @@ surface.
   Step A (align on impact), report §15 +
   [thread record](threads/strategy-and-plan-estate-holistic-review.next-session.md).
   Research in progress; next session continues.
-- **MCP LIVE-PRODUCT READINESS — framework + assessment report + future stub LANDED,
-  uncommitted (2026-06-15, Quoll weaves Dreamscape `dec917`).** Read-only strategic session
+- **MCP LIVE-PRODUCT READINESS — framework + assessment report + future stub LANDED
+  (2026-06-15, Quoll weaves Dreamscape `dec917`).** Read-only strategic session
   (owner-lifted for doc writes; no code, no commit) on "what would it take to make the MCP app
   a live product." Keystones recorded as owner-decided (CORRECTION 2026-06-15 — per
   owner, these are agent INPUT, NOT owner-ratified; input-to-verify, see survey report
@@ -50,11 +50,10 @@ surface.
   M0→M3→GA milestone ladder does NOT stand** — auth-posture-shaped, no value-proof/safeguarding
   gate, not whole-estate; replace with the impact-first Stage 1–4 ladder (report §8). Wired into
   discovery surfaces (plans/README, high-level-plan, roadmap.md, milestones/README flagged
-  provisional, reports/README). **No quality gates run** (owner direction; markdown-only — needs
-  `markdownlint:root` + `format:root` when the branch is next committed). No active thread owns
+  provisional, reports/README). No active thread owns
   this lane (repo-level + path-to-ga collection); no claim opened; deep consolidation not due.
   **Next safe step**: owner ratifies the impact-first ladder → promote the stub to redraft the
-  milestone files + Programme matrix; and/or commit these docs to `docs/planning-and-validation`.
+  milestone files + Programme matrix.
 - **MCP UAT VALIDATION RUNBOOK — landed (2026-06-15, Sirius binds Spectrum / `0557ef`).**
   Branch `docs/planning-and-validation`, commit `95ec2708a`: elevated
   [UAT validation runbook](../../apps/oak-curriculum-mcp-streamable-http/docs/manual-uat-guide.md)
@@ -62,7 +61,8 @@ surface.
   [`uat-reports/`](../../apps/oak-curriculum-mcp-streamable-http/docs/uat-reports/README.md)
   with first prod record (`2026-06-15-prod.md`, GO), operations + release-runbook links.
   Live oak-prod validation confirmed EEF dual-shape fix is live in production. **Next safe
-  step**: push branch and open PR; optional follow-up local curl pass for Sections 1, 9, 11.
+  step**: open a PR for `docs/planning-and-validation` (if not already raised); optional
+  follow-up local curl pass for Sections 1, 9, 11.
 - **UPSTREAM-SPEC ALIGNMENT — PR #200 (2026-06-12, Tempest spins Stratosphere `123098`).**
   Branch `fix/align_with_upstream_api_spec` (worktree seat) aligns the repo with the
   upstream OpenAPI description rewrite (oak-openapi PR 269, `0.7.0-69d2b6c9…`): docs-only
