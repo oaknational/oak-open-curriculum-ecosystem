@@ -9,7 +9,20 @@ merge_class: index-narrative-tables
 ---
 # Next-Session Record — `repo-professionalism-assessment` thread
 
-## Current Continuation
+## RETIRED — 2026-06-15 (Q-005 resolved)
+
+Owner decision (2026-06-15 consolidation walk): the
+[2026-06-03 professionalism report][report] roadmap **does become practical
+work, routed into the relevant EXISTING collection plans — no new standalone
+plan.** The item → collection routing map is the §Lane State Promotion watchlist
+below; it is the conserved routing record. Each collection's lane injects the
+report's items as live backlog when it next runs, pulling from the report (the
+durable source) and that map. This thread is retired; the record persists as the
+routing home. No further session opens on it.
+
+[report]: ../../reports/oak-repo-professionalism-engineering-quality-report-2026-06-03.md
+
+## Current Continuation (historical — superseded by the retirement above)
 
 - Branch: `feat/graph-tooling-tidyup`
 - Invocation pointer: `start-right-quick`, then continue this thread from this record

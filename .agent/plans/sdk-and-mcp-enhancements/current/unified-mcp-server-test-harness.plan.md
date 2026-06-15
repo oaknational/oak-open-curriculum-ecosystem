@@ -370,6 +370,32 @@ leave half-plans and a half-baked harness lingering, against the brief). One pla
 one harness, real behaviour, the old surfaces deleted, the existing suite rebalanced
 — that is the minimum that delivers the value proof and honours `replace-don't-bridge`.
 
+## Settled Engineering Decisions (2026-06-15)
+
+Two engineering questions raised during EEF go-live were resolved at the
+2026-06-15 consolidation walk; both are this plan's work and land in its named
+workstreams. Captured here so they execute with the harness, not as floating
+open questions.
+
+- **In-process mock default mirrors production (WS3 / in-process suite).** EEF is
+  default-ON in production resolution (kill-switch posture). The e2e fixture
+  (`e2e-tests/helpers/test-config.ts`) already mirrors this (`eefEnabled: true`);
+  the in-process `createMockRuntimeConfig`
+  (`src/test-helpers/auth-error-test-helpers.ts`) still defaults
+  `eefEnabled: false`. Decision: the in-process mock **mirrors the production
+  default (`eefEnabled: true`)** for fidelity, and in-process tests that assert
+  tool/resource counts **set the flag explicitly** rather than relying on the
+  default — test the flag engine, not the configuration. The flip plus a
+  blast-radius sweep across every count-asserting in-process test lands in this
+  plan's execution (alongside WS3), sized at execution.
+- **list_tools parity derives from the SDK enumeration (WS0).**
+  `server.e2e.test.ts`'s `list_tools parity` asserts against a hardcoded
+  `aggregatedTools` array, re-breaking on every tool add/rename and coupling the
+  test to the live flag configuration. Decision: **derive the expected tool set
+  from `listUniversalTools(...)`**, accounting for the fixture's flag state, so
+  the parity test proves "no projection drift" config-agnostically rather than
+  freezing an inventory. Implementation lands in WS0.
+
 ## Readiness Review Disposition (2026-06-06)
 
 Four readiness reviewers ran against this plan (assumptions, mcp, test, security;

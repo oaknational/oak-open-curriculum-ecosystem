@@ -345,7 +345,6 @@ each thread record; this table is the repo-level index.
 | `oak-kg-ontology-planning-review` | Plan the `oak-kg`/ontology work, starting with a deep review of the Oak Curriculum Ontology repo (separate concern from the bulk-derived graph redesign) | [record][oak-kg-ontology] | claude / Opus 4.8 / Twilit Cascading Supernova / thread-opener-brief-only / 2026-06-04 — **opened, not started; deep review is a fresh session** |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Zephyrous Buffeting Falcon / skills-lane-relocated-to-educator-end-users / 2026-06-08 (prior: Blustery Lifting Gale skills-taxonomy-and-distribution 2026-06-03, Umbral Whispering Silhouette 2026-06-01) |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude-code / Opus 4.8 / Peregrine turns Airstream / fitness-tooling-and-future-plans / 2026-06-15 (prior: Margay wakes Whisper skills-estate-audit 2026-06-14, Flame rides Temper statusline-lane-successor 2026-06-13; full prior-identity history: the thread record identity table) |
-| `repo-professionalism-assessment` | Repo professionalism / engineering-quality report → planability triage | [record][repo-professionalism-assessment] | codex / GPT-5 / Airy Whirling Wing / report-author-and-planability-router / 2026-06-03 |
 | `school-data-search` | Oak School Data Search service (POC MVP): briefs → report → plan → gate walk → **deep review complete** → build | [record][school-data-search] | claude / Opus 4.8 / Fiery Sparking Caldera / deep-review-and-refinement / 2026-06-04 (prior: Mossy Whispering Bark 2026-06-04, Furnace Roasting Brazier + Hushed Lurking Mask 2026-06-03) |
 | `semantic-search` | Search data foundations: upstream-schema alignment, bulk sourcing, minimal-adaptation arc | [record][semantic-search] | claude / Opus 4.8 / Moonlit Waxing Nebula / upstream-realignment-specialist / 2026-06-03 |
 | `statusline-enhancements` | Claude Code statusline: Oak-mark and session-shape indicators LANDED; successor plan **re-grounded session-state-first** 2026-06-15 (`ed563765d`; experimental discovery, no PDR/ADR); statusline lane consolidated into two `current/` plans (session-state and logo-modularisation), cross-referenced; docs and four architecture reviews dispositioned | [record][statusline] | claude-code / Opus 4.8 / Cutter spins Quay / session-state-regrounding-and-lane-consolidation-and-reviews / 2026-06-15 (prior: Orbit stirs Spectrum 2026-06-14, Bilby hunts Eventide 2026-06-13) |
@@ -431,21 +430,6 @@ licensing guardrail. See the
    bridge; the future child plan owns any later enabled-control rollout.
 4. Do not implement gated `future/` endpoints or metadata until the owner
    explicitly promotes the relevant child plan.
-
-### Repo Professionalism Assessment
-
-1. Start from the report:
-   [`oak-repo-professionalism-engineering-quality-report-2026-06-03.md`](../../reports/oak-repo-professionalism-engineering-quality-report-2026-06-03.md).
-2. Treat the plan-index links added 2026-06-03 as routing evidence, not
-   execution authority. The report is an assessment input, not a plan.
-3. Decide Q-005 in
-   [`open-questions.md`](open-questions.md#q-005--can-the-repo-professionalism-assessment-be-cut-into-practical-plans):
-   can a practical plan be made, and if yes, should it be one cross-cutting
-   plan or separate plans under architecture/quality gates, DevX,
-   agentic-engineering, and agent-tooling?
-4. If plan work is justified, create or route it through the owning collection
-   indexes; if not, record the no-plan verdict and retire this thread with a
-   banner.
 
 ### EEF Graph-Tooling Rebuild
 
@@ -557,7 +541,6 @@ authority.
 [school-data-search]: threads/school-data-search.next-session.md
 [semantic-search]: threads/semantic-search.next-session.md
 [agentic-mechanisms-discovery]: threads/agentic-mechanisms-discovery.next-session.md
-[repo-professionalism-assessment]: threads/repo-professionalism-assessment.next-session.md
 [branch-fitness]: threads/branch-fitness-and-push-cadence.next-session.md
 [statusline]: threads/statusline-enhancements.next-session.md
 [agent-naming]: threads/agent-naming.next-session.md

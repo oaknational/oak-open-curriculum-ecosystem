@@ -348,3 +348,24 @@ This is the repository instantiation of the portable pattern in
 [PDR-097](../../../.agent/practice-core/decision-records/PDR-097-disposition-category-grouping-in-health-reports.md):
 the concrete labels and path rules above are repo-specific; the disposition-by-
 mutability-gradient principle and the role-plus-location derivation are not.
+
+### 2026-06-15 — File discovery: structural exclusion of transient roots
+
+The practice-fitness and fitness-vocabulary walkers recurse the filesystem from
+the repo root and exclude noise structurally: any non-root directory carrying a
+`.git` marker (foreign git worktrees have a `.git` file, nested clones a dir) is
+skipped — covering every vendor's worktrees with zero enumeration — plus the
+root-anchored gitignored static roots `tmp/` and `.agent/reference-local`
+(matched as `p === root || p.startsWith(root + '/')`, never a loose prefix that
+would swallow e.g. a `template.md`). The proportionate fix keeps the walkers pure
+and DI-testable. Source of truth: `agent-tools/src/practice-fitness/paths.ts` and
+the vocabulary walker's `walk.ts`.
+
+**Deferred deeper cure (not adopted).** Derive the discovery set from `.gitignore`
+(a gitignore-aware walk, or `git ls-files` plus untracked-not-ignored), so the
+exclusion list cannot drift from what the repo already treats as transient — every
+exclusion added so far was already gitignored. It is deferred because it trades a
+pure filesystem walk for a git subprocess or a gitignore parser (testability and
+coupling cost), and `git ls-files` alone would stop scanning freshly-authored,
+not-yet-tracked fitness files (an author-workflow regression to design around). It
+needs deliberate design; the structural exclusion above stands until then.

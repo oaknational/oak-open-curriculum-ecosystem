@@ -94,6 +94,8 @@ the point of action, not a fact to inherit.
   consumers, siblings, or members of a source set.
 - Declaring a sweep clean while the sweep command carried an exclusion filter
   that removed the very class it was meant to inspect.
+- Reading a commit's success or failure from the streamed terminal display
+  rather than from `git log -1` / `git status`.
 
 ## Composition
 
@@ -129,6 +131,12 @@ the point of action, not a fact to inherit.
   sweeps reported clean because the command's own exclusion filter (`-v
   .test.ts` in the second instance) removed the class under test; the durable
   check is to audit the sweep's filters before trusting its empty result.
+- 2026-06-15 Cursor commit-output truncation: the Cursor agent shell returned
+  exit 1 and truncated `git commit` hook output (stopping before the build gate)
+  while the commit actually landed; the durable check is to confirm a commit's
+  outcome from authoritative git state (`git log -1`, `git status`), never from
+  the streamed terminal display — the display was never the source of truth,
+  independent of any one platform's truncation behaviour.
 - Status surfaces are pointers, not facts: thread records, frictions registers,
   plan statuses, and register markers each describe state without being it. A
   frictions register stamped "addressed-in-working-tree" with a never-completed

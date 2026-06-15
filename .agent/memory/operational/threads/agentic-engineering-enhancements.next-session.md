@@ -56,6 +56,33 @@ pickup trigger; neither blocks the other.
   ([decomposition](../../../plans/agent-tooling/future/skills-oversized-core-decomposition.plan.md),
   [eval harness](../../../plans/agent-tooling/future/skills-eval-harness.plan.md)). On a
   separate branch (committed `cbf01ae0`); not blocking and not blocked by Lane A.
+- **Lane C — memory/state semantic merge strategy (decided 2026-06-15; ADR
+  pending).** git merges lines, but `.agent/memory` and `.agent/state` files carry
+  semantic invariants git cannot see (a JSON set keyed by `claim_id`; a markdown
+  file with exactly one Current State block; an append-only narrative buffer; an
+  additive identity table) — a textually-clean merge can be semantically wrong.
+  Owner-walk decision (2026-06-15): adopt a TIERED approach, preferring the lowest
+  tier that works. **Tier 1** — conflict-free by construction (the immutable,
+  content-addressed, one-file-per-event comms store already is this; push more
+  state toward it). **Tier 2** — schema-driven git `merge=<driver>` drivers for the
+  structured registries (`active-claims.json`, `closed-claims.archive.json`,
+  comms-seen), making ADR-197's branch-authoritative-for-state policy semantically
+  safe rather than textually hopeful. **Tier 3** — agent-driven merge for narrative
+  state, emitting a REVIEWABLE diff (never a silent merge), ONLY as a last resort.
+  Next: author the formal ADR (mechanism follow-on to ADR-197, which set the policy
+  but assumed git's textual merge) plus the per-file-class merge-semantics audit and
+  the merge-driver-vs-out-of-band-tooling decision. Pickup trigger: a fresh
+  agentic-engineering session, or the next multi-writer state convergence needing it.
+- **Lane D — rule-impact instrumentation (lane opened 2026-06-11).** Of the ~70
+  rules injected via `CLAUDE.md`, which measurably change agent behaviour and earn
+  their context cost? Prose rules have no firing event; hook-backed rules (write-time
+  guards, secrets-scan on Read, PreToolUse gates) do execute and can be instrumented.
+  Authorised scope: hook invocation fire-count logging only (the one mechanically
+  measurable signal), routed to the agent-tools implementation lane; transcript-audit
+  for behaviour-change attribution deferred until fire-count evidence exists. Informs
+  the ~80k reliably-loaded context budget — the evidence needed to move inert rules
+  on-demand or retire them. Lane A's 2b reappraisal-cartography pass remains the
+  prose-rule rationalisation vehicle.
 
 - **Branch**: `feat/graph-tooling-tidyup` — **clean and pushed** at HEAD `934d5c21`
   (re-derive git first-hand).
