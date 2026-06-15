@@ -176,7 +176,7 @@ describe('renderStatusline — session-shape indicators in the four-row layout',
       parts(shape({ teamShape: 'directed', ownRole: 'director', arcActive: true })),
       { logo: 'sextant' },
     );
-    expect(out.split('\n')).toEqual([
+    expect(out.split('\n').slice(0, 4)).toEqual([
       `${mark(SEXTANT[0])}${GAP}${IDENTITY} ${COMPASS}${SEP}${FAMILY} ${FEATHER}`,
       mark(SEXTANT[1]),
       mark(SEXTANT[2]),

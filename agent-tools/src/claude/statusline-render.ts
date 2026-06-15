@@ -25,9 +25,22 @@
  */
 
 import { OAK_LOGO_ROWS, type OakLogoStyle } from './oak-logo.js';
-import { BOLD_BLUE, CYAN, DIM, GREEN, RED, RESET, SEPARATOR, YELLOW } from './statusline-ansi.js';
+import {
+  BOLD,
+  BLUE,
+  CYAN,
+  DIM,
+  GREEN,
+  RED,
+  RESET,
+  HORIZONTAL_SEPARATOR,
+  YELLOW,
+} from './statusline-ansi.js';
 import { formatIdentity, formatSessionIndicators } from './statusline-indicators.js';
 import { type SessionShape } from './statusline-session-shape.js';
+
+// This should live with the logo asset and be imported.
+const LOGO_COLOUR = GREEN;
 
 /**
  * Segment values for a single statusline render. Each visible segment is
@@ -63,11 +76,21 @@ export interface StatuslineRenderOptions {
    * single line; any other style renders the four-row logo-column layout.
    */
   readonly logo?: OakLogoStyle;
+  /**
+   * Visible rule appended as a trailing row beneath the four-row logo block,
+   * separating it from the prompt Claude Code renders below. Defaults to
+   * {@link DEFAULT_LOGO_SEPARATOR}. Only the logo layout carries it; the
+   * no-logo layout ignores it. It must be visible content — Claude Code drops
+   * a purely-empty trailing line, so a bare newline would render no gap.
+   */
+  readonly logoSeparator?: string;
 }
 
 const DIRTY_MARK = '*';
 /** Gap between the logo column and the segment text, in the multi-row layout. */
 const LOGO_GAP = '  ';
+/** Default {@link StatuslineRenderOptions.logoSeparator} — owner-tunable presentation. */
+const DEFAULT_LOGO_SEPARATOR = '______';
 
 /** Context usage below this percentage renders in green; from it, yellow. */
 const CONTEXT_ELEVATED_PERCENT = 50;
@@ -82,8 +105,9 @@ const CONTEXT_HIGH_PERCENT = 70;
  * @returns The ANSI-coloured statusline. Without a logo it renders over two
  *   lines (coordination: identity, indicators, model, context; then git: branch,
  *   place — absent segments dropped, an empty line omitted). With a logo it is
- *   four newline-separated rows: the Oak mark column with the segments to its
- *   right, the indicators trailing the identity on row 0.
+ *   four newline-separated rows — the Oak mark column with the segments to its
+ *   right, the indicators trailing the identity on row 0 — followed by a
+ *   trailing separator row that divides the block from the prompt beneath it.
  *
  * @example
  * ```ts
@@ -117,14 +141,19 @@ export function renderStatusline(
   // One entry per logo row (all styles are four rows); composeWithLogo drives
   // off the logo rows, so a row without text here renders as a bare mark. The
   // indicators trail the identity on row 0 — the coordination glyphs stay with
-  // the agent name.
+  // the agent name. A trailing separator row divides the block from the prompt
+  // that Claude Code renders beneath it.
   const rowTexts = [
     joinPresent([seg.identity, seg.indicators]),
     seg.model ?? '',
     joinPresent([seg.context, seg.branch]),
     seg.place,
   ];
-  return composeWithLogo(OAK_LOGO_ROWS[logo], rowTexts);
+  const separator = options.logoSeparator ?? DEFAULT_LOGO_SEPARATOR;
+  const statuslineContent = composeWithLogo(OAK_LOGO_ROWS[logo], rowTexts);
+  const separatorColour = `${DIM}`;
+  const separatorContent = `${separatorColour}${separator}${RESET}`;
+  return `${statuslineContent}\n${separatorContent}`;
 }
 
 /** The ANSI-coloured statusline segments, each absent when its value is. */
@@ -146,14 +175,20 @@ function buildSegments(parts: StatuslineParts): Segments {
     indicators: formatSessionIndicators(parts.sessionShape),
     model: parts.model === undefined ? undefined : `${DIM}${parts.model}${RESET}`,
     context: parts.usedPercentage === undefined ? undefined : formatContext(parts.usedPercentage),
-    branch: parts.branch === undefined ? undefined : `${BOLD_BLUE}${parts.branch}${RESET}${dirty}`,
+    // Branch is bold blue. Apply the colour before BOLD: BLUE carries a leading
+    // reset (`0;`) that would otherwise clear a preceding bold. The trailing
+    // RESET ends both attributes before the dirty mark.
+    branch:
+      parts.branch === undefined ? undefined : `${BLUE}${BOLD}${parts.branch}${RESET}${dirty}`,
     place: `${CYAN}${place}${RESET}`,
   };
 }
 
 /** Join the present segments with the separator, dropping `undefined` ones. */
 function joinPresent(segments: readonly (string | undefined)[]): string {
-  return segments.filter((segment): segment is string => segment !== undefined).join(SEPARATOR);
+  return segments
+    .filter((segment): segment is string => segment !== undefined)
+    .join(HORIZONTAL_SEPARATOR);
 }
 
 /**
@@ -164,7 +199,7 @@ function joinPresent(segments: readonly (string | undefined)[]): string {
 function composeWithLogo(logoRows: readonly string[], rowTexts: readonly string[]): string {
   return logoRows
     .map((logoRow, index) => {
-      const mark = `${GREEN}${logoRow}${RESET}`;
+      const mark = `${LOGO_COLOUR}${logoRow}${RESET}`;
       const text = rowTexts[index] ?? '';
       return text.length > 0 ? `${mark}${LOGO_GAP}${text}` : mark;
     })

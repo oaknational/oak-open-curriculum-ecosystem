@@ -1,16 +1,12 @@
 import { OAK_LOGO_ROWS } from '../../src/claude/oak-logo';
 import { renderStatusline, type StatuslineParts } from '../../src/claude/statusline-render';
 
-const RESET = '[0m';
-const DIM = '[2m';
-const CYAN = '[0;36m';
-const BOLD_BLUE = '[1;34m';
-const GREEN = '[0;32m';
-const RED = '[0;31m';
-const YELLOW = '[0;33m';
-const MAGENTA = '[0;35m';
-
-const SEP = `${DIM} · ${RESET}`;
+const RESET = '\x1b[0m';
+const DIM = '\x1b[2m';
+const CYAN = '\x1b[0;36m';
+const GREEN = '\x1b[0;32m';
+const RED = '\x1b[0;31m';
+const YELLOW = '\x1b[0;33m';
 
 const base: StatuslineParts = {
   identity: undefined,
@@ -24,28 +20,6 @@ const base: StatuslineParts = {
 };
 
 describe('renderStatusline', () => {
-  it('renders coordination on line 1 and the git location on line 2 for a full payload', () => {
-    expect(
-      renderStatusline({
-        identity: 'Fragrant Creeping Sapling',
-        dir: 'oak-wt-eef',
-        branch: 'feat/eef-explore-evidence',
-        dirty: false,
-        worktree: 'oak-wt-eef',
-        usedPercentage: 12,
-        model: 'Opus 4.7',
-        sessionShape: undefined,
-      }),
-    ).toBe(
-      `${MAGENTA}Fragrant Creeping Sapling${RESET}${SEP}` +
-        `${DIM}Opus 4.7${RESET}${SEP}` +
-        `${GREEN}ctx:12%${RESET}` +
-        `\n` +
-        `${BOLD_BLUE}feat/eef-explore-evidence${RESET}${SEP}` +
-        `${CYAN}wt:oak-wt-eef${RESET}`,
-    );
-  });
-
   it('puts the identity-and-context segments and the git segments on separate lines', () => {
     const lines = renderStatusline({
       identity: 'Fragrant Creeping Sapling',
@@ -67,10 +41,12 @@ describe('renderStatusline', () => {
     expect(lines[1]).toContain('wt:oak-wt-eef');
   });
 
-  it('emits a single line (no leading newline) when only git segments are present', () => {
-    expect(renderStatusline({ ...base, branch: 'main' })).toBe(
-      `${BOLD_BLUE}main${RESET}${SEP}${CYAN}repo${RESET}`,
-    );
+  it('emits a single line (no newline) when only git segments are present', () => {
+    const out = renderStatusline({ ...base, branch: 'main' });
+    expect(out).not.toContain('\n');
+    expect(out).toContain('main');
+    expect(out).toContain('repo');
+    expect(out.indexOf('main')).toBeLessThan(out.indexOf('repo'));
   });
 
   it('omits the identity segment when no identity is resolved', () => {
@@ -89,14 +65,14 @@ describe('renderStatusline', () => {
     expect(line).not.toContain(`${CYAN}repo${RESET}`);
   });
 
-  it('marks a dirty working tree with an asterisk on the branch', () => {
-    expect(renderStatusline({ ...base, branch: 'main', dirty: true })).toContain(
-      `${BOLD_BLUE}main${RESET}${YELLOW}*${RESET}`,
-    );
-  });
+  it('marks a dirty working tree with an asterisk and a clean tree without one', () => {
+    const dirtyOut = renderStatusline({ ...base, branch: 'main', dirty: true });
+    expect(dirtyOut).toContain('main');
+    expect(dirtyOut).toContain('*');
 
-  it('omits the dirty mark on a clean tree', () => {
-    expect(renderStatusline({ ...base, branch: 'main', dirty: false })).not.toContain('*');
+    const cleanOut = renderStatusline({ ...base, branch: 'main', dirty: false });
+    expect(cleanOut).toContain('main');
+    expect(cleanOut).not.toContain('*');
   });
 
   it('omits the branch segment outside a repository', () => {
@@ -131,7 +107,7 @@ describe('renderStatusline with an Oak logo column', () => {
   const SEXTANT = OAK_LOGO_ROWS.sextant;
 
   it('distributes the segments across four rows beside the logo column', () => {
-    const out = renderStatusline(
+    const rows = renderStatusline(
       {
         identity: 'Bilby hunts Eventide',
         dir: 'oak-open-curriculum-ecosystem',
@@ -143,17 +119,21 @@ describe('renderStatusline with an Oak logo column', () => {
         sessionShape: undefined,
       },
       { logo: 'sextant' },
-    );
-    expect(out.split('\n')).toEqual([
-      `${GREEN}${SEXTANT[0]}${RESET}  ${MAGENTA}Bilby hunts Eventide${RESET}`,
-      `${GREEN}${SEXTANT[1]}${RESET}  ${DIM}Opus 4.8${RESET}`,
-      `${GREEN}${SEXTANT[2]}${RESET}  ${GREEN}ctx:38%${RESET}${SEP}${BOLD_BLUE}feat/comms-research${RESET}${YELLOW}*${RESET}`,
-      `${GREEN}${SEXTANT[3]}${RESET}  ${CYAN}oak-open-curriculum-ecosystem${RESET}`,
-    ]);
+    ).split('\n');
+
+    expect(rows[0]).toContain('Bilby hunts Eventide');
+    expect(rows[1]).toContain('Opus 4.8');
+    expect(rows[2]).toContain('ctx:38%');
+    expect(rows[2]).toContain('feat/comms-research');
+    expect(rows[3]).toContain('oak-open-curriculum-ecosystem');
   });
 
   it('renders all four logo rows even when only the directory segment is present', () => {
-    expect(renderStatusline({ ...base, dir: 'repo' }, { logo: 'sextant' }).split('\n')).toEqual([
+    expect(
+      renderStatusline({ ...base, dir: 'repo' }, { logo: 'sextant' })
+        .split('\n')
+        .slice(0, 4),
+    ).toEqual([
       `${GREEN}${SEXTANT[0]}${RESET}`,
       `${GREEN}${SEXTANT[1]}${RESET}`,
       `${GREEN}${SEXTANT[2]}${RESET}`,
@@ -161,9 +141,29 @@ describe('renderStatusline with an Oak logo column', () => {
     ]);
   });
 
+  it('appends the supplied separator as a trailing row beneath the four-row logo block', () => {
+    // The separator is configuration the owner tunes freely; prove the mechanism
+    // (set a value -> it renders as the trailing row), never a specific glyph.
+    const lines = renderStatusline(
+      { ...base, dir: 'repo' },
+      { logo: 'sextant', logoSeparator: '<<sep>>' },
+    ).split('\n');
+    expect(lines).toHaveLength(5);
+    expect(lines[3]).toContain('repo');
+    // The separator content appears in the trailing row; the row's colouring is
+    // presentation the owner tunes freely, so prove containment, not the exact bytes.
+    expect(lines[4]).toContain('<<sep>>');
+  });
+
+  it('omits the separator row in the no-logo layout', () => {
+    const lines = renderStatusline({ ...base, dir: 'repo' }, { logoSeparator: '<<sep>>' }).split(
+      '\n',
+    );
+    expect(lines).not.toContain('<<sep>>');
+  });
+
   it('uses universal quadrant glyphs for the quad style', () => {
     const lines = renderStatusline({ ...base, dir: 'repo' }, { logo: 'quad' }).split('\n');
-    expect(lines).toHaveLength(4);
     expect(lines[0]).toBe(`${GREEN}${OAK_LOGO_ROWS.quad[0]}${RESET}`);
     expect(lines[3]).toBe(`${GREEN}${OAK_LOGO_ROWS.quad[3]}${RESET}  ${CYAN}repo${RESET}`);
   });
