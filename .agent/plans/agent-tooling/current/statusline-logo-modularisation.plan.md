@@ -67,6 +67,18 @@ isProject: false
 **Status**: 🟡 PLANNING (queued — `current/`, not started)
 **Scope**: Separate the Claude statusline into three clean layers — statusline setup, a generic reusable logo-column mechanism, and the Oak acorn brand asset as pure data — and remove the standards-loosening in the agent tooling that supports it.
 
+**References**: [`statusline-inputs-research.md`](../../../research/statusline-inputs-research.md)
+— the grounded, source-cited contract for what a Claude Code statusline command
+receives (stdin fields, env vars, output channels). Load-bearing for this plan's
+colour work: **the terminal theme is not knowable** — Claude Code exposes no theme
+field on stdin and no theme env var, and captures stdout (so an interactive OSC 11
+background-colour query cannot read a reply). Named ANSI colours are theme-mapped
+palette indices (empirically, `BLACK`/`\x1b[0;30m` renders as aubergine, not black,
+under the owner's theme), so a foreground cannot be reliably matched to the
+background. Colour choices must use the theme's own contract (the default
+foreground is guaranteed readable against the active background; `DIM` softens it)
+rather than any guessed or background-matched colour.
+
 ---
 
 ## Additional User Request

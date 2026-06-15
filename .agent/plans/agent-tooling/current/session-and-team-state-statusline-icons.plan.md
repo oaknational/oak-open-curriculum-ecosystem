@@ -29,6 +29,13 @@ isProject: false
 
 **Created**: 2026-06-13 (team-state register, Whippoorwill holds Catacomb). **Re-grounded session-state-first**: 2026-06-15 (Cutter spins Quay, session 9b4085 — a PDR-027 session-id prefix, not a commit SHA) under owner direction. **Collection**: agent-tooling. **Lane**: `current/` (queued; not started).
 
+**References**: [`statusline-inputs-research.md`](../../../research/statusline-inputs-research.md)
+— the grounded, source-cited contract for what a Claude Code statusline command
+receives (stdin fields, env vars, output channels, re-run triggers). Consult it
+before assuming any input is available: notably the terminal theme is **not**
+exposed (no stdin field, no env var; stdout is captured so no interactive query),
+which constrains any colour/icon-contrast decision in this plan.
+
 > **Re-grounding note (2026-06-15).** This plan was originally framed *team-first*
 > ("model the evolving state of the TEAM ... derived from bounded substrate"). The
 > owner corrected the foundation: **collaboration state belongs to the session**,

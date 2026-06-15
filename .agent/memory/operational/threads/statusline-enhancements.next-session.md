@@ -10,6 +10,18 @@ merge_class: index-narrative-tables
 
 # Next-Session Record — `statusline-enhancements` thread
 
+**Grounding reference for ALL statusline plans (owner direction 2026-06-15):**
+every statusline plan MUST link
+[`.agent/research/statusline-inputs-research.md`](../../../research/statusline-inputs-research.md)
+— the source-cited contract for what a Claude Code statusline command receives.
+Load-bearing constraint: the **terminal theme is not knowable** (no stdin field,
+no env var; stdout is captured so no interactive OSC 11 query), and named ANSI
+colours are theme-mapped (`BLACK`/`\x1b[0;30m` renders as aubergine under the
+owner's theme), so a foreground cannot be matched to the background. Colour with
+the theme's own contract (default foreground, optionally `DIM`), never a guessed
+or background-matched colour. Linked in the two current plans; carry the link
+into any future statusline plan.
+
 The unified Claude Code statusline lane: the Oak-mark logo column plus the
 session-shape indicators. Both render through the same `renderStatusline`, so
 they are one lane, not two. The original lane (Oak mark + the narrow
@@ -136,6 +148,7 @@ cadence. Also a research-relevant collaboration-visibility failure mode.
 
 | Platform | Model | Agent name | Role on this thread | last_session |
 | --- | --- | --- | --- | --- |
+| claude-code | Opus 4.8 | Hearth hunts Obsidian | Trailing separator row beneath the four-row logo block as a `logoSeparator?` option (`DEFAULT_LOGO_SEPARATOR`), tests decoupled from the glyph (inject-a-probe); separator now `${DIM}` (theme-robust default-fg — terminal theme is not knowable, design verdict). Fixed two ANSI bugs in the branch styling (a `0;`-prefixed `BLUE` cancelled `BOLD` → render colour-before-bold; removed dead/wrong `RESET_BOLD`+`BLACK`); branch tests made behavioural (content+placement, not bytes); `statusline-ansi.ts`+render test converted off literal-ESC to `\x1b` escapes. Linked the inputs research doc in both current statusline plans. Green (my slice); uncommitted — another agent commits/pushes (see napkin) | 2026-06-15 |
 | claude-code | Opus 4.8 | Cutter spins Quay | Re-grounded the successor plan session-state-first (session owns collaboration state; solo is the floor; owner-presence opinion; team state derived); consolidated and cross-referenced the statusline lane; ran docs and four architecture reviewers and recorded validated dispositions; added the logo-modularisation plan | 2026-06-15 |
 | claude-code | Opus 4.8 | Orbit stirs Spectrum | Interim session-relative resolver + `observing` shape + ansi/indicators/render module split; refined the successor register plan (claim-independent active-agent set) + readiness pass; seeded PDR-095 | 2026-06-14 |
 | claude-code | Opus 4.8 | Skylark wakes Summit | Re-fit WS1–WS3 onto the 4-row layout; unknown-vs-solo resolver fix; WS4 glyphs verified; test-IO compliance; corrected this record + plan | 2026-06-13 |
