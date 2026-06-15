@@ -1539,6 +1539,45 @@ below is a cross-reference index, not a second source of truth.
 - **Status**: open.
 - **Owner direction status**: standing.
 
+### F-57 — Generated-adapter/doc drift check missing from the blocking commit gate
+
+- **Source**: `pending-graduations.md` (2026-06-07 Eclipsed Watching Veil; the
+  `oak-consolidate-until-done` adapter drift `a4c4c047` that red-lit `pnpm check`
+  yet landed committed). Migrated 2026-06-15.
+- **Surface**: `.husky/pre-commit` vs generator-vs-source checks.
+- **Observed**: `skills-adapter-generate --check` (and sibling generator-vs-
+  source checks) live only in the comprehensive `pnpm check`, not the blocking
+  commit gate, so generated-doc/adapter drift can land committed (doctrine
+  without mechanism, in the gate-config domain).
+- **Expected**: the blocking commit gate runs the generated-adapter drift check,
+  mirroring the knip+depcruise→pre-commit fix that closed the prior ADR-121
+  drift class.
+- **Candidate cure**: wire `skills-adapter-generate --check` into
+  `.husky/pre-commit` (pairs with F-40 / F-54).
+- **Target surface**: `.husky/pre-commit` / ADR-121 / build-system.md.
+- **Status**: open.
+- **Owner direction status**: standing.
+
+### F-58 — Readers of untracked-by-design `.agent/state` paths must tolerate absence
+
+- **Source**: `pending-graduations.md` (2026-06-14 Whirlwind WS7;
+  `validate-collaboration-state` crashed ENOENT twice in CI on a fresh clone;
+  fixed reactively `356e76f59` + `7da12a82f`). Migrated 2026-06-15.
+- **Surface**: any reader of untracked `.agent/state/collaboration/` paths
+  (validators, comms watcher, statusline scans, curator tooling).
+- **Observed**: the WS7 untrack created a standing hazard class — a now-untracked
+  path is absent in a fresh clone; the validator was fixed reactively but the
+  class is unswept.
+- **Expected**: every reader treats an absent untracked path as the clean empty
+  state, not a fault.
+- **Candidate cure**: a one-pass audit of all readers of untracked `.agent/state`
+  paths for absence-tolerance (plus a shared `readDirOrEmpty` /
+  `optionalWhenAbsent` helper); candidate rule "untracked-by-design readers
+  tolerate absence". Sibling of F-45 (write-side self-init).
+- **Target surface**: agent-tools readers + ADR-199 consequences note.
+- **Status**: open.
+- **Owner direction status**: standing.
+
 ---
 
 ## Mitigated / Addressed Frictions

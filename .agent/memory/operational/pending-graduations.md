@@ -1542,25 +1542,6 @@ portion.
   first reopens the substrate boundary as settled architecture.
 - **status**: pending (KG-work-gated)
 
-## Generated-doc drift detection missing from the blocking commit gate (skills:check → husky)
-
-- **captured-date**: 2026-06-07
-- **source-surface**: agentic-engineering-enhancements items 4 + 1 session
-  (Eclipsed Watching Veil); the `oak-consolidate-until-done` adapter drift
-  (`a4c4c047`) that red-lit `pnpm check` yet had landed committed because
-  `.husky/pre-commit` does not run `skills-adapter-generate --check`.
-- **graduation-target**: a build-config / ADR-121-adjacent decision — wire the
-  generated-adapter drift check (`skills-adapter-generate --check`, plus any
-  sibling generator-vs-source checks) into the BLOCKING commit gate
-  (`.husky/pre-commit`), mirroring the `knip`+`depcruise`→pre-commit fix that
-  closed the prior ADR-121 drift class. A check that lives only in the
-  comprehensive `pnpm check` but not the commit gate lets generated-doc drift
-  land committed (the "doctrine without mechanism" shape, in the gate-config
-  domain).
-- **trigger-condition**: a second instance of generated-doc drift landing
-  committed, OR the next `.husky` / `build-system.md` gate-coverage pass.
-- **status**: pending
-
 ## 2026-06-14 capture — Clipper wakes Atoll (PDR-051 reduced-implementation reconciliation review)
 
 Verified absent from this register before adding.
@@ -1590,20 +1571,3 @@ Verified absent from this register before adding.
   - **graduation-target**: `distilled.md` first; PDR-011 / ADR-150 (closeout contract) if it recurs.
   - **trigger-condition**: a second instance of a context-rich closeout skipping the loss-scan.
   - **status**: pending.
-
-- **Readers of untracked-by-design `.agent/state` paths must tolerate absence in a fresh checkout
-  (Whirlwind, generalize-the-failure-class as a structural cure).**
-  - **source-surface**: WS7 Phase-3 untrack CI fallout — `validate-collaboration-state` crashed
-    `ENOENT` twice in CI (comms/ dir, then the claim files) because the now-untracked surfaces are
-    absent in a fresh clone; fixed reactively (`356e76f59` + `7da12a82f`).
-  - **substance**: the untrack created a standing hazard class — ANY tool that reads a now-untracked
-    `.agent/state/collaboration/` path (validators, the comms watcher CLI, statusline scans, future
-    curator tooling) must treat an absent path as the clean empty state, not a fault. The validator
-    is fixed; the class is not swept. Structural cure: a one-pass audit of all readers of untracked
-    `.agent/state` paths for absence-tolerance (+ optionally a shared `readDirOrEmpty`/`optionalWhenAbsent`
-    helper), so the next reader doesn't re-learn it via a CI crash. Relevant to ADR-199 / the
-    repo-instance boundary.
-  - **graduation-target**: a short remediation pass (own lane) or an ADR-199 consequences note;
-    candidate rule "untracked-by-design readers tolerate absence".
-  - **trigger-condition**: a second reader crashing on an absent untracked `.agent/state` path.
-  - **status**: pending (owner-sequenced; non-blocking — the gated reader is fixed).
