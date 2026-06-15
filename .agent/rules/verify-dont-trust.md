@@ -77,6 +77,15 @@ the class under test invalidates the sweep. The same discipline covers your own
 summarised verdicts: a conclusion you recorded earlier is a claim to re-test at
 the point of action, not a fact to inherit.
 
+Read the failure surface, never the exit code, for any wrapped, piped, or
+output-captured invocation. A pipe, redirect, or background-task wrapper reports
+the *wrapper's* exit, not the inner command's: a green hook banner with zero
+transfer behind a piped `git push`; a SIGPIPE-141 after a passing gate when the
+output is redirected; a background-task wrapper reporting exit 0 while both inner
+hooks ran red. Inspect the inner command's actual output, not the wrapper's
+status. The full behavioural doctrine is the pattern
+[`wrapped-exit-codes-false-green`](../memory/active/patterns/wrapped-exit-codes-false-green.md).
+
 ## Anti-Patterns
 
 - Asking "are you done?" when the answer needs a claim, diff, event, or gate.

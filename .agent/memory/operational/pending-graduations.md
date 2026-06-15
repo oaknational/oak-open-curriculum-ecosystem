@@ -194,22 +194,6 @@ moved here from napkin capture (or registered from the harvest inventory) so
 the substance survives napkin rotation with verified instance counts. Each
 verified absent from this register before adding.
 
-- **Wrapped/piped/background-captured invocations: read the failure surface,
-  never the exit code.** FOUR worked instances across the family's variants:
-  piped `pnpm check` reporting the pipe's exit; piped `git push` printing only
-  the hook banner with zero transfer (event e589b3c7); an UNPIPED push
-  redirected to a file dying SIGPIPE exit 141 after a green hook (Hushed, PR
-  #176); a background-task wrapper reporting exit 0 while both hooks inside
-  ran red (Iridescent waypoint-3 + Smouldering's variant, independent seats).
-  Full behavioural doctrine graduated 2026-06-12 to the pattern
-  `.agent/memory/active/patterns/wrapped-exit-codes-false-green.md`; the
-  candidate is the doctrine-level clause in `verify-dont-trust`: read the
-  failure surface, never the exit code, for any wrapped, piped, or
-  output-captured invocation.
-  `[captured: 2026-06-11 | source: pattern wrapped-exit-codes-false-green
-  (four variants) + pre-position 0f36d756 item 5 | target: verify-dont-trust
-  clause | trigger: next verify-dont-trust amendment pass or owner direction
-  | size: S | status: pending]`
 - **MD004 wrapped-list-marker trap needs a structural cure.** FOUR instances,
   three authors, one day (2026-06-11): reflowing 100-char-width prose wraps a
   continuation line so it starts with a list-marker character ("+ ", "- ",
