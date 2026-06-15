@@ -62,3 +62,17 @@ the documented trigger). Remaining live candidates, for other threads:
   get it into the reading path, let the flow refine it; over-perfecting pre-use is premature
   crystallisation — the failure my own graduated findings warn against. This dissolved a
   fear-based "pause for per-diff review" caution: draft, commit, let use refine.
+
+## Session: 2026-06-15 — MCP UAT runbook + live validation (Sirius binds Spectrum / Cursor)
+
+- **Cursor agent shell truncates long `git commit` hook output and can return exit 1 while
+  the commit still succeeds in the background** (owner + agent, 2026-06-15). Symptom: output
+  stops after `depcruise` (~12s), no `🧪 Running build…` line, exit 1 — but `bash .husky/pre-commit`
+  and a background `git commit` both complete and land the commit (`95ec2708a`). Falsifiability:
+  after a "failed" Cursor-shell commit, run `git log -1` and `git status`. Cure direction (platform,
+  not repo): investigate Cursor terminal output buffer / early process return on long-running
+  hooks; until fixed, agents should verify commit outcome via git state or run commits in the
+  owner's terminal. Routed: `open-questions.md` Q-011.
+- **UAT runbook elevation landed** (commit `95ec2708a`, branch `docs/planning-and-validation`):
+  whole-server validation runbook, `uat-reports/` with first prod record, live oak-prod GO. The
+  runbook's `limit:0` row was corrected after live probe showed `-32602` not handler refusal.

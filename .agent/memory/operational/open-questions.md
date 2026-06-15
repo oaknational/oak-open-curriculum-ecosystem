@@ -182,3 +182,21 @@ fitness_content_role: drainable-buffer
   config; turbo `doc-gen` task config.
 - **Status**: OPEN — owner decision (repair vs retire); evidence in the 2026-06-12 napkin
   entry and the alignment PR discussion.
+
+## Q-011 — Cursor agent shell truncates long git commit hook output
+
+- **Captured**: 2026-06-15 (Sirius binds Spectrum / cursor / session handoff).
+- **Question**: Why does the Cursor-integrated agent shell return exit code 1 and truncate
+  `git commit` output after ~12s (stopping after `depcruise`, before the turbo build gate),
+  while the same pre-commit hook completes successfully when run directly (`bash .husky/pre-commit`)
+  or when `git commit` runs in the background — and how should agents verify commit outcome
+  until the platform is fixed?
+- **Why it shapes future work**: false-negative commit failures waste agent and owner time;
+  agents may retry, amend, or report broken hooks when the commit actually landed. Owner
+  direction: note as a platform issue and work towards a fix in future — not a repo hook defect.
+- **Why not answerable cheaply now**: requires Cursor platform investigation (terminal buffer,
+  subprocess lifecycle, hook timeout). Workaround is operational: verify with `git log -1` /
+  `git status`, or commit in the user's external terminal.
+- **Owning artefact / discussion home**: none in-repo yet; platform/Cursor. Does not block
+  current cycles.
+- **Status**: OPEN — workaround documented in napkin 2026-06-15; platform fix deferred.

@@ -20,6 +20,14 @@ surface.
 
 ## Current State
 
+- **MCP UAT VALIDATION RUNBOOK — landed (2026-06-15, Sirius binds Spectrum / `0557ef`).**
+  Branch `docs/planning-and-validation`, commit `95ec2708a`: elevated
+  [UAT validation runbook](../../apps/oak-curriculum-mcp-streamable-http/docs/manual-uat-guide.md)
+  (whole-server, inventory self-check, response-shape contract, quick smoke pass),
+  [`uat-reports/`](../../apps/oak-curriculum-mcp-streamable-http/docs/uat-reports/README.md)
+  with first prod record (`2026-06-15-prod.md`, GO), operations + release-runbook links.
+  Live oak-prod validation confirmed EEF dual-shape fix is live in production. **Next safe
+  step**: push branch and open PR; optional follow-up local curl pass for Sections 1, 9, 11.
 - **UPSTREAM-SPEC ALIGNMENT — PR #200 (2026-06-12, Tempest spins Stratosphere `123098`).**
   Branch `fix/align_with_upstream_api_spec` (worktree seat) aligns the repo with the
   upstream OpenAPI description rewrite (oak-openapi PR 269, `0.7.0-69d2b6c9…`): docs-only
