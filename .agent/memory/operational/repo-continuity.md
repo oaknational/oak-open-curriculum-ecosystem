@@ -489,19 +489,14 @@ this section; create a thread record when execution is scheduled.
 
 ## Open Owner-Decision Items
 
-1. `pending-graduations.md` carries the owner-walked estate (2026-06-11): the
-   `owner-approved 2026-06-11` authoring queue was AUTHORED and drained 2026-06-12
-   (Thyme wakes Canopy; Core CHANGELOG carries the pass); `routed` items belong to the
-   agent-tools lane; remaining `owner-gated`/`pending` items were confirmed genuinely
-   event-gated at the walk. New evidence recorded 2026-06-12 on two items (PDR-082
-   heartbeat value-contingency second instance; PDR-081 ledger-clause contradiction) —
-   surface at the next owner walk.
+1. `pending-graduations.md` carries the owner-walked estate: its `owner-gated` /
+   `pending` items are confirmed genuinely event-gated, and the ripe graduations
+   surfaced at the 2026-06-15 walk are owner-approved and routed to a focused
+   Practice-governance session (detail in the register).
 2. MCP product analytics execution-plan promotion is deferred. Production PostHog
    capture still needs the legal/privacy gates named in the exploration record.
 3. Monorepo workspace topology is held by owner decision (2026-05-09) until after
    the graph MVP implementation tranche, unless the owner reopens it.
-4. Comms-event lifecycle research is owner-gated; do not rotate the event corpus
-   from calendar age alone.
 
 ## Repo-Wide Invariants / Non-Goals
 
