@@ -49,6 +49,12 @@ scope explicitly in the active release plan.
 4. Re-test fix and record evidence.
 5. Close only when behaviour is verified and documented.
 
+For the Curriculum MCP server, the
+[UAT validation runbook](../../apps/oak-curriculum-mcp-streamable-http/docs/manual-uat-guide.md)
+is the standard whole-server acceptance pass that feeds this snag workflow:
+run it before go/no-go and after each deploy, log any finding here with its
+severity, and attach the completed run record.
+
 ### Snag Register Template
 
 | ID      | Severity | Description         | Owner  | Status | Decision            |

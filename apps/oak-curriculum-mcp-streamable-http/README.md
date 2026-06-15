@@ -194,8 +194,8 @@ mapping them to Oak design tokens where equivalents exist.
 [MCPJam](https://www.mcpjam.com/) is an MCP Apps-compatible host useful
 for visual design review and acceptance testing. Connect it to the local
 server at `http://localhost:3333/mcp` (requires `dev:observe:noauth` running).
-For a tool-by-tool manual walkthrough against any server, see the
-[manual UAT guide](./docs/manual-uat-guide.md).
+For a repeatable whole-server validation pass against any server, see the
+[UAT validation runbook](./docs/manual-uat-guide.md).
 
 ## Observability
 
@@ -268,15 +268,18 @@ Vercel production builds have an additional repo-owned gate:
 
 ### Manual test guide (any server)
 
-A rough manual UAT walkthrough — run by an engineer or an AI agent
-against any running server (local dev or a deployed preview/production)
-to gain end-to-end confidence before trusting it. Replaces the retired
-`pnpm smoke:remote` harness (ADR-121).
+A repeatable, whole-server UAT validation runbook — run by an engineer or
+an AI agent against any running server (local dev or a deployed
+preview/production) to gain end-to-end confidence before trusting it or
+signing off a release. Replaces the retired `pnpm smoke:remote` harness
+(ADR-121).
 
-- [Manual UAT guide](./docs/manual-uat-guide.md) — what to test, how to
-  run each check, and expected results (host or curl). Covers the
-  curriculum tools, the graph tools, and the EEF evidence surface, plus
-  the deployed-server infrastructure checks.
+- [UAT validation runbook](./docs/manual-uat-guide.md) — when to run, what
+  to test, how to run each check, and expected results (host or curl).
+  Covers the full surface: transport/auth, all 37 tools, the 4 resources,
+  and the 7 prompts, the dual response-shape contract, an inventory
+  self-check, and a copy-paste run-record template tied to the release
+  severity model.
 
 ### OAuth discovery
 
