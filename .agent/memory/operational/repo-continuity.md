@@ -119,8 +119,10 @@ surface.
   (Oak-mark logo column + session-shape indicators landed; controlling plan archived). An
   interim session-relative + `observing` resolver and the ansi/indicators/render module split
   landed 2026-06-14 (commit `da8cbd7d6`, Orbit stirs Spectrum). The successor is the
-  [team-state register plan](../../plans/agent-tooling/current/team-state-register-and-session-shape-icons.plan.md)
-  (DRAFT, READY-WITH-CONDITIONS; active-agent set claim-independent per PDR-095, Accepted).
+  [session/team-state + statusline-icons plan](../../plans/agent-tooling/current/session-and-team-state-statusline-icons.plan.md)
+  (DRAFT, re-grounded session-state-first 2026-06-15: session owns collaboration state, solo is the
+  floor, team state is derived; experimental discovery — no PDR/ADR yet; the 2026-06-14 readiness
+  verdict predates the re-grounding).
   **Next safe step**: the register plan is unassigned (Clipper rotated out) — a next session
   resolves its readiness Conditions B/C-D, or the branch rides its push/merge. The
   [thread record](threads/statusline-enhancements.next-session.md) is the canonical home and

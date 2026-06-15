@@ -46,7 +46,7 @@ window), theme 17 (liveness-substrate drift).
 
 - `comms-watch-liveness-floor.plan.md`
 - `claim-liveness-crash-reconciliation-and-session-forensics.plan.md`
-- the new `team-state-register-and-session-shape-icons.plan.md` (watcher-liveness as a register dimension)
+- the new `session-and-team-state-statusline-icons.plan.md` (watcher-liveness as a register dimension)
 
 ## Next step — the go/no-go gate (spend time critically)
 

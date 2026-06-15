@@ -17,11 +17,16 @@ solo/peer/directed + wing indicators) is **COMPLETE** on `feat/comms-research`
 and its controlling plan is **already archived** (see below).
 
 **The thread is LIVE, not closed — it has a successor.** A superseding plan,
-[`team-state-register-and-session-shape-icons.plan.md`](../../../plans/agent-tooling/current/team-state-register-and-session-shape-icons.plan.md)
-(current/, DRAFT, refined 2026-06-14, READY-WITH-CONDITIONS), replaces the narrow
-resolver with a **team-state register** projected into a 4-position icon — its
-active-agent set unions claims ∪ comms ∪ ArcAngel ∪ sidebar participants, so
-read-only collaborators count (the claims-only limitation; PDR-095). An interim
+[`session-and-team-state-statusline-icons.plan.md`](../../../plans/agent-tooling/current/session-and-team-state-statusline-icons.plan.md)
+(current/, DRAFT, **re-grounded session-state-first 2026-06-15**), replaces the
+narrow resolver. Re-grounding (owner 2026-06-15): collaboration state belongs to
+the **SESSION** — solo is the floor (never `unknown` for one's own session), and
+the agent holds an opinion on owner presence/engagement; **TEAM state** is the
+non-trivial derivation of the collective published session states; the statusline
+projects this session's slice. **Experimental discovery phase — NOT crystallised
+to a PDR/ADR yet.** Its active-agent set unions the published session states
+across claims ∪ comms ∪ ArcAngel ∪ sidebars, deduplicated by the (agent_name, id) identity tuple (PDR-076a, which PDR-095 delegates to),
+so read-only collaborators count. An interim
 improvement landed 2026-06-14 (Orbit stirs Spectrum) ahead of the register:
 the resolver is now **session-relative** (team shape gated on a fresh own claim),
 a new **`observing`** shape (dim eyes) covers non-member-with-others-active, and
@@ -62,12 +67,18 @@ state here.
   ("Statusline Enhancements — Oak Mark + Session-Shape Indicators") — in
   `archive/completed/`, not `current/` (the earlier link here was stale).
 - **Successor plan (LIVE continuation)**:
-  [`team-state-register-and-session-shape-icons.plan.md`](../../../plans/agent-tooling/current/team-state-register-and-session-shape-icons.plan.md)
-  — the team-state register + 4-position projection that supersedes the narrow
-  resolver. Originally earmarked for Clipper wakes Atoll (since rotated out, so
-  the plan is unassigned — the next session that opens this thread picks it up);
-  refined 2026-06-14, READY-WITH-CONDITIONS (Condition A owner-resolved: forward-
-  design fields retained, marked no-consumer-yet for future review).
+  [`session-and-team-state-statusline-icons.plan.md`](../../../plans/agent-tooling/current/session-and-team-state-statusline-icons.plan.md)
+  — session-state-first (re-grounded 2026-06-15): session-owned collaboration
+  state (solo floor and owner-presence opinion) → derived team state → statusline
+  projection. Supersedes the narrow resolver. Unassigned (Clipper rotated out).
+  The 2026-06-14 READY-WITH-CONDITIONS verdict **predates the re-grounding** — a
+  fresh readiness pass is required (Conditions B and C/D remain valid execution
+  constraints). Experimental discovery phase: no PDR/ADR yet.
+- **Sibling plan (same lane) — logo column / reuse**:
+  [`statusline-logo-modularisation.plan.md`](../../../plans/agent-tooling/current/statusline-logo-modularisation.plan.md)
+  — separates the Oak-mark logo mechanism + asset from the statusline setup for
+  reuse, and hardens the soft-fail surface. Shares the `renderStatusline` seam;
+  coordinated with the session-state plan, not dependent on it.
 - **Landed (mark)**: the Oak acorn mark — a 4-row logo-column, default
   `braille-sharp` via `OAK_STATUSLINE_LOGO` (`braille` / `quad` / `sextant` /
   `none` alternatives). Commits `40ef58a06` + `5cc13977e` + `8efc58d83` on
