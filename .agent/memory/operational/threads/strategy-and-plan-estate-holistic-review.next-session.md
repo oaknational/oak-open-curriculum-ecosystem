@@ -42,6 +42,16 @@ raw data, and method live in the durable report
   the hard cross-plan fields across lenses, and **validate load-bearing claims
   first-hand** — the waves over-state and mis-frame (verification corrected 4 of 6
   synthesis claims; see report §13).
+- **Guard against narrowing + over-claiming — the failure mode of long analytical
+  sessions, and Step A/Step B are exactly that shape.** Last session needed ~5 owner
+  re-framings to stay broad and at altitude (a newer/narrower artefact captured the
+  frame more than once). Self-ask on a cadence, do not wait for the correction: *still
+  answering the BROAD question at the right altitude? has the newest/most-concrete input
+  captured the frame? am I over-claiming?*
+- **Adversarially verify your OWN synthesis before presenting it as settled, and report
+  what it DENTS** — not only the sub-agent waves; self-synthesis reliably over-states. And
+  a validated map is valuable even when it re-derives a known verdict — do not sell
+  re-derivation as discovery.
 
 ## Participating agent identities
 
