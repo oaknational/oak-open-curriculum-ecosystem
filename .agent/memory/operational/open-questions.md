@@ -208,8 +208,32 @@ fitness_content_role: drainable-buffer
   agents may retry, amend, or report broken hooks when the commit actually landed. Owner
   direction: note as a platform issue and work towards a fix in future — not a repo hook defect.
 - **Why not answerable cheaply now**: requires Cursor platform investigation (terminal buffer,
-  subprocess lifecycle, hook timeout). Workaround is operational: verify with `git log -1` /
-  `git status`, or commit in the user's external terminal.
+  subprocess lifecycle, hook timeout). The correct practice holds regardless of the platform:
+  confirm a commit's outcome from authoritative git state (`git log -1`, `git status`), never from
+  the streamed display — the display was never the source of truth.
 - **Owning artefact / discussion home**: none in-repo yet; platform/Cursor. Does not block
   current cycles.
-- **Status**: OPEN — workaround documented in napkin 2026-06-15; platform fix deferred.
+- **Status**: OPEN — the root cure is the Cursor platform fix (external dependency: the Cursor
+  shell, not this repo); falsifiable when the Cursor shell stops truncating hook output.
+  Confirming commits from git state is correct practice, not an interim patch.
+
+## Q-012 — should the fitness file-discovery walkers respect `.gitignore` rather than a hand-maintained exclusion list?
+
+- **Captured**: 2026-06-15 (Peregrine turns Airstream / claude-code / fitness-validator session).
+- **Question**: The practice-fitness and fitness-vocabulary walkers recurse the filesystem from
+  the repo root and exclude noise via a hand-maintained list (`.git`/node_modules/dist, backups,
+  archives, foreign worktrees, `tmp/`, `.agent/reference-local`). Every exclusion added so far was
+  already in `.gitignore`. Should discovery instead derive the file set from git (gitignore-aware
+  walk, or `git ls-files` plus untracked-not-ignored), so the exclusion list cannot drift from
+  what the repo already considers transient?
+- **Why it shapes future work**: a hand-maintained list silently re-admits any future gitignored
+  location until someone notices and adds it (the worktree bug was exactly this). Respecting
+  `.gitignore` is zero-drift.
+- **Why not answerable cheaply now**: it trades a pure, DI-testable filesystem walk for a git
+  subprocess or a gitignore parser (testability + coupling cost), and `git ls-files` alone would
+  stop scanning freshly-authored, not-yet-tracked fitness files — a real author-workflow
+  regression to design around. Needs deliberate design, not a quick swap.
+- **Owning artefact / discussion home**: ADR-144 (fitness model) / `categories.ts` +
+  `paths.ts`; no plan yet.
+- **Status**: OPEN — structural `.git`-marker + named-roots exclusion shipped 2026-06-15 as the
+  proportionate fix; the gitignore-wholesale option is the deferred deeper cure.

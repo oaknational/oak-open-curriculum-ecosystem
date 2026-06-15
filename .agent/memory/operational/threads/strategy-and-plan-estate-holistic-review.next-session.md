@@ -5,6 +5,10 @@ multi-wave research thread. This record is the pickup surface; the full findings
 raw data, and method live in the durable report
 [`.agent/reports/plan-estate-survey-2026-06-15/`](../../../reports/plan-estate-survey-2026-06-15/README.md).
 
+## User Question
+
+Does the plan frontmatter have a schema? Should it? Probably yes.
+
 ## Current Continuation
 
 - **Branch:** `main` (no code; doc/memory/report writes only — all uncommitted).

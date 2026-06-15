@@ -20,6 +20,30 @@ surface.
 
 ## Current State
 
+- **FITNESS-VALIDATOR SCOPING + DISPOSITION-CATEGORY GROUPING — landing on
+  `docs/planning-and-validation` (2026-06-15, Peregrine turns Airstream).** The
+  practice-fitness and fitness-vocabulary walkers now exclude foreign git
+  worktrees, repo-root `tmp/`, and `.agent/reference-local` (committed
+  `6ffbc14e0`: vocabulary check returned to green; census de-duplicated
+  12/39/79 → 9/19/37). The informational/strict-hard report now groups the
+  per-file section by disposition category (drainable buffers → operational
+  memory → project docs → repo doctrine → Practice Core), recorded as **PDR-097**
+  (portable pattern) and an ADR-144 amendment (repo instantiation; source of
+  truth `agent-tools/src/practice-fitness/categories.ts`). Reviewers
+  (code/test/docs-adr) clean. Committed on `docs/planning-and-validation`. Two
+  follow-on strategic plans captured in `agent-tooling/future/`:
+  [hook-policy TS + schema unification](../../plans/agent-tooling/future/hook-policy-typescript-and-schema-unification.plan.md)
+  (carries the carried-forward workaround content-detection re-add, born from a
+  malformed-policy fail-closed deadlock this session) and
+  [cSpell quality gate](../../plans/agent-tooling/future/cspell-quality-gate.plan.md).
+  **Deep consolidation status: DUE — the next session is an owner-directed
+  dedicated consolidation session**: drain the live buffers (`napkin.md`,
+  `pending-graduations.md`, `open-questions.md`) and graduate this session's
+  napkin lessons (verify-the-shape-before-writing; existence-is-not-correctness
+  applies to one's own exclusion reasoning). **Next safe step**: open/refresh the
+  PR for `docs/planning-and-validation` (fitness-tooling lane, unrelated to that
+  branch's UAT theme — owner directed committing here), then run the dedicated
+  consolidation.
 - **STRATEGY & PLAN-ESTATE HOLISTIC SURVEY — durable report LANDED (2026-06-15,
   Baobab lifts Topsoil `3be248`).** Multi-wave whole-estate survey (413
   docs; 143+124 agents) + 6-agent adversarial verification → a vision→value→action
@@ -320,7 +344,7 @@ each thread record; this table is the repo-level index.
 | `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Fable 5 / Thyme wakes Canopy / record-condensation (curation lane) / 2026-06-12, claude-code / Fable 5 / Forge turns Basalt / eef-data-surfacing-gap-research / 2026-06-12, claude / Fable 5 / Cosmos turns Equinox / snagging-execution-successor-pickup (arc landed #190–#193, closed out) / 2026-06-12, cursor / Fable 5 / Dawnlit Glimmering Orbit / oak-prod-snagging-and-cursor-visibility-writeup / 2026-06-11 (first-wave evidence still unmerged on `docs/graph-team-direction-2026-06-10` — see §Current State correction). Full prior-identity history (30+ seats, 2026-06-02 →): the thread record identity table — set-membership verified 2026-06-12 before this dedup |
 | `oak-kg-ontology-planning-review` | Plan the `oak-kg`/ontology work, starting with a deep review of the Oak Curriculum Ontology repo (separate concern from the bulk-derived graph redesign) | [record][oak-kg-ontology] | claude / Opus 4.8 / Twilit Cascading Supernova / thread-opener-brief-only / 2026-06-04 — **opened, not started; deep review is a fresh session** |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Zephyrous Buffeting Falcon / skills-lane-relocated-to-educator-end-users / 2026-06-08 (prior: Blustery Lifting Gale skills-taxonomy-and-distribution 2026-06-03, Umbral Whispering Silhouette 2026-06-01) |
-| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 / Margay wakes Whisper / skills-estate-audit-and-plan-reconciliation / 2026-06-14 (prior: Flame rides Temper statusline-lane-successor 2026-06-13, Monsoon guards Cirrus statusline-indicators-landed 2026-06-12; full prior-identity history: the thread record identity table) |
+| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude-code / Opus 4.8 / Peregrine turns Airstream / fitness-tooling-and-future-plans / 2026-06-15 (prior: Margay wakes Whisper skills-estate-audit 2026-06-14, Flame rides Temper statusline-lane-successor 2026-06-13; full prior-identity history: the thread record identity table) |
 | `repo-professionalism-assessment` | Repo professionalism / engineering-quality report → planability triage | [record][repo-professionalism-assessment] | codex / GPT-5 / Airy Whirling Wing / report-author-and-planability-router / 2026-06-03 |
 | `school-data-search` | Oak School Data Search service (POC MVP): briefs → report → plan → gate walk → **deep review complete** → build | [record][school-data-search] | claude / Opus 4.8 / Fiery Sparking Caldera / deep-review-and-refinement / 2026-06-04 (prior: Mossy Whispering Bark 2026-06-04, Furnace Roasting Brazier + Hushed Lurking Mask 2026-06-03) |
 | `semantic-search` | Search data foundations: upstream-schema alignment, bulk sourcing, minimal-adaptation arc | [record][semantic-search] | claude / Opus 4.8 / Moonlit Waxing Nebula / upstream-realignment-specialist / 2026-06-03 |

@@ -8,6 +8,60 @@ merge_class: append-only-narrative
 fitness_content_role: drainable-buffer
 ---
 
+## Session: 2026-06-15 — fitness-validator worktree exclusion (Peregrine turns Airstream)
+
+- **The fitness validators walked the raw filesystem and ignored `.gitignore`.** `practice-fitness`
+  (`paths.ts`) and `fitness-vocabulary` recursed from the repo root with a hand-maintained
+  skip-list that omitted `.claude/worktrees/`, so they descended into the nested git worktree and
+  scanned a SECOND copy of the whole estate — doubling the informational census and firing a
+  spurious `practice:vocabulary` exit-1 on the worktree's copy of its own source + ADR-144 (the
+  `ALLOWED_FILES` self-exclusion is keyed on canonical paths that don't match under the worktree
+  prefix). TELL: a validator that walks `fs.readdir` from root, not `git ls-files`, will scan
+  worktrees, `tmp/`, and everything else gitignored unless explicitly excluded.
+- **Cure = structural, not a path blacklist.** Skip any non-root dir carrying a `.git` marker
+  (worktrees have a `.git` FILE, nested clones a dir) — covers every vendor's worktrees with zero
+  enumeration. Plus root-anchored excludes (`p === root || p.startsWith(root + '/')`, never a loose
+  prefix or `tmp` swallows `template.md`) for the gitignored static roots `tmp/` and
+  `.agent/reference-local`.
+- **INSIGHT (deferred deeper cure): everything the owner named to exclude was already in
+  `.gitignore`.** The latent LTAE cure is "fitness walkers respect `.gitignore`" — subsumes
+  worktrees/tmp/reference-local with zero drift — but it couples a currently-pure, DI-testable
+  validator to a git subprocess or a gitignore parser. Chose the structural-`.git` + named-roots
+  path to keep the validators pure; flagged the gitignore option to the owner.
+- **Two commit gates fired in sequence; both genuine.** knip flagged two needlessly-`export`ed
+  symbols (used only internally); after dropping the `export`, Prettier re-wrapped the now-shorter
+  signature and the format gate fired. TELL: after removing an `export` to satisfy knip, run
+  `pnpm format:root` and re-stage BEFORE re-committing — the signature rewrap is predictable.
+- **A complexity / max-lines cap is a signal pointing at a real seam — decompose, never compress.**
+  The vocab validator had outgrown one file (250-line cap; a function over the complexity-8 cap).
+  The response was to split discovery into a `walk.ts` sibling along the genuine
+  discovery-vs-phrase-detection boundary — the structural answer the signal calls for, the same
+  way a fitness zone routes to graduation, not trimming. `consolidate-at-third-consumer` kept the
+  worktree/transient logic duplicated across the two validators (2 consumers), not extracted.
+
+- **A head-only grep is not a frontmatter check (reviewer caught a duplicate key I added).**
+  I greped `sed -n '1,12p'` of `pending-graduations.md`, saw no `fitness_content_role`, and added
+  it — but the field was already declared at line 31 (frontmatter ran past line 12 via multi-line
+  `>-` blocks). The add was a duplicate key; the file was already correct. TELL: to assert a
+  frontmatter field is absent, parse the whole YAML block (first `---` to second `---`), never a
+  fixed head window; and most strictly when the "absence" conveniently justifies an edit. Sibling
+  of distilled's "audit your own search filters". Reverted on review; net change to that file: none.
+
+- **Verify the actual shape of the surface you're writing to — a glanced type signal is not a
+  check.** I wrote object-form entries into the content guard's `blocked_patterns`, which is
+  `string[]`; the malformed policy then crashed the fail-closed guard and bricked all Edit/Write
+  (recoverable only by owner action). I had already SEEN `loadBlockedContentPatterns(): Promise<string[]>`
+  and glossed it, assuming the sibling Bash guard's object shape applied. TELL: before writing to a
+  config/data structure, confirm THAT surface's schema, not a sibling's; a return type you read and
+  glossed is a missed check the fluent assumption rode over. Captured structurally in the hook-policy plan.
+- **"Existence is not correctness" applies to your OWN exclusion reasoning, not just the corpus
+  (owner challenge).** I dropped detector phrases because they "hit the doctrine surfaces", ASSUMING
+  those hits were legitimate naming — without reading them. The owner: "do they over-match, or detect
+  bad doctrine needing remediation?" Reading them: good-frame naming (reappraisal-passes), so the cure
+  is to keep the detector strong and scope naming-surfaces out via `exclude_paths` by design — never to
+  weaken the patterns to dodge the corpus. TELL: when a check fires inside the doctrine, read each hit
+  and classify; do not assume doctrine-surface usage is correct, and do not narrow the detector to avoid it.
+
 ## Session: 2026-06-15 — statusline plan re-grounding (Cutter spins Quay)
 
 - **YAGNI / over-building is corporate-delivery doctrine, NOT innovation doctrine

@@ -69,6 +69,10 @@ isProject: false
 
 ---
 
+## Additional User Request
+
+Add one blank line under the statusline content.
+
 ## Context
 
 The Claude Code statusline renders a four-row block: the Oak acorn mark as a
