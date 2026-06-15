@@ -108,68 +108,6 @@ register before adding.
   component | trigger: the next multi-seam plan authoring, or owner direction |
   size: M | status: pending]`
 
-## 2026-06-11 capture — Pearly Snorkelling Compass (doctrine-curation pass: fired triggers)
-
-Routed during the owner-named doctrine-curation session (naming event 211a1794;
-Director pre-position 0f36d756 carries the harvest inventory). The four items
-below have FIRED triggers and were the priority drain of the pass. Each was
-verified absent from this register before adding; every instance citation was
-re-verified first-hand against the comms corpus or the closing seat's events at
-capture time.
-
-- **Collaboration-CLI relative-path hardening: resolve registry/comms paths
-  against the coordination home or refuse relative paths loudly.** THREE
-  instances in two days, three vectors, two failure shapes: (1) Scorched
-  (0d8138) — `claims close` with relative `--active` from a stale cwd, crash
-  masked by a pipe, caught only by the absent success token; (2) Prismatic
-  (65394e) — `claims close` relative-path crash from a worktree cwd (closeout
-  62d747c4); (3) Nebulous (3493fb) — comms-append vector: a comms sweep left
-  the shell cwd inside the comms dir and the next `node agent-tools/dist/...`
-  invocation crashed MODULE_NOT_FOUND (delta event de5122b8). All three failed
-  CLEAN; the class's dirty variant is already on record (event 9a164c5c: a
-  relative path from a worktree cwd wrote to the WRONG registry behind a
-  true-looking proof line — pattern wrapped-exit-codes-false-green). A fourth
-  read-direction confirmation landed during this pass (curation seat,
-  FileNotFoundError after an earlier `cd` persisted across Bash calls). The
-  behavioural cure (absolute paths; read the proof line's destination) is live
-  in distilled; the FIRED candidate is the structural CLI cure: resolve
-  `--active`/`--closed`/`--comms-dir`/`--seen-file` against a discovered
-  repo/coordination-home root, or refuse relative paths with an error that
-  names shell-cwd persistence (any prior `cd`, not only worktree seats) as the
-  trigger and absolute paths as the cure.
-  Two further instances 2026-06-12 (Tempest spins Stratosphere, 123098): (5) the
-  dirty comms-append vector again — relative `--comms-dir` after a `cd` into a
-  worktree wrote the presence event into the WORKTREE's comms store behind a
-  true-looking "wrote comms event" line (caught by checking the destination,
-  moved forward); (6) a NEW shape that extends the cure spec — `commit-queue`
-  write commands (`enqueue`/`guard`/`record-staged`/`commit`) expose no
-  registry path option at all, so a worktree seat CANNOT address the shared
-  registry even with absolute-path discipline: `enqueue` rejected a valid
-  shared-registry claim as `unknown claim_id` because it resolved the
-  worktree's own registry from cwd. The structural cure must therefore resolve
-  the coordination home across worktrees (e.g. via the git common dir), not
-  merely refuse relative paths — otherwise worktree seats are locked out of
-  the commit-queue ceremony entirely and fall back to manual staging
-  discipline.
-  `[captured: 2026-06-11 | source: Scorched napkin entry + Prismatic closeout
-  62d747c4 + Nebulous delta de5122b8 + this pass's read-direction instance +
-  Tempest 2026-06-12 instances 5–6 (comms-append misroute; commit-queue
-  worktree lockout) | target: agent-tools collaboration-state path-resolution
-  hardening | trigger: FIRED, second instance (Scorched+Prismatic); third
-  instance adds the comms-append vector; sixth instance adds the
-  worktree-lockout shape and the common-dir resolution requirement | size: S→M
-  (common-dir discovery added) | status: due]`
-- **Comms `reply` demands the full event UUID — add git-style prefix
-  resolution.** Second instance FIRED (Prismatic's closeout + the earlier
-  instance counted in pre-position 0f36d756 item 4): an 8-char event-id prefix
-  exits 2 loud, while the corpus's own conventions (titles, sweep output,
-  napkin citations) circulate short prefixes, so agents naturally carry them.
-  Cure: the CLI resolves unambiguous event-id prefixes against the comms dir,
-  erroring loudly on ambiguity.
-  `[captured: 2026-06-11 | source: Prismatic closeout 62d747c4 + pre-position
-  0f36d756 item 4 | target: agent-tools comms reply/show prefix resolution |
-  trigger: FIRED, second instance | size: S | status: due]`
-
 ## 2026-06-11 capture — Pearly Snorkelling Compass (doctrine-curation pass: accumulating candidates)
 
 Conserved from the same pass: candidates whose triggers have NOT fired,
@@ -177,39 +115,6 @@ moved here from napkin capture (or registered from the harvest inventory) so
 the substance survives napkin rotation with verified instance counts. Each
 verified absent from this register before adding.
 
-- **Comms watcher drain-step needs a budget sized to the comms dir, or the
-  dir needs hygiene.** The hardened watcher's 60s drain-step deadline died
-  fail-loud on a >100-event comms dir at least FOUR times across two seats
-  (Iridescent's restart with a real-events gap window; Nebulous's two clean
-  same-seen-file restarts, 12:18Z + 13:46Z), all restarts clean, one gap
-  window carrying substantive events. Mechanically worsens as the comms
-  corpus grows. Candidate cures: a drain budget scaled to directory size, or
-  comms-dir hygiene/archival — the latter is OWNER-GATED by the standing
-  comms-corpus preservation pause (consolidate-docs step 3a: no rotation
-  absent an owner-opened comms research / retention plan). TRIGGER FIRED
-  within this same pass: the curation seat ran `--step-timeout-ms 120000`
-  pre-emptively, and the watcher STILL died a drain-timeout at 14:16Z (during
-  the pre-push window's I/O load), restarting clean on the same seen-file
-  with a heartbeat-only gap — a further death after a raised budget is
-  exactly the condition this entry named at capture, one hour earlier. A
-  fixed budget of any size loses to a growing dir under concurrent load; the
-  durable cure is dir-size-scaled budgeting (or the owner-gated archival).
-  SHARPENED by the Director's owner-directed background-process audit (same
-  day, ~14:50Z): the fail-loud timeout emits the WATCHER ERROR line but the
-  node process does NOT exit — "dead" watchers linger as zombie co-writers on
-  the same seen-file/heartbeat-file (three writers on one file observed; two
-  orphans survived a stood-down session), and the zombie drains plausibly
-  feed the very I/O load that kills subsequent drains. The cure shape is
-  therefore THREE-part: the timeout path must process.exit; the supervisor
-  must kill the process tree; restart guidance gains a stale-process census
-  (ps for prior watchers on the same seen-file) before any same-seen-file
-  restart.
-  `[captured: 2026-06-11 | source: pre-position 0f36d756 item 7 + Nebulous
-  delta de5122b8 + this pass's 120s death at 14:16Z + the Director's
-  lingering-process audit (napkin, same day) | target: agent-tools comms
-  watch exit-on-timeout + supervisor kill-tree + census; budget sizing
-  secondary; archival path owner-gated | trigger: FIRED same-pass (death at
-  a raised budget; root cause now sharper) | size: M | status: due]`
 - **Worktree vocab-gen needs the gitignored bulk-downloads — symlink pattern
   for the team opener.** Worked once (Prismatic, PR-180 cycle): vocab-gen in a
   worktree needs `apps/oak-search-cli/bulk-downloads` (gitignored,
@@ -438,18 +343,6 @@ mechanical tripwire does" insufficiency (Pattern 1; home:
 `action-time-structural-interrupt` item). The action-time-structural-interrupt
 trigger (cross-session recurrence) is now strongly met — surfaced to owner.
 
-## 2026-06-03 captures — Opalescent curation enforcement pass
-
-- **Commit-queue write-command help must expose the full identity tuple.**
-  `commit-queue enqueue` and `guard` require identity `--id`, but usage text
-  displayed agent name/platform/model/session-prefix and omitted the UUID field.
-  This produced avoidable closeout friction and combines with the live-claim
-  referential-integrity lesson: write commands need help/validation that shows
-  every required identity field. `[captured: 2026-06-03 | source: Lofty and
-  Lacustrine closeout napkin entries | target: agent-tools commit-queue UX/TDD
-  lane | trigger: owner direction 2026-06-11 | size: S | status: routed
-  2026-06-11 — agent-tools implementation lane]`
-
 ## 2026-06-02 captures — napkin rotation doctrine routes (Shaded Veiling Mirror)
 
 - **Shared-window handoffs should scan for convergence, not only collision.** A
@@ -488,14 +381,6 @@ trigger (cross-session recurrence) is now strongly met — surfaced to owner.
   `[captured: 2026-06-02 | source: distilled.md June 2 dependency refresh cleanup | target:
   dependency-refresh closeout checklist OR plan-hygiene doctrine | trigger: owner direction or next
   workspace-wide dependency refresh | size: S | status: owner-gated]`
-- **Cursor identity seed observability needs a machine-level check.** Ashen's
-  Cursor session could not claim or broadcast because
-  `PRACTICE_AGENT_SESSION_ID_CURSOR` was absent from the shell, so a broad sweep
-  was invisible to active-claims/comms. This looks like a host hook/environment
-  gap rather than an agent-level behaviour failure.
-  `[captured: 2026-06-02 | source: napkin rotation from Ashen Igniting Hearth sweep | target:
-  cursor-hook/agent-tools identity observability check | trigger: owner direction or next Cursor
-  session with missing identity seed | size: S | status: owner-gated]`
 
 ## Register Rule
 
@@ -635,34 +520,6 @@ that the source buffers were validly drained.
   owner direction | size: S | status: owner-gated]`
   Preserve the behavioural lesson without expanding the always-read layer before
   a second instance or owner ratification.
-- **Cursor session seed absent from terminal context.**
-  `[captured: 2026-05-31 | source: napkin 2026-05-31 Cirrus entry |
-  target: agent-tools-platform-identity-candidate |
-  trigger: second platform seed/context mismatch or owner direction | size: S |
-  status: routed 2026-06-11 — agent-tools identity-observability lane (trigger
-  fired 2026-06-04: the 2026-06-02 second instance, same
-  PRACTICE_AGENT_SESSION_ID_CURSOR-absent failure, different agent; owner
-  ratified the routing at the 2026-06-11 walk)]`
-  Route to agent-tools/platform identity work if it recurs.
-
-## 2026-05-31 longitudinal napkin-review gates
-
-Captured by Blooming Twining Grove (codex / GPT-5 / `019e7d`) during the
-dedicated longitudinal review of the active napkin plus the twenty most recent
-archived napkins. These items are owner-gated because the review found repeated
-failure despite existing reminders; they still need owner direction or a
-narrower doctrine/tooling pass before promotion.
-
-- **Shell-significant collaboration CLI arguments need structural affordance.**
-  `[captured: 2026-05-31 | source: longitudinal napkin review F2 |
-  target: agent-tools-collaboration-state-ux-or-rule |
-  trigger: owner direction or next collaboration-state CLI/doc pass |
-  size: S | status: owner-gated]`
-  Repeated instances include markdown backticks in comms bodies, unquoted `**`
-  claim patterns, unquoted active-claim globs, and the current pass repeating the
-  comms-glob variant. The shell expands before the CLI can validate, so the
-  eventual cure may need `--area-pattern-file`, quote-safe examples, wrapper
-  defaults, or another structural affordance rather than another prose reminder.
 
 ## 2026-05-31 distilled continuation gates
 

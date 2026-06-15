@@ -1245,6 +1245,184 @@ below is a cross-reference index, not a second source of truth.
 - **Status**: open.
 - **Owner direction status**: standing.
 
+### F-41 — Collaboration-CLI relative-path + git-common-dir resolution
+
+- **Source**: `pending-graduations.md` "due" item (Scorched/Prismatic/Nebulous/
+  Tempest — six instances 2026-06-11/12). Migrated 2026-06-15.
+- **Surface**: collaboration-state claims/comms/commit-queue write commands
+  (`--active`/`--closed`/`--comms-dir`/`--seen-file`).
+- **Observed**: relative paths from a stale or worktree cwd crash
+  (MODULE_NOT_FOUND / FileNotFoundError) or — worse — write to the WRONG registry
+  behind a true-looking proof line (the wrapped-exit-codes false-green pattern).
+  commit-queue write commands expose NO registry path option, so a worktree seat
+  resolves its own registry from cwd and is locked out of the shared queue
+  (`enqueue` rejected a valid shared-registry claim as unknown).
+- **Expected**: write commands resolve the coordination home across worktrees
+  (e.g. via the git common dir) or refuse relative paths loudly, naming
+  shell-cwd persistence (any prior `cd`) as the trigger.
+- **Candidate cure**: resolve registry/comms paths against a discovered
+  repo/coordination-home root; commit-queue write commands gain a registry path
+  option.
+- **Target surface**: agent-tools collaboration-state path resolution. (Verified
+  2026-06-15: `collaboration-state-write-safety.plan.md` does NOT carry this.)
+- **Status**: open.
+- **Owner direction status**: standing.
+
+### F-42 — Comms `reply`/`show` need git-style event-id prefix resolution
+
+- **Source**: `pending-graduations.md` "due" item (Prismatic 62d747c4 +
+  pre-position 0f36d756 item 4). Migrated 2026-06-15.
+- **Surface**: collaboration-state comms reply/show.
+- **Observed**: an 8-char event-id prefix exits 2 loud, while the corpus
+  circulates short prefixes (titles, sweep output, napkin citations), so agents
+  naturally carry them.
+- **Expected**: the CLI resolves unambiguous event-id prefixes against the comms
+  dir, erroring loudly only on ambiguity.
+- **Candidate cure**: prefix resolution in comms reply/show.
+- **Target surface**: agent-tools comms reply/show.
+- **Status**: open.
+- **Owner direction status**: standing.
+
+### F-43 — Comms-watch zombie-process residuals (kill-tree, census, dir-scaled budget)
+
+- **Source**: `pending-graduations.md` "due" item (pre-position 0f36d756 item 7,
+  Nebulous, the 120s-death-at-14:16Z, and the Director lingering-process audit).
+  Migrated 2026-06-15.
+- **Surface**: collaboration-state comms watch + its supervising Monitor/cron.
+- **Observed**: the fail-loud drain-timeout emits WATCHER ERROR but the node
+  process does NOT exit — dead watchers linger as zombie co-writers on the same
+  seen-file/heartbeat-file (three writers on one file; two orphans survived a
+  stood-down session), and zombie drains plausibly feed the I/O load that kills
+  subsequent drains. A fixed step-timeout loses to a growing comms dir under
+  concurrent load.
+- **Expected**: a timed-out watcher exits cleanly; no zombie co-writers; drain
+  budget scales to dir size (or comms-dir archival reduces load).
+- **Candidate cure**: THREE residuals — (a) supervisor kill-tree; (b)
+  stale-process census (ps for prior watchers on the same seen-file before any
+  same-seen-file restart); (c) dir-size-scaled drain budget. The timeout→
+  EXIT-NON-ZERO path is covered by `comms-watch-hang-hardening.plan.md` c1
+  (pending landing); that plan's §Non-goals DELIBERATELY scopes out
+  supervisor/harness (kill-tree) and uses a fixed budget — so (a)/(b)/(c) are
+  genuinely unhomed.
+- **Target surface**: agent-tools comms watch supervisor + restart guidance; the
+  comms-corpus archival path is owner-gated (preservation pause).
+- **Status**: open (partial: timeout-exit in comms-watch-hang-hardening c1).
+- **Owner direction status**: standing.
+
+### F-44 — `claims list` freshness_status ignores the live heartbeat stream (SAFETY)
+
+- **Source**: Snapper binds Coral (`0beea7`) successor-in-waiting grounding
+  2026-06-15; comms behaviour-note `9e3b5b01`.
+- **Surface**: collaboration-state claims list / claims status.
+- **Observed**: freshness_status is computed from `claimed_at + freshness_seconds`
+  alone, ignoring the agent's live heartbeat comms-event stream. A demonstrably
+  live agent (heartbeating every ~4 min, recent commit) was reported "stale". An
+  agent trusting `freshness_status: stale` would conclude a live peer is dead and
+  barge into its active claim — the exact collision `respect-active-agent-claims`
+  exists to prevent.
+- **Expected**: freshness incorporates the latest heartbeat for that
+  agent/claim. (`consolidate-docs` step 7e already says "use heartbeat_at if
+  present and more recent" — but neither the claim's heartbeat_at field nor
+  `claims list` reflects the actual heartbeat events.)
+- **Candidate cure**: heartbeat append updates the claim's heartbeat_at, OR
+  `claims list` joins the comms heartbeat stream by claim_id/session and reports
+  freshness from the most recent of {claimed_at, heartbeat_at, last heartbeat
+  event}.
+- **Target surface**: agent-tools collaboration-state claims freshness.
+- **Status**: open (behavioural mitigation: freshness_status is input-to-verify
+  against the heartbeat stream).
+- **Owner direction status**: standing.
+
+### F-45 — Untracked-by-design registry/dirs do not self-init
+
+- **Source**: Rigel binds Meridian (`b475ee`) + Snapper (`0beea7`) 2026-06-15
+  bootstrap; napkin frictions.
+- **Surface**: collaboration-state claims open/close; comms watcher seen-file dir.
+- **Observed**: active-claims.json and closed-claims.archive.json are
+  untracked-by-design (ADR-199/PDR-094), so absent on fresh instance-state — the
+  EXPECTED fresh state. The first `claims open` dies ENOENT exit 2 (no auto-init,
+  no guidance); `claims close` dies ENOENT on absent closed-claims.archive.json
+  the same way. Recovery needs reading the schema source and hand-writing the
+  empty registry. Sibling: the comms-seen parent dir needs a manual `mkdir -p`.
+- **Expected**: write commands self-init an empty registry when the file is
+  absent (absence is the expected fresh state), or a `claims init` exists, or
+  ENOENT re-throws guidance naming the cure; same self-init for the comms-seen
+  dir.
+- **Candidate cure**: self-init on absent untracked-by-design registry/dir.
+- **Target surface**: agent-tools collaboration-state write commands + comms
+  watch seen-dir.
+- **Status**: open.
+- **Owner direction status**: standing.
+
+### F-46 — commit-queue write-command help must expose the full identity tuple
+
+- **Source**: `pending-graduations.md` (Lofty/Lacustrine closeouts; routed
+  2026-06-11, no plan home found). Migrated 2026-06-15 (like F-40).
+- **Surface**: collaboration-state commit-queue enqueue/guard.
+- **Observed**: enqueue/guard require identity `--id` (UUID), but usage text
+  displayed agent name/platform/model/session-prefix and omitted the UUID field —
+  avoidable closeout friction.
+- **Expected**: write-command help/validation shows every required identity
+  field including the UUID.
+- **Candidate cure**: help text + validation enumerate the full identity tuple.
+- **Target surface**: agent-tools commit-queue UX.
+- **Status**: open.
+- **Owner direction status**: standing.
+
+### F-47 — Platform identity-seed observability (absent seed → invisible session)
+
+- **Source**: `pending-graduations.md` (Ashen 2026-06-02; Cirrus 2026-05-31;
+  routed 2026-06-11 identity-observability lane; trigger fired 2026-06-04, second
+  instance). Migrated 2026-06-15.
+- **Surface**: platform host hooks / agent-tools identity; Cursor especially
+  (`PRACTICE_AGENT_SESSION_ID_CURSOR`).
+- **Observed**: a Cursor session whose `PRACTICE_AGENT_SESSION_ID_CURSOR` was
+  absent from the shell could not claim or broadcast, so a broad sweep was
+  invisible to active-claims/comms — a host hook/environment gap, not an agent
+  behaviour failure. Two instances, different agents.
+- **Expected**: a machine-level check surfaces a missing/unresolvable identity
+  seed at session open.
+- **Candidate cure**: an identity-seed preflight/observability check at the
+  host-hook layer.
+- **Target surface**: agent-tools identity preflight + platform hooks.
+- **Status**: open.
+- **Owner direction status**: standing.
+
+### F-48 — Shell-significant collaboration-CLI arguments need a structural affordance
+
+- **Source**: `pending-graduations.md` (longitudinal napkin review F2; multiple
+  instances — comms backticks, unquoted `**` claim patterns, unquoted globs).
+  Migrated 2026-06-15.
+- **Surface**: collaboration-state comms/claims args the shell expands before the
+  CLI validates.
+- **Observed**: markdown backticks in comms bodies, unquoted `**` claim patterns,
+  and unquoted active-claim/comms globs repeatedly mis-expand; the shell expands
+  before the CLI can validate.
+- **Expected**: shell-significant args cannot silently mis-expand.
+- **Candidate cure**: `--area-pattern-file` / `--body-file` (the latter
+  DELIVERED for bodies), quote-safe help examples, wrapper defaults, or another
+  structural affordance — not a prose reminder.
+- **Target surface**: agent-tools collaboration-state CLI UX.
+- **Status**: partially-addressed (`--body-file` delivered for comms bodies;
+  pattern/glob args remain).
+- **Owner direction status**: standing.
+
+### F-49 — CLI-UX residuals: pnpm wrapper masks usage text; check-commit-message flag is `-F`
+
+- **Source**: Snapper (`0beea7`) + Rigel (`b475ee`) 2026-06-15.
+- **Surface**: `pnpm agent-tools:*` recursive wrapper; check-commit-message.
+- **Observed**: (a) `pnpm agent-tools:collaboration-state <bad subcommand/flag>`
+  dies `ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL` exit 2, masking the CLI's own helpful
+  usage/error text (visible only when calling the dist binary directly). (b)
+  check-commit-message `--file` exits 2; the flag is `-F`.
+- **Expected**: the wrapper passes the CLI's stderr usage text through on
+  non-zero exit; flag naming is discoverable/consistent.
+- **Candidate cure**: wrapper stderr pass-through; `-F` documented or `--file`
+  aliased.
+- **Target surface**: agent-tools pnpm scripts + check-commit-message help.
+- **Status**: open (low priority).
+- **Owner direction status**: standing.
+
 ---
 
 ## Mitigated / Addressed Frictions
