@@ -123,6 +123,17 @@ persists; resume against THIS baton.**
   first-hand check). Commit by explicit pathspec. The owner holds full commit
   ownership-transfer for the tree this session. The plan file:
   `~/.claude/plans/nested-wiggling-lollipop.md`.
+- **Grounded findings for the agent-tools routing (loss-scan):** per-item grep
+  for plan homes is noisy — verify each first-hand. Provisional homes:
+  comms-watch exit-on-timeout / supervisor / stale-process census →
+  `comms-watch-hang-hardening.plan.md`; comms reply-prefix resolution →
+  `collaboration-identity-doctrine-enforcement-remediation.plan.md` (verify);
+  collaboration-CLI relative-path / common-dir / worktree-lockout →
+  `collaboration-state-write-safety.plan.md` (verify). The **control-byte
+  gate-check has NO existing plan home** — it needs one created (or extend a
+  validator plan). When editing the register, line-wrapped `+`/`-` connectors
+  trip markdownlint MD004 and the auto-fix mangles meaning — use "and" (this
+  session hit it; it is itself a register item).
 
 - **LESSON — "structural fitness repairs" is an inversion trap even when qualified
   (owner caught it in my own plan's vocabulary).** A phase/task labelled "repair the
