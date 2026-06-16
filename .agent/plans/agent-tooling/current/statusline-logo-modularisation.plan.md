@@ -19,7 +19,7 @@ todos:
     status: pending
     depends_on: []
   - id: ws2-cycle-1
-    content: "WS2.1: OAK_ACORN LogoAsset in neutral statusline/oak-acorn.ts — new 5x7 sharpened braille-sharp default + four retained 4x6 marks moved verbatim (old braille-sharp -> braille-sharp-compact); colour, default, provenance; migrate oak-logo tests. One commit. Tree green. See Owner Decision 2026-06-16."
+    content: "WS2.1: OAK_ACORN LogoAsset in neutral statusline/oak-acorn.ts — braille-sharp default as its FOUR-FRAME cycle (id0 canonical + id1-3; do NOT regress to one mark) + four retained 4x6 marks moved verbatim (old braille-sharp -> braille-sharp-compact); colour, default, provenance; migrate oak-logo tests; cycle-preserved acceptance. One commit. Tree green. See Owner Decision 2026-06-16 + Live landing cycling."
     status: pending
     depends_on: [ws1-cycle-1, ws1-cycle-3, ws1-cycle-4]
   - id: ws3-cycle-1
@@ -392,6 +392,18 @@ export function composeLogoColumn(
 `LogoSelection<Style>` is a closed union derived from the asset's own keys — no
 raw-string leakage past the boundary (closed-shape-design rule).
 
+**Frame cycling landed live — the WS1.1/WS1.2 contract must carry it, not regress
+it.** `braille-sharp` is now a four-frame cycle (see [Live landing §cycling](#live-landing-2026-06-16--per-render-logo-frame-cycling)).
+The sketch above is single-frame-per-style; build the contract **frame-aware from
+the start**: a style carries one or more frames (e.g. `styles: Record<Style,
+readonly (readonly string[])[]>` — a frame list per style, single-mark styles a
+one-element list), and `resolveLogo(asset, selection, frame)` selects
+`frames[frameIndex(frames.length, frame)]`. The neutral `frameIndex` (today in
+`statusline-logo-cycle.ts`) is Layer B; the per-session counter store
+(`statusline-frame-store.ts`) stays adapter I/O (Layer A). Settle the exact type
+at WS1.1 (type-expert reviews it); the invariant is that four distinct, aligned
+`braille-sharp` frames survive the move.
+
 ---
 
 ## Design Principles
@@ -564,6 +576,16 @@ agent-tools` returns nothing; no re-export shim remains.
 
 ## WS2 — Oak acorn as pure data (neutral)
 
+**Cycling carry-over (landed live — do not regress).** `braille-sharp` is a
+four-frame cycle (id0 canonical + id1–3 seeded variants;
+[Live landing §cycling](#live-landing-2026-06-16--per-render-logo-frame-cycling)).
+Throughout Cycle 2.1, wherever the spec says the `braille-sharp` "rows" or "mark",
+read **the four `braille-sharp` frames** (`BRAILLE_SHARP_FRAMES`): the move carries
+all four into `OAK_ACORN` per the frame-aware contract from WS1.1, and migrates the
+reproducible-generator pointer. The acceptance gains a **cycle-preserved guard**:
+the moved `braille-sharp` is four distinct, uniform-width frames with frame 0 equal
+to the canonical Owner-Decision mark.
+
 ### Cycle 2.1: `OAK_ACORN` LogoAsset
 
 **Parallel-safety**: sequenced after 1.1, 1.3, 1.4.
@@ -693,6 +715,15 @@ returns nothing).
 
 ## WS4 — Wiring (the inversion)
 
+**Frame selection moves to the adapter (landed-cycling carry-over).** The
+renderer's interim `logoFrame` option is removed at WS4.1 — the renderer paints the
+`ResolvedLogo.rows` it is given and selects no frame. WS4.2's composition root
+resolves the frame: read `session_id`, advance the per-session counter (the
+`FrameCounterStore` / `statusline-frame-store.ts` adapter), pass it through
+`resolveLogo(asset, selection, frame)`, and honour the `OAK_STATUSLINE_MOTION`
+off-switch (pins frame 0). The env-matrix acceptance gains a case: successive
+`braille-sharp` renders advance the frame.
+
 ### Cycle 4.1: Renderer consumes the contract, not the asset
 
 **Parallel-safety**: sequenced after 1.2, 1.4.
@@ -805,6 +836,7 @@ Document findings; spawn a follow-up plan only for BLOCKERs.
 | AC-8 | e2e | shim e2e exit 0 and `rg -e CLAUDE_PROJECT_DIR -e spawn .claude/scripts/statusline-identity.mjs` empty |
 | AC-9 | unit | render test exit 0 and `rg -e OAK_LOGO_ROWS -e GREEN …/statusline-render.ts` empty |
 | AC-10 | integration | adapter env-matrix test exit 0 and `rg "oak-logo" agent-tools` empty |
+| AC-11 | unit + integration | cycling preserved through the move: `braille-sharp` resolves four distinct, uniform-width frames; successive adapter renders advance the frame; `OAK_STATUSLINE_MOTION` pins frame 0 |
 | All | aggregate | `pnpm check` exit 0 |
 
 Completion = every AC proven; no `complete` verdict before `pnpm check` is green
