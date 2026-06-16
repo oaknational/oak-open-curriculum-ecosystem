@@ -348,3 +348,44 @@ width-matched to the active logo. Behaviour-relevant captures:
 
 Siblings: [[feedback_owner_direction_is_a_stream]] (separator off→on within two turns),
 [[fluency-is-a-failure-vector]], [[feedback_existence_is_not_correctness_default_replace]].
+
+## Session: 2026-06-16 — decision-debt register drained 72→2 via a graduation quorum (Limpet spins Headland)
+
+Drained the pending-graduations register (72 overdue → 2 honest residue) as a dedicated
+consolidation. The session's durable lessons:
+
+- **OWNER-ESTABLISHED PROTOCOL (PDR candidate — graduation-quorum):** every graduation runs through
+  a quorum before it lands — primary assesses all items first-hand, then **assumptions-expert +
+  docs-adr-expert + two Opus reviewers** assess the result, then the primary critically adjudicates
+  and corrects (deciding vote stays primary). Owner's rationale: a graduation MINTS doctrine into the
+  always-loaded corpus, so a wrong graduation costs every future session — graduations deserve MORE
+  scrutiny than rejects, not less. This is the enforce-edge cure made concrete (multi-mind review
+  before doctrine lands). Candidate home: a PDR (graduation-requires-quorum) — surfaced for owner.
+- **The two quorums calibrate in opposite directions, and the truth is in the middle.** The
+  rejection-list quorum (assumptions + 2 Opus) pushed me UP — it caught over-rejection (I'd
+  reflexively rejected ~9 single-instance items the lenses actually favoured; the owner abolished the
+  "await a second instance" gate). The graduation quorum (assumptions + docs + 2 Opus) pulled me DOWN
+  — it caught over-graduation (~6 items minted from thin/wrong/duplicate evidence). My initial
+  confidence was mis-calibrated in BOTH directions; only the adversarial quorum exposed it.
+- **The highest-value catches were duplications and a wrong doctrine I could not see myself.** docs-
+  and home-verify reviewers found B1/B2/C1/C5/E4 already homed (ADR-195 §4, ADR-157, PDR-089 D6,
+  invoke-code-experts, working-with-graphs) — re-minting them would have bloated the corpus. C3
+  ("more-restrictive reviewer always wins") was *substantively wrong* doctrine (a stricter rule can
+  be the wrong rule). C2/F1 named a phantom rule file (`validate-specialist-findings-before-acting`
+  does not exist; its content is in PDR-089 + invoke-code-experts). First-hand verification of every
+  "conserved in X" claim is non-negotiable (the Tempestuous 15/18-false caution, confirmed again).
+- **Reject is a real decision; honest residue is not avoidance.** 2 items stayed live: TA1
+  (first-out-closeout self-election) and P6 (routing-blockage) — owner-pinned do-not-mint, unique
+  substance NOT in PDR-074, genuinely-future triggers. Forcing them out would lose substance (reject)
+  or defy the owner (graduate); keeping them as visible decision-debt is the made decision. Zero was
+  the wrong target; ~2 honest residue is the success shape (PDR-100 §Falsifiability).
+- **Staging slip (cure carried forward):** `git commit -F msg` after `git add <my files>` swept in 3
+  pre-staged research files that were not mine. Cure that worked: `git commit -F msg -- <explicit
+  pathspec>` commits ONLY the named paths and leaves others' staged work intact — and the `git
+  restore` hook block is correct (worktree-destruction); the forward-going pathspec commit is the
+  non-destructive fix, not an unstage workaround. Reinforces stage-by-explicit-pathspec at the
+  commit verb, not only at `git add`.
+
+Siblings: [[fluency-is-a-failure-vector]], [[feedback_no_question_when_answer_is_forced]],
+passive-guidance-loses-to-artefact-gravity, the enforce-edge "passive prose is a no-op actuator"
+lesson above, [[feedback_validate_specialist_findings_before_acting]].
