@@ -1,6 +1,6 @@
 ---
 title: Pending-graduations entry schema + deterministic count fitness metric
-status: current (executable — queued; next session implements)
+status: implemented 2026-06-16 (model evolved — see ADR-144; ready to archive)
 collection: agent-tooling
 lane: current
 authored: 2026-06-16
@@ -16,38 +16,44 @@ owner_ratified_2026-06-16:
   - "D2: ABOLISH owner-gated entirely — no park-pending-owner status exists; every
      live item is decision-debt and is graduate-or-reject by the lenses; provenance
      and adaptation, not owner-pre-approval, are the safety net for wrong calls"
-  - "D3 thresholds (count of live items): target 0, soft 1, hard 3, critical = hard (3)"
+  - "D3 (count, discrete ceilings): target 0, soft 2, hard 3; critical = beyond hard (4+). Dwell axis added: target 2, soft 4, hard 7 days. All fitness is report-only (ADR-144)."
   - "Framing: repo-learning is a first-class pillar"
 todos:
   - id: ws1-schema-adr
     content: "Define the entry schema + status enum (NO owner-gated) and record it in an ADR (or ADR-144 amendment); author the consolidation-doctrine PDR abolishing owner-gated (provenance-over-perfection)."
-    status: pending
+    status: done
   - id: ws2-conformance-validator
     content: "TDD: schema-conformance validator — conformant entry parses; malformed rejected; an owner-gated status is rejected. Migrate the 3 block-format entries; convert all existing owner-gated entries to pending."
-    status: pending
+    status: done
     depends_on: [ws1-schema-adr]
   - id: ws3-count-parser
     content: "TDD: deterministic count parser — total live-item count + by-status breakdown over a fixture."
-    status: pending
+    status: done
     depends_on: [ws1-schema-adr]
   - id: ws4-count-metric
     content: "TDD: three-zone count metric (healthy 0; soft 1–2; hard/critical 3+) at a pure DI seam; frontmatter-declared owner-tunable thresholds (0/1/3/3); generic item-count metric reusable by other buffers."
-    status: pending
+    status: done
     depends_on: [ws3-count-parser]
   - id: ws5-report
     content: "TDD: report the count + zone + by-status breakdown, grouped per PDR-097."
-    status: pending
+    status: done
     depends_on: [ws4-count-metric]
   - id: ws6-doctrine-surfaces
     content: "Remove owner-gated from doctrine surfaces: consolidate-docs step 7, the register intro/frontmatter, referencing PDRs/rules, napkin/distilled cautions. Decide-everything-by-lenses; learning over perfection."
-    status: pending
+    status: done
     depends_on: [ws1-schema-adr]
 ---
 
 # Pending-graduations entry schema + deterministic count fitness metric
 
-> Promoted to `current/` 2026-06-16 with the owner's design ratifications (frontmatter
-> `owner_ratified_2026-06-16`). The next session implements; this session only promotes.
+> **Implemented 2026-06-16 (model evolved during implementation).** WS1–WS6 landed.
+> The shipped shape, of which **ADR-144 is the source of truth**, evolved from this
+> plan's original wording: zones use discrete **ceiling** thresholds (count
+> `target 0, soft 2, hard 3`, critical = 4+; a dwell-time axis `target 2, soft 4,
+> hard 7` days), and **all fitness output is report-only — a prioritisation signal,
+> never a build gate** (the validator always exits 0). The original workstream prose
+> below is retained as the planning record; where it says floors / `_limit` /
+> `critical = hard` / "gates like a size zone", read the ADR. Ready to archive.
 
 ## End goal
 
@@ -93,7 +99,7 @@ whole safety model: provenance + adaptation, not perfection.
   test the engine, never a pinned owner value per `never-pin-owner-tunable-values`). Zones:
   healthy 0; soft 1–2; hard/critical 3+ (critical coincides with hard per the owner's
   `critical = hard`). Thresholds declared in the register frontmatter
-  (`fitness_item_count_target: 0`, `fitness_item_count_limit: 3`, …), owner-tunable. Prefer a
+  (`fitness_item_count_target: 0`, `fitness_item_count_soft: 2`, `fitness_item_count_hard: 3`, …), owner-tunable. Prefer a
   generic, frontmatter-declarable item-count metric so `open-questions.md` etc. can adopt it.
 - **WS5 — report.** TDD: the fitness output shows count + zone + by-status, grouped per
   PDR-097. Extend `format.ts` / `messages.ts`.

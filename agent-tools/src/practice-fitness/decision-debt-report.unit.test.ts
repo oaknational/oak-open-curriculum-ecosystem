@@ -8,7 +8,9 @@ const result = (
   zone: DecisionDebtResult['zone'],
   byStatus: DecisionDebtResult['byStatus'] = { pending: count, due: 0, overdue: 0 },
   findings: DecisionDebtResult['findings'] = [],
-): DecisionDebtResult => ({ count, byStatus, zone, findings });
+  oldestDwellDays: DecisionDebtResult['oldestDwellDays'] = null,
+  dwellZone: DecisionDebtResult['dwellZone'] = null,
+): DecisionDebtResult => ({ count, byStatus, zone, findings, oldestDwellDays, dwellZone });
 
 const reading = (
   filename: string,
@@ -42,6 +44,17 @@ describe('formatDecisionDebtSection', () => {
     ]);
     expect(out).toContain('schema failure');
     expect(out).toContain('must declare both thresholds');
+  });
+
+  it('renders the oldest-dwell prioritisation signal (with its zone) when present, omits when null', () => {
+    const withDwell = formatDecisionDebtSection([
+      reading('r.md', result(2, 'soft', { pending: 2, due: 0, overdue: 0 }, [], 42, 'critical')),
+    ]);
+    expect(withDwell).toContain('Oldest undecided: 42d');
+    expect(withDwell).toContain('(dwell)');
+
+    const withoutDwell = formatDecisionDebtSection([reading('r.md', result(0, 'healthy'))]);
+    expect(withoutDwell).not.toContain('Oldest undecided');
   });
 
   it('always carries the inversion-guard reminder (decide, never delete)', () => {

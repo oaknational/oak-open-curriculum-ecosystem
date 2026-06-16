@@ -6,7 +6,6 @@ import {
   FITNESS_MODE_INFORMATIONAL,
   FITNESS_MODE_STRICT,
   FITNESS_MODE_STRICT_HARD,
-  getExitCode,
   type FitnessMode,
 } from './model.js';
 import {
@@ -52,6 +51,7 @@ async function readFitnessResults(
 async function readDecisionDebtReadings(
   repoRoot: string,
   fitnessFiles: readonly string[],
+  now: Date,
 ): Promise<DecisionDebtReading[]> {
   const readings = await Promise.all(
     fitnessFiles.map(async (relPath) => {
@@ -61,7 +61,7 @@ async function readDecisionDebtReadings(
       }
       return {
         filename: relPath,
-        result: evaluateDecisionDebt(content),
+        result: evaluateDecisionDebt(content, now),
         configFinding: decisionDebtConfigurationFinding(content),
       };
     }),
@@ -158,31 +158,19 @@ export async function runPracticeFitnessCheck(
   args: readonly string[] = process.argv.slice(2),
   repoRoot = process.cwd(),
   io: PracticeFitnessIo = console,
+  now: Date = new Date(),
 ): Promise<number> {
   const mode = getMode(args);
   const fitnessFiles = await discoverFitnessFiles(repoRoot);
   const results = await readFitnessResults(repoRoot, fitnessFiles);
-  const debtReadings = await readDecisionDebtReadings(repoRoot, fitnessFiles);
+  const debtReadings = await readDecisionDebtReadings(repoRoot, fitnessFiles, now);
 
   writePracticeFitnessReport(io, mode, results);
   writeDecisionDebtSection(io, debtReadings);
 
-  // Decision-debt is distinct in presentation but uniform in enforcement: its
-  // zones gate exactly like size zones, and a schema failure (a concept-counted
-  // file missing its thresholds) gates like a configuration finding.
-  const zones = [
-    ...results.map((result) => result.overallZone),
-    ...debtReadings.flatMap((reading) =>
-      reading.result.zone == null ? [] : [reading.result.zone],
-    ),
-  ];
-  const hasConfigurationFindings =
-    anyConfigurationFindings(results) ||
-    debtReadings.some((reading) => reading.configFinding != null);
-
-  return getExitCode(mode, zones, hasConfigurationFindings);
-}
-
-function anyConfigurationFindings(results: readonly FitnessResult[]): boolean {
-  return results.some((result) => result.configurationFindings.length > 0);
+  // Fitness is a report-only prioritisation signal (ADR-144): every zone — size,
+  // count, dwell — and every configuration finding is surfaced to be acted on with
+  // full weight, but fitness never fails a build. The exit code is always 0; the
+  // mode governs report framing only.
+  return 0;
 }

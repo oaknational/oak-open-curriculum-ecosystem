@@ -13,7 +13,6 @@ export {
   FITNESS_MODE_STRICT_HARD,
   formatFitnessResponseDiscipline,
   formatFitnessResult,
-  getExitCode,
   getMode,
   runPracticeFitnessCheck,
   shouldInspectFitnessPath,

@@ -66,6 +66,11 @@ function formatReadingLines(reading: DecisionDebtReading): string[] {
     `    Live decision-debt: ${result.count}`,
     `    By status: pending ${pending}, due ${due}, overdue ${overdue}`,
   ];
+  if (result.oldestDwellDays != null) {
+    lines.push(
+      `    Oldest undecided: ${result.oldestDwellDays}d  ${zoneGlyph(result.dwellZone)} (dwell)`,
+    );
+  }
   if (configFinding != null) {
     lines.push(`    \x1b[35m🚨 schema failure:\x1b[0m ${configFinding}`);
   }

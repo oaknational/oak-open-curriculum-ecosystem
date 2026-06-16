@@ -5,7 +5,6 @@ export {
   FITNESS_MODE_INFORMATIONAL,
   FITNESS_MODE_STRICT,
   FITNESS_MODE_STRICT_HARD,
-  getExitCode,
   worstZone,
 } from './model.js';
 export { evaluateFitnessFile } from './evaluate.js';

@@ -7,6 +7,11 @@
  *
  *   `[captured: <date> | source: <text> | target: <text> | trigger: <text> | size: <…> | status: <enum>]`
  *
+ * `captured` is the entry's creation date (createdAt); an optional `updated: <date>`
+ * field records the last-revised date (lastUpdated, defaulting to `captured`). Both
+ * feed the report's dwell-time — how long an item has sat undecided — a
+ * prioritisation signal layered on the count zone, never a gate.
+ *
  * The block may wrap across several physical lines. `status` is the load-bearing
  * field: **live** statuses are undecided decision-debt; **terminal** statuses
  * record a disposition and are removed from the register on the same pass. There
@@ -153,6 +158,11 @@ export function countLiveItems(items: readonly ParsedItem[]): ItemCountResult {
     }
   }
   return { total: byStatus.pending + byStatus.due + byStatus.overdue, byStatus };
+}
+
+/** Whether a parsed entry is live (undecided) — its status is a live enum token. */
+export function isLiveItem(item: ParsedItem): boolean {
+  return liveStatusToken(item.status) != null;
 }
 
 function findingForItem(item: ParsedItem): ItemConformanceFinding | null {

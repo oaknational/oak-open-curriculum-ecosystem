@@ -5,7 +5,11 @@ fitness_char_limit: 200000
 fitness_line_length: 100
 fitness_item_count: required
 fitness_item_count_target: 0
-fitness_item_count_limit: 2
+fitness_item_count_soft: 2
+fitness_item_count_hard: 3
+fitness_item_dwell_target: 2
+fitness_item_dwell_soft: 4
+fitness_item_dwell_hard: 7
 lifecycle_model: >-
   canonical pending-graduations register — every live item is decision-debt
   (status pending/due/overdue) until it is graduated, rejected, or marked
