@@ -20,6 +20,23 @@ surface.
 
 ## Current State
 
+- **CLERK 2.1.26 AUTH FIX + NATIVE-MCP-AUTH SPIKE — LANDED, UNPUSHED (2026-06-16, Lavender lifts
+  Pollen, solo, `docs/planning-and-validation`, 6 commits `0692a0b0d`..`bc4fb761f`, 6 ahead of
+  origin).** Owner-Q&A-driven maintenance session. The session's dep bump (`@clerk/express`
+  2.1.23→2.1.26, a **2.1.25 security fix** — `getAuth` trusts only a branded `req.auth`) broke the
+  e2e auth double (500 not 401). Fix (`f11e2e0ff`): inject a fake `getAuth` at the existing
+  `CreateMcpAuthClerkDeps` seam (threaded through `createApp`), deleting the brand workaround and the
+  duplicated auth object; `setupGlobalAuthContext` extracted to its own module to hold `auth-routes`
+  under `max-lines`. Production behaviour unchanged (option defaults to real Clerk deps). Also landed:
+  sentry-node runtime tests reclassified unit→integration with duplicated redaction proofs dropped
+  (`0692a0b0d`); agent-tools portability `max-depth` refactor (`7978fca80`); the dep bump
+  (`bc4fb761f`, last so every commit checks out green). The bespoke-vs-native MCP-auth question is
+  captured as a **strategic spike**:
+  [`security-and-privacy/future/native-mcp-sdk-auth-build-vs-buy.md`](../../plans/security-and-privacy/future/native-mcp-sdk-auth-build-vs-buy.md)
+  (wired into that roadmap + README; MCP SDK 1.29.0 ships `requireBearerAuth`/`mcpAuthRouter`,
+  `@clerk/mcp-tools` 0.5.0 ships an express integration — grounded first-hand). **Next safe step**:
+  push `docs/planning-and-validation` (or fold into its PR); promotion trigger for the spike =
+  owner approves an adopt/adopt-partial recommendation after the investigation runs.
 - **FITNESS REPORT-ONLY + DISCRETE CEILINGS + DWELL-TIME — LANDED + PUSHED (2026-06-16, Lapwing
   holds Troposphere, solo, `docs/planning-and-validation`, in sync with origin — commits
   `8665da651` + `3cb64da91`).** All fitness output is now **report-only** — a prioritisation signal

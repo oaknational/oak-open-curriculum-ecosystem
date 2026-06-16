@@ -8,6 +8,33 @@ merge_class: append-only-narrative
 fitness_content_role: drainable-buffer
 ---
 
+## Session: 2026-06-16 — Clerk 2.1.26 auth fix, the lens-collapse, and a git-mv staging near-miss (Lavender lifts Pollen)
+
+Owner-Q&A-driven maintenance session on `docs/planning-and-validation` (6 commits, unpushed):
+sentry-node test reclassification, agent-tools `max-depth` refactor, the MCP-app auth fix, a
+`security-and-privacy` build-vs-buy spike, continuity, and the dep bump.
+
+**Surprise (reusable, grounded): `git mv` then `Write`-editing the renamed file leaves the content
+change UNSTAGED.** At commit time `git diff --cached --name-status` showed **R100** (100%-similar
+pure rename) for `runtime.integration.test.ts` even though I had rewritten ~half the file (deleted
+two tests, removed ~150 lines of helpers). The staged blob was the *original* content; my edits were
+working-tree-only. Committing as-was would have **silently discarded the entire cleanup**. The tell
+was the R100 similarity score; the cure was a deliberate staged-content probe
+(`git show :<path> | grep <a-known-deleted-line>`) before commit, then `git add` to stage the real
+content. **Lesson: after any `git mv` + later content edit, verify the *staged content*, not just
+the rename — `verify-dont-trust` applies to your own index, and the similarity score is the
+tripwire.** Worked instance of [[fluency-is-a-failure-vector]] at the commit edge.
+
+**Grounded fact (pinned first-hand, for any future MCP-auth work):** `@clerk/express` **2.1.25** is a
+security fix — `getAuth()` trusts `req.auth` only when the handler carries `Symbol.for('@clerk/express.auth')`
+(brand declared module-internally, NOT on the public type surface); unbranded `req.auth` → `getAuth`
+throws "middleware required". This broke the e2e auth double (it set unbranded `req.auth`) → 500 not
+401. Cure (lens-collapse: all five "could it be simpler / change the system / strict / LTAE / existing≠correct"
+lenses forced one answer): inject a fake `getAuth` at the existing `CreateMcpAuthClerkDeps` seam, so
+tests never touch Clerk internals. Production invalid-token path was never broken (returns
+`isAuthenticated:false` → 401, traced through `getAuthObjectForAcceptedToken`). The bespoke-vs-native
+question this raised is captured as a spike plan, not decided.
+
 ## Session: 2026-06-16 — fitness made report-only; the fluency/grounding failures that drove the cures (Lapwing holds Troposphere)
 
 Landed + pushed: fitness is now report-only (gate→signal, semantics-not-severity); decision-debt
