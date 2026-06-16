@@ -20,26 +20,24 @@ surface.
 
 ## Current State
 
-- **DEDICATED CONSOLIDATION — in progress; register 1900→1514 (2026-06-15→16; Europa → Rigel →
-  Snapper binds Coral, solo, `docs/planning-and-validation`).** All agent-tools frictions →
-  `agent-tooling/frictions-register.md` (F-41..F-59); `open-questions.md` EMPTY; napkin rotated;
-  this session's REJECT/ROUTE batch landed (verification-sweeps + step-6e.2 rejected-as-covered;
-  PDR-051 + licensing rejected-as-re-homed; owner reply-shape/affirmation routed to
-  `.agent/reports/owner-comms-preferences-pending-review-2026-06-16.md` for owner review).
-  **Owner directive (2026-06-16): owner-gated is ABOLISHED — "pending" is not a resting state;
-  every live register item is graduate-or-reject by the lenses (LTAE / strict-everywhere /
-  improve-DX), decided by the agent; provenance + adaptation, not owner-pre-approval, are the
-  safety net (repo-learning is a first-class pillar).** **Remaining (mapped in `napkin.md`
-  §"Snapper final closeout" + §"DOCTRINE SHIFT"):** ~15 GRADUATE-candidates, ~5 ROUTE (agent-tools
-  → frictions register), the Team-Autonomy Gates (~430 lines; owner steered away from
-  crystallising into a protocol/menu → reject the crystallisation entries, lived insight to
-  distil), the W2/PDR-082 ArcAngel-aware revisit (owner-flagged) — ALL now decide-by-lenses (no
-  owner-walk). **Promoted this session:** the schema/count-metric work is the executable plan
-  `agent-tooling/current/pending-graduations-schema-and-count-fitness.plan.md` (a deterministic
-  decision-debt sensor; thresholds 0/1/3/3) — next session implements. **Next safe step:**
-  continue the graduate/route drain first-hand (no orchestration — see the napkin's failure
-  lessons), committing per batch; verify each home first-hand (Tempestuous: 15/18 "covered"
-  were false).
+- **DECISION-DEBT SENSOR + REGISTER MIGRATION + DOCTRINE — LANDED (2026-06-16, Snapper binds Coral,
+  solo, `docs/planning-and-validation`; NOT pushed).** Sensor: schema/parser/validator
+  (`agent-tools/src/practice-fitness/item-count.ts`), count + three-zone metric (`decision-debt.ts`),
+  report as a distinct gating category (`decision-debt-report.ts`, `run.ts`). Register: migrated to
+  the inline-bracket schema, `owner-gated` ABOLISHED, all 72 entries → `overdue`, residue stripped;
+  substance-preservation VERIFIED (72→72 entries, every source preserved). Doctrine: ADR-144
+  §Decision-Debt Count Extension, **PDR-100** (abolition + provenance-over-perfection), PDR-067/068
+  ratified, consolidate-docs/until-done + memory READMEs reworded (WS6). `pnpm check` GREEN this
+  session. **THE UNDONE CORE: decide the 72 overdue items — first-hand, strict lens (likely mostly
+  REJECTS); 0 decided, buffer still reads critical.** Also left: the skipped specialist reviews
+  (docs-adr / assumptions on the already-committed doctrine), verify doctrine==code (the ADR's
+  strict-hard-blocks-hard claim is asserted, not tested), push + CI, update the canonical plan file
+  `agent-tooling/current/pending-graduations-schema-and-count-fitness.plan.md`, WS-OM1 trigger-scan +
+  WS-OM2 capture discipline. **Owner question (mine to surface, not decide):** does PDR-100's
+  abolition extend beyond the register status (PDR-006 tool-nomination, collaboration "owner gates")?
+  **Next safe step: DRAIN — decide the 72 first-hand; do NOT build more machinery before draining.**
+  Full pickup + my assumptions + enacted antipatterns:
+  `threads/agentic-engineering-enhancements.next-session.md`.
 - **FITNESS-VALIDATOR SCOPING + DISPOSITION-CATEGORY GROUPING — landing on
   `docs/planning-and-validation` (2026-06-15, Peregrine turns Airstream).** The
   practice-fitness and fitness-vocabulary walkers now exclude foreign git

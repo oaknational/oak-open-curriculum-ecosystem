@@ -16,6 +16,57 @@ feedback-mechanism arc, taxonomy work) is retained in git and in the
 work brief and the recent identity stretch, per
 [`continuity-practice.md` §Disposition](../../../directives/continuity-practice.md).
 
+## Decision-Debt Lane — Next-Session Pickup (2026-06-16, Snapper binds Coral)
+
+The decision-debt sensor, register migration, and governing doctrine LANDED this session
+(commits on `docs/planning-and-validation`, **NOT pushed**): WS1 schema/parser/validator
+(`agent-tools/src/practice-fitness/item-count.ts`), WS3 count, WS4 three-zone metric
+(`decision-debt.ts`), WS5 report as a distinct gating category (`decision-debt-report.ts`,
+`run.ts`); WS2 register migration (72 entries → inline-bracket schema, `owner-gated` abolished,
+all `overdue`, residue stripped, substance-preservation VERIFIED 72→72 / every source preserved);
+doctrine — ADR-144 §Decision-Debt Count Extension, **PDR-100** (abolition + provenance-over-
+perfection + first-class pillar), PDR-067/068 ratified Proposed→Accepted, WS6 reworded
+consolidate-docs/until-done + memory READMEs + repo-continuity. `pnpm check` GREEN this session.
+
+**THE UNDONE CORE — the actual point of this arc:** the register still reads 72 / critical and
+**ZERO of the 72 overdue items have been decided.** Building the sensor + doctrine did not reduce
+the debt by one item. The first and highest-value next-session work is to DRAIN: decide each of
+the 72 first-hand under the strict lens (LTAE / don't-invent-optionality) — expect MOST to be
+REJECTS, not graduations (legacy single-instance "keep-watching" candidates). Commit per batch;
+verify each graduation's home first-hand (Tempestuous precedent: 15/18 "covered" claims were
+false). Do **not** build WS-OM first — overdue items need deciding now, not a trigger-scan.
+
+**Also outstanding:**
+
+- Specialist reviews SKIPPED under momentum: `docs-adr-expert` on the ADR-144 amendment + PDR-100;
+  `assumptions-expert` on the inversion-guard adequacy AND the scope boundary below. Permanent
+  doctrine shipped unreviewed — run these on the already-committed artefacts.
+- Verify doctrine==code: ADR-144 claims decision-debt "gates like a size zone (strict-hard blocks
+  hard)"; only the strict→critical→exit-1 path was tested. Add a `run.unit.test` for exit-code folding.
+- Push + CI (nothing pushed). Update the canonical plan file
+  `agent-tooling/current/pending-graduations-schema-and-count-fitness.plan.md` (WS1–WS6 done; WS-OM +
+  draining remain).
+- WS-OM1 (lightweight trigger-scan any session can run) + WS-OM2 (capture discipline + buffer-shape
+  contract) — the cures that make `target: 0` sustainable. AFTER draining.
+
+**Owner question (surface, do not decide):** PDR-100 abolished `owner-gated` as a REGISTER STATUS.
+I scoped it there and left the other `owner-gated` usages untouched (PDR-006 tool-nomination,
+collaboration "owner gates", owner-paced execution as a smell, Sonar owner-authorisation). Whether
+provenance-over-perfection extends to those is the owner's call.
+
+**My assumptions this session (surfaced for challenge):** (a) that building the instrument + rules
+was "the work" — but the goal is an empty buffer, untouched; (b) that draining waits for WS-OM —
+false; (c) that all 72 are graduate-candidates — likely mostly rejects; (d) that the scope boundary
+I drew (register-status-only) is correct — owner's call.
+
+**Antipatterns I enacted (named so the next agent watches for them):** activity-bias /
+mechanical-sequence — I ran a satisfying mechanism sequence and decided 0 items (I literally edited
+`patterns/mechanical-sequence-is-activity-bias-diagnostic.md`, `comprehensive-cataloguing-drift.md`,
+and `feel-state-of-completion-preceding-evidence-of-completion.md` while enacting all three);
+reviewer-skipping under momentum (permanent doctrine committed unreviewed); soft-default (deferred
+the hardest work — draining — behind comfortable machinery). Cure: drain first, build later; get
+the reviews onto what is already committed.
+
 ## Current Continuation
 
 **Curation state (2026-06-12, Thyme wakes Canopy / claude Fable 5 / `70655e`, dedicated
