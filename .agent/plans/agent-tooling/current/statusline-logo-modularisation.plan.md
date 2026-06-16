@@ -19,7 +19,7 @@ todos:
     status: pending
     depends_on: []
   - id: ws2-cycle-1
-    content: "WS2.1: OAK_ACORN LogoAsset in neutral statusline/oak-acorn.ts (data and colour and default and provenance); migrate oak-logo tests. One commit. Tree green."
+    content: "WS2.1: OAK_ACORN LogoAsset in neutral statusline/oak-acorn.ts — new 5x7 sharpened braille-sharp default + four retained 4x6 marks moved verbatim (old braille-sharp -> braille-sharp-compact); colour, default, provenance; migrate oak-logo tests. One commit. Tree green. See Owner Decision 2026-06-16."
     status: pending
     depends_on: [ws1-cycle-1, ws1-cycle-3, ws1-cycle-4]
   - id: ws3-cycle-1
@@ -63,8 +63,11 @@ isProject: false
 
 # Statusline logo modularisation and soft-surface hardening
 
-**Last Updated**: 2026-06-15
-**Status**: 🟡 PLANNING (queued — `current/`, not started)
+**Last Updated**: 2026-06-16
+**Status**: 🟡 PLANNING (queued — `current/`, not started). Glyph decided
+2026-06-16: a new 5×7 sharpened braille acorn becomes the default (`braille-sharp`);
+the current 4×6 mark is **retained** as `braille-sharp-compact` (not deleted) —
+see [Owner Decision (2026-06-16)](#owner-decision-2026-06-16--larger-sharpened-mark-becomes-the-default).
 **Scope**: Separate the Claude statusline into three clean layers — statusline setup, a generic reusable logo-column mechanism, and the Oak acorn brand asset as pure data — and remove the standards-loosening in the agent tooling that supports it.
 
 **References**: [`statusline-inputs-research.md`](../../../research/statusline-inputs-research.md)
@@ -78,6 +81,71 @@ under the owner's theme), so a foreground cannot be reliably matched to the
 background. Colour choices must use the theme's own contract (the default
 foreground is guaranteed readable against the active background; `DIM` softens it)
 rather than any guessed or background-matched colour.
+
+---
+
+## Owner Decision (2026-06-16) — larger sharpened mark becomes the default
+
+After a side-by-side comparison of the terminal-mark families at the larger
+size, the owner selected a **5-row × 7-column sharpened braille** acorn as the
+new default, **retaining** the current 4-row × 6-column mark as a selectable
+option (owner directive: do not delete the current logo). Verified in-terminal —
+the research doc's render-back-and-compare guard: braille renders crisply;
+**sextant tofu'd** under the owner's font (it lacks the U+1FB00 Symbols for
+Legacy Computing block), confirming braille as the portable default.
+
+**What this changes for execution:**
+
+- **A new default style; the current mark retained, not replaced.** A new
+  `braille-sharp` key holds the 5×7 sharpened mark below and becomes
+  `defaultStyle`. The current 4×6 sharpened mark is kept under a new key
+  `braille-sharp-compact`. `braille`, `quad`, and `sextant` stay as their
+  current unchanged 4×6 marks.
+
+  ```text
+  ⠀⠀⢀⣼⡃⠀⠀
+  ⢠⡞⠋⢿⡉⠳⣄
+  ⣿⡀⠀⠈⠳⢦⣿
+  ⠸⣧⠀⠀⠀⢰⡇
+  ⠀⠘⠷⣤⡴⠋⠀
+  ```
+
+  Provenance: the regeneration recipe's 5-line braille at odd cell-width 7 (the
+  doc's "odd glyph widths" guidance: 5-line → 7), plus two source-grounded
+  sharpening dots — crisper sprout tip (`⣴`→`⣼`, row 0 col 3, +dot 4) and
+  sharper lower-left nut-to-cup shoulder (`⠘`→`⠸`, row 3 col 0, +dot 6). Both
+  added dots are genuine sub-threshold ink recovered by lowering the coverage
+  cutoff (0.16 → 0.10), not freehand — the same construction `braille-sharp`
+  used over `braille`.
+
+- **`OAK_STATUSLINE_LOGO` value map** (owner choice 2026-06-16, "clean name →
+  default"):
+  - unset or `braille-sharp` → 5×7 sharpened (new default)
+  - `braille-sharp-compact` → the current 4×6 sharpened mark
+  - `braille` / `quad` / `sextant` → unchanged 4×6 alternates
+  - `none` → two-line layout
+
+  This **does** change the meaning of an explicit `=braille-sharp` (now the
+  larger mark); the non-goal "not changing the `OAK_STATUSLINE_LOGO` default" is
+  superseded by this decision, while the resolution *mechanism* is unchanged.
+
+- **Mixed style dimensions are intended.** Only `braille-sharp` is 5×7; the
+  retained styles stay 4×6. `assertUniformWidth` (WS1.3) is a per-style
+  invariant, so mixed sizes across styles are fine; the renderer takes the
+  selected style's row count (4 or 5) and must not assume a fixed logo height.
+
+- **The default makes the statusline 5 rows.** The default mark is one row
+  taller than the four segments (identity / model / context / git), so the
+  acorn's rounded base renders as a **bare painted row below the git segment**
+  (no segment text) — the `composeLogoColumn` bare-mark path (WS1.2) already
+  covers this. Selecting a 4×6 style restores the four-row footprint. The 5-row
+  default is a footprint change the sibling session-state plan must account for
+  (see [Dependencies](#dependencies)).
+
+- **WS2.1 = verbatim move of the four existing marks + one new style.** The four
+  current marks move byte-identical out of `OAK_LOGO_ROWS` (the old
+  `braille-sharp` re-keyed to `braille-sharp-compact`); only the new
+  `braille-sharp` 5×7 is new data, pinned to the rows above.
 
 ---
 
@@ -239,8 +307,10 @@ raw-string leakage past the boundary (closed-shape-design rule).
   (`apps/oak-curriculum-mcp-streamable-http/src/server-branding.ts`,
   `apps/oak-curriculum-mcp-streamable-http/widget/src/BrandBanner.tsx`) —
   different render targets, out of scope.
-- Not adding new logo styles or changing the acorn glyphs.
-- Not changing the `OAK_STATUSLINE_LOGO` env-var contract or its default.
+- Not changing the `OAK_STATUSLINE_LOGO` resolution *mechanism* (the
+  owner-directed new default `braille-sharp` 5×7, the retained
+  `braille-sharp-compact`, and the unchanged alternates are data changes within
+  the existing contract — see [Owner Decision (2026-06-16)](#owner-decision-2026-06-16--larger-sharpened-mark-becomes-the-default)).
 - Not migrating the Cursor shim in this plan (it consumes the neutral modules
   once they exist; that adoption is its own plan).
 
@@ -388,17 +458,29 @@ once no consumer remains — deletion may defer to WS4.1/4.2 when the renderer a
 adapter stop importing it).
 **File scope NOT to touch**: `logo-column.ts`.
 
-**Test (Red)**: `OAK_ACORN.styles` has the four styles, each four rows;
-`assertUniformWidth` passes for every style; `OAK_ACORN.defaultStyle ===
-'braille-sharp'`; `OAK_ACORN.color === GREEN`.
+**Test (Red)**: `OAK_ACORN.styles` has **five** styles — `braille-sharp` (5
+rows × 7 code points), `braille-sharp-compact` / `braille` / `quad` / `sextant`
+(4 rows each); `assertUniformWidth` passes for every style; the new
+`braille-sharp` rows equal the Owner-Decision (2026-06-16) literals; the four
+retained styles are byte-identical to the prior `OAK_LOGO_ROWS` (with the old
+`braille-sharp` data under the `braille-sharp-compact` key);
+`OAK_ACORN.defaultStyle === 'braille-sharp'`; `OAK_ACORN.color === GREEN`.
 
-**Product code (Green)**: `OakAcornStyle` type and `OAK_ACORN: LogoAsset<OakAcornStyle>`
-holding the verified glyph rows (moved from `OAK_LOGO_ROWS`), `color: GREEN`
-(from neutral `ansi.ts`), `defaultStyle: 'braille-sharp'`. Carry the SVG /
-regeneration provenance TSDoc across verbatim.
+**Product code (Green)**: `OakAcornStyle` type (`'braille-sharp' |
+'braille-sharp-compact' | 'braille' | 'quad' | 'sextant'`) and `OAK_ACORN:
+LogoAsset<OakAcornStyle>` holding the **new 5×7 sharpened `braille-sharp`** per
+the [Owner Decision (2026-06-16)](#owner-decision-2026-06-16--larger-sharpened-mark-becomes-the-default)
+plus the **four retained 4×6 marks moved verbatim** from `OAK_LOGO_ROWS` (old
+`braille-sharp` → `braille-sharp-compact`); `color: GREEN` (from neutral
+`ansi.ts`), `defaultStyle: 'braille-sharp'`. Carry the SVG / regeneration
+provenance TSDoc across, extended with the 5×7 odd-width recipe and the two
+sharpening dots.
 
-**Acceptance**: AC-5. Tests pass; tree green. Glyph rows byte-identical to the
-prior `OAK_LOGO_ROWS` (diff the string literals).
+**Acceptance**: AC-5. Tests pass; tree green. `braille-sharp` is 5 rows × 7 code
+points matching the Owner-Decision rows byte-for-byte; the four retained styles
+are byte-identical to the prior `OAK_LOGO_ROWS`; `assertUniformWidth` passes
+per style. Render-back-and-compare already done in-terminal (2026-06-16):
+braille crisp, sextant font-gated.
 **Reviewer dispatch**: `architecture-expert-fred`, `test-expert`.
 
 ---
@@ -502,7 +584,10 @@ returns nothing).
 
 **Test (Red)**: `renderStatusline(parts, { logo: <ResolvedLogo> })` paints the
 mark in the logo's own colour via `composeLogoColumn`; `{ logo: undefined }` (or
-absent) renders the two-line layout. No assertion references `OAK_LOGO_ROWS`.
+absent) renders the two-line layout. A **5-row** logo renders its 5th (base) row
+as a bare painted mark below the four segments; a **4-row** logo aligns
+row-for-row — the renderer must not assume a fixed logo height. No assertion
+references `OAK_LOGO_ROWS`.
 
 **Product code (Green)**: `StatuslineRenderOptions.logo?: ResolvedLogo`; delegate
 to `composeLogoColumn`; delete the `OAK_LOGO_ROWS` import (line 27) and the
@@ -520,8 +605,10 @@ agent-tools/src/claude/statusline-render.ts` returns nothing.
 delete `agent-tools/src/claude/oak-logo.ts` if now consumer-free.
 
 **Test (Red)**: extend the adapter integration test — with
-`OAK_STATUSLINE_LOGO` unset the output carries the braille-sharp acorn in green;
-with `=none` it renders two lines; with `=quad` it carries the quad rows.
+`OAK_STATUSLINE_LOGO` unset the output carries the **5-row** sharpened
+`braille-sharp` acorn in green; with `=braille-sharp-compact` it carries the
+retained **4-row** mark; with `=none` it renders two lines; with `=quad` it
+carries the 4-row quad rows.
 
 **Product code (Green)**: at the adapter, `resolveLogoStyle(OAK_ACORN,
 process.env.OAK_STATUSLINE_LOGO)` → `resolveLogo(OAK_ACORN, …)` →
@@ -541,6 +628,11 @@ deleted; `rg "oak-logo" agent-tools` returns nothing.
 - Update the regeneration-recipe pointer in
   `.agent/research/developer-experience/statusline-logos/statusline-logos.md`
   to the new `oak-acorn.ts` home.
+- Record the new 5×7 sharpened braille rendering (the new default) in that same
+  research doc — its permanent home for renderings — alongside the `ROWS=5`
+  cell-width-7 regeneration note and the two sharpening dots (sprout tip,
+  lower-left shoulder). The doc currently documents only the 4×6 sharpened and
+  an un-sharpened 5×7 compact rendering.
 - A short **new** ADR (verified 2026-06-15: no statusline ADR exists; highest is
   105) recording the repo-specific three-layer cut and home choice; the
   inject-don't-import rule itself is already general doctrine (ADR-024, ADR-078)
@@ -590,7 +682,7 @@ Document findings; spawn a follow-up plan only for BLOCKERs.
 |----|-------------|-----------------------|
 | AC-1..AC-3 | unit | `pnpm --filter @oaknational/agent-tools test logo-column` exit 0 |
 | AC-4 | integration | `pnpm test` exit 0 and `rg "claude/statusline-ansi" agent-tools` empty |
-| AC-5 | unit | `pnpm --filter @oaknational/agent-tools test oak-acorn` exit 0 and glyph diff empty |
+| AC-5 | unit | `pnpm --filter @oaknational/agent-tools test oak-acorn` exit 0; new `braille-sharp` matches Owner-Decision rows, four retained styles byte-identical to old `OAK_LOGO_ROWS`, widths uniform per style |
 | AC-6 | unit | `pnpm --filter @oaknational/agent-tools test statusline-launch` exit 0 |
 | AC-7 | integration | adapter integration test exit 0 incl. forced-throw → exit 0 |
 | AC-8 | e2e | shim e2e exit 0 and `rg -e CLAUDE_PROJECT_DIR -e spawn .claude/scripts/statusline-identity.mjs` empty |
@@ -613,7 +705,7 @@ retrospective coverage.
 |------|------------|
 | Shim dynamic-import URL drifts if `.claude/scripts/` or `agent-tools/` relocates | The relative URL is the single point of coupling; the e2e (AC-8) breaks loudly if it drifts; no silent path arithmetic remains |
 | In-process import loses spawn isolation; an adapter throw could crash the harness | AC-7 makes soft-fail an adapter property (catch-all and top-level guard) before AC-8 relies on it; `depends_on` enforces the order |
-| Glyph corruption during the data move (astral sextant chars) | AC-5 diffs the moved literals byte-for-byte against `OAK_LOGO_ROWS`; width invariant (AC-3) re-checks |
+| Glyph corruption in the verbatim move, or a sharpening-tuning error in the new 5×7 data (astral sextant chars) | The four retained styles are diffed byte-for-byte against `OAK_LOGO_ROWS`; the new `braille-sharp` is pinned to the Owner-Decision rows; width invariant (AC-3) re-checks every style; render-back-and-compare done in-terminal 2026-06-16 |
 | Over-modularisation (speculative neutral homes) | Non-goal fence: only the logo mechanism and asset and shared ANSI move; renderer stays put until the Cursor consumer lands |
 | Import-churn races between parallel tracks | Tracks A/B share no product files until WS4; `depends_on` serialises the convergence |
 
@@ -683,7 +775,12 @@ soft-surface-is-a-tested-guarantee lesson, rotate the napkin, and move this plan
   — sibling in the same lane: the session-state foundation, team-state
   derivation, and session-shape icon projection. Shares the `renderStatusline`
   seam with this plan; coordinated, not dependent (this plan owns the logo column;
-  that plan owns the segment/icon content).
+  that plan owns the segment/icon content). **Footprint coordination
+  (2026-06-16):** the new default mark is 5 rows — one taller than the four
+  segments — so the block gains a bare logo row below the git segment. That plan
+  assumes a four-row block beside four segments; the two must reconcile the row
+  count when both execute (this plan's WS4.1 lands the renderer signature first
+  per disposition #8).
 - `.agent/plans/agent-tooling/archive/completed/statusline-session-shape-indicators.plan.md`
   — prior (completed) statusline work; this plan preserves the session-shape segments.
 - Cursor-statusline adoption — a *prospective* future importer of the neutral
