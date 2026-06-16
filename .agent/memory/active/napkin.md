@@ -240,3 +240,31 @@ use "and" as a connector, never the plus-sign; AND review `--fix` diffs on autho
 committing — the auto-fix is not always meaning-preserving. Reinforces the whole synthesis: I
 hold the no-plus-sign rule in memory and still tripped it; the durable cure is the structural
 F-39 wrap-aware lint, not vigilance.
+
+## Session: 2026-06-16 — live statusline logo swap + width-matched separator (Vole calls Hollow)
+
+Owner-directed live swap of the statusline default mark to a 5×7 sharpened braille acorn ahead
+of the modularisation plan, retaining the 4×6 as `braille-sharp-compact`, plus a separator rule
+width-matched to the active logo. Behaviour-relevant captures:
+
+- **Font-dependent glyph assets are only TRULY verified in the target terminal** (empirical
+  confirmation of the research doc's existing sextant-tofu caveat). I verified the sharpened
+  mark by source-faithful recipe conversion + sub-threshold-ink recovery (numerically sound),
+  but the owner's screenshot was the load-bearing proof — sextant tofu'd in their font, braille
+  held. Source/numerical checks are necessary, not sufficient. Sibling: verify-dont-trust.
+- **Land-now-harden-on-execution is a legitimate owner-directed shape.** The owner directed a
+  live swap in `oak-logo.ts` *ahead of* the plan's neutral extraction; I reframed the plan to
+  HARDEN the live swap (relocate to `oak-acorn.ts`, invert the renderer onto the contract)
+  rather than author it. The plan is the home for the decisions; the live code is the value now.
+- **A `max-lines` error from my own added prose is also a weak divergence signal.** Tightening
+  the TSDoc fixed it, but `statusline-render.ts` crossing 250 confirms the WS1 extraction is
+  overdue — recorded in the plan, not inflated into a now-refactor.
+- **Branch-placement continuity risk:** the swap landed on `docs/planning-and-validation`,
+  divergent from the statusline lineage on `feat/comms-research` — flagged in the thread record
+  for reconciliation so it is not stranded.
+- **Fluency check held:** "swap the logo now" pulled toward a data-only edit; I grounded the
+  renderer's row-count behaviour first (it was row-agnostic — a 4-row assumption would have
+  silently dropped the 5th acorn-base row).
+
+Siblings: [[feedback_owner_direction_is_a_stream]] (separator off→on within two turns),
+[[fluency-is-a-failure-vector]], [[feedback_existence_is_not_correctness_default_replace]].

@@ -95,7 +95,22 @@ state here.
   `braille-sharp` via `OAK_STATUSLINE_LOGO` (`braille` / `quad` / `sextant` /
   `none` alternatives). Commits `40ef58a06` + `5cc13977e` + `8efc58d83` on
   `feat/comms-research`, **pushed** (verified `@{u}..HEAD` level 2026-06-13 —
-  the earlier "UNPUSHED" note was stale).
+  the earlier "UNPUSHED" note was stale). **Default superseded 2026-06-16 — see
+  the live logo swap below.**
+- **Landed (live logo swap, 2026-06-16, Vole calls Hollow) — on
+  `docs/planning-and-validation`, NOT `feat/comms-research`**: the default mark
+  is now a **5×7 sharpened braille acorn** (`braille-sharp`); the prior 4×6 is
+  retained as **`braille-sharp-compact`**; `braille` / `quad` / `sextant` /
+  `none` unchanged. The logo separator rule is **on by default and width-matched**
+  to the active logo (tiled to `[...logoRows[0]].length` code points; an empty
+  `logoSeparator` suppresses it). Landed in `oak-logo.ts` + `statusline-render.ts`
+  (+ tests); `dist` rebuilt; 1232 agent-tools tests green; rendered live via the
+  shim. Owner-directed live swap *ahead of* the modularisation plan, which is
+  reframed to **harden** it on execution (relocate data to neutral `oak-acorn.ts`,
+  invert the renderer onto the `ResolvedLogo` contract). **Branch divergence to
+  reconcile:** this landed on `docs/planning-and-validation`, while the statusline
+  code lineage lives on `feat/comms-research`; a next session must
+  cherry-pick/reconcile so the swap is not stranded.
 - **Landed (indicators re-fit, 2026-06-13, Skylark wakes Summit)**: WS1 (claim
   `role` field), WS2 (pure session-shape resolver), WS3 (render) — originally
   committed on `feat/statusline-enhancements` against the OLD single-line layout
@@ -148,6 +163,7 @@ cadence. Also a research-relevant collaboration-visibility failure mode.
 
 | Platform | Model | Agent name | Role on this thread | last_session |
 | --- | --- | --- | --- | --- |
+| claude-code | Opus 4.8 | Vole calls Hollow | Owner-directed live logo swap ahead of the modularisation plan: 5×7 sharpened `braille-sharp` default, 4×6 retained as `braille-sharp-compact`, width-matched logo separator rule on by default; reframed the modularisation plan to harden the live swap on execution; updated the plan + this record. On `docs/planning-and-validation` (branch divergence flagged). Green (build, type-check, lint, 1232 tests) | 2026-06-16 |
 | claude-code | Opus 4.8 | Hearth hunts Obsidian | Trailing separator row beneath the four-row logo block as a `logoSeparator?` option (`DEFAULT_LOGO_SEPARATOR`), tests decoupled from the glyph (inject-a-probe); separator now `${DIM}` (theme-robust default-fg — terminal theme is not knowable, design verdict). Fixed two ANSI bugs in the branch styling (a `0;`-prefixed `BLUE` cancelled `BOLD` → render colour-before-bold; removed dead/wrong `RESET_BOLD`+`BLACK`); branch tests made behavioural (content+placement, not bytes); `statusline-ansi.ts`+render test converted off literal-ESC to `\x1b` escapes. Linked the inputs research doc in both current statusline plans. Green (my slice); uncommitted — another agent commits/pushes (see napkin) | 2026-06-15 |
 | claude-code | Opus 4.8 | Cutter spins Quay | Re-grounded the successor plan session-state-first (session owns collaboration state; solo is the floor; owner-presence opinion; team state derived); consolidated and cross-referenced the statusline lane; ran docs and four architecture reviewers and recorded validated dispositions; added the logo-modularisation plan | 2026-06-15 |
 | claude-code | Opus 4.8 | Orbit stirs Spectrum | Interim session-relative resolver + `observing` shape + ansi/indicators/render module split; refined the successor register plan (claim-independent active-agent set) + readiness pass; seeded PDR-095 | 2026-06-14 |
@@ -172,7 +188,10 @@ validated dispositions in both plans. A sibling
 
 **Next safe step:** a fresh readiness pass on the re-grounded plan (the 2026-06-14
 verdict predates the re-grounding), then execute WS1 (the session-state model).
-Both plans are `current/`, unassigned. **Do NOT archive this record** — the
-thread is live. Unrelated follow-on: the pre-existing agent-tools test-IO
+Both plans are `current/`, unassigned. **Plus (2026-06-16):** reconcile the live
+logo-swap commits on `docs/planning-and-validation` onto the statusline code
+lineage (`feat/comms-research`) so the 5×7 default + width-matched separator are
+not stranded; then the modularisation plan hardens the swap. **Do NOT archive
+this record** — the thread is live. Unrelated follow-on: the pre-existing agent-tools test-IO
 compliance tracked in
 [`agent-tools-test-io-compliance.plan.md`](../../../plans/agent-tooling/current/agent-tools-test-io-compliance.plan.md).
