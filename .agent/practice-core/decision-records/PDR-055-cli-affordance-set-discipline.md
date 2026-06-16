@@ -2,9 +2,10 @@
 pdr_kind: governance
 ---
 
-# PDR-055: CLI Affordance-Set Discipline for Coordination Tooling
+# PDR-055: CLI Affordance-Set and API-Surface-Design Discipline
 
-**Status**: Accepted
+**Status**: Accepted (amended 2026-06-16 — generalised from the coordination-CLI
+affordance set to universal CLI API-surface-design consistency; clauses 7–10 + Falsifiability)
 **Date**: 2026-05-10
 **Related**:
 [PDR-035](PDR-035-agent-work-capabilities-belong-to-the-practice.md)
@@ -16,6 +17,18 @@ the failure mode this PDR closes);
 [PDR-053](PDR-053-orchestrator-vs-gate-structural-cure.md)
 (orchestrator-vs-gate structural cure — CLI affordances participate in
 the polarity-at-three-surfaces shape).
+
+## Amendment Log
+
+- **2026-06-16 — universal CLI API-surface-design consistency (owner-directed).**
+  Generalised from the coordination-CLI affordance set to all CLIs in all Practice
+  repos, per owner direction: *"consistency of API surface design is a universal
+  requirement for all CLIs in all Practice repos."* Added Decision clauses 7–10
+  (ask-only-caller-knowledge and default/derive tool-knowable values; teaching-help
+  content; actionable boundary errors; universal consistency with a conformance
+  guard), broadened the Scope split (clauses 1–6 coordination CLIs; 7–10 every CLI),
+  retitled accordingly, and added the Falsifiability axis. Underlying clauses 1–6
+  unchanged.
 
 ## Context
 
@@ -91,12 +104,50 @@ surface):
    has different behaviour from one built later when the source has
    moved.
 
+### Universal API-surface-design convention (clauses 7–10, every CLI)
+
+Clauses 1–6 above are the *coordination* affordance set. Clauses 7–10 are the
+broader API-surface-design convention that every CLI in the repo follows, coordination
+or not.
+
+7. **Ask only for caller-knowledge; default or derive everything tool-knowable.**
+   A command's required arguments are values only the caller knows (thread, intent,
+   target files, summary). Values the tool can resolve — canonical state-file paths,
+   the current time, the agent's identity / platform / model / session — are defaulted
+   or derived from the environment, with an explicit override always honoured. Flag
+   names encode the caller's intent, not the author's file or implementation
+   (`--active <a constant registry path>` is the anti-pattern). Requiring a caller to
+   supply a value the tool already knows is a design defect that manufactures
+   wrong-argument invocations.
+
+8. **Help teaches content, not just shape.** Beyond full-help-on-failure (clause 4),
+   each flag's help carries a one-line description, its default (where defaulted), the
+   canonical value, and at least one worked example. A syntax skeleton
+   (`--active <path>`) without meaning, default, or example is insufficient — the
+   help's purpose is to let the caller get it right the first time.
+
+9. **Boundary errors are actionable.** Every file-read and structured-input boundary
+   (JSON parse, schema check) that can receive caller-supplied input emits an error
+   naming the surface and what was expected, and preserves the original error as
+   `cause`. A raw library exception (a position-only `JSON.parse` SyntaxError) leaking
+   to the caller is forbidden: it hides the caller's mistake instead of teaching it.
+
+10. **Consistency is universal and structurally guarded.** Clauses 7–9, with the
+    consistent-flag-naming rule, apply *uniformly* across every command of a CLI AND
+    across every CLI in the repo. Inconsistency is itself an error generator — a
+    caller's correct model of one command becomes a wrong invocation of the next. A
+    conformance check enforces the convention and fails when any command, including a
+    newly added one, drifts. Fixing only the currently-broken commands, without the
+    convention and its guard, perpetuates the failure.
+
 ## Scope
 
-**Adopter scope**: every Practice-bearing repo with multi-agent
-collaboration CLIs. The affordance triple, filter conventions, full-help-
-on-failure rule, robust-render rule, and built-not-source rule are
-portable.
+**Adopter scope**: every Practice-bearing repo. Clauses 1–6 (the affordance
+triple, filter conventions, full-help-on-failure, robust-render, built-not-source)
+scope to **coordination CLIs** on the collaboration surface. Clauses 7–10 (the
+API-surface-design convention and its conformance guard) scope to **every CLI in the
+repo**, coordination or not — API-surface-design consistency is a universal
+requirement, not a coordination-surface concern. All clauses are portable.
 
 **Host-architectural concerns**: the specific build-isolation mechanism
 (separate build step? watch-then-built dist? compiled binary?) is
@@ -170,12 +221,26 @@ again"*.
 The host-repo operational application lands as ADR-178 (agent-tools
 build isolation) plus a follow-on plan in `.agent/plans/agent-tooling/`
 that tracks the affordance-set implementation slices per surface. The
+clause-7–10 API-surface-design convention is instantiated for this repo by
+[`agent-tools-cli-ergonomics.plan.md`](../../plans/agent-tooling/current/agent-tools-cli-ergonomics.plan.md),
+whose WS6 is the conformance guard required by clause 10. The
 existing CLI surfaces in `agent-tools/` are extended incrementally; the
 PDR's substance is the *requirement* shape, not the implementation
 sequence.
 
 User-memory references that reinforce specific corollaries (full-help
 discipline; built-CLI discipline) cite this PDR.
+
+## Falsifiability
+
+Clauses 7–10 are shown wrong if a CLI that requires only caller-knowledge
+arguments, defaults/derives the rest, teaches per-flag in help, and emits
+actionable boundary errors STILL produces wrong-argument invocations at a rate
+comparable to a non-conforming CLI — i.e. if the errors trace to something other
+than the missing convention. The conformance-guard clause (10) is shown wrong if a
+CLI that fully conforms still diverges command-to-command in a way the guard passes
+(the guard fails to detect real inconsistency), or if the guard blocks legitimate
+command variation where the domain genuinely differs (false-positive uniformity).
 
 ## Source
 

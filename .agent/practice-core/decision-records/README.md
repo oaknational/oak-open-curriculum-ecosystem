@@ -178,7 +178,7 @@ Practice-Core portability ratifies both — see the bridge index
 | [PDR-052](PDR-052-directive-file-context-budget.md) | Directive-File Context Budget | Accepted |
 | [PDR-053](PDR-053-orchestrator-vs-gate-structural-cure.md) | Orchestrator-vs-Gate Structural Cure (Advisory Polarity) | Accepted |
 | [PDR-054](PDR-054-asymmetric-cure-discipline.md) | Asymmetric-Cure Discipline | Accepted |
-| [PDR-055](PDR-055-cli-affordance-set-discipline.md) | CLI Affordance-Set Discipline for Coordination Tooling | Accepted |
+| [PDR-055](PDR-055-cli-affordance-set-discipline.md) | CLI Affordance-Set and API-Surface-Design Discipline | Accepted (amended 2026-06-16) |
 | [PDR-056](PDR-056-inter-agent-collaboration-protocol.md) | Inter-Agent Collaboration Protocol — Ten Named Cures | Accepted |
 | [PDR-057](PDR-057-empirical-answerability.md) | Empirical-Answerability Pre-Question Gate | Accepted (supersedes quarantined `apply-don't-ask`) |
 | [PDR-058](PDR-058-three-tier-optionality-decomposition.md) | Three-Tier Optionality Decomposition | Accepted (supersedes quarantined `stop-inventing-optionality`) |

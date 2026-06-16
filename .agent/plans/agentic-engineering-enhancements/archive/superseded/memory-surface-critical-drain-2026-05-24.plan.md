@@ -25,6 +25,13 @@ isProject: false
 
 # Memory Surface Critical Drain — 2026-05-24
 
+> **SUPERSEDED (2026-06-16)** by
+> [`decision-debt-register-drain.plan.md`](../../current/decision-debt-register-drain.plan.md).
+> PDR-100 abolished the `owner-gated` / agent-actionable split this plan was built
+> around; draining the register is now a single decide-by-the-lenses disposition
+> pass (graduate / reject / duplicate), provenance not pre-approval. Retained for
+> history; the residual `owner-gated` references below are the pre-abolition frame.
+
 ## Status
 
 Queued by Shaded Silencing Dusk / `codex` / `GPT-5` / `019e59` after the

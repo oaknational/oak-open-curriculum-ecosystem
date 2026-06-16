@@ -4,6 +4,17 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-06-16 — universal CLI API-surface-design consistency (owner-directed)
+
+- **Amended**: PDR-055 — generalised from the coordination-CLI affordance set to
+  universal CLI API-surface-design consistency. Added clauses 7–10
+  (ask-only-caller-knowledge and default/derive tool-knowable values; teaching-help
+  content; actionable boundary errors; universal consistency with a conformance
+  guard); broadened the Scope split (clauses 1–6 coordination CLIs; 7–10 every CLI in
+  every Practice repo); retitled; Falsifiability axis added. Owner direction:
+  API-surface-design consistency is a universal requirement for all CLIs in all
+  Practice repos.
+
 ## [oak-open-curriculum-ecosystem] 2026-06-14 — comms-research closeout consolidation (Marlin weaves Marsh)
 
 The dedicated consolidation closing the comms-corpus research thread graduated its flagship
