@@ -1,7 +1,7 @@
 /**
  * Tests for setUser, setTag, setContext, close, and createSentryInitOptions.
  *
- * @remarks Split from runtime.unit.test.ts to stay within max-lines.
+ * @remarks Split from runtime.integration.test.ts to stay within max-lines.
  * Uses the same FakeSdk pattern and config helpers.
  */
 
