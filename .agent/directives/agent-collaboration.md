@@ -217,22 +217,16 @@ claim and closure kind before writing the close. Recipe in
 
 ## Convergence and Delegation Discipline
 
-Two positive complements to the scope-discipline tripwires above (grounded in
-the PDR-026/PDR-027/PDR-029 collaboration foundation):
+Two positive complements to the scope-discipline tripwires above (PDR-026/027/029):
 
-- **Scan for convergence, not only collision.** §b guards against operating in
-  a peer's area. Its complement: in a shared window or at handoff, actively scan
-  live peer outputs for *convergence* — a parallel agent may have produced the
-  dependency, answer, or evidence your lane needs. Wire those outputs in rather
-  than re-deriving them; checking only for file conflicts misses the value a
-  peer already created.
-- **Delegate by judgement load, not available parallelism.** Partition delegated
-  work by the judgement it carries, not by how many lanes could run at once.
-  Mechanical edits (renames, well-specified transforms) parallelise safely; a
-  subtle correctness boundary stays with the agent that understands it unless
-  the delegation brief names that boundary precisely. Delegating a
-  judgement-heavy edit on available parallelism alone plants a false claim the
-  reviewer must then catch.
+- **Scan for convergence, not only collision.** In a shared window or at handoff,
+  actively scan live peer outputs for the dependency, answer, or evidence your
+  lane needs and wire them in — checking only for file conflicts misses the value
+  a peer already created.
+- **Delegate by judgement load, not parallelism.** Mechanical edits parallelise
+  safely; a subtle correctness boundary stays with the agent who understands it
+  unless the brief names that boundary precisely — delegating a judgement-heavy
+  edit on parallelism alone plants a false claim the reviewer must then catch.
 
 ## PR Closeout Discipline
 
