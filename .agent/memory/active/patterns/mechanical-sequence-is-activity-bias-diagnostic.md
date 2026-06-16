@@ -177,7 +177,7 @@ the substance has converged.
 - [`long-arc-finish-line-not-tail.md`](long-arc-finish-line-not-tail.md)
   — finish-line artefacts are often the doctrine that this anti-pattern
   is failing to author.
-- Pending owner-gated synthesis PDR (`pdr_kind: pattern`) consolidating
+- Pending synthesis PDR (`pdr_kind: pattern`; overdue decision-debt) consolidating
   this and `comprehensive-cataloguing-drift.md` as
   *the proportionality question is the substrate* — see
   `historical-napkin-synthesis-2026-05-09.md` §F12.

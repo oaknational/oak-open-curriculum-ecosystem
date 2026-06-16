@@ -99,7 +99,7 @@ What this PDR **deliberately leaves open** (NOT ratified here):
 
 - **The mechanism** that would occupy the empty quadrant. Mechanism-family
   exploration lives in the closure-pressure-remediation design space and the
-  action-time-structural-interrupt design-space plan; it is owner-gated and
+  action-time-structural-interrupt design-space plan; it is owner-directed and
   evidence-driven. This PDR does **not** select one.
 - **The gap's size** — the semantic-pathogen inventory (which rules / PDRs /
   feedback entries have no surface signature) is unbuilt; it is the empirical base

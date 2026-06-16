@@ -61,5 +61,5 @@ one fresh `git status` and one `git diff --cached` per commit.
 - [[peer-commit-absorption-third-direction]] — absorbing a peer's commit of your working files.
 - The `cannot lock ref 'HEAD'` ref-lock is the final collision backstop — re-derive and
   re-commit, never delete the lock (auto-memory `no-delete-git-lock`, `no-lock-wait-loops`).
-- Rule/PDR graduation of this discipline (a always-loaded rule) remains owner-gated; this
-  pattern is its ecosystem-grounded instance home (PDR-007).
+- Rule/PDR graduation of this discipline (a always-loaded rule) remains overdue decision-debt
+  in the register; this pattern is its ecosystem-grounded instance home (PDR-007).

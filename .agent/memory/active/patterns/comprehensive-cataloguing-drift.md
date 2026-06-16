@@ -140,7 +140,7 @@ adjacent artefacts.
   cure.
 - `consolidation-output-shape-pattern-vs-report.md` — names the
   output-shape side of the same proportionality discipline.
-- Pending owner-gated synthesis PDR (`pdr_kind: pattern`) consolidating
+- Pending synthesis PDR (`pdr_kind: pattern`; overdue decision-debt) consolidating
   this and the mechanical-sequence anti-pattern as
   *the proportionality question is the substrate* — see
   `historical-napkin-synthesis-2026-05-09.md` §F12.
