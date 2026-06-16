@@ -64,7 +64,11 @@ the [ADR index][adr-index].
 
 Always ask: **could it be simpler without compromising quality?**
 
-## Cardinal Rule
+## First Principle
+
+**Strict, everywhere, all the time.** -- This applies to everything.
+
+## Oak Open CurriculumCardinal Rule
 
 ALL static data structures, types, type guards, Zod schemas, Zod validators,
 and other type-related information MUST flow from the Open Curriculum OpenAPI
