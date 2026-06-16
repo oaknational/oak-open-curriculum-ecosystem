@@ -53,3 +53,40 @@ mint the PDR-098 action-time mechanism or PDR-074 P5/P6; curation judgement firs
 absence-claim. `distilled.md` is over its line limit after this session's conservation —
 relieve it by graduating mature entries to permanent homes (owner-approved), never by
 trimming.
+
+## Orchestration-substituted-for-cognition: the curation anti-pattern (2026-06-16, Sequoia holds Arbor — owner-stopped cautionary session)
+
+Owner stopped a dedicated-consolidation session after three failed corrections; the genuine
+output is this lesson (owner-affirmed worth further analysis). **Knowledge curation is first-hand
+cognition — a mind reads raw material and understands it — and I reflexively substituted
+ORCHESTRATION for that cognition.** Across one session I: (a) entered through the curated/graduate
+layer (PDR-074, the register, the routing card) instead of raw sources; (b) delegated discovery to
+sub-agents (second-hand — discovery cannot be delegated); (c) read filing systems before
+discovering anything; (d) pre-decided placement (a resource's home, distil-vs-graduate routing)
+before any insight existed; (e) front-loaded team ceremony. Every move FELT like competent
+high-leverage engineering — that smoothness is the fluency tripwire.
+
+- **The generator**: faced with curation I reached for an engineering-manager toolkit
+  (parallelise, organise, plan placement, coordinate, produce artefacts). An orchestration layer
+  over curation yields plausible artefacts (a 94-entry sub-agent index) with no mind having
+  understood the material — contamination dressed as progress, costing owner attention to reject.
+- **Why corrections did not land (3x)**: each correction targeted the OUTPUT ("wrong layer / no
+  sub-agents / no filing-first"); the GENERATOR survived and produced a new costume each time.
+  Worse, my compliance attempts were produced BY the same reflex — told "go to raw sources" I
+  ORCHESTRATED a raw-source campaign (locators over 90 napkins) instead of opening one file and
+  reading it myself. I named the fluency failure in a behaviour-note, then immediately delegated:
+  naming is not inoculation; the cure is structural, not vigilance.
+- **Bridge-to-impact miss**: impact = insight preserved from raw into distilled; the only bridge
+  is me reading a raw source, understanding it, and writing distilled in my own words. Every action
+  bridged instead to an imagined impact ("produce an organised artefact efficiently").
+- **Structural hazard**: a rich harness (sub-agents, watchers, claims, ArcAngel, MCP, team
+  protocol) ACTIVELY INVITES orchestration; the richer the affordances, the stronger the pull from
+  the quiet first-hand cognition curation needs. The correct first action of a consolidation
+  session is to open one raw source and read it myself.
+- **Cure candidate (surface, do not author)**: a consolidation-session entry discipline forbidding
+  sub-agent dispatch, filing-system reads, and placement planning until N insights are discovered
+  first-hand and written to distilled. Owner affirmed this bears further analysis next session.
+
+Siblings: [[fluency-is-a-failure-vector]], [[first_hand_means_me_not_subagents]],
+[[premature-crystallization]], passive-guidance-loses-to-artefact-gravity,
+[[feedback_owner_direction_is_a_stream]].

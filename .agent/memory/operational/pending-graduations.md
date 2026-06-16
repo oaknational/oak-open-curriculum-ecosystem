@@ -384,18 +384,6 @@ after owner correction. These items remain owner-gated pending real promotion;
 active napkin / distilled content was restored, so this section is not evidence
 that the source buffers were validly drained.
 
-- **Verification sweeps must not exclude the class under test.**
-  `[captured: 2026-05-31 | source: napkin 2026-05-30 readiness review |
-  target: rule-or-pattern:complete-sweep-without-negative-target-filter |
-  trigger: second sweep false-negative caused by an exclusion filter or owner
-  direction — SECOND INSTANCE 2026-06-09 (the -v .test.ts grep that hid a real
-  seventh importer, napkin Fragrant entry) | size: S | status: owner-gated —
-  the verify-your-own-verification clause is RATIFIED and landed in
-  verify-dont-trust (owner ~07:43Z 2026-06-11, events 57d32eb1/c13f2e2b); this
-  item stays per Director direction for its residual facet, the dedicated
-  complete-sweep rule-or-pattern]`
-  The candidate is the concrete failure mode where a search/audit appears clean
-  because the command filtered away the very class it meant to inspect.
 - **Find the falsifying fact before product surgery.**
   `[captured: 2026-05-31 | source: napkin 2026-05-29 Twilit entry |
   target: pattern:falsifying-fact-before-remediation-surgery |
@@ -689,23 +677,6 @@ Total live owner-gated items: 56.
   whether to graduate that method now, keep watching for a second generated
   artefact, or withdraw because existing no-moving-targets and honest
   documentation doctrine is enough.
-- 2026-05-10; **Owner reply preferences and default reply shape**.
-  `[captured: 2026-05-10 | source: insight-report-2026-05-10 | target:
-  user-collaboration-or-pattern:owner-reply-shape | trigger: owner-direction-or-second-regeneration
-  | size: S | status: owner-gated]`
-  The insight report proposed compact reply preferences plus a default shape
-  ("lead with answer" and concise evidence/next-step structure). The remaining
-  decision is whether to amend `user-collaboration.md`, keep watching, or
-  withdraw because the existing Working Model is enough.
-- 2026-05-10; **Owner affirmation phrase corpus**.
-  `[captured: 2026-05-10 | source: insight-report-2026-05-10+owner-course-correct-vocabulary |
-  target: pattern:owner-affirmation-vocabulary | trigger: owner-direction-or-second-regeneration |
-  size: S | status: owner-gated]`
-  Affirmation phrases such as "exactly", "great", and "perfect" may calibrate
-  agent confidence without acting as re-grounding triggers. The remaining
-  decision is whether to graduate a companion pattern now, keep watching for a
-  second corroborating regeneration, or withdraw because the existing
-  course-correct pattern note is enough.
 - 2026-05-05-06; **Cross-thread git-history as observable coordination
   signal**.
   `[captured: 2026-05-05-06 | source: legacy-backlog+riverine-comms-surprise | target:
@@ -1524,19 +1495,6 @@ portion.
   (four in-session instances is strong but single-session).
 - **status**: pending
 
-## Licensing guardrail — crystal-clear-open licences only (school-data-search)
-
-- **captured-date**: 2026-06-04
-- **source-surface**: school-data-search plan §Non-goals (owner directive
-  2026-06-04); the V-06 verification (Scotland geospatial OS/LGIH licence).
-- **graduation-target**: ADR-shaped if the project proceeds — a data-licensing
-  posture (only crystal-clear, open, respected licences enter the canonical
-  dataset; a licence allowlist parallel to the privacy allowlist; OS-derived /
-  Crown-Copyright / unclear-licence data excluded). Plan-local for the POC.
-- **trigger-condition**: the school-data-search POC go/no-go (project
-  proceeds), OR a second Oak data-ingestion surface facing the same question.
-- **status**: pending (project-gated)
-
 ## Two graph data sources are separate concerns sharing one substrate (graph KG)
 
 - **captured-date**: 2026-06-04
@@ -1554,33 +1512,3 @@ portion.
   review, OR the graph-tools-value-redesign promotion (EEF D6 + D7), whichever
   first reopens the substrate boundary as settled architecture.
 - **status**: pending (KG-work-gated)
-
-## 2026-06-14 capture — Clipper wakes Atoll (PDR-051 reduced-implementation reconciliation review)
-
-Verified absent from this register before adding.
-
-- **PDR-051 reduced-implementation reconciliation review.**
-  `captured-date`: 2026-06-14. `source-surface`: 2026-06-14 skills audit (this session); owner direction to
-  record gaps and defer the disposition decision to a later session. `graduation-target`: a decision on
-  PDR-051 — either amend it to record the deferred/YAGNI scope (owned/ingested machinery, supporting-file
-  copy, `claude-*` hoisting are unexercised; `skills-lock.json` empty) OR a remediation plan that closes the
-  §Required gaps as defects. `trigger-condition`: the owner-deferred review/analysis session, OR the first
-  ingested external skill (which activates the owned/ingested apparatus), OR promotion of
-  `future/skills-oversized-core-decomposition.plan.md` (which needs the supporting-file-copy gap closed).
-  `status`: owner-gated (review deferred 2026-06-14).
-  Inputs ready: the gap ledger in `current/skills-standardisation-and-adapter-generator.plan.md`
-  §Reality Reconciliation; friction F-37. Two enhancement briefs already authored (oversized-core
-  decomposition; skills eval harness) sit in `agent-tooling/future/`.
-
-## 2026-06-14 capture — Whirlwind rides Ridge (WS7 closeout + Brazier's loss-scan §6)
-
-- **Step-6e.2 adversarial loss-scan is role-INDEPENDENT (Brazier stirs Residue, §3.3/§6).**
-  - **source-surface**: Brazier's WS7 archive-move closeout handoff (folded by Whirlwind).
-  - **substance**: the closeout context-loss sweep fires for EVERY closeout, not closeout-owners
-    only; closeout lightness (the team-member path) is not a licence to skip it. Run it whenever a
-    session held substantial first-hand reconstruction or cross-surface synthesis. (Brazier's first,
-    minimal team-member closeout skipped it while holding a heavy reconstruction; the owner had to
-    direct the fuller pass.)
-  - **graduation-target**: `distilled.md` first; PDR-011 / ADR-150 (closeout contract) if it recurs.
-  - **trigger-condition**: a second instance of a context-rich closeout skipping the loss-scan.
-  - **status**: pending.
