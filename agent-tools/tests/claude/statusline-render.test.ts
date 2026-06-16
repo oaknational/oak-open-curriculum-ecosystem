@@ -141,18 +141,38 @@ describe('renderStatusline with an Oak logo column', () => {
     ]);
   });
 
-  it('appends the supplied separator as a trailing row beneath the four-row logo block', () => {
-    // The separator is configuration the owner tunes freely; prove the mechanism
-    // (set a value -> it renders as the trailing row), never a specific glyph.
+  it('spans the separator rule to the active logo width, on by default', () => {
+    // Mechanism, not configuration: the rule width is derived from whichever
+    // logo is active — never a hardcoded width or glyph — proven across two
+    // styles whose widths differ (sextant is seven columns, braille six).
+    for (const style of ['sextant', 'braille'] as const) {
+      const lines = renderStatusline({ ...base, dir: 'repo' }, { logo: style }).split('\n');
+      const ruleRow = lines[lines.length - 1].replaceAll(DIM, '').replaceAll(RESET, '');
+      expect([...ruleRow].length).toBe([...OAK_LOGO_ROWS[style][0]].length);
+    }
+  });
+
+  it('tiles a caller-supplied rule glyph across the logo width', () => {
+    // Inject a probe glyph and prove the set-it -> renders-it mechanism at the
+    // logo width; never assert the default glyph (owner-tunable presentation).
+    const probe = '=';
     const lines = renderStatusline(
       { ...base, dir: 'repo' },
-      { logo: 'sextant', logoSeparator: '<<sep>>' },
+      { logo: 'sextant', logoSeparator: probe },
     ).split('\n');
-    expect(lines).toHaveLength(5);
-    expect(lines[3]).toContain('repo');
-    // The separator content appears in the trailing row; the row's colouring is
-    // presentation the owner tunes freely, so prove containment, not the exact bytes.
-    expect(lines[4]).toContain('<<sep>>');
+    const ruleRow = lines[lines.length - 1].replaceAll(DIM, '').replaceAll(RESET, '');
+    const logoWidth = [...OAK_LOGO_ROWS.sextant[0]].length;
+    expect([...ruleRow]).toEqual(Array.from({ length: logoWidth }, () => probe));
+  });
+
+  it('suppresses the separator rule when given an empty glyph', () => {
+    // The off switch: an explicit empty string drops the rule row entirely.
+    const lines = renderStatusline(
+      { ...base, dir: 'repo' },
+      { logo: 'sextant', logoSeparator: '' },
+    ).split('\n');
+    expect(lines).toHaveLength(OAK_LOGO_ROWS.sextant.length);
+    expect(lines[lines.length - 1]).toContain('repo');
   });
 
   it('omits the separator row in the no-logo layout', () => {

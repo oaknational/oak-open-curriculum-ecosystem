@@ -1,9 +1,10 @@
 import { OAK_LOGO_ROWS, resolveLogoStyle } from '../../src/claude/oak-logo';
 
 describe('OAK_LOGO_ROWS', () => {
-  it('renders each style as four rows', () => {
-    for (const rows of Object.values(OAK_LOGO_ROWS)) {
-      expect(rows).toHaveLength(4);
+  it('renders the default braille-sharp as five rows and every other style as four', () => {
+    expect(OAK_LOGO_ROWS['braille-sharp']).toHaveLength(5);
+    for (const style of ['braille-sharp-compact', 'braille', 'quad', 'sextant'] as const) {
+      expect(OAK_LOGO_ROWS[style]).toHaveLength(4);
     }
   });
 
@@ -22,6 +23,7 @@ describe('OAK_LOGO_ROWS', () => {
 describe('resolveLogoStyle', () => {
   it('passes through the known styles', () => {
     expect(resolveLogoStyle('braille-sharp')).toBe('braille-sharp');
+    expect(resolveLogoStyle('braille-sharp-compact')).toBe('braille-sharp-compact');
     expect(resolveLogoStyle('braille')).toBe('braille');
     expect(resolveLogoStyle('quad')).toBe('quad');
     expect(resolveLogoStyle('sextant')).toBe('sextant');

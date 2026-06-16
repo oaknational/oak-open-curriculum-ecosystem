@@ -147,11 +147,45 @@ Legacy Computing block), confirming braille as the portable default.
   `braille-sharp` re-keyed to `braille-sharp-compact`); only the new
   `braille-sharp` 5×7 is new data, pinned to the rows above.
 
+**Live landing (2026-06-16) — swapped ahead of modularisation.** The owner
+directed an immediate live swap. Landed in the *current* home, not the neutral
+one: `agent-tools/src/claude/oak-logo.ts` now carries the 5×7 sharpened
+`braille-sharp` default and `braille-sharp-compact` (the prior 4×6); the
+`OakLogoStyle` union and `resolveLogoStyle` cover both; `oak-logo.test.ts` pins
+the row counts and the resolver. `dist` rebuilt and the shim verified — the live
+statusline renders the 5-row mark with the acorn base trailing bare below the
+segments. Tree green: build, type-check, lint (no new warnings), 1229 tests. The
+renderer's stale "four-row" prose was corrected in place; its compose logic was
+already row-count-agnostic, so no renderer logic changed.
+
+**What execution now does — bring the live swap up to standard.** WS1–WS4 keep
+their intent but now *relocate and harden* an already-live asset rather than
+introduce it: move the data to the neutral `oak-acorn.ts` as `OAK_ACORN`
+(carrying the 5×7 default + the four retained marks), invert the renderer onto
+the `ResolvedLogo` contract — removing the by-name `OAK_LOGO_ROWS` import and the
+`LOGO_COLOUR = GREEN` hardcode (`statusline-render.ts`) — and add the
+neutral-home enforcement seam. The WS2.1 acceptance (retained marks
+byte-identical; `braille-sharp` matching the Owner-Decision rows) is now a
+**regression guard on the live data**, not a first authoring.
+
 ---
 
 ## Additional User Request
 
-Add one blank line under the statusline content.
+The logo block has a trailing separator rule that **spans the active logo's
+display width** (owner direction 2026-06-16, superseding the earlier "add one
+blank line under the statusline content"). It is **on by default**; whatever
+glyph is used (default `_`) is tiled and trimmed to the logo's own code-point
+width, so the rule matches whichever style is active. Passing an empty
+`StatuslineRenderOptions.logoSeparator` suppresses it.
+
+**Landed 2026-06-16** in `statusline-render.ts`: `buildLogoSeparator` defaults
+the glyph to `LOGO_SEPARATOR_GLYPH` and sizes the rule to
+`[...logoRows[0]].length` code points; an empty string suppresses it. The live
+adapter passes no separator, so the live statusline shows the width-matched rule
+by default. The tests prove the **mechanism** — the rule width tracks the active
+logo across two styles of differing width, and an injected probe glyph tiles to
+that width — never a pinned glyph or literal width.
 
 ## Context
 
@@ -290,7 +324,7 @@ raw-string leakage past the boundary (closed-shape-design rule).
    today and confines brand knowledge to one composition root. The statusline
    renderer is **out of scope for this plan** only because its segment/icon
    content is the sibling session-state plan's territory (which is actively
-   editing it) — a scope boundary, not a YAGNI judgment.
+   editing it) — a scope boundary, not a YAGNI judgement.
 4. **The soft surface must be a tested guarantee, not an accident of spawn.**
    Soft-fail belongs in the adapter and is proven by test.
 5. **Agent tooling is held to the same bar as product code.** Launch logic moves
@@ -810,7 +844,7 @@ the owner has in mind is creation, not a YAGNI breach. Verdicts:
 | 8 | betty / barney | Two plans both edit `renderStatusline`/`statusline-identity.ts` — name a landing order | **ACCEPTED.** Land this plan's WS4.1 (renderer signature) first; the session-state plan's WS4 rebases onto the settled signature |
 | 9 | wilma | Dynamic-import shim risks losing buffered stdin | **DOWNGRADED.** Node stdin is paused until a listener attaches (attached synchronously during the import), and AC-8 feeds stdin and asserts output. Kept as an explicit WS3.3 empirical check, not a blocker |
 | 10 | wilma | WS3.2 "empty/partial output" on soft-fail is undefined | **ACCEPTED.** Tightened to "empty output only" — the line is assembled then written in one atomic `process.stdout.write` |
-| 11 | wilma | Shim relative-URL drift caught only by e2e | **ACCEPTED.** Add a build/lint check asserting the shim's resolved dist path exists (the build already chmods that file; extend the assertion to the shim URL) |
+| 11 | wilma | Shim relative-URL drift caught only by e2e | **ACCEPTED.** Add a build/lint check asserting the shim's resolved dist path exists (the build already marks that file executable; extend the assertion to the shim URL) |
 | 12 | wilma | `ws1-cycle-2` `depends_on` omits `ws1-cycle-4` (RESET from neutral `ansi.ts`) | **ACCEPTED.** Add `ws1-cycle-4` to the dependency |
 | 13 | barney / betty | `resolveAdapterPath` (WS3.1) may have no consumer once the shim is zero-logic | **ACCEPTED.** Confirm a consumer before building WS3.1; if the zero-logic shim wins, drop WS3.1 (the plan's own First-Question simplification) |
 | 14 | barney | Neutral dir name `statusline/` reads feature-specific; ANSI relocation is a cost of the split | **NOTED.** Name acceptable; ANSI move recognised as a cost of the neutral home, not a free win |
