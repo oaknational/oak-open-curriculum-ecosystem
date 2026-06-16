@@ -90,8 +90,8 @@ current session:
    the knowledge disposition is not optional.
 5. Every decidable item has been decided (graduated, rejected, or duplicate). An
    item that genuinely cannot be decided this pass remains a live decision-debt
-   entry (status `pending` / `due` / `overdue`) visible in the count — never an
-   owner-gated hold (abolished, PDR-100).
+   entry (status `pending` / `due` / `overdue`) visible in the count, to be
+   graduated or rejected on a later pass.
 6. The closeout reports the **value and impact** — what knowledge reached which
    permanent home, what behaviour it changes — not an accounting of dispositions.
    The commits and the permanent homes ARE the record that the pass happened. Per

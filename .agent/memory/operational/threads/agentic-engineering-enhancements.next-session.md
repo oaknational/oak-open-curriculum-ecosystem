@@ -49,9 +49,11 @@ not a presumption** — before rejecting, verify the item's insight is conserved
 nothing *runs* `practice:fitness` at a gate — what cadence anchor ensures the signal is read at
 handoff/closure? Report-only is only as live as its invocation (assumptions-expert flagged).
 
-**Owner question (still open, do not decide):** PDR-100 abolished `owner-gated` as a REGISTER STATUS
-only; other `owner-gated` usages (PDR-006 tool-nomination, collaboration gates, owner-paced
-execution, Sonar authorisation) were left. Whether provenance-over-perfection extends is owner's call.
+**Owner answer (2026-06-16):** the abolition is propagated across all knowledge-flow doctrine
+surfaces (briefs, skills, register, continuity, drain plans — done this session). The SEPARATE
+owner-authority concepts that share the word (PDR-006 tool-nomination, plan-promotion / PR-merge
+gates, `--no-verify` / limit-raise / Core-edit safety controls, Sonar authorisation) are surfaced
+to the owner for an explicit scope decision — NOT auto-purged.
 
 **Antipatterns I enacted (named so the next agent watches for them):** activity-bias /
 mechanical-sequence — I ran a satisfying mechanism sequence and decided 0 items (I literally edited
@@ -79,8 +81,8 @@ open-questions drained of two resolved entries, repo-continuity + this thread's 
 condensed insight-conserved, three unbacked register pointers conserved as real entries.
 **The ADR-131 pause-and-stabilise posture lifts when these edits land in a commit**; no NEW
 Core restructuring candidates meanwhile. **Next curation move**: none queued — the next
-dedicated pass fires on the consolidate-docs trigger checklist (owner-walk deltas waiting:
-PDR-082 second-instance evidence; the PDR-081 ledger-clause contradiction, owner-gated).
+dedicated pass fires on the consolidate-docs trigger checklist (decision-debt deltas waiting to
+decide by the lenses: PDR-082 second-instance evidence; the PDR-081 ledger-clause contradiction).
 The prior walk's record (Thermal Circling Updraft, 2026-06-11) lives in git history and the
 register.
 
@@ -92,7 +94,7 @@ pickup trigger; neither blocks the other.
 - **Lane A — feedback-mechanism follow-ons (active).** Branch `feat/graph-tooling-tidyup`;
   next is **WS1 → 2b → 2c → WS2** (full detail in the bullets and the Briny Plumbing Beacon
   banner below).
-- **Lane B — skills standardisation review (deferred, owner-gated).** Next is the
+- **Lane B — skills standardisation review (deferred).** Next is the
   **PDR-051 reduced-implementation reconciliation review**. Pickup trigger: the owner review
   session, OR the first ingested external skill, OR promotion of the oversized-core
   decomposition brief. Inputs ready — owning plan §Reality Reconciliation gap ledger
@@ -328,9 +330,9 @@ passes) is in git history and the [`curator-passes/`](../curator-passes/) ledger
   (§Reality Reconciliation gap ledger); enhancement briefs
   [`agent-tooling/future/skills-oversized-core-decomposition.plan.md`](../../../plans/agent-tooling/future/skills-oversized-core-decomposition.plan.md)
   and [`agent-tooling/future/skills-eval-harness.plan.md`](../../../plans/agent-tooling/future/skills-eval-harness.plan.md);
-  friction F-37; pending-graduations entry "PDR-051 reduced-implementation reconciliation review" (owner-deferred).
-- **Graduation register**: [`pending-graduations.md`](../pending-graduations.md) (owner-gated +
-  fired-trigger candidates from this thread's curation passes).
+  friction F-37; pending-graduations entry "PDR-051 reduced-implementation reconciliation review".
+- **Graduation register**: [`pending-graduations.md`](../pending-graduations.md) (decision-debt
+  candidates — pending/due/overdue — and fired-trigger candidates from this thread's curation passes).
 - **Curation ledgers**: [`curator-passes/`](../curator-passes/) (per-pass disposition evidence).
 - **Repo state**: [`repo-continuity.md`](../repo-continuity.md) § Current State (authoritative
   live state across threads).

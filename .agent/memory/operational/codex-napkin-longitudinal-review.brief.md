@@ -18,8 +18,9 @@ Core rule: preserve substance first. Fitness is routing evidence only. Do not
 archive, split, shard, rename, pointer-replace, or move unprocessed content to
 make fitness improve. This pass is allowed to read archived napkins as source
 material, but it must not rewrite archives. Active surfaces may be edited only
-for real dispositions: `graduated`, `duplicate`, `owner-gated`, or
-`stale-withdrawn`.
+for real dispositions: `graduated`, `rejected`, or `duplicate` (an item that
+cannot be decided this pass stays a counted decision-debt entry: `pending` /
+`due` / `overdue`).
 
 Current context:
 - The 2026-05-31 docs consolidation repair is now `failed pass repaired`.
@@ -82,7 +83,7 @@ Primary questions:
 2. Which patterns only become visible after repeated reads of the same napkin
    lineage?
 3. Which candidate lessons were dismissed as one-offs but now have enough
-   repeated evidence to become owner-gated entries, PDR/ADR candidates, rules,
+   repeated evidence to become graduation candidates, PDR/ADR candidates, rules,
    patterns, or skill amendments?
 4. Which apparent lessons have already been homed, and should not be re-added?
 5. Which failures repeat despite already being written down, implying an
@@ -109,8 +110,9 @@ Method:
    - rejected: apparent pattern, but coverage or evidence does not hold.
 5. For any removal or "already homed" verdict, verify the home in the live repo.
    Do not trust earlier curator ledgers as proof; they are claims to test.
-6. Bias against loss: if coverage is uncertain, keep or owner-gate rather than
-   withdraw. Dropping a captured lesson is the irreversible action.
+6. Bias against loss: if coverage is uncertain, keep it as a counted decision-debt
+   entry (`pending`/`due`/`overdue`) rather than withdraw. Dropping a captured
+   lesson is the irreversible action.
 
 Expected outputs:
 - A new research report under
@@ -120,10 +122,11 @@ Expected outputs:
 - A curator-pass ledger under
   `.agent/memory/operational/curator-passes/`, suggested name:
   `2026-05-31-codex-napkin-longitudinal-review.md`.
-- Updates to `pending-graduations.md` only for owner-gated candidates with clear
-  evidence and trigger conditions.
+- Updates to `pending-graduations.md` for graduation candidates that cannot be
+  decided this pass (recorded as decision-debt with clear evidence and trigger conditions).
 - Updates to `distilled.md`, rules, PDRs, ADRs, skills, or pattern files only if
-  the evidence and natural home are strong enough. Otherwise route as owner-gated
+  the evidence and natural home are strong enough. Otherwise record it as a
+  decision-debt entry (pending/due/overdue) to decide by the lenses next pass,
   rather than forcing a graduation.
 - A short note in `napkin.md` only for genuinely new observations from this
   session; do not add a note just to prove the pass happened.
@@ -140,7 +143,8 @@ Completion contract:
 - Complete only when the current plus twenty-napkin corpus has been read or a
   specific unreadable file is named as a blocker.
 - Complete only when every candidate finding in the report has a disposition:
-  `graduated`, `duplicate`, `owner-gated`, `stale-withdrawn`, or `rejected`.
+  `graduated`, `rejected`, `duplicate`, or `stale-withdrawn` (an undecidable
+  finding remains a counted decision-debt entry).
 - Do not claim the pass found "nothing" unless the report explains the search
   dimensions and why prior syntheses already cover them.
 - Final verdict must be one of:

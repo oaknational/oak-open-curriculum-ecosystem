@@ -13,9 +13,7 @@ fitness_item_dwell_hard: 7
 lifecycle_model: >-
   canonical pending-graduations register — every live item is decision-debt
   (status pending/due/overdue) until it is graduated, rejected, or marked
-  duplicate; there is no park-pending-owner status (the owner-pre-approval gate
-  was abolished 2026-06-16). Provenance and adaptation, not owner pre-approval,
-  are the safety net for a wrong call.
+  duplicate. Provenance and adaptation are the safety net for a wrong call.
 access_pattern: >-
   consolidation-pass-only — read at consolidations and drain sessions; not
   loaded every session by every agent
@@ -49,11 +47,9 @@ windowed, backlog, split, or shard-like pending-graduation files. New capture an
 unresolved pending-graduation decisions belong here until they graduate, are
 rejected, or become duplicate — every live item is decision-debt to decide.
 
-**Owner walk 2026-06-11 (dedicated consolidation, Thermal Circling Updraft):**
-every item in the register was walked with the owner. The per-item status
-vocabulary of that walk was superseded 2026-06-16, when the owner-pre-approval
-gate was abolished: every live item is now decision-debt (status
-pending/due/overdue), drained by graduation or rejection.
+**Every live item is decision-debt** (status pending/due/overdue), drained by
+graduation or rejection; provenance and adaptation are the safety net for a
+wrong call.
 
 ## 2026-06-16 capture — Snapper binds Coral (consolidation closeout)
 
@@ -133,16 +129,16 @@ Each verified absent from this register before adding.
 
 ## 2026-06-11 capture — Thermal Circling Updraft (dedicated consolidation walk)
 
-- **Team-opener generalisation exploration plan: x5 owner walk.** The
+- **Team-opener generalisation exploration plan: x5 walk (decision-debt).** The
   owner-directed exploration plan
   `.agent/plans/agent-tooling/current/team-opener-generalisation-exploration.plan.md`
   (authored 2026-06-11, merging at the Director's hand) names decisions without
   making them: the generic-platform / start-right-team-overlap / thread-specific
   decomposition and the home options (skill / sibling skill / skill+template /
-  rule extraction). Its todo x5 is a future owner walk; recorded here so the
-  decision surfaces in the owner-decision queue rather than only inside the plan.
+  rule extraction). Its todo x5 is decision-debt to decide at the plan's x5 walk;
+  recorded here so it surfaces as counted decision-debt rather than only inside the plan.
   `[captured: 2026-06-11 | source: Director handed delta (event e17324ff) |
-  target: the plan's own x5 walk | trigger: plan merged + owner walks it |
+  target: the plan's own x5 walk | trigger: plan merged + the x5 walk happens |
   size: decision-only | status: overdue]`
   Evidence rider for the walk (napkin 2026-06-11, Thermal, conserved verbatim
   in substance): the seventh directorship started as pure coordination
@@ -269,7 +265,7 @@ Each verified ABSENT from this register before adding.
   | target: pdr:dissolution-by-re-attribution | trigger: second dissolution-by-re-attribution
   instance OR owner direction | size: S | status: overdue]`
 
-**Cross-experience meta-signal (owner-walk, not a new candidate):** Patterns 2–5
+**Cross-experience meta-signal (synthesis note across existing items, not a new register entry):** Patterns 2–5
 above are facets of one deep structure — *the failure mode hides inside the
 surfaces that feel safest* (diligence, inherited authority, the corrective act,
 review volume). Separately, the experience corpus has spent ~6 days (2026-05-30

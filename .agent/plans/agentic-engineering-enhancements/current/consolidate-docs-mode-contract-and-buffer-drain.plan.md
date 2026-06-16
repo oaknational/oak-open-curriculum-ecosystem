@@ -83,8 +83,8 @@ Add explicit defaults for dedicated curation:
 
 - documentation/reference surfaces: aim for healthy-to-soft by routing,
   splitting, sharpening, or creating durable homes;
-- drainable buffers: process item by item until empty unless an owner-gated
-  item must remain live with a named blocker;
+- drainable buffers: process item by item until empty; an item that cannot be
+  decided this pass remains a counted decision-debt entry with a named blocker;
 - hard or critical fitness on documentation is a routing alarm, not permission
   to dilute substance.
 
@@ -98,8 +98,7 @@ item must end in exactly one disposition:
 
 - `graduated`: durable home created or updated, with path evidence;
 - `duplicate`: already represented in a durable home, with path evidence;
-- `owner-gated`: cannot proceed without owner decision, with the question and
-  live holding location;
+- `rejected`: no durable home is warranted, with the reason;
 - `stale-withdrawn`: no longer valid, with reason;
 - `carried-forward`: still valid but not drainable in this pass, with trigger
   and next action.

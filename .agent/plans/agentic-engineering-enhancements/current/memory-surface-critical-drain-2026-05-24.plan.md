@@ -194,8 +194,7 @@ Actions:
 Acceptance criteria:
 
 1. The baseline line/char counts are updated from live command output.
-2. Owner-gated entries are separated from agent-actionable entries.
-3. Any deferral names the constraint and falsifiability check.
+2. Any deferral names the constraint and falsifiability check.
 
 ## Phase 1 — Repo-Continuity Drain
 
@@ -255,11 +254,10 @@ Actions:
    home.
 2. Correct malformed status metadata where the status parser shows prose
    fragments instead of a lifecycle value.
-3. Execute agent-actionable due entries whose destination is not
-   owner-gated.
-4. For owner-gated due entries, keep the full substance in place and attach the
-   owner-decision packet pointer rather than silently promoting.
-5. Split or archive old partial entries only after destination evidence is
+3. Decide each due entry by the lenses (LTAE / strict / improve-DX): graduate or
+   reject it now, recording the disposition in its permanent home. An entry that
+   genuinely cannot be decided remains visible decision-debt with a named blocker.
+4. Split or archive old partial entries only after destination evidence is
    verified and all remaining unresolved substance has an explicit live route.
 
 Acceptance criteria:
@@ -710,7 +708,7 @@ Actions:
 2. For each entry, decide: already covered, stable with natural home, stable
    with home gap, or still validating.
 3. Move only stable + natural-home entries after verifying the destination.
-4. Record home gaps as pending-graduations entries or owner-decision items.
+4. Record home gaps as pending-graduations decision-debt entries.
 
 Acceptance criteria:
 

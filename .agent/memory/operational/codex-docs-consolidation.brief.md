@@ -4,8 +4,8 @@ Place this immediately after `/goal`:
 
 ```text
 Continue the Oak docs consolidation repair and real knowledge-curation pass until
-every live consolidation/docs buffer is either item-dispositioned or explicitly
-owner-gated. This is a single-agent session: do not spawn parallel agents and do
+every live consolidation/docs buffer is either item-dispositioned (graduated /
+rejected / duplicate) or a visible decision-debt entry with a named blocker. This is a single-agent session: do not spawn parallel agents and do
 not allow another agent to repair the same material independently.
 
 Use $oak-start-right-quick, $oak-consolidate-until-done, and
@@ -17,7 +17,7 @@ Core rule: fitness output is routing evidence only. Completion requires real
 item-level dispositions plus no hard/critical files. Do not archive, split,
 shard, rename, pointer-replace, or move unprocessed content to make fitness
 improve. Archive relocation is allowed only after an item-level ledger proves
-every source item is graduated, duplicate, owner-gated, or stale-withdrawn.
+every source item is graduated, rejected, duplicate, or stale-withdrawn.
 
 Current repair truth:
 - Failed 2026-05-31 archive-only moves have been repaired to live-buffer state.
@@ -56,9 +56,9 @@ Already processed in the repair batch:
 - PDR-089 accepted/indexed.
 - Removed from `distilled.md` because PDR-089 covers them:
   corrected-decision propagation and default-replace remediation.
-- Removed from `distilled.md` because canonical pending-graduations now
-  owner-gates them: flag-gated surface enumeration and fixed-canonical-data
-  derive-never-verify/read-primary-artefact.
+- Removed from `distilled.md` because the canonical pending-graduations register
+  now holds them as decision-debt entries to graduate or reject: flag-gated surface
+  enumeration and fixed-canonical-data derive-never-verify/read-primary-artefact.
 - Removed from `distilled.md` as duplicate durable homes: Cursor statusline
   delegate shim, EEF wrong-shape episode, generated adapters never hand-written.
 - Do not re-add those to `distilled.md`; verify their homes instead.

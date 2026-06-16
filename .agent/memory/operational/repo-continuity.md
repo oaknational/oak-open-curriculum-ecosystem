@@ -33,8 +33,9 @@ surface.
   no-mutable-state-in-memory (`per-user-memory-is-a-buffer`), the Second Question in `AGENT.md`.
   **THE UNDONE CORE (owner-confirmed NEXT SESSION): the register still reads 72 / critical; 0 of
   the 72 decided.** Open: cadence-anchor question (`open-questions.md` Q-001 — report-only is only
-  as live as its invocation). Owner question still open: does PDR-100's abolition extend beyond the
-  register status?
+  as live as its invocation). Owner directed (2026-06-16) the abolition propagated across all
+  knowledge-flow doctrine surfaces (done this session); the separate owner-authority concepts that
+  share the word are surfaced for an explicit scope decision.
   **Next safe step: DRAIN — decide the 72 first-hand, per-item (conserve insight before rejecting);
   do NOT build WS-OM before draining.** Full pickup:
   `threads/agentic-engineering-enhancements.next-session.md`.
@@ -135,7 +136,7 @@ surface.
   lane ran as a PLANNING session (owner-reshaped in-session): the
   [research plan](../../plans/agent-tooling/active/comms-corpus-research-and-rotation-strategy.plan.md)
   is now DECISION-COMPLETE + EXECUTION-READY with the owner-amended end-state (WS6
-  comprehensive synthesis report; owner-gated WS7 executes the ratified rotation: contract
+  comprehensive synthesis report; WS7 (gated on WS5 proposal owner-ratification) executes the ratified rotation: contract
   surfaces relocated, `experiments/` preserved — never purged, owner direction — `.agent/state/`
   untracked-by-design, 7-day default retention purge post-absorption); immediate
   `experiments/` preservation landed (gitignore flip + five machine-local records committed);
@@ -346,7 +347,7 @@ surface.
   `agentic-engineering-enhancements` activity is a temporary knowledge-curation lane — its live
   WS1→2b→2c→WS2 feedback-mechanism work lives in its thread record, not a product thread.
 - **Collaboration-state lifecycle**: `.agent/state/` files are live signal
-  sources, not long-term documentation. Outside explicit owner-gated research
+  sources, not long-term documentation. Outside explicit owner-directed research
   windows, process useful substance into memory/docs/plans and clear stale state.
 
 ## Active Threads
@@ -474,13 +475,13 @@ Live remainder:
 1. The latest dedicated curation pass is 2026-06-12 (Thyme wakes Canopy): napkin
    rotated (archive `napkin-2026-06-12-thyme-curation.md`), distilled graduated
    (five new pattern files), the owner-approved Core amendment queue authored,
-   open-questions and pending-graduations drained to genuinely gated items.
+   open-questions and pending-graduations drained to live decision-debt.
 2. The relative-link integrity item is accepted as a future validator lane, not
    implemented tooling; promote the plan only on its recorded trigger.
 3. Comms-event rotation remains paused until the
    [comms-corpus research plan](../../plans/agent-tooling/active/comms-corpus-research-and-rotation-strategy.plan.md)'s
    WS5 proposal is owner-ratified (the plan exists and is execution-ready as of
-   2026-06-12; its owner-gated WS7 is the only legitimate rotation-execution
+   2026-06-12; its WS7 (gated on WS5 proposal owner-ratification) is the only legitimate rotation-execution
    surface); fitness is routing evidence only — never archive, split, shard, or
    rename unprocessed content to improve scores. For a later ordinary docs
    continuation, use
@@ -514,13 +515,9 @@ this section; create a thread record when execution is scheduled.
 
 ## Open Owner-Decision Items
 
-1. `pending-graduations.md` is now decision-debt, decided by the agent — no longer
-   an owner-decision item. owner-gated is abolished (PDR-100); every live entry is
-   `overdue` debt to graduate or reject, and the decision-debt count metric
-   (ADR-144) reports and gates on it.
-2. MCP product analytics execution-plan promotion is deferred. Production PostHog
+1. MCP product analytics execution-plan promotion is deferred. Production PostHog
    capture still needs the legal/privacy gates named in the exploration record.
-3. Monorepo workspace topology is held by owner decision (2026-05-09) until after
+2. Monorepo workspace topology is held by owner decision (2026-05-09) until after
    the graph MVP implementation tranche, unless the owner reopens it.
 
 ## Repo-Wide Invariants / Non-Goals

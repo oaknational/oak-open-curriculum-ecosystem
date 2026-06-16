@@ -57,26 +57,16 @@ perfectionism) graduated to `distilled.md`; the Marlin commit-queue spawn/captur
 routed to frictions-register F-59; all agent-tools session frictions live as F-41..F-59;
 the rest were instances of already-homed families or already in auto-memory.
 
-## Live continuation — pending-graduations drain (for the next consolidation session)
+## Live continuation — pending-graduations drain (for the next session)
 
-The register was drained of every clearly-routable / withdrawable / agent-tools item this
-session (1900→~1585 lines; all agent-tools R items → frictions-register F-41..F-59;
-three behavioural items withdrawn as covered by verify-dont-trust). open-questions is EMPTY.
-**The residual is genuine owner-decision work — do NOT mint hollow doctrine to force zero:**
+Every register item is **decision-debt to graduate or reject by the lenses** (LTAE /
+strict-everywhere / improve-DX), decided by the agent — there is no owner-walk and no
+owner-gated resting state (PDR-100); provenance and adaptation are the safety net. The
+authoritative items live in the register; the drain method and tranches live in the executable
+plan [`decision-debt-register-drain.plan.md`](../../plans/agentic-engineering-enhancements/current/decision-debt-register-drain.plan.md).
+Expect many rejects (single-instance keep-watching candidates), but decide per-item — verify
+each item's insight is conserved in a durable home before rejecting.
 
-- **~50 owner-gated single-instance doctrine/pattern candidates** (Legacy Backlog remainder,
-  distilled continuation/final gates, source-buffer gates, Shaded, Thyme remainder, Briny
-  EEF, Dusky, Arboreal, negation-contrast, PreToolUse-hooks). Each is a graduate-now vs
-  confirm-gated **owner-walk** decision (consolidate-docs step 7); minting from one instance
-  is forbidden, so they stay conserved-in-register until the owner walks them or a second
-  instance fires. **This is why the register is not at literal zero.**
-- **G (owner-approved/confirmed, large execution):** feedback-mechanism reappraisal 2b
-  (89-file `.agent/rules/*.md` positive-direction pass) + 2c; seam-mapping plan-template
-  (insight conserved in the EEF plan §Sequencing; trigger = next multi-seam plan).
-- **Team Autonomy Gates (~430 lines, register §"Team Autonomy Gates"):** the PDR-074
-  amendment cycle — fold per-primitive graduation-triggers into PDR-074, decide P6's home,
-  THEN withdraw the register tracking-entries. Needs docs-adr + assumptions reviewers; P5
-  (no worked instance) and P6 (promotion gate UNMET) stay RECORDED-AS-GATED, not graduated.
 - **Standalones:** reviewer-brief-scope, precedent-hunting, licensing guardrail,
   graph-KG-sources, PDR-051 reduced-impl review — assess each.
 - **Step-6e.2 loss-scan item (WS7 section):** targets `distilled.md` — handle next rotation.
@@ -223,7 +213,7 @@ is NOT a resting state (owner directive):**
   appending to an ArcAngel channel via the Edit tool rewrites the file and makes `tail -F`
   re-emit the whole channel (cure: append with `>>`). Route both to the frictions register.
 
-## DOCTRINE SHIFT (owner, 2026-06-16): owner-gated is ABOLISHED — supersedes the owner-walk framing above
+## DOCTRINE SHIFT (owner, 2026-06-16): owner-gated is ABOLISHED
 
 The owner removed the concept of `owner-gated` entirely: *"if the repo makes bad decisions it
 needs to learn from them; we don't need perfection, we need provenance, traceability,
@@ -236,7 +226,7 @@ visibility, awareness, and the ability to adapt."* Repo-learning is now a **firs
   homes, visible history), NOT owner-pre-approval, are the safety net for a wrong call — because
   the fear-of-being-wrong is exactly what produced the junk drawer (over-caution-root-is-perfectionism).
 - **Implemented next session** via the promoted executable plan
-  `agent-tooling/current/pending-graduations-schema-and-count-fitness.plan.md`: entry schema with
+  `agent-tooling/archive/pending-graduations-schema-and-count-fitness.plan.md`: entry schema with
   a status enum that DROPS owner-gated; a deterministic live-item count; a three-zone fitness
   metric (target 0, soft 1, hard 3, critical = hard 3 — decision-debt kept near-zero); the count
   reported every pass; and owner-gated stripped from doctrine surfaces (consolidate-docs step 7,
@@ -251,6 +241,17 @@ visibility, awareness, and the ability to adapt."* Repo-learning is now a **firs
 Siblings: over-caution-root-is-perfectionism, [[fluency-is-a-failure-vector]], and the
 enforce-edge and orchestration-substituted-for-cognition lessons above,
 [[feedback_owner_direction_is_a_stream]].
+
+## owner-gated reflex recurred despite the abolition being in front of me (Basil tracks Xylem, 2026-06-16)
+
+This session I read PDR-100's abolition twice (register frontmatter + the consolidate-until-done
+completion contract) and STILL built an "owner-only" graduation tranche and asked the owner to walk
+it. The owner corrected it. Proximate root: a grooved reflex ("surface owner decisions"; "feature-shaping
+is the owner's") fired over a just-read fact — [[fluency-is-a-failure-vector]] exactly. Deeper cause
+(owner-confirmed): PDR-100 recorded the abolition but it was never propagated — live briefs, continuity,
+and this napkin's own "Live continuation" section still taught owner-gated/owner-walk, so the substrate
+mis-trained the next agent. Cure this session: purge owner-gated from all knowledge-flow doctrine
+surfaces — the structural fix, not another prose reminder.
 
 ## Session synthesis + a tooling caution (2026-06-16, Snapper — pre-compression loss-scan)
 
