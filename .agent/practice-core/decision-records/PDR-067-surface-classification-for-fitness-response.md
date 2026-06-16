@@ -4,8 +4,13 @@ pdr_kind: governance
 
 # PDR-067: Surface Classification for Fitness-Response Routing
 
-**Status**: Proposed
+**Status**: Accepted
 **Date**: 2026-05-22
+**Accepted**: 2026-06-16 — ratified on enforcement. The decision-debt count metric
+(`fitness_item_count`, target 0) instantiates this PDR's buffer-surface diagnostic:
+a buffer's flow-rate (is the consumer keeping pace with the producer?) is its
+defining health signal, distinct from content size, and a buffer with no such zone
+is a schema failure.
 **Related**:
 [PDR-014](PDR-014-consolidation-and-knowledge-flow-discipline.md)
 (capture → distil → graduate → enforce — this PDR classifies the
