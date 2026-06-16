@@ -17,6 +17,12 @@ import {
 } from './format.js';
 import { formatFitnessResultsByCategory } from './categories.js';
 import { discoverFitnessFiles } from './paths.js';
+import {
+  decisionDebtConfigurationFinding,
+  evaluateDecisionDebt,
+  isConceptCounted,
+} from './decision-debt.js';
+import { formatDecisionDebtSection, type DecisionDebtReading } from './decision-debt-report.js';
 
 interface PracticeFitnessIo {
   readonly log: (message?: string) => void;
@@ -41,6 +47,38 @@ async function readFitnessResults(
       evaluateFitnessFile(relPath, await fs.readFile(path.join(repoRoot, relPath), 'utf8')),
     ),
   );
+}
+
+async function readDecisionDebtReadings(
+  repoRoot: string,
+  fitnessFiles: readonly string[],
+): Promise<DecisionDebtReading[]> {
+  const readings = await Promise.all(
+    fitnessFiles.map(async (relPath) => {
+      const content = await fs.readFile(path.join(repoRoot, relPath), 'utf8');
+      if (!isConceptCounted(content)) {
+        return null;
+      }
+      return {
+        filename: relPath,
+        result: evaluateDecisionDebt(content),
+        configFinding: decisionDebtConfigurationFinding(content),
+      };
+    }),
+  );
+  return readings.filter((reading): reading is DecisionDebtReading => reading != null);
+}
+
+function writeDecisionDebtSection(
+  io: PracticeFitnessIo,
+  readings: readonly DecisionDebtReading[],
+): void {
+  const section = formatDecisionDebtSection(readings);
+  if (section === '') {
+    return;
+  }
+  io.log(`\n${section}`);
+  io.log();
 }
 
 function writeFileResults(io: PracticeFitnessIo, results: readonly FitnessResult[]): void {
@@ -124,14 +162,25 @@ export async function runPracticeFitnessCheck(
   const mode = getMode(args);
   const fitnessFiles = await discoverFitnessFiles(repoRoot);
   const results = await readFitnessResults(repoRoot, fitnessFiles);
+  const debtReadings = await readDecisionDebtReadings(repoRoot, fitnessFiles);
 
   writePracticeFitnessReport(io, mode, results);
+  writeDecisionDebtSection(io, debtReadings);
 
-  return getExitCode(
-    mode,
-    results.map((result) => result.overallZone),
-    anyConfigurationFindings(results),
-  );
+  // Decision-debt is distinct in presentation but uniform in enforcement: its
+  // zones gate exactly like size zones, and a schema failure (a concept-counted
+  // file missing its thresholds) gates like a configuration finding.
+  const zones = [
+    ...results.map((result) => result.overallZone),
+    ...debtReadings.flatMap((reading) =>
+      reading.result.zone == null ? [] : [reading.result.zone],
+    ),
+  ];
+  const hasConfigurationFindings =
+    anyConfigurationFindings(results) ||
+    debtReadings.some((reading) => reading.configFinding != null);
+
+  return getExitCode(mode, zones, hasConfigurationFindings);
 }
 
 function anyConfigurationFindings(results: readonly FitnessResult[]): boolean {

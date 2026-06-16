@@ -3,6 +3,9 @@ fitness_line_target: 1100
 fitness_line_limit: 1467
 fitness_char_limit: 200000
 fitness_line_length: 100
+fitness_item_count: required
+fitness_item_count_target: 0
+fitness_item_count_limit: 2
 lifecycle_model: >-
   canonical pending-graduations register — owner-gated and pending items live
   here until graduated, duplicated, stale-withdrawn, or owner-resolved

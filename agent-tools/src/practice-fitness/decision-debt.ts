@@ -10,7 +10,7 @@
  * `.agent/plans/agent-tooling/current/pending-graduations-schema-and-count-fitness.plan.md`.
  */
 
-import { classifyFitnessZone, parseFitnessContentRole, type FitnessZone } from './model.js';
+import { classifyFitnessZone, type FitnessZone } from './model.js';
 import { extractFrontmatter, getFrontmatterNumber, getFrontmatterString } from './markdown.js';
 import {
   countLiveItems,
@@ -83,23 +83,32 @@ export function evaluateDecisionDebt(content: string): DecisionDebtResult {
 }
 
 /**
- * A drainable buffer's flow-rate sensor is mandatory: a buffer that declares no
- * decision-debt thresholds has no zone, and a buffer with no zone is a schema
- * failure — the one surface that exists to be measured cannot report its depth.
- * Returns the schema-failure detail for such a buffer, else `null`. The metric
- * applies to buffers only (`fitness_content_role: drainable-buffer`); a
- * non-buffer surface lacking thresholds is not a failure — the metric does not
- * apply to it.
+ * A file is concept-counted by deliberate designation: `fitness_item_count: required`
+ * in its frontmatter (the pending-graduations register today; any other file we
+ * decide to apply concept-counting to). The designation is independent of the
+ * thresholds so the requirement is durable: a designated file that loses its
+ * thresholds is still required to have them.
+ */
+export function isConceptCounted(content: string): boolean {
+  return getFrontmatterString(extractFrontmatter(content), 'fitness_item_count') === 'required';
+}
+
+/**
+ * Concept-counting is an additional, non-optional schema layer for designated
+ * files: a schema has no optional parts. A designated file that does not declare
+ * both count thresholds has no flow-rate zone — and a concept-counted file with
+ * no zone is a schema failure (the one surface that exists to be measured cannot
+ * report its depth). Returns the schema-failure detail for such a file, else
+ * `null`. A file that is not designated for concept-counting is not a failure —
+ * the metric does not apply to it.
  */
 export function decisionDebtConfigurationFinding(content: string): string | null {
-  const frontmatter = extractFrontmatter(content);
-  const role = parseFitnessContentRole(getFrontmatterString(frontmatter, 'fitness_content_role'));
-  if (role !== 'drainable-buffer') {
+  if (!isConceptCounted(content)) {
     return null;
   }
   const { target, limit } = readDecisionDebtThresholds(content);
   if (target == null || limit == null) {
-    return 'drainable-buffer declares no decision-debt thresholds (fitness_item_count_target and fitness_item_count_limit) — a buffer with no flow-rate zone is a schema failure';
+    return 'concept-counted file (fitness_item_count: required) must declare both fitness_item_count_target and fitness_item_count_limit — a concept-counted file with no flow-rate zone is a schema failure';
   }
   return null;
 }

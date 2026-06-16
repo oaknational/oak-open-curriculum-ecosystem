@@ -4,6 +4,7 @@ import {
   classifyDecisionDebtZone,
   decisionDebtConfigurationFinding,
   evaluateDecisionDebt,
+  isConceptCounted,
   readDecisionDebtThresholds,
 } from './decision-debt.js';
 
@@ -73,26 +74,41 @@ describe('evaluateDecisionDebt', () => {
   });
 });
 
-describe('decisionDebtConfigurationFinding', () => {
-  const BUFFER = (extra: string): string =>
-    `---\nfitness_content_role: drainable-buffer\n${extra}\n---\n# buffer`;
-
-  it('flags a drainable-buffer that declares no decision-debt thresholds as a schema failure', () => {
-    expect(decisionDebtConfigurationFinding(BUFFER(''))).not.toBeNull();
+describe('isConceptCounted', () => {
+  it('is true only for a file explicitly designated fitness_item_count: required', () => {
+    expect(isConceptCounted('---\nfitness_item_count: required\n---\n# r')).toBe(true);
   });
 
-  it('flags a drainable-buffer that declares only one of the two thresholds', () => {
-    expect(decisionDebtConfigurationFinding(BUFFER('fitness_item_count_limit: 2'))).not.toBeNull();
-  });
-
-  it('does not flag a drainable-buffer that declares both thresholds', () => {
-    const buffer = BUFFER('fitness_item_count_target: 0\nfitness_item_count_limit: 2');
-    expect(decisionDebtConfigurationFinding(buffer)).toBeNull();
-  });
-
-  it('does not flag a non-buffer surface lacking thresholds (the metric applies to buffers only)', () => {
+  it('is false for a drainable buffer that is not designated for concept-counting', () => {
+    // A prose buffer (napkin/distilled) is a buffer but is not concept-counted.
     expect(
-      decisionDebtConfigurationFinding('---\nfitness_line_limit: 100\n---\n# a reference doc'),
+      isConceptCounted('---\nfitness_content_role: drainable-buffer\n---\n# prose buffer'),
+    ).toBe(false);
+  });
+});
+
+describe('decisionDebtConfigurationFinding', () => {
+  const DESIGNATED = (extra: string): string =>
+    `---\nfitness_item_count: required\n${extra}\n---\n# register`;
+
+  it('flags a concept-counted file that declares no thresholds as a schema failure', () => {
+    expect(decisionDebtConfigurationFinding(DESIGNATED(''))).not.toBeNull();
+  });
+
+  it('flags a concept-counted file that declares only one of the two thresholds', () => {
+    expect(
+      decisionDebtConfigurationFinding(DESIGNATED('fitness_item_count_limit: 2')),
+    ).not.toBeNull();
+  });
+
+  it('does not flag a concept-counted file that declares both thresholds', () => {
+    const designated = DESIGNATED('fitness_item_count_target: 0\nfitness_item_count_limit: 2');
+    expect(decisionDebtConfigurationFinding(designated)).toBeNull();
+  });
+
+  it('does not flag a file not designated for concept-counting (the requirement is opt-in per file)', () => {
+    expect(
+      decisionDebtConfigurationFinding('---\nfitness_content_role: drainable-buffer\n---\n# prose'),
     ).toBeNull();
   });
 });
