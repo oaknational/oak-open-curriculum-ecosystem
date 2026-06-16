@@ -389,3 +389,19 @@ consolidation. The session's durable lessons:
 Siblings: [[fluency-is-a-failure-vector]], [[feedback_no_question_when_answer_is_forced]],
 passive-guidance-loses-to-artefact-gravity, the enforce-edge "passive prose is a no-op actuator"
 lesson above, [[feedback_validate_specialist_findings_before_acting]].
+
+**Addendum — the homing-category lesson (owner, register drained 2→0).** I had left 2 items as
+"honest residue" because they fit none of my homing categories (doctrine / frictions / reject). The
+owner reframed: that is a **missing-category** problem, not a residue state. Those homes are all for
+*answers* (settled lessons → doctrine); the two items are *questions* (open design decisions with
+candidate options) that need a decision SESSION — so they **graduate to a new home type, an
+exploration/research plan**, which drains them from the register (→ 0). The durable rule (now in the
+register's own drain_strategy + intro, owner-directed): **classify answer-vs-question before homing**;
+an open question routes to an exploration plan; an item that fits NO category is a signal the
+category set is incomplete (add the category), never licence to let it age as residue — residue is a
+true rarity (genuinely un-actionable AND homeless). This is a **methodology-PDR candidate** for the
+ephemeral-to-permanent-homing surface (surfaced for a future quorum-gated graduation; the register
+encoding holds it operationally now). It is also the **second worked instance of
+dissolution-by-re-attribution** (the residue-vs-not binary dissolved by re-attributing the cause to
+the missing home) — I rejected that pattern earlier this session as single-instance; it has now
+earned its second and clears the pattern barrier on a future pass.
