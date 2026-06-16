@@ -34,6 +34,18 @@ only is not optional-to-heed. It reconciles this model with the routing doctrine
 ("fitness is a signal that routes work, never a completion gate"); the original
 "advisory and ignored" drift is answered by prominence and discipline, not by
 gating. See §Exit code semantics.
+**Amended**: 2026-06-16 — named the optional `lifecycle_model` and
+`access_pattern` frontmatter fields as recommended **declarative** metadata
+(advisory; not validator-enforced). Every fitness-tracked file implicitly
+encodes an _access-rhythm theory_ in its limit shape — a directive loaded every
+session (small is the quality signal), a consolidation-pass-only register (grows
+with cross-session-wait substance), and an archive have different healthy
+shapes. Declaring the access rhythm makes recalibration principled rather than
+ad-hoc. Example values: `loaded-every-session`, `read-on-demand`,
+`consolidation-pass-only`, `archive-only`. Owner-decided 2026-05-23 (a governed
+model concept and a candidate for portable Practice doctrine pending a second
+Practice-bearing repo); the local cure is already live in
+`pending-graduations.md` frontmatter.
 **Related**: [ADR-131 (Self-Reinforcing Improvement Loop)](131-self-reinforcing-improvement-loop.md),
 [ADR-119 (Agentic Engineering Practice)](119-agentic-engineering-practice.md),
 [ADR-127 (Documentation as Foundational Infrastructure)](127-documentation-as-foundational-infrastructure.md),

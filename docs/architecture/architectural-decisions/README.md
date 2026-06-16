@@ -489,6 +489,12 @@ Include migration impact if replacing a prior approach.}
 
 - **Proposed**: under discussion, not yet binding.
 - **Accepted**: binding. Code, rules, and quality gates must comply.
+  _Decided is not the same as validated_: an Accepted ADR may still have
+  deferred implementation or a `Candidate` paired-PDR. Record that maturity gap
+  explicitly (e.g. "acceptance gated on Phase N", a Future Work section) rather
+  than silently reading Accepted as fully shipped — and do not downgrade a
+  decided ADR to Proposed merely because implementation lags. Validation
+  maturity is a separate, explicitly-recorded axis, not a status downgrade.
 - **Superseded**: replaced by a newer ADR. Keep the file; update status
   and link to the successor.
 - **Deprecated**: no longer applicable (e.g. workspace removed).

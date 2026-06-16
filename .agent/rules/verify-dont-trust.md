@@ -91,6 +91,14 @@ would break your fix before you build it — the diagnostic counterpart to "a
 recorded verdict is a claim to test." If you cannot find the falsifying fact,
 you have not yet understood the defect well enough to repair it.
 
+A *mutating* sweep needs its set dispositioned before it runs, not only its
+filters audited after. Before a broad text-sweep or revert (multi-file
+find-replace, bulk revert, a `sed` across a tree), enumerate the planned set and
+its per-class disposition when the set spans more than simple live prose —
+generated snapshots, immutable records, and peer edits each need explicit
+handling. A blanket sweep that treats every class alike corrupts the ones it
+should never have touched.
+
 Read the failure surface, never the exit code, for any wrapped, piped, or
 output-captured invocation. A pipe, redirect, or background-task wrapper reports
 the *wrapper's* exit, not the inner command's: a green hook banner with zero

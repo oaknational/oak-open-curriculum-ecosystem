@@ -221,6 +221,13 @@ projection under ADR-191, not relevance judgement.
   _(Resolved in part 2026-06-11: the content-shape half converged — the owner reversed
   structuredContent-only and every graph tool now emits the dual shape (§4 supersession note).
   The context-hint half remains open.)_
+- **Client-render evidence before ratifying a non-default response shape (general principle).**
+  Beyond these four tools: ratifying any non-default MCP response shape requires first-hand evidence
+  of how real agent clients _render_ it. The Cursor-vs-Claude-Code two-client matrix in §4 (Cursor
+  surfaced only the decoration keys; Claude Code surfaced only `structuredContent`) is the worked
+  precedent that falsified the implicit "clients surface structuredContent" assumption — the same
+  client-population rendering check applies before any future non-default shape is ratified, and is
+  a natural input to the output-schema / mcp-expert work.
 - **The "working with graphs" skill.** Authorised in the same graduation pass, it operationalises
   this category for agent practice (graph ≠ list, the forbidden list-ops, the soft-stub failure
   mode). It teaches this contract; it does not change it.
