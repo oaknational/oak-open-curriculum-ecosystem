@@ -25,7 +25,7 @@
  * @packageDocumentation
  */
 
-import { OAK_LOGO_ROWS, type OakLogoStyle } from './oak-logo.js';
+import { resolveLogoRows, type OakLogoStyle } from './oak-logo.js';
 import {
   BOLD,
   BLUE,
@@ -40,7 +40,6 @@ import {
 import { formatIdentity, formatSessionIndicators } from './statusline-indicators.js';
 import { type SessionShape } from './statusline-session-shape.js';
 
-// This should live with the logo asset and be imported.
 const LOGO_COLOUR = GREEN;
 
 /**
@@ -78,6 +77,8 @@ export interface StatuslineRenderOptions {
    * rows for `braille-sharp`, four for the other styles).
    */
   readonly logo?: OakLogoStyle;
+  /** Per-session counter selecting the `braille-sharp` cycle frame (other styles ignore it); defaults to 0, advanced by the adapter. */
+  readonly logoFrame?: number;
   /**
    * Rule glyph for the horizontal separator beneath the logo block, which
    * divides it from the prompt Claude Code renders below. **On by default**
@@ -157,7 +158,7 @@ export function renderStatusline(
     joinPresent([seg.context, seg.branch]),
     seg.place,
   ];
-  const logoRows = OAK_LOGO_ROWS[logo];
+  const logoRows = resolveLogoRows(logo, options.logoFrame ?? 0);
   const statuslineContent = composeWithLogo(logoRows, rowTexts);
   const separatorRow = buildLogoSeparator(options.logoSeparator, logoRows);
   return separatorRow === undefined ? statuslineContent : `${statuslineContent}\n${separatorRow}`;

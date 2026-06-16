@@ -12,32 +12,33 @@ technique. This README is just the map of the bundle and how to run it.
 ## What's in here
 
 ```
-terminal-animation-toolkit/
+terminal-animation-without-redraw/
 ├── README.md                          ← you are here
 ├── terminal-animation-techniques.md   ← the detailed techniques reference (read this)
-├── generators/                        ← Python scripts that produce each piece
-│   ├── 01_two_frame_swap.py
-│   ├── 02_glow_halo.py
-│   ├── 03_polychrome_spokes.py
-│   ├── 04_mono_shimmer.py
-│   └── 05_final_acorn.py
-├── statusline/                        ← ready-to-use bash payloads (drop into a statusline)
-│   ├── swirl_blink.sh
-│   ├── acorn_glow.sh
-│   ├── acorn_spokes.sh
-│   ├── acorn_mono.sh
-│   └── acorn_final.sh
-└── renders/                           ← the end results (GIF = animated, PNG = still)
-    ├── swirl_blink.gif, phases_side_by_side.png
-    ├── acorn_glow.gif, acorn_glow_on.png
-    ├── acorn_spokes.gif, acorn_spokes_on.png
-    ├── acorn_mono.gif, acorn_mono_on.png, acorn_mono_amp.png
-    ├── acorn_final.gif, acorn_final_on.png
-    └── progression/                   ← design evolution of the acorn, stage by stage
-        ├── 3_umbra_bgwash_blocky.png
-        ├── 4_halftone_sidelit.png
-        ├── 5_warmcool.png
-        └── 6_final.png
+└── terminal-animation-toolkit/        ← the runnable bundle
+    ├── generators/                    ← Python scripts that produce each piece
+    │   ├── 01_two_frame_swap.py
+    │   ├── 02_glow_halo.py
+    │   ├── 03_polychrome_spokes.py
+    │   ├── 04_mono_shimmer.py
+    │   └── 05_final_acorn.py
+    ├── statusline/                    ← ready-to-use bash payloads (drop into a statusline)
+    │   ├── swirl_blink.sh
+    │   ├── acorn_glow.sh
+    │   ├── acorn_spokes.sh
+    │   ├── acorn_mono.sh
+    │   └── acorn_final.sh
+    └── renders/                       ← the end results (GIF = animated, PNG = still)
+        ├── swirl_blink.gif, phases_side_by_side.png
+        ├── acorn_glow.gif, acorn_glow_on.png
+        ├── acorn_spokes.gif, acorn_spokes_on.png
+        ├── acorn_mono.gif, acorn_mono_on.png, acorn_mono_amp.png
+        ├── acorn_final.gif, acorn_final_on.png
+        └── progression/               ← design evolution of the acorn, stage by stage
+            ├── 3_umbra_bgwash_blocky.png
+            ├── 4_halftone_sidelit.png
+            ├── 5_warmcool.png
+            └── 6_final.png
 ```
 
 > The GIFs are **idealised previews** at a fixed ~600 ms/phase. A real terminal runs the
@@ -73,7 +74,7 @@ Each generator is self-contained (the source art is embedded) and writes into a 
 `./renders/` directory:
 
 ```bash
-cd generators
+cd terminal-animation-toolkit/generators
 python3 05_final_acorn.py        # writes renders/acorn_final.{sh,gif,_on.png}
 ```
 
@@ -107,20 +108,33 @@ final acorn the high-value knobs are `AMP` (light strength), the multipliers ins
 
 Each script consumes the statusline's stdin JSON (`cat > /dev/null`) and prints the payload.
 
-### Test blink survival first
+### Test blink survival first — in the statusline, not just a terminal
 
 The colour, gradients, halftone and shading rely only on truecolor SGR, which passes
 through almost everywhere. The **animation** rides on `SGR 5` (blink), which some hosts
-normalise away. Run the script **directly in your target terminal** before wiring it up:
+normalise away. Crucially, the Claude Code statusline is parsed by the host's Ink renderer
+into its own cell buffer — **not** handed raw to your terminal — so a terminal that blinks
+does *not* guarantee the statusline will. The decisive, go/no-go experiment is therefore
+run **in the statusline itself** (full procedure and 2×2 result table:
+[`terminal-animation-techniques.md` §10](terminal-animation-techniques.md#the-blink-survival-experiment-run-this-first)):
 
-```bash
-./acorn_final.sh < /dev/null
-```
+1. Drop a minimal blink probe into `statusLine` in `~/.claude/settings.json` and look at the
+   statusline — does the blinking word actually blink *there*?
+2. As a **control**, run the same script directly in the terminal
+   (`bash ./acorn_final.sh < /dev/null`) to separate "terminal supports blink" from "host
+   forwards blink."
 
-- If it **blinks/breathes** → blink survives; the statusline will animate.
-- If it renders **static** → blink is stripped; you still get the full static composition
-  and lose only the motion. (These designs are built to degrade gracefully: the static
-  frame is the on-phase and stands on its own.)
+- Blinks **in the statusline** → blink survives the host; the toolkit animates.
+- Steady in the statusline (even if it blinked in the terminal) → the host strips blink. You
+  still get the full static composition and lose only the motion (these designs degrade
+  gracefully: the static frame is the on-phase and stands on its own). Use event-driven
+  frame stepping (≤3 fps) for motion instead.
+
+> **Result (observed 2026-06-16):** run for the first time — the Claude Code statusline
+> **strips `SGR 5`**. Blink does not animate in the statusline on any terminal (the stripping
+> is at the host; truecolor survives). Blink-based motion is therefore non-viable here; static
+> compositions and the event-driven fallback are unaffected. Full write-up and scope in
+> [`terminal-animation-techniques.md` §10 Result](terminal-animation-techniques.md#result-observed-2026-06-16).
 
 Note that the multi-line pieces are tall; they suit experimentation more than a compact
 one-line status bar. For a real status bar, shrink the source art or crop to a few rows.

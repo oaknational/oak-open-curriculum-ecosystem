@@ -1,4 +1,4 @@
-import { OAK_LOGO_ROWS } from '../../src/claude/oak-logo';
+import { BRAILLE_SHARP_FRAMES, OAK_LOGO_ROWS } from '../../src/claude/oak-logo';
 import { renderStatusline, type StatuslineParts } from '../../src/claude/statusline-render';
 
 const RESET = '\x1b[0m';
@@ -192,5 +192,19 @@ describe('renderStatusline with an Oak logo column', () => {
     const out = renderStatusline({ ...base, dir: 'repo', model: 'Opus 4.8' }, { logo: 'none' });
     expect(out).toContain('\n');
     expect(out).toBe(`${DIM}Opus 4.8${RESET}\n${CYAN}repo${RESET}`);
+  });
+
+  it('selects the braille-sharp frame named by logoFrame, defaulting to frame 0', () => {
+    // Mechanism, not glyph identity: prove logoFrame picks the matching frame's
+    // rows (compared against the exported frames, never hardcoded glyphs).
+    const firstRow = (logoFrame: number | undefined): string =>
+      renderStatusline({ ...base, dir: 'repo' }, { logo: 'braille-sharp', logoFrame }).split(
+        '\n',
+      )[0];
+
+    expect(firstRow(undefined)).toBe(`${GREEN}${BRAILLE_SHARP_FRAMES[0][0]}${RESET}`);
+    expect(firstRow(1)).toBe(`${GREEN}${BRAILLE_SHARP_FRAMES[1][0]}${RESET}`);
+    expect(firstRow(3)).toBe(`${GREEN}${BRAILLE_SHARP_FRAMES[3][0]}${RESET}`);
+    expect(firstRow(4)).toBe(`${GREEN}${BRAILLE_SHARP_FRAMES[0][0]}${RESET}`);
   });
 });

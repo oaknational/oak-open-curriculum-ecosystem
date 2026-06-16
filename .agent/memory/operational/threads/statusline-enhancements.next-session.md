@@ -111,6 +111,18 @@ state here.
   reconcile:** this landed on `docs/planning-and-validation`, while the statusline
   code lineage lives on `feat/comms-research`; a next session must
   cherry-pick/reconcile so the swap is not stranded.
+- **Landed (per-render logo cycling + blink experiment, 2026-06-16, Andromeda holds
+  Radiance) — on `docs/planning-and-validation`**: `braille-sharp` now cycles **four
+  seeded frames**, one per render, kept per session (`session_id`-keyed counter through an
+  injected store), `OAK_STATUSLINE_MOTION` pins frame 0. Frame 0 = the canonical mark; 1–3
+  are generator-reproducible variants (seeds 1/2/4). The **blink-survival experiment** is
+  recorded (the statusline strips `SGR 5` → blink animation NO-GO; event-driven cycling is
+  the viable path, and the toolkit's terminal-only test was corrected). Terminal-animation
+  docs deduped; the stale §1 "first line only" claim fixed (multi-line renders). The
+  modularisation plan carries the cycle→three-layer reconciliation: the frames are Layer-C
+  asset data (WS2.1 gains a frame dimension on the `LogoAsset` contract), `frameIndex` is the
+  neutral Layer-B selector, and the renderer's interim `logoFrame` is removed at WS4.1 (the
+  adapter resolves the frame and injects the chosen `ResolvedLogo.rows`).
 - **Landed (indicators re-fit, 2026-06-13, Skylark wakes Summit)**: WS1 (claim
   `role` field), WS2 (pure session-shape resolver), WS3 (render) — originally
   committed on `feat/statusline-enhancements` against the OLD single-line layout
@@ -163,6 +175,7 @@ cadence. Also a research-relevant collaboration-visibility failure mode.
 
 | Platform | Model | Agent name | Role on this thread | last_session |
 | --- | --- | --- | --- | --- |
+| claude-code | Opus 4.8 | Andromeda holds Radiance | Per-render `braille-sharp` frame cycling (four seeded frames, `session_id`-keyed counter via an injected store, `OAK_STATUSLINE_MOTION` off-switch); recorded the blink-survival experiment result (statusline strips `SGR 5` — animation NO-GO, truecolor survives); deduped the terminal-animation toolkit docs + fixed the stale §1 multi-line claim; updated the modularisation plan with the cycle→three-layer reconciliation. agent-tools green (1256 tests, build); verified live. On `docs/planning-and-validation` | 2026-06-16 |
 | claude-code | Opus 4.8 | Vole calls Hollow | Owner-directed live logo swap ahead of the modularisation plan: 5×7 sharpened `braille-sharp` default, 4×6 retained as `braille-sharp-compact`, width-matched logo separator rule on by default; reframed the modularisation plan to harden the live swap on execution; updated the plan + this record. On `docs/planning-and-validation` (branch divergence flagged). Green (build, type-check, lint, 1232 tests) | 2026-06-16 |
 | claude-code | Opus 4.8 | Hearth hunts Obsidian | Trailing separator row beneath the four-row logo block as a `logoSeparator?` option (`DEFAULT_LOGO_SEPARATOR`), tests decoupled from the glyph (inject-a-probe); separator now `${DIM}` (theme-robust default-fg — terminal theme is not knowable, design verdict). Fixed two ANSI bugs in the branch styling (a `0;`-prefixed `BLUE` cancelled `BOLD` → render colour-before-bold; removed dead/wrong `RESET_BOLD`+`BLACK`); branch tests made behavioural (content+placement, not bytes); `statusline-ansi.ts`+render test converted off literal-ESC to `\x1b` escapes. Linked the inputs research doc in both current statusline plans. Green (my slice); uncommitted — another agent commits/pushes (see napkin) | 2026-06-15 |
 | claude-code | Opus 4.8 | Cutter spins Quay | Re-grounded the successor plan session-state-first (session owns collaboration state; solo is the floor; owner-presence opinion; team state derived); consolidated and cross-referenced the statusline lane; ran docs and four architecture reviewers and recorded validated dispositions; added the logo-modularisation plan | 2026-06-15 |

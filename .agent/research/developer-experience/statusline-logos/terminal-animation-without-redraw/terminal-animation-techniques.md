@@ -35,9 +35,11 @@ out of that one constraint.
 Two facts dominate every design decision.
 
 **The statusline is event-driven, not a render loop.** The script is re-run only when
-conversation messages update, throttled to at most once every ~300 ms, and only the
-first line of stdout becomes the statusline. There is no timer callback. Your script
-prints one frame and exits. The practical ceiling for *script-driven* animation is
+conversation messages update, throttled to at most once every ~300 ms. (An earlier draft
+said "only the first line of stdout becomes the statusline" — that is **wrong**, verified
+2026-06-16 against the current Claude Code docs: each printed line becomes a statusline
+row, so multi-line marks render.) There is no timer callback. Your script prints one frame
+and exits. The practical ceiling for *script-driven* animation is
 therefore ~3 fps, and only while something is actively updating — when idle, nothing
 re-invokes you.
 
@@ -52,7 +54,12 @@ previous frame, and only changed cells are flushed. Consequences:
 - The diff means a static payload produces a fixed set of cells that are never rewritten.
 - **SGR attributes (colour, blink) are the reliable surface.** Truecolor backgrounds and
   foregrounds pass through. Whether `SGR 5` (blink) survives is host-dependent and is the
-  single thing to test empirically.
+  single thing to test empirically — and it must be tested **in the statusline itself, not
+  just in a terminal**, because (per this same section) the host is a render harness, not raw
+  passthrough: a terminal that blinks does not prove the harness forwards blink into the
+  statusline. See [§10 The blink-survival experiment](#the-blink-survival-experiment-run-this-first).
+  **Tested 2026-06-16: the Claude Code statusline strips it — truecolor survives, blink does
+  not (see [§10 Result](#result-observed-2026-06-16)).**
 
 **Generalised takeaway:** treat the terminal as a *cell grid you write once*, where the
 only attributes guaranteed to mean anything are per-cell foreground colour, background
@@ -452,9 +459,90 @@ payload:
   printf '%b\n' $'<escaped payload with \033 ... and \n line breaks>'
   ```
 
-- **Test SGR 5 first.** Run the script directly in the target terminal. If it blinks, the
-  host forwards blink; if not, you'll see only the static composition and should fall back
-  to event-driven, time-based frame selection (≤3 fps) for any motion.
+- **Run the blink-survival experiment first.** This is the go/no-go gate for the whole
+  animation layer — see [the procedure and result table](#the-blink-survival-experiment-run-this-first)
+  immediately below. Do not invest in any composition until it passes.
+
+### The blink-survival experiment (run this first)
+
+Everything animated in this toolkit rides on one unverified fact: whether `SGR 5` survives
+the Claude Code statusline render path. This is the **go/no-go gate** — run it before
+investing in any composition, and re-run it after every Claude Code upgrade. It is **not**
+the same question as "does my terminal blink": the statusline is parsed by the host's Ink
+renderer into its own cell buffer (§1), not handed raw to the terminal, so terminal blink
+support is necessary but not sufficient. The terminal-only test that earlier versions of this
+doc recommended can pass while the statusline stays dead — the experiment below exists to
+catch exactly that.
+
+**Step 1 — probe payload.** Save an executable `~/.claude/blink-probe.sh`:
+
+```bash
+#!/usr/bin/env bash
+cat > /dev/null 2>&1                 # consume the statusline's stdin JSON
+printf '%b\n' '\033[5;38;2;220;40;40mBLINK\033[0m \033[38;2;128;128;128msteady\033[0m'
+```
+
+**Step 2 — wire it into the statusline.** Save your existing `statusLine` block first, then
+point `~/.claude/settings.json` at the probe and trigger a render by sending a message:
+
+```json
+{ "statusLine": { "type": "command", "command": "~/.claude/blink-probe.sh", "padding": 0 } }
+```
+
+**Step 3 — observe, with the terminal run as a control.** Also run the same script directly
+in the terminal (`bash ~/.claude/blink-probe.sh < /dev/null`) and read the two surfaces
+together:
+
+| Terminal (direct) | Statusline (in-host) | Verdict |
+|-------------------|----------------------|---------|
+| `BLINK` blinks | `BLINK` blinks | **GO** — `SGR 5` survives the host; the full toolkit animates. |
+| `BLINK` blinks | `BLINK` steady (still red) | **NO-GO for blink** — the host forwards colour but strips blink. A terminal-only test would have *falsely* predicted success. Fall back to event-driven frame stepping (≤3 fps, active-only). |
+| `BLINK` steady | (not reached) | Terminal lacks blink support; the statusline cannot animate via `SGR 5` either. |
+
+The middle row is the trap this experiment exists to catch: **a passing terminal test does
+not imply a passing statusline.** Restore your real `statusLine` block afterwards.
+
+### Result (observed 2026-06-16)
+
+This experiment was run for the first time on 2026-06-16. **Verdict: NO-GO for the Claude
+Code statusline — the host renderer strips `SGR 5`.** Recorded here so the next reader
+inherits the finding rather than re-deriving it.
+
+**Terminal layer — blink is emulator-config-contingent, and was available in all three
+terminals tested.** Out of the box only macOS Terminal.app animates `SGR 5`; iTerm2 and the
+Cursor / VS Code integrated terminal render it steady *by default*, but each exposes a setting
+that enables it:
+
+- **macOS Terminal.app** — on by default.
+- **iTerm2** — Settings → Profiles → Text → "Allow blinking text"
+  ([docs](https://iterm2.com/documentation-preferences-profiles-text.html)).
+- **Cursor / VS Code integrated terminal** — enable-able via a terminal setting (confirmed
+  first-hand). An earlier draft of this note claimed xterm.js could not blink at all; that was
+  based on stale 2019–2023 issue threads and is wrong as of mid-2026 — do not repeat it.
+
+So "the terminal can't blink" is never the real blocker — it is a checkbox.
+
+**Host layer — the statusline strips blink regardless.** With blink enabled in the Cursor
+integrated terminal and the probe wired into the statusline: the probe **blinks when run
+directly in that terminal**, but the **statusline stays steady**. The red `BLINK` text is
+present (truecolor survives) — only the blink attribute is gone. Because the same terminal
+blinks the same bytes when they bypass the host, `SGR 5` is being dropped by Claude Code's
+render harness before the terminal ever sees it: the middle row above, and exactly the failure
+a terminal-only test would have hidden.
+
+**Consequences.**
+
+- **No blink-based animation in the statusline, on any terminal** — the breathing / twinkle /
+  shimmer motion in all five pieces does not animate here. (The techniques remain valid for a
+  *direct* terminal surface; this verdict is specific to the Claude Code statusline.)
+- **Static compositions are unaffected** — colour, gradients, halftone, shading, umbra ride on
+  truecolor, which the host forwards intact.
+- **Statusline motion must use the event-driven fallback** — script-driven frame stepping at
+  ≤3 fps while the conversation is active (§1, §13), which is also the WCAG-aligned default.
+
+**Scope.** Blink survival is host-version-dependent; this was observed against the Claude Code
+build current on 2026-06-16. Re-run the experiment after a Claude Code upgrade before assuming
+it still holds.
 
 ---
 
@@ -472,9 +560,12 @@ Keep these in view when designing; they are properties of the medium, not bugs.
 - **Backgrounds can never blink** — which is exactly why they're the right home for static
   colour.
 - **Everything animated rides on `SGR 5` surviving the host renderer.** Truecolor
-  fg/bg almost always survive; blink is the variable. A correct design degrades gracefully:
-  if blink is stripped, the full static composition still renders and only the motion is
-  lost.
+  fg/bg almost always survive; blink is the variable, so prove it with the
+  [§10 blink-survival experiment](#the-blink-survival-experiment-run-this-first) before
+  relying on any motion — which, in the Claude Code statusline, was observed on 2026-06-16
+  *not* to survive ([§10 Result](#result-observed-2026-06-16)). A correct design degrades
+  gracefully: if blink is stripped, the full static composition still renders and only the
+  motion is lost.
 
 ---
 

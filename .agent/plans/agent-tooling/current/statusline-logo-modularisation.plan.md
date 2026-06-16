@@ -187,6 +187,66 @@ by default. The tests prove the **mechanism** — the rule width tracks the acti
 logo across two styles of differing width, and an injected probe glyph tiles to
 that width — never a pinned glyph or literal width.
 
+## Live landing (2026-06-16) — per-render logo-frame cycling
+
+The owner directed an experiment: cycle the `braille-sharp` mark through four
+variants, one per statusline render, so the logo gently varies as a session
+works. Landed live in the *current* home (ahead of modularisation, like the 5×7
+swap above), doctrine-clean and green.
+
+**What landed:**
+
+- **Four frames, ids 0–3.** Frame 0 is the canonical owner mark (2026-06-16);
+  frames 1–3 are seeded sub-cell sampling-offset variants of the same SVG
+  conversion (the same acorn, a few marginal dots shifted), generated offline by
+  [`generate-braille-sharp-variants.py`](../../../research/developer-experience/statusline-logos/generate-braille-sharp-variants.py)
+  (seeds 1, 2, 4) and held as verified constants in `oak-logo.ts`
+  (`BRAILLE_SHARP_FRAMES`). The generator is the reproducible seam; the statusline
+  only **selects** a frame at render time, never regenerates one. A more dynamic
+  per-render generation is explicitly out of scope (owner 2026-06-16).
+- **Selection, not generation, per render.** The cycle advances one frame per
+  render, kept **per session** (keyed on `session_id`) so two windows never race a
+  shared counter. `OAK_STATUSLINE_MOTION` (`off`/`static`/`none`/`reduce`) pins
+  frame 0; the cycle is event-driven and freezes on idle, so it is self-limiting
+  (no autonomous motion — WCAG 2.2.2 by construction).
+- **Files:** `oak-logo.ts` (`BRAILLE_SHARP_FRAMES`, `resolveLogoRows`);
+  `statusline-logo-cycle.ts` (pure engine — `frameIndex`, `parseFrameCounter`,
+  `isMotionDisabled`, `frameCounterPath`, the `FrameCounterStore` port, and
+  `readAndAdvanceFrame`); `statusline-frame-store.ts` (the filesystem store
+  adapter); `statusline-render.ts` (interim `logoFrame` option);
+  `statusline-identity.ts` (composition root: env read, store construction,
+  per-session advance). Tests: `oak-logo.test.ts`, `statusline-render.test.ts`,
+  `statusline-logo-cycle.test.ts` — behaviour only (the cycle engine proven once
+  generically; a simple in-memory store fake injected as an argument, no IO; no
+  pinned frame count or glyph dimensions). Tree green: type-check, lint (no new
+  warnings), 1256 tests, build; cycling verified end-to-end (per-render advance +
+  wrap).
+
+**How it reconciles with the three-layer target (so WS1–WS4 absorb it):**
+
+- **Layer C (asset):** the frames are asset data. `OAK_ACORN` (WS2.1) gains a
+  **frame dimension** for `braille-sharp`; the regression guard becomes "frame 0
+  equals the canonical mark, frames distinct, all frames aligned to frame 0". This
+  extends the `LogoAsset` contract (today `styles: Record<Style, rows>`) with a
+  per-style frame list — settle the contract shape in WS1.1/WS2.1.
+- **Layer B (mechanism):** `frameIndex` is the generic neutral cycle selector and
+  moves to `statusline/` with the mechanism; `resolveLogo`/selection absorbs frame
+  selection. The renderer's interim `logoFrame` option is **removed at WS4.1** —
+  the adapter resolves the frame and injects the chosen `ResolvedLogo.rows`, so the
+  renderer never selects.
+- **Layer A (adapter):** the per-session counter is adapter I/O. The
+  `FrameCounterStore` port + `frameIndex`/parsing migrate to the neutral engine;
+  `statusline-frame-store.ts` (the FS adapter) and the env/motion read stay at the
+  composition root.
+
+**Footprint:** unchanged — every frame is 5×7, identical to the live default, so
+the sibling [`session-and-team-state-statusline-icons.plan.md`](session-and-team-state-statusline-icons.plan.md)
+row-count coordination is unaffected.
+
+Tangential fix in the same pass: the terminal-animation research doc's §1 claim
+"only the first line of stdout becomes the statusline" was **wrong** (verified
+2026-06-16 against the Claude Code docs — multi-line renders) and is corrected.
+
 ## Context
 
 The Claude Code statusline renders a four-row block: the Oak acorn mark as a

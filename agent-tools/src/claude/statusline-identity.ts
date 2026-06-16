@@ -17,7 +17,10 @@
  * The logo style is read from `OAK_STATUSLINE_LOGO` (`braille-sharp` default;
  * `braille` for the unmodified conversion; `quad` for universal-font block
  * elements; `sextant` for the sharpest mark where the font has the Legacy
- * Computing block; or `none` for the two-line layout). The agent-identity
+ * Computing block; or `none` for the two-line layout). The default
+ * `braille-sharp` cycles through four frames, one per render, kept per session
+ * (keyed on `session_id`) in an ephemeral temp file; `OAK_STATUSLINE_MOTION`
+ * (`off`/`static`/`none`/`reduce`) pins it to frame 0. The agent-identity
  * name (PDR-027) is produced by the built `agent-identity` CLI at
  * `agent-tools/dist/src/bin/agent-identity.js`. Git branch, dirty state, and
  * linked-worktree name are gathered from the working directory in the payload.
@@ -40,7 +43,9 @@ import { fileURLToPath } from 'node:url';
 import { parseCollaborationRegistry } from '../collaboration-state/state-parsers.js';
 import { type CollaborationRegistry } from '../collaboration-state/types.js';
 import { resolveLogoStyle } from './oak-logo.js';
+import { createFsFrameStore, LOGO_FRAME_STATE_DIR } from './statusline-frame-store.js';
 import { planStatuslineExecution, type StatuslinePlan } from './statusline-identity-input.js';
+import { isMotionDisabled, readAndAdvanceFrame } from './statusline-logo-cycle.js';
 import { renderStatusline } from './statusline-render.js';
 import {
   parsePrimaryWorktreeRoot,
@@ -70,6 +75,8 @@ function emitStatusline(rawJson: string): void {
   const git = gatherGitState(cwd);
   const identity = deriveIdentity(plan.inputs.seed);
 
+  const logo = resolveLogoStyle(process.env.OAK_STATUSLINE_LOGO);
+
   const line = renderStatusline(
     {
       identity,
@@ -81,10 +88,33 @@ function emitStatusline(rawJson: string): void {
       model: plan.inputs.model,
       sessionShape: gatherSessionShape(cwd, identity),
     },
-    { logo: resolveLogoStyle(process.env.OAK_STATUSLINE_LOGO) },
+    { logo, logoFrame: resolveLogoFrame(logo, plan.inputs.seed) },
   );
 
   process.stdout.write(line);
+}
+
+/**
+ * Resolve the per-session render counter for the logo cycle. Only `braille-sharp`
+ * cycles, and only when motion is not disabled and a session id is present; every
+ * other case pins frame 0 and writes no state (no counter file is created when the
+ * logo is suppressed, a non-cycling style is chosen, or reduce-motion is set).
+ *
+ * @param logo - The resolved logo style.
+ * @param sessionId - The Claude Code `session_id` (the `seed` input).
+ * @returns The render counter to pass to the renderer.
+ */
+function resolveLogoFrame(
+  logo: ReturnType<typeof resolveLogoStyle>,
+  sessionId: string | undefined,
+): number {
+  if (logo !== 'braille-sharp' || sessionId === undefined) {
+    return 0;
+  }
+  if (isMotionDisabled(process.env.OAK_STATUSLINE_MOTION)) {
+    return 0;
+  }
+  return readAndAdvanceFrame(createFsFrameStore(LOGO_FRAME_STATE_DIR), sessionId);
 }
 
 function deriveIdentity(seed: string | undefined): string | undefined {
