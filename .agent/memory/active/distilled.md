@@ -14,6 +14,42 @@ fitness_rationale: >-
   envelope by substance rather than trimming the lesson.
 ---
 
+## Standard-tools-first and liveness-from-the-event-stream (2026-06-15→16, Snapper binds Coral)
+
+- **Standard tools first; a standard tool that falls short is a friction to RECORD,
+  never a licence to fork bespoke infra — the fork masks the gap.** Having just read
+  `comms watch --help` I wrote a bespoke watcher, rationalising "custom filtering"; the
+  canonical tool plus a `grep` filter (the documented Monitor pattern) did the job.
+  Owner-caught. Forking both duplicates tested infra (`use-built-agent-tools-cli`) and
+  HIDES the tool-gap the owner needs surfaced. Generator: a fluent desire for clean control
+  bypasses the check *"does the standard tool already do this?"* Siblings:
+  [[fluency-is-a-failure-vector]], check-workspace-packages-before-proposing-infra.
+- **Liveness is read from the live event stream, never a derived/displayed field — and a
+  goal's start-pressure never overrides an active claim.** `claims list` reported a
+  demonstrably-live agent (heartbeating every ~4 min, recent commit) as
+  `freshness_status: stale` because it computes from `claimed_at` alone; I nearly barged
+  into an active claim under Stop-hook pressure to "start the goal". Ground the peer's
+  latest heartbeat first, then WAIT for the handover. Sibling of the mtime-liveness rule
+  below and [[peer_status_claims_are_input_to_verify]]; the tooling defect is
+  frictions-register F-44.
+
+## Carried cross-session lessons (2026-06-16 napkin rotation)
+
+- **Self-start when the goal is handed, grounded, and persistent — don't convert a
+  cadence/pacing signal into a permission checkpoint** (Rigel binds Meridian). The dual of
+  the liveness-respect lesson above: WAIT for a live peer's handover, but once the baton is
+  yours and grounded, begin without waiting for an explicit "go". Sibling:
+  run-the-thing-don't-flag-the-gap.
+- **A complexity / max-lines cap is a signal pointing at a real seam — decompose along the
+  boundary, never compress** (Peregrine turns Airstream). The same shape as a fitness zone
+  routing to graduation rather than trimming; a function or file over its cap is telling you
+  where the seam is.
+- **Over-caution's root is a perfectionism / fear-of-imperfection frame; the cure is the
+  frame, not willpower** (Halley tracks Plasma, owner reframe). Operate from a LEARNING frame
+  — act on excellence, accept that some moves get corrected (that IS the loop), capture what
+  they teach. Holding corrections as wounds is the same perfectionism that PRODUCES the
+  over-caution. Sibling: [[no-speed-pressure]].
+
 ## Innovation vs corporate-delivery doctrine (2026-06-15, Cutter spins Quay)
 
 - **YAGNI / over-building / speculative-optionality is corporate-delivery doctrine; it does

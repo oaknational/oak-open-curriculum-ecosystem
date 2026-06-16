@@ -44,6 +44,19 @@ reading `routed 2026-06-11` belong to the agent-tools implementation lane; items
 still reading `owner-gated` or `pending` below were confirmed at the walk as
 genuinely waiting on their named external event or trigger.
 
+## 2026-06-16 capture — Snapper binds Coral (consolidation closeout)
+
+- **A standard tool that falls short is a friction to RECORD, not a licence to fork bespoke
+  infra — the fork masks the gap.** Owner-caught this session (I wrote a bespoke comms
+  watcher when the canonical `comms watch` + a `grep` filter sufficed). Sharpens
+  `use-built-agent-tools-cli` with the missing "why not to fork" clause: forking duplicates
+  tested infra AND hides the tool-gap the owner needs surfaced.
+  `[captured: 2026-06-16 | source: this session's owner correction; distilled
+  Standard-tools-first section; frictions-register F-49 (the comms-watch gap that tempted
+  the fork) | target: amend use-built-agent-tools-cli (fork-masks-the-gap clause) OR a PDR
+  clause | trigger: second fork-instead-of-record instance OR owner direction | size: S |
+  status: pending]`
+
 ## 2026-06-12 capture — Thyme wakes Canopy (dedicated consolidation; napkin-rotation routes)
 
 Routed during the 2026-06-12 napkin rotation. Each verified absent from this

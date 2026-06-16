@@ -1578,6 +1578,23 @@ below is a cross-reference index, not a second source of truth.
 - **Status**: open.
 - **Owner direction status**: standing.
 
+### F-59 — commit-queue `-- commit` workflow spawn/capture defect (P1)
+
+- **Source**: Marlin weaves Marsh carry-forward (2026-06-14 napkin). Migrated
+  2026-06-16 during napkin rotation.
+- **Surface**: collaboration-state commit-queue `-- commit` workflow.
+- **Observed**: the commit-queue `-- commit` workflow fails while the standalone
+  `git commit -F … -- <files>` passes — captured hook output dies at the
+  depcruise line; the defect is in the workflow's spawn/capture environment, not
+  the tree/hooks/message.
+- **Expected**: the commit-queue commit workflow succeeds wherever the standalone
+  commit does.
+- **Candidate cure**: investigate the workflow's spawn/capture environment
+  (hook-output capture / process spawn).
+- **Target surface**: agent-tools commit-queue commit workflow.
+- **Status**: open (P1; no plan home yet).
+- **Owner direction status**: standing.
+
 ---
 
 ## Mitigated / Addressed Frictions

@@ -20,27 +20,21 @@ surface.
 
 ## Current State
 
-- **DEDICATED CONSOLIDATION IN PROGRESS — relay handoff to Snapper binds Coral
-  (2026-06-15; Europa binds Perihelion → Rigel binds Meridian → Snapper binds
-  Coral).** Owner-gated dedicated knowledge-curation goal (Stop hook): all
-  drainable buffers empty, zero pending-graduations, zero open-questions, insight
-  conserved. **Landed (9 commits on `docs/planning-and-validation`,
-  `9e8c943e5`→ batch 1):** open-questions drained to EMPTY (all 9 homed); four
-  owner-approved Core PDRs graduated + reviewed (PDR-078 §4; PDR-082 → Adopted;
-  PDR-098; PDR-099) + the wrapped-exit-codes verify-dont-trust clause; statusline
-  lane (Hearth) committed; **batch 1 (`40b5750aa`): three uncovered agent-tooling
-  items migrated to `agent-tooling/frictions-register.md` (F-38/39/40) and drained
-  from pending-graduations.** **Remaining (Snapper continues):** the bulk of
-  `pending-graduations.md` (~64 items — Class R agent-tools routing, the ~40
-  Class-O single-instance forks, Team-Autonomy primitives, standalones), then
-  napkin + distilled rotation, then residual-fitness re-read and closeout.
-  **Pickup surface = the `napkin.md` "HANDOFF BATON → successor consolidator"
-  block** (full R/W/G/O classification, verified route-homes, the owner "delegate
-  with reported verdicts" Class-O policy, the Team-Autonomy disposition shape, the
-  cautions). Plan: `~/.claude/plans/nested-wiggling-lollipop.md`. Curation
-  judgement first-hand; verify a lesson's home before any withdrawal (Tempestuous:
-  15/18 "covered" claims were false); audit your own grep/glob filters with a
-  positive control.
+- **DEDICATED CONSOLIDATION — agent-tools drain complete; residual is owner-decision
+  work (2026-06-15→16; Europa → Rigel → Snapper binds Coral, `docs/planning-and-validation`).**
+  All clearly-routable items are drained from `pending-graduations.md`: every agent-tools
+  friction now lives in `agent-tooling/frictions-register.md` (F-41..F-59); three behavioural
+  items withdrawn as covered by `verify-dont-trust`; `open-questions.md` EMPTY; napkin
+  rotated; two new + three carried lessons graduated to `distilled.md` (now over its line
+  limit — relieve by graduating mature entries, never trimming). **Residual (genuine
+  owner-decision, NOT to be force-zeroed — minting doctrine from one instance is forbidden):**
+  ~50 owner-gated single-instance doctrine candidates awaiting the owner-walk
+  (consolidate-docs step 7); the Team-Autonomy PDR-074 amendment cycle (needs docs-adr +
+  assumptions reviewers); the owner-approved G items (feedback-mechanism reappraisal 2b/2c;
+  seam-mapping plan-template). **Next safe step:** owner walks the residual single-instance
+  forks, OR a fresh session runs the PDR-074 cycle + the G items. Pickup detail =
+  `napkin.md` live-continuation section. Curation judgement first-hand; verify a home before
+  any withdrawal (Tempestuous: 15/18 "covered" claims were false).
 - **FITNESS-VALIDATOR SCOPING + DISPOSITION-CATEGORY GROUPING — landing on
   `docs/planning-and-validation` (2026-06-15, Peregrine turns Airstream).** The
   practice-fitness and fitness-vocabulary walkers now exclude foreign git
@@ -57,14 +51,11 @@ surface.
   (carries the carried-forward workaround content-detection re-add, born from a
   malformed-policy fail-closed deadlock this session) and
   [cSpell quality gate](../../plans/agent-tooling/future/cspell-quality-gate.plan.md).
-  **Deep consolidation status: DUE — the next session is an owner-directed
-  dedicated consolidation session**: drain the live buffers (`napkin.md`,
-  `pending-graduations.md`, `open-questions.md`) and graduate this session's
-  napkin lessons (verify-the-shape-before-writing; existence-is-not-correctness
-  applies to one's own exclusion reasoning). **Next safe step**: open/refresh the
-  PR for `docs/planning-and-validation` (fitness-tooling lane, unrelated to that
-  branch's UAT theme — owner directed committing here), then run the dedicated
-  consolidation.
+  **Deep consolidation status: completed this handoff (2026-06-15→16, Europa →
+  Rigel → Snapper binds Coral)** — see the dedicated-consolidation entry above for
+  live residual state. **Next safe step**: open/refresh the PR for
+  `docs/planning-and-validation` (fitness-tooling lane, unrelated to that branch's
+  UAT theme — owner directed committing here).
 - **STRATEGY & PLAN-ESTATE HOLISTIC SURVEY — durable report LANDED (2026-06-15,
   Baobab lifts Topsoil `3be248`).** Multi-wave whole-estate survey (413
   docs; 143+124 agents) + 6-agent adversarial verification → a vision→value→action
