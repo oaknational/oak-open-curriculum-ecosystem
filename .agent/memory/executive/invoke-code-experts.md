@@ -95,6 +95,20 @@ This keeps reintegration cheaper and reduces clarification loops. Mailbox
 delivery alone is not reintegration; the parent lane must absorb the outcome
 back into the authoritative plan or dialogue.
 
+Two brief-construction disciplines (per PDR-015 reviewer authority):
+
+- **Mandate the full gate set, not one gate.** A verification brief's *Required
+  evidence* is the whole gate set, never a single gate — `lintClean` is not
+  `gate-clean`: compact code can pass ESLint and fail Prettier, which then
+  un-compacts it over `max-lines`. Cure an over-cap finding by
+  responsibility-based splitting, never by compaction.
+- **A scope-protection list enumerates the owner's numbered ratified decisions.**
+  When a brief protects already-decided scope so reviewers don't re-litigate it,
+  the protection list names the owner's *numbered* ratified decisions (and
+  explicitly owner-settled artefact sections) — plan-authored elaborations
+  remain refutable. Protecting a whole sweep wholesale suppresses the legitimate
+  findings the owner's own settlement would surface.
+
 ## Reviewer Dispatch vs Peer Collaboration
 
 Reviewer dispatch is a fork-blocking-rejoin channel inside one agent's

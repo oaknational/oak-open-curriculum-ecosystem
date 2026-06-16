@@ -52,6 +52,12 @@ widen unions. The generator is the single source of truth.
   fast.
 - Re-validating or re-parsing tool arguments in authored runtime
   code.
+- Hand-authoring a static data map *inside* codegen that mirrors the
+  schema by hand — **a hand-authored mirror inside codegen is still a
+  mirror.** Durable data shapes are static data *projected through* the
+  type-strict schema boundary, with `satisfies` tying the projection to
+  the structured source (per ADR-153) so a drift in the source fails the
+  build rather than silently desyncing the mirror.
 
 ## Expectations
 
