@@ -1659,6 +1659,59 @@ below is a cross-reference index, not a second source of truth.
   direction).
 - **Owner direction status**: standing.
 
+### F-64 — Editing an append-only channel file with the Edit tool re-emits the whole channel to watchers
+
+- **Source**: napkin 2026-06-16 (Snapper binds Coral closeout); routed here at the
+  graduation drain (Skunk hunts Crescent, 2026-06-16) — the sibling of the
+  markdownlint MD004 friction (F-39) the same closeout routed.
+- **Surface**: ArcAngel / `.agent/collaboration/rapid-comms/` append-only channel
+  files, written with the Edit tool; `tail -F` channel watchers.
+- **Observed**: appending to an append-only channel file via the Edit tool rewrites
+  the file (new inode / full-content write), so a `tail -F` watcher re-emits the
+  entire channel rather than only the appended line. The append reads as a flood to
+  every channel monitor.
+- **Expected**: an append lands as one new line; watchers see only the delta.
+- **Candidate cure**: append to channel files with a shell `>>` redirect (true
+  append, preserves the inode), never the Edit tool; document the `>>` contract on
+  the rapid-comms channel surface so the next agent finds it before failing.
+- **Target surface**: `.agent/collaboration/rapid-comms/README.md` (append contract);
+  `comms-all-channels-watcher` rule if a watcher-side note is warranted.
+- **Status**: open (trigger: a documented `>>` append contract on the channel surface).
+- **Owner direction status**: session-scoped (closeout routing direction).
+
+### F-65 — Mixed time bases (UTC comms vs local mtimes) manufacture phantom liveness gaps
+
+- **Source**: distilled (2026-06-11 window); graduation drain 2026-06-16 (Skunk hunts Crescent) — quorum-rescued from a reject.
+- **Surface**: comms-event `created_at` (UTC) compared against filesystem mtimes (local display time) during agent liveness / gap reasoning.
+- **Observed**: comparing UTC `created_at` against local mtimes manufactures phantom gaps — two independent successor-bootstrap misreads inferred a dead team / a retirement from a ~1-hour display offset.
+- **Expected**: all time comparisons resolve in a single base before any liveness/gap inference.
+- **Candidate cure**: derive "now" with `date -u` FIRST; compare all timestamps in UTC; never infer liveness from mtime display time. Consider a comms-CLI `--age`/`--since` helper that emits ages in UTC so agents do not hand-compare bases.
+- **Target surface**: agent time-reasoning discipline; optional comms-CLI age/since projection.
+- **Status**: open.
+- **Owner direction status**: unsolicited.
+
+### F-66 — BSD `sed -i ''` transient siblings race directory watchers
+
+- **Source**: distilled (2026-06-11→12); graduation drain 2026-06-16 (Skunk hunts Crescent) — quorum-rescued from a reject.
+- **Surface**: BSD `sed -i ''` run over files inside a watched directory (FSEvents / comms watchers / Monitor tails).
+- **Observed**: BSD `sed -i ''` creates transient `.!nnnnn!file` siblings during the in-place edit; these trip directory watchers, producing spurious wakes/noise.
+- **Expected**: an in-place edit over a watched dir does not emit watcher events for transient scratch files.
+- **Candidate cure**: pause or expect-noise on watchers before in-place sweeps over watched dirs; or write-to-temp-outside-the-watched-dir then rename in; or prefer the Edit tool. Watcher poll-loops should filter `.!*!*` / `*.tmp-*` transient names.
+- **Target surface**: agent sweep discipline; watcher transient-name filtering.
+- **Status**: open.
+- **Owner direction status**: unsolicited.
+
+### F-67 — Forename-keyed `/tmp` filenames collide across same-forename agents
+
+- **Source**: distilled; graduation drain 2026-06-16 (Skunk hunts Crescent) — quorum-rescued from a reject.
+- **Surface**: `/tmp` scratch-file naming in multi-agent shared-checkout sessions.
+- **Observed**: forename-keyed `/tmp` filenames (e.g. `/tmp/skunk-foo.txt`) collide across agents that share a forename in the naming wordlist, clobbering each other's temp files.
+- **Expected**: temp-file names are agent-unique within a shared checkout.
+- **Candidate cure**: identity-qualified temp names — `<forename>-<surname-word>-<purpose>-<date>` or include the `session_id_prefix`; optionally an agent-tools temp-path helper that returns an identity-qualified scratch path.
+- **Target surface**: agent temp-file naming convention; optional agent-tools scratch-path helper.
+- **Status**: open.
+- **Owner direction status**: unsolicited.
+
 ---
 
 ## Mitigated / Addressed Frictions

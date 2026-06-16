@@ -7,7 +7,7 @@ pdr_kind: governance
 **Status**: Accepted
 **Date**: 2026-05-10
 **Related**:
-[PDR-014](PDR-014-pattern-routing-discipline.md) (consolidation
+[PDR-014](PDR-014-consolidation-and-knowledge-flow-discipline.md) (consolidation
 flow — this PDR routes optionality-shaped findings into three
 distinct surfaces rather than a single fence);
 [PDR-026](PDR-026-per-session-landing-commitment.md) (deferral
@@ -27,6 +27,28 @@ combined quarantine entry
 under the 2026-05-01 owner-named reformulation.
 
 ## Amendment Log
+
+- **2026-06-16** (Accepted; decision-debt drain, Skunk hunts Crescent):
+  **Surface 2's diagnostic carries an innovation-context precondition.** The
+  Surface 2 (Design Optionality) diagnostic fires only when the author/reviewer
+  *"cannot name a concrete second instantiation in scope"*. In the owner's
+  **innovation and discovery work** (forward design *with consumers in mind*),
+  the owner can often name the second instantiation — so the diagnostic does not
+  fire and the closed-shape cure does not apply. The standing failure: a reviewer
+  (or the agent) proposing to narrow, close, defer, or descope a surface *because
+  no current consumer exists* applies Surface 2 by analogy without checking its
+  precondition against the innovation context. The screen: in innovation work,
+  ask whether the owner can name a near-term consumer before applying the cure;
+  keep correctness, factual, and structural-enforcement findings; reject only the
+  no-consumer narrowing. YAGNI / speculative-optionality is corporate-delivery
+  doctrine and does not govern innovation work where forward design is *creating*.
+  Aligns with the assumptions-expert "Condition A" resolution and
+  `feedback_explore_means_explore` / `feedback_yagni_doesnt_apply_to_innovation`.
+  - **Falsifiability**: shown wrong if applying the innovation screen routinely
+    waved through genuinely speculative surface that no consumer (named or
+    foreseeable) ever materialised to use — i.e. if "the owner can name a
+    consumer" became an escape hatch from the closed-shape discipline rather than
+    a genuine precondition check.
 
 - **2026-06-11** (Accepted; owner-approved at the dedicated consolidation
   walk): **Gate-outcome vocabulary gains a third word — `reject-as-framed`.**

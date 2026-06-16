@@ -104,7 +104,7 @@ A pattern is admitted only when **all four criteria** are met:
 |---|---|
 | **Broadly applicable** | Not domain-specific; applies across codebases |
 | **Proven by implementation** | Backed by real shipped code, not theoretical |
-| **Prevents a recurring mistake** | Addresses a problem that has occurred more than once |
+| **Prevents a recurring mistake** | Addresses a problem likely to recur. "Occurred more than once" is the default heuristic, **not a gate**: per [PDR-100](../../../practice-core/decision-records/PDR-100-decision-debt-as-a-first-class-pillar.md) a single-instance lesson graduates when the lenses (long-term architectural excellence / strict-everywhere / improve-DX) give a clear answer — provenance and adaptation are the safety net, not a second instance. |
 | **Stable** | Not expected to change soon |
 
 ## Promotion and Retirement

@@ -21,6 +21,22 @@ aspirations).
 
 ## Amendment Log
 
+- **2026-06-16 amendment — a plan pending its readiness review must not grow
+  (Skunk hunts Crescent; decision-debt drain).** A plan whose whole pending job
+  is review → DECISION-COMPLETE → execution-ready MUST NOT accrue new scope while
+  it awaits that review: added scope makes the readiness review certify a *moving
+  target*, and the review can no longer be sound. When new scope lands on a
+  not-yet-ready plan — even owner-directed — immediately fence it as a separate
+  strand AND recommend splitting it to its own plan so the review stays on the
+  original scope. This pairs with small-PR delivery: "is it ready?" decomposes
+  into "is each small unit ready?", never a mega-block judgement. Sibling of the
+  DECISION-COMPLETE readiness-gate amendment (2026-05-14, below) — that one fixes
+  *when* a plan is ready; this one protects the readiness judgement from being
+  invalidated by in-flight growth.
+  - **Falsifiability**: shown wrong if plans routinely completed their readiness
+    review soundly despite accruing scope mid-review, i.e. if the moving-target
+    risk never materialised.
+
 - **2026-05-09 amendment — five planning-discipline rules graduated
   from distilled.md (Woodland Sheltering Glade / claude-code /
   claude-opus-4-7-1m; owner-directed graduation during the focused

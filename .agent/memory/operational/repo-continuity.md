@@ -30,8 +30,9 @@ surface.
   **PDR-055 amended to universal CLI API-surface-design consistency** (clauses 7–10 + Falsifiability;
   owner: "a universal requirement for all CLIs in all Practice repos"); `agent-tools-cli-ergonomics.plan.md`
   authored (`current/`, repo instantiation, WS6 = conformance guard); `memory-surface-critical-drain`
-  superseded. **Next safe step**: push `docs/planning-and-validation`; then the decision-debt DRAIN
-  (72 undrained, next session, `decision-debt-register-drain.plan.md`) and CLI-ergonomics plan WS0.
+  superseded. **Next safe step**: push `docs/planning-and-validation`; then CLI-ergonomics plan WS0.
+  (The decision-debt drain that this entry queued is DONE — register drained to 0 live items; its plan
+  executed and archived to `archive/completed/decision-debt-register-drain.plan.md`.)
 - **CLERK 2.1.26 AUTH FIX + NATIVE-MCP-AUTH SPIKE — LANDED, UNPUSHED (2026-06-16, Lavender lifts
   Pollen, solo, `docs/planning-and-validation`, 6 commits `0692a0b0d`..`bc4fb761f`, 6 ahead of
   origin).** Owner-Q&A-driven maintenance session. The session's dep bump (`@clerk/express`
@@ -60,14 +61,11 @@ surface.
   agent-tooling plan updated; reviewers run (docs-adr/assumptions/config/test), findings absorbed.
   Also landed: three discipline cures — citation-or-silence (`verify-dont-trust`),
   no-mutable-state-in-memory (`per-user-memory-is-a-buffer`), the Second Question in `AGENT.md`.
-  **THE UNDONE CORE (owner-confirmed NEXT SESSION): the register still reads 72 / critical; 0 of
-  the 72 decided.** Open: cadence-anchor question (`open-questions.md` Q-001 — report-only is only
-  as live as its invocation). Owner directed (2026-06-16) the abolition propagated across all
-  knowledge-flow doctrine surfaces (done this session); the separate owner-authority concepts that
-  share the word are surfaced for an explicit scope decision.
-  **Next safe step: DRAIN — decide the 72 first-hand, per-item (conserve insight before rejecting);
-  do NOT build WS-OM before draining.** Full pickup:
-  `threads/agentic-engineering-enhancements.next-session.md`.
+  The decision-debt drain this entry queued is now DONE (register drained to 0 live items).
+  **Open**: cadence-anchor question (`open-questions.md` Q-001 — report-only is only as live as its
+  invocation). Owner directed (2026-06-16) the abolition propagated across all knowledge-flow doctrine
+  surfaces (done); the separate owner-authority concepts that share the word are surfaced for an
+  explicit scope decision. Full pickup: `threads/agentic-engineering-enhancements.next-session.md`.
 - **FITNESS-VALIDATOR SCOPING + DISPOSITION-CATEGORY GROUPING — landing on
   `docs/planning-and-validation` (2026-06-15, Peregrine turns Airstream).** The
   practice-fitness and fitness-vocabulary walkers now exclude foreign git

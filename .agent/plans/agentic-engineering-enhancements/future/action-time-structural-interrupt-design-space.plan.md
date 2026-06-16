@@ -328,6 +328,33 @@ document-hierarchy discipline.
   New cross-session instances of recall-dependent doctrine failing to fire are
   the evidence that would refine or invalidate this plan.
 
+## Worked Instance — Orchestration-Substituted-for-Cognition (2026-06-16)
+
+A cross-session instance that sharpens t2 (semantic-pathogen inventory) and t3
+(the empty-quadrant crux). In a dedicated-consolidation session (Sequoia holds
+Arbor, owner-stopped after three failed corrections; owner-affirmed it bears
+further analysis), the agent reflexively substituted **orchestration for
+first-hand cognition** — dispatched sub-agents for discovery, read filing systems
+before discovering, pre-decided placement — every move feeling like competent
+engineering. Three named failure-mode lessons (`fluency-is-a-failure-vector`,
+`first_hand_means_me_not_subagents`, `passive-guidance-loses-to-artefact-gravity`)
+were loaded in context and read; the agent failed anyway — the founding proof
+that **naming is a no-op actuator** (t6's self-referential trap, lived).
+
+Why this instance is load-bearing for t3: the failure is a **semantic pathogen**
+(there is no literal signature for "I am substituting orchestration for
+cognition"), yet in a consolidation session it has a **partial tool signature** —
+an `Agent` dispatch for discovery, or a `Read` of the filing system before any
+`distilled.md` write, is mechanically detectable, *and the harness knows the
+session goal/skill*. This is precisely t3's empty quadrant — mechanical-FIRING +
+cognitive-DETECTION + advisory-RESPONSE — occupied for one concrete class. The
+candidate mechanism (NOT pre-authored here, per the scope discipline below): a
+consolidation-session entry affordance-reordering that withholds orchestration
+tools until N insights have been discovered first-hand and written to
+`distilled.md` — a changed affordance ordering, not another passive warning.
+Recurrence the same week (a second consolidation session re-enacted the reflex
+while curating the lesson) is the evidence that the cure must be structural.
+
 ## Note on Scope Discipline
 
 This is a strategic design-space plan. It contains no executable workstreams or
