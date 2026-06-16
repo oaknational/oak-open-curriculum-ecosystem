@@ -1,4 +1,10 @@
-import { getJsonValue, isJsonObject, parseStringArray, requireString } from './json.js';
+import {
+  getJsonValue,
+  isJsonObject,
+  parseJsonText,
+  parseStringArray,
+  requireString,
+} from './json.js';
 import {
   parseCommsEventValue,
   parseDirectedCommsMessageValue,
@@ -23,7 +29,10 @@ import {
  * Parse the active claims registry from JSON text.
  */
 export function parseCollaborationRegistry(text: string): CollaborationRegistry {
-  const parsed: unknown = JSON.parse(text);
+  const parsed: unknown = parseJsonText(
+    text,
+    'active-claims registry (--active must point to the active-claims registry JSON, e.g. .agent/state/collaboration/active-claims.json)',
+  );
   if (!isJsonObject(parsed) || getJsonValue(parsed, 'schema_version') !== '1.3.0') {
     throw new Error('active claims registry must use schema_version 1.3.0');
   }
@@ -44,7 +53,10 @@ export function parseCollaborationRegistry(text: string): CollaborationRegistry 
  * Parse the closed-claims archive from JSON text.
  */
 export function parseClosedClaimsArchive(text: string): ClosedClaimsArchive {
-  const parsed: unknown = JSON.parse(text);
+  const parsed: unknown = parseJsonText(
+    text,
+    'closed-claims archive (--closed must point to the closed-claims archive JSON)',
+  );
   if (!isJsonObject(parsed) || getJsonValue(parsed, 'schema_version') !== '1.3.0') {
     throw new Error('closed claims archive must use schema_version 1.3.0');
   }
