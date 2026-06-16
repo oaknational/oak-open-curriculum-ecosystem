@@ -30,6 +30,14 @@ Deep convergence workflow. This is **not** the default end-of-session flow.
 Use this workflow only when one or more triggers hold. If none apply, use
 [`session-handoff`](../session-handoff/SKILL-CANONICAL.md) instead.
 
+## Approach
+
+This is deep, thoughtful work. It takes time. It must be done first hand, secondhand knowledge is not enough.
+
+Do not rush. Knowledge curation, conservation of insight, they are all that matters.
+
+Never chase fitness functions, they are a signal, not a goal. Caring for understanding is the only goal.
+
 ## Trigger Checklist
 
 Run `consolidate-docs` when one or more of these is true:
@@ -86,7 +94,7 @@ buffers were drained. `dedicated-knowledge-curation` may claim `complete` only
 when the closeout proof shows both documentation fitness at the agreed
 healthy-to-soft target and every drainable buffer item dispositioned.
 
-## Cardinal Rule: Plans, Memory, and Entry Points Are Not Documentation
+## Cardinal Rule: Plans, Memory, Logs, Events, and Entry Points Are Not Documentation
 
 The canonical methodology and destinations table for moving content out
 of ephemeral surfaces lives at

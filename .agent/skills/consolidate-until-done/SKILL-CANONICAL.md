@@ -19,7 +19,7 @@ Use this wrapper when the owner starts or resumes a persistent goal like:
 > files are either empty or only contain items flagged explicitly for user
 > decisions.
 
-This is not a lighter version of
+This is a strict superset of
 [`consolidate-docs`](../consolidate-docs/SKILL-CANONICAL.md). It is the
 strict, persistent version of `dedicated-knowledge-curation`: keep working
 until the proof exists, or report the exact remaining owner decisions without
@@ -35,6 +35,16 @@ knowledge item by item, preserve the learning at full weight, move it to the
 right durable home, and let any fitness improvement happen only as the side
 effect of real curation. "No file worse than soft" is a health condition to
 verify at rest, not the work itself.
+
+## Approach
+
+This is deep, thoughtful work. It takes time. It must be done first hand.
+
+Secondhand knowledge is not enough. If you use subagents at all you MUST first-hand critically assess their work, responses, claims, and evidence, verifying sources.
+
+Do not rush. Knowledge curation, conservation of insight, they are all that matters.
+
+Never chase fitness functions, they are a signal, not a goal. Caring for understanding is the only goal.
 
 ## Required Grounding
 
