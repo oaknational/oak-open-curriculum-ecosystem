@@ -26,16 +26,20 @@ surface.
   this session's REJECT/ROUTE batch landed (verification-sweeps + step-6e.2 rejected-as-covered;
   PDR-051 + licensing rejected-as-re-homed; owner reply-shape/affirmation routed to
   `.agent/reports/owner-comms-preferences-pending-review-2026-06-16.md` for owner review).
-  **Owner directive (2026-06-16): "pending" is NOT a resting state — every remaining register
-  item is graduate-or-reject by the lenses (LTAE / strict-everywhere / improve-DX); the agent
-  decides all but the genuine product/strategic/taste minority.** **Remaining (mapped in
-  `napkin.md` §"Snapper final closeout"):** ~15 GRADUATE-candidates (author homes), ~5 ROUTE
-  (agent-tools → frictions register), the Team-Autonomy Gates (~430 lines; owner steered AWAY
-  from crystallising into a protocol/menu → reject crystallisation-entries, P5/P6 owner-walk,
-  lived insight to distil), the W2/PDR-082 ArcAngel-aware revisit (owner-flagged), and the
-  now-unowned distil step. **Next safe step:** continue the graduate/route drain first-hand (no
-  orchestration — see the napkin's two owner-affirmed failure lessons), committing per batch;
-  verify each home first-hand before any withdrawal (Tempestuous: 15/18 "covered" were false).
+  **Owner directive (2026-06-16): owner-gated is ABOLISHED — "pending" is not a resting state;
+  every live register item is graduate-or-reject by the lenses (LTAE / strict-everywhere /
+  improve-DX), decided by the agent; provenance + adaptation, not owner-pre-approval, are the
+  safety net (repo-learning is a first-class pillar).** **Remaining (mapped in `napkin.md`
+  §"Snapper final closeout" + §"DOCTRINE SHIFT"):** ~15 GRADUATE-candidates, ~5 ROUTE (agent-tools
+  → frictions register), the Team-Autonomy Gates (~430 lines; owner steered away from
+  crystallising into a protocol/menu → reject the crystallisation entries, lived insight to
+  distil), the W2/PDR-082 ArcAngel-aware revisit (owner-flagged) — ALL now decide-by-lenses (no
+  owner-walk). **Promoted this session:** the schema/count-metric work is the executable plan
+  `agent-tooling/current/pending-graduations-schema-and-count-fitness.plan.md` (a deterministic
+  decision-debt sensor; thresholds 0/1/3/3) — next session implements. **Next safe step:**
+  continue the graduate/route drain first-hand (no orchestration — see the napkin's failure
+  lessons), committing per batch; verify each home first-hand (Tempestuous: 15/18 "covered"
+  were false).
 - **FITNESS-VALIDATOR SCOPING + DISPOSITION-CATEGORY GROUPING — landing on
   `docs/planning-and-validation` (2026-06-15, Peregrine turns Airstream).** The
   practice-fitness and fitness-vocabulary walkers now exclude foreign git

@@ -185,3 +185,32 @@ is NOT a resting state (owner directive):**
   `pnpm markdownlint:root`, owner-directed — use the repo script, do not guess CLI syntax);
   appending to an ArcAngel channel via the Edit tool rewrites the file and makes `tail -F`
   re-emit the whole channel (cure: append with `>>`). Route both to the frictions register.
+
+## DOCTRINE SHIFT (owner, 2026-06-16): owner-gated is ABOLISHED — supersedes the owner-walk framing above
+
+The owner removed the concept of `owner-gated` entirely: *"if the repo makes bad decisions it
+needs to learn from them; we don't need perfection, we need provenance, traceability,
+visibility, awareness, and the ability to adapt."* Repo-learning is now a **first-class pillar**.
+
+- **There is no park-pending-owner resting state.** Every live pending-graduation item is
+  decision-debt and is **graduate-or-reject by the lenses** (LTAE / strict-everywhere /
+  improve-DX), decided by the agent. The ~50 items I had framed as "owner-gated, await the
+  owner's walk" are now just `pending` items to DECIDE. Provenance + adaptation (commits, the
+  homes, visible history), NOT owner-pre-approval, are the safety net for a wrong call — because
+  the fear-of-being-wrong is exactly what produced the junk drawer (over-caution-root-is-perfectionism).
+- **Implemented next session** via the promoted executable plan
+  `agent-tooling/current/pending-graduations-schema-and-count-fitness.plan.md`: entry schema with
+  a status enum that DROPS owner-gated; a deterministic live-item count; a three-zone fitness
+  metric (target 0, soft 1, hard 3, critical = hard 3 — decision-debt kept near-zero); the count
+  reported every pass; and owner-gated stripped from doctrine surfaces (consolidate-docs step 7,
+  the register, referencing PDRs/rules, these napkin cautions). The count is the **sensor** that
+  closes the enforce-edge feedback loop (the napkin lessons above) — routable ONLY to deciding,
+  never to silent trimming (the inversion guard).
+- This abolishes the "no PDR-082 re-promote / mint hollow doctrine" caution's *deferral* reflex:
+  the bar is no longer "wait for a second instance or the owner" but "decide now by the lenses;
+  if wrong, the provenance lets us see and adapt." (Single-instance promotion is now the norm,
+  not the exception, where the lenses give a clear answer.)
+
+Siblings: over-caution-root-is-perfectionism, [[fluency-is-a-failure-vector]], and the
+enforce-edge and orchestration-substituted-for-cognition lessons above,
+[[feedback_owner_direction_is_a_stream]].
