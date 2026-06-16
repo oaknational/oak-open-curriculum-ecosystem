@@ -164,3 +164,40 @@ export function getSkillsLockEntries(skillsLock: unknown): [string, JsonObject][
 
   return result;
 }
+
+/**
+ * Cross-references locked skills against the canonical skills directory and
+ * validates that each lock entry carries the required provenance fields
+ * (`source`, `sourceType`, `computedHash`).
+ *
+ * @param lockedSkills - `[skillName, entry]` pairs from {@link getSkillsLockEntries}.
+ * @param canonicalSkillNames - Names of skills that have a canonical
+ *   `.agent/skills/<name>/SKILL-CANONICAL.md`.
+ * @param lockPath - Path label used in issue messages.
+ * @returns An array of human-readable issue strings; empty means no issues.
+ */
+export function getSkillsLockCrossReferenceIssues(
+  lockedSkills: readonly [string, JsonObject][],
+  canonicalSkillNames: readonly string[],
+  lockPath: string,
+): string[] {
+  const canonicalSkillSet = new Set(canonicalSkillNames);
+  const requiredStringFields = ['source', 'sourceType', 'computedHash'] as const;
+  const issues: string[] = [];
+
+  for (const [skillName, entry] of lockedSkills) {
+    if (!canonicalSkillSet.has(skillName)) {
+      issues.push(
+        `${lockPath}: locked skill "${skillName}" has no canonical .agent/skills/${skillName}/SKILL-CANONICAL.md`,
+      );
+    }
+    for (const field of requiredStringFields) {
+      const value = entry[field];
+      if (typeof value !== 'string' || value.length === 0) {
+        issues.push(`${lockPath}: locked skill "${skillName}" missing ${field}`);
+      }
+    }
+  }
+
+  return issues;
+}

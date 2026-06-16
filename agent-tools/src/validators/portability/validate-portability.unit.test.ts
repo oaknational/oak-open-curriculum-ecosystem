@@ -7,6 +7,7 @@ import {
   getReviewerAdapterParityIssues,
   getRulesIndexPortabilityIssues,
   getSkillPermissionIssues,
+  getSkillsLockCrossReferenceIssues,
   HOOK_POLICY_PATH,
   isClaudeHookWired,
   isClaudeHookWiredInText,
@@ -347,5 +348,48 @@ describe('getSkillPermissionIssues', () => {
         claudeSettingsPermissions: ['WebSearch', 'Bash(git status:*)'],
       }),
     ).toContainEqual(expect.stringContaining('oak-gates'));
+  });
+});
+
+describe('getSkillsLockCrossReferenceIssues', () => {
+  const completeEntry = {
+    source: 'oaknational/oak-skills',
+    sourceType: 'git',
+    computedHash: 'abc123',
+  };
+
+  it('returns no issues when every locked skill is canonical and fully provenanced', () => {
+    expect(
+      getSkillsLockCrossReferenceIssues(
+        [['oak-plan', completeEntry]],
+        ['oak-plan'],
+        'skills-lock.json',
+      ),
+    ).toStrictEqual([]);
+  });
+
+  it('reports a locked skill that has no canonical SKILL-CANONICAL.md', () => {
+    expect(
+      getSkillsLockCrossReferenceIssues(
+        [['ghost-skill', completeEntry]],
+        ['oak-plan'],
+        'skills-lock.json',
+      ),
+    ).toContain(
+      'skills-lock.json: locked skill "ghost-skill" has no canonical .agent/skills/ghost-skill/SKILL-CANONICAL.md',
+    );
+  });
+
+  it('reports each absent or empty provenance field while accepting present ones', () => {
+    expect(
+      getSkillsLockCrossReferenceIssues(
+        [['oak-plan', { source: '', sourceType: 'git' }]],
+        ['oak-plan'],
+        'skills-lock.json',
+      ),
+    ).toStrictEqual([
+      'skills-lock.json: locked skill "oak-plan" missing source',
+      'skills-lock.json: locked skill "oak-plan" missing computedHash',
+    ]);
   });
 });

@@ -25,6 +25,7 @@ import {
   getReviewerAdapterParityIssues,
   getRulesIndexPortabilityIssues,
   getSkillPermissionIssues,
+  getSkillsLockCrossReferenceIssues,
   getSkillsLockEntries,
   CLAUDE_SETTINGS_PATH,
   HOOK_POLICY_PATH,
@@ -142,23 +143,9 @@ for (const ruleFile of [...cursorRules, ...claudeRules, ...agentsRules]) {
 if (await exists(repoRoot, SKILLS_LOCK_PATH)) {
   try {
     const lockedSkills = getSkillsLockEntries(await readJson(repoRoot, SKILLS_LOCK_PATH));
-    const canonicalSkillSet = new Set(canonicalSkillDirs);
-    for (const [skillName, entry] of lockedSkills) {
-      if (!canonicalSkillSet.has(skillName)) {
-        issues.push(
-          `${SKILLS_LOCK_PATH}: locked skill "${skillName}" has no canonical .agent/skills/${skillName}/SKILL-CANONICAL.md`,
-        );
-      }
-      if (typeof entry['source'] !== 'string' || entry['source'].length === 0) {
-        issues.push(`${SKILLS_LOCK_PATH}: locked skill "${skillName}" missing source`);
-      }
-      if (typeof entry['sourceType'] !== 'string' || entry['sourceType'].length === 0) {
-        issues.push(`${SKILLS_LOCK_PATH}: locked skill "${skillName}" missing sourceType`);
-      }
-      if (typeof entry['computedHash'] !== 'string' || entry['computedHash'].length === 0) {
-        issues.push(`${SKILLS_LOCK_PATH}: locked skill "${skillName}" missing computedHash`);
-      }
-    }
+    issues.push(
+      ...getSkillsLockCrossReferenceIssues(lockedSkills, canonicalSkillDirs, SKILLS_LOCK_PATH),
+    );
   } catch (error) {
     issues.push(
       `${SKILLS_LOCK_PATH}: validation failed: ${error instanceof Error ? error.message : 'Unknown skills-lock failure.'}`,
