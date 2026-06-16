@@ -62,11 +62,15 @@ the [ADR index][adr-index].
 
 ## First Question
 
-Always ask: **could it be simpler without compromising quality?**
+**Could it be simpler without compromising quality?**
 
 ## First Principle
 
-**Strict, everywhere, all the time.** -- This applies to everything.
+**Strict, everywhere, all the time.**
+
+## Second Question
+
+**Would this be simpler if the system changed?**
 
 ## Oak Open CurriculumCardinal Rule
 

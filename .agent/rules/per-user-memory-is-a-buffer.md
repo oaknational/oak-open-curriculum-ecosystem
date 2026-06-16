@@ -41,6 +41,30 @@ sweep vendor specific memories and integrate them into our learning
 loop, so that all agents working on the repo can benefit from the
 understanding."*
 
+## No Mutable State As a Standing Fact
+
+A durable memory surface stores facts that stay true and *pointers* to where
+volatile truth lives — never the volatile truth itself as a standing assertion.
+"WS3+ is paused", "the migration is done", "X is the current owner" are mutable
+world-state: they are guaranteed to go stale, and a stale memory is recalled as
+fact and asserted with confidence (the 2026-06-16 "collaboration is paused"
+failure — the entry had been superseded two days earlier and was read as
+current).
+
+So when an entry must reference something mutable, store the **pointer and the
+check**, phrased as an instruction, not the state phrased as a fact:
+
+- Wrong (decays into a false fact): *"WS3+ is paused pending evidence."*
+- Right (a pointer that stays useful): *"WS3+ status lives in `<plan>` §Status —
+  re-read before relying; as of `<date>` it was under review against M4."*
+
+Mutable operational state has a home already — the live-state surfaces
+(`repo-continuity.md`, thread records, `active-claims.json`) re-derived every
+session. Durable memory points at those; it does not freeze a copy of their
+contents as a claim. This guard applies to every durable memory surface
+(per-user `MEMORY.md` and entries, `distilled.md`, patterns), not only the
+per-user buffer.
+
 ## How to Apply
 
 At every `oak-session-handoff` step 6 and `oak-consolidate-docs`

@@ -86,6 +86,23 @@ hooks ran red. Inspect the inner command's actual output, not the wrapper's
 status. The full behavioural doctrine is the pattern
 [`wrapped-exit-codes-false-green`](../memory/active/patterns/wrapped-exit-codes-false-green.md).
 
+## Citation or Silence
+
+A load-bearing claim about current state — what is paused, landed, conserved,
+authorised, decided, or merely *exists* — may not stand in your output unless
+the same sentence carries a source you inspected **this session**: a
+`path:line`, command output, an event ID, or the owner's own turn. If you
+cannot cite it, you have two honest moves: read the proving surface, or write
+the claim tagged `[unverified]` so it cannot pass as fact.
+
+This is structural, not a matter of vigilance. The failure mode is a claim that
+arrives *fluently* — smoothly enough to bypass the instant you would have
+checked it — and fluency is exactly what an internal "remember to verify"
+intention cannot catch. The missing citation can: it is a visible feature of
+the sentence, observable to you as you write and to a reader as they read. Gate
+on the artefact the fluent claim omits, not on the feeling you hoped to notice.
+The smoother and more convenient the claim, the harder the citation is owed.
+
 ## Anti-Patterns
 
 - Asking "are you done?" when the answer needs a claim, diff, event, or gate.
