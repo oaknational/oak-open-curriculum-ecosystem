@@ -10,6 +10,7 @@ import {
   createMockRuntimeConfig,
   createNoOpClerkMiddleware,
   createNoOpRateLimiterFactory,
+  createUnauthenticatedMcpAuthClerkDeps,
 } from './helpers/test-config.js';
 
 const ACCEPT = 'application/json, text/event-stream';
@@ -40,6 +41,7 @@ async function createEnforcedApp() {
     getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     upstreamMetadata: TEST_UPSTREAM_METADATA,
     clerkMiddlewareFactory: createNoOpClerkMiddleware(),
+    mcpAuthClerkDeps: createUnauthenticatedMcpAuthClerkDeps(),
     rateLimiterFactory: createNoOpRateLimiterFactory(),
   });
 }

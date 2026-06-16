@@ -9,47 +9,43 @@ import type { HttpObservability } from '../../src/observability/http-observabili
 import type { RateLimiterFactory } from '../../src/rate-limiting/rate-limiter-factory.js';
 import { createFakeHttpObservability } from '../../src/test-helpers/observability-fakes.js';
 import { createFakeRateLimiterFactory } from '../../src/test-helpers/rate-limiter-fakes.js';
+import { createFakeMachineAuthObject } from '../../src/test-helpers/fakes-clerk.js';
+import type { CreateMcpAuthClerkDeps } from '../../src/auth/mcp-auth/index.js';
 
 /**
  * Creates a no-op Clerk middleware factory for E2E tests.
  *
  * Replaces the real `clerkMiddleware` from `@clerk/express` via dependency
  * injection ({@link CreateAppOptions.clerkMiddlewareFactory}), avoiding
- * `vi.mock` and the ADR-078 violation it entails.
- *
- * The returned middleware sets `req.auth` as a callable function matching
- * Clerk's runtime contract: `getAuth(req)` checks `"auth" in req` then
- * calls `req.auth(options)`. Setting `isAuthenticated: false` ensures
- * auth-enforcement middleware correctly rejects unauthenticated requests.
+ * `vi.mock` and the ADR-078 violation it entails. It is a pure pass-through
+ * that installs no `req.auth`: the auth outcome is controlled at the
+ * verification seam via {@link createUnauthenticatedMcpAuthClerkDeps}, not by
+ * forging Clerk's branded request handler. This keeps the test boundary off
+ * Clerk's internal `req.auth` brand entirely (see ADR-193 — no reaching into
+ * vendor internals).
  *
  * @see ADR-078 for the dependency injection rationale
  */
 export function createNoOpClerkMiddleware(): () => RequestHandler {
-  return () => noOpClerkMiddleware;
+  return () => (_req, _res, next) => {
+    next();
+  };
 }
 
-const noOpClerkMiddleware: RequestHandler = (req, res, next) => {
-  // Simulate clerkMiddleware() which sets req.auth via Object.assign.
-  // Uses the same mechanism Clerk uses at runtime — no type augmentation needed.
-  Object.assign(req, {
-    auth: createUnauthenticatedAuth,
-  });
-  res.locals.clerkAuthSimulation = 'unauthenticated';
-  next();
-};
-
-function createUnauthenticatedAuth() {
+/**
+ * Creates the Clerk auth dependencies for `createMcpAuthClerk` that report an
+ * unauthenticated request, so the MCP auth middleware rejects it with HTTP 401.
+ *
+ * Injected via {@link CreateAppOptions.mcpAuthClerkDeps} (ADR-078). `getAuth`
+ * returns the canonical unauthenticated `MachineAuthObject` from
+ * {@link createFakeMachineAuthObject} (the one owner of the Clerk auth-object
+ * shape); `verifyClerkToken` is never reached because the
+ * `isAuthenticated: false` branch short-circuits first.
+ */
+export function createUnauthenticatedMcpAuthClerkDeps(): CreateMcpAuthClerkDeps {
   return {
-    id: null,
-    subject: null,
-    scopes: null,
-    userId: null,
-    clientId: null,
-    getToken: async () => null,
-    has: () => false,
-    debug: () => ({}),
-    tokenType: 'oauth_token',
-    isAuthenticated: false,
+    getAuth: () => createFakeMachineAuthObject({ isAuthenticated: false }),
+    verifyClerkToken: () => undefined,
   };
 }
 

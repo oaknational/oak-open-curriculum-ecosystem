@@ -5,6 +5,7 @@ import listRoutes from 'express-list-routes';
 import type { ToolHandlerOverrides } from './handlers.js';
 import type { RuntimeConfig } from './runtime-config.js';
 import { setupAuthRoutes } from './auth-routes.js';
+import type { CreateMcpAuthClerkDeps } from './auth/mcp-auth/index.js';
 import { createEnsureMcpAcceptHeader } from './mcp-middleware.js';
 import {
   runBootstrapPhase,
@@ -41,6 +42,13 @@ export interface CreateAppOptions {
   readonly upstreamMetadata?: UpstreamAuthServerMetadata;
   /** Factory for global Clerk middleware (tests inject no-op; prod omits). (ADR-078) */
   readonly clerkMiddlewareFactory?: () => RequestHandler;
+  /**
+   * Clerk auth dependencies (`getAuth` / `verifyClerkToken`) for
+   * `createMcpAuthClerk`. Tests inject fakes that report a known auth outcome
+   * at the verification seam; production omits this and the real Clerk SDK
+   * functions are used. (ADR-078)
+   */
+  readonly mcpAuthClerkDeps?: CreateMcpAuthClerkDeps;
   /**
    * Factory for per-IP rate-limit middleware. Required: production passes
    * {@link createDefaultRateLimiterFactory}; tests pass a no-op or recording
@@ -138,6 +146,7 @@ function setupPostAuthPhases(deps: SetupPostAuthPhasesDeps): void {
         allowedHosts,
         options.observability,
         mcpRateLimiter,
+        options.mcpAuthClerkDeps,
       );
     },
     options.observability,
