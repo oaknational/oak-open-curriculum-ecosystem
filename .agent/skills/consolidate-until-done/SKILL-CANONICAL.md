@@ -88,16 +88,17 @@ current session:
    Cursor, Gemini), non-repo plans, entry-point drift, and any explicitly named
    comms-event evidence. Platform file lifecycle may be external, but
    the knowledge disposition is not optional.
-5. Any remaining non-empty buffer item is explicitly `owner-gated`, with the
-   user decision needed, the live holding location, and the evidence a future
-   agent can use to tell whether the gate still applies.
+5. Every decidable item has been decided (graduated, rejected, or duplicate). An
+   item that genuinely cannot be decided this pass remains a live decision-debt
+   entry (status `pending` / `due` / `overdue`) visible in the count — never an
+   owner-gated hold (abolished, PDR-100).
 6. The closeout reports the **value and impact** — what knowledge reached which
    permanent home, what behaviour it changes — not an accounting of dispositions.
    The commits and the permanent homes ARE the record that the pass happened. Per
    [`permanent-doc-is-the-consolidation-record`](../../rules/permanent-doc-is-the-consolidation-record.md)
    do NOT produce a durable disposition ledger, before/after counts, or
    provenance pointers; completion is verified by the observable end-state
-   (buffers empty or owner-gated, substance live in its permanent home) plus the
+   (buffers drained by deciding, substance live in its permanent home) plus the
    commit, not by an accounting artefact.
 
 Anything else is `pending` or `partial slice landed`, not complete.
@@ -119,8 +120,8 @@ Never do these to satisfy the goal:
   Selection can order the pass; it cannot narrow the completion contract.
 
 Archive moves are allowed only as normal lifecycle cleanup after the item-level
-disposition ledger already proves the source content is graduated, duplicate,
-stale-withdrawn, or owner-gated.
+disposition already proves the source content is graduated, duplicate, or
+rejected.
 
 ## Pre-Archive Verification Gate
 
@@ -155,10 +156,10 @@ Repeat this loop until the completion contract is met:
 4. **Route substance.** Move knowledge to the correct durable home, update the
    existing home, or prove the home already contains it.
 5. **Classify each item's disposition as you process it** — `graduated`,
-   `duplicate`, `owner-gated`, or `stale-withdrawn` (`carried-forward` only for an
+   `duplicate`, or `rejected` (`carried-forward` only for an
    interrupted mid-run handoff, and it does not satisfy the completion contract).
    The classification is reasoning, not a record to persist: home the substance,
-   confirm a duplicate's home, or mark an item owner-gated in its live location.
+   confirm a duplicate's home, or reject it with the reason.
    Do not write the dispositions into a ledger — see the Pre-Archive Verification
    Gate and `permanent-doc-is-the-consolidation-record`.
 6. **Repair structural fitness honestly.** If a file is worse than soft because

@@ -516,10 +516,10 @@ this section; create a thread record when execution is scheduled.
 
 ## Open Owner-Decision Items
 
-1. `pending-graduations.md` carries the owner-walked estate: its `owner-gated` /
-   `pending` items are confirmed genuinely event-gated, and the ripe graduations
-   surfaced at the 2026-06-15 walk are owner-approved and routed to a focused
-   Practice-governance session (detail in the register).
+1. `pending-graduations.md` is now decision-debt, decided by the agent — no longer
+   an owner-decision item. owner-gated is abolished (PDR-100); every live entry is
+   `overdue` debt to graduate or reject, and the decision-debt count metric
+   (ADR-144) reports and gates on it.
 2. MCP product analytics execution-plan promotion is deferred. Production PostHog
    capture still needs the legal/privacy gates named in the exploration record.
 3. Monorepo workspace topology is held by owner decision (2026-05-09) until after

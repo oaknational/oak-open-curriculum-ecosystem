@@ -85,8 +85,9 @@ completion criteria, and closeout evidence for the pass.
   default when the owner sets a curation goal, mentions buffers, asks for a
   curation pass, or names fitness pressure as work to process. Route
   documentation/reference surfaces toward healthy-to-soft by preserving and
-  homing substance; process drainable buffers item by item until empty unless a
-  specific item is owner-gated and remains live with its blocker recorded.
+  homing substance; process drainable buffers item by item toward empty, deciding each (graduate,
+  reject, or confirm duplicate); what cannot be decided yet is visible
+  decision-debt in the count, never an owner-gated hold (abolished, PDR-100).
 
 Fitness output is routing evidence in both modes. It is never completion
 evidence by itself. `session-completion` must not imply that all curation
@@ -229,13 +230,12 @@ persist:
 
 - `graduated` - durable home created or updated (verify it is there).
 - `duplicate` - already represented in a durable home (verify it is there).
-- `owner-gated` - cannot proceed without owner decision; mark it owner-gated in
-  its live holding location, with the question.
-- `stale-withdrawn` - no longer valid, with reason.
+- `rejected` - decided not worth a durable home (no longer valid, too thin, or
+  superseded), with the reason.
 - `carried-forward` - still valid but not drainable in this pass, with trigger
   and next action. This is valid for honest mid-pass handoff or
   `session-completion`; it is not a final completion state for an owner goal
-  that asks to continue until buffers are empty or explicitly owner-gated.
+  that asks to continue until buffers are empty.
 
 Per [`permanent-doc-is-the-consolidation-record`](../../rules/permanent-doc-is-the-consolidation-record.md),
 do **not** write these dispositions into a durable ledger, adjacent disposition
@@ -500,7 +500,7 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
 
    - `.agent/memory/active/distilled.md` — refined cross-session entries from prior napkin rotations.
    - `.agent/memory/active/napkin.md` — recent surprises and candidate tags.
-   - **[`.agent/memory/operational/pending-graduations.md`](../../memory/operational/pending-graduations.md) (the pending-graduations register)** — the structured list of captured candidates with per-item `captured-date`, `source-surface`, `graduation-target`, `trigger-condition`, and `status`. Items with `status: due` or `status: overdue` are the primary graduation candidates for this pass. Items with `status: pending` are reviewed to see whether their trigger condition has fired since last consolidation. Items with `status: owner-gated` are **not** parked indefinitely. Per the owner direction of 2026-06-04 ("owner-gated should be collapsed into owner-directed"), `owner-gated` must not function as a graveyard: a consolidation session with the owner present is itself the venue, so **walk every owner-gated item with the owner** during the pass, not only those whose sole trigger is owner-direction. Present them as a recommendation-first digest (graduate / withdraw / confirm genuinely-event-gated); the owner may graduate a strong single-instance candidate now or override an external-event gate (a second-instance trigger is a default, not a barrier when the owner is present). Items left after the walk are those the owner explicitly confirms are genuinely waiting on an external event. The register was split out from `repo-continuity.md § Deep consolidation status` on 2026-04-30; older references to that location route here.
+   - **[`.agent/memory/operational/pending-graduations.md`](../../memory/operational/pending-graduations.md) (the pending-graduations register)** — the structured list of captured candidates with per-item `captured-date`, `source-surface`, `graduation-target`, `trigger-condition`, and `status`. Items with `status: due` or `status: overdue` are the primary graduation candidates for this pass. Items with `status: pending` are reviewed to see whether their trigger condition has fired since last consolidation. There is no owner-gated hold (abolished, PDR-100): the empty buffer is the target, so any item that has lingered is `overdue`, and every item is **decided in the pass** — graduate it, reject it, or confirm it duplicate. The disposition is recorded by the landed artefact and the commit, not a ledger; the decision-debt count metric (ADR-144) reports the live count and gates on it. The register was split out from `repo-continuity.md § Deep consolidation status` on 2026-04-30; older references to that location route here.
    - **[`.agent/memory/operational/open-questions.md`](../../memory/operational/open-questions.md) (the open-questions register)** — the structured list of non-urgent unresolved decision-shapes with `Q-NNN` identity, context, deferral reason, suggested resolution path, status, and links. Open entries are not graduation candidates by default; they are consolidation-time questions to answer, surface to owner, withdraw, or leave open with deferral-honesty.
 
    **7a. Scan for ADR-shaped and PDR-shaped doctrine** (do this *before* applying the three outcomes below). Walk every entry in `distilled.md` and every recent napkin surprise and ask two questions:

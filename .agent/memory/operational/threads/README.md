@@ -183,8 +183,8 @@ one live arc, record each as a first-class lane rather than collapsing to one po
 - Acceptance bar:
 ```
 
-A deferred lane still belongs here (marked deferred, with its trigger), not only in an
-owner-gated register — a lane entry records *takeable work*. The single-`Next safe step`
+A deferred lane still belongs here (marked deferred, with its trigger), not only in a
+decision-debt register — a lane entry records *takeable work*. The single-`Next safe step`
 `## Current Continuation` block above stays valid for a genuinely single-lane thread;
 multi-lane threads use `## Lanes`. (Owner-confirmed general principle 2026-06-14; the
 continuity-surface authority is PDR-011. Existing records reconcile to this shape as they
