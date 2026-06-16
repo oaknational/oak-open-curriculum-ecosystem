@@ -16,6 +16,33 @@ feedback-mechanism arc, taxonomy work) is retained in git and in the
 work brief and the recent identity stretch, per
 [`continuity-practice.md` §Disposition](../../../directives/continuity-practice.md).
 
+## Decision-Debt Lane — DRAINED (updated 2026-06-16, Limpet spins Headland)
+
+**The drain is DONE — the pending-graduations register is at decision-debt 0** (was 72). This session
+decided every item first-hand under an owner-directed **graduation quorum** (assumptions-expert +
+docs-adr-expert + two Opus reviewers + primary correction): 17 lessons graduated to durable homes
+(rules, ADRs, directives, exec-memory — quorum-cleared; commits `db6dd3f86`, `4fe1addb8`,
+`a7c18a242`); ~50 items rejected with conservation verified first-hand (`597529bdf`); 4 tooling
+frictions routed to the frictions register (F-60..F-63); and the 2 items that were neither doctrine
+nor reject — TA1 (first-out closeout self-election) and P6 (Director routing-blockage) — recognised
+as open QUESTIONS and routed to a new exploration plan
+`team-autonomy-primitive-decisions-exploration.plan.md` (`1a36c027d`). The drain plan is executed
+(archive it). This supersedes the Lapwing pickup below — that lane is now drained.
+
+**NEXT-SESSION PICKUP (owner-confirmed):**
+
+1. **The remaining HARD buffers** — `napkin.md`, `distilled.md`, `repo-continuity.md`
+   rotation / graduation (deferred this session by owner direction; the napkin grew with this
+   session's capture).
+2. **Two PDR candidates surfaced this session** (owner decides promotion; both would run the
+   quorum): (a) the **graduation-quorum protocol** itself (Practice-governance — every graduation
+   runs assumptions + docs + 2 Opus + primary correction before it lands); (b) the **homing-category
+   model** (an open question graduates to an exploration plan, not doctrine/reject/residue; a no-fit
+   item signals an incomplete category set — methodology home: `ephemeral-to-permanent-homing.md`).
+   Both captured in `napkin.md` (2026-06-16 Limpet).
+3. **The exploration plan's two questions** (TA1, P6) await an owner-walked decision session — not
+   urgent; evidence gathered via real multi-agent sessions per `n-agent-collaboration-experiments`.
+
 ## Decision-Debt Lane — Next-Session Pickup (updated 2026-06-16, Lapwing holds Troposphere)
 
 **LANDED + PUSHED this session** (`docs/planning-and-validation`, in sync with origin — commits
@@ -38,12 +65,11 @@ demonstrated — **citation-or-silence** (`verify-dont-trust`), **no-mutable-sta
 (`per-user-memory-is-a-buffer`), and the **Second Question** ("would this be simpler if the system
 changed?", owner-added to `AGENT.md`).
 
-**THE UNDONE CORE — owner-confirmed NEXT SESSION:** the register still reads **72 / critical**;
-**ZERO of the 72 have been decided.** The instrument is sharper now (dwell + ceilings rank urgency)
-but the debt is untouched. DRAIN: decide each of the 72 first-hand under the strict lens. Expect
-many REJECTS (legacy single-instance "keep-watching" candidates) but the disposition is **per-item,
-not a presumption** — before rejecting, verify the item's insight is conserved in a durable home
-(15/18 "covered" claims were once false). Commit per batch. Do NOT build WS-OM before draining.
+**THE UNDONE CORE — DONE 2026-06-16 (Limpet):** the register was drained 72 → 0 under the
+graduation quorum (see the DRAINED pickup at the top of this record). The drain followed exactly
+the discipline this paragraph called for: per-item first-hand decisions, conservation verified
+before each reject, commit per batch, WS-OM not built. Retained here as the brief that the drain
+discharged.
 
 **Open question (cadence anchor — see `open-questions.md` Q-001):** fitness is report-only, so
 nothing *runs* `practice:fitness` at a gate — what cadence anchor ensures the signal is read at
