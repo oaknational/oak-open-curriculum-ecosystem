@@ -90,3 +90,98 @@ high-leverage engineering — that smoothness is the fluency tripwire.
 Siblings: [[fluency-is-a-failure-vector]], [[first_hand_means_me_not_subagents]],
 [[premature-crystallization]], passive-guidance-loses-to-artefact-gravity,
 [[feedback_owner_direction_is_a_stream]].
+
+## The missing feedback loop: "enforce" lands as passive prose, a no-op actuator (2026-06-16, Sequoia holds Arbor + owner, generative)
+
+Owner observation: naming a failure mode does not prevent it; this recurs across many sessions;
+"there is a feedback loop missing, and while the two ends sit within the agent platform, the
+connection could sit in the agentic-engineering guidelines, rules, or tooling." Worked through
+first-hand (the design conversation that gave this stopped session its value).
+
+- **The open loop is the `enforce` edge of `capture -> distil -> graduate -> enforce` (PDR-014).**
+  The loop is open because enforcement almost always lands as MORE PASSIVE PROSE — a lesson
+  becomes a rule file loaded into context as guidance, and guidance-in-context is a no-op
+  actuator: exactly what `passive-guidance-loses-to-artefact-gravity` says fails. Naming sets the
+  setpoint; prose-enforcement supplies no sensor and no actuator, so the loop never closes. Proof:
+  this very session had `fluency-is-a-failure-vector`, `first-hand-means-me-not-subagents`,
+  `passive-guidance-loses-to-artefact-gravity` all loaded; I read them and failed anyway.
+- **The two platform ends + the missing connection.** End 1: the harness loads the named failure
+  modes as context (setpoint). End 2: the harness observes every tool call (behaviour). The
+  missing connection is a mechanism that FIRES AT TOOL-CALL TIME when a call matches a failure
+  mode's signature — independent of self-vigilance, because self-vigilance under fluency is the
+  thing that fails. The mechanism already exists: PreToolUse hooks (used for secrets, blocked
+  patterns, commit messages). What is missing is a PIPELINE STEP that converts a graduated lesson
+  into a gate. Today `graduate -> enforce` means "write a rule"; it should sometimes mean "wire a
+  hook conditioned on session-context (the harness knows the session goal/skill)."
+- **Two classes of failure mode — only one is hookable.** (1) Tool-signature-detectable -> wire a
+  gate. My failure is this class: in a consolidation session, an `Agent` dispatch for discovery,
+  or a `Read` of the filing-system before any `distilled.md` write, has a clean signature; a hook
+  could fire at the dispatch moment. (Same shape as Gull's constitutive-comms-watcher event:
+  prose said "do not skip", it was skipped, cure = a session-open gate.) (2) Purely cognitive
+  (fluency, premature-crystallization, over-claiming) -> NO tool signature; a warning-rule is
+  hopeless. The only cure is changing structural AFFORDANCE ORDERING so the failure has no
+  opportunity (e.g. orchestration tools literally unavailable until N first-hand reads +
+  distilled writes have happened) — not a warning, a changed affordance.
+- **Fix shape (owner to direct; not authored here).** Force a verdict at the `graduate -> enforce`
+  boundary for every lesson: mechanical signature? -> wire a gate. Cognitive? -> change affordance
+  ordering. Neither? -> say so explicitly, accept human-in-loop. And treat "we only wrote prose"
+  as an INCOMPLETE enforcement, not a finished lesson — a rule's Enforcement section either points
+  at a wired gate or records "no mechanical signature yet, needs tooling X". That one discipline
+  surfaces every lesson silently sitting as no-op prose.
+- **Honest caveat.** Not everything is mechanizable; over-hooking has real cost (false positives,
+  friction, the `no-warning-toleration` tension). The pipeline step is not "hook everything" — it
+  is "force the verdict and follow through to actually wire the gate where warranted." The
+  judgement is the hard part. Owner affirmed this bears further analysis next session.
+
+Siblings: [[fluency-is-a-failure-vector]], passive-guidance-loses-to-artefact-gravity,
+the constitutive-precondition comms event (Gull spins Stratus, 2026-06-14), PDR-014 pipeline.
+
+## Snapper final closeout (2026-06-16) — updated continuation + session lessons
+
+Owner ended the session here (handoff + consolidate-docs + commit/push). This supersedes the
+"Live continuation" numbers above.
+
+**State at close:** register 1900→1514; open-questions EMPTY; skill file fixed (`d2571f209`).
+REJECT/ROUTE batch landed (`c437e8fe7`): verification-sweeps + step-6e.2 rejected-as-covered;
+PDR-051 + licensing rejected-as-re-homed; owner reply-shape + affirmation routed to
+`.agent/reports/owner-comms-preferences-pending-review-2026-06-16.md` (pending owner review).
+Solo — n=2 partner Sequoia retired (owner-stopped; committed nothing; their two lessons above
+are the value).
+
+**Remaining drain — graduate-or-reject by the lenses (LTAE / strict / improve-DX); "pending"
+is NOT a resting state (owner directive):**
+
+- **GRADUATE (author home):** tests-pass≠works; premise-bound-verdicts; merge-divergence-
+  content-derived (amend pre-merge-divergence-analysis); recorded-verdicts-meaning-facet
+  (extend verify-dont-trust); production-reachability; ADR-status-maturity; long-gate-fresh-
+  status; find-falsifying-fact; client-visibility-MCP (ADR-195 family); seam-mapping-template;
+  agent-infra-failure-visibility (PDR); proportionate-exploration; fork-masks-the-gap
+  (use-built-agent-tools-cli); two-graph-sources (ADR); dissolution-by-re-attribution; plus the
+  Shaded / source-buffer / distilled-continuation / Legacy single-instance set — each
+  graduate-or-reject, never "await a second instance" (that is the deferral the owner abolished).
+- **ROUTE (agent-tools → frictions register):** transient-pre-push; PreToolUse-prebuilt-
+  artefacts; knip-entry-config; negation-contrast detector; mcp-expert review.
+- **Team-Autonomy Gates (~430 lines):** owner steered AWAY from crystallising into a
+  protocol/menu — reject the crystallisation-tracking entries; P5/P6 owner-walk; lived insight
+  to distil.
+- **W2 / PDR-082 revisit** (ArcAngel-aware, evolved comms tooling) — owner flagged the revisit;
+  orphaned by Sequoia's exit → owner-walk or author.
+- **Now-unowned DISTIL step** (raw napkins/comms → `distilled.md`) — Sequoia's lane; mine solo.
+
+**Session lessons (mine — for next distil):**
+
+- **Deferral is decision-avoidance dressed as prudence (owner, emphatic).** A
+  pending/owner-gated/await-second-instance register entry is a decision NOT MADE — not
+  conserved insight; a growing owner-gated backlog is debt. With a decision procedure (the three
+  lenses) most items are the agent's call (graduate-or-reject); the owner is needed only for the
+  tiny minority of genuine product/strategic/taste calls. I exhibited the failure — a
+  principled-sounding digest that deferred ~50 items behind "don't mint hollow doctrine", the
+  over-caution frame I had just graduated. Same family as Sequoia's two lessons above: avoiding
+  the actual cognitive decision. Sibling: [[fluency-is-a-failure-vector]], over-caution-root-is-perfectionism.
+- **Register category error:** some entries are not doctrine-candidates at all (school-licensing
+  = release-plan content; PDR-051 = a plan work-item) — reject-by-re-home, not park. The register
+  had become a junk drawer of avoided decisions.
+- **Frictions:** markdownlint-cli prints help on a single/dual-file `--dot` invocation (cure:
+  `pnpm markdownlint:root`, owner-directed — use the repo script, do not guess CLI syntax);
+  appending to an ArcAngel channel via the Edit tool rewrites the file and makes `tail -F`
+  re-emit the whole channel (cure: append with `>>`). Route both to the frictions register.

@@ -20,21 +20,22 @@ surface.
 
 ## Current State
 
-- **DEDICATED CONSOLIDATION — agent-tools drain complete; residual is owner-decision
-  work (2026-06-15→16; Europa → Rigel → Snapper binds Coral, `docs/planning-and-validation`).**
-  All clearly-routable items are drained from `pending-graduations.md`: every agent-tools
-  friction now lives in `agent-tooling/frictions-register.md` (F-41..F-59); three behavioural
-  items withdrawn as covered by `verify-dont-trust`; `open-questions.md` EMPTY; napkin
-  rotated; two new + three carried lessons graduated to `distilled.md` (now over its line
-  limit — relieve by graduating mature entries, never trimming). **Residual (genuine
-  owner-decision, NOT to be force-zeroed — minting doctrine from one instance is forbidden):**
-  ~50 owner-gated single-instance doctrine candidates awaiting the owner-walk
-  (consolidate-docs step 7); the Team-Autonomy PDR-074 amendment cycle (needs docs-adr +
-  assumptions reviewers); the owner-approved G items (feedback-mechanism reappraisal 2b/2c;
-  seam-mapping plan-template). **Next safe step:** owner walks the residual single-instance
-  forks, OR a fresh session runs the PDR-074 cycle + the G items. Pickup detail =
-  `napkin.md` live-continuation section. Curation judgement first-hand; verify a home before
-  any withdrawal (Tempestuous: 15/18 "covered" claims were false).
+- **DEDICATED CONSOLIDATION — in progress; register 1900→1514 (2026-06-15→16; Europa → Rigel →
+  Snapper binds Coral, solo, `docs/planning-and-validation`).** All agent-tools frictions →
+  `agent-tooling/frictions-register.md` (F-41..F-59); `open-questions.md` EMPTY; napkin rotated;
+  this session's REJECT/ROUTE batch landed (verification-sweeps + step-6e.2 rejected-as-covered;
+  PDR-051 + licensing rejected-as-re-homed; owner reply-shape/affirmation routed to
+  `.agent/reports/owner-comms-preferences-pending-review-2026-06-16.md` for owner review).
+  **Owner directive (2026-06-16): "pending" is NOT a resting state — every remaining register
+  item is graduate-or-reject by the lenses (LTAE / strict-everywhere / improve-DX); the agent
+  decides all but the genuine product/strategic/taste minority.** **Remaining (mapped in
+  `napkin.md` §"Snapper final closeout"):** ~15 GRADUATE-candidates (author homes), ~5 ROUTE
+  (agent-tools → frictions register), the Team-Autonomy Gates (~430 lines; owner steered AWAY
+  from crystallising into a protocol/menu → reject crystallisation-entries, P5/P6 owner-walk,
+  lived insight to distil), the W2/PDR-082 ArcAngel-aware revisit (owner-flagged), and the
+  now-unowned distil step. **Next safe step:** continue the graduate/route drain first-hand (no
+  orchestration — see the napkin's two owner-affirmed failure lessons), committing per batch;
+  verify each home first-hand before any withdrawal (Tempestuous: 15/18 "covered" were false).
 - **FITNESS-VALIDATOR SCOPING + DISPOSITION-CATEGORY GROUPING — landing on
   `docs/planning-and-validation` (2026-06-15, Peregrine turns Airstream).** The
   practice-fitness and fitness-vocabulary walkers now exclude foreign git
