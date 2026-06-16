@@ -8,6 +8,26 @@ merge_class: append-only-narrative
 fitness_content_role: drainable-buffer
 ---
 
+## Session: 2026-06-16 — fitness made report-only; the fluency/grounding failures that drove the cures (Lapwing holds Troposphere)
+
+Landed + pushed: fitness is now report-only (gate→signal, semantics-not-severity); decision-debt
+discrete ceilings + dwell-time axis (`dwell.ts`); ADR-144/PDR-100 reframed; reviewers run.
+**Through-line of ~six owner corrections this session:** I asserted load-bearing claims sourced
+from convenient inherited text — a memory-index gloss ("collaboration paused"; never opened the
+file), PDR-100's authorisation ("unauthorised"; the gotcha formed before reading), the old doctrine
+("contradicts the rule-of-three" — an invented problem), a reused mechanism ("0/2/3/4 works" —
+confirmed via the wrong ratio engine without questioning the design), scope ("a core
+rearchitecture" — it was a tweak), and a tool ("markdownlint and prettier disagree" — they don't; I
+hadn't run both). Each arrived *fluently* and I read fluency as confirmation, not warning.
+**Meta-pattern: mis-calibration** — over-objecting, then under-objecting, then over-scoping. The
+cure is not "object more/less" but **ground the situational fact first; the right size falls out of
+the grounded fact.** Three structural cures landed from this: citation-or-silence (the missing
+citation is the observable tripwire — `verify-dont-trust`), no-mutable-state-in-memory (stop the rot
+at source — `per-user-memory-is-a-buffer`), and the owner's Second Question in `AGENT.md`. Also
+verified: fitness was never actually gating (no hook/CI/`check` consumed the exit code) — report-only
+makes the code tell the truth. Worked instances of [[fluency-is-a-failure-vector]] and
+`eager-rounding-off-on-partial-structures`.
+
 ## Session: 2026-06-16 — decision-debt implementation + the activity-bias it exposed (Snapper binds Coral)
 
 Built and landed the decision-debt sensor, register migration, and governing doctrine (ADR-144

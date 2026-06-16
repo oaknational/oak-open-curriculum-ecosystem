@@ -20,23 +20,23 @@ surface.
 
 ## Current State
 
-- **DECISION-DEBT SENSOR + REGISTER MIGRATION + DOCTRINE — LANDED (2026-06-16, Snapper binds Coral,
-  solo, `docs/planning-and-validation`; NOT pushed).** Sensor: schema/parser/validator
-  (`agent-tools/src/practice-fitness/item-count.ts`), count + three-zone metric (`decision-debt.ts`),
-  report as a distinct gating category (`decision-debt-report.ts`, `run.ts`). Register: migrated to
-  the inline-bracket schema, `owner-gated` ABOLISHED, all 72 entries → `overdue`, residue stripped;
-  substance-preservation VERIFIED (72→72 entries, every source preserved). Doctrine: ADR-144
-  §Decision-Debt Count Extension, **PDR-100** (abolition + provenance-over-perfection), PDR-067/068
-  ratified, consolidate-docs/until-done + memory READMEs reworded (WS6). `pnpm check` GREEN this
-  session. **THE UNDONE CORE: decide the 72 overdue items — first-hand, strict lens (likely mostly
-  REJECTS); 0 decided, buffer still reads critical.** Also left: the skipped specialist reviews
-  (docs-adr / assumptions on the already-committed doctrine), verify doctrine==code (the ADR's
-  strict-hard-blocks-hard claim is asserted, not tested), push + CI, update the canonical plan file
-  `agent-tooling/current/pending-graduations-schema-and-count-fitness.plan.md`, WS-OM1 trigger-scan +
-  WS-OM2 capture discipline. **Owner question (mine to surface, not decide):** does PDR-100's
-  abolition extend beyond the register status (PDR-006 tool-nomination, collaboration "owner gates")?
-  **Next safe step: DRAIN — decide the 72 first-hand; do NOT build more machinery before draining.**
-  Full pickup + my assumptions + enacted antipatterns:
+- **FITNESS REPORT-ONLY + DISCRETE CEILINGS + DWELL-TIME — LANDED + PUSHED (2026-06-16, Lapwing
+  holds Troposphere, solo, `docs/planning-and-validation`, in sync with origin — commits
+  `8665da651` + `3cb64da91`).** All fitness output is now **report-only** — a prioritisation signal
+  that never fails a build (validator always exits 0; `getExitCode` removed as dead enforcement —
+  no hook / CI / `check` consumed it). Decision-debt uses **discrete ceiling** thresholds (count
+  `0/2/3`) not the size ratio, plus a **dwell-time axis** (`fitness_item_dwell_*`, `2/4/7` days),
+  one axis-agnostic engine (`classifyDiscreteZone`, new `dwell.ts`). ADR-144 reframed
+  (gate→signal, semantics-not-severity), PDR-100 Decision 3 reconciled, register frontmatter +
+  agent-tooling plan updated; reviewers run (docs-adr/assumptions/config/test), findings absorbed.
+  Also landed: three discipline cures — citation-or-silence (`verify-dont-trust`),
+  no-mutable-state-in-memory (`per-user-memory-is-a-buffer`), the Second Question in `AGENT.md`.
+  **THE UNDONE CORE (owner-confirmed NEXT SESSION): the register still reads 72 / critical; 0 of
+  the 72 decided.** Open: cadence-anchor question (`open-questions.md` Q-001 — report-only is only
+  as live as its invocation). Owner question still open: does PDR-100's abolition extend beyond the
+  register status?
+  **Next safe step: DRAIN — decide the 72 first-hand, per-item (conserve insight before rejecting);
+  do NOT build WS-OM before draining.** Full pickup:
   `threads/agentic-engineering-enhancements.next-session.md`.
 - **FITNESS-VALIDATOR SCOPING + DISPOSITION-CATEGORY GROUPING — landing on
   `docs/planning-and-validation` (2026-06-15, Peregrine turns Airstream).** The

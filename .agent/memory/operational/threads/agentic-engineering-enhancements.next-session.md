@@ -16,48 +16,42 @@ feedback-mechanism arc, taxonomy work) is retained in git and in the
 work brief and the recent identity stretch, per
 [`continuity-practice.md` §Disposition](../../../directives/continuity-practice.md).
 
-## Decision-Debt Lane — Next-Session Pickup (2026-06-16, Snapper binds Coral)
+## Decision-Debt Lane — Next-Session Pickup (updated 2026-06-16, Lapwing holds Troposphere)
 
-The decision-debt sensor, register migration, and governing doctrine LANDED this session
-(commits on `docs/planning-and-validation`, **NOT pushed**): WS1 schema/parser/validator
-(`agent-tools/src/practice-fitness/item-count.ts`), WS3 count, WS4 three-zone metric
-(`decision-debt.ts`), WS5 report as a distinct gating category (`decision-debt-report.ts`,
-`run.ts`); WS2 register migration (72 entries → inline-bracket schema, `owner-gated` abolished,
-all `overdue`, residue stripped, substance-preservation VERIFIED 72→72 / every source preserved);
-doctrine — ADR-144 §Decision-Debt Count Extension, **PDR-100** (abolition + provenance-over-
-perfection + first-class pillar), PDR-067/068 ratified Proposed→Accepted, WS6 reworded
-consolidate-docs/until-done + memory READMEs + repo-continuity. `pnpm check` GREEN this session.
+**LANDED + PUSHED this session** (`docs/planning-and-validation`, in sync with origin — commits
+`8665da651` + `3cb64da91`): the fitness enforcement model is now **report-only** — every fitness
+signal (size, decision-debt count, dwell, config findings) is a prioritisation signal that never
+fails a build (validator always exits 0; `getExitCode` removed as **dead** enforcement — verified
+no hook / CI / `check` ever consumed it). Decision-debt uses **discrete ceiling** thresholds (count
+`target 0, soft 2, hard 3`; critical = beyond hard) — NOT the size ratio (fractional ×1.5 is a
+category error on small integers) — plus a **dwell-time axis** (`fitness_item_dwell_*`,
+oldest-undecided age in days; register `2 / 4 / 7`), classified by one axis-agnostic engine
+(`classifyDiscreteZone`). New module `dwell.ts`. ADR-144 reframed (gate→signal, semantics-not-
+severity), PDR-100 Decision 3 reconciled, register frontmatter + agent-tooling plan updated.
+Reviewers RUN (docs-adr, assumptions, config, test); findings absorbed (doc contradictions swept;
+declines reasoned). Prior "add run.unit.test for exit-code folding" is MOOT — the fold was removed
+(report-only). The plan `pending-graduations-schema-and-count-fitness.plan.md` is implemented,
+ready to archive.
 
-**THE UNDONE CORE — the actual point of this arc:** the register still reads 72 / critical and
-**ZERO of the 72 overdue items have been decided.** Building the sensor + doctrine did not reduce
-the debt by one item. The first and highest-value next-session work is to DRAIN: decide each of
-the 72 first-hand under the strict lens (LTAE / don't-invent-optionality) — expect MOST to be
-REJECTS, not graduations (legacy single-instance "keep-watching" candidates). Commit per batch;
-verify each graduation's home first-hand (Tempestuous precedent: 15/18 "covered" claims were
-false). Do **not** build WS-OM first — overdue items need deciding now, not a trigger-scan.
+Also landed (committed): three structural cures for the fluency/grounding failures this session
+demonstrated — **citation-or-silence** (`verify-dont-trust`), **no-mutable-state-in-memory**
+(`per-user-memory-is-a-buffer`), and the **Second Question** ("would this be simpler if the system
+changed?", owner-added to `AGENT.md`).
 
-**Also outstanding:**
+**THE UNDONE CORE — owner-confirmed NEXT SESSION:** the register still reads **72 / critical**;
+**ZERO of the 72 have been decided.** The instrument is sharper now (dwell + ceilings rank urgency)
+but the debt is untouched. DRAIN: decide each of the 72 first-hand under the strict lens. Expect
+many REJECTS (legacy single-instance "keep-watching" candidates) but the disposition is **per-item,
+not a presumption** — before rejecting, verify the item's insight is conserved in a durable home
+(15/18 "covered" claims were once false). Commit per batch. Do NOT build WS-OM before draining.
 
-- Specialist reviews SKIPPED under momentum: `docs-adr-expert` on the ADR-144 amendment + PDR-100;
-  `assumptions-expert` on the inversion-guard adequacy AND the scope boundary below. Permanent
-  doctrine shipped unreviewed — run these on the already-committed artefacts.
-- Verify doctrine==code: ADR-144 claims decision-debt "gates like a size zone (strict-hard blocks
-  hard)"; only the strict→critical→exit-1 path was tested. Add a `run.unit.test` for exit-code folding.
-- Push + CI (nothing pushed). Update the canonical plan file
-  `agent-tooling/current/pending-graduations-schema-and-count-fitness.plan.md` (WS1–WS6 done; WS-OM +
-  draining remain).
-- WS-OM1 (lightweight trigger-scan any session can run) + WS-OM2 (capture discipline + buffer-shape
-  contract) — the cures that make `target: 0` sustainable. AFTER draining.
+**Open question (cadence anchor — see `open-questions.md` Q-001):** fitness is report-only, so
+nothing *runs* `practice:fitness` at a gate — what cadence anchor ensures the signal is read at
+handoff/closure? Report-only is only as live as its invocation (assumptions-expert flagged).
 
-**Owner question (surface, do not decide):** PDR-100 abolished `owner-gated` as a REGISTER STATUS.
-I scoped it there and left the other `owner-gated` usages untouched (PDR-006 tool-nomination,
-collaboration "owner gates", owner-paced execution as a smell, Sonar owner-authorisation). Whether
-provenance-over-perfection extends to those is the owner's call.
-
-**My assumptions this session (surfaced for challenge):** (a) that building the instrument + rules
-was "the work" — but the goal is an empty buffer, untouched; (b) that draining waits for WS-OM —
-false; (c) that all 72 are graduate-candidates — likely mostly rejects; (d) that the scope boundary
-I drew (register-status-only) is correct — owner's call.
+**Owner question (still open, do not decide):** PDR-100 abolished `owner-gated` as a REGISTER STATUS
+only; other `owner-gated` usages (PDR-006 tool-nomination, collaboration gates, owner-paced
+execution, Sonar authorisation) were left. Whether provenance-over-perfection extends is owner's call.
 
 **Antipatterns I enacted (named so the next agent watches for them):** activity-bias /
 mechanical-sequence — I ran a satisfying mechanism sequence and decided 0 items (I literally edited
@@ -322,6 +316,7 @@ passes) is in git history and the [`curator-passes/`](../curator-passes/) ledger
 | `Rigel binds Meridian` | `claude` | `Opus-4.8 (1M)` | `b475ee` | `dedicated-consolidation relay (Europa handoff): verified open-questions EMPTY; batch 1 (`40b5750aa`) migrated F-38/39/40 agent-tooling frictions to the register + drained from pending-graduations; produced the full R/W/G/O classification + verified route-homes + Team-Autonomy disposition shape in the napkin HANDOFF BATON; owner set the Class-O "delegate with reported verdicts" policy; handed off mid-bulk-drain to Snapper binds Coral` | 2026-06-15 | 2026-06-15 |
 | `Snapper binds Coral` | `claude` | `Opus 4.8 (1M)` | `0beea7` | `curator — dedicated-consolidation drain (Rigel handoff): all agent-tools R items → frictions-register F-41..F-59; 3 behavioural items withdrawn as covered by verify-dont-trust; open-questions re-verified EMPTY; napkin rotated, 2 new + 3 carried lessons → distilled; ~50 owner-gated single-instance candidates + Team-Autonomy PDR-074 cycle + G items remain for owner-walk / reviewed cycle` | 2026-06-15 | 2026-06-16 |
 | `Sequoia holds Arbor` | `claude` | `Opus 4.8 (1M)` | `0ed76b` | `n=2 partner (distil lane), owner-stopped cautionary session — committed nothing; conserved two owner-affirmed failure lessons to napkin (orchestration-substituted-for-cognition; the open enforce-edge feedback loop)` | 2026-06-16 | 2026-06-16 |
+| `Lapwing holds Troposphere` | `claude` | `Opus 4.8 (1M)` | `85f435` | `fitness made report-only (gate→signal, semantics-not-severity); decision-debt discrete ceilings + dwell-time axis (new dwell.ts); ADR-144/PDR-100 reframed; reviewers run; three discipline cures landed (citation-or-silence, no-mutable-state-in-memory, the Second Question in AGENT.md); committed + pushed 8665da651/3cb64da91; register 72 still undrained → drain is next session` | 2026-06-16 | 2026-06-16 |
 
 ## Cross-Plan and Cross-Thread Links
 
