@@ -143,6 +143,18 @@ state here.
 
 ## Next safe step (the fresh session's first move)
 
+**Owner direction (2026-06-16): the next session on this thread takes
+[`statusline-logo-modularisation.plan.md`](../../../plans/agent-tooling/current/statusline-logo-modularisation.plan.md).**
+Execute the three-layer separation (WS1 neutral logo mechanism → WS2 `OAK_ACORN`
+asset → WS3 soft-fail hardening → WS4 wiring), folding in the cycling
+reconciliation recorded there: the `LogoAsset` contract gains a frame dimension
+(settle the shape at WS1.1/WS2.1) and the renderer's interim `logoFrame` is
+removed at WS4.1 (the adapter resolves the frame, injects `ResolvedLogo.rows`).
+Read that plan's own grounded-execution-knowledge block first (the
+`refreshInterval`/WCAG caveat, the `dist`-rebuild note, the variant seeds). The
+session-state plan and the readiness pass below remain the parallel track, not
+the directed focus.
+
 The **narrow** lane is COMPLETE on `feat/comms-research` (all workstreams landed,
 five glyphs verified, 1081 agent-tools tests green; commits this arc `a1fb8e9c4`
 `5c01ee7ee` `221ee4a9f` test-IO, `c456cda0d` unknown/solo + glyphs). The live
