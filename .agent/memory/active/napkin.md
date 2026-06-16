@@ -214,3 +214,29 @@ visibility, awareness, and the ability to adapt."* Repo-learning is now a **firs
 Siblings: over-caution-root-is-perfectionism, [[fluency-is-a-failure-vector]], and the
 enforce-edge and orchestration-substituted-for-cognition lessons above,
 [[feedback_owner_direction_is_a_stream]].
+
+## Session synthesis + a tooling caution (2026-06-16, Snapper — pre-compression loss-scan)
+
+**The session's failure modes share ONE root, and the owner's whole arc was a coherent campaign
+against it** (the integrating frame; the per-lesson "same family" cross-links above name the
+family, this names the root and the response). Every failure this session — barging toward a
+"stale"-labelled but live claim, the bespoke watcher, the digest that deferred ~50 items,
+owner-gating used as a graveyard, Sequoia's orchestration-instead-of-cognition, my repeated
+plus-sign-in-prose slips — was the same move: **a fluent substitution that avoids the actual
+first-hand cognition or decision.** The owner's directives form a deliberate campaign against
+exactly that: record-all-frictions, then use-standard-tools-don't-fork, then
+decide-by-lenses-don't-defer, then ABOLISH owner-gated (remove the most legitimate-looking
+hiding place), then install the deterministic decision-debt COUNT as a first-class fitness
+pillar (the sensor that catches avoidance's return). That is the enforce-edge cure at the
+meta-level: remove the avoidance affordances AND install a sensor, because naming-the-failure
+(passive prose) provably does not fire the reflex. Carry this frame, not only the individual
+lessons.
+
+**Tooling caution (new, uncaptured before this scan):** `pnpm markdownlint:root` (the
+owner-directed auto-fix script) can MANGLE meaning — when a prose connector (a plus-sign, dash,
+or asterisk) wraps to a line start, the auto-fix rewrites it into a list marker (MD004), turning
+prose into a spurious list. Observed this session on a wrapped "plus-sign" connector. Cures:
+use "and" as a connector, never the plus-sign; AND review `--fix` diffs on authored prose before
+committing — the auto-fix is not always meaning-preserving. Reinforces the whole synthesis: I
+hold the no-plus-sign rule in memory and still tripped it; the durable cure is the structural
+F-39 wrap-aware lint, not vigilance.
