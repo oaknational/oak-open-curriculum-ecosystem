@@ -247,6 +247,29 @@ Tangential fix in the same pass: the terminal-animation research doc's §1 claim
 "only the first line of stdout becomes the statusline" was **wrong** (verified
 2026-06-16 against the Claude Code docs — multi-line renders) and is corrected.
 
+**Grounded execution knowledge for the next cycling executor** (sub-agent- and
+first-hand-grounded this session; would otherwise be re-derived):
+
+- **Do NOT use `refreshInterval` to speed the cycle.** The statusline re-runs on
+  events (new assistant message, `/compact`, permission/vim mode change), debounced
+  ~300 ms, and freezes when idle — that event cadence is exactly what makes
+  per-render cycling self-limiting (WCAG 2.2.2 by construction). `refreshInterval`
+  re-runs the command every N seconds **even when idle**, converting the
+  self-limiting effect into autonomous motion and re-introducing the 2.2.2
+  liability. (Cadence + `refreshInterval` semantics verified 2026-06-16 via the
+  `claude-code-guide` agent against `code.claude.com/docs/en/statusline.md`, updated
+  2026-06-15; fold into `statusline-inputs-research.md` if not already there.)
+- **The cycle is live only after a `dist` build.** `dist/` is gitignored; the shim
+  resolves `agent-tools/dist/src/claude/statusline-identity.js`, so after pulling
+  the cycling source a `pnpm --filter ./agent-tools build` is required before the
+  live statusline cycles (true of all statusline code; noted because "why isn't it
+  cycling after pull?" is the predictable question).
+- **Variant seeds.** Frames 1–3 are generator seeds 1/2/4, chosen from a ten-seed
+  contact sheet for distinct-but-recognisable marks (1 = subtle, 2 = fuller top,
+  4 = tall stem); seeds that collapsed back toward frame 0 (e.g. 3, 10) were
+  rejected. The 5×7 variation budget is ~1–4 marginal dots — regenerate with the
+  generator's seed arg and keep the render-back recognisable.
+
 ## Context
 
 The Claude Code statusline renders a four-row block: the Oak acorn mark as a

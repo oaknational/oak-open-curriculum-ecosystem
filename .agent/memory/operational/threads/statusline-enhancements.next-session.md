@@ -203,8 +203,12 @@ validated dispositions in both plans. A sibling
 verdict predates the re-grounding), then execute WS1 (the session-state model).
 Both plans are `current/`, unassigned. **Plus (2026-06-16):** reconcile the live
 logo-swap commits on `docs/planning-and-validation` onto the statusline code
-lineage (`feat/comms-research`) so the 5×7 default + width-matched separator are
-not stranded; then the modularisation plan hardens the swap. **Do NOT archive
+lineage (`feat/comms-research`) so the 5×7 default + width-matched separator **and
+the per-render cycling commits (`b45a6aedf`, `cb1c6e256`)** are not stranded; then
+the modularisation plan hardens the swap. After reconciling, **rebuild `dist`**
+(`pnpm --filter ./agent-tools build`) so the live statusline reflects the cycling —
+`dist/` is gitignored, so the source commit alone does not update the running mark.
+**Do NOT archive
 this record** — the thread is live. Unrelated follow-on: the pre-existing agent-tools test-IO
 compliance tracked in
 [`agent-tools-test-io-compliance.plan.md`](../../../plans/agent-tooling/current/agent-tools-test-io-compliance.plan.md).
