@@ -77,6 +77,20 @@ the class under test invalidates the sweep. The same discipline covers your own
 summarised verdicts: a conclusion you recorded earlier is a claim to re-test at
 the point of action, not a fact to inherit.
 
+Verification reaches the *meaning* of an inherited frame, not only its
+existence. A recorded verdict, a continuity note's diagnosis, or a status
+label tells you what a prior mind concluded — it does not tell you the role,
+meaning, or current correctness of the thing it describes. Before letting
+inherited prose define the question you are answering, re-test the verdict
+against the live artefact: is this still the right frame, or am I inheriting a
+stale diagnosis as my starting premise?
+
+The proactive form: before editing *around* an inherited story to repair it,
+find the fact that would **falsify** the proposed repair. Locate the fact that
+would break your fix before you build it — the diagnostic counterpart to "a
+recorded verdict is a claim to test." If you cannot find the falsifying fact,
+you have not yet understood the defect well enough to repair it.
+
 Read the failure surface, never the exit code, for any wrapped, piped, or
 output-captured invocation. A pipe, redirect, or background-task wrapper reports
 the *wrapper's* exit, not the inner command's: a green hook banner with zero
@@ -163,6 +177,18 @@ The smoother and more convenient the claim, the harder the citation is owed.
   outcome from authoritative git state (`git log -1`, `git status`), never from
   the streamed terminal display — the display was never the source of truth,
   independent of any one platform's truncation behaviour.
+- 2026-06-16 long-gate status drift: a long aggregate gate run (`pnpm check`,
+  full test/build sweeps) can mutate the working tree (codegen, format, doc-gen);
+  claiming "tree clean" or writing handoff state from a pre-gate `git status` is a
+  stale-claim failure. The durable check is to rerun `git status --short` *after*
+  any long gate, before asserting clean or recording closeout state.
+- 2026-06-16 no-commit owner-visibility: a successful file write is proof to the
+  writing agent, not to the owner, when the file stays untracked and uncommitted.
+  In no-commit sessions a "created X" report carries the path **plus current
+  `git status` evidence**. Sibling: after a `git mv` followed by a later
+  `Write`-edit of the renamed file, verify the *staged content* (`git show :<path>`),
+  not just the rename — a 100%-similarity (`R100`) score is the tripwire that the
+  staged blob is the pre-edit original and the real change is unstaged.
 - Status surfaces are pointers, not facts: thread records, frictions registers,
   plan statuses, and register markers each describe state without being it. A
   frictions register stamped "addressed-in-working-tree" with a never-completed
