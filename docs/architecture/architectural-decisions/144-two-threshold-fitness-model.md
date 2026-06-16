@@ -21,6 +21,9 @@ other load-bearing reference surfaces. See §Content Role Extension below.
 **Amended**: 2026-06-15 — the informational and strict-hard reports group the
 per-file section by disposition category (orthogonal to the zone axis). See the
 Amendment Log entry below.
+**Amended**: 2026-06-16 — added the decision-debt count metric
+(`fitness_item_count_*`), a new metric _kind_ that measures conceptual objects
+(flow-rate), not content size. See §Decision-Debt Count Extension below.
 **Related**: [ADR-131 (Self-Reinforcing Improvement Loop)](131-self-reinforcing-improvement-loop.md),
 [ADR-119 (Agentic Engineering Practice)](119-agentic-engineering-practice.md),
 [ADR-127 (Documentation as Foundational Infrastructure)](127-documentation-as-foundational-infrastructure.md),
@@ -137,6 +140,47 @@ whose ideal end state can be empty after every item is curated elsewhere:
 `napkin.md`, `distilled.md`, `pending-graduations.md`, active
 pending-graduations shards, `open-questions.md`, and MEMORY-style capture
 queues. Only these files may appear in the `ready (empty)` inventory.
+
+### Decision-Debt Count Extension
+
+The size metrics above (lines, characters, prose width, tokens) all measure the
+_size_ of a file's text. The decision-debt count measures something categorically
+different: the number of **conceptual objects** inside a file — schema-conformant
+entries — and so reads the _flow rate_ of a buffer (is the consuming stage keeping
+pace with the producer?), not its size. It is a buffer's defining health signal
+(PDR-067), and its cure is to **decide** items and diagnose the pipeline (PDR-068),
+never to trim content or raise a limit.
+
+| Field                       | Role                                                         |
+| --------------------------- | ------------------------------------------------------------ |
+| `fitness_item_count`        | Designation: `required` marks a file as concept-counted.     |
+| `fitness_item_count_target` | Soft boundary (the empty-buffer target, typically `0`).      |
+| `fitness_item_count_limit`  | Hard boundary; the global `CRITICAL_RATIO` derives critical. |
+
+Semantics:
+
+- **It reuses the zone classifier, not the size plumbing.** The count maps to a
+  zone through the same `classifyFitnessZone(count, target, limit)` engine and the
+  same global `CRITICAL_RATIO` (one scale, one vocabulary — Key Principle 1). With
+  the register's declared `target: 0, limit: 2`: `0` healthy, `1–2` soft, `3` hard,
+  `4+` critical.
+- **It is a distinct signal, reported separately.** The decision-debt reading is
+  its own report category (flow-rate, not size); it is NOT folded into a file's
+  size `overallZone`, because its cure differs. It is uniform in _enforcement_,
+  though: its zone gates exactly like a size zone (strict blocks `critical`,
+  strict-hard blocks `hard`+`critical`, informational blocks nothing).
+- **It is mandatory for designated files — a schema has no optional parts.** A file
+  carrying `fitness_item_count: required` MUST declare both thresholds; a
+  concept-counted file with no zone is a **schema failure** (a configuration
+  finding, gating like any other). The metric does not apply to undesignated files.
+- **The count falls only by deciding.** An item leaves the count only through a
+  recorded terminal disposition (graduated / rejected / duplicate), never by
+  deletion, annotation, or raising the limit. Lowering the number any other way is
+  the fitness→goal inversion this model forbids.
+
+See [PDR-100](../../../.agent/practice-core/decision-records/PDR-100-decision-debt-as-a-first-class-pillar.md)
+for the owner-gated abolition and the provenance-over-perfection doctrine this
+metric enforces.
 
 ### Exit code semantics
 
@@ -369,3 +413,18 @@ pure filesystem walk for a git subprocess or a gitignore parser (testability and
 coupling cost), and `git ls-files` alone would stop scanning freshly-authored,
 not-yet-tracked fitness files (an author-workflow regression to design around). It
 needs deliberate design; the structural exclusion above stands until then.
+
+### 2026-06-16 — Decision-debt count metric (a new metric kind)
+
+Owner direction across a dedicated session: repo-learning is a first-class pillar,
+and the pending-graduations buffer needs a _direct_ sensor of its decision-debt —
+the count of undecided items — rather than the line-count byte-proxy that
+understated it. Added `fitness_item_count_*` as a new metric kind (see
+§Decision-Debt Count Extension): a flow-rate measurement of conceptual objects,
+distinct in presentation (its own report category) but uniform in enforcement
+(gates like a size zone). The schema that makes the count parseable is the
+buffer's perception interface; the metric reuses the existing three-zone
+classifier rather than inventing new threshold math. Source of truth:
+`agent-tools/src/practice-fitness/item-count.ts` (schema + count) and
+`decision-debt.ts` (metric). The owner-pre-approval gate (`owner-gated`) is
+abolished as a status; the count is a first-class gating signal. See PDR-100.
