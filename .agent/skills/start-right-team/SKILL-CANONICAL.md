@@ -11,11 +11,6 @@ description: Apply repository start-right grounding plus team bootstrapping for 
 This SKILL is mode-aware. Read the section that matches your role; the rest
 remains background.
 
-- **sole-contributor**: solo session on a multi-agent-shaped thread. Run
-  §"Non-Negotiable Foundation" and §"First Moves" (collapsing §1 peer-wait
-  and §1a gate-runner election to a single self-run pass), skip §3
-  temporary-responsibility coordination, and close out per §Closeout
-  Contract "natural-boundary closeout".
 - **team-closeout-owner**: the agent named to own the full session
   handoff. Run every section end-to-end including §Closeout Contract
   natural-boundary closeout AND the consolidator role inside §3.
@@ -27,11 +22,14 @@ remains background.
 
 ### n=2 mode (overlay on team-member modes)
 
-When the team has exactly two active participants both visible in the same
-owner-chat surface (or one chat-relayed via the owner) and no third-agent join
-is in scope, activate **n=2 collaboration mode** per
-[PDR-082 (Adopted)](../../practice-core/decision-records/PDR-082-n2-collaboration-mode.md),
-which is the doctrine source for the full trigger / drop-set / retain-set / exit.
+1. **Open an ArcAngel channel** with your partner — or any agent you will
+   substantively collaborate with. ArcAngel is predominantly a _pairwise_
+   channel, but it can be used for n=3 as well.
+2. **When the team has exactly two active participants, activate n=2 collaboration
+   mode** per
+   [PDR-082](../../practice-core/decision-records/PDR-082-n2-collaboration-mode.md),
+   the doctrine source for the full trigger / drop-set / retain-set / exit.
+
 In short: **drop** the heartbeat cron and periodic/standby heartbeats (the
 PDR-078 §4 consumer-absent exemption — at n=2 chat-visibility makes the
 async-detection consumer absent), the directed events between the two agents,
@@ -45,8 +43,7 @@ atomically; declare the mode in your team-start broadcast.
 
 ## Goal
 
-Run the same shared repository foundation as `start-right-quick`, then add the
-smallest team protocol needed for a coordinated multi-agent session.
+Run the same shared repository foundation as `start-right-quick`, then add the team protocols needed for a coordinated multi-agent session.
 
 This skill does not replace `start-right-quick` or `start-right-thorough`.
 It layers team bootstrapping on top of the shared start-right requirements.
@@ -56,18 +53,15 @@ It layers team bootstrapping on top of the shared start-right requirements.
 1. Read `.agent/skills/start-right-quick/shared/start-right.md` end to end.
 2. Follow that workflow's referenced reading order. Do not replace it with a
    smaller subset for team sessions.
-3. For Codex, Gemini, or any platform that does not auto-load canonical rules,
-   read every `.agent/rules/*.md` file listed in `RULES_INDEX.md` before
-   substantive work.
-4. Run the live collaboration checks named by the shared workflow: identity
+3. Run the live collaboration checks named by the shared workflow: identity
    preflight, active claims, shared comms, active commit queue, active plans,
    and git status/log.
-5. If the task is architectural, high-risk, planning-heavy, cross-workspace, or
+4. If the task is architectural, high-risk, planning-heavy, cross-workspace, or
    explicitly asks for thorough grounding, apply `start-right-thorough` after
    the shared quick foundation and before team routing.
 
-The controller or first registered agent must not assign implementation work
-until each participating agent has either reported this foundation complete or
+If a session has a controller, they must not assign implementation work
+to a specific agent until that agent has either reported their foundation complete or
 named the blocker preventing completion.
 
 ## Continuation Pointer Contract
@@ -102,7 +96,7 @@ Every participating agent in every team session executes these moves in
 order, before any non-planning source edit:
 
 Moves 1 and 2 install the team's visibility surface — incoming (the comms
-watcher) and outgoing (the heartbeat). Their *value* is context-contingent
+watcher) and outgoing (the heartbeat). Their _value_ is context-contingent
 per
 [`collaboration-is-value-contingent`](../../rules/collaboration-is-value-contingent.md):
 the incoming-awareness monitor is near-universally justified and must not be
@@ -214,7 +208,7 @@ Team start report:
 - Gate-verification offer: willing to run inherited-tree gates if elected / observing only
 ```
 
-`Intended boundary` is a non-binding declaration of *where* the agent expects
+`Intended boundary` is a non-binding declaration of _where_ the agent expects
 to work; `Claim status` reports the live registry state. `Heartbeat cron
 status` reports the
 [`liveness-heartbeat-cron`](../../rules/liveness-heartbeat-cron.md)
@@ -235,8 +229,8 @@ prompts to multiple agents AND the next safe step on the relevant thread
 is a narrow single-owner source slice (a singleton lane), the team-start
 report is the coordination surface, not the claim. Concretely:
 
-- An empty `active-claims.json` at session open means *"no team visible
-  yet"*, NOT *"safe solo ownership of the singleton slice"*. Other
+- An empty `active-claims.json` at session open means _"no team visible
+  yet"_, NOT _"safe solo ownership of the singleton slice"_. Other
   identically-prompted agents may be in the same window and have not yet
   reached the registration step.
 - A named peer in the owner's prompt can arrive after the first live
@@ -312,8 +306,8 @@ boundaries.**
 **Added 2026-05-21 from worked precedent**: a three-agent session opened
 on a branch carrying 16 inherited modified files from a prior session.
 The thread record warned about the files but framed them with the prior
-owner direction *"leave it"*. All three agents posted team-start
-broadcasts claiming *"Foundation: complete"* without running gates
+owner direction _"leave it"_. All three agents posted team-start
+broadcasts claiming _"Foundation: complete"_ without running gates
 against the inherited state. The cascade (an upstream API schema bump
 that had broken consumer workspaces) was discovered ~30 minutes into
 the session when one agent eventually ran `pnpm turbo`. Every later
@@ -382,9 +376,9 @@ gate-state report. The report includes:
 - **Failure surface** (if non-green): full output of each failing
   gate, including affected files and error texts.
 - **Diagnosis hypothesis** (if non-green): the gate-runner's best
-  reading of what the failures represent (e.g. *"upstream schema bump
-  cascaded into consumer workspaces"*, *"stale codegen artefacts"*,
-  *"unrelated peer work-in-progress"*).
+  reading of what the failures represent (e.g. _"upstream schema bump
+  cascaded into consumer workspaces"_, _"stale codegen artefacts"_,
+  _"unrelated peer work-in-progress"_).
 - **Proposed next step**: surface to owner / coordinate a fix plan /
   proceed (if green).
 
@@ -500,7 +494,7 @@ event-driven monitors for the lifetime of the role:
 - a working-tree watcher — files becoming ready to commit;
 - a git-state watcher — HEAD movement and `.git/index.lock` contention.
 
-These monitors are *awareness*, the precondition for responding in time;
+These monitors are _awareness_, the precondition for responding in time;
 do NOT mis-file them as ceremony and skip them, or the role is blind. The
 warden's value is the **behaviour** they enable: gate and commit a ready
 bundle, flag a dangerous git state, or do nothing when nothing is
@@ -583,7 +577,7 @@ owner or controller sets one.
 
 Where an event-driven monitor covers a surface (per
 [`use-monitor-for-event-driven-wake`](../../rules/use-monitor-for-event-driven-wake.md)),
-the monitor *satisfies* this cadence for that surface — each new event wakes
+the monitor _satisfies_ this cadence for that surface — each new event wakes
 the agent, so no separate poll is needed. The 120-second sweep is the
 fallback for surfaces a monitor cannot watch directly.
 
@@ -722,8 +716,8 @@ SKILL names the protocol shape and points at it):
 1. **Sense approaching budget** at one of the triggers above.
 2. **Freeze work-in-progress to a structured handoff record** under
    `.agent/state/collaboration/handoffs/` naming the four required
-   sections — *current edit state*, *in-flight reasoning*, *decisions
-   made*, *decisions deferred*. The record is a first-class artefact,
+   sections — _current edit state_, _in-flight reasoning_, _decisions
+   made_, _decisions deferred_. The record is a first-class artefact,
    content-addressed by `claim_id`, retained until the claim closes.
 3. **Extend the active claim** by setting the optional
    `handoff_record_path` field on the active-claims entry pointing at
@@ -753,8 +747,8 @@ detect.
 
 **Moment 1 — Pre-positioning (information transfer only).** The
 outgoing coordinator broadcasts a `narrative` event with the
-conventional title *"Coordinator pre-positioning: \<outgoing\> →
-\<incoming\>"* carrying the team roster, slice state, outstanding
+conventional title _"Coordinator pre-positioning: \<outgoing\> →
+\<incoming\>"_ carrying the team roster, slice state, outstanding
 work, standing notes, and the proposed incoming coordinator (or the
 criteria for self-selection if not yet known). Pre-positioning is
 information transfer only — the outgoing coordinator retains all
@@ -764,8 +758,8 @@ authority.
 
 **Moment 2 — Active-acknowledgement (authority transfer).** Authority
 transfers only when the incoming coordinator broadcasts a distinct
-active-acknowledgement event with the conventional title *"Coordinator
-role acknowledgement: \<incoming\> from \<prior\>"*, referencing the
+active-acknowledgement event with the conventional title _"Coordinator
+role acknowledgement: \<incoming\> from \<prior\>"_, referencing the
 pre-positioning event via `in_response_to`, naming the prior
 coordinator, and declaring the cadence the incoming coordinator will
 adopt. The outgoing coordinator continues to hold authority until this
