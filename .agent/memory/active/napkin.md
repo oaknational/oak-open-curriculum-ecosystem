@@ -8,6 +8,21 @@ merge_class: append-only-narrative
 fitness_content_role: drainable-buffer
 ---
 
+## Session: 2026-06-16 — owner-gated purge + universal CLI API-surface consistency (Basil tracks Xylem)
+
+The session's spine was a **recurring under-scoping correction**: the owner lifted my scope three times —
+owner-only graduation tranche → the whole CLI surface → all CLIs in all Practice repos. Each time I had
+fixed the instance in front of me; the owner kept raising it to the system. The cure is a reflex change:
+**when fixing a thing, first ask what universal Practice principle it instantiates, and home the principle
+in portable doctrine** (here: PDR-055 clauses 7–10, not a local plan note). Concrete learnings: (1) a
+standalone `pnpm agent-tools:*` script is a *second way into the tooling* — an API-surface inconsistency,
+not just a script; the commit-message check is the worked instance to fold into the unified CLI. (2) The
+pnpm `--`-passthrough doubles `--` and breaks arg parsing (hit live validating a commit message) — the
+footgun PDR-055 clause 10 / WS5 targets. (3) I twice mis-sized a defect by *my* convenience (the `--active`
+bug called "minor" because I could bootstrap around it; "owner-only" because deciding felt like the owner's
+call) — size by system impact, not local vantage. (napkin is over its char limit after this; rotation /
+graduation is consolidate-docs' job, not a trim here.)
+
 ## Session: 2026-06-16 — Clerk 2.1.26 auth fix, the lens-collapse, and a git-mv staging near-miss (Lavender lifts Pollen)
 
 Owner-Q&A-driven maintenance session on `docs/planning-and-validation` (6 commits, unpushed):
