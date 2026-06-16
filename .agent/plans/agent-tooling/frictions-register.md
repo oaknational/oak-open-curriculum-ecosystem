@@ -1595,6 +1595,70 @@ below is a cross-reference index, not a second source of truth.
 - **Status**: open (P1; no plan home yet).
 - **Owner direction status**: standing.
 
+### F-60 — non-reproducing pre-push failures under concurrent worktree gate runs
+
+- **Source**: `pending-graduations.md` (2026-06-11/12; two lanes hit
+  non-reproducing pre-push failures). Migrated 2026-06-16 (decision-debt drain).
+- **Surface**: pre-push gate under concurrent worktree gate runs.
+- **Observed**: two lanes in one window hit non-reproducing pre-push failures;
+  suspect a shared turbo cache under concurrent gate runs across worktrees.
+- **Expected**: the pre-push gate is deterministic across concurrent worktrees.
+- **Candidate cure**: capture the full log and do one clean re-run before treating
+  a pre-push red as content-rooted; investigate per-worktree turbo cache isolation.
+- **Target surface**: build-system / turbo config investigation.
+- **Status**: open (escalates if a third lane hits it).
+- **Owner direction status**: standing.
+
+### F-61 — PreToolUse safety hooks must run prebuilt artefacts, not `pnpm exec tsx`
+
+- **Source**: `pending-graduations.md` (2026-05-31, commit `1851eed`). Migrated
+  2026-06-16 (decision-debt drain).
+- **Surface**: PreToolUse safety hooks.
+- **Observed**: per-call TS recompile (~1-2s via `pnpm exec tsx`) blows the 5s
+  hook timeout under concurrent load, so the guard fails OPEN.
+- **Expected**: hooks run prebuilt artefacts well within the timeout.
+- **Candidate cure**: invoke `node dist/...` directly; guarantee `dist` via the
+  install lifecycle (postinstall + pre-commit build).
+- **Target surface**: PreToolUse hook execution; candidate ADR
+  (hook-execution-from-prebuilt-artefacts).
+- **Status**: partially-addressed — `validate-pretooluse-guard-routing` now asserts
+  guards route through the shim; verify the dist-build lifecycle guarantee closes
+  the fail-open window fully.
+- **Owner direction status**: standing.
+
+### F-62 — relocating tsx-invoked entry points silently breaks knip's entry config
+
+- **Source**: `pending-graduations.md` (2026-05-31 knip failure). Migrated
+  2026-06-16 (decision-debt drain).
+- **Surface**: `knip.config.ts` entry globs.
+- **Observed**: relocating tsx-invoked entry points (`scripts/` → `src/`) made the
+  whole dependency graph read as unused.
+- **Expected**: entry-point relocations do not silently break knip.
+- **Candidate cure**: update the `knip.config.ts` entry list on any entry-point
+  relocation; candidate discipline "knip entry config tracks entry-point moves".
+- **Target surface**: `knip.config.ts` + an entry-relocation checklist.
+- **Status**: open (discipline note).
+- **Owner direction status**: standing.
+
+### F-63 — negation-contrast tombstone form needs a structural detector
+
+- **Source**: `pending-graduations.md` (2026-05-31;
+  `no-tombstones-for-removed-ideas.md` §"Why This Rule Is Strict"). Migrated
+  2026-06-16 (decision-debt drain).
+- **Surface**: no-tombstones enforcement (write-time PreToolUse policy +
+  output-time review).
+- **Observed**: the negation-contrast form of tombstoning ("X, not Y"; "built
+  fresh, never a bridge") is a *structural* pattern, not a fixed literal; the
+  write-time hook carries only high-signal literals, and a naive block on
+  "never" / "rather than" / "instead of" false-positives unacceptably.
+- **Expected**: the negation-contrast form is detectable without unacceptable
+  false positives.
+- **Candidate cure**: a smarter structural detector OR an output-time review pass.
+- **Target surface**: no-tombstones enforcement tooling.
+- **Status**: open (trigger: a viable low-false-positive detector design OR owner
+  direction).
+- **Owner direction status**: standing.
+
 ---
 
 ## Mitigated / Addressed Frictions
