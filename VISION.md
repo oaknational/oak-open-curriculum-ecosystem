@@ -6,51 +6,35 @@ last_reviewed: 2026-06-17
 
 # Vision
 
-Oak National Academy's mission is to
+Oak's mission is to
 
 > _"improve pupil outcomes and close the disadvantage gap by supporting
 > teachers to teach, and enabling pupils to access, a high-quality curriculum."_
 
 Oak has created a high-quality, open, fully sequenced, fully resourced
-curriculum. We are here to enable access and use. This repository supports that
-in two ways:
+curriculum. We are here to enable access and use of that curriculum in three ways:
 
-1. By creating an MCP app that puts Oak inside the AI assistants (ChatGPT,
+1. **For teachers** — an MCP app that puts Oak inside the AI assistants (ChatGPT,
    Claude, Gemini and others) that teachers already use.
-2. By providing a set of engineering tools to the wider ecosystem for working
-   with Oak's curriculum data: a generated, type-safe TypeScript SDK, a semantic
-   search service, graph tools generated from Oak data, and evidence surfaces
-   grounded in the wider education sector.
+2. **For the wider ecosystem** — engineering tools for working with Oak's
+   curriculum data: a generated, type-safe TypeScript SDK, a semantic search
+   service, graph tools generated from Oak data, and evidence surfaces grounded
+   in the wider education sector.
+3. **For delivering AI-enhanced innovation** — an openly documented framework for
+   agentic engineering that lets us build the first two quickly and safely,
+   without losing quality or clarity, and that other teams can adopt to deliver
+   their own.
 
 ## What We're Changing
 
-Oak's curriculum is open, fully sequenced, and evidence-informed. Reaching it
-well is still too hard: teachers meet AI assistants that invent answers instead
-of drawing on a curriculum they can trust, and teams building tools for schools
-rebuild the same curriculum plumbing from scratch.
-
-We turn Oak's curriculum into AI-native infrastructure. That changes two things
-at once — neither secondary, both running on one body of work built once:
+We are turning Oak's open curriculum into AI-native infrastructure:
 
 - **Oak reaches teachers where they already work.** Inside the AI assistants
   teachers use, what comes back is grounded in Oak's sequenced,
-  evidence-informed curriculum, not invented. The teacher stays the expert; we
-  inform with evidence, and we never instruct.
-- **The wider ecosystem builds on open foundations.** Anyone building for
-  schools can build on typed, openly licensed, evidence-grounded components —
-  SDK, semantic search, curriculum graph, MCP — instead of starting from
-  scratch.
-
-## Why It Matters
-
-When what reaches teachers is grounded in a high-quality curriculum, the
-integrity of what reaches pupils is protected, and the work of planning gets
-lighter. That's Oak's mission, happening wherever teachers and their tools are —
-not only on Oak's own site.
-
-And it compounds. Because the infrastructure is built once and reused — across
-Oak's products, the wider sector, and the AI assistants teachers already reach
-for — a single public asset multiplies into impact at system scale.
+  evidenced curriculum and pedagogical rigour.
+- **The wider ecosystem builds on open foundations.** Anyone can build with
+  typed, openly licensed, evidence-grounded curriculum components,
+  the SDK, semantic search, curriculum graph, MCP pipeline.
 
 ## How We Achieve This
 
@@ -64,7 +48,8 @@ for — a single public asset multiplies into impact at system scale.
   [How the Agentic Engineering System Works](docs/foundation/agentic-engineering-system.md)
   and
   [ADR-119](docs/architecture/architectural-decisions/119-agentic-engineering-practice.md):
-  Oak's agentic engineering Practice, the operating system for delivery.
+  Oak's agentic engineering Practice — the operating system for delivery, and the
+  third front of value above.
 - **Where the work has reached** — the [reports surface](.agent/reports/).
 - **The boundaries we hold** —
   [ADR-194](docs/architecture/architectural-decisions/194-teacher-as-expert-product-boundary.md):

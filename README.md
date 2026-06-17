@@ -41,14 +41,15 @@ assistants can search Oak's curriculum and explore lessons, units, threads,
 sequences, and other structured content — helping teachers find, adapt, and use
 high-quality curriculum resources.
 
-Underneath the product surfaces, we develop a reusable, self-improving Practice
-for agentic-first engineering: a plain-text framework that lets agents from major
-vendors collaborate, keep learning, and keep operational knowledge in the
-repository where it stays useful.
+We also develop a reusable, self-improving Practice for agentic-first
+engineering: a plain-text framework that lets agents from major vendors
+collaborate, keep learning, and keep operational knowledge in the repository
+where it stays useful.
 
-Putting Oak inside the AI assistants teachers already use, and giving the wider
-ecosystem the tools to build with Oak curriculum content, are two co-equal value
-streams — neither secondary. **Beyond Oak-hosted products**, we publish a
+Putting Oak inside the AI assistants teachers already use, giving the wider
+ecosystem the tools to build with Oak curriculum content, and the openly
+documented Practice that delivers AI-enhanced innovation are three co-equal value
+streams — none secondary. **Beyond Oak-hosted products**, we publish a
 deliberate set of reusable sector components — the OpenAPI-to-MCP pipeline,
 SDK-generation patterns, hybrid-search tooling, MCP and MCP App scaffolds, graph
 projection conventions, and the openly documented Practice — so other
