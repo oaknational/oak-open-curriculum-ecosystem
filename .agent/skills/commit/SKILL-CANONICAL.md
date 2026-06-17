@@ -118,14 +118,18 @@ Run these steps **before** formulating the commit message.
    `pull request 170` or move the reference to the real footer. Em-dashes
    and bullet shapes are innocent.
 
-   **Trust the checker only after a negative control:** advisory checkers
-   can run void and exit 0 (two seats observed an argless false-green run
-   on 2026-06-11; a deliberate-RED probe from repo root reproduces neither
-   today, so the trigger is environment-dependent). If the run does not
-   echo your message back (or prints usage), it checked nothing — re-run
-   with a deliberately bad message first, or fall back to
-   `pnpm exec tsx agent-tools/src/commit-advisories/check-commit-message.ts -F <file>`
-   from the repo root.
+   **The `commit-msg` hook is the real gate — do not test the checker.** The
+   `.husky/commit-msg` hook runs commitlint on every commit unconditionally; the
+   pre-draft `check-commit-message` script is an optional convenience to catch a
+   format slip ~30s earlier, not a gate. **Never run a per-commit negative
+   control** (a deliberately-bad message to "prove the checker is live") — that
+   tests the tool, not your message, and has no bridge to landing a conforming
+   commit. If you run the checker, trust its exit code; if a given invocation
+   looks void (no echo, usage text), do not escalate to a forensic probe — just
+   commit and let the hook gate the message. (An argless false-green run was
+   observed once on 2026-06-11 and is environment-dependent; a one-off
+   self-check is reasonable only if you genuinely suspect the checker is broken
+   on this machine — it is never a standing per-commit step.)
 
 5. **Surface any repo-specific extra hooks** flagged by `.husky/commit-msg`. In
    this repo at the time of writing, `pnpm agent-tools:prevent-accidental-major-version`

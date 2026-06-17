@@ -77,3 +77,20 @@ reconciliation.
   archives/raw/evidence/napkins/cursor untouched per archive discipline. The owner lifted the
   plan-gate for pure link-hygiene; re-anchoring conceptual references stays gated to the
   estate phase.
+
+## Commit-checker negative-control is a pathology, not SOP (2026-06-17, Ocelot binds Curfew)
+
+- **Owner correction: I ran a deliberately-bad-message negative control to "prove the
+  commit-message checker is live" before a commit. That tests the tool, not the message, and
+  has no bridge to the goal (a conforming commit).** The `.husky/commit-msg` hook runs
+  commitlint unconditionally on every commit — it is the real gate; the pre-draft checker is
+  optional convenience. When my first checker run looked ambiguous, the cheap correct move
+  was to commit and let the hook gate it, not to forensically test the checker. This is
+  friction-inflation (descend-into-mechanism): mild ambiguity in a convenience tool inflated
+  into a forensic verification of it. Root cause is artefact gravity — the commit SKILL
+  prescribed it ("Trust the checker only after a negative control… re-run with a deliberately
+  bad message first"), born of a one-off env-dependent false-green (2026-06-11) and
+  over-generalised into a per-commit ritual. Structural cure landed this session: reframed
+  that skill paragraph (the hook is the gate; never run a per-commit negative control; a
+  one-off self-check only if you genuinely suspect the checker is broken on this machine).
+  Sibling: [[passive-guidance-loses-to-artefact-gravity]], [[fluency-is-a-failure-vector]].
