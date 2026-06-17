@@ -46,6 +46,15 @@ reconciliation.
   line**, not JSON — capture with `tail -1`, never a `grep '"intent_id"'` (returns empty and tempts
   a re-enqueue that creates a duplicate intent, which then fails the next `guard`).
 
+## Full gate re-fetches the upstream spec and re-dirties the tree — use CI=true until the spec PR lands (2026-06-17, Squall spins Stratus)
+
+- On `docs/planning-and-validation`, `pnpm check`/`pnpm sdk-codegen` fetch the **live** upstream
+  Oak OpenAPI spec by default, which has drifted from the committed schema-cache (version moved,
+  `/sequences/{slug}` → `/sequences/{sequence}`). So a plain full-gate run regenerates ~10 SDK files
+  and leaves the tree dirty even on a doc-only branch. **`CI=true` drives codegen off the committed
+  cached spec**, leaving the tree clean. Owner direction (2026-06-17): until a dedicated SDK-spec-sync
+  PR lands, run the gate with `CI=true`; the regenerated files are restored, not committed here.
+
 ## SonarCloud signal observed via owner screenshot (2026-06-17, Squall spins Stratus)
 
 - Owner shared a SonarCloud Overview screenshot: **quality gate Failed (1 condition)**; **Coverage
