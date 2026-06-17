@@ -15,8 +15,11 @@ foundation; its report + raw data live in
 
 ## Where We Are (2026-06-17, Ocelot binds Curfew — vision authored + wired)
 
-- **Branch:** `docs/planning-and-validation`. **Everything this session is
-  uncommitted** (doc/memory writes only; no commit, no push, no gates run).
+- **Branch:** `docs/planning-and-validation`. The vision was finalised and
+  committed (`d4f6e0293`, gates green); the three-stream rewrite landed after this
+  record was first written. **Scope authority is now the controlling plan**
+  [`vision-strategy-and-plan-estate.plan.md`](../../../plans/vision-strategy-and-plan-estate.plan.md);
+  this record is the pickup surface, not an authority for scope.
 - **VISION is DONE and now lives at the repository root: [`VISION.md`](../../../../VISION.md)**
   (moved from `docs/foundation/` via `git mv`, history preserved). It is a real
   vision in the owner's shape: **what we're changing · why it matters · the
@@ -46,13 +49,15 @@ lifted only once, narrowly, for VISION-path link-hygiene (now complete).
    (do not paraphrase it — "supporting teachers to teach, and enabling pupils to
    access" is precise teacher-agency language; an earlier paraphrase
    "helping teachers teach" was wrong and was corrected).
-2. **Two co-equal, first-class value streams — neither secondary:** (a) an MCP app
-   that puts Oak inside the AI assistants teachers already use; (b) engineering
-   tools (SDK, semantic search, curriculum graph, MCP, evidence surfaces) for the
-   wider ecosystem to build with Oak's curriculum data. The survey §13
-   "two-products conflation / tension" was an **unverified sub-agent claim and is
-   WITHDRAWN** — there is no tension; one body of infrastructure, two co-equal
-   delivery channels.
+2. **Three co-equal value streams — none secondary** (settled 2026-06-17; the
+   vision now names all three): (a) an MCP app that puts Oak inside the AI assistants
+   teachers already use; (b) engineering tools (SDK, semantic search, curriculum
+   graph, MCP, evidence surfaces) for the wider ecosystem to build with Oak's
+   curriculum data; (c) the agentic-engineering framework that delivers AI-enhanced
+   innovation (the Practice as a value stream in its own right, per owner §14.1).
+   The survey §13 "two-products conflation / tension" was an **unverified sub-agent
+   claim and is WITHDRAWN** — there is no tension; one body of infrastructure, three
+   co-equal delivery fronts.
 3. **A vision states the change + why + a map to the how.** It delegates
    explanations and commitments (deliverables inventory, measurement, integrations,
    positioning, licensing) to other documents and *points* to them — it does not
@@ -128,14 +133,17 @@ captured so they survive a fresh context:
 
 ## K1–K3 AUTHORITY ISSUE (still live — resolve in the strategy phase)
 
-Four strategy docs — `curriculum-mcp-path-to-ga/launch-readiness-framework.md`,
-`high-level-plan.md`, `curriculum-mcp-path-to-ga/roadmap.md`, and the future
-milestone-redefinition stub — assert keystones **K1–K3 as "owner-DECIDED
-(2026-06-15)" with no correction qualifier**. The survey §14 records the owner's
-position that K1–K3 are **agent INPUT, not ratified** (only `repo-continuity.md`
-carries the correction). K1 ("live" = full GA with *observed* positive impact)
-is itself an impact definition → treat K1–K3 as **strategy keystones to settle**
-(ratify / revise / correct the docs), not a doc-authority footnote.
+**Five** strategy/report surfaces — `curriculum-mcp-path-to-ga/launch-readiness-framework.md`,
+`high-level-plan.md`, `curriculum-mcp-path-to-ga/roadmap.md`, the future
+milestone-redefinition stub, and the **readiness assessment report** — assert
+keystones **K1–K3 as "owner-DECIDED / ratified (2026-06-15)" with no correction
+qualifier**. The survey §14 records the owner's position that K1–K3 are **agent
+INPUT, not ratified**; the correction lives on **three** surfaces
+(`repo-continuity.md`, the survey §12/§14, and this record). K1 ("live" = full GA
+with *observed* positive impact) is itself an impact definition → treat K1–K3 as
+**strategy keystones to settle** (ratify / revise / correct the docs), now owned by
+Phase 2A of
+[`vision-strategy-and-plan-estate.plan.md`](../../../plans/vision-strategy-and-plan-estate.plan.md).
 
 ## Delta since the 2026-06-15 survey (re-grounded first-hand this session)
 
