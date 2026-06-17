@@ -42,3 +42,24 @@ emit a prominent signal without re-introducing a gate. Out of scope for the deci
 **Status:** open. **Resolution trigger:** the next fitness/cadence design pass, or a second
 instance of a report-only fitness signal going unread. Surfaced by assumptions-expert during
 the 2026-06-16 report-only review.
+
+## Q-002 — The nature of the strategy layer and the vision→strategy→planning flow
+
+**Question:** What *is* the strategy layer (its shape, content, and granularity), and how exactly
+does vision derive strategy, and strategy derive planning? The controlling plan assumes a
+2A (align-on-impact) → 2B (gap analysis) → 2C (execution spine) structure, but the owner wants the
+nature of the strategy layer and the derivation flow settled before more strategy work proceeds.
+
+**Why it shapes future work:** it governs the whole Phase 2 (and the Phase 3 estate restructure
+that serves the strategy). If "the strategy layer" means something different from the current
+2A/2B/2C breakdown, that breakdown is provisional and may be reshaped — so authoring more strategy
+documents now risks building on an unsettled frame.
+
+**Why not cheaply answerable now:** it's a design discussion the owner wants to hold directly in a
+fresh session; it isn't an artefact an agent should settle unilaterally.
+
+**Owning artefact:** [`vision-strategy-and-plan-estate.plan.md`](../../plans/vision-strategy-and-plan-estate.plan.md)
+(Phase 2 — carries the owner-directed gate); thread `strategy-and-plan-estate-holistic-review`.
+
+**Status:** open — owner-directed next-session topic. **Resolution trigger:** the fresh-session
+strategy-layer discussion with the owner (2026-06-17 direction). Surfaced by owner direction.

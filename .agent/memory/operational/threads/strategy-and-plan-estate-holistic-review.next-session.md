@@ -33,8 +33,9 @@ foundation; its report + raw data live in
   planning**; only the MCP-app stream gates go-live; the other two's fuller strategy follows
   (tracked `p2a-other-streams-strategy`). Controlling plan amended; K1–K3 reconciled across the
   five keystone surfaces + `repo-continuity.md` (the dated survey report left as a dated input).
-- **Next safe step:** the ecosystem + framework streams' strategy + planning, then Phase 2B gap
-  analysis at hybrid depth → 2C spine. See §Next.
+- **Next safe step (owner-directed 2026-06-17):** a fresh session opens by **discussing the
+  nature of the strategy layer and the vision→strategy→planning flow** — before any more strategy
+  work. Only then the ecosystem + framework streams' strategy + planning → Phase 2B → 2C. See §Next.
 
 ## Order (owner-set 2026-06-17 — SUPERSEDES the prior A→B→C)
 
@@ -175,19 +176,24 @@ the §4 ungated-collection removal, the disposition-ledger value-preservation). 
 record is the pickup surface, not the scope.
 
 **Phase 2A ratification gate is COMPLETE; the value/impact articulation is AUTHORED.**
-In order:
+**Owner-directed gate (2026-06-17): a fresh session opens by DISCUSSING the nature of the
+strategy layer and the vision→strategy→planning flow — BEFORE any more strategy work.**
+This is a design discussion with the owner, not an authoring task; it likely reshapes what
+"the strategy layer" and Phases 2A–2C mean. Logged as `Q-` in open-questions. In order:
 
 1. Read the plan, the [decisions brief](../../../plans/vision-strategy-and-plan-estate.2a-decisions.md)
    (status `ratified`), and the [value/impact articulation](../../../plans/vision-strategy-and-plan-estate.value-and-impact.md)
    (the MCP-app stream in full + a separate mention of the other two streams' value).
-2. **Author the ecosystem + framework streams' strategy + planning.** Owner refinement
-   2026-06-17: all three streams are co-equal and each needs its own strategy layer and
-   planning; their value is already named in the articulation, their fuller strategy
-   follows (tracked `p2a-other-streams-strategy`). Only the MCP-app stream gates go-live.
-3. **Then Phase 2B** — value-stream redundancy/gap analysis at the **hybrid** depth
+2. **Discuss with the owner: what is the strategy layer, and how does vision → strategy →
+   planning flow?** Settle this before authoring more. It may revise the phase structure below.
+3. **Only then — author the ecosystem + framework streams' strategy + planning.** Owner
+   refinement 2026-06-17: all three streams are co-equal and each needs its own strategy layer
+   and planning; their value is already named in the articulation, their fuller strategy follows
+   (tracked `p2a-other-streams-strategy`). Only the MCP-app stream gates go-live.
+4. **Then Phase 2B** — value-stream redundancy/gap analysis at the **hybrid** depth
    (ecosystem decomposed to SDK/search/graph/EEF); re-verify the survey's empirical
    counts first. **Then Phase 2C** — execution spine. Do not jump to the spine first.
-4. **Estate hygiene runs in parallel anytime (NOT strategy-gated):** re-anchor the
+5. **Estate hygiene runs in parallel anytime (NOT strategy-gated):** re-anchor the
    dead VISION What-We-Deliver references, fix the editorial-tone vision path, clear
    the dead PR-76 blocker — after re-verifying current reachability counts.
 

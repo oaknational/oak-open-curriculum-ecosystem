@@ -109,6 +109,14 @@ delegated the wording. The earlier ecosystem-only framing is replaced.
 
 ## Phase 2 — Strategy Layer (NEXT)
 
+> **Owner-directed gate (2026-06-17): before any more Phase 2 work, a fresh session
+> opens by discussing the nature of the strategy layer and the vision→strategy→planning
+> flow with the owner.** Phase 2A's decisions are ratified and the value/impact
+> articulation is authored, but the *shape* of the strategy layer itself — what it is,
+> and how vision derives strategy derives planning — is an open design question the
+> owner wants settled first. It may revise the 2A/2B/2C structure below. Treat the
+> phase breakdown here as provisional until that discussion lands.
+
 Create the **missing** strategy documents and **integrate** the existing strategy
 surfaces, organised around delivering the vision's impact. The internal method is
 owner-set (survey §14/§15) and **must not be flattened into "write the strategy

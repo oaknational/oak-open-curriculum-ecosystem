@@ -34,21 +34,27 @@ reconciliation.
   owner's blunt re-grounding plus the PDR-101 quorum (an external check), not my
   self-vigilance. Sibling: [[fluency-is-a-failure-vector]], [[first_hand_means_me_not_subagents]].
 
-## commit-queue spawned git-commit hits the depcruise→turbo stream-truncation artifact in Claude Code (2026-06-17, Squall spins Stratus)
+## commit-queue spawned commit hits the depcruise→turbo stream artifact (2026-06-17, Squall spins Stratus)
 
-- **`pnpm agent-tools:commit-queue -- commit` failed twice**, output truncating exactly at the
-  `depcruise → turbo` handover with `git commit exited with code 1` and **no commit landing** —
-  the precise symptom the commit skill's "Cursor Shell tool — stream truncation workaround"
-  documents, but observed here via the **commit-queue workflow in Claude Code**, not Cursor.
-- **Decisive disambiguation** (not a real gate failure): `bash .husky/pre-commit` standalone
-  exited **0** with full turbo output; a direct `git commit -F <msgfile> > tmp/log 2>&1` (hooks
-  intact, no `--no-verify`) landed cleanly (`fce9bd863`). The gates are green; the artifact is in
-  the *spawned-commit live-stream*, cured by file redirection.
-- **Next agent:** if commit-queue `commit` dies at the depcruise→turbo handover, don't re-diagnose
-  the gates — verify with standalone `bash .husky/pre-commit`, then use the skill's documented
-  direct `git commit -F` + file-redirection fallback (then record the queue intent + close the
-  claim manually with the SHA). The skill's workaround section is scoped "Cursor Shell tool only";
-  this is a candidate to widen it to the commit-queue spawn path. Sibling: [[comms-watch-cli-can-stall-silently]].
+- Hit the depcruise→turbo stream-truncation artifact via `commit-queue -- commit` in Claude
+  Code (not just Cursor): the spawned `git commit` dies at the handover, exit 1, no commit;
+  reproduces across retries. **Graduated** to the commit skill's stream-truncation section (now
+  scoped to the commit-queue path, with the direct `git commit -F` redirected fallback). Landed
+  `fce9bd863` / `58f9df9f6` via that fallback; `bash .husky/pre-commit` exits 0 standalone (gates
+  green — the artifact is the live-stream, not the hook).
+- Second gotcha: `commit-queue -- enqueue` prints the intent_id as a **bare UUID on the last
+  line**, not JSON — capture with `tail -1`, never a `grep '"intent_id"'` (returns empty and tempts
+  a re-enqueue that creates a duplicate intent, which then fails the next `guard`).
+
+## SonarCloud signal observed via owner screenshot (2026-06-17, Squall spins Stratus)
+
+- Owner shared a SonarCloud Overview screenshot: **quality gate Failed (1 condition)**; **Coverage
+  1.4%, −89.51% vs 30 days, "No data available to display"**; a scanner warning **"problems with
+  file encoding in the source code"**; last analysis ~2 days old. My read: the coverage collapse +
+  "no data" is almost certainly a **coverage-report ingestion break** (CI not uploading lcov /
+  scanner not finding it), not deleted tests. Owner cares only about the **encoding warning** for
+  now and is starting a **separate parallel thread** for it; the coverage/gate observations are
+  noted, not owned by this thread. Not investigated first-hand here (out of this session's scope).
 
 ## Researching the estate is not the same as refusing new plans (2026-06-17, Phobos turns Singularity)
 
