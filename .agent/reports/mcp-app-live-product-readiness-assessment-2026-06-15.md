@@ -25,11 +25,24 @@ re-assessment of the milestone ladder. It is the durable home of those findings;
 the [Launch-Readiness Framework](../plans/curriculum-mcp-path-to-ga/launch-readiness-framework.md)
 is the living gate structure derived from it.
 
-**Status note.** The keystone decisions in §7 are owner-ratified (2026-06-15).
-The milestone re-assessment in §8 is a verdict for owner ratification; the prior
-milestone files have **not** been rewritten. That redraft is a future plan whose
-promotion trigger is owner direction to schedule the redraft pass — see the
+**Status note.** The milestone re-assessment in §8 is a verdict for owner
+ratification; the prior milestone files have **not** been rewritten. That redraft
+is a future plan whose promotion trigger is owner direction to schedule the redraft
+pass — see the
 [stub future plan](../plans/curriculum-mcp-path-to-ga/future/launch-readiness-and-milestone-redefinition.plan.md).
+
+**Ratification correction (2026-06-17).** This report's original framing of the §7
+keystones as "owner-ratified (2026-06-15)" was premature — at the time they were
+agent **input**, not ratified (see the 2026-06-15 plan-estate survey §12/§14). The
+owner ratified K1–K3 on **2026-06-17** as the **MCP-app stream's** keystones, with
+two corrections that supersede the §7 wording below: (1) **K1** — value-proof is a
+GA precondition *articulated here and measured by Oak, not instrumented in-repo*
+(owner §14.2); the "and its instrumentation" phrasing is withdrawn. (2) **K3** —
+readiness is scoped to the app's **real dependency set**, not literally the whole
+repo; "whole-estate" readiness holds only at the **portfolio level**. The §7 table
+and §8 analysis are left as the dated 2026-06-15 record; the ratified wording lives
+in the [Launch-Readiness Framework](../plans/curriculum-mcp-path-to-ga/launch-readiness-framework.md)
+and the [Phase-2A decisions brief](../plans/vision-strategy-and-plan-estate.2a-decisions.md).
 
 ---
 
@@ -172,7 +185,17 @@ Its shape:
 
 ---
 
-## 7. Keystone decisions — DECIDED (owner, 2026-06-15)
+## 7. Keystone decisions — agent input (2026-06-15); ratified 2026-06-17 with corrections
+
+> **Superseded wording.** This table is the dated 2026-06-15 record. The keystones
+> were owner-**ratified on 2026-06-17** as the MCP-app stream's keystones, with two
+> corrections to the rows below — K1 drops "and its instrumentation" (value-proof is
+> articulated here and measured by Oak, not instrumented in-repo, per §14.2); K3 is
+> scoped to the app's **real dependency set**, not literally the whole repo
+> ("whole-estate" holds only at portfolio level). See the **Ratification correction
+> (2026-06-17)** note above and the
+> [Launch-Readiness Framework](../plans/curriculum-mcp-path-to-ga/launch-readiness-framework.md)
+> for the ratified wording.
 
 | # | Decision | Consequence |
 |---|----------|-------------|

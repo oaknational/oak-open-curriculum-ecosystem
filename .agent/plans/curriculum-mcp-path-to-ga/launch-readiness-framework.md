@@ -1,8 +1,8 @@
 ---
 title: "Curriculum MCP — Launch-Readiness Framework"
 type: readiness-framework
-status: draft-keystones-decided-milestones-under-reassessment
-last_updated: 2026-06-15
+status: draft-keystones-ratified-milestones-under-reassessment
+last_updated: 2026-06-17
 feeds:
   - ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md (Programme §6 A4)"
   - ".agent/milestones/README.md (M3 → M4/GA gate definitions)"
@@ -22,7 +22,7 @@ purpose: >
 
 # Curriculum MCP — Launch-Readiness Framework
 
-**Status**: 🟡 DRAFT — keystones K1–K3 decided (2026-06-15); milestone ladder under fresh-eyes re-assessment
+**Status**: 🟡 DRAFT — keystones K1–K3 **owner-ratified 2026-06-17** as the **MCP-app stream's** keystones (§14.2 correction to K1; K3 scoped to the app's real dependency set); milestone ladder under fresh-eyes re-assessment
 **Audience**: owner (product + go/no-go), then the collections that own each axis.
 
 This framework answers a different question from the Path-to-GA Programme. The
@@ -66,25 +66,33 @@ would mislead. Three facts reshape the work:
    public-sector accessibility duties and the ICO Age Appropriate Design Code
    (the Children's Code) if children are likely users. Assume both apply.
 
-## Keystone decisions — DECIDED (owner, 2026-06-15)
+## Keystone decisions — owner-ratified (2026-06-17, MCP-app stream)
 
-The three forks the framework hangs on are now set. This is the decision log;
-every dimension below is read in their light.
+The three forks the framework hangs on are now set (owner-ratified 2026-06-17 as
+the **MCP-app stream's** keystones — the observed-positive-impact gate is this
+stream's alone; the ecosystem and framework streams' "live" definitions are
+deferred to a later phase). This is the decision log; every dimension below is read
+in their light.
 
 - **K1 — "Live" = full GA, out in the world, with real users (teachers and
   curriculum leaders) using it and demonstrating positive impact.** "Live" is
   therefore an **evidence state, not a deploy state**: GA cannot be declared
-  until positive impact is *observed* in real use, not assumed. Value-proof and
-  its instrumentation become a **precondition** of GA, not a post-launch nicety.
+  until positive impact is *observed* in real use, not assumed. Value-proof
+  becomes a **precondition** of GA, not a post-launch nicety — **articulated here
+  and measured by Oak, not instrumented in-repo** (owner §14.2).
 - **K2 — Primary audience: teachers and curriculum leaders** (for now). Not
   "developers building on the surface", and not "the open public" — a
-  professional education audience whose work reaches pupils.
-- **K3 — Surface scope: the MCP app in ChatGPT and Claude — which means the
-  entire estate beneath it must be GA-ready.** Declaring the app live asserts
-  that every workspace it surfaces (SDK/codegen, search + Elasticsearch, the
-  graph tooling, auth, observability, the MCP server runtime, and the React
-  experience) is itself at production quality. Readiness is **whole-estate**, not
-  app-surface-only.
+  professional education audience whose work reaches pupils. "For now" is a
+  **post-GA non-commitment**: it fixes the current safeguarding bar; no audience
+  widening is planned at this stage.
+- **K3 — Surface scope: the MCP app in ChatGPT and Claude — which means the app's
+  real dependency set must be GA-ready.** Declaring the app live asserts that
+  every workspace it actually depends on (SDK/codegen, the curriculum data/API,
+  the MCP server runtime, and search/graph and the React experience **as used**,
+  plus auth and observability) is itself at production quality. Readiness is
+  scoped to the **app's real dependency set**, not literally every workspace in
+  the repo; "whole-estate" readiness holds only at the **portfolio level** — each
+  value stream reaches its own readiness.
 
 **Consequence for this document.** With K1–K3 set, the prior M0 → M3 → GA
 milestone ladder is **no longer assumed to stand**; it is being re-assessed from
@@ -236,18 +244,22 @@ design surface, not a footnote.
   against directory policy.
 - **Candidate owner.** Engineering + product.
 
-### C4. Whole-estate production-readiness (K3 consequence)
+### C4. App-dependency-set production-readiness (K3 consequence)
 
 - **Concern (target-grounded).** Declaring the MCP app live asserts that *every
-  workspace beneath it* is at production quality — the app is only as
-  trustworthy as the estate it surfaces. In scope: SDK/codegen
-  (`@oaknational/curriculum-sdk` + generators), search + Elasticsearch, the
-  graph tooling, auth (Clerk), observability (Sentry/OTel + the ADR-160
-  redaction barrier), the MCP server runtime, and the React experience. Each
-  must be contract-stable, tested, observable, supportable, and free of known
-  sev-1 defects — not just the app surface.
+  workspace it actually depends on* is at production quality — the app is only as
+  trustworthy as the dependency set it surfaces. In scope: SDK/codegen
+  (`@oaknational/curriculum-sdk` + generators), the curriculum data/API, the MCP
+  server runtime, and — **as the app uses them** — search + Elasticsearch, the
+  graph tooling, and the React experience, plus auth (Clerk) and observability
+  (Sentry/OTel + the ADR-160 redaction barrier). Each must be contract-stable,
+  tested, observable, supportable, and free of known sev-1 defects — not just the
+  app surface. This is the app's **real dependency set**, not literally the whole
+  repo (per the ratified K3; whole-estate readiness holds only at portfolio
+  level).
 - **Open decisions.** Which workspaces are in the GA-critical path versus
-  independently shippable.
+  independently shippable — i.e. the precise boundary of the app's real
+  dependency set.
 - **Candidate gate / how we'd know.** A per-workspace production-readiness
   checklist (tests, observability, no open sev-1, contract stability) green
   across the GA-critical estate, behind one canonical aggregate gate.
@@ -288,16 +300,16 @@ design surface, not a footnote.
 
 ## How to use this framework
 
-1. **Keystones K1–K3 are decided** (above), so the framework is read in their
-   light — and the prior M0 → M3 → GA milestone ladder is **not assumed to
-   stand**. It is being re-assessed from first principles against the decided
-   definition of "live".
+1. **Keystones K1–K3 are owner-ratified** (above, 2026-06-17, as the MCP-app
+   stream's keystones), so the framework is read in their light — and the prior
+   M0 → M3 → GA milestone ladder is **not assumed to stand**. It is being
+   re-assessed from first principles against the ratified definition of "live".
 2. **Re-derive the milestone ladder, impact-first.** Because "live" is an
    *evidence* state (real teachers and curriculum leaders + observed positive
-   impact) and readiness is whole-estate (K3), the milestone gates re-organise
-   around proof of estate readiness, safety/compliance clearance, and real-user
-   value — not around auth posture. The re-derived ladder feeds Programme A4 and
-   the milestone files.
+   impact) and readiness is scoped to the app's real dependency set (K3), the
+   milestone gates re-organise around proof of dependency-set readiness,
+   safety/compliance clearance, and real-user value — not around auth posture.
+   The re-derived ladder feeds Programme A4 and the milestone files.
 3. **Each candidate gate becomes a GA exit criterion** (Programme A4), routed to
    its owning collection (`security-and-privacy/`, `observability/`,
    `sdk-and-mcp-enhancements/`, `compliance/`, a new safeguarding/editorial

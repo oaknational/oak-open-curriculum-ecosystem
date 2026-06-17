@@ -20,21 +20,24 @@ surface.
 
 ## Current State
 
-- **VISION FINALISED + CONTROLLING PLAN LANDED; PHASE 2A IS NEXT (2026-06-17, Tempest spins
-  Spire, solo, `docs/planning-and-validation`, 3 commits ahead of origin — unpushed).** The
-  vision is finalised at repo-root `VISION.md` — three co-equal value streams (teacher MCP app;
-  ecosystem engineering tools; the agentic-engineering framework delivering AI-enhanced
-  innovation) — committed `d4f6e0293`. The thread now has a controlling plan of record,
-  [`vision-strategy-and-plan-estate.plan.md`](../../plans/vision-strategy-and-plan-estate.plan.md)
-  (`4d887361a`; six-reviewer-vetted + independently verified) — the **scope authority** for the
-  vision→strategy→plan-estate DAG (Phases 1–3, gates, the §4 ungated-collection removal, the
-  disposition-ledger value-preservation). The three Phase-2A owner decisions (K1–K3, value-stream
-  taxonomy depth, README headline) are drafted as decision-ready options
-  ([`2a-decisions.md`](../../plans/vision-strategy-and-plan-estate.2a-decisions.md), `cc9014cad`)
-  — **not made; the owner ratifies next session**. **Next safe step**: the Phase-2A ratification
-  gate — read the plan, then the options brief, put the three decisions to the owner (do not make
-  them), then author the per-stream value/impact articulation; estate hygiene runs in parallel off
-  the gate. Full start sequence:
+- **PHASE 2A RATIFICATION GATE COMPLETE; APP-STREAM ARTICULATION IS NEXT (2026-06-17, Squall
+  spins Stratus, solo, `docs/planning-and-validation`).** The owner ratified all three Phase-2A
+  decisions (scope authority remains the controlling plan
+  [`vision-strategy-and-plan-estate.plan.md`](../../plans/vision-strategy-and-plan-estate.plan.md)):
+  **K1–K3** settled as the **MCP-app stream's** keystones — §14.2 correction to K1 (value-proof
+  is a GA precondition *articulated here and measured by Oak, not instrumented in-repo*),
+  impact-gate **app-stream-only**, K2 "for now" a **post-GA non-commitment**, K3 scoped to the
+  app's **real dependency set** (whole-estate only at portfolio level); **taxonomy depth = hybrid**
+  (drives Phase 2B granularity — ecosystem decomposes to SDK/search/graph/EEF); **README headline =
+  name all three streams** (applied, editorial voice). **2A scope NARROWED to the MCP-app stream**
+  (owner): the ecosystem and framework streams' value/impact articulation **and** keystones defer
+  to a later phase (tracked `p2a-deferred-streams`). Decisions recorded in
+  [`2a-decisions.md`](../../plans/vision-strategy-and-plan-estate.2a-decisions.md) (status
+  `ratified`); controlling plan amended; K1–K3 reconciled across the five keystone surfaces +
+  this record (the dated survey report left as a dated input, not edited). **Next safe step**:
+  author the **MCP-app stream's** value/impact articulation (Phase 2A substance, app-stream-only —
+  articulated here, measured by Oak), then Phase 2B gap analysis at hybrid depth → 2C execution
+  spine; estate hygiene runs in parallel off the gate. Full start sequence:
   [thread record](threads/strategy-and-plan-estate-holistic-review.next-session.md).
 - **COLLABORATION-DOCTRINE DECOMPOSITION — strategic brief LANDED (2026-06-17, Phobos turns
   Singularity, solo, `docs/planning-and-validation`).** Compared the two collaboration directives
@@ -129,12 +132,17 @@ surface.
 - **MCP LIVE-PRODUCT READINESS — framework + assessment report + future stub LANDED
   (2026-06-15, Quoll weaves Dreamscape `dec917`).** Read-only strategic session
   (owner-lifted for doc writes; no code, no commit) on "what would it take to make the MCP app
-  a live product." Keystones recorded as owner-decided (CORRECTION 2026-06-15 — per
-  owner, these are agent INPUT, NOT owner-ratified; input-to-verify, see survey report
-  §12/§14): **K1** "live" = full GA with real
-  teachers/curriculum-leaders + *observed* positive impact (an evidence state — value-proof is
-  a GA precondition); **K2** primary audience = teachers + curriculum leaders; **K3** scope =
-  MCP app in ChatGPT/Claude ⇒ the whole estate beneath must be GA-ready. Created the
+  a live product." Keystones **owner-RATIFIED 2026-06-17** (the 2026-06-15 "agent INPUT, NOT ratified"
+  correction is now resolved) as the **MCP-app stream's** keystones: **K1** "live" =
+  full GA with real teachers/curriculum-leaders + *observed* positive impact (an
+  evidence state — value-proof is a GA precondition, *articulated here and measured by
+  Oak, not instrumented in-repo* per §14.2); **K2** primary audience = teachers +
+  curriculum leaders ("for now" = post-GA non-commitment); **K3** scope = MCP app in
+  ChatGPT/Claude ⇒ the app's **real dependency set** must be GA-ready (whole-estate
+  only at portfolio level). The impact-gate is app-stream-only; the other two streams'
+  "live" definitions defer. See the
+  [Phase-2A decisions brief](../../plans/vision-strategy-and-plan-estate.2a-decisions.md).
+  Created the
   [launch-readiness framework](../../plans/curriculum-mcp-path-to-ga/launch-readiness-framework.md),
   the self-contained
   [assessment report](../../reports/mcp-app-live-product-readiness-assessment-2026-06-15.md)

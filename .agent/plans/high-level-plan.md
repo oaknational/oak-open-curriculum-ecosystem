@@ -90,8 +90,8 @@ which indexes sub-plans without owning their execution.
 Where the Programme sequences engineering and compliance work, the
 [Launch-Readiness Framework](curriculum-mcp-path-to-ga/launch-readiness-framework.md)
 defines what "live product" means: readiness dimensions, keystone owner
-decisions (K1–K3 decided 2026-06-15), and candidate GA gates grounded in the
-target React MCP App experience. The
+decisions (K1–K3 owner-ratified 2026-06-17 as the MCP-app stream's keystones),
+and candidate GA gates grounded in the target React MCP App experience. The
 [2026-06-15 readiness assessment](../reports/mcp-app-live-product-readiness-assessment-2026-06-15.md)
 records the full findings and a fresh-eyes verdict that the prior milestone
 ladder does not stand; the impact-first redraft is held in a

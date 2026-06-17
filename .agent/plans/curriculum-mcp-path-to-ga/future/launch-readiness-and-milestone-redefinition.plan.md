@@ -2,7 +2,7 @@
 name: "Launch-Readiness & Milestone Redefinition"
 type: future-strategic-stub
 status: future
-last_updated: 2026-06-15
+last_updated: 2026-06-17
 promotion_trigger: "Owner direction to schedule the milestone-redraft pass."
 inputs:
   - "../launch-readiness-framework.md"
@@ -30,17 +30,23 @@ redraft pass is picked up deliberately, not by drift.
   — the full findings: first-hand verification, right/wrong/missing, the
   keystone decisions, and the milestone re-assessment verdict (§8).
 - [Launch-Readiness Framework](../launch-readiness-framework.md) — the living
-  gate structure (Groups A–D, dimension C4 whole-estate readiness).
+  gate structure (Groups A–D, dimension C4 app-dependency-set readiness).
 - [Path-to-GA Programme](../roadmap.md) — the engineering/compliance sequencing
   index whose §6 A4 this work satisfies.
 
-## Decided keystones (from the assessment, owner 2026-06-15)
+## Ratified keystones (MCP-app stream; owner-ratified 2026-06-17)
+
+These are the **MCP-app stream's** keystones (the ecosystem and framework streams'
+"live" definitions defer to a later phase):
 
 - **K1** — "Live" = full GA with real users (teachers and curriculum leaders)
-  and *observed* positive impact. Value-proof is a GA precondition.
-- **K2** — Primary audience: teachers and curriculum leaders.
-- **K3** — Scope: the MCP app in ChatGPT and Claude, which requires the whole
-  estate beneath to be GA-ready.
+  and *observed* positive impact. Value-proof is a GA precondition — **articulated
+  here and measured by Oak, not instrumented in-repo** (owner §14.2).
+- **K2** — Primary audience: teachers and curriculum leaders. "For now" is a
+  post-GA non-commitment (sets the current safeguarding bar; no widening planned).
+- **K3** — Scope: the MCP app in ChatGPT and Claude, which requires the app's
+  **real dependency set** to be GA-ready (whole-estate readiness holds only at the
+  portfolio level — each stream reaches its own readiness).
 
 ## What promotion will produce
 
@@ -62,7 +68,8 @@ stays in `future/` and the milestone files are unchanged.
 
 ## Non-goals
 
-- Making product decisions — the keystones are owner-decided; any further forks
-  (impact bar, minors handling) are named for the owner, not resolved here.
+- Making product decisions — the keystones are owner-ratified (2026-06-17); any
+  further forks (impact bar, minors handling) are named for the owner, not
+  resolved here.
 - Rewriting milestone files before promotion.
 - Duplicating the framework or the report — this stub points to them.

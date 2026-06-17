@@ -13,21 +13,25 @@ The 2026-06-15 survey (waves, census, adversarial verification) is the prior
 foundation; its report + raw data live in
 [`.agent/reports/plan-estate-survey-2026-06-15/`](../../../reports/plan-estate-survey-2026-06-15/README.md).
 
-## Where We Are (2026-06-17, Ocelot binds Curfew — vision authored + wired)
+## Where We Are (2026-06-17, Squall spins Stratus — Phase 2A ratification gate COMPLETE)
 
-- **Branch:** `docs/planning-and-validation`. The vision was finalised and
-  committed (`d4f6e0293`, gates green); the three-stream rewrite landed after this
-  record was first written. **Scope authority is now the controlling plan**
+- **Branch:** `docs/planning-and-validation`. **Scope authority is the controlling plan**
   [`vision-strategy-and-plan-estate.plan.md`](../../../plans/vision-strategy-and-plan-estate.plan.md);
   this record is the pickup surface, not an authority for scope.
-- **VISION is DONE and now lives at the repository root: [`VISION.md`](../../../../VISION.md)**
-  (moved from `docs/foundation/` via `git mv`, history preserved). It is a real
-  vision in the owner's shape: **what we're changing · why it matters · the
-  documents that explain how**. It carries a **strategy placeholder** ("Our
-  strategic goals — defined by the strategy (in development; not yet linked
-  here)") — the strategy does not exist yet.
-- **Next safe step:** **make the STRATEGY documents EXIST** (see §Next below).
-  Then, and only then, the plan-estate restructure.
+- **Phase 1 (Vision) DONE** — [`VISION.md`](../../../../VISION.md) at repo root, three co-equal
+  value streams (`d4f6e0293`). README headline now names all three streams (this session).
+- **Phase 2A ratification gate COMPLETE (this session).** The owner ratified all three decisions
+  ([`2a-decisions.md`](../../../plans/vision-strategy-and-plan-estate.2a-decisions.md) → status
+  `ratified`): **K1–K3** = the **MCP-app stream's** keystones (§14.2 correction to K1 — value-proof
+  articulated here, measured by Oak, not in-repo; impact-gate app-stream-only; K2 "for now" =
+  post-GA non-commitment; K3 = app's real dependency set, whole-estate only at portfolio level);
+  **taxonomy depth = hybrid** (drives Phase 2B granularity); **README = name all three streams**
+  (applied). **2A scope NARROWED to the MCP-app stream** — the ecosystem and framework streams'
+  value/impact articulation **and** keystones defer to a later phase (tracked `p2a-deferred-streams`).
+  Controlling plan amended; K1–K3 reconciled across the five keystone surfaces + `repo-continuity.md`
+  (the dated survey report left as a dated input).
+- **Next safe step:** author the **MCP-app stream's** value/impact articulation (Phase 2A substance,
+  app-stream-only — articulated here, measured by Oak). See §Next.
 
 ## Order (owner-set 2026-06-17 — SUPERSEDES the prior A→B→C)
 
@@ -97,24 +101,23 @@ lifted only once, narrowly, for VISION-path link-hygiene (now complete).
 Surfaced by the context loss-scan; left unapplied (owner-taste or deferred),
 captured so they survive a fresh context:
 
-- **README headline** — drafted as Decision 3 in the 2a-decisions brief (name all
-  three streams); owner ratifies next session.
+- **README headline** — DONE (2026-06-17): owner ratified "name all three streams";
+  the headline (`:8`) and strapline (`:6`) now name all three in the editorial voice.
 - The 7-agent delta-workflow output is ephemeral (`/tmp`); its headlines are in
   §Delta above and the raw is re-derivable from git state.
 
-## K1–K3 AUTHORITY ISSUE (still live — resolve in the strategy phase)
+## K1–K3 AUTHORITY ISSUE — RESOLVED (owner-ratified 2026-06-17)
 
-**Five** strategy/report surfaces — `curriculum-mcp-path-to-ga/launch-readiness-framework.md`,
-`high-level-plan.md`, `curriculum-mcp-path-to-ga/roadmap.md`, the future
-milestone-redefinition stub, and the **readiness assessment report** — assert
-keystones **K1–K3 as "owner-DECIDED / ratified (2026-06-15)" with no correction
-qualifier**. The survey §14 records the owner's position that K1–K3 are **agent
-INPUT, not ratified**; the correction lives on **three** surfaces
-(`repo-continuity.md`, the survey §12/§14, and this record). K1 ("live" = full GA
-with *observed* positive impact) is itself an impact definition → treat K1–K3 as
-**strategy keystones to settle** (ratify / revise / correct the docs), now owned by
-Phase 2A of
-[`vision-strategy-and-plan-estate.plan.md`](../../../plans/vision-strategy-and-plan-estate.plan.md).
+The decided-vs-input contradiction is closed. The owner ratified K1–K3 on
+**2026-06-17** as the **MCP-app stream's** keystones, with the §14.2 correction to K1
+(value-proof articulated here and measured by Oak, not instrumented in-repo) and K3
+scoped to the app's real dependency set (whole-estate only at portfolio level). The
+five "decided" surfaces (`launch-readiness-framework.md`, `high-level-plan.md`,
+`roadmap.md`, the milestone-redefinition stub, the readiness assessment report) plus
+`repo-continuity.md` are reconciled to the ratified wording; the dated survey report
+§12/§14 is left as a dated input (Non-Goal: not edited). Authoritative wording lives
+in the [Phase-2A decisions brief](../../../plans/vision-strategy-and-plan-estate.2a-decisions.md)
+and the launch-readiness framework.
 
 ## Delta since the 2026-06-15 survey (re-grounded first-hand this session)
 
@@ -168,23 +171,20 @@ structuring must include plans/owners for them:
 the §4 ungated-collection removal, the disposition-ledger value-preservation). This
 record is the pickup surface, not the scope.
 
-**Start Phase 2A — the owner-ratification gate. In order:**
+**Phase 2A ratification gate is COMPLETE.** Next is the Phase 2A substance, now
+narrowed to the MCP-app stream. In order:
 
-1. Read the plan, then the decision-ready options:
-   [`vision-strategy-and-plan-estate.2a-decisions.md`](../../../plans/vision-strategy-and-plan-estate.2a-decisions.md).
-   The three decisions are drafted and laid out; the owner has NOT yet made them.
-2. **Put the three decisions to the owner — do not make them yourself:**
-   - **K1–K3** — ratify / revise / correct. Required K1 correction: strip the
-     in-repo-instrumentation wording (owner §14.2 — impact is articulated here,
-     measured by Oak). On ratification, reconcile the five "decided" surfaces with
-     the three "input" surfaces.
-   - **Value-stream taxonomy depth** — three streams / capability-level / hybrid
-     (brief recommends hybrid). Sets the Phase 2B granularity.
-   - **README headline** — name all three streams (brief gives a candidate).
-3. **On ratification:** author the per-stream value/impact articulation (Phase 2A
-   substance) at the settled depth — articulated here, measured by Oak, not
-   instrumented in-repo. Then Phase 2B (gap analysis at that depth) → Phase 2C
-   (execution spine). Do not jump to the spine first.
+1. Read the plan and the [decisions brief](../../../plans/vision-strategy-and-plan-estate.2a-decisions.md)
+   (status `ratified` — the settled outcomes are recorded there and in the plan).
+2. **Author the MCP-app stream's value/impact articulation** (Phase 2A substance,
+   **app-stream-only** per the owner's 2A narrowing): what value/impact the MCP-app
+   stream intends to create, why it matters, how we attempt it — connected to its
+   ratified K1–K3 keystones; **articulated here, measured by Oak, not instrumented
+   in-repo**. The ecosystem and framework streams' articulation **and** keystones are
+   a named deferral (`p2a-deferred-streams`), not authored in 2A.
+3. **Then Phase 2B** — value-stream redundancy/gap analysis at the **hybrid** depth
+   (ecosystem decomposed to SDK/search/graph/EEF); re-verify the survey's empirical
+   counts first. **Then Phase 2C** — execution spine. Do not jump to the spine first.
 4. **Estate hygiene runs in parallel anytime (NOT strategy-gated):** re-anchor the
    dead VISION What-We-Deliver references, fix the editorial-tone vision path, clear
    the dead PR-76 blocker — after re-verifying current reachability counts.
@@ -215,3 +215,4 @@ done. Full scope: the plan.
 | Baobab lifts Topsoil | claude-code | claude-opus-4-8 | 3be248 | surveyor-synthesist | 2026-06-15 | 2026-06-15 |
 | Ocelot binds Curfew | claude-code | claude-opus-4-8[1m] | c9423b | vision-author + estate-rewiring | 2026-06-17 | 2026-06-17 |
 | Tempest spins Spire | claude-code | claude-opus-4-8[1m] | 94a5c5 | controlling-plan author + review-synthesis + hygiene | 2026-06-17 | 2026-06-17 |
+| Squall spins Stratus | claude-code | claude-opus-4-8[1m] | 8b8770 | Phase-2A ratification gate + decision recording + K1–K3 reconciliation | 2026-06-17 | 2026-06-17 |

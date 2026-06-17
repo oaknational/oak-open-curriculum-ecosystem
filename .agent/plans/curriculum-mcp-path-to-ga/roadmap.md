@@ -198,7 +198,7 @@ Load-bearing decisions feeding this programme. Outbound links only; no content d
 
 - [`.agent/plans/high-level-plan.md`](../high-level-plan.md) — repo-wide strategic index
 - [`.agent/plans/observability/high-level-observability-plan.md`](../observability/high-level-observability-plan.md) — observability cross-axis index
-- [`launch-readiness-framework.md`](./launch-readiness-framework.md) — launch-readiness framework feeding A4 (M4/GA definition); keystones K1–K3 decided 2026-06-15
+- [`launch-readiness-framework.md`](./launch-readiness-framework.md) — launch-readiness framework feeding A4 (M4/GA definition); keystones K1–K3 owner-ratified 2026-06-17 as the MCP-app stream's keystones
 - [`future/launch-readiness-and-milestone-redefinition.plan.md`](./future/launch-readiness-and-milestone-redefinition.plan.md) — future stub: impact-first milestone redraft (promotion trigger: owner direction)
 - [`mcp-app-live-product-readiness-assessment-2026-06-15.md`](../../reports/mcp-app-live-product-readiness-assessment-2026-06-15.md) — session assessment report (full findings + milestone re-assessment verdict)
 - [`.agent/milestones/README.md`](../../milestones/README.md) — milestone definitions

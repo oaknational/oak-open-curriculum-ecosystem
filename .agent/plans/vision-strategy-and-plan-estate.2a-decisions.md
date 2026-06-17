@@ -1,7 +1,7 @@
 ---
 title: "Phase 2A — Decision-Ready Options"
 type: decision-brief
-status: awaiting-owner-ratification
+status: ratified
 plan: .agent/plans/vision-strategy-and-plan-estate.plan.md
 thread: strategy-and-plan-estate-holistic-review
 last_updated: 2026-06-17
@@ -11,13 +11,41 @@ last_updated: 2026-06-17
 
 The three owner decisions Phase 2A needs settled before the per-stream value/impact
 articulation can be authored. **This document names the decisions and lays out the
-options; it does not make them.** The owner ratifies next session. Drafted now
-because the controlling plan makes 2A *drafting* beneficial and proceeds-now; only
-*ratification* is owner-gated.
+options; it does not make them.** The options were drafted because the controlling
+plan makes 2A *drafting* beneficial and proceeds-now; only *ratification* is
+owner-gated. **The owner ratified all three on 2026-06-17** — outcomes recorded per
+decision below and summarised next.
 
 Companion to the controlling plan
 [`vision-strategy-and-plan-estate.plan.md`](vision-strategy-and-plan-estate.plan.md),
 reached through it (not an independent root plan).
+
+## Ratified outcomes (2026-06-17)
+
+1. **K1–K3 — settled as the MCP-app stream's keystones.** The §14.2 correction is
+   applied to K1 (value-proof is a GA precondition, *articulated here and measured by
+   Oak, not instrumented in-repo*). The observed-positive-impact gate is the
+   **MCP-app stream's alone**; the ecosystem and framework streams' "live"/GA-gate
+   definitions are **deferred, not set in 2A**. **K2** "for now" is a **post-GA
+   non-commitment** — it fixes the current safeguarding bar; no audience widening is
+   planned in 2A. **K3** readiness is scoped to the **app's real dependency set**
+   (SDK, curriculum data/API, MCP server, search/graph as used); "whole-estate"
+   readiness holds only at the **portfolio level** — each stream reaches its own
+   readiness — not literally every artefact in the repo.
+2. **Taxonomy depth — Hybrid.** The three top-level streams remain the vision frame;
+   the ecosystem stream decomposes into SDK / search / graph / EEF **for the Phase 2B
+   gap analysis**, which runs at that sub-capability granularity. (This decision sets
+   **2B's** granularity; independent of the 2A narrowing *at ratification* but coupled
+   at execution — see the plan's Phase 2B sequencing note.)
+3. **README headline — name all three streams**, in the editorial voice (the owner
+   chose the editorial-voice option, delegating the exact wording).
+
+**2A scope consequence — narrowed to the MCP-app stream.** Because the other two
+streams' "live" definitions defer, the owner narrowed Phase 2A to the **MCP-app
+stream**: 2A authors the app stream's value/impact articulation and its K1–K3
+keystones only; the ecosystem and framework streams' articulation **and** keystones
+both defer to a later phase. This **amends** the controlling plan's per-stream 2A
+acceptance — the amendment is recorded in the plan.
 
 ## Decision 1 — K1–K3 keystones (the impact definition)
 
@@ -61,6 +89,13 @@ strategy is organised around, so this is the load-bearing decision.
 surfaces to one consistent statement (the §12/§14 + `repo-continuity.md` correction
 is the authority; the five plan/report surfaces are updated to the ratified wording).
 
+**Ratified (2026-06-17):** K1–K3 are the **MCP-app stream's** keystones. §14.2
+correction applied to K1. Impact-gate is **app-stream-only** (the ecosystem and
+framework streams' "live" definitions defer). K2 "for now" is a **post-GA
+non-commitment**. K3 is scoped to the **app's real dependency set** (whole-estate
+only at portfolio level). Reconcile the five "decided" surfaces + `repo-continuity.md`
+to this wording; the survey report is a dated input and is **not** edited (Non-Goal).
+
 ## Decision 2 — Value-stream taxonomy depth
 
 The three top-level streams are settled (teacher-facing MCP app; ecosystem
@@ -86,6 +121,15 @@ gaps; (c) does so while honouring the settled three-stream vision — hence the
 recommendation. The choice sets 2B's granularity and blocks nothing by waiting for
 ratification.
 
+**Ratified (2026-06-17):** option **(c) Hybrid**. The three streams stay the vision
+frame; the ecosystem stream decomposes into SDK / search / graph / EEF for the
+Phase 2B gap analysis. Sets 2B's granularity. Independent of the 2A app-stream
+narrowing *at ratification*, but **coupled at execution**: 2B decomposes the
+ecosystem stream while 2A defers that stream's value articulation, so 2B has no 2A
+value baseline for it — resolved at 2B entry (see the plan's Phase 2B sequencing
+note: un-block the deferred articulation first, or flag the ecosystem/framework
+streams as "value-not-yet-articulated" gaps).
+
 ## Decision 3 — README headline / strapline
 
 The README front matter states three co-equal streams in the body, but the headline
@@ -103,6 +147,9 @@ ecosystem stream alone.
 **Considerations:** the headline is the most prominent positioning line; leaving it
 ecosystem-only contradicts the three-stream vision the body now states. Editorial /
 taste call (the `editorial-tone.md` directive applies); low-risk, not blocking.
+
+**Ratified (2026-06-17):** option **(b) name all three streams**, in the editorial
+voice — the owner chose the editorial-voice option, delegating the exact wording.
 
 ## What this does NOT decide
 
