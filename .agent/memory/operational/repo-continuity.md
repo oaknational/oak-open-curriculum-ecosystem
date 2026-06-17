@@ -20,6 +20,17 @@ surface.
 
 ## Current State
 
+- **COLLABORATION-DOCTRINE DECOMPOSITION — strategic brief LANDED (2026-06-17, Phobos turns
+  Singularity, solo, `docs/planning-and-validation`).** Compared the two collaboration directives
+  against the `start-right-team` skill and the PDR corpus; both are **layer-blenders** that predate
+  the PDRs now owning their substance (PDR-056/053, 2026-05-10, postdate `agent-collaboration.md`).
+  Authored [`collaboration-directive-decomposition.plan.md`](../../plans/agent-tooling/future/collaboration-directive-decomposition.plan.md)
+  (future strategic; wired into `future/README.md` Plans table + comms/coordination cluster) — the
+  **doctrine-surface counterpart** to the rightsizing keystone (keystone = *which* machinery
+  survives; this = *where* each surviving unit of doctrine lives, routed by `new-rule-vs-pdr-clause`,
+  directives retired). One correction fed to keystone M2: the operating-context-mode graduates to a
+  **PDR + rule**, not *into* `agent-collaboration.md` (which repeats the blend). **Next safe step**:
+  promote on keystone M2 ratification, OR owner prioritises the doc-hygiene axis.
 - **OWNER-GATED PURGE + UNIVERSAL CLI API-SURFACE CONSISTENCY — LANDED (2026-06-16, Basil tracks
   Xylem, solo, `docs/planning-and-validation`, commits `5a2d365b8` + `66bd1e218` + `9abd9893f`).** The
   abolished `owner-gated` vocabulary was purged from all knowledge-flow doctrine surfaces (register, both
@@ -387,7 +398,7 @@ each thread record; this table is the repo-level index.
 | `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Fable 5 / Thyme wakes Canopy / record-condensation (curation lane) / 2026-06-12, claude-code / Fable 5 / Forge turns Basalt / eef-data-surfacing-gap-research / 2026-06-12, claude / Fable 5 / Cosmos turns Equinox / snagging-execution-successor-pickup (arc landed #190–#193, closed out) / 2026-06-12, cursor / Fable 5 / Dawnlit Glimmering Orbit / oak-prod-snagging-and-cursor-visibility-writeup / 2026-06-11 (first-wave evidence still unmerged on `docs/graph-team-direction-2026-06-10` — see §Current State correction). Full prior-identity history (30+ seats, 2026-06-02 →): the thread record identity table — set-membership verified 2026-06-12 before this dedup |
 | `oak-kg-ontology-planning-review` | Plan the `oak-kg`/ontology work, starting with a deep review of the Oak Curriculum Ontology repo (separate concern from the bulk-derived graph redesign) | [record][oak-kg-ontology] | claude / Opus 4.8 / Twilit Cascading Supernova / thread-opener-brief-only / 2026-06-04 — **opened, not started; deep review is a fresh session** |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Zephyrous Buffeting Falcon / skills-lane-relocated-to-educator-end-users / 2026-06-08 (prior: Blustery Lifting Gale skills-taxonomy-and-distribution 2026-06-03, Umbral Whispering Silhouette 2026-06-01) |
-| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 (1M) / Basil tracks Xylem / owner-gated-purge + PDR-055-universal-CLI-consistency + CLI-ergonomics-plan / 2026-06-16 (prior: Lapwing holds Troposphere fitness-report-only 2026-06-16, Snapper binds Coral curation 2026-06-16; full prior-identity history: the thread record identity table) |
+| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 (1M) / Phobos turns Singularity / collaboration-doctrine-decomposition-plan / 2026-06-17 (prior: Basil tracks Xylem owner-gated-purge 2026-06-16, Lapwing holds Troposphere fitness-report-only 2026-06-16; full prior-identity history: the thread record identity table) |
 | `school-data-search` | Oak School Data Search service (POC MVP): briefs → report → plan → gate walk → **deep review complete** → build | [record][school-data-search] | claude / Opus 4.8 / Fiery Sparking Caldera / deep-review-and-refinement / 2026-06-04 (prior: Mossy Whispering Bark 2026-06-04, Furnace Roasting Brazier + Hushed Lurking Mask 2026-06-03) |
 | `semantic-search` | Search data foundations: upstream-schema alignment, bulk sourcing, minimal-adaptation arc | [record][semantic-search] | claude / Opus 4.8 / Moonlit Waxing Nebula / upstream-realignment-specialist / 2026-06-03 |
 | `statusline-enhancements` | Claude Code statusline: Oak-mark and session-shape indicators LANDED; **live logo swap 2026-06-16** — 5×7 sharpened `braille-sharp` default, 4×6 retained as `braille-sharp-compact`, width-matched separator rule on by default (on `docs/planning-and-validation`, **divergence to reconcile onto `feat/comms-research`**); successor plan **re-grounded session-state-first** 2026-06-15 (`ed563765d`; experimental discovery, no PDR/ADR); statusline lane in two `current/` plans (session-state and logo-modularisation), cross-referenced | [record][statusline] | claude-code / Opus 4.8 / Vole calls Hollow / live-logo-swap-and-plan-harden / 2026-06-16 (prior: Cutter spins Quay 2026-06-15, Orbit stirs Spectrum 2026-06-14) |

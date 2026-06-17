@@ -33,3 +33,18 @@ reconciliation.
   being authored *as I failed them*. The structural cure that worked this session was the
   owner's blunt re-grounding plus the PDR-101 quorum (an external check), not my
   self-vigilance. Sibling: [[fluency-is-a-failure-vector]], [[first_hand_means_me_not_subagents]].
+
+## Researching the estate is not the same as refusing new plans (2026-06-17, Phobos turns Singularity)
+
+- **I took "consolidate estate / don't fragment the plan estate" and over-applied it to
+  conclude "no new plan — route the findings into the existing keystone as input."** The owner
+  corrected: "this is new work, it needs a new plan… I never wanted an end to genuinely new
+  plans." The research that surfaced the keystone was the *right* reflex — but the keystone is an
+  exploration/design brief whose own text says "build, refactor, and deletion plans are authored
+  after M2." My work was exactly one of those downstream plans. The fluent move ("don't fragment →
+  fold in") skipped the situational check that genuinely-new work distinct in *kind* gets its own
+  vessel, **coordinated and bounded** against neighbours (declare the boundary, depend explicitly),
+  not collapsed into one. Doctrine-by-analogy again, caught by the owner not by me. Sibling:
+  [[fluency-is-a-failure-vector]]. Cure: when "don't fragment" points at folding work into an
+  existing plan, first ask whether the work differs in *kind* — if so, new vessel + explicit
+  boundary is the non-fragmenting shape.

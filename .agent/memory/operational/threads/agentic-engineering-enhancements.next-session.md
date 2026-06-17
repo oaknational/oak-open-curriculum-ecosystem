@@ -16,6 +16,20 @@ feedback-mechanism arc, taxonomy work) is retained in git and in the
 work brief and the recent identity stretch, per
 [`continuity-practice.md` §Disposition](../../../directives/continuity-practice.md).
 
+## Collaboration-Doctrine Decomposition Lane — brief authored (2026-06-17, Phobos turns Singularity)
+
+Authored [`agent-tooling/future/collaboration-directive-decomposition.plan.md`](../../../plans/agent-tooling/future/collaboration-directive-decomposition.plan.md)
+(wired into `future/README.md` Plans table + comms/coordination cluster). It is the
+**doctrine-surface counterpart** to the rightsizing keystone: the keystone decides *which*
+coordination machinery survives; this brief decides *where* each surviving unit of doctrine lives,
+routing every unit of the two collaboration directives (`agent-collaboration.md`,
+`user-collaboration.md`) through the `new-rule-vs-pdr-clause` classifier and retiring the
+directives as layer-blenders that predate the PDR corpus now owning their substance. **Key finding
+fed back to the keystone's M2**: its M1-inventory plan to graduate the operating-context-mode *into*
+`agent-collaboration.md` repeats the layer-blend — the tiered model should graduate to a PDR + rule
+instead. **Promotion trigger**: keystone M2 ratifies the survival model, OR owner prioritises the
+doc-hygiene axis. Not started; strategic only.
+
 ## Decision-Debt Lane — DRAINED (updated 2026-06-16, Limpet spins Headland)
 
 **The drain is DONE — the pending-graduations register is at decision-debt 0** (was 72). This session
@@ -346,6 +360,7 @@ passes) is in git history and the [`curator-passes/`](../curator-passes/) ledger
 | `Sequoia holds Arbor` | `claude` | `Opus 4.8 (1M)` | `0ed76b` | `n=2 partner (distil lane), owner-stopped cautionary session — committed nothing; conserved two owner-affirmed failure lessons to napkin (orchestration-substituted-for-cognition; the open enforce-edge feedback loop)` | 2026-06-16 | 2026-06-16 |
 | `Lapwing holds Troposphere` | `claude` | `Opus 4.8 (1M)` | `85f435` | `fitness made report-only (gate→signal, semantics-not-severity); decision-debt discrete ceilings + dwell-time axis (new dwell.ts); ADR-144/PDR-100 reframed; reviewers run; three discipline cures landed (citation-or-silence, no-mutable-state-in-memory, the Second Question in AGENT.md); committed + pushed 8665da651/3cb64da91; register 72 still undrained → drain is next session` | 2026-06-16 | 2026-06-16 |
 | `Basil tracks Xylem` | `claude` | `Opus 4.8 (1M)` | `6381a2` | `owner-gated knowledge-flow purge (PDR-100 propagated across briefs/skills/continuity/plans; action-authority gates kept per owner); actionable-error fix for non-registry --active (PDR-055 cl.9); PDR-055 amended to universal CLI API-surface-design consistency (cl.7-10 + Falsifiability); authored agent-tools-cli-ergonomics plan; superseded memory-surface-critical-drain; register 72 still undrained → drain next session` | 2026-06-16 | 2026-06-16 |
+| `Phobos turns Singularity` | `claude` | `Opus 4.8 (1M)` | `e85d37` | `collaboration-doctrine-decomposition plan author — compared the two collaboration directives against the start-right-team skill + PDR corpus; found both are layer-blenders predating their own PDR homes; authored the future/ strategic brief (doctrine-surface counterpart to the rightsizing keystone) + wired it into future/README.md` | 2026-06-17 | 2026-06-17 |
 
 ## Cross-Plan and Cross-Thread Links
 
