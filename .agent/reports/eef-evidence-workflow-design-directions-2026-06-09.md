@@ -228,7 +228,7 @@ smaller, sharper artefact than a plan.
   READMEs.
 - ADRs read first-hand:
   [ADR-191](../../docs/architecture/architectural-decisions/191-deterministic-data-surface-agent-reasons.md);
-  [VISION](../../docs/foundation/VISION.md).
+  [VISION](../../VISION.md).
 - Code landing paths anchored:
   `packages/sdks/graph-corpus-sdk/src/eef-strands/eef-evidence.ts`
   (`EefEvidenceEnvelope`); `packages/sdks/oak-curriculum-sdk/src/mcp/`

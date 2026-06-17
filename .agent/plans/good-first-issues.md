@@ -8,6 +8,8 @@ related_indices:
   - "high-level-plan.md"
 ---
 
+Deprecated: to be removed - scan for useful content and move to permanent docs
+
 # Good First Issues
 
 A curated entry point for picking up first useful work in this repository.

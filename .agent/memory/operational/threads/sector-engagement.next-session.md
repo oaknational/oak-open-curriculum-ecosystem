@@ -83,7 +83,7 @@ vendor-portable.
 
 Landed additionally (2026-04-30, Cursor Composer):
 
-1. **`docs/foundation/VISION.md`**: thesis at fold + Three Orders refactor +
+1. **`VISION.md`**: thesis at fold + Three Orders refactor +
    `Worked Example: Aila` + reusable sector-component inventory + link to sector
    adoption contract plan under **What We Deliver**.
 2. **Root [`README.md`](../../../../README.md)**: mirrored secondary goal versus
@@ -98,7 +98,7 @@ Landed additionally (2026-04-30, Cursor Composer):
 Evidence (prior 2026-04-29 landing still authoritative for narrative sweep):
 
 - [Root README](../../../../README.md)
-- [Vision](../../../../docs/foundation/VISION.md)
+- [Vision](../../../../VISION.md)
 - [Sector Engagement](../../../plans/sector-engagement/README.md)
 - [Sector Engagement Roadmap](../../../plans/sector-engagement/roadmap.md)
 - [SDK and MCP Enhancements](../../../plans/sdk-and-mcp-enhancements/README.md)
@@ -132,7 +132,7 @@ before implementation promotion:
 4. advance playbook work from
    [`sector-reusable-components-adoption.plan.md`](../../../plans/sector-engagement/current/sector-reusable-components-adoption.plan.md)
    (maturity matrix, first adopter profile, scaffold prose) grounded in Vision
-   [_What We Deliver_](../../../../docs/foundation/VISION.md#what-we-deliver).
+   [_What We Deliver_](../../../../VISION.md#what-we-deliver).
 
 ## Session Shape and Grounding Order
 

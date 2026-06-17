@@ -1,6 +1,6 @@
 ---
 name: "Sector reusable components adoption contract"
-overview: "Partner-facing contract for external reuse of Oak's reusable sector-component fabric anchored in docs/foundation/VISION.md canonical inventory-playbooks inputs, differentiated from upstream API access and Oak-hosted deployments."
+overview: "Partner-facing contract for external reuse of Oak's reusable sector-component fabric anchored in VISION.md canonical inventory-playbooks inputs, differentiated from upstream API access and Oak-hosted deployments."
 status: current
 specialist_reviewer: "docs-adr-expert, architecture-expert-betty"
 isProject: false
@@ -43,7 +43,7 @@ The reusable sector-component inventory and per-line intent live in foundation
 Vision, section **What We Deliver** — repeatable components designed to shorten
 sector innovation loops:
 
-[docs/foundation/VISION.md — What We Deliver](../../../docs/foundation/VISION.md#what-we-deliver)
+[VISION.md — What We Deliver](../../../VISION.md#what-we-deliver)
 
 That section is **normative documentation** until superseded explicitly. README
 summaries must not invent additional official component sets without aligning
@@ -102,7 +102,7 @@ Promotion criteria for escalating this contract into executable engineering:
 When this file or Vision inventory cross-links move:
 
 ```bash
-pnpm exec markdownlint README.md docs/foundation/VISION.md \
+pnpm exec markdownlint README.md VISION.md \
   .agent/plans/sector-engagement/current/sector-reusable-components-adoption.plan.md
 pnpm format:root
 git diff --check

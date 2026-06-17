@@ -18,7 +18,7 @@ that EEF surfaces present options and trade-offs, never recommendations);
 [ADR-058](058-context-grounding-for-ai-agents.md)
 (context grounding — the interpretation-resource scaffold that lets the agent
 reason well over deterministic facts);
-[Vision](../../foundation/VISION.md)
+[Vision](../../../VISION.md)
 (Non-Goals — the learner-facing and "not a replacement for Oak's teacher-facing
 product" boundaries this principle sits alongside);
 the EEF evidence integration strategy's **R7 — Professional Judgement Framing**
@@ -37,7 +37,7 @@ The answer is settled in practice but had no durable home. It lives scattered:
 - as **R7 (Professional Judgement Framing)** in the EEF integration strategy —
   "evidence-informed teaching means teachers use evidence to inform decisions, not
   that algorithms make decisions for them";
-- as a [VISION](../../foundation/VISION.md) Non-Goal — the system is not a
+- as a [VISION](../../../VISION.md) Non-Goal — the system is not a
   learner-facing surface and not a replacement for Oak's teacher-facing product;
 - and, for the server only, as
   [ADR-191](191-deterministic-data-surface-agent-reasons.md) (the agent is the

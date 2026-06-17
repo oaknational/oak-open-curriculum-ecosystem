@@ -48,3 +48,32 @@ reconciliation.
   [[fluency-is-a-failure-vector]]. Cure: when "don't fragment" points at folding work into an
   existing plan, first ask whether the work differs in *kind* — if so, new vessel + explicit
   boundary is the non-fragmenting shape.
+
+## Vision rewrite + estate-rewiring session (2026-06-17, Ocelot binds Curfew)
+
+- **I built load-bearing decisions on a sub-agent's unverified product judgement.** The
+  survey's §13 "two-products conflation / tension" was an adversarial sub-agent verdict,
+  explicitly input-to-verify — yet I carried it into recommendations (a vision rewrite that
+  demoted the ecosystem stream; a "flagship + horizons" shape). The owner: "I am not sure
+  there is tension… neither is secondary… question your assumptions." A claim that the
+  *product* has a tension/conflation/skew is the owner's judgement to make; the default is
+  co-equal-by-design. Doctrine-by-analogy, caught by the owner. Cure: treat an agent-sourced
+  tension/conflation framing of the product as a candidate to verify with the owner, never a
+  premise to build on. `candidate:` pattern. Sibling: [[fluency-is-a-failure-vector]].
+- **I paraphrased Oak's mission for prose flow and degraded it.** "supporting teachers to
+  teach" → "helping teachers teach" lost the teacher-as-agent precision *and* rephrased a
+  protected source. Authoritative / mission language is quoted exactly, never smoothed for
+  rhythm. Sibling: [[fluency-is-a-failure-vector]].
+- **A vision is not a comprehensive timeless doc.** My first "up to standard" pass kept the
+  old doc's kitchen-sink shape — the knowledge-preservation instinct conserved the sprawl.
+  Owner: "it is not a vision, it is a meandering set of explanations and commitments." A
+  vision = what we're changing · why it matters · a map to the documents that explain how; it
+  delegates explanations and commitments outward. `candidate:` pattern — when authoring or
+  standard-raising a vision, screen each section: does it state the change/why, or restate a
+  commitment that belongs in strategy/README/ADR?
+- **Moving a foundational doc has a large reference blast radius.** `git mv VISION.md` to root
+  touched 47 referrers (21 in plans). Cure: partition LIVE vs HISTORICAL before sweeping —
+  update live navigational refs (and display-text labels, not only link targets); leave
+  archives/raw/evidence/napkins/cursor untouched per archive discipline. The owner lifted the
+  plan-gate for pure link-hygiene; re-anchoring conceptual references stays gated to the
+  estate phase.

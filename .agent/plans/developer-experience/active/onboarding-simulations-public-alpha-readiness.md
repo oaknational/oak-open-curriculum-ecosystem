@@ -81,7 +81,7 @@ mechanism that keeps structure coherent over time.
 1. Broken `institutional-memory.md` link in `README.md`
 2. Missing prerequisites in onboarding path
 3. `pnpm make` docs drift (missing `subagents:check`)
-4. `foundation/VISION.md` buried and under-discoverable
+4. `VISION.md` buried and under-discoverable
 5. No human-facing explanation of the agentic practice
 6. No documented PR/review process in human docs
 7. `.env.example` contradiction on Elasticsearch requirement
@@ -114,7 +114,7 @@ mechanism that keeps structure coherent over time.
 
 Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
 
-- [~] **B1. Add cost model and sustainability framing to `foundation/VISION.md`**
+- [~] **B1. Add cost model and sustainability framing to `VISION.md`**
   - **Disposition (2026-06-12)**: agent drafts the skeleton (hosting,
     search, auth, observability cost lines + sustainability narrative);
     owner supplies numbers and team-model stance. Draft goes to owner
@@ -124,7 +124,7 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
     conditional-go items, adversarial architecture reviews, ADR risk
     sections); prioritisation stays with the owner; owner-reviewed
     before landing.
-- [~] **B3. Add business-level risks and mitigations to `foundation/VISION.md`**
+- [~] **B3. Add business-level risks and mitigations to `VISION.md`**
   - **Disposition (2026-06-12)**: folded into the B2 register as a
     business-risk section, with a short plain-language summary linked
     from VISION — one risk document, not two.
@@ -192,7 +192,7 @@ Run updated onboarding simulations against current repository state for:
 - [README.md](../../../README.md) (includes Quick Start)
 - [CONTRIBUTING.md](../../../CONTRIBUTING.md)
 - [docs/README.md](../../../docs/README.md)
-- [docs/foundation/VISION.md](../../../docs/foundation/VISION.md)
+- [docs/VISION.md](../../../VISION.md)
 - [high-level-plan.md](../high-level-plan.md)
 - [user-experience/public-alpha-experience-contract.md](../user-experience/public-alpha-experience-contract.md)
 
@@ -917,7 +917,7 @@ Run onboarding simulations against the current repository state for
 
 - [README.md](../../../README.md) (restructured; Quick Start now lives here)
 - [CONTRIBUTING.md](../../../CONTRIBUTING.md) (updated)
-- [docs/foundation/VISION.md](../../../docs/foundation/VISION.md) (updated)
+- [docs/VISION.md](../../../VISION.md) (updated)
 - [docs/governance/README.md](../../../docs/governance/README.md) (enhanced)
 - [.agent/README.md](../../README.md) (new)
 - [.agent/experience/HUMAN.md](../../experience/HUMAN.md) (new)

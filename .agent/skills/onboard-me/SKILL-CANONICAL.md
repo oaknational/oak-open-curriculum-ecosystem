@@ -62,7 +62,7 @@ onboarding status register
 | `README.md` | Audience routing, Quick Start (prerequisites, install and verify), key commands |
 | `CONTRIBUTING.md` | Contributor flow, contribution levels, external-contribution posture |
 | `docs/README.md` | Documentation index and start paths |
-| `docs/foundation/VISION.md` | Strategy and what-we-deliver framing |
+| `VISION.md` (repo root) | What we're changing, why it matters, and the map to how |
 | `docs/domain/curriculum-guide.md` | Curriculum structure in plain language |
 | `.agent/reports/README.md` | Reports index — resolve the newest progress report (the `oak-ecosystem-progress-*` family) here |
 | `.agent/plans/high-level-plan.md` | Live delivery roadmap |
@@ -181,7 +181,7 @@ part no other repo will have taught them. Exit → Completion.
 No detection needed. Offer, one at a time, letting the newcomer pick
 depth: the README's audience-routing block; the Headline Invariants
 (above) for what technically distinguishes the repo;
-`docs/foundation/VISION.md`; `docs/domain/curriculum-guide.md`; then the
+`VISION.md`; `docs/domain/curriculum-guide.md`; then the
 newest progress report
 (the `oak-ecosystem-progress-*` family), resolved from
 `.agent/reports/README.md` at walk time (never assume a remembered

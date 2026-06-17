@@ -1,3 +1,5 @@
+Deprecated: to be removed - scan for useful content and move to permanent docs
+
 # Completed Plans
 
 Index of archived plans across all collections. When a plan is completed,

@@ -37,7 +37,7 @@ internal engineering plan is needed.
 The recurring resources in scope are the OpenAPI-driven pipeline, generated
 SDKs, MCP server surfaces, semantic-search configuration, knowledge-graph
 assets, the reusable sector-component canon in foundation Vision [_What We
-Deliver_](../../../docs/foundation/VISION.md#what-we-deliver), and the
+Deliver_](../../../VISION.md#what-we-deliver), and the
 documentation or playbooks that make those assets usable by others (see
 [current/sector-reusable-components-adoption.plan.md](current/sector-reusable-components-adoption.plan.md)). The collection also tracks how MCP Apps in AI platforms such as Claude
 Cowork and ChatGPT can turn those assets into practical end-user and developer

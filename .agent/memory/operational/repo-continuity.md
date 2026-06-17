@@ -20,6 +20,18 @@ surface.
 
 ## Current State
 
+- **VISION REWRITTEN + MOVED TO ROOT + WIRED; STRATEGY IS NEXT (2026-06-17, Ocelot binds
+  Curfew, solo, `docs/planning-and-validation`, uncommitted).** Repo transitioning
+  experiment→product. `VISION.md` rewritten to a real vision (what we're changing · why ·
+  map-to-how), `git mv`'d to repo root, all LIVE references repointed; new
+  `.agent/directives/editorial-tone.md` directive wired into `AGENT.md`. **Owner-set order
+  SUPERSEDES the prior A→B→C**: Vision (DONE) → make the **strategy documents exist** → then
+  (gated) the plan-estate restructure (value-preserving; remove the survey-flagged ungated
+  collection by re-housing or extract-and-delete; re-anchor the now-stale `VISION#what-we-deliver`
+  references; fold in abstracted MCP-app release-readiness / due-diligence requirements). K1–K3
+  authority still unresolved (treat as strategy keystones). **Next safe step**: make the strategy
+  documents exist. Full pickup:
+  [thread record](threads/strategy-and-plan-estate-holistic-review.next-session.md).
 - **COLLABORATION-DOCTRINE DECOMPOSITION — strategic brief LANDED (2026-06-17, Phobos turns
   Singularity, solo, `docs/planning-and-validation`).** Compared the two collaboration directives
   against the `start-right-team` skill and the PDR corpus; both are **layer-blenders** that predate
@@ -403,7 +415,7 @@ each thread record; this table is the repo-level index.
 | `semantic-search` | Search data foundations: upstream-schema alignment, bulk sourcing, minimal-adaptation arc | [record][semantic-search] | claude / Opus 4.8 / Moonlit Waxing Nebula / upstream-realignment-specialist / 2026-06-03 |
 | `statusline-enhancements` | Claude Code statusline: Oak-mark and session-shape indicators LANDED; **live logo swap 2026-06-16** — 5×7 sharpened `braille-sharp` default, 4×6 retained as `braille-sharp-compact`, width-matched separator rule on by default (on `docs/planning-and-validation`, **divergence to reconcile onto `feat/comms-research`**); successor plan **re-grounded session-state-first** 2026-06-15 (`ed563765d`; experimental discovery, no PDR/ADR); statusline lane in two `current/` plans (session-state and logo-modularisation), cross-referenced | [record][statusline] | claude-code / Opus 4.8 / Vole calls Hollow / live-logo-swap-and-plan-harden / 2026-06-16 (prior: Cutter spins Quay 2026-06-15, Orbit stirs Spectrum 2026-06-14) |
 | `agent-naming` | PDR-027 display-name derivation: versioned schema registry, session-hook identity surfaces, wordlist eras (v2 landed; v3 + era-pinning cure queued) | [record][agent-naming] | claude / Opus 4.8 / Squall hunts Troposphere / thread-open + v3-plan-author / 2026-06-13 (prior: Moss weaves Blossom v2-landing 2026-06-12, Swift Gliding Zephyr v2-build 2026-06-11) |
-| `strategy-and-plan-estate-holistic-review` | Holistic survey + analysis of vision, strategy & the whole planning estate (413-doc multi-wave census + adversarial verification; vision→value→action) | [record](threads/strategy-and-plan-estate-holistic-review.next-session.md) | claude-code / Opus 4.8 / Baobab lifts Topsoil / surveyor-synthesist / 2026-06-15 |
+| `strategy-and-plan-estate-holistic-review` | Vision/strategy/plan-estate rework (experiment→product): vision rewritten + moved to root + wired; strategy is the next deliverable; estate restructure gated until vision + strategy done | [record](threads/strategy-and-plan-estate-holistic-review.next-session.md) | claude-code / Opus 4.8 / Baobab lifts Topsoil / surveyor-synthesist / 2026-06-15, claude-code / Opus 4.8 / Ocelot binds Curfew / vision-author / 2026-06-17 |
 
 ## Paused Threads
 

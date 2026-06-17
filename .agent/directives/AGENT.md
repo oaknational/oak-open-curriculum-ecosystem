@@ -72,7 +72,7 @@ the [ADR index][adr-index].
 
 **Would this be simpler if the system changed?**
 
-## Oak Open CurriculumCardinal Rule
+## Oak Open Curriculum Cardinal Rule
 
 ALL static data structures, types, type guards, Zod schemas, Zod validators,
 and other type-related information MUST flow from the Open Curriculum OpenAPI
@@ -165,6 +165,9 @@ Use these links by trigger:
   [Troubleshooting][troubleshooting]
 - Vision and domain: [Vision][vision], [Curriculum Guidance][curriculum],
   [Experience Recording](../experience/README.md)
+- Authoring outward copy: [Editorial Tone](./editorial-tone.md) — apply when
+  writing the vision, strategy, or the public-facing parts of the README; never
+  to plans or developer-facing docs
 
 [development]: ../../docs/governance/development-practice.md
 [typescript]: ../../docs/governance/typescript-practice.md
@@ -179,7 +182,7 @@ Use these links by trigger:
 [mcp-app-styling]: ../../docs/governance/mcp-app-styling.md
 [build-system]: ../../docs/engineering/build-system.md
 [troubleshooting]: ../../docs/operations/troubleshooting.md
-[vision]: ../../docs/foundation/VISION.md
+[vision]: ../../VISION.md
 [curriculum]: ../../docs/governance/curriculum-tools-guidance-and-playbooks.md
 
 ## Commands

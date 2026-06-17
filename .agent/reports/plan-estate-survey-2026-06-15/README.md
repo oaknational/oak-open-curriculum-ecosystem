@@ -247,7 +247,7 @@ report — is a single product-surface lens (agent-produced, not an owner decisi
 §12). It is weighed here as one slice among many, never the frame; its specifics
 (e.g. the MCP aggregated-tool-handling debt) are known and real but not
 value-critical. Authorities for vision/value:
-[VISION](../../../docs/foundation/VISION.md),
+[VISION](../../../VISION.md),
 [readiness assessment](../mcp-app-live-product-readiness-assessment-2026-06-15.md),
 [launch-readiness framework](../../plans/curriculum-mcp-path-to-ga/launch-readiness-framework.md).
 

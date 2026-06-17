@@ -17,7 +17,7 @@ last_reviewed: 2026-06-12
   (`$oak-onboard-me` in Codex) — an interactive onboarding walker that
   branches by audience and need, detects your setup state, and reads the
   live docs as it guides you
-- **Evaluating the project?** → [VISION.md](foundation/VISION.md) for the
+- **Evaluating the project?** → [VISION.md](../VISION.md) for the
   timeless framing: MCP Apps exploration in AI platforms, sector reuse of
   Oak's openly licenced curriculum, hybrid semantic search, knowledge graphs,
   modular building blocks, and the agentic-first Practice. Then read the

@@ -14,7 +14,7 @@ sector bodies, edtech, and the AI platforms now working in classrooms — open
 components, open data access, and an openly documented engineering practice
 to build on. Public goods, built in the open.
 
-**Vision and direction**: For more on the strategic overview of what this repository is for, see [VISION.md](docs/foundation/VISION.md). For the live delivery roadmap, see the [high-level plan](.agent/plans/high-level-plan.md).
+**Vision and direction**: For more on the strategic overview of what this repository is for, see [VISION.md](VISION.md). For the live delivery roadmap, see the [high-level plan](.agent/plans/high-level-plan.md).
 
 ---
 
@@ -29,35 +29,37 @@ to build on. Public goods, built in the open.
 [![MIT Licence](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENCE)
 [![OGL Data Licence](https://img.shields.io/badge/data_licence-OGL-green.svg)](LICENCE-DATA.md)
 
-This repository is how Oak makes its openly licenced, fully sequenced, and
-fully resourced curriculum easier for the wider education and technology
-sectors to use. It provides the Oak Curriculum SDK, the canonical MCP server
-as both an end-user-facing app surface and a developer tool, the
-OpenAPI-to-MCP server pipeline, hybrid semantic search, and knowledge graph
-surfaces as modular building blocks for education applications.
+This is how we make Oak's openly licensed, fully sequenced, fully resourced
+curriculum easier to build on. We provide the Oak Curriculum SDK; the canonical
+MCP server, both an end-user app surface and a developer tool; the OpenAPI-to-MCP
+server pipeline; hybrid semantic search; and knowledge-graph surfaces — modular
+building blocks for education applications.
 
-The repository also explores what can be done with MCP Apps in AI platforms
-such as [Claude Cowork](https://www.anthropic.com/product/claude-cowork) and
-ChatGPT. AI assistants can search Oak's curriculum, explore lessons, units,
-threads, sequences, and other structured educational content — helping
-teachers find, adapt, and use high-quality curriculum resources.
+We also explore what's possible with MCP Apps in AI platforms such as
+[Claude Cowork](https://www.anthropic.com/product/claude-cowork) and ChatGPT. AI
+assistants can search Oak's curriculum and explore lessons, units, threads,
+sequences, and other structured content — helping teachers find, adapt, and use
+high-quality curriculum resources.
 
-Underneath the product surfaces, the repo develops a reusable,
-self-improving Practice for agentic-first engineering: a plain-text framework
-that lets agents from major vendors collaborate, learn, and keep operational
-knowledge in the repository where it remains useful.
+Underneath the product surfaces, we develop a reusable, self-improving Practice
+for agentic-first engineering: a plain-text framework that lets agents from major
+vendors collaborate, keep learning, and keep operational knowledge in the
+repository where it stays useful.
 
-**Beyond Oak-hosted products**, this repository publishes a deliberate set of
-reusable sector components—the OpenAPI-to-MCP pipeline, SDK-generation
-patterns, hybrid-search tooling, MCP/MCP App scaffolds, graph projection
-conventions, and the openly documented Practice—so other organisations can lower
-the cost of building curriculum-aware applications without starting from scratch.
-The canonical inventory and scope for each asset live in [_What We
-Deliver_](docs/foundation/VISION.md#what-we-deliver) in the Vision.
+Putting Oak inside the AI assistants teachers already use, and giving the wider
+ecosystem the tools to build with Oak curriculum content, are two co-equal value
+streams — neither secondary. **Beyond Oak-hosted products**, we publish a
+deliberate set of reusable sector components — the OpenAPI-to-MCP pipeline,
+SDK-generation patterns, hybrid-search tooling, MCP and MCP App scaffolds, graph
+projection conventions, and the openly documented Practice — so other
+organisations can lower the cost of building curriculum-aware applications
+without starting from scratch. The canonical inventory and scope for each asset
+live in [_What We Deliver_](VISION.md#what-we-deliver) in the
+Vision.
 
 **Product owners, school leaders, non-technical evaluators** — you do not need to read the technical content below. Start with:
 
-- [VISION.md](docs/foundation/VISION.md) — what this project delivers, hosted vs reusable sector components, why it matters, and the investment case
+- [VISION.md](VISION.md) — what this project delivers, hosted vs reusable sector components, why it matters, and the investment case
 - [Curriculum Guide](docs/domain/curriculum-guide.md) — Oak's curriculum structure explained in plain language
 - [Progress update (April 2026)](.agent/reports/oak-ecosystem-progress-update-2026-04-20.md) — what has been delivered, what is next, and why it matters; newer reports land in [.agent/reports/](.agent/reports/README.md)
 
@@ -139,12 +141,12 @@ Three capabilities, powered by three open education data sources:
 | **Semantic Search** | Hybrid lexical + semantic retrieval across lessons, units, threads, and curriculum sequences using Elasticsearch with reciprocal rank fusion                    | [`oak-search-cli`](apps/oak-search-cli/), [`oak-search-sdk`](packages/sdks/oak-search-sdk/)      |
 
 Together, shipped products and reusable sector-facing components are the pillars
-of _compositional curriculum intelligence_, framed in depth in [VISION.md](docs/foundation/VISION.md)—including hosted surfaces versus reusable components under [_What We Deliver_](docs/foundation/VISION.md#what-we-deliver).
+of _compositional curriculum intelligence_, framed in depth in [VISION.md](VISION.md)—including hosted surfaces versus reusable components under [_What We Deliver_](VISION.md#what-we-deliver).
 
 ### Sector reusable components
 
 Partners and external builders should anchor adoption claims on the enumerated
-inventory in [_What We Deliver_](docs/foundation/VISION.md#what-we-deliver): what
+inventory in [_What We Deliver_](VISION.md#what-we-deliver): what
 counts as reusable fabric (pipeline, SDK generation patterns, hybrid-search
 tooling, MCP/MCP App scaffolds, graph projection conventions, Practice) versus
 Oak-hosted APIs and deployments. Supporting playbooks and partner obligations
@@ -167,7 +169,7 @@ approaches (EEF). They also equip internal Oak teams and external builders with
 high-quality integration primitives spanning curriculum API access, MCP, search,
 ontology alignment, and evidence surfaces. Organisational reuse of Oak's delivery
 patterns—not merely calling the upstream REST API—is grounded in Vision,
-[_What We Deliver_](docs/foundation/VISION.md#what-we-deliver). See
+[_What We Deliver_](VISION.md#what-we-deliver). See
 [ADR-157](docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md)
 for the integration architecture and [LICENCE-DATA.md](LICENCE-DATA.md) for
 full licence terms.

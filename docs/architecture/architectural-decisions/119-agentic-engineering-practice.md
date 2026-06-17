@@ -26,7 +26,7 @@ search) but the environment in which that code is produced and
 maintained. That environment needs a name, a boundary, and a map.
 
 The repository-level purpose and impact framing is defined in
-[docs/foundation/VISION.md](../../foundation/VISION.md). This ADR defines one specific part of that
+[VISION.md](../../../VISION.md). This ADR defines one specific part of that
 framing: the naming, boundary, and operating model of the agentic engineering
 practice.
 

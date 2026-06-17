@@ -104,7 +104,7 @@ Phase 4: Organisation-specific support playbooks            Future
 ### Phase 4 - Organisation-Specific Support Playbooks
 
 - Authoritative reusable-component canon (upstream for playbook wording):
-  [docs/foundation/VISION.md — What We Deliver](../../../docs/foundation/VISION.md#what-we-deliver)
+  [VISION.md — What We Deliver](../../../VISION.md#what-we-deliver)
 - Partner contract and playbook discipline:
   [current/sector-reusable-components-adoption.plan.md](current/sector-reusable-components-adoption.plan.md)
 - Candidate threads:
