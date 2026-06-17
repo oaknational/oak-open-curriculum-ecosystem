@@ -50,14 +50,12 @@ lifted only once, narrowly, for VISION-path link-hygiene (now complete).
    access" is precise teacher-agency language; an earlier paraphrase
    "helping teachers teach" was wrong and was corrected).
 2. **Three co-equal value streams — none secondary** (settled 2026-06-17; the
-   vision now names all three): (a) an MCP app that puts Oak inside the AI assistants
+   vision names all three): (a) an MCP app that puts Oak inside the AI assistants
    teachers already use; (b) engineering tools (SDK, semantic search, curriculum
    graph, MCP, evidence surfaces) for the wider ecosystem to build with Oak's
    curriculum data; (c) the agentic-engineering framework that delivers AI-enhanced
    innovation (the Practice as a value stream in its own right, per owner §14.1).
-   The survey §13 "two-products conflation / tension" was an **unverified sub-agent
-   claim and is WITHDRAWN** — there is no tension; one body of infrastructure, three
-   co-equal delivery fronts.
+   One body of infrastructure, three co-equal delivery fronts.
 3. **A vision states the change + why + a map to the how.** It delegates
    explanations and commitments (deliverables inventory, measurement, integrations,
    positioning, licensing) to other documents and *points* to them — it does not
@@ -94,42 +92,15 @@ lifted only once, narrowly, for VISION-path link-hygiene (now complete).
 - **README** — public narrative aligned to the vision and given the editorial
   voice in earlier passes (developer sections left plain).
 
-## OUTDATED-CONTENT NOTE (owner-requested — re-anchor during the estate phase)
-
-The vision rewrite **removed the "What We Deliver" canonical inventory** that the
-old vision held. Per owner: paths were made correct everywhere, but the
-**content anchor is now stale** and must be re-anchored when the estate is
-structured (do NOT restructure it now — gate). Specifically, references to
-`VISION.md#what-we-deliver` now have correct file paths but **dead anchors**, and
-surrounding text still claims "canonical inventory in VISION":
-
-- `README.md` (4 occurrences) — the README's own `## What This Repo Provides`
-  table + `### Sector reusable components` now hold the inventory; repoint there.
-- `.agent/plans/sector-engagement/` — `README.md`, `current/README.md`,
-  `sector-reusable-components-adoption.plan.md`, `roadmap.md` anchor their
-  partner-adoption contract on the VISION inventory; decide the canonical home
-  (README? the forthcoming strategy?) and re-anchor.
-- `.agent/memory/operational/threads/sector-engagement.next-session.md` (one).
-
 ## Pending doc refinements (adversarial loss-scan, 2026-06-17 — not yet applied)
 
 Surfaced by the context loss-scan; left unapplied (owner-taste or deferred),
 captured so they survive a fresh context:
 
-- **README headline (line ~8) under-represents a co-equal stream** — the prominent
-  blockquote frames the repo around *building on the ecosystem* alone, omitting
-  the teacher-facing stream (docs-adr reviewer finding, judged valid, left for
-  owner taste). Bring it into co-equality when the README front is next touched.
-- **README contraction** — one un-contracted "you do not need" in the public
-  narrative (editorial-voice nit, trivial).
-- **Working tree** carries two pre-existing uncommitted edits NOT from this
-  session: `completed-plans.md`, `good-first-issues.md`.
-- The detailed 7-agent delta-workflow output is in machine-local `/tmp`
-  (ephemeral); its load-bearing headlines are in §Delta above and the raw is
-  re-derivable from git state — not re-homed.
-- Deliberately NOT carried forward: the rejected flagship/platform/portfolio
-  product-shape framing (re-introducing it would re-litigate the settled
-  co-equality).
+- **README headline** — drafted as Decision 3 in the 2a-decisions brief (name all
+  three streams); owner ratifies next session.
+- The 7-agent delta-workflow output is ephemeral (`/tmp`); its headlines are in
+  §Delta above and the raw is re-derivable from git state.
 
 ## K1–K3 AUTHORITY ISSUE (still live — resolve in the strategy phase)
 
@@ -243,3 +214,4 @@ done. Full scope: the plan.
 | --- | --- | --- | --- | --- | --- | --- |
 | Baobab lifts Topsoil | claude-code | claude-opus-4-8 | 3be248 | surveyor-synthesist | 2026-06-15 | 2026-06-15 |
 | Ocelot binds Curfew | claude-code | claude-opus-4-8[1m] | c9423b | vision-author + estate-rewiring | 2026-06-17 | 2026-06-17 |
+| Tempest spins Spire | claude-code | claude-opus-4-8[1m] | 94a5c5 | controlling-plan author + review-synthesis + hygiene | 2026-06-17 | 2026-06-17 |

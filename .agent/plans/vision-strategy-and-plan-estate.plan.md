@@ -68,9 +68,9 @@ plans and express it more clearly and discoverably; never delete ideas.
 - **A dependency DAG forces derivation, not drift.** Each layer derives from the
   one above. Building any layer before the one it depends on produces a layer that
   looks settled but encodes a stale or absent parent.
-- **Impact is made explicit, not instrumented here.** Per owner §14.2, the
+- **Impact is made explicit here and measured by Oak.** Per owner §14.2, the
   deliverable is a value/impact *articulation* connected to Oak's measurement
-  capability — not in-repo instrumentation.
+  capability.
 - **The estate models the discipline it imposes.** The thread whose job is to
   leave no plan ungated must itself be a gated, value-preserving plan. This file
   closes that gap.
@@ -200,27 +200,19 @@ the owner ratifies them next session — the plan settles nothing on their behal
    related plans (Phase 3).
 4. **The README headline** editorial choice (Phase 1 residual).
 
-## Inputs and Authorities — With Currency Discipline
+## Inputs and Authorities
 
-Work **only from the latest understanding**. Surfaces here carry deprecated
-concepts that read as current:
+Work **only from the latest understanding**. The authorities are the committed
+`VISION.md` (the value streams and what they mean), the owner §14/§15 corrections
+(the strategy method — align on impact, articulated here and measured by Oak), and
+ADR-119 (the Practice). The 2026-06-15 **survey report** is the input for its
+**empirical map** — the census, reachability, and dependency data; that map is
+dated, so re-verify the counts before relying on them.
 
-- The 2026-06-15 **survey report** is the input for its **empirical map only** (the
-  census, reachability, dependency data). Its **strategic framing** (§11/§13:
-  inward-skew, two-products tension, proof-of-value-as-in-repo-instrumentation) is
-  **owner-superseded by §14** — do not re-import it. The estate is a deliberate
-  multi-value-stream portfolio, not a skew. The survey's §15 next-session note tells
-  the reader to "ground in VISION §How We Measure Impact + §Three Orders" — those
-  sections were **deleted** in the vision rewrite; that instruction is stale.
-- Do **not** re-introduce **evicted vision concepts** as current: the deleted vision
-  sections (What We Deliver, How We Measure Impact, Three Orders of Effect, Two
-  Audiences) were removed on purpose. "Three orders of effect" is a causal-chain
-  concept and is **not** the value-stream taxonomy (which is three streams).
-- The **thread record** is continuity (pickup state) and is being refreshed; it is
-  **not** an authority for scope — this plan is. Re-verify it has been refreshed to
-  three streams before treating any framing in it as current.
-- Authorities: `VISION.md` (committed), owner §14/§15 corrections, ADR-119 (the
-  Practice), the `editorial-tone.md` directive, and the survey's empirical data.
+Ground every framing in those current authorities before using it. The **thread
+record** is continuity (pickup state), not an authority for scope — this plan is;
+treat any framing there as current only after confirming it against the authorities
+above.
 
 ## Non-Goals
 
@@ -270,7 +262,7 @@ acceptance is proven.
 | --- | --- |
 | Strategy authored doc-first, skipping align-on-impact | 2A is a hard gate before 2C; 2C proof requires per-milestone acceptance, so a doc-existence spine fails its proof |
 | Gap analysis at the wrong granularity returns false "no gaps" | 2B granularity is bound to the 2A taxonomy-depth decision, not hard-coded to three |
-| Deprecated framings re-imported from the survey | Currency Discipline; empirical map only, §11/§13 owner-superseded |
+| A framing is used that is not grounded in the current authorities | ground every framing in VISION.md, owner §14/§15, or the survey's empirical map before using it |
 | Phase 3 deletes value while "restructuring" | disposition ledger — every removal carries a recorded disposition or it is a defect |
 | K1–K3 left unsettled, strategy built on contradiction | settle K1–K3 inside 2A; proof greps the five surfaces for consistency |
 | Survey counts decay before Phase 2B/3 | re-verify counts before relying on them |

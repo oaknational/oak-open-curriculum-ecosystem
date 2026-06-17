@@ -131,8 +131,8 @@ before implementation promotion:
 3. promote one external data-source demonstration into a current plan; or
 4. advance playbook work from
    [`sector-reusable-components-adoption.plan.md`](../../../plans/sector-engagement/current/sector-reusable-components-adoption.plan.md)
-   (maturity matrix, first adopter profile, scaffold prose) grounded in Vision
-   [_What We Deliver_](../../../../VISION.md#what-we-deliver).
+   (maturity matrix, first adopter profile, scaffold prose) grounded in the README
+   [Sector reusable components](../../../../README.md#sector-reusable-components).
 
 ## Session Shape and Grounding Order
 

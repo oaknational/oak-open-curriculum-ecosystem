@@ -39,15 +39,15 @@ plan owns the **meaning** external organisations should assign to reuse and the 
 
 ## Authoritative canon
 
-The reusable sector-component inventory and per-line intent live in foundation
-Vision, section **What We Deliver** — repeatable components designed to shorten
+The reusable sector-component inventory and per-line intent live in the README,
+section **Sector reusable components** — repeatable components designed to shorten
 sector innovation loops:
 
-[VISION.md — What We Deliver](../../../VISION.md#what-we-deliver)
+[README — Sector reusable components](../../../../README.md#sector-reusable-components)
 
-That section is **normative documentation** until superseded explicitly. README
-summaries must not invent additional official component sets without aligning
-them back here.
+That inventory is the **canonical reusable-component set** until superseded
+explicitly; do not invent additional official component sets without aligning them
+back to it.
 
 Distinct from that inventory:
 

@@ -16,7 +16,7 @@ it must stay out of the first.
 
 **Apply the editorial voice to:**
 
-- `docs/foundation/VISION.md`
+- `VISION.md` (repository root)
 - strategy documents (as they come to exist)
 - the public-facing, narrative parts of `README.md` and other outward-facing
   documents

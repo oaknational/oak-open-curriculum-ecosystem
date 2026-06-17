@@ -55,10 +55,9 @@ SDK-generation patterns, hybrid-search tooling, MCP and MCP App scaffolds, graph
 projection conventions, and the openly documented Practice — so other
 organisations can lower the cost of building curriculum-aware applications
 without starting from scratch. The canonical inventory and scope for each asset
-live in [_What We Deliver_](VISION.md#what-we-deliver) in the
-Vision.
+are set out in [What This Repo Provides](#what-this-repo-provides) below.
 
-**Product owners, school leaders, non-technical evaluators** — you do not need to read the technical content below. Start with:
+**Product owners, school leaders, non-technical evaluators** — you don't need to read the technical content below. Start with:
 
 - [VISION.md](VISION.md) — what this project delivers, hosted vs reusable sector components, why it matters, and the investment case
 - [Curriculum Guide](docs/domain/curriculum-guide.md) — Oak's curriculum structure explained in plain language
@@ -142,15 +141,14 @@ Three capabilities, powered by three open education data sources:
 | **Semantic Search** | Hybrid lexical + semantic retrieval across lessons, units, threads, and curriculum sequences using Elasticsearch with reciprocal rank fusion                    | [`oak-search-cli`](apps/oak-search-cli/), [`oak-search-sdk`](packages/sdks/oak-search-sdk/)      |
 
 Together, shipped products and reusable sector-facing components are the pillars
-of _compositional curriculum intelligence_, framed in depth in [VISION.md](VISION.md)—including hosted surfaces versus reusable components under [_What We Deliver_](VISION.md#what-we-deliver).
+of _compositional curriculum intelligence_, framed in depth in [VISION.md](VISION.md); hosted surfaces versus reusable components are distinguished in [Sector reusable components](#sector-reusable-components) below.
 
 ### Sector reusable components
 
-Partners and external builders should anchor adoption claims on the enumerated
-inventory in [_What We Deliver_](VISION.md#what-we-deliver): what
-counts as reusable fabric (pipeline, SDK generation patterns, hybrid-search
-tooling, MCP/MCP App scaffolds, graph projection conventions, Practice) versus
-Oak-hosted APIs and deployments. Supporting playbooks and partner obligations
+Partners and external builders should anchor adoption claims on the reusable
+fabric enumerated here — the OpenAPI-to-MCP pipeline, SDK generation patterns,
+hybrid-search tooling, MCP/MCP App scaffolds, graph projection conventions, and
+the Practice — versus Oak-hosted APIs and deployments. Supporting playbooks and partner obligations
 grow from [.agent/plans/sector-engagement/current/sector-reusable-components-adoption.plan.md](.agent/plans/sector-engagement/current/sector-reusable-components-adoption.plan.md).
 
 ### Data Sources
@@ -169,8 +167,8 @@ curriculum structure (ontology), and recommend evidence-backed teaching
 approaches (EEF). They also equip internal Oak teams and external builders with
 high-quality integration primitives spanning curriculum API access, MCP, search,
 ontology alignment, and evidence surfaces. Organisational reuse of Oak's delivery
-patterns—not merely calling the upstream REST API—is grounded in Vision,
-[_What We Deliver_](VISION.md#what-we-deliver). See
+patterns—not merely calling the upstream REST API—is set out above in
+[Sector reusable components](#sector-reusable-components). See
 [ADR-157](docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md)
 for the integration architecture and [LICENCE-DATA.md](LICENCE-DATA.md) for
 full licence terms.

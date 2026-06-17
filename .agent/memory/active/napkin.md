@@ -94,3 +94,26 @@ reconciliation.
   that skill paragraph (the hook is the gate; never run a per-commit negative control; a
   one-off self-check only if you genuinely suspect the checker is broken on this machine).
   Sibling: [[passive-guidance-loses-to-artefact-gravity]], [[fluency-is-a-failure-vector]].
+
+## Strategy/plan-estate: vision finalised + controlling plan landed (2026-06-17, Tempest spins Spire)
+
+- **An adversarial verify pass of my OWN rewrite caught a claim that outran the act.** I wrote
+  that a file "is recorded in the reachability invariant as a temporary exception" while having
+  only added the README link — the invariant edit was never made, so the prose asserted something
+  untrue about another file. The 3-agent verification workflow, run on my own revision, flagged it;
+  self-review would not have. Cure: for a load-bearing self-authored change, an independent
+  adversarial re-read against the artefacts is non-negotiable — the author is blind to the gap
+  between what they wrote and what they did. Sibling: [[fluency-is-a-failure-vector]], [[verify-dont-trust]].
+- **Fidelity-audit ≠ currency-audit.** Verifying "does the artefact say what the record claims?"
+  is currency-blind: a claim grounded in a stale surface passes it. The owner's "are you working
+  from the latest understanding?" forced the deeper test — "is this still current?" Cure: when
+  verifying an inherited surface, ground the claim AND confirm the framing is still live in the
+  current authorities before using it. Sibling: [[fluency-is-a-failure-vector]].
+- **A removed idea needs no memorial.** I cleaned dead doc references by re-pointing them to the
+  live home, then wrote a note explaining what had been removed — a tombstone. The links pointing
+  at the live home ARE the fix; the explanation re-instantiates the dead idea and invites the next
+  author to weigh it again. Cure: state the present design and stop; git history carries the
+  change. Sibling: [[no-tombstones-for-removed-ideas]], [[fluency-is-a-failure-vector]].
+- **Convergence discipline: plan → review → revise → verify must converge.** Verify is the last
+  meta-step; then commit and pivot to substance. The pull to keep polishing the plan is itself a
+  fluent-feeling trap.
