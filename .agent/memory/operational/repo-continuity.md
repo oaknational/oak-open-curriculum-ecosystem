@@ -29,15 +29,19 @@ surface.
   impact-gate **app-stream-only**, K2 "for now" a **post-GA non-commitment**, K3 scoped to the
   app's **real dependency set** (whole-estate only at portfolio level); **taxonomy depth = hybrid**
   (drives Phase 2B granularity — ecosystem decomposes to SDK/search/graph/EEF); **README headline =
-  name all three streams** (applied, editorial voice). **2A scope NARROWED to the MCP-app stream**
-  (owner): the ecosystem and framework streams' value/impact articulation **and** keystones defer
-  to a later phase (tracked `p2a-deferred-streams`). Decisions recorded in
+  name all three streams** (applied, editorial voice). **Value/impact articulation AUTHORED**
+  ([`value-and-impact.md`](../../plans/vision-strategy-and-plan-estate.value-and-impact.md)) — the
+  MCP-app stream in full (it alone gates go-live) plus a separate mention of the ecosystem and
+  framework streams' value (owner refinement 2026-06-17: all three co-equal, each needs its own
+  strategy + planning; only the app stream gates go-live; the other two's fuller strategy follows,
+  tracked `p2a-other-streams-strategy`). Decisions recorded in
   [`2a-decisions.md`](../../plans/vision-strategy-and-plan-estate.2a-decisions.md) (status
   `ratified`); controlling plan amended; K1–K3 reconciled across the five keystone surfaces +
-  this record (the dated survey report left as a dated input, not edited). **Next safe step**:
-  author the **MCP-app stream's** value/impact articulation (Phase 2A substance, app-stream-only —
-  articulated here, measured by Oak), then Phase 2B gap analysis at hybrid depth → 2C execution
-  spine; estate hygiene runs in parallel off the gate. Full start sequence:
+  this record (the dated survey report left as a dated input, not edited). Ratification + K1–K3
+  reconciliation committed `fce9bd863`; the articulation + refinement is the follow-on commit.
+  **Next safe step**: the ecosystem + framework streams' strategy + planning, then Phase 2B gap
+  analysis at hybrid depth → 2C execution spine; estate hygiene runs in parallel off the gate.
+  Full start sequence:
   [thread record](threads/strategy-and-plan-estate-holistic-review.next-session.md).
 - **COLLABORATION-DOCTRINE DECOMPOSITION — strategic brief LANDED (2026-06-17, Phobos turns
   Singularity, solo, `docs/planning-and-validation`).** Compared the two collaboration directives

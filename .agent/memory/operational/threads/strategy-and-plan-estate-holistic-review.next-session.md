@@ -26,12 +26,15 @@ foundation; its report + raw data live in
   articulated here, measured by Oak, not in-repo; impact-gate app-stream-only; K2 "for now" =
   post-GA non-commitment; K3 = app's real dependency set, whole-estate only at portfolio level);
   **taxonomy depth = hybrid** (drives Phase 2B granularity); **README = name all three streams**
-  (applied). **2A scope NARROWED to the MCP-app stream** — the ecosystem and framework streams'
-  value/impact articulation **and** keystones defer to a later phase (tracked `p2a-deferred-streams`).
-  Controlling plan amended; K1–K3 reconciled across the five keystone surfaces + `repo-continuity.md`
-  (the dated survey report left as a dated input).
-- **Next safe step:** author the **MCP-app stream's** value/impact articulation (Phase 2A substance,
-  app-stream-only — articulated here, measured by Oak). See §Next.
+  (applied). **Value/impact articulation AUTHORED** — the MCP-app stream in full (it alone gates
+  go-live) plus a separate mention of the ecosystem and framework streams' value
+  ([`value-and-impact.md`](../../../plans/vision-strategy-and-plan-estate.value-and-impact.md)).
+  Owner refinement 2026-06-17: all three streams are **co-equal and each needs its own strategy +
+  planning**; only the MCP-app stream gates go-live; the other two's fuller strategy follows
+  (tracked `p2a-other-streams-strategy`). Controlling plan amended; K1–K3 reconciled across the
+  five keystone surfaces + `repo-continuity.md` (the dated survey report left as a dated input).
+- **Next safe step:** the ecosystem + framework streams' strategy + planning, then Phase 2B gap
+  analysis at hybrid depth → 2C spine. See §Next.
 
 ## Order (owner-set 2026-06-17 — SUPERSEDES the prior A→B→C)
 
@@ -171,17 +174,16 @@ structuring must include plans/owners for them:
 the §4 ungated-collection removal, the disposition-ledger value-preservation). This
 record is the pickup surface, not the scope.
 
-**Phase 2A ratification gate is COMPLETE.** Next is the Phase 2A substance, now
-narrowed to the MCP-app stream. In order:
+**Phase 2A ratification gate is COMPLETE; the value/impact articulation is AUTHORED.**
+In order:
 
-1. Read the plan and the [decisions brief](../../../plans/vision-strategy-and-plan-estate.2a-decisions.md)
-   (status `ratified` — the settled outcomes are recorded there and in the plan).
-2. **Author the MCP-app stream's value/impact articulation** (Phase 2A substance,
-   **app-stream-only** per the owner's 2A narrowing): what value/impact the MCP-app
-   stream intends to create, why it matters, how we attempt it — connected to its
-   ratified K1–K3 keystones; **articulated here, measured by Oak, not instrumented
-   in-repo**. The ecosystem and framework streams' articulation **and** keystones are
-   a named deferral (`p2a-deferred-streams`), not authored in 2A.
+1. Read the plan, the [decisions brief](../../../plans/vision-strategy-and-plan-estate.2a-decisions.md)
+   (status `ratified`), and the [value/impact articulation](../../../plans/vision-strategy-and-plan-estate.value-and-impact.md)
+   (the MCP-app stream in full + a separate mention of the other two streams' value).
+2. **Author the ecosystem + framework streams' strategy + planning.** Owner refinement
+   2026-06-17: all three streams are co-equal and each needs its own strategy layer and
+   planning; their value is already named in the articulation, their fuller strategy
+   follows (tracked `p2a-other-streams-strategy`). Only the MCP-app stream gates go-live.
 3. **Then Phase 2B** — value-stream redundancy/gap analysis at the **hybrid** depth
    (ecosystem decomposed to SDK/search/graph/EEF); re-verify the survey's empirical
    counts first. **Then Phase 2C** — execution spine. Do not jump to the spine first.

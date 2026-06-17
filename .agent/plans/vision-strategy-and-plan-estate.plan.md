@@ -23,11 +23,11 @@ todos:
     content: "Phase 2A — Owner ratified the three decisions 2026-06-17: K1–K3 as MCP-app-stream keystones (§14.2 correction, impact-gate app-only, K2 post-GA non-commitment, K3 app dependency-set); taxonomy depth=hybrid (drives 2B); README=name-all-three. Recorded in 2a-decisions.md"
     status: completed
   - id: p2a-align-impact
-    content: "Phase 2A — Align on impact, NARROWED to the MCP-app stream (owner 2026-06-17): author the app stream's value/impact articulation (articulated here, measured by Oak) connected to its K1–K3 keystones; reconcile K1–K3 across keystone surfaces"
+    content: "Phase 2A — Align on impact: value/impact articulation authored (vision-strategy-and-plan-estate.value-and-impact.md, owner 2026-06-17) — the MCP-app stream in full (it alone gates go-live, connected to K1–K3) plus a separate mention of the ecosystem and framework streams' value; K1–K3 reconciled across keystone surfaces"
+    status: completed
+  - id: p2a-other-streams-strategy
+    content: "Phase 2A consequence (owner 2026-06-17) — the ecosystem and framework streams are co-equal and each needs its OWN strategy layer and planning; their value is named in the value-and-impact articulation, their fuller strategy + planning (and their own non-go-live success definitions) follow as equally-important later work. Only the MCP-app stream's readiness gates go-live"
     status: pending
-  - id: p2a-deferred-streams
-    content: "Phase 2A deferral (owner 2026-06-17) — the ecosystem and framework streams' value/impact articulation AND their 'live'/GA-gate keystones defer to a later phase; not authored in 2A. Tracked so the deferral is named, not silent. UN-BLOCKS on whichever comes first: a future owner decision to define the ecosystem/framework streams' 'live' definitions, OR Phase 2B needing the ecosystem value baseline (see the Phase 2B sequencing note)"
-    status: blocked
   - id: p2b-gap-analysis
     content: "Phase 2B — Value-stream redundancy and gap analysis, at the hybrid taxonomy depth settled in 2A (ecosystem decomposed to SDK/search/graph/EEF; not assumed to be three)"
     status: pending
@@ -134,31 +134,32 @@ docs"**:
     frame; the ecosystem stream decomposes into SDK / search / graph / EEF for the
     Phase 2B gap analysis. This sets the granularity **2B** runs at.
 
-  **2A scope — narrowed to the MCP-app stream (owner 2026-06-17).** Because the
-  ecosystem and framework streams' "live"/GA-gate definitions defer, 2A authors the
-  **MCP-app stream's** value/impact articulation and K1–K3 keystones only. The other
-  two streams' articulation **and** keystones defer to a later phase (tracked as
-  `p2a-deferred-streams`, named not silent). This narrows the original per-stream 2A
-  acceptance below. **The three streams remain co-equal (Phase 1, settled): this is
-  sequencing, not a demotion** — the app stream is articulated first because its
-  keystones are settled, not because it ranks above the others.
+  **2A scope — the MCP-app stream in full; the other two named (owner 2026-06-17).**
+  The value/impact articulation
+  ([`vision-strategy-and-plan-estate.value-and-impact.md`](vision-strategy-and-plan-estate.value-and-impact.md))
+  sets out the **MCP-app stream in full** — it alone gates go-live (K1–K3) — and gives
+  a **separate mention** of the ecosystem and framework streams' value. **The three
+  streams are co-equal, and each needs its own strategy layer and planning**; the other
+  two streams' fuller strategy + planning (and their own non-go-live success
+  definitions) follow as equally-important later work, tracked as
+  `p2a-other-streams-strategy`. What differs is the go-live gate and the order we reach
+  for each, **not** priority.
 - **2B — Value-stream redundancy and gap analysis**, run **at the taxonomy depth
   settled in 2A** (hybrid: ecosystem decomposed to SDK/search/graph/EEF) — not assumed
   to be three. The survey flagged SDK/search/graph/EEF as the sub-capabilities with no
   execution spine; a gap analysis at too coarse a granularity would return a false "no
   gaps". Re-verify the survey's empirical counts have not decayed before relying on
   them (see Currency Discipline).
-  - **Sequencing dependency surfaced (2A narrowing × hybrid 2B).** The two ratified
-    decisions are independent *at ratification* but **coupled at execution**: 2B is to
-    decompose the ecosystem stream and scrutinise its sub-capabilities, yet 2A's
-    narrowing defers the ecosystem stream's value articulation out of 2A. So 2B has no
-    2A value baseline for the very stream it scrutinises hardest. Resolve at 2B entry,
-    one of two ways (owner/author call then): either the deferred ecosystem articulation
-    (`p2a-deferred-streams`) un-blocks and is authored *before* 2B's ecosystem
-    decomposition, or 2B runs against the app-only baseline and **flags the ecosystem
-    and framework streams as "value-not-yet-articulated" gaps** rather than asserting
-    "no gaps". `p2b-gap-analysis` must not claim a clean ecosystem result without one of
-    these holding.
+  - **Sequencing dependency surfaced (hybrid 2B × the staged strategy layer).** 2B
+    decomposes the ecosystem stream to SDK/search/graph/EEF and scrutinises each. The
+    value/impact articulation states the ecosystem stream's value at the **top level**,
+    but not at sub-capability depth — that depth is part of the fuller ecosystem
+    strategy that follows (`p2a-other-streams-strategy`). So at 2B entry, one of two
+    holds (owner/author call then): either the sub-capability value is articulated
+    *before* 2B's ecosystem decomposition, or 2B runs against the top-level baseline and
+    **flags the per-capability streams as "value-not-yet-articulated" gaps** rather than
+    asserting "no gaps". `p2b-gap-analysis` must not claim a clean ecosystem result
+    without one of these holding.
 - **2C — Execution spine.** Only after 2A and 2B: design the execution spine /
   milestone structure for all streams. Do not jump to the spine first.
 
@@ -172,12 +173,14 @@ UX; go-to-market/school support) — several owned **outside this repository**. 
 those, the deliverable is a **tracked hand-off with a named external
 accountability**, not in-repo resolution; the repo cannot assign an external owner.
 
-**Acceptance (outcome-level):** a value/impact articulation exists **for the
-MCP-app stream** (the ecosystem and framework streams deferred per
-`p2a-deferred-streams`); K1–K3 and the taxonomy depth are owner-settled (2026-06-17)
-and recorded consistently across every surface; a spine exists for every stream with
-named acceptance per milestone; the `VISION.md` placeholder links a real strategy
-corpus; every release-readiness requirement has a tracked hand-off with named
+**Acceptance (outcome-level):** a value/impact articulation exists — the **MCP-app
+stream in full** (it alone gates go-live) plus a separate mention of the ecosystem and
+framework streams' value, with all three named co-equal and each needing its own
+strategy + planning (the other two's fuller strategy follows per
+`p2a-other-streams-strategy`); K1–K3 and the taxonomy depth are owner-settled
+(2026-06-17) and recorded consistently across every surface; a spine exists for every
+stream with named acceptance per milestone; the `VISION.md` placeholder links a real
+strategy corpus; every release-readiness requirement has a tracked hand-off with named
 accountability.
 
 ## Phase 3 — Plan-Estate Restructure (GATED on Phase 1 + 2)
@@ -287,8 +290,8 @@ code surface. Each completion claim is proven by the named `non-code` artefact a
 | `p1-vision-finalise` | `VISION.md` at `d4f6e0293` states three co-equal streams; README consistent |
 | `p1-readme-headline` | README `:6`/`:8` name all three streams (owner-approved) |
 | `p2a-decisions-ratified` | `2a-decisions.md` status `ratified`; the three outcomes + the 2A-narrowing recorded there and in this plan |
-| `p2a-align-impact` | a value/impact articulation exists **for the MCP-app stream**; grep the five named keystone surfaces + `repo-continuity.md` — K1–K3 stated identically or consistently qualified across all as app-stream keystones; taxonomy depth recorded |
-| `p2a-deferred-streams` | the ecosystem + framework streams' articulation/keystones are recorded as a named deferral (this plan's todos), not silently absent |
+| `p2a-align-impact` | `value-and-impact.md` sets out the MCP-app stream in full + a separate mention of the other two streams' value; grep the five named keystone surfaces + `repo-continuity.md` — K1–K3 stated identically or consistently qualified across all as app-stream keystones; taxonomy depth recorded |
+| `p2a-other-streams-strategy` | the ecosystem + framework streams' value is named in `value-and-impact.md` and recorded as co-equal work needing its own strategy + planning (this plan's todos), not silently absent or demoted |
 | `p2b-gap-analysis` | gap analysis runs at the settled taxonomy depth; each overlap / under-served stream named with evidence |
 | `p2c-execution-spine` | a spine exists for every stream; each milestone names its own acceptance |
 | `p2-integrate-surfaces` | high-level-plan goal reconciled to three streams; VISION placeholder links the corpus; every release-readiness requirement has a tracked hand-off with named accountability |

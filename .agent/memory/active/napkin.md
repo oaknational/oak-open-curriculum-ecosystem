@@ -34,6 +34,22 @@ reconciliation.
   owner's blunt re-grounding plus the PDR-101 quorum (an external check), not my
   self-vigilance. Sibling: [[fluency-is-a-failure-vector]], [[first_hand_means_me_not_subagents]].
 
+## commit-queue spawned git-commit hits the depcruise→turbo stream-truncation artifact in Claude Code (2026-06-17, Squall spins Stratus)
+
+- **`pnpm agent-tools:commit-queue -- commit` failed twice**, output truncating exactly at the
+  `depcruise → turbo` handover with `git commit exited with code 1` and **no commit landing** —
+  the precise symptom the commit skill's "Cursor Shell tool — stream truncation workaround"
+  documents, but observed here via the **commit-queue workflow in Claude Code**, not Cursor.
+- **Decisive disambiguation** (not a real gate failure): `bash .husky/pre-commit` standalone
+  exited **0** with full turbo output; a direct `git commit -F <msgfile> > tmp/log 2>&1` (hooks
+  intact, no `--no-verify`) landed cleanly (`fce9bd863`). The gates are green; the artifact is in
+  the *spawned-commit live-stream*, cured by file redirection.
+- **Next agent:** if commit-queue `commit` dies at the depcruise→turbo handover, don't re-diagnose
+  the gates — verify with standalone `bash .husky/pre-commit`, then use the skill's documented
+  direct `git commit -F` + file-redirection fallback (then record the queue intent + close the
+  claim manually with the SHA). The skill's workaround section is scoped "Cursor Shell tool only";
+  this is a candidate to widen it to the commit-queue spawn path. Sibling: [[comms-watch-cli-can-stall-silently]].
+
 ## Researching the estate is not the same as refusing new plans (2026-06-17, Phobos turns Singularity)
 
 - **I took "consolidate estate / don't fragment the plan estate" and over-applied it to

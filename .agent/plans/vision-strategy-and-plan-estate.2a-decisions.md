@@ -40,12 +40,16 @@ reached through it (not an independent root plan).
 3. **README headline — name all three streams**, in the editorial voice (the owner
    chose the editorial-voice option, delegating the exact wording).
 
-**2A scope consequence — narrowed to the MCP-app stream.** Because the other two
-streams' "live" definitions defer, the owner narrowed Phase 2A to the **MCP-app
-stream**: 2A authors the app stream's value/impact articulation and its K1–K3
-keystones only; the ecosystem and framework streams' articulation **and** keystones
-both defer to a later phase. This **amends** the controlling plan's per-stream 2A
-acceptance — the amendment is recorded in the plan.
+**2A scope consequence — the MCP-app stream in full; the other two named (refined by
+owner 2026-06-17).** Only the MCP-app stream's "live"/GA-gate is set in 2A, because it
+alone gates go-live. The value/impact articulation
+([`vision-strategy-and-plan-estate.value-and-impact.md`](vision-strategy-and-plan-estate.value-and-impact.md))
+sets out the MCP-app stream in full and gives a **separate mention** of the ecosystem
+and framework streams' value. **All three streams are co-equal, and each needs its own
+strategy layer and planning**; the other two streams' fuller strategy + planning (and
+their own non-go-live success definitions) follow as equally-important later work. What
+differs is the go-live gate and sequencing, not priority. This refines the controlling
+plan's per-stream 2A acceptance — recorded in the plan.
 
 ## Decision 1 — K1–K3 keystones (the impact definition)
 
@@ -123,11 +127,11 @@ ratification.
 
 **Ratified (2026-06-17):** option **(c) Hybrid**. The three streams stay the vision
 frame; the ecosystem stream decomposes into SDK / search / graph / EEF for the
-Phase 2B gap analysis. Sets 2B's granularity. Independent of the 2A app-stream
-narrowing *at ratification*, but **coupled at execution**: 2B decomposes the
-ecosystem stream while 2A defers that stream's value articulation, so 2B has no 2A
-value baseline for it — resolved at 2B entry (see the plan's Phase 2B sequencing
-note: un-block the deferred articulation first, or flag the ecosystem/framework
+Phase 2B gap analysis. Sets 2B's granularity. Coupled at execution to the staged
+strategy layer: the value/impact articulation states the ecosystem stream's value at
+the **top level**, but 2B scrutinises it at sub-capability depth, which is part of the
+fuller ecosystem strategy that follows. Resolved at 2B entry (see the plan's Phase 2B
+sequencing note: articulate the sub-capability value first, or flag the per-capability
 streams as "value-not-yet-articulated" gaps).
 
 ## Decision 3 — README headline / strapline
