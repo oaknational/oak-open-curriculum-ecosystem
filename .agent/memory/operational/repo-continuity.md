@@ -43,9 +43,13 @@ surface.
   layer and the vision→strategy→planning flow BEFORE any more strategy work.** Only after that:
   the ecosystem + framework streams' strategy + planning, then Phase 2B gap analysis at hybrid
   depth → 2C execution spine; estate hygiene runs in parallel off the gate. Full start sequence:
-  [thread record](threads/strategy-and-plan-estate-holistic-review.next-session.md). (Unrelated
-  signal surfaced, NOT owned here: a SonarCloud last-analysis "file encoding problems" warning,
-  being picked up as a separate parallel thread.)
+  [thread record](threads/strategy-and-plan-estate-holistic-review.next-session.md). **Branch
+  operational state (NOT owned by this thread, expect on session-open):** (1) the SonarCloud
+  "file encoding problems" warning was fixed by a parallel agent — `sonar.sourceEncoding=UTF-8`,
+  committed `ee6a389f9`; (2) **10 SDK files under `packages/sdks/oak-sdk-codegen/` are dirty by
+  design** — upstream OpenAPI spec drift (`/sequences/{slug}`→`{sequence}`), deferred to a separate
+  SDK-sync PR; **run the full gate with `CI=true`** to use the committed cached spec and avoid
+  re-dirtying (napkin `6f8b36290` documents it).
 - **COLLABORATION-DOCTRINE DECOMPOSITION — strategic brief LANDED (2026-06-17, Phobos turns
   Singularity, solo, `docs/planning-and-validation`).** Compared the two collaboration directives
   against the `start-right-team` skill and the PDR corpus; both are **layer-blenders** that predate
