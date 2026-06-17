@@ -189,6 +189,10 @@ blocker cleared; reachability re-counted and remediated.
 
 ## Owner Decisions To Settle (named, not made)
 
+Decisions 1, 2, and 4 are drafted as decision-ready options in the companion
+[`vision-strategy-and-plan-estate.2a-decisions.md`](vision-strategy-and-plan-estate.2a-decisions.md);
+the owner ratifies them next session — the plan settles nothing on their behalf.
+
 1. **K1–K3** — ratify, revise, or correct (Phase 2A).
 2. **Value-stream taxonomy depth** — sub-capabilities under the three streams, or
    streams in their own right (Phase 2A; sets 2B's granularity).

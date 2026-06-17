@@ -191,26 +191,36 @@ structuring must include plans/owners for them:
 
 ## Next (fresh context starts here)
 
-1. **Make the strategy documents EXIST** — organised around delivering the
-   vision's impact. Integrate existing strategy surfaces (`high-level-plan.md`,
-   `curriculum-mcp-path-to-ga/` roadmap + launch-readiness-framework + milestones,
-   the survey report). Settle **K1–K3** as keystones. Derive the **value-stream
-   taxonomy** — hold it as a *hypothesis to re-derive from the now-settled vision*,
-   not an inherited list (candidates: the teacher-facing MCP-app stream, the
-   ecosystem-enablement stream, the Practice stream; possibly organised around the
-   three orders of effect rather than a flat list). Fold in the release-readiness
-   requirements above. Fill the VISION strategy placeholder + link the corpus.
-2. **Then (gated): the plan-estate restructure** driven by strategy + vision —
-   new directory structure, rehome/move/remove/create, value-preserving, and
-   **re-anchor the What-We-Deliver references** named above.
-3. **Owner decision (2026-06-17) — REQUIREMENT for the estate rework:** the
-   survey-flagged collection that lacks a README and an owner-agreed gate
-   (survey report §4) is **removed**. Every plan it holds is either **properly
-   re-housed** in a live lane with a named dependency and an owner-agreed gate,
-   **or** its useful concept is **extracted and the item deleted**. No plan is
-   left ungated; the section ceases to exist. This settles the open owner
-   decision the survey raised about that collection, and aligns the estate with
-   the no-holding-state doctrine (`no-hedging-vocabulary`).
+**The controlling plan is**
+[`vision-strategy-and-plan-estate.plan.md`](../../../plans/vision-strategy-and-plan-estate.plan.md)
+— read it first; it is the scope authority (Phases 1–3, the DAG, gates, acceptance,
+the §4 ungated-collection removal, the disposition-ledger value-preservation). This
+record is the pickup surface, not the scope.
+
+**Start Phase 2A — the owner-ratification gate. In order:**
+
+1. Read the plan, then the decision-ready options:
+   [`vision-strategy-and-plan-estate.2a-decisions.md`](../../../plans/vision-strategy-and-plan-estate.2a-decisions.md).
+   The three decisions are drafted and laid out; the owner has NOT yet made them.
+2. **Put the three decisions to the owner — do not make them yourself:**
+   - **K1–K3** — ratify / revise / correct. Required K1 correction: strip the
+     in-repo-instrumentation wording (owner §14.2 — impact is articulated here,
+     measured by Oak). On ratification, reconcile the five "decided" surfaces with
+     the three "input" surfaces.
+   - **Value-stream taxonomy depth** — three streams / capability-level / hybrid
+     (brief recommends hybrid). Sets the Phase 2B granularity.
+   - **README headline** — name all three streams (brief gives a candidate).
+3. **On ratification:** author the per-stream value/impact articulation (Phase 2A
+   substance) at the settled depth — articulated here, measured by Oak, not
+   instrumented in-repo. Then Phase 2B (gap analysis at that depth) → Phase 2C
+   (execution spine). Do not jump to the spine first.
+4. **Estate hygiene runs in parallel anytime (NOT strategy-gated):** re-anchor the
+   dead VISION What-We-Deliver references, fix the editorial-tone vision path, clear
+   the dead PR-76 blocker — after re-verifying current reachability counts.
+
+Phase 3 (the plan-estate restructure — new structure, value-preserving via the
+disposition ledger, this plan's permanent home) stays gated until Phases 1+2 are
+done. Full scope: the plan.
 
 ## Method carried forward
 
