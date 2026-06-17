@@ -20,17 +20,21 @@ surface.
 
 ## Current State
 
-- **VISION REWRITTEN + MOVED TO ROOT + WIRED; STRATEGY IS NEXT (2026-06-17, Ocelot binds
-  Curfew, solo, `docs/planning-and-validation`, uncommitted).** Repo transitioning
-  experiment→product. `VISION.md` rewritten to a real vision (what we're changing · why ·
-  map-to-how), `git mv`'d to repo root, all LIVE references repointed; new
-  `.agent/directives/editorial-tone.md` directive wired into `AGENT.md`. **Owner-set order
-  SUPERSEDES the prior A→B→C**: Vision (DONE) → make the **strategy documents exist** → then
-  (gated) the plan-estate restructure (value-preserving; remove the survey-flagged ungated
-  collection by re-housing or extract-and-delete; re-anchor the now-stale `VISION#what-we-deliver`
-  references; fold in abstracted MCP-app release-readiness / due-diligence requirements). K1–K3
-  authority still unresolved (treat as strategy keystones). **Next safe step**: make the strategy
-  documents exist. Full pickup:
+- **VISION FINALISED + CONTROLLING PLAN LANDED; PHASE 2A IS NEXT (2026-06-17, Tempest spins
+  Spire, solo, `docs/planning-and-validation`, 3 commits ahead of origin — unpushed).** The
+  vision is finalised at repo-root `VISION.md` — three co-equal value streams (teacher MCP app;
+  ecosystem engineering tools; the agentic-engineering framework delivering AI-enhanced
+  innovation) — committed `d4f6e0293`. The thread now has a controlling plan of record,
+  [`vision-strategy-and-plan-estate.plan.md`](../../plans/vision-strategy-and-plan-estate.plan.md)
+  (`4d887361a`; six-reviewer-vetted + independently verified) — the **scope authority** for the
+  vision→strategy→plan-estate DAG (Phases 1–3, gates, the §4 ungated-collection removal, the
+  disposition-ledger value-preservation). The three Phase-2A owner decisions (K1–K3, value-stream
+  taxonomy depth, README headline) are drafted as decision-ready options
+  ([`2a-decisions.md`](../../plans/vision-strategy-and-plan-estate.2a-decisions.md), `cc9014cad`)
+  — **not made; the owner ratifies next session**. **Next safe step**: the Phase-2A ratification
+  gate — read the plan, then the options brief, put the three decisions to the owner (do not make
+  them), then author the per-stream value/impact articulation; estate hygiene runs in parallel off
+  the gate. Full start sequence:
   [thread record](threads/strategy-and-plan-estate-holistic-review.next-session.md).
 - **COLLABORATION-DOCTRINE DECOMPOSITION — strategic brief LANDED (2026-06-17, Phobos turns
   Singularity, solo, `docs/planning-and-validation`).** Compared the two collaboration directives
