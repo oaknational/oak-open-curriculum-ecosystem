@@ -63,6 +63,7 @@ a true rarity. If an item fits no category, that is a signal the category set is
 incomplete, not licence to let it age here.
 
 *No live decision-debt: the register is drained (2026-06-18). Every captured
-candidate reached a terminal disposition. New capture is appended below as
-inline-bracket entries (`- **<title>**` then a fenced
-`[captured: <date> | source: <text> | target: <text> | trigger: <text> | size: <…> | status: <enum>]`).*
+candidate reached a terminal disposition. New capture appends below as
+inline-bracket entries — `- **<title>**` then a fenced bracket with pipe-separated
+`captured / source / target / trigger / size / status` fields (schema:
+`agent-tools/src/practice-fitness/item-count.ts`).*

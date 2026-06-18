@@ -252,7 +252,7 @@ each thread record; this table is the repo-level index.
 | `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Fable 5 / Thyme wakes Canopy / record-condensation (curation lane) / 2026-06-12, claude-code / Fable 5 / Forge turns Basalt / eef-data-surfacing-gap-research / 2026-06-12, claude / Fable 5 / Cosmos turns Equinox / snagging-execution-successor-pickup (arc landed #190–#193, closed out) / 2026-06-12, cursor / Fable 5 / Dawnlit Glimmering Orbit / oak-prod-snagging-and-cursor-visibility-writeup / 2026-06-11 (first-wave evidence still unmerged on `docs/graph-team-direction-2026-06-10` — see §Current State correction). Full prior-identity history (30+ seats, 2026-06-02 →): the thread record identity table — set-membership verified 2026-06-12 before this dedup |
 | `oak-kg-ontology-planning-review` | Plan the `oak-kg`/ontology work, starting with a deep review of the Oak Curriculum Ontology repo (separate concern from the bulk-derived graph redesign) | [record][oak-kg-ontology] | claude / Opus 4.8 / Twilit Cascading Supernova / thread-opener-brief-only / 2026-06-04 — **opened, not started; deep review is a fresh session** |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Zephyrous Buffeting Falcon / skills-lane-relocated-to-educator-end-users / 2026-06-08 (prior: Blustery Lifting Gale skills-taxonomy-and-distribution 2026-06-03, Umbral Whispering Silhouette 2026-06-01) |
-| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 (1M) / Phobos turns Singularity / collaboration-doctrine-decomposition-plan / 2026-06-17 (prior: Basil tracks Xylem owner-gated-purge 2026-06-16, Lapwing holds Troposphere fitness-report-only 2026-06-16; full prior-identity history: the thread record identity table) |
+| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude-code / Opus 4.8 (1M) / Wisteria spins Bark / curator–dedicated-consolidation / 2026-06-18 (prior: Phobos turns Singularity 2026-06-17, Basil tracks Xylem 2026-06-16; full prior-identity history: the thread record identity table) |
 | `school-data-search` | Oak School Data Search service (POC MVP): briefs → report → plan → gate walk → **deep review complete** → build | [record][school-data-search] | claude / Opus 4.8 / Fiery Sparking Caldera / deep-review-and-refinement / 2026-06-04 (prior: Mossy Whispering Bark 2026-06-04, Furnace Roasting Brazier + Hushed Lurking Mask 2026-06-03) |
 | `semantic-search` | Search data foundations: upstream-schema alignment, bulk sourcing, minimal-adaptation arc | [record][semantic-search] | claude / Opus 4.8 / Moonlit Waxing Nebula / upstream-realignment-specialist / 2026-06-03 |
 | `statusline-enhancements` | Claude Code statusline: Oak-mark and session-shape indicators LANDED; **live logo swap 2026-06-16** — 5×7 sharpened `braille-sharp` default, 4×6 retained as `braille-sharp-compact`, width-matched separator rule on by default (on `docs/planning-and-validation`, **divergence to reconcile onto `feat/comms-research`**); successor plan **re-grounded session-state-first** 2026-06-15 (`ed563765d`; experimental discovery, no PDR/ADR); statusline lane in two `current/` plans (session-state and logo-modularisation), cross-referenced | [record][statusline] | claude-code / Opus 4.8 / Vole calls Hollow / live-logo-swap-and-plan-harden / 2026-06-16 (prior: Cutter spins Quay 2026-06-15, Orbit stirs Spectrum 2026-06-14) |
@@ -364,20 +364,16 @@ Live remainder:
 
 ### Agentic-Engineering Curation
 
-1. The latest dedicated curation pass is 2026-06-12 (Thyme wakes Canopy): napkin
-   rotated (archive `napkin-2026-06-12-thyme-curation.md`), distilled graduated
-   (five new pattern files), the owner-approved Core amendment queue authored,
-   open-questions and pending-graduations drained to live decision-debt.
+1. The latest dedicated consolidation is 2026-06-18 (Wisteria spins Bark): bulk done (continuity
+   processed to rest, napkin graduated to 5 patterns, PDR-104 best-effort policy, 7c/7e audits,
+   PDR-098 recurrence-capture wired into consolidate-docs step 7). The remainder is owner-scoped to
+   a fresh session — full pickup: [`agentic` thread record][agentic] §NEXT-SESSION PICKUP.
 2. The relative-link integrity item is accepted as a future validator lane, not
    implemented tooling; promote the plan only on its recorded trigger.
-3. Comms-event rotation remains paused until the
-   [comms-corpus research plan](../../plans/agent-tooling/active/comms-corpus-research-and-rotation-strategy.plan.md)'s
-   WS5 proposal is owner-ratified (the plan exists and is execution-ready as of
-   2026-06-12; its WS7 (gated on WS5 proposal owner-ratification) is the only legitimate rotation-execution
-   surface); fitness is routing evidence only — never archive, split, shard, or
-   rename unprocessed content to improve scores. For a later ordinary docs
-   continuation, use
-   [`codex-docs-consolidation.brief.md`](codex-docs-consolidation.brief.md).
+3. Comms-event rotation is the retention-gated curator-pass (ADR-199 / PDR-094; the comms-corpus
+   research is RETIRED — see §Next Safe Steps › Comms-Corpus Research): archive-move events past
+   their class window, gated on absorption + provenance. Analysis is never gated; fitness is routing
+   evidence only — never archive, split, shard, or rename unprocessed content to improve scores.
 
 ### Connecting-Oak / PR History
 

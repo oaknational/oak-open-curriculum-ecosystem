@@ -43,19 +43,37 @@ as open QUESTIONS and routed to a new exploration plan
 `team-autonomy-primitive-decisions-exploration.plan.md` (`1a36c027d`). The drain plan is executed
 (archive it). This supersedes the Lapwing pickup below — that lane is now drained.
 
-**NEXT-SESSION PICKUP (owner-confirmed):**
+**NEXT-SESSION PICKUP (dedicated consolidation, owner-scoped to a fresh session 2026-06-18):**
 
-1. **The remaining HARD buffers** — `napkin.md`, `distilled.md`, `repo-continuity.md`
-   rotation / graduation (deferred this session by owner direction; the napkin grew with this
-   session's capture).
-2. **Two PDR candidates surfaced this session** (owner decides promotion; both would run the
-   quorum): (a) the **graduation-quorum protocol** itself (Practice-governance — every graduation
-   runs assumptions + docs + 2 Opus + primary correction before it lands); (b) the **homing-category
-   model** (an open question graduates to an exploration plan, not doctrine/reject/residue; a no-fit
-   item signals an incomplete category set — methodology home: `ephemeral-to-permanent-homing.md`).
-   Both captured in `napkin.md` (2026-06-16 Limpet).
-3. **The exploration plan's two questions** (TA1, P6) await an owner-walked decision session — not
-   urgent; evidence gathered via real multi-agent sessions per `n-agent-collaboration-experiments`.
+The 2026-06-18 dedicated consolidation (Wisteria spins Bark, n=2 with Bluebell on the SDK lane) did
+the bulk: repo-continuity PROCESSED to rest (15 concluded Current State entries conserved to pointers;
+char 54.5k → 37.4k as a side effect); napkin drained (5 patterns graduated incl.
+`fluency-is-a-failure-vector`, which homed 13 dangling wikilinks); `distilled.md` already empty;
+pending-graduations drained to decision-debt 0 (PDR-104 best-effort-doctrine policy graduated +
+PDR-003 / consolidate-docs step-8 reconciled); open-questions dispositioned; 7c/7e audits actioned
+(F-68, the Wisteria identity row, the retired-banner fix); and consolidate-docs step-7 gained the
+**PDR-098 recurrence-capture** amendment with the semantic-pathogen inventory seeded in the
+action-time-interrupt plan.
+
+Remainder for the fresh session:
+
+1. **Napkin rotation** — the napkin grew with this session's real-time capture (hard chars /
+   prose-width; under 500 lines so rotation is optional). Its lessons are conserved (several graduated
+   to patterns); a fresh pass rotates/drains it.
+2. **Comms-event rotation** — the retention-gated curator-pass (archive-move events past their class
+   window). The ANALYSIS is done (durable substance homed); only the gated archive-move remains.
+3. **Owner-decision items (NOT agent work):** `testing-strategy.md` hard line-limit (raise or split —
+   owner-only); repo-continuity char-limit (the residual is live content — owner accept/raise); the
+   **fitness-report-self-framing cure** (build? — candidate mechanism in the action-time-interrupt
+   plan's t2 inventory); the 7c stale-thread findings (`semantic-search` last active 2026-06-03;
+   `agentic-mechanisms-discovery` 06-08 and `school-data-search` 06-04 aging toward 14 days —
+   owner review/pause); Q-001 fitness cadence.
+4. **Two PDR candidates** (owner decides; both would run the quorum): the **graduation-quorum
+   protocol** itself; the **homing-category model** (open question → exploration plan, not
+   doctrine/reject/residue). Plus the exploration-plan questions (TA1, P6) awaiting an owner-walked
+   decision session.
+5. `agent-collaboration-research` retired-record prose-width — cosmetic on a historical artefact,
+   reported not chased.
 
 ## Decision-Debt Lane — Next-Session Pickup (updated 2026-06-16, Lapwing holds Troposphere)
 
