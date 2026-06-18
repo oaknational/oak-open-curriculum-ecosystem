@@ -62,88 +62,42 @@ surface.
   spec→input-flow guard test + a breaking-change-classification runbook addition landed with it (owner
   invariant: all API-tool input parameters flow automatically from the spec). Strategic follow-on:
   [`upstream-spec-change-automation.plan.md`](../../plans/sdk-and-mcp-enhancements/future/upstream-spec-change-automation.plan.md).
-- **COLLABORATION-DOCTRINE DECOMPOSITION — strategic brief LANDED (2026-06-17, Phobos turns
-  Singularity, solo, `docs/planning-and-validation`).** Compared the two collaboration directives
-  against the `start-right-team` skill and the PDR corpus; both are **layer-blenders** that predate
-  the PDRs now owning their substance (PDR-056/053, 2026-05-10, postdate `agent-collaboration.md`).
-  Authored [`collaboration-directive-decomposition.plan.md`](../../plans/agent-tooling/future/collaboration-directive-decomposition.plan.md)
-  (future strategic; wired into `future/README.md` Plans table + comms/coordination cluster) — the
-  **doctrine-surface counterpart** to the rightsizing keystone (keystone = *which* machinery
-  survives; this = *where* each surviving unit of doctrine lives, routed by `new-rule-vs-pdr-clause`,
-  directives retired). One correction fed to keystone M2: the operating-context-mode graduates to a
-  **PDR + rule**, not *into* `agent-collaboration.md` (which repeats the blend). **Next safe step**:
-  promote on keystone M2 ratification, OR owner prioritises the doc-hygiene axis.
-- **OWNER-GATED PURGE + UNIVERSAL CLI API-SURFACE CONSISTENCY — LANDED (2026-06-16, Basil tracks
-  Xylem, solo, `docs/planning-and-validation`, commits `5a2d365b8` + `66bd1e218` + `9abd9893f`).** The
-  abolished `owner-gated` vocabulary was purged from all knowledge-flow doctrine surfaces (register, both
-  Codex briefs, both consolidate skills, repo-continuity, thread record, drain plans) — the PDR-100
-  propagation the prior session recorded but never spread. Owner scoped it: knowledge-flow purged;
-  action-authority / safety gates (merge / promotion / Sonar / `--no-verify` / limit-raise / Core-edit)
-  KEPT. (The "Core-edit" gate is later disambiguated by
-  [PDR-104](../../practice-core/decision-records/PDR-104-best-effort-doctrine-authoring-in-consolidation.md):
-  its sub-agent-protection sense is kept; its owner-pre-approval-of-each-doctrine-amendment sense is
-  relaxed for dedicated consolidation sessions.) The active-claims `--active` JSON-parse bug was fixed
-  (actionable boundary error, `parseJsonText`).
-  **PDR-055 amended to universal CLI API-surface-design consistency** (clauses 7–10 + Falsifiability;
-  owner: "a universal requirement for all CLIs in all Practice repos"); `agent-tools-cli-ergonomics.plan.md`
-  authored (`current/`, repo instantiation, WS6 = conformance guard); `memory-surface-critical-drain`
-  superseded. **Next safe step**: push `docs/planning-and-validation`; then CLI-ergonomics plan WS0.
-  (The decision-debt drain that this entry queued is DONE — register drained to 0 live items; its plan
-  executed and archived to `archive/completed/decision-debt-register-drain.plan.md`.)
-- **CLERK 2.1.26 AUTH FIX + NATIVE-MCP-AUTH SPIKE — LANDED, UNPUSHED (2026-06-16, Lavender lifts
-  Pollen, solo, `docs/planning-and-validation`, 6 commits `0692a0b0d`..`bc4fb761f`, 6 ahead of
-  origin).** Owner-Q&A-driven maintenance session. The session's dep bump (`@clerk/express`
-  2.1.23→2.1.26, a **2.1.25 security fix** — `getAuth` trusts only a branded `req.auth`) broke the
-  e2e auth double (500 not 401). Fix (`f11e2e0ff`): inject a fake `getAuth` at the existing
-  `CreateMcpAuthClerkDeps` seam (threaded through `createApp`), deleting the brand workaround and the
-  duplicated auth object; `setupGlobalAuthContext` extracted to its own module to hold `auth-routes`
-  under `max-lines`. Production behaviour unchanged (option defaults to real Clerk deps). Also landed:
-  sentry-node runtime tests reclassified unit→integration with duplicated redaction proofs dropped
-  (`0692a0b0d`); agent-tools portability `max-depth` refactor (`7978fca80`); the dep bump
-  (`bc4fb761f`, last so every commit checks out green). The bespoke-vs-native MCP-auth question is
-  captured as a **strategic spike**:
-  [`security-and-privacy/future/native-mcp-sdk-auth-build-vs-buy.md`](../../plans/security-and-privacy/future/native-mcp-sdk-auth-build-vs-buy.md)
-  (wired into that roadmap + README; MCP SDK 1.29.0 ships `requireBearerAuth`/`mcpAuthRouter`,
-  `@clerk/mcp-tools` 0.5.0 ships an express integration — grounded first-hand). **Next safe step**:
-  push `docs/planning-and-validation` (or fold into its PR); promotion trigger for the spike =
-  owner approves an adopt/adopt-partial recommendation after the investigation runs.
-- **FITNESS REPORT-ONLY + DISCRETE CEILINGS + DWELL-TIME — LANDED + PUSHED (2026-06-16, Lapwing
-  holds Troposphere, solo, `docs/planning-and-validation`, in sync with origin — commits
-  `8665da651` + `3cb64da91`).** All fitness output is now **report-only** — a prioritisation signal
-  that never fails a build (validator always exits 0; `getExitCode` removed as dead enforcement —
-  no hook / CI / `check` consumed it). Decision-debt uses **discrete ceiling** thresholds (count
-  `0/2/3`) not the size ratio, plus a **dwell-time axis** (`fitness_item_dwell_*`, `2/4/7` days),
-  one axis-agnostic engine (`classifyDiscreteZone`, new `dwell.ts`). ADR-144 reframed
-  (gate→signal, semantics-not-severity), PDR-100 Decision 3 reconciled, register frontmatter +
-  agent-tooling plan updated; reviewers run (docs-adr/assumptions/config/test), findings absorbed.
-  Also landed: three discipline cures — citation-or-silence (`verify-dont-trust`),
+- **Collaboration-doctrine decomposition — strategic brief LANDED (2026-06-17).** Both collaboration
+  directives are layer-blenders predating the PDRs that own their substance; the future
+  [`collaboration-directive-decomposition.plan.md`](../../plans/agent-tooling/future/collaboration-directive-decomposition.plan.md)
+  routes each unit by `new-rule-vs-pdr-clause`. Full detail (incl. the M2 operating-context-mode →
+  PDR+rule correction): [`agentic` thread record][agentic] §Collaboration-Doctrine Decomposition Lane.
+  **Next:** promote on rightsizing-keystone M2 ratification.
+- **Owner-gated vocabulary purge + universal CLI API-surface consistency — LANDED (2026-06-16,
+  `5a2d365b8`/`66bd1e218`/`9abd9893f`).** Knowledge-flow `owner-gated` purged; action-authority /
+  safety gates (merge / promotion / Sonar / `--no-verify` / limit-raise / Core-edit) KEPT — the
+  "Core-edit" gate later disambiguated by
+  [PDR-104](../../practice-core/decision-records/PDR-104-best-effort-doctrine-authoring-in-consolidation.md)
+  (sub-agent-protection sense kept; owner-pre-approval-of-each-amendment sense relaxed for dedicated
+  consolidation). PDR-055 amended to universal CLI consistency;
+  [`agent-tools-cli-ergonomics.plan.md`](../../plans/agent-tooling/current/agent-tools-cli-ergonomics.plan.md)
+  authored. Detail: [`agentic` thread record][agentic] §Decision-Debt Lane. **Next:** CLI-ergonomics
+  WS0 (push + decision-debt drain done).
+- **Clerk 2.1.26 auth fix + native-MCP-auth spike — LANDED (2026-06-16, 6 commits
+  `0692a0b0d`..`bc4fb761f`).** The 2.1.25 security fix (`getAuth` trusts only a branded `req.auth`)
+  broke the e2e auth double; fixed by injecting a fake `getAuth` at the `CreateMcpAuthClerkDeps` seam
+  (`f11e2e0ff`), production behaviour unchanged. Bespoke-vs-native MCP-auth captured as a strategic
+  spike: [`native-mcp-sdk-auth-build-vs-buy.md`](../../plans/security-and-privacy/future/native-mcp-sdk-auth-build-vs-buy.md)
+  (MCP SDK 1.29.0 + `@clerk/mcp-tools` 0.5.0, grounded first-hand). **Next:** spike promotes on owner
+  adopt/adopt-partial after the investigation.
+- **Fitness report-only + discrete ceilings + dwell-time — LANDED + PUSHED (2026-06-16,
+  `8665da651`/`3cb64da91`).** All fitness output never fails a build (validator always exits 0);
+  decision-debt uses discrete-ceiling counts + a dwell-time axis (`dwell.ts`). ADR-144 reframed
+  gate→signal; PDR-100 Decision 3 reconciled. Also landed: citation-or-silence (`verify-dont-trust`),
   no-mutable-state-in-memory (`per-user-memory-is-a-buffer`), the Second Question in `AGENT.md`.
-  The decision-debt drain this entry queued is now DONE (register drained to 0 live items).
-  **Open**: cadence-anchor question (`open-questions.md` Q-001 — report-only is only as live as its
-  invocation). Owner directed (2026-06-16) the abolition propagated across all knowledge-flow doctrine
-  surfaces (done); the separate owner-authority concepts that share the word are surfaced for an
-  explicit scope decision. Full pickup: `threads/agentic-engineering-enhancements.next-session.md`.
-- **FITNESS-VALIDATOR SCOPING + DISPOSITION-CATEGORY GROUPING — landing on
-  `docs/planning-and-validation` (2026-06-15, Peregrine turns Airstream).** The
-  practice-fitness and fitness-vocabulary walkers now exclude foreign git
-  worktrees, repo-root `tmp/`, and `.agent/reference-local` (committed
-  `6ffbc14e0`: vocabulary check returned to green; census de-duplicated
-  12/39/79 → 9/19/37). The informational/strict-hard report now groups the
-  per-file section by disposition category (drainable buffers → operational
-  memory → project docs → repo doctrine → Practice Core), recorded as **PDR-097**
-  (portable pattern) and an ADR-144 amendment (repo instantiation; source of
-  truth `agent-tools/src/practice-fitness/categories.ts`). Reviewers
-  (code/test/docs-adr) clean. Committed on `docs/planning-and-validation`. Two
-  follow-on strategic plans captured in `agent-tooling/future/`:
-  [hook-policy TS + schema unification](../../plans/agent-tooling/future/hook-policy-typescript-and-schema-unification.plan.md)
-  (carries the carried-forward workaround content-detection re-add, born from a
-  malformed-policy fail-closed deadlock this session) and
-  [cSpell quality gate](../../plans/agent-tooling/future/cspell-quality-gate.plan.md).
-  **Deep consolidation status: completed this handoff (2026-06-15→16, Europa →
-  Rigel → Snapper binds Coral)** — see the dedicated-consolidation entry above for
-  live residual state. **Next safe step**: open/refresh the PR for
-  `docs/planning-and-validation` (fitness-tooling lane, unrelated to that branch's
-  UAT theme — owner directed committing here).
+  **Open:** Q-001 cadence-anchor (open-questions). Detail: [`agentic` thread record][agentic].
+- **Fitness-validator scoping + disposition-category grouping — LANDED (2026-06-15, `6ffbc14e0`).**
+  The fitness walkers exclude foreign worktrees / repo-root `tmp/` / `.agent/reference-local`; the
+  report groups per-file by disposition category. Recorded as PDR-097 + an ADR-144 amendment (source
+  of truth `agent-tools/src/practice-fitness/categories.ts`). Follow-on plans:
+  [hook-policy TS+schema](../../plans/agent-tooling/future/hook-policy-typescript-and-schema-unification.plan.md)
+  + [cSpell gate](../../plans/agent-tooling/future/cspell-quality-gate.plan.md). **Next:** refresh the
+  PR for `docs/planning-and-validation`.
 - **STRATEGY & PLAN-ESTATE HOLISTIC SURVEY — durable report LANDED (2026-06-15,
   Baobab lifts Topsoil `3be248`).** Multi-wave whole-estate survey (413
   docs; 143+124 agents) + 6-agent adversarial verification → a vision→value→action
