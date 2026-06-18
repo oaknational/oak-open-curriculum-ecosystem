@@ -58,8 +58,11 @@ action-time-interrupt plan.
 Remainder for the fresh session:
 
 1. **Napkin rotation** — the napkin grew with this session's real-time capture (hard chars /
-   prose-width; under 500 lines so rotation is optional). Its lessons are conserved (several graduated
-   to patterns); a fresh pass rotates/drains it.
+   prose-width; under 500 lines so rotation is optional). The 2026-06-17/18 entries are **already
+   dispositioned** this session (graduated to the 5 new patterns / folded / confirmed already-homed /
+   routed to F-68 + PDR-104) — rotation **archives** them, it does not re-run the quorum (the 5 new
+   patterns are the durable record). See the napkin's `Loss-scan findings` entry. A fresh pass rotates
+   the processed window.
 2. **Comms-event rotation** — the retention-gated curator-pass (archive-move events past their class
    window). The ANALYSIS is done (durable substance homed); only the gated archive-move remains.
 3. **Owner-decision items (NOT agent work):** `testing-strategy.md` hard line-limit (raise or split —

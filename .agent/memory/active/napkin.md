@@ -283,3 +283,28 @@ reconciliation.
   is the TRIPWIRE to do the work, not a disposition. The quorum is run, not awaited; analysis is done,
   not retention-gated; continuity is processed (verification-led, conserve-insight), not deferred for
   numbers. Curate the knowledge — that is the only goal.
+
+## Loss-scan findings at session-end (2026-06-18, Wisteria spins Bark)
+
+Adversarial loss-scan (PDR-011 §6e.2, owner-requested) — held in context, not durable until now:
+
+- **Use the `claims close` CLI; do not hand-roll the closed-claims archive JSON.** I hand-rolled the
+  claim-close and burned four schema-fix iterations: the closed-claims root key is `claims` (not
+  `closed_claims`), `archived_at` is **date** format (not date-time), and `closure.evidence[]` items
+  are `evidence_ref` objects `{kind (enum), ref, summary}`, not strings. `collaboration-state claims
+  close` exists and handles all of this — reach for it.
+- **lint-staged stash gotcha after a blocked commit.** A pre-commit failure leaves the index STAGED;
+  a later `git add` of a *different* file adds to that same index (the next commit lands both —
+  watch the file count). And lint-staged lints the WORKING TREE (post-`markdownlint --fix`) while
+  `git commit` commits the INDEX BLOB — so a `--fix` applied *after* staging does not reach the
+  commit (the staged blob keeps the unfixed line). Cure: after a blocked commit, re-`git add` the
+  corrected file so the index matches the linted working tree, and verify with `git show HEAD:<file>`.
+- **The 2026-06-17/18 napkin entries are already DISPOSITIONED this session** (graduated to the 5 new
+  patterns / folded into `delivering-a-reframing-is-a-consumer-walk` / confirmed already-homed / routed
+  to F-68 + PDR-104). They physically remain in the napkin (drain = dispositioned, not removed). The
+  fresh session's rotation ARCHIVES them — it does not re-run the quorum; the 5 new patterns are the
+  durable record that they were decided.
+- **Per-user memory is over-limit and a behavioural entry is due.** The gate-invention-to-defer reflex
+  (owner-corrected 4× this session) is MY cross-session behaviour worth a per-user feedback entry, but
+  `MEMORY.md` is over its size limit — a per-user-memory curation pass is separately due (not part of
+  this repo consolidation).
