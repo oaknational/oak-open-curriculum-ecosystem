@@ -250,3 +250,14 @@ reconciliation.
   mechanism lane (PDR-098 / action-time-structural-interrupt plan), not silent deletion; (2) seed the
   semantic-pathogen inventory from this recurring family. The fitness-report-self-framing cure (entry
   above) is one concrete mechanism instance for one pathogen (conservation-first).
+
+## n=2 with Bluebell went clean — positive PDR-082 instance (2026-06-18, Wisteria spins Bark)
+
+- A smooth n=2 worked instance (PDR-082 / start-right-team) worth conserving as confirming evidence:
+  complementary boundary split (Bluebell: `packages/sdks/**` + `plans/sdk-and-mcp-enhancements/` SDK
+  spec-sync; me: `.agent/memory/**` + `.agent/practice-core/**` curation), a subtree-scoped plans-claim
+  clarification when the two broad `.agent/plans/**` claims technically overlapped, a deferred-memory
+  handoff (Bluebell routed their continuity bullet to me — folded as `562813bac`), commit-window
+  singleton (index-free signalled each way), a batched push of all four commits, and a loss-sweep
+  handoff at their closeout that fed the PDR-098 lane its first real input (their config-test
+  recurrence-despite-home → the t2 inventory). Low-ceremony, no collision; the protocol worked as designed.

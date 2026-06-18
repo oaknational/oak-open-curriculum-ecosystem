@@ -390,6 +390,27 @@ Why this instance is load-bearing for t2/t3:
   triggers the failure, per the metacognition directive §Cure Shape). Candidate mechanism
   is NOT pre-authored as an executable here, per the scope discipline below.
 
+## Worked Instance — Config/Type-Proving Test Despite testing-strategy Doctrine (2026-06-18)
+
+A third t2 inventory entry, surfaced through Bluebell guards Acorn's n=2 loss-sweep
+handoff (the recurrence-capture step working end-to-end: a peer routed the signal, the
+consolidator homed it here). While landing the SDK spec-sync, the agent reached for a
+vitest test to "guard" the spec→input-parameter invariant; the owner corrected
+mid-session — *"tests prove behaviour, not configuration; vitest is not the tool for
+proving types — that's the type checker's job."* The doctrine is already homed
+(`testing-strategy.md`: tests prove behaviour not configuration; the type system is the
+tool for type invariants), yet the agent reached for a config/type-proving test anyway —
+a **recurrence-despite-home**.
+
+Firing signature (t3): unusually strong and mechanical — authoring a test file whose
+assertions mirror a config value or a type-level invariant (rather than exercising
+runtime behaviour) is detectable at write time, and `testing-strategy.md` names the
+surface shapes. Candidate mechanism (NOT pre-authored, per scope discipline): a
+write-time advisory when a new test's assertions match a config/schema/type shape,
+citing testing-strategy. This is a **second fresh homed-doctrine-not-firing instance
+this session** (alongside conservation-first above) — the recurrence rate the t2/t3
+mechanism choice needs as its evidence base.
+
 ## Note on Scope Discipline
 
 This is a strategic design-space plan. It contains no executable workstreams or
