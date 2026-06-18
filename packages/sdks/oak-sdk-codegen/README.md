@@ -138,6 +138,22 @@ alignment with the upstream description rewrite (oak-openapi pull request 269).
    API's own changelog (`GET /changelog/latest`) records _versioned_ changes
    only — documentation-only deploys move the build hash without a changelog
    entry, so an empty changelog delta does not mean an unchanged spec.
+4. **Classify structural drift as additive or consumer-breaking.** Separating
+   structural from documentation drift (step 2) is not enough — a structural
+   change still divides into two kinds, and the distinction is what a consumer
+   needs to know:
+   - **Additive** — a new path, a new optional parameter, a widened response.
+     Existing callers keep working.
+   - **Consumer-breaking** — a path or parameter renamed or removed, a parameter
+     made required, a response type narrowed. Existing callers that named the old
+     shape must change. A rename flows through codegen cleanly and type-checks
+     green (the flow below), yet it _is_ a contract change for callers: e.g. the
+     2026-06-18 `/sequences/{slug}` → `/sequences/{sequence}` rename is
+     consumer-breaking at the MCP tool input boundary even though it cost zero
+     hand-edits. For the MCP transport the break is self-healing (agents read the
+     live `inputSchema` each session); for any pinned SDK consumer it is not.
+     Record consumer-breaking changes in the changelog / PR description with a
+     one-line migration note, even when the in-repo blast radius is zero.
 
 ### Run the designed alignment path
 
@@ -156,6 +172,37 @@ behaviours to know:
   (`pnpm --filter @oaknational/sdk-codegen sdk-codegen`) and verify
   `info.version` moved in both the schema cache and
   `src/types/generated/api-schema/api-schema-original.json`.
+
+### The spec→input-parameter flow is compile-time-enforced, not test-enforced
+
+Every API (path-proxying) tool's input parameters flow automatically from the
+spec, and that flow is guaranteed by three layers — **none of which is a runtime
+test**:
+
+- **Single-source codegen.** A generated tool's input schema comes only from its
+  generated descriptor (`requireGeneratedToolInputShape`); generated files are
+  `DO NOT EDIT` and reproduced by the generator. There is no seam through which a
+  hand-authored API-tool parameter can enter. (The four aggregated tools —
+  `search`, `fetch`, `get-curriculum-model`, `download-asset` — are
+  application-level composites with no single upstream path; their hand-written
+  schemas are a distinct class, not API-endpoint parameters.)
+- **The type checker.** Each tool's nested `ToolPathParams` is
+  `satisfies ToolDescriptor<…>` against the spec-typed `api-paths-types.ts`, and
+  `transformFlatToNestedArgs(flat): ToolArgs` is typed so the flat→nested
+  round-trip will not compile if it drifts. This includes the deliberate
+  `normaliseParamName` simplification (the `Slug` suffix is stripped for the
+  MCP-facing flat name, e.g. `threadSlug` → `thread`, while the spec-faithful
+  name stays in the nested schema). A deliberate `sequence`→`slug` drift in a
+  generated tool fails `tsc` with `error TS2322` — proof the flow is held at
+  compile time.
+- **Codegen idempotency.** Re-running `sdk-codegen` reproduces byte-identical
+  output, so the committed generated files _are_ the current spec.
+
+Do **not** add a Vitest test asserting that tool parameters match the spec. Such
+a test proves configuration and duplicates the type checker — types are the type
+checker's job. If you want to confirm the invariant holds, run `type-check`, not
+a unit test. The path toward fully automating spec-change handling is captured in
+[`upstream-spec-change-automation.plan.md`](../../../.agent/plans/sdk-and-mcp-enhancements/future/upstream-spec-change-automation.plan.md).
 
 ### Expect the correction-layer tripwires to fire
 

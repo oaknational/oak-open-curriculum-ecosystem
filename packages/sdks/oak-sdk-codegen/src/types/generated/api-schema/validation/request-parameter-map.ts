@@ -7,8 +7,8 @@ import { z } from 'zod';
 import type { ApiHttpMethod, ValidPath } from '../path-parameters.js';
 
 export const REQUEST_PARAMETER_SCHEMAS = {
-  "GET:/sequences/:slug": z.object({
-    "slug": z.string(),
+  "GET:/sequences/:sequence": z.object({
+    "sequence": z.string(),
   }),
   "GET:/sequences/:sequence/units": z.object({
     "sequence": z.string(),

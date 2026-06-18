@@ -8,13 +8,13 @@ import type { OakApiPathBasedClient } from '../../client-types.js';
  * GENERATED FILE - DO NOT EDIT
  * 
  * Tool: get-sequences
- * Path: /sequences/\{slug\}
+ * Path: /sequences/\{sequence\}
  * Method: GET
  */
 
 const operationId = 'getSequences-getSubjectSequence' as const;
 const name = 'get-sequences' as const;
-const path = '/sequences/{slug}' as const;
+const path = '/sequences/{sequence}' as const;
 const method = 'GET' as const;
 
 
@@ -23,7 +23,7 @@ const method = 'GET' as const;
  */
 export interface ToolPathParams {
   /** The sequence slug identifier */
-  readonly slug: string;
+  readonly sequence: string;
 }
 export interface ToolParams {
   readonly path: ToolPathParams;
@@ -31,11 +31,11 @@ export interface ToolParams {
 
 export interface ToolArgs { readonly params: ToolParams; }
 
-export const toolInputJsonSchema = { type: 'object' as const, properties: {"slug":{"type":"string","description":"The sequence slug identifier","examples":["art-secondary"]}} as const, additionalProperties: false as const, required: ["slug"] };
-export const toolZodSchema = z.object({ params: z.object({ path: z.object({ slug: z.string().describe("The sequence slug identifier") }) }) });
-export const toolMcpFlatInputSchema = z.strictObject({ slug: z.string().describe("The sequence slug identifier").meta({ examples: ["art-secondary"] }) });
+export const toolInputJsonSchema = { type: 'object' as const, properties: {"sequence":{"type":"string","description":"The sequence slug identifier","examples":["art-secondary"]}} as const, additionalProperties: false as const, required: ["sequence"] };
+export const toolZodSchema = z.object({ params: z.object({ path: z.object({ sequence: z.string().describe("The sequence slug identifier") }) }) });
+export const toolMcpFlatInputSchema = z.strictObject({ sequence: z.string().describe("The sequence slug identifier").meta({ examples: ["art-secondary"] }) });
 export type ToolInputSchema = z.infer<typeof toolZodSchema>;
-const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"slug":{"type":"string","description":"The sequence slug identifier","examples":["art-secondary"]}},"additionalProperties":false,"required":["slug"]}\nRequired: slug';
+const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"sequence":{"type":"string","description":"The sequence slug identifier","examples":["art-secondary"]}},"additionalProperties":false,"required":["sequence"]}\nRequired: sequence';
 export const describeToolArgs = () => toolArgsDescription;
 /**
  * Transform flat MCP arguments to nested SDK format.
@@ -49,7 +49,7 @@ export const describeToolArgs = () => toolArgsDescription;
 export function transformFlatToNestedArgs(flatArgs: z.infer<typeof toolMcpFlatInputSchema>): ToolArgs {
   const params: ToolParams = {
     path: {
-      slug: flatArgs.slug,
+      sequence: flatArgs.sequence,
     },
   };
   return { params };
@@ -88,10 +88,10 @@ export const getSequences = {
     if (!validation.success) {
       throw new TypeError(describeToolArgs());
     }
-    const endpoint = client["/sequences/{slug}"];
+    const endpoint = client["/sequences/{sequence}"];
     const call = endpoint ? endpoint.GET : undefined;
     if (typeof call !== "function") {
-      throw new TypeError('Invalid method on endpoint: GET for /sequences/{slug}');
+      throw new TypeError('Invalid method on endpoint: GET for /sequences/{sequence}');
     }
     const response = await call(validation.data);
     const status = response.response.status;

@@ -7,6 +7,7 @@ Strategic briefs and review checkpoints for later work.
 | [post-merge-tidy-up.plan.md](post-merge-tidy-up.plan.md) | Non-blocking follow-ups from ws1, error handling, resource pattern, and review work | Not started | Merge to main |
 | [mcp-tool-token-economy-and-progressive-discovery.plan.md](mcp-tool-token-economy-and-progressive-discovery.plan.md) | Strategic brief for Cloudflare/Anthropic Code Mode patterns, progressive tool discovery, token measurement, and Oak MCP applicability | Strategic | Token-footprint evidence or Cloudflare portal Code Mode availability |
 | [ws2-ws3-pedagogical-review-checkpoint.plan.md](ws2-ws3-pedagogical-review-checkpoint.plan.md) | Review checkpoint: evaluate whether `get-curriculum-model` provides sufficient pedagogical context | Deferred | WS1 deployment + production usage |
+| [upstream-spec-change-automation.plan.md](upstream-spec-change-automation.plan.md) | Move the upstream-spec-change pipeline toward automatic-and-correct: scheduled detection → regenerate → breaking-change classification → review-ready PR, consuming the existing compile-time + idempotency correctness layers | Strategic | Owner prioritises the automation lane, or a spec change is missed because detection was manual |
 
 Active work: [active/README.md](../active/README.md)
 Next-up queue: [current/README.md](../current/README.md)

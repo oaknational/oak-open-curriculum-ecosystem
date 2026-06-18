@@ -1,5 +1,5 @@
 export interface paths {
-    "/sequences/{slug}": {
+    "/sequences/{sequence}": {
         parameters: {
             query?: never;
             header?: never;
@@ -3351,7 +3351,7 @@ export interface operations {
             header?: never;
             path: {
                 /** The sequence slug identifier */
-                slug: string;
+                sequence: string;
             };
             cookie?: never;
         };

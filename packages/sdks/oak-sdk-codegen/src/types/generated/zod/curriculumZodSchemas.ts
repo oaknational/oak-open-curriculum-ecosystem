@@ -12,7 +12,7 @@ interface Endpoint {
 }
 
 const OPERATION_ID_BY_METHOD_AND_PATH = {
-  "get /sequences/:slug": "getSequences-getSubjectSequence",
+  "get /sequences/:sequence": "getSequences-getSubjectSequence",
   "get /sequences/:sequence/units": "getSequences-getSequenceUnits",
   "get /lessons/:lesson/transcript": "getLessonTranscript-getLessonTranscript",
   "get /search/transcripts": "searchTranscripts-searchTranscripts",
@@ -2547,6 +2547,41 @@ Example queries: the mitochondria are the powerhouse, to be or not to be, carry 
   },
   {
     method: "get",
+    path: "/sequences/:sequence",
+    description: `Use when you have a sequence slug and need the sequence-level summary. A sequence is a subject&#x27;s curriculum across a phase (e.g. maths-primary, science-secondary-aqa); it spans one or more National Curriculum schemes and contains one programme per year group. Get sequence slugs from GET /subjects or GET /subjects/{subject} (the sequenceSlugs field). Returns slug, phase, key stages, years, and any KS4 programme factors (exam board, tier, child subject, pathway) needed to interpret the programmes within it.
+
+Not for: the programmes within this sequence (GET /sequences/{sequence}/programmes); the unit sequence for one programme (GET /sequences/{sequence}/programmes/{programme}/units); all units across the sequence (GET /sequences/{sequence}/units); subject-level catalogue data (GET /subjects or GET /subjects/{subject}).
+
+Example: sequence&#x3D;maths-primary or science-secondary-aqa.`,
+    requestFormat: "json",
+    parameters: [
+      {
+        name: "sequence",
+        type: "Path",
+        schema: z.string(),
+      },
+    ],
+    response: SubjectSequenceResponseSchema,
+    errors: [
+      {
+        status: 400,
+        description: `Bad request - e.g. &quot;Content is blocked for copyright reasons&quot;`,
+        schema: error_BAD_REQUEST,
+      },
+      {
+        status: 401,
+        description: `API token not provided or invalid`,
+        schema: error_UNAUTHORIZED,
+      },
+      {
+        status: 404,
+        description: `Detail of the request causing the 404, e.g. &quot;Lesson not found&quot;`,
+        schema: error_NOT_FOUND,
+      },
+    ],
+  },
+  {
+    method: "get",
     path: "/sequences/:sequence/assets",
     description: `Use when you need every downloadable asset across a whole sequence — all programmes combined. Returns assets grouped by lesson in unit sequence order, with signed download URLs, asset type, lesson title and slug, and attribution. Pass year as an optional filter. Narrow further with type (one of: slideDeck, starterQuiz, starterQuizAnswers, exitQuiz, exitQuizAnswers, worksheet, worksheetAnswers, supplementaryResource, video). Lesson content is under OGL v3.0; assets are either Oak-owned or third-party under an OGL-compatible licence. Attribution required — see https://open-api.thenational.academy/docs/about-oaks-api/terms.
 
@@ -2690,41 +2725,6 @@ Example: sequence&#x3D;science-secondary-aqa or maths-primary.`,
       },
     ],
     response: SequenceUnitsResponseSchema,
-    errors: [
-      {
-        status: 400,
-        description: `Bad request - e.g. &quot;Content is blocked for copyright reasons&quot;`,
-        schema: error_BAD_REQUEST,
-      },
-      {
-        status: 401,
-        description: `API token not provided or invalid`,
-        schema: error_UNAUTHORIZED,
-      },
-      {
-        status: 404,
-        description: `Detail of the request causing the 404, e.g. &quot;Lesson not found&quot;`,
-        schema: error_NOT_FOUND,
-      },
-    ],
-  },
-  {
-    method: "get",
-    path: "/sequences/:slug",
-    description: `Use when you have a sequence slug and need the sequence-level summary. A sequence is a subject&#x27;s curriculum across a phase (e.g. maths-primary, science-secondary-aqa); it spans one or more National Curriculum schemes and contains one programme per year group. Get sequence slugs from GET /subjects or GET /subjects/{subject} (the sequenceSlugs field). Returns slug, phase, key stages, years, and any KS4 programme factors (exam board, tier, child subject, pathway) needed to interpret the programmes within it.
-
-Not for: the programmes within this sequence (GET /sequences/{sequence}/programmes); the unit sequence for one programme (GET /sequences/{sequence}/programmes/{programme}/units); all units across the sequence (GET /sequences/{sequence}/units); subject-level catalogue data (GET /subjects or GET /subjects/{subject}).
-
-Example: sequence&#x3D;maths-primary or science-secondary-aqa.`,
-    requestFormat: "json",
-    parameters: [
-      {
-        name: "slug",
-        type: "Path",
-        schema: z.string(),
-      },
-    ],
-    response: SubjectSequenceResponseSchema,
     errors: [
       {
         status: 400,

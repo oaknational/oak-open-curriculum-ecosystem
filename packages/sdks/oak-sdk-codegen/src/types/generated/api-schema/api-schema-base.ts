@@ -8,7 +8,7 @@ export const schemaBase = {
   "openapi": "3.1.0",
   "info": {
     "title": "Oak OpenAPI",
-    "version": "0.7.0-69d2b6c9fd28bb7a76f4659225818f179b18e280"
+    "version": "0.7.0-f7c18eadb6d5d287f3d339b503bb1c48aa8517a3"
   },
   "servers": [
     {
@@ -45,7 +45,7 @@ export const schemaBase = {
     "url": "https://open-api.thenational.academy/api/v0/swagger.json"
   },
   "paths": {
-    "/sequences/{slug}": {
+    "/sequences/{sequence}": {
       "get": {
         "operationId": "getSequences-getSubjectSequence",
         "summary": "Sequencing information for a given sequence slug",
@@ -62,7 +62,7 @@ export const schemaBase = {
         "parameters": [
           {
             "in": "path",
-            "name": "slug",
+            "name": "sequence",
             "schema": {
               "type": "string",
               "description": "The sequence slug identifier",

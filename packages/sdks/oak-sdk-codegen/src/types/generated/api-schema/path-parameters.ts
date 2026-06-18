@@ -39,10 +39,10 @@ export const PATHS = {
   '/rate-limit': '/rate-limit',
   '/search/lessons': '/search/lessons',
   '/search/transcripts': '/search/transcripts',
+  '/sequences/{sequence}': '/sequences/{sequence}',
   '/sequences/{sequence}/assets': '/sequences/{sequence}/assets',
   '/sequences/{sequence}/questions': '/sequences/{sequence}/questions',
   '/sequences/{sequence}/units': '/sequences/{sequence}/units',
-  '/sequences/{slug}': '/sequences/{slug}',
   '/subjects': '/subjects',
   '/subjects/{subject}': '/subjects/{subject}',
   '/subjects/{subject}/key-stages': '/subjects/{subject}/key-stages',
@@ -142,10 +142,10 @@ export type GetResponseBody =
   | Paths['/rate-limit']['get']['responses'][200]['content']['application/json']
   | Paths['/search/lessons']['get']['responses'][200]['content']['application/json']
   | Paths['/search/transcripts']['get']['responses'][200]['content']['application/json']
+  | Paths['/sequences/{sequence}']['get']['responses'][200]['content']['application/json']
   | Paths['/sequences/{sequence}/assets']['get']['responses'][200]['content']['application/json']
   | Paths['/sequences/{sequence}/questions']['get']['responses'][200]['content']['application/json']
   | Paths['/sequences/{sequence}/units']['get']['responses'][200]['content']['application/json']
-  | Paths['/sequences/{slug}']['get']['responses'][200]['content']['application/json']
   | Paths['/subjects']['get']['responses'][200]['content']['application/json']
   | Paths['/subjects/{subject}']['get']['responses'][200]['content']['application/json']
   | Paths['/subjects/{subject}/key-stages']['get']['responses'][200]['content']['application/json']
@@ -285,7 +285,7 @@ export function isValidPathParameter(parameterType: unknown, value: unknown): bo
 /**
  * Path grouping keys
  */
-export type PathGroupingKeys = "NO_PARAMS" | "keyStage_subject" | "lesson" | "lesson_type" | "sequence" | "slug" | "subject" | "threadSlug" | "unit";
+export type PathGroupingKeys = "NO_PARAMS" | "keyStage_subject" | "lesson" | "lesson_type" | "sequence" | "subject" | "threadSlug" | "unit";
 
 
 /**
@@ -408,6 +408,11 @@ export const VALID_PATHS_BY_PARAMETERS: ValidPathGroupings = {
     }
   },
   "sequence": {
+    "/sequences/{sequence}": {
+        "params": "sequence",
+        "path": "/sequences/{sequence}",
+        "paramsKey": "sequence"
+    },
     "/sequences/{sequence}/assets": {
         "params": "sequence",
         "path": "/sequences/{sequence}/assets",
@@ -422,13 +427,6 @@ export const VALID_PATHS_BY_PARAMETERS: ValidPathGroupings = {
         "params": "sequence",
         "path": "/sequences/{sequence}/units",
         "paramsKey": "sequence"
-    }
-  },
-  "slug": {
-    "/sequences/{slug}": {
-        "params": "slug",
-        "path": "/sequences/{slug}",
-        "paramsKey": "slug"
     }
   },
   "subject": {
@@ -470,7 +468,7 @@ export const VALID_PATHS_BY_PARAMETERS: ValidPathGroupings = {
  */
 export const PATH_OPERATIONS = [
   {
-    "path": "/sequences/{slug}",
+    "path": "/sequences/{sequence}",
     "method": "get",
     "operationId": "getSequences-getSubjectSequence",
     "summary": "Sequencing information for a given sequence slug",
@@ -478,7 +476,7 @@ export const PATH_OPERATIONS = [
     "parameters": [
       {
         "in": "path",
-        "name": "slug",
+        "name": "sequence",
         "description": "The sequence slug identifier",
         "required": true,
         "schema": {
