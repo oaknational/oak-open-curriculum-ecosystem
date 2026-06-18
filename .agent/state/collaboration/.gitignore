@@ -5,6 +5,10 @@ _tmp-*
 *.seen
 comms/*
 comms-seen/*
+# A watcher seen-file / heartbeat mis-placed at the collaboration root (it belongs in
+# comms-seen/) must still never be committed — F-69, the 2026-06-18 Bluebell instance.
+*-seen.json
+*.heartbeat.json
 comms-draft/*
 handoffs/*
 !handoffs/README.md
