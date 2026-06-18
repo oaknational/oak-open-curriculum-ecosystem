@@ -308,3 +308,29 @@ Adversarial loss-scan (PDR-011 §6e.2, owner-requested) — held in context, not
   (owner-corrected 4× this session) is MY cross-session behaviour worth a per-user feedback entry, but
   `MEMORY.md` is over its size limit — a per-user-memory curation pass is separately due (not part of
   this repo consolidation).
+
+## Last insights before handoff (2026-06-18, Wisteria spins Bark)
+
+Higher-order, not named by any single entry above (against the don't-manufacture screen — these
+genuinely change future behaviour):
+
+- **Best-effort consolidation (PDR-104) is only as safe as the external check that follows it; the
+  PDR-098 mechanisms are what make it safe AUTONOMOUSLY.** This session's "flow self-corrects" was the
+  OWNER, four times — not an automated flow. The fitness-number-chasing, the continuity-condensing, and
+  the three invented gates were caught by owner correction; only the pattern graduations were caught by
+  the (quorum) flow. So PDR-104 and the PDR-098 family are **complementary**: best-effort authoring is
+  only as safe as the correction that follows, and for an owner-absent consolidation that correction
+  must be MECHANICAL (the recurrence-capture step, the fitness-report-self-framing cure, the F-69
+  session-open sweep). Consequence: those mechanisms are not polish — they are what makes PDR-104 safe
+  without an owner watching; a solo *autonomous* dedicated-consolidation, before they exist, is
+  higher-risk than PDR-104 alone implies. Candidate: a PDR-104 ↔ PDR-098 link / amendment.
+- **The consolidation + handoff CLI path is friction-dense — ~7 frictions in one session** (commit-queue
+  spawn bug; enqueue bare-UUID F-68; claim-close hand-rolled with 4 schema iterations; lint-staged
+  stash; stale-state no-sweep F-69; the gitignore mis-placement; the `pnpm agent-tools:X --`
+  arg-mangling + `check-commit-message -F` direct path). Each is minor; the DENSITY is the signal that
+  the collaboration-state / commit / handoff surface — not the broad CLI estate — should be the
+  agent-tools-cli-ergonomics (PDR-055) priority.
+- **(me) Oscillating internally on continue-vs-checkpoint burns context.** I spent significant context
+  wrestling "is checkpointing the defer-reflex?" before the owner made the scope call. The
+  continue-vs-defer decision under context pressure is the owner's (scope is theirs) — surface it early
+  rather than resolving it by internal oscillation. Sibling: the gate-invention entry above.
