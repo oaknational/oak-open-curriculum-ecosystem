@@ -96,8 +96,8 @@ surface.
   report groups per-file by disposition category. Recorded as PDR-097 + an ADR-144 amendment (source
   of truth `agent-tools/src/practice-fitness/categories.ts`). Follow-on plans:
   [hook-policy TS+schema](../../plans/agent-tooling/future/hook-policy-typescript-and-schema-unification.plan.md)
-  + [cSpell gate](../../plans/agent-tooling/future/cspell-quality-gate.plan.md). **Next:** refresh the
-  PR for `docs/planning-and-validation`.
+  and [cSpell gate](../../plans/agent-tooling/future/cspell-quality-gate.plan.md). **Next:** refresh
+  the PR for `docs/planning-and-validation`.
 - **STRATEGY & PLAN-ESTATE HOLISTIC SURVEY — durable report LANDED (2026-06-15,
   Baobab lifts Topsoil `3be248`).** Multi-wave whole-estate survey (413
   docs; 143+124 agents) + 6-agent adversarial verification → a vision→value→action
