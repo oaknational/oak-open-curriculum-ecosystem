@@ -9,7 +9,9 @@ merge_class: index-narrative-tables
 ---
 # Next-Session Record — `repo-professionalism-assessment` thread
 
-## RETIRED — 2026-06-15 (Q-005 resolved)
+> **RETIRED — 2026-06-15 (Q-005 resolved).** Routed into existing collection plans as live
+> backlog; no new standalone thread (owner decision, 2026-06-15 consolidation walk). The record
+> persists as the conserved item → collection routing map below.
 
 Owner decision (2026-06-15 consolidation walk): the
 [2026-06-03 professionalism report][report] roadmap **does become practical
