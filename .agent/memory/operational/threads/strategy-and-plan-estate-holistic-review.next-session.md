@@ -50,10 +50,9 @@ foundation; its report + raw data live in
   keystones, §14.2 correction), hybrid taxonomy depth, README-names-three. `2a-decisions.md` is
   **archived** (`.agent/plans/archive/`, 2026-06-18; decisions preserved in the controlling plan).
   `value-and-impact.md` is **also archived** (`.agent/plans/archive/`); Body 2 absorbs its
-  value-articulation prose from the archived copy (a live doc stating the wrong plan is a hazard,
-  not education — extract-and-archive, never banner-and-keep). The **2A/2B/2C phases are
-  dissolved**, not relabelled (2A→Body 2; 2B gap analysis + 2C
-  spine → Body 3); no "2A/2B/2C" step is in the sequence.
+  value-articulation prose from the archived copy. The strategy layer is **three co-equal bodies**
+  on the informational model — the within-ecosystem gap analysis (SDK/search/graph/EEF, hybrid
+  depth) and the milestone structure are aspects of Body 3, not a separate strategy phase.
 
 ## Order — the informational model (SUPERSEDES the 2026-06-17 A→B→C and the prior Phase 1/2/3)
 
@@ -127,15 +126,12 @@ Reading/extraction/hygiene are independent and runnable now.
 
 ## Artefacts landed 2026-06-18 (approach reconception + residue purge — Asteroid)
 
-- **Controlling plan reconceived** — three-phase temporal DAG → four-layer informational
-  model; three co-equal first-class bodies; strategy homed at `docs/strategy/`; K1–K3 demoted
-  to the app's readiness keystones; schools non-goal stated; 2A/2B/2C dissolved; a Disposition
-  of Superseded Prior Work register; Body 2 made executable (editorial-voice + measures-are-an-
-  Oak-input guards, enforceable in acceptance/proof/risk).
+- **Controlling plan reconceived** to the four-layer informational model with three co-equal
+  first-class bodies; strategy homed at `docs/strategy/`; K1–K3 positioned as the app's readiness
+  keystones; schools non-goal stated; a Disposition of Superseded Prior Work register; Body 2 made
+  executable (editorial-voice + measures-are-an-Oak-input guards, enforceable in acceptance/proof/risk).
 - **`2a-decisions.md` AND `value-and-impact.md` archived** to `.agent/plans/archive/`, each with a
   supersession mapping (Body 2 absorbs their useful content from the archive); references repointed.
-  Lesson: a live doc stating the wrong plan is a hazard, not education — extract-and-archive, never
-  banner-and-keep.
 - **Survey report caution-bannered** (`2026-06-15`): strategy framing §11/§13/§15 invalidated;
   empirical map dated; **fresh estate survey required** for Body 3. NOTE: same hazard as the two
   archived plans — its archival should follow the same extract-and-archive treatment (flagged to
@@ -172,7 +168,7 @@ five "decided" surfaces (`launch-readiness-framework.md`, `high-level-plan.md`,
 lives in the controlling plan** (§Owner Decisions); the
 [2a-decisions brief](../../../plans/archive/vision-strategy-and-plan-estate.2a-decisions.md) (archived) is a
 **superseded input** (decisions preserved, framing corrected 2026-06-18). K1–K3 remain the
-MCP-app stream's production-readiness keystones, not the strategic centre.
+MCP-app stream's production-readiness keystones.
 
 ## Delta since the 2026-06-15 survey (re-grounded first-hand 2026-06-17; empirical figures dated)
 

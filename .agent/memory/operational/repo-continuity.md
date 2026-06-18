@@ -34,11 +34,10 @@ surface.
   quoted/linked/copied); stream→goal map: teachers←app, ecosystem←tools **and** the Practice
   framework, **schools = deliberate non-goal**. **(2)** the three streams are a **system** (framework
   builds the two; tools are the app's foundation; app proves the foundation) — strategy must be
-  cohesive **across and within**. **(3)** the MCP app is **NOT** "the go-live stream", does **NOT**
-  happen first, is **NOT** more important — it has extra alpha→beta→production requirements, a
-  property not a ranking. **(4)** K1–K3 are **demoted** from "the strategic centre" to the app
-  stream's production-readiness keystones (the ratified decisions are **preserved**, only the
-  framing corrected). Strategy gets a new home: **`docs/strategy/`**.
+  cohesive **across and within**, and all three streams are co-equal. **(3)** the MCP app carries
+  additional alpha→beta→production requirements (a property of that stream); **K1–K3 are its
+  production-readiness keystones** (the ratified decisions are **preserved**). Strategy gets a new
+  home: **`docs/strategy/`**.
   **Next safe step:** author the **strategy corpus (Body 2)** at `docs/strategy/` (diagnosis;
   Oak-alignment as original derivation; streams-as-system map; per-stream choices + won't-do +
   measures; K1–K3 inside the app section; release-readiness as named hand-offs). In parallel, the

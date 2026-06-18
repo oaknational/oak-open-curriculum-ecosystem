@@ -185,3 +185,13 @@ reconciliation.
   consolidate-docs first; the owner had to stop me. This is PDR-103's prediction confirmed: a
   passive/artefact gate loses to fluency under context pressure. **Recorded first instance toward
   the evidence-gated hook escalation** — a second instance should wire the hook.
+- **Extract-and-archive over banner-and-keep; and lessons go in the napkin, not the live doc.**
+  Two instances of keeping a dead idea visible. (1) I bannered `value-and-impact` "superseded" and
+  left it live in `.agent/plans/` when the owner had said archive it — a live doc stating the wrong
+  plan is a hazard no banner fixes (a reader skims past the banner; the wrong content has gravity).
+  Cure: extract the useful content, archive the file (the archive *is* the preservation), state the
+  present design positively. (2) While *removing* tombstones I *added* new ones — "do not
+  reintroduce", "NOT the go-live stream", a "Lesson: …" line — memorialising the dead framing in
+  the live plan/continuity. The recursion is the tell: rationale and lessons belong in the napkin
+  (capture surface) and on the archived artefact's supersession mapping; the live plan states only
+  the present design. Sibling: [[no-tombstones-for-removed-ideas]], [[fluency-is-a-failure-vector]].
