@@ -203,7 +203,7 @@ surface that makes later governance or enforcement honest.
 - **Wire-Format-Aware Redaction** -- Use this when: telemetry redaction protects structured objects or URLs, but secrets can also travel through raw encoded strings such as `application/x-www-form-urlencoded` request bodies. → [wire-format-aware-redaction.md](wire-format-aware-redaction.md)
 - **Workaround Debt Compounds Through Rationalisation** -- Use this when: a workaround exists and someone is explaining why it's justified, especially when invoking "different purposes" or "separate concerns". → [workaround-debt-compounds-through-rationalisation.md](workaround-debt-compounds-through-rationalisation.md)
 
-### Process (39)
+### Process (44)
 
 - **ADR by Reusability, Not Diff Size** -- Use this when: closing a small implementation lane and deciding whether the decision it encoded deserves to be promoted to an ADR. → [adr-by-reusability-not-diff-size.md](adr-by-reusability-not-diff-size.md)
 
@@ -245,6 +245,11 @@ surface that makes later governance or enforcement honest.
 - **PR Delivery: Monitor to Merge, Flat Stacks, Pure Diffs** -- Use this when: opening a pull request, choosing the base for a dependent change, or resolving merge conflicts that touch shared registry state. → [pr-monitor-to-merge.md](pr-monitor-to-merge.md)
 - **Plan-as-Artefact Gravity** -- Use this when: a remediation plan has accumulated multiple session-history sections, re-grounding tables, and re-classification amendments while the gates it targets remain red. → [plan-as-artefact-gravity.md](plan-as-artefact-gravity.md)
 - **Templates Can Institutionalise Failure Modes** -- Use this when: sharpening a doctrine, principle, or rule that flows through templates, scaffolds, or generators that produce future plans or artefacts. → [templates-encode-failure-modes.md](templates-encode-failure-modes.md)
+- **Delivering a Reframing Is a Consumer-Walk, Not a Phrase-Sweep** -- Use this when: delivering a reframing, supersession, rename, or any conceptual change across a documentation / plan estate, especially after a foundational doc moves or a controlling decision changes. → [delivering-a-reframing-is-a-consumer-walk.md](delivering-a-reframing-is-a-consumer-walk.md)
+- **Fluency Is a Failure Vector** *(anti-pattern)* -- Use this when: a move, justification, or framing arrives smoothly — a local convention obvious to match, an owner statement that seems to license a shortcut, an "of course X" framing, or a claim that simply feels true. → [fluency-is-a-failure-vector.md](fluency-is-a-failure-vector.md)
+- **Quote Authoritative Language Exactly** *(anti-pattern)* -- Use this when: restating mission, vision, licence, owner-stated, or other protected / authoritative source language in a doc, summary, or prose passage. → [quote-authoritative-language-exactly.md](quote-authoritative-language-exactly.md)
+- **A Fidelity Audit Is Not a Currency Audit** *(anti-pattern)* -- Use this when: verifying a claim that rests on an inherited surface (a record, a thread note, a prior session's framing) before relying on it. → [fidelity-audit-is-not-currency-audit.md](fidelity-audit-is-not-currency-audit.md)
+- **A North-Star Doc Conserves Sprawl Instead of Delegating** *(anti-pattern)* -- Use this when: authoring or raising the standard of a vision, charter, strategy, or other north-star document whose job is to orient, not to explain everything. → [north-star-doc-conserves-sprawl.md](north-star-doc-conserves-sprawl.md)
 
 ### Testing (6)
 

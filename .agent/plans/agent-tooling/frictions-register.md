@@ -1712,6 +1712,17 @@ below is a cross-reference index, not a second source of truth.
 - **Status**: open.
 - **Owner direction status**: unsolicited.
 
+### F-68 — `commit-queue enqueue` prints the intent_id as a bare UUID on the last line, not JSON
+
+- **Source**: napkin; 2026-06-17 (Squall spins Stratus); graduation drain 2026-06-18 (Wisteria spins Bark).
+- **Surface**: `pnpm agent-tools:collaboration-state -- commit-queue -- enqueue` stdout.
+- **Observed**: the command prints the new `intent_id` as a **bare UUID on the last line**, not as JSON. A `grep '"intent_id"'` returns empty (no JSON key), tempting a re-enqueue that creates a duplicate intent — which then fails the next `guard`. Correct capture is `tail -1`.
+- **Expected**: labelled or JSON output (e.g. `intent_id=<uuid>` or a `--format json`) so the id is parseable without positional assumptions — consistent with PDR-055 universal CLI API-surface-design consistency.
+- **Candidate cure**: emit the intent_id as a labelled/JSON field; align with the agent-tools-cli-ergonomics conformance guard (PDR-055).
+- **Target surface**: `collaboration-state commit-queue enqueue` output; `agent-tools-cli-ergonomics.plan.md`.
+- **Status**: open.
+- **Owner direction status**: unsolicited.
+
 ---
 
 ## Mitigated / Addressed Frictions
