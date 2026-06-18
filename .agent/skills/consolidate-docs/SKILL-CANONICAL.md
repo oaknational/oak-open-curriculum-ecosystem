@@ -734,8 +734,8 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
 
    1. Enumerate Core surfaces. For each, the question is: does recent session content (this session's work, the rotated napkin entries, the graduated PDRs) contradict, extend, refine, or supersede anything here?
    2. Surface candidates to the user as a numbered list. For each candidate: Core surface affected + type of change (contradict / extend / refine / supersede) + one-sentence summary of the evidence and proposed amendment.
-   3. **Owner approves each amendment before editing Core surfaces.** Per PDR-003 and the care-and-consult posture on dense Core content: the main agent drafts; the owner reviews each diff; no ad-hoc sub-agent dispatch for Core edits. PDRs in `decision-records/` follow the same discipline as the trinity.
-   4. Apply approved amendments as diffs. If substantive, amendments are captured in the Core `CHANGELOG.md` with a short summary.
+   3. **Author Core amendments on best effort; the owner does NOT pre-approve each one** ([PDR-104](../../practice-core/decision-records/PDR-104-best-effort-doctrine-authoring-in-consolidation.md)). The main agent — never a sub-agent, per [PDR-003](../../practice-core/decision-records/PDR-003-sub-agent-protection-of-foundational-practice-docs.md) — drafts and applies, with the care-and-consult posture on dense Core content. Review rigor is the PDR-101 graduation quorum and ordinary reviewer dispatch (does the doctrine hold up?), not an owner pre-ratification (may I write it?). The kept action-authority / safety gates (merge, plan-promotion, Sonar authorisation, `--no-verify`, fitness-limit raise) are unaffected. Surface the candidate list (step 2) so the owner reviews through the normal flow, not as a pre-approval gate. PDRs in `decision-records/` follow the same discipline as the trinity.
+   4. Apply amendments as diffs. If substantive, amendments are captured in the Core `CHANGELOG.md` with a short summary.
 
    **When nothing qualifies**: say so and move on. Not every consolidation produces Core refinement. But "nothing qualifies" is a conclusion reached by review, not by skipping review.
 

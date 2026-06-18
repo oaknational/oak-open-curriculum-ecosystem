@@ -79,7 +79,11 @@ surface.
   Codex briefs, both consolidate skills, repo-continuity, thread record, drain plans) — the PDR-100
   propagation the prior session recorded but never spread. Owner scoped it: knowledge-flow purged;
   action-authority / safety gates (merge / promotion / Sonar / `--no-verify` / limit-raise / Core-edit)
-  KEPT. The active-claims `--active` JSON-parse bug was fixed (actionable boundary error, `parseJsonText`).
+  KEPT. (The "Core-edit" gate is later disambiguated by
+  [PDR-104](../../practice-core/decision-records/PDR-104-best-effort-doctrine-authoring-in-consolidation.md):
+  its sub-agent-protection sense is kept; its owner-pre-approval-of-each-doctrine-amendment sense is
+  relaxed for dedicated consolidation sessions.) The active-claims `--active` JSON-parse bug was fixed
+  (actionable boundary error, `parseJsonText`).
   **PDR-055 amended to universal CLI API-surface-design consistency** (clauses 7–10 + Falsifiability;
   owner: "a universal requirement for all CLIs in all Practice repos"); `agent-tools-cli-ergonomics.plan.md`
   authored (`current/`, repo instantiation, WS6 = conformance guard); `memory-surface-critical-drain`

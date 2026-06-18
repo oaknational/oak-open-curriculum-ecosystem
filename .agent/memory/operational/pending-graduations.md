@@ -62,20 +62,7 @@ live decision-debt when it is genuinely un-actionable now AND has no such home �
 a true rarity. If an item fits no category, that is a signal the category set is
 incomplete, not licence to let it age here.
 
-## PG-best-effort-consolidation-policy
-
-- **captured-date**: 2026-06-18
-- **source-surface**: owner direction (session `2297c9`, Asteroid calls Meridian);
-  napkin entry same date
-- **graduation-target**: PDR — formalise the **best-effort consolidation policy**:
-  agents author/graduate Practice doctrine on best effort in dedicated consolidation
-  sessions; mistakes accepted; frictions surface through use and are fixed by the
-  knowledge flow; **no owner-pre-ratification of each PDR**. Either a new PDR or an
-  amendment to PDR-003. MUST reconcile the now-stale "owner approves each amendment"
-  wording in `consolidate-docs` step 8 and PDR-003 against this policy.
-- **trigger-condition**: next dedicated Practice-governance consolidation, or a second
-  instance of an agent over-gating on invented owner-approval. Owner stated the policy
-  as already-current 2026-06-18 — formalisation of standing policy, not a proposal.
-- **status**: due
-- **note**: PDR-103 §Notes records it was authored under this policy; this entry
-  generalises the policy beyond that one instance.
+*No live decision-debt: the register is drained (2026-06-18). Every captured
+candidate reached a terminal disposition. New capture is appended below as
+inline-bracket entries (`- **<title>**` then a fenced
+`[captured: <date> | source: <text> | target: <text> | trigger: <text> | size: <…> | status: <enum>]`).*

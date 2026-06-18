@@ -93,7 +93,11 @@ handoff/closure? Report-only is only as live as its invocation (assumptions-expe
 surfaces (briefs, skills, register, continuity, drain plans — done this session). The SEPARATE
 owner-authority concepts that share the word (PDR-006 tool-nomination, plan-promotion / PR-merge
 gates, `--no-verify` / limit-raise / Core-edit safety controls, Sonar authorisation) are surfaced
-to the owner for an explicit scope decision — NOT auto-purged.
+to the owner for an explicit scope decision — NOT auto-purged. (The "Core-edit" control is
+subsequently disambiguated by
+[PDR-104](../../../practice-core/decision-records/PDR-104-best-effort-doctrine-authoring-in-consolidation.md):
+its sub-agent-protection sense is kept; its owner-pre-approval-of-each-doctrine-amendment sense is
+relaxed for dedicated consolidation sessions.)
 
 **Antipatterns I enacted (named so the next agent watches for them):** activity-bias /
 mechanical-sequence — I ran a satisfying mechanism sequence and decided 0 items (I literally edited

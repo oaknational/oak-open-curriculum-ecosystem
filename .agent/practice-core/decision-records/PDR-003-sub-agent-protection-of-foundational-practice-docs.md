@@ -72,8 +72,13 @@ rules can cite this PDR as their justification:
 Therefore: **sub-agents MUST NOT create, edit, delete, or
 rename files in the foundational Practice document set**. The
 primary conversation agent — the one the human is actively
-working with — retains full authority over these documents, with
-the human's consent in the loop for changes of substance.
+working with — retains full authority over these documents. In dedicated
+consolidation sessions the primary agent authors and amends on **best effort
+without per-change owner pre-ratification**
+([PDR-104](PDR-104-best-effort-doctrine-authoring-in-consolidation.md)); the
+owner's review runs through the knowledge flow (PDR-014) and the kept
+action-authority / safety gates, not a pre-approval of each substantive edit. The
+sub-agent prohibition above is unchanged by that policy.
 
 The foundational document set for this PDR's purpose includes:
 the Practice Core plasmid trinity and its verification companion,

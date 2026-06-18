@@ -4,6 +4,28 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-06-18 — best-effort doctrine authoring + recurrence-capture at the drain (dedicated consolidation, Wisteria spins Bark)
+
+Authored under the best-effort policy this entry records (no owner pre-ratification;
+reviewers run: assumptions-expert SOUND-WITH-FIXES, docs-adr-expert FIX-NEEDED — both
+absorbed before commit).
+
+- **Added**: PDR-104 (best-effort Practice-doctrine authoring in dedicated
+  consolidation sessions) — the primary agent authors/amends doctrine on best effort
+  without owner pre-ratification of each change; mistakes accepted, the knowledge flow
+  corrects them. Preserves PDR-003 sub-agent protection, the kept action-authority /
+  safety gates, and the PDR-101 quorum (as review, not pre-ratification). Disambiguates
+  the 2026-06-16 "Core-edit" gate (sub-agent-protection sense kept; per-amendment
+  owner-approval sense relaxed). Graduates the `PG-best-effort-consolidation-policy`
+  register item (register drained to decision-debt 0).
+- **Amended**: PDR-003 §Decision — reconciled the stale "with the human's consent in the
+  loop for changes of substance" wording to best-effort-no-pre-ratification (cites
+  PDR-104); sub-agent prohibition unchanged.
+- **Amended**: `consolidate-docs` skill — step 7 `duplicate` disposition gains a
+  recurrence check (a recurring-despite-home concept routes to the doctrine-traction
+  mechanism lane per PDR-098, not silent deletion); step 8 §3-§4 reconciled to
+  best-effort authoring (cites PDR-104).
+
 ## [oak-open-curriculum-ecosystem] 2026-06-16 — universal CLI API-surface-design consistency (owner-directed)
 
 - **Amended**: PDR-055 — generalised from the coordination-CLI affordance set to
