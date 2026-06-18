@@ -136,7 +136,8 @@ surface.
   Baobab lifts Topsoil `3be248`).** Multi-wave whole-estate survey (413
   docs; 143+124 agents) + 6-agent adversarial verification → a vision→value→action
   holistic reading. Report + all raw/refined data:
-  [`reports/plan-estate-survey-2026-06-15/`](../../reports/plan-estate-survey-2026-06-15/README.md).
+  [`reports/archive/plan-estate-survey-2026-06-15/`](../../reports/archive/plan-estate-survey-2026-06-15/README.md)
+  (archived 2026-06-18).
   **Owner corrections (report §14)**: (1) ~40% inward (substrate+Practice) is
   deliberate — the Practice is a value stream in its own right; (2) impact is
   articulated here + measured by Oak, not instrumented in-repo; (3) **SUPERSEDED

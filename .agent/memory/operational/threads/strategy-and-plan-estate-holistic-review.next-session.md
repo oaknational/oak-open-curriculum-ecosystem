@@ -21,7 +21,8 @@ reconceived to this model 2026-06-18.
 
 The 2026-06-15 survey (waves, census, adversarial verification) is the prior
 foundation; its report + raw data live in
-[`.agent/reports/plan-estate-survey-2026-06-15/`](../../../reports/plan-estate-survey-2026-06-15/README.md).
+[`.agent/reports/archive/plan-estate-survey-2026-06-15/`](../../../reports/archive/plan-estate-survey-2026-06-15/README.md)
+(archived 2026-06-18; a fresh survey is a Body-3 prerequisite).
 
 ## Where We Are (2026-06-18, Asteroid calls Meridian — approach reconceived to the informational model)
 
@@ -132,11 +133,10 @@ Reading/extraction/hygiene are independent and runnable now.
   executable (editorial-voice + measures-are-an-Oak-input guards, enforceable in acceptance/proof/risk).
 - **`2a-decisions.md` AND `value-and-impact.md` archived** to `.agent/plans/archive/`, each with a
   supersession mapping (Body 2 absorbs their useful content from the archive); references repointed.
-- **Survey report caution-bannered** (`2026-06-15`): strategy framing §11/§13/§15 invalidated;
-  empirical map dated; **fresh estate survey required** for Body 3. NOTE: same hazard as the two
-  archived plans — its archival should follow the same extract-and-archive treatment (flagged to
-  owner; currently bannered with archival paired to the Body-3 fresh survey). `high-level-plan.md`
-  "primitives" goal superseding-callout.
+- **Survey report archived** (`2026-06-15` dated record → `.agent/reports/archive/`, owner-directed
+  2026-06-18) with a supersession mapping: the empirical map and reusable method are preserved as a
+  dated input; a **fresh estate survey is a Body-3 prerequisite** before relying on counts.
+  `high-level-plan.md` "primitives" goal superseding-callout.
 - **Consumer-walk residue purge** (the rejected framing did not survive at any entry point):
   `repo-continuity.md` (strategy bullet + K1–K3 paragraph + thread-table row + a stale duplicate
   "Step A (align on impact)" bullet), `docs/README.md` (evaluator entry — old "modular building

@@ -11,7 +11,7 @@ related:
   - .agent/plans/high-level-plan.md
   - .agent/plans/curriculum-mcp-path-to-ga/roadmap.md
   - .agent/plans/curriculum-mcp-path-to-ga/launch-readiness-framework.md
-  - .agent/reports/plan-estate-survey-2026-06-15/README.md
+  - .agent/reports/archive/plan-estate-survey-2026-06-15/README.md
 todos:
   - id: vision-foundation
     content: "Vision body — VISION.md states the change, three co-equal streams, mission verbatim (committed d4f6e0293). DONE as the change-statement. Its alignment TO Oak's strategy is expressed in the strategy corpus, not restated in the vision."
@@ -248,7 +248,7 @@ on the archived artefact (or in the receiving archive README), never a standalon
 | Controlling plan (this file) | Reconceived 2026-06-18 | Done. |
 | `2a-decisions.md` | Decisions preserved, framing superseded | **Archived 2026-06-18** with a supersession mapping (decisions → this plan §Owner Decisions; rationale → Body 2). |
 | `value-and-impact.md` | Superseded input | **Archived 2026-06-18** (`.agent/plans/archive/`) with a supersession mapping; Body 2 absorbs the value-articulation prose from the archived copy. |
-| Survey report (2026-06-15) | Empirical map dated; strategy framing (§11/§13/§15) invalidated | **Caution-bannered 2026-06-18.** A **fresh estate survey is required** before Body 3 relies on counts; the old report and its reusable method are archived when the fresh one lands (Body 3). |
+| Survey report (2026-06-15) | Empirical map dated; strategy framing invalidated | **Archived 2026-06-18** (`.agent/reports/archive/`) with a supersession mapping; empirical map and reusable method preserved as a dated input. A **fresh estate survey is a Body-3 prerequisite** before relying on counts. |
 | `high-level-plan.md` | "Primitives" goal predates the streams | Superseding callout added 2026-06-18; reconciled to the strategy during Body 3. |
 | Readiness assessment report (2026-06-15) | Valid app-readiness content (no rejected framing) | Absorb into the app section of the strategy corpus (Body 2). |
 | `launch-readiness-framework.md` | Valid (K1–K3 definitions live here) | Keep; it is the app stream's readiness home, consumed by Body 2. |
@@ -300,8 +300,9 @@ Work only from the latest understanding. Authorities, in informational order:
   multi-workstream work; end-goal/mechanism/means; blocking-vs-beneficial;
   DECISION-COMPLETE readiness gate), **ADR-117** (document hierarchy — facts
   authoritative in one place).
-- **The 2026-06-15 survey report** — the empirical map only (census, reachability,
-  dependencies); dated, so re-verify counts before relying on them.
+- **The 2026-06-15 survey report** (archived, `.agent/reports/archive/`) — the empirical
+  map only (census, reachability, dependencies); dated, so re-verify via a fresh survey
+  before relying on the counts.
 
 The thread record is continuity, not scope authority. The `high-level-plan.md`
 strategic goal ("world-class primitives and modular building blocks") **predates the
@@ -314,10 +315,10 @@ three streams and is not a source of truth** — Body 2 supersedes it.
 - **No quoting, linking, or copying the local Oak reference** — derive only.
 - **No in-repo impact instrumentation** — articulate in the strategy, measure at Oak.
 - **No idea deletion** — value-preserving; every removal carries a disposition.
-- **No rewriting the survey report's dated findings in place** — its empirical map is a
-  dated 2026-06-15 record, re-derived by a *fresh* survey, not edited. (Its invalidated
-  strategy framing is neutralised by a caution banner, not a rewrite — owner-directed
-  2026-06-18; this supersedes the earlier "do not touch the survey at all" non-goal.)
+- **No rewriting the survey report's dated findings** — its empirical map is a dated
+  2026-06-15 record, re-derived by a *fresh* survey, not edited. The report is archived
+  (`.agent/reports/archive/`) with a supersession mapping; its dated content is preserved
+  as-is for re-derivation, not rewritten (owner-directed 2026-06-18).
 - **No re-litigating settled framings** — three co-equal streams; mission verbatim;
   streams-as-system; schools a deliberate non-goal.
 - **No serving Oak's schools goal** until a future explicit decision.

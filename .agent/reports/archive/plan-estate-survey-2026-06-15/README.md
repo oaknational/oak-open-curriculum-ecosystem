@@ -1,17 +1,20 @@
-# Plan-Estate & Strategy Survey — Living Running Notes (started 2026-06-15)
+# Plan-Estate & Strategy Survey — ARCHIVED (dated 2026-06-15 record)
 
-> **CAUTION — strategy framing INVALIDATED; empirical map DATED; a FRESH survey is required (2026-06-18).**
-> This report's **strategy-recommendation sections (§11 Change→Value→Action, §13 holistic
-> synthesis, §14 owner corrections, §15 next-session research plan)** encode the **superseded
-> 2A/2B/2C "align on impact → gap analysis → execution spine" approach** — that model is
-> **rejected**. The strategy layer is now a cohesive system-strategy on a four-layer
-> informational model; see the controlling plan
-> [`vision-strategy-and-plan-estate.plan.md`](../../../plans/vision-strategy-and-plan-estate.plan.md).
-> The **empirical map (§4 findings, §6 per-collection, §10 evidence index) is a dated
-> 2026-06-15 snapshot** — do **not** treat its counts as current. A **fresh estate survey is a
-> Body-3 prerequisite**; the reusable *method* (§1) is preserved for it. This report is kept as
-> a dated record, archived when the fresh survey lands. Do not treat its strategy framing or its
-> counts as current.
+> **ARCHIVED 2026-06-18 — dated record; not a current survey, not current strategy.**
+> **Supersession mapping:**
+>
+> - **Useful information preserved here** — the empirical map (§4 findings, §6 per-collection,
+>   §10 evidence index) as a **dated 2026-06-15 snapshot**, and the reusable survey **method**
+>   (§1). Body 3 reads these as input; it does **not** rely on the counts as current.
+> - **A fresh estate survey is a Body-3 prerequisite** — re-run the method against current state
+>   before relying on any count.
+> - **Rationale for archival:** the strategy-recommendation sections (§11/§13/§14/§15) encode the
+>   superseded "align on impact → gap analysis → execution spine" approach, rejected during the
+>   2026-06-18 reconception. The live strategy authority is the controlling plan
+>   [`vision-strategy-and-plan-estate.plan.md`](../../../plans/vision-strategy-and-plan-estate.plan.md)
+>   (cohesive system-strategy on a four-layer informational model).
+>
+> **Do not treat the counts or the strategy framing below as current.**
 
 - **Author**: Baobab lifts Topsoil (claude-code / Opus 4.8, session `3be248`).
 - **Status**: 🔄 LIVING — updated as each survey wave lands. Not a finalised
