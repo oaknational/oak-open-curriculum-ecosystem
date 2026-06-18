@@ -50,10 +50,18 @@ surface.
   pending-graduations as `due`); continuity, thread record, and disposition register current.
   **Branch operational state (NOT owned by this thread, expect on session-open):** (1) the SonarCloud
   "file encoding problems" warning was fixed by a parallel agent — `sonar.sourceEncoding=UTF-8`,
-  committed `ee6a389f9`; (2) **10 SDK files under `packages/sdks/oak-sdk-codegen/` are dirty by
-  design** — upstream OpenAPI spec drift (`/sequences/{slug}`→`{sequence}`), deferred to a separate
-  SDK-sync PR; **run the full gate with `CI=true`** to use the committed cached spec and avoid
-  re-dirtying (napkin `6f8b36290` documents it).
+  committed `ee6a389f9`; (2) the upstream OpenAPI spec drift (`/sequences/{slug}`→`{sequence}`)
+  **LANDED as `e12587b9d` on PR #213** (Bluebell guards Acorn, n=2, 2026-06-18) — pure idempotent
+  rename of the 10 SDK-codegen files; the tree is clean and the `CI=true` workaround is retired. See
+  the dedicated SDK spec-sync bullet below.
+- **UPSTREAM SDK SPEC-SYNC (sequences param rename) — LANDED (2026-06-18, Bluebell guards Acorn, n=2
+  with Wisteria spins Bark; commit `e12587b9d`, PR #213).** Upstream OOC spec `0.7.0-69d2b6c9`→`f7c18ead`
+  renamed the `get-sequences` path param `slug`→`sequence` (matching its siblings
+  assets/questions/units; eliminates the lone `slug` PathGroupingKey). The 10 SDK-codegen regen files
+  were verified first-hand as a pure, idempotent rename (CI-mode regen reproduces them). A
+  spec→input-flow guard test + a breaking-change-classification runbook addition landed with it (owner
+  invariant: all API-tool input parameters flow automatically from the spec). Strategic follow-on:
+  [`upstream-spec-change-automation.plan.md`](../../plans/sdk-and-mcp-enhancements/future/upstream-spec-change-automation.plan.md).
 - **COLLABORATION-DOCTRINE DECOMPOSITION — strategic brief LANDED (2026-06-17, Phobos turns
   Singularity, solo, `docs/planning-and-validation`).** Compared the two collaboration directives
   against the `start-right-team` skill and the PDR corpus; both are **layer-blenders** that predate
