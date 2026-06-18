@@ -70,9 +70,9 @@ would mislead. Three facts reshape the work:
 
 The three forks the framework hangs on are now set (owner-ratified 2026-06-17 as
 the **MCP-app stream's** keystones — the observed-positive-impact gate is this
-stream's alone; the ecosystem and framework streams' "live" definitions are
-deferred to a later phase). This is the decision log; every dimension below is read
-in their light.
+stream's alone; the ecosystem and framework streams reach their own readiness on
+their own terms, co-equal, not a later phase). This is the decision log; every
+dimension below is read in their light.
 
 - **K1 — "Live" = full GA, out in the world, with real users (teachers and
   curriculum leaders) using it and demonstrating positive impact.** "Live" is

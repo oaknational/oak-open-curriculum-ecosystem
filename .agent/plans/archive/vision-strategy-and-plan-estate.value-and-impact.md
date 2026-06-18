@@ -1,24 +1,39 @@
 ---
-title: "Value and Impact — Phase 2A"
+title: "Value and Impact — ARCHIVED superseded input"
 type: strategy-articulation
-status: active
-plan: .agent/plans/vision-strategy-and-plan-estate.plan.md
+status: archived-superseded
+plan: ../vision-strategy-and-plan-estate.plan.md
 thread: strategy-and-plan-estate-holistic-review
-last_updated: 2026-06-17
+last_updated: 2026-06-18
 ---
 
-# Value and Impact — Phase 2A
+# Value and Impact — ARCHIVED (superseded input)
+
+> **ARCHIVED 2026-06-18 — superseded input; not current strategy, not a live plan.**
+> A pre-reconception value/impact articulation. **Supersession mapping:**
+>
+> - **Useful information** (the per-stream value-articulation prose) → acceptance lane
+>   = the `strategy-corpus` todo (Body 2); absorb into the `docs/strategy/` corpus from
+>   this archived copy. Live authority:
+>   [`../vision-strategy-and-plan-estate.plan.md`](../vision-strategy-and-plan-estate.plan.md).
+> - **Rationale for archival:** its framing is rejected and corrected in the controlling
+>   plan — the MCP app is **not** "the go-live stream", does **not** happen first or rank
+>   higher (it has extra production-readiness requirements only); the three streams are a
+>   **system**, cohesive across and within, **not** independent tracks whose work "follows".
+>
+> **Do not treat anything below as current strategy.**
 
 What value each of Oak's three value streams creates, why it matters, and how we
 attempt it. Impact is **articulated here and measured by Oak** — we don't
 instrument it inside this repository (owner §14.2).
 
-The teacher-facing MCP app is set out in full, because it's the stream whose
-readiness decides whether we're ready to **go live**. The other two streams are
-named here too. They're equally important, and each needs its own strategy layer
-and planning — that work follows; it isn't lesser.
+The teacher-facing MCP app is set out in full here because it carries the additional
+production-readiness requirements (alpha→beta→production). That is a property of this
+stream, **not** a ranking and **not** a sequence: all three streams are co-equal, they
+form a **system** that reinforces itself, and the strategy is cohesive across and
+within them.
 
-## The teacher-facing MCP app — the go-live stream
+## The teacher-facing MCP app — the stream with production-readiness requirements
 
 Teachers already use AI assistants. Oak's curriculum is high-quality and built on
 pedagogical rigour. The MCP app puts that content into the assistants teachers
@@ -61,7 +76,8 @@ can adopt the same framework to deliver their own work.
 
 ## The difference that matters
 
-Only the MCP-app stream's readiness decides whether we go live. That's the single
-distinction — and it isn't a ranking. All three streams are equally important,
-and all three need their own strategy layer and planning. What differs is the
-go-live gate and the order we reach for each, not how much each matters.
+The MCP-app stream carries additional production-readiness requirements. That's the
+single distinction — and it isn't a ranking, and it doesn't make the app happen
+first. All three streams are equally important and form one system. What differs is
+that one stream has extra requirements before it is safe in front of teachers, not
+how much each matters or the order in which they are reached.

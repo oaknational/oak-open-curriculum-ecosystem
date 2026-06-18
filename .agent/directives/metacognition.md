@@ -24,12 +24,17 @@ intervention?**
 is non-obvious or load-bearing — a non-trivial brief whose impact
 space is wider than the obvious one, a strategic fork where the
 right move depends on what is really being built, an open-ended
-ask where direct execution would foreclose the real question, or a
+ask where direct execution would foreclose the real question, a
 concept that recurs in unexpected places (often systems-level
-vocabulary surfacing inside a surface-level task). The cure target
-is *purpose-by-default*: the surface ask has an obvious
+vocabulary surfacing inside a surface-level task), or **a task that
+arrives as a narrow pointer** ("fix this", "is X right?") whose
+implied scope may be narrower than the goal's real scope. The cure
+target is *purpose-by-default*: the surface ask has an obvious
 interpretation, but the deeper impact the user actually needs may
-be wider, sharper, or differently shaped.
+be wider, sharper, or differently shaped. The routine form of this
+mode is the scope-from-goal artefact (restate the goal, derive the
+full relevant set, name in/out *before* approach) — see
+[`scope-from-goal-before-approach`](../rules/scope-from-goal-before-approach.md).
 
 When uncertain which mode applies, **generative is the safer
 default for non-trivial work**: it costs a brief first-principles

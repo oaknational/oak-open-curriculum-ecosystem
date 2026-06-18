@@ -42,7 +42,8 @@ readiness is scoped to the app's **real dependency set**, not literally the whol
 repo; "whole-estate" readiness holds only at the **portfolio level**. The §7 table
 and §8 analysis are left as the dated 2026-06-15 record; the ratified wording lives
 in the [Launch-Readiness Framework](../plans/curriculum-mcp-path-to-ga/launch-readiness-framework.md)
-and the [Phase-2A decisions brief](../plans/vision-strategy-and-plan-estate.2a-decisions.md).
+and the [Phase-2A decisions brief](../plans/archive/vision-strategy-and-plan-estate.2a-decisions.md)
+(archived 2026-06-18; decisions preserved in the controlling plan, framing superseded).
 
 ---
 

@@ -1,13 +1,32 @@
 ---
-title: "Phase 2A — Decision-Ready Options"
+title: "Phase 2A decisions — ARCHIVED superseded decision-log"
 type: decision-brief
-status: ratified
-plan: .agent/plans/vision-strategy-and-plan-estate.plan.md
+status: archived-superseded
+plan: ../vision-strategy-and-plan-estate.plan.md
 thread: strategy-and-plan-estate-holistic-review
-last_updated: 2026-06-17
+last_updated: 2026-06-18
 ---
 
-# Phase 2A — Decision-Ready Options
+# Phase 2A decisions — ARCHIVED (superseded decision-log)
+
+> **ARCHIVED 2026-06-18 — superseded decision-log; not current strategy, not a live plan.**
+> The dated record of the 2026-06-17 Phase-2A ratification, archived during the approach
+> reconception. **Supersession mapping:**
+>
+> - **Decisions** (K1–K3, hybrid taxonomy depth, README-names-three) → preserved in
+>   [`../vision-strategy-and-plan-estate.plan.md`](../vision-strategy-and-plan-estate.plan.md)
+>   §Owner Decisions (the live authority). The K1–K3 *definitions* live in
+>   [`../curriculum-mcp-path-to-ga/launch-readiness-framework.md`](../curriculum-mcp-path-to-ga/launch-readiness-framework.md).
+> - **Strategy rationale / options weighed** → acceptance lane = the `strategy-corpus` todo
+>   (Body 2); to be absorbed into the `docs/strategy/` corpus from this archived copy.
+> - **Rationale for archival:** the decision-brief's job (surface decisions for ratification)
+>   is complete. Its **framing** is rejected and corrected in the controlling plan: K1–K3 are
+>   the MCP-app stream's production-readiness keystones (**not** the strategic centre); the app
+>   does **not** "gate go-live" ahead of the others, happen first, or rank higher; the three
+>   streams are **co-equal** and form a **system**, **not** independent tracks whose strategy
+>   "follows" later.
+>
+> **Do not treat anything below as current.**
 
 The three owner decisions Phase 2A needs settled before the per-stream value/impact
 articulation can be authored. **This document names the decisions and lays out the

@@ -20,31 +20,36 @@ surface.
 
 ## Current State
 
-- **PHASE 2A RATIFICATION GATE COMPLETE; APP-STREAM ARTICULATION IS NEXT (2026-06-17, Squall
-  spins Stratus, solo, `docs/planning-and-validation`).** The owner ratified all three Phase-2A
-  decisions (scope authority remains the controlling plan
-  [`vision-strategy-and-plan-estate.plan.md`](../../plans/vision-strategy-and-plan-estate.plan.md)):
-  **K1–K3** settled as the **MCP-app stream's** keystones — §14.2 correction to K1 (value-proof
-  is a GA precondition *articulated here and measured by Oak, not instrumented in-repo*),
-  impact-gate **app-stream-only**, K2 "for now" a **post-GA non-commitment**, K3 scoped to the
-  app's **real dependency set** (whole-estate only at portfolio level); **taxonomy depth = hybrid**
-  (drives Phase 2B granularity — ecosystem decomposes to SDK/search/graph/EEF); **README headline =
-  name all three streams** (applied, editorial voice). **Value/impact articulation AUTHORED**
-  ([`value-and-impact.md`](../../plans/vision-strategy-and-plan-estate.value-and-impact.md)) — the
-  MCP-app stream in full (it alone gates go-live) plus a separate mention of the ecosystem and
-  framework streams' value (owner refinement 2026-06-17: all three co-equal, each needs its own
-  strategy + planning; only the app stream gates go-live; the other two's fuller strategy follows,
-  tracked `p2a-other-streams-strategy`). Decisions recorded in
-  [`2a-decisions.md`](../../plans/vision-strategy-and-plan-estate.2a-decisions.md) (status
-  `ratified`); controlling plan amended; K1–K3 reconciled across the five keystone surfaces +
-  this record (the dated survey report left as a dated input, not edited). Ratification + K1–K3
-  reconciliation committed `fce9bd863`; articulation + refinement committed `58f9df9f6`.
-  **Next safe step (owner-directed 2026-06-17, fresh session): discuss the nature of the strategy
-  layer and the vision→strategy→planning flow BEFORE any more strategy work.** Only after that:
-  the ecosystem + framework streams' strategy + planning, then Phase 2B gap analysis at hybrid
-  depth → 2C execution spine; estate hygiene runs in parallel off the gate. Full start sequence:
-  [thread record](threads/strategy-and-plan-estate-holistic-review.next-session.md). **Branch
-  operational state (NOT owned by this thread, expect on session-open):** (1) the SonarCloud
+- **STRATEGY-LAYER DISCUSSION RESOLVED; APPROACH RECONCEIVED TO THE INFORMATIONAL MODEL
+  (2026-06-18, Asteroid calls Meridian, solo, `docs/planning-and-validation`).** The Q-002
+  strategy-layer discussion the prior session gated **happened and reshaped the approach**. Scope
+  authority is the controlling plan
+  [`vision-strategy-and-plan-estate.plan.md`](../../plans/vision-strategy-and-plan-estate.plan.md),
+  **reconceived 2026-06-18** from a three-phase temporal DAG to a **four-layer informational-
+  dependence model** — `Oak's strategy → our vision → our strategy → our planning` (each arrow =
+  what must be *known* to author the next layer, **not execution order**) — with **three separate,
+  co-equal, first-class bodies of work** (vision / strategy / plan estate). Load-bearing owner
+  corrections: **(1)** Oak has its own strategy; our vision **services** it (align, not fulfil) —
+  Oak's strategy is the top layer, read inform-only from `.agent/reference-local/` (never
+  quoted/linked/copied); stream→goal map: teachers←app, ecosystem←tools **and** the Practice
+  framework, **schools = deliberate non-goal**. **(2)** the three streams are a **system** (framework
+  builds the two; tools are the app's foundation; app proves the foundation) — strategy must be
+  cohesive **across and within**. **(3)** the MCP app is **NOT** "the go-live stream", does **NOT**
+  happen first, is **NOT** more important — it has extra alpha→beta→production requirements, a
+  property not a ranking. **(4)** K1–K3 are **demoted** from "the strategic centre" to the app
+  stream's production-readiness keystones (the ratified decisions are **preserved**, only the
+  framing corrected). Strategy gets a new home: **`docs/strategy/`**.
+  **Next safe step:** author the **strategy corpus (Body 2)** at `docs/strategy/` (diagnosis;
+  Oak-alignment as original derivation; streams-as-system map; per-stream choices + won't-do +
+  measures; K1–K3 inside the app section; release-readiness as named hand-offs). In parallel, the
+  strategy-**independent** estate slice (read every plan, extract permanent docs, archive complete)
+  may proceed; the restructure's **new boundaries** wait for Body 2. `value-and-impact.md` and
+  `2a-decisions.md` are **archived** (`.agent/plans/archive/`); Body 2 absorbs them from there. Full
+  start sequence: [thread record](threads/strategy-and-plan-estate-holistic-review.next-session.md).
+  **Deep consolidation status: completed this handoff (2026-06-18, session-completion mode)** —
+  session learning homed (PDR-103 + the `scope-from-goal` rule; the best-effort-policy captured to
+  pending-graduations as `due`); continuity, thread record, and disposition register current.
+  **Branch operational state (NOT owned by this thread, expect on session-open):** (1) the SonarCloud
   "file encoding problems" warning was fixed by a parallel agent — `sonar.sourceEncoding=UTF-8`,
   committed `ee6a389f9`; (2) **10 SDK files under `packages/sdks/oak-sdk-codegen/` are dirty by
   design** — upstream OpenAPI spec drift (`/sequences/{slug}`→`{sequence}`), deferred to a separate
@@ -135,11 +140,12 @@ surface.
   [`reports/plan-estate-survey-2026-06-15/`](../../reports/plan-estate-survey-2026-06-15/README.md).
   **Owner corrections (report §14)**: (1) ~40% inward (substrate+Practice) is
   deliberate — the Practice is a value stream in its own right; (2) impact is
-  articulated here + measured by Oak, not instrumented in-repo; (3) forward order =
-  align-on-impact → value-stream redundancy/gap → execution-spine. **Next safe step**:
-  Step A (align on impact), report §15 +
+  articulated here + measured by Oak, not instrumented in-repo; (3) **SUPERSEDED
+  2026-06-18** — the "align-on-impact → gap → execution-spine" (2A/2B/2C) ordering is
+  **dissolved**; the strategy is now one cohesive body on the four-layer informational
+  model (see the strategy bullet above). **Next safe step**: author the strategy corpus
+  (Body 2) at `docs/strategy/`; see
   [thread record](threads/strategy-and-plan-estate-holistic-review.next-session.md).
-  Research in progress; next session continues.
 - **MCP LIVE-PRODUCT READINESS — framework + assessment report + future stub LANDED
   (2026-06-15, Quoll weaves Dreamscape `dec917`).** Read-only strategic session
   (owner-lifted for doc writes; no code, no commit) on "what would it take to make the MCP app
@@ -150,9 +156,11 @@ surface.
   Oak, not instrumented in-repo* per §14.2); **K2** primary audience = teachers +
   curriculum leaders ("for now" = post-GA non-commitment); **K3** scope = MCP app in
   ChatGPT/Claude ⇒ the app's **real dependency set** must be GA-ready (whole-estate
-  only at portfolio level). The impact-gate is app-stream-only; the other two streams'
-  "live" definitions defer. See the
-  [Phase-2A decisions brief](../../plans/vision-strategy-and-plan-estate.2a-decisions.md).
+  only at portfolio level). K1–K3 are the **app stream's production-readiness keystones**, not
+  the strategic centre (reframed 2026-06-18); the other two streams are **co-equal, not deferred
+  or lesser** — each reaches its own readiness on its own terms. The
+  [2a-decisions brief](../../plans/archive/vision-strategy-and-plan-estate.2a-decisions.md) is an archived, superseded
+  input (decisions preserved in the controlling plan; framing corrected).
   Created the
   [launch-readiness framework](../../plans/curriculum-mcp-path-to-ga/launch-readiness-framework.md),
   the self-contained
@@ -438,7 +446,7 @@ each thread record; this table is the repo-level index.
 | `semantic-search` | Search data foundations: upstream-schema alignment, bulk sourcing, minimal-adaptation arc | [record][semantic-search] | claude / Opus 4.8 / Moonlit Waxing Nebula / upstream-realignment-specialist / 2026-06-03 |
 | `statusline-enhancements` | Claude Code statusline: Oak-mark and session-shape indicators LANDED; **live logo swap 2026-06-16** — 5×7 sharpened `braille-sharp` default, 4×6 retained as `braille-sharp-compact`, width-matched separator rule on by default (on `docs/planning-and-validation`, **divergence to reconcile onto `feat/comms-research`**); successor plan **re-grounded session-state-first** 2026-06-15 (`ed563765d`; experimental discovery, no PDR/ADR); statusline lane in two `current/` plans (session-state and logo-modularisation), cross-referenced | [record][statusline] | claude-code / Opus 4.8 / Vole calls Hollow / live-logo-swap-and-plan-harden / 2026-06-16 (prior: Cutter spins Quay 2026-06-15, Orbit stirs Spectrum 2026-06-14) |
 | `agent-naming` | PDR-027 display-name derivation: versioned schema registry, session-hook identity surfaces, wordlist eras (v2 landed; v3 + era-pinning cure queued) | [record][agent-naming] | claude / Opus 4.8 / Squall hunts Troposphere / thread-open + v3-plan-author / 2026-06-13 (prior: Moss weaves Blossom v2-landing 2026-06-12, Swift Gliding Zephyr v2-build 2026-06-11) |
-| `strategy-and-plan-estate-holistic-review` | Vision/strategy/plan-estate rework (experiment→product): vision finalised; controlling plan landed; Phase 2A decisions ratified + value/impact articulation authored; **owner-directed next (2026-06-17): discuss the nature of the strategy layer and the vision→strategy→planning flow BEFORE more strategy work**; estate restructure gated until vision + strategy done | [record](threads/strategy-and-plan-estate-holistic-review.next-session.md) | claude-code / Opus 4.8 / Baobab lifts Topsoil / surveyor-synthesist / 2026-06-15, claude-code / Opus 4.8 / Ocelot binds Curfew / vision-author / 2026-06-17, claude-code / Opus 4.8 / Tempest spins Spire / controlling-plan author / 2026-06-17, claude-code / Opus 4.8 / Squall spins Stratus / Phase-2A ratification + articulation / 2026-06-17 |
+| `strategy-and-plan-estate-holistic-review` | Vision/strategy/plan-estate rework (experiment→product), **three co-equal first-class bodies on a four-layer informational model** (Oak strategy → vision → strategy → planning): vision done; strategy-layer discussion **resolved 2026-06-18** and the approach **reconceived**; **next: author the strategy corpus at `docs/strategy/`** (Body 2) with the estate read+extract prep in parallel; restructure's new boundaries informationally gated on the strategy | [record](threads/strategy-and-plan-estate-holistic-review.next-session.md) | claude-code / Opus 4.8 / Baobab lifts Topsoil / surveyor-synthesist / 2026-06-15, claude-code / Opus 4.8 / Ocelot binds Curfew / vision-author / 2026-06-17, claude-code / Opus 4.8 / Tempest spins Spire / controlling-plan author / 2026-06-17, claude-code / Opus 4.8 / Squall spins Stratus / Phase-2A ratification + articulation / 2026-06-17, claude-code / Opus 4.8 / Asteroid calls Meridian / approach-reconception / 2026-06-18 |
 
 ## Paused Threads
 

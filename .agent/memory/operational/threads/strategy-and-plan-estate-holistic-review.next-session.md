@@ -1,54 +1,76 @@
 # Next-Session Record — `strategy-and-plan-estate-holistic-review` thread
 
-Holistic work on Oak's **vision, strategy, and planning estate**. The transition
-this thread now serves: **the repository is moving from an important experiment to
-an important product** (owner, 2026-06-17). That needs, in order: a clear coherent
-**vision** → a practical, measurable **strategy** organised around delivering the
-vision's impact → a consolidated, simplified **planning landscape** re-organised
-around the strategy and vision. Re-org is **value-preserving**: understand the
-value encoded in plans and express it more clearly and discoverably — never delete
-ideas.
+Holistic work on Oak's **vision, strategy, and planning estate** — three
+**separate, co-equal, first-class bodies of work**. The transition this thread
+serves: **the repository is moving from an important experiment to an important
+product** (owner, 2026-06-17). The relationship between the layers is
+**informational dependence, not execution order** (owner, 2026-06-18):
+
+```text
+Oak's strategy → our vision → our strategy → our planning
+(we align, not fulfil)   (3 streams)   (cohesive system)   (the estate)
+```
+
+Each arrow means *what must be known to author the next layer correctly*. Bodies are
+co-equal in **importance**; they differ in **work-volume** (the estate restructure is
+~80% of the work) and **dependency-direction** — never collapse those axes into
+"priority". Re-org is **value-preserving**: express the value encoded in plans more
+clearly; never delete ideas. **Scope authority is the controlling plan**
+[`vision-strategy-and-plan-estate.plan.md`](../../../plans/vision-strategy-and-plan-estate.plan.md),
+reconceived to this model 2026-06-18.
 
 The 2026-06-15 survey (waves, census, adversarial verification) is the prior
 foundation; its report + raw data live in
 [`.agent/reports/plan-estate-survey-2026-06-15/`](../../../reports/plan-estate-survey-2026-06-15/README.md).
 
-## Where We Are (2026-06-17, Squall spins Stratus — Phase 2A ratification gate COMPLETE)
+## Where We Are (2026-06-18, Asteroid calls Meridian — approach reconceived to the informational model)
 
-- **Branch:** `docs/planning-and-validation`. **Scope authority is the controlling plan**
-  [`vision-strategy-and-plan-estate.plan.md`](../../../plans/vision-strategy-and-plan-estate.plan.md);
-  this record is the pickup surface, not an authority for scope.
-- **Phase 1 (Vision) DONE** — [`VISION.md`](../../../../VISION.md) at repo root, three co-equal
-  value streams (`d4f6e0293`). README headline now names all three streams (this session).
-- **Phase 2A ratification gate COMPLETE (this session).** The owner ratified all three decisions
-  ([`2a-decisions.md`](../../../plans/vision-strategy-and-plan-estate.2a-decisions.md) → status
-  `ratified`): **K1–K3** = the **MCP-app stream's** keystones (§14.2 correction to K1 — value-proof
-  articulated here, measured by Oak, not in-repo; impact-gate app-stream-only; K2 "for now" =
-  post-GA non-commitment; K3 = app's real dependency set, whole-estate only at portfolio level);
-  **taxonomy depth = hybrid** (drives Phase 2B granularity); **README = name all three streams**
-  (applied). **Value/impact articulation AUTHORED** — the MCP-app stream in full (it alone gates
-  go-live) plus a separate mention of the ecosystem and framework streams' value
-  ([`value-and-impact.md`](../../../plans/vision-strategy-and-plan-estate.value-and-impact.md)).
-  Owner refinement 2026-06-17: all three streams are **co-equal and each needs its own strategy +
-  planning**; only the MCP-app stream gates go-live; the other two's fuller strategy follows
-  (tracked `p2a-other-streams-strategy`). Controlling plan amended; K1–K3 reconciled across the
-  five keystone surfaces + `repo-continuity.md` (the dated survey report left as a dated input).
-- **Next safe step (owner-directed 2026-06-17):** a fresh session opens by **discussing the
-  nature of the strategy layer and the vision→strategy→planning flow** — before any more strategy
-  work. Only then the ecosystem + framework streams' strategy + planning → Phase 2B → 2C. See §Next.
+- **Branch:** `docs/planning-and-validation`. Scope authority is the controlling plan.
+- **The strategy-layer discussion the prior session gated (Q-002) HAPPENED (2026-06-18).**
+  It reshaped the approach. The controlling plan was reconceived from a three-phase temporal
+  DAG to the **four-layer informational-dependence model** above, with **three separate,
+  co-equal, first-class bodies of work** (vision / strategy / plan estate). Load-bearing
+  corrections the owner made:
+  - **Oak has its own strategy; our vision services it** (we align, not fulfil). Oak's strategy
+    is the missing top layer — read first-hand from `.agent/reference-local/` (inform-only:
+    never quoted/linked/copied; original derivation only). The stream→Oak-goal map:
+    teachers←MCP-app; ecosystem(edtech/AI)←engineering-tools **and** the agentic framework;
+    **schools←deliberately not served by this repo** (explicit non-goal, revisited only by a
+    future explicit decision).
+  - **The three streams are a SYSTEM** — framework builds the other two; tools are the foundation
+    the app stands on; app proves the foundation. Strategy is **cohesive across AND within**, and
+    all three streams are co-equal.
+  - **vision→strategy→planning is informational dependence** — coherence and traceability read
+    upward; it says nothing about execution order.
+  - **The MCP app carries additional alpha→beta→production requirements** (a property of that
+    stream, not a ranking); **K1–K3 are its production-readiness keystones**.
+- **Phase 1 (Vision) DONE** as the change-statement — `VISION.md`, three co-equal streams,
+  mission verbatim (`d4f6e0293`); README names all three.
+- **Decisions preserved (not deleted), framing corrected:** K1–K3 (now the app's readiness
+  keystones, §14.2 correction), hybrid taxonomy depth, README-names-three. `2a-decisions.md` is
+  **archived** (`.agent/plans/archive/`, 2026-06-18; decisions preserved in the controlling plan).
+  `value-and-impact.md` is **also archived** (`.agent/plans/archive/`); Body 2 absorbs its
+  value-articulation prose from the archived copy (a live doc stating the wrong plan is a hazard,
+  not education — extract-and-archive, never banner-and-keep). The **2A/2B/2C phases are
+  dissolved**, not relabelled (2A→Body 2; 2B gap analysis + 2C
+  spine → Body 3); no "2A/2B/2C" step is in the sequence.
 
-## Order (owner-set 2026-06-17 — SUPERSEDES the prior A→B→C)
+## Order — the informational model (SUPERSEDES the 2026-06-17 A→B→C and the prior Phase 1/2/3)
 
-1. **Vision** — to standard, correct audience. **COMPLETE.**
-2. **Strategy** — make the strategy documents *exist*, organised around delivering
-   the vision's impact; integrate existing strategy surfaces as appropriate.
-   **NOT STARTED.**
-3. **Plan-estate restructure** — rehome/move/remove/create plans and coordination
-   surfaces, likely a **new directory structure driven by strategy + vision**.
-   **GATED until 1 + 2 are done.** Value-preserving (no idea loss).
+The three bodies are **co-equal in importance**. The arrows are informational, not a schedule:
 
-**The gate:** no plan-estate restructuring until vision + strategy are done. It was
-lifted only once, narrowly, for VISION-path link-hygiene (now complete).
+1. **Vision** (`VISION.md`) — DONE as the change-statement; its alignment to Oak lives in the
+   strategy, not the vision.
+2. **Strategy** (new home: **`docs/strategy/`**) — UNDERWAY. The cohesive system-strategy:
+   diagnosis, Oak-alignment, streams-as-system map, choices + won't-do + measures per stream,
+   K1–K3 inside the app section, release-readiness as named hand-offs. Leadership-grade; stands
+   on its own merit.
+3. **Plan-estate restructure** (`.agent/plans/`) — core, ~80% of the work, **not an addendum**.
+   Its *new boundaries* informationally depend on the strategy; its *read + permanent-doc
+   extraction + archive-complete* slice does **not** and can proceed in parallel.
+
+**The only gate is informational:** the restructure's new boundaries need the settled strategy.
+Reading/extraction/hygiene are independent and runnable now.
 
 ## Framing decisions ratified with the owner this session (load-bearing)
 
@@ -63,7 +85,10 @@ lifted only once, narrowly, for VISION-path link-hygiene (now complete).
    graph, MCP, evidence surfaces) for the wider ecosystem to build with Oak's
    curriculum data; (c) the agentic-engineering framework that delivers AI-enhanced
    innovation (the Practice as a value stream in its own right, per owner §14.1).
-   One body of infrastructure, three co-equal delivery fronts.
+   One body of infrastructure, three co-equal delivery fronts. **Refined 2026-06-18:
+   the streams are a SYSTEM, not orthogonal — framework builds the other two; tools
+   are the foundation the app stands on; app proves the foundation. Each services an
+   Oak strategic goal (teachers / ecosystem×2); schools is a deliberate non-goal.**
 3. **A vision states the change + why + a map to the how.** It delegates
    explanations and commitments (deliverables inventory, measurement, integrations,
    positioning, licensing) to other documents and *points* to them — it does not
@@ -78,7 +103,7 @@ lifted only once, narrowly, for VISION-path link-hygiene (now complete).
    "you" mechanic is for teacher-facing copy; strategic/internal docs use the
    voice *qualities* in Oak's "we" voice.
 
-## Artefacts landed this session
+## Artefacts landed 2026-06-17 (vision session — Ocelot / Tempest / Squall)
 
 - **`VISION.md`** — rewritten + moved to root + content-fixed.
 - **`.agent/directives/editorial-tone.md`** — NEW directive, derived from the
@@ -100,6 +125,30 @@ lifted only once, narrowly, for VISION-path link-hygiene (now complete).
 - **README** — public narrative aligned to the vision and given the editorial
   voice in earlier passes (developer sections left plain).
 
+## Artefacts landed 2026-06-18 (approach reconception + residue purge — Asteroid)
+
+- **Controlling plan reconceived** — three-phase temporal DAG → four-layer informational
+  model; three co-equal first-class bodies; strategy homed at `docs/strategy/`; K1–K3 demoted
+  to the app's readiness keystones; schools non-goal stated; 2A/2B/2C dissolved; a Disposition
+  of Superseded Prior Work register; Body 2 made executable (editorial-voice + measures-are-an-
+  Oak-input guards, enforceable in acceptance/proof/risk).
+- **`2a-decisions.md` AND `value-and-impact.md` archived** to `.agent/plans/archive/`, each with a
+  supersession mapping (Body 2 absorbs their useful content from the archive); references repointed.
+  Lesson: a live doc stating the wrong plan is a hazard, not education — extract-and-archive, never
+  banner-and-keep.
+- **Survey report caution-bannered** (`2026-06-15`): strategy framing §11/§13/§15 invalidated;
+  empirical map dated; **fresh estate survey required** for Body 3. NOTE: same hazard as the two
+  archived plans — its archival should follow the same extract-and-archive treatment (flagged to
+  owner; currently bannered with archival paired to the Body-3 fresh survey). `high-level-plan.md`
+  "primitives" goal superseding-callout.
+- **Consumer-walk residue purge** (the rejected framing did not survive at any entry point):
+  `repo-continuity.md` (strategy bullet + K1–K3 paragraph + thread-table row + a stale duplicate
+  "Step A (align on impact)" bullet), `docs/README.md` (evaluator entry — old "modular building
+  blocks" framing), `plans/README.md` (stale "Phase 3"), the readiness-report link.
+- **`open-questions.md` Q-002 RESOLVED** with the outcome.
+- **napkin** — captured the method lesson: a reframing is delivered by a consumer walk of every
+  entry point, not by phrase-sweeps.
+
 ## Pending doc refinements (adversarial loss-scan, 2026-06-17 — not yet applied)
 
 Surfaced by the context loss-scan; left unapplied (owner-taste or deferred),
@@ -119,11 +168,13 @@ scoped to the app's real dependency set (whole-estate only at portfolio level). 
 five "decided" surfaces (`launch-readiness-framework.md`, `high-level-plan.md`,
 `roadmap.md`, the milestone-redefinition stub, the readiness assessment report) plus
 `repo-continuity.md` are reconciled to the ratified wording; the dated survey report
-§12/§14 is left as a dated input (Non-Goal: not edited). Authoritative wording lives
-in the [Phase-2A decisions brief](../../../plans/vision-strategy-and-plan-estate.2a-decisions.md)
-and the launch-readiness framework.
+§12/§14 is left as a dated input (Non-Goal: not edited). Authoritative wording **now
+lives in the controlling plan** (§Owner Decisions); the
+[2a-decisions brief](../../../plans/archive/vision-strategy-and-plan-estate.2a-decisions.md) (archived) is a
+**superseded input** (decisions preserved, framing corrected 2026-06-18). K1–K3 remain the
+MCP-app stream's production-readiness keystones, not the strategic centre.
 
-## Delta since the 2026-06-15 survey (re-grounded first-hand this session)
+## Delta since the 2026-06-15 survey (re-grounded first-hand 2026-06-17; empirical figures dated)
 
 - The estate churned ~82 commits on `docs/planning-and-validation`, **dominated by
   the Practice/substrate value stream** (PDR-096–101, decision-debt machinery,
@@ -137,7 +188,8 @@ and the launch-readiness framework.
 - Product/user-value gaps **unchanged**: widget **search UI not started**
   (brand-banner-only); **no production-Clerk execution plan**; Cloudflare gate
   unpromoted; WS3-Phase-5 plan still carries a **dead blocker on PR #76** (merged
-  2026-04-10); **no impact/value articulation started**.
+  2026-04-10). (The value/impact articulation was since authored 2026-06-17 and is now a
+  **superseded input** pending Body 2 — see Where We Are; the rest remain unverified-since-survey.)
 - Survey-framing correction: the README front door reads **"Invite-Only Alpha"**
   (not "private alpha"), one milestone behind the M2 tracker. (A survey
   "missing-README" collection finding was a labelling artefact; its disposition is
@@ -169,37 +221,35 @@ structuring must include plans/owners for them:
 
 ## Next (fresh context starts here)
 
-**The controlling plan is**
-[`vision-strategy-and-plan-estate.plan.md`](../../../plans/vision-strategy-and-plan-estate.plan.md)
-— read it first; it is the scope authority (Phases 1–3, the DAG, gates, acceptance,
-the §4 ungated-collection removal, the disposition-ledger value-preservation). This
-record is the pickup surface, not the scope.
+**Read the controlling plan first** —
+[`vision-strategy-and-plan-estate.plan.md`](../../../plans/vision-strategy-and-plan-estate.plan.md),
+reconceived 2026-06-18 to the four-layer informational model and three first-class bodies.
+It is the scope authority; this record is the pickup surface.
 
-**Phase 2A ratification gate is COMPLETE; the value/impact articulation is AUTHORED.**
-**Owner-directed gate (2026-06-17): a fresh session opens by DISCUSSING the nature of the
-strategy layer and the vision→strategy→planning flow — BEFORE any more strategy work.**
-This is a design discussion with the owner, not an authoring task; it likely reshapes what
-"the strategy layer" and Phases 2A–2C mean. Logged as `Q-` in open-questions. In order:
+The Q-002 strategy-layer discussion is **resolved** (the model + bodies above) and Q-002 in
+`open-questions.md` is marked resolved with that outcome. In order:
 
-1. Read the plan, the [decisions brief](../../../plans/vision-strategy-and-plan-estate.2a-decisions.md)
-   (status `ratified`), and the [value/impact articulation](../../../plans/vision-strategy-and-plan-estate.value-and-impact.md)
-   (the MCP-app stream in full + a separate mention of the other two streams' value).
-2. **Discuss with the owner: what is the strategy layer, and how does vision → strategy →
-   planning flow?** Settle this before authoring more. It may revise the phase structure below.
-3. **Only then — author the ecosystem + framework streams' strategy + planning.** Owner
-   refinement 2026-06-17: all three streams are co-equal and each needs its own strategy layer
-   and planning; their value is already named in the articulation, their fuller strategy follows
-   (tracked `p2a-other-streams-strategy`). Only the MCP-app stream gates go-live.
-4. **Then Phase 2B** — value-stream redundancy/gap analysis at the **hybrid** depth
-   (ecosystem decomposed to SDK/search/graph/EEF); re-verify the survey's empirical
-   counts first. **Then Phase 2C** — execution spine. Do not jump to the spine first.
-5. **Estate hygiene runs in parallel anytime (NOT strategy-gated):** re-anchor the
-   dead VISION What-We-Deliver references, fix the editorial-tone vision path, clear
-   the dead PR-76 blocker — after re-verifying current reachability counts.
+1. **Author the strategy corpus (Body 2) at `docs/strategy/`** — the cohesive system-strategy:
+   diagnosis of the experiment→product challenge; the Oak-strategy alignment as an *original
+   derivation* (stream→goal map; schools deliberate non-goal; four pillars as constraints;
+   align-not-fulfil) — read Oak's strategy first-hand from `.agent/reference-local/`
+   (**inform-only: never quote/link/copy**); the streams-as-system map; per-stream choices +
+   won't-do + measures; K1–K3 inside the app section as its readiness keystones; the
+   release-readiness requirements (below) as named hand-offs. Absorb `value-and-impact.md` and the
+   2a rationale — both from `.agent/plans/archive/` — as inputs. Leadership-grade.
+2. **In parallel — `estate-restructure-prep` (strategy-independent):** begin reading every plan
+   and extracting its permanent documentation to its durable home; archive genuinely-complete
+   plans. Do **not** assert new boundaries yet (those need Body 2). Re-verify survey counts first.
+3. **Estate hygiene (independent, anytime):** dead VISION references; editorial-tone vision path;
+   dead PR-76 blocker — after re-verifying reachability counts.
+4. **Then Body 3 (estate restructure) proper** — once the strategy structure exists: new
+   boundaries, rehoming, rewrite-to-standard, scattered-concepts→new-plans, deletions with
+   disposition. Authored as its own executable plan. The within-ecosystem gap analysis (the old
+   "2B") is part of **Body 3**, run at the **hybrid** depth (SDK/search/graph/EEF). The old
+   2A/2B/2C phases are dissolved — see the controlling plan's Disposition section.
 
-Phase 3 (the plan-estate restructure — new structure, value-preserving via the
-disposition ledger, this plan's permanent home) stays gated until Phases 1+2 are
-done. Full scope: the plan.
+The estate restructure (Body 3) is **core and ~80% of the work, not an addendum**; only its
+new-boundary work is informationally gated on the strategy. Full scope: the plan.
 
 ## Method carried forward
 
@@ -215,6 +265,13 @@ done. Full scope: the plan.
 - **Authoritative/mission language is quoted exactly, never smoothed for prose.**
 - Treat all agent-produced inputs (sub-agent reviewers, survey waves, K1–K3) as
   **input-to-verify**; validate load-bearing claims first-hand.
+- **Scope from the goal, not from the pointer (2026-06-18).** This session's recurring failure:
+  examining exactly what the owner pointed at — the plan, then 2a, then the survey, then this
+  record — and declaring done, instead of stepping back to ask *given the goal, what is the
+  complete set of surfaces that relevantly sit in this context?* and verifying all of them. The
+  owner had to point at each surface in turn. Cure (generative metacognition): before declaring
+  any verification done, derive the full relevant surface set from the goal and walk it — the
+  consumer-walk discipline applied to **verification**, not only to framing residue.
 
 ## Participating agent identities
 
@@ -224,3 +281,4 @@ done. Full scope: the plan.
 | Ocelot binds Curfew | claude-code | claude-opus-4-8[1m] | c9423b | vision-author + estate-rewiring | 2026-06-17 | 2026-06-17 |
 | Tempest spins Spire | claude-code | claude-opus-4-8[1m] | 94a5c5 | controlling-plan author + review-synthesis + hygiene | 2026-06-17 | 2026-06-17 |
 | Squall spins Stratus | claude-code | claude-opus-4-8[1m] | 8b8770 | Phase-2A ratification gate + decision recording + K1–K3 reconciliation | 2026-06-17 | 2026-06-17 |
+| Asteroid calls Meridian | claude-code | claude-opus-4-8[1m] | 2297c9 | Q-002 strategy-layer discussion + approach reconception to the informational model | 2026-06-18 | 2026-06-18 |

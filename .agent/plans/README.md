@@ -19,7 +19,7 @@ For the strategic overview, use [high-level-plan.md](high-level-plan.md).
 | Entry | Purpose |
 |---|---|
 | [high-level-plan.md](high-level-plan.md) | Strategic cross-collection overview |
-| [vision-strategy-and-plan-estate.plan.md](vision-strategy-and-plan-estate.plan.md) | Controlling plan for the experiment→product arc: vision → strategy → plan-estate (temporary root exception; permanent home decided in its Phase 3) |
+| [vision-strategy-and-plan-estate.plan.md](vision-strategy-and-plan-estate.plan.md) | Controlling plan for the experiment→product arc: three co-equal bodies (vision · strategy · plan-estate) on a four-layer informational model (temporary root exception; permanent home decided by its estate-restructure body) |
 | [curriculum-mcp-path-to-ga/roadmap.md](curriculum-mcp-path-to-ga/roadmap.md) | MCP HTTP server M1 → M2 → M3 → GA coordination |
 | [curriculum-mcp-path-to-ga/launch-readiness-framework.md](curriculum-mcp-path-to-ga/launch-readiness-framework.md) | What "live product" means for the MCP app: readiness dimensions, keystone owner decisions, candidate M4/GA gates |
 | [curriculum-mcp-path-to-ga/future/launch-readiness-and-milestone-redefinition.plan.md](curriculum-mcp-path-to-ga/future/launch-readiness-and-milestone-redefinition.plan.md) | Future stub: redraft the milestone ladder impact-first and drive launch-readiness to GA (owner-promotion gated) |
@@ -104,8 +104,8 @@ The strategic cross-collection index `high-level-plan.md` is linked directly
 from this root; every other plan is reached through its owning collection's
 index. One **temporary** second root exception is sanctioned:
 `vision-strategy-and-plan-estate.plan.md`, the controlling plan for the
-experiment→product arc, linked directly from root until its own Phase 3 decides
-its permanent home (it governs the restructure that places it). No other
+experiment→product arc, linked directly from root until its estate-restructure body
+decides its permanent home (it governs the restructure that places it). No other
 root-level plan exception is permitted without amending this invariant. Graph
 work is reached through its collections —
 `connecting-oak-resources/knowledge-graph-integration/` for graph substrate and

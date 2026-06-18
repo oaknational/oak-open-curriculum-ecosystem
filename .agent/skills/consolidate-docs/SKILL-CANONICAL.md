@@ -561,8 +561,6 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
    - **answered-in-place** — a clear answer has emerged from repo evidence,
      comments, a landed plan, an ADR, a PDR, or another durable artefact; update
      the status and link the evidence.
-   - **surfaced-to-owner** — the question is genuinely owner-decision-class;
-     update the status and include it in the consolidation closeout report.
    - **withdrawn** — the question has been overtaken by events or no longer
      applies; update the status with a one-line reason.
    - **open** — only when a named constraint still prevents resolution; record
@@ -753,7 +751,7 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
    - `hard` ("do something soon"): above hard limit but within
      `hard limit × CRITICAL_RATIO` (1.5). Preserve learning first, then
      remediate before consolidation closure, open an explicit remediation
-     lane, or record owner-approved deferral. Do not roll back or suppress
+     lane. Do not roll back or suppress
      the learning to make the gate green.
    - `critical` ("loop failure signal"): above `hard limit × CRITICAL_RATIO`.
      Stop routine work and open a remediation lane — see ADR-144 §Loop
@@ -777,8 +775,7 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
    expose unresolved hard or critical pressure. If the command fails because
    knowledge was preserved correctly, do not undo the knowledge. Closure
    still needs a concrete disposition: remediate now, open an explicit
-   remediation lane with acceptance criteria, or record owner-approved
-   deferral/limit change. Changes to fitness thresholds are self-documenting
+   remediation lane with acceptance criteria. Changes to fitness thresholds are self-documenting
    via frontmatter. An ADR amendment is only needed if the fitness system
    itself changes.
 10. **Manage the practice exchange.** Two directions:

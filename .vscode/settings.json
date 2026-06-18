@@ -160,7 +160,7 @@
   },
   "cSpell.language": "en-GB",
   "sonarlint.connectedMode.project": {
-    "connectionId": "oaknational-cloud",
+    "connectionId": "oaknational",
     "projectKey": "oaknational_oak-open-curriculum-ecosystem"
   }
 }

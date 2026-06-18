@@ -257,6 +257,13 @@ Before diving in, pause and ask:
 2. **What value are we delivering, through what impact, for which users?**
 3. **Could it be simpler without compromising quality?**
 4. **What assumptions am I making? Are they valid?**
+5. **What is the goal, and what is the full set of surfaces relevantly in scope for
+   it — not just what I was pointed at?** Emit a proportionate `Goal · In · Out`
+   artefact before approach, and again before declaring done, per
+   [`scope-from-goal-before-approach`](../../../rules/scope-from-goal-before-approach.md).
+
+These questions are **not** session-open-only: re-ask them at every task/pointer
+arrival and before declaring done, not just here.
 
 ## Commit
 

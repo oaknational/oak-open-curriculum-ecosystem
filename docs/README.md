@@ -18,9 +18,10 @@ last_reviewed: 2026-06-12
   branches by audience and need, detects your setup state, and reads the
   live docs as it guides you
 - **Evaluating the project?** → [VISION.md](../VISION.md) for the
-  timeless framing: MCP Apps exploration in AI platforms, sector reuse of
-  Oak's openly licenced curriculum, hybrid semantic search, knowledge graphs,
-  modular building blocks, and the agentic-first Practice. Then read the
+  timeless framing: Oak's open curriculum as AI-native infrastructure across
+  **three co-equal value streams** — the teacher-facing MCP app, engineering
+  tools for the wider ecosystem (SDK, semantic search, curriculum graph,
+  evidence surfaces), and the agentic-engineering Practice. Then read the
   latest snapshot in the [reports surface](../.agent/reports/) and the live
   [high-level plan](../.agent/plans/high-level-plan.md)
 - **Not a developer?** → [Curriculum Guide](domain/curriculum-guide.md) — Oak's curriculum structure in plain language

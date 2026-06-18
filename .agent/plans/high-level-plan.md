@@ -3,7 +3,7 @@ plan_id: high-level-plan
 title: "High-Level Plan"
 type: strategic-index
 status: active
-last_updated: 2026-06-15
+last_updated: 2026-06-18
 related_indices:
   - "README.md"
   - "curriculum-mcp-path-to-ga/roadmap.md"
@@ -24,6 +24,16 @@ start at [README.md](README.md). For the Curriculum MCP release arc, use
 ---
 
 ## Strategic Goal
+
+> **Predates the three-stream vision — being superseded (2026-06-18).** The goal stated
+> below ("primitives and modular building blocks") was written before the vision settled
+> on **three co-equal value streams** (teacher MCP app · ecosystem engineering tools ·
+> agentic-engineering framework) that form a **system** and service Oak's own strategy. It
+> is **not the current source of truth** for strategic goals — see
+> [`VISION.md`](../../VISION.md) and the forthcoming `docs/strategy/` corpus (Body 2 of
+> [`vision-strategy-and-plan-estate.plan.md`](vision-strategy-and-plan-estate.plan.md)). It
+> will be reconciled to the strategy during the estate restructure (Body 3); do not extend
+> it as current strategy.
 
 Oak's open curriculum should become a set of world-class primitives and modular
 building blocks for education applications. The repo pursues that through:
