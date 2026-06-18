@@ -355,6 +355,41 @@ tools until N insights have been discovered first-hand and written to
 Recurrence the same week (a second consolidation session re-enacted the reflex
 while curating the lesson) is the evidence that the cure must be structural.
 
+## Worked Instance — Conservation-First / Chase-Fitness-Numbers (2026-06-18)
+
+A second concrete entry for the t2 semantic-pathogen inventory, with an unusually
+**strong** partial firing signature — the strongest candidate yet for occupying t3's
+empty quadrant. In a dedicated-consolidation session (Wisteria spins Bark) the agent
+read the Conservation Invariant, `knowledge-preservation-over-fitness-warnings`, and
+`substance-before-fitness` — then, one turn later, treated a `repo-continuity.md`
+"critical — loop failure signal" fitness report as a number to clear and condensed the
+file (the owner reverted it). The pathogen is *chasing the fitness number / suppressing
+substance to clear a zone* — semantic (no literal signature for "I am condensing to hit
+a count").
+
+Why this instance is load-bearing for t2/t3:
+
+- **Recurrence evidence (the t2 base PDR-098 names as unbuilt):** in one napkin the
+  recurring family is `fluency-is-a-failure-vector` (13 references),
+  `passive-guidance-loses-to-artefact-gravity` (4), `substrate-pointer-read-as-current-state`
+  (stable, 5+ instances across teams), plus this conservation-first pathogen. The owner
+  has had to re-issue "prioritise knowledge preservation, don't chase fitness numbers"
+  every consolidation — owner-correction recurrence is itself first-class t2 evidence.
+- **Partial firing signature (t3 empty quadrant, occupied for one class):** the agent
+  acts on the `practice:fitness` report output, AND every flagged file already declares
+  its conservation policy in frontmatter (`overflow_disposition`, `drain_strategy`,
+  `fitness_rationale`). The report run is a mechanical firing moment; the framing is the
+  advisory cognitive content. So the candidate mechanism is *make the fitness report
+  self-frame* — emit, in the report output: (a) "fitness is a routing signal, not a
+  target — conserve insight first; numbers follow"; (b) per worse-than-soft file, echo
+  that file's own conservation frontmatter + the root-cause questions (why large? root
+  cause? best insight-conserving step?); (c) the anti-pattern line (never trim, condense,
+  archive-to-fit, split, or raise a limit to clear a zone). This is an
+  affordance/output-framing change at a mechanical firing moment — not another passive
+  rule (t6 self-referential-trap clear: the discipline rides the artefact whose output
+  triggers the failure, per the metacognition directive §Cure Shape). Candidate mechanism
+  is NOT pre-authored as an executable here, per the scope discipline below.
+
 ## Note on Scope Discipline
 
 This is a strategic design-space plan. It contains no executable workstreams or

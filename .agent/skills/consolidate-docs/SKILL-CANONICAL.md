@@ -230,6 +230,18 @@ persist:
 
 - `graduated` - durable home created or updated (verify it is there).
 - `duplicate` - already represented in a durable home (verify it is there).
+  **Recurrence check ([PDR-098](../../practice-core/decision-records/PDR-098-doctrine-traction-firing-detection-response.md)):**
+  before treating an already-homed concept as a routine duplicate-removal, ask whether it has
+  **recurred despite its home** — multiple instances across napkin rotations or comms events, or the
+  owner re-raising the same correction. A recurring-despite-home concept is NOT a silent duplicate: the
+  recurrence is first-class evidence that the home's *mechanism is not firing* (the home is passive
+  guidance and loses at the action moment — `passive-guidance-loses-to-artefact-gravity`). Route it to
+  the doctrine-traction mechanism lane (PDR-098's empty quadrant / the semantic-pathogen inventory in
+  [`action-time-structural-interrupt-design-space.plan.md`](../../plans/agentic-engineering-enhancements/future/action-time-structural-interrupt-design-space.plan.md))
+  as recurrence evidence, THEN remove the duplicate instance. Deleting the duplicate without capturing
+  the recurrence throws away the exact signal that forces the mechanism decision — which is why the
+  same corrections keep recurring. (This step gives recurrence-capture a *defined firing moment* at the
+  drain; the action-time *mechanism* PDR-098 leaves open is the design lane, not this step.)
 - `rejected` - decided not worth a durable home (no longer valid, too thin, or
   superseded), with the reason.
 - `carried-forward` - still valid but not drainable in this pass, with trigger
