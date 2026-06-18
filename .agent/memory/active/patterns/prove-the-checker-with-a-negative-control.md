@@ -46,5 +46,21 @@ Worked instances:
    linted file list, the message body) — a result with no evidence of
    inputs is not a result.
 
+## Exception: a downstream unconditional gate makes the per-invocation control redundant
+
+When the same input is *also* checked by a downstream gate that fires
+**unconditionally** (no flags, no path-scoping that can silently match nothing),
+the per-invocation negative control is redundant — trust the gate. The canonical
+case: a commit message is gated by the `.husky/commit-msg` hook, which runs
+`commitlint` on every commit; the pre-commit advisory checker is convenience, so a
+per-commit deliberate-RED control on *it* tests the tool, not the message, and has
+no bridge to the goal (a conforming commit). Run a one-off self-check on such a
+checker only if you genuinely suspect it is broken on this machine — never as a
+per-invocation ritual. The control earns its place precisely when there is **no**
+such downstream gate (a targeted `markdownlint` run, a one-off validator) — the
+green there could be a structural false-green with nothing else to catch it.
+
 Sibling families: the green-verifier-without-count lesson and the
-zero-hit-absence-claims-need-a-positive-control register candidate.
+zero-hit-absence-claims-need-a-positive-control register candidate. The exception
+above is the commit-skill reframe (the `commit-msg` hook is the real gate); see the
+commit SKILL.
