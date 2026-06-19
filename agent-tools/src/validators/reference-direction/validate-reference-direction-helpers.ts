@@ -107,6 +107,14 @@ export function classifyLayer(repoRelPath: string): ArtefactLayer {
  * Extract repo-relative references from markdown content. Resolves inline links
  * (`](target)`) and reference definitions (`[label]: target`) relative to the
  * source file's directory. External URLs, mailto, and pure anchors are ignored.
+ *
+ * Backticked paths — a repo path written inside backticks — are deliberately NOT
+ * extracted: a backtick is a concept-NAME, not a resolvable dependency that can rot,
+ * and the PDR-105 de-link convention treats backticked/prose names as safe. Detecting
+ * them would flag ~1000
+ * legitimate concept-names across policed doctrine — a gate-bricking false-positive
+ * storm — so the validator polices only resolvable markdown-link references. Do not
+ * "widen" extraction to backticks without first revisiting that convention.
  */
 export function extractReferences(sourcePath: string, content: string): ExtractedReference[] {
   const sourceDir = posix.dirname(sourcePath.replace(/^\.\//, ''));

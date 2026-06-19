@@ -221,3 +221,89 @@ the tsc gate ARE the test. General lesson: **a helper whose entire value is a co
 no standalone runtime test; co-land it with the consumer that exercises the property.** The error-FACTORY
 signature `(value: never, makeError: (s)=>E)` is forced by `noUnusedParameters` (never param must be
 used) + no-underscore-rename. **candidate:** TDD-doctrine/pattern note (propagates to ~100 WS4 sites).
+
+## no-throw residue: read every site; the throw-CLASS is orthogonal to the leaf-DAG (2026-06-19, Siren mends Rudder)
+
+**Surprise:** inherited per-workspace no-throw counts conflate THREE things — src vs test throws, AND
+the throw's fix-class (WS2/WS3/WS4/WS5/Dx). Three inherited labels were wrong this session, each caught
+only by reading the actual sites: env-resolution "WS2 leaf (4)" was **0 src / 4 test** (all WS7);
+graph-core "finish 16, follow the assertNeverResult template" was a **documented construction-contract**
+(create-graph-view ×4, ADR-179) + a **vendor-callback** (jsonld) — zero exhaustiveness arms; env "clean
+2-src WS2" was **module-init D2** with a cross-workspace cascade. **Lesson:** the cheap result-return
+throws get done first, so the leaf RESIDUE is the design-laden exception-uses ADR-088 once blessed (now
+convert-all per D6). Walking a DAG by count is a trap — re-read every site and classify by fix-technique
+before touching it. Full tier map in the thread record.
+
+## Type-narrowing-artifact throws → strengthen the type, don't route to Result (2026-06-19, Siren mends Rudder)
+
+**Lesson (sharp, cross-session):** a `throw` that exists ONLY to narrow a too-wide upstream return type
+(e.g. `redactTelemetryValue: JsonValue→JsonValue` whose string branch always returns string) is NOT a
+recoverable error. Routing it through `Result` bolts a permanently-unreachable `err` arm onto the
+function AND cascades to every caller. The correct fix is to **strengthen the upstream type** (add a
+`string→string` overload), after which the guard is provably dead and deletes cleanly — no Result, no
+cascade, behaviour identical. This is "would it be simpler if the system changed?" in miniature.
+**Leverage:** one overload on `redactTelemetryValue` removed throws at two call sites (observability
+`redactText` + logger `redactStringValue`) and unlocks a third (express-middleware). **candidate:**
+pattern instance — *throw-as-narrowing-artifact → type-strengthening, not Result*.
+
+## Vendor-callback-required throws — owner ruling (2026-06-19, Siren mends Rudder)
+
+Owner ruling on the class I flagged: *"we can't ever control how third parties handle errors, and we
+should not try. Either wrap our call appropriately, or if we don't need the callback, simplify by
+deleting it."* jsonld's `documentLoader` must reject-to-refuse (its contract); we honour it via
+`Promise.reject` (no throw statement) and type the error as `Result` at OUR boundary (processor.ts
+already wraps). Not gaming the rule — the boundary is correctly placed. **candidate:** ADR-088 WS9
+amendment should name this class. (Recorded as pending-graduation.)
+
+## Shared-branch transient-mid-edit-window reds the full-tree gate (2026-06-19, Siren mends Rudder)
+
+**Failure-mode (mirrored from comms `7ae04490`):** on a shared branch with a blocking full-tree
+pre-commit gate, a peer's *transient* uncommitted lint error (Drake momentarily at 21 statements
+mid-edit) reds the gate for ANY agent's commit. My commit failed on an agent-tools error I didn't
+cause. **Cure (worked):** diagnose first-hand (dirty file? whose lane? in a commit or working-tree?),
+surface to the lane owner, **never touch their in-flight dirty work**, abandon cleanly — the window
+self-resolves (it had already cleared ~3 min before my broadcast). Verify the peer's "it's green now"
+claim first-hand (`pnpm --filter <ws> lint`) before re-committing — peer status is input-to-verify.
+
+## "owner-gated" is the over-caution reflex again — recurrence escalates past the PDR-098 bar (2026-06-19, Drake lifts Obsidian)
+
+Running the PDR-105 burndown tail I labelled THREE forced-by-doctrine moves "owner-gated" and surfaced
+them as questions: residue deletion (PDR-105 Task 2 mandates it; git is provenance), the validator
+report-only→blocking escalation (PDR-105 §Consequences mandates mechanical enforcement), and the
+substrate-manifest reconciliation (forced coherence-completion of the authorised deletion). Owner:
+*"'owner-gated' is a tombstone and an excuse in almost all cases."* The genuine owner-gate is rare; the
+real citable gate here was already present (owner-controls-push).
+**Recurrence-despite-home (PDR-098), escalating:** SAME over-caution/over-gating family as the Sandpiper
+entry ("recurred ~4×") and the Merlin entry above (invented worktree + fabricated gate, SAME DAY). The
+reflex reaches for a SOFTER move — ask / gate / isolate / widen — instead of the harder correct one
+(decide from doctrine, fix the type, commit). It did NOT fire at my action moment; the napkin home is
+passive and loses to artefact-gravity. The recurrence count across distinct agents now clears the
+PDR-098 bar decisively — an ACTION-TIME mechanism is overdue. Routing as recurrence evidence to the
+action-time-structural-interrupt design lane.
+**Cure (changes the next move):** before writing "owner-gated" or raising a question, test — is the
+answer FORCED by ratified doctrine/excellence, and is the gate CITABLE to a real owner reservation? If
+forced or uncitable, do it and own it; a fabricated precondition IS the tell. Siblings:
+[[fluency-is-a-failure-vector]], [[passive-guidance-loses-to-artefact-gravity]].
+**candidate:** PDR-shaped (over-gating family + gates-must-be-citable + no-question-when-forced synthesis)
+AND action-time-mechanism recurrence evidence.
+
+## "widen" hides a type problem (2026-06-19, Drake lifts Obsidian)
+
+Proposed "widen the reference-direction validator to flag backticked paths" to catch one stray ref —
+owner: *"I'm always slightly wary of 'widen', it so often hides an improper solution to a type problem."*
+Right: the validator's type is *resolvable dependency*; a backtick is a *concept-name* (a different type
+the de-link convention treats as safe). Flagging backticks conflates the two — 1030 false positives,
+gate-bricking — REJECTED on type grounds. By contrast, adding `.agent/analysis/` to the ephemeral set
+was NOT a widen-hack: analysis docs ARE ephemeral, mis-typed as `other`; that corrects the model.
+**Cure:** before widening a list/type/union, discriminate — is the model WRONG (fix it) or
+CORRECT-AND-VIOLATED (reject the widen)? **candidate:** pattern (widen-is-a-type-smell).
+
+## Deleting a doctrine surface → reconcile the PDR-049/050 substrate manifest (2026-06-19, Drake lifts Obsidian)
+
+Tranche B deleted tracks/+workstreams/. validate-full-target-estate caught that the PDR-049/050
+substrate-contracts manifest still declared `memory-operational-tracks` with `"lifecycle": "live"` — a
+live contract for a deleted surface. NO gate caught it (read by an informational report, not a blocking
+validator), so a pre-commit-only check would have missed it. **Grounded knowledge for the next
+surface-deleter:** when retiring an operational memory/state surface, grep
+`.agent/memory/executive/memory-state-substrate-contracts.manifest.json` for a contract entry +
+historical_root and reconcile them in the deletion commit. Reconciled in 774a49e5e.

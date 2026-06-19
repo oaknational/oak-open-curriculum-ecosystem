@@ -124,7 +124,7 @@ archive/); `tracks/` is empty. "workstream" has two senses — the operational l
 (retired) vs a *scope descriptor* in PDR-027's identity model (RETAINED — do NOT purge). PDR-027 has no
 live dir-refs (no change); PDR-030 + practice.md:358 are retained-sense (no change).
 
-**BLOCKING remaining work (Drake lifts Obsidian) — every item is a live deliverable:**
+**Remaining work (Drake lifts Obsidian) — ALL RESOLVED 2026-06-19; see the Drake completion section below. The original deliverables:**
 
 1. **PDR-011 body** (lines 49, 421–432 treat track cards as a live compliant surface): retire the live
    treatment + add a new amendment-log entry recording the tracks retirement. The existing Session-5 and
@@ -145,9 +145,47 @@ live dir-refs (no change); PDR-030 + practice.md:358 are retained-sense (no chan
    that already follows it. `register-identity:103` links the retired `../commands/` dir — repoint to
    `.agent/skills/consolidate-docs/SKILL-CANONICAL.md`.
 
-**COMMIT STATE:** the Task-2 operational edits + 7 self-created-tombstone fixes + this thread-record update
-are ALL UNCOMMITTED. Commit them as one reviewed "Task-2 refs-first" commit once Merlin spins Cirrus
-releases the `git:index/head` window (held now for the no-throw consolidation onto this branch).
+### Burndown progress (2026-06-19, Drake lifts Obsidian `9258d7`) — PDR-105 COMPLETE, validator now BLOCKING
+
+Successor to Siren guards Reef. The deliverables above are RESOLVED across three reviewed,
+gate-green commits on `docs/planning-and-validation` (unpushed — owner controls push):
+
++ **Tranche A — doctrine cures** (`d8ec8867c`, docs-adr-expert: all sound): de-linked the
+  validator-missed refs (ADR-026 backticked archived-plan path; ADR-093 three `.agent/analysis/`
+  links); retired the live track-card/workstream treatment in PDR-011 + ADR-150 (amendment-log
+  entries; ADR-150 body kept verbatim as the historical decision record per ADR convention);
+  removed PDR-027's stale track-card convention; reframed the PDR-058:359 tombstone. Plus a
+  finding beyond the handoff list: reconciled `no-moving-targets:135`, which still licensed the
+  very ADR→ephemeral refs the burndown removes (PDR-105 §Consequences retires
+  wrong-direction-affirming clauses). `register-identity:103` was already done (verified
+  first-hand — the prior `../commands/` link is gone).
++ **Tranche B — residue removal** (`774a49e5e`, owner-authorised "git is the provenance"):
+  deleted `tracks/` + `workstreams/`; reconciled the PDR-049/050 substrate-contracts manifest
+  (dropped the stale `memory-operational-tracks` `"lifecycle": "live"` contract entry + the
+  `workstreams/` historical_root); flipped PDR-105 §Notes to past-tense. repo-validators:check
+  green. (The "COMMIT STATE: ALL UNCOMMITTED" note that previously sat here was superseded — Siren
+  guards Reef committed the Task-2 work as `631bc5851`/`1fb700017` before standing down.)
++ **Tranche C — enforcement capstone** (`563487f79`, code-expert + test-expert APPROVE; their
+  claims verified first-hand, blocking path proven by a probe): corrected `.agent/analysis/`'s
+  layer (it is ephemeral, was mis-typed `other`); escalated `validate-reference-direction`
+  report-only → **blocking** (exit 1 on any wrong-direction ref; fails repo-validators:check in
+  CI + `pnpm check`). PDR-105 §Consequences mechanical enforcement now holds.
+
+**Design decision recorded (do not re-litigate):** the validator deliberately does NOT detect
+backticked repo-paths — a backtick is a concept-name, not a resolvable dependency; flagging them
+would brick the gate (1030 backticked repo-paths in policed doctrine) and contradict the de-link
+convention ("backticked/prose names are safe"). ADR-026's stray ref was cured by de-linking, not
+by widening detection. A comment in `extractReferences` records this for the next modifier.
+
+**PDR-105 burndown is COMPLETE**: 197→145 (Tulip spins Xylem) → 145→0 (Siren guards Reef) → residue
+deleted + invariant mechanically enforced (Drake lifts Obsidian). No remaining PDR-105 deliverables.
+
+**repo-continuity note:** `repo-continuity.md` was held uncommitted by the no-throw lane
+(Siren mends Rudder) this session, so this thread's §Active threads identity summary was NOT updated
+there (avoiding a collision with their uncommitted edits — constraint, not omission; falsifiable by
+checking repo-continuity reflects PDR-105 complete after the no-throw lane commits it). The next
+agent to commit repo-continuity should add Drake lifts Obsidian (claude / Opus 4.8 / 9258d7 /
+implementer / 2026-06-19) to this thread's `Latest identity` summary.
 
 **NEXT-SESSION PICKUP (dedicated consolidation, owner-scoped to a fresh session 2026-06-18):**
 
@@ -497,6 +535,7 @@ passes) is in git history and the [`curator-passes/`](../curator-passes/) ledger
 | `Sandpiper lifts Downdraft` | `claude-code` | `Opus 4.8 (1M)` | `0c6576` | `curator — dedicated-consolidation: buffers drained; continuity curated to live-work-only; testing recipes graduated; PDR-105 reference-direction invariants + validate-reference-direction enforcer landed; threads relocated to paused/retired; tracks/workstreams removal + ref-burndown deferred (refs-first)` | 2026-06-18 | 2026-06-19 |
 | `Tulip spins Xylem` | `claude` | `Opus 4.8 (1M)` | `34b8e5` | `PDR-105 reference-direction burndown: §Context SDP/DIP fix; stable-addressed-surface exemption (validator + corollary generalisation) + built --verbose; wired no-moving-targets + practice-core-portability to PDR-105; retired consolidate-docs 7d; inverted dont-break-build to own the green-gate invariant; validator 197→145; tracks/workstreams + bulk burndown deferred to fresh budget` | 2026-06-19 | 2026-06-19 |
 | `Siren guards Reef` | `claude` | `Opus 4.8 (1M)` | `e0eb7f` | `PDR-105 burndown COMPLETED 145→0 (Tulip successor): portability 55 (7ac5fe657) + durability 90 (6893962c2), pure de-link, 3 docs-adr passes APPROVED, gate green, NOT pushed; Task-2 tracks/workstreams operational surfaces retired (uncommitted) + 7 self-made tombstones fixed; handed to Drake lifts Obsidian — blocking remaining: PDR-011/ADR-150 foundational edits, dir deletion, validator warn→error escalation, ADR-026/093 coverage gaps, PDR-058:359 + register-identity stale-link tombstones` | 2026-06-19 | 2026-06-19 |
+| `Drake lifts Obsidian` | `claude` | `Opus 4.8 (1M)` | `9258d7` | `PDR-105 burndown COMPLETE (Siren guards Reef successor): Tranche A doctrine cures d8ec8867c (de-links + PDR-011/ADR-150/PDR-027/PDR-058 + no-moving-targets:135 reconciliation; docs-adr APPROVED); Tranche B 774a49e5e (tracks/workstreams deleted + PDR-049/050 manifest reconciled + §Notes past-tense; owner-authorised); Tranche C 563487f79 (validate-reference-direction report-only→blocking + .agent/analysis/ ephemeral; code/test-expert APPROVE; probe-proven); validator now BLOCKING at 0; backticked-detection deliberately rejected; NOT pushed` | 2026-06-19 | 2026-06-19 |
 
 ## Cross-Plan and Cross-Thread Links
 

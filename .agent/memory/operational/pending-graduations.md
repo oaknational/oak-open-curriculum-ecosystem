@@ -95,3 +95,20 @@ consolidation; both are owner-decision-gated (surfaced to the owner this pass).
   session-open sweep). So PDR-104 and the PDR-098 family are complementary: a solo
   autonomous dedicated-consolidation, before those mechanisms exist, is higher-risk than
   PDR-104 alone implies. Doctrine-shaping — surfaced for owner ratification before authoring.
+
+- **"owner-gated" / over-caution reflex: recurrence clears the PDR-098 bar (action-time mechanism overdue)**
+  `[captured: 2026-06-19 |
+  source: napkin (Drake lifts Obsidian) + Merlin spins Cirrus + Sandpiper lifts Downdraft instances |
+  target: PDR-shaped synthesis (over-gating family + gates-must-be-citable + no-question-when-forced)
+  AND action-time-mechanism recurrence evidence for the action-time-structural-interrupt design lane |
+  trigger: owner ratifies the synthesis, OR the next action-time-mechanism design pass |
+  size: M | status: due]`
+  The over-caution / over-gating reflex — reaching for a softer move (ask / gate / isolate / widen)
+  instead of the harder correct one (decide from doctrine, fix the type, commit) — has now recurred
+  across at least three distinct agents this period (Sandpiper ~4x, Merlin's worktree + fabricated
+  gate, Drake's triple "owner-gated" on PDR-105-mandated moves). The owner corrections this session,
+  *"'owner-gated' is a tombstone and an excuse in almost all cases"* and *"widen hides a type
+  problem"*, are the same family. Passive napkin guidance is proven not to fire at the action moment
+  (PDR-098 recurrence-despite-home). Two routes, surfaced for owner: (1) a PDR synthesising the
+  citable-gate / forced-answer / over-caution doctrine; (2) recurrence evidence that the action-time
+  structural-interrupt mechanism is overdue.
