@@ -19,9 +19,9 @@ principle constrains);
 (context grounding for AI agents — the interpretation-resource scaffold that lets
 the agent reason well over deterministic facts);
 the EEF plan's **Decision 10** in
-[`eef-graph-tool-completion.plan.md`](../../../.agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md)
+`eef-graph-tool-completion.plan.md`
 (the plan-local statement this ADR promotes to a repo-wide principle);
-[`graph-tools-value-redesign.plan.md`](../../../.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-tools-value-redesign.plan.md)
+`graph-tools-value-redesign.plan.md`
 (the second plan that independently embodies the same principle: bounded
 retrieval, agent reasons);
 PDR-058 §Surface 2 (earned-generic design optionality).
@@ -35,7 +35,7 @@ the consuming agent?**
 
 The question is not hypothetical. It surfaced explicitly in the EEF evidence
 work, where an originating strategic brief
-([`evidence-integration-strategy.md`](../../../.agent/plans/sector-engagement/eef/future/evidence-integration-strategy.md))
+(`evidence-integration-strategy.md`)
 proposed a server-side "pedagogical recommendation system" with a transparent
 composite-scoring algorithm (Impact 40% / Evidence 30% / Cost 20% / Context
 10%) and a server-side curriculum→evidence crosswalk. The brief's own §10.3

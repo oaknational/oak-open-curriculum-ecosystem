@@ -24,7 +24,7 @@ doctrine carried forward in the parallel PDR-011 amendment)
   Rationale and Consequences language aligned. Doctrine unchanged (three
   continuity types, split-loop model, contract field set, surprise
   pipeline all preserved). See
-  [operational-awareness-and-continuity-surface-separation.plan.md](../../../.agent/plans/agentic-engineering-enhancements/archive/completed/operational-awareness-and-continuity-surface-separation.plan.md).
+  operational-awareness-and-continuity-surface-separation.plan.md.
 - **2026-04-21 Session 5** (memory-feedback thread; Pippin / cursor-opus;
   owner-ratified TIER-2 simplification): the host-local surface set
   realising this ADR has been re-shaped. The per-workstream brief

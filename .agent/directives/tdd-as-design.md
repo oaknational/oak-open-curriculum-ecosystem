@@ -105,11 +105,9 @@ that "need to describe an internal seam" are asking for scaffolding
 unless the seam genuinely produces new observable state; the default
 is scaffolding.
 
-See the [`where-system-state-is-observable-at-plan-author-time`][observable-pattern]
+See the `where-system-state-is-observable-at-plan-author-time`
 pattern for the diagnostic question, the worked instance, and how to
 apply the constraint during cycle decomposition.
-
-[observable-pattern]: ../memory/active/patterns/where-system-state-is-observable-at-plan-author-time.md
 
 ## Why Scales Are Complementary
 

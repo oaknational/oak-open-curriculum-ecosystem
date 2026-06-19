@@ -22,7 +22,7 @@ reason well over deterministic facts);
 (Non-Goals — the learner-facing and "not a replacement for Oak's teacher-facing
 product" boundaries this principle sits alongside);
 the EEF evidence integration strategy's **R7 — Professional Judgement Framing**
-in [`evidence-integration-strategy.md`](../../../.agent/plans/sector-engagement/eef/future/evidence-integration-strategy.md)
+in `evidence-integration-strategy.md`
 (the latent product-requirement statement this ADR promotes to a repo-wide
 principle).
 

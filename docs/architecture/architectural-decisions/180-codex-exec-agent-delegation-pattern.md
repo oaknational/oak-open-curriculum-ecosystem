@@ -70,7 +70,7 @@ ADR's experiment. The implementation was structurally large enough to fight
 the repo's complexity discipline (50-line function limit, 250-line file
 limit, complexity ≤8) for a feature that has no second consumer yet.
 The deeper design exploration lives in
-[`codex-exec-cli-deep-dive.plan.md`](../../../.agent/plans/agentic-engineering-enhancements/future/codex-exec-cli-deep-dive.plan.md).
+`codex-exec-cli-deep-dive.plan.md`.
 Promotion of that plan is the trigger for adding `run`/`extract`/
 `validate-brief`.
 

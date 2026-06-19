@@ -41,7 +41,7 @@ once: it **duplicates tested infrastructure** (now two code paths drift), and it
 Per [PDR-060 (tooling friction is first-class user feedback)](../practice-core/decision-records/PDR-060-tooling-friction-is-first-class-user-feedback.md)
 and [PDR-036 (friction as structural finding)](../practice-core/decision-records/PDR-036-friction-as-structural-finding.md):
 when the built CLI is missing an affordance, add a
-[frictions-register](../plans/agent-tooling/frictions-register.md) entry (or
+frictions-register entry (or
 extend the tool), then use the smallest standard composition that works — not a
 private re-implementation. If a one-off shell pipeline gets you unblocked now,
 that is fine; the standing rule is that the **gap gets recorded**, so the fork is

@@ -157,7 +157,7 @@ Phase 5 implementation work.
      from `@oaknational/observability-events`.
    - **Initial severity**: `warn`. Escalates to `error` once Phase 2 of
      the restructure plan lands its first emission sites (per
-     [`patterns/warning-severity-is-off-severity.md`](../../../.agent/memory/active/patterns/warning-severity-is-off-severity.md)
+     `patterns/warning-severity-is-off-severity.md`
      this is a deliberate soft-launch with a named escalation trigger,
      not a permanent warn-severity state).
    - **Opt-out**: a sentinel comment justifies a legitimate

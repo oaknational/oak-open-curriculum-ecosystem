@@ -10,7 +10,7 @@ host-specific decision and adoption mechanism for this repo's CI;
 [ADR-168](168-typescript-6-baseline-and-workspace-script-architectural-rules.md) —
 TS6 baseline ADR landed contemporaneously and demonstrates the
 "foundational dep change with cross-cutting consequences" shape;
-[`.agent/plans/architecture-and-infrastructure/future/build-pipeline-composition-safeguards.plan.md`](../../../.agent/plans/architecture-and-infrastructure/future/build-pipeline-composition-safeguards.plan.md) —
+`.agent/plans/architecture-and-infrastructure/future/build-pipeline-composition-safeguards.plan.md` —
 the strategic brief covering the validator + Dependabot config that
 will operationalise this ADR; promotion-gated.
 
@@ -57,7 +57,7 @@ The mechanism for enforcing this is staged:
 - **Now (this ADR)**: the convention is documented and the
   affected workflows have been corrected. Reviewers checking PRs
   that touch `.github/workflows/` files apply the convention by hand.
-- **Later (per [`build-pipeline-composition-safeguards.plan.md`](../../../.agent/plans/architecture-and-infrastructure/future/build-pipeline-composition-safeguards.plan.md))**:
+- **Later (per `build-pipeline-composition-safeguards.plan.md`)**:
   a `scripts/validate-action-pin-hygiene.ts` validator queries each
   pinned action's `/releases/latest` and fails when the pinned SHA
   diverges from the Latest SHA. The validator runs as a CI gate and
@@ -136,6 +136,6 @@ maintainers' Latest as of the 2026-04-30 audit.
 ## Future work
 
 The full structural enforcement landscape is captured in
-[`build-pipeline-composition-safeguards.plan.md`](../../../.agent/plans/architecture-and-infrastructure/future/build-pipeline-composition-safeguards.plan.md).
+`build-pipeline-composition-safeguards.plan.md`.
 Promotion is gated on owner direction, second cross-action
 divergence instance, or near-violation in PR review.

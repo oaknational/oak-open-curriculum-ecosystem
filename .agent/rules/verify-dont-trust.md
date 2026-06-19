@@ -106,7 +106,7 @@ transfer behind a piped `git push`; a SIGPIPE-141 after a passing gate when the
 output is redirected; a background-task wrapper reporting exit 0 while both inner
 hooks ran red. Inspect the inner command's actual output, not the wrapper's
 status. The full behavioural doctrine is the pattern
-[`wrapped-exit-codes-false-green`](../memory/active/patterns/wrapped-exit-codes-false-green.md).
+`wrapped-exit-codes-false-green`.
 
 ## Citation or Silence
 

@@ -183,4 +183,4 @@ When Level 3 work begins:
 
 - [Elasticsearch Function Score Query](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-function-score-query.html)
 - [Elasticsearch Query Rules](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-using-query-rules.html)
-- [modern-es-features.md](../../../.agent/plans/semantic-search/post-sdk/search-quality/modern-es-features.md) — Level 3 planning
+- modern-es-features.md — Level 3 planning

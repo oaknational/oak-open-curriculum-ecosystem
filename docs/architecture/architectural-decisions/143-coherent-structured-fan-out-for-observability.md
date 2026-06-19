@@ -309,6 +309,6 @@ The implementation is expected to:
   `.sentryclirc` composition, per-workspace ownership, and the
   two-step `sourcemaps inject` → `sourcemaps upload` flow that this
   ADR's source map decision assumes.
-- [Sentry + OpenTelemetry Integration Execution Plan](../../../.agent/plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md)
+- Sentry + OpenTelemetry Integration Execution Plan
   — the execution plan under which the observability adoption,
   per-workspace CLI scoping, and alerting baseline were landed.

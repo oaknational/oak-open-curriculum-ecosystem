@@ -153,7 +153,7 @@ in another.
 Existing mixed workspaces are not required to split immediately, but they
 must be tracked as migration work. The principle applies to new code and
 to workspaces that are being substantially refactored. The
-[workspace-layer separation audit plan](../../../.agent/plans/architecture-and-infrastructure/current/workspace-layer-separation-audit.plan.md)
+workspace-layer separation audit plan
 owns the repo-wide audit and promotion path; the
-[Oak surface isolation programme](../../../.agent/plans/architecture-and-infrastructure/future/oak-surface-isolation-and-generic-foundation-programme.plan.md)
+Oak surface isolation programme
 is the strategic umbrella for the generic-foundation / Oak-leaf split.

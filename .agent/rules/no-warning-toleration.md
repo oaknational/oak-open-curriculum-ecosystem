@@ -5,7 +5,7 @@ and [ADR-163 (Sentry release / commits / deploy linkage)](../../docs/architectur
 §6/§7 (entry-point boundary discipline + non-deferrable-warnings amendment).
 
 Pattern reference:
-[`acknowledged-warnings-deferred-to-the-stage-they-explode-in`](../memory/active/napkin.md)
+`acknowledged-warnings-deferred-to-the-stage-they-explode-in`
 (2026-04-23 napkin entry, first hard instance).
 
 ## Rule

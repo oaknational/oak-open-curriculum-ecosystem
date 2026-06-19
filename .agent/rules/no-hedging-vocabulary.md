@@ -117,7 +117,7 @@ trade a known false-positive flood for no real coverage gain.
 The recursive-exclusion pattern is structural: any structural
 enforcer that names its own pathogen must exclude the documents
 that define the pathogen. The general form lives at
-[`structural-enforcer-recursive-exclusion.md`](../memory/active/patterns/structural-enforcer-recursive-exclusion.md)
+`structural-enforcer-recursive-exclusion.md`
 (agent-tier pattern), which names two further mechanism shapes
 beyond `exclude_paths` (per-line context exclusion;
 self-exclusion by placement) and the structural distinction from

@@ -47,7 +47,7 @@ Acceptance authority: owner direction in the 2026-05-14 Verdant Swaying
 Glade session ("1 and 3 in this session" — graduation pass plus ADR-181
 status flip). Companion graduation pass landed in the same session; see
 the archived distilled graduation log entry in
-[`distilled-graduations-log-2026-05-14.md`](../../../.agent/memory/active/archive/distilled-graduations-log-2026-05-14.md).
+`distilled-graduations-log-2026-05-14.md`.
 
 ## Context
 

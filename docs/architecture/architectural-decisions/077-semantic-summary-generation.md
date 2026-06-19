@@ -263,7 +263,7 @@ apps/oak-search-cli/src/lib/indexing/
 - [ADR-110](110-thread-search-architecture.md) - Thread semantic retrieval
 - [ADR-139](139-sequence-semantic-contract-and-ownership.md) - Sequence semantic contract and ownership
 - [`apps/oak-search-cli/docs/INDEXING.md`](../../../apps/oak-search-cli/docs/INDEXING.md) - Current indexing contract summary
-- [Upstream API Wishlist](../../../.agent/plans/sector-engagement/ooc-api-wishlist/archive/upstream-api-metadata-wishlist.md) - Request for native `semantic_summary`
+- Upstream API Wishlist - Request for native `semantic_summary`
 
 ## References
 

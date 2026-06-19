@@ -66,7 +66,7 @@ in various guises". It lived only in auto-memory (`feedback_no_provenance_pointe
 `feedback_useful_work_over_ceremony`), which is passive — under the gravity of
 skill instructions that mandate ledgers and closeout proof, the guidance did not
 fire (the
-[`passive-guidance-loses-to-artefact-gravity`](../memory/active/patterns/passive-guidance-loses-to-artefact-gravity.md)
+`passive-guidance-loses-to-artefact-gravity`
 failure). The rule corpus is the active behavioural-modifier layer; this rule is
 that layer, and it stands against the skill instructions that generate the
 ceremony.

@@ -255,7 +255,7 @@ See [NEW-SUBJECT-GUIDE.md](../../apps/oak-search-cli/docs/NEW-SUBJECT-GUIDE.md) 
 
 **Status**: 🔄 Planning (2025-12-24)
 
-The `pnpm vocab-gen` pipeline (see [02b-vocabulary-mining.md](../../../.agent/plans/semantic-search/part-1-search-excellence/02b-vocabulary-mining.md)) will mine synonyms from bulk download data, specifically:
+The `pnpm vocab-gen` pipeline (see 02b-vocabulary-mining.md) will mine synonyms from bulk download data, specifically:
 
 - **13,349 unique keywords with definitions** — Parse for "also known as" patterns
 - **Cross-subject terms** — Identify vocabulary shared across subjects
@@ -343,7 +343,7 @@ Before implementing vocab-gen synonym generation, decide:
 - [ADR-030: SDK as Single Source of Truth](030-sdk-single-source-truth.md)
 - [ADR-038: Compilation Time Revolution](038-compilation-time-revolution.md)
 - [ADR-082: Fundamentals-First Search Strategy](082-fundamentals-first-search-strategy.md)
-- [02b-vocabulary-mining.md](../../../.agent/plans/semantic-search/part-1-search-excellence/02b-vocabulary-mining.md) — Vocabulary mining pipeline
+- 02b-vocabulary-mining.md — Vocabulary mining pipeline
 - Semantic search plans: `.agent/plans/semantic-search/`
 
 ## References

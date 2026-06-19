@@ -23,7 +23,7 @@ Files under `.agent/directives/` (`AGENT.md`, `principles.md`,
 The error rate of editing operations rises sharply under context
 pressure. The disposition that produces *"I'll just be careful"*
 under context pressure is exactly the rounding-off failure mode the
-[`eager-rounding-off-on-partial-structures`][rounding] pattern
+`eager-rounding-off-on-partial-structures` pattern
 names — partial structures get filled by inference rather than by
 reading, and the resulting damage is invisible until the next
 session reads the affected directive.
@@ -78,7 +78,5 @@ rule.
 
 - per-user feedback memory: `feedback_30_percent_context_for_directives`
 - principles.md §Owner Direction Beats Plan (conflict surfacing)
-- pattern: [`eager-rounding-off-on-partial-structures`][rounding]
+- pattern: `eager-rounding-off-on-partial-structures`
 - Owner-stated standing authority: *"this is always true"* (2026-05-05)
-
-[rounding]: ../memory/active/patterns/eager-rounding-off-on-partial-structures.md

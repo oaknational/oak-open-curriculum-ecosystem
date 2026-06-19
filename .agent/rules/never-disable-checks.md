@@ -179,8 +179,8 @@ during the window — which they will not.
   — gate skipping requires fresh per-invocation owner authorisation.
 - Sibling rule: [`dont-break-build-without-fix-plan.md`](dont-break-build-without-fix-plan.md)
   — broken builds are first-priority work, not deferrable.
-- Adjacent pattern: [`tool-error-as-question.md`](../memory/active/patterns/tool-error-as-question.md)
+- Adjacent pattern: `tool-error-as-question.md`
   — the meta-pattern. A failing gate is a question being asked; the
   forbidden response is to silence the question.
-- Adjacent pattern: [`hook-as-question-not-obstacle.md`](../memory/active/patterns/hook-as-question-not-obstacle.md)
+- Adjacent pattern: `hook-as-question-not-obstacle.md`
   — instance pattern at the pre-commit-hook surface.

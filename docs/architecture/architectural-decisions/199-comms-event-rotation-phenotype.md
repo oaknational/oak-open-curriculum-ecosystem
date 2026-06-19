@@ -27,7 +27,7 @@ sits in the live comms watcher's drain path, and the corpus's value-preservation
 mechanism (keep everything) erodes the watcher's awareness mechanism.
 
 The research (WS0–WS6 of
-[`comms-corpus-research-and-rotation-strategy.plan.md`](../../../.agent/plans/agent-tooling/active/comms-corpus-research-and-rotation-strategy.plan.md))
+`comms-corpus-research-and-rotation-strategy.plan.md`)
 produced a two-round adversarially-reviewed rotation proposal
 ([`.agent/reports/agentic-engineering/2026-06-13-ws5-rotation-strategy-proposal.md`](../../../.agent/reports/agentic-engineering/2026-06-13-ws5-rotation-strategy-proposal.md))
 which the owner ratified "as proposed" on 2026-06-13. The owner amended one term:
@@ -114,7 +114,7 @@ repo phenotype of PDR-094. The phenotype:
    attaches to the events, never to the rendered log.
 
 9. **Composition with the storage redesign.** If
-   [`comms-watch-storage-redesign`](../../../.agent/plans/agent-tooling/current/comms-watch-storage-redesign.plan.md)
+   `comms-watch-storage-redesign`
    lands a watermark/segment store, the curator pass becomes "retire segments
    older than the window"; the class-tiers and the absorption gate are unchanged.
    Otherwise the directory-level archive-move ships standalone.

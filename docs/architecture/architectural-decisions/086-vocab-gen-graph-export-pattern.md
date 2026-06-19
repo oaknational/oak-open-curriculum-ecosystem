@@ -286,5 +286,5 @@ packages/sdks/oak-sdk-codegen/
 ## Related
 
 - [ADR-059: Knowledge Graph for Agent Context](059-knowledge-graph-for-agent-context.md) - Original graph pattern
-- [02b-vocabulary-mining.md](../../../.agent/plans/semantic-search/part-1-search-excellence/02b-vocabulary-mining.md) - Full pipeline specification
+- 02b-vocabulary-mining.md - Full pipeline specification
 - [TypeScript Issue #26979](https://github.com/microsoft/TypeScript/issues/26979) - Type inference performance with large literals

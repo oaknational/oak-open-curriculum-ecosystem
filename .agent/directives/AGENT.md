@@ -128,9 +128,9 @@ message via `pnpm agent-tools:check-commit-message` before `git commit`.
 
 Institutional memory lives in `.agent/memory/`:
 
-- [distilled.md](../memory/active/distilled.md) — refined cross-session
+- distilled.md — refined cross-session
   lessons conserved between capture and graduation
-- [napkin.md](../memory/active/napkin.md) — current session observations
+- napkin.md — current session observations
 - [patterns/](../memory/active/patterns/README.md) — reusable solutions and
   failure modes
 - [threads/](../memory/operational/threads/README.md) — thread convention,

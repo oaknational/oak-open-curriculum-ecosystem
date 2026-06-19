@@ -6,9 +6,9 @@
 [ADR-191](191-deterministic-data-surface-agent-reasons.md)
 (the EEF evidence surface that introduced the live instance of this lifecycle);
 the EEF plan's **D7** in
-[`eef-graph-tool-completion.plan.md`](../../../.agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md)
+`eef-graph-tool-completion.plan.md`
 (the pre-release → release-pre-proof move in flight);
-[`eef-outcome-evaluation-infrastructure.plan.md`](../../../.agent/plans/sector-engagement/eef/future/eef-outcome-evaluation-infrastructure.plan.md)
+`eef-outcome-evaluation-infrastructure.plan.md`
 (owns the post-proof flag removal).
 
 ## Context

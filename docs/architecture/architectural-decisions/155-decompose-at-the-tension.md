@@ -96,8 +96,8 @@ classifies cleanly.
 ### Non-Goals
 
 - This ADR does not prescribe the tier model itself — the four-tier
-  classification is documented in the [workspace topology exploration
-  plan](../../../.agent/plans/sdk-and-mcp-enhancements/active/workspace_topology_exploration.plan.md)
+  classification is documented in the workspace topology exploration
+  plan
   and may graduate to its own ADR when finalised. Tier labels used in
   the examples above are illustrative of the decomposition signal,
   not normative definitions.

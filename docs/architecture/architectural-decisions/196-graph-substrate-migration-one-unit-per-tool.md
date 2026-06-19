@@ -1,9 +1,9 @@
 # ADR-196: Graph Substrate Migration — One Replacement Unit per Tool
 
 **Status**: Accepted. Owner-ratified 2026-06-02 as the scope clause of
-[`graph-estate-consolidation.plan.md`](../../../.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-estate-consolidation.plan.md)
+`graph-estate-consolidation.plan.md`
 Judgement call 4; executed and validated in full via Track-G of
-[`graph-tools-value-redesign.plan.md`](../../../.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-tools-value-redesign.plan.md)
+`graph-tools-value-redesign.plan.md`
 (2026-06-10/11); recorded as an ADR 2026-06-11.
 **Date**: 2026-06-11
 **Related**:
@@ -49,7 +49,7 @@ Two corollaries are part of the decision:
 
 - **A tool's schema arrives when the tool is built or rebuilt, never before.** The delivery
   vehicle for the MCP wire field was refined by the owner on 2026-06-08
-  ([`output-schemas-for-mcp-tools.plan.md`](../../../.agent/plans/sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md)
+  (`output-schemas-for-mcp-tools.plan.md`
   §Resolved Sequencing): no migrated unit ships an MCP `outputSchema` (protocol-valid — the field
   is optional); the wire declaration is composed uniformly for **every** tool by the
   output-schemas plan, explicitly gated on the migration having landed, over each tool's

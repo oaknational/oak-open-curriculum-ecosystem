@@ -34,8 +34,8 @@ resource removal protocol-safe.
 Evidence record: the 2026-05-28 capture in
 [`pending-graduations.md`](../../../.agent/memory/operational/pending-graduations.md) (§2026-05-28
 captures — EEF graph-tooling rebuild); the EEF plan's Ratified Decisions in
-[`eef-graph-tool-completion.plan.md`](../../../.agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md);
-[`graph-tools-value-redesign.plan.md`](../../../.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-tools-value-redesign.plan.md)
+`eef-graph-tool-completion.plan.md`;
+`graph-tools-value-redesign.plan.md`
 (the executed Track-G arc); the client-behaviour research
 [`mcp-client-tool-result-consumption-2026-05-28.md`](../../../.agent/research/mcp-client-tool-result-consumption-2026-05-28.md).
 
@@ -126,7 +126,7 @@ questions for the convergence item).
 > (`formatToolResponse`: summary + serialised-JSON `content` blocks plus the
 > `structuredContent` payload) — the MCP spec's backwards-compatibility SHOULD
 > — for every graph tool; `get-eef-evidence` was realigned in PR-2 of the
-> [2026-06-11 snagging plan](../../../.agent/plans/sdk-and-mcp-enhancements/current/oak-prod-mcp-snagging-2026-06-11.plan.md)
+> 2026-06-11 snagging plan
 > (commit `20ad83326`). Evidence:
 > [`oak-prod-mcp-cursor-visibility-writeup-2026-06-11.md`](../../../.agent/reports/oak-prod-mcp-cursor-visibility-writeup-2026-06-11.md)
 > and [ADR-058's client-variability note](058-context-grounding-for-ai-agents.md).

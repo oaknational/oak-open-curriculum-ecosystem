@@ -79,7 +79,7 @@ collaboration-functionality decision, not at one structural moment. It had
 lived only in auto-memory (`useful-work-over-ceremony`,
 `comms-ceremony-minimal`), which is passive — under context pressure it did
 not fire (the
-[`passive-guidance-loses-to-artefact-gravity`](../memory/active/patterns/passive-guidance-loses-to-artefact-gravity.md)
+`passive-guidance-loses-to-artefact-gravity`
 failure). The rule corpus is the active behavioural-modifier layer; this
 rule is that active layer. The portable *contract* substance already lives
 in PDR-082 / PDR-080 / PDR-066 — what was missing is the always-applied
