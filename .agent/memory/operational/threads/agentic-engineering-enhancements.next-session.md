@@ -43,6 +43,38 @@ as open QUESTIONS and routed to a new exploration plan
 `team-autonomy-primitive-decisions-exploration.plan.md` (`1a36c027d`). The drain plan is executed
 (archive it). This supersedes the Lapwing pickup below — that lane is now drained.
 
+## Reference-Direction Doctrine + Deferred Application (2026-06-19, Sandpiper lifts Downdraft)
+
+PDR-105 (reference-direction invariants — two axes of artefact fundamentality: durability and
+portability; the unifying availability invariant; the stable-index corollary) is **Accepted and
+landed WITH its enforcement** — `validate-reference-direction` (report-first, wired into
+`repo-validators:check`, 22 unit tests, code/test-expert reviewed; commit `8d0297696`). Doctrine
+shipped with a mechanical detector, never prose alone (owner: "doctrine without enforcement masks
+the problem"). Thread records relocated to `threads/paused/` and `threads/retired/`; repo-continuity
+is the single stable index resolving slug → path (commit `44406e502`).
+
+**Deferred — the PDR-105 application burndown (owner-directed, properly sequenced, reviewed):**
+
+1. **Reference-direction debt: ~197 wrong-direction references** the validator now measures (55
+   portability = Core citing repo-specific paths; 142 durability = doctrine citing ephemeral
+   plans/threads). The fix is removal/inversion of doctrine→ephemeral references and routing
+   plan→thread through the continuity index — NOT symptom-repointing. The thread relocation newly
+   broke the subset that pointed at the moved records; these are inside the 142 and are removal
+   targets, not repoint targets. Escalating the validator from report-first to a blocking gate is the
+   owner decision after burndown (`new-rules-start-at-warn`).
+2. **`tracks/` and `workstreams/` removal (owner-directed):** a foundational concept-retirement —
+   the surfaces are woven through PDR-011 (×12), ADR-150 (×10), PDR-027, PDR-030, continuity-practice,
+   orientation, memory READMEs, four skills, and three rules. Retire the concept from each LIVE
+   doctrine surface (leave historical analysis/research/curator-passes/experience untouched), with
+   `docs-adr-expert` review on the PDR/ADR amendments, THEN remove the directories (refs-first, then
+   delete — the order this session got backwards). Both are not-useful-now (harness task-list + napkin
+   + claims/comms cover tracks; thread-record `## Lanes` cover workstreams) — judged by present need,
+   not usage/provenance.
+3. **Wire the operationalising rules to cite PDR-105** (`no-moving-targets-in-permanent-docs` = the
+   durability-axis hook; `practice-core-portability` = the portability axis) and **retire the
+   `consolidate-docs` 7d rule↔plan-citation check** — it validates a rule citing a plan, the exact
+   wrong-direction PDR-105 forbids.
+
 **NEXT-SESSION PICKUP (dedicated consolidation, owner-scoped to a fresh session 2026-06-18):**
 
 The 2026-06-18 dedicated consolidation (Wisteria spins Bark, n=2 with Bluebell on the SDK lane) did
@@ -156,10 +188,10 @@ linear next-step: the lanes below are independent and can be picked up **in para
 different checkouts, by separate agents, or collaboratively. Each carries its own state and
 pickup trigger; neither blocks the other.
 
-- **Lane A — feedback-mechanism follow-ons (active).** Branch `feat/graph-tooling-tidyup`;
++ **Lane A — feedback-mechanism follow-ons (active).** Branch `feat/graph-tooling-tidyup`;
   next is **WS1 → 2b → 2c → WS2** (full detail in the bullets and the Briny Plumbing Beacon
   banner below).
-- **Lane B — skills standardisation review (deferred).** Next is the
++ **Lane B — skills standardisation review (deferred).** Next is the
   **PDR-051 reduced-implementation reconciliation review**. Pickup trigger: the owner review
   session, OR the first ingested external skill, OR promotion of the oversized-core
   decomposition brief. Inputs ready — owning plan §Reality Reconciliation gap ledger
@@ -168,7 +200,7 @@ pickup trigger; neither blocks the other.
   ([decomposition](../../../plans/agent-tooling/future/skills-oversized-core-decomposition.plan.md),
   [eval harness](../../../plans/agent-tooling/future/skills-eval-harness.plan.md)). On a
   separate branch (committed `cbf01ae0`); not blocking and not blocked by Lane A.
-- **Lane C — memory/state semantic merge strategy (decided 2026-06-15; ADR
++ **Lane C — memory/state semantic merge strategy (decided 2026-06-15; ADR
   pending).** git merges lines, but `.agent/memory` and `.agent/state` files carry
   semantic invariants git cannot see (a JSON set keyed by `claim_id`; a markdown
   file with exactly one Current State block; an append-only narrative buffer; an
@@ -185,7 +217,7 @@ pickup trigger; neither blocks the other.
   but assumed git's textual merge) plus the per-file-class merge-semantics audit and
   the merge-driver-vs-out-of-band-tooling decision. Pickup trigger: a fresh
   agentic-engineering session, or the next multi-writer state convergence needing it.
-- **Lane D — rule-impact instrumentation (lane opened 2026-06-11).** Of the ~70
++ **Lane D — rule-impact instrumentation (lane opened 2026-06-11).** Of the ~70
   rules injected via `CLAUDE.md`, which measurably change agent behaviour and earn
   their context cost? Prose rules have no firing event; hook-backed rules (write-time
   guards, secrets-scan on Read, PreToolUse gates) do execute and can be instrumented.
@@ -196,20 +228,20 @@ pickup trigger; neither blocks the other.
   on-demand or retire them. Lane A's 2b reappraisal-cartography pass remains the
   prose-rule rationalisation vehicle.
 
-- **Branch**: `feat/graph-tooling-tidyup` — **clean and pushed** at HEAD `934d5c21`
++ **Branch**: `feat/graph-tooling-tidyup` — **clean and pushed** at HEAD `934d5c21`
   (re-derive git first-hand).
-- **Live work (next non-curation session)**: the feedback-mechanism follow-ons, in sequence
++ **Live work (next non-curation session)**: the feedback-mechanism follow-ons, in sequence
   **WS1 → 2b → 2c → WS2**. The full brief and the un-homed design decisions are in the **Briny
   Plumbing Beacon banner** below — preserve it. **Its GATE-STATE / EEF-lint-precondition
   paragraphs were VOID** even before this session (ADR-193 made `EefEvidenceEnvelope` a strict
   `interface` + egress membrane, so the `consistent-type-definitions` lint is green-resolved;
   the branch is clean and pushed). Read Briny for the work; this block for the current gate.
-  - **WS1** (`no-type-widening` ESLint rule) plan is at
+  + **WS1** (`no-type-widening` ESLint rule) plan is at
     [`current/no-type-widening-enforcement.plan.md`](../../../plans/agentic-engineering-enhancements/current/no-type-widening-enforcement.plan.md).
     **Fixture caveat**: the EEF `new Set<string>(OBSERVED_PHASES)` widening that motivated the
     rule was since made zero-widening (`Set<DeclaredPhase>` / `Set<EefStrandId>`) — confirm
     against `graph-corpus-sdk/src/eef-strands/` first-hand; author a dedicated fixture if gone.
-  - **2b** = the owner-approved 89-file `.agent/rules/*.md` reappraisal-cartography pass
+  + **2b** = the owner-approved 89-file `.agent/rules/*.md` reappraisal-cartography pass
     (discover cure per rule → cluster → discriminate collapse-candidate vs sharpen vs keep;
     do NOT auto-collapse — owner decides). **2c** = per-surface PDR-044 widening (ESLint
     now-eligible; rules-prose after 2b). **WS2** = tripwire wiring; coordinate with
@@ -227,7 +259,7 @@ pickup trigger; neither blocks the other.
 >
 > **What landed — item 2a (ESLint custom-rule reappraisal enforcement):**
 >
-> - **Mechanism = compile-time-by-construction (NOT a validator, NOT a factory).**
+> + **Mechanism = compile-time-by-construction (NOT a validator, NOT a factory).**
 >   `packages/core/oak-eslint/src/reappraising-message.ts`: a zod-branded `ReappraisingMessage`
 >   type, minted only by `createMessage({prohibition, reappraisal})` via
 > `z.string().brand().parse()`,
@@ -235,7 +267,7 @@ pickup trigger; neither blocks the other.
 > `meta.messages`
 >   to the brand. A **plain prohibition-only string now fails `tsc`** in any rule typed this way —
 >   non-bypassable, no separate validator to drift, no bypass-guard needed.
-> - **Why zod, not a hand-rolled brand:** the shared config bans assertions outright
+> + **Why zod, not a hand-rolled brand:** the shared config bans assertions outright
 >   (`@typescript-eslint/consistent-type-assertions: { assertionStyle: 'never' }`,
 >   `packages/core/oak-eslint/src/configs/recommended.ts`), and the repo had **no existing branded
 >   types**. A hand-rolled `as` brand is illegal; zod's `.parse()` is the only assertion-free mint
@@ -244,13 +276,13 @@ pickup trigger; neither blocks the other.
 > in
 >   the repo**. Added `zod@^4.4.3` to `oak-eslint` deps + `tsup.config.ts` `external` (zod is NOT
 >   inlined — verified `from 'zod'` in dist, 0 inlined source).
-> - **All 6 `meta.messages` rules migrated** (`no-dynamic-import`, `no-eslint-disable`,
+> + **All 6 `meta.messages` rules migrated** (`no-dynamic-import`, `no-eslint-disable`,
 >   `no-export-trivial-type-aliases`, `require-observability-emission`, `max-files-per-dir`,
 >   `no-real-io-in-tests`). Composed messages are behaviourally identical to the originals EXCEPT
 >   `max-files-per-dir`, which **gained a cure it never had** ("Group related files into a cohesive
 >   subdirectory…") — the owner's whole thesis, confirmed in the smallest case. `boundary.ts` uses
 >   `no-restricted-imports` config `message:` strings (not `meta.messages`) and is **out of scope**.
-> - **Green:** oak-eslint type-check, lint, 202 tests, build. TDD test-first
+> + **Green:** oak-eslint type-check, lint, 202 tests, build. TDD test-first
 >   (`reappraising-message.unit.test.ts`, red→green). Reviewed at the unit boundary (not backfill):
 >   **type-expert SAFE**, **code-expert APPROVED**, **test-expert PASS**. Applied: test assertions
 >   pinned to product-owned substrings; zod externalised. **Caught one false positive** —
@@ -259,12 +291,12 @@ pickup trigger; neither blocks the other.
 >
 > **Decisions held in my context (loss-scan — reached no other durable surface):**
 >
-> - **Option C beat the factory** (assumptions-expert + architecture-expert-betty converged): a
+> + **Option C beat the factory** (assumptions-expert + architecture-expert-betty converged): a
 >   rule-wrapping factory over-reached the M-sized approved capture and needed a fragile no-bypass
 >   guard; compile-time brand is lighter AND stronger. Then zod-brand beat a hand-rolled brand
 > because
 >   of the `as` ban (above). Do not "simplify" this back to a hand-rolled brand — it will not lint.
-> - **2b is RESHAPED and OWNER-EXPANDED.** The capture sized it "M"; it is actually an **89-file
+> + **2b is RESHAPED and OWNER-EXPANDED.** The capture sized it "M"; it is actually an **89-file
 >   corpus change** (`.agent/rules/*.md`), many flat-prose with no positive-direction section, so
 >   "states a positive move" is **not mechanically checkable** without first imposing a structured
 > slot
@@ -282,14 +314,14 @@ pickup trigger; neither blocks the other.
 >   is lower-dimensional than the detection-space. Let collision density decide 2b's structure
 > (dense →
 >   shared concept→cure registry; sparse → per-rule section).
-> - **Collision signal already found (feeds 2b):** within the ESLint surface,
+> + **Collision signal already found (feeds 2b):** within the ESLint surface,
 > `no-real-io-in-tests`'s
 >   three `bannedModule*` messages share one cure ("inject a fake instead"); `eslintDisableBanned` +
 >   `tsDirectiveBanned` both cure to "fix the root cause".
-> - **2c (PDR-044 widening) is PER-SURFACE**, not all-or-nothing: ESLint widening lands once 2a
+> + **2c (PDR-044 widening) is PER-SURFACE**, not all-or-nothing: ESLint widening lands once 2a
 >   enforces; rules-prose widening waits for 2b. Never state doctrine wider than enforcement reaches
 >   (the amendment's own §Scope / PDR-038).
-> - **The interlock binds the no-type-widening rule to the 2a enforcer existing** (now true), so
+> + **The interlock binds the no-type-widening rule to the 2a enforcer existing** (now true), so
 >   **WS1's message is authored via `createMessage` and is born teaching by construction** — costs
 >   nothing extra.
 >
@@ -392,17 +424,17 @@ passes) is in git history and the [`curator-passes/`](../curator-passes/) ledger
 
 ## Cross-Plan and Cross-Thread Links
 
-- **Live-work plans**:
++ **Live-work plans**:
   [`current/no-type-widening-enforcement.plan.md`](../../../plans/agentic-engineering-enhancements/current/no-type-widening-enforcement.plan.md),
   [`future/action-time-structural-interrupt-design-space.plan.md`](../../../plans/agentic-engineering-enhancements/future/action-time-structural-interrupt-design-space.plan.md).
-- **Skills arc** (2026-06-14 audit, agent-tooling collection): owning plan
++ **Skills arc** (2026-06-14 audit, agent-tooling collection): owning plan
   [`agent-tooling/current/skills-standardisation-and-adapter-generator.plan.md`](../../../plans/agent-tooling/current/skills-standardisation-and-adapter-generator.plan.md)
   (§Reality Reconciliation gap ledger); enhancement briefs
   [`agent-tooling/future/skills-oversized-core-decomposition.plan.md`](../../../plans/agent-tooling/future/skills-oversized-core-decomposition.plan.md)
   and [`agent-tooling/future/skills-eval-harness.plan.md`](../../../plans/agent-tooling/future/skills-eval-harness.plan.md);
   friction F-37; pending-graduations entry "PDR-051 reduced-implementation reconciliation review".
-- **Graduation register**: [`pending-graduations.md`](../pending-graduations.md) (decision-debt
++ **Graduation register**: [`pending-graduations.md`](../pending-graduations.md) (decision-debt
   candidates — pending/due/overdue — and fired-trigger candidates from this thread's curation passes).
-- **Curation ledgers**: [`curator-passes/`](../curator-passes/) (per-pass disposition evidence).
-- **Repo state**: [`repo-continuity.md`](../repo-continuity.md) § Current State (authoritative
++ **Curation ledgers**: [`curator-passes/`](../curator-passes/) (per-pass disposition evidence).
++ **Repo state**: [`repo-continuity.md`](../repo-continuity.md) § Current State (authoritative
   live state across threads).
