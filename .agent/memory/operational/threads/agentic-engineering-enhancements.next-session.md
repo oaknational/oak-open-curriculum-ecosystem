@@ -75,6 +75,45 @@ is the single stable index resolving slug → path (commit `44406e502`).
    `consolidate-docs` 7d rule↔plan-citation check** — it validates a rule citing a plan, the exact
    wrong-direction PDR-105 forbids.
 
+### Burndown progress (2026-06-19, Tulip spins Xylem `34b8e5`) — validator 197 → 145
+
+Four reviewed commits on `docs/planning-and-validation` (NOT pushed — owner controls push):
+
++ **Task 0** (`6eddad013`): PDR-105 §Context wording corrected — the two axes are SDP (depend in
+  the direction of stability), only the stable-index corollary is DIP proper. docs-adr APPROVED.
++ **Task 1a/1b** (`01561d374`, `8601c3d4e`): owner-approved bucket-B cure. The validator now exempts
+  **stable-addressed surfaces** (fixed address, churning content) on the durability axis only —
+  registries (`active-claims.json`, `closed-claims.archive.json`, `shared-comms-log.md`), index
+  READMEs (`patterns/`, `threads/`, `state/`), permanent collaboration dirs (`conversations/`,
+  `escalations/`, `comms/`, `handoffs/`), the patterns dir, and `*.schema.json`. A link to a
+  *specific item inside* such a surface still flags. Allowlists live in a new sibling module; PDR-105
+  body+§Notes amended; a built `--verbose` flag lists `axis source:line -> target` (replaces
+  throwaway triage scripts — ESM/agent-tools). TDD; type/test/code-expert reviewed. **197 → 149 → 145.**
++ **Task 3** (`e75b1e0fd`): `no-moving-targets` + `practice-core-portability` wired to PDR-105 axes;
+  consolidate-docs **step 7d retired** (7e→7d); `dont-break-build-without-fix-plan` **inverted** to OWN
+  the green-gate invariant (was quoting `gate-recovery-cadence.plan.md` as "Authority"); that plan's
+  banner corrected. docs-adr APPROVED. This is the exemplar bucket-A inversion cure.
+
+**REMAINING (fresh-budget multi-surface pass):**
+
++ **Task 1 burndown — 145 left (90 durability + 55 portability).** Run
+  `pnpm --filter @oaknational/agent-tools validate-reference-direction -- --verbose` for the live
+  per-target list. Three cure-buckets: **A** doctrine→*moving* target (plan / individual `patterns/*.md`
+  / relocating thread record) → remove or invert (the dont-break-build inversion is the worked
+  exemplar); **C** genuinely-historical pointer → annotate `(historical reference)`; portability (PDRs
+  citing ADRs/rules/repo paths/ephemeral) → remove or restate portably. Biggest clusters:
+  `agent-collaboration.md` (7), ADR-082 (7, archived semantic-search plans — likely bucket C),
+  PDR-057 (7 portability). Many active-mem refs point at `patterns/passive-guidance-…md` (×8) and
+  `napkin.md` (×6) — a graduation signal (repeatedly-cited patterns may warrant durable homes).
++ **Task 2 — tracks/workstreams retirement** (NOT started). NOTE: first-hand `grep` shows the opener's
+  "PDR-011 ×12 / ADR-150 ×10" counts are UNRELIABLE (raw word-count over-counts ordinary "track");
+  re-enumerate the LIVE doctrine surfaces per-concept. `tracks/`+`workstreams/` are NOT in the
+  validator's EPHEMERAL_PREFIXES, so this is independent of the count. Refs-first, THEN delete dirs.
+  PDR-105 §Notes still says they "were removed" — corrected to "slated for removal (pending)"; flip to
+  past-tense in the deletion commit.
++ **Task 4 — escalate validator report-only → blocking** (owner decision, last; gated on burndown
+  reaching the agreed floor — zero-after-stable-addressed-exemptions).
+
 **NEXT-SESSION PICKUP (dedicated consolidation, owner-scoped to a fresh session 2026-06-18):**
 
 The 2026-06-18 dedicated consolidation (Wisteria spins Bark, n=2 with Bluebell on the SDK lane) did
