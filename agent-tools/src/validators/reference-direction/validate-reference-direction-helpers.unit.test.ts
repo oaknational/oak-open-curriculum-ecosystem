@@ -210,4 +210,83 @@ describe('findReferenceDirectionViolations', () => {
     ];
     expect(findReferenceDirectionViolations(files)).toHaveLength(0);
   });
+
+  // Stable-addressed-state exemption (PDR-105 stable-index corollary, generalised):
+  // a doctrine surface may link a singleton registry / log / schema whose ADDRESS is
+  // fixed even though its content churns — that is a safe dependency target, the
+  // abstraction the corollary's DIP rests on. The exemption is durability-only; the
+  // portability axis still refuses a portable-core file citing repo-specific state.
+  it('allows a rule citing the active-claims registry (stable-addressed state)', () => {
+    const files: ScanFile[] = [
+      {
+        path: '.agent/rules/register-active-areas.md',
+        content: 'register in [claims](../state/collaboration/active-claims.json)',
+      },
+    ];
+    expect(findReferenceDirectionViolations(files)).toHaveLength(0);
+  });
+
+  it('allows a rule citing the shared comms log (stable-addressed state)', () => {
+    const files: ScanFile[] = [
+      {
+        path: '.agent/rules/use-agent-comms-log.md',
+        content: 'post to [comms](../state/collaboration/shared-comms-log.md)',
+      },
+    ];
+    expect(findReferenceDirectionViolations(files)).toHaveLength(0);
+  });
+
+  it('allows a doctrine file citing the closed-claims archive (stable-addressed state)', () => {
+    const files: ScanFile[] = [
+      {
+        path: '.agent/rules/x.md',
+        content: 'archived to [closed](../state/collaboration/closed-claims.archive.json)',
+      },
+    ];
+    expect(findReferenceDirectionViolations(files)).toHaveLength(0);
+  });
+
+  it('allows a doctrine file citing a JSON schema (stable-addressed contract)', () => {
+    const files: ScanFile[] = [
+      {
+        path: '.agent/rules/register-active-areas.md',
+        content: 'shape per [schema](../state/collaboration/active-claims.schema.json)',
+      },
+    ];
+    expect(findReferenceDirectionViolations(files)).toHaveLength(0);
+  });
+
+  it('allows a doctrine file citing the patterns index README (stable-addressed)', () => {
+    const files: ScanFile[] = [
+      {
+        path: '.agent/rules/x.md',
+        content: 'see [patterns](../memory/active/patterns/README.md)',
+      },
+    ];
+    expect(findReferenceDirectionViolations(files)).toHaveLength(0);
+  });
+
+  it('still flags a doctrine file citing an individual pattern file (it graduates/moves)', () => {
+    const files: ScanFile[] = [
+      {
+        path: '.agent/rules/x.md',
+        content: 'see [pattern](../memory/active/patterns/fluency-is-a-failure-vector.md)',
+      },
+    ];
+    const violations = findReferenceDirectionViolations(files);
+    expect(violations).toHaveLength(1);
+    expect(violations[0].axis).toBe('durability');
+  });
+
+  it('still flags a portable-core file citing stable-addressed state (portability is strict)', () => {
+    const files: ScanFile[] = [
+      {
+        path: '.agent/practice-core/decision-records/PDR-1.md',
+        content: 'see [claims](../../state/collaboration/active-claims.json)',
+      },
+    ];
+    const violations = findReferenceDirectionViolations(files);
+    expect(violations).toHaveLength(1);
+    expect(violations[0].axis).toBe('portability');
+  });
 });

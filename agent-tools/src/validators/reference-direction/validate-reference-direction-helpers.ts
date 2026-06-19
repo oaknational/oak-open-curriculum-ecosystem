@@ -76,6 +76,26 @@ const EPHEMERAL_PREFIXES = [
  */
 const STABLE_INDEX_PATHS: readonly string[] = ['.agent/memory/operational/repo-continuity.md'];
 
+/**
+ * Stable-addressed operational targets a doctrine surface may link without a
+ * durability violation (PDR-105 stable-index corollary, generalised): singleton
+ * registries/logs whose *address* is fixed though *content* churns. Per-item records
+ * (`patterns/*.md`, `plans/**`, thread records) move/graduate and are NOT here.
+ */
+const STABLE_ADDRESSED_STATE: readonly string[] = [
+  '.agent/state/collaboration/active-claims.json',
+  '.agent/state/collaboration/closed-claims.archive.json',
+  '.agent/state/collaboration/shared-comms-log.md',
+  '.agent/memory/active/patterns/README.md',
+];
+
+/** True when an ephemeral target is a stable-addressed surface: an allowlisted
+ * singleton, or any `*.schema.json` (a schema is the stable abstraction). */
+function isStableAddressedState(repoRelPath: string): boolean {
+  const p = repoRelPath.replace(/^\.\//, '');
+  return STABLE_ADDRESSED_STATE.includes(p) || p.endsWith('.schema.json');
+}
+
 /** Matches a line annotated as a deliberate historical reference. */
 const HISTORICAL_MARKER = /\(historical references?\)|<!--\s*historical\s*-->/i;
 
@@ -168,7 +188,8 @@ export function isStableIndex(sourcePath: string): boolean {
  *   without that ADR). Reported even when the target is ephemeral (the stronger
  *   axis), so a Core → ephemeral reference is reported once.
  * - **Durability:** any policed source referencing an `ephemeral` target, unless
- *   the line is historical-marked.
+ *   the line is historical-marked or the target is a stable-addressed operational
+ *   surface (a singleton registry/log/schema — see {@link isStableAddressedState}).
  */
 function classifyReference(
   file: ScanFile,
@@ -194,7 +215,11 @@ function classifyReference(
   if (sourceLayer === 'portable-core' && targetLayer !== 'portable-core') {
     return { ...base, axis: 'portability' };
   }
-  if (targetLayer === 'ephemeral' && !ref.historicalMarked) {
+  if (
+    targetLayer === 'ephemeral' &&
+    !ref.historicalMarked &&
+    !isStableAddressedState(ref.resolvedRepoPath)
+  ) {
     return { ...base, axis: 'durability' };
   }
   return null;

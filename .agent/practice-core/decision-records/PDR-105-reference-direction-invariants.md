@@ -92,6 +92,19 @@ move then updates one place. A stable index has a stable *address* even though i
 *content* changes; that is what makes it a safe dependency target for the identities
 it resolves.
 
+This generalises beyond an index. A **stable-addressed surface** — a singleton
+registry, a log, an index, or a schema whose *address* is fixed by construction while
+its *content* churns — is itself a safe dependency target for what it holds, for the
+same reason: the address does not move, so the dependency does not rot. A schema is the
+strongest case — it is the abstraction (in DIP terms) that volatile records conform to.
+The boundary is movement, not mutation: a *per-item* record (one catalogued entry, one
+pattern, one plan) moves, graduates, or is deleted and so must be reached through the
+stable surface, not linked directly. Durable doctrine may therefore reference a
+stable-addressed surface it governs; it must not reference the volatile items within.
+This exemption is durability-only: the portability axis is unchanged — a portable-Core
+artefact still must not cite a host-specific stable-addressed surface, which is absent
+on arrival in another repo.
+
 ## Consequences
 
 - **Enforcement is mechanical, not prose.** Prose doctrine loses to artefact gravity
@@ -113,6 +126,15 @@ it resolves.
 In this repo: `repo-continuity.md` is the stable thread index — its link-definition
 block is the one surface that maps a thread slug to its current record path, so a
 thread moving between the active root and the `paused/` or `retired/` subdirectories
-updates only that block. The `tracks/` and `workstreams/` surfaces were removed
-2026-06-19 as residue; their removal and the thread-index discipline are the first
-applications of this PDR.
+updates only that block — the thread-index discipline is the first application of this
+PDR. The `tracks/` and `workstreams/` surfaces are slated for removal as residue
+(pending the reference-direction burndown); this note becomes past-tense in the commit
+that deletes them.
+
+The stable-addressed operational surfaces that durable doctrine may link without a
+durability violation (the corollary's generalisation, enforced by
+`validate-reference-direction`) are: `active-claims.json`,
+`closed-claims.archive.json`, `shared-comms-log.md`, the patterns index
+`patterns/README.md`, and any `*.schema.json`. Per-item records under
+`memory/active/patterns/`, `memory/operational/threads/`, and `plans/` stay volatile —
+reach them through the stable index, never by a direct link.
