@@ -43,9 +43,14 @@ export const jsonLdRuntime: JsonLdRuntime = {
   },
 };
 
-const noRemoteDocumentLoader: JsonLdDocumentLoader = async (url: string): Promise<never> => {
-  throw new Error(`Remote JSON-LD document loading is disabled for graph-core: ${url}`);
-};
+// jsonld's documentLoader contract refuses a URL by REJECTING the returned
+// promise — that is the third party's error protocol, which we honour rather
+// than trying to make the vendor speak Result (ADR-088). The rejection is
+// translated to a typed Result at our boundary (processor.ts `runProcessor`'s
+// try/catch -> err(processorFailure)). Expressed as `Promise.reject` rather
+// than a `throw` statement so the refusal is not an invisible throw.
+const noRemoteDocumentLoader: JsonLdDocumentLoader = (url: string): Promise<never> =>
+  Promise.reject(new Error(`Remote JSON-LD document loading is disabled for graph-core: ${url}`));
 
 export const noRemoteExpandOptions = {
   documentLoader: noRemoteDocumentLoader,
