@@ -122,6 +122,19 @@ doctrine carried forward in the parallel PDR-011 amendment)
   (the section each continuity surface's `overflow_disposition` frontmatter points at) plus the
   practice-fitness apparatus that surfaces the signal. First exercised in the 2026-06-08
   dedicated continuity-curation session. Doctrine otherwise unchanged.
+- **2026-06-19 — `tracks/`/`workstreams/` operational surfaces retired** (PDR-105 Task 2
+  reference-direction burndown). Mirrors the portable PDR-011 amendment
+  ([PDR-011 §Amendment Log 2026-06-19](../../../.agent/practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md#amendment-log)):
+  the single-writer tactical track-card surface and the per-workstream-brief split-shape
+  variant are retired; per-lane short-horizon state lives in the relevant thread's
+  next-session record under its `Lane state` substructure. The §3 body field list and the
+  §Rationale "Why a canonical repo-local surface" prose are unchanged — they remain the
+  original historical decision record per ADR convention, with this Amendment Log carrying
+  the change. The realising
+  `.agent/memory/operational/tracks/` and `.agent/memory/operational/workstreams/`
+  directories are removed in the burndown's deletion commit. The terms "track" and
+  "workstream" remain valid as conceptual scope descriptors; only the dedicated artefact
+  homes are retired.
 
 ## Context
 
@@ -203,9 +216,8 @@ Per-lane short-horizon state (current objective, blockers, promotion
 watchlist) is carried in a per-workstream brief surface, and tactical
 coordination in single-writer track cards. The exact file paths are a
 host-local implementation detail. _(Illustrative only, non-normative:_
-_this repository implements the surface set under `.agent/memory/operational/` and_
-_`.agent/memory/operational/tracks/`; see the state scaffolding docs for the_
-_realising paths.)_
+_this repository implements the surface set under `.agent/memory/operational/`;_
+_see the state scaffolding docs for the realising paths.)_
 
 The continuity surface set is operational only. Active plans remain
 authoritative for scope, sequencing, acceptance criteria, and validation.

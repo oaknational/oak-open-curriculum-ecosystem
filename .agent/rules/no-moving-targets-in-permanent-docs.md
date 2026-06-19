@@ -129,14 +129,19 @@ Three reasons:
 
 Portable permanent docs (PDRs, governance docs in practice-core,
 principles, testing-strategy, rules, patterns) MUST NOT cite plans,
-plan paths, plan section identifiers, workstream identifiers,
-track-card paths, or other ephemeral surfaces.
+plan paths, plan section identifiers, thread next-session record
+paths, or other ephemeral surfaces.
 
-ADRs, being repo-bound, may cite ephemeral surfaces as evidence
-where appropriate; the directionality rule applies in its strict
-form only to portable surfaces. Plans archive, get renamed, get split or
-merged; a permanent doc citing a plan name becomes a dead pointer
-the moment that plan archives.
+ADRs are repo-bound, so the **portability** axis does not bite them —
+an ADR may name a host-specific surface a portable PDR could not. The
+**durability** axis applies to ADRs in full, however: like all durable
+doctrine, an ADR references nothing more ephemeral than itself
+(PDR-105 Axis-1). Plans archive, get renamed, get split or merged; a
+permanent doc — ADR included — citing a plan name becomes a dead
+pointer the moment that plan archives. The one durability exemption is
+a reference to a stable-*addressed* surface (a registry, log, index, or
+schema whose address is fixed) per PDR-105's stable-index corollary —
+never to a volatile item within it.
 
 The directionality is one-way:
 
@@ -149,7 +154,7 @@ The directionality is one-way:
 This subsumes the SHA-specific framing under the broader
 directionality principle. Same family of failure (permanent →
 ephemeral citation), different granularities: SHAs, plan names,
-workstream identifiers, track-card paths, and any other identifier
+thread next-session record paths, and any other identifier
 that lives in ephemeral state.
 
 Owner sharpening 2026-05-05: *"plans are ephemeral! ADRs are

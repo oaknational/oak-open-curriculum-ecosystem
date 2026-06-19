@@ -356,8 +356,8 @@ authored at host-specific shapes only as evidence forces them.
 
 ## Rationale
 
-The single-rule shape `stop-inventing-optionality` was wrong
-because the distinct impacts demand distinct cures:
+Distinct impacts demand distinct cures, so optionality decomposes
+into four shapes rather than collapsing into a single rule:
 
 - Decision optionality: read-the-surface (PDR-057).
 - Design optionality: close-the-shape (closed-shape discipline).

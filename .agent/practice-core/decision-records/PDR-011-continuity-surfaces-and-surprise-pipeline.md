@@ -31,6 +31,20 @@ unit).
 
 ## Amendment Log
 
+- **2026-06-19** (PDR-105 Task 2 — reference-direction burndown): **the
+  `tracks/` and `workstreams/` operational surfaces are retired.** §"The
+  continuity contract" no longer lists single-writer tactical track cards
+  as a compliant split-surface, and the prior per-workstream-brief
+  split-shape variant is dropped; the surviving compliant shape is a
+  canonical file + per-thread next-session records (with a `Lane state`
+  substructure). The runtime-track-card git-tracking requirement (the
+  2026-04-21 Session 5 entry below, kept as a history-record) no longer
+  applies — there is no track-card surface to govern. The terms "track"
+  and "workstream" remain valid as conceptual scope descriptors; only the
+  dedicated artefact surfaces are retired. Rationale: at current scale the
+  surfaces added a coordination layer without structural value the thread
+  next-session record's `Lane state` does not already carry.
+
 - **2026-06-14** (Accepted; owner-confirmed general principle at the comms-research closeout
   consolidation): **a thread is a multi-lane container, not a single linear pointer.** A thread
   holds one or more concurrent lanes — independently pickup-able arcs, each with its own state,
@@ -417,21 +431,10 @@ is host-local: it may be a dedicated state file, a section of a
 primary session-continuation prompt, or any equivalent surface that
 every workflow references first. Hosts that split the contract
 across a canonical file + per-thread next-session records (with a
-`Lane state` substructure for lane-level short-horizon state) +
-single-writer tactical track cards remain compliant, provided the
-authority order between surfaces is explicit, each surface has a
-single documented writer, and the fields below are covered in
-aggregate. **Single-writer tactical track cards MUST be git-tracked**
-in the host's repository — not gitignored — so they are portable
-across machines, branches, and worktrees within their lifetime
-(per the 2026-04-21 Session 5 amendment). Track cards are short-
-lived (single-branch lifetime) but each card spans multiple
-sessions and potentially multiple agents/machines on the same
-branch; git is the portable transport that preserves them. (Per the 2026-04-21 Session 5 amendment, the prior
-split-shape — *canonical file + per-workstream briefs + tactical
-track cards* — is also accepted as a host-local variant if an
-adopter encounters multi-lane threads requiring dedicated
-brief surfaces, but is no longer the recommended default.)
+`Lane state` substructure for lane-level short-horizon state)
+remain compliant, provided the authority order between surfaces is
+explicit, each surface has a single documented writer, and the
+fields below are covered in aggregate.
 
 **Portable minimum fields** (every repo carries these, regardless of
 host shape):

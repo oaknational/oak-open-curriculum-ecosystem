@@ -160,16 +160,6 @@ discipline binds to this PDR's tuple format).
   was both). Post-retirement, the workstream slug is moot —
   only the thread slug carries operational-memory weight.
 
-  **Track-naming scope** (also raised as a Session 5
-  first-principles question): tactical track-card filenames in the
-  host's operational tracks surface remain `<scope>--<agent>--<branch>.md`.
-  With the workstream layer retired, `<scope>` is typically the
-  thread slug; for a thread exercising multi-lane scope, the
-  `<scope>` token may carry a lane qualifier
-  (e.g. `<thread>-<lane>`) — the format remains declarative, not
-  schema-enforced. Until a multi-lane thread surfaces, the
-  simpler `<thread>--<agent>--<branch>.md` is canonical.
-
 ## Context
 
 Agentic engineering sessions are bounded units of work
