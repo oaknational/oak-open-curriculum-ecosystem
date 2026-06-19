@@ -1,6 +1,10 @@
 # No Moving Targets in Permanent Docs
 
-Operationalises the moving-targets-in-permanent-docs doctrine. The
+Operationalises the **durability axis** of
+[PDR-105](../practice-core/decision-records/PDR-105-reference-direction-invariants.md)
+(reference-direction invariants): a permanent doc must not depend on a more-ephemeral
+target — neither an embedded moving value (a SHA, a count) nor a citation pointing at an
+ephemeral surface. This rule is that axis's write-time hook. The
 write-time hook enforcement at
 `.agent/hooks/policy.json` `preToolUseContent.scoped_blocks` is the
 machine layer; this rule names the discipline. The hook now distinguishes
@@ -163,6 +167,8 @@ THEM"*.
 
 ## Doctrinal Anchors
 
+- [PDR-105](../practice-core/decision-records/PDR-105-reference-direction-invariants.md)
+  §Axis 1 (durability) — the reference-direction invariant this rule operationalises
 - per-user feedback memory: `feedback_no_moving_targets_in_permanent_docs`
 - PDR-044 §Innate immunity (write-time fingerprints)
 - PDR-038 §2026-05-04 amendment (stated principles require structural enforcement)

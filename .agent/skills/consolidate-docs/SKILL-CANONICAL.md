@@ -594,19 +594,11 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
    4. **Expired track cards** — read every file under [`.agent/memory/operational/tracks/`](../../memory/operational/tracks/); flag any whose `expires_at:` frontmatter is past today's date.
    5. **Duplicate identity rows** — flag any thread where two rows share the same platform + model + `agent_name` tuple (additive-identity violation per PDR-027 — two visits should have coalesced into one row with an updated `last_session`, not accumulated).
    6. **Active threads ↔ next-session record correspondence** — for every thread listed in `§ Active threads`, confirm a file exists at the declared `Next-session record` path (canonical `threads/<slug>.next-session.md`). Flag any mismatch.
-   7. **Retired-record banner hygiene** — checks 1–6 verify that *live* threads (active or paused) have well-formed records; this check covers the *retired* case. For every `*.next-session.md` file under [`threads/`](../../memory/operational/threads/), confirm the thread appears in either [`repo-continuity.md § Active Threads`](../../memory/operational/repo-continuity.md#active-threads) or `§ Paused Threads`. A record present on disk but absent from **both** indexes is a retired or completed thread (its work has concluded — e.g. a merged single-PR closure thread). Flag any such record whose top lacks a **retirement banner** per the convention in [`threads/README.md`](../../memory/operational/threads/README.md#retirement-banner-convention) (a leading blockquote naming the retired/completed state, the conclusion date, and where the work concluded). Unlike checks 1–6, this check's remedy is a small edit: apply the missing banner as a follow-on consolidation diff (the same way 7e's archival edits land), not merely a flag — a retired record left unbannered silently reads as live to the next agent who opens it.
+   7. **Retired-record banner hygiene** — checks 1–6 verify that *live* threads (active or paused) have well-formed records; this check covers the *retired* case. For every `*.next-session.md` file under [`threads/`](../../memory/operational/threads/), confirm the thread appears in either [`repo-continuity.md § Active Threads`](../../memory/operational/repo-continuity.md#active-threads) or `§ Paused Threads`. A record present on disk but absent from **both** indexes is a retired or completed thread (its work has concluded — e.g. a merged single-PR closure thread). Flag any such record whose top lacks a **retirement banner** per the convention in [`threads/README.md`](../../memory/operational/threads/README.md#retirement-banner-convention) (a leading blockquote naming the retired/completed state, the conclusion date, and where the work concluded). Unlike checks 1–6, this check's remedy is a small edit: apply the missing banner as a follow-on consolidation diff (the same way 7d's archival edits land), not merely a flag — a retired record left unbannered silently reads as live to the next agent who opens it.
 
    Record each finding as `[thread-slug-or-path]: <observed state> (<what the rule says it should be>)`. Present the aggregated list to the owner at consolidation close. The audit's enforcement force is that this step is part of `/oak-consolidate-docs` — any agent running the consolidation ritual is obligated to walk the six checks, not remember them. The "do not silently skip" posture is the same authority as earlier steps (7a ADR/PDR scan, 7b graduation application).
 
-   **7d. Validate bidirectional rule ↔ plan citations.** Some `.agent/rules/` entries cite an authority surface in `.agent/plans/` (or vice versa) where the citation is load-bearing for the rule's authority. When such a pair exists, both directions must resolve so the rule and plan evolve together.
-
-   Walk the named pairs and confirm each direction resolves:
-
-   - [`.agent/rules/dont-break-build-without-fix-plan.md`](../../rules/dont-break-build-without-fix-plan.md) ↔ [`.agent/plans/observability/active/gate-recovery-cadence.plan.md`](../../plans/observability/active/gate-recovery-cadence.plan.md). Rule cites plan's `## Intent` and `## Recovery Sequence` point 2; plan cites rule under its own `## Cross-references` section. Flag any direction missing or pointing at a stale file path.
-
-   Findings surface as `[<rule>] ↔ [<plan>]: <observed direction missing>`. New bidirectional pairs are added here when subsequent rules cite plan authorities.
-
-   <a id="stale-claim-audit"></a>**7e. Audit collaboration state for protocol observability.** The
+   <a id="stale-claim-audit"></a>**7d. Audit collaboration state for protocol observability.** The
    [`active-claims.json`](../../state/collaboration/active-claims.json),
    [`closed-claims.archive.json`](../../state/collaboration/closed-claims.archive.json),
    and
@@ -707,7 +699,7 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
       files-first non-goal); the audit relies on the consolidator running
       `node -e 'JSON.parse(...)'` or a similar inline check.
 
-   Findings surface alongside the 7a–7d findings; archival edits land as
+   Findings surface alongside the 7a–7c findings; archival edits land as
    normal consolidation diffs. New cross-thread coordination signals
    (e.g. an unclosed claim from an agent on another thread) flow up to
    `repo-continuity.md § Active threads` if they affect another thread's

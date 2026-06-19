@@ -25,21 +25,13 @@ todos:
 
 # Quality Gate Recovery And Cadence
 
-> **Status: Operational reference plan, NOT a closing execution plan.**
-> All execution todos are completed (per the frontmatter), but this
-> plan's `## Intent` and `## Recovery Sequence` are cited verbatim as
-> the authority surface for the
-> [`dont-break-build-without-fix-plan.md`](../../../rules/dont-break-build-without-fix-plan.md)
-> rule. The bidirectional citation is validated at every consolidate-
-> docs run (step 7d). Do NOT archive this plan based on todo-completion
-> alone — its authority role is standing doctrine.
->
-> Future refactor candidate: extract `## Intent` and `## Recovery
-> Sequence` to a governance doc (`docs/governance/quality-gate-cadence.md`
-> or similar) and update both the rule citation and the plan to point
-> at the new home. Until then, this plan stays in `active/` as
-> reference. Last reviewed during 2026-04-29 deep consolidation pass
-> (Nebulous Illuminating Satellite).
+> **Status: Completed execution plan.** All execution todos are completed
+> (per the frontmatter). The green-gate invariant this plan recovered has
+> graduated to durable doctrine in
+> [`dont-break-build-without-fix-plan.md`](../../../rules/dont-break-build-without-fix-plan.md),
+> which now owns it directly — a plan cites the rule, never the reverse
+> (PDR-105 reference-direction). This plan no longer holds an authority role
+> and is archivable on the next consolidation pass.
 
 ## Intent
 

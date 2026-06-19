@@ -6,6 +6,13 @@ repo-independent. The Practice-Core package is portable by
 construction — host repos adopt it, the Core does not depend on any
 host.
 
+This is the **portability axis** of
+[PDR-105](../practice-core/decision-records/PDR-105-reference-direction-invariants.md)
+(reference-direction invariants) applied to the Core: a portable artefact may
+reference only artefacts at least as general as itself, so a Core file referencing a
+repo-specific target (an ADR, a host path) would dangle on arrival in another
+Practice-bearing repo. This rule is that axis's strictest form.
+
 ## The Rule
 
 Files under `.agent/practice-core/` MUST NOT contain:
@@ -73,6 +80,8 @@ critical-architectural-failure-shaped prior art for this rule.
 
 ## Doctrinal Anchors
 
+- [PDR-105](../practice-core/decision-records/PDR-105-reference-direction-invariants.md)
+  §Axis 2 (portability) — the reference-direction invariant this rule operationalises
 - per-user feedback memory: `feedback_practice_core_portability_strict`
 - PDR-007 §Core-package contract (the package contract is the
   authority; this rule operationalises it)
