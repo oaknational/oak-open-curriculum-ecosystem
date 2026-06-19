@@ -29,6 +29,50 @@ register. Last insight C (oscillating internally on continue-vs-defer instead of
 scope call early — a per-user behavioural lesson) routes to the **separately-due per-user-memory
 pass** (`MEMORY.md` is over its size limit); it is conserved verbatim in the archived napkin.
 
+## Applying a fresh report-first gate is a doctrine-application pass, not mechanical burndown (2026-06-19, Tulip spins Xylem)
+
+PDR-105's `validate-reference-direction` shipped report-first measuring ~197 "wrong-direction
+references". The opener framed the burndown as mechanical ("watch the count fall"). It is **not**.
+The first real burndown of a freshly-landed enforcement gate is where the doctrine meets reality
+and reveals where it needs refinement. The flags split three ways, only one of which is "delete":
+
+- **A — genuine defect**: doctrine links a *moving* target (a plan, an individual `patterns/*.md`
+  that graduates, a relocating thread record). Cure: remove or invert. The `dont-break-build`
+  inversion (it quoted an ephemeral plan as its "Authority (verbatim)") is the worked exemplar.
+- **B — constitutive reference to a stable-addressed surface** (`active-claims.json`, the comms
+  log, `conversations/`/`escalations/` dirs, index READMEs, `*.schema.json`): a rule that *governs*
+  the surface must be able to name it; the address is fixed, only content churns — PDR-105's own
+  stable-index corollary already blesses this. Cure (owner-approved): **extend the corollary +
+  validator allowlist**, NOT bulldoze the pointer. Bulldozing degrades the rule.
+- **C — genuinely historical pointer**: annotate `(historical reference)`.
+
+Lesson: **classify before curing; a report-first gate's first burndown is co-design, not data-entry.**
+Treating all flags as bucket A would enact a different failure (rules that can't name what they
+govern). Sibling: [[existence-is-not-correctness-default-replace]], [[fluency-is-a-failure-vector]]
+(the fluent move is "the count must reach zero" — ground which flags are actually defects first).
+**candidate:** pattern `report-first-gate-burndown-is-doctrine-application` (1 instance; needs a 2nd).
+
+## parallel-track-pre-commit-gate-coupling — fresh worked instance (2026-06-19, Tulip spins Xylem)
+
+A concurrent agent's *uncommitted* edits to `packages/core/build-metadata/semver.ts` + tests sat in
+the shared working tree. My full-tree pre-commit (for an unrelated thread-record commit) caught a
+**transient mid-edit state** and failed 14 semver tests; an immediate re-run was green (their WIP
+was momentarily inconsistent). I committed only my explicit pathspec — **their WIP stayed untouched
+and uncommitted**. This is the exact coupling `dont-break-build-without-fix-plan` names (now owns,
+post-inversion this session). Cure when it bites: re-run (catch a consistent window) or surface the
+peer-coupling; never `git add -A`, never bypass. Also this session: the **script-code → agent-tools
+TS** directive — throwaway triage heredocs (which hit a CJS-transform error; repo is ESM-only) were
+deleted and replaced with a **built `--verbose` flag** on the validator. And the `max-lines`/
+`max-statements` ratchet fired twice → extracted an allowlists sibling module + a `reportViolations`
+helper (decompose-at-the-tension); code-expert flagged 2-of-3 toward a solution-class review.
+
+**6e.1 recurrence (verify your own banner at write-time):** my continuity entry asserted a stale
+cluster-count (`agent-collaboration.md` 7) carried from mid-session analysis taken BEFORE a later
+commit changed the count to 3. The adversarial fresh-reader pass caught it; I re-derived first-hand
+and fixed it. Lesson: **derived data (counts, clusters) captured at one state goes stale when the
+state moves later in the same session — re-derive at the moment of writing, or stamp it "as-of"**.
+The externalised verifier is the structural catch for exactly this. Sibling: [[verify-dont-trust]].
+
 New session observations append below.
 
 ## Usefulness is judged from the current process, not existence/usage/provenance (2026-06-19, owner correction, Sandpiper)

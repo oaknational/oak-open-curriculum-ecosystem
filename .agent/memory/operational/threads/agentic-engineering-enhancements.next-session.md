@@ -101,10 +101,11 @@ Four reviewed commits on `docs/planning-and-validation` (NOT pushed — owner co
   per-target list. Three cure-buckets: **A** doctrine→*moving* target (plan / individual `patterns/*.md`
   / relocating thread record) → remove or invert (the dont-break-build inversion is the worked
   exemplar); **C** genuinely-historical pointer → annotate `(historical reference)`; portability (PDRs
-  citing ADRs/rules/repo paths/ephemeral) → remove or restate portably. Biggest clusters:
-  `agent-collaboration.md` (7), ADR-082 (7, archived semantic-search plans — likely bucket C),
-  PDR-057 (7 portability). Many active-mem refs point at `patterns/passive-guidance-…md` (×8) and
-  `napkin.md` (×6) — a graduation signal (repeatedly-cited patterns may warrant durable homes).
+  citing ADRs/rules/repo paths/ephemeral) → remove or restate portably. Biggest clusters at the
+  current 145-count (re-derive via `--verbose`): PDR-057 (7 portability), ADR-082 (7 durability,
+  semantic-search plan links, several archived → likely bucket C), PDR-056 + PDR-058 (5 portability
+  each), ADR-168 (4 durability). Many active-mem refs point at `patterns/passive-guidance-…md` (×8)
+  and `napkin.md` (×6) — a graduation signal (repeatedly-cited patterns may warrant durable homes).
 + **Task 2 — tracks/workstreams retirement** (NOT started). NOTE: first-hand `grep` shows the opener's
   "PDR-011 ×12 / ADR-150 ×10" counts are UNRELIABLE (raw word-count over-counts ordinary "track");
   re-enumerate the LIVE doctrine surfaces per-concept. `tracks/`+`workstreams/` are NOT in the
@@ -460,6 +461,7 @@ passes) is in git history and the [`curator-passes/`](../curator-passes/) ledger
 | `Skunk hunts Crescent` | `claude` | `Opus 4.8 (1M)` | `54eb83` | `curator — dedicated-consolidation buffer drain: rotated the napkin (critical→healthy) and drained distilled by DECIDING every entry (5 patterns + PDR-101 graduation-quorum + PDR-058/PDR-018 amendments + patterns-README single-instance reconciliation; F-64..F-67 + skill-two-gate routed; enforce-edge instance homed in the action-time plan), all through the PDR-101 quorum (rescued 4 over-rejections); committed f4a1416ad, gate green. HARD reference/doctrine surfaces (repo-continuity, testing-strategy) left for a specialist session per owner.` | 2026-06-16 | 2026-06-17 |
 | `Wisteria spins Bark` | `claude-code` | `Opus 4.8 (1M)` | `d143c9` | `curator — dedicated-consolidation (n=2 with Bluebell on SDK): operationalised PDR-098 recurrence-capture (consolidate-docs step-7 + semantic-pathogen inventory seeded); graduated PDR-104 best-effort policy (+ PDR-003/step-8 reconciliation) and 5 napkin patterns (incl. fluency-is-a-failure-vector, homing 13 dangling wikilinks); processed repo-continuity to rest (15 concluded entries conserved to pointers, verification-backed); 7c/7e audits; F-68. The HARD repo-continuity surface Skunk left for a specialist session is now done; testing-strategy assessed (reported).` | 2026-06-18 | 2026-06-18 |
 | `Sandpiper lifts Downdraft` | `claude-code` | `Opus 4.8 (1M)` | `0c6576` | `curator — dedicated-consolidation: buffers drained; continuity curated to live-work-only; testing recipes graduated; PDR-105 reference-direction invariants + validate-reference-direction enforcer landed; threads relocated to paused/retired; tracks/workstreams removal + ref-burndown deferred (refs-first)` | 2026-06-18 | 2026-06-19 |
+| `Tulip spins Xylem` | `claude` | `Opus 4.8 (1M)` | `34b8e5` | `PDR-105 reference-direction burndown: §Context SDP/DIP fix; stable-addressed-surface exemption (validator + corollary generalisation) + built --verbose; wired no-moving-targets + practice-core-portability to PDR-105; retired consolidate-docs 7d; inverted dont-break-build to own the green-gate invariant; validator 197→145; tracks/workstreams + bulk burndown deferred to fresh budget` | 2026-06-19 | 2026-06-19 |
 
 ## Cross-Plan and Cross-Thread Links
 
