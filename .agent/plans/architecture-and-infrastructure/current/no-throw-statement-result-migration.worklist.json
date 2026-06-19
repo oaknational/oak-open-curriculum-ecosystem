@@ -1,0 +1,6297 @@
+{
+  "meta": {
+    "source": "no-throw-warning-classification workflow (wf_93547fc0-587) + first-hand verification",
+    "totalClassifiedSites": 811,
+    "note": "Source/test/generator-source/scripts sites. Generated-output (189) handled via generator templates — see generatorEmissionSpec.",
+    "subcategoryFixRubric": {
+      "result-return": "Change fn to return Result<T,E>; return err(...) at the guard; thread Result through callers + tests.",
+      "boundary-translate": "Wrap the external boundary; translate to Result at that single edge (attach {cause} where re-expressing).",
+      "invariant-unreachable": "Use a Result-returning assertNever helper; replace the exhaustiveness/narrowing throw.",
+      "rethrow-in-catch": "Convert the catch to a Result translation; fatal-process cases use process.exitCode/typed-fatal, not throw.",
+      "test-setup-guard": "TEST-VALUE TRIAGE first (what does it prove; product vs test-code; lower level?); delete/reshape/convert.",
+      "test-fake-or-mock": "TEST-VALUE TRIAGE; simplify the seam or return err() to match a Result-typed interface; delete if testing the mock.",
+      "test-tothrow-arrow": "Product returns Result, so assert err(...), not .toThrow(); fix the code-under-test to return Result.",
+      "cli-exit": "main() returns Result; entrypoint sets process.exitCode. No throw.",
+      "other": "Inspect individually."
+    }
+  },
+  "generatorEmissionSpec": {
+    "emissionSites": [
+      {
+        "generatorFile": "packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/generate-execute-file.ts",
+        "emissionDescription": "emitToolInvocationFunctions() (lines 36-73) emits one async invoke<Tool>Tool function per tool name, each containing THREE throws in its template literal: line 48 `throw new TypeError(descriptor.describeToolArgs())` (input parse failure), lines 54-56 `throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), { cause: ... })` (HTTP >= 400), lines 60-66 `throw new TypeError('Output validation error: ' + validation.message, { cause: ... })` (output validation failure). Plus two fixed-string throws in the file body: line 108 `throw new TypeError('Unknown tool: ' + String(name))` in invokeToolByName switch default, and line 139 same string in callToolWithValidation isToolName guard. Output: 24 invocation functions x 3 + 2 fixed = 74 throws in runtime/execute.ts.",
+        "approxOutputThrows": 74,
+        "fixApproach": "Change the emitted invoke<Tool>Tool functions to return a Result instead of throwing: emit `return err({ kind: 'input-validation', message: descriptor.describeToolArgs() })`, `return err({ kind: 'http-error', httpStatus, payload })`, and `return err({ kind: 'output-validation', message, issues, attemptedStatuses })`, and on success `return ok({ status, data })`. Change the emitted return type from `Promise<ToolResultForName<...>>` to `Promise<Result<ToolResultForName<...>, ToolCallError>>` (or a generated ToolCallError discriminated union), import `ok`/`err`/`Result` from @oaknational/result, and propagate Result through invokeToolByName/callTool/callToolWithValidation overloads. The two 'Unknown tool' guards become `return err({ kind: 'unknown-tool', name })`. Define ToolCallError once in the runtime contract and have callers pattern-match instead of try/catch."
+      },
+      {
+        "generatorFile": "packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/emit-index.ts",
+        "emissionDescription": "buildExports() emits the per-tool descriptor file body (one tools/<tool>.ts per tool). FOUR throws are emitted into each tool file via the lines[] template: line 72 `throw new TypeError('Missing response descriptor for documented status <N> on <operationId>.')` (module-load guard), line 97 `throw new TypeError(describeToolArgs())` inside the descriptor.invoke closure (input parse failure), line 102 `throw new TypeError('Invalid method on endpoint: <METHOD> for <path>')` (missing client method), line 109 `throw new UndocumentedResponseError(status, '<operationId>', documentedStatuses, responseBody)` (no descriptor for HTTP status). emit-index.ts is reached via generate-tool-file.ts -> emitters.ts -> emitIndex(). Output: 23 tool files x 4 = 92 throws across mcp-tools/tools/*.ts.",
+        "approxOutputThrows": 92,
+        "fixApproach": "The line-72 module-load guard is a generator-time invariant about the response map and can remain a thrown TypeError at import time (it is not a per-call failure path) OR be eliminated by asserting it at generate time. The three per-call throws inside descriptor.invoke (lines 97, 102, 109) should instead make invoke return a Result-typed payload: emit `return err({ kind: 'input-validation', ... })`, `return err({ kind: 'invalid-method', method, path })`, and for the undocumented-response case emit `return err({ kind: 'undocumented-response', status, operationId, documentedStatuses, responseBody })` rather than `throw new UndocumentedResponseError(...)`. Change the emitted invoke signature to return `Promise<Result<{ httpStatus; payload }, ...>>` and update the ToolDescriptor contract type (contract/tool-descriptor.contract.ts) accordingly. UndocumentedResponseError stays as the error value carried inside err(), not thrown. The execute-file generator (above) then consumes the Result rather than relying on a throw."
+      },
+      {
+        "generatorFile": "packages/sdks/oak-sdk-codegen/code-generation/typegen/response-map/emit-response-validators.ts",
+        "emissionDescription": "emitResponseValidators() emits the response-map.ts helper functions block (template string at lines 66-123) containing FIVE fixed-string throws: line 71 `throw new TypeError('No response schema for id: ' + String(id))` (getResponseRecord), line 79 same string (requireSchema void-source guard), line 101 `throw new TypeError('Invalid id: ' + String(key))` (getResponseSchemaByOperationIdAndStatus), line 113 `throw new TypeError('Invalid operationId: ' + String(operationId))` (getResponseSchemaByPathAndMethodAndStatus), line 119 `throw new TypeError('Method not allowed for path: ' + String(method) + ' ' + String(path))` (getResponseSchemaForEndpoint). Separately, buildSchemaExpression() (line 162) emits a per-void-entry IIFE `(() => { throw new TypeError('No response schema for id: ...'); })()` into the RESPONSE_SCHEMA map value; the current schema has zero void-source entries so it contributes 0 output throws today but is a latent emission site. These 5 helper throws account for response-map.ts output lines 1331/1339/1361/1373/1379.",
+        "approxOutputThrows": 5,
+        "fixApproach": "Change the emitted helper functions to return `Result<CurriculumSchemaDefinition, ResponseMapError>` instead of throwing: getResponseRecord/requireSchema/getResponseSchemaByOperationIdAndStatus/getResponseSchemaByPathAndMethodAndStatus/getResponseSchemaForEndpoint each emit `return err({ kind: '...' })` and `return ok(schema)`. Update the emitted return-type annotations in the template and propagate Result through callers (the tool descriptor build and cross-validation consumers). For the latent void-entry IIFE in buildSchemaExpression (line 162), replace the throwing IIFE with a sentinel value/typed Err so void responses surface as a Result rather than crashing at field access. Import ok/err/Result from @oaknational/result in the emitted header."
+      },
+      {
+        "generatorFile": "packages/sdks/oak-sdk-codegen/code-generation/typegen/operations/operation-generators.ts",
+        "emissionDescription": "generateOperationsByIdConstant() emits the path-parameters.ts tail. Its static template (lines 60-189) emits the getResponseCodesForPathAndMethod function carrying FOUR throws: line 173 `throw new TypeError('Invalid path: ' + String(path))`, line 176 `throw new TypeError('Invalid method: ' + String(method))`, line 180 `throw new TypeError('Operation not found: ' + String(path) + ' ' + String(method))`, line 185 `throw new TypeError('Invalid response codes: ' + String(codes))`. These map to path-parameters.ts output lines 2932/2935/2939/2944.",
+        "approxOutputThrows": 4,
+        "fixApproach": "Rewrite the getResponseCodesForPathAndMethod template to return `Result<ValidResponseCode[], PathParamError>`: emit `return err({ kind: 'invalid-path', path })`, `return err({ kind: 'invalid-method', method })`, `return err({ kind: 'operation-not-found', path, method })`, `return err({ kind: 'invalid-response-codes', codes })`, and `return ok(codes)` on success. Change the emitted return type and import ok/err/Result in this generated file's header. Update callers to pattern-match. (Note: operation-generators.ts itself has no generator-side throws to fix; only the emitted template strings change.)"
+      },
+      {
+        "generatorFile": "packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/generate-definitions-file.ts",
+        "emissionDescription": "Emits definitions.ts. THREE fixed-string throws are emitted via the const template blocks: GET_TOOL_ENTRY_FROM_TOOL_NAME_BLOCK (line 85) `throw new TypeError('Unknown tool: ' + String(toolName))`, GET_TOOL_NAME_FROM_ID_BLOCK (line 105) `throw new TypeError('Unknown operation: ' + String(operationId))`, GET_ID_FROM_TOOL_NAME_BLOCK (line 121) `throw new TypeError('Unknown tool: ' + String(toolName))`. These map to definitions.ts output lines 144/191/231. NOTE: line 40 of this generator (`throw new Error('No operation id found for tool ...')` in emitToolEntries) is a generator-time guard that runs during codegen and is NOT emitted into output -- it is the c16 generator-source finding, not a generated-output throw.",
+        "approxOutputThrows": 3,
+        "fixApproach": "Change the three emitted accessor functions (getToolEntryFromToolName, getToolNameFromOperationId, getOperationIdFromToolName) to return Result: emit `return err({ kind: 'unknown-tool', toolName })` / `return err({ kind: 'unknown-operation', operationId })` and `return ok(entry/toolName/operationId)`. Update emitted return-type annotations and import ok/err/Result in the banner. Callers (notably the emitted execute.ts which calls getToolEntryFromToolName and getToolFromToolName) must thread the Result. The generator-side line-40 throw stays as a build-time invariant (acceptable: codegen fail-fast, not runtime)."
+      },
+      {
+        "generatorFile": "packages/sdks/oak-sdk-codegen/code-generation/typegen/response-map/build-response-descriptor-helpers.ts",
+        "emissionDescription": "buildResponseDescriptorHelpers() emits the response-map.ts descriptorsByOperationId tail (template lines 68-82). ONE fixed-string throw at template line 78: `throw new TypeError('No response descriptors for operationId: ' + String(operationId))` inside getResponseDescriptorsByOperationId. Maps to response-map.ts output line 1903. This function is imported and called by every emitted tool file (emit-index.ts line 56 emits `getResponseDescriptorsByOperationId(operationId)`).",
+        "approxOutputThrows": 1,
+        "fixApproach": "Emit `return err({ kind: 'unknown-operation-id', operationId })` and `return ok(record)`; change emitted return type to `Result<Readonly<Record<string, ResponseDescriptorRecord>>, ...>`. Because emit-index.ts consumes this at module-load to build the descriptor (line 70-73 primaryResponseDescriptor guard), coordinate the change: either keep this as a load-time invariant throw (the operationId is generator-known so it can never legitimately miss) or have emit-index unwrap the Result and surface a typed load error. Recommend keeping load-time guards as throws and converting only the per-request paths; this site is load-time so it may legitimately stay thrown."
+      },
+      {
+        "generatorFile": "packages/sdks/oak-sdk-codegen/code-generation/typegen/routing/generate-url-helpers.ts",
+        "emissionDescription": "dispatcherSection() emits routing/url-helpers.ts generateOakUrlWithContext via a single static template literal (lines 95-158). TWO throws emitted: line 151 `throw new TypeError(\\`Oak URL generation failed: Unsupported content type: ...\\`)` (invalid type), line 154 `throw new TypeError(\\`Oak URL generation failed: Missing required context for ...\\`)` (missing context). Map to url-helpers.ts output lines 123/126.",
+        "approxOutputThrows": 2,
+        "fixApproach": "Change generateOakUrlWithContext template to return `Result<string | null, OakUrlError>`: emit `return err({ kind: 'unsupported-content-type', type, id })` and `return err({ kind: 'missing-context', type, id, context })`, and `return ok(result)` for the success/null cases. Update the emitted JSDoc (`@throws` becomes `@returns err(...)`) and return-type annotation, and import ok/err/Result. Update the response-augmentation consumer to pattern-match."
+      },
+      {
+        "generatorFile": "apps/oak-search-cli/ground-truths/generation/type-emitter.ts",
+        "emissionDescription": "emitAllLessonSlugTypes() emits the lesson-slugs-by-subject.ts loader module. TWO throws emitted via the lines[] template: line 217 `throw new Error(\\`Invalid lesson slug dataset phase: ${phase}\\`)` inside parseLessonSlugPhase, line 248 `throw new Error(\\`Missing lesson slug data for sequence: ${sequenceSlug}\\`)` inside getSequenceData. Map to generated output lines 19/49. (schema-emitter.ts emits no throws into output; emitLessonSlugType / emitLessonSlugDatasetTypes / emitGroundTruthSchemas contain none.)",
+        "approxOutputThrows": 2,
+        "fixApproach": "Emit Result-returning helpers in the template: parseLessonSlugPhase emits `return err({ kind: 'invalid-phase', phase })` / `return ok(phase)`; getSequenceData emits `return err({ kind: 'missing-sequence', sequenceSlug })` / `return ok(sequenceData)`. Thread the Result through loadLessonSlugData and buildSlugToSubjectMap (or, since these are build-time/load-time invariants over generator-controlled JSON, keep them as throws -- they are not user-facing request paths). If the no-throw rule is absolute, import ok/err from @oaknational/result and have the emitted loader return/log a typed error; otherwise these two are defensible as module-load assertions over self-generated data."
+      },
+      {
+        "generatorFile": "packages/sdks/oak-sdk-codegen/code-generation/typegen/observability/generate-zero-hit-fixtures.ts",
+        "emissionDescription": "Emits observability/zero-hit-fixtures.ts. ONE throw at generator line 66 (inside the emitted template): `throw new Error('Invalid zero-hit fixture: ' + label + '. ' + message, { cause: error })` in the emitted fixture-parse/validation helper. Maps to generated output line 63.",
+        "approxOutputThrows": 1,
+        "fixApproach": "Change the emitted fixture-validation helper to return `Result<Fixture, FixtureError>`: emit `return err({ kind: 'invalid-zero-hit-fixture', label, message, cause: error })` and `return ok(parsed)`. Import ok/err/Result in the emitted header and update the test/consumer to pattern-match. Alternatively, since these are test fixtures validated at module-load, this is a defensible build-time assertion -- confirm with owner whether fixtures fall under the runtime no-throw rule."
+      },
+      {
+        "generatorFile": "packages/sdks/oak-sdk-codegen/code-generation/typegen/search/generate-search-fixtures.ts",
+        "emissionDescription": "Emits search/fixtures.ts. ONE throw at generator line 25 (inside the emitted template): `throw new Error('Invalid search fixture: ' + label, { cause: error })` in the emitted fixture-validation helper. Maps to generated output line 22.",
+        "approxOutputThrows": 1,
+        "fixApproach": "Same pattern as zero-hit-fixtures: emit `return err({ kind: 'invalid-search-fixture', label, cause: error })` / `return ok(parsed)`, change emitted return type, import ok/err/Result. Or treat as a defensible module-load assertion over generator-controlled fixture data pending owner confirmation on whether fixtures are in scope for the no-throw runtime rule."
+      }
+    ],
+    "totalOutputThrowsExplained": 185,
+    "notes": [
+      "Reconciliation: traced output throws sum to exactly 185 across the on-disk generated files (execute.ts 74, tools/*.ts 92 across 23 files x 4, response-map.ts 6 = 5 helper + 1 descriptor-helper, path-parameters.ts 4, definitions.ts 3, routing/url-helpers.ts 2, ground-truths lesson-slugs-by-subject.ts 2, observability/zero-hit-fixtures.ts 1, search/fixtures.ts 1). The prompt's ~189/187 estimate is ~2-4 high versus the current generated tree; the live count is 185. The discrepancy is most plausibly a tool-file count drift (worklist assumed ~96 in tools/*.ts; actual is 92 across 23 files) partly offset by other rounding.",
+      "execute.ts arithmetic: grep shows 24 (not 25) tool invocation functions each emitting 3 throws = 72, plus 2 fixed 'Unknown tool' throws = 74. The generate-execute-file.ts generator emits one function per tool name in the sorted names array; the build also emits callTool overloads (no throws).",
+      "tools/*.ts: 23 generated tool files (excluding tests), each emitting exactly 4 throws from emit-index.ts buildExports = 92. Verified one example (get-subjects.ts: lines 51/76/81/88).",
+      "Generator-side vs emitted: clusters.json buckets c16/c17 ('generator-source') and c18 ('scripts') are throws in the GENERATOR'S OWN code that run at codegen time (e.g. generate-definitions-file.ts line 40 'No operation id found for tool'), NOT emitted into generated output. Those are out of scope for this trace (they are real source throws, fixable on their own merits as build-time invariants). This report covers ONLY templates/statements that EMIT a throw into generated output.",
+      "The response-map void-entry IIFE in emit-response-validators.ts buildSchemaExpression (line 162) is a latent emission site: it would emit `(() => { throw new TypeError(...); })()` per void-source response entry, but the current OpenAPI schema yields zero void entries, so it contributes 0 today. Worth fixing in the same pass to prevent future regressions.",
+      "Result pattern is already available at packages/core/result (@oaknational/result) exporting Result/Ok/Err/ok/err/isOk/isErr/map/flatMap etc. The use-result-pattern rule applies. The cleanest fix threads a generated discriminated-union error type (ToolCallError / ResponseMapError / PathParamError / OakUrlError / FixtureError) through the emitted return types and updates the ToolDescriptor contract (contract/tool-descriptor.contract.ts) plus the runtime callers; UndocumentedResponseError becomes an error VALUE carried in err(), not thrown.",
+      "UndocumentedResponseError and tool-descriptor.contract.ts are themselves GENERATED runtime-contract files (banner 'GENERATED FILE - DO NOT EDIT') but contain zero throws, so they are not in the worklist; however the contract type DEFINITION must change (emit Result-returning invoke signature) as part of the emit-index.ts and generate-execute-file.ts fixes -- locate their generator templates (contract emission) before editing.",
+      "Load-time vs request-time distinction: several emitted throws are module-load invariants over generator-controlled data (emit-index.ts line 72 'Missing response descriptor', build-response-descriptor-helpers.ts line 78, the ground-truths/fixtures parse guards). These are defensible as fail-fast build/load assertions and may legitimately remain throws if the owner scopes the no-throw rule to per-request runtime paths only. The clearly request-path throws that MUST become Result: execute.ts per-call throws (input/http/output validation), emit-index invoke per-call throws (input/method/undocumented-response), and all the response-map/path-parameters/url-helpers lookup helpers that run per request."
+    ]
+  },
+  "files": {
+    "agent-tools/src/collaboration-state/state-parsers.ts": {
+      "sites": [
+        {
+          "line": 37,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 42,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 61,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 65,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 80,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 92,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 104,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 116,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 124,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 151,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 176,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 184,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 203,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 217,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/core/graph-core/src/canon/term-reconstruction.ts": {
+      "sites": [
+        {
+          "line": 47,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 52,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 78,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 85,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 103,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 110,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 132,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 139,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 159,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 166,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/src/commit-queue/registry.ts": {
+      "sites": [
+        {
+          "line": 42,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 45,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 48,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 51,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 64,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 67,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 86,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 116,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/core/codex-project-agents.ts": {
+      "sites": [
+        {
+          "line": 73,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 81,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 130,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 135,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 148,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 168,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 177,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/sdks/oak-curriculum-sdk/src/validation/curriculum-response-validators.ts": {
+      "sites": [
+        {
+          "line": 151,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 154,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 159,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 164,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 179,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 184,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 198,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/commit-queue/args.ts": {
+      "sites": [
+        {
+          "line": 29,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 72,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 81,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 92,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 105,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 134,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/e2e-tests/helpers/sse.ts": {
+      "sites": [
+        {
+          "line": 61,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 85,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 135,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 153,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 157,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 160,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/operations/ingestion/field-readback-audit-ledger.ts": {
+      "sites": [
+        {
+          "line": 58,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 65,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 70,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 80,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 93,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 104,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/e2e-tests/helpers/stub-search-retrieval.ts": {
+      "sites": [
+        {
+          "line": 6,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 9,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 12,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 15,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 18,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 21,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/elasticsearch/setup/ingest-cli-validators.ts": {
+      "sites": [
+        {
+          "line": 29,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 39,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 56,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 65,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 107,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 113,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/index-batch-helpers.ts": {
+      "sites": [
+        {
+          "line": 53,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 55,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 91,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 93,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 136,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 138,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/collaboration-state/cli-comms-commands.ts": {
+      "sites": [
+        {
+          "line": 51,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 57,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 61,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 64,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 82,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/core/agent-identity/derive.ts": {
+      "sites": [
+        {
+          "line": 142,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 150,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 153,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 165,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 180,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/core/codex-project-agent-registry.ts": {
+      "sites": [
+        {
+          "line": 49,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 74,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 80,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 154,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 158,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/hook-policy/policy-loader.ts": {
+      "sites": [
+        {
+          "line": 31,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 40,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 70,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 112,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 118,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/practice-substrate/report.ts": {
+      "sites": [
+        {
+          "line": 72,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 77,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 128,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 153,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 163,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/operations/ingestion/field-readback-audit-cli.ts": {
+      "sites": [
+        {
+          "line": 23,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 31,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 51,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 54,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 94,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/operations/ingestion/field-readback-audit-elasticsearch-deps.ts": {
+      "sites": [
+        {
+          "line": 29,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 54,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 60,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 77,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 81,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/cli/admin/shared/parse-lifecycle-ingest-opts.ts": {
+      "sites": [
+        {
+          "line": 43,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 53,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 68,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 78,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 92,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/indexing/sandbox-fixture-data.ts": {
+      "sites": [
+        {
+          "line": 93,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 100,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 107,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 124,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 133,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/indexing/unit-processing.ts": {
+      "sites": [
+        {
+          "line": 52,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 101,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 105,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 109,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 114,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/src/branch-touched-files/cli.ts": {
+      "sites": [
+        {
+          "line": 151,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 160,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 164,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 182,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/ci/ci-turbo-summary-parsing.ts": {
+      "sites": [
+        {
+          "line": 49,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 65,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 81,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 115,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/design/design-tokens-core/src/index.ts": {
+      "sites": [
+        {
+          "line": 81,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 88,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 95,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 125,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/collaboration-state/cli-json-commands.ts": {
+      "sites": [
+        {
+          "line": 48,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 51,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 79,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 89,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/collaboration-state/cli-options.ts": {
+      "sites": [
+        {
+          "line": 97,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 119,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 127,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 164,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/collaboration-state/cli.ts": {
+      "sites": [
+        {
+          "line": 71,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 80,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 131,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 162,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/collaboration-state/collaboration-json-validation.ts": {
+      "sites": [
+        {
+          "line": 39,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 75,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 78,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 117,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/core/graph-core/src/graph-view/create-graph-view.ts": {
+      "sites": [
+        {
+          "line": 54,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 69,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 72,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 147,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/libs/sentry-node/src/runtime-error.ts": {
+      "sites": [
+        {
+          "line": 62,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 85,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 141,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 160,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-configured-build-gate.ts": {
+      "sites": [
+        {
+          "line": 30,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 58,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 64,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 70,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/evaluation/validation/lib/api-checkers.ts": {
+      "sites": [
+        {
+          "line": 91,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 98,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 170,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 177,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/runtime-only-scripts/vercel-ignore-production-non-release-build.mjs": {
+      "sites": [
+        {
+          "line": 247,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 262,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 265,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 268,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/indexing/pattern-aware-fetcher.ts": {
+      "sites": [
+        {
+          "line": 80,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 140,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 201,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 203,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/indexing/sandbox-fixture-validation.ts": {
+      "sites": [
+        {
+          "line": 41,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 48,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 55,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 62,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/ci/ci-turbo-report.ts": {
+      "sites": [
+        {
+          "line": 105,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 124,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 230,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/collaboration-state/cli-claim-areas.ts": {
+      "sites": [
+        {
+          "line": 21,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 30,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 44,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/collaboration-state/cli-claim-commands.ts": {
+      "sites": [
+        {
+          "line": 143,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 146,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 166,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/src/collaboration-state/cli-comms-messages.ts": {
+      "sites": [
+        {
+          "line": 126,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 152,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 161,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/collaboration-state/cli-runtime.ts": {
+      "sites": [
+        {
+          "line": 81,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 95,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 111,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/src/collaboration-state/comms-heartbeat-cli.ts": {
+      "sites": [
+        {
+          "line": 40,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 45,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 52,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/collaboration-state/comms-use-cases.ts": {
+      "sites": [
+        {
+          "line": 76,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 108,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 145,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/collaboration-state/comms.ts": {
+      "sites": [
+        {
+          "line": 20,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 31,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 141,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/collaboration-state/json.ts": {
+      "sites": [
+        {
+          "line": 19,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 30,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 47,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/collaboration-state/timestamps.ts": {
+      "sites": [
+        {
+          "line": 12,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 15,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 18,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/commit-queue/cli.ts": {
+      "sites": [
+        {
+          "line": 59,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 105,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 211,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/context-cost/cli-options.ts": {
+      "sites": [
+        {
+          "line": 112,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 115,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 142,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/hook-policy/hook-input.ts": {
+      "sites": [
+        {
+          "line": 13,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 24,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 72,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/sdks/graph-corpus-sdk/src/curriculum/test-helpers.ts": {
+      "sites": [
+        {
+          "line": 18,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 33,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 41,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-search-sdk/src/admin/alias-operations.ts": {
+      "sites": [
+        {
+          "line": 164,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 175,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 202,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/sdks/oak-curriculum-sdk/src/mcp/stub-tool-executor.ts": {
+      "sites": [
+        {
+          "line": 29,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 34,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 97,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-curriculum-sdk/src/oak-url-convenience.ts": {
+      "sites": [
+        {
+          "line": 49,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 89,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 111,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/build-scripts/run-sentry-configured-build.ts": {
+      "sites": [
+        {
+          "line": 33,
+          "sub": "cli-exit",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 55,
+          "sub": "cli-exit",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 60,
+          "sub": "cli-exit",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/cli/shared/validators.ts": {
+      "sites": [
+        {
+          "line": 27,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 45,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 60,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/src/app/upstream-metadata-fetch.ts": {
+      "sites": [
+        {
+          "line": 79,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 81,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 85,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/src/auth/mcp-auth/get-mcp-resource-url.ts": {
+      "sites": [
+        {
+          "line": 43,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 46,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 50,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/src/auth/mcp-auth/get-prm-url.ts": {
+      "sites": [
+        {
+          "line": 39,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 42,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 46,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/src/oauth-proxy/oauth-proxy-upstream.ts": {
+      "sites": [
+        {
+          "line": 59,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 64,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 70,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/indexing/index-bulk-helpers.ts": {
+      "sites": [
+        {
+          "line": 34,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 39,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 176,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/indexing/ingest-harness.ts": {
+      "sites": [
+        {
+          "line": 155,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 166,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 182,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/indexing/retry/http-retry.ts": {
+      "sites": [
+        {
+          "line": 94,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 158,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 173,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/indexing/semantic-summary-generator.ts": {
+      "sites": [
+        {
+          "line": 168,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 185,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 195,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/src/branch-touched-files/git.ts": {
+      "sites": [
+        {
+          "line": 77,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 80,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/core/env/src/root-package-version.ts": {
+      "sites": [
+        {
+          "line": 17,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 27,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/collaboration-state/cli-comms-query.ts": {
+      "sites": [
+        {
+          "line": 62,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 73,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/collaboration-state/comms-tag-namespace.ts": {
+      "sites": [
+        {
+          "line": 39,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 44,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/collaboration-state/comms-watch-loop.ts": {
+      "sites": [
+        {
+          "line": 53,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 188,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/src/collaboration-state/state-integrity.ts": {
+      "sites": [
+        {
+          "line": 171,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 185,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/libs/logger/src/log-levels.ts": {
+      "sites": [
+        {
+          "line": 83,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 102,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/libs/logger/src/timing.ts": {
+      "sites": [
+        {
+          "line": 169,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 213,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/design/oak-design-tokens/src/build.ts": {
+      "sites": [
+        {
+          "line": 33,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 59,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/collaboration-state/transaction-lock.ts": {
+      "sites": [
+        {
+          "line": 18,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 30,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/src/collaboration-state/tui/cli.tsx": {
+      "sites": [
+        {
+          "line": 21,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 39,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/collaboration-state/watcher-heartbeat.ts": {
+      "sites": [
+        {
+          "line": 70,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 74,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/commit-queue/options.ts": {
+      "sites": [
+        {
+          "line": 52,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 56,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/core/build-metadata/src/semver.ts": {
+      "sites": [
+        {
+          "line": 119,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 122,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/vocab-gen/vocab-gen.ts": {
+      "sites": [
+        {
+          "line": 91,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 99,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/sdks/oak-search-sdk/src/create-search-sdk.ts": {
+      "sites": [
+        {
+          "line": 41,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 47,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/descriptor-utils.ts": {
+      "sites": [
+        {
+          "line": 30,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 54,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/sdks/oak-curriculum-sdk/src/sequence-slug-derivation.ts": {
+      "sites": [
+        {
+          "line": 47,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 63,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/evaluation/analysis/benchmark-query-runner-units.ts": {
+      "sites": [
+        {
+          "line": 111,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 142,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/build-scripts/build-output-contract.ts": {
+      "sites": [
+        {
+          "line": 100,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 123,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/evaluation/analysis/benchmark.ts": {
+      "sites": [
+        {
+          "line": 51,
+          "sub": "cli-exit",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 78,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/operations/ingestion/field-readback-audit-retry.ts": {
+      "sites": [
+        {
+          "line": 80,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 85,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/esbuild.config.ts": {
+      "sites": [
+        {
+          "line": 65,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 81,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/adapters/bulk-lesson-transformer.ts": {
+      "sites": [
+        {
+          "line": 144,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 153,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/adapters/bulk-sequence-transformer.ts": {
+      "sites": [
+        {
+          "line": 50,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 124,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/cli/admin/admin-lifecycle-alias-commands.ts": {
+      "sites": [
+        {
+          "line": 34,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 38,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/src/app/bootstrap-helpers.ts": {
+      "sites": [
+        {
+          "line": 69,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 103,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/src/app/oauth-and-caching-setup.ts": {
+      "sites": [
+        {
+          "line": 53,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 66,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/indexing/bulk-ingestion-phases.ts": {
+      "sites": [
+        {
+          "line": 87,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 96,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/indexing/document-transform-helpers.ts": {
+      "sites": [
+        {
+          "line": 145,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 190,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/indexing/fetch-all-lessons.ts": {
+      "sites": [
+        {
+          "line": 50,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 52,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/indexing/fetch-error-handling.ts": {
+      "sites": [
+        {
+          "line": 71,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 87,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/src/observability/span-helpers.ts": {
+      "sites": [
+        {
+          "line": 151,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 173,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/src/server.ts": {
+      "sites": [
+        {
+          "line": 47,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 60,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/indexing/lesson-document-builder.ts": {
+      "sites": [
+        {
+          "line": 95,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 183,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/indexing/lesson-materials.ts": {
+      "sites": [
+        {
+          "line": 186,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 220,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/indexing/thread-bulk-helpers.ts": {
+      "sites": [
+        {
+          "line": 62,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 64,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/core/result/src/index.ts": {
+      "sites": [
+        {
+          "line": 131,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/core/observability/src/primitives.ts": {
+      "sites": [
+        {
+          "line": 40,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/core/observability/src/span-context.ts": {
+      "sites": [
+        {
+          "line": 85,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/src/bin/agent-tools-cli.ts": {
+      "sites": [
+        {
+          "line": 142,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/collaboration-state/active-agent-routing.ts": {
+      "sites": [
+        {
+          "line": 34,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/collaboration-state/active-agents.ts": {
+      "sites": [
+        {
+          "line": 178,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/collaboration-state/atomic-file.ts": {
+      "sites": [
+        {
+          "line": 47,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/src/collaboration-state/cli-claim-query-commands.ts": {
+      "sites": [
+        {
+          "line": 35,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/design/design-tokens-core/src/contrast.ts": {
+      "sites": [
+        {
+          "line": 28,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/collaboration-state/cli-comms-validate.ts": {
+      "sites": [
+        {
+          "line": 13,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/collaboration-state/identity.ts": {
+      "sites": [
+        {
+          "line": 58,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/core/graph-core/src/jsonld/runtime.ts": {
+      "sites": [
+        {
+          "line": 47,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/src/collaboration-state/state-io.ts": {
+      "sites": [
+        {
+          "line": 153,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/libs/logger/src/express-middleware.ts": {
+      "sites": [
+        {
+          "line": 92,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/libs/logger/src/unified-logger.ts": {
+      "sites": [
+        {
+          "line": 89,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/collaboration-state/state-schemas.ts": {
+      "sites": [
+        {
+          "line": 211,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/design/oak-design-tokens/src/terminal-theme.ts": {
+      "sites": [
+        {
+          "line": 76,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/collaboration-state/transaction.ts": {
+      "sites": [
+        {
+          "line": 39,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/collaboration-state/tui/reduce-refresh-state.ts": {
+      "sites": [
+        {
+          "line": 79,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/src/commit-queue/commit-workflow-runtime.ts": {
+      "sites": [
+        {
+          "line": 76,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/commit-queue/intent.ts": {
+      "sites": [
+        {
+          "line": 24,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/commit-queue/status.ts": {
+      "sites": [
+        {
+          "line": 88,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/commit-queue/time.ts": {
+      "sites": [
+        {
+          "line": 9,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/context-cost/per-file.ts": {
+      "sites": [
+        {
+          "line": 25,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/core/agent-identity/hash.ts": {
+      "sites": [
+        {
+          "line": 65,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/core/repo-root.ts": {
+      "sites": [
+        {
+          "line": 35,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/core/runtime-agent-index.ts": {
+      "sites": [
+        {
+          "line": 64,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/core/runtime.ts": {
+      "sites": [
+        {
+          "line": 43,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/hook-policy/blocked-patterns.ts": {
+      "sites": [
+        {
+          "line": 27,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/hook-policy/content-deny-response.ts": {
+      "sites": [
+        {
+          "line": 61,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/src/repo-check/repo-check.ts": {
+      "sites": [
+        {
+          "line": 50,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/validators/stale-script-invocations/validate-no-stale-script-invocations.ts": {
+      "sites": [
+        {
+          "line": 111,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/libs/sentry-node/src/config-resolution.ts": {
+      "sites": [
+        {
+          "line": 188,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/libs/sentry-node/src/runtime-sinks.ts": {
+      "sites": [
+        {
+          "line": 39,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/src/bulk/generators/graph-corpus-misconception-nodes.ts": {
+      "sites": [
+        {
+          "line": 111,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/sdks/graph-corpus-sdk/src/curriculum/keyword-projection.ts": {
+      "sites": [
+        {
+          "line": 66,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/graph-corpus-sdk/src/curriculum/misconception-projection.ts": {
+      "sites": [
+        {
+          "line": 78,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/graph-corpus-sdk/src/curriculum/projection-helpers.ts": {
+      "sites": [
+        {
+          "line": 26,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/sdks/graph-corpus-sdk/src/eef-strands/eef-evidence.ts": {
+      "sites": [
+        {
+          "line": 157,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/sdks/graph-corpus-sdk/src/eef-strands/strand-lookup.ts": {
+      "sites": [
+        {
+          "line": 151,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/sdks/oak-search-sdk/src/admin/verify-doc-counts.ts": {
+      "sites": [
+        {
+          "line": 54,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-curriculum-sdk/src/client/middleware/auth.ts": {
+      "sites": [
+        {
+          "line": 26,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-curriculum-sdk/src/client/middleware/retry.ts": {
+      "sites": [
+        {
+          "line": 67,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts": {
+      "sites": [
+        {
+          "line": 115,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search/execution.ts": {
+      "sites": [
+        {
+          "line": 143,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-thread-progressions.ts": {
+      "sites": [
+        {
+          "line": 185,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-curriculum-sdk/src/response-augmentation.ts": {
+      "sites": [
+        {
+          "line": 236,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/evaluation/analysis/benchmark-all-lessons.ts": {
+      "sites": [
+        {
+          "line": 24,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/evaluation/analysis/benchmark-all-sequences.ts": {
+      "sites": [
+        {
+          "line": 25,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/evaluation/analysis/benchmark-all-threads.ts": {
+      "sites": [
+        {
+          "line": 24,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/evaluation/analysis/benchmark-all-units.ts": {
+      "sites": [
+        {
+          "line": 24,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/evaluation/analysis/benchmark-query-runner-lessons.ts": {
+      "sites": [
+        {
+          "line": 154,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/evaluation/analysis/benchmark-query-runner-sequences.ts": {
+      "sites": [
+        {
+          "line": 105,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/evaluation/analysis/benchmark-query-runner-threads.ts": {
+      "sites": [
+        {
+          "line": 112,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/evaluation/validation/lib/api-helpers.ts": {
+      "sites": [
+        {
+          "line": 20,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/operations/ingestion/field-readback-audit-lib.ts": {
+      "sites": [
+        {
+          "line": 65,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/operations/ingestion/field-readback-audit.ts": {
+      "sites": [
+        {
+          "line": 147,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/operations/ingestion/verify-ingestion.ts": {
+      "sites": [
+        {
+          "line": 115,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/operations/utilities/reset-ttls.ts": {
+      "sites": [
+        {
+          "line": 41,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/smoke-test.setup.ts": {
+      "sites": [
+        {
+          "line": 29,
+          "sub": "test-setup-guard",
+          "rt": "unknown",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/adapters/bulk-data-adapter.ts": {
+      "sites": [
+        {
+          "line": 81,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/adapters/bulk-unit-transformer.ts": {
+      "sites": [
+        {
+          "line": 103,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/adapters/hybrid-data-source.ts": {
+      "sites": [
+        {
+          "line": 68,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/adapters/oak-adapter.ts": {
+      "sites": [
+        {
+          "line": 100,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/cli/admin/admin-lifecycle-commands.ts": {
+      "sites": [
+        {
+          "line": 41,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/diagnostics/elser-diagnostic-runner.ts": {
+      "sites": [
+        {
+          "line": 186,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/src/auth-instrumentation.ts": {
+      "sites": [
+        {
+          "line": 44,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/src/auth-middleware-instrumentation.ts": {
+      "sites": [
+        {
+          "line": 152,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/elastic-http.ts": {
+      "sites": [
+        {
+          "line": 166,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/elasticsearch/setup/ingest-cli-args.ts": {
+      "sites": [
+        {
+          "line": 131,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/elasticsearch/setup/ingest-client-factory.ts": {
+      "sites": [
+        {
+          "line": 88,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/src/bootstrap-app.ts": {
+      "sites": [
+        {
+          "line": 52,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/es-client.ts": {
+      "sites": [
+        {
+          "line": 32,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/src/deploy-entry-handler.ts": {
+      "sites": [
+        {
+          "line": 43,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/src/logging/index.ts": {
+      "sites": [
+        {
+          "line": 105,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/indexing/bulk-ingestion.ts": {
+      "sites": [
+        {
+          "line": 107,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/indexing/document-transforms.ts": {
+      "sites": [
+        {
+          "line": 173,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/src/observability/http-observability.ts": {
+      "sites": [
+        {
+          "line": 241,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/indexing/lesson-document-core.ts": {
+      "sites": [
+        {
+          "line": 185,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/widget/src/main.tsx": {
+      "sites": [
+        {
+          "line": 9,
+          "sub": "invariant-unreachable",
+          "rt": "unknown",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/indexing/lesson-planning-snippets.ts": {
+      "sites": [
+        {
+          "line": 20,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/indexing/pattern-config-validator.ts": {
+      "sites": [
+        {
+          "line": 131,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/indexing/sequence-document-builder.ts": {
+      "sites": [
+        {
+          "line": 88,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/runtime-only-scripts/vercel-ignore-production-non-release-build.unit.test.mjs": {
+      "sites": [
+        {
+          "line": 53,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 56,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 59,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 78,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 81,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 96,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 99,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 229,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 232,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 235,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 376,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 379,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 527,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 530,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 613,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 616,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-eef-evidence.unit.test.ts": {
+      "sites": [
+        {
+          "line": 24,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 46,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 61,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 75,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 90,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 99,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 108,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 117,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 126,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 145,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 177,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 189,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 218,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 246,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.unit.test.ts": {
+      "sites": [
+        {
+          "line": 37,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 61,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 87,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 96,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 103,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 125,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 142,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 159,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 184,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 201,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 219,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 237,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 261,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/src/error-handling.integration.test.ts": {
+      "sites": [
+        {
+          "line": 22,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 38,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 48,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 84,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 101,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 118,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 135,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 148,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 165,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 182,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/tests/collaboration-state/comms-watch-loop.unit.test.ts": {
+      "sites": [
+        {
+          "line": 156,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 189,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 220,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 253,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 256,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 279,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 287,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 308,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/code-generation/schema-separation.unit.test.ts": {
+      "sites": [
+        {
+          "line": 72,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 79,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 104,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 118,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 130,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 134,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 147,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 151,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-search-sdk/src/create-search-sdk.integration.test.ts": {
+      "sites": [
+        {
+          "line": 139,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 143,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 151,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 155,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 158,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 162,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 166,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 565,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/e2e-tests/auth-enforcement.e2e.test.ts": {
+      "sites": [
+        {
+          "line": 77,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 111,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 287,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 346,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 366,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 385,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 409,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 434,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/core/graph-core/src/canon/canonicalize.unit.test.ts": {
+      "sites": [
+        {
+          "line": 31,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 40,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 48,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 52,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 94,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 97,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 115,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/aggregated-flat-zod-schema.integration.test.ts": {
+      "sites": [
+        {
+          "line": 45,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 58,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 72,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 85,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 98,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 112,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 127,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/cli/shared/with-es-client.integration.test.ts": {
+      "sites": [
+        {
+          "line": 69,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 86,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 107,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 122,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 137,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 207,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 225,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/libs/sentry-node/src/runtime.integration.test.ts": {
+      "sites": [
+        {
+          "line": 135,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 143,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 164,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 181,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 199,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 327,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-search-sdk/src/retrieval/search-field-integrity.integration.test.ts": {
+      "sites": [
+        {
+          "line": 28,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 38,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 57,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 61,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 65,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 92,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/src/ci/ci-turbo-report.unit.test.ts": {
+      "sites": [
+        {
+          "line": 83,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 131,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 168,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 202,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 223,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-curriculum-sdk/src/mcp/stub-tool-executor.unit.test.ts": {
+      "sites": [
+        {
+          "line": 14,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 30,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 47,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 60,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 72,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/src/observability/http-observability.unit.test.ts": {
+      "sites": [
+        {
+          "line": 120,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 128,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 144,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 156,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 168,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/src/register-resources.integration.test.ts": {
+      "sites": [
+        {
+          "line": 84,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 93,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 153,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 202,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 227,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/tests/collaboration-state/transaction.integration.test.ts": {
+      "sites": [
+        {
+          "line": 50,
+          "sub": "test-tothrow-arrow",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 93,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 96,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 178,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/libs/sentry-node/src/runtime-redaction-barrier.unit.test.ts": {
+      "sites": [
+        {
+          "line": 118,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 122,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 137,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 149,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/libs/sentry-node/src/runtime-sdk.unit.test.ts": {
+      "sites": [
+        {
+          "line": 90,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 110,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 122,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 158,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-search-sdk/src/retrieval/retrieval-search-helpers.unit.test.ts": {
+      "sites": [
+        {
+          "line": 18,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 27,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 36,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 40,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-search-sdk/src/retrieval/rrf-query-builders.unit.test.ts": {
+      "sites": [
+        {
+          "line": 18,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 27,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 31,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 102,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-search-sdk/src/retrieval/search-sequences.integration.test.ts": {
+      "sites": [
+        {
+          "line": 35,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 84,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 89,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 94,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/src/correlation/middleware.integration.test.ts": {
+      "sites": [
+        {
+          "line": 18,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 45,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 65,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 82,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/indexing/field-readback-audit-retry.unit.test.ts": {
+      "sites": [
+        {
+          "line": 41,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 58,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 73,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 89,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/libs/env-resolution/tests/warnings-channel.unit.test.ts": {
+      "sites": [
+        {
+          "line": 102,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 105,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 121,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/core/graph-core/src/jsonld/processor.integration.test.ts": {
+      "sites": [
+        {
+          "line": 84,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 90,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 104,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/design/oak-design-tokens/src/build-css.integration.test.ts": {
+      "sites": [
+        {
+          "line": 13,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 80,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 99,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/src/context-cost/cli.integration.test.ts": {
+      "sites": [
+        {
+          "line": 119,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 122,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 157,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/code-generation/schema-separation-decorators.unit.test.ts": {
+      "sites": [
+        {
+          "line": 141,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 147,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 279,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/code-generation/typegen/response-map/build-response-map.integration.test.ts": {
+      "sites": [
+        {
+          "line": 210,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 222,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 243,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-search-sdk/src/admin/alias-operations.integration.test.ts": {
+      "sites": [
+        {
+          "line": 66,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 72,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 84,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools-executor.integration.test.ts": {
+      "sites": [
+        {
+          "line": 82,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 89,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 200,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/e2e-tests/mcp-app-composition.e2e.test.ts": {
+      "sites": [
+        {
+          "line": 41,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 73,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 124,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/adapters/vocabulary-mining-adapter.unit.test.ts": {
+      "sites": [
+        {
+          "line": 91,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 225,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 269,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/src/server-runtime.unit.test.ts": {
+      "sites": [
+        {
+          "line": 233,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 265,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 291,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/src/test-error/test-error-route.integration.test.ts": {
+      "sites": [
+        {
+          "line": 81,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 150,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 155,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/indexing/readback-field-audit.integration.test.ts": {
+      "sites": [
+        {
+          "line": 96,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 166,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 183,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/design/design-tokens-core/src/contrast.unit.test.ts": {
+      "sites": [
+        {
+          "line": 20,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 292,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/libs/logger/src/express-middleware.integration.test.ts": {
+      "sites": [
+        {
+          "line": 334,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 552,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/libs/logger/src/file-sink.unit.test.ts": {
+      "sites": [
+        {
+          "line": 107,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 127,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/libs/logger/src/unified-logger.unit.test.ts": {
+      "sites": [
+        {
+          "line": 24,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 67,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/tests/agent-identity/derive.unit.test.ts": {
+      "sites": [
+        {
+          "line": 125,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 133,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/tests/collaboration-state/active-claims-claim-jsonschema.unit.test.ts": {
+      "sites": [
+        {
+          "line": 36,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 39,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/tests/collaboration-state/agent-id-jsonschema.unit.test.ts": {
+      "sites": [
+        {
+          "line": 38,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 41,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/tests/collaboration-state/comms-watch-errors.unit.test.ts": {
+      "sites": [
+        {
+          "line": 26,
+          "sub": "test-tothrow-arrow",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 140,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/tests/collaboration-state/fake-collaboration-runtime.ts": {
+      "sites": [
+        {
+          "line": 105,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 147,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/tests/commit-queue.integration.test.ts": {
+      "sites": [
+        {
+          "line": 366,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 382,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/tests/run-cli-bin.unit.test.ts": {
+      "sites": [
+        {
+          "line": 79,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 126,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/schema-sample-core.unit.test.ts": {
+      "sites": [
+        {
+          "line": 40,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 72,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/code-generation/typegen/schema/schema-generators.unit.test.ts": {
+      "sites": [
+        {
+          "line": 28,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 35,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-curriculum-sdk/src/client/middleware/response-augmentation.integration.test.ts": {
+      "sites": [
+        {
+          "line": 58,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 76,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools.integration.test.ts": {
+      "sites": [
+        {
+          "line": 216,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 247,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-build-plugin.unit.test.ts": {
+      "sites": [
+        {
+          "line": 60,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 64,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/e2e-tests/mcp-app-pipeline.e2e.test.ts": {
+      "sites": [
+        {
+          "line": 90,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 103,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/e2e-tests/thread-progressions-anchored.e2e.test.ts": {
+      "sites": [
+        {
+          "line": 60,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 76,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/e2e-tests/ws3-fallback-proof.e2e.test.ts": {
+      "sites": [
+        {
+          "line": 17,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 46,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/src/app/setup-error-handlers.integration.test.ts": {
+      "sites": [
+        {
+          "line": 79,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 93,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/elasticsearch/setup/ingest-failure-report.integration.test.ts": {
+      "sites": [
+        {
+          "line": 34,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 54,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/src/tool-executor-factory.unit.test.ts": {
+      "sites": [
+        {
+          "line": 130,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 168,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/src/tool-handler-with-auth.integration.test.ts": {
+      "sites": [
+        {
+          "line": 44,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 48,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/indexing/task-0.0-gap-ledger.integration.test.ts": {
+      "sites": [
+        {
+          "line": 34,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 38,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/observability/cli-observability.unit.test.ts": {
+      "sites": [
+        {
+          "line": 95,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 203,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/libs/env-resolution/tests/repo-root.integration.test.ts": {
+      "sites": [
+        {
+          "line": 13,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/core/observability/src/json-sanitisation.unit.test.ts": {
+      "sites": [
+        {
+          "line": 11,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/core/observability/src/span-context.unit.test.ts": {
+      "sites": [
+        {
+          "line": 86,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/core/env/tests/root-package-version.unit.test.ts": {
+      "sites": [
+        {
+          "line": 18,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/core/graph-core/src/jsonld/processor.unit.test.ts": {
+      "sites": [
+        {
+          "line": 74,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/libs/logger/src/test-helpers/parse-otel-log-record.ts": {
+      "sites": [
+        {
+          "line": 59,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/src/context-cost/per-file.unit.test.ts": {
+      "sites": [
+        {
+          "line": 20,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/src/context-cost/tokenize-globs.unit.test.ts": {
+      "sites": [
+        {
+          "line": 20,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/src/hook-policy/check-blocked-patterns.integration.test.ts": {
+      "sites": [
+        {
+          "line": 82,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/src/practice-fitness/paths.unit.test.ts": {
+      "sites": [
+        {
+          "line": 32,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/tests/branch-touched-files-git.integration.test.ts": {
+      "sites": [
+        {
+          "line": 75,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/tests/collaboration-state/active-claims-schema-fixture.ts": {
+      "sites": [
+        {
+          "line": 19,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/tests/collaboration-state/comms-event-schema-fixture.ts": {
+      "sites": [
+        {
+          "line": 18,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/tests/collaboration-state/loud-writes.integration.test.ts": {
+      "sites": [
+        {
+          "line": 448,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/tests/collaboration-state/parse-agent-id.unit.test.ts": {
+      "sites": [
+        {
+          "line": 52,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/tests/collaboration-state/state-integrity.integration.test.ts": {
+      "sites": [
+        {
+          "line": 1,
+          "sub": "other",
+          "rt": "unknown",
+          "fp": false
+        }
+      ]
+    },
+    "agent-tools/tests/collaboration-state/state-io.integration.test.ts": {
+      "sites": [
+        {
+          "line": 160,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/tests/collaboration-state/watcher-staleness.unit.test.ts": {
+      "sites": [
+        {
+          "line": 169,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/tests/commit-workflow.unit.test.ts": {
+      "sites": [
+        {
+          "line": 168,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/tests/practice-substrate/practice-substrate-report.unit.test.ts": {
+      "sites": [
+        {
+          "line": 233,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "agent-tools/tests/runtime.integration.test.ts": {
+      "sites": [
+        {
+          "line": 39,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/libs/sentry-node/src/runtime-scope.integration.test.ts": {
+      "sites": [
+        {
+          "line": 61,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/upstream-param-description-overrides.unit.test.ts": {
+      "sites": [
+        {
+          "line": 50,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/code-generation/typegen/routing/validate-canonical-urls.integration.test.ts": {
+      "sites": [
+        {
+          "line": 341,
+          "sub": "test-setup-guard",
+          "rt": "yes",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/code-generation/zodgen-core.integration.test.ts": {
+      "sites": [
+        {
+          "line": 119,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/code-generation/zodgen-core.unit.test.ts": {
+      "sites": [
+        {
+          "line": 104,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/src/bulk/generators/nc-coverage-generator.unit.test.ts": {
+      "sites": [
+        {
+          "line": 164,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/src/bulk/generators/synonym-miner.unit.test.ts": {
+      "sites": [
+        {
+          "line": 220,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/src/bulk/generators/vocabulary-graph-generator.unit.test.ts": {
+      "sites": [
+        {
+          "line": 172,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/graph-corpus-sdk/src/eef-strands/strand-lookup.unit.test.ts": {
+      "sites": [
+        {
+          "line": 42,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-search-sdk/src/admin/verify-doc-counts.integration.test.ts": {
+      "sites": [
+        {
+          "line": 165,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-curriculum-sdk/src/client/middleware/rate-limit.integration.test.ts": {
+      "sites": [
+        {
+          "line": 43,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-keyword-graph.integration.test.ts": {
+      "sites": [
+        {
+          "line": 31,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-misconception-graph.integration.test.ts": {
+      "sites": [
+        {
+          "line": 36,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-prior-knowledge-graph.integration.test.ts": {
+      "sites": [
+        {
+          "line": 35,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/sdks/oak-search-sdk/src/retrieval/suggestions.integration.test.ts": {
+      "sites": [
+        {
+          "line": 162,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-thread-progressions.integration.test.ts": {
+      "sites": [
+        {
+          "line": 32,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/sdks/oak-curriculum-sdk/src/mcp/test-helpers/null-generated-tool-registry.ts": {
+      "sites": [
+        {
+          "line": 16,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-curriculum-sdk/src/test-helpers/fakes.ts": {
+      "sites": [
+        {
+          "line": 26,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/sdks/oak-curriculum-sdk/src/validation/response-validators.unit.test.ts": {
+      "sites": [
+        {
+          "line": 236,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/e2e-tests/live-mode.e2e.test.ts": {
+      "sites": [
+        {
+          "line": 116,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/e2e-tests/misconception-anchored.e2e.test.ts": {
+      "sites": [
+        {
+          "line": 48,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/e2e-tests/prior-knowledge-anchored.e2e.test.ts": {
+      "sites": [
+        {
+          "line": 49,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/e2e-tests/string-args-normalisation.e2e.test.ts": {
+      "sites": [
+        {
+          "line": 185,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/e2e-tests/stub-mode.e2e.test.ts": {
+      "sites": [
+        {
+          "line": 19,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/e2e-tests/tool-call-success.e2e.test.ts": {
+      "sites": [
+        {
+          "line": 108,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/smoke-tests/scope-verification.smoke.test.ts": {
+      "sites": [
+        {
+          "line": 159,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/cli/admin/shared/parse-lifecycle-ingest-opts.unit.test.ts": {
+      "sites": [
+        {
+          "line": 8,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/src/app/auth-instrumentation.unit.test.ts": {
+      "sites": [
+        {
+          "line": 44,
+          "sub": "test-tothrow-arrow",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/cli/shared/with-loaded-cli-env.unit.test.ts": {
+      "sites": [
+        {
+          "line": 24,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/src/auth/mcp-auth/verify-clerk-token.unit.test.ts": {
+      "sites": [
+        {
+          "line": 33,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/src/deploy-entry-handler.integration.test.ts": {
+      "sites": [
+        {
+          "line": 77,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/indexing/bulk-chunk-uploader.integration.test.ts": {
+      "sites": [
+        {
+          "line": 536,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/src/handlers-tool-registration.integration.test.ts": {
+      "sites": [
+        {
+          "line": 37,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/src/mcp-handler.unit.test.ts": {
+      "sites": [
+        {
+          "line": 173,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/src/oauth-proxy/oauth-proxy-routes.integration.test.ts": {
+      "sites": [
+        {
+          "line": 514,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/indexing/document-transforms.unit.test.ts": {
+      "sites": [
+        {
+          "line": 32,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/src/observability/http-observability.integration.test.ts": {
+      "sites": [
+        {
+          "line": 77,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/indexing/fetch-all-lessons.unit.test.ts": {
+      "sites": [
+        {
+          "line": 246,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/src/register-prompts.integration.test.ts": {
+      "sites": [
+        {
+          "line": 53,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/indexing/ingest-harness.unit.test.ts": {
+      "sites": [
+        {
+          "line": 69,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/widget/src/App.unit.test.tsx": {
+      "sites": [
+        {
+          "line": 65,
+          "sub": "test-fake-or-mock",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/indexing/unit-lesson-count-correctness.integration.test.ts": {
+      "sites": [
+        {
+          "line": 20,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/src/lib/search-quality/ground-truth-archive/registry.unit.test.ts": {
+      "sites": [
+        {
+          "line": 64,
+          "sub": "test-setup-guard",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/response-schema.ts": {
+      "sites": [
+        {
+          "line": 35,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 40,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 43,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 74,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 77,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 84,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 87,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/code-generation/verify-docs.ts": {
+      "sites": [
+        {
+          "line": 25,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 34,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 38,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 81,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 88,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 91,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 138,
+          "sub": "cli-exit",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/code-generation/schema-enhancement-404.ts": {
+      "sites": [
+        {
+          "line": 52,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 56,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 61,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 66,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 110,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/code-generation/typegen-extraction.ts": {
+      "sites": [
+        {
+          "line": 50,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 56,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 59,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 65,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 233,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/code-generation/generate-ai-doc.ts": {
+      "sites": [
+        {
+          "line": 87,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 97,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 104,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 106,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/code-generation/generate-markdown-docs.ts": {
+      "sites": [
+        {
+          "line": 42,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 52,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 58,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 62,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/code-generation/codegen.ts": {
+      "sites": [
+        {
+          "line": 52,
+          "sub": "cli-exit",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 72,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 76,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/code-generation/typegen/validation/cross-validate.ts": {
+      "sites": [
+        {
+          "line": 30,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 57,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 144,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/code-generation/schema-validator.ts": {
+      "sites": [
+        {
+          "line": 28,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 70,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/code-generation/typegen/search/index-doc-code-gen.ts": {
+      "sites": [
+        {
+          "line": 95,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 152,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/code-generation/typegen/validation/emit-request-validator-map.ts": {
+      "sites": [
+        {
+          "line": 63,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 68,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/code-generation/schema-status-guard.ts": {
+      "sites": [
+        {
+          "line": 33,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/code-generation/test-fixtures.ts": {
+      "sites": [
+        {
+          "line": 281,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/generate-definitions-file.ts": {
+      "sites": [
+        {
+          "line": 40,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/kebab-to-title-case.ts": {
+      "sites": [
+        {
+          "line": 13,
+          "sub": "result-return",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/code-generation/typegen/operations/schema-resolvers.ts": {
+      "sites": [
+        {
+          "line": 28,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/code-generation/typegen/response-map/shared.ts": {
+      "sites": [
+        {
+          "line": 52,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/code-generation/typegen/schema-input.ts": {
+      "sites": [
+        {
+          "line": 5,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/code-generation/typegen/search/es-field-config.ts": {
+      "sites": [
+        {
+          "line": 75,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/code-generation/typegen/search/es-mapping-from-fields.ts": {
+      "sites": [
+        {
+          "line": 72,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/code-generation/typegen/search/zod-schema-generator.ts": {
+      "sites": [
+        {
+          "line": 114,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "packages/sdks/oak-sdk-codegen/code-generation/zodgen-core.ts": {
+      "sites": [
+        {
+          "line": 298,
+          "sub": "invariant-unreachable",
+          "rt": "no",
+          "fp": false
+        }
+      ]
+    },
+    "apps/oak-search-cli/scripts/download-bulk.ts": {
+      "sites": [
+        {
+          "line": 71,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 78,
+          "sub": "boundary-translate",
+          "rt": "no",
+          "fp": false
+        },
+        {
+          "line": 135,
+          "sub": "cli-exit",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/scripts/run-requests.ts": {
+      "sites": [
+        {
+          "line": 76,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 78,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": true
+        },
+        {
+          "line": 114,
+          "sub": "cli-exit",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    },
+    "apps/oak-curriculum-mcp-streamable-http/scripts/embed-widget-html.ts": {
+      "sites": [
+        {
+          "line": 41,
+          "sub": "rethrow-in-catch",
+          "rt": "no",
+          "fp": true
+        }
+      ]
+    }
+  }
+}

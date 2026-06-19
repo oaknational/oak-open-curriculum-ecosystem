@@ -67,6 +67,24 @@ surface.
   `get-eef-evidence` success is invisible to the Cursor harness:
   [snag register](../../plans/sdk-and-mcp-enhancements/current/oak-prod-mcp-snagging-2026-06-11.plan.md).
   **Next:** run S0 (non-Cursor client probe) per §6, then S1 to owner.
+- **ESLint no-throw → Result migration — 🟢 IN EXECUTION on `docs/planning-and-validation`.**
+  Result-pattern migration (ADR-088) for ~1000 `@oaknational/no-throw-statement` warnings; owner-ruled
+  strict (convert every throw, amend ADR-088). Plan + 92KB per-site worklist:
+  [`no-throw-statement-result-migration.plan.md`](../../plans/architecture-and-infrastructure/current/no-throw-statement-result-migration.plan.md)
+  (thread [`eslint-no-throw-result-migration`](threads/eslint-no-throw-result-migration.next-session.md)).
+  **Merlin spins Cirrus landed the first conversions** as **`1556b9191`** (build-metadata WS2 exemplar +
+  `@oaknational/result` `assertNeverResult` keystone WS0 + graph-core term-reconstruction WS0/WS4).
+  **Siren mends Rudder (successor) landed 3 more, all full-gate-green + reviewed:** `93beffcfe`
+  (observability `redactText` via type-strengthening overload), `304b68f8d` (graph-core jsonld loader →
+  `Promise.reject`, owner's vendor-callback ruling), `61bdbc3e4` (logger `redactStringValue`, same overload).
+  **Key finding:** the cheap WS2 result-returns are largely done; the leaf residue is **design-laden**
+  (construction-contract / module-init / WS5 rethrow / stateful-guards) — see the thread record's
+  §"Remaining-throw tier map" for the per-site classification (next clean cycle: `express-middleware.ts:92`).
+  **Unpushed — owner controls push.** (Stale `feat/no-throw-result-migration` worktree awaits tidy-up.)
+  **Next (incoming successor Siren mends Rudder, distinct from Siren guards Reef):** continue WS2 leaves
+  (env-resolution / observability / env / logger) up the real import DAG; WS1 codegen is blocked on the
+  F-74 live-upstream-fetch hazard; WS9 doctrine edits + agent-tools (214) LAST, coordinate with Siren
+  guards Reef (claim `b01b303e`). Full resumable state in the thread record.
 - **Current product focus**: `eef` graph-tooling rebuild is the only active product lane. The
   `agentic-engineering-enhancements` activity is a temporary knowledge-curation lane — its live
   WS1→2b→2c→WS2 feedback-mechanism work lives in its thread record, not a product thread.
@@ -83,6 +101,7 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Zephyrous Buffeting Falcon / skills-lane-relocated-to-educator-end-users / 2026-06-08 (prior identities: thread record) |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 (1M) / Tulip spins Xylem / PDR-105-reference-direction-burndown / 2026-06-19 (prior identities: thread record) |
+| `eslint-no-throw-result-migration` | Migrate every throw to Result (ADR-088); drive the ~1000 warnings to zero; promote the rule. In execution on `docs/planning-and-validation`; cheap WS2 done, residue is design-laden (tier map in record) | [record](threads/eslint-no-throw-result-migration.next-session.md) | claude / Opus 4.8 (1M) / Siren mends Rudder / execution — observability+graph-core+logger landed (`93beffcfe`,`304b68f8d`,`61bdbc3e4`) / 2026-06-19 (prior: Merlin spins Cirrus `1556b9191`; Vanilla weaves Undergrowth, plan-author) |
 | `statusline-enhancements` | Claude Code statusline: Oak-mark, session-shape indicators, logo swap; lane in two `current/` plans (session-state, logo-modularisation). Live detail + the `feat/comms-research` divergence to reconcile: thread record | [record][statusline] | claude-code / Opus 4.8 / Vole calls Hollow / live-logo-swap-and-plan-harden / 2026-06-16 (prior identities: thread record) |
 | `agent-naming` | PDR-027 display-name derivation: versioned schema registry, session-hook identity surfaces, wordlist eras (v2 landed; v3 + era-pinning cure queued) | [record][agent-naming] | claude / Opus 4.8 / Squall hunts Troposphere / thread-open + v3-plan-author / 2026-06-13 (prior identities: thread record) |
 | `strategy-and-plan-estate-holistic-review` | Vision/strategy/plan-estate rework (experiment→product), **three co-equal first-class bodies on a four-layer informational model** (Oak strategy → vision → strategy → planning): vision done; strategy-layer discussion **resolved 2026-06-18** and the approach **reconceived**; **next: author the strategy corpus at `docs/strategy/`** (Body 2) with the estate read+extract prep in parallel; restructure's new boundaries informationally gated on the strategy | [record](threads/strategy-and-plan-estate-holistic-review.next-session.md) | claude-code / Opus 4.8 / Baobab lifts Topsoil / surveyor-synthesist / 2026-06-15, claude-code / Opus 4.8 / Ocelot binds Curfew / vision-author / 2026-06-17, claude-code / Opus 4.8 / Tempest spins Spire / controlling-plan author / 2026-06-17, claude-code / Opus 4.8 / Squall spins Stratus / Phase-2A ratification + articulation / 2026-06-17, claude-code / Opus 4.8 / Asteroid calls Meridian / approach-reconception / 2026-06-18 |

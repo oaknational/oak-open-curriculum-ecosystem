@@ -1736,6 +1736,63 @@ below is a cross-reference index, not a second source of truth.
 
 ---
 
+### F-70 — `comms list` has no time/`--since` filter, and there is no `comms recent`
+
+- **Source**: this session (Merlin spins Cirrus, `5e7419`), 2026-06-19.
+- **Surface**: `pnpm agent-tools:collaboration-state -- comms list`.
+- **Observed**: To read events since session-open I reached for `comms recent --limit N` (does not exist) then `comms list --since <iso>` (`unknown option for comms list: --since`). The only narrowing knob is `--tail <n>`, so situational catch-up is "tail a guessed N and eyeball timestamps". For a session opening hours into a thread, the natural query is "everything since `<iso>`", which the CLI cannot express.
+- **Expected**: A `--since <iso>` (and/or `--until`) filter on `comms list`, or a `comms recent` alias, so an agent can read exactly the window between session-open and watcher-arm without over-/under-reading.
+- **Candidate cure**: Add `--since`/`--until` ISO filters to `comms list`; optionally a `comms recent` alias for `list --since <session-open>`.
+- **Target surface**: `agent-tools/src/collaboration-state/cli-comms-commands.ts`.
+- **Status**: open.
+- **Owner direction status**: standing (owner 2026-06-19: "keep a clear record of all comms issues and other tooling frustrations so that we can fix them"; reinforces Pelagic `2dbd74f6`).
+
+### F-71 — `pnpm agent-tools:*` wrapper buries the CLI's own error behind `ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL`
+
+- **Source**: this session (Merlin spins Cirrus, `5e7419`), 2026-06-19.
+- **Surface**: `pnpm agent-tools:collaboration-state -- <bad-subcommand>` (the documented canonical invocation).
+- **Observed**: An invalid subcommand (`comms recent`) returned a multi-line pnpm recursive-run stack (`ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL ... Exit status 2 ... [ELIFECYCLE]`) that hid the actual CLI message. The CLI's own usage/error text only became visible by bypassing pnpm and calling `node agent-tools/dist/src/bin/agent-tools.js …` directly — which an agent should not have to discover. The rule corpus documents the pnpm form, so the noisy path is the documented path.
+- **Expected**: The agent-tools CLI's own usage/error text surfaces cleanly through the pnpm wrapper on a bad subcommand/flag.
+- **Candidate cure**: Have the `agent-tools:*` package scripts exec the bin without pnpm's recursive-run wrapper (direct `node …` in the script), or document the direct-`node` invocation as the canonical interactive form for read commands.
+- **Target surface**: `agent-tools/package.json` scripts; `use-built-agent-tools-cli` rule / `comms-all-channels-watcher` rule docs.
+- **Status**: open.
+- **Owner direction status**: standing (owner 2026-06-19, as F-70).
+
+### F-72 — `claims active-agents` requires an explicit `--active <path>` to the canonical claims file
+
+- **Source**: this session (Merlin spins Cirrus, `5e7419`), 2026-06-19.
+- **Surface**: `collaboration-state claims active-agents`.
+- **Observed**: Run without args it errors `missing required option --active`; the agent must pass `--active .agent/state/collaboration/active-claims.json` — the single canonical, well-known location every other reader already assumes. The required-flag forces the agent to know and re-type the path that the tool could default to.
+- **Expected**: `--active` defaults to `.agent/state/collaboration/active-claims.json` (overridable), matching how the watcher/inbox default their comms-dir from convention.
+- **Candidate cure**: Default `--active` (and the optional `--closed`) to the canonical paths; keep the flags as overrides.
+- **Target surface**: `agent-tools/src/collaboration-state/cli-claims-commands.ts`.
+- **Status**: open.
+- **Owner direction status**: standing (owner 2026-06-19, as F-70).
+
+### F-73 — Heartbeat mode requires a claim, so pre-claim roles (successor-in-waiting / standby / scout) cannot emit a liveness heartbeat
+
+- **Source**: this session (Merlin spins Cirrus, `5e7419`), 2026-06-19.
+- **Surface**: `collaboration-state comms send --tag heartbeat` (and `comms append`).
+- **Observed**: Heartbeat mode rejects `--body` and *requires* `--claim-id --intent-id --branch --current-cycle-label`. A `start-right-team` agent in a legitimate pre-claim state — successor-in-waiting (this session), `standby`, or `scout` per the skill's own role vocabulary — has no claim/intent/branch yet, so it cannot emit a typed heartbeat to signal "alive, not yet on a lane". The only liveness signals available pre-claim are a narrative broadcast and owner chat-visibility; the typed heartbeat surface is closed to exactly the roles whose presence is least otherwise visible.
+- **Expected**: A pre-claim agent can emit a heartbeat with an honest no-claim lane label (e.g. `cycle=successor-in-waiting` / `standby`), without inventing a claim.
+- **Candidate cure**: Allow `--tag heartbeat` with a lane/cycle label but no claim-id when the agent has no open claim (typed state becomes `{cycle: <label>, claim: none}`); or document that pre-claim liveness uses a narrative event and the consumer-absent exemption, so the gap is intentional rather than a discoverability trap.
+- **Target surface**: `agent-tools/src/collaboration-state/cli-comms-commands.ts`; `liveness-heartbeat-cron` rule.
+- **Status**: open.
+- **Owner direction status**: standing (owner 2026-06-19, as F-70).
+
+### F-74 — A full `pnpm build` in a fresh worktree fetches live upstream OpenAPI schema and dirties generated SDK files
+
+- **Source**: this session (Merlin spins Cirrus, `5e7419`), 2026-06-19.
+- **Surface**: `pnpm build` (turbo) → `@oaknational/sdk-codegen` build step.
+- **Observed**: The first full build in a fresh off-main worktree regenerated `oak-sdk-codegen` generated files — `schema-cache/api-schema-original.json` version bumped (`0.7.0-69d2b6c…` → `0.7.0-f7c18ea…`, incl. a `/sequences/{slug}` → `/sequences/{sequence}` path-param rename) plus the generated types/zod. The build fetched a **fresher upstream schema live** rather than consuming the committed schema-cache, so a build that should be deterministic against the branch base instead pulled in upstream-spec drift owned by a different lane (`fix/align_with_upstream_api_spec`). On a migration branch this forces excluding the drift by explicit pathspec on every commit, and makes `pnpm build` non-deterministic w.r.t. the committed base (a real hazard for WS1, which regenerates codegen — upstream changes would silently contaminate the migration).
+- **Expected**: A plain `pnpm build` uses the committed schema-cache and is deterministic; fetching fresh upstream is an explicit opt-in step (e.g. `pnpm sdk-codegen` with a fetch flag), never a side effect of `build`.
+- **Candidate cure**: Make the sdk-codegen build step consume the committed schema-cache only; gate the live upstream fetch behind an explicit command/flag. Failing that, document `pnpm build`'s upstream non-determinism so migrations exclude codegen drift by pathspec.
+- **Target surface**: `packages/sdks/oak-sdk-codegen` build pipeline; `docs/engineering/build-system.md`.
+- **Status**: open.
+- **Owner direction status**: standing (owner 2026-06-19, as F-70).
+
+---
+
 ## Mitigated / Addressed Frictions
 
 - F-03 — addressed by current CLI validation ordering.
