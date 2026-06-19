@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
-    "@sentry/cli": "^3.5.0",
+    "@sentry/cli": "^3.5.1",
     "@types/node": "^25.9.3",
     "eslint": "^10.5.0",
     "globals": "^17.6.0",

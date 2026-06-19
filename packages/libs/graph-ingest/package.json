@@ -72,7 +72,7 @@
     "@oaknational/graph-core": "workspace:*",
     "@oaknational/result": "workspace:*",
     "jsonld": "^9.0.0",
-    "n3": "^2.0.3"
+    "n3": "^2.0.4"
   },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
