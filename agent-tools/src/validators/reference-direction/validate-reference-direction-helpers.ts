@@ -16,6 +16,15 @@
 
 import posix from 'node:path/posix';
 
+import {
+  isStableAddressedState,
+  isStableIndex,
+} from './validate-reference-direction-allowlists.js';
+
+// Re-exported so consumers (and tests) resolve the stable-index predicate from the
+// validator's public surface; the allowlist data itself lives in the sibling module.
+export { isStableIndex } from './validate-reference-direction-allowlists.js';
+
 /** Artefact layers, ordered by fundamentality (most fundamental last). */
 export type ArtefactLayer =
   | 'ephemeral' // plans, threads, operational memory/state — most volatile
@@ -68,33 +77,6 @@ const EPHEMERAL_PREFIXES = [
   '.agent/memory/active/',
   '.agent/state/',
 ] as const;
-
-/**
- * The one stable index permitted to reference ephemeral thread records by path
- * (PDR-105 stable-index corollary): its job is to resolve thread identity →
- * current location, localising lifecycle churn to one surface.
- */
-const STABLE_INDEX_PATHS: readonly string[] = ['.agent/memory/operational/repo-continuity.md'];
-
-/**
- * Stable-addressed operational targets a doctrine surface may link without a
- * durability violation (PDR-105 stable-index corollary, generalised): singleton
- * registries/logs whose *address* is fixed though *content* churns. Per-item records
- * (`patterns/*.md`, `plans/**`, thread records) move/graduate and are NOT here.
- */
-const STABLE_ADDRESSED_STATE: readonly string[] = [
-  '.agent/state/collaboration/active-claims.json',
-  '.agent/state/collaboration/closed-claims.archive.json',
-  '.agent/state/collaboration/shared-comms-log.md',
-  '.agent/memory/active/patterns/README.md',
-];
-
-/** True when an ephemeral target is a stable-addressed surface: an allowlisted
- * singleton, or any `*.schema.json` (a schema is the stable abstraction). */
-function isStableAddressedState(repoRelPath: string): boolean {
-  const p = repoRelPath.replace(/^\.\//, '');
-  return STABLE_ADDRESSED_STATE.includes(p) || p.endsWith('.schema.json');
-}
 
 /** Matches a line annotated as a deliberate historical reference. */
 const HISTORICAL_MARKER = /\(historical references?\)|<!--\s*historical\s*-->/i;
@@ -172,12 +154,6 @@ function isRepoPathReference(target: string): boolean {
   // Only police references that point at repo files (have a path separator or a
   // markdown/json/ts extension). Bare anchors and labels are skipped above.
   return target.includes('/') || /\.(md|json|ts|tsx|mjs|cjs)$/.test(target.split('#')[0]);
-}
-
-/** True when the source path is the sanctioned stable index. */
-export function isStableIndex(sourcePath: string): boolean {
-  const p = sourcePath.replace(/^\.\//, '');
-  return STABLE_INDEX_PATHS.includes(p);
 }
 
 /**

@@ -6,6 +6,7 @@ import { writeLine } from '../../core/terminal-output.js';
 
 import {
   findReferenceDirectionViolations,
+  type ReferenceViolation,
   type ScanFile,
 } from './validate-reference-direction-helpers.js';
 
@@ -57,20 +58,8 @@ async function collectMarkdown(relRoot: string): Promise<ScanFile[]> {
   return files;
 }
 
-async function main(): Promise<void> {
-  const files: ScanFile[] = [];
-  for (const root of POLICED_ROOTS) {
-    files.push(...(await collectMarkdown(root)));
-  }
-  const violations = findReferenceDirectionViolations(files);
-
-  if (violations.length === 0) {
-    writeLine(
-      'validate-reference-direction: OK (no wrong-direction references in policed doctrine).',
-    );
-    return;
-  }
-
+/** Print the violation summary, the by-file burndown, and (when `verbose`) per-reference detail. */
+function reportViolations(violations: readonly ReferenceViolation[], verbose: boolean): void {
   const byAxis = { portability: 0, durability: 0 };
   const byFile = new Map<string, number>();
   for (const v of violations) {
@@ -89,6 +78,37 @@ async function main(): Promise<void> {
   for (const [file, count] of [...byFile.entries()].sort((a, b) => b[1] - a[1])) {
     writeLine(`    ${file}: ${String(count)}`);
   }
+
+  // Verbose lists every violation as `<axis> <source>:<line> -> <target>`, the
+  // first-hand per-target detail the burndown and the report-only→blocking escalation
+  // decision (PDR-105 §Enforcement) need without a throwaway script.
+  if (verbose) {
+    writeLine('');
+    writeLine('  Per-reference detail (axis source:line -> target):');
+    const sorted = [...violations].sort(
+      (a, b) => a.axis.localeCompare(b.axis) || a.sourcePath.localeCompare(b.sourcePath),
+    );
+    for (const v of sorted) {
+      writeLine(`    ${v.axis} ${v.sourcePath}:${String(v.line)} -> ${v.targetPath}`);
+    }
+  }
+}
+
+async function main(): Promise<void> {
+  const files: ScanFile[] = [];
+  for (const root of POLICED_ROOTS) {
+    files.push(...(await collectMarkdown(root)));
+  }
+  const violations = findReferenceDirectionViolations(files);
+
+  if (violations.length === 0) {
+    writeLine(
+      'validate-reference-direction: OK (no wrong-direction references in policed doctrine).',
+    );
+    return;
+  }
+
+  reportViolations(violations, process.argv.includes('--verbose'));
 }
 
 await main();

@@ -133,8 +133,10 @@ that deletes them.
 
 The stable-addressed operational surfaces that durable doctrine may link without a
 durability violation (the corollary's generalisation, enforced by
-`validate-reference-direction`) are: `active-claims.json`,
-`closed-claims.archive.json`, `shared-comms-log.md`, the patterns index
-`patterns/README.md`, and any `*.schema.json`. Per-item records under
-`memory/active/patterns/`, `memory/operational/threads/`, and `plans/` stay volatile —
-reach them through the stable index, never by a direct link.
+`validate-reference-direction`) are: the singleton registries/logs `active-claims.json`,
+`closed-claims.archive.json`, `shared-comms-log.md`; the fixed-address index/convention
+READMEs `patterns/README.md`, `threads/README.md`, `state/README.md`; the permanent
+collaboration/library directories `conversations/`, `escalations/`, `comms/`,
+`handoffs/`, `patterns/`; and any `*.schema.json`. A link names the *surface*; a link to
+one volatile item inside it (an individual pattern, thread record, plan, or a single
+file within a stable directory) stays a defect — reach it through the stable surface.

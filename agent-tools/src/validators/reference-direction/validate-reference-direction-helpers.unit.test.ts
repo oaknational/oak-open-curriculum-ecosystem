@@ -266,6 +266,38 @@ describe('findReferenceDirectionViolations', () => {
     expect(findReferenceDirectionViolations(files)).toHaveLength(0);
   });
 
+  it('allows a rule citing the conversations directory (stable-addressed surface)', () => {
+    const files: ScanFile[] = [
+      {
+        path: '.agent/rules/use-agent-comms-log.md',
+        content: 'open a thread in [conversations](../state/collaboration/conversations/)',
+      },
+    ];
+    expect(findReferenceDirectionViolations(files)).toHaveLength(0);
+  });
+
+  it('allows doctrine citing the threads index README (stable-addressed)', () => {
+    const files: ScanFile[] = [
+      {
+        path: '.agent/rules/register-identity-on-thread-join.md',
+        content: 'per [threads](../memory/operational/threads/README.md)',
+      },
+    ];
+    expect(findReferenceDirectionViolations(files)).toHaveLength(0);
+  });
+
+  it('still flags a link to a specific file inside a stable directory (the item moves)', () => {
+    const files: ScanFile[] = [
+      {
+        path: '.agent/rules/x.md',
+        content: 'see [a thread](../state/collaboration/conversations/some-decision.json)',
+      },
+    ];
+    const violations = findReferenceDirectionViolations(files);
+    expect(violations).toHaveLength(1);
+    expect(violations[0].axis).toBe('durability');
+  });
+
   it('still flags a doctrine file citing an individual pattern file (it graduates/moves)', () => {
     const files: ScanFile[] = [
       {
