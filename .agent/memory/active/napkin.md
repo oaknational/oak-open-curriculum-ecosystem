@@ -68,8 +68,30 @@ New session observations append below.
     churn is localised. repo-continuity is that resolver for threads.
 - **Already homed in fragments** to unify: `no-moving-targets-in-permanent-docs` (time axis as a rule),
   `practice-core-portability` (portability axis), `feedback_adrs_permanent_plans_ephemeral`.
-- **Canonical home (owner-requested, PROPOSED):** a new PDR defining both axes + the hierarchy + the
-  single-index corollary; the fragment-rules become its operationalisations. The 7d rule↔plan-citation
-  check in `consolidate-docs` is a time-axis VIOLATION (rule cites plan) — retire it. The tracks/workstreams
-  removal and the thread-path-reference fix are this doctrine's first applications. Sibling:
-  [[existence-is-not-correctness-default-replace]], the usefulness-now entry above.
+- **LANDED as PDR-105 + `validate-reference-direction` (report-first; commit `8d0297696`).** The
+  fragment-rules become its operationalisations; the `consolidate-docs` 7d rule↔plan-citation check is
+  a time-axis VIOLATION to retire. Sibling: [[existence-is-not-correctness-default-replace]], the
+  usefulness-now entry above.
+
+## Loss-scan at session-close (2026-06-19, Sandpiper lifts Downdraft)
+
+Adversarial sweep — held in context, routed here so it is not lost:
+
+- **PDR-105 wording is imprecise — tighten next session.** The two axes are most precisely Martin's
+  **Stable Dependencies Principle** (depend in the direction of stability), not DIP. **DIP proper**
+  (depend on an abstraction, not a concretion) is the **stable-index corollary** only. PDR-105 §Context
+  says "this is the Dependency Inversion Principle" — true in spirit, loose in name. Fix: axes = SDP;
+  index corollary = DIP. (Owner asked; surfaced the imprecision. Carried in the next-session opener.)
+- **New repo-validator → register it in `knip.config.ts` entry list**, else `knip` fails the gate as
+  "unused file" (entry-point scripts are invoked via the bin chain, not imported). Gotcha hit this
+  session; sibling to the format:root / markdownlint:root pre-commit re-run-and-restage pattern.
+- **(me) Over-gating recurred repeatedly this session** — turning safe/forced or owner-principle-covered
+  actions into approval gates (owner corrected it ~4×: the AskUserQuestion the owner rejected to
+  clarify; "stop getting lost in details, use proper tools"; the useful-now reframe). Cross-session
+  behaviour → **per-user memory candidate** (per-user `MEMORY.md` is over-limit; behavioural entry due —
+  out of this repo's scope). Sibling: [[over-caution-root-is-perfectionism]], [[fluency-is-a-failure-vector]]
+  (a fluently-invoked principle — "DIP" — that wasn't the precisely-right one).
+- **Sequencing lesson (the session's own arc):** I removed `tracks`/`workstreams` and moved thread
+  records BEFORE burning down their references — enacting the durable→ephemeral coupling PDR-105 forbids
+  while authoring it. The burndown must be **refs-first, then delete/move**. Homed in the thread record
+  pickup; restated here as the load-bearing why for the deferral.
