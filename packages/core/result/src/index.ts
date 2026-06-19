@@ -217,3 +217,29 @@ export function unwrapOr<T, E>(result: Result<T, E>, defaultValue: T): T {
 export function unwrapOrElse<T, E>(result: Result<T, E>, fn: (error: E) => T): T {
   return result.ok ? result.value : fn(result.error);
 }
+
+/**
+ * Exhaustiveness guard that returns an `Err` instead of throwing.
+ *
+ * Call in the `default` branch of an exhaustive `switch` (or the final `else`)
+ * over a discriminated union. The `value: never` parameter makes the compiler
+ * reject the call if any variant is left unhandled — compile-time exhaustiveness
+ * with no runtime `throw` (ADR-088, use-result-pattern). If the branch is reached
+ * at runtime because data defeated the types, `makeError` is called with the
+ * stringified unexpected value so the failure is debuggable, and the result flows
+ * back as the `Err` arm rather than as an exception.
+ *
+ * @param value - The value narrowed to `never` by exhaustive handling of every variant
+ * @param makeError - Builds the domain error from the stringified unexpected value
+ * @returns Err result wrapping the built error
+ *
+ * @example
+ * ```typescript
+ * // In the default branch of an exhaustive switch over a discriminated union,
+ * // after every known variant has returned ok(...):
+ * return assertNeverResult(shape, (got) => new UnknownShapeError(got));
+ * ```
+ */
+export function assertNeverResult<E>(value: never, makeError: (unexpected: string) => E): Err<E> {
+  return err(makeError(String(value)));
+}
