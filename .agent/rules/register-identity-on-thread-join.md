@@ -100,10 +100,11 @@ The complementary layers are, per PDR-029's 2026-04-21 Amendment Log
   on any platform performs the same walkthrough by reading the same
   markdown.
 - **Stale-identity audit** — a six-check documentation walkthrough in
-  [`/oak-consolidate-docs § Thread-register freshness`](../commands/consolidate-docs.md#thread-register-freshness)
+  [`/oak-consolidate-docs § Thread-register freshness`](../skills/consolidate-docs/SKILL-CANONICAL.md#thread-register-freshness)
   that the agent performs at consolidation time: stale `last_session`,
-  orphan threads, missing fields, expired track cards, duplicate
-  identity rows, active-threads ↔ next-session-file correspondence.
+  orphan threads, missing fields, duplicate identity rows,
+  active-threads ↔ next-session-file correspondence, and retired-record
+  banner hygiene.
 
 Together the three layers ensure no single failure mode (forgot to read the
 rule; forgot to walk the session-handoff gate; forgot to run the audit)

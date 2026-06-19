@@ -43,10 +43,7 @@ conflicts, not a gating rule across different-scope claims.
 2. **`memory/operational/repo-continuity.md`** — canonical continuity
    contract.
 3. **`memory/operational/threads/<slug>.next-session.md`** — thread-level
-   identity + next-session landing + lane state (PDR-027;
-   workstream surface retired 2026-04-21, lane state folded in).
-4. **`memory/operational/tracks/*.md`** — tactical coordination only;
-   never authoritative for scope.
+   identity + next-session landing + lane state (PDR-027).
 
 Doctrine (directives, ADRs, PDRs) sits above these for *governance*
 claims — a plan that contradicts an ADR must yield, unless the plan

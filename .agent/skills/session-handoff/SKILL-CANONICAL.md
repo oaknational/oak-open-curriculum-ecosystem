@@ -189,7 +189,8 @@ there unless the owner or closeout owner gives a further assignment.
    - Repo-level active state -> `repo-continuity.md`.
    - Per-thread identity, landing target, or lane state ->
      `threads/<slug>.next-session.md`.
-   - Short-lived tactical coordination -> `tracks/*.md`.
+   - Short-lived tactical coordination -> the harness task-list, the napkin, or
+     active claims.
    - Continuity strategy, rules, or process ->
      `.agent/directives/continuity-practice.md`.
    - Settled architecture or Practice governance -> ADR / PDR / rule /
@@ -200,26 +201,20 @@ there unless the owner or closeout owner gives a further assignment.
    If content does not answer "what is live right now?", do not place it in
    `repo-continuity.md`.
 
-   *Workstream surface retired 2026-04-21 Session 5*: the
-   `Active workstreams` and `Branch-primary workstream brief`
-   fields that were previously listed here have been replaced by
-   the thread-record pointers above. Lane state now folds into
-   `.agent/memory/operational/threads/<slug>.next-session.md`.
-
 3. **Refresh the relevant thread's next-session record (lane state
    included).** Update
    `.agent/memory/operational/threads/<slug>.next-session.md` for
    any thread that moved this session. The thread record carries
    identity + next-session landing + lane state. Fields (lane state
    section): `Owning plan(s)`, `Current objective`, `Current state`,
-   `Blockers / low-confidence areas`, `Next safe step`, `Active
-   track links`, `Promotion watchlist`.
+   `Blockers / low-confidence areas`, `Next safe step`,
+   `Promotion watchlist`.
 
-4. **Resolve, promote, or delete any tactical track cards.** Cards in
-   `.agent/memory/operational/tracks/` are short-horizon. At session close, each card is
-   either: resolved (deleted), promoted (signal routed into the
-   owning thread's next-session record's lane-state promotion
-   watchlist or into the napkin), or deleted if no longer relevant.
+4. **Promote or drop short-lived tactical signals.** Tactical coordination
+   state lives in the harness task-list, the napkin, and active claims. At
+   session close, promote any short-lived signal worth keeping into the owning
+   thread's next-session record lane-state promotion watchlist or into the
+   napkin; the rest lapse with the task-list and claims.
 
 5. **Sync the authoritative next-action surfaces.** Update any active plan
    whose status, preconditions, or immediate next safe step changed this

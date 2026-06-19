@@ -460,7 +460,7 @@ checkout.** Hydration is incomplete until the host surface exists and
 the workflows that reference it resolve.
 
 Hosts that split the contract across multiple surfaces — canonical
-contract, per-thread next-session record, tactical track cards — remain compliant
+contract and per-thread next-session record — remain compliant
 provided the authority order between them is explicit, each surface has a
 single documented writer, and the contract fields are covered in aggregate.
 

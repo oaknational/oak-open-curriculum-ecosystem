@@ -69,7 +69,7 @@ Read in order; stop at whichever answers your next-step question:
 
 1. @.agent/memory/operational/repo-continuity.md — canonical continuity contract
 2. @.agent/memory/operational/threads/README.md — thread convention + identity discipline (PDR-027)
-3. `.agent/memory/operational/threads/<slug>.next-session.md` — the thread record for any thread the session will touch (carries identity, next-session landing, *and lane state* — workstream surface retired 2026-04-21)
+3. `.agent/memory/operational/threads/<slug>.next-session.md` — the thread record for any thread the session will touch (carries identity, next-session landing, *and lane state*)
 4. `.agent/state/collaboration/active-claims.json` — active-claims
    registry and ordered advisory `commit_queue`
 5. `.agent/state/collaboration/shared-comms-log.md` — generated recent
@@ -79,7 +79,6 @@ Read in order; stop at whichever answers your next-step question:
    evidence obligations for the touched thread or area
 7. `.agent/state/collaboration/escalations/*.json` — active owner-facing
    escalation cases for the touched thread or area
-8. `.agent/memory/operational/tracks/*.md` — any relevant tactical track card(s)
 
 When reading `active-claims.json`, surface any fresh `commit_queue` entries
 alongside active claims: `intent_id`, `agent_id`, `files`, `commit_subject`,
