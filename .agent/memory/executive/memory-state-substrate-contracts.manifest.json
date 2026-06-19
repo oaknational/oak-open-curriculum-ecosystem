@@ -38,8 +38,7 @@
     ],
     "historical_roots": [
       ".agent/memory/active/archive/",
-      ".agent/memory/operational/archive/",
-      ".agent/memory/operational/workstreams/"
+      ".agent/memory/operational/archive/"
     ],
     "fixture_roots": [
       "agent-tools/tests/collaboration-state/fixtures/"
@@ -787,49 +786,6 @@
         },
         {
           "action": "overwrite peer identity rows",
-          "repair_class": "forbidden"
-        }
-      ],
-      "portability_tier": "repo-local-contract",
-      "owner_reviewer_route": "session-handoff + architecture"
-    },
-    {
-      "id": "memory-operational-tracks",
-      "path": ".agent/memory/operational/tracks/",
-      "plane": "memory",
-      "purpose": "Single-writer tactical coordination cards for operational work.",
-      "authority": [
-        "PDR-050-state-memory-substrate-contracts",
-        "PDR-049-memory-and-state-file-merge-semantics"
-      ],
-      "lifecycle": "live single-writer tactical coordination cards",
-      "writer_or_write_api": "human/agent edits by owning track",
-      "entry_identity": "track filename slug",
-      "merge_class": "exclusive-create-fragments",
-      "schema_or_parser": "directory/file markdown conventions; future README contract",
-      "generated_outputs": [],
-      "validator": "future practice:substrate:check",
-      "severity": [
-        {
-          "invariant": "duplicate track slug",
-          "severity": "blocking"
-        },
-        {
-          "invariant": "same track edited by multiple writers",
-          "severity": "review-required"
-        }
-      ],
-      "repair_path": [
-        {
-          "action": "add missing metadata when unambiguous",
-          "repair_class": "deterministic"
-        },
-        {
-          "action": "coordinate same-track concurrent edits",
-          "repair_class": "manual-with-provenance"
-        },
-        {
-          "action": "silently discard stale-looking track cards",
           "repair_class": "forbidden"
         }
       ],

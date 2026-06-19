@@ -127,9 +127,9 @@ In this repo: `repo-continuity.md` is the stable thread index — its link-defin
 block is the one surface that maps a thread slug to its current record path, so a
 thread moving between the active root and the `paused/` or `retired/` subdirectories
 updates only that block — the thread-index discipline is the first application of this
-PDR. The `tracks/` and `workstreams/` surfaces are slated for removal as residue
-(pending the reference-direction burndown); this note becomes past-tense in the commit
-that deletes them.
+PDR. The `tracks/` and `workstreams/` operational surfaces were removed as residue by the
+reference-direction burndown; per-lane short-horizon state lives in thread next-session
+records under their `Lane state` substructure.
 
 The stable-addressed operational surfaces that durable doctrine may link without a
 durability violation (the corollary's generalisation, enforced by
