@@ -43,6 +43,24 @@ fixed and two graduated duplicates drained, but it wants a dedicated drain pass 
 graduating or retiring entries, where which preference entries are now stale is partly an
 owner-preference call.
 
+### Next safe step (owner-directed 2026-06-19): the four prose-width-hard records → analysis + joint decision + protocol
+
+Four long-lived records sit at prose-line-width `hard`: `repo-continuity.md`,
+`agentic-engineering-enhancements.next-session.md` (this record), the retired
+`agent-collaboration-research.next-session.md`, and `statusline-enhancements.next-session.md`.
+They were deliberately NOT reflowed this pass — the substance is fully conserved; reflowing
+purely to clear the width number is the fitness-chasing the owner forbids, and `repo-continuity`
+additionally carries an uncommitted peer no-throw change. The owner directed the next session to
+**analyse these files, then jointly (owner + agent) work out the proper action for records of this
+shape, then save that decision as a future protocol to refine.** The open question to settle:
+what is the right action for `index-narrative-tables` records whose table rows and dense
+narrative structurally exceed the 100-char prose-width limit — reflow the reflowable prose while
+exempting genuine table rows; raise/relax the width metric for this `merge_class`; split the
+metric (table-aware); or accept-and-annotate? The decision becomes a written protocol (likely a
+rule or a `fitness`-metric refinement) so future records of this shape have a settled disposition
+rather than a recurring per-session judgement. Do the analysis first-hand before proposing; the
+fitness signal is routing evidence, not the target.
+
 ## Collaboration-Doctrine Decomposition Lane — brief authored (2026-06-17, Phobos turns Singularity)
 
 Authored [`agent-tooling/future/collaboration-directive-decomposition.plan.md`](../../../plans/agent-tooling/future/collaboration-directive-decomposition.plan.md)
@@ -563,6 +581,7 @@ passes) is in git history and the [`curator-passes/`](../curator-passes/) ledger
 | `Tulip spins Xylem` | `claude` | `Opus 4.8 (1M)` | `34b8e5` | `PDR-105 reference-direction burndown: §Context SDP/DIP fix; stable-addressed-surface exemption (validator + corollary generalisation) + built --verbose; wired no-moving-targets + practice-core-portability to PDR-105; retired consolidate-docs 7d; inverted dont-break-build to own the green-gate invariant; validator 197→145; tracks/workstreams + bulk burndown deferred to fresh budget` | 2026-06-19 | 2026-06-19 |
 | `Siren guards Reef` | `claude` | `Opus 4.8 (1M)` | `e0eb7f` | `PDR-105 burndown COMPLETED 145→0 (Tulip successor): portability 55 (7ac5fe657) + durability 90 (6893962c2), pure de-link, 3 docs-adr passes APPROVED, gate green, NOT pushed; Task-2 tracks/workstreams operational surfaces retired (uncommitted) + 7 self-made tombstones fixed; handed to Drake lifts Obsidian — blocking remaining: PDR-011/ADR-150 foundational edits, dir deletion, validator warn→error escalation, ADR-026/093 coverage gaps, PDR-058:359 + register-identity stale-link tombstones` | 2026-06-19 | 2026-06-19 |
 | `Drake lifts Obsidian` | `claude` | `Opus 4.8 (1M)` | `9258d7` | `PDR-105 burndown COMPLETE (Siren guards Reef successor): Tranche A doctrine cures d8ec8867c (de-links + PDR-011/ADR-150/PDR-027/PDR-058 + no-moving-targets:135 reconciliation; docs-adr APPROVED); Tranche B 774a49e5e (tracks/workstreams deleted + PDR-049/050 manifest reconciled + §Notes past-tense; owner-authorised); Tranche C 563487f79 (validate-reference-direction report-only→blocking + .agent/analysis/ ephemeral; code/test-expert APPROVE; probe-proven); validator now BLOCKING at 0; backticked-detection deliberately rejected; NOT pushed` | 2026-06-19 | 2026-06-19 |
+| `Finch binds Halo` | `claude` | `Opus 4.8 (1M)` | `b0831c` | `dedicated-knowledge-curation: drained pending-graduations to decision-debt 0 by DECIDING each item on best-effort (PDR-104, not deferring the "owner-gated" tags); rotated napkin; graduated 7 repo-local patterns + a PDR-104 safety-scoping amendment + the over-gating/negation-contrast recurrence to the action-time-structural-interrupt t2 inventory (new-PDR route rejected as the PDR-098 self-referential trap); per-user MEMORY.md over-long index lines fixed + 2 graduated duplicates drained; comms absorption confirmed (buffer at rest); 7c/7d audits clean; four prose-width-hard records deferred to a next-session joint analysis → protocol lane; NOT pushed` | 2026-06-19 | 2026-06-19 |
 
 ## Cross-Plan and Cross-Thread Links
 
