@@ -64,51 +64,12 @@ incomplete, not licence to let it age here.
 
 New capture appends below as inline-bracket entries — `- **<title>**` then a fenced
 bracket with pipe-separated `captured / source / target / trigger / size / status`
-fields (schema: `agent-tools/src/practice-fitness/item-count.ts`). The two live
-candidates below were conserved from the napkin at the 2026-06-18 Sandpiper
-consolidation; both are owner-decision-gated (surfaced to the owner this pass).
+fields (schema: `agent-tools/src/practice-fitness/item-count.ts`).
 
-- **New-vessel-for-new-kind: "don't fragment" never means "fold everything in"**
-  `[captured: 2026-06-17 | source: napkin (Phobos turns Singularity) |
-  target: pattern or rule clause refining consolidate-estate / no-plan-fragmentation
-  doctrine | trigger: a 2nd instance across sessions, OR the owner judges the single
-  instance stable enough to graduate now | size: S | status: pending]`
-  When the "consolidate the estate / don't fragment the plan estate" reflex points at
-  folding new work into an existing plan, the situational check is whether the work
-  differs in *kind* — if it does, a new bounded vessel with an explicit declared
-  boundary (depend, don't merge) is the non-fragmenting shape. One clean owner-corrected
-  instance; a doctrine-by-analogy cure not fully covered by
-  `scope-from-goal-before-approach` or `consolidate-estate-decouple-execution`. Holds as
-  decision-debt until a second instance confirms stability or the owner rules.
-
-- **Best-effort consolidation is only as safe as the check that follows (PDR-104 ↔ PDR-098)**
-  `[captured: 2026-06-18 |
-  source: napkin (Wisteria spins Bark, "Last insights before handoff") |
-  target: amendment linking PDR-104 and PDR-098 (and the PDR-089 conservation-reflex
-  external-check) | trigger: owner ratifies the link this consolidation, OR the next
-  consolidation-safety / autonomy design pass | size: S | status: due]`
-  PDR-104 (best-effort doctrine authoring in dedicated consolidation) is only as safe as
-  the check that follows it. The 2026-06-18 session's four owner-corrections show that for
-  an *owner-present* pass the flow self-corrects via the owner; for an *owner-absent*
-  autonomous consolidation the correction must be **mechanical** (the PDR-098
-  recurrence-capture step, the proposed fitness-report-self-framing cure, the F-69
-  session-open sweep). So PDR-104 and the PDR-098 family are complementary: a solo
-  autonomous dedicated-consolidation, before those mechanisms exist, is higher-risk than
-  PDR-104 alone implies. Doctrine-shaping — surfaced for owner ratification before authoring.
-
-- **"owner-gated" / over-caution reflex: recurrence clears the PDR-098 bar (action-time mechanism overdue)**
-  `[captured: 2026-06-19 |
-  source: napkin (Drake lifts Obsidian) + Merlin spins Cirrus + Sandpiper lifts Downdraft instances |
-  target: PDR-shaped synthesis (over-gating family + gates-must-be-citable + no-question-when-forced)
-  AND action-time-mechanism recurrence evidence for the action-time-structural-interrupt design lane |
-  trigger: owner ratifies the synthesis, OR the next action-time-mechanism design pass |
-  size: M | status: due]`
-  The over-caution / over-gating reflex — reaching for a softer move (ask / gate / isolate / widen)
-  instead of the harder correct one (decide from doctrine, fix the type, commit) — has now recurred
-  across at least three distinct agents this period (Sandpiper ~4x, Merlin's worktree + fabricated
-  gate, Drake's triple "owner-gated" on PDR-105-mandated moves). The owner corrections this session,
-  *"'owner-gated' is a tombstone and an excuse in almost all cases"* and *"widen hides a type
-  problem"*, are the same family. Passive napkin guidance is proven not to fire at the action moment
-  (PDR-098 recurrence-despite-home). Two routes, surfaced for owner: (1) a PDR synthesising the
-  citable-gate / forced-answer / over-caution doctrine; (2) recurrence evidence that the action-time
-  structural-interrupt mechanism is overdue.
+*Register drained (2026-06-19 dedicated consolidation, Finch binds Halo). Every live
+candidate was decided this pass per PDR-104 best-effort authority — the "owner-gated"
+tags the prior pass attached were the over-caution fig-leaf PDR-104 §Enables names, not
+real gates (`fabricated-gate-as-avoidance`, `over-caution-root-is-perfectionism`). The
+substance reached its permanent home: the new-in-kind vessel doctrine and the
+over-caution recurrence evidence are live in their homes, and the best-effort-safety
+link is folded into PDR-104 itself. New capture appends below.*

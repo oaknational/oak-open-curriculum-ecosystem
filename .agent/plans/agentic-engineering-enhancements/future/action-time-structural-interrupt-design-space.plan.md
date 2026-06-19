@@ -411,6 +411,58 @@ citing testing-strategy. This is a **second fresh homed-doctrine-not-firing inst
 this session** (alongside conservation-first above) — the recurrence rate the t2/t3
 mechanism choice needs as its evidence base.
 
+## Worked Instance — 2026-06-19 Recurrence Cluster: Over-Gating and Negation-Contrast Tombstones
+
+A cluster of recurrence-despite-home instances inside one period (the PDR-105
+burndown and no-throw-migration sessions, four distinct agents), adding two
+semantic-pathogen classes to the t2 inventory — both with **unusually strong
+partial firing signatures**, which makes them the leading t3 empty-quadrant
+candidates after the conservation-first instance above.
+
+**Pathogen A — over-gating / "owner-gated"-as-tombstone.** The reflex reaches for
+a *softer* move (ask / gate / isolate / widen) instead of the harder correct one
+(decide from doctrine, fix the type, commit). Instances this period: Merlin spins
+Cirrus invented a git worktree off `main` to "avoid disturbing" a peer sharing the
+checkout (same-branch claims + explicit-pathspec is the protocol) **and** a
+fabricated gate "once the other agent clears" to defer consolidation; Drake lifts
+Obsidian labelled three *doctrine-forced* moves "owner-gated" (residue deletion
+PDR-105 Task 2 mandates, the validator report→blocking escalation PDR-105
+§Consequences mandates, the substrate-manifest reconciliation); Sandpiper ~4×
+(an AskUserQuestion the owner rejected, the useful-now reframe). Owner correction:
+*"'owner-gated' is a tombstone and an excuse in almost all cases"* and *"I don't
+accept your made up gate … do it now."* The doctrine is **exhaustively** homed —
+`over-caution-root-is-perfectionism` (its tells literally list "owner-gated" and
+"awaiting a second instance"), `fabricated-gate-as-avoidance`, PDR-098, PDR-100,
+PDR-104 (§Enables: owner-gating "is no longer a citable reason to defer") — and it
+did **not** fire at the action moment. A new synthesising PDR was rejected at the
+2026-06-19 consolidation precisely as the t6 self-referential trap (another passive
+doc on top of five). Firing signature (t3): the literal label `owner-gated` /
+`owner-flagged` is a partial surface signature, and in a dedicated-consolidation
+session the harness knows the goal — a pending-graduation or buffer item tagged
+"owner-gated" whose home is doctrine the primary agent may author under PDR-104 is
+mechanically detectable; the advisory cognitive content is "is the gate citable to a
+real owner reservation, or fabricated?" The fabricated precondition ("once X clears",
+"needs a 2nd instance") is the structural tell.
+
+**Pathogen B — negation-contrast tombstones.** Siren guards Reef wrote ~7
+negation-contrast tombstones ("lives in X — *not* a separate surface", "workstream
+surface retired") **while executing a tombstone-removal task**.
+`no-tombstones-for-removed-ideas` already names this exact form as "the most
+insidious" and already records that the write-time hook carries only a narrow set of
+banner literals and misses the structural "X — not Y" form, which "needs a smarter
+detector or an output-time review pass". So this is recurrence-despite-home with the
+home itself naming the gap. Firing signature (t3): a negation bound to a just-removed
+concept is structural, not literal — the candidate is the output-time review pass the
+rule anticipates, fired mechanically at write/commit time over prose diffs, not
+another passive clause.
+
+Why this cluster is load-bearing for t2/t3: it is the recurrence *rate* PDR-098 names
+as the unbuilt evidence base — four agents, one period, two distinct pathogens, every
+one homed and none firing. Both pathogens have a stronger mechanical handle than the
+purely-semantic conservation-first case, so they sharpen t3's "occupied for one
+concrete class" question. Candidate mechanisms are **not** pre-authored here, per the
+scope discipline below.
+
 ## Note on Scope Discipline
 
 This is a strategic design-space plan. It contains no executable workstreams or

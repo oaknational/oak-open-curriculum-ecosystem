@@ -112,6 +112,24 @@ cite this PDR.
   (the cost the owner was paying) is worse than a corrected best-effort edit. The
   knowledge flow exists precisely to catch and fix it.
 
+  **The correction channel differs by session shape (scoping the safety argument).**
+  This policy is only as safe as the check that follows it, and that check is
+  different for an owner-present versus an owner-absent run. In an **owner-present**
+  dedicated consolidation, the flow self-corrects in real time — the owner reads the
+  surfaced candidate list and corrects a bad call the same session (the 2026-06-18
+  Wisteria session and the 2026-06-19 pass that authored *this* note both did
+  exactly that, several times). In an **owner-absent / autonomous** consolidation the
+  same-session owner correction is unavailable, so the correction must be
+  **mechanical** — the PDR-098 recurrence-capture step at the drain, the
+  fitness-report self-framing candidate, the session-open buffer-state sweep. Those
+  action-time mechanisms are the open lane in PDR-098 and the
+  action-time-structural-interrupt design space; until they exist, a *solo autonomous*
+  dedicated consolidation carries more unbounded risk than this policy's headline
+  implies. The mitigation is not to re-impose owner pre-ratification (that re-creates
+  the over-gating cost) but to prefer owner-present runs for the densest Core work
+  and to treat building the PDR-098 mechanisms as the thing that makes owner-absent
+  best-effort authoring genuinely safe.
+
 ## Falsifiability
 
 Falsified if best-effort doctrine authoring in consolidation sessions produces a

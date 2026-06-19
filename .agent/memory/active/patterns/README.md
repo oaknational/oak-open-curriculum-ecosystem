@@ -171,7 +171,7 @@ surface that makes later governance or enforcement honest.
 
 ## Pattern Index
 
-### Code (20)
+### Code (22)
 
 - **Additive-Only Schema Decoration** -- Use this when: a decorator or enrichment pass modifies a third-party schema and must not overwrite properties that the upstream source already defines. → [additive-only-schema-decoration.md](additive-only-schema-decoration.md)
 - **Boundary Narrowing for Schema Types** -- Use this when: a schema type is optional but at a specific call site the value is known to exist, and a non-null assertion or runtime throw is tempting. → [boundary-narrowing-for-schema-types.md](boundary-narrowing-for-schema-types.md)
@@ -193,6 +193,8 @@ surface that makes later governance or enforcement honest.
 - **Template Literal Derived Union with Builder** -- Use this when: a string union type is the cross-product of two smaller unions joined by a separator, and code constructs members at runtime via template literals. → [template-literal-derived-union.md](template-literal-derived-union.md)
 - **Unknown Until Validated** -- Use this when: a function produces data whose type cannot be statically verified and a validation boundary exists downstream. → [unknown-until-validated.md](unknown-until-validated.md)
 - **Validation Error Severity Separation** -- Use this when: a schema validation error message lists all absent fields alongside actually failing fields, making operators debug the wrong variables. → [validation-error-severity-separation.md](validation-error-severity-separation.md)
+- **"Widen" Is a Type Smell — Discriminate Model-Wrong from Correct-and-Violated** *(anti-pattern)* -- Use this when: about to widen a list, type, union, or allowlist to make a case pass (or an owner/reviewer flags a "widen") — the reach for a wider shape usually hides a type problem. → [widen-is-a-type-smell.md](widen-is-a-type-smell.md)
+- **A Throw That Only Narrows a Too-Wide Return Type → Strengthen the Type** -- Use this when: migrating a throw to a Result type and the throw exists only to narrow a too-wide upstream return type, so its error arm would be permanently unreachable. → [throw-as-narrowing-artifact-strengthen-the-type.md](throw-as-narrowing-artifact-strengthen-the-type.md)
 
 ### Architecture (6)
 
@@ -203,7 +205,7 @@ surface that makes later governance or enforcement honest.
 - **Wire-Format-Aware Redaction** -- Use this when: telemetry redaction protects structured objects or URLs, but secrets can also travel through raw encoded strings such as `application/x-www-form-urlencoded` request bodies. → [wire-format-aware-redaction.md](wire-format-aware-redaction.md)
 - **Workaround Debt Compounds Through Rationalisation** -- Use this when: a workaround exists and someone is explaining why it's justified, especially when invoking "different purposes" or "separate concerns". → [workaround-debt-compounds-through-rationalisation.md](workaround-debt-compounds-through-rationalisation.md)
 
-### Process (44)
+### Process (47)
 
 - **ADR by Reusability, Not Diff Size** -- Use this when: closing a small implementation lane and deciding whether the decision it encoded deserves to be promoted to an ADR. → [adr-by-reusability-not-diff-size.md](adr-by-reusability-not-diff-size.md)
 
@@ -250,8 +252,11 @@ surface that makes later governance or enforcement honest.
 - **Quote Authoritative Language Exactly** *(anti-pattern)* -- Use this when: restating mission, vision, licence, owner-stated, or other protected / authoritative source language in a doc, summary, or prose passage. → [quote-authoritative-language-exactly.md](quote-authoritative-language-exactly.md)
 - **A Fidelity Audit Is Not a Currency Audit** *(anti-pattern)* -- Use this when: verifying a claim that rests on an inherited surface (a record, a thread note, a prior session's framing) before relying on it. → [fidelity-audit-is-not-currency-audit.md](fidelity-audit-is-not-currency-audit.md)
 - **A North-Star Doc Conserves Sprawl Instead of Delegating** *(anti-pattern)* -- Use this when: authoring or raising the standard of a vision, charter, strategy, or other north-star document whose job is to orient, not to explain everything. → [north-star-doc-conserves-sprawl.md](north-star-doc-conserves-sprawl.md)
+- **When "Don't Fragment" Meets New-in-Kind Work, the New Vessel Is the Non-Fragmenting Shape** -- Use this when: the "consolidate the estate / don't fragment" reflex points at folding new work into an existing plan or artefact — check first whether the work differs in KIND. → [new-vessel-for-new-kind.md](new-vessel-for-new-kind.md)
+- **Judge Usefulness From the Current Process, Never From Existence, Usage History, or Provenance** *(anti-pattern)* -- Use this when: asked whether a surface/rule/process is useful and reaching for usage history, the past decision that created it, or mere existence instead of present need. → [judge-usefulness-from-current-process.md](judge-usefulness-from-current-process.md)
+- **A Freshly-Landed Enforcement Gate's First Burndown Is Doctrine Co-Design, Not Mechanical Data-Entry** -- Use this when: burning down the violations a newly-landed validator/rule/scanner reports for the first time — classify each flag (defect / constitutive-stable-address / historical) before curing it. → [report-first-gate-burndown-is-doctrine-application.md](report-first-gate-burndown-is-doctrine-application.md)
 
-### Testing (6)
+### Testing (7)
 
 - **Accessibility as a Blocking Gate** -- Use this when: a project ships user-facing HTML and needs to prove WCAG compliance automatically. → [accessibility-as-blocking-gate.md](accessibility-as-blocking-gate.md)
 - **Conformance Tests for Library Adoption** -- Use this when: replacing hand-rolled code with a library import and keeping existing unit tests as library contract guards. → [conformance-tests-for-library-adoption.md](conformance-tests-for-library-adoption.md)
@@ -259,8 +264,9 @@ surface that makes later governance or enforcement honest.
 - **Plain-Node Built-Artefact Proof** -- Use this when: a workspace runs source with a dev loader locally but ships built JavaScript under plain Node, and dev success may mask production-startup defects. → [plain-node-built-artifact-proof.md](plain-node-built-artifact-proof.md)
 - **satisfies for Mock Completeness** -- Use this when: a test mock implements an interface and you need compile-time proof that all methods are present. → [satisfies-for-mock-completeness.md](satisfies-for-mock-completeness.md)
 - **Don't Test SDK Internals** -- Use this when: tests must prove product behaviour, not third-party SDK internal normalisation or compatibility logic. → [dont-test-sdk-internals.md](dont-test-sdk-internals.md)
+- **A Compile-Time-Only Helper Has No Standalone Runtime Test — Co-Land It With Its First Consumer** -- Use this when: authoring a helper whose entire value is a compile-time guarantee (exhaustiveness, type narrowing) and TDD pressure wants a standalone unit test before any consumer exists. → [compile-time-helper-lands-with-consumer.md](compile-time-helper-lands-with-consumer.md)
 
-### Agent (16)
+### Agent (17)
 
 - **Agentic Surface Separation** -- Use this when: designing or refactoring agent infrastructure that spans skills, rules, commands, subagents, or platform adapters. → [agentic-surface-separation.md](agentic-surface-separation.md)
 - **Audit Rule Body When Extending With a New Prohibition** -- Use this when: adding a new "X is forbidden" / "X must not appear" / "do not Y" clause to an existing rule, ADR, governance doc, or directive — scan the rule body itself for instances of the new prohibition before committing. → [audit-rule-body-on-prohibition-extension.md](audit-rule-body-on-prohibition-extension.md)
@@ -278,3 +284,4 @@ surface that makes later governance or enforcement honest.
 - **Bounded Structured Output for Workflow Fan-Outs** -- Use this when: authoring a Workflow script that uses `agent({schema})` fan-out, passing args into it, or consuming its verify-stage results. → [bounded-structured-output-for-workflows.md](bounded-structured-output-for-workflows.md)
 - **Fan Out the Verify, Gatekeep the Execute** -- Use this when: structuring a multi-agent or workflow session that mixes verification work with irreversible or coordination-dependent moves. → [fan-out-verify-gatekeeper-execute.md](fan-out-verify-gatekeeper-execute.md)
 - **Parallel `isolation:"worktree"` Dispatch Is Unreliable** -- Use this when: considering a parallel `Agent` batch with `isolation:"worktree"` for non-trivial work that depends on a specific branch HEAD or specific repo state. → [parallel-worktree-dispatch-unreliable.md](parallel-worktree-dispatch-unreliable.md)
+- **Deleting an Operational Memory/State Surface → Reconcile the Substrate-Contracts Manifest** -- Use this when: retiring or deleting an operational memory/state surface (a directory, register, or convention) that may have a contract entry in the PDR-049/050 substrate manifest. → [reconcile-substrate-manifest-on-surface-deletion.md](reconcile-substrate-manifest-on-surface-deletion.md)

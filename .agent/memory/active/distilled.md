@@ -20,7 +20,35 @@ Refined cross-session lessons, conserved between napkin rotation and graduation 
 a permanent home. Each entry earns its place by being specific, actionable,
 non-obvious, and terse.
 
-*No current entries: the register is drained (2026-06-16). Every cross-session
-lesson reached its permanent home — a pattern, a PDR, a rule, a governance doc, or
-the frictions register — or was confirmed already-homed. New napkin rotations
-append below.*
+Entries below are staged cross-session lessons whose substance is conserved but
+whose final home is not yet fixed (a graduation candidate surfaced to the owner, or
+a single-instance technique awaiting a second instance). New napkin rotations append
+below.
+
+## A directive that conflicts with an Accepted ADR → directive supersedes; amend the ADR
+
+When an owner directive (e.g. "increase strictness — convert every throw") conflicts
+with an **Accepted** ADR (ADR-088 §"Keep Exceptions For" keeps exhaustiveness/invariant
+throws), the resolution is neither to paper over the conflict nor to over-dramatise it
+as a fork needing a big decision. The owner ruling (2026-06-19, no-throw migration):
+*"I author the ADRs; increase strictness, update the ADRs to match."* So: the directive
+supersedes, and the **ADR is amended to match** in the same arc — the ADR stays the
+architectural source of truth, never left silently contradicted by live practice.
+**Graduation candidate** (surfaced to owner): this is portable directive-vs-ADR
+precedence governance — candidate home is a `development-practice.md` clause or a PDR
+on decision-record authority. Stable, owner-stated; held here pending the owner's
+shape-call on its home (the substance is about the owner's own authority over ADRs).
+Siblings: repo-continuity invariant "owner direction beats plan"; PDR-091
+(precedence-is-not-approval).
+
+## Parsing interleaved/parallel tool output: key by a stable prefix, cross-check sums
+
+When parsing stateful logs from a parallel/interleaved runner (e.g. `turbo` running
+tasks concurrently, with CR line-endings), "nearest-header" file attribution is unsafe:
+interleaving and CR endings can misattribute lines, producing phantom aggregates (a
+"307 warnings in one file" that was really a misparse — the workspace's true total was
+77). Cure: key the stateful parse by the **stable workspace/task prefix** the runner
+emits, and **cross-check** per-file sums against the gate's authoritative per-workspace
+totals as an independent checksum. Single-instance debugging tactic (2026-06-19, Siren
+mends Rudder); staged for a second instance to confirm the general shape before
+graduating to a pattern. Sibling: [`tool-output-framing-bias`](patterns/tool-output-framing-bias.md).
