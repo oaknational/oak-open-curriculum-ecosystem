@@ -12,7 +12,7 @@ boundary checks fire as artefacts, not aspirations; this PDR adds a new tripwire
 that family);
 the `re-apply-first-question-at-elaboration-boundaries` rule (the **pruning** boundary
 question — "could it be simpler?"; this PDR adds the sibling **scoping** question);
-[`plan-body-first-principles-check`](../../rules/plan-body-first-principles-check.md)
+`plan-body-first-principles-check`
 (the plan-authoring-time companion);
 the `passive-guidance-loses-to-artefact-gravity` pattern (why a reminder is not enough);
 `open-questions.md` Q-001 (the same structural problem for report-only fitness — a
@@ -147,4 +147,4 @@ an instance of that policy: not owner-pre-ratified, offered to the flow to be sh
 by the frictions of applying it.
 
 Operationalised by the always-applied rule
-[`scope-from-goal-before-approach`](../../rules/scope-from-goal-before-approach.md).
+`scope-from-goal-before-approach`.

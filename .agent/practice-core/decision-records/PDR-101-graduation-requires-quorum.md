@@ -107,7 +107,7 @@ would be confirmed by continued bidirectional miscalibration catches.
 This PDR is itself prose, not a wired actuator — by its own enforce-edge logic it
 is the no-op-actuator risk it names. It is accepted as a *discipline* (the agent
 convenes the quorum because the lesson is internalised), not a gate; the
-[`action-time-structural-interrupt`](../../plans/agentic-engineering-enhancements/future/action-time-structural-interrupt-design-space.plan.md)
+`action-time-structural-interrupt`
 design space is where a mechanical firing surface for disciplines like this is
 explored.
 

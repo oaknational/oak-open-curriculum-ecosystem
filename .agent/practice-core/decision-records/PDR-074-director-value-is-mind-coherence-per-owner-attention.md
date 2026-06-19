@@ -20,7 +20,7 @@ team-scale mind-shape the recursion produces — two-mode coherence);
 (handoff protocol this PDR's checklist applies at);
 [PDR-026](PDR-026-per-session-landing-commitment.md)
 (landing-commitment grounding this PDR's substrate-work standby applies);
-[ADR-183](../../../docs/architecture/architectural-decisions/183-comms-event-tag-namespace-substrate.md)
+ADR-183
 (failure-mode capture substrate this PDR's substrate-observer-of-record
 property names as Director duty).
 

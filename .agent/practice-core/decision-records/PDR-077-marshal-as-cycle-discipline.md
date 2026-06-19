@@ -29,7 +29,7 @@ principle);
 [PDR-075](PDR-075-director-substrate-writing-discipline.md)
 (Director substrate-writing discipline — Commit Marshal cycle landings
 emit substrate events into the same stream the Director writes into);
-[ADR-185](../../../docs/architecture/architectural-decisions/185-comms-event-auto-acceptance-metadata.md)
+ADR-185
 (comms-event auto-acceptance metadata — composes with this PDR's
 empirical-cure observation: throughput improves on multiple axes at once,
 of which marshal-as-role is one).

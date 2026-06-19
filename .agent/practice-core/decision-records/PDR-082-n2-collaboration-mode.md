@@ -18,7 +18,7 @@ role is explicitly opt-in);
 [PDR-078](PDR-078-liveness-heartbeat-contract.md)
 (liveness-heartbeat contract — the protocol this PDR scopes for
 n=2 reduction);
-[`start-right-team` SKILL](../../skills/start-right-team/SKILL-CANONICAL.md)
+`start-right-team` SKILL
 (team-bootstrap workflow — the SKILL this PDR amends scope for);
 `feedback_coordinator_role_threshold` user-memory
 (coordinator role expected default at ≥4 agents; n=2 mode generalises

@@ -16,7 +16,7 @@ mistakes);
 [PDR-101](PDR-101-graduation-requires-quorum.md)
 (graduation review rigor — a *review* mechanism that composes with best-effort
 authoring, not an owner-pre-ratification gate);
-[`over-caution-root-is-perfectionism`](../../memory/active/patterns/over-caution-root-is-perfectionism.md)
+`over-caution-root-is-perfectionism`
 and the `gates-must-be-citable` discipline (the failure mode this policy names).
 
 ## Context

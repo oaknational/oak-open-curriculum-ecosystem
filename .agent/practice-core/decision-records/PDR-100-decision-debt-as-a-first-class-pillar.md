@@ -14,7 +14,7 @@ graduate/enforce edge and the buffer's lifecycle);
 (buffer surfaces are flow-control; fitness pressure is a rate signal);
 [PDR-068](PDR-068-pipeline-back-pressure-as-structural-cure-signal.md)
 (back-pressure routes to a pipeline diagnostic, never an envelope raise);
-[ADR-144](../../../docs/architecture/architectural-decisions/144-two-threshold-fitness-model.md)
+ADR-144
 (the decision-debt count metric is the substrate sensor this PDR makes
 first-class).
 

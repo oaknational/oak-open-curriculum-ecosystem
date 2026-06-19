@@ -529,7 +529,7 @@ recognise it as a failure mode needed the polarity at a glance, not after
 parsing the body.
 
 The host operational form has stabilised
-([`memory/active/patterns/README.md` § Polarity](../../memory/active/patterns/README.md))
+(`memory/active/patterns/README.md` § Polarity)
 with the polarity required for entries authored 2026-05-05 onwards and a
 backfill pass underway across the pre-2026-05-05 corpus. Per PDR-007 §Routing,
 polarity is a *routing concern* (how substance is classified into the patterns
@@ -569,7 +569,7 @@ same consolidation pass that lands this amendment, completing the host
 operational backfill.
 
 **Reviewer**. `docs-adr-expert` + `onboarding-expert` per
-[`invoke-doc-and-onboarding-experts-on-significant-changes`](../../rules/invoke-doc-and-onboarding-experts-on-significant-changes.md)
+`invoke-doc-and-onboarding-experts-on-significant-changes`
 (this amendment is a Practice-governance change to the pattern-graduation
 contract).
 
@@ -648,7 +648,7 @@ target. If applying the question changes the target for ≥1 entry,
 the discipline is firing usefully.
 
 **Reviewer**. `docs-adr-expert` per
-[`invoke-doc-and-onboarding-experts-on-significant-changes`](../../rules/invoke-doc-and-onboarding-experts-on-significant-changes.md)
+`invoke-doc-and-onboarding-experts-on-significant-changes`
 (Practice-governance amendment). Owner-direction-evidenced (Mistbound
 reframing worked instance).
 

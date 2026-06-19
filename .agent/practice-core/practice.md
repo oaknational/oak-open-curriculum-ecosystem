@@ -26,7 +26,7 @@ work can inspect it.
 
 **See also**: For the Practice Core files and their roles, see [index.md](index.md). For navigable
 links to the host repo's directives, ADRs, and tools,
-see [practice-index.md](../practice-index.md) — the bridge between the portable Core and the
+see practice-index.md — the bridge between the portable Core and the
 host repo.
 
 ## Three Layers
@@ -392,7 +392,7 @@ graph LR
 | Host exploration tier (see practice-index bridge)                           | Design-space explorations — option-weighing documents that inform ADRs and plans                                                                                |
 | `.agent/reference/` (or equivalent)                                        | Curated library tier — owner-vetted, evergreen, deliberately-promoted read-to-learn material. Promotion-gated per [PDR-032](decision-records/PDR-032-reference-tier-as-curated-library.md) (substantiate / justify / owner-vet). |
 | `.cursor/`, `.claude/`, `.gemini/`, `.github/`, `.agents/`, `.codex/`      | Platform adapters: thin wrappers and project config referencing canonical content                                                                                |
-| Repo's ADR directory                                                       | Permanent architectural decision records (path varies by repo; see [`practice-index`](../practice-index.md))                                                    |
+| Repo's ADR directory                                                       | Permanent architectural decision records (path varies by repo; see `practice-index`)                                                    |
 
 ### Minimum Operational Estate
 

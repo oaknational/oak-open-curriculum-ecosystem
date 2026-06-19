@@ -13,7 +13,7 @@ pdr_kind: governance
 distinction by naming the PDR↔ADR pattern for one specific
 substrate: PDR-066 is the portable doctrine, the corresponding
 ADR records the repo-bound substrate that operationalises it);
-[`practice-index.md`](../../practice-index.md)
+`practice-index.md`
 (host adoption and implementation bridge — the index is itself
 the substrate where portable PDRs gain their repo-bound phenotype
 references, so cross-references between a PDR and its phenotype

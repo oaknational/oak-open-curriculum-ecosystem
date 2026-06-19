@@ -106,7 +106,7 @@ the host's bridge index and ADR surface, not in the PDR.
 
 Two narrow carve-outs (the host's distilled-doctrine entry on
 Practice-Core portability ratifies both — see the bridge index
-[Practice-Core concept ↔ ADR map](../../practice-index.md#practice-core-concept--adr-map)):
+Practice-Core concept ↔ ADR map):
 
 1. **Practice-canonical directory references** describing the
    Practice's own canonical layout (`.agent/skills/`, `.agent/rules/`,

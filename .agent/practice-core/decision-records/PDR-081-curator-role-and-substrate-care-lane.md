@@ -23,7 +23,7 @@ operationalises).
 
 - **2026-06-14** (comms-research closeout consolidation; PDR still Proposed):
   **The per-pass log's disposition-pointer surface is superseded by**
-  [`permanent-doc-is-the-consolidation-record`](../../rules/permanent-doc-is-the-consolidation-record.md).
+  `permanent-doc-is-the-consolidation-record`.
   The curator's record is the commit plus the homed substance — git history is the
   pass-navigation index — NOT a per-pass file of "surfaces surveyed → disposition" and
   "concept → home" pointers, which are exactly the disposition/provenance ledger that rule
@@ -158,7 +158,7 @@ A curator engages when any of:
 ### Per-pass log contract (SUPERSEDED — see §Amendment Log)
 
 > **Superseded 2026-06-14** by
-> [`permanent-doc-is-the-consolidation-record`](../../rules/permanent-doc-is-the-consolidation-record.md):
+> `permanent-doc-is-the-consolidation-record`:
 > do **not** author a per-pass log file. The commit plus the homed substance are the
 > curator's record; git history is the pass-navigation index; the pass's observable claim
 > is a normal active claim. The contract below is retained as historical proposal context

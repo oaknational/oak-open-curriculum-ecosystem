@@ -38,7 +38,7 @@ unit).
   pickup by different checkouts, separate agents, or collaborators). The singular "Next safe step"
   field encodes a single-lane assumption; multi-lane threads use a `## Lanes` section (each lane a
   first-class pickup point, deferred lanes included with their trigger). Operative format-definer:
-  [`threads/README.md` §"Concurrent lanes"](../../memory/operational/threads/README.md); the
+  `threads/README.md` §"Concurrent lanes"; the
   `session-handoff` step-3 lane-state field and `continuity-practice.md` align to it as next
   touched (existing records reconcile lazily, never a mass rewrite). Cures the recurring collapse
   of the concurrent continuity graph (threads × lanes × identities × checkouts) into linear singletons.

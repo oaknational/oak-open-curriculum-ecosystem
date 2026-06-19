@@ -16,12 +16,12 @@ didn't-fire; markdown-ritual / platform-parity);
 autoimmunity safeguard);
 [PDR-038](PDR-038-stated-principles-require-structural-enforcement.md)
 (stated principles require structural enforcement);
-[metacognition directive](../../directives/metacognition.md)
+metacognition directive
 (pre-action ratification of the action-to-impact bridge);
-[`passive-guidance-loses-to-artefact-gravity`](../../memory/active/patterns/passive-guidance-loses-to-artefact-gravity.md)
+`passive-guidance-loses-to-artefact-gravity`
 (recall-dependent guidance loses under context pressure);
 the design-space plan
-[`action-time-structural-interrupt-design-space.plan.md`](../../plans/agentic-engineering-enhancements/future/action-time-structural-interrupt-design-space.plan.md)
+`action-time-structural-interrupt-design-space.plan.md`
 (the lane that explores the mechanism this PDR deliberately leaves open).
 
 ## Context

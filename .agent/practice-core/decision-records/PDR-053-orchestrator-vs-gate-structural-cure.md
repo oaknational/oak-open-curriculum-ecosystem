@@ -43,7 +43,7 @@ When the orchestrator's filename, banner, or surrounding language carries
 gate-coded vocabulary (`gates`, `pre-commit-validation`, `commit-skill-
 checks`), the agent under failure pressure rounds the orchestrator's
 identity into the blocking-hook identity (the failure mode named at
-[`patterns/eager-rounding-off-on-partial-structures.md`](../../memory/active/patterns/eager-rounding-off-on-partial-structures.md)).
+`patterns/eager-rounding-off-on-partial-structures.md`).
 The compounding chain produces bypass framings (`--no-verify` proposals,
 fabricated doctrinal collisions) that the substance does not require.
 
@@ -104,7 +104,7 @@ distilled.md. It did not inoculate subsequent agents:
 - Fronded fired the conflation AFTER the doctrine landed in HEAD.
 
 Reading-only cures lose to artefact gravity (per
-[`patterns/passive-guidance-loses-to-artefact-gravity.md`](../../memory/active/patterns/passive-guidance-loses-to-artefact-gravity.md)).
+`patterns/passive-guidance-loses-to-artefact-gravity.md`).
 The orchestrator's filename token "gates" pulls the rounded-off identity
 back into place under context pressure regardless of prior reading. Three
 co-firing structural surfaces (filename, banner, doctrine) close the gap
@@ -112,7 +112,7 @@ that any single surface leaves open.
 
 The `--no-verify` proposal is *forbidden* (per
 `feedback_no_verify_fresh_permission` and the
-[`no-verify-requires-fresh-authorisation`](../../rules/no-verify-requires-fresh-authorisation.md)
+`no-verify-requires-fresh-authorisation`
 rule); the structural cure addresses *why* agents reach for it under
 orchestrator failure even though they know the rule.
 

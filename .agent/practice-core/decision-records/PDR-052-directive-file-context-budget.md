@@ -34,7 +34,7 @@ as authoritative.
 The error rate of editing operations rises sharply under context
 pressure. The disposition that produces *"I'll just be careful"* under
 context pressure is the rounding-off failure mode named at
-[`patterns/eager-rounding-off-on-partial-structures.md`](../../memory/active/patterns/eager-rounding-off-on-partial-structures.md):
+`patterns/eager-rounding-off-on-partial-structures.md`:
 agents reach for shortcut framings (skip the section read; trust the
 prior summary; let the diff stand without re-reading the surrounding
 prose) precisely when the surrounding doctrine least tolerates
