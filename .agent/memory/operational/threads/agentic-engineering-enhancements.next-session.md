@@ -16,6 +16,33 @@ feedback-mechanism arc, taxonomy work) is retained in git and in the
 work brief and the recent identity stretch, per
 [`continuity-practice.md` §Disposition](../../../directives/continuity-practice.md).
 
+## Dedicated consolidation — buffers at rest (2026-06-19, Finch binds Halo)
+
+Goal-gated drain-all-buffers pass; the live curation buffers are at rest. The napkin
+rotated (the 2026-06-18/19 window archived verbatim); pending-graduations is at
+decision-debt 0; distilled holds 2 staged lessons (a directive-vs-Accepted-ADR
+governance candidate surfaced to the owner, and a parse-by-stable-key technique
+awaiting a 2nd instance).
+
+The 3 prior "owner-gated" register items were DECIDED on best-effort (PDR-104), not
+deferred — the over-caution doctrine they captured is already homed five ways, so the
+"new synthesising PDR" route was rejected as the PDR-098 self-referential trap, and the
+recurrence evidence (over-gating + negation-contrast, four agents this period) went to
+the action-time-structural-interrupt t2 inventory. The open gap there is the firing
+MECHANISM (PDR-098's empty quadrant), not more doctrine. Seven repo-local patterns and a
+PDR-104 amendment (best-effort safety differs by session shape) landed the same pass.
+
+Audits clean: 7c thread-register (no staleness, all banners present) and 7d
+collaboration-state (one fresh claim, empty queue, valid JSON). One stale open
+conversation (WS3A channel-choice, last entry 2026-04-26) surfaced for owner review, not
+auto-closed.
+
+**Open for a future pass (not curation debt):** the per-user Claude `MEMORY.md` buffer
+(~153 entries) is near its context-load budget. The flagged over-long index lines are
+fixed and two graduated duplicates drained, but it wants a dedicated drain pass —
+graduating or retiring entries, where which preference entries are now stale is partly an
+owner-preference call.
+
 ## Collaboration-Doctrine Decomposition Lane — brief authored (2026-06-17, Phobos turns Singularity)
 
 Authored [`agent-tooling/future/collaboration-directive-decomposition.plan.md`](../../../plans/agent-tooling/future/collaboration-directive-decomposition.plan.md)
