@@ -76,6 +76,10 @@ const EPHEMERAL_PREFIXES = [
   '.agent/memory/operational/threads/',
   '.agent/memory/active/',
   '.agent/state/',
+  // Analysis docs are dated, supersedable research outputs — ephemeral, not durable
+  // doctrine. Previously fell through to `other` (inert as a target), so a doctrine
+  // doc citing one was silently unflagged.
+  '.agent/analysis/',
 ] as const;
 
 /** Matches a line annotated as a deliberate historical reference. */

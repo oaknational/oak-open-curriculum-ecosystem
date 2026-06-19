@@ -17,12 +17,12 @@ import {
  * repo-specific one (portability axis), or a durable doc citing an ephemeral
  * surface (durability axis).
  *
- * **Report-first (exit 0).** There is pre-existing wrong-direction debt; a
- * hard-failing gate would brick the build. Per the repo's `new-rules-start-at-warn`
- * and report-only-fitness doctrine, this validator makes the debt mechanically
- * visible and trackable on every check run (un-masking it — PDR-105 §Enforcement),
- * and escalation to a blocking gate is a separate owner decision once the debt is
- * burned down. Wired into root `repo-validators:check`.
+ * **Blocking (PDR-105 §Enforcement).** The wrong-direction debt has been burned down
+ * to zero (the PDR-105 reference-direction burndown), so the validator now fails the
+ * gate on any wrong-direction reference — enforcement is mechanical, not prose
+ * (PDR-105 §Consequences). It ran report-first while debt existed (a hard-failing gate
+ * would have bricked the build) and escalated once the floor was reached. Wired into
+ * root `repo-validators:check` (CI and `pnpm check`).
  *
  * @packageDocumentation
  */
@@ -70,7 +70,7 @@ function reportViolations(violations: readonly ReferenceViolation[], verbose: bo
   writeLine(
     `validate-reference-direction: ${String(violations.length)} wrong-direction reference(s) — ` +
       `${String(byAxis.portability)} portability (Core → repo-specific), ` +
-      `${String(byAxis.durability)} durability (doctrine → ephemeral). REPORT-ONLY (PDR-105).`,
+      `${String(byAxis.durability)} durability (doctrine → ephemeral). BLOCKING (PDR-105 §Consequences).`,
   );
   writeLine('');
   writeLine('  Reference direction must flow toward the more fundamental artefact (PDR-105):');
@@ -109,6 +109,9 @@ async function main(): Promise<void> {
   }
 
   reportViolations(violations, process.argv.includes('--verbose'));
+  // Blocking (PDR-105 §Enforcement): the debt is burned down to zero, so any
+  // wrong-direction reference now fails the gate (repo-validators:check — CI + `pnpm check`).
+  process.exitCode = 1;
 }
 
 await main();

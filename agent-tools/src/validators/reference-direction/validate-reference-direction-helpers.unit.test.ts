@@ -34,6 +34,8 @@ describe('classifyLayer', () => {
     );
     expect(classifyLayer('.agent/memory/active/patterns/x.md')).toBe('ephemeral');
     expect(classifyLayer('.agent/state/collaboration/active-claims.json')).toBe('ephemeral');
+    // Analysis docs are dated, supersedable research artefacts — ephemeral, not `other`.
+    expect(classifyLayer('.agent/analysis/bulk-download-vs-api-comparison.md')).toBe('ephemeral');
   });
 
   it('classifies code and unknowns as other', () => {
@@ -138,6 +140,18 @@ describe('findReferenceDirectionViolations', () => {
     expect(violations[0].axis).toBe('durability');
   });
 
+  it('flags an ADR citing an analysis doc (durability) — analysis is ephemeral research', () => {
+    const files: ScanFile[] = [
+      {
+        path: 'docs/architecture/architectural-decisions/93.md',
+        content: 'see [analysis](../../../.agent/analysis/curriculum-structure-analysis.md)',
+      },
+    ];
+    const violations = findReferenceDirectionViolations(files);
+    expect(violations).toHaveLength(1);
+    expect(violations[0].axis).toBe('durability');
+  });
+
   it('reports portability (not durability) for a portable-core file citing an ephemeral surface', () => {
     const files: ScanFile[] = [
       {
@@ -210,12 +224,14 @@ describe('findReferenceDirectionViolations', () => {
     ];
     expect(findReferenceDirectionViolations(files)).toHaveLength(0);
   });
+});
 
-  // Stable-addressed-state exemption (PDR-105 stable-index corollary, generalised):
-  // a doctrine surface may link a singleton registry / log / schema whose ADDRESS is
-  // fixed even though its content churns — that is a safe dependency target, the
-  // abstraction the corollary's DIP rests on. The exemption is durability-only; the
-  // portability axis still refuses a portable-core file citing repo-specific state.
+// Stable-addressed-state exemption (PDR-105 stable-index corollary, generalised):
+// a doctrine surface may link a singleton registry / log / schema whose ADDRESS is
+// fixed even though its content churns — that is a safe dependency target, the
+// abstraction the corollary's DIP rests on. The exemption is durability-only; the
+// portability axis still refuses a portable-core file citing repo-specific state.
+describe('findReferenceDirectionViolations — stable-addressed-state exemption', () => {
   it('allows a rule citing the active-claims registry (stable-addressed state)', () => {
     const files: ScanFile[] = [
       {
