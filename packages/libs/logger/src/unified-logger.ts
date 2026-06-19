@@ -84,12 +84,10 @@ export class UnifiedLogger implements Logger {
   }
 
   private redactStringValue(value: string): string {
-    const redactedValue = redactTelemetryValue(value);
-    if (typeof redactedValue !== 'string') {
-      throw new Error('Telemetry redaction returned a non-string for string input.');
-    }
-
-    return redactedValue;
+    // redactTelemetryValue's `string` overload guarantees a string result for
+    // string input, so the former runtime narrowing guard is now enforced by
+    // the type system (ADR-088 / no-throw migration).
+    return redactTelemetryValue(value);
   }
 
   private redactContext(context: LogContext): LogContext {
