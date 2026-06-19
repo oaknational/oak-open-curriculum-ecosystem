@@ -39,7 +39,7 @@ surface.
   (thread [`agent-naming`][agent-naming]; shape C decided; Phase-1 era-pinning cure lands first —
   full detail in §Next Safe Steps › Agent Naming); (3) protocols/skills for examining production
   issues in Sentry; (4) organise the Sentry logging improvements those discoveries surface;
-  (5) refine the PostHog plan ([`mcp-product-analytics` thread](threads/mcp-product-analytics.next-session.md));
+  (5) refine the PostHog plan ([`mcp-product-analytics` thread](threads/paused/mcp-product-analytics.next-session.md));
   (6) plan integration of the oak-api repo into this ecosystem repo; (7) organise the EEF
   data-surfacing follow-ons
   ([gap research](../../plans/sector-engagement/eef/reference/eef-data-surfacing-gap-research-2026-06-12.md));
@@ -81,7 +81,6 @@ each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Fable 5 / Thyme wakes Canopy / record-condensation / 2026-06-12 (prior identities, 30+ seats: thread record identity table) |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Zephyrous Buffeting Falcon / skills-lane-relocated-to-educator-end-users / 2026-06-08 (prior identities: thread record) |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude-code / Opus 4.8 (1M) / Sandpiper lifts Downdraft / curator–dedicated-consolidation / 2026-06-18 (prior identities: thread record) |
 | `statusline-enhancements` | Claude Code statusline: Oak-mark, session-shape indicators, logo swap; lane in two `current/` plans (session-state, logo-modularisation). Live detail + the `feat/comms-research` divergence to reconcile: thread record | [record][statusline] | claude-code / Opus 4.8 / Vole calls Hollow / live-logo-swap-and-plan-harden / 2026-06-16 (prior identities: thread record) |
@@ -95,6 +94,7 @@ not the current session-priority lane. Reactivation is owner-directed.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
+| `eef` | EEF graph-tooling rebuild — D0–D7 delivered & shipped (v1.16.0); D7 proof dropped as overkill (paused 2026-06-19) | [record][eef] | claude / Fable 5 / Thyme wakes Canopy / record-condensation / 2026-06-12 (prior identities, 30+ seats: thread record) |
 | `school-data-search` | Oak School Data Search service (POC MVP): deep review complete, build-ready (paused 2026-06-19) | [record][school-data-search] | claude / Opus 4.8 / Fiery Sparking Caldera / deep-review-and-refinement / 2026-06-04 (prior identities: thread record) |
 | `semantic-search` | Search data foundations: upstream-schema alignment, bulk sourcing, minimal-adaptation arc (paused 2026-06-19) | [record][semantic-search] | claude / Opus 4.8 / Moonlit Waxing Nebula / upstream-realignment-specialist / 2026-06-03 |
 | `oak-kg-ontology-planning-review` | Plan the `oak-kg`/ontology work via a deep review of the Oak Curriculum Ontology repo (opened, not started; paused 2026-06-19) | [record][oak-kg-ontology] | claude / Opus 4.8 / Twilit Cascading Supernova / thread-opener-brief-only / 2026-06-04 |
@@ -113,7 +113,7 @@ not the current session-priority lane. Reactivation is owner-directed.
 ### Comms-Corpus Research — RETIRED 2026-06-14
 
 Thread concluded: WS0–WS7 complete, PR #208 merged to main (`a6b14a8a3`). Retired record:
-[`threads/agent-collaboration-research.next-session.md`](threads/agent-collaboration-research.next-session.md)
+[`threads/retired/agent-collaboration-research.next-session.md`](threads/retired/agent-collaboration-research.next-session.md)
 (carries the candidate-themes research substrate + the WS7 closeout conserved findings). Findings
 homed in **PDR-094** + **ADR-199**, the `reports/agentic-engineering/` WS2–WS6 synthesis, and the
 rightsizing keystone M4; the deep-convergence pass that was deferred here ran as this dedicated
@@ -148,29 +148,6 @@ follow. Orientation: read the thread record, then the plan, then re-grep the
    bridge; the future child plan owns any later enabled-control rollout.
 4. Do not implement gated `future/` endpoints or metadata until the owner
    explicitly promotes the relevant child plan.
-
-### EEF Graph-Tooling Rebuild
-
-The D0–D6 build arc is COMPLETE and SHIPPED (v1.16.0; live by default with a
-kill-switch flag) and Track-G executed the graph-tools redesign in full — the
-[`eef` record][eef] and the
-[EEF rebuild plan](../../plans/sector-engagement/eef/) /
-[graph plan](../../plans/connecting-oak-resources/knowledge-graph-integration/current/graph-tools-value-redesign.plan.md)
-todos are the durable authority for the arc's history (D0–D7 chronology,
-review outcomes, ADR-191, the contamination-correction arc, commits).
-
-Live remainder:
-
-1. **D7 — the teacher-value round-trip proof** (the master
-   `d7-teacher-value-round-trip` todo): delivered-value proof against
-   independent ground truth. The EXERCISE RECIPE banner in the
-   [`eef` record](threads/eef.next-session.md) carries the server-start
-   command and the four working JSON-RPC calls.
-2. Graph-estate close: `t6` + the full `t8` remain D7-gated by design (the
-   graph-estate items live in the plan todos).
-3. The seam-mapping taxonomy + "seams compose, never reconciled" law as a
-   reusable plan-template component — registered in
-   [`pending-graduations.md`](pending-graduations.md) (2026-06-12).
 
 ### Agentic-Engineering Curation
 
@@ -247,20 +224,20 @@ authority.
 - Knowledge preservation is absolute; fitness warnings route work, not deletion.
 - Shared memory/state files are always writable and commit-includable when dirty.
 
-[main-critical]: threads/main-critical-sonar-remediation.next-session.md
-[mcp-analytics]: threads/mcp-product-analytics.next-session.md
-[observability]: threads/observability-sentry-otel.next-session.md
+[main-critical]: threads/paused/main-critical-sonar-remediation.next-session.md
+[mcp-analytics]: threads/paused/mcp-product-analytics.next-session.md
+[observability]: threads/paused/observability-sentry-otel.next-session.md
 [agentic]: threads/agentic-engineering-enhancements.next-session.md
-[connecting]: threads/connecting-oak-resources.next-session.md
-[oer]: threads/exploring-open-education-resources.next-session.md
-[budget]: threads/architectural-budget-system.next-session.md
-[cloudflare]: threads/cloudflare-mcp-security-and-token-economy-plans.next-session.md
-[sector]: threads/sector-engagement.next-session.md
-[eef]: threads/eef.next-session.md
-[oak-kg-ontology]: threads/oak-kg-ontology-planning-review.next-session.md
-[school-data-search]: threads/school-data-search.next-session.md
-[semantic-search]: threads/semantic-search.next-session.md
+[connecting]: threads/paused/connecting-oak-resources.next-session.md
+[oer]: threads/paused/exploring-open-education-resources.next-session.md
+[budget]: threads/paused/architectural-budget-system.next-session.md
+[cloudflare]: threads/paused/cloudflare-mcp-security-and-token-economy-plans.next-session.md
+[sector]: threads/paused/sector-engagement.next-session.md
+[eef]: threads/paused/eef.next-session.md
+[oak-kg-ontology]: threads/paused/oak-kg-ontology-planning-review.next-session.md
+[school-data-search]: threads/paused/school-data-search.next-session.md
+[semantic-search]: threads/paused/semantic-search.next-session.md
 [agentic-mechanisms-discovery]: threads/agentic-mechanisms-discovery.next-session.md
-[branch-fitness]: threads/branch-fitness-and-push-cadence.next-session.md
+[branch-fitness]: threads/paused/branch-fitness-and-push-cadence.next-session.md
 [statusline]: threads/statusline-enhancements.next-session.md
 [agent-naming]: threads/agent-naming.next-session.md

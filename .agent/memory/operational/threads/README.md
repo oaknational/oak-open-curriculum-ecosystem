@@ -19,9 +19,24 @@ The live inventory of currently-active threads lives in
 Treat the repo-continuity table as the source of truth; this README is
 the convention document, not the inventory.
 
+## Directory layout (lifecycle → location)
+
+Records are filed by lifecycle state (owner-directed 2026-06-19):
+
+- **Active** threads → this directory root (`threads/<slug>.next-session.md`).
+- **Paused** threads → [`paused/`](paused/) (`threads/paused/<slug>.next-session.md`);
+  reactivation is owner-directed. On reactivation, `git mv` the record back to the root.
+- **Retired / completed** threads → [`retired/`](retired/)
+  (`threads/retired/<slug>.next-session.md`); retained as continuity history, never deleted.
+
+The repo-continuity `§ Active Threads` / `§ Paused Threads` tables and link
+definitions point at the lifecycle-correct path. Retired records are absent from
+both tables by design and carry a retirement banner (see below).
+
 ## What lives in this directory
 
-One `*.next-session.md` file per active thread. Each file contains:
+One `*.next-session.md` file per thread (active at the root; paused and retired in
+their subdirectories per the layout above). Each file contains:
 
 - **Thread identity** — which thread this record belongs to.
 - **Current continuation** — the branch, invocation pointer, controlling plan,

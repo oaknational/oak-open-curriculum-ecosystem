@@ -9,6 +9,12 @@ merge_class: index-narrative-tables
 ---
 # Next-Session Record — `eef` thread
 
+> **PAUSED 2026-06-19 (owner direction).** The D0–D7 build arc is delivered and shipped
+> (v1.16.0, live by default). The **D7 teacher-value round-trip proof is dropped as overkill** —
+> its underlying intent (delivered-value proof against independent ground truth) can be
+> transformed into a **later, more useful investigation** when this thread is reactivated. No
+> active next step; reactivation is owner-directed.
+
 ## Current Continuation
 
 - **2026-06-12 (Forge turns Basalt / claude-code Fable 5, `c4b882`) — EEF DATA SURFACING-GAP
