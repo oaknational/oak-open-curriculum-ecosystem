@@ -94,26 +94,60 @@ Four reviewed commits on `docs/planning-and-validation` (NOT pushed — owner co
   the green-gate invariant (was quoting `gate-recovery-cadence.plan.md` as "Authority"); that plan's
   banner corrected. docs-adr APPROVED. This is the exemplar bucket-A inversion cure.
 
-**REMAINING (fresh-budget multi-surface pass):**
+### Burndown progress (2026-06-19, Siren guards Reef `e0eb7f`) — validator 145 → 0 (Task 1 DONE)
 
-+ **Task 1 burndown — 145 left (90 durability + 55 portability).** Run
-  `pnpm --filter @oaknational/agent-tools validate-reference-direction -- --verbose` for the live
-  per-target list. Three cure-buckets: **A** doctrine→*moving* target (plan / individual `patterns/*.md`
-  / relocating thread record) → remove or invert (the dont-break-build inversion is the worked
-  exemplar); **C** genuinely-historical pointer → annotate `(historical reference)`; portability (PDRs
-  citing ADRs/rules/repo paths/ephemeral) → remove or restate portably. Biggest clusters at the
-  current 145-count (re-derive via `--verbose`): PDR-057 (7 portability), ADR-082 (7 durability,
-  semantic-search plan links, several archived → likely bucket C), PDR-056 + PDR-058 (5 portability
-  each), ADR-168 (4 durability). Many active-mem refs point at `patterns/passive-guidance-…md` (×8)
-  and `napkin.md` (×6) — a graduation signal (repeatedly-cited patterns may warrant durable homes).
-+ **Task 2 — tracks/workstreams retirement** (NOT started). NOTE: first-hand `grep` shows the opener's
-  "PDR-011 ×12 / ADR-150 ×10" counts are UNRELIABLE (raw word-count over-counts ordinary "track");
-  re-enumerate the LIVE doctrine surfaces per-concept. `tracks/`+`workstreams/` are NOT in the
-  validator's EPHEMERAL_PREFIXES, so this is independent of the count. Refs-first, THEN delete dirs.
-  PDR-105 §Notes still says they "were removed" — corrected to "slated for removal (pending)"; flip to
-  past-tense in the deletion commit.
-+ **Task 4 — escalate validator report-only → blocking** (owner decision, last; gated on burndown
-  reaching the agreed floor — zero-after-stable-addressed-exemptions).
+Two reviewed commits on `docs/planning-and-validation` (NOT pushed — owner controls push):
+
++ **Portability axis** (`7ac5fe657`): all 55 portability refs cured across 28 Practice-Core files
+  (PDRs/practice.md/README). docs-adr-expert APPROVED (two passes: PDR-057/056/058 priority, then
+  the remainder).
++ **Durability axis** (`6893962c2`): all 90 durability refs cured across 52 files (62 ADR, 19 rule,
+  9 directive). docs-adr-expert APPROVED-WITH-FIXES (5 MD012 footer-def double-blanks fixed).
+
+**Cure convention (reviewer-ratified, applies to any future ref):** pure **de-link** —
+`[label](target)` → `label` (label verbatim, inline AND reference-style), removing the
+dangling-on-arrival path dependency while conserving the named concept. Provenance blocks
+(Source/Supersedes) keep the de-linked prose; git is the provenance. **De-link is chosen over the
+`(historical reference)` marker** even for ADR→archived-plan refs (PDR-105 "retire, don't maintain";
+the marker only exempts a still-wrong link). napkin/distilled NOT allowlisted (Axis-1 ranks them
+most-ephemeral). Validator flags ONLY markdown links, so backticked/prose concept names are safe.
+
+**Task 2 — tracks/workstreams retirement (IN PROGRESS; all edits UNCOMMITTED, markdownlint exit 0).**
+DONE this session (refs-first, retarget-in-place to avoid numbered-list renumber churn): the
+operational/skill surfaces — `go`, `start-right-quick`, `session-handoff`, `consolidate-docs` (7c dropped
+the expired-track-cards check, renumbered seven→six), `napkin`, `memory/operational/README` (tracks row +
+track-card paragraph + workstream-retired block removed), `orientation`, `continuity-practice`,
+`respect-active-agent-claims`, plus two surfaces the first enumeration MISSED (`practice-bootstrap:463`,
+`register-identity:105`). All route tracks → harness task-list + napkin + claims; workstreams →
+thread-record `## Lanes`. KEY NUANCE: `workstreams/` is already a retired-surface tombstone (README +
+archive/); `tracks/` is empty. "workstream" has two senses — the operational lane-tracking *surface*
+(retired) vs a *scope descriptor* in PDR-027's identity model (RETAINED — do NOT purge). PDR-027 has no
+live dir-refs (no change); PDR-030 + practice.md:358 are retained-sense (no change).
+
+**BLOCKING remaining work (Drake lifts Obsidian) — every item is a live deliverable:**
+
+1. **PDR-011 body** (lines 49, 421–432 treat track cards as a live compliant surface): retire the live
+   treatment + add a new amendment-log entry recording the tracks retirement. The existing Session-5 and
+   runtime-track-card amendment entries are HISTORY-RECORDS (change-as-subject) — keep them.
+2. **ADR-150 mirror** (8, 38, 204–207, 265): same shape as PDR-011.
+3. **PDR-027:164** (track-card filename convention — light) + **no-moving-targets:133/152** (track-card-path
+   *examples* — replace with a live ephemeral example).
+4. **Delete `tracks/` + `workstreams/` directories** (destructive; confirm at the action moment) and flip
+   `PDR-105 §Notes` "slated for removal (pending)" → past-tense in the deletion commit.
+5. **docs-adr-expert review** on the PDR-011/ADR-150/PDR-027 amendments.
+6. **Escalate `validate-reference-direction` report-only → blocking.** Floor is reached (0). This is the
+   next live decision-and-action: decide the warn→error escalation (`new-rules-start-at-warn`) and wire it.
+7. **Validator-coverage gaps:** `ADR-026:90` (backticked-path citation) and `ADR-093:271` (link to
+   `.agent/analysis/`, a prefix absent from the validator's `EPHEMERAL_PREFIXES`) carry durable→ephemeral
+   refs the validator misses. Both fixes: de-link the two refs AND widen the validator's reach.
+8. **Pre-existing tombstones found this session:** `PDR-058:359` ("the single-rule shape … was wrong
+   because") — a rejection-label tombstone; lead with the positive "distinct impacts demand distinct cures"
+   that already follows it. `register-identity:103` links the retired `../commands/` dir — repoint to
+   `.agent/skills/consolidate-docs/SKILL-CANONICAL.md`.
+
+**COMMIT STATE:** the Task-2 operational edits + 7 self-created-tombstone fixes + this thread-record update
+are ALL UNCOMMITTED. Commit them as one reviewed "Task-2 refs-first" commit once Merlin spins Cirrus
+releases the `git:index/head` window (held now for the no-throw consolidation onto this branch).
 
 **NEXT-SESSION PICKUP (dedicated consolidation, owner-scoped to a fresh session 2026-06-18):**
 
@@ -462,6 +496,7 @@ passes) is in git history and the [`curator-passes/`](../curator-passes/) ledger
 | `Wisteria spins Bark` | `claude-code` | `Opus 4.8 (1M)` | `d143c9` | `curator — dedicated-consolidation (n=2 with Bluebell on SDK): operationalised PDR-098 recurrence-capture (consolidate-docs step-7 + semantic-pathogen inventory seeded); graduated PDR-104 best-effort policy (+ PDR-003/step-8 reconciliation) and 5 napkin patterns (incl. fluency-is-a-failure-vector, homing 13 dangling wikilinks); processed repo-continuity to rest (15 concluded entries conserved to pointers, verification-backed); 7c/7e audits; F-68. The HARD repo-continuity surface Skunk left for a specialist session is now done; testing-strategy assessed (reported).` | 2026-06-18 | 2026-06-18 |
 | `Sandpiper lifts Downdraft` | `claude-code` | `Opus 4.8 (1M)` | `0c6576` | `curator — dedicated-consolidation: buffers drained; continuity curated to live-work-only; testing recipes graduated; PDR-105 reference-direction invariants + validate-reference-direction enforcer landed; threads relocated to paused/retired; tracks/workstreams removal + ref-burndown deferred (refs-first)` | 2026-06-18 | 2026-06-19 |
 | `Tulip spins Xylem` | `claude` | `Opus 4.8 (1M)` | `34b8e5` | `PDR-105 reference-direction burndown: §Context SDP/DIP fix; stable-addressed-surface exemption (validator + corollary generalisation) + built --verbose; wired no-moving-targets + practice-core-portability to PDR-105; retired consolidate-docs 7d; inverted dont-break-build to own the green-gate invariant; validator 197→145; tracks/workstreams + bulk burndown deferred to fresh budget` | 2026-06-19 | 2026-06-19 |
+| `Siren guards Reef` | `claude` | `Opus 4.8 (1M)` | `e0eb7f` | `PDR-105 burndown COMPLETED 145→0 (Tulip successor): portability 55 (7ac5fe657) + durability 90 (6893962c2), pure de-link, 3 docs-adr passes APPROVED, gate green, NOT pushed; Task-2 tracks/workstreams operational surfaces retired (uncommitted) + 7 self-made tombstones fixed; handed to Drake lifts Obsidian — blocking remaining: PDR-011/ADR-150 foundational edits, dir deletion, validator warn→error escalation, ADR-026/093 coverage gaps, PDR-058:359 + register-identity stale-link tombstones` | 2026-06-19 | 2026-06-19 |
 
 ## Cross-Plan and Cross-Thread Links
 
