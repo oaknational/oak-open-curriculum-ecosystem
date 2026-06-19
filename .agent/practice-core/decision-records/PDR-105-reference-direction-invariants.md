@@ -21,9 +21,14 @@ A cross-artefact reference is a **dependency**: the referrer depends on the targ
 existing, at the target's location, in the referrer's context. A reference whose
 target is *less fundamental* than the referrer — more volatile in time, or more
 specific to one context — is a latent defect: it breaks when the target moves, is
-deleted, or is absent where the referrer is read. This is the Dependency Inversion
-Principle, applied to the knowledge substrate: depend on abstractions (durable,
-general doctrine), never on concretions (volatile, context-specific instances).
+deleted, or is absent where the referrer is read. The two axes are Robert C. Martin's
+**Stable Dependencies Principle** (SDP) applied to the knowledge substrate — *depend in
+the direction of stability* — generalised from SDP's original time-stability axis to a
+second, contextual one: every reference points toward an artefact at least as
+fundamental (durable, general) as the referrer. The **stable-index corollary** below is
+the **Dependency Inversion Principle** (DIP) proper: where a reference to a volatile
+target is unavoidable, depend on a stable *abstraction* — an identity resolved through
+one stable-addressed index — never on the concretion's volatile location.
 
 The defect surfaced concretely as link-rot (continuity/plan references to
 thread-record paths breaking when records were relocated by lifecycle) and as
