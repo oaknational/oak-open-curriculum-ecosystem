@@ -82,11 +82,8 @@ each thread record; this table is the repo-level index.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `eef` | EEF graph-tooling rebuild | [record][eef] | claude / Fable 5 / Thyme wakes Canopy / record-condensation / 2026-06-12 (prior identities, 30+ seats: thread record identity table) |
-| `oak-kg-ontology-planning-review` | Plan the `oak-kg`/ontology work, starting with a deep review of the Oak Curriculum Ontology repo (separate concern from the bulk-derived graph redesign) | [record][oak-kg-ontology] | claude / Opus 4.8 / Twilit Cascading Supernova / thread-opener-brief-only / 2026-06-04 — **opened, not started; deep review is a fresh session** |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Zephyrous Buffeting Falcon / skills-lane-relocated-to-educator-end-users / 2026-06-08 (prior identities: thread record) |
 | `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude-code / Opus 4.8 (1M) / Sandpiper lifts Downdraft / curator–dedicated-consolidation / 2026-06-18 (prior identities: thread record) |
-| `school-data-search` | Oak School Data Search service (POC MVP): briefs → report → plan → gate walk → **deep review complete** → build | [record][school-data-search] | claude / Opus 4.8 / Fiery Sparking Caldera / deep-review-and-refinement / 2026-06-04 (prior identities: thread record) |
-| `semantic-search` | Search data foundations: upstream-schema alignment, bulk sourcing, minimal-adaptation arc | [record][semantic-search] | claude / Opus 4.8 / Moonlit Waxing Nebula / upstream-realignment-specialist / 2026-06-03 |
 | `statusline-enhancements` | Claude Code statusline: Oak-mark, session-shape indicators, logo swap; lane in two `current/` plans (session-state, logo-modularisation). Live detail + the `feat/comms-research` divergence to reconcile: thread record | [record][statusline] | claude-code / Opus 4.8 / Vole calls Hollow / live-logo-swap-and-plan-harden / 2026-06-16 (prior identities: thread record) |
 | `agent-naming` | PDR-027 display-name derivation: versioned schema registry, session-hook identity surfaces, wordlist eras (v2 landed; v3 + era-pinning cure queued) | [record][agent-naming] | claude / Opus 4.8 / Squall hunts Troposphere / thread-open + v3-plan-author / 2026-06-13 (prior identities: thread record) |
 | `strategy-and-plan-estate-holistic-review` | Vision/strategy/plan-estate rework (experiment→product), **three co-equal first-class bodies on a four-layer informational model** (Oak strategy → vision → strategy → planning): vision done; strategy-layer discussion **resolved 2026-06-18** and the approach **reconceived**; **next: author the strategy corpus at `docs/strategy/`** (Body 2) with the estate read+extract prep in parallel; restructure's new boundaries informationally gated on the strategy | [record](threads/strategy-and-plan-estate-holistic-review.next-session.md) | claude-code / Opus 4.8 / Baobab lifts Topsoil / surveyor-synthesist / 2026-06-15, claude-code / Opus 4.8 / Ocelot binds Curfew / vision-author / 2026-06-17, claude-code / Opus 4.8 / Tempest spins Spire / controlling-plan author / 2026-06-17, claude-code / Opus 4.8 / Squall spins Stratus / Phase-2A ratification + articulation / 2026-06-17, claude-code / Opus 4.8 / Asteroid calls Meridian / approach-reconception / 2026-06-18 |
@@ -98,6 +95,9 @@ not the current session-priority lane. Reactivation is owner-directed.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
+| `school-data-search` | Oak School Data Search service (POC MVP): deep review complete, build-ready (paused 2026-06-19) | [record][school-data-search] | claude / Opus 4.8 / Fiery Sparking Caldera / deep-review-and-refinement / 2026-06-04 (prior identities: thread record) |
+| `semantic-search` | Search data foundations: upstream-schema alignment, bulk sourcing, minimal-adaptation arc (paused 2026-06-19) | [record][semantic-search] | claude / Opus 4.8 / Moonlit Waxing Nebula / upstream-realignment-specialist / 2026-06-03 |
+| `oak-kg-ontology-planning-review` | Plan the `oak-kg`/ontology work via a deep review of the Oak Curriculum Ontology repo (opened, not started; paused 2026-06-19) | [record][oak-kg-ontology] | claude / Opus 4.8 / Twilit Cascading Supernova / thread-opener-brief-only / 2026-06-04 |
 | `connecting-oak-resources` | Oak resource graph substrate for EEF | [record][connecting] | claude / Opus 4.8 / Galactic Glowing Prism / jc4-plan-authoring (kg collection) / 2026-06-02 (prior: Opalescent Cascading Planet, Stellar Waning Planet, Silvered Lurking Mask, all 2026-06-02) |
 | `branch-fitness-and-push-cadence` | Small-PR, push-often, branch-fitness, PR/Sonar protocol substrate | [record][branch-fitness] | Pelagic Snorkelling Sextant / codex / GPT-5 / Cycle 1 substrate capture / 2026-05-24 |
 | `mcp-product-analytics` | MCP product analytics design and Path-to-GA Programme | [record][mcp-analytics] | Stellar Glowing Satellite / claude / claude-opus-4-7 / Programme landed + amendments / 2026-05-26 |
@@ -134,28 +134,6 @@ is the owner-ordered prerequisite for v3 activation. Phases 2 (C wordlist
 curation, owner taste review BLOCKING) and 3 (v3 registry entry + activation)
 follow. Orientation: read the thread record, then the plan, then re-grep the
 `OAK_AGENT_IDENTITY_OVERRIDE` consumer set (plan-body first-principles check).
-
-### School Data Search
-
-All nine owner gates decided 2026-06-04, plus a high-stakes verification pass
-(reopened/resolved three: G-1 F-C→F-B; G-6 NI register + Scotland geospatial;
-coordinates dropped). **Deep review complete (2026-06-04, Fiery Sparking
-Caldera): sound, faithful, build-ready** — refinements committed `1839e9b8`
-(WS9 reuses `@oaknational/logger` stdio-only + `@oaknational/observability`;
-new WS11 access-gated value-proof school-picker page; canonical-ID a tested
-invariant + per-nation sourceId-identity check at WS4; England/GIAS
-front-loaded; change_events/import-run-inspection deferred post-go; report §6
-reframed; C-10 path fixed). **WS-D1 / G-8 DONE (2026-06-04): the 4-workspace
-bundle is ratified** (contracts + sdk [data/ingest/search modules] + client +
-apps/api under a new top-level `school-data-search/` tier; auth in apps/api;
-authored boundary rules — betty + fred reviewed/validated, 6-way split
-rejected; see the
-[decomposition doc](../../plans/school-data-search/current/school-data-search-wsd1-decomposition.md)).
-**Next: ADR-041 amendment (school-data-search/ tier matrix row + authored
-boundary rules) + draft ADR-190 (F-B produced-spec) → `docs-adr-expert`;
-promote to `active/`; begin WS1+.** Carry the verification discipline +
-licensing guardrail. See the
-[`school-data-search` thread record][school-data-search].
 
 ### Agentic Mechanisms Discovery
 
