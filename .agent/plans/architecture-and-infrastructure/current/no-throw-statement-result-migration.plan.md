@@ -1,7 +1,8 @@
 ---
 name: "no-throw-statement Result migration"
 overview: "Drive the 1000 ESLint warnings (999 @oaknational/no-throw-statement + 1 no-real-io-in-tests) to zero by migrating every throw to the Result pattern (ADR-088) at root cause — no exemptions, no eslint-disable, no rule weakening — then promote the rule warn->error. Test-throws are value-assessed per testing-strategy before any conversion."
-status: DECISION-COMPLETE — owner ruled D6 (increase strictness; convert every throw; amend ADR-088). D1/D2 follow; D3/D4/D5 operational. Reviewed (assumptions-expert, test-expert).
+status: "SUPERSEDED (2026-06-19) by no-throw-remediation.plan.md — the owner reopened the convert-all framing (distrust of the per-site analysis; tests-first priority; reassess-gate). This plan + its 92KB worklist are now a DATED INPUT the remediation plan's WS0 survey validates or replaces. D6 (convert-every-throw) is REOPENED, decided at the remediation plan's WS4 gate. Do not execute this plan's WS0-WS9 directly; start from no-throw-remediation.plan.md."
+superseded_by: ./no-throw-remediation.plan.md
 created: 2026-06-19
 collection: architecture-and-infrastructure
 lane: current

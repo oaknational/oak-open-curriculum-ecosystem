@@ -21,11 +21,17 @@ Merlin→Siren handoff (natural-boundary, no PDR-063 record) broadcast `6519b97d
 
 ## Lane state
 
-- **Owning plan**:
+- **Owning plan (RESHAPED 2026-06-19)**:
+  [`no-throw-remediation.plan.md`](../../../plans/architecture-and-infrastructure/current/no-throw-remediation.plan.md)
+  — investigation-first, **READY (survey-first), remediation PAUSED by owner** to progress the
+  strategy thread. It **supersedes the convert-all framing** of
   [`no-throw-statement-result-migration.plan.md`](../../../plans/architecture-and-infrastructure/current/no-throw-statement-result-migration.plan.md)
-  — DECISION-COMPLETE. Per-site worklist:
-  [`no-throw-statement-result-migration.worklist.json`](../../../plans/architecture-and-infrastructure/current/no-throw-statement-result-migration.worklist.json)
-  (334 files / 811 sites + the 10-template generator spec).
+  (now a dated input the WS0 survey validates; its 92KB worklist's per-site labels are distrusted).
+  Owner reopened the work because the 1000-count is an indiscriminate-rule artefact (~6 cause-classes,
+  not 1000 problems; ~1/3 tests, ~189 generated from ~10 templates, ~400/811 flagged false-positive),
+  and the per-site analysis proved unreliable (3 mis-labels this session). Reviewed READY by
+  assumptions-expert + test-expert (folded). **Resume from the remediation plan's WS0**, NOT the
+  migration plan's WS0-WS9.
 - **Current objective**: execute the plan WS0→WS9. Convert every throw; amend ADR-088
   / `use-result-pattern.md` / `principles.md` (WS9); promote the rule.
 - **Current state**: executing on `docs/planning-and-validation`. 4 conversion commits landed
@@ -38,10 +44,13 @@ Merlin→Siren handoff (natural-boundary, no PDR-063 record) broadcast `6519b97d
   result-returns, and design-laden (construction-contract / module-init / WS5 rethrow / stateful
   guards) that each need a dedicated reviewed cycle. Inherited per-workspace counts conflate
   src/test AND throw-class — re-read every site (this overturned 3 inherited labels this session).
-- **Next safe step**: Tier-1 `express-middleware.ts:92` (narrowing, likely a `sanitiseObject`
-  overload mirroring the `redactTelemetryValue` fix), then Tier-2 `log-levels.ts:102` (env-value
-  validation → Result). Defer Tier-3 design-laden sites to dedicated reviewed cycles. Full
-  per-site map in §"Remaining-throw tier map".
+- **Next safe step (when remediation RESUMES — currently PAUSED for the strategy thread)**:
+  the remediation plan's **WS0 fresh holistic cause-survey**, NOT a site fix. The
+  §"Remaining-throw tier map" below and the old worklist are **input the survey validates**,
+  not the next action — the whole point of the reshape is to re-ground before executing. After
+  WS0: WS1 (review fixes-to-date for hacks), then WS2 (test-quality triage, priority), then WS3
+  (generator causes, F-74-gated), then the WS4 reassess gate. `express-middleware.ts:92` /
+  `log-levels.ts:102` are candidate early fixes the survey will confirm, not pre-committed steps.
 - **Coordination**: agent-tools (214 sites) and the WS9 doctrine edits sit on Siren
   guards Reef's claim `b01b303e` — narrow-claim + pathspec per Siren's coordination
   broadcast; execute last.
