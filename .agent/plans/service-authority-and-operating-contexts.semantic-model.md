@@ -49,6 +49,9 @@ It contains and organises definitions of:
 - what the product and ecosystem are for;
 - how strategy turns into plans;
 - how plans turn into work;
+- how system architecture is understood and changed;
+- how code is designed, reviewed, and kept coherent;
+- how software engineering discipline is practised;
 - how work is reviewed;
 - how release readiness is understood;
 - how quality is assessed;
@@ -120,15 +123,9 @@ A Claude agent operating inside Sentry mutates Sentry issue state with access to
 repo context.
 ```
 
-Those two relationships differ in:
-
-- operating context;
-- data direction;
-- authority effect;
-- audit surface;
-- human supervision expectation;
-- failure mode;
-- preferred governance boundary.
+Those two relationships differ in operating context, data direction, authority
+effect, audit surface, human supervision expectation, failure mode, and preferred
+governance boundary.
 
 The model must therefore describe directional capabilities, not just named
 service connections.
@@ -137,7 +134,8 @@ service connections.
 
 The default preference is to surface third-party information into the **repo
 working context**, especially when the work is code, docs, product definition,
-planning, release readiness, or repo-governance centred.
+planning, release readiness, system architecture, engineering quality, or
+repo-governance centred.
 
 Preferred default:
 
@@ -157,6 +155,7 @@ Best when the agent is:
 
 - modifying code or docs;
 - tracing from strategy → plan → implementation;
+- inspecting system architecture or code design;
 - preparing or reviewing a PR;
 - using Sentry, PostHog, SonarQube, Elastic, or Figma as evidence;
 - writing repo records;
@@ -233,8 +232,6 @@ GitHub PRs aggregate review and readiness for proposed changes.
 
 AI agents are not a single service class. They differ by operating context and
 capability.
-
-Examples:
 
 | Agent/context | Typical role |
 | --- | --- |
@@ -387,13 +384,17 @@ model should avoid forcing all signals into one level.
 | Strategy | Choices, non-goals, measures, theory of change. | PostHog, Sentry, Elastic, Linear, reports may provide evidence. |
 | Product | Product surfaces and value propositions. | Figma, PostHog, user research, GitHub, Linear. |
 | Product increment | Release/value gates. | GitHub PRs, Linear, Sonar, Sentry, PostHog, deployment previews. |
+| System architecture | System boundaries, contracts, component responsibilities, data/control flow, integration topology, and architectural constraints. | ADRs, GitHub diffs, dependency analysis, Elastic/Sentry evidence, architecture reports. |
+| Code design | Module boundaries, APIs, abstractions, naming, dependency direction, test seams, and maintainability expectations. | GitHub PRs, code review agents, SonarQube Cloud, local repo agents, ADRs. |
+| Software engineering discipline | Engineering rules of practice: type safety, testing, accessibility, security, observability, review, documentation, change control, and agent collaboration. | Repo doctrine, ADRs/PDRs, GitHub checks, SonarQube Cloud, agent-tools, human review. |
 | Plan | Durable work intent and acceptance. | Linear, GitHub, Sentry, PostHog, Figma, Elastic as evidence or execution links. |
-| PR | Proposed change and readiness. | GitHub, Sonar, Sentry, Vercel/deployments, reviewers, linked evidence. |
+| PR | Proposed change and readiness. | GitHub, Sonar, Sentry, deployment previews, reviewers, linked evidence. |
 | Runtime | Stability, performance, errors. | Sentry, deployment services, logs, Elastic where relevant. |
 | Product usage | Adoption, friction, behaviour. | PostHog and qualitative reports. |
 | Search/retrieval quality | Query behaviour, index health, relevance. | Elastic, evaluation reports, GitHub changes. |
 | Design/UX | Interaction intent, flows, design system, visual/UX decisions. | Figma plus repo implementation and accessibility checks. |
-| Quality | Static analysis, tests, code health. | SonarQube Cloud, GitHub checks, test reports. |
+| Code quality | Static quality, maintainability, duplication, complexity, coverage, vulnerabilities, and review findings. | SonarQube Cloud, GitHub checks, code review, tests, local agent analysis. |
+| Release readiness | Aggregate readiness to expose, merge, deploy, or promote a product increment. | GitHub PRs, Linear, SonarQube Cloud, Sentry, PostHog, Figma, deployment previews, reports. |
 | Agentic practice | How humans and agents build safely. | Repo doctrine, agent-tools, GitHub PR review, service evidence. |
 
 ## Managed in repo vs managed externally
@@ -438,6 +439,8 @@ is interpreted and connected to durable intent.
 - A SonarQube finding is treated as a release blocker without a policy boundary.
 - Elastic relevance evidence is treated as product success without user context.
 - A Figma design is treated as implemented truth rather than design intent.
+- A code-quality score becomes an architectural decision without engineering interpretation.
+- A performance signal becomes a product priority without strategy context.
 - An AI agent treats a correlation across tools as a decision.
 - A third-party service becomes the hidden centre of gravity for repo work.
 - The repo mirrors every tool state and becomes a stale second dashboard.
@@ -477,6 +480,36 @@ PR preview → Figma/design review evidence
 Default preference: surface Figma design context into local repo agent work when
 implementing code. Operate in Figma when the object of work is a design comment,
 annotation, or design artefact.
+
+## Architecture and engineering-specific notes
+
+System architecture, code design, code quality, and software engineering
+discipline are not merely implementation detail. In an agentic-first repo they
+are part of the operating model.
+
+The repo owns the durable definitions:
+
+- architectural boundaries and constraints;
+- accepted integration patterns;
+- module and package responsibility boundaries;
+- dependency direction and layering rules;
+- code-design expectations;
+- quality bars and review norms;
+- testing, accessibility, security, and observability disciplines;
+- how agent-authored code is reviewed and held to the same standards;
+- how architecture decisions are recorded and changed.
+
+Supporting services provide evidence:
+
+- GitHub shows proposed changes and review discussion;
+- SonarQube Cloud reports static quality and vulnerabilities;
+- Sentry reports runtime failures and performance symptoms;
+- Elastic reports search/index/retrieval behaviour where relevant;
+- PostHog reports user behaviour where relevant;
+- Figma reports design intent and UX collaboration state.
+
+Those services do not own the architecture. They evidence and stress-test it.
+The repo interprets and records durable engineering intent.
 
 ## Closing principle
 
