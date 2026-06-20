@@ -24,6 +24,32 @@ foundation; its report + raw data live in
 [`.agent/reports/archive/plan-estate-survey-2026-06-15/`](../../../reports/archive/plan-estate-survey-2026-06-15/README.md)
 (archived 2026-06-18; a fresh survey is a Body-3 prerequisite).
 
+## Where We Are (2026-06-20, Juniper stirs Taproot — handoff received; Body-3 under-spec resolutions encoded)
+
+Picked up the thread from Kiln guards Patina (owner-directed succession). Handoff verified
+first-hand: commit `8fc0f95ca` (diagnosis and granularity settled, README-index refactor,
+per-stream bets owner-signed-off, pupil decontamination), Kiln's claim released, working tree
+clean bar this session's artefacts. The owner **signed off the per-stream how-we-win and won't-do
+bets**, then delegated the plan's Body-3 design ("you decide what excellent looks like") and asked
+to resolve the under-specified areas.
+
+- **Body-3 under-spec resolutions encoded** in the controlling plan §"Body 3 — Approach ›
+  Resolved" (owner-accepted): a metadata spine (concrete layout survey-gated, not re-foldered); a
+  canonical machine-readable strategic-choice registry as the validator's source of truth (thin
+  slice, extends `repo-validators`, built at Body-3 execution); as-touched rubric migration;
+  archive-by-default deletion with a reviewer value-capture gate; per-stream granularity made
+  decomposition-ready; the governance file's thin-index role post-Body-3.
+- **Sign-off staleness flipped** across the plan (frontmatter, Body-2 bullets, owner-framings,
+  Owner Decisions 16–17); the strategy corpus was already fresh.
+- **Sequencing re-derived:** the plan standard, the fresh survey, and the read-and-extract slice
+  are **startable now** (Body 2 signed); the structure-dependent restructure still gates on the
+  search/graph external-vs-internal-reuse decision.
+
+**Next safe step:** (1) the **full vision tripwire-2 pass** (now due — how-we-win signed); then
+(2) **Body-3 prep** — the plan standard (Anchor B) and the fresh deep survey, both now startable;
+(3) the estate-hygiene slice (independent). Still owner/Oak: the search/graph reuse decision, the
+measure targets, the internal-transformation alignment rationale.
+
 ## Where We Are (2026-06-20, Kiln guards Patina — diagnosis + granularity settled; corpus refactored; per-stream proposals; pupils decontaminated)
 
 Continued the refinement, owner-directed. The owner settled the two shape-determining decisions,
@@ -385,6 +411,12 @@ controlling plan §Body 2 and launch-readiness K3.
 
 ## Next (fresh context starts here)
 
+> **Superseded by the 2026-06-20 Juniper stirs Taproot section at the top.** The strategy
+> refinement below is largely complete: corpus refactored, diagnosis and granularity settled,
+> per-stream bets signed off, editorial pass done, and the Body-3 under-spec resolutions encoded.
+> The live next-safe-step is the **vision tripwire-2 pass**, then **Body-3 prep** (plan standard +
+> fresh survey). The grounding order below remains valid.
+
 **▶ Body 2 STRUCTURE is authored; the next session refines it.** Opener:
 [`strategy-and-vision-refinement.prompt.md`](../../../prompts/strategy-and-plan-estate/strategy-and-vision-refinement.prompt.md)
 (the prior `define-strategy-content.prompt.md` is superseded; the structure it asked for now exists).
@@ -433,8 +465,8 @@ The Q-002 strategy-layer discussion is **resolved** (the model + bodies above) a
    "2B") is part of **Body 3**, run at the **hybrid** depth (SDK/search/graph/EEF). The old
    2A/2B/2C phases are dissolved — see the controlling plan's Disposition section. The
    **approach (the how)** — the plan standard, the deep survey, the bidirectional traceability spine,
-   enforcement-as-structural-cure, and the five open discussions — is recorded in the controlling plan
-   §"Body 3 — Approach (the how)" (2026-06-20 plan discussion).
+   enforcement-as-structural-cure, and the Body-3 design (the five prior open discussions, now
+   **resolved** 2026-06-20) — is recorded in the controlling plan §"Body 3 — Approach".
 
 The estate restructure (Body 3) is **core and ~80% of the work, not an addendum**; only its
 new-boundary work is informationally gated on the strategy. Full scope: the plan.
@@ -473,3 +505,4 @@ new-boundary work is informationally gated on the strategy. Full scope: the plan
 | Kayak seeks Coral | claude-code | claude-opus-4-8[1m] | 551a7f | critical assessment + plan-estate approach recording + strategy-input capture + records-accuracy + handoff | 2026-06-20 | 2026-06-20 |
 | Fennel tracks Chlorophyll | claude-code | claude-opus-4-8[1m] | 6dd550 | strategy reflection + two-part vision authoring + strategy-structure scaffolding + continuity deep-update | 2026-06-20 | 2026-06-20 |
 | Kiln guards Patina | claude-code | claude-opus-4-8[1m] | 0c90b2 | diagnosis + granularity settling + README-index refactor + per-stream proposals + pupil-decontamination + handoff | 2026-06-20 | 2026-06-20 |
+| Juniper stirs Taproot | claude-code | claude-opus-4-8[1m] | 8afc21 | handoff pickup from Kiln; encoded owner-accepted Body-3 under-spec resolutions and the sign-off staleness flip into the controlling plan | 2026-06-20 | 2026-06-20 |
