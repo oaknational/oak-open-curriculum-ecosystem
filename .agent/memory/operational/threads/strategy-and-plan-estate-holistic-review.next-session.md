@@ -24,6 +24,45 @@ foundation; its report + raw data live in
 [`.agent/reports/archive/plan-estate-survey-2026-06-15/`](../../../reports/archive/plan-estate-survey-2026-06-15/README.md)
 (archived 2026-06-18; a fresh survey is a Body-3 prerequisite).
 
+## Where We Are (2026-06-20, Kiln guards Patina — diagnosis + granularity settled; corpus refactored; per-stream proposals; pupils decontaminated)
+
+Continued the refinement, owner-directed. The owner settled the two shape-determining decisions,
+then directed applying them across the docs plus a session handoff. Key moves and corrections:
+
+- **Diagnosis SETTLED (owner):** *"deliver Oak's rigour at reach and at pace"* — the unified hook
+  (rigour = the value; reach = where teachers and the ecosystem now work; pace = agent-first), with
+  per-stream edges. Adopt-and-iterate-from-practice (a living strategy). **Hook lifted into `VISION.md`**
+  (owner-directed).
+- **Granularity SETTLED (owner): per-stream choices** (`APP-`/`TOOLS-`/`FRAME-`; ecosystem may decompose
+  to SDK/search/graph/EEF). A plan → one choice → stream → goal; threads serve goals selectively (a graph,
+  not a strict tree — independently corroborated by the imported graph suggestions; convergence, not
+  authority).
+- **Corpus refactored to a README-index + 6 detail files** (diagnosis, alignment-and-streams, three
+  `stream-*`, measures); the ID **contract** relocated to controlling-plan **Body 3** (governance owns the
+  contract; the strategy lists the choices). The structure FOLLOWS the substance — settling shape before
+  refactoring was the owner's correction (I'd planned it backwards).
+- **Per-stream how-we-win / won't-do / measures = PROPOSED** (not deferred). Owner correction: "I didn't
+  agree to anything being deferred… do valid, thoughtful analysis and make suggestions; sign-off is mine."
+  Each stream now carries proposed bets + won't-do + measure candidates; the **owner is actively shaping
+  them** in the stream files.
+- **Pupil decontamination (owner correction):** pupils were repeatedly elevated to a component (amplifier
+  "three levels"; a vision "for pupils" boundary) against the owner's standing "this isn't about pupils" —
+  the semantic prior education=students overrode it. Removed: the amplifier is now **two levels** (the
+  teacher; our own teams), the vision pupil-boundary is gone. Pupils remain only in Oak's verbatim mission
+  and the external compliance gates (K2 / ICO Children's Code / safeguarding). Applied across `VISION.md`,
+  the strategy corpus, the controlling plan, and continuity.
+- **Owner edits in-flight (their sign-off — respected, not reverted):** K3 surface scope now
+  ChatGPT/Claude/Gemini; per-stream won't-do/how-we-win wording refined in the stream files.
+- **Gates:** my non-stream edits pass markdownlint + repo-validators; prettier aligned the README. The full
+  `pnpm check` and a final format pass run once the owner's in-flight stream-file edits settle (tree in
+  flux). Working tree uncommitted; owner controls push.
+
+**Next:** owner finishes shaping / signs off the proposed per-stream choices, won't-do, and measure
+candidates; then the **full vision tripwire pass** (tripwire 2, once how-we-win is signed off); then the
+**plan standard** + a **fresh deep survey**, then the restructure (Body 3). Flags for the owner's eye:
+`stream-mcp-app.md` release-channel hand-off row still reads ChatGPT/Claude (K3 now adds Gemini); "OWA"
+acronym in a won't-do bullet (expand on first use per editorial-tone).
+
 ## Where We Are (2026-06-20, Fennel tracks Chlorophyll — two-part vision authored + strategy structure scaffolded)
 
 A read-only reflection session that the owner then opened to authoring. The owner ratified a
@@ -433,3 +472,4 @@ new-boundary work is informationally gated on the strategy. Full scope: the plan
 | Asteroid calls Meridian | claude-code | claude-opus-4-8[1m] | 2297c9 | Q-002 strategy-layer discussion + approach reconception to the informational model | 2026-06-18 | 2026-06-18 |
 | Kayak seeks Coral | claude-code | claude-opus-4-8[1m] | 551a7f | critical assessment + plan-estate approach recording + strategy-input capture + records-accuracy + handoff | 2026-06-20 | 2026-06-20 |
 | Fennel tracks Chlorophyll | claude-code | claude-opus-4-8[1m] | 6dd550 | strategy reflection + two-part vision authoring + strategy-structure scaffolding + continuity deep-update | 2026-06-20 | 2026-06-20 |
+| Kiln guards Patina | claude-code | claude-opus-4-8[1m] | 0c90b2 | diagnosis + granularity settling + README-index refactor + per-stream proposals + pupil-decontamination + handoff | 2026-06-20 | 2026-06-20 |

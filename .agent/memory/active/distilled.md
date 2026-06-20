@@ -52,3 +52,18 @@ emits, and **cross-check** per-file sums against the gate's authoritative per-wo
 totals as an independent checksum. Single-instance debugging tactic (2026-06-19, Siren
 mends Rudder); staged for a second instance to confirm the general shape before
 graduating to a pattern. Sibling: [`tool-output-framing-bias`](patterns/tool-output-framing-bias.md).
+
+## "Education = pupils" is a contaminating prior; this repo's subjects are teachers, the ecosystem, and our teams
+
+Across the vision/strategy work, pupils were repeatedly elevated to a strategy *component* (an
+amplifier "three levels (pupil ← teacher ← our teams)", a vision "for pupils" boundary) despite the
+owner's standing "this isn't about pupils." The owner named the mechanism: the semantic prior
+education=students overrides explicit direction — fluency-is-a-warning at its deepest, recurring even
+in a file written minutes earlier. **Guard:** this repo's subjects are teachers (the app), the
+ecosystem (tools/framework), and our own teams (the transformation). Pupils legitimately appear ONLY in
+(a) Oak's mission quoted verbatim (Oak's end, reached *through* teachers) and (b) external compliance
+gates where law forces naming child-access (Children's Code, safeguarding, the "nothing is aimed at
+pupils" audience boundary). Everywhere else treat "pupil" / "learner" / "student" as a tripwire to
+delete or reframe to the teacher. Source: 2026-06-20 (Kiln guards Patina), owner correction.
+Graduation candidate: a vision/strategy authoring guard (home TBD — possibly `editorial-tone.md` or a
+strategy-authoring note). Sibling: [[passive-guidance-loses-to-artefact-gravity]].

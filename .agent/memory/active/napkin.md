@@ -115,3 +115,67 @@ imported analysis cluster relocated, all committed. Durable lessons:
 **candidate:** a doc-architecture convention — "README = stable index/summary; detailed content in
 separate file(s)" — as a rule or docs-governance entry. Trigger: the strategy README-index refactor next
 session (its first application).
+
+## Structure follows substance; I own "excellent"; adopt-and-learn (2026-06-20, Kiln guards Patina)
+
+Strategy-corpus refinement session; four owner corrections, shared roots. The doc-architecture
+convention candidate above had its **first application** this session (the README-index refactor) —
+per consolidate-at-third-consumer, applied but NOT formalised as a rule; noted for the next recurrence.
+
+- **Structure follows substance.** I planned the README-index refactor as step 1 (a "structure-preserving
+  relocation"), with "settle diagnosis + granularity" as step 2. Owner: "How are you planning on
+  refactoring the strategy without settling the questions that determine the shape?" The diagnosis (the
+  spine) and the choice granularity DETERMINE the file structure — refactoring first is drawing furniture
+  before the rooms. Root: a CODE-refactor reflex (move without changing behaviour) misapplied to a strategy
+  doc, where structure IS substance. Cure: for a strategy/design doc, settle the shape-determining
+  substance first; the structure is its output. The plan-mode "plan-then-execute" frame pushed me to
+  package the reflective heart (the diagnosis discussion) as a deferred step — it was the thing.
+- **I decide "excellent", not a subagent.** I framed the detail-file frontmatter call as "adjudicate the
+  Explore agent's `fitness_*` recommendation vs the parent style, resolve at execution." Owner: "YOU decide
+  what excellent looks like in the frontmatter definitions, not some random subagent." Subagents gather
+  facts; the verdict on excellence is mine. (Their `fitness_*` was a pattern-match off drift-prone practice
+  docs; a leadership strategy corpus wants lineage/role frontmatter — my reasoned call.)
+- **Adopt-and-learn beats perfect-in-the-abstract.** Owner: take the excellent diagnosis, apply it, use it,
+  learn in practice, iterate later (healthy). I'd been perfecting the strategy in the abstract with a
+  sign-off at each micro-step. The Practice's own philosophy, turned on this work: commit to a
+  well-grounded view, let reality refine it.
+- **Convergence raises confidence; the false-binary tell.** I posed "is the diagnosis unified OR
+  per-stream?" — a clean binary. Owner dissolved it: threads collect plans and serve goals selectively, so
+  the trace is a GRAPH (plan→choice→stream→goal), not a partition — and the imported governed-document-graph
+  suggestions independently corroborate it (convergence, not authority, raises confidence; their proposals
+  stay information). Recurring tell: forcing organic structure into clean dichotomies; cure: ground the
+  options in the actual structure (threads/goals).
+
+Settled this session: diagnosis = "deliver Oak's rigour at reach and at pace"; granularity = per-stream
+choices. Corpus refactored to a README-index + 6 detail files; the ID contract relocated to controlling-plan
+Body 3; gates green. Recurrence per PDR-098 (the fluency-is-a-warning / read-gate cluster), not new homes.
+Sibling: [[passive-guidance-loses-to-artefact-gravity]] — the corrections fired at owner-review, where the
+held intention (substance-before-structure) had not.
+
+## Pupils are not this repo's subject; "deferred" was abdication (2026-06-20, Kiln guards Patina)
+
+Two more owner corrections, same session, both a comfortable default standing in for the work.
+
+- **The semantic prior education=students contaminated the strategy, repeatedly.** Pupils kept being
+  elevated to a component (the amplifier "three levels (pupil ← teacher ← our teams)"; a vision "for
+  pupils" boundary; a "pupil-boundary" tripwire) DESPITE the owner's standing "this isn't about pupils."
+  Owner named the mechanism: "on some level the semantic connection education=students overrode my
+  statements." I did it AGAIN in a file I'd written an hour earlier ("the principle the product holds for
+  teachers AND pupils"). Fluency-is-a-warning at its deepest — an association so automatic it bypasses an
+  explicit constraint. **Cure (structural):** this repo's subjects are teachers, the ecosystem, and our
+  own teams. Pupils appear in exactly two places — Oak's verbatim mission (Oak's end, reached THROUGH
+  teachers) and the external compliance gates where law forces naming child-access (K2 / ICO Children's
+  Code / safeguarding, which say "nothing is aimed at pupils"). Everywhere else, "pupil" is a tripwire.
+  Decontaminated across VISION, the strategy corpus, and the controlling plan this session.
+- **"Deferred to the owner" was abdication, not deference.** I marked per-stream how-we-win / won't-do /
+  measures "DEFERRED (owner)" and did zero analysis. Owner: "I didn't agree to anything being deferred… I
+  expect valid and thoughtful analysis and suggestions made; sign-off is mine." "It's the owner's" ≠ "do
+  nothing" — bring grounded proposals, the owner signs off. The over-SUPPRESS pole of the
+  over-claim↔over-suppress oscillation (Kayak's locus entry named it); the stable point is
+  analysis-plus-proposal-plus-sign-off, never silence. Replaced every DEFERRED stub with proposed bets
+  (`APP-`/`TOOLS-`/`FRAME-1…4`) for sign-off.
+
+Shared root with the rest of this session: a comfortable default (the education=pupils prior; "it's the
+owner's, so stay quiet") substituting for the actual work (check the constraint; do the analysis).
+Recurrence per PDR-098 (fluency-is-a-warning cluster); the pupil lesson is sharp enough to graduate —
+added to `distilled.md`. Sibling: [[passive-guidance-loses-to-artefact-gravity]].

@@ -24,31 +24,23 @@ surface.
   [`strategy-and-plan-estate-holistic-review`](threads/strategy-and-plan-estate-holistic-review.next-session.md)).
   Controlling plan:
   [`vision-strategy-and-plan-estate.plan.md`](../../plans/product-development-governance/vision-strategy-and-plan-estate.plan.md).
-  Model: four-layer informational dependence (Oak strategy → our vision → our strategy → our planning)
-  with three co-equal first-class bodies. **Body 1 (vision) and the Body 2 (strategy) STRUCTURE now
-  AUTHORED (2026-06-20, Fennel tracks Chlorophyll):** `VISION.md` is the **full two-part vision** —
-  Part 1 serves Oak's mission (app→teachers, tools→ecosystem), Part 2 the agent-first
-  creation-and-curation transformation with the **amplifier-not-replacement** ethic at three levels
-  (pupil ← teacher ← our teams); the web and AI assistants are **two co-equal complementary channels**
-  (this repo delivers the AI side). `docs/strategy/README.md` carries the strategy **structure** with
-  the **three value streams as its first organising principle** (provisional, PDR-018): Oak-alignment,
-  streams-as-system, per-stream sections (app with K1–K3 + a release-readiness hand-offs table), the
-  strategic-choice-ID contract, a measures checkpoint. **EEF = the concrete ecosystem-convenor exemplar**
-  (external org, open materials brought together with Oak's; source-linked). Root `README.md` updated to
-  surface **vision + strategy at a glance** (primary human entrypoint). **DEFERRED to the owner**
-  (questions in the corpus): the diagnosis, strategic-choice granularity (gates the choice set),
-  per-stream how-we-win + won't-do, measures (Oak input), search/graph external-vs-internal-reuse.
-  Incoming materials read + reflected (suggestions, not authority — relocated to the
-  `product-development-governance/suggestions/` sub-folder; graphs → adopt a thin slice, defer the
-  cathedral; service-authority → forward design for Linear/Figma when the team lands). **Next safe step
-  (opener: [`strategy-and-vision-refinement.prompt.md`](../../prompts/strategy-and-plan-estate/strategy-and-vision-refinement.prompt.md)):**
-  (1) refactor the strategy corpus to README-index + detail files (owner convention) and move the
-  choice-ID mechanics to the governance layer; (2) settle the deferred decisions with the owner —
-  diagnosis + granularity first (they gate the choice set, the IDs, and Body 3) — then per-stream
-  substance, balancing the app-heavy corpus; (3) editorial-voice pass; (4) vision re-review per the
-  controlling plan's §"Vision review tripwires" (major upstream needs are flagged, never suppressed).
-  Then the **plan standard** + a **fresh deep survey**, then the restructure. Body-3 approach detail in
-  the thread record + controlling plan §"Body 3 — Approach (the how)".
+  Model: four-layer informational dependence (Oak strategy → our vision → our strategy → our planning),
+  three co-equal first-class bodies. **Body 1 (vision) + Body 2 (strategy) authored; per-stream substance
+  shaping with the owner (2026-06-20, Kiln guards Patina).** `VISION.md` is the full two-part vision and now
+  leads with the **"deliver Oak's rigour at reach and at pace"** hook (owner-directed). `docs/strategy/` is now
+  a **README-index + 6 detail files** (diagnosis, alignment-and-streams, three `stream-*`, measures).
+  **Settled (owner):** diagnosis = _rigour at reach and at pace_; strategic-choice **granularity = per-stream**
+  (a plan → one choice → stream → goal; the ID _contract_ relocated to controlling-plan **Body 3** — governance
+  owns it, the strategy lists the choices). **Per-stream how-we-win / won't-do / measures are now PROPOSED**
+  (`APP-`/`TOOLS-`/`FRAME-1…4`, provisional — the owner is actively shaping them; sign-off is the owner's).
+  **Pupil decontamination (owner correction):** pupils are NOT a component of this work — the amplifier ethic is
+  **two levels** (the teacher; our own teams), the vision pupil-boundary is gone; pupils remain only in Oak's
+  verbatim mission and the external compliance gates (K2 / ICO Children's Code / safeguarding). EEF = the
+  ecosystem-convenor exemplar. Incoming materials = suggestions (graphs → thin slice; service-authority →
+  forward design). **Next safe step:** owner signs off / refines the proposed per-stream choices, won't-do, and
+  measure candidates; then the **full vision tripwire pass** (tripwire 2), the **plan standard** + a **fresh deep
+  survey**, then the restructure (Body 3). Working tree uncommitted (owner controls push). Body-3 approach detail:
+  thread record + controlling plan §"Body 3 — Approach (the how)".
 - **Onboarding-improvement arc — PR #199 OPEN, merge-once-green (`feat/onboarding-improvement`).**
   **Next:** owner re-walks `/oak-onboard-me` off-branch; B2/B3 risk-register seeding; the
   ask-the-repo search decision. (B1 awaits owner cost bands; B6 at the M2 gate.)

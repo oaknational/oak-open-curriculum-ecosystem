@@ -16,12 +16,17 @@ This repository turns that curriculum into AI-native infrastructure — for the
 teachers and the wider ecosystem who use it — and it's where we're learning to
 build and curate everything we make, agent-first, so we can.
 
-Two things are changing here, and they hold each other up. We're bringing Oak's
-curriculum to where teachers and the ecosystem can use it through AI. And to do
-that with the rigour it demands, at the pace it needs, we're transforming how we
-build and curate digital products — working agent-first, with our people firmly in
-the lead. The transformation is how we deliver the mission work; it's also worth
-sharing in its own right.
+It comes down to one challenge: **deliver Oak's rigour at reach and at pace** — keep
+what makes the curriculum trustworthy intact (rigour) while bringing it to where
+teachers and the ecosystem now work (reach), fast enough to matter (pace). Those pull
+apart unless we choose well.
+
+Two things are changing here to meet that challenge, and they hold each other up. We're
+bringing Oak's curriculum to where teachers and the ecosystem can use it through AI. And
+to do that with the rigour it demands, at the pace it needs, we're transforming how we
+build and curate digital products — working agent-first, with our people firmly in the
+lead. The transformation is how we deliver the mission work; it's also worth sharing in
+its own right.
 
 ## Part one — Oak's curriculum, AI-native
 
@@ -42,7 +47,7 @@ assistant is the teacher's choice, not ours.
 What comes back is grounded in Oak's sequenced, evidence-informed curriculum, not
 ungrounded invention. We inform the teacher's expert judgement; we never replace
 it. That's how Oak works: the curriculum is optional and fully adaptable, and the
-teacher decides what's right for their pupils — we're there to inform that choice,
+teacher decides what's right for their context — we're there to inform that choice,
 not to push Oak as the only answer.
 
 ### For the wider ecosystem — open tools for open educational data
@@ -64,9 +69,9 @@ lifecycle and not just the code, with people leading throughout.
 
 This amplifies our teams; it doesn't replace them. Agents take on the toil and the
 scale; our people bring the judgement, expertise, taste, and accountability that
-decide whether the work is any good. It's the same principle we hold for teachers
-and pupils, turned on ourselves: the human expert leads, and what we build
-amplifies them. It lets us be more ambitious, not smaller.
+decide whether the work is any good. It's the same principle we hold for teachers,
+turned on ourselves: the human expert leads, and what we build amplifies them. It
+lets us be more ambitious, not smaller.
 
 We share how we do this. Our framework for agent-first delivery is openly
 documented and freely available, so other teams — inside Oak and beyond — can adopt
@@ -95,7 +100,6 @@ open educational data projects together to make a real difference.
 One principle runs through everything, at every level: the human expert leads, and
 what we build amplifies them rather than deciding for them.
 
-- **For pupils** — this isn't a surface learners use directly.
 - **For teachers** — the teacher is the expert; we inform, we never decide. See
   [ADR-194](docs/architecture/architectural-decisions/194-teacher-as-expert-product-boundary.md).
 - **For our own teams** — agent-first work amplifies our people; it doesn't replace

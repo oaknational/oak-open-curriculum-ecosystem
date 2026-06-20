@@ -20,7 +20,7 @@ todos:
     content: "Strategy body — decisions preserved from the 2026-06-17 ratification: K1–K3 (the MCP-app stream's production-readiness keystones, §14.2 correction), value-stream taxonomy depth = hybrid, README names all three streams. value-and-impact.md is archived as an input the strategy corpus (Body 2) absorbs."
     status: completed
   - id: strategy-corpus
-    content: "Strategy body (STRUCTURE AUTHORED, substance deferred) — docs/strategy/README.md now carries the proper structure with the three value streams as its first organising principle: Oak-alignment (stream→goal, schools non-goal, four pillars as constraints, align-not-fulfil), the streams-as-system map, per-stream sections (app with K1–K3 + a release-readiness hand-offs table), the strategic-choice-ID contract, and a measures checkpoint. Settled inputs authored; diagnosis, per-stream how-we-win, won't-do, granularity, and measures marked DEFERRED to the owner with sharp questions. Provisional (PDR-018); iterate on owner input and incoming materials."
+    content: "Strategy body (REFACTORED to README-index + detail files 2026-06-20; diagnosis + granularity SETTLED; remaining substance owner-deferred) — docs/strategy/ is now a stable README-index over detail files (diagnosis, alignment-and-streams, three stream-*, measures). Diagnosis SETTLED (owner): 'deliver Oak's rigour at reach and at pace' (unified hook + per-stream edges). Granularity SETTLED (owner): per-stream choices (APP-*/TOOLS-*/FRAME-*, ecosystem may decompose to SDK/search/graph/EEF). The strategic-choice-ID contract relocated to Body 3 (governance owns the contract; strategy lists the choices). Still DEFERRED to the owner: per-stream how-we-win + won't-do (the 'advantages' discussion), measures (Oak input). A living strategy (PDR-018): adopt-and-iterate-from-practice."
     status: in_progress
   - id: estate-restructure
     content: "Plan-estate body (core, large — informationally depends on the strategy's structure) — read every plan, extract permanent documentation, archive complete plans, extract-and-archive completed work from partial plans, rewrite survivors to a common standard, pull scattered concepts into new plans, delete with disposition. New thread/plan boundaries derived FROM the strategy. Value-preserving via recorded dispositions (supersession mappings per the consolidation discipline, never a standalone ledger)."
@@ -134,8 +134,8 @@ interdependent. A strategy that treats the streams as independent misses the poi
    AI-assistant channel.
 2. **The agent-first transformation** — how Oak builds and curates digital products
    across the whole lifecycle, agent-first, stated with the **amplifier-not-
-   replacement** ethic: the human expert leads, the system amplifies, at every
-   level (pupil ← teacher ← our own teams). Its outward face (open, freely available
+   replacement** ethic: the human expert leads, the system amplifies, at two levels
+   (the teacher, with our product; our own teams, with agents). Its outward face (open, freely available
    framework; exemplar) and inward face (Oak's own transformation) are both present.
 
 The **three value streams persist**, grouped into the two parts; the vision is the
@@ -164,19 +164,26 @@ fires:
    or an over-claim.
 4. **The team forms / Linear, Figma, and a designer arrive** — the solo→team shift and
    the service/operating model may change how the transformation is framed.
-5. **The ICO Children's Code ruling / target-audience decision lands** — re-check the
-   pupil-boundary statement ("not a surface learners use directly") against the ruling.
+5. **The ICO Children's Code ruling / target-audience decision lands** — a compliance gate
+   (de-facto child access), tracked in the app stream's release-readiness hand-offs and the
+   compliance lane; re-check the **K2 audience boundary** against the ruling. The vision no
+   longer carries a pupil-facing boundary — pupils are not a component of this work.
 6. **The imported "repo as durable intent substrate" thesis is accepted or rejected** —
    if accepted, the vision may need to name it.
 7. **Standing tripwire** — any session, on any thread, that surfaces a major vision-level
    need flags it to the owner immediately; it is never folded silently or deferred into
    invisibility.
 
-**Candidate major updates already surfaced (2026-06-20, flagged not made — owner decides):**
-whether the vision should name the **repo-as-intent-substrate / operating-model** thesis;
-whether the **organisational transformation** (educating Oak, the team-learns-then-disperses
-rollout, internal reuse) belongs more explicitly in the vision or stays strategy-level; and
-the pupil-boundary line versus the de-facto-child-access compliance reality (tripwire 5).
+**Vision updates this session (2026-06-20, Kiln guards Patina — owner-directed):** the
+*rigour at reach and at pace* hook was lifted into the vision; and the **pupil contamination
+was removed** — pupils had been repeatedly elevated to a component (the amplifier "three
+levels", a "for pupils" boundary) against the owner's standing "this isn't about pupils", so
+the amplifier is now **two levels** (the teacher; our own teams) and the pupil-facing boundary
+is gone. Pupils remain only in Oak's verbatim mission and the external compliance gates (K2,
+ICO Children's Code, safeguarding). **Candidates still open (owner decides):** whether the
+vision should name the **repo-as-intent-substrate / operating-model** thesis; and whether the
+**organisational transformation** (educating Oak, the team-learns-then-disperses rollout,
+internal reuse) belongs more explicitly in the vision or stays strategy-level.
 
 ## Body 2 — Strategy (STRUCTURE AUTHORED; home: `docs/strategy/README.md`)
 
@@ -190,31 +197,58 @@ sharp questions: the diagnosis, per-stream how-we-win, what-we-won't-do, strateg
 choice granularity, and measures. The corpus is **provisional** (PDR-018) — a
 baseline to refine on owner input and to read incoming materials against.
 
-**Remaining at the strategy level (next session — owner-directed 2026-06-20):**
+**Strategy-level progress (2026-06-20 — owner-directed, this session "Kiln guards Patina"):**
 
-- **README-as-index refactor.** `docs/strategy/README.md` is currently one file holding
-  every section; per the owner's convention (README = stable index + summary; detail in
-  separate files) split it into a README-index over detail files (natural seams:
-  diagnosis, oak-alignment, streams-as-system, the per-stream sections, measures). This
-  supersedes the earlier "one corpus, sections-in-one-doc" framing; the over-structuring
-  guard still holds (split on natural seams, not one file per fragment).
-- **Separate strategy from mechanics.** The strategic-choice-ID *contract* (§7 —
-  stable/additive/resolvable, the `serves_strategic_choice` field, the validator) is
-  traceability-spine machinery and belongs in the Body-3 / governed-document-graph
-  governance layer, not the leadership strategy corpus. The strategy lists the choices;
-  governance owns the ID mechanics.
-- **Balance the streams.** The corpus is app-heavy (K1–K3, hand-offs settled) while the
-  tools and framework streams are thin placeholders — an app-heavy strategy risks the
-  app-dominance the thread fought. The framework stream still needs its
-  internal-transformation content (rollout model, team-learns-then-disperses, the
-  Practice meta-learning loop, internal reuse).
-- **Editorial-voice pass.** Acceptance requires Oak's editorial "we" voice; the authored
-  prose currently reads more structural than leadership. Largely rides with the deferred
-  substance; the README-index summary must be unmistakably leadership-editorial.
-- **Assistant-list principle vs K3.** The vision and strategy now list ChatGPT, Claude,
-  Gemini and others (no favourites; the teacher's choice); K3's surface-scope wording
-  ("ChatGPT and Claude") is the ratified *initial release surface*. Keep the no-favourites
-  framing and the surface-scope fact distinct when the app section is authored.
+- **README-as-index refactor — DONE.** `docs/strategy/README.md` is now a stable index +
+  leadership-editorial summary over detail files (`diagnosis.md`, `alignment-and-streams.md`,
+  three `stream-*.md`, `measures.md`), split on natural seams per the over-structuring guard
+  (flat files, no `streams/` subdirectory — a subdir would make the corpus *look* balanced
+  while content stayed app-heavy).
+- **Diagnosis — SETTLED (owner):** *"deliver Oak's rigour at reach and at pace"* — the
+  unified hook (rigour = the value; reach = where teachers and the ecosystem now work; pace =
+  agent-first), with per-stream edges (`diagnosis.md`). It is the spine the corpus hangs
+  from. Owner steer: adopt it, apply it, learn in practice, iterate when practice teaches —
+  a living strategy, not an artefact to perfect in the abstract.
+- **Strategic-choice granularity — SETTLED (owner): per-stream choices**
+  (`APP-*`/`TOOLS-*`/`FRAME-*`; the ecosystem may decompose to SDK/search/graph/EEF). A plan
+  resolves to one choice → its stream → an Oak goal; threads serve goals selectively, so the
+  map is a graph, not a strict tree (a framing the imported graph suggestions independently
+  corroborate — convergence raises confidence; their proposals remain information, not goals).
+- **Separate strategy from mechanics — DONE.** The strategic-choice-ID *contract*
+  (stable/additive/resolvable, the `serves_strategic_choice` field, the validator) is
+  relocated to **§"Body 3 — Approach"** (below); the strategy lists the choices, governance
+  owns the contract. Routed to *this* controlling plan (the authority), **not** the
+  `status: future` `suggestions/governed-repo-document-graph.plan.md` input.
+- **Per-stream how-we-win + won't-do — PROPOSED (owner sign-off).** Each stream now carries
+  grounded proposed bets (`APP-1–4`, `TOOLS-1–4`, `FRAME-1–4`) and won't-do lists, marked
+  provisional — analysis and suggestions, not deferred placeholders (owner correction
+  2026-06-20: don't defer; do the analysis and suggest — sign-off is the owner's). The README
+  registry reflects them.
+- **Balance the streams — done.** The framework stream carries its inward-transformation
+  body (the Practice meta-learning loop; internal reuse; the rollout flagged as the owner's)
+  plus four proposed bets — peer weight with the app, not a thin placeholder.
+- **Measures — proposed candidates (Oak grounds the targets).** Each stream's candidate
+  signal is proposed; the actual target is Oak's analytics/research to ground.
+- **Vision hook lifted (owner-directed).** *"Deliver Oak's rigour at reach and at pace"* is
+  now stated in `VISION.md`.
+- **Pupil decontamination (owner correction 2026-06-20).** Pupils had been repeatedly
+  elevated as a component (the amplifier "three levels"; a "for pupils" vision boundary)
+  against the owner's standing "this isn't about pupils"; removed — the amplifier is now two
+  levels, the vision pupil-boundary is gone, and pupils remain only in Oak's verbatim mission
+  and the external compliance gates (K2, ICO Children's Code, safeguarding). Applied across
+  `VISION.md`, the strategy corpus, and this plan.
+- **Editorial-voice pass — done on the index summary** (unmistakably leadership-editorial,
+  per acceptance); the proposed per-stream prose carries the voice too.
+- **Assistant-list principle vs K3 — preserved and explicit** in `stream-mcp-app.md`: no
+  favourites (ChatGPT, Claude, Gemini and others; the teacher's choice) is kept distinct from
+  K3's ratified *initial release surface* (ChatGPT, Claude, and Gemini — owner-updated
+  2026-06-20).
+
+**Still genuinely open (owner decides / Oak grounds):** sign-off on the proposed per-stream
+choices, won't-do lists, and measure candidates; the search/graph external-vs-internal-reuse
+and internal-transformation-alignment questions; the measure *targets* (Oak
+analytics/research); and the **full vision tripwire pass** once how-we-win is signed off
+(tripwire 2).
 
 A cohesive, leadership-grade **system-strategy** that stands on its own merit (an
 asset Oak leadership could read to understand and back this work) **and** is the
@@ -264,9 +298,8 @@ framings for Body 2 authoring; build on these, do not re-open them:
   behaviour; we do not introduce a new risk vector.
 - **The teacher is the safety layer.** The critically-aware expert teacher takes what we
   present and handles it appropriately; teachers are **not conduits**, and **nothing in
-  the app is directly aimed at students**. This sharpens ADR-194 (teacher-as-expert) and
-  the launch-readiness "pupil-boundary" framing: the direct safety mechanism is the expert
-  teacher, not app-level child-safety controls.
+  the app is directly aimed at students**. This sharpens ADR-194 (teacher-as-expert): the
+  direct safety mechanism is the expert teacher, not app-level child-safety controls.
 - **How we win** is a **separate, larger discussion** (deferred) — "we have the advantages".
 - **What we will not do** is a **deferred conversation**.
 - **Strategic granularity / levels / layers** (the traceability-target shape) is
@@ -291,8 +324,10 @@ session; build on these:
 - **Curriculum ownership is external** — this repo is a delivery mechanism and a build
   toolset, not the curriculum owner. Oak owns the curriculum.
 - **Amplifier, not replacement** — agent-first amplifies our people; it does not replace
-  them. The human-expert-leads ethic runs pupil ← teacher ← our own teams (one principle,
-  three levels). State it confidently, never as a defensive hedge.
+  them. The human-expert-leads ethic runs at **two levels** — the teacher (with our product)
+  and our own teams (with agents); pupils are not a level (the repo deliberately doesn't
+  centre pupils — owner correction 2026-06-20, superseding the earlier "three levels"
+  framing). State it confidently, never as a defensive hedge.
 - **"Open educational data, not only Oak's"** is **aligned** with Oak's ecosystem goal
   (innovative, safe tools from *open content and data*, generically) — not a boundary breach.
 - **Python SDK to follow** the TypeScript SDK (future, named).
@@ -320,13 +355,14 @@ link is load-bearing and must not be lost.
 stream's strategy:
 
 - **The release channel is not unilateral.** We can make the **MCP server** available
-  ourselves, but proper **app-like packaging and promotion** (a ChatGPT connector, a Claude
-  app) **require collaboration with the AI vendors**. The vendors are **aware and have
+  ourselves, but proper **app-like packaging and promotion** (connectors and apps across
+  ChatGPT, Claude, and Gemini, even-handedly — never favouring one provider) **require
+  collaboration with the AI vendors**. The vendors are **aware and have
   agreed** to support that packaging and to support us reaching the appropriate audience. So
   the **release channel and some promotion channels are an external-collaboration
   dependency** — de-risked by the vendors' agreement, but not something we can do alone. A
   vital product / digital-service constraint; the GTM/distribution hand-off carries it
-  (launch-readiness K3 names the ChatGPT + Claude surfaces).
+  (launch-readiness K3 names the ChatGPT, Claude, and Gemini surfaces).
 - **Marketing is gated on TPC-risk mitigation.** The app **cannot be marketed** until the
   **TPC risk** is sufficiently mitigated (TPC — the owner's term; relates to lesson-level
   content served by the API, the same area as the data-availability / missing-MV gate). The
@@ -434,6 +470,17 @@ discussions-to-be-had*: a strategic choice with no serving plan is a discussion 
 schedule (build / hand-off / defer), not an orphan defect. The spine surfaces both the
 deletions and the gaps.
 
+**The strategic-choice-ID contract** (relocated from the strategy corpus 2026-06-20 — the
+strategy *lists* the choices, governance *owns* the contract). The IDs the strategy
+enumerates per stream (`APP-*`, `TOOLS-*` — the ecosystem may decompose to
+`SDK-*`/`SEARCH-*`/`GRAPH-*`/`EEF-*` — and `FRAME-*`; granularity = **per-stream choices**,
+owner-set 2026-06-20) are a contract, not decoration: **stable** (once published, an ID
+isn't renumbered or reused), **additive** (new choices get new IDs; the space grows without
+breaking existing references — the same discipline as versioning a public API), and
+**resolvable** (every legitimate plan traces to exactly one choice; a choice with no serving
+plan is a discussion to schedule, not an orphan defect — as above). The
+`serves_strategic_choice` frontmatter field and the validator below enforce it.
+
 **The per-plan pass is judgment-heavy, not mechanical** — classification,
 concept-extraction (the value-loss risk; knowledge-preservation is absolute),
 rewrite-to-standard, traceability assignment — naturally a reviewed multi-agent pipeline
@@ -535,17 +582,26 @@ Settled (2026-06-20):
    both; this repo delivers the AI-assistant channel.
 10. **Curation = the full, iterative product lifecycle** (agent-first applies to build and
     maintain, not just code); **curriculum ownership is external** to this repo.
-11. **Amplifier, not replacement** — the human-expert-leads ethic at three levels
-    (pupil ← teacher ← our own teams); stated confidently.
+11. **Amplifier, not replacement** — the human-expert-leads ethic at **two levels** (the
+    teacher, with our product; our own teams, with agents); stated confidently. *(Corrected
+    2026-06-20: the earlier "three levels (pupil ← …)" wrongly elevated pupils, who are not a
+    component of this work — owner direction.)*
 12. **"Open educational data beyond Oak's"** is aligned with Oak's ecosystem goal, not a
     boundary breach.
 13. **Owner is the final editor of the vision**; engineering/estate structure is
     collaborative; product-strategy substance (diagnosis, how-we-win, won't-do, measures)
     is the owner's.
+14. **Diagnosis — settled:** *"deliver Oak's rigour at reach and at pace"* (rigour = the
+    value; reach = where teachers and the ecosystem now work; pace = agent-first) — the
+    unified hook with per-stream edges. Adopt-and-iterate-from-practice (a living strategy).
+15. **Strategic-choice granularity — per-stream choices** (`APP-*`/`TOOLS-*`/`FRAME-*`; the
+    ecosystem may decompose to SDK/search/graph/EEF). A plan → one choice → stream → goal;
+    threads serve goals selectively (a graph, not a strict tree). The ID *contract* lives in
+    governance (§"Body 3 — Approach").
 
 Outstanding (genuinely needs the settled strategy):
 
-14. **The new estate structure** and the **permanent home** of this governance file
+16. **The new estate structure** and the **permanent home** of this governance file
     and related plans (Body 3).
 
 ## Inputs and Authorities
