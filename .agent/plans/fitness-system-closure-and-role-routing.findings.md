@@ -1,8 +1,10 @@
 # Fitness System — Closure & Role-Routing — Findings & Decision Record
 
 **Type**: Session findings-and-decision record (independent baseline).
-**Status**: Complete for this session. No further substantive changes will be made
-this session — this document is the full record.
+**Status**: Findings complete and committed (`547d889c9`). Written as the pre-pull
+independent baseline; same-session events after the baseline (commits, the remote
+merge, session-handoff, claim close) are recorded in the **Post-write update** note
+below, which supersedes the write-time snapshots in §0 and §8.
 **Thread**: `agentic-engineering-enhancements` (Practice continuity & curation).
 **Session identity**: Finch binds Halo · claude · Opus 4.8 (1M) · session `b0831c` ·
 2026-06-20.
@@ -22,6 +24,20 @@ deliberately — see §0).
 - PDR-094 / ADR-199 + `.agent/reports/agentic-engineering/` — where the retired
   research record's insight is already homed.
 
+## Post-write update (2026-06-20)
+
+This record was authored as the **pre-pull independent baseline**, then — later the
+same session, on owner direction — the work was committed and integrated. The
+write-time snapshots further down (the §0 "not yet pulled" framing; the §8 claim,
+working-tree, and remote bullets) are **superseded by this note**:
+
+- **Committed** in three chunks by concern: findings record + backbone plan
+  (`547d889c9`), compliance lane (`d1387b81f`), strategy lane (`453896d64`).
+- **Remote merged** (`6f89ad64a`): the 8 broad planning-cluster commits are now in the
+  tree. They have still **not been read or compared** — the §11 integration is pending.
+- **Session-handoff** run (`b359631d8`): continuity surfaces refreshed; the curator
+  claim is **closed**. Branch is 0 behind / 38 ahead, **unpushed** (owner controls push).
+
 ---
 
 ## 0. What this document is, and why it exists now
@@ -31,12 +47,13 @@ agent) resolution of a recurring Practice signal. It is written deliberately
 **before** pulling or reading the fresh changes on the remote instance of this
 branch.
 
-The remote `docs/planning-and-validation` is currently **8 commits ahead** of local
-and carries **additional documents that are siblings in location** (`.agent/plans/`)
-— **not in subject**. They relate to the fitness functions only tangentially; they
-are **far broader** (the planning/validation/strategy estate). Those commits have
-**not been fetched into the working tree, inspected, or read** — by explicit owner
-instruction ("do not pull the fresh changes from the remote until I tell you to") and
+At the time of writing, the remote `docs/planning-and-validation` was **8 commits
+ahead** of local and carried **additional documents that are siblings in location**
+(`.agent/plans/`) — **not in subject**. They relate to the fitness functions only
+tangentially; they are **far broader** (the planning/validation/strategy estate). At
+write time those commits had **not been fetched into the working tree, inspected, or
+read** (they were merged later in the session — see the Post-write update) — by
+explicit owner instruction ("do not pull the fresh changes from the remote until I tell you to") and
 because it is the correct epistemic hygiene: writing our conclusions as an
 **independent baseline** keeps the subsequent reconciliation clean. Reading theirs
 first would anchor ours and destroy that value.
@@ -357,21 +374,21 @@ proportionality, blocking legitimacy).
   the question tool stays right for crisp/transactional forks — judge the work's
   shape." No other repo content was changed by me except the backbone plan (§6) and
   this document.
-- **Open claim** (collaboration state, untracked): a `curator`-role active claim was
+- **Curator claim** (collaboration state, untracked): a `curator`-role claim was
   opened on the lane files (`continuity-practice.md`, the four records, the backbone
-  plan) at 2026-06-20T05:34:25Z, `freshness_seconds` 14400. **It was not closed**
-  (honoring "no further changes"); the next session or the 4-hour stale-archive pass
-  should close it. Recorded here so it is not lost.
-- **Working-tree state at session end** (NOT touched by me — owner parallel edits on
-  the strategy thread and adjacent): `M` on `napkin.md`, `repo-continuity.md`,
-  `threads/strategy-and-plan-estate-holistic-review.next-session.md`,
-  `plans/compliance/roadmap.md`,
+  plan) at 2026-06-20T05:34:25Z. It is **now closed** (archived to
+  `closed-claims.archive.json`) as part of the session-handoff.
+- **Working-tree state**: at the baseline write-time these were uncommitted — a
+  parallel strategy-lane session's edits across `napkin.md`, `repo-continuity.md`, the
+  strategy thread record, `plans/compliance/roadmap.md`,
   `plans/curriculum-mcp-path-to-ga/launch-readiness-framework.md`,
-  `plans/vision-strategy-and-plan-estate.plan.md`, `.vscode/settings.json`; plus my
-  untracked backbone plan and this document.
-- **Remote**: branch is **8 behind / 33 ahead** of `@{u}`. The 8 remote commits
-  (sibling documents) were **not fetched into the tree, inspected, or read**, by owner
-  instruction. Local is **unpushed** (owner controls push).
+  `plans/vision-strategy-and-plan-estate.plan.md`, `.vscode/settings.json`, plus the
+  strategy opener. The owner then assigned them to this session; they are **now
+  committed** (`453896d64`, `d1387b81f`) by concern, and the tree is clean.
+- **Remote**: at write-time the branch was **8 behind / 33 ahead**; the 8 remote
+  commits were not yet fetched or read. They are **now merged** (`6f89ad64a`) but
+  **still not read or compared** (the §11 integration is pending). Branch is now
+  **0 behind / 38 ahead**, **unpushed** (owner controls push).
 - **No-throw specifics** (§3.5): plan reshape `24b2b7f6a`; conversions `1556b9191`,
   `93beffcfe`, `304b68f8d`, `61bdbc3e4`; uncommitted in `repo-continuity`, now
   entangled with owner edits.
