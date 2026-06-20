@@ -89,6 +89,13 @@ surface.
 - **Collaboration-state lifecycle**: `.agent/state/` files are live signal
   sources, not long-term documentation. Outside explicit owner-directed research
   windows, process useful substance into memory/docs/plans and clear stale state.
+- **Incoming planning cluster (merged from remote 2026-06-20, not yet integrated)**: a broad
+  repo-intent / service-authority / governed-document-graph / context-preservation set of sibling
+  documents now lives in [`.agent/plans/`](../../plans/). Integration and comparison are pending —
+  protocol in [`fitness-system-closure-and-role-routing.findings.md`](../../plans/fitness-system-closure-and-role-routing.findings.md) §11.
+- **Fitness-system doctrine (agentic lane)**: the Closure & Role-Routing design landed as a findings
+  record + backbone plan (`547d889c9`); next is the plan's WS0 (PDR-106 + ADR-144 amendment) and the
+  §11 comparison. Detail in the `agentic-engineering-enhancements` thread record.
 
 ## Active Threads
 
@@ -98,7 +105,7 @@ each thread record; this table is the repo-level index.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Zephyrous Buffeting Falcon / skills-lane-relocated-to-educator-end-users / 2026-06-08 (prior identities: thread record) |
-| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 (1M) / Drake lifts Obsidian / PDR-105 burndown COMPLETE — validator now blocking / 2026-06-19 (prior: Siren guards Reef, Tulip spins Xylem; full history in thread record) |
+| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 (1M) / Finch binds Halo / Closure & Role-Routing fitness doctrine designed + captured / 2026-06-20 (prior: Drake lifts Obsidian, Siren guards Reef, Tulip spins Xylem; full history in thread record) |
 | `eslint-no-throw-result-migration` | Migrate every throw to Result (ADR-088); drive the ~1000 warnings to zero; promote the rule. In execution on `docs/planning-and-validation`; cheap WS2 done, residue is design-laden (tier map in record) | [record](threads/eslint-no-throw-result-migration.next-session.md) | claude / Opus 4.8 (1M) / Siren mends Rudder / execution — observability+graph-core+logger landed (`93beffcfe`,`304b68f8d`,`61bdbc3e4`) / 2026-06-19 (prior: Merlin spins Cirrus `1556b9191`; Vanilla weaves Undergrowth, plan-author) |
 | `statusline-enhancements` | Claude Code statusline: Oak-mark, session-shape indicators, logo swap; lane in two `current/` plans (session-state, logo-modularisation). Live detail + the `feat/comms-research` divergence to reconcile: thread record | [record][statusline] | claude-code / Opus 4.8 / Vole calls Hollow / live-logo-swap-and-plan-harden / 2026-06-16 (prior identities: thread record) |
 | `agent-naming` | PDR-027 display-name derivation: versioned schema registry, session-hook identity surfaces, wordlist eras (v2 landed; v3 + era-pinning cure queued) | [record][agent-naming] | claude / Opus 4.8 / Squall hunts Troposphere / thread-open + v3-plan-author / 2026-06-13 (prior identities: thread record) |

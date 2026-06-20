@@ -69,3 +69,24 @@ intention failed three times. Owner re-calibrated 2026-06-20: I'd over-corrected
 propose substance", which would wrongly silence engineering/architecture contribution — the failure
 oscillates (over-claim → over-suppress), and the stable point is the read-gate + locus-awareness, not
 silence.
+
+## Closure & Role-Routing fitness doctrine + proximity-implies-topic (2026-06-20, Finch binds Halo)
+
+A jointly-designed session on the four prose-width-hard records that opened (generative metacognition)
+into the fitness system's design philosophy. The durable output is committed — the findings record +
+backbone plan (`547d889c9`) — so this is a pointer, not a re-derivation. The principle: **closure**
+(measure every content-bearing surface, declared in frontmatter incl. its own budget, or the unmeasured
+one becomes the gaming drain) + **role-routing** (a budget overage routes to the surface's role-cure —
+graduate for memory, decompose-for-value for plans, bound for frontmatter — never trim or shard for score).
+
+Same root as Kayak's entry above (fluency-is-a-warning, recurring even while documenting it), three more
+instances this session: (1) "relax the width limit for this `merge_class`" — would re-open the very gaming
+channel the triad closed; (2) "frontmatter is free of the budget" — sold an unmeasured surface as a benefit
+inside an anti-gaming design; (3) **proximity-implies-topic** — I inferred the remote siblings were
+fitness-SUBJECT from their location next to my fitness doc; they were location-siblings, far broader. Each
+arrived smoothly; the situational fact (why the triad exists; what the siblings actually are) was the
+ungrounded step. Recurrence per PDR-098, not a new home. Sibling: [[passive-guidance-loses-to-artefact-gravity]].
+
+**candidate:** PDR-106 (Closure & Role-Routing principle) + an ADR-144 amendment (frontmatter-budget
+metric, role-routing of overages). Trigger: owner confirms the PDR-vs-`principles.md` home (findings §7
+D1a), then author the plan's WS0 with `docs-adr-expert`.
