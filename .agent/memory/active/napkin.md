@@ -43,3 +43,29 @@ trusted the script's output I'd have added two redundant banners (re-instantiati
 present). Lesson: a verification SCRIPT's output is itself a claim to verify against the source before
 acting on it — `verify-dont-trust` applies to your own tooling, not just inherited state. The cheap
 nearest-content heuristic is the tell. Sibling: [[fidelity-audit-is-not-currency-audit]].
+
+## Decision locus + the read-gate: product strategy is the owner's, engineering/architecture is collaborative, never over-claim from partial grounding (2026-06-20, Kayak seeks Coral)
+
+Three over-claims in one session, each owner-corrected: (1) an "effort is inverted vs impact" opening
+thesis (a 7-agent adversarial workflow refuted it — I'd collapsed importance/work-volume/sequencing axes
+the owner deliberately separated); (2) a structural "lean" (metadata-spine vs re-foldering) recorded
+before I'd read the estate; (3) a candidate strategy diagnosis centring cost/sustainability — owner: cost
+is not critical, must not dominate architectural excellence, funding is out of scope. Also: the thread
+record itself mis-transmitted its own source (cited 153/363; the survey says 149/355) — verify-don't-trust
+applies to INHERITED framing, not only external claims.
+
+One root: I move from PARTIAL grounding to a confident framing, and the smoother it arrives the less it
+was grounded (fluency-is-a-warning, recurring even while documenting it). Two structural cures held: (a)
+gate every substantive claim on *have I read the source this rests on?* — if not, read it or mark it OPEN
+(applied: stripped the lean from the durable record; read Oak's strategy in reference-local before
+discussing the flow); (b) calibrate the **decision locus** — **product-level** strategy (diagnosis /
+how-we-win / measures / feature shaping) is the owner's, where input and questions stay valuable but I
+don't decide; **engineering strategy / architecture / technical approaches** are **collaborative,
+case-by-case** — propose, reason, push for LTAE, don't go passive. Recurrence of homed
+doctrine (ground-convenient-claims; feature-shaping-is-owner-decision; present-verdicts-not-menus misfired
+where grounding was absent) — flagged as recurrence per PDR-098, not a new home. Sibling:
+[[passive-guidance-loses-to-artefact-gravity]] — the read-gate firing at write-time worked where the held
+intention failed three times. Owner re-calibrated 2026-06-20: I'd over-corrected THIS lesson into "don't
+propose substance", which would wrongly silence engineering/architecture contribution — the failure
+oscillates (over-claim → over-suppress), and the stable point is the read-gate + locus-awareness, not
+silence.

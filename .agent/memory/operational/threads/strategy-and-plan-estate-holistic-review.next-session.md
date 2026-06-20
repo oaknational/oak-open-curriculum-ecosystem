@@ -24,6 +24,44 @@ foundation; its report + raw data live in
 [`.agent/reports/archive/plan-estate-survey-2026-06-15/`](../../../reports/archive/plan-estate-survey-2026-06-15/README.md)
 (archived 2026-06-18; a fresh survey is a Body-3 prerequisite).
 
+## Where We Are (2026-06-20, Kayak seeks Coral — plan-estate approach recorded; strategy inputs captured)
+
+This session: a critical assessment of the thread (first-hand + a 7-agent verify/adversarial workflow),
+then — on owner direction — **recorded the plan-estate restructure approach** in the controlling plan
+§"Body 3 — Approach (the how)" and **captured owner strategy inputs** in Body 2. Records corrected for
+accuracy (owner: all records accurate at all times).
+
+- **Flow reaffirmed (owner):** vision → strategy → planning, each enhanced/created/restructured in turn,
+  with at most minor upward adjustments from lower-level insights. **Strategy first**, then the plan
+  standard + deep survey, then the restructure.
+- **Body-3 approach recorded:** two anchors (the strategy's enumerable strategic choices; a ratified
+  plan standard / conformance rubric); two new prerequisite deliverables (the **plan standard** and a
+  **fresh deep survey** of every plan + plan-adjacent surface); bidirectional traceability; enforcement
+  as the structural cure. Structural decisions left **OPEN** (not pre-judged) — controlling plan §Body 3.
+- **Strategy inputs captured (owner, 2026-06-20):** cost not critical / must not dominate architectural
+  excellence / funding out of scope; teachers already use AI hosts, we bring Oak's rigour (source
+  materials + agent guidance; future host-vetting moderation service); the **teacher is the safety
+  layer**, nothing aimed at students; how-we-win + won't-do + granularity all **DEFERRED** to near-term
+  discussion; measures defined/measured with Oak analytics + research experts. Full text: controlling
+  plan §Body 2 "Strategy inputs ratified by the owner (2026-06-20)".
+- **Records corrected:** survey figure is 149/355 (not 153/363); editorial-tone path + PR-76 blocker
+  already fixed (`564ef6e39`); sequencing updated to strategy-first.
+- **Compliance & release constraints recorded (2026-06-20):** the production-blocking compliance set
+  (ATRS [gov.uk], detailed DPIA, ICO Children's Code, safeguarding, independent AI-output evals) is
+  tracked in the [compliance lane](../../../plans/compliance/roadmap.md) §"Statutory & Release-Blocking
+  Compliance"; the gate-ownership map and two release constraints — **vendor-collaboration release
+  channel** (not unilateral; vendors aware + agreed) and **marketing blocked on TPC-risk mitigation** —
+  are in the controlling plan §Body 2; **ICO ↔ target-audience** is cross-referenced bidirectionally
+  (launch-readiness K2 ↔ §B3). All are inputs Body 2 folds in as named hand-offs.
+- **Next (owner-driven):** react to / shape the diagnosis; set strategic-choice granularity; then
+  how-we-win and won't-do. **Decision locus:** product-level strategy is the **owner's** call (input and
+  questions stay valuable); **engineering strategy / architecture decisions are collaborative,
+  case-by-case** — proposed and discussed, not forbidden. The session failure was over-claiming from
+  partial grounding, cured by the read-gate, not by going passive.
+- **Working tree:** controlling plan + this record + repo-continuity (strategy lane) edited (uncommitted;
+  owner controls commit/push). Two changes left untouched as not-mine: a pre-existing `repo-continuity.md`
+  no-throw-lane edit, and an untracked `fitness-system-closure-and-role-routing.plan.md` (agentic lane).
+
 ## Where We Are (2026-06-18, Asteroid calls Meridian — approach reconceived to the informational model)
 
 - **Branch:** `docs/planning-and-validation`. Scope authority is the controlling plan.
@@ -178,13 +216,16 @@ MCP-app stream's production-readiness keystones.
   This is the deliberate inward value stream (owner §14), not a defect.
 - Strategy surfaces received **scaffolding-wiring only** (date bumps, framework +
   stub pointers); **no substantive forward movement.** Survey hygiene findings are
-  **UNCHANGED**: reachability ~42% (153/363 unlinked), 59 stale executables, 14
-  session-openers, missing lane READMEs, the reachability-CI-validator plan still
-  `decision-incomplete`.
+  **UNCHANGED** (re-verified 2026-06-20): the real archived-survey figure is
+  **149/355 (42%) unlinked** — the earlier "153/363" was a mis-transmission (153 is the
+  survey's future-doc count). 59 stale executables, 14 session-openers, missing lane
+  READMEs, the reachability-CI-validator plan still `decision-incomplete`. The estate has
+  since grown ~33% to ~550 non-archive docs, so counts are measured again by the fresh deep
+  survey, not trusted from the dated figures.
 - Product/user-value gaps **unchanged**: widget **search UI not started**
   (brand-banner-only); **no production-Clerk execution plan**; Cloudflare gate
-  unpromoted; WS3-Phase-5 plan still carries a **dead blocker on PR #76** (merged
-  2026-04-10). (The value/impact articulation was since authored 2026-06-17 and is now a
+  unpromoted; the WS3-Phase-5 plan's dead PR-76 blocker is now **cleared** (`564ef6e39`,
+  2026-06-17). (The value/impact articulation was since authored 2026-06-17 and is now a
   **superseded input** pending Body 2 — see Where We Are; the rest remain unverified-since-survey.)
 - Survey-framing correction: the README front door reads **"Invite-Only Alpha"**
   (not "private alpha"), one milestone behind the M2 tracker. (A survey
@@ -215,7 +256,29 @@ structuring must include plans/owners for them:
   discoverability (teachers will not auto-discover or self-install), and messaging
   / positioning alongside Oak's other AI offerings.
 
+**(2026-06-20) Ownership verified first-hand & tracked:** privacy and host-UX are owned
+in-repo (`app-submission-standards` WS2; `mcp-app-extension-migration` WS3/WS4). **ATRS,
+detailed DPIA, ICO Children's Code, safeguarding, and independent AI-output evals** are
+external/tracked **production-release blockers**, now recorded in the
+[compliance lane](../../../plans/compliance/roadmap.md) §"Statutory & Release-Blocking
+Compliance" and
+[launch-readiness §B1/§B3](../../../plans/curriculum-mcp-path-to-ga/launch-readiness-framework.md);
+the lesson-level data MV and MCP-app GTM remain discussions. The **ICO Children's Code ↔
+target-audience** question ("nothing aimed at students") is cross-linked bidirectionally
+(launch-readiness K2 ↔ §B3) and is an open compliance discussion. Full gate map: controlling
+plan §Body 2. **Release constraints (owner, 2026-06-20):** the release channel is **not
+unilateral** — the MCP server can be served by us, but app-like packaging + promotion in
+ChatGPT/Claude **require vendor collaboration** (vendors aware + **agreed** to support
+packaging and audience reach); and **marketing is blocked until the TPC risk** (lesson-level
+content / the data-availability area) **is sufficiently mitigated**. Both recorded in the
+controlling plan §Body 2 and launch-readiness K3.
+
 ## Next (fresh context starts here)
+
+**▶ The next session is scope-locked to STRATEGY AUTHORING (Body 2).** Use the opener:
+[`define-strategy-content.prompt.md`](../../../prompts/strategy-and-plan-estate/define-strategy-content.prompt.md).
+The full body sequence below remains the thread's overall plan; the opener carries the
+scoped brief, ground sources, settled owner inputs, and the open diagnosis/granularity decisions.
 
 **Read the controlling plan first** —
 [`vision-strategy-and-plan-estate.plan.md`](../../../plans/vision-strategy-and-plan-estate.plan.md),
@@ -233,16 +296,22 @@ The Q-002 strategy-layer discussion is **resolved** (the model + bodies above) a
    won't-do + measures; K1–K3 inside the app section as its readiness keystones; the
    release-readiness requirements (below) as named hand-offs. Absorb `value-and-impact.md` and the
    2a rationale — both from `.agent/plans/archive/` — as inputs. Leadership-grade.
-2. **In parallel — `estate-restructure-prep` (strategy-independent):** begin reading every plan
-   and extracting its permanent documentation to its durable home; archive genuinely-complete
-   plans. Do **not** assert new boundaries yet (those need Body 2). Re-verify survey counts first.
-3. **Estate hygiene (independent, anytime):** dead VISION references; editorial-tone vision path;
-   dead PR-76 blocker — after re-verifying reachability counts.
+2. **After the strategy — the plan standard (Anchor B) + a fresh deep survey, then the read+extract pass.**
+   Owner sequencing (2026-06-20, vision→strategy→planning, each level in turn): although the read+extract
+   slice is informationally independent, both prerequisites' traceability elements depend on the strategy's
+   strategic-choice shape, so they follow Body 2. Then read every plan, extract its permanent documentation
+   to its durable home, archive genuinely-complete; do **not** assert new boundaries (those need Body 2).
+3. **Estate hygiene:** the dead VISION `§What We Deliver` references remain open in 3 live files.
+   The editorial-tone vision path and the PR-76 blocker are **already fixed** (`564ef6e39`, 2026-06-17).
+   Remediate reachability/openers/stale-executables after the fresh deep survey measures the counts again.
 4. **Then Body 3 (estate restructure) proper** — once the strategy structure exists: new
    boundaries, rehoming, rewrite-to-standard, scattered-concepts→new-plans, deletions with
    disposition. Authored as its own executable plan. The within-ecosystem gap analysis (the old
    "2B") is part of **Body 3**, run at the **hybrid** depth (SDK/search/graph/EEF). The old
-   2A/2B/2C phases are dissolved — see the controlling plan's Disposition section.
+   2A/2B/2C phases are dissolved — see the controlling plan's Disposition section. The
+   **approach (the how)** — the plan standard, the deep survey, the bidirectional traceability spine,
+   enforcement-as-structural-cure, and the five open discussions — is recorded in the controlling plan
+   §"Body 3 — Approach (the how)" (2026-06-20 plan discussion).
 
 The estate restructure (Body 3) is **core and ~80% of the work, not an addendum**; only its
 new-boundary work is informationally gated on the strategy. Full scope: the plan.
@@ -278,3 +347,4 @@ new-boundary work is informationally gated on the strategy. Full scope: the plan
 | Tempest spins Spire | claude-code | claude-opus-4-8[1m] | 94a5c5 | controlling-plan author + review-synthesis + hygiene | 2026-06-17 | 2026-06-17 |
 | Squall spins Stratus | claude-code | claude-opus-4-8[1m] | 8b8770 | Phase-2A ratification gate + decision recording + K1–K3 reconciliation | 2026-06-17 | 2026-06-17 |
 | Asteroid calls Meridian | claude-code | claude-opus-4-8[1m] | 2297c9 | Q-002 strategy-layer discussion + approach reconception to the informational model | 2026-06-18 | 2026-06-18 |
+| Kayak seeks Coral | claude-code | claude-opus-4-8[1m] | 551a7f | critical assessment + plan-estate approach recording + strategy-input capture + records-accuracy + handoff | 2026-06-20 | 2026-06-20 |

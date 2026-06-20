@@ -5,7 +5,7 @@ type: governance-execution
 status: active
 lifecycle: active
 thread: strategy-and-plan-estate-holistic-review
-last_updated: 2026-06-18
+last_updated: 2026-06-20
 related:
   - VISION.md
   - .agent/plans/high-level-plan.md
@@ -26,7 +26,7 @@ todos:
     content: "Plan-estate body (core, large — informationally depends on the strategy's structure) — read every plan, extract permanent documentation, archive complete plans, extract-and-archive completed work from partial plans, rewrite survivors to a common standard, pull scattered concepts into new plans, delete with disposition. New thread/plan boundaries derived FROM the strategy. Value-preserving via recorded dispositions (supersession mappings per the consolidation discipline, never a standalone ledger)."
     status: blocked
   - id: estate-restructure-prep
-    content: "Plan-estate body, strategy-independent slice (runnable now) — reading every plan and extracting its permanent documentation to its durable home (ADRs/docs) does NOT informationally depend on the final strategy; the new BOUNDARIES do. Begin the read+extract+archive-genuinely-complete pass in parallel; defer new-boundary rehoming and rewrite-to-standard until the strategy structure exists."
+    content: "Plan-estate body, prerequisite deliverables — the **plan standard** (Anchor B: one ratified conformance rubric for plans and inter-plan structure) and a **fresh deep survey** of every plan and plan-adjacent surface (conformance + traceability inventory). Owner sequencing (2026-06-20, vision→strategy→planning flow): the strategy (Body 2) is authored FIRST; although the read+extract slice is informationally independent, both prerequisites' traceability elements depend on the strategy's strategic-choice shape, so they follow Body 2. Then read every plan, extract permanent documentation, archive genuinely-complete. See §'Body 3 — Approach (the how)'."
     status: pending
   - id: estate-hygiene
     content: "Estate hygiene (independent — no informational dependence on vision/strategy) — re-anchor dead VISION references; fix the editorial-tone vision path; clear the dead PR-76 blocker; remediate reachability/openers/stale-executables after re-verifying current counts."
@@ -170,6 +170,66 @@ its framing superseded. `value-and-impact.md` is likewise **archived**
 (`.agent/plans/archive/`, 2026-06-18); Body 2 absorbs its value-articulation prose
 from the archived copy.
 
+**Strategy inputs ratified by the owner (2026-06-20, this session)** — load-bearing
+framings for Body 2 authoring; build on these, do not re-open them:
+
+- **Cost efficiency** matters but is **not critical** and must **not dominate
+  architectural-excellence decisions in any way**; **funding is out of scope** (the
+  project is funded). The diagnosis and choices must not centre cost or sustainability.
+- **AI-host framing (positive, not defensive):** teachers are **already using** the AI
+  hosts in their work. Our move is to bring Oak's high-quality rigour to that — as
+  (1) source materials and (2) agent guidance — and, in future, (3) a response-moderation
+  service the host can vet its responses against. We raise the quality of an existing
+  behaviour; we do not introduce a new risk vector.
+- **The teacher is the safety layer.** The critically-aware expert teacher takes what we
+  present and handles it appropriately; teachers are **not conduits**, and **nothing in
+  the app is directly aimed at students**. This sharpens ADR-194 (teacher-as-expert) and
+  the launch-readiness "pupil-boundary" framing: the direct safety mechanism is the expert
+  teacher, not app-level child-safety controls.
+- **How we win** is a **separate, larger discussion** (deferred) — "we have the advantages".
+- **What we will not do** is a **deferred conversation**.
+- **Strategic granularity / levels / layers** (the traceability-target shape) is
+  **deferred — returning shortly**; it is the one decision that flows straight into the
+  plan-traceability spine.
+- **Measures** are **critically important** and will be defined and measured with Oak's
+  **analytics and research experts** — reinforcing that measures are an Oak input, never
+  agent-invented.
+
+**Release-readiness gate ownership (verified first-hand 2026-06-20)** — input for Body 2's
+named hand-offs. "Owned" = a live in-repo plan drives it; "external/tracked" = executed
+outside the repo and tracked in the [compliance lane](compliance/roadmap.md); "discussion"
+= no owner yet, surface as a hand-off:
+
+- **Privacy policy / T&Cs surfacing** — *owned in-repo* (`app-submission-standards` WS2 +
+  `compliance/roadmap` Phase 1); the legal decide-and-publish step is external.
+- **Host UX** — *owned in-repo* (`mcp-app-extension-migration` WS3/WS4).
+- **ATRS, detailed DPIA, ICO Children's Code, safeguarding assessment, independent
+  AI-output safety/quality evals** — *external/tracked*, **production-release blockers**
+  (compliance lane + [launch-readiness](curriculum-mcp-path-to-ga/launch-readiness-framework.md)
+  §B1/§B3); most executed by experts outside the repo.
+- **Lesson-level data-availability (the API's missing materialised view)** and **MCP-app
+  go-to-market / school support** — *discussion* (no owner yet).
+
+The **ICO Children's Code** question is **cross-linked to the target-audience decision**
+(teachers/curriculum leaders; nothing aimed at students — launch-readiness K2 ↔ §B3); that
+link is load-bearing and must not be lost.
+
+**Release & distribution constraints (owner, 2026-06-20)** — load-bearing for the app
+stream's strategy:
+
+- **The release channel is not unilateral.** We can make the **MCP server** available
+  ourselves, but proper **app-like packaging and promotion** (a ChatGPT connector, a Claude
+  app) **require collaboration with the AI vendors**. The vendors are **aware and have
+  agreed** to support that packaging and to support us reaching the appropriate audience. So
+  the **release channel and some promotion channels are an external-collaboration
+  dependency** — de-risked by the vendors' agreement, but not something we can do alone. A
+  vital product / digital-service constraint; the GTM/distribution hand-off carries it
+  (launch-readiness K3 names the ChatGPT + Claude surfaces).
+- **Marketing is gated on TPC-risk mitigation.** The app **cannot be marketed** until the
+  **TPC risk** is sufficiently mitigated (TPC — the owner's term; relates to lesson-level
+  content served by the API, the same area as the data-availability / missing-MV gate). The
+  marketing go-ahead is downstream of that mitigation.
+
 **Acceptance (outcome-level):** a `docs/strategy/` corpus exists that a leadership
 reader can follow, **written in the editorial voice**; the Oak-alignment (stream→goal,
 schools non-goal, pillars) is derived and explicit; the streams-as-system map is stated;
@@ -222,6 +282,81 @@ permanent documentation extracted; complete plans archived; partial plans' compl
 work extracted and archived; survivors rewritten to the common standard; this plan
 and related plans have a decided home; the ungated collection no longer exists; every
 removed/moved item has a recorded disposition (supersession mapping; zero unaccounted removals).
+
+### Body 3 — Approach (the *how*) — recorded 2026-06-20
+
+Provisional design insights from the 2026-06-20 plan discussion (PDR-018: marked
+provisional; finalised when Body 3 is authored, post-strategy, per the
+vision→strategy→planning flow). They define how the restructure reaches a **cohesive
+standard of excellence and discovery** across every plan, and make two prerequisite
+deliverables first-class. The structural decisions below are **open** until the strategy
+exists and every plan has been read — named here, not pre-judged.
+
+**Two anchors, both gating the per-plan rewrite:**
+
+- **Anchor A — the strategy** (Body 2), structured to expose an *enumerable, stable set
+  of strategic choices* (with IDs) as the traceability targets every surviving plan
+  resolves to.
+- **Anchor B — the plan standard** (new deliverable): one **ratified conformance rubric**
+  consolidated from PDR-018 + ADR-117 + `templates/`, covering required frontmatter
+  (incl. a `serves_strategic_choice` field), the end-goal/mechanism/means body shape,
+  status vocabulary, size guidance, and inter-plan structure (collection / lifecycle /
+  index conventions). Grounded need: the doctrine exists but is unapplied — first-hand
+  profiling 2026-06-20 found 2% of plans carry `plan_id` and 38% have no frontmatter — so
+  the rubric must ship with enforcement, not as more doctrine.
+
+**Two prerequisite deliverables, now explicit:**
+
+1. **The plan standard (Anchor B).**
+2. **A fresh deep survey of every plan and plan-adjacent surface** — the 2026-06-15
+   survey expanded from census/reachability into a **conformance-and-traceability
+   inventory**: per-plan standard-conformance, classification (keep / rewrite /
+   archive-complete / delete-with-disposition / rehome-concept / new-for-gap), and
+   traceability resolution. The inventory is the work-list the per-plan pass consumes.
+   (2026-06-15 figures are stale — the estate has grown ~33% to ~550 non-archive docs;
+   the qualitative debt is unchanged, re-verified 2026-06-20: the real survey figure was
+   **149/355 unlinked**, 59 stale executables, 14 openers, 3 missing lane READMEs, a
+   stalled reachability-remediation plan.)
+
+**Sequence — vision → strategy → planning (owner, 2026-06-20).** Each level is enhanced
+in turn, with at most minor upward adjustments from insights gained lower down. Body 2
+(strategy) is authored before the plan standard and the deep survey: although the
+read+extract slice is informationally independent, both prerequisites' *traceability*
+elements need the strategy's strategic-choice shape.
+
+**Traceability is bidirectional.** plans→strategy validates that every surviving plan
+serves a strategic choice (→ vision element → Oak goal). strategy→plans *produces the
+discussions-to-be-had*: a strategic choice with no serving plan is a discussion to
+schedule (build / hand-off / defer), not an orphan defect. The spine surfaces both the
+deletions and the gaps.
+
+**The per-plan pass is judgment-heavy, not mechanical** — classification,
+concept-extraction (the value-loss risk; knowledge-preservation is absolute),
+rewrite-to-standard, traceability assignment — naturally a reviewed multi-agent pipeline
+over the deep-survey inventory.
+
+**Enforcement is the structural cure, not optional polish.** A validator (reachability +
+frontmatter conformance + traceability resolving to a real choice) wired into CI,
+warn-first per the new-rule convention then blocking. A reachability-remediation plan
+already exists but has been stalled since 2026-05-19; reconcile the enforcement work with
+it. Without enforcement the restructure re-drifts — the frozen hygiene debt and the
+unenforced reachability invariant already prove the failure mode.
+
+**Open discussions (to settle by discussion — product-level shaping is the owner's call;
+estate / engineering structure is collaborative and case-by-case; informed by and informing
+the strategy — not pre-judged here):**
+
+1. **Traceability spine — structure vs metadata.** Stream-shaped re-foldering vs
+   ownership-based collections plus a `serves_strategic_choice` field and a strategy→plans
+   index. (PDR-018 currently places plans by ownership and rejects moves-for-symmetry — a
+   constraint to weigh.)
+2. **Granularity of a "strategic choice"** as the traceability target (stream /
+   per-stream choice / finer) — shapes how the strategy is written.
+3. **Rubric strictness and migration** — big-bang retrofit vs as-touched; warn-first vs
+   blocking.
+4. **Deletion bar and concept-extraction review gate** — what justifies delete vs archive
+   vs rehome (value-preservation).
+5. **Strategy measures** — the Oak-grounded input only the owner supplies.
 
 ## Estate Hygiene (independent — no informational dependence)
 
