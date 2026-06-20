@@ -43,6 +43,19 @@ that deserve explicit triage before any practical plan is cut from them.
 
 ---
 
+## Proposal Records
+
+These root-level artefacts are not executable plans and do not amend the root
+plan-file exception rule. They preserve proposed planning/semantic changes until
+they are accepted, rejected, merged into existing models, promoted into
+directives/templates/ADRs, or decomposed into practical plans.
+
+| Proposal | Planning question | Likely owning surfaces |
+|---|---|---|
+| [Repo Intent and Service Knowledge Boundaries — Proposal Record](repo-intent-and-service-knowledge-boundaries.proposal.md) | Should the repo explicitly codify its role as durable intent substrate, and define how external service knowledge relates to repo-held intent? | `VISION.md`, `docs/strategy/`, `.agent/directives/`, `.agent/templates/`, service/document semantic models, PR/review templates |
+
+---
+
 ## Plan Collections
 
 | Collection | Purpose | Status |
@@ -176,6 +189,7 @@ When adding, promoting, or retiring plan work:
 | Status | Meaning |
 |---|---|
 | 📋 Planned | Not started or queued but not executing |
+| 📝 Proposal | Recorded proposal awaiting triage, acceptance, rejection, merge, or decomposition |
 | 🔬 In Progress | Actively being worked on |
 | 🔄 Active | Active collection or mixed active surface |
 | ⏸ Blocked/Deferred | Waiting on dependency or deprioritised |
