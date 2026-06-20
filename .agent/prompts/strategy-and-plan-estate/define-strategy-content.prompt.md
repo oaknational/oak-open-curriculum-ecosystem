@@ -3,7 +3,7 @@
 - **Thread:** `strategy-and-plan-estate-holistic-review`
 - **Type:** handover (stateful session entry point)
 - **Scope:** **ONLY** author the strategy content — Body 2: the `docs/strategy/` corpus.
-- **Primary plan:** [`vision-strategy-and-plan-estate.plan.md`](../../plans/vision-strategy-and-plan-estate.plan.md) §Body 2
+- **Primary plan:** [`vision-strategy-and-plan-estate.plan.md`](../../plans/product-development-governance/vision-strategy-and-plan-estate.plan.md) §Body 2
 - **Created:** 2026-06-20 (Kayak seeks Coral) for the next session
 
 ---
@@ -20,7 +20,7 @@ questions, and structure; the **owner shapes the product-strategy substance**.
 1. [`.agent/directives/AGENT.md`](../../directives/AGENT.md) and apply `/oak-start-right-quick`
    (identity, rules).
 2. Controlling plan
-   [`vision-strategy-and-plan-estate.plan.md`](../../plans/vision-strategy-and-plan-estate.plan.md)
+   [`vision-strategy-and-plan-estate.plan.md`](../../plans/product-development-governance/vision-strategy-and-plan-estate.plan.md)
    — especially **§Body 2** (conception + "Strategy inputs ratified by the owner (2026-06-20)" +
    the gate-ownership map + "Release & distribution constraints") and **§Body 3 — Approach**.
 3. [`VISION.md`](../../../VISION.md) — the change + three co-equal streams + mission (verbatim).

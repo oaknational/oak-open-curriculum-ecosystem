@@ -58,7 +58,7 @@ documents now risks building on an unsettled frame.
 **Why not cheaply answerable now:** it's a design discussion the owner wants to hold directly in a
 fresh session; it isn't an artefact an agent should settle unilaterally.
 
-**Owning artefact:** [`vision-strategy-and-plan-estate.plan.md`](../../plans/vision-strategy-and-plan-estate.plan.md)
+**Owning artefact:** [`vision-strategy-and-plan-estate.plan.md`](../../plans/product-development-governance/vision-strategy-and-plan-estate.plan.md)
 (Phase 2 — carries the owner-directed gate); thread `strategy-and-plan-estate-holistic-review`.
 
 **Status:** RESOLVED (2026-06-18). The discussion happened. Outcome: the strategy layer is a
@@ -68,5 +68,5 @@ across and within), homed at `docs/strategy/`. The vision→strategy→planning 
 strategy**, which our vision services (align, not fulfil). The 2A/2B/2C phase breakdown is
 superseded by three co-equal, first-class bodies of work (vision / strategy / plan estate). Full
 outcome recorded in the controlling plan
-[`vision-strategy-and-plan-estate.plan.md`](../../plans/vision-strategy-and-plan-estate.plan.md)
+[`vision-strategy-and-plan-estate.plan.md`](../../plans/product-development-governance/vision-strategy-and-plan-estate.plan.md)
 (reconceived 2026-06-18). Surfaced by owner direction; resolved with the owner.

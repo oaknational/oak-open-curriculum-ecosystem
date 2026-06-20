@@ -2,7 +2,7 @@
 plan_id: project-context-preservation-gap-report
 title: "Project Context Preservation Gap Report"
 type: report
-status: active
+status: proposed
 lifecycle: current
 thread: strategy-and-plan-estate-holistic-review
 last_updated: 2026-06-20
@@ -11,13 +11,13 @@ related:
   - governed-repo-document-graph.semantic-model.md
   - governed-repo-document-graph.plan.md
   - service-authority-and-operating-contexts.semantic-model.md
-  - vision-strategy-and-plan-estate.plan.md
-  - high-level-plan.md
-  - good-first-issues.md
-  - completed-plans.md
-  - ../memory/operational/threads/strategy-and-plan-estate-holistic-review.next-session.md
-  - ../../VISION.md
-  - ../../README.md
+  - ../vision-strategy-and-plan-estate.plan.md
+  - ../../high-level-plan.md
+  - ../../good-first-issues.md
+  - ../../completed-plans.md
+  - ../../../memory/operational/threads/strategy-and-plan-estate-holistic-review.next-session.md
+  - ../../../../VISION.md
+  - ../../../../README.md
 source_threads:
   - github-repo-context-gap-scan
   - linear-conceptual-model
@@ -41,7 +41,7 @@ that are not yet recorded in the repo?
 
 This report is intentionally a **capture report**, not a new authority layer. The
 current scope authority remains
-[`vision-strategy-and-plan-estate.plan.md`](vision-strategy-and-plan-estate.plan.md).
+[`vision-strategy-and-plan-estate.plan.md`](../vision-strategy-and-plan-estate.plan.md).
 The semantic models remain the places where the model is preserved. This report
 records what was found, what is still fragile, and which follow-up work should be
 considered during the strategy and plan-estate restructure.
@@ -85,7 +85,7 @@ Primary homes:
 
 - [`service-authority-and-operating-contexts.semantic-model.md`](service-authority-and-operating-contexts.semantic-model.md)
 - [`context-preservation-and-intent-map.semantic-model.md`](context-preservation-and-intent-map.semantic-model.md)
-- [`VISION.md`](../../VISION.md)
+- [`VISION.md`](../../../../VISION.md)
 
 ### Repo, Linear, and GitHub authority split
 
@@ -120,7 +120,7 @@ by importance, or imply temporal sequence.
 
 Primary homes:
 
-- [`vision-strategy-and-plan-estate.plan.md`](vision-strategy-and-plan-estate.plan.md)
+- [`vision-strategy-and-plan-estate.plan.md`](../vision-strategy-and-plan-estate.plan.md)
 - [`governed-repo-document-graph.semantic-model.md`](governed-repo-document-graph.semantic-model.md)
 - [`context-preservation-and-intent-map.semantic-model.md`](context-preservation-and-intent-map.semantic-model.md)
 
@@ -140,8 +140,8 @@ engineering framework becoming accidentally dominant.
 
 Primary homes:
 
-- [`VISION.md`](../../VISION.md)
-- [`vision-strategy-and-plan-estate.plan.md`](vision-strategy-and-plan-estate.plan.md)
+- [`VISION.md`](../../../../VISION.md)
+- [`vision-strategy-and-plan-estate.plan.md`](../vision-strategy-and-plan-estate.plan.md)
 - [`governed-repo-document-graph.semantic-model.md`](governed-repo-document-graph.semantic-model.md)
 
 ### Product increments rather than repo-global milestones
@@ -207,7 +207,7 @@ not have the strategy. The plan-estate restructure remains informationally gated
 for new-boundary work.
 
 Recommended treatment: keep this as Body 2 under
-[`vision-strategy-and-plan-estate.plan.md`](vision-strategy-and-plan-estate.plan.md).
+[`vision-strategy-and-plan-estate.plan.md`](../vision-strategy-and-plan-estate.plan.md).
 Do not let high-level indexes or plan bodies substitute for the strategy corpus.
 
 ### Gap 2 — Semantic model not yet ratified or enforced

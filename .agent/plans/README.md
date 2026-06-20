@@ -19,7 +19,7 @@ For the strategic overview, use [high-level-plan.md](high-level-plan.md).
 | Entry | Purpose |
 |---|---|
 | [high-level-plan.md](high-level-plan.md) | Strategic cross-collection overview |
-| [vision-strategy-and-plan-estate.plan.md](vision-strategy-and-plan-estate.plan.md) | Controlling plan for the experiment→product arc: three co-equal bodies (vision · strategy · plan-estate) on a four-layer informational model (temporary root exception; permanent home decided by its estate-restructure body) |
+| [vision-strategy-and-plan-estate.plan.md](product-development-governance/vision-strategy-and-plan-estate.plan.md) | Controlling plan for the experiment→product arc: three co-equal bodies (vision · strategy · plan-estate) on a four-layer informational model (homed in the product-development-governance collection; imported analysis suggestions sit subordinate under that collection's `suggestions/`) |
 | [curriculum-mcp-path-to-ga/roadmap.md](curriculum-mcp-path-to-ga/roadmap.md) | MCP HTTP server M1 → M2 → M3 → GA coordination |
 | [curriculum-mcp-path-to-ga/launch-readiness-framework.md](curriculum-mcp-path-to-ga/launch-readiness-framework.md) | What "live product" means for the MCP app: readiness dimensions, keystone owner decisions, candidate M4/GA gates |
 | [curriculum-mcp-path-to-ga/future/launch-readiness-and-milestone-redefinition.plan.md](curriculum-mcp-path-to-ga/future/launch-readiness-and-milestone-redefinition.plan.md) | Future stub: redraft the milestone ladder impact-first and drive launch-readiness to GA (owner-promotion gated) |
@@ -45,14 +45,15 @@ that deserve explicit triage before any practical plan is cut from them.
 
 ## Proposal Records
 
-These root-level artefacts are not executable plans and do not amend the root
-plan-file exception rule. They preserve proposed planning/semantic changes until
-they are accepted, rejected, merged into existing models, promoted into
-directives/templates/ADRs, or decomposed into practical plans.
-
-| Proposal | Planning question | Likely owning surfaces |
-|---|---|---|
-| [Repo Intent and Service Knowledge Boundaries — Proposal Record](repo-intent-and-service-knowledge-boundaries.proposal.md) | Should the repo explicitly codify its role as durable intent substrate, and define how external service knowledge relates to repo-held intent? | `VISION.md`, `docs/strategy/`, `.agent/directives/`, `.agent/templates/`, service/document semantic models, PR/review templates |
+Imported analysis (suggestions, explorations, conversation-starters) from a parallel
+project context now lives in the
+[`product-development-governance/`](product-development-governance/README.md) collection,
+under [`suggestions/`](product-development-governance/suggestions/) — subordinate to that
+collection's agreed, active controlling plan, not authority in their own right. They are
+held until accepted, rejected, merged into existing models, promoted into
+directives/templates/ADRs, or decomposed into practical plans. See the
+[collection README](product-development-governance/README.md) for the full set and its
+disposition.
 
 ---
 

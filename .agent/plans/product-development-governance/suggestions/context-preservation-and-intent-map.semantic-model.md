@@ -2,7 +2,7 @@
 plan_id: context-preservation-and-intent-map-semantic-model
 title: "Context Preservation and Intent Map — Semantic Model"
 type: semantic-model
-status: active
+status: proposed
 lifecycle: current
 thread: strategy-and-plan-estate-holistic-review
 last_updated: 2026-06-20
@@ -11,11 +11,11 @@ related:
   - governed-repo-document-graph.semantic-model.md
   - governed-repo-document-graph.plan.md
   - service-authority-and-operating-contexts.semantic-model.md
-  - vision-strategy-and-plan-estate.plan.md
-  - high-level-plan.md
-  - ../memory/operational/threads/strategy-and-plan-estate-holistic-review.next-session.md
-  - ../../VISION.md
-  - ../../docs/strategy/
+  - ../vision-strategy-and-plan-estate.plan.md
+  - ../../high-level-plan.md
+  - ../../../memory/operational/threads/strategy-and-plan-estate-holistic-review.next-session.md
+  - ../../../../VISION.md
+  - ../../../../docs/strategy/
 source_threads:
   - linear-conceptual-model
   - github-branch-review

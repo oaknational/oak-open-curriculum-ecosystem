@@ -14,13 +14,13 @@ related:
   - .agent/reports/archive/plan-estate-survey-2026-06-15/README.md
 todos:
   - id: vision-foundation
-    content: "Vision body — VISION.md states the change, three co-equal streams, mission verbatim (committed d4f6e0293). DONE as the change-statement. Its alignment TO Oak's strategy is expressed in the strategy corpus, not restated in the vision."
+    content: "Vision body — VISION.md is the full two-part vision (authored 2026-06-20): Part 1 serves Oak's mission (the app for teachers + the tools for the ecosystem, two of Oak's three goals); Part 2 is the agent-first product-creation-and-curation transformation, stated with the amplifier-not-replacement ethic. Mission verbatim; the three value streams are present, grouped into the two parts; VISION.md links the strategy corpus. Alignment TO Oak lives in the strategy, not restated in the vision. Owner is the final editor of the vision."
     status: completed
   - id: strategy-decisions-preserved
     content: "Strategy body — decisions preserved from the 2026-06-17 ratification: K1–K3 (the MCP-app stream's production-readiness keystones, §14.2 correction), value-stream taxonomy depth = hybrid, README names all three streams. value-and-impact.md is archived as an input the strategy corpus (Body 2) absorbs."
     status: completed
   - id: strategy-corpus
-    content: "Strategy body (UNDERWAY) — author the cohesive system-strategy at docs/strategy/: shared diagnosis (the experiment→product central challenge), the streams-as-system map (how the three reinforce each other), guiding choices + what-we-will-not-do + measures, and the Oak-strategy alignment (stream→Oak-goal map; schools as a deliberate non-goal; the four pillars as constraints; align-not-fulfil boundary). K1–K3 repositioned inside the app's section; release-readiness requirements as named hand-offs. Leadership-grade; stands on its own merit."
+    content: "Strategy body (STRUCTURE AUTHORED, substance deferred) — docs/strategy/README.md now carries the proper structure with the three value streams as its first organising principle: Oak-alignment (stream→goal, schools non-goal, four pillars as constraints, align-not-fulfil), the streams-as-system map, per-stream sections (app with K1–K3 + a release-readiness hand-offs table), the strategic-choice-ID contract, and a measures checkpoint. Settled inputs authored; diagnosis, per-stream how-we-win, won't-do, granularity, and measures marked DEFERRED to the owner with sharp questions. Provisional (PDR-018); iterate on owner input and incoming materials."
     status: in_progress
   - id: estate-restructure
     content: "Plan-estate body (core, large — informationally depends on the strategy's structure) — read every plan, extract permanent documentation, archive complete plans, extract-and-archive completed work from partial plans, rewrite survivors to a common standard, pull scattered concepts into new plans, delete with disposition. New thread/plan boundaries derived FROM the strategy. Value-preserving via recorded dispositions (supersession mappings per the consolidation discipline, never a standalone ledger)."
@@ -122,18 +122,43 @@ The strategy must be **cohesive across and within** the streams — the cross-st
 cohesion carried at the portfolio tier, each stream's section explicitly
 interdependent. A strategy that treats the streams as independent misses the point.
 
-## Body 1 — Vision (DONE as the change-statement)
+## Body 1 — Vision (full two-part vision authored 2026-06-20)
 
-`VISION.md` (root) states the change, three co-equal streams, mission verbatim
-(`d4f6e0293`). It is a vision: the change + why + a map to the how. It does **not**
-restate Oak's strategy or contain the alignment — that is the strategy's job. The
-only residual is a forward pointer to the strategy corpus once it exists (the
-"strategic goals — in development" placeholder).
+`VISION.md` (root) is the full vision, in two parts that hold each other up:
 
-**Acceptance (met):** `VISION.md` names three co-equal streams; mission verbatim;
-README front matter consistent; strategy placeholder present.
+1. **Serving Oak's mission** — Oak's curriculum made AI-native for two of Oak's
+   three goals: the MCP app for **teachers**, and the engineering tools for the
+   **ecosystem**. (Schools is Oak's work elsewhere — served by omission, not a
+   stated non-goal.) The web and AI assistants are framed as **two co-equal,
+   complementary channels** (AI has a place in both); this repo delivers the
+   AI-assistant channel.
+2. **The agent-first transformation** — how Oak builds and curates digital products
+   across the whole lifecycle, agent-first, stated with the **amplifier-not-
+   replacement** ethic: the human expert leads, the system amplifies, at every
+   level (pupil ← teacher ← our own teams). Its outward face (open, freely available
+   framework; exemplar) and inward face (Oak's own transformation) are both present.
 
-## Body 2 — Strategy (UNDERWAY; home: `docs/strategy/`)
+The **three value streams persist**, grouped into the two parts; the vision is the
+two-part narrative, and the **strategy's first organising principle is the three
+streams** (the same picture at two zooms). The vision states the change + why + a map
+to the how; it does **not** restate Oak's strategy or contain the alignment — that's
+the strategy's job — and it now links the strategy corpus.
+
+**Acceptance (met):** `VISION.md` is the two-part vision; all three streams present;
+mission verbatim; amplifier ethic stated; two-channel framing present; `VISION.md`
+links the strategy corpus. Owner remains the final editor of the vision.
+
+## Body 2 — Strategy (STRUCTURE AUTHORED; home: `docs/strategy/README.md`)
+
+**Structure landed 2026-06-20 (Fennel tracks Chlorophyll):** `docs/strategy/README.md`
+now carries the proper structure with the **three value streams as its first
+organising principle** (owner-set), under a portfolio tier. Settled inputs are
+authored (Oak-alignment derivation; streams-as-system map; K1–K3 inside the app
+section; the release-readiness hand-offs table; the strategic-choice-ID contract;
+the measures checkpoint shape). Owner-owned substance is marked **DEFERRED** with
+sharp questions: the diagnosis, per-stream how-we-win, what-we-won't-do, strategic-
+choice granularity, and measures. The corpus is **provisional** (PDR-018) — a
+baseline to refine on owner input and to read incoming materials against.
 
 A cohesive, leadership-grade **system-strategy** that stands on its own merit (an
 asset Oak leadership could read to understand and back this work) **and** is the
@@ -195,9 +220,30 @@ framings for Body 2 authoring; build on these, do not re-open them:
   **analytics and research experts** — reinforcing that measures are an Oak input, never
   agent-invented.
 
+**Further owner framings (2026-06-20, vision/strategy-structure session)** — settled this
+session; build on these:
+
+- **Two-part vision; three-stream strategy.** The vision is two parts (serve the mission;
+  the agent-first transformation); the **three value streams are the strategy's first
+  organising principle**. Both express the same system — do not collapse them into a ranking.
+- **Two co-equal, complementary delivery channels.** Teachers reach Oak through **the web
+  and AI assistants**; the channels **complement, not compete**, and **AI has a place in
+  both**. This repo delivers the AI-assistant channel. (Supersedes any "the app matters more
+  than the web / native apps" framing — the relationship is complementary co-equality.)
+- **Curation = the full, iterative product lifecycle** — agent-first applies to building
+  *and* maintaining/curating digital products and services, not just to code.
+- **Curriculum ownership is external** — this repo is a delivery mechanism and a build
+  toolset, not the curriculum owner. Oak owns the curriculum.
+- **Amplifier, not replacement** — agent-first amplifies our people; it does not replace
+  them. The human-expert-leads ethic runs pupil ← teacher ← our own teams (one principle,
+  three levels). State it confidently, never as a defensive hedge.
+- **"Open educational data, not only Oak's"** is **aligned** with Oak's ecosystem goal
+  (innovative, safe tools from *open content and data*, generically) — not a boundary breach.
+- **Python SDK to follow** the TypeScript SDK (future, named).
+
 **Release-readiness gate ownership (verified first-hand 2026-06-20)** — input for Body 2's
 named hand-offs. "Owned" = a live in-repo plan drives it; "external/tracked" = executed
-outside the repo and tracked in the [compliance lane](compliance/roadmap.md); "discussion"
+outside the repo and tracked in the [compliance lane](../compliance/roadmap.md); "discussion"
 = no owner yet, surface as a hand-off:
 
 - **Privacy policy / T&Cs surfacing** — *owned in-repo* (`app-submission-standards` WS2 +
@@ -205,7 +251,7 @@ outside the repo and tracked in the [compliance lane](compliance/roadmap.md); "d
 - **Host UX** — *owned in-repo* (`mcp-app-extension-migration` WS3/WS4).
 - **ATRS, detailed DPIA, ICO Children's Code, safeguarding assessment, independent
   AI-output safety/quality evals** — *external/tracked*, **production-release blockers**
-  (compliance lane + [launch-readiness](curriculum-mcp-path-to-ga/launch-readiness-framework.md)
+  (compliance lane + [launch-readiness](../curriculum-mcp-path-to-ga/launch-readiness-framework.md)
   §B1/§B3); most executed by experts outside the repo.
 - **Lesson-level data-availability (the API's missing materialised view)** and **MCP-app
   go-to-market / school support** — *discussion* (no owner yet).
@@ -379,7 +425,7 @@ on the archived artefact (or in the receiving archive README), never a standalon
 
 | Artefact | Status under the new model | Disposition & owning body |
 | --- | --- | --- |
-| `VISION.md` | Valid (the change-statement) | Keep. Add a forward pointer to the strategy corpus when it exists (Body 2). |
+| `VISION.md` | Full two-part vision (authored 2026-06-20) | Done — two parts authored; links the strategy corpus; owner is final editor. |
 | Controlling plan (this file) | Reconceived 2026-06-18 | Done. |
 | `2a-decisions.md` | Decisions preserved, framing superseded | **Archived 2026-06-18** with a supersession mapping (decisions → this plan §Owner Decisions; rationale → Body 2). |
 | `value-and-impact.md` | Superseded input | **Archived 2026-06-18** (`.agent/plans/archive/`) with a supersession mapping; Body 2 absorbs the value-articulation prose from the archived copy. |
@@ -417,10 +463,26 @@ Settled (2026-06-17 / 2026-06-18):
 6. **Schools — a deliberate non-goal for this repo.**
 7. **Vision, strategy, plans — three separate, co-equal, first-class bodies.**
 
+Settled (2026-06-20):
+
+8. **Vision shape — two parts** (serve Oak's mission; the agent-first transformation),
+   with the **three value streams as the strategy's first organising principle**.
+9. **Two co-equal, complementary delivery channels** — the web and AI assistants; AI in
+   both; this repo delivers the AI-assistant channel.
+10. **Curation = the full, iterative product lifecycle** (agent-first applies to build and
+    maintain, not just code); **curriculum ownership is external** to this repo.
+11. **Amplifier, not replacement** — the human-expert-leads ethic at three levels
+    (pupil ← teacher ← our own teams); stated confidently.
+12. **"Open educational data beyond Oak's"** is aligned with Oak's ecosystem goal, not a
+    boundary breach.
+13. **Owner is the final editor of the vision**; engineering/estate structure is
+    collaborative; product-strategy substance (diagnosis, how-we-win, won't-do, measures)
+    is the owner's.
+
 Outstanding (genuinely needs the settled strategy):
 
-8. **The new estate structure** and the **permanent home** of this governance file
-   and related plans (Body 3).
+14. **The new estate structure** and the **permanent home** of this governance file
+    and related plans (Body 3).
 
 ## Inputs and Authorities
 
@@ -510,15 +572,19 @@ ADR amending ADR-117 rather than merely applying it.
 
 ## Lifecycle Triggers
 
-See [`templates/components/lifecycle-triggers.md`](templates/components/lifecycle-triggers.md).
+See [`templates/components/lifecycle-triggers.md`](../templates/components/lifecycle-triggers.md).
 This file is the session-entry and work-shape surface for the thread; register the
 claim on touched files before editing; run the consolidation workflow at each body
 closure; refresh the thread record as state changes, keeping scope authority here.
 
-## Provisional Home
+## Home
 
-This file lives at `.agent/plans/vision-strategy-and-plan-estate.plan.md` (the
-planning root, alongside `high-level-plan.md`) **provisionally**, linked from the root
-README and recorded as a temporary second root exception in the reachability
-invariant. Its permanent home is decided by Body 3. When decided, move this file and
-update all cross-references in a clean break.
+This file lives at
+`.agent/plans/product-development-governance/vision-strategy-and-plan-estate.plan.md`
+— it anchors the `product-development-governance` collection as its agreed, active
+controlling plan. The imported analysis documents that informed this thread are
+subordinate **suggestions** under [`suggestions/`](suggestions/), not co-authorities;
+see the [collection README](README.md). Moved here from the planning root 2026-06-20
+(owner-directed placement — the root location was a convenience, not an intent);
+all cross-references were updated in the same change. This supersedes the earlier
+"provisional root exception" note: the home is now decided.

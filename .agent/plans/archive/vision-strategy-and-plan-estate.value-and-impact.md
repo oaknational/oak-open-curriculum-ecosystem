@@ -2,7 +2,7 @@
 title: "Value and Impact — ARCHIVED superseded input"
 type: strategy-articulation
 status: archived-superseded
-plan: ../vision-strategy-and-plan-estate.plan.md
+plan: ../product-development-governance/vision-strategy-and-plan-estate.plan.md
 thread: strategy-and-plan-estate-holistic-review
 last_updated: 2026-06-18
 ---
@@ -15,7 +15,7 @@ last_updated: 2026-06-18
 > - **Useful information** (the per-stream value-articulation prose) → acceptance lane
 >   = the `strategy-corpus` todo (Body 2); absorb into the `docs/strategy/` corpus from
 >   this archived copy. Live authority:
->   [`../vision-strategy-and-plan-estate.plan.md`](../vision-strategy-and-plan-estate.plan.md).
+>   [`../vision-strategy-and-plan-estate.plan.md`](../product-development-governance/vision-strategy-and-plan-estate.plan.md).
 > - **Rationale for archival:** its framing is rejected and corrected in the controlling
 >   plan — the MCP app is **not** "the go-live stream", does **not** happen first or rank
 >   higher (it has extra production-readiness requirements only); the three streams are a

@@ -7,14 +7,14 @@ lifecycle: future
 thread: strategy-and-plan-estate-holistic-review
 last_updated: 2026-06-20
 related:
-  - vision-strategy-and-plan-estate.plan.md
-  - high-level-plan.md
-  - ../memory/operational/threads/strategy-and-plan-estate-holistic-review.next-session.md
-  - ../../VISION.md
-  - ../../docs/strategy/
-  - ../../agent-tools/README.md
-  - ../../packages/core/graph-core/README.md
-  - ../../docs/architecture/architectural-decisions/179-transport-agnostic-graph-substrate.md
+  - ../vision-strategy-and-plan-estate.plan.md
+  - ../../high-level-plan.md
+  - ../../../memory/operational/threads/strategy-and-plan-estate-holistic-review.next-session.md
+  - ../../../../VISION.md
+  - ../../../../docs/strategy/
+  - ../../../../agent-tools/README.md
+  - ../../../../packages/core/graph-core/README.md
+  - ../../../../docs/architecture/architectural-decisions/179-transport-agnostic-graph-substrate.md
   - agent-tooling/future/agent-graphs-workspace-organisation.plan.md
 source_threads:
   - linear-conceptual-model

@@ -2,7 +2,7 @@
 title: "Phase 2A decisions — ARCHIVED superseded decision-log"
 type: decision-brief
 status: archived-superseded
-plan: ../vision-strategy-and-plan-estate.plan.md
+plan: ../product-development-governance/vision-strategy-and-plan-estate.plan.md
 thread: strategy-and-plan-estate-holistic-review
 last_updated: 2026-06-18
 ---
@@ -14,7 +14,7 @@ last_updated: 2026-06-18
 > reconception. **Supersession mapping:**
 >
 > - **Decisions** (K1–K3, hybrid taxonomy depth, README-names-three) → preserved in
->   [`../vision-strategy-and-plan-estate.plan.md`](../vision-strategy-and-plan-estate.plan.md)
+>   [`../vision-strategy-and-plan-estate.plan.md`](../product-development-governance/vision-strategy-and-plan-estate.plan.md)
 >   §Owner Decisions (the live authority). The K1–K3 *definitions* live in
 >   [`../curriculum-mcp-path-to-ga/launch-readiness-framework.md`](../curriculum-mcp-path-to-ga/launch-readiness-framework.md).
 > - **Strategy rationale / options weighed** → acceptance lane = the `strategy-corpus` todo
@@ -36,7 +36,7 @@ owner-gated. **The owner ratified all three on 2026-06-17** — outcomes recorde
 decision below and summarised next.
 
 Companion to the controlling plan
-[`vision-strategy-and-plan-estate.plan.md`](vision-strategy-and-plan-estate.plan.md),
+[`vision-strategy-and-plan-estate.plan.md`](../product-development-governance/vision-strategy-and-plan-estate.plan.md),
 reached through it (not an independent root plan).
 
 ## Ratified outcomes (2026-06-17)

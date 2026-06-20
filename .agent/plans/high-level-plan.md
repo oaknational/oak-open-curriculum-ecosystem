@@ -31,7 +31,7 @@ start at [README.md](README.md). For the Curriculum MCP release arc, use
 > agentic-engineering framework) that form a **system** and service Oak's own strategy. It
 > is **not the current source of truth** for strategic goals — see
 > [`VISION.md`](../../VISION.md) and the forthcoming `docs/strategy/` corpus (Body 2 of
-> [`vision-strategy-and-plan-estate.plan.md`](vision-strategy-and-plan-estate.plan.md)). It
+> [`vision-strategy-and-plan-estate.plan.md`](product-development-governance/vision-strategy-and-plan-estate.plan.md)). It
 > will be reconciled to the strategy during the estate restructure (Body 3); do not extend
 > it as current strategy.
 

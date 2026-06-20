@@ -11,7 +11,7 @@
 > - **Rationale for archival:** the strategy-recommendation sections (§11/§13/§14/§15) encode the
 >   superseded "align on impact → gap analysis → execution spine" approach, rejected during the
 >   2026-06-18 reconception. The live strategy authority is the controlling plan
->   [`vision-strategy-and-plan-estate.plan.md`](../../../plans/vision-strategy-and-plan-estate.plan.md)
+>   [`vision-strategy-and-plan-estate.plan.md`](../../../plans/product-development-governance/vision-strategy-and-plan-estate.plan.md)
 >   (cohesive system-strategy on a four-layer informational model).
 >
 > **Do not treat the counts or the strategy framing below as current.**

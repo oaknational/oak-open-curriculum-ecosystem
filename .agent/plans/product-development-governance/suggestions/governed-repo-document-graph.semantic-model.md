@@ -2,18 +2,18 @@
 plan_id: governed-repo-document-graph-semantic-model
 title: "Governed Repo Document Graph — Semantic Model"
 type: semantic-model
-status: active
+status: proposed
 lifecycle: current
 thread: strategy-and-plan-estate-holistic-review
 last_updated: 2026-06-20
 model_scope: governance-and-structure-only
 related:
   - governed-repo-document-graph.plan.md
-  - vision-strategy-and-plan-estate.plan.md
-  - high-level-plan.md
-  - ../memory/operational/threads/strategy-and-plan-estate-holistic-review.next-session.md
-  - ../../VISION.md
-  - ../../docs/strategy/
+  - ../vision-strategy-and-plan-estate.plan.md
+  - ../../high-level-plan.md
+  - ../../../memory/operational/threads/strategy-and-plan-estate-holistic-review.next-session.md
+  - ../../../../VISION.md
+  - ../../../../docs/strategy/
 source_threads:
   - linear-conceptual-model
   - github-branch-review

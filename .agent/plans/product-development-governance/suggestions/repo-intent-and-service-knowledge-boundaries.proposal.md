@@ -12,9 +12,9 @@ related:
   - service-authority-and-operating-contexts.semantic-model.md
   - governed-repo-document-graph.semantic-model.md
   - governed-repo-document-graph.plan.md
-  - vision-strategy-and-plan-estate.plan.md
-  - high-level-plan.md
-  - ../memory/operational/threads/strategy-and-plan-estate-holistic-review.next-session.md
+  - ../vision-strategy-and-plan-estate.plan.md
+  - ../../high-level-plan.md
+  - ../../../memory/operational/threads/strategy-and-plan-estate-holistic-review.next-session.md
 source_threads:
   - project-concept-gap-review
   - linear-conceptual-model
