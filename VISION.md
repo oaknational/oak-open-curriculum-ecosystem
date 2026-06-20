@@ -34,9 +34,10 @@ to reach it and build with it.
 
 The web and AI assistants are two co-equal, complementary ways teachers reach Oak.
 They don't compete — they reinforce each other, and AI has a place in both. This
-repository delivers the AI-assistant side: an MCP app — Oak in ChatGPT, Oak in
-Claude — that brings Oak's standards into the tools teachers already use to plan
-lessons and prepare.
+repository delivers the AI-assistant side: an MCP app that puts Oak inside the AI
+assistants teachers already choose — ChatGPT, Claude, Gemini and others — bringing
+Oak's standards into the tools they already use to plan lessons and prepare. Which
+assistant is the teacher's choice, not ours.
 
 What comes back is grounded in Oak's sequenced, evidence-informed curriculum, not
 ungrounded invention. We inform the teacher's expert judgement; we never replace

@@ -124,9 +124,10 @@ app's reception is the proof the framework and tools are worth adopting.
 
 **Two co-equal, complementary channels.** Teachers reach Oak through the web and
 through AI assistants; the channels reinforce rather than compete, and AI has a
-place in both. This repository delivers the AI-assistant channel — Oak in ChatGPT,
-Oak in Claude — bringing Oak's standards into the planning and preparation teachers
-already do there.
+place in both. This repository delivers the AI-assistant channel — Oak inside the
+assistants teachers already choose, ChatGPT, Claude, Gemini and others — bringing
+Oak's standards into the planning and preparation teachers already do there. Which
+assistant is the teacher's choice, not ours; we don't play favourites.
 
 ### Choices / how we win — DEFERRED (owner: "we have the advantages")
 

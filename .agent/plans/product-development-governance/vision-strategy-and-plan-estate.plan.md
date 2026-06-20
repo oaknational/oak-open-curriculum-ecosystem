@@ -148,6 +148,36 @@ the strategy's job — and it now links the strategy corpus.
 mission verbatim; amplifier ethic stated; two-channel framing present; `VISION.md`
 links the strategy corpus. Owner remains the final editor of the vision.
 
+### Vision review tripwires
+
+The vision is authored ahead of the settled strategy (PDR-018), so it is re-reviewed at
+defined points — not once. A lower layer may surface a **major** upstream need, and when
+it does it is **flagged to the owner, never suppressed** ("at most minor" was never an
+owner constraint — owner correction 2026-06-20). Re-review the vision when any of these
+fires:
+
+1. **Diagnosis + granularity settle** — the strategy's central framing may reshape a
+   vision element.
+2. **Body 2 (strategy) is fully authored** — the alignment derivation may surface an
+   upward gap.
+3. **Body 3 (estate restructure) lands** — a reorganised estate may reveal a vision gap
+   or an over-claim.
+4. **The team forms / Linear, Figma, and a designer arrive** — the solo→team shift and
+   the service/operating model may change how the transformation is framed.
+5. **The ICO Children's Code ruling / target-audience decision lands** — re-check the
+   pupil-boundary statement ("not a surface learners use directly") against the ruling.
+6. **The imported "repo as durable intent substrate" thesis is accepted or rejected** —
+   if accepted, the vision may need to name it.
+7. **Standing tripwire** — any session, on any thread, that surfaces a major vision-level
+   need flags it to the owner immediately; it is never folded silently or deferred into
+   invisibility.
+
+**Candidate major updates already surfaced (2026-06-20, flagged not made — owner decides):**
+whether the vision should name the **repo-as-intent-substrate / operating-model** thesis;
+whether the **organisational transformation** (educating Oak, the team-learns-then-disperses
+rollout, internal reuse) belongs more explicitly in the vision or stays strategy-level; and
+the pupil-boundary line versus the de-facto-child-access compliance reality (tripwire 5).
+
 ## Body 2 — Strategy (STRUCTURE AUTHORED; home: `docs/strategy/README.md`)
 
 **Structure landed 2026-06-20 (Fennel tracks Chlorophyll):** `docs/strategy/README.md`
@@ -159,6 +189,32 @@ the measures checkpoint shape). Owner-owned substance is marked **DEFERRED** wit
 sharp questions: the diagnosis, per-stream how-we-win, what-we-won't-do, strategic-
 choice granularity, and measures. The corpus is **provisional** (PDR-018) — a
 baseline to refine on owner input and to read incoming materials against.
+
+**Remaining at the strategy level (next session — owner-directed 2026-06-20):**
+
+- **README-as-index refactor.** `docs/strategy/README.md` is currently one file holding
+  every section; per the owner's convention (README = stable index + summary; detail in
+  separate files) split it into a README-index over detail files (natural seams:
+  diagnosis, oak-alignment, streams-as-system, the per-stream sections, measures). This
+  supersedes the earlier "one corpus, sections-in-one-doc" framing; the over-structuring
+  guard still holds (split on natural seams, not one file per fragment).
+- **Separate strategy from mechanics.** The strategic-choice-ID *contract* (§7 —
+  stable/additive/resolvable, the `serves_strategic_choice` field, the validator) is
+  traceability-spine machinery and belongs in the Body-3 / governed-document-graph
+  governance layer, not the leadership strategy corpus. The strategy lists the choices;
+  governance owns the ID mechanics.
+- **Balance the streams.** The corpus is app-heavy (K1–K3, hand-offs settled) while the
+  tools and framework streams are thin placeholders — an app-heavy strategy risks the
+  app-dominance the thread fought. The framework stream still needs its
+  internal-transformation content (rollout model, team-learns-then-disperses, the
+  Practice meta-learning loop, internal reuse).
+- **Editorial-voice pass.** Acceptance requires Oak's editorial "we" voice; the authored
+  prose currently reads more structural than leadership. Largely rides with the deferred
+  substance; the README-index summary must be unmistakably leadership-editorial.
+- **Assistant-list principle vs K3.** The vision and strategy now list ChatGPT, Claude,
+  Gemini and others (no favourites; the teacher's choice); K3's surface-scope wording
+  ("ChatGPT and Claude") is the ratified *initial release surface*. Keep the no-favourites
+  framing and the surface-scope fact distinct when the app section is authored.
 
 A cohesive, leadership-grade **system-strategy** that stands on its own merit (an
 asset Oak leadership could read to understand and back this work) **and** is the
@@ -365,7 +421,9 @@ exists and every plan has been read — named here, not pre-judged.
    stalled reachability-remediation plan.)
 
 **Sequence — vision → strategy → planning (owner, 2026-06-20).** Each level is enhanced
-in turn, with at most minor upward adjustments from insights gained lower down. Body 2
+in turn. Lower-level insights can require upstream updates: minor ones are folded in, and
+any **major** upstream change is **surfaced and flagged to the owner, never suppressed**
+(owner correction 2026-06-20 — "at most minor" was never an owner constraint). Body 2
 (strategy) is authored before the plan standard and the deep survey: although the
 read+extract slice is informationally independent, both prerequisites' *traceability*
 elements need the strategy's strategic-choice shape.
@@ -415,6 +473,12 @@ Off the model entirely; runnable now:
   (PR #76 merged 2026-04-10).
 - Remediate reachability / session-openers / stale-executables **after** re-verifying
   the current counts (survey figures dated 2026-06-15).
+- Concrete stragglers found 2026-06-20 (pre-existing, not this thread's regression — route to
+  the reachability-remediation lane): `.agent/prompts/README.md` carries 6 stale prompt-index
+  links (`gt-review.md`, `semantic-search/*.prompt.md`, `codegen-*.prompt.md` — prompts retired
+  earlier); the archived `reports/archive/plan-estate-survey-2026-06-15/README.md` and
+  `plans/archive/vision-strategy-and-plan-estate.value-and-impact.md` carry pre-existing broken
+  `../`-depth links (left per archive discipline — dated frozen records).
 
 ## Disposition of Superseded Prior Work
 

@@ -1,5 +1,9 @@
 # Define Strategy Content — Session Opener
 
+> **Superseded (2026-06-20)** by
+> [`strategy-and-vision-refinement.prompt.md`](strategy-and-vision-refinement.prompt.md):
+> the strategy structure this opener asked for now exists. Kept for provenance.
+
 - **Thread:** `strategy-and-plan-estate-holistic-review`
 - **Type:** handover (stateful session entry point)
 - **Scope:** **ONLY** author the strategy content — Body 2: the `docs/strategy/` corpus.
