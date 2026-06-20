@@ -38,11 +38,17 @@ surface.
   surface **vision + strategy at a glance** (primary human entrypoint). **DEFERRED to the owner**
   (questions in the corpus): the diagnosis, strategic-choice granularity (gates the choice set),
   per-stream how-we-win + won't-do, measures (Oak input), search/graph external-vs-internal-reuse.
-  **Next safe step:** read the owner's **incoming materials**, then settle the deferred decisions
-  (diagnosis + granularity first), fill per-stream substance, refine the vision (owner is final editor);
-  then the **plan standard** + a **fresh deep survey**, then the restructure (owner sequencing
-  vision→strategy→planning). Body-3 approach detail in the thread record + controlling plan
-  §"Body 3 — Approach (the how)".
+  Incoming materials read + reflected (suggestions, not authority — relocated to the
+  `product-development-governance/suggestions/` sub-folder; graphs → adopt a thin slice, defer the
+  cathedral; service-authority → forward design for Linear/Figma when the team lands). **Next safe step
+  (opener: [`strategy-and-vision-refinement.prompt.md`](../../prompts/strategy-and-plan-estate/strategy-and-vision-refinement.prompt.md)):**
+  (1) refactor the strategy corpus to README-index + detail files (owner convention) and move the
+  choice-ID mechanics to the governance layer; (2) settle the deferred decisions with the owner —
+  diagnosis + granularity first (they gate the choice set, the IDs, and Body 3) — then per-stream
+  substance, balancing the app-heavy corpus; (3) editorial-voice pass; (4) vision re-review per the
+  controlling plan's §"Vision review tripwires" (major upstream needs are flagged, never suppressed).
+  Then the **plan standard** + a **fresh deep survey**, then the restructure. Body-3 approach detail in
+  the thread record + controlling plan §"Body 3 — Approach (the how)".
 - **Onboarding-improvement arc — PR #199 OPEN, merge-once-green (`feat/onboarding-improvement`).**
   **Next:** owner re-walks `/oak-onboard-me` off-branch; B2/B3 risk-register seeding; the
   ask-the-repo search decision. (B1 awaits owner cost bands; B6 at the M2 gate.)
@@ -134,7 +140,7 @@ each thread record; this table is the repo-level index.
 | `eslint-no-throw-result-migration` | Migrate every throw to Result (ADR-088); drive the ~1000 warnings to zero; promote the rule. In execution on `docs/planning-and-validation`; cheap WS2 done, residue is design-laden (tier map in record) | [record](threads/eslint-no-throw-result-migration.next-session.md) | claude / Opus 4.8 (1M) / Siren mends Rudder / execution — observability+graph-core+logger landed (`93beffcfe`,`304b68f8d`,`61bdbc3e4`) / 2026-06-19 (prior: Merlin spins Cirrus `1556b9191`; Vanilla weaves Undergrowth, plan-author) |
 | `statusline-enhancements` | Claude Code statusline: Oak-mark, session-shape indicators, logo swap; lane in two `current/` plans (session-state, logo-modularisation). Live detail + the `feat/comms-research` divergence to reconcile: thread record | [record][statusline] | claude-code / Opus 4.8 / Vole calls Hollow / live-logo-swap-and-plan-harden / 2026-06-16 (prior identities: thread record) |
 | `agent-naming` | PDR-027 display-name derivation: versioned schema registry, session-hook identity surfaces, wordlist eras (v2 landed; v3 + era-pinning cure queued) | [record][agent-naming] | claude / Opus 4.8 / Squall hunts Troposphere / thread-open + v3-plan-author / 2026-06-13 (prior identities: thread record) |
-| `strategy-and-plan-estate-holistic-review` | Vision/strategy/plan-estate rework (experiment→product), **three co-equal first-class bodies on a four-layer informational model**: **two-part vision + Body-2 strategy STRUCTURE authored 2026-06-20** (`VISION.md` full two-part; `docs/strategy/README.md` three-stream structure, provisional; EEF = convenor exemplar; root README surfaces vision+strategy at a glance). **Next:** read owner's incoming materials → settle DEFERRED decisions (diagnosis + granularity first) → fill per-stream substance; then plan standard + fresh deep survey, then the restructure | [record](threads/strategy-and-plan-estate-holistic-review.next-session.md) | claude-code / Opus 4.8 (1M) / Fennel tracks Chlorophyll / two-part-vision + strategy-structure + continuity / 2026-06-20 (prior seats: Baobab, Ocelot, Tempest, Squall, Asteroid, Kayak — full table in thread record) |
+| `strategy-and-plan-estate-holistic-review` | Vision/strategy/plan-estate rework (experiment→product), **three co-equal first-class bodies on a four-layer informational model**: **two-part vision + Body-2 strategy STRUCTURE authored 2026-06-20** (`VISION.md` full two-part; `docs/strategy/README.md` three-stream structure, provisional; EEF = convenor exemplar; root README surfaces vision+strategy at a glance). **Next:** README-index refactor (owner convention) → settle diagnosis + granularity (gate the choices/IDs/Body 3) → per-stream substance + voice; vision re-review per tripwires (flag major upstream needs); then plan standard + fresh deep survey, then restructure. Opener: `strategy-and-vision-refinement.prompt.md` | [record](threads/strategy-and-plan-estate-holistic-review.next-session.md) | claude-code / Opus 4.8 (1M) / Fennel tracks Chlorophyll / two-part-vision + strategy-structure + continuity / 2026-06-20 (prior seats: Baobab, Ocelot, Tempest, Squall, Asteroid, Kayak — full table in thread record) |
 
 ## Paused Threads
 

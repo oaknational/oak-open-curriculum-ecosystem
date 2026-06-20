@@ -90,3 +90,28 @@ ungrounded step. Recurrence per PDR-098, not a new home. Sibling: [[passive-guid
 **candidate:** PDR-106 (Closure & Role-Routing principle) + an ADR-144 amendment (frontmatter-budget
 metric, role-routing of overages). Trigger: owner confirms the PDR-vs-`principles.md` home (findings §7
 D1a), then author the plan's WS0 with `docs-adr-expert`.
+
+## Strategy/vision session — corrections + structure conventions (2026-06-20, Fennel tracks Chlorophyll)
+
+A long owner-led strategy/vision session: two-part vision authored, strategy structure scaffolded,
+imported analysis cluster relocated, all committed. Durable lessons:
+
+- **"at most minor upstream updates" was never owner-said.** A prior session attributed that constraint
+  to the owner; corrected 2026-06-20 — a lower layer CAN surface a MAJOR upstream (vision) need, and that
+  is **surfaced and flagged, never suppressed**. Structural cure: vision-review tripwires in the
+  controlling plan (§Vision review tripwires), incl. a standing flag-major-upstream tripwire.
+- **READMEs are stable indexes/summaries; detail lives in separate file(s)** (owner convention,
+  2026-06-20). `docs/strategy/README.md` was authored as one big file; it needs splitting to index +
+  detail next session. A reusable doc-architecture convention.
+- **No favourites in the AI-assistant list.** List ChatGPT, Claude, Gemini and others; the choice is the
+  teacher's, not ours (owner: "not allowed to play favourites… good practice"). Applied to vision + strategy.
+- **Authority gradient via folder placement.** Imported suggestions went into a `suggestions/` sub-folder
+  subordinate to the agreed controlling plan — folder subordination encodes authority subordination and
+  pre-empts the "authority by merge/recency" drift those very docs warned about.
+- **Imported analysis = suggestions, not instructions**, even when the owner was in the originating
+  conversation ("that does not make it correct"). Question-and-validate; graphs → adopt a thin slice,
+  defer the cathedral; service-authority → forward design for Linear/Figma when the team lands.
+
+**candidate:** a doc-architecture convention — "README = stable index/summary; detailed content in
+separate file(s)" — as a rule or docs-governance entry. Trigger: the strategy README-index refactor next
+session (its first application).

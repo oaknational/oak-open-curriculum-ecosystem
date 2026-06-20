@@ -102,8 +102,9 @@ then — on owner direction — **recorded the plan-estate restructure approach*
 accuracy (owner: all records accurate at all times).
 
 - **Flow reaffirmed (owner):** vision → strategy → planning, each enhanced/created/restructured in turn,
-  with at most minor upward adjustments from lower-level insights. **Strategy first**, then the plan
-  standard + deep survey, then the restructure.
+  with upstream updates as needed — minor ones folded in, **major upstream changes surfaced and flagged
+  to the owner, never suppressed** (owner correction 2026-06-20; "at most minor" was never owner-said).
+  **Strategy first**, then the plan standard + deep survey, then the restructure.
 - **Body-3 approach recorded:** two anchors (the strategy's enumerable strategic choices; a ratified
   plan standard / conformance rubric); two new prerequisite deliverables (the **plan standard** and a
   **fresh deep survey** of every plan + plan-adjacent surface); bidirectional traceability; enforcement
@@ -345,13 +346,23 @@ controlling plan §Body 2 and launch-readiness K3.
 
 ## Next (fresh context starts here)
 
-**▶ Body 2 STRUCTURE is now authored** (`docs/strategy/README.md`, provisional); the next
-moves are: (a) **read the owner's incoming materials**, then (b) **settle the DEFERRED
-decisions with the owner — diagnosis and granularity first** (they gate the choice set), then
-how-we-win / won't-do / measures, and (c) **fill the per-stream substance** and refine the
-two-part vision (owner is final editor). The opener
-[`define-strategy-content.prompt.md`](../../../prompts/strategy-and-plan-estate/define-strategy-content.prompt.md)
-still carries the scoped brief and ground sources; the structure it asked for now exists.
+**▶ Body 2 STRUCTURE is authored; the next session refines it.** Opener:
+[`strategy-and-vision-refinement.prompt.md`](../../../prompts/strategy-and-plan-estate/strategy-and-vision-refinement.prompt.md)
+(the prior `define-strategy-content.prompt.md` is superseded; the structure it asked for now exists).
+Scope-locked next moves (owner-directed 2026-06-20):
+
+1. **Refactor the strategy corpus to README-index + detail files** (owner convention: README = stable
+   index/summary, detail in separate files); move the strategic-choice-ID *mechanics* to the
+   governance layer (strategy lists the choices, governance owns the contract).
+2. **Settle the DEFERRED decisions with the owner — diagnosis and granularity first** (they gate the
+   choice set, the IDs, and Body 3), then per-stream how-we-win / won't-do / measures; balance the
+   app-heavy corpus across the three streams (the framework stream needs its internal-transformation content).
+3. **Editorial-voice pass** on the leadership-facing prose.
+4. **Vision re-review per the controlling plan's §Vision review tripwires** — any MAJOR upstream need is
+   flagged to the owner, never suppressed ("at most minor" was never an owner constraint).
+
+Detail lives in the controlling plan (Body 1 §"Vision review tripwires" + candidate major updates;
+Body 2 §"Remaining at the strategy level").
 
 **Read the controlling plan first** —
 [`vision-strategy-and-plan-estate.plan.md`](../../../plans/product-development-governance/vision-strategy-and-plan-estate.plan.md),
