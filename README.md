@@ -5,7 +5,7 @@
 
 The [Oak National Academy Open Curriculum](https://open-api.thenational.academy/), delivered three ways: a [Model Context Protocol app](https://modelcontextprotocol.io/) (MCP app) that brings Oak into the AI assistants teachers already use; engineering tools for the wider ecosystem to build with — a generated, type-safe TypeScript SDK, a semantic search service, graph tools generated from Oak data, and evidence surfaces grounded in the wider education sector; and an openly documented framework for agentic engineering that delivers AI-enhanced innovation.
 
-> **We're turning Oak's open curriculum into AI-native infrastructure — for teachers, for the wider ecosystem, and for delivering AI-enhanced innovation.**
+> **We're turning Oak's open curriculum into AI-native infrastructure — for teachers and the wider ecosystem — and transforming how we build and curate digital products, agent-first, to do it well.**
 
 Everything here serves the same ends: helping teachers find, adapt, and use
 high-quality curriculum resources; helping the organisations that serve
@@ -14,7 +14,7 @@ sector bodies, edtech, and the AI platforms now working in classrooms — open
 components, open data access, and an openly documented engineering practice
 to build on. Public goods, built in the open.
 
-**Vision and direction**: For more on the strategic overview of what this repository is for, see [VISION.md](VISION.md). For the live delivery roadmap, see the [high-level plan](.agent/plans/high-level-plan.md).
+**Vision and strategy**: Start with [VISION.md](VISION.md) — the two-part vision (Oak's curriculum made AI-native for teachers and the ecosystem; and how we build and curate it, agent-first). Then the [strategy](docs/strategy/README.md) — the diagnosis, the three value streams, and how we'll know it's working. For the live delivery roadmap, see the [high-level plan](.agent/plans/high-level-plan.md).
 
 ---
 
@@ -59,7 +59,8 @@ are set out in [What This Repo Provides](#what-this-repo-provides) below.
 
 **Product owners, school leaders, non-technical evaluators** — you don't need to read the technical content below. Start with:
 
-- [VISION.md](VISION.md) — what this project delivers, hosted vs reusable sector components, why it matters, and the investment case
+- [VISION.md](VISION.md) — the two-part vision: what this project delivers (for teachers and the wider ecosystem), and how we build and curate it agent-first; why it matters and the investment case
+- [Strategy](docs/strategy/README.md) — the diagnosis, the three value streams (app, tools, framework), the alignment to Oak's goals, and how we'll measure success
 - [Curriculum Guide](docs/domain/curriculum-guide.md) — Oak's curriculum structure explained in plain language
 - [Progress update (April 2026)](.agent/reports/oak-ecosystem-progress-update-2026-04-20.md) — what has been delivered, what is next, and why it matters; newer reports land in [.agent/reports/](.agent/reports/README.md)
 
@@ -155,16 +156,18 @@ grow from [.agent/plans/sector-engagement/current/sector-reusable-components-ado
 
 This repository integrates three open education data sources, each answering a different question that teachers ask:
 
-| Source                                                                                                                        | What It Provides                                                                                                                                             | Licence                                                                                |
-| ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
-| [Oak Open Curriculum API](https://open-api.thenational.academy/)                                                              | Lessons, units, threads, sequences, quizzes, and transcripts — openly licenced, fully sequenced, fully resourced curriculum content                          | [OGL v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) |
-| [Oak Curriculum Ontology](https://github.com/oaknational/oak-curriculum-ontology)                                             | Oak's formal semantic representation of curriculum structure aligned to the National Curriculum for England (2014), using W3C standards (RDF/OWL/SKOS/SHACL) | OGL v3.0 (data) + MIT (code)                                                           |
-| [EEF Teaching and Learning Toolkit](https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit) | 30 research-synthesised teaching approaches with quantified impact, cost, and evidence strength ratings                                                      | Attribution required                                                                   |
+| Source                                                                                                                                                         | What It Provides                                                                                                                                             | Licence                                                                                |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
+| [Oak Open Curriculum API](https://open-api.thenational.academy/)                                                                                               | Lessons, units, threads, sequences, quizzes, and transcripts — openly licenced, fully sequenced, fully resourced curriculum content                          | [OGL v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) |
+| [Oak Curriculum Ontology](https://github.com/oaknational/oak-curriculum-ontology)                                                                              | Oak's formal semantic representation of curriculum structure aligned to the National Curriculum for England (2014), using W3C standards (RDF/OWL/SKOS/SHACL) | OGL v3.0 (data) + MIT (code)                                                           |
+| [Education Endowment Foundation (EEF) Teaching and Learning Toolkit](https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit) | 30 research-synthesised teaching approaches with quantified impact, cost, and evidence strength ratings                                                      | Attribution required                                                                   |
 
 Together these sources enable **evidence-grounded curriculum discovery**: AI
 agents can search for content (Oak API), understand where it fits in the
 curriculum structure (ontology), and recommend evidence-backed teaching
-approaches (EEF). They also equip internal Oak teams and external builders with
+approaches (the EEF Toolkit — openly licensed material from an independent,
+external organisation, brought together with Oak's own). They also equip internal
+Oak teams and external builders with
 high-quality integration primitives spanning curriculum API access, MCP, search,
 ontology alignment, and evidence surfaces. Organisational reuse of Oak's delivery
 patterns—not merely calling the upstream REST API—is set out above in

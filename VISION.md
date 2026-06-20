@@ -1,7 +1,7 @@
 ---
 title: Vision
 status: active
-last_reviewed: 2026-06-17
+last_reviewed: 2026-06-20
 ---
 
 # Vision
@@ -11,49 +11,91 @@ Oak's mission is to
 > _"improve pupil outcomes and close the disadvantage gap by supporting
 > teachers to teach, and enabling pupils to access, a high-quality curriculum."_
 
-Oak has created a high-quality, open, fully sequenced, fully resourced
-curriculum. We are here to enable access and use of that curriculum in three ways:
+Oak has built a high-quality, open, fully sequenced, fully resourced curriculum.
+This repository turns that curriculum into AI-native infrastructure — for the
+teachers and the wider ecosystem who use it — and it's where we're learning to
+build and curate everything we make, agent-first, so we can.
 
-1. **For teachers** — an MCP app that puts Oak inside the AI assistants (ChatGPT,
-   Claude, Gemini and others) that teachers already use.
-2. **For the wider ecosystem** — engineering tools for working with Oak's
-   curriculum data: a generated, type-safe TypeScript SDK, a semantic search
-   service, graph tools generated from Oak data, and evidence surfaces grounded
-   in the wider education sector.
-3. **For delivering AI-enhanced innovation** — an openly documented framework for
-   agentic engineering that lets us build the first two quickly and safely,
-   without losing quality or clarity, and that other teams can adopt to deliver
-   their own.
+Two things are changing here, and they hold each other up. We're bringing Oak's
+curriculum to where teachers and the ecosystem can use it through AI. And to do
+that with the rigour it demands, at the pace it needs, we're transforming how we
+build and curate digital products — working agent-first, with our people firmly in
+the lead. The transformation is how we deliver the mission work; it's also worth
+sharing in its own right.
 
-## What We're Changing
+## Part one — Oak's curriculum, AI-native
 
-We are turning Oak's open curriculum into AI-native infrastructure:
+We enable access to and use of Oak's curriculum in two of the ways Oak serves its
+mission: for teachers, and for the wider ecosystem. (Serving schools directly is
+Oak's work elsewhere, not this repository's.) Oak owns the curriculum; we're a way
+to reach it and build with it.
 
-- **Oak reaches teachers where they already work.** Inside the AI assistants
-  teachers use, what comes back is grounded in Oak's sequenced,
-  evidenced curriculum and pedagogical rigour.
-- **The wider ecosystem builds on open foundations.** Anyone can build with
-  typed, openly licensed, evidence-grounded curriculum components,
-  the SDK, semantic search, curriculum graph, MCP pipeline.
+### For teachers — Oak inside the AI assistants they already use
 
-## How We Achieve This
+The web and AI assistants are two co-equal, complementary ways teachers reach Oak.
+They don't compete — they reinforce each other, and AI has a place in both. This
+repository delivers the AI-assistant side: an MCP app — Oak in ChatGPT, Oak in
+Claude — that brings Oak's standards into the tools teachers already use to plan
+lessons and prepare.
 
-- **Our strategic goals** — defined by the strategy (in development; not yet
-  linked here).
+What comes back is grounded in Oak's sequenced, evidence-informed curriculum, not
+ungrounded invention. We inform the teacher's expert judgement; we never replace
+it. That's how Oak works: the curriculum is optional and fully adaptable, and the
+teacher decides what's right for their pupils — we're there to inform that choice,
+not to push Oak as the only answer.
+
+### For the wider ecosystem — open tools for open educational data
+
+Anyone building with open educational data should be able to do it well. We provide
+a typed TypeScript SDK (with Python to follow), a semantic search service, and
+curriculum graph tools. And we bring open resources together: alongside Oak's own
+data we draw in openly licensed evidence from other organisations in the sector —
+such as the [Education Endowment Foundation's Teaching and Learning Toolkit](https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit) —
+so what we surface is grounded in the wider evidence base, not Oak alone. The code is open;
+each data source stays under its own upstream open licence, attributed to whoever
+created it.
+
+## Part two — agent-first product creation and curation
+
+Building AI-native infrastructure to Oak's standard, at pace, takes a different way
+of working. We build and curate our products agent-first, across the whole product
+lifecycle and not just the code, with people leading throughout.
+
+This amplifies our teams; it doesn't replace them. Agents take on the toil and the
+scale; our people bring the judgement, expertise, taste, and accountability that
+decide whether the work is any good. It's the same principle we hold for teachers
+and pupils, turned on ourselves: the human expert leads, and what we build
+amplifies them. It lets us be more ambitious, not smaller.
+
+We share how we do this. Our framework for agent-first delivery is openly
+documented and freely available, so other teams — inside Oak and beyond — can adopt
+it. We aim to be a useful exemplar: for agent-first delivery with excellence at its
+centre, applied across all of digital product and service work, and for bringing
+open educational data projects together to make a real difference.
+
+## How we achieve this
+
+- **Our strategy** — the [strategy corpus](docs/strategy/README.md): the diagnosis,
+  the choices we make per value stream, and how we'll know it's working.
 - **What we build, and the order we build it in** — the
-  [high-level plan](.agent/plans/high-level-plan.md) and the strategy documents
-  it indexes; the live inventory of products and reusable components is in the
-  [README](README.md).
+  [high-level plan](.agent/plans/high-level-plan.md) and the plans it indexes; the
+  live inventory of products and components is in the [README](README.md).
 - **How we build it safely and fast** —
   [How the Agentic Engineering System Works](docs/foundation/agentic-engineering-system.md)
   and
   [ADR-119](docs/architecture/architectural-decisions/119-agentic-engineering-practice.md):
-  Oak's agentic engineering Practice — the operating system for delivery, and the
-  third front of value above.
+  Oak's agentic engineering Practice.
 - **Where the work has reached** — the [reports surface](.agent/reports/).
-- **The boundaries we hold** —
-  [ADR-194](docs/architecture/architectural-decisions/194-teacher-as-expert-product-boundary.md):
-  the teacher is the expert, we inform and never decide, and this is not a
-  surface that learners use directly.
 - **Openness and licensing** — the code is MIT; Oak's curriculum stays under its
   upstream open licence. See [LICENCE-DATA.md](LICENCE-DATA.md).
+
+## The boundaries we hold
+
+One principle runs through everything, at every level: the human expert leads, and
+what we build amplifies them rather than deciding for them.
+
+- **For pupils** — this isn't a surface learners use directly.
+- **For teachers** — the teacher is the expert; we inform, we never decide. See
+  [ADR-194](docs/architecture/architectural-decisions/194-teacher-as-expert-product-boundary.md).
+- **For our own teams** — agent-first work amplifies our people; it doesn't replace
+  them.
