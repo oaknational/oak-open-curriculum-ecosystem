@@ -77,7 +77,7 @@ ontology governance narratives are not duplicated inconsistently.
 
 Until `t3-supported-vs-experimental-matrix` closes:
 
-1. Prefer **enumeration from Vision**: name only what appears under What We Deliver's reusable component list unless this plan is amended.
+1. Prefer **enumeration from the README inventory**: name only what appears under the README's product/component inventory unless this plan is amended (the former VISION component list was removed in the 2026-06-17 restructure).
 2. Separate **capabilities primitives** (the three shipped product lanes in README) from **component reuse** narratives (fabric for other codebases) — downstream marketing MUST mirror that split.
 3. Never imply production support tiers not decided by Oak-owner policy.
 

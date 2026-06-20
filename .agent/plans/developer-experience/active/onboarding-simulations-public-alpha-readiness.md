@@ -133,7 +133,7 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
     since baseline (practice-core portable by construction with the
     portability gate enforcing it; ADR-124 propagation; plasmid
     mechanism). **Landed same day**: owner-approved evidence note in
-    VISION §What We Deliver (portable by construction, ADR-124 cited).
+    VISION (portable by construction, ADR-124 cited); the VISION evidence note was folded into the 2026-06-17 restructure, and ADR-124 is the durable home.
 - [x] **B5. Clarify ecosystem/open-source posture for non-technical audiences**
   - **Disposition (2026-06-12)**: a plain-language policy paragraph —
     why contributions are closed during alpha, what external readers can

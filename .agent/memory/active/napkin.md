@@ -179,3 +179,35 @@ Shared root with the rest of this session: a comfortable default (the education=
 owner's, so stay quiet") substituting for the actual work (check the constraint; do the analysis).
 Recurrence per PDR-098 (fluency-is-a-warning cluster); the pupil lesson is sharp enough to graduate —
 added to `distilled.md`. Sibling: [[passive-guidance-loses-to-artefact-gravity]].
+
+## Successor pickup: close the principle, gate the concrete; situational claims are input-to-verify (2026-06-20, Juniper stirs Taproot)
+
+Picked up the strategy/plan-estate thread from Kiln, encoded the owner-accepted Body-3 under-spec
+resolutions, reviewed and committed (`7a75081f5`). Three lessons, all variants of the
+fluency-is-a-warning / read-gate cluster (recurrence per PDR-098, not new homes):
+
+- **Resolving an under-spec = close the principle, gate the concrete to a named trigger.** The owner
+  asked to "sort out the under-specified areas" of the plan. The generative-metacognition catch: most were
+  under-specified *because* they wait on an input that does not exist yet (the fresh survey, the
+  search/graph decision, Oak's measures). Forcing concrete answers now would repeat this thread's
+  documented "structural lean recorded before reading the estate" error. Cure: decide the PRINCIPLE where
+  doctrine settles it (e.g. metadata-spine, because the trace is a graph and PDR-018 rejects symmetry-moves)
+  and bind the CONCRETE to its named gate (the collection layout → the fresh survey), never a bare
+  "deferred". Clause-4 optionality applied to design resolution — the positive instance of the lens firing.
+
+- **Present tense in a dated section still reads as current; "it's historical" is a fluency rationalisation.**
+  I considered the Fennel-era "Owner-owned substance is marked DEFERRED" paragraph at the top of the plan's
+  Body-2 section and DECIDED to leave it as a "dated snapshot". docs-adr-expert (real-time reviewer) flagged
+  it correctly: present tense at a section's top reads as current and contradicts the updated bullets below.
+  A dated section may record past state but must not assert false present-tense. The reviewer fold caught
+  what my "it's history" smoothing missed — the value of reviewing before the commit, not after.
+
+- **"The owner is editing" is a situational claim to ground, not assume.** README.md and
+  docs/strategy/README.md showed content changes mid-session; I confidently attributed them to the owner
+  "live-editing in parallel" and built a no-collision coordination strategy around it. Owner: "I am not
+  editing anything, I just had some tabs open." Working-tree changes of unclear provenance are
+  input-to-verify; the smooth narrative arrived before I confirmed it. verify-dont-trust applies to
+  *situational* claims, not only artefact claims.
+
+Sibling: [[passive-guidance-loses-to-artefact-gravity]]. The README changes remain uncommitted (unclear
+provenance) — flagged for the next session's vision/strategy review, not committed as mine.

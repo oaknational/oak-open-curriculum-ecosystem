@@ -45,10 +45,16 @@ to resolve the under-specified areas.
   are **startable now** (Body 2 signed); the structure-dependent restructure still gates on the
   search/graph external-vs-internal-reuse decision.
 
-**Next safe step:** (1) the **full vision tripwire-2 pass** (now due — how-we-win signed); then
-(2) **Body-3 prep** — the plan standard (Anchor B) and the fresh deep survey, both now startable;
-(3) the estate-hygiene slice (independent). Still owner/Oak: the search/graph reuse decision, the
-measure targets, the internal-transformation alignment rationale.
+**Next safe step (owner-directed open-mind review — the plan's next-steps predate the last few days'
+work, 2026-06-20):** (1) **strategy review** — revalidate the corpus and the signed bets, update where
+appropriate; (2) **vision review** (tripwire-2, now due); (3) **step back and revalidate the remainder of
+the plan** with an open mind — review, revalidate, possibly rewrite, rather than executing the encoded
+next-steps as-is. Body-3 prep (plan standard + fresh survey) is startable but is itself subject to this
+revalidation. Estate hygiene: the 2 dead VISION-reference re-anchors landed this session;
+reachability/openers remain survey-gated. Still owner/Oak: the search/graph reuse decision, the measure
+targets, the internal-transformation alignment rationale. **Uncommitted `README.md` and
+`docs/strategy/README.md` refinements (unclear provenance — not this session's authorship) to assess in
+the vision review.**
 
 ## Where We Are (2026-06-20, Kiln guards Patina — diagnosis + granularity settled; corpus refactored; per-stream proposals; pupils decontaminated)
 

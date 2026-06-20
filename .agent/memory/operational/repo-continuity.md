@@ -25,22 +25,24 @@ surface.
   Controlling plan:
   [`vision-strategy-and-plan-estate.plan.md`](../../plans/product-development-governance/vision-strategy-and-plan-estate.plan.md).
   Model: four-layer informational dependence (Oak strategy → our vision → our strategy → our planning),
-  three co-equal first-class bodies. **Body 1 (vision) + Body 2 (strategy) authored; per-stream substance
-  shaping with the owner (2026-06-20, Kiln guards Patina).** `VISION.md` is the full two-part vision and now
+  three co-equal first-class bodies. **Body 1 (vision) + Body 2 (strategy) authored; per-stream how-we-win / won't-do SIGNED OFF
+  (owner, 2026-06-20); Body-3 design under-specs resolved and encoded (Juniper stirs Taproot, `7a75081f5`).** `VISION.md` is the full two-part vision and now
   leads with the **"deliver Oak's rigour at reach and at pace"** hook (owner-directed). `docs/strategy/` is now
   a **README-index + 6 detail files** (diagnosis, alignment-and-streams, three `stream-*`, measures).
   **Settled (owner):** diagnosis = _rigour at reach and at pace_; strategic-choice **granularity = per-stream**
   (a plan → one choice → stream → goal; the ID _contract_ relocated to controlling-plan **Body 3** — governance
-  owns it, the strategy lists the choices). **Per-stream how-we-win / won't-do / measures are now PROPOSED**
-  (`APP-`/`TOOLS-`/`FRAME-1…4`, provisional — the owner is actively shaping them; sign-off is the owner's).
+  owns it, the strategy lists the choices). **Per-stream how-we-win / won't-do SIGNED OFF**
+  (`APP-`/`TOOLS-`/`FRAME-1…4`, owner 2026-06-20); measures remain Oak-grounded.
   **Pupil decontamination (owner correction):** pupils are NOT a component of this work — the amplifier ethic is
   **two levels** (the teacher; our own teams), the vision pupil-boundary is gone; pupils remain only in Oak's
   verbatim mission and the external compliance gates (K2 / ICO Children's Code / safeguarding). EEF = the
   ecosystem-convenor exemplar. Incoming materials = suggestions (graphs → thin slice; service-authority →
-  forward design). **Next safe step:** owner signs off / refines the proposed per-stream choices, won't-do, and
-  measure candidates; then the **full vision tripwire pass** (tripwire 2), the **plan standard** + a **fresh deep
-  survey**, then the restructure (Body 3). Working tree uncommitted (owner controls push). Body-3 approach detail:
-  thread record + controlling plan §"Body 3 — Approach (the how)".
+  forward design). **Next safe step (owner-directed open-mind review — the plan's next-steps predate the last few days' work):**
+  (1) strategy review (revalidate the corpus + the signed bets); (2) vision review (tripwire-2, now due); (3) step
+  back and revalidate the remainder of the plan with an open mind — review / revalidate / possibly rewrite, not
+  execute as-is. Body-3 prep (plan standard + fresh survey) is startable but subject to that revalidation.
+  Uncommitted `README.md` + `docs/strategy/README.md` refinements (unclear provenance) to assess in the vision
+  review. Owner controls push. Detail: thread record + controlling plan §"Body 3 — Approach › Resolved".
 - **Onboarding-improvement arc — PR #199 OPEN, merge-once-green (`feat/onboarding-improvement`).**
   **Next:** owner re-walks `/oak-onboard-me` off-branch; B2/B3 risk-register seeding; the
   ask-the-repo search decision. (B1 awaits owner cost bands; B6 at the M2 gate.)
@@ -132,7 +134,7 @@ each thread record; this table is the repo-level index.
 | `eslint-no-throw-result-migration` | Migrate every throw to Result (ADR-088); drive the ~1000 warnings to zero; promote the rule. In execution on `docs/planning-and-validation`; cheap WS2 done, residue is design-laden (tier map in record) | [record](threads/eslint-no-throw-result-migration.next-session.md) | claude / Opus 4.8 (1M) / Siren mends Rudder / execution — observability+graph-core+logger landed (`93beffcfe`,`304b68f8d`,`61bdbc3e4`) / 2026-06-19 (prior: Merlin spins Cirrus `1556b9191`; Vanilla weaves Undergrowth, plan-author) |
 | `statusline-enhancements` | Claude Code statusline: Oak-mark, session-shape indicators, logo swap; lane in two `current/` plans (session-state, logo-modularisation). Live detail + the `feat/comms-research` divergence to reconcile: thread record | [record][statusline] | claude-code / Opus 4.8 / Vole calls Hollow / live-logo-swap-and-plan-harden / 2026-06-16 (prior identities: thread record) |
 | `agent-naming` | PDR-027 display-name derivation: versioned schema registry, session-hook identity surfaces, wordlist eras (v2 landed; v3 + era-pinning cure queued) | [record][agent-naming] | claude / Opus 4.8 / Squall hunts Troposphere / thread-open + v3-plan-author / 2026-06-13 (prior identities: thread record) |
-| `strategy-and-plan-estate-holistic-review` | Vision/strategy/plan-estate rework (experiment→product), **three co-equal first-class bodies on a four-layer informational model**: **two-part vision + Body-2 strategy STRUCTURE authored 2026-06-20** (`VISION.md` full two-part; `docs/strategy/README.md` three-stream structure, provisional; EEF = convenor exemplar; root README surfaces vision+strategy at a glance). **Next:** README-index refactor (owner convention) → settle diagnosis + granularity (gate the choices/IDs/Body 3) → per-stream substance + voice; vision re-review per tripwires (flag major upstream needs); then plan standard + fresh deep survey, then restructure. Opener: `strategy-and-vision-refinement.prompt.md` | [record](threads/strategy-and-plan-estate-holistic-review.next-session.md) | claude-code / Opus 4.8 (1M) / Fennel tracks Chlorophyll / two-part-vision + strategy-structure + continuity / 2026-06-20 (prior seats: Baobab, Ocelot, Tempest, Squall, Asteroid, Kayak — full table in thread record) |
+| `strategy-and-plan-estate-holistic-review` | Vision/strategy/plan-estate rework (experiment→product), **three co-equal first-class bodies on a four-layer informational model**: **two-part vision + Body-2 strategy STRUCTURE authored 2026-06-20** (`VISION.md` full two-part; `docs/strategy/README.md` three-stream structure, provisional; EEF = convenor exemplar; root README surfaces vision+strategy at a glance). **Next (owner-directed open-mind review):** strategy review → vision review (tripwire-2, due) → step back and revalidate the plan-remainder with an open mind (review / revalidate / possibly rewrite, not execute as-is). Bets SIGNED OFF (owner 2026-06-20); Body-3 under-specs resolved + encoded (`7a75081f5`). | [record](threads/strategy-and-plan-estate-holistic-review.next-session.md) | claude-code / Opus 4.8 (1M) / Juniper stirs Taproot / Body-3 under-spec resolutions + sign-off staleness flip + handoff / 2026-06-20 (prior seats: Baobab, Ocelot, Tempest, Squall, Asteroid, Kayak, Fennel, Kiln — full table in thread record) |
 
 ## Paused Threads
 
