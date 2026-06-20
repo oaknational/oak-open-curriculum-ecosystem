@@ -84,7 +84,10 @@ dimension below is read in their light.
   "developers building on the surface", and not "the open public" — a
   professional education audience whose work reaches pupils. "For now" is a
   **post-GA non-commitment**: it fixes the current safeguarding bar; no audience
-  widening is planned at this stage.
+  widening is planned at this stage. **Cross-ref (§B3 ICO Children's Code):** this
+  audience decision — teachers and curriculum leaders, with **nothing aimed at students** —
+  is load-bearing for the **ICO Children's Code** applicability question in §B3; the two
+  must be read together and the link must not be lost.
 - **K3 — Surface scope: the MCP app in ChatGPT and Claude — which means the app's
   real dependency set must be GA-ready.** Declaring the app live asserts that
   every workspace it actually depends on (SDK/codegen, the curriculum data/API,
@@ -92,7 +95,13 @@ dimension below is read in their light.
   plus auth and observability) is itself at production quality. Readiness is
   scoped to the **app's real dependency set**, not literally every workspace in
   the repo; "whole-estate" readiness holds only at the **portfolio level** — each
-  value stream reaches its own readiness.
+  value stream reaches its own readiness. **Release channel (owner, 2026-06-20):** the MCP
+  server can be made available unilaterally, but app-like packaging and promotion in
+  ChatGPT/Claude **require vendor collaboration** — the vendors are aware and have **agreed**
+  to support packaging and audience reach. The release and some promotion channels are an
+  external-collaboration dependency, carried with the GTM/distribution hand-off (controlling
+  plan §Body 2). Relatedly, **marketing is gated on sufficient TPC-risk mitigation** (the
+  lesson-level content / data-availability area).
 
 **Consequence for this document.** With K1–K3 set, the prior M0 → M3 → GA
 milestone ladder is **no longer assumed to stand**; it is being re-assessed from
@@ -179,7 +188,16 @@ first principles (see "How to use this framework").
   token efficiency, age-appropriateness, developer verification) which gate
   discoverability; **terms of service / acceptable use** for a free public
   service. The privacy *engineering* (ADR-160 redaction barrier, per-sink
-  identity projection) is sound; the *legal artefacts* are unwritten.
+  identity projection) is sound; the *legal artefacts* are unwritten. Also required as an
+  arms-length public body: an **ATRS** record
+  ([Algorithmic Transparency Recording Standard](https://www.gov.uk/government/collections/algorithmic-transparency-recording-standard-hub))
+  published before release. **Cross-ref (K2 audience):** the Children's-Code applicability
+  question is load-bearing on the **target-audience decision** — teachers and curriculum
+  leaders, with **nothing aimed at students** — so K2 and this Children's-Code item must be
+  read together; that link must not be lost. These compliance items are **production-release
+  blockers; most are executed by experts outside the repo and tracked in the
+  [compliance lane](../compliance/roadmap.md)** (ATRS, DPIA, ICO Children's Code,
+  safeguarding, AI-output evals).
 - **Open decisions.** Children's-Code applicability ruling; per-sink identity
   ruling backfill (Programme A5).
 - **Candidate gate / how we'd know.** DPIA approved; privacy notice + T&Cs +

@@ -39,6 +39,31 @@ No phase can be marked complete until documentation updates are handled for:
 
 ---
 
+## Statutory & Release-Blocking Compliance (production gate)
+
+Distinct from the platform directory-submission phases below: a set of statutory and
+safety-compliance obligations that **block production release** of the MCP app. **Most of
+this work is performed by experts outside this repository** (legal, DPO, safeguarding, Oak's
+analytics/research and AI Platform teams) — the repo's job is to **acknowledge, track, and
+gate on** them, not to resolve them in-repo. None may be assumed complete; each is a
+production go/no-go gate.
+
+| Requirement | What | Execution | In-repo status |
+|---|---|---|---|
+| **ATRS** — [Algorithmic Transparency Recording Standard](https://www.gov.uk/government/collections/algorithmic-transparency-recording-standard-hub) | As an arms-length public body, Oak must publish an ATRS record before release. | External | Tracked here; no in-repo execution |
+| **Detailed DPIA** | Full Data Protection Impact Assessment across the live data flows (Clerk + PostHog + Sentry). | External (DPO/legal) | Named in [launch-readiness §B3](../curriculum-mcp-path-to-ga/launch-readiness-framework.md); tracked here |
+| **ICO Children's Code** | Applicability ruling + conformance — **cross-linked to the target-audience decision** (teachers/curriculum leaders; nothing aimed at students). | External (legal) + product | See [launch-readiness K2 ↔ §B3](../curriculum-mcp-path-to-ga/launch-readiness-framework.md); discussion open |
+| **Safeguarding & content-safety assessment** | Assessed at the pupil boundary; the teacher is the safety layer. | External (safeguarding + editorial) | Named in [launch-readiness §B1](../curriculum-mcp-path-to-ga/launch-readiness-framework.md); tracked here |
+| **Independent AI-output safety & quality evals** | Stress-test the MCP's AI outputs against Oak's quality and safety benchmarks. | External (Oak AI Platform) | No in-repo owner; tracked here |
+
+The authoritative readiness catalogue for all of the above is
+[launch-readiness-framework.md](../curriculum-mcp-path-to-ga/launch-readiness-framework.md)
+Groups A–D; this section is the compliance lane's tracking view of the production-blocking
+subset. Privacy policy / T&Cs surfacing has its own in-repo execution lane (Phase 1 below);
+the legal decide-and-publish step is external.
+
+---
+
 ## Execution Order
 
 ```text
