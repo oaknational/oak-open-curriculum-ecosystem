@@ -3,7 +3,7 @@
 
 # Oak Open Curriculum Ecosystem
 
-The [Oak National Academy Open Curriculum](https://open-api.thenational.academy/), delivered three ways: a [Model Context Protocol app](https://modelcontextprotocol.io/) (MCP app) that brings Oak into the AI assistants teachers already use; engineering tools for the wider ecosystem to build with — a generated, type-safe TypeScript SDK, a semantic search service, graph tools generated from Oak data, and evidence surfaces grounded in the wider education sector; and an openly documented framework for agentic engineering that delivers AI-enhanced innovation.
+The [Oak National Academy Open Curriculum](https://open-api.thenational.academy/), delivered three ways: a [Model Context Protocol app](https://modelcontextprotocol.io/) (MCP app) that brings Oak into the AI assistants teachers already use; engineering tools for the wider ecosystem to build with — a generated, type-safe TypeScript SDK, a semantic search service, graph tools generated from Oak data, and evidence surfaces grounded in the wider education sector; and an openly documented framework for agentic engineering that delivers AI-amplified innovation without trading away rigour or excellence.
 
 > **We're turning Oak's open curriculum into AI-native infrastructure — for teachers and the wider ecosystem — and transforming how we build and curate digital products, agent-first, to do it well.**
 

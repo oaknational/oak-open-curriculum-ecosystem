@@ -22,9 +22,9 @@ derives_from:
 
 **Deliver Oak's rigour at reach and at pace.** Oak's curriculum is rigorous, and that rigour
 is the value. Becoming a product means keeping it intact (**rigour**) while meeting teachers
-and the ecosystem where they now work (**reach**), fast enough to matter (**pace**) — and the
-three pull apart unless we choose well. That's the [diagnosis](diagnosis.md), and it's the
-spine the rest hangs from.
+and the ecosystem where they increasingly work (**reach**, AI assistants),
+fast enough to matter (**pace**) — and the three pull apart unless we choose well.
+That's the [diagnosis](diagnosis.md), and it's the spine the rest hangs from.
 
 ## How to read this
 

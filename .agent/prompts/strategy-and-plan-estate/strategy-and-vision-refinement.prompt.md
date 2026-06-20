@@ -21,7 +21,7 @@ owner's to shape.
 
 ## Ground first (read end-to-end, first-hand)
 
-1. [`.agent/directives/AGENT.md`](../../directives/AGENT.md) and apply `/oak-start-right-quick`.
+1. [`.agent/directives/AGENT.md`](../../directives/AGENT.md) and apply `/oak-start-right-thorough`.
 2. Controlling plan
    [`vision-strategy-and-plan-estate.plan.md`](../../plans/product-development-governance/vision-strategy-and-plan-estate.plan.md)
    — especially **Body 1 §"Vision review tripwires"**, **Body 2 §"Remaining at the strategy level"**,
