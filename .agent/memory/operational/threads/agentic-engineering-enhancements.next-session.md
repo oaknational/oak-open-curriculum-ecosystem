@@ -50,7 +50,7 @@ generator) found the prose-width metric is ALREADY table/link/frontmatter-aware 
 never blocks — so the records flag on genuine prose and the real gap was doctrinal, not metric.
 The owner and I jointly designed the **Closure & Role-Routing** doctrine and captured it in two
 committed artefacts: the findings record
-[`fitness-system-closure-and-role-routing.findings.md`](../../../plans/fitness-system-closure-and-role-routing.findings.md)
+[`fitness-system-closure-and-role-routing.findings.md`](../../../plans/agentic-engineering-enhancements/current/fitness-system-closure-and-role-routing.findings.md)
 (independent baseline, sibling of the strategy plan) and the backbone plan
 [`current/fitness-system-closure-and-role-routing.plan.md`](../../../plans/agentic-engineering-enhancements/current/fitness-system-closure-and-role-routing.plan.md).
 The records were NOT reflowed (that is the fitness-chasing the owner forbids); curation is the

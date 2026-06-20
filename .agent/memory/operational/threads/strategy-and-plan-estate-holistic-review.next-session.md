@@ -16,13 +16,83 @@ co-equal in **importance**; they differ in **work-volume** (the estate restructu
 ~80% of the work) and **dependency-direction** — never collapse those axes into
 "priority". Re-org is **value-preserving**: express the value encoded in plans more
 clearly; never delete ideas. **Scope authority is the controlling plan**
-[`vision-strategy-and-plan-estate.plan.md`](../../../plans/vision-strategy-and-plan-estate.plan.md),
+[`vision-strategy-and-plan-estate.plan.md`](../../../plans/product-development-governance/vision-strategy-and-plan-estate.plan.md),
 reconceived to this model 2026-06-18.
 
 The 2026-06-15 survey (waves, census, adversarial verification) is the prior
 foundation; its report + raw data live in
 [`.agent/reports/archive/plan-estate-survey-2026-06-15/`](../../../reports/archive/plan-estate-survey-2026-06-15/README.md)
 (archived 2026-06-18; a fresh survey is a Body-3 prerequisite).
+
+## Where We Are (2026-06-20, Fennel tracks Chlorophyll — two-part vision authored + strategy structure scaffolded)
+
+A read-only reflection session that the owner then opened to authoring. The owner ratified a
+**two-part vision** and **three streams as the strategy's first organising principle**, and
+asked to get the current position into the repo **before introducing new materials**. All
+other agents' claims are **stale** (owner-confirmed); this session's claim is the only live one.
+
+- **Vision authored — `VISION.md` is now the full two-part vision** (owner is final editor):
+  - **Part 1 — serving Oak's mission:** the MCP app for **teachers** + the engineering tools
+    for the **ecosystem** (two of Oak's three goals; schools served by omission). The **web and
+    AI assistants are two co-equal, complementary channels** — they don't compete, AI has a
+    place in both, and this repo delivers the AI-assistant channel.
+  - **Part 2 — agent-first product creation and curation:** across the **full product
+    lifecycle**, stated with the **amplifier-not-replacement** ethic — the human expert leads,
+    the system amplifies, at three levels (pupil ← teacher ← our own teams). Outward face (open,
+    freely available framework; exemplar) + inward face (Oak's own transformation) both present.
+  - The **three value streams persist**, grouped into the two parts; vision = two-part narrative,
+    strategy = three-stream organising principle (same system, two zooms). Do not collapse to a ranking.
+- **Strategy structure authored — `docs/strategy/README.md`** (provisional, PDR-018): three
+  streams as first organising principle, portfolio tier, Oak-alignment derivation (stream→goal,
+  schools non-goal, four pillars as constraints, align-not-fulfil), streams-as-system map,
+  per-stream sections (app carries K1–K3 + a release-readiness hand-offs table), the
+  **strategic-choice-ID contract** (stable/additive/resolvable), and a **measures checkpoint**.
+- **Settled this session (build on, do not re-open):** curation = full iterative lifecycle;
+  **curriculum ownership is external** (repo is a delivery + build mechanism, not the curriculum
+  owner); "open educational data beyond Oak's" is **aligned** with Oak's ecosystem goal (read
+  first-hand in `reference-local/oak.md`); Python SDK to follow TypeScript.
+- **DEFERRED to the owner (with sharp questions in the corpus):** the **diagnosis** (3 candidate
+  framings offered); strategic-choice **granularity** (recommend per-stream; gates the choice set);
+  per-stream **how-we-win** and **won't-do**; **measures** (Oak analytics/research input);
+  search/graph/EEF **external-vs-internal-reuse**; the **internal-transformation alignment rationale**.
+- **EEF / point-4 clarified (later in session, owner-prompted):** the EEF integration is the
+  **concrete proof of the ecosystem-convenor posture** (owner point 4) — an external organisation's
+  openly licensed materials brought together with Oak's — **not aspirational** (this corrects the
+  earlier "point 4 is homeless" read). Made explicit and **source-linked** in `VISION.md`,
+  `docs/strategy/README.md`, and the root `README.md`.
+- **Root README updated (owner-directed, "vital"):** the primary human entrypoint now surfaces the
+  **two-part vision + the strategy at a glance** — a Vision-and-strategy pointer near the top, a
+  Strategy entry in the non-technical evaluator start-list, and a two-part headline — and spells out
+  and links the EEF source. Three co-equal streams still named (Owner Decision 3 preserved).
+- **Continuity deep-updated:** controlling plan (Body 1 + Body 2 + Owner Decisions 8–13 +
+  Disposition VISION row), **`repo-continuity.md`** (strategy-lane entry rewritten + an agentic-state
+  bullet + the Active-Threads row), and this record.
+- **Agentic state handled (owner-directed):** claims clean — `active-claims.json` holds only this
+  session's live claim; prior-session claims archived; commit queue empty; no stale session crons.
+  Stale decision-thread / sidebar / handoff surfaces remain from retired sessions; clearing them is a
+  conservation-gated curator-pass (conserve substance first), surveyed and deferred — not blind-deleted.
+- **Incoming materials read + reflected (2026-06-20):** the 6 imported docs (governed-document-graph
+  ×2, service-authority, context-preservation, repo-intent proposal, gap report) are **suggestions /
+  explorations**, not authority. Verdicts: **strong corroboration** of the existing model; **graphs →
+  adopt a thin slice** (typed-relationship vocabulary + `product_increment` + a two-edge
+  `serves_strategic_choice`/reachability observe-graph = Body-3 enforcement sharpened) and **defer the
+  full typed-graph cathedral**; **service-authority → forward design** (Linear + Figma are real
+  near-term needs — team forming, designer incoming — define the edge vocabulary when that work lands;
+  home = a directive/ADR, not the strategy corpus). Owner was in the originating conversation; that
+  does not make the analysis correct — question-and-validate stands.
+- **Relocation (owner-directed, 2026-06-20):** new collection
+  `.agent/plans/product-development-governance/` — the **agreed active controlling plan** at its top
+  (the authority), the 6 imported docs in **`suggestions/`** (subordinate; the 4 overclaiming `active`
+  statuses downgraded to `proposed`), a collection `README.md` encoding the authority gradient. The
+  **fitness-system-closure findings** doc rehomed to `agentic-engineering-enhancements/current/`
+  beside its backbone plan (sibling-in-location-not-subject). All inbound + internal references rewired
+  and **verified 0-broken** (274 links checked); the 4 pre-existing broken links flagged sit in dated
+  archived records, not this move's regression.
+- **Working tree (uncommitted; owner controls commit):** the relocation (7 `git mv`s + new collection
+  README) plus `VISION.md`, `docs/strategy/README.md`, root `README.md`, `repo-continuity.md`,
+  `plans/README.md`, `high-level-plan.md`, the prompt opener, two archive files, `open-questions.md`,
+  both thread records. Gates re-greened (markdownlint + prettier + repo-validators). Claim
+  `strategy-and-plan-estate-holistic-review` open (implementer).
 
 ## Where We Are (2026-06-20, Kayak seeks Coral — plan-estate approach recorded; strategy inputs captured)
 
@@ -275,13 +345,16 @@ controlling plan §Body 2 and launch-readiness K3.
 
 ## Next (fresh context starts here)
 
-**▶ The next session is scope-locked to STRATEGY AUTHORING (Body 2).** Use the opener:
-[`define-strategy-content.prompt.md`](../../../prompts/strategy-and-plan-estate/define-strategy-content.prompt.md).
-The full body sequence below remains the thread's overall plan; the opener carries the
-scoped brief, ground sources, settled owner inputs, and the open diagnosis/granularity decisions.
+**▶ Body 2 STRUCTURE is now authored** (`docs/strategy/README.md`, provisional); the next
+moves are: (a) **read the owner's incoming materials**, then (b) **settle the DEFERRED
+decisions with the owner — diagnosis and granularity first** (they gate the choice set), then
+how-we-win / won't-do / measures, and (c) **fill the per-stream substance** and refine the
+two-part vision (owner is final editor). The opener
+[`define-strategy-content.prompt.md`](../../../prompts/strategy-and-plan-estate/define-strategy-content.prompt.md)
+still carries the scoped brief and ground sources; the structure it asked for now exists.
 
 **Read the controlling plan first** —
-[`vision-strategy-and-plan-estate.plan.md`](../../../plans/vision-strategy-and-plan-estate.plan.md),
+[`vision-strategy-and-plan-estate.plan.md`](../../../plans/product-development-governance/vision-strategy-and-plan-estate.plan.md),
 reconceived 2026-06-18 to the four-layer informational model and three first-class bodies.
 It is the scope authority; this record is the pickup surface.
 
@@ -348,3 +421,4 @@ new-boundary work is informationally gated on the strategy. Full scope: the plan
 | Squall spins Stratus | claude-code | claude-opus-4-8[1m] | 8b8770 | Phase-2A ratification gate + decision recording + K1–K3 reconciliation | 2026-06-17 | 2026-06-17 |
 | Asteroid calls Meridian | claude-code | claude-opus-4-8[1m] | 2297c9 | Q-002 strategy-layer discussion + approach reconception to the informational model | 2026-06-18 | 2026-06-18 |
 | Kayak seeks Coral | claude-code | claude-opus-4-8[1m] | 551a7f | critical assessment + plan-estate approach recording + strategy-input capture + records-accuracy + handoff | 2026-06-20 | 2026-06-20 |
+| Fennel tracks Chlorophyll | claude-code | claude-opus-4-8[1m] | 6dd550 | strategy reflection + two-part vision authoring + strategy-structure scaffolding + continuity deep-update | 2026-06-20 | 2026-06-20 |

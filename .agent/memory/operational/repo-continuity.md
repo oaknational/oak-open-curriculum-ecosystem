@@ -23,15 +23,26 @@ surface.
 - **Strategy / vision / plan-estate rework — LIVE primary lane** (thread
   [`strategy-and-plan-estate-holistic-review`](threads/strategy-and-plan-estate-holistic-review.next-session.md)).
   Controlling plan:
-  [`vision-strategy-and-plan-estate.plan.md`](../../plans/vision-strategy-and-plan-estate.plan.md).
-  Approach: a four-layer informational-dependence model (Oak's strategy → our vision → our strategy →
-  our planning; arrows = what must be *known* to author the next layer, not execution order) with
-  three co-equal first-class bodies (vision done; strategy and plan-estate next). **Next safe step:**
-  author the strategy corpus (Body 2) at `docs/strategy/`. Owner sequencing (2026-06-20,
-  vision→strategy→planning, each level in turn): the **plan standard** and a **fresh deep survey**
-  follow the strategy, NOT in parallel — their traceability elements need the strategy's
-  strategic-choice shape. The recorded Body-3 approach, owner strategy inputs, reconception detail, and
-  start sequence live in the thread record and the controlling plan §"Body 3 — Approach (the how)".
+  [`vision-strategy-and-plan-estate.plan.md`](../../plans/product-development-governance/vision-strategy-and-plan-estate.plan.md).
+  Model: four-layer informational dependence (Oak strategy → our vision → our strategy → our planning)
+  with three co-equal first-class bodies. **Body 1 (vision) and the Body 2 (strategy) STRUCTURE now
+  AUTHORED (2026-06-20, Fennel tracks Chlorophyll):** `VISION.md` is the **full two-part vision** —
+  Part 1 serves Oak's mission (app→teachers, tools→ecosystem), Part 2 the agent-first
+  creation-and-curation transformation with the **amplifier-not-replacement** ethic at three levels
+  (pupil ← teacher ← our teams); the web and AI assistants are **two co-equal complementary channels**
+  (this repo delivers the AI side). `docs/strategy/README.md` carries the strategy **structure** with
+  the **three value streams as its first organising principle** (provisional, PDR-018): Oak-alignment,
+  streams-as-system, per-stream sections (app with K1–K3 + a release-readiness hand-offs table), the
+  strategic-choice-ID contract, a measures checkpoint. **EEF = the concrete ecosystem-convenor exemplar**
+  (external org, open materials brought together with Oak's; source-linked). Root `README.md` updated to
+  surface **vision + strategy at a glance** (primary human entrypoint). **DEFERRED to the owner**
+  (questions in the corpus): the diagnosis, strategic-choice granularity (gates the choice set),
+  per-stream how-we-win + won't-do, measures (Oak input), search/graph external-vs-internal-reuse.
+  **Next safe step:** read the owner's **incoming materials**, then settle the deferred decisions
+  (diagnosis + granularity first), fill per-stream substance, refine the vision (owner is final editor);
+  then the **plan standard** + a **fresh deep survey**, then the restructure (owner sequencing
+  vision→strategy→planning). Body-3 approach detail in the thread record + controlling plan
+  §"Body 3 — Approach (the how)".
 - **Onboarding-improvement arc — PR #199 OPEN, merge-once-green (`feat/onboarding-improvement`).**
   **Next:** owner re-walks `/oak-onboard-me` off-branch; B2/B3 risk-register seeding; the
   ask-the-repo search decision. (B1 awaits owner cost bands; B6 at the M2 gate.)
@@ -89,10 +100,24 @@ surface.
 - **Collaboration-state lifecycle**: `.agent/state/` files are live signal
   sources, not long-term documentation. Outside explicit owner-directed research
   windows, process useful substance into memory/docs/plans and clear stale state.
+- **Agentic state (2026-06-20, single-agent)**: this strategy session (Fennel tracks Chlorophyll) is
+  the only active agent. `active-claims.json` holds only its live claim; prior-session claims are
+  archived (`closed-claims.archive.json`); the commit queue is empty; no stale session crons (crons are
+  per-session in-memory and died with their sessions). Stale decision-thread / sidebar / handoff
+  surfaces under `.agent/state/collaboration/` remain from retired sessions — clearing them is a
+  conservation-gated curator-pass (conserve substance first), surveyed and deferred this session, not
+  a blind delete.
+- **Plan-estate relocation (2026-06-20, owner-directed)**: the controlling plan + the merged imported
+  analysis docs moved off the planning root into a new `.agent/plans/product-development-governance/`
+  collection — controlling plan at the top (authority), the 6 imports in `suggestions/` (subordinate,
+  statuses downgraded to `proposed`). The `fitness-system-closure-and-role-routing.findings.md` rehomed
+  to `agentic-engineering-enhancements/current/` beside its backbone plan. References rewired and
+  verified 0-broken. Detail + the incoming-materials verdicts (graphs: thin slice; service-authority:
+  forward-design) live in the strategy thread record.
 - **Incoming planning cluster (merged from remote 2026-06-20, not yet integrated)**: a broad
   repo-intent / service-authority / governed-document-graph / context-preservation set of sibling
   documents now lives in [`.agent/plans/`](../../plans/). Integration and comparison are pending —
-  protocol in [`fitness-system-closure-and-role-routing.findings.md`](../../plans/fitness-system-closure-and-role-routing.findings.md) §11.
+  protocol in [`fitness-system-closure-and-role-routing.findings.md`](../../plans/agentic-engineering-enhancements/current/fitness-system-closure-and-role-routing.findings.md) §11.
 - **Fitness-system doctrine (agentic lane)**: the Closure & Role-Routing design landed as a findings
   record + backbone plan (`547d889c9`); next is the plan's WS0 (PDR-106 + ADR-144 amendment) and the
   §11 comparison. Detail in the `agentic-engineering-enhancements` thread record.
@@ -109,7 +134,7 @@ each thread record; this table is the repo-level index.
 | `eslint-no-throw-result-migration` | Migrate every throw to Result (ADR-088); drive the ~1000 warnings to zero; promote the rule. In execution on `docs/planning-and-validation`; cheap WS2 done, residue is design-laden (tier map in record) | [record](threads/eslint-no-throw-result-migration.next-session.md) | claude / Opus 4.8 (1M) / Siren mends Rudder / execution — observability+graph-core+logger landed (`93beffcfe`,`304b68f8d`,`61bdbc3e4`) / 2026-06-19 (prior: Merlin spins Cirrus `1556b9191`; Vanilla weaves Undergrowth, plan-author) |
 | `statusline-enhancements` | Claude Code statusline: Oak-mark, session-shape indicators, logo swap; lane in two `current/` plans (session-state, logo-modularisation). Live detail + the `feat/comms-research` divergence to reconcile: thread record | [record][statusline] | claude-code / Opus 4.8 / Vole calls Hollow / live-logo-swap-and-plan-harden / 2026-06-16 (prior identities: thread record) |
 | `agent-naming` | PDR-027 display-name derivation: versioned schema registry, session-hook identity surfaces, wordlist eras (v2 landed; v3 + era-pinning cure queued) | [record][agent-naming] | claude / Opus 4.8 / Squall hunts Troposphere / thread-open + v3-plan-author / 2026-06-13 (prior identities: thread record) |
-| `strategy-and-plan-estate-holistic-review` | Vision/strategy/plan-estate rework (experiment→product), **three co-equal first-class bodies on a four-layer informational model** (Oak strategy → vision → strategy → planning): vision done; strategy-layer discussion **resolved 2026-06-18**, approach **reconceived**, **Body-3 approach recorded 2026-06-20**; **strategy-first** (owner 2026-06-20): author the strategy corpus at `docs/strategy/` (Body 2), then the plan standard + fresh deep survey, then the restructure | [record](threads/strategy-and-plan-estate-holistic-review.next-session.md) | claude-code / Opus 4.8 / Baobab lifts Topsoil / surveyor-synthesist / 2026-06-15, claude-code / Opus 4.8 / Ocelot binds Curfew / vision-author / 2026-06-17, claude-code / Opus 4.8 / Tempest spins Spire / controlling-plan author / 2026-06-17, claude-code / Opus 4.8 / Squall spins Stratus / Phase-2A ratification + articulation / 2026-06-17, claude-code / Opus 4.8 / Asteroid calls Meridian / approach-reconception / 2026-06-18, claude-code / Opus 4.8 / Kayak seeks Coral / plan-estate-approach-record + strategy-input-capture / 2026-06-20 |
+| `strategy-and-plan-estate-holistic-review` | Vision/strategy/plan-estate rework (experiment→product), **three co-equal first-class bodies on a four-layer informational model**: **two-part vision + Body-2 strategy STRUCTURE authored 2026-06-20** (`VISION.md` full two-part; `docs/strategy/README.md` three-stream structure, provisional; EEF = convenor exemplar; root README surfaces vision+strategy at a glance). **Next:** read owner's incoming materials → settle DEFERRED decisions (diagnosis + granularity first) → fill per-stream substance; then plan standard + fresh deep survey, then the restructure | [record](threads/strategy-and-plan-estate-holistic-review.next-session.md) | claude-code / Opus 4.8 (1M) / Fennel tracks Chlorophyll / two-part-vision + strategy-structure + continuity / 2026-06-20 (prior seats: Baobab, Ocelot, Tempest, Squall, Asteroid, Kayak — full table in thread record) |
 
 ## Paused Threads
 
