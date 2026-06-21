@@ -53,12 +53,14 @@ surface.
   `agentic-engineering-enhancements` is **70/70 Pass-1 COMPLETE** (Pinnace hunts Marsh, successor to Hobby
   wakes Halo). The owner's **substance re-aim** is implemented + validated + committed in the instrument
   (idea-level: `substance_class` summary + `content_quality` + idea-granular `salvage_value`); two-pass
-  consolidation ratified in Body-3/V0 (`14877e8d0`). Survey state + successor handoff:
-  [`plan-estate-survey-2026-06-21/05-orchestration-state-and-successor-handoff.md`](../../reports/plan-estate-survey-2026-06-21/05-orchestration-state-and-successor-handoff.md)
-  and `coverage-ledger.md`. **Next safe step:** Aardvark turns Whisper (pre-positioned successor) continues
-  Pass-1 at the next owner-reset window — the 15 other collections (~35-plan atomic sub-batches, one per
-  window) + the all-70-AEE idea-granular back-fill before Pass-3 → Pass-2/3 → dated outputs + no-loss audit;
-  V1 ratification + Stage-1 build still OWNER-GATED. Owner controls push. n=2 owner-visible (no Director).
+  consolidation ratified in Body-3/V0 (`14877e8d0`). **Pass-1 coverage: 106/286 (2 collections)** — `agentic-engineering-enhancements` 70/70 +
+  `architecture-and-infrastructure` 36/36 (Anvil lifts Solder, 3 increments `0b59c7934`/`71d3fbfe0`/`8dd00afa1`;
+  502 ideas inventoried, 14 locked-contradictions). The SOLE-successor deep handoff + step-by-step linear plan:
+  [`plan-estate-survey-2026-06-21/07-sole-successor-survey-plan.md`](../../reports/plan-estate-survey-2026-06-21/07-sole-successor-survey-plan.md)
+  (committed `cf5319371`; supersedes 06/05) + `coverage-ledger.md`. **Next safe step:** the next session is
+  **SOLE** — ground on `07`, open a fresh orchestrator claim, continue Pass-1 (14 collections / ~180 plans
+  remain) in ~12-plan increments + the 70-AEE back-fill before Pass-3 → Pass-2/3 → dated outputs + no-loss
+  audit; V1 ratification + Stage-1 build still OWNER-GATED. Owner controls push. n=2 owner-visible (no Director).
   Detail: thread record (top section).
 - **Onboarding-improvement arc — PR #199 OPEN, merge-once-green (`feat/onboarding-improvement`).**
   **Next:** owner re-walks `/oak-onboard-me` off-branch; B2/B3 risk-register seeding; the
