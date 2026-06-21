@@ -202,7 +202,7 @@ surfaces of portable doctrine. The canonical rule files live at
 Practice-Core PDRs cite host-local skills as the workflow
 implementations of portable doctrine. Canonical files live under
 [`.agent/skills/`](skills/); adapters are generated at
-`.agents/skills/jc-*/SKILL.md` and `.claude/skills/jc-*/SKILL.md`.
+`.agents/skills/oak-*/SKILL.md` and `.claude/skills/oak-*/SKILL.md`.
 
 | Workflow (canonical) | Cited by Core | Concept implemented |
 | --- | --- | --- |

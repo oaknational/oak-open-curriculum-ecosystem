@@ -18,7 +18,7 @@ pattern directly implementable without workarounds.
 
 ## Prior Art in This Repo
 
-The review ensemble (`jc-review-ensemble`) already implements a simpler version
+The review ensemble (`oak-review-ensemble`) already implements a simpler version
 of this pattern: it dispatches four model-specific code reviewers and then
 synthesises their findings. The orchestrator generalises that pattern beyond
 reviews to arbitrary parallelisable work.
@@ -152,8 +152,8 @@ The orchestrator would be implemented as a Cursor subagent definition in
 - Collect and synthesise worker results
 - Optionally run a judge pass before returning the final summary
 
-A companion slash command (e.g., `/jc-swarm`) could provide a standard
-invocation pattern, similar to how `/jc-review-ensemble` standardises the
+A companion slash command (e.g., `/oak-swarm`) could provide a standard
+invocation pattern, similar to how `/oak-review-ensemble` standardises the
 review process.
 
 ## Open Questions

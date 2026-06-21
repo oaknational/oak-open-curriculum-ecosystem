@@ -388,9 +388,9 @@ unprefixed). The installer auto-detects supported agent platforms (Claude
 Code, Cursor, Codex, Gemini CLI, etc.) and surfaces each skill through
 whichever discovery path that platform reads.
 
-Do **not** vendor these into `.agent/skills/` or generate `jc-`-prefixed
-adapters for them. Per PDR-051, ingested skills retain their upstream
-identity in adapters and receive no local prefix; the
+These skills live only at `.agents/skills/<id>/`, upstream-managed rather
+than vendored, so they stay in sync with their source. Per PDR-051, ingested
+skills retain their upstream identity and receive no local prefix; the
 `skills-adapter-generate` pipeline is owned-skill-only.
 
 ### Available skills
@@ -419,15 +419,6 @@ npx skills add modelcontextprotocol/ext-apps --yes
 
 It overwrites the `.agents/skills/<id>/` entries with the latest upstream
 content. No further wrapper-restoration step is required.
-
-### History (why upstream-managed, not vendored)
-
-A previous attempt managed these skills by canonicalising them into
-`.agent/skills/`, recording entries in `skills-lock.json`, and emitting
-`jc-`-prefixed adapters. That pattern was removed: it duplicated upstream
-content statically, drifted under the unprefixed-ingested rule of PDR-051,
-and required a custom installer that was never built. The current path is
-`npx skills add` directly into `.agents/skills/`.
 
 ## Review Checklist
 

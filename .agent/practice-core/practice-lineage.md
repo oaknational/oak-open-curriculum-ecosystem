@@ -288,7 +288,7 @@ The Practice itself changes only when a learning is **structural**. The bar:
 3. **Stable?** If you expect it to change again soon, it's not ready. The Practice is a ratchet, not
    a pendulum.
 
-The `jc-consolidate-docs` command includes a step to consider Practice evolution. That is the
+The `oak-consolidate-docs` command includes a step to consider Practice evolution. That is the
 natural trigger point.
 
 ## Fitness Functions
@@ -356,7 +356,7 @@ Every repo with a Practice has a canonical location for incoming material:
 The Practice Box is checked at two points:
 
 1. **Session start** (via `start-right-quick`) — alert the user if files are present.
-2. **Consolidation** (via the `jc-consolidate-docs` command) — perform the full integration
+2. **Consolidation** (via the `oak-consolidate-docs` command) — perform the full integration
    flow.
 
 ### Integration Flow

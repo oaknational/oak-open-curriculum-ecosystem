@@ -218,7 +218,7 @@ another on another — are not permitted: the portability value of a
 consistent name across platforms outweighs any platform-native
 convention.
 
-Practical convention (adopt or adapt): a project prefix like `jc-` or
+Practical convention (adopt or adapt): a project prefix like `oak-` or
 similar makes it visible at a glance which commands are
 Practice-owned vs. platform-native or plugin-installed.
 

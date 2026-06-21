@@ -196,7 +196,7 @@ blocked protocol above.
 - Output:
   - Phase entry updated in `documentation-sync-log.md`
   - required canonical docs updated or explicitly marked no-change with rationale
-  - consolidation review completed using `jc-consolidate-docs`
+  - consolidation review completed using `oak-consolidate-docs`
 - Acceptance criteria:
   - Documentation update or no-change rationale is recorded for every
     required canonical surface.
@@ -228,7 +228,7 @@ blocked protocol above.
 
 ## Consolidation
 
-After all work is complete and quality gates pass, run `/jc-consolidate-docs`
+After all work is complete and quality gates pass, run `/oak-consolidate-docs`
 to graduate settled content, extract reusable patterns, rotate the napkin,
 manage fitness, and update the practice exchange.
 

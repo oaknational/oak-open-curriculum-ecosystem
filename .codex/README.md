@@ -14,7 +14,7 @@ Reviewer sub-agents are **not** skills. They require `sandbox_mode = "read-only"
 Codex custom workflows do not appear as project-defined slash commands.
 Codex's `/` popup is the built-in command surface; repo workflows in
 `.agents/skills/` are invoked through the `/skills` selector or by typing a
-`$skill-name` mention such as `$jc-review`. See the official
+`$skill-name` mention such as `$oak-gates`. See the official
 [Codex skills](https://developers.openai.com/codex/skills) and
 [Codex CLI slash commands](https://developers.openai.com/codex/cli/slash-commands)
 documentation.
