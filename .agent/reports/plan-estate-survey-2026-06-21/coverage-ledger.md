@@ -6,15 +6,16 @@
 `<opened 21:01Z>`) picked up the sole survey lane from Cosmos calls Infinity (who closed out cleanly
 20:52Z; claim `3a5e8798` archived) per doc 08 §10. Grounded first-hand on doc 08 + ledger + instrument
 + worklist TSV + git + registry; coverage re-derived from scratch = **228/286 (6 collections), 20
-conserved JSONs reconcile**. First increment **sector-engagement (12) COMPLETE** (`pass1-sector-engagement-01.json`,
-0 unreadable, 138 ideas: 125 good / 11 speculative / 2 bad, 5 locked-contradictions, 10 high-stakes
-verdicts all survive; spot-audit passed first-hand) → **Pass-1 now 240/286 (7 collections)**. Peer
-**Oyster weaves Surf** (`d16a4a`) is live finishing a small agent-tools F-41 commit-queue fix — shared-checkout
-turbo gate couples, so survey commits are timed to Oyster's `tree-green` broadcasts (conserved JSONs held
-safe on disk meanwhile). All-channels watcher armed pipe-less; heartbeat OFF (consumer-absent, owner-visible).
-**Next safe step: the 9 remaining collections / ~46 plans** (start `semantic-search` 11, or fold the
-singletons), ~one ~35-plan sub-batch per owner-reset window; then the 70-AEE idea-granular back-fill BEFORE
-Pass-3. Owner resets the budget window; owner controls push.
+conserved JSONs reconcile**. Two clean increments this window: **sector-engagement (12)** committed
+`2b306a202` and **semantic-search (11)** — 0 unreadable across both, spot-audits passed first-hand
+(the ss-01 audit confirmed the adversarial gate caught a genuine stale-plan drift in
+`search-contract-followup`). → **Pass-1 now 251/286 (8 collections)**. Peer **Oyster weaves Surf**
+(`d16a4a`) landed its agent-tools F-41 commit-queue fix (`4fd640089`, tree-green) and is closing out
+(it owns the singleton whole-repo `pnpm check`); the shared-checkout turbo coupling clears once its
+markdown closeout docs land. All-channels watcher armed pipe-less; heartbeat OFF (consumer-absent,
+owner-visible). **Next safe step: the 8 remaining collections / ~35 plans** (start `connecting-oak-resources`
+10 or `discovery` 9, or fold the singletons), ~one ~35-plan sub-batch per owner-reset window; then the
+70-AEE idea-granular back-fill BEFORE Pass-3. Owner resets the budget window; owner controls push.
 
 ---
 
@@ -104,6 +105,7 @@ scope; not surveyed.) Source: `worklist-plans.tsv`.
 | sdk-02 | sdk-and-mcp-enhancements (`current/`+`future/`, plans 13–24 of 28) | 12 | Cosmos calls Infinity | COMPLETE (8 keep / 4 archive-complete; substance 12 good; content 12 strong; conformance 11 major-drift / 1 no-fm; 159 ideas: 143 good / 16 speculative / 0 bad; 0 locked-contradictions; 14 high-stakes verdicts: 13 survive / 1 refuted) | `pass1-sdk-and-mcp-enhancements-02.json` |
 | sdk-03 | sdk-and-mcp-enhancements (`future/`, plans 25–28 of 28) | 4 | Cosmos calls Infinity | COMPLETE (3 keep / 1 rewrite; substance 4 good; content 3 strong / 1 adequate; conformance 2 major-drift / 2 no-fm; 43 ideas: 36 good / 7 speculative / 0 bad; 0 locked-contradictions; 4 high-stakes verdicts: 4 survive) | `pass1-sdk-and-mcp-enhancements-03.json` |
 | se-01 | sector-engagement (full collection: `current/` + `eef/` + `future/` + `knowledge-graph-adoption/`) | 12 | Cinder holds Warmth | COMPLETE (8 keep / 4 archive-complete; substance 12 good; content 9 strong / 3 adequate; conformance 12 major-drift; 138 ideas: 125 good / 11 speculative / 2 bad; 5 locked-contradictions; 10 high-stakes verdicts: 10 survive; spot-audit passed first-hand on eef-d5-execution + eef-outcome-evaluation-infrastructure) | `pass1-sector-engagement-01.json` |
+| ss-01 | semantic-search (full collection: `current/` + `future/`) | 11 | Cinder holds Warmth | COMPLETE (9 keep / 1 archive-complete / 1 rewrite; substance 11 good; content 10 strong / 1 adequate; conformance 11 major-drift; 145 ideas: 134 good / 11 speculative / 0 bad; 2 locked-contradictions; 9 high-stakes verdicts: 7 survive / 2 refuted; spot-audit passed first-hand — refutation evidence verified). **Pass-2 reconciliation item:** holistic classified `search-contract-followup` as `rewrite` on its self-reported `pending` todos, but the adversarial verifier REFUTED "no task completed" — the work LANDED via the archived `pre-reingest-remediation.execution.plan.md` (COMPLETE 2026-03-23; Task-1 test at `search-field-integrity.integration.test.ts:122-132`, Task-2 doc at `INDEXING.md:158`). Stale-plan-vs-reality drift; likely `archive-complete`. Both signals conserved, not averaged. | `pass1-semantic-search-01.json` |
 
 After 1b: the full **agentic-engineering-enhancements** collection (70 plans) is Pass-1 complete.
 
@@ -135,16 +137,23 @@ After se-01: the full **sector-engagement** collection (12 plans) is Pass-1 comp
 Warmth, 1 increment, 0 unreadable, 138 ideas inventoried: 125 good / 11 speculative / 2 bad, 5
 locked-contradictions, 10 high-stakes verdicts: 10 survive; orchestrator spot-audit passed first-hand —
 eef-d5-execution archive-complete + eef-outcome-evaluation-infrastructure keep both trace to real
-file:line). **Pass-1 coverage so far: 240 / 286 plans (7 collections).** 9 collections / ~46 plans
-remain — see the linear successor plan [`08-next-session-execution-plan.md`](./08-next-session-execution-plan.md).
+file:line). **Pass-1 coverage at that point: 240 / 286 plans (7 collections).**
 
-### Remaining Pass-1 collections (~46 plans, ~35-plan atomic sub-batches, one per owner-reset window)
+After ss-01: the full **semantic-search** collection (11 plans) is Pass-1 complete (Cinder holds Warmth,
+1 increment, 0 unreadable, 145 ideas inventoried: 134 good / 11 speculative / 0 bad, 2
+locked-contradictions, 9 high-stakes verdicts: 7 survive / 2 refuted; spot-audit passed first-hand —
+the adversarial gate caught a genuine stale-plan drift in `search-contract-followup`, refutation
+evidence verified in the codebase). **Pass-1 coverage so far: 251 / 286 plans (8 collections).** 8
+collections / ~35 plans remain — see the linear successor plan
+[`08-next-session-execution-plan.md`](./08-next-session-execution-plan.md).
 
-The 9 collections other than the seven now complete (`agentic-engineering-enhancements`,
+### Remaining Pass-1 collections (~35 plans, ~35-plan atomic sub-batches, one per owner-reset window)
+
+The 8 collections other than the eight now complete (`agentic-engineering-enhancements`,
 `architecture-and-infrastructure`, `product-development-governance`, `agent-tooling`, `observability`,
-`sdk-and-mcp-enhancements`, `sector-engagement`), derived from
+`sdk-and-mcp-enhancements`, `sector-engagement`, `semantic-search`), derived from
 `worklist-plans.tsv` (col `collection`):
-`semantic-search` (11), `connecting-oak-resources` (10), `discovery` (9),
+`connecting-oak-resources` (10), `discovery` (9),
 `user-experience` (7), `developer-experience` (4), `exploring-open-education-resources` (2),
 `security-and-privacy` (1), `school-data-search` (1), `curriculum-mcp-path-to-ga` (1).
 Each future sub-batch appends a row above and conserves its own `pass1-<collection>-<range>.json`.
