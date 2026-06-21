@@ -415,8 +415,9 @@ removed, re-homed, or isolated carries a **recorded disposition** — `re-housed
 `isolated` (speculative, moved outside the estate), or `archived`. The disposition is a
 supersession mapping on the archived artefact or in the receiving archive's README (the
 consolidation discipline — never a standalone ledger). A removal without a recorded
-disposition is a defect, and the **no-loss audit** (see Acceptance) turns the dispositions
-into a verifiable proof that no good or speculative idea was lost.
+disposition is a defect, and the **no-loss audit** (see Acceptance) — run by a dedicated,
+independent parallel session — turns the dispositions into a verifiable proof that no useful
+information, structure, or relationship was lost.
 
 This body becomes its **own executable plan** (own home, workstreams, TDD-not-
 applicable proof contract) when it begins; this governance file scopes it until then. When that executable plan exists,
@@ -446,9 +447,14 @@ and conformant (the survey's content-quality verdict on each plan's ideas); (b) 
 strategic choice — adequate serving plans that will achieve it, gaps closed with authored new
 plans (the Pass-2 effectiveness verdict), effective not merely aligned; and (c) the bad is
 genuinely gone from the live estate. A restructure that passes the form checks but fails this
-gate is not done. **No-loss is proven, not asserted:** a no-loss audit report verifies that
-every removed / archived / extracted / isolated idea's salvage value is conserved in a named
-live home — the accounting (every removal has a disposition) made *demonstrable*.
+gate is not done. **No-loss is proven independently, not asserted (owner, 2026-06-21):** a **dedicated primary
+agent runs a full parallel session** — concurrent with the restructure, owning no restructure
+edits itself — to **prove no loss of useful information, structure, or relationships**, and
+**reports back to the owner**. Scope is the whole estate, not just ideas: every removed /
+archived / extracted / isolated idea's salvage value conserved in a named live home; the
+estate's *structure* preserved or deliberately changed-and-recorded; and the *relationships*
+(the typed inter-plan / inter-idea edges) preserved or deliberately changed-and-recorded. It
+is an independent adversarial proof — not the restructuring agent marking its own homework.
 
 ### Body 3 — Approach (the *how*) — recorded 2026-06-20
 
