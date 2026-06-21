@@ -24,6 +24,39 @@ foundation; its report + raw data live in
 [`.agent/reports/archive/plan-estate-survey-2026-06-15/`](../../../reports/archive/plan-estate-survey-2026-06-15/README.md)
 (archived 2026-06-18; a fresh survey is a Body-3 prerequisite).
 
+## Where We Are (2026-06-21, Cinder holds Warmth — ▶ PASS-1 COMPLETE 286/286, all 16 collections; standing down at the Pass-1 boundary)
+
+Picked up the sole survey lane from **Cosmos calls Infinity** (who closed out 20:52Z; claim `3a5e8798`
+archived) per doc 08 §10. Grounded first-hand on doc 08 + coverage-ledger + the instrument + worklist
+TSV + git + registry; re-derived coverage from scratch (228/286, 20 JSONs reconcile) before acting.
+Opened a fresh orchestrator claim `0cfb921f`, armed the all-channels watcher PIPE-LESS, heartbeat OFF.
+
+**▶ PASS-1 COMPLETE — 286/286, all 16 collections.** This session advanced 228→286 across **5 conserved+committed
+increments** (`2b306a202` sector-engagement 12, `9f6b5cf03` semantic-search 11, `3b1e35134`
+connecting-oak-resources 10, `37d03d307` discovery 9, `9b8428b4d` final-6 [user-experience,
+developer-experience, and the 4 singletons] 16) — 58 plans in one budget window, **0 unreadable, 0 fabricated** (HALT held). Each
+increment: fire → conserve-to-disk → distribution sanity-check → orchestrator spot-audit first-hand → ledger →
+commit by explicit pathspec. **Pass-1 grand totals (25 `pass1-*.json`):** 229 keep / 43 archive-complete / 8
+rewrite / 4 rehome / 2 extract-then-archive; **2,935 ideas** (2,560 good / 352 speculative / 23 bad — AEE
+1a/1b-01..03 undercounted, the back-fill closes this); **65 locked-contradictions** (owner re-ratification at
+Pass-3); **240 high-stakes verdicts: 210 survive / 25 refuted / 5 uncertain** — the Opus adversarial gate caught
+real false-completion / stale claims, three confirmed first-hand by the orchestrator (`graph-stack` WS4.5 =
+placeholder-not-landed; `search-contract-followup` = work-actually-done-elsewhere; `devx-strictness-convergence`
+= Object.assign 0-claimed-vs-17-live).
+
+- **Next safe step (doc 08 §7):** the **70-AEE idea-granular back-fill BEFORE Pass-3** — a holistic-only pass over
+  all 70 agentic-engineering-enhancements plans capturing ONLY `salvage_value` + `substance_class` +
+  `content_quality` (AEE already has conformance/specialist/verify), making the idea-inventory uniform across all
+  286 so the no-loss audit has a complete substrate. Author a thin holistic-only variant of the instrument (or trim
+  the full one). Then **Pass-2** (cross-cutting relational passes + Saffron Spec-1 effectiveness widening — carry the
+  effectiveness-arm reviewer item to the owner first per doc 08 §4.5) → **Pass-3** (synthesis + completeness-critic,
+  loop-until-dry, 2 clean rounds) → the **dated outputs** + the **independent no-loss audit**. Open a fresh
+  orchestrator claim per doc 08 §10 (Cinder's `0cfb921f` relinquished at this closeout).
+- **Pickup surfaces:** doc 08 (`08-next-session-execution-plan.md`) the linear runbook; `coverage-ledger.md` the
+  living state (WINDOW STATE block current; Pass-1 grand totals recorded); the 25 `pass1-*.json` (full per-plan
+  findings); the instrument `survey-pass1.workflow.js`. **Owner resets the budget window; owner controls push**
+  (branch 122 ahead of upstream, unpushed). The 65 locked-contradictions route to the owner at Pass-3 synthesis.
+
 ## Where We Are (2026-06-21, Cosmos calls Infinity — survey advanced: 4 collections / 122 plans → Pass-1 228/286; doc 08 runbook written; window-2 closeout)
 
 Picked up sole survey orchestration from **Anvil lifts Solder** (the `07` handoff). Across two owner-reset budget windows surveyed **`product-development-governance` 4/4, `agent-tooling` 59/59, `observability` 31/31, `sdk-and-mcp-enhancements` 28/28** in conservable ~12-plan increments (commits `ed469d576` → `b41714abe`) → **Pass-1 now 228/286 (6 of 16 collections)**, 0 fabricated findings (window-1 depletion at ~63 plans returned null findings, not invented ones — HALT held; owner reset → window 2). Authored the exhaustive next-session linear runbook [`08-next-session-execution-plan.md`](../../../reports/plan-estate-survey-2026-06-21/08-next-session-execution-plan.md) (committed `5388185e8`; supersedes `07` §5; cross-linked up to the parent method brief + the controlling plan): owner-intervention points, sub-agent critical-assessment exhortations, every skill invocation. **n=2 with Oyster weaves Surf** (WS-3 path-safety on `agent-tools/**` — disjoint; shared-checkout commit-gate coupling handled via tree-green windows; Oyster B1 landed `b5408291d`, B2 owner-deferred `5326dc02f`). Orchestrator claim `3a5e8798` closed at this closeout. The 37 accumulated locked-contradictions (14 inherited + 23 this session) route to the owner at Pass-3 synthesis.
