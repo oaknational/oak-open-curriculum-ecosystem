@@ -330,3 +330,25 @@ broke a later pathspec commit; stay at repo root. (2) zsh does NOT expand a glob
 hit `Exit status 2`; use `--body-file`. (4) the hook policy **substring-matches comms-event bodies** — a
 body merely *describing* a gate-bypass flag was blocked as if it were one (false positive; reword the
 prose). Instance of [[hook-policy-substring-discipline]].
+
+## The proper question forces the answer — reverse-engineer solution-shaped tasks (2026-06-21, Oyster weaves Surf)
+
+The load-bearing lesson of WS-3 F-41, owner-taught. The plan handed a *solution* ("introduce a shared
+`resolveCoordinationHome`; refuse bare-relative paths"). I executed it faithfully — full TDD, three
+sub-agent reviews, a green commit (b5408291d), AND a deferred repo-wide-migration brief — all answering
+a **mis-posed question** ("how do we make the resolver safe?"). The owner re-posed it twice ("why is
+this even work?" → "what problem are we solving? finding the primary checkout on a machine so worktrees
+share one comms location?"). The *proper* question forced the answer instantly: `git worktree list`
+lists the main worktree first, so its path IS the shared home from any worktree — a one-call resolver
+(c90150ffa) that dissolved the sentinel-walk, the explicit-`--repo-root` migration, and most of the
+brief. The answer was **adjacent the whole time**: the F-41 register itself named "via the git common
+dir," and architecture-expert-fred flagged the existing `git rev-parse` resolvers in `bin/` as
+"correctly out of scope" — the solution-framing made me and every reviewer route *around* the answer.
+Operational cure (the **forced-answer test**): before building on a solution-shaped task (build/add/
+refuse/fix-it-this-way), restate the *problem* as a one-line question and check the answer is forced —
+if you are *designing, comparing options, or weighing trade-offs*, the question is unripe; sharpen it
+(with the owner when the framing is theirs) before building. A ripe question has one obvious answer (cf.
+schema-first: a precise schema forces the types). Reviewers must check the solution's **frame**, not
+only its quality. Proposed to extend [[scope-from-goal-before-approach]] + the generative metacognition
+trigger. Siblings: [[feedback_no_single_checkout_or_machine_assumption]],
+[[feedback_ask_would_this_be_simpler_if_the_system_changed]], [[passive-guidance-loses-to-artefact-gravity]].
