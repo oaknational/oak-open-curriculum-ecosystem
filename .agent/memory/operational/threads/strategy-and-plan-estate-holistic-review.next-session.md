@@ -24,6 +24,22 @@ foundation; its report + raw data live in
 [`.agent/reports/archive/plan-estate-survey-2026-06-15/`](../../../reports/archive/plan-estate-survey-2026-06-15/README.md)
 (archived 2026-06-18; a fresh survey is a Body-3 prerequisite).
 
+## Where We Are (2026-06-21, Ganymede herds Penumbra → Saffron holds Sepal handoff; V1-fold / Stage-3 lane picked up; n=2 owner-visible, no Director)
+
+The V1-fold / Stage-3-restructure lane rotated **Ganymede herds Penumbra (74cb92) → Saffron holds Sepal (0f0399)** at a clean, fully-committed boundary (owner-directed, 13:38Z; handoff event `6a175e86`). Ganymede's claim `37d251fa` closed/archived; Saffron opened implementer claim `333257e2` on the same design lane. Nothing mid-flight; no handoff record needed — the design lives first-hand in the committed plan + the Ganymede×Pinnace ARC channel, both read by Saffron before pickup.
+
+**Committed + owner-ratified this window (Ganymede; NOT pushed):** the substance re-aim of Body-3 + V0 (`14877e8d0`, `61489ce7e`; docs-adr-expert sound, full gate green). The design, now authoritative over this record's earlier plan-level framing:
+
+- **Atomic unit of curation = the IDEA, not the plan.** The restructure is a **two-pass consolidation**: Pass 1 decomposes each plan's ideas and sorts them into good/speculative/bad buckets (good → extracted + provenance-tracked + staged; speculative → an isolated home *outside* `.agent/plans/`, proposed `.agent/speculative/`; bad → archive-with-disposition); Pass 2 re-composes the good bucket into new `stream → thread → plan` plans by the strategic choice each idea serves, under-served choices get authored new plans, every re-composed idea traces to its source.
+- **The seam (owner-confirmed):** the **survey identifies** ideas read-only (its idea-inventory); the **consolidation extracts / sorts / re-composes** — the mutation side, this lane's.
+- **Substance gate (Acceptance):** content-quality + per-choice effectiveness reviewer-confirmed; form-conformance necessary-not-sufficient; the bad genuinely gone; **no-loss proven** by a **dedicated independent parallel session** reporting to the owner (not asserted dispositions). V0 §9 = conformance necessary-not-sufficient. New Risks rows: theater (form without substance); Pass-2 re-composition drift.
+
+**Saffron's lane (all gated):** (1) draft the 3 Pass-2 survey specs for the orchestrator — per-choice effectiveness/adequacy, the design of the dedicated parallel no-loss-proof session, and the trichotomy → disposition defaults — *not urgent* (Pass-2 is many windows out); (2) the V1-fold when the survey synthesis lands (input-to-verify; OWNER-GATED); (3) the Stage-3 two-pass restructure (OWNER-GATED). Survey-gated until synthesis; synthesized outputs route to Saffron directly.
+
+**Open item carried to the owner (as a question):** the substance gate's **effectiveness-arm reviewer is unassigned** — the owner assigned only the no-loss arm (the dedicated parallel session). Who confirms per-choice effectiveness is unresolved.
+
+**Standing:** n=2 owner-visible (Pinnace orchestrator + Saffron V1-fold; no Director — heartbeat off, canonical + ARC watchers paired). Owner controls push (branch ahead ~71, none pushed). The orchestrator seat is itself rotating Pinnace → **Aardvark turns Whisper** (3c3b32, standby successor); the durable post-handoff coordination seam is **Saffron ↔ Aardvark** (V1-fold ↔ orchestration), with a preemptive ARC channel already open.
+
 ## Where We Are (2026-06-21, Pinnace hunts Marsh — survey orchestrator; AEE 70/70 Pass-1 complete; substance re-aim implemented; handed to Aardvark turns Whisper)
 
 Picked up survey orchestration from Hobby wakes Halo (PDR-063 handoff). n=2 owner-visible, no Director.
