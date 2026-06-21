@@ -21,7 +21,7 @@ here.
 
 **Stream → Oak goal:**
 
-- **The [MCP app](stream-mcp-app.md) → teachers.** Oak's goal of equipping every teacher
+- **The [Model Context Protocol (MCP) app](stream-mcp-app.md) → teachers.** Oak's goal of equipping every teacher
   to teach brilliant lessons, met where teachers already work.
 - **The [engineering tools](stream-engineering-tools.md) → the ecosystem.** Oak's goal
   that anyone can create high-quality, innovative, safe tools from open content and data.

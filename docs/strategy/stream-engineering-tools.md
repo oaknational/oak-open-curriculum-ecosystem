@@ -57,9 +57,12 @@ openly) — owner-signed-off (2026-06-20); the strategy iterates as a living doc
 Ecosystem adoption of the SDK / search / graph — the candidate signal is ours to propose,
 the target Oak's to ground. See the [measures checkpoint](measures.md).
 
-> **Open decision for the owner:** how much of the **search and graph tooling** is an
-> _external_ ecosystem deliverable versus an _internal-reuse_ module (e.g. the semantic
-> search engine re-pointed at a different data source)? They appeared in the strategy
-> inputs mostly as internal-reuse; their outward role needs settling. (The EEF integration
-> is settled: external open material we bring together — an ecosystem-facing exemplar, not
-> an internal-reuse question.)
+> **Settled (owner, 2026-06-20): search and graph are built for general reuse — internal and
+> external are the same build, not a choice.** Our deliberately layered architecture (generic
+> primitives, then reusable libraries, then application-specific services, then apps —
+> separated by degree of coupling) means we never optimise for one consumer over another. The
+> generic layers are shared common infrastructure our own products reuse **and** the ecosystem
+> can build on, and we release that infrastructure openly as a natural consequence; only the
+> Oak-specific bindings sit in the top layers. The EEF integration is one ecosystem-facing
+> instance of exactly this. Any SDK / search / graph / EEF sub-IDs are additive granularity
+> along that layering, not a fork.

@@ -211,3 +211,49 @@ fluency-is-a-warning / read-gate cluster (recurrence per PDR-098, not new homes)
 
 Sibling: [[passive-guidance-loses-to-artefact-gravity]]. The README changes remain uncommitted (unclear
 provenance) — flagged for the next session's vision/strategy review, not committed as mine.
+
+## After dissolving a false dichotomy, don't re-manufacture it one layer down (2026-06-20, Plover wakes Sundog)
+
+Open-mind review of the strategy/vision/plan estate. I correctly dissolved the search/graph "external
+deliverable vs internal-reuse" question as the repo's framework/consumer split (graph-core /
+search-contracts general; the SDKs Oak-specific — confirmed first-hand: graph-ingest's own description
+says "Oak-specific corpus mapping belongs in graph-corpus-sdk"). Then I RE-MANUFACTURED the same conflict
+one layer down as a "genuine residual: how much to invest in the external face vs internal." Owner: there
+is no conflict and no residual — the deliberately layered scheme (generic primitives → reusable libraries
+→ app-specific services → apps, separated by degree of coupling) means we never choose what to optimise
+for; shared common infrastructure is built for general reuse internally AND externally in one act, and the
+generic layers are publicly releasable as a consequence.
+
+Root: a reflex to find SOME owner decision / trade-off in every resolution (premature crystallisation's
+twin); the "balanced residual" arrived smoothly and bypassed the no-conflict check (fluency-is-a-warning,
+the PDR-098 recurrence cluster). Cure: when the architecture genuinely dissolves a conflict, trust it — do
+not hunt a smaller version one level down; re-anchor the four lenses (LTAE always; could-it-be-simpler;
+simpler-if-system-changed; optimise for positive user impact) before forming a view. Forward note the owner
+raised: the generic graph layer (graph-core/graph-project, transport-agnostic) can serve a strategy-and-
+planning corpus too — Body-3's traceability spine reuses those primitives, publicly releasable, rather than
+bespoke tooling. Sibling: [[passive-guidance-loses-to-artefact-gravity]].
+
+## Worked instances: the immune system fired; decomposition dissolved a complexity-fear (2026-06-21, Plover wakes Sundog)
+
+Two positive datapoints from the intent-graph session (the FRAME-flagship dogfooding its own discipline).
+(1) The write-time hedging hook BLOCKED "good enough" in the repo-intent-graph plan — I'd used it
+rhetorically ("good enough that others adopt it"); reappraised per the block (not a synonym-swap) and stated
+the bar positively as the exemplar standard. The memetic immune system catching expediency-hedging at
+write-time, as designed. (2) The owner's "plan states — is this too complex?" worry dissolved by DECOMPOSING
+into orthogonal axes (kind/readiness, execution-status [Linear-projected], terminal-disposition, hold): the
+complexity-fear came from flattening independent axes into one nested enum; the cure is the repo's own
+"decompose at the tension" + the suggestions' "do not collapse status/lifecycle/execution state". Captured in
+`repo-intent-graph.plan.md §Plan state`. Sibling: the search/graph false-dichotomy (same root: collapsed axes).
+
+## Context-loss probes are first-hand-only — a subagent verifies artefacts, never detects loss (2026-06-21, Plover wakes Sundog)
+
+Owner correction. Running the "deep adversarial context-loss probe", I delegated it to a subagent and
+labelled its output as the probe. Wrong: a context-loss probe MUST be first-hand. Loss = (what I hold in
+context) − (what the artefacts capture); only the context-holder can see the left side. A context-isolated
+subagent sees only the artefacts, so it can VERIFY them (it caught a false ADR-117 §6 citation — valuable)
+but can NEVER detect loss, having no access to my context to subtract from. The handoff skill (§6e.2) states
+this explicitly; I read it and conflated verification with loss-detection under closeout load
+(passive-guidance-loses-to-artefact-gravity, again). The first-hand scan then found two items the subagent
+structurally could not: this lesson, and an open TPC↔missing-MV question (homed as Q-003) — both lived only
+in my context. **Always:** run the loss-scan first-hand; use a subagent only as the verification complement;
+never substitute one for the other. Homed: [[feedback_context_loss_probe_is_first_hand_only]].

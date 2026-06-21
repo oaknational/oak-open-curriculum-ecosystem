@@ -29,7 +29,7 @@ That's the [diagnosis](diagnosis.md), and it's the spine the rest hangs from.
 ## How to read this
 
 The vision has two parts — serving Oak's mission, and the agent-first transformation. The
-strategy's first organising principle is the **three value streams** — the app, the
+strategy's first organising principle is the **three value streams** — the [Model Context Protocol](https://modelcontextprotocol.io/docs/getting-started/intro) (MCP) [app](https://modelcontextprotocol.io/extensions/apps/overview), the
 engineering tools, and the agentic framework — held together at a portfolio tier. The
 two-part vision and the three-stream strategy are the same picture at two zooms: the app and
 the tools serve the mission, and the framework is both the engine that builds them and a
@@ -56,6 +56,13 @@ search / graph / EEF). A plan resolves to exactly one choice, which rolls up to 
 and Oak goal. Threads collect plans and serve goals selectively, so the map is a graph, not a
 strict tree.
 
+**Streams and threads are different axes.** A _stream_ is a strategic front of value (the
+organising principle of this strategy); a _thread_ is a continuity unit — a named line of work
+that persists across sessions. They relate through plans, many-to-many: a plan serves one
+strategic choice (→ stream → Oak goal), while a thread collects whatever plans advance its line
+of work and so may touch several streams; equally, one stream is advanced by several threads.
+Neither contains the other.
+
 Each stream's strategic choices are **signed off** by the owner (2026-06-20) in its "how we
 win" section; the registry below reflects them. The ID **contract** — how IDs
 behave (stable, additive, resolvable), the `serves_strategic_choice` field, and the validator
@@ -71,15 +78,15 @@ The strategy lists the choices; governance owns the contract.
 
 ## Open decisions
 
-| Decision                                          | Owner                                          | Status / note                                                                         |
-| ------------------------------------------------- | ---------------------------------------------- | ------------------------------------------------------------------------------------- |
-| The diagnosis                                     | Owner                                          | **Settled** — "deliver Oak's rigour at reach and at pace" ([diagnosis](diagnosis.md)) |
-| Strategic-choice granularity                      | Owner                                          | **Settled** — per-stream choices                                                      |
-| How we win, per stream                            | Owner ("the advantages" — a larger discussion) | **Signed off** — owner 2026-06-20 (each stream)                                       |
-| What we won't do, per stream                      | Owner                                          | **Signed off** — owner 2026-06-20 (each stream)                                       |
-| Measures                                          | Owner + Oak analytics/research                 | Open — [measures](measures.md)                                                        |
-| Search / graph / EEF — external vs internal-reuse | Owner                                          | Open — [engineering tools](stream-engineering-tools.md)                               |
-| Internal-transformation alignment rationale       | Owner                                          | Open — [agentic framework](stream-agentic-framework.md)                               |
+| Decision                                          | Owner                                          | Status / note                                                                                                                             |
+| ------------------------------------------------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| The diagnosis                                     | Owner                                          | **Settled** — "deliver Oak's rigour at reach and at pace" ([diagnosis](diagnosis.md))                                                     |
+| Strategic-choice granularity                      | Owner                                          | **Settled** — per-stream choices                                                                                                          |
+| How we win, per stream                            | Owner ("the advantages" — a larger discussion) | **Signed off** — owner 2026-06-20 (each stream)                                                                                           |
+| What we won't do, per stream                      | Owner                                          | **Signed off** — owner 2026-06-20 (each stream)                                                                                           |
+| Measures                                          | Owner + Oak analytics/research                 | Open — [measures](measures.md)                                                                                                            |
+| Search / graph / EEF — external vs internal-reuse | Owner                                          | **Settled** 2026-06-20 — general reuse, both faces; layered architecture, no trade-off ([engineering tools](stream-engineering-tools.md)) |
+| Internal-transformation alignment rationale       | Owner                                          | **Settled** 2026-06-20 — internal improvement maps to the external goals ([agentic framework](stream-agentic-framework.md))               |
 
 ## Related
 

@@ -16,8 +16,8 @@ Serves Oak's **teachers** goal._
 
 **Two co-equal, complementary channels.** Teachers reach Oak through the web and through
 AI assistants; the channels reinforce rather than compete, and AI has a place in both.
-This repository delivers the AI-assistant channel — Oak inside the assistants teachers
-already choose, ChatGPT, Claude, Gemini and others — bringing Oak's standards into the
+This repository delivers the AI-assistant channel — a [Model Context Protocol](https://modelcontextprotocol.io/docs/getting-started/intro) (MCP) [app](https://modelcontextprotocol.io/extensions/apps/overview)
+putting Oak inside the assistants teachers already choose, ChatGPT, Claude, Gemini and others — bringing Oak's standards into the
 planning and preparation teachers already do there. Which assistant is the teacher's
 choice, not ours — as a public body we serve the public good, not any one provider, so we
 support the major assistants even-handedly and never partner with one over another.
@@ -42,7 +42,7 @@ iterates as a living document (PDR-018).
 
 ## What we won't do
 
-- Compete with the [Oak Web Application](https://www.thenational.academy) (OWA) — the two
+- Compete with the [Oak Web Application](https://www.thenational.academy) — the two
   channels are complementary, and both involve AI.
 - Present Oak as the only choice — the Optional pillar.
 - Trade rigour for reach — all content MUST be grounded in Oak's curriculum and/or standards.
@@ -53,7 +53,7 @@ These are settled and live in the
 [launch-readiness framework](../../.agent/plans/curriculum-mcp-path-to-ga/launch-readiness-framework.md);
 they sit inside this stream's strategy as its production-readiness keystones.
 
-- **K1 — "Live" is an evidence state, not a deploy state.** GA means real teachers and
+- **K1 — "Live" is an evidence state, not a deploy state.** General availability (GA) means real teachers and
   curriculum leaders using the app and demonstrating positive impact. Value proof is a
   precondition of GA — articulated here, measured by Oak, not instrumented in-repo.
 - **K2 — Primary audience: teachers and curriculum leaders** (for now). Nothing in the app
@@ -63,9 +63,12 @@ they sit inside this stream's strategy as its production-readiness keystones.
   dependency set must be GA-ready. (This is the ratified _initial release surface_ —
   distinct from the no-favourites principle above, which names ChatGPT, Claude, Gemini and
   others as the teacher's open choice.) The release channel isn't unilateral — app-like
-  packaging and promotion need the AI vendors' collaboration (they're aware and have
-  agreed). Marketing is gated on sufficient mitigation of the TPC risk (the lesson-level
-  data-availability area).
+  packaging and promotion need the AI vendors' collaboration (the live status is in the
+  release-readiness hand-offs below). Marketing is gated on sufficient mitigation of the third-party-content (TPC) risk:
+  Oak's curriculum includes material licensed for the website but not for reuse beyond it, so
+  every AI surface must run on the **open** subset with TPC filtered out (what the Open
+  Curriculum API serves) — and that filter is not yet proven to the bar we need for public
+  release.
 
 ## Release-readiness — named hand-offs with accountability
 
@@ -74,18 +77,18 @@ them, with an accountable owner, so none is silently assumed done. "Owned in-rep
 plan drives it; "external/tracked" = executed outside the repo and tracked in the
 [compliance lane](../../.agent/plans/compliance/roadmap.md); "discussion" = no owner yet.
 
-| Requirement                     | What                                                                                                      | Ownership                                                                                  |
-| ------------------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| Privacy policy / T&Cs surfacing | Links in server metadata + discovery; the decide-and-publish step is legal                                | In-repo (`app-submission-standards` WS2 + compliance Phase 1); decide-and-publish external |
-| Host UX                         | The teacher's experience inside the host product                                                          | In-repo (`mcp-app-extension-migration` WS3/WS4)                                            |
-| ATRS                            | Algorithmic Transparency Recording Standard record, required of an arms-length public body before release | External/tracked — **production blocker**                                                  |
-| Detailed DPIA                   | Full data-protection impact assessment across the live flows                                              | External (DPO/legal) — **production blocker**                                              |
-| ICO Children's Code             | Applicability ruling + conformance, **cross-linked to the K2 target-audience decision**                   | External (legal) + product — discussion open                                               |
-| Safeguarding & content-safety   | The teacher is the safety layer; content-safety assessed externally                                       | External (safeguarding + editorial) — **production blocker**                               |
-| Independent AI-output evals     | Stress-test outputs against Oak's quality and safety benchmarks                                           | External (Oak AI Platform) — **production blocker**                                        |
-| Lesson-level data availability  | The missing materialised view the API needs                                                               | Discussion — no owner yet                                                                  |
-| Go-to-market / school support   | Discoverability and enablement; teachers won't auto-discover or self-install                              | Discussion — no owner yet                                                                  |
-| Release channel                 | App-like packaging + promotion across the assistants (ChatGPT / Claude / Gemini, even-handedly)           | External-collaboration dependency (vendors aware + agreed)                                 |
+| Requirement                     | What                                                                                                                                                                                           | Ownership                                                                                  |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| Privacy policy / T&Cs surfacing | Links in server metadata + discovery; the decide-and-publish step is legal                                                                                                                     | In-repo (`app-submission-standards` WS2 + compliance Phase 1); decide-and-publish external |
+| Host UX                         | The teacher's experience inside the host product                                                                                                                                               | In-repo (`mcp-app-extension-migration` WS3/WS4)                                            |
+| ATRS                            | Algorithmic Transparency Recording Standard record, required of an arms-length public body before release                                                                                      | External/tracked — **production blocker**                                                  |
+| Detailed DPIA                   | Full data-protection impact assessment across the live flows                                                                                                                                   | External (DPO/legal) — **production blocker**                                              |
+| ICO Children's Code             | Applicability ruling + conformance, **cross-linked to the K2 target-audience decision**                                                                                                        | External (legal) + product — discussion open                                               |
+| Safeguarding & content-safety   | The teacher is the safety layer; content-safety assessed externally                                                                                                                            | External (safeguarding + editorial) — **production blocker**                               |
+| Independent AI-output evals     | Stress-test outputs against Oak's quality and safety benchmarks                                                                                                                                | External (Oak AI Platform) — **production blocker**                                        |
+| Lesson-level data availability  | Safely-filtered (TPC-removed) lesson data via the upstream API — DB surfacing is upstream (not our scope) plus a materialised view (the same gate as the TPC filter; see open-questions Q-003) | Discussion — no owner yet                                                                  |
+| Go-to-market / school support   | Discoverability and enablement; teachers won't auto-discover or self-install                                                                                                                   | Discussion — no owner yet                                                                  |
+| Release channel                 | App-like packaging + promotion across the assistants (ChatGPT / Claude / Gemini, even-handedly)                                                                                                | External-collaboration dependency (vendors aware + agreed)                                 |
 
 The **ICO Children's Code** question is cross-linked to the K2 target-audience decision
 (teachers and curriculum leaders; nothing aimed at students) — that link is load-bearing

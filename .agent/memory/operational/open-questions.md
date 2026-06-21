@@ -70,3 +70,28 @@ superseded by three co-equal, first-class bodies of work (vision / strategy / pl
 outcome recorded in the controlling plan
 [`vision-strategy-and-plan-estate.plan.md`](../../plans/product-development-governance/vision-strategy-and-plan-estate.plan.md)
 (reconceived 2026-06-18). Surfaced by owner direction; resolved with the owner.
+
+## Q-003 — Is the app's data-availability gate a missing materialised view, or TPC-filter assurance?
+
+**Question:** The MCP-app launch-readiness names a "lesson-level data-availability" gate as "the missing
+materialised view the API needs" (stream-mcp-app.md release-readiness hand-offs; controlling plan Body 2).
+The owner (2026-06-21) framed the same area as the **third-party-content (TPC) filter not yet proven** for
+public release — the open-data subset (TPC removed) the Open Curriculum API serves. Are these the same gate
+(the MV *is* the proven-open filter), two facets of one gate, or two distinct gates?
+
+**Why it shapes future work:** it is a production-release blocker for the app stream and the marketing gate
+(TPC-risk mitigation). Whether the work is "build a missing MV", "prove the existing filter", or both changes
+the hand-off owner and the acceptance criteria.
+
+**Why not cheaply answerable now:** needs the data/API team's first-hand knowledge of the actual data
+infrastructure; an agent must not assert the data shape from docs.
+
+**Owning artefact:** [`stream-mcp-app.md`](../../../docs/strategy/stream-mcp-app.md) §release-readiness
+hand-offs; controlling plan §Body 2; the launch-readiness framework.
+
+**Status:** RESOLVED (2026-06-21, owner). Same conceptual area — surfacing the lesson-level TPC data in the
+database (upstream, **not our scope**) and an appropriate materialised view are the *mechanisms* that enable
+access to the safely-filtered (TPC-removed) data via the upstream Oak Open Curriculum API. The "missing
+materialised view" and the "TPC filter not yet proven" describe one gate: the safely-filtered open-data
+availability the app depends on. Surfaced by Plover wakes Sundog's first-hand context-loss scan; resolved by
+owner direction.

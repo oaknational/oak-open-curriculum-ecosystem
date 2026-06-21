@@ -39,7 +39,7 @@ to reach it and build with it.
 
 The web and AI assistants are two co-equal, complementary ways teachers reach Oak.
 They don't compete — they reinforce each other, and AI has a place in both. This
-repository delivers the AI-assistant side: an MCP app that puts Oak inside the AI
+repository delivers [the AI-assistant side](docs/strategy/stream-mcp-app.md): a [Model Context Protocol](https://modelcontextprotocol.io/docs/getting-started/intro) (MCP) [app](https://modelcontextprotocol.io/extensions/apps/overview) that puts Oak inside the AI
 assistants teachers already choose — ChatGPT, Claude, Gemini and others — bringing
 Oak's standards into the tools they already use to plan lessons and prepare. Which
 assistant is the teacher's choice, not ours.
@@ -53,8 +53,8 @@ not to push Oak as the only answer.
 ### For the wider ecosystem — open tools for open educational data
 
 Anyone building with open educational data should be able to do it well. We provide
-a typed TypeScript SDK (with Python to follow), a semantic search service, and
-curriculum graph tools. And we bring open resources together: alongside Oak's own
+[a typed TypeScript SDK (with Python to follow), a semantic search service, and
+curriculum graph tools](docs/strategy/stream-engineering-tools.md). And we bring open resources together: alongside Oak's own
 data we draw in openly licensed evidence from other organisations in the sector —
 such as the [Education Endowment Foundation's Teaching and Learning Toolkit](https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit) —
 so what we surface is grounded in the wider evidence base, not Oak alone. The code is open;
@@ -73,7 +73,7 @@ decide whether the work is any good. It's the same principle we hold for teacher
 turned on ourselves: the human expert leads, and what we build amplifies them. It
 lets us be more ambitious, not smaller.
 
-We share how we do this. Our framework for agent-first delivery is openly
+We share how we do this. Our [framework for agent-first delivery](docs/strategy/stream-agentic-framework.md) is openly
 documented and freely available, so other teams — inside Oak and beyond — can adopt
 it. We aim to be a useful exemplar: for agent-first delivery with excellence at its
 centre, applied across all of digital product and service work, and for bringing

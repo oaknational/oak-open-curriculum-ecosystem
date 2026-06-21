@@ -24,6 +24,69 @@ foundation; its report + raw data live in
 [`.agent/reports/archive/plan-estate-survey-2026-06-15/`](../../../reports/archive/plan-estate-survey-2026-06-15/README.md)
 (archived 2026-06-18; a fresh survey is a Body-3 prerequisite).
 
+## Where We Are (2026-06-21, Plover wakes Sundog — open-mind review done; intent-graph vision ratified; plans updated, NOT executed)
+
+Owner-directed open-mind review of the strategy/vision/plan estate. The review **confirmed the
+strategy and revalidated the signed bets (no re-decision)**, ran the **vision tripwire-2 pass (no
+major upstream change)**, and revalidated the controlling plan — then opened into ratifying a larger
+frame and updating the plans. **No build started** (owner: "update the plans, don't start yet").
+
+**Owner decisions ratified (controlling plan §Owner Decisions 20–22):**
+
+- **Search/graph external-vs-internal-reuse — a FALSE DICHOTOMY; settled.** The layered architecture
+  (generic primitives → reusable libraries → app-specific services → apps, separated by degree of
+  coupling) means search/graph are built for general reuse, internal AND external in one build; the
+  generic layers are shared, publicly-releasable infrastructure. Confirmed first-hand: `graph-core` /
+  `graph-project` / `search-contracts` are general (transport-agnostic), `graph-corpus-sdk` /
+  `oak-search-sdk` are the Oak instances — `graph-ingest`'s own description says "Oak-specific corpus
+  mapping belongs in graph-corpus-sdk". It does **not** gate the restructure; remaining prerequisites
+  are the plan standard + the fresh survey only.
+- **Internal-transformation alignment — settled.** Oak getting better at delivering Oak's goals;
+  internal improvement maps to / amplifies the external goals; the vision already carries it.
+- **Repo intent graph — VISION RATIFIED ("all of it").** The plan estate is one corpus of a typed,
+  agentic-first memory and intent graph: six pillars (one schema generated → indexes are projections;
+  on the generic graph substrate; dual human/agent legibility; authority as typed edges; intent
+  preservation; external systems as typed edges). Whole contract shape ratified up front; build staged
+  node-type by node-type. **The plan standard is the `plan` node-schema (#1).** Schema-first applies as
+  a **second domain** (the Cardinal Rule names the OpenAPI spec; the same discipline applies here).
+  Taxonomy survey-gated; the `suggestions/` are input-to-verify (ChatGPT-synthesis, convergent).
+
+**Artefacts authored (all `future/`, NOT executable — owner-gated):**
+
+- [`future/repo-intent-graph.plan.md`](../../../plans/product-development-governance/future/repo-intent-graph.plan.md)
+  — the ratified design + staging. **Stage 1 = the smallest slice** that unlocks the plan work without
+  compromising the vision: ratify the contract v1 (docs) + the `plan` node-schema (#1) + the
+  strategic-choice registry + an observe-mode plan extractor (over `graph-core`, via `repo-validators`).
+  Stage 2 = the deep survey; Stage 3 = the restructure; Stage 4+ = grow the graph, external projection
+  gated on a live consumer. Carries the **plan-state model** (orthogonal axes — kind/readiness, live
+  execution-status [Linear-projected], terminal-disposition, hold; plan ≈ Linear Project; enum values +
+  folder collapse ratified at Stage 1, survey-grounded).
+- [`future/deep-plan-estate-survey.plan.md`](../../../plans/product-development-governance/future/deep-plan-estate-survey.plan.md)
+  — decision-complete brief for the deep-survey **session**: ≥3 agents per plan (holistic + specialist),
+  cross-cutting relational passes (across plans / groups / plans↔threads / plans↔doc-groups), an
+  **adversarial verification gate (no finding accepted unverified)**, dynamic-workflow orchestration,
+  loop-until-dry completeness. Method fixed; findings not presupposed.
+
+**Editorial pass (applied; working-tree, owner controls push):** TPC expanded (third-party content); MCP + GA expanded on first
+use across VISION + the corpus; OWA dropped; vendor-collaboration de-duplicated; MCP-protocol
+first-mentions link to the MCP intro and MCP-app first-mentions to the MCP Apps overview (owner-provided
+URLs); the MCP app made concrete ("Oak inside ChatGPT, Claude, and Gemini"); stream links added in the
+root README + VISION; **streams↔threads clarified** (different axes; many-to-many through plans — strategy
+README §spine).
+
+**Grounded knowledge for the next executor (verify-don't-trust paid off):**
+
+- Conformance figures are UNVERIFIED: a subagent's "58% no frontmatter" scanned ALL `.md`; my first-hand
+  `*.plan.md` scan = 38/282 (~13.5%); the controlling plan's "38%" reconciles with neither. The fresh
+  survey measures them — do not design against any figure.
+- Two thread-flagged editorial items (release-channel Gemini; OWA expand-on-first-use) were already fixed
+  in the live files when checked — the thread's flags were stale.
+- External MCP URLs are owner-provided; resolution not independently verified.
+
+**Next safe step (two openers exist):** (1) the **deep-survey session** per its brief — needs the `plan`
+node-schema lens (a v0 draft suffices; the survey grounds the v1); (2) **Stage-1 build** — promote
+`repo-intent-graph` Stage 1 to `current/` (**OWNER-GATED**). Editorial batch done. Owner controls push.
+
 ## Where We Are (2026-06-20, Juniper stirs Taproot — handoff received; Body-3 under-spec resolutions encoded)
 
 Picked up the thread from Kiln guards Patina (owner-directed succession). Handoff verified
@@ -512,3 +575,4 @@ new-boundary work is informationally gated on the strategy. Full scope: the plan
 | Fennel tracks Chlorophyll | claude-code | claude-opus-4-8[1m] | 6dd550 | strategy reflection + two-part vision authoring + strategy-structure scaffolding + continuity deep-update | 2026-06-20 | 2026-06-20 |
 | Kiln guards Patina | claude-code | claude-opus-4-8[1m] | 0c90b2 | diagnosis + granularity settling + README-index refactor + per-stream proposals + pupil-decontamination + handoff | 2026-06-20 | 2026-06-20 |
 | Juniper stirs Taproot | claude-code | claude-opus-4-8[1m] | 8afc21 | handoff pickup from Kiln; encoded owner-accepted Body-3 under-spec resolutions and the sign-off staleness flip into the controlling plan | 2026-06-20 | 2026-06-20 |
+| Plover wakes Sundog | claude-code | claude-opus-4-8[1m] | f91f5e | open-mind strategy/vision/plan-estate review; vision tripwire-2 pass; resolved search/graph (false dichotomy) + internal-alignment, encoded across the corpus and controlling plan | 2026-06-20 | 2026-06-20 |

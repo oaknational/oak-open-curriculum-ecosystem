@@ -37,12 +37,18 @@ surface.
   **two levels** (the teacher; our own teams), the vision pupil-boundary is gone; pupils remain only in Oak's
   verbatim mission and the external compliance gates (K2 / ICO Children's Code / safeguarding). EEF = the
   ecosystem-convenor exemplar. Incoming materials = suggestions (graphs → thin slice; service-authority →
-  forward design). **Next safe step (owner-directed open-mind review — the plan's next-steps predate the last few days' work):**
-  (1) strategy review (revalidate the corpus + the signed bets); (2) vision review (tripwire-2, now due); (3) step
-  back and revalidate the remainder of the plan with an open mind — review / revalidate / possibly rewrite, not
-  execute as-is. Body-3 prep (plan standard + fresh survey) is startable but subject to that revalidation.
-  Uncommitted `README.md` + `docs/strategy/README.md` refinements (unclear provenance) to assess in the vision
-  review. Owner controls push. Detail: thread record + controlling plan §"Body 3 — Approach › Resolved".
+  forward design). **Intent-graph vision RATIFIED (2026-06-21, Plover wakes Sundog — owner "all of it"):** the plan estate is one
+  corpus of a typed, agentic-first memory and intent graph (six pillars; one schema generated → indexes are
+  projections; on the generic graph substrate; dual human/agent legibility; authority as typed edges; intent
+  preservation; external systems as typed edges). The **plan standard = the `plan` node-schema (#1)**; search/graph
+  (a false dichotomy) + internal-alignment settled (controlling plan §Owner Decisions 20–22). Two new `future/`
+  plans authored (NOT executed): the
+  [`repo-intent-graph` plan](../../plans/product-development-governance/future/repo-intent-graph.plan.md) (staged;
+  Stage 1 = the smallest slice) and the
+  [`deep-plan-estate-survey` brief](../../plans/product-development-governance/future/deep-plan-estate-survey.plan.md).
+  Editorial pass applied (TPC / MCP / GA / streams↔threads / MCP-doc links). **Next safe step:** (1) the
+  deep-survey session per its brief (needs the `plan` node-schema lens; a v0 draft suffices); (2) Stage-1 build
+  (promote `repo-intent-graph` Stage 1 — OWNER-GATED). Owner controls push. Detail: thread record (Plover section).
 - **Onboarding-improvement arc — PR #199 OPEN, merge-once-green (`feat/onboarding-improvement`).**
   **Next:** owner re-walks `/oak-onboard-me` off-branch; B2/B3 risk-register seeding; the
   ask-the-repo search decision. (B1 awaits owner cost bands; B6 at the M2 gate.)
@@ -100,13 +106,12 @@ surface.
 - **Collaboration-state lifecycle**: `.agent/state/` files are live signal
   sources, not long-term documentation. Outside explicit owner-directed research
   windows, process useful substance into memory/docs/plans and clear stale state.
-- **Agentic state (2026-06-20, single-agent)**: this strategy session (Fennel tracks Chlorophyll) is
-  the only active agent. `active-claims.json` holds only its live claim; prior-session claims are
-  archived (`closed-claims.archive.json`); the commit queue is empty; no stale session crons (crons are
-  per-session in-memory and died with their sessions). Stale decision-thread / sidebar / handoff
-  surfaces under `.agent/state/collaboration/` remain from retired sessions — clearing them is a
-  conservation-gated curator-pass (conserve substance first), surveyed and deferred this session, not
-  a blind delete.
+- **Agentic state (2026-06-21, single-agent)**: this session (Plover wakes Sundog) is the only active
+  agent (owner-confirmed sole; all other claims/state stale). `active-claims.json` is empty; the commit
+  queue is empty; no stale session crons (crons are per-session in-memory and died with their sessions).
+  Stale decision-thread / sidebar / handoff surfaces under `.agent/state/collaboration/` remain from
+  retired sessions — clearing them is a conservation-gated curator-pass (conserve substance first),
+  deferred, not a blind delete.
 - **Plan-estate relocation (2026-06-20, owner-directed)**: the controlling plan + the merged imported
   analysis docs moved off the planning root into a new `.agent/plans/product-development-governance/`
   collection — controlling plan at the top (authority), the 6 imports in `suggestions/` (subordinate,
@@ -134,7 +139,7 @@ each thread record; this table is the repo-level index.
 | `eslint-no-throw-result-migration` | Migrate every throw to Result (ADR-088); drive the ~1000 warnings to zero; promote the rule. In execution on `docs/planning-and-validation`; cheap WS2 done, residue is design-laden (tier map in record) | [record](threads/eslint-no-throw-result-migration.next-session.md) | claude / Opus 4.8 (1M) / Siren mends Rudder / execution — observability+graph-core+logger landed (`93beffcfe`,`304b68f8d`,`61bdbc3e4`) / 2026-06-19 (prior: Merlin spins Cirrus `1556b9191`; Vanilla weaves Undergrowth, plan-author) |
 | `statusline-enhancements` | Claude Code statusline: Oak-mark, session-shape indicators, logo swap; lane in two `current/` plans (session-state, logo-modularisation). Live detail + the `feat/comms-research` divergence to reconcile: thread record | [record][statusline] | claude-code / Opus 4.8 / Vole calls Hollow / live-logo-swap-and-plan-harden / 2026-06-16 (prior identities: thread record) |
 | `agent-naming` | PDR-027 display-name derivation: versioned schema registry, session-hook identity surfaces, wordlist eras (v2 landed; v3 + era-pinning cure queued) | [record][agent-naming] | claude / Opus 4.8 / Squall hunts Troposphere / thread-open + v3-plan-author / 2026-06-13 (prior identities: thread record) |
-| `strategy-and-plan-estate-holistic-review` | Vision/strategy/plan-estate rework (experiment→product), **three co-equal first-class bodies on a four-layer informational model**: **two-part vision + Body-2 strategy STRUCTURE authored 2026-06-20** (`VISION.md` full two-part; `docs/strategy/README.md` three-stream structure, provisional; EEF = convenor exemplar; root README surfaces vision+strategy at a glance). **Next (owner-directed open-mind review):** strategy review → vision review (tripwire-2, due) → step back and revalidate the plan-remainder with an open mind (review / revalidate / possibly rewrite, not execute as-is). Bets SIGNED OFF (owner 2026-06-20); Body-3 under-specs resolved + encoded (`7a75081f5`). | [record](threads/strategy-and-plan-estate-holistic-review.next-session.md) | claude-code / Opus 4.8 (1M) / Juniper stirs Taproot / Body-3 under-spec resolutions + sign-off staleness flip + handoff / 2026-06-20 (prior seats: Baobab, Ocelot, Tempest, Squall, Asteroid, Kayak, Fennel, Kiln — full table in thread record) |
+| `strategy-and-plan-estate-holistic-review` | Vision/strategy/plan-estate rework (experiment→product), **three co-equal first-class bodies on a four-layer informational model**: **two-part vision + Body-2 strategy STRUCTURE authored 2026-06-20** (`VISION.md` full two-part; `docs/strategy/README.md` three-stream structure, provisional; EEF = convenor exemplar; root README surfaces vision+strategy at a glance). **Intent-graph vision RATIFIED 2026-06-21** ("all of it"; plan standard = node-schema #1; search/graph + internal-alignment settled). Two new `future/` plans authored (NOT executed): `repo-intent-graph` (staged; Stage 1 = smallest slice) + `deep-plan-estate-survey` brief; editorial pass applied. **Next:** deep-survey session (per brief) + Stage-1 build (OWNER-GATED). | [record](threads/strategy-and-plan-estate-holistic-review.next-session.md) | claude-code / Opus 4.8 (1M) / Plover wakes Sundog / open-mind review + intent-graph ratification + plan authoring / 2026-06-21 (prior seats: Baobab, Ocelot, Tempest, Squall, Asteroid, Kayak, Fennel, Kiln, Juniper — full table in thread record) |
 
 ## Paused Threads
 

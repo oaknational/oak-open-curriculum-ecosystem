@@ -20,13 +20,13 @@ todos:
     content: "Strategy body — decisions preserved from the 2026-06-17 ratification: K1–K3 (the MCP-app stream's production-readiness keystones, §14.2 correction), value-stream taxonomy depth = hybrid, README names all three streams. value-and-impact.md is archived as an input the strategy corpus (Body 2) absorbs."
     status: completed
   - id: strategy-corpus
-    content: "Strategy body (REFACTORED to README-index + detail files 2026-06-20; diagnosis and granularity SETTLED; per-stream how-we-win and won't-do SIGNED OFF 2026-06-20) — docs/strategy/ is now a stable README-index over detail files (diagnosis, alignment-and-streams, three stream-*, measures). Diagnosis SETTLED (owner): 'deliver Oak's rigour at reach and at pace' (unified hook + per-stream edges). Granularity SETTLED (owner): per-stream choices (APP-*/TOOLS-*/FRAME-*, ecosystem may decompose to SDK/search/graph/EEF). The strategic-choice-ID contract relocated to Body 3 (governance owns the contract; strategy lists the choices). Per-stream how-we-win and won't-do SIGNED OFF (owner, 2026-06-20). Still open: measures (Oak grounds the targets), the search/graph external-vs-internal-reuse decision, the internal-transformation alignment rationale, and the vision tripwire-2 pass. A living strategy (PDR-018): adopt-and-iterate-from-practice."
+    content: "Strategy body (REFACTORED to README-index + detail files 2026-06-20; diagnosis and granularity SETTLED; per-stream how-we-win and won't-do SIGNED OFF 2026-06-20) — docs/strategy/ is now a stable README-index over detail files (diagnosis, alignment-and-streams, three stream-*, measures). Diagnosis SETTLED (owner): 'deliver Oak's rigour at reach and at pace' (unified hook + per-stream edges). Granularity SETTLED (owner): per-stream choices (APP-*/TOOLS-*/FRAME-*, ecosystem may decompose to SDK/search/graph/EEF). The strategic-choice-ID contract relocated to Body 3 (governance owns the contract; strategy lists the choices). Per-stream how-we-win and won't-do SIGNED OFF (owner, 2026-06-20). Still open: measures (Oak grounds the targets). Search/graph (a false dichotomy), the internal-transformation alignment rationale, and the vision tripwire-2 pass were resolved 2026-06-20. A living strategy (PDR-018): adopt-and-iterate-from-practice."
     status: in_progress
   - id: estate-restructure
     content: "Plan-estate body (core, large — informationally depends on the strategy's structure) — read every plan, extract permanent documentation, archive complete plans, extract-and-archive completed work from partial plans, rewrite survivors to a common standard, pull scattered concepts into new plans, delete with disposition. New thread/plan boundaries derived FROM the strategy. Value-preserving via recorded dispositions (supersession mappings per the consolidation discipline, never a standalone ledger)."
     status: blocked
   - id: estate-restructure-prep
-    content: "Plan-estate body, prerequisite deliverables — the **plan standard** (Anchor B: one ratified conformance rubric for plans and inter-plan structure) and a **fresh deep survey** of every plan and plan-adjacent surface (conformance + traceability inventory). Owner sequencing (2026-06-20, vision→strategy→planning flow): the strategy (Body 2) is authored FIRST; although the read+extract slice is informationally independent, both prerequisites' traceability elements depend on the strategy's strategic-choice shape, so they follow Body 2 — now signed off (2026-06-20), so these are startable. Then read every plan, extract permanent documentation, archive genuinely-complete. See §'Body 3 — Approach (the how)'."
+    content: "Plan-estate body, prerequisite deliverables — the **plan standard** (= the `plan` node-schema #1, delivered by the repo-intent-graph plan Stage 1 — the smallest slice that unlocks the survey and restructure) and a **fresh deep survey** of every plan and plan-adjacent surface (conformance + traceability inventory). Owner sequencing (2026-06-20, vision→strategy→planning flow): the strategy (Body 2) is authored FIRST; although the read+extract slice is informationally independent, both prerequisites' traceability elements depend on the strategy's strategic-choice shape, so they follow Body 2 — now signed off (2026-06-20), so these are startable. Then read every plan, extract permanent documentation, archive genuinely-complete. See §'Body 3 — Approach (the how)'."
     status: pending
   - id: estate-hygiene
     content: "Estate hygiene (independent — no informational dependence on vision/strategy) — re-anchor dead VISION references; fix the editorial-tone vision path; clear the dead PR-76 blocker; remediate reachability/openers/stale-executables after re-verifying current counts."
@@ -246,9 +246,9 @@ refined on owner input and read against incoming materials.
   2026-06-20).
 
 **Still genuinely open (owner decides / Oak grounds):** the measure *targets* (Oak
-analytics/research); the search/graph external-vs-internal-reuse decision; the
-internal-transformation-alignment rationale; and the **full vision tripwire-2 pass**, now
-**due** (how-we-win is signed off).
+analytics/research). The search/graph question (a false dichotomy), the
+internal-transformation-alignment rationale, and the vision tripwire-2 pass were all resolved
+2026-06-20 (Owner Decisions 20–21; tripwire-2 found no major upstream vision change).
 
 A cohesive, leadership-grade **system-strategy** that stands on its own merit (an
 asset Oak leadership could read to understand and back this work) **and** is the
@@ -434,18 +434,29 @@ standard of excellence and discovery** across every plan, and make two prerequis
 deliverables first-class. The one concrete that needs the estate read first — the collection
 layout — is explicitly gated on the fresh survey, not pre-judged.
 
+**The graph mechanism is owned by the [repo-intent-graph plan](future/repo-intent-graph.plan.md)
+(owner-ratified 2026-06-21).** The plan estate is one corpus of a typed, agentic-first memory and
+intent graph; this section records the **estate-restructure** approach that consumes that graph.
+Body 3's two anchors are delivered by that plan's **Stage 1** (the smallest slice): the `plan`
+node-schema (node-schema #1 = the plan standard, Anchor B) and the strategic-choice registry
+(Anchor A's target). The survey (Stage 2) and the restructure (Stage 3) follow. The schema,
+registry, validator, and observe→warn→enforce mechanics live in that plan, not here.
+
 **Two anchors, both gating the per-plan rewrite:**
 
 - **Anchor A — the strategy** (Body 2), structured to expose an *enumerable, stable set
   of strategic choices* (with IDs) as the traceability targets every surviving plan
   resolves to.
-- **Anchor B — the plan standard** (new deliverable): one **ratified conformance rubric**
-  consolidated from PDR-018 + ADR-117 + `templates/`, covering required frontmatter
-  (incl. a `serves_strategic_choice` field), the end-goal/mechanism/means body shape,
-  status vocabulary, size guidance, and inter-plan structure (collection / lifecycle /
-  index conventions). Grounded need: the doctrine exists but is unapplied — first-hand
-  profiling 2026-06-20 found 2% of plans carry `plan_id` and 38% have no frontmatter — so
-  the rubric must ship with enforcement, not as more doctrine.
+- **Anchor B — the plan node-schema** (= the plan standard, **node-schema #1** of the repo
+  intent graph; delivered by the [repo-intent-graph plan](future/repo-intent-graph.plan.md)
+  Stage 1): the strict frontmatter-and-edge contract for the `plan` node-type, consolidated
+  from PDR-018 + ADR-117 + `templates/`, covering the canonical frontmatter (incl. the
+  `serves_strategic_choice` edge), the end-goal/mechanism/means body shape, a closed status
+  vocabulary, size guidance, and inter-plan structure. Grounded need: the doctrine exists but
+  is unapplied — the minimal documented frontmatter (ADR-117 §6 documents only `name`/`overview`/`todos`) against a much wider, unvalidated emergent key set,
+  two parallel status vocabularies, and no validator (exact conformance percentages are
+  unverified — the fresh survey measures them). The schema ships with enforcement
+  (observe→warn→enforce), generated not hand-maintained, not as more doctrine.
 
 **Two prerequisite deliverables, now explicit:**
 
@@ -524,9 +535,10 @@ the owner / Oak):**
    on before the estate is read.
 2. **Granularity — per-stream choices (owner-set), made decomposition-ready.** The registry
    carries `APP-*`/`TOOLS-*`/`FRAME-*`, with optional `SDK-*`/`SEARCH-*`/`GRAPH-*`/`EEF-*`
-   sub-IDs; a plan resolves to the finest *published* ID. Decomposition activates only if the
-   owner's search/graph external-vs-internal-reuse decision calls for it — the shape accommodates
-   it without building it speculatively (closed-shape optionality).
+   sub-IDs; a plan resolves to the finest *published* ID. Sub-IDs are additive granularity along
+   the layered architecture, introduced when a finer distinction earns its keep — not a fork
+   gated on any external-vs-internal decision (settled as a false dichotomy, Owner Decision 20).
+   The shape accommodates decomposition without building it speculatively (closed-shape optionality).
 3. **Rubric strictness and migration — as-touched, not big-bang.** A judgment-heavy rewrite
    cannot be big-banged, and retrofitting ~550 docs at once is high-risk; survivors reach the
    standard as the per-plan pass processes them. New plans conform from creation (the validator
@@ -539,9 +551,8 @@ the owner / Oak):**
    disposition mechanism above.
 
 **Stays with the owner / Oak (not settled here):** the **strategy measures** (Oak
-analytics/research grounds the targets); the **search/graph external-vs-internal-reuse** decision
-(product scope — it gates item 2's decomposition and the estate-restructure trigger); and the
-**internal-transformation alignment rationale**.
+analytics/research grounds the targets). (The search/graph question and the
+internal-transformation alignment rationale were settled 2026-06-20 — Owner Decisions 20 and 21.)
 
 ## Estate Hygiene (independent — no informational dependence)
 
@@ -641,15 +652,39 @@ Settled (2026-06-20):
     validator's source of truth, as-touched rubric migration, archive-by-default deletion with a
     reviewer value-capture gate, and the governance file's thin-index role once Body 3 spawns its
     executable plan.
-
 Outstanding (needs a further owner decision / Oak):
 
 18. **The new estate structure** and the **permanent home** of this governance file and
     related plans — resolved when the Body-3 executable plan is authored.
-19. **Search/graph: external deliverable vs internal-reuse** (gates the TOOLS decomposition and
-    the estate-restructure trigger); **strategy measures** (Oak analytics/research grounds the
-    targets); the **internal-transformation alignment rationale** (surfaces in the vision
-    tripwire-2 pass — the framework "stream vs engine" question is vision-level).
+19. **Strategy measures** — Oak analytics/research grounds the targets (the one remaining
+    product-strategy input).
+
+Settled (2026-06-21):
+
+20. **Search/graph — "external vs internal-reuse" is a false dichotomy; settled** (owner,
+    2026-06-20/21). Built for general reuse — internal and external are the same build — via the
+    layered architecture (generic primitives → reusable libraries → application-specific
+    services → apps, separated by degree of coupling); the generic layers are shared,
+    publicly-releasable infrastructure, the Oak bindings sit in the SDKs. It does **not** gate
+    the restructure: search/graph plans assign to streams by layer (general mechanism → TOOLS;
+    Oak application → APP; internal reuse → FRAME-3), and any SDK/search/graph/EEF sub-IDs are
+    additive. The remaining restructure prerequisites are the plan standard and the fresh survey.
+21. **Internal-transformation alignment — settled** (owner, 2026-06-20/21): Oak getting better at
+    delivering Oak's goals. Internal improvement maps onto and amplifies the external goals, and
+    the outward framework serves the ecosystem goal directly — no separate rationale is needed
+    (the vision already carries it). Closes the item the vision tripwire-2 pass surfaced.
+22. **Repo intent graph — vision ratified ("all of it"); the plan standard is node-schema #1;
+    staged build** (owner, 2026-06-21). The plan estate is one corpus of a typed, agentic-first
+    memory and intent graph — six pillars: one schema generated (indexes are projections), built
+    on the generic graph substrate, dual human/agent legibility, authority as typed edges, intent
+    preservation, and external systems as typed edges. The whole contract shape is ratified up
+    front; the build is staged node-type by node-type (observe→warn→enforce). The **plan standard
+    is the `plan` node-schema (#1)**, delivered by the
+    [repo-intent-graph plan](future/repo-intent-graph.plan.md) Stage 1 — the smallest slice that
+    unlocks the Body-3 survey and restructure without compromising the vision. Schema-first
+    applies as a **second domain** (the Cardinal Rule names the OpenAPI spec; the same
+    generated-from-schema discipline applies here). Taxonomy survey-gated; the `suggestions/` docs
+    held as input-to-verify.
 
 ## Inputs and Authorities
 
@@ -674,10 +709,10 @@ three streams and is not a source of truth** — Body 2 supersedes it.
 
 ## Non-Goals
 
-- **No structure-dependent estate restructuring before its gates clear.** Body 2 is now signed
-  off (2026-06-20), so the remaining gate is the **search/graph external-vs-internal-reuse
-  decision** (it sets TOOLS granularity) plus the **plan standard** and the **fresh survey**.
-  Hygiene and the read+extract prep are exempt and **startable now**.
+- **No structure-dependent estate restructuring before its gates clear.** Body 2 is signed off
+  and the search/graph question is settled (2026-06-20 — a false dichotomy, see Owner Decision
+  20), so the remaining gates are just the **plan standard** and the **fresh survey**. Hygiene
+  and the read+extract prep are exempt and **startable now**.
 - **No quoting, linking, or copying the local Oak reference** — derive only.
 - **No in-repo impact instrumentation** — articulate in the strategy, measure at Oak.
 - **No idea deletion** — value-preserving; every removal carries a disposition.

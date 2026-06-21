@@ -71,8 +71,9 @@ The bets, grounded in the diagnosis (pace without trading rigour away) — owner
 Internal delivery uplift and external adoption of the framework — the candidate signals are
 ours to propose, the targets Oak's to ground. See the [measures checkpoint](measures.md).
 
-> **Open decision for the owner:** the framework's external face serves Oak's ecosystem
-> goal; its internal face serves Oak's _delivery capability_, which isn't one of Oak's three
-> external goals. Does the internal transformation need its own stated alignment rationale
-> (capability that amplifies delivery of the other goals), or does the ecosystem alignment
-> carry it?
+> **Settled (owner, 2026-06-20):** the internal transformation's alignment is direct — **Oak
+> getting better at delivering Oak's goals.** Internal improvement in how we build and curate
+> maps straight onto the external goals it amplifies (better, faster delivery of the teacher and
+> ecosystem streams), and the outward framework serves the ecosystem goal in its own right. No
+> separate rationale is needed; the vision already carries it — the transformation is "how we
+> deliver the mission work" and "worth sharing in its own right".
