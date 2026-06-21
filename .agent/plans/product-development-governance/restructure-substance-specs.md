@@ -50,44 +50,95 @@ Resolve the choice set from the live stream docs at run time, never from this li
 Once the machine-readable strategic-choice registry is built (at Body-3 execution), it becomes the
 run-time source of truth and the stream-doc table is its projection.
 
-**Inputs.** (a) The Pass-1 idea-level inventory (each plan's ideas classified, with
-`file:line` + provenance); (b) the V0 `serves_strategic_choice` typed edges resolving
-plans/ideas to choices (where absent, infer-and-flag — an unresolved serving relationship is
-itself a finding); (c) the strategy stream docs (each choice's *how-we-win* statement and its
-stated *advantage* — the achievement bar).
+**Inputs.** (a) The Pass-1 **idea-granular** inventory (each plan's ideas classified, with
+`file:line` + provenance) — **precondition: the idea-granular `salvage_value` back-fill must be
+complete**; in the surveyed data today `salvage_value` is still a string (pre-correction), so this
+pass cannot run until the orchestrator's all-plans back-fill lands. (b) The V0
+`serves_strategic_choice` typed edges resolving plans/ideas to choices — **these score ~0 in the
+estate today**, so the first effectiveness pass is in practice a *wholly authored* capability→plan
+mapping (100% infer-and-flag), not edge-resolved; an unresolved serving relationship is itself a
+finding. (c) The strategy stream docs — each choice's *how-we-win* mechanism, its stated
+*advantage*, and its named release-readiness / measure preconditions (the per-stream hand-off
+tables and Measures sections).
 
-**Method (cross-plan, Pass-2).** For each strategic choice:
+**Method (cross-plan, Pass-2) — the capability-coverage method.** Built so an `effective` verdict
+CANNOT be rendered by hand-waving: it requires a capability map a reviewer (or the owner) can
+challenge. For each strategic choice:
 
-1. Gather every plan/idea that serves it (edge-resolved; infer-and-flag the rest).
-2. Judge **adequacy** against the choice's how-we-win intent and advantage: do the serving
-   plans, taken together, plausibly *achieve* it?
-3. Classify adequacy: `adequate | partial | absent`.
-4. For `partial` / `absent`: name the **gap** concretely and **recommend an authored new plan**
-   (a scope sketch — goal, the choice it would serve, why existing plans do not cover it),
+1. Gather every plan/idea that serves it (edge-resolved where edges exist; infer-and-flag the rest).
+2. **Decompose the choice into its required capabilities against a FIXED dimension checklist** —
+   not free-form. Every how-we-win choice must be decomposed across the dimensions its source doc
+   visibly contains: **(i) the way-to-win mechanism**, **(ii) the stated *advantage* and what would
+   realize it**, **(iii) the named release-readiness / measure preconditions** (the stream
+   hand-off tables + Measures sections). A decomposition that omits a dimension the source doc
+   contains is **falsifiable by the source**, not just by reviewer taste — this converts "is this
+   the right capability set?" from opinion into a check, and closes the under-decomposition hole
+   (a thin capability set yielding trivial coverage).
+3. **Map each required capability to serving plan(s)** (infer-and-flag the rest), and **assess each
+   covering plan's soundness** from its Pass-1 `content_quality` verdict via this mapping:
+   `strong | adequate → sound`; `weak | empty → unsound`; absent verdict → `n/a` (re-read needed).
+4. **Score the verdict by coverage × soundness** (rubric below).
+5. For `partial` / `ineffective`: name the **uncovered or unsound capability** and **recommend an
+   authored new plan** (goal, the capability it delivers, why existing plans do not cover it),
    never a deferred discussion.
+
+**Effectiveness rubric (falsifiable — coverage × soundness).** The verdict enum is
+`effective | partial | ineffective` (deliberately NOT reusing `adequate`, which is a
+`content_quality` value — see the soundness mapping above):
+
+- **`effective`**: EVERY required-capability dimension is covered by at least one `sound` serving
+  plan, AND the choice's stated *advantage* is evidenced (see advantage-evidence below). An
+  `effective` verdict that does not list every capability with its sound covering plan + the
+  advantage evidence is **invalid**.
+- **`partial`**: at least one required capability is uncovered, OR covered only by an `unsound`
+  plan, OR the advantage is unevidenced. Partly served; a material gap remains — name the specific
+  failing capability.
+- **`ineffective`**: no serving plans, or serving plans that deliver no required capability
+  (alignment-only / mis-aligned).
+
+**Advantage-evidence — realizable vs posture advantages.** Some advantages are *realizable*
+behaviours (e.g. `APP-2` grounding/attribution, `TOOLS-1` schema-first generation, `FRAME-1`
+dogfooding) — these require **behavioural / measure / proof-contract** evidence. Others are
+*posture* claims (e.g. `TOOLS-2` "public-good posture", `TOOLS-3` "credible convenor", `APP-3`
+"aligns with the Optional pillar") with no shipped behaviour that proves them — for these, accept a
+**boundary / proof-contract citation** (the ADR or won't-do clause that protects the posture, e.g.
+ADR-194 for `APP-3`) as the realization evidence. Without this distinction, posture choices pin to
+`partial` forever — a false-negative theater of its own.
+
+Theater is structurally blocked: the verdict is unrenderable without the capability map, so "looks
+effective" is not expressible. "Alignment" (a plan points at the choice) never substitutes for
+"coverage" (a sound plan delivers a required capability).
 
 **Output (per choice).**
 
 ```text
 {
-  choice_id,                 // e.g. "APP-2"
-  serving_plans: [path...],  // edge-resolved + inferred-and-flagged
-  adequacy: adequate | partial | absent,
-  gap: <one-line description | null>,
-  recommended_new_plan: <scope sketch | null>,
+  choice_id,                          // e.g. "APP-2"
+  required_capabilities: [            // decomposed against dimensions (i)-(iii); the falsifiable backbone
+    { capability: <one line>,
+      dimension: mechanism | advantage | readiness-measure,
+      covered_by: [plan path...] | [],
+      covering_plan_soundness: sound | unsound | n/a,   // mapped from Pass-1 content_quality
+      status: covered | uncovered | unsound }
+  ],
+  advantage_kind: realizable | posture,
+  advantage_evidence: <behaviour/measure/proof-contract | boundary/proof-contract citation | null>,
+  verdict: effective | partial | ineffective,           // derived from the capability map, not asserted
+  gaps: [ { capability, recommended_new_plan: <scope sketch> } ],
   evidence: [file:line...]
 }
 ```
 
-**Adequacy rubric is a Pass-2-time deliverable.** The thresholds that separate `partial` from
-`absent`, and how "the choice's *advantage* is achieved" is evidenced, are refined at Pass-2 run
-time against the live choices — not assumed solved here. This spec fixes the unit, inputs,
-method shape, and output contract; the rubric detail firms up when Pass-2 fires.
-
-**Verdict authority.** The per-choice effectiveness verdict is the **effectiveness arm** of the
-substance gate (Acceptance), reviewer-confirmed with evidence. **The reviewer is unassigned —
-see §Open Questions.** The verdict is `evidence-confirmed`, not the survey agent's
-self-assessment.
+**Verdict authority (RESOLVED — owner, 2026-06-21).** The effectiveness arm is proven like the
+no-loss arm: a **dedicated independent effectiveness-reviewer session proposes** the per-choice
+verdicts WITH the capability-map evidence above, independent of the restructure author (it must not
+mark its own effectiveness homework), and **routes them to the owner for ratification**. The owner
+ratifies; the session proposes. This session MAY be the same dedicated independent session that
+runs the no-loss proof (Spec 2) — one independent prover, two substance workstreams, one report to
+the owner — the recommended shape for coherence. **If combined, the two arms keep distinct default
+stances within the one session:** no-loss is adversarial (default-to-lost), effectiveness is
+constructive (derive-then-cover); neither reflex may bleed into the other (no manufacturing
+capability-failures, no softening the no-loss hunt).
 
 ## Spec 2 — No-loss proof (dedicated independent parallel session)
 
@@ -167,14 +218,13 @@ that those dispositions are true and complete. The two are claim and audit.
   removal of a non-trivial idea; the no-loss proof (Spec 2) then verifies every good and
   speculative idea reached a named live home.
 
-## Open Questions
+## Resolved decisions
 
-1. **The effectiveness-arm reviewer is unassigned** (owner assigned only the no-loss arm — the
-   dedicated parallel session of Spec 2). Who confirms the per-choice effectiveness verdict
-   (Spec 1) is undecided. This is an **owner question** (it touches authority over whether the
-   strategy is *effectively implemented*, and the strategy measures stay with the owner / Oak).
-   It is **not urgent** — the effectiveness review fires at Pass-2 / restructure-acceptance time,
-   many windows out. Carried for the owner; do not self-resolve.
+1. **Effectiveness-arm reviewer (owner, 2026-06-21): a dedicated independent session proposes,
+   the owner ratifies** — mirroring the no-loss arm, and may be the same session (one independent
+   prover, two substance workstreams, one report to the owner). The restructure author does not
+   confirm their own effectiveness. Encoded in Spec 1 §Verdict authority. (Was the one open owner
+   question; now settled.)
 
 ## Non-goals / boundaries
 
