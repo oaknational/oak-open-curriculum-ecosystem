@@ -1,0 +1,1997 @@
+{
+  "batch_size": 10,
+  "plans_returned": 10,
+  "unreadable": [],
+  "null_holistic": [],
+  "results": [
+    {
+      "plan": ".agent/plans/connecting-oak-resources/external-oak-references/future/external-oak-references-deep-research.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan is NOT STARTED, awaiting promotion trigger — folder placement is correct and no per-repo child plans have been authored yet.",
+          "file_line": "file:32-33"
+        },
+        {
+          "claim": "Owner decisions from 2026-05-01 are recorded here and not duplicated elsewhere in the estate (this is the canonical record).",
+          "file_line": "file:462-483"
+        },
+        {
+          "claim": "The promotion trigger is specific and executable: promotion happens when a per-repo research session becomes the next primary work.",
+          "file_line": "file:348-352"
+        },
+        {
+          "claim": "Per-repo stubs are explicitly deferred to be authored at promotion time, confirming the plan is the correct pre-execution home.",
+          "file_line": "file:447-459"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan encodes confirmed owner decisions, a completed light scan, a concrete research order, and an approved acknowledgement mechanism. The impact-map hypotheses are appropriately hypothesis-shaped (file:168-169). The private-repo discipline is a well-formed policy (file:143-163). The distinction between \"recognition\" and \"adoption\" is maintained throughout. No speculative scope inflation detected.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan is well-structured with clear domain boundaries (file:80-101), explicit success signals (file:304-318), a risks section with mitigations (file:321-344), and a differentiation-from-siblings section (file:410-424). The license table (file:117-122) and the Increment 1 scan finding (file:238-287) are specific and verifiable. The promotion trigger is concrete (file:348-352). Quality is consistently above V0-conformant.",
+      "salvage_value": [
+        {
+          "idea": "Owner-confirmed adoption rule: permissive-with-attribution (MIT, ISC, OGL-3) is sufficient — not strictly MIT.",
+          "class": "good",
+          "file_line": "file:107-108"
+        },
+        {
+          "idea": "License table: oak-curriculum-ontology is public dual MIT/OGL-3 adoption-eligible; Aila is public MIT adoption-eligible; oak-ai-moderation-service is PRIVATE ISC concepts-only.",
+          "class": "good",
+          "file_line": "file:117-122"
+        },
+        {
+          "idea": "Private-repo discipline: concepts-eligible, content-ineligible — specific do/do-not list for private repo learning.",
+          "class": "good",
+          "file_line": "file:143-163"
+        },
+        {
+          "idea": "aila-atomic-concepts (private) is a fourth adjacent repo with a local checkout; relevant to PrerequisiteGraph in graph-query-layer.plan.md.",
+          "class": "good",
+          "file_line": "file:129-141"
+        },
+        {
+          "idea": "Impact hypothesis: oak-curriculum-ontology may surface canonical edge types and node identifiers that the adapters in graph-query-layer.plan.md should align with or consciously diverge from.",
+          "class": "good",
+          "file_line": "file:176-187"
+        },
+        {
+          "idea": "Impact hypothesis: Aila's prompts may already orchestrate teacher-question journeys that Increment 3 (cross-source-journeys) contemplates — potentially shifting from 'design' to 'expose Aila-shaped journeys'.",
+          "class": "good",
+          "file_line": "file:196-205"
+        },
+        {
+          "idea": "Impact hypothesis: Aila prompts may seed the ground-truth corpus for search-quality work rather than designing from scratch.",
+          "class": "speculative",
+          "file_line": "file:208-212"
+        },
+        {
+          "idea": "Impact hypothesis: EEF evidence plans (Increment 2) should check whether Aila prompts already incorporate EEF guidance language.",
+          "class": "speculative",
+          "file_line": "file:206-208"
+        },
+        {
+          "idea": "Impact hypothesis: moderation may be needed for MCP tool responses in graph-query-layer and EEF plans, especially for student-facing downstream applications.",
+          "class": "speculative",
+          "file_line": "file:220-231"
+        },
+        {
+          "idea": "Increment 1 light-scan finding: ontology-alignment is at vocabulary layer only, no structural collision — do not block Increment 1 promotion.",
+          "class": "good",
+          "file_line": "file:238-287"
+        },
+        {
+          "idea": "Per-repo research order: Aila first (highest plan-altering potential, adoption-eligible), ontology second, moderation service third (reference-only lower payoff).",
+          "class": "good",
+          "file_line": "file:357-375"
+        },
+        {
+          "idea": "Acknowledgement mechanism: per-file attribution header + repo-level NOTICE/ATTRIBUTION + README acknowledgement covering MIT, ISC, and OGL per-license requirements.",
+          "class": "good",
+          "file_line": "file:389-408"
+        },
+        {
+          "idea": "Differentiation from siblings: this plan is impact-mapping not adoption-strategising; differs from oak-ontology-graph-opportunities.strategy.md (narrower, specific to ontology) and from sector-engagement/external-knowledge-sources/ (third-party, not Oak-internal).",
+          "class": "good",
+          "file_line": "file:412-424"
+        },
+        {
+          "idea": "Thread-home decision: Connecting Oak Resources contains internal Oak KG work and external Oak references; Exploring Open Education Resources contains third-party external knowledge-source work.",
+          "class": "good",
+          "file_line": "file:477-483"
+        },
+        {
+          "idea": "Moderation coupling risk: introducing oak-ai-moderation-service as a downstream dependency adds operational surface (latency, error modes) — significant architectural decision even without code adoption.",
+          "class": "good",
+          "file_line": "file:333-337"
+        },
+        {
+          "idea": "Plan-impact-bias risk: impact map can proliferate speculative links; mitigation is that every impact entry requires a stated research question.",
+          "class": "good",
+          "file_line": "file:338-342"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "future",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, required for all plans)",
+          "file_line": "plan:1-27 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `node_type: \"plan\"` (LOCKED, required for all plans)",
+          "file_line": "plan:1-27 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED, required for all plans); `status: future` should migrate to `kind: strategic` per §3.5 migration map",
+          "file_line": "plan:12"
+        },
+        {
+          "issue": "`status: future` is an explicitly dropped field per V0 §2.5; replaced by `kind`/`disposition`/`gate`",
+          "file_line": "plan:12"
+        },
+        {
+          "issue": "`isProject: false` is an explicitly dropped field per V0 §2.5",
+          "file_line": "plan:26"
+        },
+        {
+          "issue": "Missing required field `promotion_trigger` (LOCKED, required for `strategic` plans per §2.4); promotion trigger content exists only in the body (lines 347-382), not frontmatter",
+          "file_line": "plan:1-27 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "`todos` is present but V0 §2.4 forbids `todos` on `strategic` plans (only permitted on `executable` plans)",
+          "file_line": "plan:13-25"
+        },
+        {
+          "issue": "Missing required field `last_updated` (LOCKED, required for all plans per §2.4); date appears only in body prose",
+          "file_line": "plan:31 (body only — absent from frontmatter)"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "Aila (oak-ai-lesson-assistant) is described in the References section as a repo whose 'GitHub URL to be confirmed at Phase 0' (line 435), yet it is treated as MIT-licensed, public, and adoption-eligible in the license table (line 121) and throughout the plan-impact map. The plan asserts adoption-eligibility on the basis of a light scan but hedges on whether the URL has been confirmed. If the confirmed repo differs from the scanned one, the license finding and all downstream plan-impact assertions collapse.",
+          "file_line": "external-oak-references-deep-research.plan.md:121,435"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan assumes that the local checkout of oak-curriculum-ontology (line 429) and oak-ai-moderation-service (line 430) was done solely for license inspection, but these checkouts are at relative paths (e.g. '../aila-atomic-concepts', line 133) that are machine-local and unversioned in this repo. Any finding derived from them — including the non-blocking Increment 1 readiness call (line 240) — rests on an unversioned, unreproducible snapshot. The plan does not record which commit SHA of the external repos was inspected.",
+          "file_line": "external-oak-references-deep-research.plan.md:133,240,429"
+        },
+        {
+          "severity": "low",
+          "claim": "The promotion trigger (line 349) assumes a per-repo executable plan will be authored 'when a specific repo's research becomes the next session's primary work.' This creates an implicit assumption that the owner will re-engage to make that session prioritisation call. The plan does not record any scheduled follow-up trigger or owner commitment to revisit — meaning the plan may sit in future/ indefinitely without a concrete trip-wire.",
+          "file_line": "external-oak-references-deep-research.plan.md:349-353"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan-impact map for Aila (line 196-215) asserts that Aila 'contains Oak's official prompts for lesson planning and pedagogy' and 'is Oak's source of authoritative pedagogy phrasing' (line 214). These characterisations are asserted rather than evidenced — the light scan of Aila is explicitly deferred ('Aila has not been inspected locally', line 323). If Aila does not contain the asserted content, the plan-impact claims for Increment 3 and the EEF corpus plan dissolve.",
+          "file_line": "external-oak-references-deep-research.plan.md:196-215,323"
+        },
+        {
+          "severity": "info",
+          "claim": "The success signals (line 305) mark items 1 and 2 as resolved (owner confirmed permissive-with-attribution rule; Phase 1 impact map confirmed blocking vs informational). Items 3 and 4 are still open. The plan's own criteria confirm it is not yet promotable, which is consistent with its future/ status — no assumption gap here, but worth noting for classification.",
+          "file_line": "external-oak-references-deep-research.plan.md:305-319"
+        }
+      ],
+      "load_bearing_claims_count": 7,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/connecting-oak-resources/knowledge-graph-integration/active/agent-guidance-consolidation.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "All 11 todos are status: pending — no work has started, the plan is still the right prescription for an open gap",
+          "file_line": "agent-guidance-consolidation.plan.md:8-40"
+        },
+        {
+          "claim": "The problem statement is concrete and bounded (10+ files, manual imports, no registration-time check) — the plan encodes distinct executable value",
+          "file_line": "agent-guidance-consolidation.plan.md:52-60"
+        },
+        {
+          "claim": "Branch is TBD, meaning the plan is pre-execution and should be retained until a branch is opened",
+          "file_line": "agent-guidance-consolidation.plan.md:47"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan diagnoses a real structural problem (manual prerequisite imports with no compile-time guarantee, line 55-59), proposes a typed catalogue design that makes staleness a type error (lines 143-151), and provides concrete exit criteria (lines 257-266). No speculative or bad ideas are present; the scope is appropriately bounded and the EEF dependency is correctly deferred.",
+      "content_quality": "strong",
+      "content_quality_note": "The problem statement is precise with concrete examples (lines 83-91). The design decision is unambiguous (lines 98-100). The implementation phases map cleanly onto the sequencing diagram (lines 221-233). Per-file change table (lines 269-284) gives an implementer an immediate starting point. Exit criteria are testable (lines 257-266). The plan earns strong rather than merely adequate.",
+      "salvage_value": [
+        {
+          "idea": "Single machine-readable tool-catalogue.ts as the sole authoritative source for tool name, category, prerequisites, use-when/do-not-use guidance, and resource-loading recommendations",
+          "class": "good",
+          "file_line": "agent-guidance-consolidation.plan.md:98-100"
+        },
+        {
+          "idea": "Typed catalogue where adding a tool without a catalogue entry is a type error and referencing a non-existent tool in prerequisites is a type error",
+          "class": "good",
+          "file_line": "agent-guidance-consolidation.plan.md:143-151"
+        },
+        {
+          "idea": "Replace manual prerequisite constant imports in each tool definition with catalogue-driven generation",
+          "class": "good",
+          "file_line": "agent-guidance-consolidation.plan.md:155-163"
+        },
+        {
+          "idea": "Validation tests that verify every registered MCP tool has a catalogue entry, every workflow tool exists, every prerequisite reference is real, and categories are exhaustive",
+          "class": "good",
+          "file_line": "agent-guidance-consolidation.plan.md:199-207"
+        },
+        {
+          "idea": "Single resource-priority model table mapping each resource to load-timing, loader, and rationale — replaces scattered 'call get-curriculum-model first' advice in 7+ tool descriptions",
+          "class": "good",
+          "file_line": "agent-guidance-consolidation.plan.md:178-192"
+        },
+        {
+          "idea": "Four-phase sequencing: audit → design → parallel consolidation → validation, with explicit inter-phase dependencies",
+          "class": "good",
+          "file_line": "agent-guidance-consolidation.plan.md:219-235"
+        },
+        {
+          "idea": "Misconception diagnostics workflow (search lesson → get misconceptions → plan remediation) added to workflow definitions",
+          "class": "good",
+          "file_line": "agent-guidance-consolidation.plan.md:170-172"
+        },
+        {
+          "idea": "EEF evidence workflows deferred until the EEF tool ships, keeping this plan EEF-independent for the audit phase",
+          "class": "good",
+          "file_line": "agent-guidance-consolidation.plan.md:241-245"
+        },
+        {
+          "idea": "In-process (non-E2E) validation tests for guidance drift, separate from E2E server-instructions verification",
+          "class": "good",
+          "file_line": "agent-guidance-consolidation.plan.md:207-208"
+        },
+        {
+          "idea": "Full surface audit table listing 10 guidance surfaces with file locations and what each controls",
+          "class": "good",
+          "file_line": "agent-guidance-consolidation.plan.md:113-122"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "PENDING (body line 45)",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (V0 §2.1 — LOCKED; required for all plans)",
+          "file_line": "agent-guidance-consolidation.plan.md:1-41 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `node_type: plan` (V0 §2.1 — LOCKED; required for all plans)",
+          "file_line": "agent-guidance-consolidation.plan.md:1-41 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `last_updated` — date appears only in body prose (V0 §2.4 — LOCKED; required for all)",
+          "file_line": "agent-guidance-consolidation.plan.md:46 (body)"
+        },
+        {
+          "issue": "Missing required edge `serves_strategic_choice` (V0 §2.3 — LOCKED shape; required for executable plans, or explicit `pending` sentinel)",
+          "file_line": "agent-guidance-consolidation.plan.md:1-41 (frontmatter block)"
+        },
+        {
+          "issue": "Emergent `status: PENDING` present only in body prose, not mapped to V0 axes; V0 §3.5 maps `PENDING` ambiguously — likely `kind: executable` + Linear execution `backlog`, but no frontmatter axis records it",
+          "file_line": "agent-guidance-consolidation.plan.md:45 (body)"
+        },
+        {
+          "issue": "Dropped key `isProject: false` present (V0 §2.5 — explicitly dropped; subsumed by `projects_to`)",
+          "file_line": "agent-guidance-consolidation.plan.md:6"
+        },
+        {
+          "issue": "Todos items lack the V0-required `id`, `content`, `status` triple structure check is fine individually, but todos are present on a plan missing `kind: executable` declaration — the discriminated union cannot be confirmed without `kind`",
+          "file_line": "agent-guidance-consolidation.plan.md:7-41"
+        },
+        {
+          "issue": "No `kind` field declared in frontmatter (V0 §2.2, §3.1 — LOCKED; required for all plans; the honest name for the readiness axis)",
+          "file_line": "agent-guidance-consolidation.plan.md:1-41 (frontmatter block)"
+        }
+      ],
+      "unclassified_keys": [
+        "graph_layer",
+        "specialist_reviewer",
+        "isProject"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The proposed tool-catalogue.ts sits in the SDK package (packages/sdks/oak-curriculum-sdk/src/mcp/tool-catalogue.ts) but at least one consumer, the E2E validation test, lives in the HTTP app (apps/oak-curriculum-mcp-streamable-http/e2e-tests/). If the catalogue ever references HTTP-app-specific tool registrations or vice-versa, the boundary between SDK (pure library) and HTTP app (transport-aware host) blurs. The plan does not name which package owns registration-vs-description authority.",
+          "file_line": "agent-guidance-consolidation.plan.md:271-283"
+        },
+        {
+          "severity": "medium",
+          "claim": "T3 specifies that adding a tool without a catalogue entry should be a type error, but the current registration point (MCP server) is in the HTTP app, not the SDK. Unless the HTTP app imports and validates against the catalogue at build time, the compile-time guarantee is illusory — the check only fires if someone imports the catalogue type, which is not enforced by the plan.",
+          "file_line": "agent-guidance-consolidation.plan.md:143-151"
+        },
+        {
+          "severity": "low",
+          "claim": "The sequencing diagram (T4-T8 as parallel after T3) and the prose both describe T4-T8 as parallel implementation, but T8 (regenerate server instructions) logically depends on T4-T7 being complete. No explicit dependency edge is drawn from T4-T7 into T8, which could allow T8 to execute with a partial catalogue and produce a stale regeneration.",
+          "file_line": "agent-guidance-consolidation.plan.md:219-235"
+        },
+        {
+          "severity": "low",
+          "claim": "T9 validation tests are described as in-process (not E2E), but T11 adds overlapping E2E assertions covering the same surfaces (server instructions mention all tool categories; tool descriptions include prerequisite guidance). The boundary between T9 and T11 is unclear; there is a risk of duplicated or contradictory test coverage with no stated owner-of-truth for each assertion.",
+          "file_line": "agent-guidance-consolidation.plan.md:199-212"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly defers EEF resource rows to the live EEF plan and explicitly scopes this plan to the existing tool surface. This is well-bounded and avoids scope creep. The coordination note at line 241 names the sibling plan by path, which is a load-bearing dependency citation worth verifying stays current when the EEF plan archives.",
+          "file_line": "agent-guidance-consolidation.plan.md:239-248"
+        },
+        {
+          "severity": "info",
+          "claim": "The resource-priority table (T7) lists three resource rows with explicit When/Who/Why columns. This is a sound pattern for making agent guidance auditable. Architecture is clean here; the only gap is that the table will grow stale unless T9 validation covers resource-loading recommendations referencing real resources, which the plan does state at line 205.",
+          "file_line": "agent-guidance-consolidation.plan.md:177-193"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan is actively owned with pending executable work: WS4.2, WS4.3, WS6, WS7, WS8 all status: pending",
+          "file_line": "graph-stack.plan.md:91-122"
+        },
+        {
+          "claim": "Sequencing re-frame banner (line 127) explicitly marks plan as the live substrate spine — remaining work here, not moved",
+          "file_line": "graph-stack.plan.md:127-141"
+        },
+        {
+          "claim": "The multi-increment promotion ladder (Inc.2-7) exists only in this plan body and is not duplicated elsewhere",
+          "file_line": "graph-stack.plan.md:308-319"
+        },
+        {
+          "claim": "Status: active in frontmatter, folder lane: active/, agreed",
+          "file_line": "graph-stack.plan.md:3"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every constituent idea is grounded in research (graph-library.research.md), ADR evidence (ADR-173, ADR-179, ADR-154), or first-hand reviewer verdicts. The topology collapses ten research layers to seven active workspaces with explicit justification (line 703). Design decisions carry absorbed reviewer conditions with commit SHAs. Non-goals are stated with justification. Risk mitigations are concrete and testable. No speculative surface ships without a named consumer justification. The one speculative element (Inc.2-7 increment sketches) is explicitly deferred to owner-promotion gates.",
+      "content_quality": "strong",
+      "content_quality_note": "The per-cycle YAML todos (lines 14-122) each carry: commit SHA, reviewer verdicts with resolution status, design decisions absorbed in-cycle, follow-up obligations, and atomic-landing evidence. The body sections (Design Principles, Topology, Increments, Test Discipline, Acceptance, Reviewer Scheduling, Risk Assessment, Foundation Alignment) are substantive and cross-referenced to ADRs and research. The scaffold checklist (lines 435-456) and parallelisation invariants (lines 493-519) are actionable and non-redundant. Content quality is high relative to the plan's role as a long-lived substrate spine.",
+      "salvage_value": [
+        {
+          "idea": "Seven-workspace (plus one deferred) topology with research-section mapping — the canonical home for every graph layer",
+          "class": "good",
+          "file_line": "graph-stack.plan.md:238-251"
+        },
+        {
+          "idea": "Scaffold checklist for all future graph workspace additions (depcruise pathNot, knip entry, tsconfig.lint.json, wsTsProject constant, coreBoundaryRules)",
+          "class": "good",
+          "file_line": "graph-stack.plan.md:435-456"
+        },
+        {
+          "idea": "RDF 1.2-native internals with adapter seams for emerging standards (graph-future deferred workspace)",
+          "class": "good",
+          "file_line": "graph-stack.plan.md:200-207"
+        },
+        {
+          "idea": "Ontology IRI as canonical cross-corpus join key",
+          "class": "good",
+          "file_line": "graph-stack.plan.md:201"
+        },
+        {
+          "idea": "Property-graph as projection over RDF quad dataset, not canonical model",
+          "class": "good",
+          "file_line": "graph-stack.plan.md:202"
+        },
+        {
+          "idea": "EnhancementRecord discipline — every derived claim carries provenance; silent semantic corruption structurally prevented",
+          "class": "good",
+          "file_line": "graph-stack.plan.md:203"
+        },
+        {
+          "idea": "Build-vs-Buy attestation with named alternatives for jsonld.js, rdf-canonize, rdf-validate-shacl",
+          "class": "good",
+          "file_line": "graph-stack.plan.md:220-228"
+        },
+        {
+          "idea": "Eight test-discipline invariants as cross-workspace contract (stable IRI, predicate IRI, source path, enhancement traceable, JSON-LD-1.1-only, projection-derived-not-canonical, triple-term round-trip, JSON-LD framing determinism)",
+          "class": "good",
+          "file_line": "graph-stack.plan.md:521-532"
+        },
+        {
+          "idea": "Pre-Inc.2 design precondition: graph-enhance/graph-validate seam dependency-direction protocol",
+          "class": "good",
+          "file_line": "graph-stack.plan.md:606-617"
+        },
+        {
+          "idea": "Pre-Inc.3 design precondition: graph-ingest/graph-corpus-sdk parse-extension protocol",
+          "class": "good",
+          "file_line": "graph-stack.plan.md:618-629"
+        },
+        {
+          "idea": "Inc.2 retrospective-review tripwire binding on GraphDocument scope — design review of all Inc.1 surfaces before WS1.8 lands",
+          "class": "good",
+          "file_line": "graph-stack.plan.md:312"
+        },
+        {
+          "idea": "Multi-increment promotion ladder (Inc.2-7) with named predecessors and consumer pointers",
+          "class": "good",
+          "file_line": "graph-stack.plan.md:306-319"
+        },
+        {
+          "idea": "Transport-agnostic substrate discipline — no graph workspace ships MCP/HTTP/CLI-shaped code",
+          "class": "good",
+          "file_line": "graph-stack.plan.md:260-276"
+        },
+        {
+          "idea": "Inter-scaffold serialisation invariant: WS2.1 and WS3.1 are not parallel-safe (root monorepo file writes)",
+          "class": "good",
+          "file_line": "graph-stack.plan.md:498-500"
+        },
+        {
+          "idea": "Per-kind checker-array dispatch for discriminated-union equality (cast-free, complexity-bounded)",
+          "class": "good",
+          "file_line": "graph-stack.plan.md:445-449"
+        },
+        {
+          "idea": "Public-asset positioning discipline — substrate workspaces below graph-corpus-sdk carry no Oak-specific identifiers",
+          "class": "good",
+          "file_line": "graph-stack.plan.md:563-580"
+        },
+        {
+          "idea": "consumer-readiness sequencing for remaining WS4.2/WS4.3 (Threads adapter) — ADR-173 gate rather than arbitrary schedule",
+          "class": "good",
+          "file_line": "graph-stack.plan.md:127-141"
+        },
+        {
+          "idea": "ws2-jsonld-precise-source-paths deferred per consolidate-at-third-consumer discipline until a real consumer exists",
+          "class": "good",
+          "file_line": "graph-stack.plan.md:67-69"
+        },
+        {
+          "idea": "FieldPredicate.contains semantic-collision obligation carried forward to Inc.3 EEF enumerateNodes implementation",
+          "class": "good",
+          "file_line": "graph-stack.plan.md:103"
+        },
+        {
+          "idea": "URDNA2015 alias rejection (rejectURDNA2015: true) — hardcoded RDFC-1.0, no fallbacks, fail-fast with helpful error",
+          "class": "good",
+          "file_line": "graph-stack.plan.md:37"
+        },
+        {
+          "idea": "N2 canon ambient-declaration follow-up: rdf-canonize.d.ts algorithm narrowing to 'RDFC-1.0' pending owner direction (revert to algorithm: string)",
+          "class": "speculative",
+          "file_line": "graph-stack.plan.md:37"
+        },
+        {
+          "idea": "Standards-evolution tripwires (RDF 1.2, JSON-LD 1.2/1.3, SPARQL 1.2, SHACL 1.2) as observable consumer-PR signals rather than time-based gates",
+          "class": "good",
+          "file_line": "graph-stack.plan.md:317"
+        },
+        {
+          "idea": "WS6 documentation propagation batch (collection README, monorepo README, LICENCE-DATA.md, Mark Hodierne author addition)",
+          "class": "good",
+          "file_line": "graph-stack.plan.md:111-113"
+        },
+        {
+          "idea": "graph-enhance workspace (full EnhancementRecord + RelationshipRecord) deferred to Inc.2 — speculative until Inc.1 corpus adapters prove the surface",
+          "class": "speculative",
+          "file_line": "graph-stack.plan.md:312"
+        },
+        {
+          "idea": "graph-validate workspace (JSON Schema + SHACL) deferred to Inc.2 — speculative until Inc.1 corpus adapters prove the surface",
+          "class": "speculative",
+          "file_line": "graph-stack.plan.md:312"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "active",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "id is absent — required for all plans (V0 §2.1, LOCKED)",
+          "file_line": "graph-stack.plan.md:1-123 (frontmatter block; field not present)"
+        },
+        {
+          "issue": "node_type is absent — required discriminator literal 'plan' for all plans (V0 §2.1, LOCKED)",
+          "file_line": "graph-stack.plan.md:1-123"
+        },
+        {
+          "issue": "kind is absent — required for all plans (V0 §3.1, LOCKED); the plan carries todos indicating executable, but the axis is not declared",
+          "file_line": "graph-stack.plan.md:1-123"
+        },
+        {
+          "issue": "last_updated is absent from frontmatter — required for all plans (V0 §2.4, LOCKED); value appears in the body prose only",
+          "file_line": "graph-stack.plan.md:143 (body) vs frontmatter"
+        },
+        {
+          "issue": "serves_strategic_choice is absent — required for executable plans (V0 §2.3, §4, LOCKED)",
+          "file_line": "graph-stack.plan.md:1-123"
+        },
+        {
+          "issue": "status: active is present — this key is explicitly dropped by V0 (V0 §2.5); execution state must be Linear-projected, not stored in frontmatter",
+          "file_line": "graph-stack.plan.md:4"
+        },
+        {
+          "issue": "isProject: true is present — explicitly dropped by V0 §2.5 (LOCKED)",
+          "file_line": "graph-stack.plan.md:12"
+        },
+        {
+          "issue": "thread is absent — recommended for all plans (V0 §2.3); plan body references 'agentic-engineering-enhancements thread' and 'connecting-oak-resources' implying a natural thread association",
+          "file_line": "graph-stack.plan.md:1-123"
+        },
+        {
+          "issue": "todos items carry inline depends_on and sub_increment keys not in the V0 todo shape (V0 §2.4 defines {id, content, status: pending|completed} only)",
+          "file_line": "graph-stack.plan.md:24-106 (multiple todo entries)"
+        }
+      ],
+      "unclassified_keys": [
+        "first_graph_work",
+        "sibling_plans"
+      ],
+      "locked_contradictions": [
+        {
+          "item": "V0 §3.2 LOCKS execution status as Linear-projected, not a durable frontmatter field; the estate here uses status: active (line 4) and a multi-line body Status line ('🟢 ACTIVE') at line 143 — both are durable in-repo execution-status records. With 386 census occurrences of status and this high-value plan still using it post-spec, the estate may signal that the projected-only model has a practical gap before the Linear projects_to edge is live. This is a re-ratification candidate: does the no-in-repo-execution-state invariant hold when the Linear projection is not yet built?",
+          "evidence": "status: active at frontmatter line 4; body line 143 carries 'Status: 🟢 ACTIVE — the substrate is landed on main'",
+          "file_line": "graph-stack.plan.md:4 and graph-stack.plan.md:143"
+        }
+      ],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "The plan's layered topology (graph-core / graph-ingest / graph-project / graph-enhance / graph-validate / graph-corpus-sdk / agent-graphs/practice-graph + deferred graph-future) is coherent and well-reasoned. The ADR-041 dependency-direction rules are applied explicitly throughout, and the graph-core placement of GraphView is correctly argued at lines 98-99 on ADR-041 grounds.",
+          "file_line": "graph-stack.plan.md:238-258"
+        },
+        {
+          "severity": "info",
+          "claim": "ADR-173 and ADR-179 ratified Accepted; topology and transport-agnostic discipline are committed in durable ADRs, not just plan text. The plan correctly defers to those ADRs rather than re-stating the rule.",
+          "file_line": "graph-stack.plan.md:14-15,713"
+        },
+        {
+          "severity": "medium",
+          "claim": "The graph-enhance <-> graph-validate seam protocol (validate imports enhancement-record types; direction validate->enhance; no callback into enhancement) is defined only in a reviewer-absorption note (lines 605-618) and flagged as a pre-Inc.2 design precondition. It has not been captured in a durable ADR or workspace README. If Inc.2 starts before that protocol is recorded in a permanent home, the contract is execution-load-bearing but not guaranteed to survive context loss.",
+          "file_line": "graph-stack.plan.md:605-618"
+        },
+        {
+          "severity": "medium",
+          "claim": "The graph-ingest <-> graph-corpus-sdk boundary (corpus-local parse extension protocol — visitor/parse-callback extension points so corpus quirks land in adapters not in graph-ingest) is also defined only in a reviewer-absorption note as a pre-Inc.3 design precondition (lines 619-628) and lacks a permanent home. Any Inc.3 implementer who does not read this plan in full will miss the constraint.",
+          "file_line": "graph-stack.plan.md:619-628"
+        },
+        {
+          "severity": "low",
+          "claim": "WS2.3 follow-on ws2-jsonld-precise-source-paths (lines 67-69) is deferred indefinitely under consolidate-at-third-consumer discipline. This is architecturally sound, but the all-quads-map-to-root-pointer placeholder in parseJsonLdCompatible is a known type-level weakening (source location exists but carries no precision), and no signal is defined for when the third consumer appears or who monitors it.",
+          "file_line": "graph-stack.plan.md:67-69"
+        },
+        {
+          "severity": "low",
+          "claim": "The ws1-canon todo notes that the rdf-canonize.d.ts ambient declaration narrowed algorithm to 'RDFC-1.0' against type-expert verdict (N2 finding), and that reverting to algorithm: string is owner-direction-pending (line 37). This is a type-boundary decision with architecture implications: a hard-coded narrow algorithm type precludes future RDFC-1.1+ admission through the same wrapper without a type change. The pending decision should be resolved before Inc.2.",
+          "file_line": "graph-stack.plan.md:37"
+        },
+        {
+          "severity": "low",
+          "claim": "The sub-path ./graph-view on graph-core has an open follow-on note to consider renaming to ./graph-query before the open-infrastructure publishing milestone (Inc.6), but no owner decision is recorded and no gate blocks the name propagating widely (line 98 absorbs architecture-expert-betty's note as deferred). Given that every consumer of GraphView will import from ./graph-view, a rename at Inc.6 carries high citation-propagation cost.",
+          "file_line": "graph-stack.plan.md:98"
+        },
+        {
+          "severity": "info",
+          "claim": "The FieldPredicate.contains semantic-collision obligation (string substring vs array element-membership disambiguation required at enumerateNodes implementation time) is correctly carried forward from graph-query-layer.plan.md into the EEF adapter todo at lines 102-106. The obligation travels to Inc.3 as intended; no architecture gap here, just a deferred implementation constraint.",
+          "file_line": "graph-stack.plan.md:103"
+        },
+        {
+          "severity": "info",
+          "claim": "The RDF/JS TripleTerm shape risk (authored ahead of WG formalisation) is acknowledged, mitigation is structurally sound (keep TripleTerm minimal; single-workspace refactor boundary), and tripwire #2 is defined in ADR-173. No additional architecture flag needed.",
+          "file_line": "graph-stack.plan.md:230"
+        },
+        {
+          "severity": "info",
+          "claim": "The pre-commit hook staged-only-gates P0 defect recurrence is recorded at line 76 (WS3.2 observation) but is scoped to agentic-engineering-enhancements; it is not an architecture issue in this plan's scope. Noted as informational only.",
+          "file_line": "graph-stack.plan.md:76"
+        }
+      ],
+      "load_bearing_claims_count": 8,
+      "high_stakes_verdicts": [
+        {
+          "claim": "Inc.1 substrate is landed on main (PRs #93/#108/#114/#115/#122): graph-core WS1.1-1.6, graph-ingest WS2.1-2.3+parser, graph-project WS3.1-3.3, GraphView interface WS4.4, EefStrandsGraphView WS4.5, graph-corpus-sdk scaffold WS4.1.",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "graph-stack.plan.md:143 (claim); all five PR merge commits are ancestors of origin/main: #93=00b6e219, #108=2462952a, #114=77fcf746, #115=9fa3a180, #122=29fc29e4; all four workspaces present (packages/core/graph-core, packages/libs/graph-ingest, packages/libs/graph-project, packages/sdks/graph-corpus-sdk); graph-view interface at packages/core/graph-core/src/graph-view/; EEF adapter at packages/sdks/graph-corpus-sdk/src/eef-strands/eef-graph.ts:34-46 typed GraphView<EefStrand,...>"
+        },
+        {
+          "claim": "WS5 Coordination amendments CLOSED 2026-06-02, executed in substance by the graph-estate consolidation.",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "graph-stack.plan.md:107-110 (WS5 todo status: completed) and :142 (Last Updated t7 pass closes WS5 as executed-by-consolidation); estate corroborates all four sub-claims first-hand: archive/completed/graph-query-layer.plan.md status: superseded (:11); archive/completed/open-education-knowledge-surfaces.plan.md status: superseded; future/oak-kg-threads-surface.plan.md status: parked, last_updated 2026-06-02; README.md:51 names graph-stack the Substrate plan routing the estate. Dependency WS4.5 ws4-eef-strands-adapter completed (:104, PR #114 at 77fcf746)."
+        },
+        {
+          "claim": "WS4.1 scaffold verified landed — status flipped 2026-06-02 during graph-estate consolidation t7 pass, verified by workspace presence (packages/sdks/graph-corpus-sdk/src/eef-strands + index.ts) and green gates on main. (cited at graph-stack.plan.md:86-87)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "git: commit 3241893d4 on origin/main (2026-05-23 07:47:58) \"feat(graph-corpus-sdk): scaffold @oaknational/graph-corpus-sdk workspace (WS4.1)\" is the diff-filter=A introduction of packages/sdks/graph-corpus-sdk/package.json (name @oaknational/graph-corpus-sdk); git ls-tree origin/main shows src/index.ts and src/eef-strands/ tracked; scaffold present on main as of 2026-06-02 (status-flip date). Plan lines 86-87."
+        },
+        {
+          "claim": "WS4.4 status: completed — landed 2026-05-24 via PR #114 at 77fcf746; verified by directory listing of packages/core/graph-core/src/graph-view/",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "graph-stack.plan.md:99 (status: completed); 77fcf7469 = \"Merge pull request #114 from oaknational/feat/education-evidence-foundational-graphs\"; landing commit 1fc5b4913 \"feat(graph-core): land WS4.4 GraphView interface + T7a array-stop smoke-test\" is an ancestor of 77fcf7469; packages/core/graph-core/src/graph-view/ exists with interface.ts/types.ts/index.ts/index.unit.test.ts present"
+        },
+        {
+          "claim": "WS4.5 status: completed — landed 2026-05-24 via PR #114 at 77fcf746; verified by directory listing of packages/sdks/graph-corpus-sdk/src/eef-strands/ (cited at graph-stack.plan.md:104)",
+          "verdict": "refuted",
+          "confidence": "high",
+          "evidence": "git show 77fcf746:packages/sdks/graph-corpus-sdk/src/eef-strands/index.ts == \"Surface placeholder for the EefStrandsGraphView adapter landing at WS4.5 ... export {}; // NOSONAR ... documented WS4.5 surface placeholder stub\"; git ls-tree -r 77fcf746 -- .../eef-strands/ lists ONLY index.ts"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-estate-consolidation.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Two todos (t6 and t8) remain pending and are legitimately gated on EEF finishing-plan D7",
+          "file_line": "graph-estate-consolidation.plan.md:28-38"
+        },
+        {
+          "claim": "The plan holds the single derived current-state section for the graph estate and the no-re-stratification discipline — archiving or completing it prematurely would orphan that authority",
+          "file_line": "graph-estate-consolidation.plan.md:65-80"
+        },
+        {
+          "claim": "t8's acceptance criterion explicitly includes the D7-gated t6/value-plan criterion, confirming the plan is not complete",
+          "file_line": "graph-estate-consolidation.plan.md:282-285"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every section is grounded in first-hand verification against code, ADRs, and git (line 73-74). The methodology is sound: substance-loss lens first, assumptions-expert gate, point-precise residue verification (lines 146-163), and real-time docs review during t8 (lines 291-295). The Judgement calls are well-reasoned with explicit failure modes called out (lines 243-246). The only speculative element is t6 (the value-evaluation plan, lines 27-29) which is correctly gated rather than built speculatively.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan demonstrates unusually high internal discipline: a no-re-stratification rule for its own current-state section (lines 65-79), explicit substance-preservation conditions baked into todo text (lines 22-23), and a prohibition on leaving the estate in an intermediate dangling-pointer state (lines 269-277). The disposition map at lines 182-192 is a complete, actionable inventory. The t1 grounded findings section (lines 193-239) shows the plan catching and correcting its own initial mis-categorisation — the kind of self-correction that prevents knowledge loss.",
+      "salvage_value": [
+        {
+          "idea": "A graph plan estate must be decontaminated before executing new work; contaminated framing (gate-1a/1b, Inc.3, 7-op polymorphic, recommend/explain/compare) silently biases every subsequent read",
+          "class": "good",
+          "file_line": "graph-estate-consolidation.plan.md:46-56"
+        },
+        {
+          "idea": "The substance-loss-first lens: before archiving or parking any plan, ask whether it carries live EEF-independent substance — three of six files changed category under this lens",
+          "class": "good",
+          "file_line": "graph-estate-consolidation.plan.md:196-202"
+        },
+        {
+          "idea": "Exact block condition for parked plans must name the precise dependency (graph-stack Inc.1b substrate floor) not the EEF tool ships shorthand, to avoid mis-classifying technically independent work as EEF-gated",
+          "class": "good",
+          "file_line": "graph-estate-consolidation.plan.md:223-231"
+        },
+        {
+          "idea": "Substance-preservation at park-move time: carry-forward insights (inverse-edge query primitive, spine-locked tool names, bounded-traversal contract, fixture-manifest scheme, _meta legacy-disclosure discipline) must be written into the parked header at move time, not deferred",
+          "class": "good",
+          "file_line": "graph-estate-consolidation.plan.md:231-239"
+        },
+        {
+          "idea": "Unify all graph-tool substrate migrations into one plan so no tool is orphaned upstream of the EEF re-validation gate",
+          "class": "good",
+          "file_line": "graph-estate-consolidation.plan.md:122-145"
+        },
+        {
+          "idea": "Per-tool migration is ONE replacement unit: data/type re-emission + tool rewrite + projection-derived outputSchema land together; existing tools are untouched before their migration",
+          "class": "good",
+          "file_line": "graph-estate-consolidation.plan.md:246"
+        },
+        {
+          "idea": "Thread-progressions data is sequence-shaped (ordered unit sequences per thread; a latent thread-unit bipartite structure exists); the migration plan decides its substrate shape without forcing node/edge graph form",
+          "class": "speculative",
+          "file_line": "graph-estate-consolidation.plan.md:246"
+        },
+        {
+          "idea": "A plan whose job is to de-stratify must not re-grow a changelog at its own head — the no-re-stratification discipline for the current-state section",
+          "class": "good",
+          "file_line": "graph-estate-consolidation.plan.md:65-79"
+        },
+        {
+          "idea": "Owner-directed quarantine (not rewrite) for the four root graph coordination spines: rewriting a spine when wider graph work is undefined would be fresh speculative contamination",
+          "class": "good",
+          "file_line": "graph-estate-consolidation.plan.md:107-116"
+        },
+        {
+          "idea": "t6 value-evaluation plan — evaluate the finished EEF tool's structural fidelity, the discovery questions, and usefulness vs other curriculum tools; promotion trigger is finishing-plan D7 green",
+          "class": "speculative",
+          "file_line": "graph-estate-consolidation.plan.md:27-29"
+        },
+        {
+          "idea": "t8 full acceptance criterion remains open (includes the D7-gated value-plan criterion); the scoped 2026-06-02 verification passed but is not the full gate",
+          "class": "good",
+          "file_line": "graph-estate-consolidation.plan.md:36-38, 282-285"
+        },
+        {
+          "idea": "Five-prefix source convention (onto-/bulk-/oakapi-/oaksearch-/eef-) added to ADR-157 during the t9 deep-review cleanup",
+          "class": "good",
+          "file_line": "graph-estate-consolidation.plan.md:40-41"
+        },
+        {
+          "idea": "Empty oak-kg surface stubs (lesson-graph, programme-navigator, schema-browser, iri-traverser) consolidated into a README backlog rather than kept as individual stub plans",
+          "class": "good",
+          "file_line": "graph-estate-consolidation.plan.md:40-41"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [
+        "thread"
+      ],
+      "status_raw": "current",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required LOCKED field `id` — every plan requires a stable kebab slug for graph identity",
+          "file_line": "file:1 (frontmatter block, line 1–42)"
+        },
+        {
+          "issue": "Missing required LOCKED field `node_type: \"plan\"` — the registry discriminator is absent",
+          "file_line": "file:1 (frontmatter block)"
+        },
+        {
+          "issue": "Uses emergent `title:` (line 2) instead of LOCKED `name:` — V0 §2.1 and §2.5 mandate migration of `title` → `name`",
+          "file_line": "file:2"
+        },
+        {
+          "issue": "Missing required LOCKED field `overview` (one-line scope sentence)",
+          "file_line": "file:1 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required LOCKED field `kind` — V0 §2.2 replaces `type`/`status` readiness senses with `kind: strategic | executable`",
+          "file_line": "file:1 (frontmatter block)"
+        },
+        {
+          "issue": "Uses dropped key `status: current` (line 3) — V0 §2.2/§2.5 drops `status`; the value maps to `kind: executable` (migration map §3.5)",
+          "file_line": "file:3"
+        },
+        {
+          "issue": "Uses dropped key `lane: current` (line 4) — V0 §2.5 explicitly drops `collection`/`lane`; folder location is the projection",
+          "file_line": "file:4"
+        },
+        {
+          "issue": "Uses dropped key `type: executable` (line 5) — V0 §2.5 drops `type` as free-label; replaced by `node_type` + `kind`",
+          "file_line": "file:5"
+        },
+        {
+          "issue": "Uses emergent `date:` (line 7) instead of LOCKED `last_updated:` — V0 §2.4 folds `created`/`date`/`branch` drift into `last_updated`",
+          "file_line": "file:7"
+        },
+        {
+          "issue": "Missing required LOCKED edge `serves_strategic_choice` — mandatory for executable plans (V0 §2.3, §4 invariant 1)",
+          "file_line": "file:1 (frontmatter block)"
+        }
+      ],
+      "unclassified_keys": [
+        "authored_by"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "The plan's core assumption that 'wider graph work is undefined until that tool finishes' (referring to the EEF tool finishing) is stated as owner-direction and is used as the block condition for parking ~9 speculative graph-surface plans. This assumption is load-bearing for t4 and t6 dispositions and is correctly labelled as owner-directed rather than self-derived.",
+          "file_line": "graph-estate-consolidation.plan.md:85-87"
+        },
+        {
+          "severity": "low",
+          "claim": "t6 (the value-evaluation plan, 'Author future/eef-graph-tool-value-evaluation.plan.md') depends on finishing-plan D7 being green, but the plan simultaneously states D3 is the next deliverable at current-state verification time (2026-06-01). The assumption that D7 completion is a near-term realistic promotion trigger is implicit and unverified in this plan — there is no stated estimate or risk note if D3–D7 stall.",
+          "file_line": "graph-estate-consolidation.plan.md:28-30 and 83-85"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan assumes kg-alignment-audit and kg-integration-quick-wins have a live promotion trigger via the KG README's 'Direct ontology work' trigger (§t1 grounded findings). However, t9 (2026-06-04) records that these two plans were subsequently archived as superseded after the deep review answered their core join-key questions. The original keep-independent disposition in t1 was superseded by t9, which means the readiness-reviewer ratification (assumptions-expert, 2026-06-01) approved a disposition that was later reversed. The plan's readiness-reviewer record does not acknowledge this reversal.",
+          "file_line": "graph-estate-consolidation.plan.md:40-41 (t9 supersedes t1's keep-disposition) vs. 192 (disposition map still lists keep-independent) and 331-341 (readiness reviewer section records READY on the original 6/6 split)"
+        },
+        {
+          "severity": "medium",
+          "claim": "t8 (verify-clean) is marked pending and has a full dependency on t6 (itself D7-gated). The acceptance criterion for t8 is therefore split: part passed 2026-06-02 (scoped verification) and part is deferred until D7 + t6. The plan carries this as a single pending todo without distinguishing the scoped-passed portion from the deferred portion. An agent reading t8's status:pending may not distinguish what is actually open. This is an assumption-of-completeness risk: the plan may appear mostly-done but has a non-trivial open tail.",
+          "file_line": "graph-estate-consolidation.plan.md:35-38 (t8 definition) and 279-295 (scoped verification passed note)"
+        },
+        {
+          "severity": "info",
+          "claim": "The graph-tools-value-redesign.plan.md (Judgement call 4 output) was authored 2026-06-02, parked, then promoted to current/ 2026-06-09. The promotion trigger (EEF D6 + D7) is recorded as having fired, but this plan's current state section and t8 verification were authored before that promotion. The assumption that this plan's 'verified ground truth' section accurately reflects the estate as of 2026-06-09+ has not been re-verified here — the current-state section still references it as parked ('may be parked until substrate + finishing-plan readiness allow').",
+          "file_line": "graph-estate-consolidation.plan.md:246 (promotion noted inline in Judgement call 4 text) vs 72-79 (current-state section dated 2026-06-01, not re-verified post-promotion)"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": [
+        {
+          "claim": "graph-tools-value-redesign.plan.md was authored 2026-06-02 then promoted to current/ 2026-06-09 when the EEF D6+D7 trigger fired (cited at graph-estate-consolidation.plan.md:246)",
+          "verdict": "refuted",
+          "confidence": "high",
+          "evidence": "graph-tools-value-redesign.plan.md:9 (front-matter `date: 2026-06-04`); git commit 12c745f06 (2026-06-04) created the file by overhauling graph-tools-substrate-migration.plan.md; git commit 8b0fb0e22 (2026-06-09, rename R085 future/→current/) confirms the promotion"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-tools-value-redesign.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "S3 has one pending todo (status: pending) with explicit follow-on obligation that must not be forgotten",
+          "file_line": "file:48-49 (s3-skills-as-prompts, status: pending) and file:49 last para"
+        },
+        {
+          "claim": "All other todos are status: completed with SHA-cited PRs, confirming active execution against this plan",
+          "file_line": "file:21-61 (todos section, all but s3-skills-as-prompts show status: completed with PR SHAs)"
+        },
+        {
+          "claim": "Frontmatter status=current with last_restructured=2026-06-09 and live outstanding work",
+          "file_line": "file:7 (status: current), file:10 (last_restructured: 2026-06-09)"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is data-grounded throughout (corpus sizes, depth distributions, mint-rule measurements at file:271-291 and file:281-291), carries adversarially reviewed settled decisions with first-hand-verified dispositions (file:21-24, file:77-87), records its own framing corrections rather than overwriting them (file:107-108, file:301-316), and has one live deliverable remainder (S3 attribution step, file:49). No speculative or wishful framing detected; all open items are explicitly scoped and routed.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan body is unusually dense with verified evidence: every completed todo cites merged PR SHA and commit SHA (e.g. file:27 PR #152 c2aa4791, file:33 PR #161 793cb3c1, file:37 PR #163 27204da0); corpus figures are pinned to a snapshot date and carry re-verification obligations (file:133-135); the misconception mint-rule section (file:37) records quantitative measurements, adversarial review dispositions, and a five-part stability contract test shape. The emission ownership table (file:242-249) directly prevents dependency errors. The cycles-and-proof-contract table (file:382-392) is execution-ready. This is not a placeholder or aspirational plan — it is a post-execution record with a live tail.",
+      "salvage_value": [
+        {
+          "idea": "Bounded anchored retrieval replaces whole-corpus tool returns (the central redesign thesis)",
+          "class": "good",
+          "file_line": "file:99-105 (Problem and intent)"
+        },
+        {
+          "idea": "One-graph corpus with per-view createGraphView construction — no substrate change, no G0 deliverable",
+          "class": "good",
+          "file_line": "file:196-204 (Settled mechanism decisions, substrate question)"
+        },
+        {
+          "idea": "Kind-qualified deterministic node ids materialised as explicit id fields at vocab-gen",
+          "class": "good",
+          "file_line": "file:251-261 (Identity model section)"
+        },
+        {
+          "idea": "Misconception mint rule: content-hash, lesson-scoped, normalised text, hash16 of SHA-256, deterministic",
+          "class": "good",
+          "file_line": "file:37 (g2-misconception-view todo, mint rule SETTLED paragraph)"
+        },
+        {
+          "idea": "Emission ownership table preventing re-emission of shared node kinds across G-units",
+          "class": "good",
+          "file_line": "file:242-249 (Emission ownership table)"
+        },
+        {
+          "idea": "Placement-as-edge (unit-lesson multi-placement is an edge, not a property)",
+          "class": "good",
+          "file_line": "file:24 (define-heterogeneous-node-edge-model todo)"
+        },
+        {
+          "idea": "Thread-progressions ordered projection as its own real operation (cannot ride GraphView edges)",
+          "class": "good",
+          "file_line": "file:200-204 and file:295-298 (Substrate question + thread-progressions section)"
+        },
+        {
+          "idea": "Stateless per-request transport makes listChanged plumbing inert; resource removal is protocol-safe",
+          "class": "good",
+          "file_line": "file:222-230 (Protocol notes)"
+        },
+        {
+          "idea": "Zero-arg to required-anchor is a deliberate behaviour break (replace-dont-bridge); no aliasing step",
+          "class": "good",
+          "file_line": "file:231-234 (Protocol notes)"
+        },
+        {
+          "idea": "structuredContent without MCP outputSchema is protocol-valid; TextContent serialisation kept alongside per spec SHOULD",
+          "class": "good",
+          "file_line": "file:234-236 (Protocol notes)"
+        },
+        {
+          "idea": "S3 pending: two oak-curriculum-principles skills gated on owner attribution-validation step",
+          "class": "good",
+          "file_line": "file:49 (s3-skills-as-prompts last paragraph)"
+        },
+        {
+          "idea": "Misconception thread-anchor heavy-tail handling: limit/paging or unit-granular response for mega-threads (max 262 KB)",
+          "class": "good",
+          "file_line": "file:281-291 (misconception per-corpus value section)"
+        },
+        {
+          "idea": "Reachability gap: english-secondary 15.7% units carry no thread — results never presented as subject-complete",
+          "class": "good",
+          "file_line": "file:290-292 and file:37 (g2 todo thread-unreachable gap)"
+        },
+        {
+          "idea": "prerequisiteFor multiplicity open question: 3,452 emitted vs 2,605 unique pairs — dedup-vs-multiplicity-as-signal to decide at EEF re-proof",
+          "class": "speculative",
+          "file_line": "file:41 (g3 todo, OPEN paragraph)"
+        },
+        {
+          "idea": "G4b conditional closes FALSE — keyword graph is adjacent enrichment, not EEF value-path dependency",
+          "class": "good",
+          "file_line": "file:59 (signal-eef-revalidation todo)"
+        },
+        {
+          "idea": "Bulk-refresh timing for the wider G-estate is an open owner decision (snapshot semantics accepted for now)",
+          "class": "speculative",
+          "file_line": "file:45 (g4-bounded-keywords-tool todo, GATE-1 paragraph)"
+        },
+        {
+          "idea": "oak-tone-of-voice excluded from S3 (owner may re-add by future decision)",
+          "class": "speculative",
+          "file_line": "file:48-49 (s3-skills-as-prompts todo)"
+        },
+        {
+          "idea": "oak-skills going public is BENEFICIAL not blocking; prompt content derives from private repo with attribution",
+          "class": "good",
+          "file_line": "file:48 (s3-skills-as-prompts, Prerequisite classification paragraph)"
+        },
+        {
+          "idea": "Corrections ledger: src/bulk duplicate of keyword extractor is a smell to resolve, not entrench",
+          "class": "good",
+          "file_line": "file:342-344 (Decision disposition ledger row 16)"
+        },
+        {
+          "idea": "ADR-086 amendment (explicit-interface-first overturned, freeze clause cleared) — already executed, permanent record",
+          "class": "good",
+          "file_line": "file:54-57 (amend-adr-086 todo, completed)"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [
+        "thread"
+      ],
+      "status_raw": "current",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Uses 'plan_id' instead of V0-canonical 'id' (LOCKED field). V0 §2.1: 'id' is canonical for emergent 'plan_id' (count 11).",
+          "file_line": "graph-tools-value-redesign.plan.md:4"
+        },
+        {
+          "issue": "Uses dropped 'type: executable' instead of V0-required 'node_type: \"plan\"' (LOCKED). V0 §2.1 and §2.5: 'type' dropped as free-label; 'node_type' is the registry discriminator.",
+          "file_line": "graph-tools-value-redesign.plan.md:5"
+        },
+        {
+          "issue": "Uses dropped 'status: current' instead of V0-required 'kind' axis (LOCKED). V0 §2.2 and §3.1: 'status' is dropped; 'kind: executable' is the correct replacement. Migration map §3.5 maps 'current' → kind=executable unambiguously.",
+          "file_line": "graph-tools-value-redesign.plan.md:6"
+        },
+        {
+          "issue": "Missing required 'kind' field for an executable plan. V0 §2.2: 'kind' required for all plans (LOCKED).",
+          "file_line": "graph-tools-value-redesign.plan.md:1"
+        },
+        {
+          "issue": "Missing required 'node_type' field. V0 §2.1: 'node_type: \"plan\"' required for all plans (LOCKED).",
+          "file_line": "graph-tools-value-redesign.plan.md:1"
+        },
+        {
+          "issue": "Missing required 'serves_strategic_choice' edge for an executable plan. V0 §2.3 and §4: required for executable plans (LOCKED shape); must resolve to a published strategic-choice ID or carry the 'pending' sentinel.",
+          "file_line": "graph-tools-value-redesign.plan.md:1"
+        },
+        {
+          "issue": "Uses 'date' (line 9) instead of V0-required 'last_updated' (LOCKED). V0 §2.4: 'last_updated' folds in emergent 'created'/'date'/'branch' drift.",
+          "file_line": "graph-tools-value-redesign.plan.md:9"
+        },
+        {
+          "issue": "Contains dropped 'isProject: false'. V0 §2.5: 'isProject' explicitly dropped (107/250 census); subsumed by 'projects_to' edge.",
+          "file_line": "graph-tools-value-redesign.plan.md:11"
+        }
+      ],
+      "unclassified_keys": [
+        "last_restructured"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "All core architecture decisions (A/B/D/E/F, identity model, substrate question) are recorded as SETTLED with R1-unanimous reviews cited, and every G1–G4 deliverable is marked completed. The plan's architecture is fully executed; no open structural decisions remain in the settled-decisions section.",
+          "file_line": "graph-tools-value-redesign.plan.md:21-22"
+        },
+        {
+          "severity": "info",
+          "claim": "Decision B (adapter home: graph-corpus-sdk imports sdk-codegen via ./graph-corpus single-level subpath) is architecturally sound: no circular back-edge, ADR-108 invariant 4 satisfied, ESLint boundary rules verified zero-change. The rationale for not reusing ./vocab-data is recorded (avoids mixing legacy flat corpora with new graph authority).",
+          "file_line": "graph-tools-value-redesign.plan.md:189-196"
+        },
+        {
+          "severity": "info",
+          "claim": "Substrate question is settled as per-view createGraphView construction with no graph-core changes. The no-manifest(), no-edgeTypes-extension, no-curriculum-vocabulary-in-substrate invariants all derive from ADR-179. Thread-progressions as an ordered corpus projection (not riding subgraph edges) is correctly identified as its own real operation under ADR-173.",
+          "file_line": "graph-tools-value-redesign.plan.md:198-204"
+        },
+        {
+          "severity": "low",
+          "claim": "An open multiplicity question remains in G3: prerequisiteFor emits 3,452 edges vs 2,605 unique pairs — dedup-vs-multiplicity-as-signal is deferred to the eef-revalidation re-proof. This is a named open item in a completed deliverable; it does not block the plan but leaves a corpus-level semantic ambiguity unresolved at plan close.",
+          "file_line": "graph-tools-value-redesign.plan.md:41 (g3-thread-progressions-view: 'OPEN to the re-proof: prerequisiteFor multiplicity')"
+        },
+        {
+          "severity": "low",
+          "claim": "G4b keyword node identity uses kind-qualified id = keyword:<normalised-term> (lc+trim). The plan notes this is 'deliberately simple — do not over-build a unicode layer the corpus may not warrant' but does not record a post-execution stability check confirming the corpus's NFC assumption holds for keyword terms (distinct from the misconception 0/12,858 NFC-divergent measurement, which covers lesson text not keywords).",
+          "file_line": "graph-tools-value-redesign.plan.md:45 (g4-bounded-keywords-tool: 'normaliseKeyword stability contract test (lc+trim, deliberately simple')"
+        },
+        {
+          "severity": "low",
+          "claim": "S3 (skills-as-prompts) status is pending. The two oak-curriculum-principles prompts remain gated on an owner-owned attribution-validation step linked to ADR-058/060 grounding addenda (PR #154). The architecture of deriving MCP prompts from a private oak-skills repo is ratified, but the attribution-gate dependency is not architecturally resolved in this plan — it is an explicit owner-action blocker.",
+          "file_line": "graph-tools-value-redesign.plan.md:49-50 (s3-skills-as-prompts status: pending)"
+        },
+        {
+          "severity": "info",
+          "claim": "The extractor duplication (vocab-gen/extractors/ vs src/bulk/extractors/keyword-extractor.ts) is named as a smell to resolve in G-units, not entrench. G4b-c1 resolves it. The plan correctly prohibits targeting the src/bulk duplicate and records the correction in the decision disposition ledger (row 16).",
+          "file_line": "graph-tools-value-redesign.plan.md:343-344 (disposition ledger row 16) and line 45 (g4b-c1 step)"
+        },
+        {
+          "severity": "info",
+          "claim": "The protocol-safe stateless-transport rationale is correctly grounded: sessionIdGenerator:undefined, ADR-112, and first-hand SDK verification (removed-URI returns -32602, not -32002). No listChanged plumbing is warranted. The behaviour-break (zero-arg to required-anchor) is declared and the per-request transport mitigation is sound.",
+          "file_line": "graph-tools-value-redesign.plan.md:222-232"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": [
+        {
+          "claim": "S3 is NOT complete — two oak-curriculum-principles skills remain gated on owner-owned attribution-validation step; must NOT be forgotten (explicit owner direction 2026-06-11) (cited at file:49 last paragraph)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "graph-tools-value-redesign.plan.md:50 `status: pending` (S3 todo); :49 \"REMAINING (owner-directed 2026-06-11, must NOT be forgotten — explicit follow-on): the TWO oak-curriculum-principles skills (oak-curriculum-principles-mcp-enabled + oak-curriculum-principles) stay gated on the owner-owned attribution-validation step ... linked to the ADR-058/060 grounding addenda, PR #154\""
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Park notice explicitly preserves journey concept and two reference journeys as live substance",
+          "file_line": "file:38-41"
+        },
+        {
+          "claim": "Promotion trigger conditions are load-bearing and empirically gated — not speculative scaffolding",
+          "file_line": "file:230-244"
+        },
+        {
+          "claim": "T4 citation propagation invariant cross-links to corpus plan type constraint — preserving this avoids a compile-time regression",
+          "file_line": "file:21-22"
+        },
+        {
+          "claim": "Three-shape architecture framework (T1) is a genuine open question requiring discovery, not yet resolved",
+          "file_line": "file:166-206"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan's active substance (journey concept, two fully-specified reference journeys, T1 architecture decision framework, citation invariant, promotion trigger discipline) is well-reasoned and grounded. The retired increment/arc framing is correctly flagged and does not corrupt the live content. The empirical gate on promotion (condition 4, file:243-244) is a notably mature constraint. The T4 type invariant (file:21-22) is a precise cross-plan dependency that prevents a silent compile-time regression. No speculative or bad ideas dominate the live core.",
+      "content_quality": "strong",
+      "content_quality_note": "Both reference journeys have step-by-step input/output specs, explicit user-value statements, provability criteria, and architecture validation hypotheses (file:104-163). The T1 architecture question names three candidate shapes with explicit pros/cons (file:168-206). Risk register names three risks with concrete mitigations (file:246-261). Promotion trigger names four conditions with rationale (file:230-244). The layer-distinction note (file:47-53) prevents conflation with substrate-layer plans. Quality is genuinely strong for a parked future plan.",
+      "salvage_value": [
+        {
+          "idea": "Journey artefact concept: a first-class composable artefact that wraps N tool calls into one coherent teacher-facing output with provenance",
+          "class": "good",
+          "file_line": "file:57-70"
+        },
+        {
+          "idea": "Journey A (evidence-aware-lesson-sequencing): fully specified cross-source journey composing search, misconception graph, prereq graph, and EEF corpus into a 3-lesson plan with citations",
+          "class": "good",
+          "file_line": "file:104-135"
+        },
+        {
+          "idea": "Journey B (prerequisite-trace): graph-only journey walking prereq graph backward from a lesson and annotating each step with misconceptions",
+          "class": "good",
+          "file_line": "file:139-163"
+        },
+        {
+          "idea": "T1 architecture decision: research write-up + ADR amendment resolving journey as prompt / playbook / hybrid before building",
+          "class": "good",
+          "file_line": "file:165-206"
+        },
+        {
+          "idea": "Citation non-empty tuple invariant at journey boundary: readonly [Citation, ...Citation[]] must not be widened to Citation[] at the journey output",
+          "class": "good",
+          "file_line": "file:21-22"
+        },
+        {
+          "idea": "Empirical promotion gate: promote only when there is a real teacher question that the existing prompt-only surface answers poorly — no speculative promotion",
+          "class": "good",
+          "file_line": "file:238-244"
+        },
+        {
+          "idea": "Layer separation: journeys are feature-layer consumers of substrate-layer primitives; these are sequential not parallel dependencies",
+          "class": "good",
+          "file_line": "file:47-53"
+        },
+        {
+          "idea": "Downstream usage proxy metric: does the next user message reference journey output? (as a telemetry proxy for journey value)",
+          "class": "speculative",
+          "file_line": "file:25"
+        },
+        {
+          "idea": "N=20 manual sample with 80% pass threshold on citation completeness AND pedagogical coherence as provability criterion",
+          "class": "speculative",
+          "file_line": "file:95-97"
+        },
+        {
+          "idea": "Shape 3 hybrid journey primitive (typed prompt with server-side or LLM dispatch depending on runtime)",
+          "class": "speculative",
+          "file_line": "file:196-204"
+        },
+        {
+          "idea": "Increment/arc framing (Increments 1-3, combinatorial arc, 7-op query layer) — explicitly retired scaffold",
+          "class": "bad",
+          "file_line": "file:37-41"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "parked",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` — the plan has no stable kebab slug; V0 §2.1 (LOCKED) requires `id` on all plans.",
+          "file_line": "cross-source-journeys.plan.md:1-29 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `node_type` — V0 §2.1 (LOCKED) requires `node_type: plan` on all plans.",
+          "file_line": "cross-source-journeys.plan.md:1-29 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `kind` — V0 §2.2 (LOCKED) requires `kind: strategic | executable` on all plans; the folder location (future/) implies `strategic` but the field is not declared.",
+          "file_line": "cross-source-journeys.plan.md:1-29 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Dropped key `status: parked` present — V0 §2.5 explicitly drops `status`; it is replaced by `kind` / `disposition` / `gate`. `parked` does not appear in the V0 §3.5 migration map and encodes an open holding state, which V0 §3.4 (LOCKED) prohibits.",
+          "file_line": "cross-source-journeys.plan.md:9"
+        },
+        {
+          "issue": "Dropped key `isProject: false` present — V0 §2.5 explicitly drops `isProject`.",
+          "file_line": "cross-source-journeys.plan.md:10"
+        },
+        {
+          "issue": "No `gate` field despite plan being explicitly parked — V0 §3.4 (LOCKED) requires a named-dependency `depends_on: blocking` edge or a `gate` object with `awaiting`, `clears_when`, and mandatory `expires` to represent a block; a bare `status: parked` is invalid.",
+          "file_line": "cross-source-journeys.plan.md:9 (status field) and body lines 34-41 (park record)"
+        },
+        {
+          "issue": "Missing typed edge `serves_strategic_choice` — V0 §2.3 and §4 require this on executable plans and recommend it on strategic; absent entirely.",
+          "file_line": "cross-source-journeys.plan.md:1-29 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Unclassified key `sibling_plans` present — not a V0-defined edge; the V0 untyped see-also edge is `related`; V0 §4 does not define `sibling_plans`.",
+          "file_line": "cross-source-journeys.plan.md:6-7"
+        },
+        {
+          "issue": "Missing `last_updated` field — V0 §2.4 (LOCKED) requires `last_updated` (ISO date) on all plans; a `Last Updated` prose line exists in the body (line 45) but is not in frontmatter.",
+          "file_line": "cross-source-journeys.plan.md:1-29 (frontmatter block — field absent)"
+        }
+      ],
+      "unclassified_keys": [
+        "graph_layer",
+        "sibling_plans",
+        "specialist_reviewer",
+        "status",
+        "isProject"
+      ],
+      "locked_contradictions": [
+        {
+          "item": "Open holding state `status: parked` violates V0 §3.4 LOCKED decision — 'There is no open-ended paused state.' V0 §3.4 mandates either a `depends_on` blocking edge (auto-clears when target is done) or a `gate` object with `awaiting`, `clears_when`, and a mandatory `expires` date. The body (lines 34-41) supplies a clear `clears_when` narrative (revisit after EEF graph tool ships, cross-referencing eef-graph-tool-completion.plan.md) but this is expressed as prose, not as a structured `gate` with an expiry. The plan has been parked since 2026-06-02 with no gate expiry — exactly the indefinite holding state V0 exists to eliminate. Owner re-ratification candidate: either migrate to `gate: { awaiting: owner-decision, clears_when: 'eef-graph-tool-completion ships', expires: <date> }` plus a `depends_on` blocking edge, or apply `disposition: cancelled` if the park is effectively an owner-stop.",
+          "evidence": "status: parked (frontmatter line 9); body park notice 'PARKED 2026-06-02 — increment scaffold retired' with cross-reference but no expiry (body lines 34-41); V0 §3.4 LOCKED text: 'There is no open-ended paused state'; V0 §3.5 migration map has no entry for `parked`.",
+          "file_line": "cross-source-journeys.plan.md:9 (status field); body lines 34-41"
+        }
+      ],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "The plan correctly encodes a sequential substrate dependency: journeys consume finished MCP primitives (EEF graph tool, graph-query-layer, corpus primitives) and are blocked until those substrate layers ship. The two-layer model (substrate vs feature-layer journey orchestration) is explicitly stated and architecturally sound.",
+          "file_line": "cross-source-journeys.plan.md:47-53"
+        },
+        {
+          "severity": "medium",
+          "claim": "Shape 2 (journey = new MCP primitive 'playbook') proposes server-side orchestration via playbooks/list and playbooks/run but references an ADR-123 amendment (T6, t6-playbook-doctrine) without evidence that ADR-123 exists or is scoped to this domain. If the ADR does not exist, the governance chain for a protocol extension is dangling. Verify ADR-123 is in the estate before this plan is promoted.",
+          "file_line": "cross-source-journeys.plan.md:27,186-188"
+        },
+        {
+          "severity": "medium",
+          "claim": "T4 mandates the non-empty tuple type 'readonly [Citation, ...Citation[]]' from the corpus plan T12 at the journey boundary. The corpus plan T12 is not cited by path — only referenced abstractly as 'the corpus plan T12'. If that plan has been superseded or that constraint has moved, T4's compile-time invariant claim becomes stale. The cross-plan reference section (lines 264-269) does not mention the corpus plan at all, leaving T4 unanchored.",
+          "file_line": "cross-source-journeys.plan.md:21,264-269"
+        },
+        {
+          "severity": "low",
+          "claim": "Promotion trigger condition 4 ('real teacher question that the existing surface answers poorly') is owner-validated evidence, which is architecturally correct as a demand signal gate. However no mechanism is named for how that evidence is collected or who judges sufficiency. This is a governance gap, not a structural flaw, but it means promotion could stall indefinitely on an underdefined criterion.",
+          "file_line": "cross-source-journeys.plan.md:238-243"
+        },
+        {
+          "severity": "low",
+          "claim": "Shape 3 (hybrid typed prompt with runtime dispatch) is included as a candidate but described as 'most complex; hardest to defend in review' with no prototype path. Given T1 requires prototyping Journey B against each shape, including Shape 3 here risks T1 scope creep. Architecturally, Shape 3 should either be scoped to a sub-investigation with explicit exit criteria or removed as a live candidate until Shape 1 and Shape 2 prototypes produce evidence that neither is sufficient.",
+          "file_line": "cross-source-journeys.plan.md:196-203"
+        },
+        {
+          "severity": "info",
+          "claim": "The parked status is consistent with the stated dependency order: substrate (EEF graph tool) must reach ACTIVE before journey work can begin. The park record cites graph-estate-consolidation.plan.md, which is the correct coordination point. No premature execution risk while parked.",
+          "file_line": "cross-source-journeys.plan.md:33-41"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/connecting-oak-resources/knowledge-graph-integration/future/extending-graph-support-tooling.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan is a candidate-buffer, not a completed or superseded piece of work; all six todos are pending with no execution started",
+          "file_line": "file:10-29"
+        },
+        {
+          "claim": "Explicitly future-status and not a deferral gate — it is the correct structural home for this class of content",
+          "file_line": "file:34-41"
+        },
+        {
+          "claim": "Encodes live architectural constraints (no list-ops, no soft stubs, smart-graph-thin-tool) that must remain findable",
+          "file_line": "file:70-78"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every candidate is grounded in a real decision event (D4 removal, D7 round-trip trigger) and carries an explicit activation condition rather than being wishlist speculation. The constraints encoded at lines 70-78 are architecturally load-bearing and non-obvious. The candidate-buffer structural pattern itself is a genuine contribution to the plan estate. No bad ideas detected; c5 and c6 are speculative but correctly labelled as build-only-if-exploration-shows-need.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan is concise, every candidate has a concrete activation condition, constraints are precisely stated with counterexamples (rank-and-cut is explicitly forbidden at line 13; field-masking per-tool is explicitly forbidden at lines 22-23 and 76). The why-this-plan-exists section (lines 43-58) names the two failure modes it prevents. No filler, no hedging vocabulary, no orphaned context.",
+      "salvage_value": [
+        {
+          "idea": "corpus-analytical ops (rank/explain/compare): design fresh from exploration data, never by un-stubbing; ordering within a complete subgraph is legitimate, slicing is not",
+          "class": "good",
+          "file_line": "file:13"
+        },
+        {
+          "idea": "relevance ordering within a scoped subgraph as an annotation-only enhancement, activation gated on real exploration data showing agents struggle to prioritise",
+          "class": "speculative",
+          "file_line": "file:16-18"
+        },
+        {
+          "idea": "resolve whether explore tool should require focus parameter from real exploration data, not abstractly",
+          "class": "good",
+          "file_line": "file:19-20"
+        },
+        {
+          "idea": "graded role-based disclosure for large corpora: build only when a corpus genuinely cannot fit full-node; must live in graph-core as a shared projection applier, never as per-tool field-masking",
+          "class": "speculative",
+          "file_line": "file:21-24"
+        },
+        {
+          "idea": "additional GraphView adapters (onto-threads, bulk-threads, misconceptions, prerequisites) to confirm genuine reusability of the delivery capability",
+          "class": "good",
+          "file_line": "file:25-27"
+        },
+        {
+          "idea": "cross-corpus surfaces and prose-delivery tool: build only if exploration shows the need",
+          "class": "speculative",
+          "file_line": "file:28-29"
+        },
+        {
+          "idea": "candidate-buffer pattern: named durable home for removed-but-worth-keeping ideas prevents soft stubs and ambient follow-ons",
+          "class": "good",
+          "file_line": "file:37-41"
+        },
+        {
+          "idea": "corrected EEF doctrine constraints (no list-ops, no soft stubs, smart-graph-thin-tool) as standing architectural constraints for all graph work",
+          "class": "good",
+          "file_line": "file:70-78"
+        },
+        {
+          "idea": "source-prefix ratified decision: Threads = onto-threads + bulk-threads (two distinct tools, not one adapter)",
+          "class": "good",
+          "file_line": "file:25"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": null,
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "future",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, required for all plans)",
+          "file_line": "extending-graph-support-tooling.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `node_type` with literal value `\"plan\"` (LOCKED, required for all plans)",
+          "file_line": "extending-graph-support-tooling.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED, required for all plans; `status: future` maps to `kind: strategic` via V0 §3.5 migration map)",
+          "file_line": "extending-graph-support-tooling.plan.md:9"
+        },
+        {
+          "issue": "Missing required field `last_updated` (LOCKED, required for all plans)",
+          "file_line": "extending-graph-support-tooling.plan.md:1"
+        },
+        {
+          "issue": "`status: future` present — V0 §2.5 explicitly drops `status`; it is replaced by the `kind`/`disposition`/`gate` axes",
+          "file_line": "extending-graph-support-tooling.plan.md:9"
+        },
+        {
+          "issue": "`isProject: false` present — V0 §2.5 explicitly drops `isProject`",
+          "file_line": "extending-graph-support-tooling.plan.md:10"
+        },
+        {
+          "issue": "`todos` declared (lines 11-29) but `status: future` maps to `kind: strategic` via V0 §3.5; V0 §2.4 forbids `todos` on `strategic` plans. Plan must either declare `kind: executable` (with `serves_strategic_choice`) or remove the todos block and promote candidates to body prose.",
+          "file_line": "extending-graph-support-tooling.plan.md:11"
+        },
+        {
+          "issue": "`serves_strategic_choice` absent — required for executable plans, recommended for strategic (V0 §2.3, LOCKED shape)",
+          "file_line": "extending-graph-support-tooling.plan.md:1"
+        },
+        {
+          "issue": "`parent_plan` present — V0 §2.5 classifies this as SURVEY-MAY-ADD-EDGES (not a V0 frontmatter edge field)",
+          "file_line": "extending-graph-support-tooling.plan.md:5"
+        },
+        {
+          "issue": "`specialist_reviewer` present — V0 §2.5 classifies this as SURVEY-MAY-ADD-FIELDS (not a V0 frontmatter field)",
+          "file_line": "extending-graph-support-tooling.plan.md:8"
+        }
+      ],
+      "unclassified_keys": [
+        "graph_layer",
+        "sibling_plans"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "The 'smart graph, thin tool' constraint is correctly placed: cross-cutting capabilities (e.g., a projection applier) are mandated to live in the graph layer, not per-tool. This is architecturally sound and consistent with the GraphView adapter pattern referenced.",
+          "file_line": "extending-graph-support-tooling.plan.md:75-78"
+        },
+        {
+          "severity": "info",
+          "claim": "c4 (graded-disclosure) correctly identifies the shared projection applier should live in graph-core via graph-view.ts, not as per-tool field-masking. This is an explicit architectural boundary that should be carried into any implementation brief for this candidate.",
+          "file_line": "extending-graph-support-tooling.plan.md:22-23"
+        },
+        {
+          "severity": "low",
+          "claim": "c5 references a 'ratified source-prefix decision (2026-06-04)' that governs Threads splitting into onto-threads and bulk-threads. This decision is cited by date only, with no ADR reference or file path. Per estate practice, ADRs are the permanent source of truth; a date-only citation is fragile if the ADR estate shifts.",
+          "file_line": "extending-graph-support-tooling.plan.md:25-26"
+        },
+        {
+          "severity": "low",
+          "claim": "The parent_plan path '../../../sector-engagement/eef/current/eef-graph-tool-completion.plan.md' is not verified as existing in this review. If the EEF parent plan has been closed or moved, the architectural dependency chain this plan describes (its whole rationale) becomes unanchored. The parent plan's current status should be confirmed.",
+          "file_line": "extending-graph-support-tooling.plan.md:5"
+        },
+        {
+          "severity": "info",
+          "claim": "The no-list-ops constraint (slice/cap/field-mask-for-budget/rank-and-cut forbidden) is clearly stated and architecturally correct for a graph-first delivery model. The carve-out for ordering-within-complete-subgraph is precise and does not introduce ambiguity.",
+          "file_line": "extending-graph-support-tooling.plan.md:70-74"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan's design as a candidate-buffer rather than a deferral gate is architecturally appropriate: it avoids re-introducing scheduled scope while preserving the knowledge. The mechanism (each candidate requires a fresh owner decision to build or keep) is clear and does not create implicit delivery obligations.",
+          "file_line": "extending-graph-support-tooling.plan.md:34-42"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/connecting-oak-resources/knowledge-graph-integration/future/nc-knowledge-taxonomy-surface.plan.md",
+      "classification": "rewrite",
+      "classification_evidence": [
+        {
+          "claim": "Phase 1 extraction script framing predates ADR-173 and must be reworked to the graph-ingest substrate path",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:119-124"
+        },
+        {
+          "claim": "All TODO IDs and type definitions still use oak-kg-* naming which predates and contradicts the ADR-157 onto-* convention",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:59-61"
+        },
+        {
+          "claim": "T9 references ADR-123 for URI update but the URI in the Decision is already correctly onto-knowledge-taxonomy; the TODO body still says oak-kg-knowledge-taxonomy",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:34,249"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The core idea — expose SKOS taxonomy as a demand-gated MCP surface using the ADR-173 graph-ingest path — is sound and the plan correctly identifies why it is uniquely valuable (bulk API gap at line 107-112). The internal inconsistency between the Phase 1 extractor framing and ADR-173 is a body-staleness problem, not a conceptual flaw.",
+      "content_quality": "adequate",
+      "content_quality_note": "The Decision section (lines 119-124) correctly supersedes the Phase 1 body, but the TODOs and type definitions were never updated to match — so a reader following the TODOs would build the wrong thing. The SKOS hierarchy description and bulk-API gap analysis (lines 93-113) are strong. Type interface definitions (lines 175-212) are concrete and complete for the bespoke-extractor approach but need reworking for graph-ingest path.",
+      "salvage_value": [
+        {
+          "idea": "Demand-tripwire gating pattern: a plan that stays PENDING until documented external/internal demand for a specific traversal fires, with concrete tripwire examples",
+          "class": "good",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:68-81"
+        },
+        {
+          "idea": "SKOS 4-tier hierarchy (Discipline/Strand/SubStrand/ContentDescriptor) is the correct structure for NC-aligned curriculum taxonomy; 356+ content descriptors for maths alone",
+          "class": "good",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:95-113"
+        },
+        {
+          "idea": "Bulk API gap: nationalCurriculumContent exists only as loose text strings at unit level; ontology TTL files are the sole source of structured hierarchy",
+          "class": "good",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:107-112"
+        },
+        {
+          "idea": "ADR-173 graph-ingest path (TTL → DatasetCore → property-graph) is the correct ingestion route, not a bespoke extractor",
+          "class": "good",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:119-124"
+        },
+        {
+          "idea": "onto-* naming prefix (ADR-157) for ontology-sourced surfaces, applied as onto-knowledge-taxonomy",
+          "class": "good",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:58-61"
+        },
+        {
+          "idea": "The 8 subject TTL files that constitute the knowledge taxonomy corpus (mathematics, english, science x3, history, geography, citizenship)",
+          "class": "good",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:129-141"
+        },
+        {
+          "idea": "Typed interfaces for OakKgKnowledgeTaxonomy, Discipline, Strand, SubStrand, ContentDescriptor as a model for the surface's output shape",
+          "class": "speculative",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:175-212"
+        },
+        {
+          "idea": "Bespoke Node.js extraction script with SKOS triple parsing (skos:narrower, rdfs:label) as the ingestion implementation",
+          "class": "bad",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:148-171"
+        },
+        {
+          "idea": "Regex-based extractor as a fallback for Turtle parsing (offered as an option in T1)",
+          "class": "bad",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:168-170"
+        },
+        {
+          "idea": "oak-kg-* naming throughout TODOs and type definitions (predates ADR-157 convention)",
+          "class": "bad",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:14-41"
+        },
+        {
+          "idea": "Mark Hodierne attribution in authors list when plan ships",
+          "class": "good",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:86-88"
+        },
+        {
+          "idea": "Size estimate: ~230 lines total across extraction script, types, factory config, and tests",
+          "class": "speculative",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:254-258"
+        },
+        {
+          "idea": "Exit criteria list including pnpm check, E2E tool/resource assertions, and ADR-123 update",
+          "class": "good",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:262-269"
+        },
+        {
+          "idea": "Sequencing dependency: this plan explicitly gates on EEF graph tool completion as the wider graph work anchor",
+          "class": "good",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:46-51"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": null,
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "PARKED (body, line 53); also \"PENDING\" referenced in body lines 81, 48",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (V0 §2.1, LOCKED — the stable kebab slug that is the node's graph identity)",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:1-42 (absent from frontmatter)"
+        },
+        {
+          "issue": "Missing required field `node_type` literal `\"plan\"` (V0 §2.1, LOCKED — the registry discriminator)",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:1-42 (absent from frontmatter)"
+        },
+        {
+          "issue": "Missing required field `last_updated` ISO date (V0 §2.4, LOCKED). Date 2026-06-02 is present only in the body (line 54), not in frontmatter.",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:54"
+        },
+        {
+          "issue": "Missing `kind` field (V0 §2.2, model LOCKED). The plan has executable-plan content (`todos` present) so `kind: executable` is the correct assignment, but the field is absent.",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:1-42 (absent from frontmatter)"
+        },
+        {
+          "issue": "Missing `serves_strategic_choice` edge (V0 §2.3, LOCKED shape). Required for executable plans; neither a registry ID nor the `\"pending\"` sentinel is present.",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:1-42 (absent from frontmatter)"
+        },
+        {
+          "issue": "`todos` present but `kind` is absent — the V0 discriminated union makes `todos` exclusively a `kind: executable` field (V0 §2.2, §6). Without `kind`, the plan body-signals executable but the schema is indeterminate.",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:8-41"
+        },
+        {
+          "issue": "Emergent `isProject: false` present (V0 §2.5, DROPPED — subsumed by `projects_to` edge).",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:7"
+        },
+        {
+          "issue": "Status carried in body as prose `**Status**: PARKED` (line 53), not mapped to V0 axes. `PARKED` maps to `gate: { awaiting: owner-decision, clears_when: ..., expires: ... }` or `disposition: cancelled` depending on intent, but neither axis is set in frontmatter (V0 §3.4, §3.5).",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:53"
+        },
+        {
+          "issue": "`promotion_trigger` is present in frontmatter (line 5) but also restated in body (lines 67-82). V0 §2.4 keeps `promotion_trigger` for `kind: strategic` plans only; its presence alongside `todos` (executable content) creates a kind-classification contradiction internal to the plan.",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:5"
+        },
+        {
+          "issue": "No typed edges declared in frontmatter (`serves_strategic_choice`, `derives_from`, `depends_on`, `thread`, `supersedes`, `superseded_by` all absent — V0 §2.3).",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:1-42 (absent)"
+        }
+      ],
+      "unclassified_keys": [
+        "graph_layer",
+        "specialist_reviewer",
+        "isProject"
+      ],
+      "locked_contradictions": [
+        {
+          "item": "PARKED state expressed as body prose with no expiring `gate` field. V0 §3.4 LOCKS the model: every block must be an expiring `gate` object with `awaiting`, `clears_when`, and a mandatory `expires`. The body (line 47-51) describes a park condition with a named dependency (eef-graph-tool-completion plan must ship first) — that is precisely a `depends_on: [{ plan: eef-graph-tool-completion, kind: blocking }]` edge under V0, not a `gate`. The park predates V0; if the estate consistently uses prose parking without expiring gates, the survey should surface this as a candidate for the `depends_on` blocking-edge pattern, which V0 already provides for exactly this shape. No re-ratification of LOCKED is needed — the estate use-case is already covered — but the mapping must be applied.",
+          "evidence": "Body lines 47-51: '⏸️ PARKED 2026-06-02. Wider graph work is undefined until the first proper graph tool (EEF) ships'; frontmatter contains no `gate` and no `depends_on`.",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:47-51"
+        },
+        {
+          "item": "`promotion_trigger` coexists with `todos` in the same plan. V0 §2.4 LOCKS `promotion_trigger` as forbidden on `executable` plans and `todos` as forbidden on `strategic` plans (the discriminated union is LOCKED). This plan carries both, which is structurally invalid under V0. The estate evidence suggests a hybrid 'gated-executable' shape — an executable plan that promotes only on a demand signal — which V0's current two-value `kind` enum does not accommodate. This is a genuine survey finding: if other plans share this shape, the survey should surface it as a candidate for an additive `kind` value (e.g. `gated-executable`) or a modelling clarification that the demand tripwire belongs in `gate`, not `promotion_trigger`.",
+          "evidence": "Frontmatter line 5: `promotion_trigger: demand-tripwire — promotes from PENDING…`; frontmatter lines 8-41: full `todos` list with 11 items. V0 §2.4 states `todos` forbidden on `strategic`, `promotion_trigger` forbidden on `executable`.",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:5 and 8-41"
+        }
+      ],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "Phase 1 (T1–T2) specifies a bespoke build-time JSON extractor (regex or `n3` Turtle parser), but the Decision section at line 119 explicitly states this framing predates ADR-173 and must be reworked to the `graph-ingest` substrate path. The todo items t1-extraction-script and t2-type-definitions remain scoped to the pre-ADR-173 approach, so execution against the current todos would produce an architectural violation the moment work starts.",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:119-124 and todos lines 9-12"
+        },
+        {
+          "severity": "high",
+          "claim": "The todo id t3-resource-constant at line 16 and the Phase 2 code block at lines 221–235 still use the pre-ADR-157 `oak-kg-*` naming. The Decision section (line 58) states these names 'predate the convention and rename at build time', but no todo captures the renaming. The execution surface therefore ships the wrong URI prefix (`oak-kg-knowledge-taxonomy`) rather than the ADR-157-mandated `onto-knowledge-taxonomy`.",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:58-61 and 221-235"
+        },
+        {
+          "severity": "medium",
+          "claim": "The Exit Criteria (lines 260–267) and the ADR update task (t9, line 34) reference ADR-123 only. The Decision section cites ADR-173 (graph-ingest path) and ADR-157 (onto-* prefix) as accepted decisions that govern this plan's architecture, but neither ADR appears in the exit criteria or the todos. There is no gate confirming ADR-173 compliance is achieved before the plan closes.",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:34-35 and 260-267"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan states 'It does NOT require Neo4j, SPARQL, or the full ontology' (line 142) and lists eight static `.ttl` files as the data source. ADR-173's graph-ingest path (referenced at line 119) implies a live or build-time `DatasetCore` pipeline. Whether the listed static `.ttl` files feed that pipeline or bypass it is unresolved — the data-source section and the decision section are architecturally inconsistent with each other after the ADR-173 acceptance.",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:119-124 and 128-142"
+        },
+        {
+          "severity": "low",
+          "claim": "The `graph-resource-factory.plan.md` dependency is referenced by name in line 216 with no ADR or stable plan-id anchor. If that factory plan is renamed, archived, or superseded, this plan has no resolvable pointer to its own execution dependency.",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:216"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan is correctly PARKED pending the EEF graph tool (lines 46–51) and retains a demand-tripwire promotion trigger. The park record cross-link to graph-estate-consolidation.plan.md is present and correct. Architecture-readiness at promotion time requires reconciling the ADR-173 / ADR-157 inconsistencies above before the plan can execute cleanly.",
+          "file_line": "nc-knowledge-taxonomy-surface.plan.md:46-51"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": [
+        {
+          "claim": "The SKOS knowledge taxonomy does NOT exist anywhere in the bulk API data; ontology is the sole source",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "packages/sdks/oak-sdk-codegen/src/types/generated/bulk/bulk-schemas.ts:203 (nationalCurriculumContent: z.array(z.string())); nc-statement-extractor.ts:56 (iterates strings, unit-level only); plan lines 108-110"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/connecting-oak-resources/knowledge-graph-integration/future/oak-kg-threads-surface.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Status is 'parked' with a clear resume condition (EEF ships first, substrate floor lands)",
+          "file_line": "oak-kg-threads-surface.plan.md:7,73-91"
+        },
+        {
+          "claim": "The plan carries two high-value carry-forward primitives not recorded elsewhere (inverse-edge insight + onto-* rename)",
+          "file_line": "oak-kg-threads-surface.plan.md:81-89"
+        },
+        {
+          "claim": "All seven workstreams are fully specified with TDD cycles, acceptance criteria, and reviewer dispatch — ready to execute once unblocked",
+          "file_line": "oak-kg-threads-surface.plan.md:25-68"
+        },
+        {
+          "claim": "Park record cross-referenced to graph-estate-consolidation.plan.md (line 91) confirms the plan is intentionally retained, not abandoned",
+          "file_line": "oak-kg-threads-surface.plan.md:91"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan body is a well-structured execution blueprint with specific TDD cycles, file paths, acceptance criteria, error-path coverage, and dependency reasoning. The parked notice is honest and preserves the two substantive insights (inverse-edge primitive, onto-* rename) explicitly. The internal tension between the spine-locked names and the ADR-157 rename is acknowledged with a concrete resolution rule (migrate-on-touch). No padding or speculative scope inflation detected.",
+      "content_quality": "strong",
+      "content_quality_note": "Cycle specifications name exact test file paths (e.g. `oak-kg-threads-resource.integration.test.ts`, line 213), exact registry symbols (`AGGREGATED_TOOL_DEFS`, `AGGREGATED_HANDLERS`, lines 141-151), exact MCP envelope fields (`structuredContent`, `outputSchema`, `isError`, lines 249-252), and named error variants (lines 262-266). Risk table (lines 330-337) maps each risk to a concrete mitigation with cycle-level specificity. Quality gate chain is enumerated verbatim (lines 302-305). This is well above V0-conformant boilerplate.",
+      "salvage_value": [
+        {
+          "idea": "Inverse-edge query primitive: Thread is a forward edge from Unit (`curric:includesThread`), so thread-content resolution requires an inverse lookup — this plan is the designated proof vehicle for that primitive",
+          "class": "good",
+          "file_line": "oak-kg-threads-surface.plan.md:81-84,163-165"
+        },
+        {
+          "idea": "onto-* naming convention supersedes oak-kg-* names per ADR-157: resource becomes `curriculum://onto-threads`, tool becomes `onto-get-thread-content`; migrate-on-touch at execution",
+          "class": "good",
+          "file_line": "oak-kg-threads-surface.plan.md:86-89"
+        },
+        {
+          "idea": "TDD cycle structure: 9 cycles across 3 workstreams (resource stub, resource grouping, tool inverse-edge, tool grouping, tool error-paths, MCP wiring, descriptor) with one-commit discipline",
+          "class": "good",
+          "file_line": "oak-kg-threads-surface.plan.md:25-64"
+        },
+        {
+          "idea": "MCP envelope acceptance contract: `CallToolResult` with `content` (summary + serialised JSON) + `structuredContent` + `outputSchema` + `isError: true` on errors",
+          "class": "good",
+          "file_line": "oak-kg-threads-surface.plan.md:249-252"
+        },
+        {
+          "idea": "Fixture-based (not real-ontology) unit tests for Thread enumeration — auditing the pinned ontology belongs in a standalone validator, not the in-process test",
+          "class": "good",
+          "file_line": "oak-kg-threads-surface.plan.md:214-218"
+        },
+        {
+          "idea": "Error path coverage: unknown IRI (404-shaped), malformed IRI (validation error), ontology missing curric:Thread instance (classified error) — all routed through classify-error-response",
+          "class": "good",
+          "file_line": "oak-kg-threads-surface.plan.md:42-44,262-266"
+        },
+        {
+          "idea": "Substrate-only-via-adapter design principle: no direct ontology I/O from the resource or tool; everything routes through graph-corpus-sdk",
+          "class": "good",
+          "file_line": "oak-kg-threads-surface.plan.md:159-161"
+        },
+        {
+          "idea": "Adversarial review dispatch with three named specialists (mcp-expert, test-expert, code-expert) at WS6 with specific review mandates per specialist",
+          "class": "good",
+          "file_line": "oak-kg-threads-surface.plan.md:62-64,310-316"
+        },
+        {
+          "idea": "Park ordering: wider graph work deferred until EEF graph tool ships; resume condition is explicit",
+          "class": "good",
+          "file_line": "oak-kg-threads-surface.plan.md:73-80"
+        },
+        {
+          "idea": "WS7 spine-gate close: the body's spin-gate update instruction conflicts with the parked-plan footnote (line 65-68 vs 319-328); this inconsistency needs resolution at unpark time",
+          "class": "speculative",
+          "file_line": "oak-kg-threads-surface.plan.md:65-68,319-328"
+        },
+        {
+          "idea": "Bounded responses rationale: threads.ttl is small, per-Thread Unit lists are bounded, no pagination needed at this scale",
+          "class": "good",
+          "file_line": "oak-kg-threads-surface.plan.md:167-169"
+        },
+        {
+          "idea": "Non-goals list (lesson-graph projection, programme/unit navigator, generic IRI traverser, schema/class browser, SPARQL endpoint, forward-edge enrichment) explicitly queue future plans",
+          "class": "good",
+          "file_line": "oak-kg-threads-surface.plan.md:174-185"
+        },
+        {
+          "idea": "ADR-173 cited as 'Proposed' (not Accepted) for graph stack topology — substrate-path authority may not be settled at execution time",
+          "class": "speculative",
+          "file_line": "oak-kg-threads-surface.plan.md:350"
+        },
+        {
+          "idea": "Consolidation post-WS7: surface inverse-edge query pattern, graph-corpus-sdk Oak adapter shape, and spine-locked-name discipline as graduation candidates",
+          "class": "good",
+          "file_line": "oak-kg-threads-surface.plan.md:393-397"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": null,
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "parked",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing `id` — LOCKED required-for-all field; `plan_id: oak-kg-threads-surface` (line 4) is the emergent precursor but uses the dropped key name",
+          "file_line": "future/oak-kg-threads-surface.plan.md:4"
+        },
+        {
+          "issue": "Missing `node_type` — LOCKED required-for-all field; absent entirely",
+          "file_line": "future/oak-kg-threads-surface.plan.md:1"
+        },
+        {
+          "issue": "Missing `kind` — LOCKED required-for-all field; absent entirely; plan carries `todos` (executable shape) but is filed under `future/` (strategic folder per §3.6), making classification ambiguous",
+          "file_line": "future/oak-kg-threads-surface.plan.md:1"
+        },
+        {
+          "issue": "`plan_id` present (line 4) — V0 §2.1 drops this key; canonical replacement is `id`",
+          "file_line": "future/oak-kg-threads-surface.plan.md:4"
+        },
+        {
+          "issue": "`type: feature-workstream` (line 5) — V0 §2.5 drops `type` as a free-label; replaced by `node_type` + `kind`",
+          "file_line": "future/oak-kg-threads-surface.plan.md:5"
+        },
+        {
+          "issue": "`status: parked` (line 6) — V0 §2.5 drops `status` entirely; value `parked` does not appear in the §3.5 migration map and encodes an indefinite holding state prohibited by §3.4",
+          "file_line": "future/oak-kg-threads-surface.plan.md:6"
+        },
+        {
+          "issue": "`isProject: false` (line 23) — V0 §2.5 explicitly drops `isProject`",
+          "file_line": "future/oak-kg-threads-surface.plan.md:23"
+        },
+        {
+          "issue": "`foundation_alignment` (lines 19–22) — V0 §2.5 reconciles this as `derives_from`; the key is present under the dropped name rather than the canonical typed edge name",
+          "file_line": "future/oak-kg-threads-surface.plan.md:19"
+        },
+        {
+          "issue": "No V0 typed edges declared in frontmatter — `serves_strategic_choice`, `derives_from`, `depends_on`, `thread` all absent; `foundation_alignment` is the unrenamed precursor to `derives_from`",
+          "file_line": "future/oak-kg-threads-surface.plan.md:1"
+        },
+        {
+          "issue": "`related_indices` (line 10) — not a V0 key; `related` is V0-canonical but `related_indices` is a distinct emergent key not classified by V0",
+          "file_line": "future/oak-kg-threads-surface.plan.md:10"
+        }
+      ],
+      "unclassified_keys": [
+        "namespace",
+        "related_indices",
+        "adr_amendments_required"
+      ],
+      "locked_contradictions": [
+        {
+          "item": "`status: parked` encodes an indefinite holding state with no `gate.expires`, no named `clears_when`, and no `depends_on` blocking edge — directly contradicting LOCKED §3.4 ('There is no open-ended paused state'; a gate with no expiry is invalid; work is either a live deliverable with a named expiring gate, or it is disposed by owner decision). The body text (lines 72–91) confirms the parked state is indefinite: 'revisit after finishing-plan D7' with no date.",
+          "evidence": "Body line 72: '⏸️ PARKED 2026-06-02 — spine scaffold retired. Wider graph work is undefined until the first proper graph tool (EEF) ships'; no `gate.expires` field present; §3.4 is LOCKED.",
+          "file_line": "future/oak-kg-threads-surface.plan.md:6"
+        }
+      ],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "The plan header namespace field (line 8) and the design-principles section (line 156) still use `oak-kg-*` as the locked namespace, but the park notice (lines 86-89) explicitly supersedes these with `onto-*` names per ADR-157 (2026-06-04): `curriculum://onto-threads` and `onto-get-thread-content`. The body's 'Spine-locked names' principle (line 156-158) forbids renaming without a spine amendment, yet the park notice directs a rename-at-build-time under a migrate-on-touch rule. This creates an architectural conflict: the plan's own governing principle contradicts the park-notice instruction, with no resolution recorded.",
+          "file_line": "8, 86-89, 156-158"
+        },
+        {
+          "severity": "high",
+          "claim": "The plan's WS7 acceptance record todo (lines 66-68) and the WS7 body section (lines 319-327) diverge on the closure action. The todo says 'the MVP-arc spine is retired — there is no live gate-2-threads-ships todo to update; record acceptance evidence in the thread next-session record.' The body says 'Update spine graph-mvp-arc.plan.md gate-2-threads-ships todo to completed.' The spine is described as 'quarantined' in the Dependencies section (line 385). One of these is wrong; the WS7 body records a structural action that is already admitted to be a no-op.",
+          "file_line": "66-68, 319-327, 385"
+        },
+        {
+          "severity": "medium",
+          "claim": "ADR-173 is cited as the substrate topology authority (lines 89, 165, 351) but is listed as status 'Proposed', not Accepted. The plan proceeds as though the TTL-to-substrate ingestion path is settled, but a Proposed ADR is still subject to revision. If ADR-173 is rejected or amended, the substrate boundary design (principle 2, line 160-163) and all cycle-2.1 adapter call assumptions become undefined.",
+          "file_line": "89, 165, 351"
+        },
+        {
+          "severity": "medium",
+          "claim": "Principle 4 (lines 168-170) asserts `threads.ttl` is small and per-Thread Unit lists are bounded, with no pagination needed at this scale. No quantitative bound is cited (number of threads, max units-per-thread). If the ontology grows or the inverse-edge query fans out unexpectedly, the no-pagination assumption becomes a latent architectural ceiling with no governed review trigger.",
+          "file_line": "168-170"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan references `graph-corpus-sdk` as the exclusive adapter abstraction (lines 131-133, 162-163) but `graph-corpus-sdk` does not appear as a workspace package in any referenced path — all cited file paths resolve to `packages/sdks/oak-curriculum-sdk`. If `graph-corpus-sdk` is a separate package, the inter-package dependency boundary is not defined within this plan; if it is an internal module alias, the naming creates misleading plan-to-code traceability.",
+          "file_line": "131-133, 162-163"
+        },
+        {
+          "severity": "low",
+          "claim": "The MCP envelope contract for tool call results (lines 249-252) specifies `structuredContent` carrying the Thread/Unit payload and a declared `outputSchema`. The `outputSchema` field is an extension not in the base MCP 2025-03-26 spec; the plan does not cite which spec revision or SDK version introduced it, nor whether `mcp-expert` review at WS6 covers that conformance gap before ADR-123 records it as canonical.",
+          "file_line": "249-252, 296-298"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan is correctly filed under future/ and is status parked. The park notice is substantive — it names the concrete unblock condition (EEF graph tool shipping) and preserves the two key carry-forward architectural insights (inverse-edge primitive design and onto-* naming convention). The substance is not stale; it is a valid deferred slice of the graph-surface architecture.",
+          "file_line": "73-91"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": [
+        {
+          "claim": "Tool/resource names `curriculum://oak-kg-threads` and `oak-kg-get-thread-content` are 'locked' by the spine (cited at oak-kg-threads-surface.plan.md:119-121)",
+          "verdict": "uncertain",
+          "confidence": "high",
+          "evidence": "oak-kg-threads-surface.plan.md:119-121 (\"Tool/resource names are **locked** by the spine — they're named in the MVP-arc spine and any rename requires a spine amendment\"); CONTRADICTED by lines 84-91 PARKED header and lines 73-80"
+        },
+        {
+          "claim": "The spine (`graph-mvp-arc.plan.md`) is 'quarantined' — the spine-naming lock is name-discipline only, not a live gating contract",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "oak-kg-threads-surface.plan.md:386 (\"coordination spine (quarantined)\"); :76 (\"the MVP-arc spine that scaffolded this slice is quarantined\"); :125-126 (\"the lock is a spine-naming discipline, not a downstream-composition dependency\"); :78-79 (\"retired scaffold, not a live sequencing contract\"); :66 (\"the MVP-arc spine is retired ... This does not gate any cross-corpus tool\")"
+        },
+        {
+          "claim": "ADR-157 (2026-06-04) supersedes the `oak-kg-*` names with `onto-*` prefix convention; body uses old names with migrate-on-touch rule",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "oak-kg-threads-surface.plan.md:85-89 (\"the surface ships under the **`onto-*` source-prefix convention** (ADR-157, 2026-06-04): `curriculum://onto-threads` (resource) and `onto-get-thread-content` (tool) — superseding the retired spine's `oak-kg-*` names still used in the body below (rename at build time, per the convention's migrate-on-touch rule)\"); body still uses old names at :97-98, :116-117, :156-157; ADR file 157-multi-source-open-education-integration.md exists"
+        },
+        {
+          "claim": "WS7 references updating `gate-2-threads-ships` in the spine, but footnote in the body corrects this to record in next-session instead since the spine is retired",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "oak-kg-threads-surface.plan.md:65-68 (frontmatter WS7 todo: \"the MVP-arc spine is retired — there is no live `gate-2-threads-ships` todo to update; record acceptance evidence ... in the thread next-session record instead\") contradicts oak-kg-threads-surface.plan.md:319-328 (body \"WS7 — Spine gate-2 close\": \"Update spine graph-mvp-arc.plan.md `gate-2-threads-ships` todo to `completed`\")"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/connecting-oak-resources/knowledge-graph-integration/future/oak-misconceptions-graph-features.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Consolidated park of four source plans, each archived with a pointer back here — losing this loses the only live copy of their design substance",
+          "file_line": "file:24-27"
+        },
+        {
+          "claim": "Boundary note 2026-06-04 is an in-place amendment that correctly re-homes §1 — the plan is still the authority on §2-§4",
+          "file_line": "file:29-39"
+        },
+        {
+          "claim": "Sequencing section (§Sequencing) encodes internal ordering rationale not repeated elsewhere",
+          "file_line": "file:152-159"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan carries specific, actionable design contracts: named tool identifiers (file:64-65), fixture-manifest schema and selection rule (file:72-80), substrate-only principle (file:107-111), structurally well-formed empty response contract (file:112-115), and explicit prerequisite dependency chain (file:124-128). §3 and §4 are thinner (open questions only) but correctly scoped as placeholders pending upstream proof. No invented scope or speculation beyond what the problem space warrants.",
+      "content_quality": "strong",
+      "content_quality_note": "The §1 and §2 carry-forward substance sections (file:61-92, file:99-128) contain precise, implementer-ready contracts: tool names, manifest schemas with exact field types and bucket sizes, substrate-isolation discipline, empty-result behaviour, and retired-item tagging. The park rationale and boundary note (file:15-39) are clear and internally consistent. §3 and §4 are weak individually but correctly minimal given their gating conditions.",
+      "salvage_value": [
+        {
+          "idea": "Tool name oak-misconceptions-subgraph-for-thread (and optional -for-unit) as strong prior art for the value-redesign plan",
+          "class": "good",
+          "file_line": "file:64-65"
+        },
+        {
+          "idea": "Bounded-traversal contract: Thread IRI + bound parameter yields bounded sub-graph; bound exposed to callers; default derived empirically from committed fixture data",
+          "class": "good",
+          "file_line": "file:67-71"
+        },
+        {
+          "idea": "Fixture-manifest selection scheme: 20-context manifest with exact schema and 5-high/5-median/5-low/5-zero bucket rule, deterministic sort and fill discipline",
+          "class": "good",
+          "file_line": "file:72-80"
+        },
+        {
+          "idea": "_meta legacy-substrate disclosure discipline: tool declares its interim substrate explicitly in _meta with a pointer to the migration owner and ADR reference",
+          "class": "good",
+          "file_line": "file:81-87"
+        },
+        {
+          "idea": "Retirement of maxResponseTokens=16000 cap with explicit requirement to re-derive bound sizing against EEF tool response-budget posture",
+          "class": "good",
+          "file_line": "file:88-92"
+        },
+        {
+          "idea": "Tool name oak-misconceptions-eef-recommend-for-thread with compound-prefix naming convention for dual-corpus source attribution",
+          "class": "good",
+          "file_line": "file:103-105"
+        },
+        {
+          "idea": "Substrate-only principle: both corpora flow through graph-corpus-sdk; tool never imports legacy factory or calls other MCP tools at runtime",
+          "class": "good",
+          "file_line": "file:107-111"
+        },
+        {
+          "idea": "Structurally well-formed empty responses: compound response holds its shape when either corpus is empty, using the same projection code path",
+          "class": "good",
+          "file_line": "file:112-115"
+        },
+        {
+          "idea": "10-context fixture manifest for cross-corpus composition: Thread IRIs where both corpora have content, selected by descending combined coverage",
+          "class": "good",
+          "file_line": "file:116-118"
+        },
+        {
+          "idea": "Cross-corpus join prerequisite: node-id policy for heterogeneous node/edge model must be settled by value-redesign plan before §2 can proceed",
+          "class": "good",
+          "file_line": "file:124-128"
+        },
+        {
+          "idea": "Topic extraction (§3): free-text topic string resolution to curriculum IRIs as a distinct deferred problem, sequenced after bounded extraction proves the surface",
+          "class": "speculative",
+          "file_line": "file:132-139"
+        },
+        {
+          "idea": "Extended contexts (§4): cross-corpus sequencing beyond Thread IRI (unit, lesson, content descriptor), demand-gated after Thread IRI cross-corpus surface ships",
+          "class": "speculative",
+          "file_line": "file:141-151"
+        },
+        {
+          "idea": "Internal sequencing rationale: bounded extraction first (blocking primitive), cross-corpus composition second, topic and extended contexts on evidenced demand",
+          "class": "good",
+          "file_line": "file:152-159"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "parked",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "id absent — V0 LOCKED required field for all plans; plan_id (line 5) is the emergent variant V0 renames to id (§2.1)",
+          "file_line": "oak-misconceptions-graph-features.plan.md:5"
+        },
+        {
+          "issue": "node_type absent — V0 LOCKED required field (literal \"plan\") for all plans (§2.1)",
+          "file_line": "oak-misconceptions-graph-features.plan.md:1"
+        },
+        {
+          "issue": "kind absent — V0 LOCKED required field for all plans; type: strategic (line 6) is the dropped free-label V0 replaces with kind (§2.2, §2.5)",
+          "file_line": "oak-misconceptions-graph-features.plan.md:6"
+        },
+        {
+          "issue": "last_updated absent — V0 LOCKED required field; date: 2026-06-02 (line 10) is the emergent drift key V0 folds into last_updated (§2.4)",
+          "file_line": "oak-misconceptions-graph-features.plan.md:10"
+        },
+        {
+          "issue": "status: parked — V0 §2.5 drops status entirely; parked is not in the V0 §3.5 migration map and does not map to any V0 axis without interpretation. Body evidence (line 20) indicates a blocking dependency on eef-graph-tool-completion.plan.md, which V0 maps to depends_on with kind: blocking (§3.5, §4), not a status value",
+          "file_line": "oak-misconceptions-graph-features.plan.md:7"
+        },
+        {
+          "issue": "type: strategic — V0 §2.5 drops type as free-label (49 census); domain/kind information moves to kind (§2.1, §2.5)",
+          "file_line": "oak-misconceptions-graph-features.plan.md:6"
+        },
+        {
+          "issue": "isProject: false — V0 §2.5 explicitly drops isProject (107 / 250 census); subsumed by projects_to edge",
+          "file_line": "oak-misconceptions-graph-features.plan.md:11"
+        },
+        {
+          "issue": "plan_id key used instead of V0 canonical id (§2.1); plan_id is the emergent variant counted as 11 first-hand occurrences in the census",
+          "file_line": "oak-misconceptions-graph-features.plan.md:5"
+        },
+        {
+          "issue": "date key used instead of V0 canonical last_updated; date is emergent housekeeping drift V0 §2.4 folds into last_updated",
+          "file_line": "oak-misconceptions-graph-features.plan.md:10"
+        },
+        {
+          "issue": "No typed edges present — serves_strategic_choice absent on a strategic plan (recommended per §2.3); depends_on absent despite body describing a blocking dependency on eef-graph-tool-completion.plan.md (line 20)",
+          "file_line": "oak-misconceptions-graph-features.plan.md:1-11"
+        }
+      ],
+      "unclassified_keys": [
+        "namespace"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "Plan correctly identifies a blocking architectural dependency: §2 (EEF cross-corpus composition) cannot proceed until the value-redesign plan settles the heterogeneous node/edge model and cross-kind node-id policy. This is an explicit, named prerequisite, not a vague sequencing note.",
+          "file_line": "oak-misconceptions-graph-features.plan.md:126-128"
+        },
+        {
+          "severity": "medium",
+          "claim": "The ADR reference for `_meta` legacy-substrate disclosure discipline cites 'ADR-123' (line 86). This is a concrete load-bearing architecture decision reference embedded in carry-forward substance. If ADR-123 does not exist in the ADR estate, the substrate-disclosure contract for interim tools has no durable home and the migration handoff signal is unverifiable.",
+          "file_line": "oak-misconceptions-graph-features.plan.md:85-87"
+        },
+        {
+          "severity": "medium",
+          "claim": "The EEF cross-corpus composition section (§2) references 'ADR-157 explicit-source-attribution discipline' (line 105) as the authority for the compound tool-name convention. If ADR-157 does not exist, the naming rationale and citation-envelope contract for per-response EEF strand ID + misconception IRI attribution has no permanent home.",
+          "file_line": "oak-misconceptions-graph-features.plan.md:104-106"
+        },
+        {
+          "severity": "low",
+          "claim": "The bound-default sizing discipline was explicitly retired (line 88-91): the `maxResponseTokens = 16000` cap was discarded and re-derivation is deferred to 'whatever response-budget posture the finished EEF tool establishes'. This leaves the bounded-traversal default without a concrete sizing method until D7 lands, meaning the carry-forward contract is partially open-ended at the critical sub-graph shape decision.",
+          "file_line": "oak-misconceptions-graph-features.plan.md:88-93"
+        },
+        {
+          "severity": "low",
+          "claim": "The 'substrate-only principle' for §2 (line 107-111) states that non-trivial composition logic in the tool body signals a leaking cross-corpus join primitive. This is a sound architectural boundary, but the cross-corpus join primitive itself is not yet designed — its ownership and home are not named in this plan or the referenced redesign plan link. The abstraction is declared without a named home.",
+          "file_line": "oak-misconceptions-graph-features.plan.md:107-112"
+        },
+        {
+          "severity": "info",
+          "claim": "The fixture-manifest selection scheme for §1 (lines 74-82) is architecturally precise: a deterministic 20-context manifest with bucket fill rules and IRI lexical tie-breaks. This level of specification is unusually complete for a parked future plan and serves as stable prior art for the value-redesign plan.",
+          "file_line": "oak-misconceptions-graph-features.plan.md:74-82"
+        },
+        {
+          "severity": "info",
+          "claim": "§3 (topic extraction) and §4 (extended contexts) are intentionally design-open, with no architecture contracts preserved beyond problem statements. Both are correctly gated on evidenced demand after their parent features ship. No architectural gap here — the open-question preservation is deliberate.",
+          "file_line": "oak-misconceptions-graph-features.plan.md:132-152"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    }
+  ]
+}
