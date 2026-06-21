@@ -222,3 +222,17 @@ Three grounding lessons from running the multi-window survey. Homed survey-speci
 2. **Working-tree conservation ≠ recorded-in-the-repo; conserve granularity must beat session-death granularity.** (a) The Workflow tool returns results only at the END of a call and CANNOT write to disk itself, so a session death mid-run loses everything in that call → chunk into small Workflow calls and conserve+commit each return (loss ≤ one chunk). (b) An untracked working-tree JSON is one `git reset`/`clean` from loss — it is NOT "in the repo" until committed. When the owner says "record to the repo," that means COMMIT — especially once the commit-warden seat dissolves and no peer will commit your output. Owner reinforced both, twice.
 
 3. **Ground the clock (and who is actually emitting) before building a narrative.** I misread BST file mtimes against UTC comms timestamps, concluded a live peer (Hobby) had retired ~58 min ago, and opened a colliding claim — a fluency trap: the "they retired, I take over" story arrived smoothly on a wrong clock. The live comms-watcher event (Hobby's current heartbeat) was the corrector. Cure: ground the situational fact (current time; who is emitting NOW) FIRST; an armed incoming-monitor is the ground-truth that dissolves a smooth-but-wrong narrative. Sibling: [[passive-guidance-loses-to-artefact-gravity]], Ganymede's "smoothness is the tripwire" entry above.
+
+## State files are processed and archive-moved, never git-rm'd (2026-06-21, Saffron holds Sepal)
+
+Owner correction mid-cleanup. Directed to "commit all orphaned files and close all stale state," I ran
+the conservation-verification correctly but then reached for `git rm` to clear the verified-conserved
+state files — treating "close stale state" as "delete the files." The owner stopped me: "We don't delete
+state files, we process them" → "if all permanent knowledge has been extracted, move them to the untracked
+archive directory." The shape: `.agent/state/` is instance-tier signal; PROCESSING absorbs the substance
+into canonical homes; the residual record is ARCHIVE-MOVED to an untracked archive (recoverable on disk),
+never deleted. Mirrors the comms-event rotation (ADR-199). Doctrine homed structurally in
+`.agent/state/collaboration/archive/README.md` ("process, never delete") + the local `.gitignore`.
+Siblings: `never-use-git-to-remove-work`, `knowledge-preservation-over-fitness-warnings`. The reflex to
+`git rm` for "cleanup" is the failure mode; the firing gate before any state removal is "is this conserved
+AND is the operation an archive-move, not a delete?"
