@@ -1,49 +1,82 @@
-import { resolveRootFromDir } from '../core/repo-root.js';
+import { execFileSync } from 'node:child_process';
 
-/**
- * Sentinel marking the repository's collaboration-state home: the directory
- * tree that holds claims, comms, and the commit queue. The coordination home
- * is the directory that CONTAINS this path.
- */
-export const COLLABORATION_HOME_SENTINEL = '.agent/state/collaboration';
+/** Runs a git subcommand from `cwd` and returns stdout; throws on non-zero exit. */
+export type GitRunner = (args: readonly string[], cwd: string) => string;
 
 /** Injectable seams for {@link resolveCoordinationHome}. */
 export interface ResolveCoordinationHomeOptions {
-  /** Filesystem-existence probe. Defaults to `node:fs` `existsSync`. */
-  readonly exists?: (path: string) => boolean;
+  /**
+   * Git runner seam. Defaults to invoking the real `git` binary. Injected in
+   * tests so the resolution is exercised without a real repository.
+   */
+  readonly runGit?: GitRunner;
 }
 
+const defaultRunGit: GitRunner = (args, cwd) =>
+  execFileSync('git', [...args], { cwd, encoding: 'utf8' });
+
 /**
- * Resolve the repository-root-anchored coordination home — the directory that
- * contains `.agent/state/collaboration` — by walking up from `cwd`.
+ * Resolve the coordination home: the **primary (main) checkout** for whatever
+ * repository `cwd` sits in.
  *
- * This is the single coordination-home resolver for the collaboration-state
- * CLI. It composes the shared {@link resolveRootFromDir} walk primitive with
- * the collaboration sentinel, inheriting that primitive's loud-refusal
- * contract: when no ancestor of `cwd` contains the sentinel it THROWS rather
- * than falling back to `cwd`. The fallback was the F-41 corruption vector — a
- * stale or worktree cwd would otherwise create a fresh, wrong registry and a
- * collaboration write would land there behind a green success token.
+ * The problem this solves is not "find a repo root" — it is "from any worktree
+ * on this machine, resolve the ONE shared location every other worktree also
+ * resolves to, so comms / claims / the commit queue land in a single place and
+ * the agents can see each other." Each linked worktree has its own working-tree
+ * copy of `.agent/state/collaboration/`; resolving locally makes worktree seats
+ * invisible to one another (friction F-41). The answer is git-native: every
+ * worktree shares one repository, and `git worktree list --porcelain` lists the
+ * main worktree first, so its path is the shared home regardless of which
+ * worktree `cwd` is in. A standalone clone is the degenerate case (it is its own
+ * primary). This is the cure named in the F-41 register entry ("resolve the
+ * coordination home across worktrees, e.g. via the git common dir") and aligns
+ * with ADR-197 (one checkout owns shared registry state); callers keep the
+ * explicit `--repo-root` override as the escape hatch.
  *
- * ADR-197 (coordination-home owns registry state) names this exact hazard as a
- * standing cost: "an unparameterised call silently writes to the wrong
- * checkout's copy." The ADR-mandated targeting — an explicit `--repo-root` (or
- * absolute `--comms-dir`/`--active`) resolved at session open — short-circuits
- * this resolver in the callers; this resolver hardens the *unparameterised*
- * fallback from a silent wrong-write into a loud refusal.
+ * Resolution is per machine: across machines the collaboration filesystem is not
+ * shared at all, so cross-machine coordination is a separate concern. No
+ * machine-local path is baked in — the home is discovered via git at call time.
  *
- * @param cwd - the directory to begin the upward walk from (typically
- *   `process.cwd()` at the composition edge, or a runtime-injected value).
- * @param options - the existence-probe seam.
- * @throws when no ancestor of `cwd` contains the collaboration sentinel.
+ * @param cwd - the directory git resolution runs from (typically `process.cwd()`
+ *   at the composition edge, or a runtime-injected value).
+ * @param options - the git-runner seam.
+ * @throws when `cwd` is not inside a git working tree, or git reports no
+ *   worktree — refusing loudly rather than silently writing to a wrong location.
  */
 export function resolveCoordinationHome(
   cwd: string,
   options: ResolveCoordinationHomeOptions = {},
 ): string {
-  return resolveRootFromDir(cwd, {
-    sentinel: COLLABORATION_HOME_SENTINEL,
-    description: 'the collaboration home',
-    ...(options.exists === undefined ? {} : { exists: options.exists }),
-  });
+  const runGit = options.runGit ?? defaultRunGit;
+
+  let porcelain: string;
+  try {
+    porcelain = runGit(['worktree', 'list', '--porcelain'], cwd);
+  } catch (cause) {
+    throw new Error(
+      `Unable to resolve the collaboration home: '${cwd}' is not inside a git working tree. ` +
+        `Run from inside the repository, or pass an explicit --repo-root <path>.`,
+      { cause },
+    );
+  }
+
+  const primary = firstWorktreePath(porcelain);
+  if (primary === undefined) {
+    throw new Error(
+      `Unable to resolve the collaboration home: 'git worktree list' returned no worktree for '${cwd}'.`,
+    );
+  }
+  return primary;
+}
+
+const WORKTREE_LINE_PREFIX = 'worktree ';
+
+/** The first `worktree <path>` line of `git worktree list --porcelain` is the main worktree. */
+function firstWorktreePath(porcelain: string): string | undefined {
+  for (const line of porcelain.split('\n')) {
+    if (line.startsWith(WORKTREE_LINE_PREFIX)) {
+      return line.slice(WORKTREE_LINE_PREFIX.length).trimEnd();
+    }
+  }
+  return undefined;
 }

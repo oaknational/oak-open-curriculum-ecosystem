@@ -1,45 +1,54 @@
-import { resolve } from 'node:path';
-
 import { describe, expect, it } from 'vitest';
 
-import { COLLABORATION_HOME_SENTINEL, resolveCoordinationHome } from './coordination-home.js';
+import { type GitRunner, resolveCoordinationHome } from './coordination-home.js';
 
-// The coordination home is the directory that CONTAINS
-// `.agent/state/collaboration`. The fake `exists` reports the sentinel present
-// only beneath `/repo`, exercising the walk-up without touching real IO.
-const repoRoot = '/repo';
-const sentinelPath = resolve(repoRoot, COLLABORATION_HOME_SENTINEL);
-const existsAtRepoRoot = (path: string): boolean => path === sentinelPath;
+const PRIMARY = '/Users/dev/oak';
+const LINKED = '/Users/dev/oak-worktrees/feature';
+
+// `git worktree list --porcelain` lists the main worktree FIRST, then each
+// linked worktree, regardless of which worktree the command runs from.
+function porcelain(...roots: readonly string[]): string {
+  return roots
+    .map((root, i) => `worktree ${root}\nHEAD ${'0'.repeat(40)}\nbranch refs/heads/wt-${i}\n`)
+    .join('\n');
+}
+
+const gitReturning =
+  (output: string): GitRunner =>
+  () =>
+    output;
 
 describe('resolveCoordinationHome', () => {
-  it('returns the directory that contains the collaboration sentinel', () => {
-    expect(resolveCoordinationHome(repoRoot, { exists: existsAtRepoRoot })).toBe(repoRoot);
+  it('returns the primary checkout for a single-worktree repo', () => {
+    expect(resolveCoordinationHome(PRIMARY, { runGit: gitReturning(porcelain(PRIMARY)) })).toBe(
+      PRIMARY,
+    );
   });
 
-  it('walks up from a nested cwd to the sentinel-bearing home', () => {
+  it('resolves the PRIMARY checkout from inside a linked worktree (the shared home)', () => {
+    // The F-41-dissolving behaviour: an agent in a linked worktree must resolve
+    // the same shared home as every other worktree — the primary, never its own
+    // local copy. git lists the primary first whatever cwd we pass.
     expect(
-      resolveCoordinationHome('/repo/agent-tools/src/collaboration-state', {
-        exists: existsAtRepoRoot,
-      }),
-    ).toBe(repoRoot);
+      resolveCoordinationHome(LINKED, { runGit: gitReturning(porcelain(PRIMARY, LINKED)) }),
+    ).toBe(PRIMARY);
   });
 
-  it('throws loudly when no ancestor contains the collaboration sentinel (F-41 stale/worktree cwd)', () => {
-    // The regression guard for F-41: a stale or worktree cwd with no
-    // `.agent/state/collaboration` ancestor must NOT silently resolve to the
-    // cwd (which would create a fresh, wrong registry behind a green write
-    // token) — it must refuse loudly.
-    expect(() => resolveCoordinationHome('/tmp/worktree', { exists: () => false })).toThrow(
+  it('throws loudly when cwd is not inside a git working tree (F-41 stale/worktree cwd)', () => {
+    const gitFails: GitRunner = () => {
+      throw new Error('fatal: not a git repository');
+    };
+    expect(() => resolveCoordinationHome('/tmp/elsewhere', { runGit: gitFails })).toThrow(
       /Unable to resolve the collaboration home/u,
     );
+    expect(() => resolveCoordinationHome('/tmp/elsewhere', { runGit: gitFails })).toThrow(
+      /\/tmp\/elsewhere/u,
+    );
   });
 
-  it('names the offending cwd and the sentinel in the refusal', () => {
-    expect(() => resolveCoordinationHome('/tmp/worktree', { exists: () => false })).toThrow(
-      /\/tmp\/worktree/u,
-    );
-    expect(() => resolveCoordinationHome('/tmp/worktree', { exists: () => false })).toThrow(
-      new RegExp(COLLABORATION_HOME_SENTINEL.replaceAll('/', '\\/'), 'u'),
+  it('throws when git reports no worktree at all', () => {
+    expect(() => resolveCoordinationHome(PRIMARY, { runGit: gitReturning('') })).toThrow(
+      /returned no worktree/u,
     );
   });
 });

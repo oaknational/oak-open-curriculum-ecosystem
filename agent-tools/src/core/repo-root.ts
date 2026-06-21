@@ -19,40 +19,12 @@ export interface ResolveRepoRootOptions {
   readonly exists?: (path: string) => boolean;
 }
 
-/** Injectable seams for {@link resolveRootFromDir}. */
-export interface ResolveRootFromDirOptions {
-  /** A path that exists only at the root being resolved. */
-  readonly sentinel?: string;
-  /** Filesystem-existence probe. Defaults to `node:fs` `existsSync`. */
-  readonly exists?: (path: string) => boolean;
-  /**
-   * Noun phrase completing the not-found error `Unable to resolve ___:` — e.g.
-   * `"the collaboration home"`. Must read naturally in that slot. Lets a domain
-   * caller surface an actionable message without re-implementing the walk.
-   * Defaults to `"repository root"`.
-   */
-  readonly description?: string;
-}
-
-/**
- * Ascend from `startDir` until a directory containing `sentinel` is found,
- * throwing when no ancestor contains it. This is the shared walk primitive:
- * it never falls back to `startDir` on failure, so a caller can never silently
- * resolve to the wrong directory (the F-41 corruption vector). Callers that
- * need a domain-specific home (e.g. the collaboration-state home) compose this
- * with their own sentinel rather than re-implementing the loop.
- *
- * @param startDir - the directory to begin the upward walk from.
- * @param options - sentinel, existence-probe, and error-description seams.
- * @throws when no ancestor directory contains the sentinel.
- */
-export function resolveRootFromDir(
+/** Ascend from `startDir` until a directory containing `sentinel` is found. */
+function walkUpToSentinel(
   startDir: string,
-  options: ResolveRootFromDirOptions = {},
+  sentinel: string,
+  exists: (path: string) => boolean,
 ): string {
-  const sentinel = options.sentinel ?? DEFAULT_REPO_ROOT_SENTINEL;
-  const exists = options.exists ?? existsSync;
-  const description = options.description ?? 'repository root';
   let dir = startDir;
   for (;;) {
     if (exists(resolve(dir, sentinel))) {
@@ -61,7 +33,7 @@ export function resolveRootFromDir(
     const parent = dirname(dir);
     if (parent === dir) {
       throw new Error(
-        `Unable to resolve ${description}: sentinel '${sentinel}' not found in any ancestor of '${startDir}'.`,
+        `Unable to resolve repository root: sentinel '${sentinel}' not found in any ancestor of '${startDir}'.`,
       );
     }
     dir = parent;
@@ -99,5 +71,5 @@ export function resolveRepoRoot(fromUrl: string, options: ResolveRepoRootOptions
     return projectDir;
   }
 
-  return resolveRootFromDir(dirname(fileURLToPath(fromUrl)), { sentinel, exists });
+  return walkUpToSentinel(dirname(fileURLToPath(fromUrl)), sentinel, exists);
 }
