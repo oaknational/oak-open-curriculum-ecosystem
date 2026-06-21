@@ -83,6 +83,23 @@ sufficient to bring all workspaces into alignment.
 Use [schema-first-execution.md](./schema-first-execution.md) for the
 non-negotiable runtime and generator contract.
 
+## Orientation Requests
+
+When someone asks you to **explain or introduce this repository**, route to
+the orientation skills rather than improvising — both are platform-agnostic
+and read the live docs at answer time:
+
+- *"Explain this repo", "tell me about this repo", "what is this", "give me an
+  overview", "executive summary"* → the **`explain-repo`** skill: a direct,
+  synthesised executive briefing, no setup and no interaction.
+- *"Onboard me", "where do I start", "give me a tour", "set me up", "help me
+  contribute"* → the **`onboard-me`** skill: an interactive, paced
+  walkthrough that detects machine state and guides hands-on setup.
+
+On a loader platform invoke the skill (`/oak-explain-repo`,
+`/oak-onboard-me`); on a non-loader platform read and follow the canonical
+`.agent/skills/<name>/SKILL-CANONICAL.md`.
+
 ## Project Context
 
 This repository contains libraries, SDKs, MCP servers, search services, and
