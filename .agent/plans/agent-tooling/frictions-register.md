@@ -1813,6 +1813,92 @@ below is a cross-reference index, not a second source of truth.
 
 ---
 
+### F-76 — Heartbeat mode still requires `--title`, but the help text implies it does not
+
+- **Source**: Vesuvius calls Quench (`92cefc`), 2026-06-21 director session.
+- **Surface**: `agent-tools collaboration-state comms append --tag heartbeat`.
+- **Observed**: The heartbeat-mode help reads "the body is composed from typed state args instead
+  … and `--claim-id` `--intent-id` `--branch` `--current-cycle-label` are required" but does NOT
+  name `--title`. First heartbeat attempt with all four typed args failed `Error: missing required
+  option --title`.
+- **Expected**: Either auto-compose the title in heartbeat mode (the `liveness-heartbeat-cron` rule
+  already fixes the exact subject format `Heartbeat: <agent_name> (<prefix>) — <lane>`, derivable
+  from identity + `--current-cycle-label`), or name `--title` as required in the heartbeat-mode help
+  clause.
+- **Candidate cure**: Auto-derive the heartbeat title from identity + cycle label when `--title` is
+  omitted in heartbeat mode (removes a redundant arg AND guarantees the canonical format).
+- **Target surface**: `agent-tools/src/collaboration-state/cli-comms-commands.ts`.
+- **Status**: open.
+- **Owner direction status**: standing (record-all-frictions, owner 2026-06-21).
+
+### F-77 — `comms reply` cannot reference a broadcast/narrative event; no way to set `in_response_to` on an `append`
+
+- **Source**: Vesuvius calls Quench (`92cefc`), 2026-06-21 director session.
+- **Surface**: `agent-tools collaboration-state comms reply` / `comms append`.
+- **Observed**: PDR-064 Moment 2 (coordinator active-acknowledgement) should reference the Moment-1
+  pre-positioning event via `in_response_to`. The pre-positioning is a `narrative` broadcast, but
+  `comms reply --to-event-id <broadcast-id>` failed `directed message not found` — `reply` only
+  resolves `directed` events. There is no `--in-response-to` option on `comms append`, so a
+  broadcast acknowledgement can only reference its antecedent in prose (title/body), losing the
+  machine-readable edge.
+- **Expected**: A clean way to set `in_response_to` when acknowledging a broadcast — either let
+  `comms reply` reference any event kind, or add `--in-response-to <id>` to `comms append`.
+- **Candidate cure**: Add `--in-response-to <id>` to `comms append` (broadest fix; serves PDR-064
+  Moment 2 and any broadcast→broadcast threading).
+- **Target surface**: `agent-tools/src/collaboration-state/cli-comms-commands.ts`; interacts with
+  PDR-064.
+- **Status**: open.
+- **Owner direction status**: standing (record-all-frictions, owner 2026-06-21).
+
+### F-78 — `check-commit-message` is not an `agent-tools` subcommand; only reachable via the pnpm script
+
+- **Source**: Vesuvius calls Quench (`92cefc`), 2026-06-21 director session.
+- **Surface**: `agent-tools` CLI vs `pnpm agent-tools:check-commit-message`.
+- **Observed**: `node agent-tools/dist/src/bin/agent-tools.js check-commit-message …` fails
+  `unknown topic: check-commit-message`. The message check is reachable only via the separate
+  `pnpm agent-tools:check-commit-message` script (a `tsx` invocation of
+  `agent-tools/src/commit-advisories/check-commit-message.ts`). Every other check used this session
+  (`collaboration-state`, `commit-queue`) is an `agent-tools` subcommand, so the inconsistency is a
+  discoverability trap.
+- **Expected**: `check-commit-message` reachable as an `agent-tools` subcommand (consistent surface),
+  or the commit skill clearly stating it is pnpm-script-only.
+- **Candidate cure**: Register `check-commit-message` (and the advisories orchestrator) as
+  `agent-tools` subcommands alongside `commit-queue`.
+- **Target surface**: `agent-tools/src/bin/agent-tools.ts` topic registry.
+- **Status**: open.
+- **Owner direction status**: standing (record-all-frictions, owner 2026-06-21).
+
+### F-79 — `comms list` rejects `--now`; option surface inconsistent across comms subcommands
+
+- **Source**: Vesuvius calls Quench (`92cefc`), 2026-06-21 director session.
+- **Surface**: `agent-tools collaboration-state comms list`.
+- **Observed**: `comms list --now <iso>` failed `unknown option for comms list: --now`, although
+  `--now` is required on `comms append`/`reply`. An agent carrying a `$NOW` from prior comms calls
+  naturally passes it and hits a hard error on a read-only command.
+- **Expected**: Read-only subcommands accept-and-ignore `--now` (or the option surface is documented
+  per-subcommand at a glance).
+- **Candidate cure**: Accept-and-ignore `--now` on read-only comms subcommands; composes with F-09
+  (full help on invalid flag).
+- **Target surface**: `agent-tools/src/collaboration-state/cli-comms-commands.ts`.
+- **Status**: open.
+- **Owner direction status**: standing (record-all-frictions, owner 2026-06-21).
+
+### F-80 — `comms show` needs `--event-id <id>`, not a positional id, while `comms list` prints bare ids
+
+- **Source**: Vesuvius calls Quench (`92cefc`), 2026-06-21 director session.
+- **Surface**: `agent-tools collaboration-state comms show`.
+- **Observed**: `comms list` prints bare event ids per line, inviting `comms show <id>`, but
+  `comms show <id>` fails `unknown argument: <id>` — the id must be passed as `--event-id <id>`.
+  Small but a repeated stumble when triaging events from a `list` output.
+- **Expected**: `comms show` accepts a positional event-id (the obvious shape given `list`'s output),
+  or errors with "did you mean --event-id?".
+- **Candidate cure**: Accept a positional event-id on `comms show` as an alias for `--event-id`.
+- **Target surface**: `agent-tools/src/collaboration-state/cli-comms-commands.ts`.
+- **Status**: open.
+- **Owner direction status**: standing (record-all-frictions, owner 2026-06-21).
+
+---
+
 ## Mitigated / Addressed Frictions
 
 - F-03 — addressed by current CLI validation ordering.
