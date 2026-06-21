@@ -1,8 +1,24 @@
 # Deep Plan-Estate Survey — Coverage Ledger (living)
 
-## ▶ WINDOW STATE (live, 2026-06-21 ~19:15 UTC)
+## ▶ WINDOW STATE (live, 2026-06-21 ~21:10 UTC)
 
-**Survey RUNNING (window 2) — n=2 team.** Cosmos calls Infinity (`9888f9`, orchestrator claim
+**Survey RUNNING (window 3) — n=2.** **Cinder holds Warmth** (`2a2142`, orchestrator claim
+`<opened 21:01Z>`) picked up the sole survey lane from Cosmos calls Infinity (who closed out cleanly
+20:52Z; claim `3a5e8798` archived) per doc 08 §10. Grounded first-hand on doc 08 + ledger + instrument
++ worklist TSV + git + registry; coverage re-derived from scratch = **228/286 (6 collections), 20
+conserved JSONs reconcile**. First increment **sector-engagement (12) COMPLETE** (`pass1-sector-engagement-01.json`,
+0 unreadable, 138 ideas: 125 good / 11 speculative / 2 bad, 5 locked-contradictions, 10 high-stakes
+verdicts all survive; spot-audit passed first-hand) → **Pass-1 now 240/286 (7 collections)**. Peer
+**Oyster weaves Surf** (`d16a4a`) is live finishing a small agent-tools F-41 commit-queue fix — shared-checkout
+turbo gate couples, so survey commits are timed to Oyster's `tree-green` broadcasts (conserved JSONs held
+safe on disk meanwhile). All-channels watcher armed pipe-less; heartbeat OFF (consumer-absent, owner-visible).
+**Next safe step: the 9 remaining collections / ~46 plans** (start `semantic-search` 11, or fold the
+singletons), ~one ~35-plan sub-batch per owner-reset window; then the 70-AEE idea-granular back-fill BEFORE
+Pass-3. Owner resets the budget window; owner controls push.
+
+---
+
+**Survey RAN (window 2) — n=2 team.** Cosmos calls Infinity (`9888f9`, orchestrator claim
 `3a5e8798`) holds the survey lane; **Oyster weaves Surf** (`d16a4a`, claim `93c58529`) joined on WS-3
 (F-41 path-safety, `agent-tools/**`) — boundaries verified first-hand as fully disjoint, no contention.
 **Window 1** (this session, ~17:07–19:1xZ) ran 6 clean increments — PDG (4) + agent-tooling (59), to
@@ -87,6 +103,7 @@ scope; not surveyed.) Source: `worklist-plans.tsv`.
 | sdk-01 | sdk-and-mcp-enhancements (`active/`+root+`current/`, plans 1–12 of 28) | 12 | Cosmos calls Infinity | COMPLETE (10 keep / 1 archive-complete / 1 rewrite; substance 11 good / 1 mixed; content 11 strong / 1 adequate; conformance 12 major-drift; 152 ideas: 124 good / 25 speculative / 3 bad; 2 locked-contradictions; 10 high-stakes verdicts: 9 survive / 1 refuted) | `pass1-sdk-and-mcp-enhancements-01.json` |
 | sdk-02 | sdk-and-mcp-enhancements (`current/`+`future/`, plans 13–24 of 28) | 12 | Cosmos calls Infinity | COMPLETE (8 keep / 4 archive-complete; substance 12 good; content 12 strong; conformance 11 major-drift / 1 no-fm; 159 ideas: 143 good / 16 speculative / 0 bad; 0 locked-contradictions; 14 high-stakes verdicts: 13 survive / 1 refuted) | `pass1-sdk-and-mcp-enhancements-02.json` |
 | sdk-03 | sdk-and-mcp-enhancements (`future/`, plans 25–28 of 28) | 4 | Cosmos calls Infinity | COMPLETE (3 keep / 1 rewrite; substance 4 good; content 3 strong / 1 adequate; conformance 2 major-drift / 2 no-fm; 43 ideas: 36 good / 7 speculative / 0 bad; 0 locked-contradictions; 4 high-stakes verdicts: 4 survive) | `pass1-sdk-and-mcp-enhancements-03.json` |
+| se-01 | sector-engagement (full collection: `current/` + `eef/` + `future/` + `knowledge-graph-adoption/`) | 12 | Cinder holds Warmth | COMPLETE (8 keep / 4 archive-complete; substance 12 good; content 9 strong / 3 adequate; conformance 12 major-drift; 138 ideas: 125 good / 11 speculative / 2 bad; 5 locked-contradictions; 10 high-stakes verdicts: 10 survive; spot-audit passed first-hand on eef-d5-execution + eef-outcome-evaluation-infrastructure) | `pass1-sector-engagement-01.json` |
 
 After 1b: the full **agentic-engineering-enhancements** collection (70 plans) is Pass-1 complete.
 
@@ -111,17 +128,23 @@ ideas inventoried: 338 good / 60 speculative / 5 bad, 6 locked-contradictions, 2
 
 After sdk-03: the full **sdk-and-mcp-enhancements** collection (28 plans) is Pass-1 complete (Cosmos calls
 Infinity, 3 increments sdk-01..03, 0 unreadable, 354 ideas inventoried: 303 good / 48 speculative / 3
-bad, 2 locked-contradictions, 28 high-stakes verdicts: 26 survive / 2 refuted). **Pass-1 coverage so
-far: 228 / 286 plans (6 collections).** 10 collections / ~58 plans remain — see the linear successor
-plan [`07-sole-successor-survey-plan.md`](./07-sole-successor-survey-plan.md).
+bad, 2 locked-contradictions, 28 high-stakes verdicts: 26 survive / 2 refuted). **Pass-1 coverage at
+that point: 228 / 286 plans (6 collections).**
 
-### Remaining Pass-1 collections (~58 plans, ~35-plan atomic sub-batches, one per owner-reset window)
+After se-01: the full **sector-engagement** collection (12 plans) is Pass-1 complete (Cinder holds
+Warmth, 1 increment, 0 unreadable, 138 ideas inventoried: 125 good / 11 speculative / 2 bad, 5
+locked-contradictions, 10 high-stakes verdicts: 10 survive; orchestrator spot-audit passed first-hand —
+eef-d5-execution archive-complete + eef-outcome-evaluation-infrastructure keep both trace to real
+file:line). **Pass-1 coverage so far: 240 / 286 plans (7 collections).** 9 collections / ~46 plans
+remain — see the linear successor plan [`08-next-session-execution-plan.md`](./08-next-session-execution-plan.md).
 
-The 10 collections other than the six now complete (`agentic-engineering-enhancements`,
+### Remaining Pass-1 collections (~46 plans, ~35-plan atomic sub-batches, one per owner-reset window)
+
+The 9 collections other than the seven now complete (`agentic-engineering-enhancements`,
 `architecture-and-infrastructure`, `product-development-governance`, `agent-tooling`, `observability`,
-`sdk-and-mcp-enhancements`), derived from
+`sdk-and-mcp-enhancements`, `sector-engagement`), derived from
 `worklist-plans.tsv` (col `collection`):
-`sector-engagement` (12), `semantic-search` (11), `connecting-oak-resources` (10), `discovery` (9),
+`semantic-search` (11), `connecting-oak-resources` (10), `discovery` (9),
 `user-experience` (7), `developer-experience` (4), `exploring-open-education-resources` (2),
 `security-and-privacy` (1), `school-data-search` (1), `curriculum-mcp-path-to-ga` (1).
 Each future sub-batch appends a row above and conserves its own `pass1-<collection>-<range>.json`.

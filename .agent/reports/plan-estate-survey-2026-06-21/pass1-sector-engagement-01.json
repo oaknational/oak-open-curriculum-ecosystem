@@ -1,0 +1,2201 @@
+{
+  "batch_size": 12,
+  "plans_returned": 12,
+  "unreadable": [],
+  "null_holistic": [],
+  "results": [
+    {
+      "plan": ".agent/plans/sector-engagement/current/sector-reusable-components-adoption.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan is status=current with all four todos pending — active planning authority, not complete",
+          "file_line": "line:7,13-23"
+        },
+        {
+          "claim": "Three-layer taxonomy and README-anchoring discipline are not encoded elsewhere in this collection",
+          "file_line": "line:54-58,46-49"
+        },
+        {
+          "claim": "Promotion criteria gating Phase 4 escalation are live and unmet",
+          "file_line": "line:93-97"
+        },
+        {
+          "claim": "2026-06-17 restructure updated the canonical source reference, keeping the plan partially fresh",
+          "file_line": "line:80"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan holds a coherent, well-scoped contract-level document: the three-layer taxonomy (lines 54-58) is precise and directly prevents misuse; the README anchor (lines 46-49) is a strong single-source discipline; the promotion criteria (lines 93-97) are concrete. The only substantive gap is the VISION.md reference inconsistency in the validation block (line 106) and the entirely-pending todo list, which together indicate the plan is nascent but structurally sound.",
+      "content_quality": "adequate",
+      "content_quality_note": "The plan is well-structured and its key distinctions are clearly stated (lines 54-58, 46-49). However, all four todos are pending (lines 13-23), the means leg of EGM is absent, and the validation block contains a stale VISION.md reference (line 106) — limiting practical usability until those gaps close.",
+      "salvage_value": [
+        {
+          "idea": "Three-layer taxonomy distinguishing upstream API access, Oak-hosted surfaces, and reusable-component adoption as separate partner offering modes",
+          "class": "good",
+          "file_line": "line:54-58"
+        },
+        {
+          "idea": "README inventory as the single canonical enumeration of reusable sector components, explicitly forbidding unofficial component sets",
+          "class": "good",
+          "file_line": "line:46-49"
+        },
+        {
+          "idea": "Promotion criteria gating escalation to executable engineering: adoption profile locked, maturity matrix drafted, playbook skeleton reviewed",
+          "class": "good",
+          "file_line": "line:93-97"
+        },
+        {
+          "idea": "Partner-claims discipline: enumerate only from README inventory until maturity matrix closes; never imply support tiers not decided by Oak-owner policy",
+          "class": "good",
+          "file_line": "line:78-83"
+        },
+        {
+          "idea": "Sector playbooks must cross-link KG adoption when graphs are centre-frame to prevent duplicated ontology governance narratives",
+          "class": "good",
+          "file_line": "line:72-74"
+        },
+        {
+          "idea": "t2: First external adoption profile — name MAT / edtech / research / public sector and prioritise playbook sections",
+          "class": "speculative",
+          "file_line": "line:15-17"
+        },
+        {
+          "idea": "t3: Supported vs experimental vs reference-only maturity matrix per component inventory line with packaging and versioning notes",
+          "class": "speculative",
+          "file_line": "line:18-20"
+        },
+        {
+          "idea": "t4: Adoption playbook scaffold referencing this contract and linking to KG external adoption brief",
+          "class": "speculative",
+          "file_line": "line:21-23"
+        },
+        {
+          "idea": "t1: Keep README, Vision, and sector-engagement roadmap cross-links aligned when canonical inventory evolves",
+          "class": "good",
+          "file_line": "line:12-14"
+        },
+        {
+          "idea": "VISION.md in the validation bash command is stale post-2026-06-17 restructure and should be removed",
+          "class": "bad",
+          "file_line": "line:106"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "current",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "id absent — required for all plans (LOCKED)",
+          "file_line": "plan frontmatter:1-24 (field missing)"
+        },
+        {
+          "issue": "node_type absent — required for all plans (LOCKED)",
+          "file_line": "plan frontmatter:1-24 (field missing)"
+        },
+        {
+          "issue": "kind absent — required for all plans (LOCKED); inferred as executable from status:current via §3.5 migration map",
+          "file_line": "plan frontmatter:1-24 (field missing)"
+        },
+        {
+          "issue": "status: current — explicitly DROPPED by V0 (§2.5); superseded by kind/disposition/gate/projected execution axes",
+          "file_line": "sector-reusable-components-adoption.plan.md:4"
+        },
+        {
+          "issue": "isProject: false — explicitly DROPPED by V0 (§2.5); subsumed by projects_to edge",
+          "file_line": "sector-reusable-components-adoption.plan.md:6"
+        },
+        {
+          "issue": "serves_strategic_choice absent — required for executable plans (LOCKED §2.3, §4); no pending sentinel present",
+          "file_line": "plan frontmatter:1-24 (field missing)"
+        },
+        {
+          "issue": "related_plans used instead of V0 key related (§2.4); related_plans is unclassified",
+          "file_line": "sector-reusable-components-adoption.plan.md:8-10"
+        }
+      ],
+      "unclassified_keys": [
+        "specialist_reviewer",
+        "related_plans"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "docs",
+      "specialist_kind": "docs",
+      "specialist_findings": [
+        {
+          "severity": "low",
+          "claim": "Frontmatter overview (line 3) describes the plan as 'anchored in VISION.md canonical inventory-playbooks inputs', but line 80 of the same file records that the VISION component list was removed in the 2026-06-17 restructure. VISION.md line 88 now defers the live component inventory to README. The overview overstates VISION.md's role.",
+          "file_line": "sector-reusable-components-adoption.plan.md:3"
+        },
+        {
+          "severity": "low",
+          "claim": "Frontmatter last_updated is 2026-04-30 (line 7), but the plan body records a 2026-06-17 restructure event at line 80. The metadata predates a known body edit, making the date misleading for any tooling or reviewer that relies on it.",
+          "file_line": "sector-reusable-components-adoption.plan.md:7"
+        },
+        {
+          "severity": "info",
+          "claim": "The validation snippet at line 105 includes VISION.md in the markdownlint run ('pnpm exec markdownlint README.md VISION.md ...'). VISION.md no longer contains a sector-components inventory section; it defers entirely to README (VISION.md:88). Linting VISION.md here is harmless but documents a guard over content that no longer lives there.",
+          "file_line": "sector-reusable-components-adoption.plan.md:105"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/sector-engagement/eef/current/eef-d5-execution.plan.md",
+      "classification": "archive-complete",
+      "classification_evidence": [
+        {
+          "claim": "LANDED 2026-06-04 in one green commit (2e9021ff); this is now a completed execution record.",
+          "file_line": "file:23"
+        },
+        {
+          "claim": "All five todos have status: completed",
+          "file_line": "file:27, file:32, file:36, file:40, file:44"
+        },
+        {
+          "claim": "This document is retained as the execution record, not a live plan.",
+          "file_line": "file:52"
+        },
+        {
+          "claim": "Frontmatter status: completed",
+          "file_line": "file:3"
+        },
+        {
+          "claim": "Next EEF step is D6 (MCP composition).",
+          "file_line": "file:55"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is a thoroughly grounded, multi-reviewed TDD execution record. Every cycle has precise acceptance criteria with corpus-pinned test anchors. Four reviewers plus a 48-agent adversarial dual-review are documented with per-finding disposition. The C1 supersession decision is explained with type-system rationale (file:489-503). The package-name correction is a concrete empirical finding (file:454-464). No speculative ideas; all substance is either executed and verified or explicitly marked historical.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan contains first-hand grounded corpus cardinalities (file:157-163), named expectTypeOf assertions (file:34, ws2-1), explicit member-edge semantics (file:30, ws1-2), construction-validation semantics (file:30, ws1-2), frontier definition-robust anchors (file:38, ws3-1), and a full review-disposition audit trail (file:411-521). Every acceptance criterion is specific enough to verify independently. The supersession note is clear and self-consistent.",
+      "salvage_value": [
+        {
+          "idea": "GraphView<TNode, TNodeId extends string, TEdgeType extends string> generic factory pattern (createGraphView) — the closed three-parameter shape is the ratified design for graph-core's reusable BFS substrate",
+          "class": "good",
+          "file_line": "file:107-113, file:178-189"
+        },
+        {
+          "idea": "Construction-time validation: duplicate node ids and dangling edges fail construction (not new subgraph error variants) — protects graph-native view from silent corpus drift",
+          "class": "good",
+          "file_line": "file:30 (ws1-2), file:447-453"
+        },
+        {
+          "idea": "Two-variant subgraph error surface (SubgraphRootNotFound, SubgraphDepthExceeded) is fixed; no new kind added — D4 not re-opened",
+          "class": "good",
+          "file_line": "file:30 (ws1-2), file:447-453"
+        },
+        {
+          "idea": "Edge type injection pattern: relatedStrandEdges.map((e) => ({ ...e, type: 'related_strand' as const })) — RelatedStrandEdge carries no type field; as const prevents TEdgeType widening to string",
+          "class": "good",
+          "file_line": "file:34 (ws2-1)"
+        },
+        {
+          "idea": "Named expectTypeOf assertions (four specific: edges[0].type, edges[0].source, SubgraphRootNotFound.rootId, edges[0].target) — compilation alone is insufficient to prove non-widening",
+          "class": "good",
+          "file_line": "file:34 (ws2-1), file:424-427"
+        },
+        {
+          "idea": "Id-accessor typed (node: TNode) => TNodeId, never => string — prevents id-flow widening across the whole graph",
+          "class": "good",
+          "file_line": "file:30 (ws1-2), file:427"
+        },
+        {
+          "idea": "maxDepth is a per-graph createGraphView factory input (not a substrate-wide constant), carried into SubgraphDepthExceeded.limit",
+          "class": "good",
+          "file_line": "file:30 (ws1-2), file:504-507"
+        },
+        {
+          "idea": "One-green-commit landing discipline for large atomic replacements: TDD cycles are internal authoring checkpoints, not separate commit boundaries",
+          "class": "good",
+          "file_line": "file:85-99"
+        },
+        {
+          "idea": "Frontier definition: related_strand targets of any member node that fall outside the member set — definition-robust, not just 'not in roots'",
+          "class": "good",
+          "file_line": "file:38 (ws3-1), file:438-441"
+        },
+        {
+          "idea": "Reachable-by-axis property asserted by derivation (filter over EEF_TOOLKIT_DATA at test time), not a hard-coded count — avoids brittle 17/30 hardcode",
+          "class": "good",
+          "file_line": "file:42 (ws3-2), file:299-301"
+        },
+        {
+          "idea": "graph-core SubgraphResult is NOT extended with frontier/provenance — the binding layer constructs the envelope; ADR-179 boundary stays clean",
+          "class": "good",
+          "file_line": "file:38 (ws3-1), file:289"
+        },
+        {
+          "idea": "Package name @oaknational/curriculum-sdk != directory oak-curriculum-sdk — pnpm --filter on the dir-name matches no project (three reviewers converged on wrong name; only empirical filter-run caught it)",
+          "class": "good",
+          "file_line": "file:454-464"
+        },
+        {
+          "idea": "C1 supersession: projection?/NodeProjection/DeepKeyPath dropped because a field-narrowing projection returning TNode[] cannot be type-honest under no-type-shortcuts; no consumer exists for EEF",
+          "class": "good",
+          "file_line": "file:489-503"
+        },
+        {
+          "idea": "Corpus anchor for floor-only strand: eef-tl-repeating-a-year (impact_months: -2, no school_context_relevance, no related_strands) — useful for testing floor-only code paths",
+          "class": "good",
+          "file_line": "file:38 (ws3-1), file:161-163"
+        },
+        {
+          "idea": "Corpus anchor for frontier test: eef-tl-setting-and-streaming depth 0 -> frontier {eef-tl-within-class-attainment-grouping} — single outgoing related_strand, non-empty frontier at depth 0",
+          "class": "good",
+          "file_line": "file:38 (ws3-1), file:166-168"
+        },
+        {
+          "idea": "Four-edge member-edge set for eef-tl-feedback depth 1 (feedback->metacognition, feedback->mastery-learning, metacognition->feedback, mastery-learning->feedback) — reverse edges are members, not frontier",
+          "class": "good",
+          "file_line": "file:34 (ws2-1), file:507-510"
+        },
+        {
+          "idea": "inspectStrand and evidenceForMove({strandIds:[id]}) return identical envelope at cardinality one — stated overlap, not hidden",
+          "class": "good",
+          "file_line": "file:42 (ws3-2)"
+        },
+        {
+          "idea": "Sole-ingest-path invariant: no eef-strands file reads EEF_TOOLKIT_DATA except via the graph-constructor module",
+          "class": "good",
+          "file_line": "file:34 (ws2-1), Done-when"
+        },
+        {
+          "idea": "Convergence is not proof: three reviewers converged on wrong package-name filter; only first-hand empirical check found it — learning for review discipline",
+          "class": "good",
+          "file_line": "file:457-461"
+        },
+        {
+          "idea": "manifest()/GraphManifest are non-goals in D5 (no EEF consumer); re-added by graph-tools redesign plan when first consumer is built",
+          "class": "good",
+          "file_line": "file:349-356"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": "done",
+      "v0_gate": "absent",
+      "edges_present": [
+        "thread"
+      ],
+      "status_raw": "completed",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Uses emergent `title` key instead of required V0 `name`",
+          "file_line": "eef-d5-execution.plan.md:2"
+        },
+        {
+          "issue": "Uses emergent `status: completed` instead of V0 `disposition: done` (§2.5: `status` is explicitly dropped)",
+          "file_line": "eef-d5-execution.plan.md:3"
+        },
+        {
+          "issue": "Uses emergent `lane: current` (V0 §2.5: `collection`/`lane` explicitly dropped)",
+          "file_line": "eef-d5-execution.plan.md:4"
+        },
+        {
+          "issue": "Uses emergent `type: executable` free-label instead of required V0 `kind: executable` (§2.5: `type` dropped as free-label)",
+          "file_line": "eef-d5-execution.plan.md:5"
+        },
+        {
+          "issue": "Uses emergent `date` instead of required V0 `last_updated` (§2.4: `date` is housekeeping drift folded into `last_updated`)",
+          "file_line": "eef-d5-execution.plan.md:7"
+        },
+        {
+          "issue": "Missing required V0 field `id` (§2.1: required for all plan nodes)",
+          "file_line": "eef-d5-execution.plan.md:1"
+        },
+        {
+          "issue": "Missing required V0 field `node_type: plan` (§2.1: required for all)",
+          "file_line": "eef-d5-execution.plan.md:1"
+        },
+        {
+          "issue": "Missing required V0 field `overview` (§2.1: required for all)",
+          "file_line": "eef-d5-execution.plan.md:1"
+        },
+        {
+          "issue": "Missing required V0 field `kind` (§3.1: required for all; discriminates the union)",
+          "file_line": "eef-d5-execution.plan.md:1"
+        },
+        {
+          "issue": "Missing required V0 field `serves_strategic_choice` (§2.3: required for executable plans)",
+          "file_line": "eef-d5-execution.plan.md:1"
+        },
+        {
+          "issue": "Missing required V0 field `last_updated` (§2.4: required for all)",
+          "file_line": "eef-d5-execution.plan.md:1"
+        },
+        {
+          "issue": "Missing required V0 field `disposition` (§3.3: required for terminal plans; plan is landed/completed per body line 49)",
+          "file_line": "eef-d5-execution.plan.md:49"
+        },
+        {
+          "issue": "Unclassified key `owner_scope` is not defined anywhere in V0 schema",
+          "file_line": "eef-d5-execution.plan.md:8"
+        },
+        {
+          "issue": "Unclassified key `readiness` carries whole-paragraph prose execution record (§3.5: prose values move to body; axes carry state)",
+          "file_line": "eef-d5-execution.plan.md:23"
+        }
+      ],
+      "unclassified_keys": [
+        "owner_scope",
+        "readiness"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "Plan status is 'completed' (frontmatter line 3) with readiness confirming LANDED 2026-06-04 (commit 2e9021ff). All five todos show status: completed. This is a closed execution record, not a live plan — no live assumptions remain actionable.",
+          "file_line": "eef-d5-execution.plan.md:3,23"
+        },
+        {
+          "severity": "info",
+          "claim": "The ws1-1 and ws1-2 todo bodies contain historically-superseded wording ('projection RETAINED') from before the 2026-06-05 owner decision to drop NodeProjection/DeepKeyPath. The readiness header explicitly flags this as historical, not live instruction — the discrepancy is documented and scoped.",
+          "file_line": "eef-d5-execution.plan.md:23,26,30"
+        },
+        {
+          "severity": "low",
+          "claim": "The C1 supersession note (line 489) documents that the projection? parameter was dropped at execution, but the WS1.1 Done-when body (line 229-230) still reads 'subgraph retains its projection? parameter' — an internal contradiction within the plan body. The readiness note covers it, but a reader who skips the readiness block will see inconsistent Done-when text.",
+          "file_line": "eef-d5-execution.plan.md:229,489"
+        },
+        {
+          "severity": "info",
+          "claim": "The corpus cardinalities section (lines 157-168) are stated as 'grep-verified against the as const data'. The plan was authored and executed; the landed commit is cited. No open assumption remains — the verification grounding is well-recorded.",
+          "file_line": "eef-d5-execution.plan.md:131"
+        },
+        {
+          "severity": "info",
+          "claim": "The package-name vs directory-name distinction (@oaknational/curriculum-sdk vs oak-curriculum-sdk) was caught by Iridescent at review and confirmed first-hand via pnpm --filter. The review disposition documents that three reviewers (type-expert, fred, one other) converged on the wrong name — convergence-is-not-proof is correctly noted as a lesson.",
+          "file_line": "eef-d5-execution.plan.md:454-464"
+        },
+        {
+          "severity": "info",
+          "claim": "The 'integration tests run within the single pnpm --filter test run' assumption (no separate integration runner) is explicitly verified in the review disposition (line 434) and reflected in the Acceptance section (lines 323-325). Assumption is grounded and documented.",
+          "file_line": "eef-d5-execution.plan.md:323,434"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": [
+        {
+          "claim": "LANDED 2026-06-04 in one green commit (2e9021ff); the master plan's d5-graph-construction-methods todo is flipped.",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "eef-d5-execution.plan.md:3,49-51 (status: completed; \"LANDED ... commit 2e9021ff\"); git show 2e9021ffe = \"feat(eef): graph-core generic query layer + graph-native EEF view (D5)\" touching graph-view contract + create-graph-view + eef-evidence; eef-graph-tool-completion.plan.md:45-47 d5-graph-construction-methods status: completed"
+        },
+        {
+          "claim": "C1 (projection?/NodeProjection/DeepKeyPath) was SUPERSEDED at execution — dropped, not retained; ws1-1/ws1-2 'projection RETAINED' wording is historical.",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "file:489-503 (\"C1 (keep projection) — SUPERSEDED at execution (owner decision, 2026-06-05)... the owner directed dropping the runtime projection? parameter from D5's subgraph (Decision 6 'absent'...); the NodeProjection / DeepKeyPath type utilities — which only typed that parameter — were removed with it\"); corroborated at file:23 (readiness: \"projection? parameter AND the NodeProjection/DeepKeyPath utilities... were dropped/removed... ws1-1/ws1-2 todo bodies... still say projection RETAINED; treat them as historical\"), file:54-55 (header note), file:184-189 (\"the projection? parameter was dropped at execution\"); ws1-1/ws1-2 do verbatim say \"projection is RETAINED\" at file:26 and file:30, confirming the \"historical\" framing is grounded not invented."
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/sector-engagement/eef/current/eef-d6-execution.plan.md",
+      "classification": "archive-complete",
+      "classification_evidence": [
+        {
+          "claim": "D6 COMPLETE (2026-06-08, Briny Charting Lagoon). c1-c3 + c6 tool-gating landed earlier. This session added c4 and c5",
+          "file_line": "file:145-148"
+        },
+        {
+          "claim": "All six todos have status: completed",
+          "file_line": "file:42 (c1), file:46 (c2), file:50 (c3), file:54 (c4), file:58 (c5), file:62 (c6)"
+        },
+        {
+          "claim": "Supersession note: structuredContent-only success shape reversed, landing in PR-2 of oak-prod-mcp-snagging-2026-06-11.plan.md",
+          "file_line": "file:68-79"
+        },
+        {
+          "claim": "Next EEF step after D6 is D7 (teacher-value round-trip)",
+          "file_line": "file:88-89"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "All six cycles are completed with concrete proof commands, first-hand verified grounded facts, and owner-ratified architectural decisions. The plan correctly documents the superseded output shape with a clear forward pointer. The ADR-193 egress membrane and the attribution/PII correction are substantive architectural lessons. No speculative or bad substance detected. file:103-128 (ADR-193 correction record), file:229-246 (grounded facts table), file:250-273 (key design decisions).",
+      "content_quality": "strong",
+      "content_quality_note": "The plan is unusually thorough: per-cycle TDD specs with red/green/done criteria and exact proof commands (file:41-63 frontmatter todos), a grounded-facts table with file:line citations verified first-hand (file:229-246), precise architectural corrections with superseded-framing labelled inline (file:94-156), and a first-principles check section (file:377-386). The supersession note at file:68-79 is a model of honest plan hygiene.",
+      "salvage_value": [
+        {
+          "idea": "EEF as aggregated-tool-family peer — no discriminant branch, no bypass, no app-side handler; registers and executes through the identical config as every aggregated tool",
+          "class": "good",
+          "file_line": "file:250-253"
+        },
+        {
+          "idea": "Bounded-query input shape (z.enum over finite corpus domains) as the target migration shape for existing whole-corpus-dump graph tools",
+          "class": "good",
+          "file_line": "file:262-264"
+        },
+        {
+          "idea": "ADR-193 egress membrane pattern: strict types held internal; a per-primitive egress function (eefEvidenceToCallToolResult) crosses the domain-transport seam via fresh object construction with no cast",
+          "class": "good",
+          "file_line": "file:116-122"
+        },
+        {
+          "idea": "Flag co-gating tool + resource + prompt atomically behind OAK_CURRICULUM_MCP_EEF_ENABLED — listing via listUniversalTools is always-on; protocol surface filter lives in the app registration loop",
+          "class": "good",
+          "file_line": "file:61 (c6 todo body)"
+        },
+        {
+          "idea": "original_authors are attribution data not PII; source URLs must never be stripped (trust requirement); README is the primary attribution surface",
+          "class": "good",
+          "file_line": "file:151-156"
+        },
+        {
+          "idea": "oak-curriculum-sdk takes a runtime (not devDependency) dependency on graph-corpus-sdk; the dependency is acyclic (graph-corpus-sdk -> {graph-core, result} only)",
+          "class": "good",
+          "file_line": "file:41 (c1 todo body)"
+        },
+        {
+          "idea": "Cross-package atomic commit discipline: docs reshape lands first as one commit, then all six cycles land as one green cross-package commit",
+          "file_line": "file:174-192",
+          "class": "good"
+        },
+        {
+          "idea": "Handlers-tool-registration integration test must be made flag-aware once an AGGREGATED_HANDLERS entry is co-gated off by default test config",
+          "class": "good",
+          "file_line": "file:61 (c6 todo, reconcile section)"
+        },
+        {
+          "idea": "structuredContent-only success shape (content: []) — the V8 owner-ratified deviation documented here — was superseded 2026-06-11 by dual response shape via formatToolResponse; forward pointer to oak-prod-mcp-snagging-2026-06-11.plan.md PR-2",
+          "class": "bad",
+          "file_line": "file:68-79"
+        },
+        {
+          "idea": "Generic graph-tool factory deferred to consolidate-at-third-consumer rule (not D6); factory consolidation at the second consumer of the new substrate",
+          "class": "good",
+          "file_line": "file:163-166"
+        },
+        {
+          "idea": "listUniversalTools always enumerates co-gated entries (SDK-static); the human-facing landing page is owner-relaxed for D6 — NOT flag-gated (catalog by design)",
+          "class": "good",
+          "file_line": "file:131-140"
+        },
+        {
+          "idea": "c4/c5 (string resource text and PromptMessage[]) do not cross a strict-domain type boundary so they take no egress function — ADR-193 scope does not extend to them",
+          "class": "good",
+          "file_line": "file:148-152"
+        },
+        {
+          "idea": "EEF interpretation resource homed SDK-side (content builder) with app-side registration — following misconception-graph-resource.ts precedent",
+          "class": "good",
+          "file_line": "file:53-55 (c4 todo body)"
+        },
+        {
+          "idea": "isError as a D6-layer predicate over the total D5 substrate: evidence-for-move with no selector and unknown strand key both trigger isError",
+          "class": "good",
+          "file_line": "file:243 (grounded facts table)"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": "done",
+      "v0_gate": "absent",
+      "edges_present": [
+        "thread"
+      ],
+      "status_raw": "current",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (kebab slug, LOCKED §2.1)",
+          "file_line": "eef-d6-execution.plan.md:1-64 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `node_type: \"plan\"` (LOCKED §2.1)",
+          "file_line": "eef-d6-execution.plan.md:1-64 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "`title` present instead of required `name`; V0 §2.1 mandates migrate `title`→`name` (LOCKED)",
+          "file_line": "eef-d6-execution.plan.md:2"
+        },
+        {
+          "issue": "Missing required field `overview` (one-line scope, LOCKED §2.1)",
+          "file_line": "eef-d6-execution.plan.md:1-64 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `kind`; `type: executable` is the dropped free-label that `kind` replaces (LOCKED §2.2, §3.1)",
+          "file_line": "eef-d6-execution.plan.md:5"
+        },
+        {
+          "issue": "`status: current` present; V0 §2.5 drops `status` entirely (split into `kind`/`disposition`/`gate`/projected execution axis)",
+          "file_line": "eef-d6-execution.plan.md:3"
+        },
+        {
+          "issue": "`lane: current` present; V0 §2.5 drops `lane`/`collection` (folder location is the projection)",
+          "file_line": "eef-d6-execution.plan.md:4"
+        },
+        {
+          "issue": "`type: executable` present; V0 §2.5 drops `type` as free-label (replaced by `node_type` + `kind`)",
+          "file_line": "eef-d6-execution.plan.md:5"
+        },
+        {
+          "issue": "Missing `disposition: done`; all todos are `completed` and body declares 'D6 COMPLETE' (line 145) — terminal state reached but `disposition` axis absent (V0 §3.3, §2.2)",
+          "file_line": "eef-d6-execution.plan.md:145"
+        },
+        {
+          "issue": "Missing `serves_strategic_choice`; required for executable plans (LOCKED §2.3)",
+          "file_line": "eef-d6-execution.plan.md:1-64 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "`date: 2026-06-06` present; V0 §2.4 folds `date` into `last_updated` (LOCKED) — field should be renamed",
+          "file_line": "eef-d6-execution.plan.md:7"
+        },
+        {
+          "issue": "Plan is complete (all todos `completed`, body confirms D6 COMPLETE) yet resides in `current/`; V0 §3.6 places terminal plans (`disposition: done`) in `archive/`",
+          "file_line": "eef-d6-execution.plan.md:145 (body); path: current/eef-d6-execution.plan.md"
+        },
+        {
+          "issue": "`owner_scope` is unclassified by V0 — not in the field contract; substantive content should move to the plan body if not mappable to a V0 field",
+          "file_line": "eef-d6-execution.plan.md:8"
+        },
+        {
+          "issue": "`readiness` is unclassified by V0 — not in the field contract; content appears to conflate execution-state prose with gate/kind signal",
+          "file_line": "eef-d6-execution.plan.md:25"
+        }
+      ],
+      "unclassified_keys": [
+        "owner_scope",
+        "readiness"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "Supersession note (line 68-79) records that the structuredContent-only success shape (`content: []`) built by this plan was reversed post-completion: `get-eef-evidence` now emits the dual-response shape via `formatToolResponse` in a subsequent plan (`oak-prod-mcp-snagging-2026-06-11.plan.md`, branch `feat/eef-dual-shape-alignment`, commit `20ad83326`). Every cycle body (c3 in particular, lines 49, 118-120) specifies `content: []` on success and `isError` on error as the authoritative contract. The plan body has not been updated to reflect the superseded shape; a reader executing from the cycle bodies would build the wrong output contract.",
+          "file_line": "eef-d6-execution.plan.md:68-79"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan's non-goal section (line 340-347) explicitly defers EEF output schema work to `output-schemas-for-mcp-tools.plan.md`. However, the supersession note (line 68-79) indicates the dual-shape alignment adds `formatToolResponse` wrapping, which is an output-shape architectural concern. The plan does not record whether the deferred output-schema boundary still holds post-supersession, creating an ambiguity about where the output-schema contract now lives architecturally.",
+          "file_line": "eef-d6-execution.plan.md:340-347"
+        },
+        {
+          "severity": "medium",
+          "claim": "ADR-193 (system/vendor type boundary membrane) is cited as authoritative for the egress-function pattern (lines 103-128), but the supersession note (lines 68-79) states the dual-shape uses `formatToolResponse` rather than the bespoke `eefEvidenceToCallToolResult` egress function designed here. It is not recorded whether `formatToolResponse` satisfies ADR-193's egress-membrane requirement or whether the ADR itself was updated. A reader of ADR-193 plus this plan cannot confirm the boundary invariant still holds.",
+          "file_line": "eef-d6-execution.plan.md:103-128"
+        },
+        {
+          "severity": "low",
+          "claim": "The `c6` todo body (line 61) states the human-facing landing-page HTML is owner-relaxed and NOT flag-gated (confirmed 2026-06-06), and that WCAG 2.2 AA is inherited via `renderToolItem`. The plan does not record first-hand verification that no new landing markup was introduced in c6 (it says 'if any NEW landing markup is introduced... run accessibility-expert'). Given the organisation instruction mandating WCAG 2.2 AA on all artefacts, absence of a confirmed accessibility check for any additive markup is a residual gap.",
+          "file_line": "eef-d6-execution.plan.md:61"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan records the `graph-corpus-sdk` dependency as acyclic and first-hand verified (line 236, grounded-facts table). The generic graph-tool factory is deliberately deferred to the second graph-tool consumer (line 163-165, 340). This is architecturally sound. However, no mechanism is recorded for enforcing the `consolidate-at-third-consumer` rule: if a second graph-tool consumer lands without triggering factory consolidation, the acyclic substrate benefit degrades silently. The plan cites `graph-tools-value-redesign.plan.md` but does not record a cross-plan dependency or enforcement trigger.",
+          "file_line": "eef-d6-execution.plan.md:163-165"
+        },
+        {
+          "severity": "info",
+          "claim": "All six cycles (c1-c6) are recorded as `status: completed` in the frontmatter todos (lines 42, 45, 51, 54, 58, 62), and the D6 COMPLETE marker is present (line 145). The plan is a closed execution record, not an open work item. The architecture as built (aggregated-tool-family peer, SDK-side homing, acyclic runtime dependency, uniform auth via securitySchemes, flag co-gating at registration, no bypass, no discriminant) is sound and consistent with the Layer Role Topology and ADR-179/191 constraints.",
+          "file_line": "eef-d6-execution.plan.md:145-156"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": [
+        {
+          "claim": "D6 COMPLETE (2026-06-08, Briny Charting Lagoon) — all six cycles landed (cited at file:145)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "eef-d6-execution.plan.md:145 (\"D6 COMPLETE (2026-06-08, Briny Charting Lagoon)\") corroborated: all six todos status:completed (lines 42,46,50,54,58,62); cited commits 496ea7ca + 83d791e8 exist dated 2026-06-08 (git log); all six cycle artifacts present first-hand — get-eef-evidence in AggregatedToolName (types.ts:84) + AGGREGATED_HANDLERS (executor.ts:174-175), handler aggregated-eef-evidence.ts, c4 resource eef://interpretation (register-resources.ts:110), c5 adapt-lesson prompt (register-prompts.ts:70), c6 flag co-gating (handlers.ts:150-177); master plan d6-mcp-composition-eef-surface status:completed (eef-graph-tool-completion.plan.md:51) and dependent D7 also completed (line 55)."
+        },
+        {
+          "claim": "The structuredContent-only success shape (content: []) this plan built is reversed — get-eef-evidence now emits the family dual response shape via formatToolResponse, landing in PR-2 of oak-prod-mcp-snagging-2026-06-11.plan.md (cited at file:68-73)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "eef-d6-execution.plan.md:68-79 (supersession note); target plan oak-prod-mcp-snagging-2026-06-11.plan.md:9,66,77 (PR-2 = dual shape, commit 20ad83326); handler packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-eef-evidence.ts:16-18 (dual shape via formatToolResponse, owner reversal of D6); git: commit 20ad83326 and branch feat/eef-dual-shape-alignment both present"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md",
+      "classification": "archive-complete",
+      "classification_evidence": [
+        {
+          "claim": "All eight todos (D0-D7) carry status=completed in frontmatter",
+          "file_line": "lines 26-56 (todos block)"
+        },
+        {
+          "claim": "D7 body explicitly marked COMPLETE owner-marked 2026-06-08",
+          "file_line": "line 1506"
+        },
+        {
+          "claim": "Plan Definition Of Done states the plan is done when D0-D7 are complete and all listed criteria pass; those criteria are met per the completed todos",
+          "file_line": "lines 1792-1827"
+        },
+        {
+          "claim": "Learning Loop section directs: on completion, run oak-consolidate-docs and archive this plan per ADR-117",
+          "file_line": "lines 1987-1990"
+        },
+        {
+          "claim": "graph-tools-value-redesign promotion trigger noted as fired ('EEF D6 landed + D7 green') on D7 completion",
+          "file_line": "lines 1514-1516"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every deliverable is grounded in real corpus data, owner-ratified value, and co-landed test+code discipline. The design decisions (fixed-data doctrine, single-Zod-call schema derivation, TNodeId parameterisation, replace-dont-bridge, no server-side crosswalk, honest insufficiency as first-class value) are architecturally sound and independently motivated. The supersessions are recorded faithfully with evidence and commit SHAs. No speculative or bad ideas are embedded; the plan defers appropriately to follow-on plans for outcome evaluation, metric filters, and school-leadership strands (lines 395-397, 877-879, 1838-1853). The content is substantively strong and reflects a completed, well-executed plan.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan carries the full ratified value contract (lines 324-498), the V1 field set with corpus cardinalities (lines 500-535), the schema-derivation chain (lines 472-478), ten numbered Ratified Decisions (lines 205-322), per-deliverable Do/Done-when/Proof structure (D0-D7), a Fully Specified End State (lines 1675-1790), a Plan Definition Of Done (lines 1792-1827), a Risk Assessment (lines 1855-1902), Foundation Alignment (lines 1904-1925), and a Learning Loop trigger (lines 1985-1997). The supersession note at lines 189-203 is precisely cited with a commit SHA and a live client matrix rationale. The depth and internal consistency are high; this is strong content by any measure.",
+      "salvage_value": [
+        {
+          "idea": "Teacher value contract: EEF turns curriculum retrieval into evidence-calibrated lesson adaptation while preserving professional judgement and uncertainty; faithful evidence transmission standard, not local efficacy proof",
+          "class": "good",
+          "file_line": "lines 428-466"
+        },
+        {
+          "idea": "Fixed-data / known-vs-unknown doctrine: shape known at authoring time derives from as const; shape unknown at runtime narrows at its boundary; these are orthogonal axes",
+          "class": "good",
+          "file_line": "lines 208-213, 540-567"
+        },
+        {
+          "idea": "Single Zod call per MCP schema, derived from a named graph-native EEF view subset/schema-builder value, compile-time tied to the corresponding payload type",
+          "class": "good",
+          "file_line": "lines 214-236, 472-478"
+        },
+        {
+          "idea": "Only unknown in the system is the key; isValidStrandKey(value: unknown): value is EefStrandId is the single narrowing",
+          "class": "good",
+          "file_line": "lines 258-267"
+        },
+        {
+          "idea": "graph-core query contract parameterised over TNode/TNodeId extends string/TEdgeType; public result/error types carry TNodeId through EEF binding as EefStrandId",
+          "class": "good",
+          "file_line": "lines 269-288"
+        },
+        {
+          "idea": "Guidance reports travel inline in strand member payload, not as a separate guidance_report node kind; heterogeneous node/edge model deferred to graph-tools-value-redesign.plan.md",
+          "class": "good",
+          "file_line": "lines 1151-1156"
+        },
+        {
+          "idea": "Zero external consumer blast radius for graph-core query-contract replacement; three bounded in-package edit sites named",
+          "class": "good",
+          "file_line": "lines 1157-1160, 1856-1865"
+        },
+        {
+          "idea": "Replace-dont-bridge discipline: a wrong surface is deleted at the point it becomes redundant (D2), not kept alive until its replacement is ready",
+          "class": "good",
+          "file_line": "lines 157-160, 724-727"
+        },
+        {
+          "idea": "V1 teacher-facing field set with corpus cardinalities for every field (floor universal on all 30 strands, non-floor fields with exact cardinalities)",
+          "class": "good",
+          "file_line": "lines 500-535"
+        },
+        {
+          "idea": "Honest insufficiency as first-class value: strands with impact_months: null / evidence_strength_label: Insufficient surface that finding so the teacher does not waste effort",
+          "class": "good",
+          "file_line": "lines 398-402, 522-526"
+        },
+        {
+          "idea": "No server-side or plan-authored Oak-signal-category to EefStrandId crosswalk; the invoking agent does the reasoning (Decision 10, promoted to ADR-191)",
+          "class": "good",
+          "file_line": "lines 308-322"
+        },
+        {
+          "idea": "Dual response shape supersession (2026-06-11): structuredContent-only reversed to family dual shape because Cursor renders only content blocks, Claude Code renders only structuredContent, so only dual shape renders everywhere",
+          "class": "good",
+          "file_line": "lines 189-203"
+        },
+        {
+          "idea": "go-live flag lifecycle: pre-release (false default) -> release-pre-proof (true default, false=kill-switch) -> release-post-proof (flag removed); D7 moves to release-pre-proof only",
+          "class": "good",
+          "file_line": "lines 1533-1539"
+        },
+        {
+          "idea": "Schema-derivation chain as canonical traceability path: raw EEF data -> typed raw foundation -> graph-native EEF view -> named graph-view subset/schema-builder -> single Zod call -> MCP schema",
+          "class": "good",
+          "file_line": "lines 472-478"
+        },
+        {
+          "idea": "Value proof reshaped: potential value proven by releasing and observing real use, not by a codified value-proxy test",
+          "class": "good",
+          "file_line": "lines 1506-1513"
+        },
+        {
+          "idea": "declaredVsObservedDivergence: declared enum values with no backing strand are recorded as corpus facts; declared-only values are not valid filter inputs",
+          "class": "good",
+          "file_line": "lines 935-941"
+        },
+        {
+          "idea": "Corpus-level meta.caveats travel once per envelope as provenance, not as a per-strand field",
+          "class": "good",
+          "file_line": "lines 521-522"
+        },
+        {
+          "idea": "EEF tool is a graph universal tool in the AGGREGATED_HANDLERS family; no bespoke bypass, no registration-loop discriminant, uniform auth",
+          "class": "good",
+          "file_line": "lines 892-908"
+        },
+        {
+          "idea": "Seams compose, never reconcile: friction at a confluence is a signal that one input has drifted from the corpus root; fix upstream, never bridge at the junction",
+          "class": "good",
+          "file_line": "lines 163-185"
+        },
+        {
+          "idea": "Metric-filter inputs (exact-value filters over headline metric domains) deferred to eef-tool-metric-filter-inputs.plan.md; sequenced after D7 proves the axis/strand path",
+          "class": "good",
+          "file_line": "lines 877-879, 919-924"
+        },
+        {
+          "idea": "School-leadership EEF strands scoped out to eef-school-leadership-evidence.plan.md; classroom insufficiency strands (learning-styles, aspiration-interventions) stay in this surface as high cover-lesson value",
+          "class": "good",
+          "file_line": "lines 395-402"
+        },
+        {
+          "idea": "D7 full faithfulness proof and release-post-proof flag removal deferred to eef-outcome-evaluation-infrastructure.plan.md; this plan closes at release-pre-proof",
+          "class": "good",
+          "file_line": "lines 1512-1513, 1524-1528"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [
+        "thread"
+      ],
+      "status_raw": "current",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, required for all plan nodes)",
+          "file_line": "file:1-57 (frontmatter block — absent)"
+        },
+        {
+          "issue": "Missing required field `node_type: \"plan\"` (LOCKED, required for all)",
+          "file_line": "file:1-57 (frontmatter block — absent)"
+        },
+        {
+          "issue": "`title` present instead of required `name` (V0 §2.1 LOCKED mandates `name`; `title` is an emergent key V0 migrates to `name`)",
+          "file_line": "file:2"
+        },
+        {
+          "issue": "Missing required field `overview` (LOCKED, required for all)",
+          "file_line": "file:1-57 (frontmatter block — absent)"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED, required for all); plan uses dropped `type: executable` instead",
+          "file_line": "file:5"
+        },
+        {
+          "issue": "`type: executable` is the dropped free-label form (V0 §2.5); V0 replaces it with `node_type` + `kind`",
+          "file_line": "file:5"
+        },
+        {
+          "issue": "`status: current` is a dropped field (V0 §2.5); the readiness sense maps to `kind: executable` and the execution sense projects to Linear",
+          "file_line": "file:3"
+        },
+        {
+          "issue": "`lane: current` is an explicitly dropped field (V0 §2.5 drops `collection`/`lane`; folder location is the projection)",
+          "file_line": "file:4"
+        },
+        {
+          "issue": "Missing required field `serves_strategic_choice` (LOCKED, required for executable plans — must carry a strategic-choice ID or `\"pending\"` sentinel)",
+          "file_line": "file:1-57 (frontmatter block — absent)"
+        },
+        {
+          "issue": "Missing required field `last_updated` (LOCKED, required for all); plan uses dropped `date` instead",
+          "file_line": "file:7"
+        },
+        {
+          "issue": "`date` is a housekeeping drift key V0 §2.4 folds into `last_updated`; it is not a V0 field",
+          "file_line": "file:7"
+        },
+        {
+          "issue": "All 7 todos carry `status: completed` and D7 is owner-marked complete (2026-06-08); plan remains in `current/` with no `disposition: done` set — disposition absence is inconsistent with apparent terminal state",
+          "file_line": "file:24-56 (todos block) and file:54-55"
+        }
+      ],
+      "unclassified_keys": [
+        "owner_scope"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "All D0-D7 todos are marked completed. The plan is execution-complete. No open architecture work remains inside this plan's scope.",
+          "file_line": "eef-graph-tool-completion.plan.md:25-56"
+        },
+        {
+          "severity": "info",
+          "claim": "The three-layer split (domain-generic graph-core parameterised over TNode/TNodeId/TEdgeType; EEF/Oak binding in graph-corpus-sdk; MCP composition in the curriculum consumer layer) is correctly designed and enforced by ADR-179 and ADR-041. No EEF or MCP names are permitted in the graph-core substrate.",
+          "file_line": "eef-graph-tool-completion.plan.md:146-149"
+        },
+        {
+          "severity": "info",
+          "claim": "The replace-dont-bridge invariant is applied correctly at every seam: D2 deleted the old load/list/Zod/freshness path atomically with consumer updates; D5 rebuilds the graph-core query contract fresh (not extended); no compatibility shims are authorised.",
+          "file_line": "eef-graph-tool-completion.plan.md:1282-1284"
+        },
+        {
+          "severity": "info",
+          "claim": "Consumer-impact analysis for the graph-core query contract replacement is sound: zero external-consumer blast radius verified (graph-ingest and graph-project consume only the RDF substrate), bounded in-package edits named at exactly three sites.",
+          "file_line": "eef-graph-tool-completion.plan.md:1233-1248"
+        },
+        {
+          "severity": "low",
+          "claim": "The D6 body contains an irreconciled reconciliation note (2026-06-08) stating that three correction points supersede portions of the D6 body, but the D6 body prose was not rewritten — it describes the superseded outputSchema-required framing and the bespoke eef-surface.ts bypass as live intent. The frontmatter D6 todo and the D6 execution plan are stated as authoritative. For a future executor reading only the D6 body section, the historically-dead clauses create a material risk of re-implementing the wrong shape.",
+          "file_line": "eef-graph-tool-completion.plan.md:1389-1406"
+        },
+        {
+          "severity": "low",
+          "claim": "The 2026-06-11 supersession (structuredContent-only reversed to dual response shape via formatToolResponse) is documented in the Ratified Decisions block and as inline supersession notes in D3, D6, D7, and the End State section, but the Plan Definition of Done at line 1796-1798 still states the old shape ('the only Zod authored... is the MCP input schema... and the EEF tool returns structuredContent with no outputSchema'). If this plan were reactivated the DoD would be inconsistent with the landed shape.",
+          "file_line": "eef-graph-tool-completion.plan.md:1795-1800"
+        },
+        {
+          "severity": "low",
+          "claim": "The fundamental heterogeneous node/edge model (multiple node kinds, cross-kind node-id policy, typed inter-kind edges) is explicitly deferred and homed in graph-tools-value-redesign.plan.md, with a strong warning it must not be dropped. This creates a forward architectural dependency: the current homogeneous EefStrandId-only graph contract will need a migration when that plan lands. The deferral is correctly flagged but there is no architectural guard in this plan ensuring the current design remains forward-compatible.",
+          "file_line": "eef-graph-tool-completion.plan.md:1229-1231"
+        },
+        {
+          "severity": "info",
+          "claim": "The PDR-058 consolidate-at-third-consumer trigger has not fired: the prerequisite/prior-knowledge DAG is named as a concrete second instantiation of the parameterised graph-core contract, but no third consumer exists yet, so generic extraction across corpora is correctly deferred.",
+          "file_line": "eef-graph-tool-completion.plan.md:1163-1167"
+        },
+        {
+          "severity": "info",
+          "claim": "ADR-179 boundary (substrate never imports MCP types) is carried as an explicit acceptance check in D6. The egress membrane pattern (ADR-193) is named as the single erasure point from strict EefEvidenceEnvelope to CallToolResult.structuredContent, which is correct architecture.",
+          "file_line": "eef-graph-tool-completion.plan.md:1400-1406"
+        }
+      ],
+      "load_bearing_claims_count": 8,
+      "high_stakes_verdicts": [
+        {
+          "claim": "D7 is complete (owner-marked 2026-06-08): go-live landed, engineering-complete, pnpm check green, value demonstrated via live LLM-mediated round trip (cited at lines 1506-1516)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md:1506-1513 (✅ COMPLETE banner, owner-marked 2026-06-08, go-live + pnpm check green + live LLM round trip); corroborated in code by apps/oak-curriculum-mcp-streamable-http/src/env.ts:43 (\"Default ON ... release-pre-proof\") and runtime-config-from-validated-env.ts:37-38 (resolveKillSwitchFlag default-ON, =false kill-switch); commit d9f0d9061 \"feat(eef): ship the EEF graph tool surface live by default (D0–D7)\"; e2e test apps/oak-curriculum-mcp-streamable-http/e2e-tests/eef-evidence-anchored.e2e.test.ts exists; post-go-live commit 968aff597 re-ran the D7 round trip \"all green\""
+        },
+        {
+          "claim": "All D0-D7 todos carry status=completed",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": ".agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md:27,31,35,39,43,47,51,55 each read 'status: completed'"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/sector-engagement/eef/current/eef-revalidate-on-new-graph-tools.plan.md",
+      "classification": "archive-complete",
+      "classification_evidence": [
+        {
+          "claim": "Status is 'completed', execution date 2026-06-11, verdict recorded",
+          "file_line": "eef-revalidate-on-new-graph-tools.plan.md:5-6"
+        },
+        {
+          "claim": "Overview states 'EXECUTED 2026-06-11: the value path is intact'",
+          "file_line": "eef-revalidate-on-new-graph-tools.plan.md:3"
+        },
+        {
+          "claim": "Both todos are status: completed with dated completion notes",
+          "file_line": "eef-revalidate-on-new-graph-tools.plan.md:16,21"
+        },
+        {
+          "claim": "Outcome section (line 35-49) records the full verdict and riding decisions — nothing remains open",
+          "file_line": "eef-revalidate-on-new-graph-tools.plan.md:35"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "All ideas in the plan are grounded in executed proof runs against the live estate, with specific commit SHAs, PR numbers, and corpus version. The verdict is unambiguous and the riding decisions are tightly scoped. No speculative or unvalidated claims appear — the plan records what was done and what was found, not what might be done. File lines 3, 7, 19 carry the substantive evidence.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan is well-structured with a clear why-section, a fully narrated outcome, precise scope bounds, and complete todo records. The frontmatter carries the execution agent, routing decision, commit SHAs, and signal identifiers needed for audit. The riding decisions are named with enough specificity to hand off (lines 44-49). The only gap is the folder-lane mismatch (current vs completed) which is administrative, not substantive.",
+      "salvage_value": [
+        {
+          "idea": "EEF value path is confirmed intact on the new anchored graph tools as of 2026-06-11 against origin/main 5310d1e4e",
+          "class": "good",
+          "file_line": "eef-revalidate-on-new-graph-tools.plan.md:7,19"
+        },
+        {
+          "idea": "get-keyword-graph is not on the EEF value path — the upstream plan's signal-eef-revalidation condition closes as false",
+          "class": "good",
+          "file_line": "eef-revalidate-on-new-graph-tools.plan.md:7,48-49"
+        },
+        {
+          "idea": "prerequisiteFor multiplicity finding: 3,452 emitted vs 2,605 unique, ×8 envelope inflation, agent-facing summary misstating the graph",
+          "class": "good",
+          "file_line": "eef-revalidate-on-new-graph-tools.plan.md:7,44-46"
+        },
+        {
+          "idea": "Dedup implementing cycle (vocab-gen dedup + drop-count surfacing + emission test) routed to Director queue, not yet implemented",
+          "class": "good",
+          "file_line": "eef-revalidate-on-new-graph-tools.plan.md:46"
+        },
+        {
+          "idea": "Re-proof methodology: three signal types x verbatim EEF ground truth x honest insufficiency x unfiltered provenance as a reusable validation pattern",
+          "class": "good",
+          "file_line": "eef-revalidate-on-new-graph-tools.plan.md:19,40-41"
+        },
+        {
+          "idea": "EEF corpus values reached the payload verbatim 10/10 on all key fields (impact, effect size, headline, definition, eef_url, provenance, caveats, answerType)",
+          "class": "good",
+          "file_line": "eef-revalidate-on-new-graph-tools.plan.md:19"
+        },
+        {
+          "idea": "Honest insufficiency preserved verbatim (impact_months null, Insufficient, honest headline) — no teacher-replacing language at the tool layer",
+          "class": "good",
+          "file_line": "eef-revalidate-on-new-graph-tools.plan.md:19"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": "done",
+      "v0_gate": "absent",
+      "edges_present": [
+        "thread"
+      ],
+      "status_raw": "completed",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing LOCKED required field `id` — the node's graph identity",
+          "file_line": "plan:1-22 (frontmatter block; field absent)"
+        },
+        {
+          "issue": "Missing LOCKED required field `node_type` (literal \"plan\") — the registry discriminator",
+          "file_line": "plan:1-22 (frontmatter block; field absent)"
+        },
+        {
+          "issue": "Missing required field `kind` — plan carries `todos` implying `executable` but axis is not declared",
+          "file_line": "plan:1-22 (frontmatter block; field absent); lens:§2.2 line 131"
+        },
+        {
+          "issue": "Missing required field `disposition` — plan is terminal (`status: completed` maps to `done`); `disposition` is required on terminal plans",
+          "file_line": "plan:5; lens:§3.3 line 210"
+        },
+        {
+          "issue": "Missing LOCKED required field `last_updated`",
+          "file_line": "plan:1-22 (frontmatter block; field absent); lens:§2.4 line 159"
+        },
+        {
+          "issue": "Missing required `serves_strategic_choice` — plan has `todos` (executable); field is required for executable plans or must carry `\"pending\"` sentinel",
+          "file_line": "plan:1-22 (frontmatter block; field absent); lens:§2.3 line 145"
+        },
+        {
+          "issue": "`status: completed` retained — V0 §2.5 explicitly drops `status`; terminal state must be expressed as `disposition: done`",
+          "file_line": "plan:5; lens:§2.5 line 165"
+        },
+        {
+          "issue": "`type: seed` present — V0 §2.5 explicitly drops `type` as free-label; replaced by `node_type` + `kind`",
+          "file_line": "plan:4; lens:§2.5 line 168"
+        },
+        {
+          "issue": "`isProject: false` present — V0 §2.5 explicitly drops `isProject`",
+          "file_line": "plan:12; lens:§2.5 line 169"
+        },
+        {
+          "issue": "`related_plans` key used instead of V0's `related` — naming variant not in the V0 contract",
+          "file_line": "plan:9; lens:§2.4 line 161"
+        }
+      ],
+      "unclassified_keys": [
+        "promoted",
+        "executed",
+        "related_plans"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "The plan assumes the execution report at the relative path ../../../../reports/eef-revalidation-report-2026-06-11.md is the durable evidence record. If that report is moved or the relative path breaks, the plan's stated evidence anchor becomes unresolvable. This is an archival brittleness, not a correctness issue — the plan is already completed.",
+          "file_line": "eef-revalidate-on-new-graph-tools.plan.md:7"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan assumes that the three signal types exercised (misconception, prior knowledge, thread progression) are sufficient to cover the EEF value path in full. get-keyword-graph was explicitly excluded (line 47-49) on the determination that it is not on the EEF value path. That determination is recorded and owner-signed, so the assumption is grounded — but the reasoning rests on a single execution-time assertion rather than a structural argument from the value path definition.",
+          "file_line": "eef-revalidate-on-new-graph-tools.plan.md:47-49"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan assumes the prerequisiteFor multiplicity dedup was routed to the Director queue and will be actioned there. No follow-up plan reference or Director queue citation is given; the plan itself marks this out-of-scope and completed. If the Director queue entry was never created, the dedup work has no live owner. This is an assumption about downstream handling that the plan cannot verify.",
+          "file_line": "eef-revalidate-on-new-graph-tools.plan.md:44-46"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan assumes that the snapshot taken at origin/main 5310d1e4e and corpus v1.3.0 (line 19) remains the reference baseline for future EEF validation. If the corpus or tools advance materially, the 'intact' verdict ages. This is an expected lifecycle assumption for a completed seed plan and requires no immediate action.",
+          "file_line": "eef-revalidate-on-new-graph-tools.plan.md:19"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": [
+        {
+          "claim": "EEF value path is INTACT on the new anchored tools — three signal types, verbatim ground truth, honest insufficiency, provenance unfiltered (cited at eef-revalidate-on-new-graph-tools.plan.md:7)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": ".agent/reports/eef-revalidation-report-2026-06-11.md:13-17 (verdict INTACT; provenance with original_authors unfiltered), :38 (10/10 verbatim ground-truth checks), :52-55 (honest insufficiency verbatim), :23-60 (three signal types: misconception/prior-knowledge/thread)"
+        },
+        {
+          "claim": "get-keyword-graph is NOT on the EEF value path (code and workflow level); the upstream plan's signal-eef-revalidation condition is determined false (cited at eef-revalidate-on-new-graph-tools.plan.md:7,48-49)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "eef-revalidation-report-2026-06-11.md:98-111 (NOT on path, no signal raised) corroborated first-hand by grep -rin keyword over packages/sdks/graph-corpus-sdk/src/eef-strands/ returning zero hits and eef-evidence.ts:17-27 imports; upstream graph-tools-value-redesign.plan.md:58-60 (signal-eef-revalidation completed, condition determined false)"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/sector-engagement/eef/future/eef-outcome-evaluation-infrastructure.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "This is the named follow-on for outcome questions intentionally kept out of eef-evidence-corpus.plan.md T19; the split is deliberate design.",
+          "file_line": "file:31"
+        },
+        {
+          "claim": "All four todos are pending and the plan is correctly filed as future; it is not complete and should not be archived.",
+          "file_line": "file:11-25"
+        },
+        {
+          "claim": "The flag-removal trigger at todo remove-flag-post-proof is a live gate on a feature flag lifecycle; the plan holds the only named owner of the release-post-proof stage.",
+          "file_line": "file:23-25"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan cleanly owns a real gap: the boundary between structural-fidelity testing (Slice 1, handled elsewhere) and LLM-output faithfulness evaluation, which cannot run inside Vitest. The flag-lifecycle endpoint it controls is architecturally significant. The human-outcome split decision is a genuine unresolved design question. No speculative or bad ideas detected; the weakness is purely hollow means (all TODOs pending, no named owners). See file:31-43.",
+      "content_quality": "adequate",
+      "content_quality_note": "The plan states its scope and trigger conditions clearly (file:31-51) and the todo set is well-structured (file:11-25). However, four pending TODOs represent the entire means layer: no rubric owner named, no fixture protocol committed, no attribution failure classes defined, no human-outcome split resolved. The plan is structurally V0-conformant but substantively thin — it names work rather than specifying it.",
+      "salvage_value": [
+        {
+          "idea": "LLM-output faithfulness evaluation is a distinct second slice from structural-fidelity (Slice 1) and must run outside Vitest with its own rubric.",
+          "class": "good",
+          "file_line": "file:31-38"
+        },
+        {
+          "idea": "A named rubric owner is a hard gate before ACTIVE promotion of the EEF surface.",
+          "class": "good",
+          "file_line": "file:41-43"
+        },
+        {
+          "idea": "Zero-tolerance critical failure classes for citation attribution must be defined before promotion.",
+          "class": "good",
+          "file_line": "file:41-43"
+        },
+        {
+          "idea": "Prompt-output fixture protocol with sampling cadence and data-version pinning is required for reproducible evaluation.",
+          "class": "good",
+          "file_line": "file:14-17"
+        },
+        {
+          "idea": "The human-outcome split decision (teacher-trust measurement vs SENCO workflow-time measurement) must be resolved before ACTIVE promotion and may warrant a separate named plan.",
+          "class": "good",
+          "file_line": "file:21-22"
+        },
+        {
+          "idea": "Final flag removal (release-post-proof stage) is owned here, not by the finishing plan's D7, with a specific dual trigger: D7 green AND faithfulness proof passing.",
+          "class": "good",
+          "file_line": "file:23-25"
+        },
+        {
+          "idea": "A successor value-evaluation plan tracked in the graph-estate consolidation plan would inherit the flag-removal trigger from this plan.",
+          "class": "speculative",
+          "file_line": "file:24-25"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [
+        "thread"
+      ],
+      "status_raw": "future",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing LOCKED field `id` — required for all plan nodes (V0 §2.1)",
+          "file_line": "eef-outcome-evaluation-infrastructure.plan.md:1 (frontmatter has no `id` key)"
+        },
+        {
+          "issue": "Missing LOCKED field `node_type` — required for all plan nodes (V0 §2.1)",
+          "file_line": "eef-outcome-evaluation-infrastructure.plan.md:1 (frontmatter has no `node_type` key)"
+        },
+        {
+          "issue": "Missing LOCKED field `kind` — replaces `status` entirely (V0 §2.2); `status: future` maps to `kind: strategic` per §3.5 but `kind` itself is absent",
+          "file_line": "eef-outcome-evaluation-infrastructure.plan.md:6"
+        },
+        {
+          "issue": "Missing LOCKED field `last_updated` — required for all plans (V0 §2.4)",
+          "file_line": "eef-outcome-evaluation-infrastructure.plan.md:1 (frontmatter has no `last_updated` key)"
+        },
+        {
+          "issue": "Dropped field `status: future` present — V0 §2.5 explicitly drops `status`; migrates to `kind` / `disposition` / `gate` axes (§3.5)",
+          "file_line": "eef-outcome-evaluation-infrastructure.plan.md:6"
+        },
+        {
+          "issue": "Dropped field `type: evaluation-infrastructure` present — V0 §2.5 explicitly drops free-label `type`; replaced by `node_type` + `kind`",
+          "file_line": "eef-outcome-evaluation-infrastructure.plan.md:5"
+        },
+        {
+          "issue": "Dropped field `isProject: false` present — V0 §2.5 explicitly drops `isProject`; subsumed by `projects_to` edge",
+          "file_line": "eef-outcome-evaluation-infrastructure.plan.md:9"
+        },
+        {
+          "issue": "`todos` present on a plan that maps to `kind: strategic` — V0 §2.4 states `todos` are forbidden on `strategic` plans",
+          "file_line": "eef-outcome-evaluation-infrastructure.plan.md:10-26"
+        },
+        {
+          "issue": "Missing `serves_strategic_choice` — recommended for strategic plans, required for executable (V0 §2.3)",
+          "file_line": "eef-outcome-evaluation-infrastructure.plan.md:1 (frontmatter has no `serves_strategic_choice` key)"
+        },
+        {
+          "issue": "`related_plans` key present — V0 classifies the untyped see-also edge as `related` (§2.4); `related_plans` is an unclassified variant spelling not in the V0 contract",
+          "file_line": "eef-outcome-evaluation-infrastructure.plan.md:7-8"
+        }
+      ],
+      "unclassified_keys": [
+        "related_plans"
+      ],
+      "locked_contradictions": [
+        {
+          "item": "`todos` forbidden on `strategic` plans (V0 §2.4, LOCKED) — plan carries 5 concrete `todos` (lines 11–26) while `status: future` maps unambiguously to `kind: strategic` (§3.5 migration map). The todos name concrete delivery work (rubric owner, fixture protocol, failure classes, split-decision, flag removal), which suggests executable intent; the `future/` folder placement and `status: future` suggest strategic. Owner re-ratification required: either reclassify as `kind: executable` (move todos to an executable plan, adjust folder if needed) or reclassify as `kind: strategic`, replace todos with a `promotion_trigger`, and move the work items to the plan body.",
+          "evidence": "`status: future` at line 6 maps to `kind: strategic` per §3.5; `todos` block at lines 10–26 carries 5 pending items. V0 §2.4 states: 'Forbidden on `strategic` plans.' V0 §3.1: 'strategic — intent, not yet executable (no TDD cycles); carries promotion_trigger'.",
+          "file_line": "eef-outcome-evaluation-infrastructure.plan.md:6 (status), 10-26 (todos)"
+        }
+      ],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "The plan assumes a named rubric owner will exist before promotion, but no candidate owner, team, or ownership process is identified. The pending todo (define-rubric-and-owner) leaves both the accountability chain and cadence undefined, creating a structural gate with no evident path to resolution.",
+          "file_line": "eef-outcome-evaluation-infrastructure.plan.md:12-14"
+        },
+        {
+          "severity": "high",
+          "claim": "The flag-removal trigger assumes the finishing plan's D7 will gate release-pre-proof correctly and that this plan's proof will pass before unconditional registration is warranted. Neither the finishing plan's current D7 status nor the proof criteria for 'faithfulness/outcome proof passing' are defined here, so the trigger chain rests on an unverified cross-plan dependency.",
+          "file_line": "eef-outcome-evaluation-infrastructure.plan.md:24-25 and 44-51"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan assumes that LLM-mediated output fidelity (caveat/attribution preservation) can be measured via a fixed fixture-sampling protocol and manual adjudication, but does not acknowledge that LLM output non-determinism may require statistical sampling at scale rather than a discrete pass/fail fixture set. The 'zero-tolerance critical failure class' framing at line 43 is inconsistent with probabilistic LLM behaviour.",
+          "file_line": "eef-outcome-evaluation-infrastructure.plan.md:16-19 and 43"
+        },
+        {
+          "severity": "medium",
+          "claim": "The human-outcome split decision (todo human-outcome-split-decision) assumes the answer is resolvable before EEF ACTIVE promotion without specifying who decides, what evidence is required, or what the default split is if the decision is not made in time. A missing default leaves the promotion gate open-ended.",
+          "file_line": "eef-outcome-evaluation-infrastructure.plan.md:20-22"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan references eef-evidence-corpus.plan.md T19 as the upstream boundary condition (this plan measures a 'different thing' than Slice 1), but does not confirm that T19 is in a state where its structural fidelity proof is already green. If T19 is itself incomplete, the sequencing assumption may not hold.",
+          "file_line": "eef-outcome-evaluation-infrastructure.plan.md:31-32"
+        },
+        {
+          "severity": "low",
+          "claim": "The successor-plan escape clause ('if a successor value-evaluation plan supersedes this one') is speculative and introduces an assumption that the graph-estate consolidation plan tracks this relationship. No citation to that consolidation plan is given, making the inheritance trigger unverifiable.",
+          "file_line": "eef-outcome-evaluation-infrastructure.plan.md:24 (last sentence of todo remove-flag-post-proof)"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": [
+        {
+          "claim": "If a successor value-evaluation plan supersedes this one (tracked in the graph-estate consolidation plan), it inherits the flag-removal trigger.",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": ".agent/plans/sector-engagement/eef/future/eef-outcome-evaluation-infrastructure.plan.md:24 — frontmatter todo remove-flag-post-proof closes: \"If a successor value-evaluation plan supersedes this one (tracked in the graph-estate consolidation plan), it inherits this trigger.\" The cross-referenced plan resolves to a real file: .agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-estate-consolidation.plan.md"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/sector-engagement/eef/future/eef-school-leadership-evidence.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Type is seed and status is future — plan is intentionally incomplete and awaiting value ratification before design begins",
+          "file_line": "eef-school-leadership-evidence.plan.md:4-5"
+        },
+        {
+          "claim": "Hard gate explicitly prohibits any design until school-leader user value is established and ratified",
+          "file_line": "eef-school-leadership-evidence.plan.md:47-50"
+        },
+        {
+          "claim": "All three todos are pending with no completed work recorded",
+          "file_line": "eef-school-leadership-evidence.plan.md:11-22"
+        },
+        {
+          "claim": "The plan encodes a structural split decision (2026-05-31) that must be preserved for continuity of the teacher plan's scope boundary",
+          "file_line": "eef-school-leadership-evidence.plan.md:43-45"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan's core substance is an architectural discipline decision: build only when user value pulls, not when data exists. That decision is correctly reasoned (file:47-50), correctly scoped to a seed, and prevents a known failure mode named explicitly. All content is purposeful; nothing is filler.",
+      "content_quality": "strong",
+      "content_quality_note": "The hard gate at file:47-50 is crisp and actionable. The todo sequencing (value first, then strand scope, then surface decision) at file:11-22 is correctly ordered. The doctrine-inheritance clause at file:57-60 avoids redundant re-derivation. No padding, no vague intent.",
+      "salvage_value": [
+        {
+          "idea": "School-policy / leadership EEF strands (class size, TAs, setting/streaming, performance pay, summer schools, extending school time, mentoring, aspiration interventions, repeating a year, school uniform) are a distinct user-value surface from classroom-pedagogy strands",
+          "class": "good",
+          "file_line": "eef-school-leadership-evidence.plan.md:30-40"
+        },
+        {
+          "idea": "The first deliverable for this surface must be a ratified SLT user-value statement, not a tool or schema design",
+          "class": "good",
+          "file_line": "eef-school-leadership-evidence.plan.md:11-14"
+        },
+        {
+          "idea": "Surface-type decision (MCP vs other host vs non-MCP artefact) is explicitly deferred until value and strand scope are settled",
+          "class": "good",
+          "file_line": "eef-school-leadership-evidence.plan.md:19-22"
+        },
+        {
+          "idea": "The EEF corpus is shared and whole; this plan represents a surface/scope split, not a data split or copy",
+          "class": "good",
+          "file_line": "eef-school-leadership-evidence.plan.md:56-57"
+        },
+        {
+          "idea": "Doctrine inheritance from the teacher plan (known-vs-unknown data, deterministic boundary, single-Zod-call schemas, no Zod over corpus) prevents re-litigation",
+          "class": "good",
+          "file_line": "eef-school-leadership-evidence.plan.md:57-60"
+        },
+        {
+          "idea": "Existence of data strands is not a sufficient reason to build a surface for them",
+          "class": "good",
+          "file_line": "eef-school-leadership-evidence.plan.md:49-50"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [
+        "thread"
+      ],
+      "status_raw": "future",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (V0 §2.1: required for all plans; the node's stable graph identity)",
+          "file_line": "eef-school-leadership-evidence.plan.md:1-23 (entire frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `node_type: \"plan\"` (V0 §2.1: required for all plans; registry discriminator)",
+          "file_line": "eef-school-leadership-evidence.plan.md:1-23"
+        },
+        {
+          "issue": "Missing required field `last_updated` (V0 §2.4: required for all plans)",
+          "file_line": "eef-school-leadership-evidence.plan.md:1-23"
+        },
+        {
+          "issue": "Carries `type: seed` — V0 §2.5 explicitly drops `type` as a free-label; `kind: strategic` is the correct V0 field",
+          "file_line": "eef-school-leadership-evidence.plan.md:4"
+        },
+        {
+          "issue": "Carries `status: future` — V0 §2.5 explicitly drops `status`; readiness is expressed as `kind: strategic`",
+          "file_line": "eef-school-leadership-evidence.plan.md:5"
+        },
+        {
+          "issue": "Carries `isProject: false` — V0 §2.5 explicitly drops `isProject`",
+          "file_line": "eef-school-leadership-evidence.plan.md:9"
+        },
+        {
+          "issue": "Missing `promotion_trigger` — V0 §2.4 requires this field on `kind: strategic` plans (the condition that promotes to executable)",
+          "file_line": "eef-school-leadership-evidence.plan.md:1-23"
+        },
+        {
+          "issue": "Carries `todos` on what maps to a `kind: strategic` plan — V0 §2.4 forbids `todos` on `strategic` plans (allowed only on `executable`)",
+          "file_line": "eef-school-leadership-evidence.plan.md:10-22"
+        },
+        {
+          "issue": "Missing `serves_strategic_choice` — V0 §2.3 requires this for executable plans and recommends it for strategic plans; no `EEF-*` strategic-choice ID or `\"pending\"` sentinel present",
+          "file_line": "eef-school-leadership-evidence.plan.md:1-23"
+        },
+        {
+          "issue": "`related_plans` is not a V0-classified key; the V0 equivalent is `related` (untyped see-also) or a typed `depends_on` edge",
+          "file_line": "eef-school-leadership-evidence.plan.md:7-8"
+        }
+      ],
+      "unclassified_keys": [
+        "related_plans"
+      ],
+      "locked_contradictions": [
+        {
+          "item": "V0 §2.4 LOCKED: `todos` is forbidden on `strategic` plans. This plan carries three `todos` with intra-todo `depends_on` wiring (a pattern absent from the V0 Zod sketch). The todo-level `depends_on` list is not part of the V0 field contract (V0 §2.3 defines `depends_on` as a plan-level edge, not a per-todo edge). If the estate regularly carries per-todo dependency wiring, this is a SURVEY-MAY-REFINE signal for the `todos` sub-schema.",
+          "evidence": "Frontmatter carries `todos` with `depends_on` arrays on individual todo items (e.g. `depends_on: [establish-school-leader-value]`); V0 §2.4 states `todos` is for `executable` plans only and the Zod sketch (§6) shows no `depends_on` on the todo object.",
+          "file_line": "eef-school-leadership-evidence.plan.md:10-22 / plan-node-schema.v0.md:156-157, 489-496"
+        }
+      ],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan assumes a clean user-segment boundary: classroom-pedagogy strands belong exclusively to teachers, and school-policy strands belong exclusively to school leaders (SLT). This is asserted without evidence (no user research cited). Some strands (e.g. teaching assistants, setting and streaming) are legitimately relevant to both classroom teachers and SLT; the segmentation may be premature and could collapse once real user-value work begins.",
+          "file_line": "eef-school-leadership-evidence.plan.md:38-40"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan assumes the EEF Toolkit's school-policy strands have 'no intersection with the lesson-adaptation workflow' (line 40). This is a strong claim made at seed stage before any user-value research. If intersection exists, the plan's motivating rationale for the split weakens and scope-strand-set (todo at line 15-18) would need re-framing.",
+          "file_line": "eef-school-leadership-evidence.plan.md:40"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan assumes the teacher plan's settled doctrine (known-vs-unknown data, deterministic boundary, single-Zod-call MCP schemas) can be directly inherited for a school-leader surface without re-evaluation (lines 57-60). School-leader queries may differ in shape — aggregated, cross-strand, budget-scenario — enough that the deterministic-input-boundary assumption needs re-checking at design time, not just accepted as settled.",
+          "file_line": "eef-school-leadership-evidence.plan.md:57-60"
+        },
+        {
+          "severity": "info",
+          "claim": "The hard gate (line 47-51) is well-structured and explicitly guards against the 'build because data exists' anti-pattern. This is a design assumption that is correctly surfaced and gated rather than left implicit — no action needed.",
+          "file_line": "eef-school-leadership-evidence.plan.md:47-51"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/sector-engagement/eef/future/eef-standalone-evidence-workflows.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "type=seed, status=future — plan explicitly self-identifies as a future seed waiting on value ratification",
+          "file_line": "eef-standalone-evidence-workflows.plan.md:4-5"
+        },
+        {
+          "claim": "Gate clause explicitly defers all design work",
+          "file_line": "eef-standalone-evidence-workflows.plan.md:39-44"
+        },
+        {
+          "claim": "Both todos are pending with no work started",
+          "file_line": "eef-standalone-evidence-workflows.plan.md:11-18"
+        },
+        {
+          "claim": "Captures a distinct unbundled value thesis that would otherwise be lost",
+          "file_line": "eef-standalone-evidence-workflows.plan.md:36-37"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan's core thesis — that standalone EEF value (impact/cost browser, myth-busting, approach decision-support) is real and distinct from Oak-intersection value — is well-reasoned and the gate discipline is sound. The seed format is appropriate: it captures the idea and the reuse dependency without prematurely designing tooling (file:12-18, file:39-44).",
+      "content_quality": "adequate",
+      "content_quality_note": "The plan is minimal but intentionally so for a seed. It does what a seed should: names the value thesis, defers design, and records the dependency. It does not yet have an example teacher journey or a specific value statement (the first todo is to produce that), so the content is adequate rather than strong (file:11-13).",
+      "salvage_value": [
+        {
+          "idea": "Standalone EEF value (evidence-base-only teacher queries) is distinct from Oak-intersection value and warrants its own workflow family",
+          "class": "good",
+          "file_line": "eef-standalone-evidence-workflows.plan.md:29-37"
+        },
+        {
+          "idea": "Do not design standalone workflows until teacher value is established and ratified — output is a value statement, not a tool design",
+          "class": "good",
+          "file_line": "eef-standalone-evidence-workflows.plan.md:11-13"
+        },
+        {
+          "idea": "Standalone workflows reuse the deterministic EEF tool and interpretation resource delivered by the teacher plan — no new graph or data layer needed",
+          "class": "good",
+          "file_line": "eef-standalone-evidence-workflows.plan.md:15-18"
+        },
+        {
+          "idea": "Example standalone use-cases: 'is collaborative learning worth it for this age group?', 'what is high-impact for low effort?', 'does catering to learning styles help?'",
+          "class": "good",
+          "file_line": "eef-standalone-evidence-workflows.plan.md:32-34"
+        },
+        {
+          "idea": "Myth-busting on debunked approaches (learning styles, ability streaming) as a discrete standalone workflow type",
+          "class": "speculative",
+          "file_line": "eef-standalone-evidence-workflows.plan.md:3"
+        },
+        {
+          "idea": "Impact/cost leverage browser as a standalone workflow type",
+          "class": "speculative",
+          "file_line": "eef-standalone-evidence-workflows.plan.md:3"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [
+        "thread"
+      ],
+      "status_raw": "future",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (V0 §2.1: required for all plans)",
+          "file_line": "plan.md:1-19 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `node_type` (V0 §2.1 line 117: required for all; replaces free `type:` label)",
+          "file_line": "plan.md:1-19 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `kind` (V0 §2.2 line 132: required for all; replaces readiness senses of `status:`)",
+          "file_line": "plan.md:1-19 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `last_updated` (V0 §2.4 line 159: required for all)",
+          "file_line": "plan.md:1-19 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "`type: seed` is a dropped free-label (V0 §2.5 line 169); replaced by `node_type` + `kind`",
+          "file_line": "plan.md:4"
+        },
+        {
+          "issue": "`status: future` is a dropped field (V0 §2.5 line 166); split into `kind`/`disposition`/`gate`/Linear-projected execution axis",
+          "file_line": "plan.md:5"
+        },
+        {
+          "issue": "`isProject: false` is a dropped field (V0 §2.5 line 168); subsumed by `projects_to` edge",
+          "file_line": "plan.md:9"
+        },
+        {
+          "issue": "`todos` present but plan content is strategic (no TDD cycles; body carries a promotion-gate condition); V0 §2.4 line 157 forbids `todos` on `strategic` plans; additionally `promotion_trigger` is absent (V0 §2.4 line 158: required for strategic)",
+          "file_line": "plan.md:10-18"
+        },
+        {
+          "issue": "`related_plans` key does not match V0's canonical `related` key (V0 §2.4 line 161)",
+          "file_line": "plan.md:7"
+        },
+        {
+          "issue": "Missing `serves_strategic_choice` edge (V0 §2.3 line 145: required for executable plans, recommended for strategic; absent entirely)",
+          "file_line": "plan.md:1-19 (frontmatter block — field absent)"
+        }
+      ],
+      "unclassified_keys": [
+        "related_plans",
+        "todos[*].depends_on"
+      ],
+      "locked_contradictions": [
+        {
+          "item": "Per-todo `depends_on` list present (inter-todo ordering) — V0 §2.4 line 157 specifies todo shape as `{ id, content, status }` only; this extended shape is not in the locked contract. V0 §8 defers per-todo endpoint questions (SURVEY-MAY-REFINE) but does not reserve intra-todo dependency edges. Estate evidence that todos carry their own dependency graph may warrant V0 additive refinement of the todo shape at V1.",
+          "evidence": "todos[0].depends_on: [] and todos[1].depends_on: [establish-standalone-value] — intra-plan sequencing encoded on the todo objects",
+          "file_line": "plan.md:14,18"
+        }
+      ],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan assumes the deterministic EEF tool and interpretation resource that the teacher plan (eef-graph-tool-completion.plan.md) delivers will exist and be reusable before standalone workflows are shaped. If the teacher plan stalls, is descoped, or omits the interpretation resource, this plan's gate condition is never met and the seed remains permanently blocked.",
+          "file_line": "eef-standalone-evidence-workflows.plan.md:16-17 (shape-standalone-workflows todo) and line 44 ('they reuse the deterministic EEF tool and the interpretation resource the teacher plan delivers')"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan assumes 'teacher value of EEF used on its own' is a discoverable, ratifiable thing — i.e., that there is a real teacher decision-making context where EEF evidence alone (no Oak lesson) is sufficient and valued. This is presented as a hypothesis to investigate (line 12), but the framing in the body (lines 33-37) lists concrete use cases as if they are already validated, which may prejudge the value-establishment exercise.",
+          "file_line": "eef-standalone-evidence-workflows.plan.md:12 (establish-standalone-value todo) and lines 33-37 (body examples)"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan assumes 'no new graph or data layer' is needed for standalone workflows (line 44). This has not yet been validated: standalone workflows operating across different axes (impact/cost leverage, debunked-approach myth-busting) may surface data-shape or traversal requirements that the teacher-plan's graph tool was not designed to satisfy.",
+          "file_line": "eef-standalone-evidence-workflows.plan.md:44"
+        },
+        {
+          "severity": "info",
+          "claim": "The seed captures its own uncertainty clearly: the gate at line 40 explicitly prohibits design until value is ratified, and the overview labels this a seed. The assumption discipline is self-aware; no assumption is presented as settled.",
+          "file_line": "eef-standalone-evidence-workflows.plan.md:3 (overview, type: seed) and lines 40-41 (gate)"
+        }
+      ],
+      "load_bearing_claims_count": 3,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/sector-engagement/eef/future/eef-tool-metric-filter-inputs.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Seed type with status future; promotion trigger is non-speculative and observable",
+          "file_line": "file:3-4,63-64"
+        },
+        {
+          "claim": "Carries settled facts recorded at deferral time that must survive re-org (five fields, reserved name, binding rules)",
+          "file_line": "file:45-64"
+        },
+        {
+          "claim": "No v1 consumer existed; enhancement correctly parked pending D7 and observed usage",
+          "file_line": "file:37-43"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan carries precisely the right level of content for a deferral seed: a crisp rationale (file:33-43), the settled corpus facts that must survive re-org (file:45-64), a concrete promotion trigger (file:63-64), and binding constraints that prevent the enhancement from regressing on landing (file:55-59). No bloat, no speculation, no bad ideas present.",
+      "content_quality": "strong",
+      "content_quality_note": "The deferral rationale is grounded in concrete corpus measurements (1-5.5KB strands, file:35) and contract decisions (PDR-058 / Decision 6, file:38-39). The promotion trigger is fully observable and avoids date-coupling (file:63-64). The binding rules section (file:55-59) encodes corpus truths at the right precision (literal union, not range; orthogonal Zod concerns named explicitly). The two todos are well-sequenced with an explicit dependency (file:13-19).",
+      "salvage_value": [
+        {
+          "idea": "Defer exact-value metric filters until a real consumer is observed (PDR-058 discipline applied at deferral time)",
+          "class": "good",
+          "file_line": "file:37-43"
+        },
+        {
+          "idea": "Five candidate filter fields (impactMonths, costRating, costLabel, evidenceStrengthRating, evidenceStrengthLabel) sourced from D2 graph projections",
+          "class": "good",
+          "file_line": "file:47-52"
+        },
+        {
+          "idea": "Reserve eefHeadlineMetricSubset name at D4 binding level for this enhancement",
+          "class": "good",
+          "file_line": "file:53-54"
+        },
+        {
+          "idea": "Exact-corpus-values-only rule (no buckets, thresholds, weights, or comparators) binds on landing",
+          "class": "good",
+          "file_line": "file:55-57"
+        },
+        {
+          "idea": "cost_rating domain is literal union {1,2,3,5} — gap is corpus truth, never smoothed",
+          "class": "good",
+          "file_line": "file:58-59"
+        },
+        {
+          "idea": "impact_months corpus null on 4 strands — nullability and field-optionality are orthogonal Zod concerns",
+          "class": "good",
+          "file_line": "file:57-58"
+        },
+        {
+          "idea": "Promotion trigger: D7 lands green AND observed agent usage confirms exact-match pattern — both observable, neither a date",
+          "class": "good",
+          "file_line": "file:63-64"
+        },
+        {
+          "idea": "Schema + handler + tests land as one atomic change",
+          "class": "good",
+          "file_line": "file:17-18"
+        },
+        {
+          "idea": "extend eefToolInputSchemaSource and the at-least-one-selector rule on landing",
+          "class": "good",
+          "file_line": "file:17-18"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [
+        "thread"
+      ],
+      "status_raw": "future",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (required for all plans)",
+          "file_line": "eef-tool-metric-filter-inputs.plan.md:1-19 (absent from frontmatter); V0 §2.1 line 116"
+        },
+        {
+          "issue": "Missing required field `node_type: plan` (required for all plans)",
+          "file_line": "eef-tool-metric-filter-inputs.plan.md:1-19 (absent); V0 §2.1 line 117"
+        },
+        {
+          "issue": "Missing required field `kind` (required for all plans; inferred `strategic` from status migration map)",
+          "file_line": "eef-tool-metric-filter-inputs.plan.md:1-19 (absent); V0 §3.1"
+        },
+        {
+          "issue": "Missing required field `last_updated` (required for all plans)",
+          "file_line": "eef-tool-metric-filter-inputs.plan.md:1-19 (absent); V0 §2.4 line 159"
+        },
+        {
+          "issue": "Dropped emergent key `type: seed` present; V0 replaces free-label `type` with `node_type` + `kind`",
+          "file_line": "eef-tool-metric-filter-inputs.plan.md:4; V0 §2.5 line 169"
+        },
+        {
+          "issue": "Dropped emergent key `status: future` present; V0 replaces `status` with orthogonal axes (`kind`/`disposition`/`gate`)",
+          "file_line": "eef-tool-metric-filter-inputs.plan.md:5; V0 §2.5 line 165"
+        },
+        {
+          "issue": "Dropped emergent key `isProject: false` present",
+          "file_line": "eef-tool-metric-filter-inputs.plan.md:10; V0 §2.5 line 167"
+        },
+        {
+          "issue": "Key `related_plans` is not a V0 field; V0 canonical name is `related`",
+          "file_line": "eef-tool-metric-filter-inputs.plan.md:7; V0 §2.4 line 161"
+        },
+        {
+          "issue": "`todos` present on a strategic (seed) plan; V0 forbids `todos` on `strategic` plans",
+          "file_line": "eef-tool-metric-filter-inputs.plan.md:11-19; V0 §2.4 line 157"
+        },
+        {
+          "issue": "`promotion_trigger` present only in body prose, not as a frontmatter field; V0 requires it as a frontmatter field on strategic plans",
+          "file_line": "eef-tool-metric-filter-inputs.plan.md:62 (body); V0 §2.4 line 158"
+        },
+        {
+          "issue": "Missing `serves_strategic_choice` (recommended for strategic plans, required for executable)",
+          "file_line": "eef-tool-metric-filter-inputs.plan.md:1-19 (absent); V0 §2.3 line 145"
+        },
+        {
+          "issue": "Plan describes owner-deferred state (body line 30) with no V0 `gate` object capturing the block with `awaiting`, `clears_when`, and mandatory `expires`",
+          "file_line": "eef-tool-metric-filter-inputs.plan.md:30; V0 §3.4"
+        }
+      ],
+      "unclassified_keys": [
+        "related_plans"
+      ],
+      "locked_contradictions": [
+        {
+          "item": "V0 LOCKS that `todos` is forbidden on `strategic` plans (§2.4). This seed plan carries two `todos` used as sequenced evidence-gathering steps (gather-usage-evidence → ratify-and-specify), not deliverables. The estate shows a real pattern where strategic/seed plans use `todos` to sequence their own promotion preconditions — a use-case V0's prohibition does not accommodate. The survey should surface whether `todos` on strategic plans carrying `kind: blocking` dependency sequencing is a genuine estate pattern requiring a V1 additive allowance.",
+          "evidence": "todos at lines 11-19 on a plan whose `status: future` / `type: seed` maps to `kind: strategic`; V0 §2.4 line 157 states 'Forbidden on strategic plans'",
+          "file_line": "eef-tool-metric-filter-inputs.plan.md:11-19; V0 §2.4 line 157"
+        }
+      ],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "low",
+          "claim": "The promotion trigger assumes D7 is the correct predecessor gate, but the plan does not name what D7 is or cite its plan file. If D7 is renamed, restructured, or the axis/strand value path is proved by a different decision point, the trigger becomes ambiguous. The D3 contract plan is cited but D7 is not linked.",
+          "file_line": "eef-tool-metric-filter-inputs.plan.md:63"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan assumes that observed agent usage of exact-match metric filtering will materialise after D7 lands. This is a reasonable sequencing assumption but it is not grounded — if agents consistently reason over returned headline facts without ever issuing exact-match filters, the trigger condition may never be met and the seed will silently stall indefinitely. There is no timeout, review cadence, or negative-evidence path named.",
+          "file_line": "eef-tool-metric-filter-inputs.plan.md:12-13"
+        },
+        {
+          "severity": "info",
+          "claim": "The cost_rating domain {1, 2, 3, 5} is stated as corpus truth with the gap treated as intentional (line 59). This is a reasonable assumption given D2 projections, but the plan does not cite a corpus verification artifact. If the gap is a data quality issue rather than an intentional domain, the literal-union schema constraint will silently exclude real data.",
+          "file_line": "eef-tool-metric-filter-inputs.plan.md:58-59"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan assumes impact_months carries corpus null on exactly 4 strands (line 58). This count is stated as a settled fact recorded at deferral time, not derived from a live corpus check. Corpus updates between deferral (2026-06-03) and eventual landing could change the null-count, silently invalidating the Zod schema design assumption.",
+          "file_line": "eef-tool-metric-filter-inputs.plan.md:17-18"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/sector-engagement/future/dfe-data-sdk.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Seed status, future lane, no executable work — correctly positioned; promotion trigger is defined and gated on external consumer-value evidence not yet available",
+          "file_line": "dfe-data-sdk.plan.md:4,230-241"
+        },
+        {
+          "claim": "Three pending todos with sequential dependencies; none can progress until a named Oak consumer exists — correctly inactive",
+          "file_line": "dfe-data-sdk.plan.md:13-23"
+        },
+        {
+          "claim": "Settled research facts section carries first-hand-verified API data (2026-06-12) not recorded elsewhere; this is the primary reason to keep rather than archive",
+          "file_line": "dfe-data-sdk.plan.md:72-113"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is a well-structured seed with first-hand research (lines 72-113), explicit domain boundaries (lines 115-128), a coherent promotion gate (lines 230-241), and a frank risk register (lines 207-227). The consumer-value-first gate at lines 13-15 is the correct anti-over-engineering posture. The Python-path analysis (lines 148-188) is thorough and correctly marks all tooling as illustrative-only. No inflated scope, no premature implementation commitment.",
+      "content_quality": "strong",
+      "content_quality_note": "The settled-research-facts section (lines 72-113) is unusually strong for a seed: live API calls verified, SDK landscape checked, licence confirmed, coverage quantified. The strategic acceptance criteria (lines 192-205) are concrete and testable. The risk register (lines 207-227) names the most dangerous unknown (undocumented rate limits, SQID opacity, Python-path integration cost) with proportionate mitigations. The promotion trigger (lines 230-241) is crisp and avoids false precision.",
+      "salvage_value": [
+        {
+          "idea": "Consumer-value gate: no SDK work begins until a named Oak consumer with a ratified value statement exists",
+          "class": "good",
+          "file_line": "dfe-data-sdk.plan.md:13-15"
+        },
+        {
+          "idea": "Schema-first SDK design: types and validators generated from the published EES OpenAPI document at codegen time, not hand-rolled",
+          "class": "good",
+          "file_line": "dfe-data-sdk.plan.md:58-64"
+        },
+        {
+          "idea": "Transport-agnostic workspace: no MCP, HTTP-server, or CLI types in the SDK; surfacing is a consumer concern",
+          "class": "good",
+          "file_line": "dfe-data-sdk.plan.md:116-118"
+        },
+        {
+          "idea": "Zero Oak-domain logic in the SDK: dataset choices, caching, and presentation belong to consumers; framework test applies",
+          "class": "good",
+          "file_line": "dfe-data-sdk.plan.md:119-122"
+        },
+        {
+          "idea": "Result-pattern error handling for all endpoint wrappers",
+          "class": "good",
+          "file_line": "dfe-data-sdk.plan.md:65-71"
+        },
+        {
+          "idea": "Every consumed value carries provenance: publication, dataset id, dataset version, and OGL attribution",
+          "class": "good",
+          "file_line": "dfe-data-sdk.plan.md:198-199"
+        },
+        {
+          "idea": "DfE EES is complementary to EEF corpus, not a replacement; each source remains authoritative for what it is",
+          "class": "good",
+          "file_line": "dfe-data-sdk.plan.md:46-50"
+        },
+        {
+          "idea": "Build-vs-buy survey: no TypeScript SDK exists from DfE, Python client is in-development — re-verify at promotion as the most drift-prone fact",
+          "class": "good",
+          "file_line": "dfe-data-sdk.plan.md:103-107"
+        },
+        {
+          "idea": "API is anonymous and beta; dataset version pinning plus codegen refresh path mitigates breaking changes",
+          "class": "good",
+          "file_line": "dfe-data-sdk.plan.md:80-84,207-210"
+        },
+        {
+          "idea": "SQID metadata helpers as first-class SDK concern to avoid consumers hand-caching label mappings ad hoc",
+          "class": "good",
+          "file_line": "dfe-data-sdk.plan.md:108-111"
+        },
+        {
+          "idea": "Undocumented rate limits: unknown operational envelope; consumers needing volume must probe and record findings at promotion",
+          "class": "good",
+          "file_line": "dfe-data-sdk.plan.md:211-213"
+        },
+        {
+          "idea": "Coverage gaps: 140 of 1,085 datasets API-queryable; school workforce and exclusions are not API-queryable today",
+          "class": "good",
+          "file_line": "dfe-data-sdk.plan.md:215-218"
+        },
+        {
+          "idea": "Python workspace path: aligns with DfE Analytical Services tooling; would unlock monorepo's first Python workspace as strategic side-benefit",
+          "class": "speculative",
+          "file_line": "dfe-data-sdk.plan.md:148-168"
+        },
+        {
+          "idea": "Python-path integration shape: minimal package.json deferring to uv or built binaries, pure Python tooling directory",
+          "class": "speculative",
+          "file_line": "dfe-data-sdk.plan.md:170-182"
+        },
+        {
+          "idea": "oak-python-starter as reference material for gate analogues (uv, hatchling, pytest, pyright, ruff, pre-commit, commitizen, deptry, import-linter)",
+          "class": "speculative",
+          "file_line": "dfe-data-sdk.plan.md:178-182"
+        },
+        {
+          "idea": "Codegen home decision: whether oak-sdk-codegen generalises, a sibling generator stands alone, or a Python OpenAPI generator applies — open architecture decision deferred to promotion",
+          "class": "speculative",
+          "file_line": "dfe-data-sdk.plan.md:219-223"
+        },
+        {
+          "idea": "Non-goal: 945 non-API datasets (ZIP/CSV downloads) are out of scope; no bulk-catalogue manager",
+          "class": "good",
+          "file_line": "dfe-data-sdk.plan.md:125-128"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "future",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing LOCKED required field `id` — every plan node requires a stable kebab slug (§2.1)",
+          "file_line": "dfe-data-sdk.plan.md:1"
+        },
+        {
+          "issue": "Missing LOCKED required field `node_type: plan` — the registry discriminator is absent (§2.1)",
+          "file_line": "dfe-data-sdk.plan.md:1"
+        },
+        {
+          "issue": "Missing LOCKED required field `kind` — replaces `status:`; this plan is `strategic` per folder and body (§2.2, §3.1)",
+          "file_line": "dfe-data-sdk.plan.md:1"
+        },
+        {
+          "issue": "Missing LOCKED required field `last_updated` — ISO date required for all plans (§2.4)",
+          "file_line": "dfe-data-sdk.plan.md:1"
+        },
+        {
+          "issue": "`type: seed` is a dropped free-label (V0 §2.5, 49 census); replaced by `node_type` + `kind`",
+          "file_line": "dfe-data-sdk.plan.md:4"
+        },
+        {
+          "issue": "`status: future` is a dropped field (V0 §2.5, 386 census); state is carried by `kind`/`disposition`/`gate`/Linear projection axes",
+          "file_line": "dfe-data-sdk.plan.md:5"
+        },
+        {
+          "issue": "`related_plans` is not the V0 canonical key name; V0 §2.4 names the field `related` (untyped see-also)",
+          "file_line": "dfe-data-sdk.plan.md:6"
+        },
+        {
+          "issue": "`promotion_trigger` exists only in the body (line 229) as a prose section heading, not as a frontmatter field; V0 §2.4 mandates it as a frontmatter field on `strategic` plans",
+          "file_line": "dfe-data-sdk.plan.md:229"
+        },
+        {
+          "issue": "No typed edge fields in frontmatter; blocking and beneficial dependencies described only in body prose (lines 132–144); V0 §2.3/§4 require `depends_on` list with `kind: blocking | beneficial`",
+          "file_line": "dfe-data-sdk.plan.md:132"
+        },
+        {
+          "issue": "`serves_strategic_choice` absent; recommended for `strategic` plans and required for `executable`; no `pending` sentinel present (§2.3, §4)",
+          "file_line": "dfe-data-sdk.plan.md:1"
+        }
+      ],
+      "unclassified_keys": [
+        "type",
+        "status",
+        "related_plans",
+        "specialist_reviewer"
+      ],
+      "locked_contradictions": [
+        {
+          "item": "`todos` present on a plan that is `strategic` (folder `future/`, `status: future`, body-scoped promotion trigger); V0 §2.4 states `todos` is LOCKED forbidden on `strategic` plans — the three todos encode a pre-promotion task sequence, which is exactly the use-case `promotion_trigger` is designed to carry",
+          "evidence": "V0 §2.4: 'Forbidden on `strategic` plans.' Plan frontmatter lines 11–23 declare three pending todos; plan body and folder both confirm `strategic` kind.",
+          "file_line": "dfe-data-sdk.plan.md:11"
+        }
+      ],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "The plan correctly treats all dated API observations as provisional and explicitly instructs re-verification at promotion (line 76-78: 'these are dated observations, not standing warrants; re-verify at promotion'). This is a strong assumption-hygiene practice that defuses most staleness risk.",
+          "file_line": "dfe-data-sdk.plan.md:75-78"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan assumes no TypeScript/JavaScript SDK exists at the time of research (line 107: 'No TypeScript/JavaScript SDK exists'). It correctly flags this as the most drift-prone fact (line 78), but if DfE Analytical Services ships a TS client before promotion the entire build rationale collapses. The re-verify instruction covers this, but there is no fallback posture documented: what should the promotion reviewer do if a first-party TS SDK has shipped?",
+          "file_line": "dfe-data-sdk.plan.md:103-108"
+        },
+        {
+          "severity": "medium",
+          "claim": "Rate limits and SLA are documented as unknown (line 112-113: 'none documented'). The plan surfaces this as a risk but assumes the API is operationally viable for Oak's use patterns. No minimum-viability probe is required before promotion. Consumers needing volume are told to 'probe and record findings at promotion', which defers the blocking question until after commitment to a workspace shape.",
+          "file_line": "dfe-data-sdk.plan.md:112-113"
+        },
+        {
+          "severity": "low",
+          "claim": "The Python path assumes the DfE's in-development Python client remains incomplete or unsuitable at promotion time, so that 'consume-or-contribute' remains plausible rather than trivially resolved. If the DfE client ships and is production-grade before promotion, the Python path justification (build-vs-buy shifts toward contribute) should be re-evaluated but the plan has no explicit trigger for this check.",
+          "file_line": "dfe-data-sdk.plan.md:158-162"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan assumes `oak-sdk-codegen` is available and generalisable as a codegen route for the EES OpenAPI spec (lines 59-64, 220-222). It correctly names this as an open architecture decision, but the seed's framing and acceptance criterion 4 (line 204-206) implicitly presuppose codegen is achievable. If the EES OpenAPI spec is non-standard or contains patterns the generator cannot handle, the schema-first mechanism requires re-evaluation.",
+          "file_line": "dfe-data-sdk.plan.md:57-64"
+        },
+        {
+          "severity": "low",
+          "claim": "The promotion trigger assumes at least one of the named candidate consumers (school-leadership, outcome-evaluation, school-context workflows) will eventually name EES-sourced data. These are listed as 'illustrative candidates, not an exhaustive trigger set' (line 235-237), but if none of the live plans progresses to ratification this plan has no organic promotion path. There is no time-box or dormancy review trigger.",
+          "file_line": "dfe-data-sdk.plan.md:229-240"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly does not assume OGL v3 licence compliance is automatic — it contrasts EES licensing favourably against the EEF corpus's unresolved provenance (lines 41-43), but a re-verify instruction at promotion for licence terms is implied by the general re-verify clause rather than stated explicitly. This is an adequate assumption posture given the stable nature of OGL v3.",
+          "file_line": "dfe-data-sdk.plan.md:40-43"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": [
+        {
+          "claim": "No TypeScript/JavaScript SDK exists, so a thin TS SDK is not duplicating a first-party offering",
+          "verdict": "survives",
+          "confidence": "medium",
+          "evidence": "dfe-data-sdk.plan.md:103-107 (build-vs-buy: eesyapi.R, Python client in development, PowerBI connectors, all DfE Analytical Services; \"No TypeScript/JavaScript SDK exists\"), explicitly scoped and dated at :72-78 (\"as observed 2026-06-12 — these are dated observations, not standing warrants; re-verify at promotion... the TypeScript-SDK absence... most drift-prone\")"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/sector-engagement/future/oak-openapi-monorepo-integration.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Explicitly labelled not yet executable and correctly parked in future/ pending a bounded architecture decision",
+          "file_line": "file:17,100-103"
+        },
+        {
+          "claim": "Ownership note correctly routes executable plan elsewhere while preserving this as consumer-evidence context",
+          "file_line": "file:38-40"
+        },
+        {
+          "claim": "Promotion trigger is well-defined and non-trivial; the brief will graduate when conditions are met, not via arbitrary promotion",
+          "file_line": "file:100-103"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The brief correctly scopes itself as pre-decision framing (line 17), defines a precise non-goal set (lines 46-54) that prevents premature repo movement, documents four candidate models with concrete trade-offs (lines 72-78), and sets a principled promotion trigger (lines 100-103). No bad ideas are present. The one speculative element (Castr as codegen replacement, line 64) is explicitly flagged as a future candidate, not a commitment.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan is well-structured with a clear problem statement (lines 22-31), domain boundaries table (lines 43-54), dependency sequencing with rationale (lines 57-68), candidate model table (lines 72-78), success signals as answerable questions (lines 80-89), risk table with severities and mitigations (lines 92-98), and a promotion trigger (lines 100-103). Content is substantive, not just structurally conformant. The ownership note (lines 38-40) is an unusual addition that prevents confusion about where the executable plan belongs.",
+      "salvage_value": [
+        {
+          "idea": "Schema-first generation contract must be preserved: OpenAPI output flows from router/Zod schemas via pnpm generate:openapi",
+          "class": "good",
+          "file_line": "file:60-62"
+        },
+        {
+          "idea": "Four candidate integration models evaluated: separate repos with contract CI, generated artefact dependency, monorepo absorption, and hybrid contract-moves-here",
+          "class": "good",
+          "file_line": "file:72-78"
+        },
+        {
+          "idea": "API/KG integration decisions should be compared together with the ontology workspace reassessment before either repo boundary is settled",
+          "class": "good",
+          "file_line": "file:67-68"
+        },
+        {
+          "idea": "Castr as a future codegen replacement candidate to escape the dead openapi-to-zod / openapi-zod-client dependency chain",
+          "class": "speculative",
+          "file_line": "file:63-66"
+        },
+        {
+          "idea": "External wishlist and issue items must be validated against the current live oak-openapi implementation before being treated as current bugs",
+          "class": "good",
+          "file_line": "file:48-50 and 97"
+        },
+        {
+          "idea": "The executable repo-topology decision plan should live under an architecture collection, with this brief providing sector-facing consumer evidence context",
+          "class": "good",
+          "file_line": "file:38-40"
+        },
+        {
+          "idea": "Promotion readiness defined as a four-question checklist: authoritativeness per layer, wishlist currency, contract validation command, best integration model for sector adoption",
+          "class": "good",
+          "file_line": "file:80-89"
+        },
+        {
+          "idea": "Risk: monorepo absorption blurs API runtime and downstream consumer ownership — must define layer ownership before any move",
+          "class": "good",
+          "file_line": "file:92-98"
+        },
+        {
+          "idea": "Non-goal: do not make this repo the source of truth for API behaviour without a decision",
+          "class": "good",
+          "file_line": "file:52"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "future",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, required for all plans)",
+          "file_line": "oak-openapi-monorepo-integration.plan.md:1 (frontmatter has no id key)"
+        },
+        {
+          "issue": "Missing required field `node_type` (LOCKED literal `\"plan\"`, required for all plans)",
+          "file_line": "oak-openapi-monorepo-integration.plan.md:1 (frontmatter has no node_type key)"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED, required for all plans); `status: future` should be replaced by `kind: strategic` per §3.5 migration map",
+          "file_line": "oak-openapi-monorepo-integration.plan.md:4"
+        },
+        {
+          "issue": "Dropped key `status` present (V0 §2.5 explicitly drops it; value `future` maps to `kind: strategic`)",
+          "file_line": "oak-openapi-monorepo-integration.plan.md:4"
+        },
+        {
+          "issue": "Missing required frontmatter field `last_updated` (LOCKED); value appears in body prose only",
+          "file_line": "oak-openapi-monorepo-integration.plan.md:19 (body only, not frontmatter)"
+        },
+        {
+          "issue": "`promotion_trigger` is a prose section in the body rather than a frontmatter field (V0 §2.4 requires it as a frontmatter field on `strategic` plans)",
+          "file_line": "oak-openapi-monorepo-integration.plan.md:100"
+        },
+        {
+          "issue": "`related_plans` key is a naming drift from the canonical `related` key (V0 §2.4)",
+          "file_line": "oak-openapi-monorepo-integration.plan.md:7"
+        },
+        {
+          "issue": "`specialist_reviewer` is present but V0 §2.5 classifies it as SURVEY-MAY-ADD-FIELDS — not a conforming V0 field",
+          "file_line": "oak-openapi-monorepo-integration.plan.md:11"
+        },
+        {
+          "issue": "No V0 typed edges declared in frontmatter (`serves_strategic_choice` recommended for strategic plans; no `thread`, `derives_from`, or `depends_on`)",
+          "file_line": "oak-openapi-monorepo-integration.plan.md:1 (frontmatter block)"
+        }
+      ],
+      "unclassified_keys": [
+        "source_repos",
+        "related_plans"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan names Castr as a future codegen replacement candidate but records no decision on whether build-vs-buy was evaluated. Castr is an unvalidated external dependency assumption baked into a strategic brief that will shape downstream SDK and MCP toolchain choices.",
+          "file_line": "oak-openapi-monorepo-integration.plan.md:65-66"
+        },
+        {
+          "severity": "medium",
+          "claim": "The Hybrid model (API remains app, generated contract moves here) is listed as a candidate but carries no note on how generated artefact versioning, release discipline, and cross-repo CI would be owned. The 'two-source navigation' concern is named but not bounded, leaving a gap before any promotion decision.",
+          "file_line": "oak-openapi-monorepo-integration.plan.md:76-77"
+        },
+        {
+          "severity": "high",
+          "claim": "The plan explicitly defers repo-boundary and workspace-topology decisions to promotion time (line 108-109), but the API/KG convergence risk (line 98) notes piecemeal decisions are a High risk. No gate or blocking precondition requires the ontology workspace reassessment to complete first, so promotion could happen independently and repeat the piecemeal failure mode the plan identifies.",
+          "file_line": "oak-openapi-monorepo-integration.plan.md:98-108"
+        },
+        {
+          "severity": "low",
+          "claim": "Layer ownership is cited as a precondition for any repo move (line 95-96) but no Success Signal explicitly requires a written layer-ownership map. The four Success Signals at lines 81-89 enumerate questions without requiring their answers to be recorded as a durable artefact (e.g., an ADR) before promotion.",
+          "file_line": "oak-openapi-monorepo-integration.plan.md:81-89"
+        },
+        {
+          "severity": "info",
+          "claim": "The schema-first generation contract (OpenAPI output flows from router/Zod schemas via pnpm generate:openapi) is correctly identified as a hard invariant to preserve. This is architecturally sound and no finding attaches to it.",
+          "file_line": "oak-openapi-monorepo-integration.plan.md:60-62"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/sector-engagement/knowledge-graph-adoption/future/oak-knowledge-graph-external-adoption.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan is explicitly a future strategic brief with no complete or superseded status; promotion gate is unmet",
+          "file_line": "file:15-16"
+        },
+        {
+          "claim": "Promotion trigger (first external adopter profile selected) has not fired; plan cannot be archived or executed yet",
+          "file_line": "file:80-83"
+        },
+        {
+          "claim": "Domain boundaries and non-goals are crisp and still accurate relative to the internal KG integration split",
+          "file_line": "file:33-47"
+        },
+        {
+          "claim": "Risk table captures two high-severity risks (stability contract misread; licensing misunderstood) that have no other home in the estate",
+          "file_line": "file:73-78"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every substantive element — adopter profiles (line 35-36), explicit non-goals (lines 42-47), sequencing assumptions (lines 51-57), five promotion criteria (lines 62-69), and the risk table (lines 73-78) — is decision-useful. Nothing is speculative hand-waving and nothing contradicts known architectural direction. The plan earns its place in the future lane.",
+      "content_quality": "strong",
+      "content_quality_note": "For a future strategic brief the content is unusually complete: it names four adopter profiles (line 35-36), enumerates five success signals with concrete naming criteria (lines 62-69), provides a four-row risk register with severity and mitigation (lines 73-78), and defines a clear promotion trigger (lines 80-83). This is above average for a future-lane plan.",
+      "salvage_value": [
+        {
+          "idea": "Distinct external adopter profiles (MAT analytics, edtech vendors, researchers, public-sector partners) need different packaging strategies",
+          "class": "good",
+          "file_line": "file:35-36"
+        },
+        {
+          "idea": "Partner-facing adoption model must be kept clearly separate from internal KG integration work to avoid conflated support obligations",
+          "class": "good",
+          "file_line": "file:27-29"
+        },
+        {
+          "idea": "Packaging must address provenance, OGL licensing, and Oak-vs-DfE ontology distinctions explicitly in every support artefact",
+          "class": "good",
+          "file_line": "file:38-39"
+        },
+        {
+          "idea": "A feedback channel from external adoption needs back into the internal KG/API/search roadmap is required as a first-class deliverable",
+          "class": "good",
+          "file_line": "file:40"
+        },
+        {
+          "idea": "Supported, experimental, and reference-only surfaces must be defined separately to prevent support expectations outrunning Oak capacity",
+          "class": "good",
+          "file_line": "file:78"
+        },
+        {
+          "idea": "Version/status labels and explicit compatibility promises plus no-go language should be applied to early KG assets to prevent them being treated as stable contracts",
+          "class": "good",
+          "file_line": "file:75"
+        },
+        {
+          "idea": "Promotion is gated on selecting a single first adopter profile before any playbook is written",
+          "class": "good",
+          "file_line": "file:56-58"
+        },
+        {
+          "idea": "Success at promotion requires naming: adopter profile, relevant KG assets, provenance/licensing boundaries, first support artefact type, and owning engineering collection",
+          "class": "good",
+          "file_line": "file:62-69"
+        },
+        {
+          "idea": "Moving the ontology repo into this monorepo is an explicit non-goal",
+          "class": "good",
+          "file_line": "file:43"
+        },
+        {
+          "idea": "Promising production support before Oak chooses a support model is an explicit non-goal",
+          "class": "good",
+          "file_line": "file:44"
+        },
+        {
+          "idea": "Importing third-party knowledge graphs into Oak applications is an explicit non-goal",
+          "class": "good",
+          "file_line": "file:46"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "future",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing LOCKED required field `id` (kebab slug graph identity)",
+          "file_line": "file:1-11 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing LOCKED required field `node_type: \"plan\"` (registry discriminator)",
+          "file_line": "file:1-11 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing LOCKED required field `kind` (readiness axis); `status: future` maps to `kind: strategic` per §3.5 migration map but is not expressed as `kind`",
+          "file_line": "file:4"
+        },
+        {
+          "issue": "Dropped key `status` present (V0 §2.5 drops it; replace with `kind`/`disposition`/`gate`)",
+          "file_line": "file:4"
+        },
+        {
+          "issue": "Missing LOCKED required field `last_updated` in frontmatter; value appears only in body prose",
+          "file_line": "file:18 (body only)"
+        },
+        {
+          "issue": "Missing LOCKED kind-specific field `promotion_trigger` for a `strategic` plan; condition exists only in body prose section 'Promotion Trigger Into current/'",
+          "file_line": "file:80-83 (body only)"
+        },
+        {
+          "issue": "Key `related_plans` does not match V0-specified key `related` (§2.4); same semantic intent, wrong name",
+          "file_line": "file:6"
+        }
+      ],
+      "unclassified_keys": [
+        "specialist_reviewer"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "The plan assumes an external demand signal already exists strong enough to justify a partner-facing adoption model, but names no concrete evidence of that demand. The four adopter profiles (MATs, edtech vendors, researchers, public-sector partners) are asserted without any grounding in a conversation with, or enquiry from, any of those parties.",
+          "file_line": "oak-knowledge-graph-external-adoption.plan.md:35-36"
+        },
+        {
+          "severity": "high",
+          "claim": "The plan assumes Oak's KG assets are already 'understandable, usable, and safe to consume' to the point that the work is definitional and packaging — not exploratory. But the related workspace-reassessment plan is listed as a sequencing dependency (line 54) that must be read before promotion, implying the asset model is itself unsettled. These two positions are in tension: packaging work presupposes a stable asset surface that the reassessment may not yet have confirmed.",
+          "file_line": "oak-knowledge-graph-external-adoption.plan.md:27-29 and 54-55"
+        },
+        {
+          "severity": "medium",
+          "claim": "Sequencing dependency 2 says this plan 'should read the workspace reassessment before promotion' (line 54-55), but the success signals (lines 62-69) do not include any gate that the reassessment is settled or has produced a stable dependency model. A promoter could satisfy all five named success signals while the reassessment is still open, invalidating the adoption packaging.",
+          "file_line": "oak-knowledge-graph-external-adoption.plan.md:54-55 and 62-69"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan assumes a single 'first external adopter profile' selection will be sufficient to unblock a playbook (line 56-58 and line 81-83). This conflates picking a profile with having a named partner willing to trial the assets. Without a real partner, the playbook authors have no feedback loop, and the promotion trigger is satisfiable by internal decision alone with no external validation.",
+          "file_line": "oak-knowledge-graph-external-adoption.plan.md:56-58 and 81-83"
+        },
+        {
+          "severity": "medium",
+          "claim": "Licensing and provenance are flagged as a high-severity risk (line 77), but the plan assumes these questions can be deferred entirely to 'every support artefact' without any prior legal or policy gate. No assumption is stated about whether Oak has a determined position on OGL applicability or Oak-vs-DfE distinctions for third-party re-use; the plan proceeds as if that clarity is forthcoming rather than verifying it is already owned.",
+          "file_line": "oak-knowledge-graph-external-adoption.plan.md:77"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan treats MCP resources as one of the external-facing asset types (line 25) without acknowledging that MCP protocol stability, authentication model, and rate-limit design for external (non-Oak) consumers are open questions in adjacent plans. It assumes MCP is ready for external consumption without citing a decision.",
+          "file_line": "oak-knowledge-graph-external-adoption.plan.md:25"
+        },
+        {
+          "severity": "low",
+          "claim": "The non-goal 'promising production support before Oak chooses a support model' (line 45-46) implies a support-model decision is expected before or during promotion. No plan or owner is cited as responsible for that decision, making it an undeclared external dependency.",
+          "file_line": "oak-knowledge-graph-external-adoption.plan.md:45-46"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": []
+    }
+  ]
+}
