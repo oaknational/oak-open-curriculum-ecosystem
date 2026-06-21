@@ -54,7 +54,7 @@ surface.
   [`plan-estate-survey-2026-06-21/01-fresh-session-handoff.md`](../../reports/plan-estate-survey-2026-06-21/01-fresh-session-handoff.md));
   the V0→survey→V1 loop is live. **Next safe step:** the survey emits the taxonomy-grounding (→ V1) and the
   conformance inventory (→ restructure work-list); then V1 ratification and Stage-1 build (still OWNER-GATED).
-  Owner controls push. Detail: thread record (Drake section).
+  Owner controls push. Window now n=2 owner-visible (no Director). Detail: thread record (top section).
 - **Onboarding-improvement arc — PR #199 OPEN, merge-once-green (`feat/onboarding-improvement`).**
   **Next:** owner re-walks `/oak-onboard-me` off-branch; B2/B3 risk-register seeding; the
   ask-the-repo search decision. (B1 awaits owner cost bands; B6 at the M2 gate.)
@@ -124,12 +124,14 @@ surface.
   `90a0f532`); this continuity handoff is the paired Commit B. **NOT pushed** (owner controls push).
   Brief:
   [`current/practice-lineage-principle-graduation.plan.md`](../../plans/agentic-engineering-enhancements/current/practice-lineage-principle-graduation.plan.md).
-  The **multi-agent window evolved** (2026-06-21): Cutter holds Reef (V0 `plan` node-schema author +
-  de-facto director), Ferret seeks Tunnel (curation), and Volcano lifts Gleam (survey Phase-0) have all
-  retired cleanly. LIVE: **Drake hunts Beeswax** (implementer — Cutter's boundary successor; settled the
-  owner-gated V0 governance calls + this continuity refresh) and **Vesuvius calls Quench** (Director,
-  PDR-064 Moment-2 from Cutter). INCOMING: **Hobby wakes Halo** (fresh survey orchestrator, Volcano's
-  successor — survey pre-launch). Full protocol re-active (heartbeats armed). Commit queue empty; owner
+  The **multi-agent window settled to n=2 owner-visible** (2026-06-21, owner-directed — the Director role
+  was dissolved): **Pinnace hunts Marsh** (survey orchestrator, running the multi-window Pass-1) and
+  **Ganymede herds Penumbra** (V1-fold / alignment-checker, currently blocked-on-owner with intent-alignment
+  forks awaiting owner adjudication). The Director chain Cutter holds Reef → Vesuvius calls Quench →
+  **Birch tracks Arbor** ran (PDR-064 two-moments each); Birch coordinated two clean role rotations
+  (Drake→Ganymede, Hobby→Pinnace), folded continuity, then retired as the owner dissolved the seat at n=2.
+  Earlier cast (Cutter, Ferret, Volcano, Drake, Hobby, Vesuvius) all retired cleanly. **No Director unless
+  the owner re-establishes one** (n=2 = PDR-082 owner-visible / consumer-absent). Commit queue empty; owner
   controls push.
   Stale decision-thread / sidebar / handoff surfaces under `.agent/state/collaboration/` remain
   from retired sessions — clearing them is a conservation-gated curator-pass, deferred.
@@ -160,7 +162,7 @@ each thread record; this table is the repo-level index.
 | `eslint-no-throw-result-migration` | Migrate every throw to Result (ADR-088); drive the ~1000 warnings to zero; promote the rule. In execution on `docs/planning-and-validation`; cheap WS2 done, residue is design-laden (tier map in record) | [record](threads/eslint-no-throw-result-migration.next-session.md) | claude / Opus 4.8 (1M) / Siren mends Rudder / execution — observability+graph-core+logger landed (`93beffcfe`,`304b68f8d`,`61bdbc3e4`) / 2026-06-19 (prior: Merlin spins Cirrus `1556b9191`; Vanilla weaves Undergrowth, plan-author) |
 | `statusline-enhancements` | Claude Code statusline: Oak-mark, session-shape indicators, logo swap; lane in two `current/` plans (session-state, logo-modularisation). Live detail + the `feat/comms-research` divergence to reconcile: thread record | [record][statusline] | claude-code / Opus 4.8 / Vole calls Hollow / live-logo-swap-and-plan-harden / 2026-06-16 (prior identities: thread record) |
 | `agent-naming` | PDR-027 display-name derivation: versioned schema registry, session-hook identity surfaces, wordlist eras (v2 landed; v3 + era-pinning cure queued) | [record][agent-naming] | claude / Opus 4.8 / Squall hunts Troposphere / thread-open + v3-plan-author / 2026-06-13 (prior identities: thread record) |
-| `strategy-and-plan-estate-holistic-review` | Vision/strategy/plan-estate rework (experiment→product), **three co-equal first-class bodies on a four-layer informational model**: **two-part vision + Body-2 strategy STRUCTURE authored 2026-06-20** (`VISION.md` full two-part; `docs/strategy/README.md` three-stream structure, provisional; EEF = convenor exemplar; root README surfaces vision+strategy at a glance). **Intent-graph vision RATIFIED 2026-06-21** ("all of it"; plan standard = node-schema #1; search/graph + internal-alignment settled). Two new `future/` plans authored (NOT executed): `repo-intent-graph` (staged; Stage 1 = smallest slice) + `deep-plan-estate-survey` brief; editorial pass applied. **V0 `plan` node-schema authored, owner-settled + survey-ready 2026-06-21** (the deep-survey lens; orthogonal axes, expiring-gate-not-paused, typed edges; DORA woven at all levels; link checker built+wired; the four owner-reserved governance calls signed off). **Deep survey (Stage 2) RUNNING** in a fresh session (Hobby wakes Halo; handoff in `.agent/reports/plan-estate-survey-2026-06-21/`) → refines V0→V1; Stage-1 build OWNER-GATED. | [record](threads/strategy-and-plan-estate-holistic-review.next-session.md) | claude-code / Opus 4.8 (1M) / Drake hunts Beeswax (implementer) + Vesuvius calls Quench (director) / V0 owner-gated settlement + continuity refresh; survey → Hobby wakes Halo / 2026-06-21 (prior seats: Cutter holds Reef [V0 author + de-facto director], Volcano lifts Gleam [survey Phase-0], …Plover wakes Sundog — full table in thread record) |
+| `strategy-and-plan-estate-holistic-review` | Vision/strategy/plan-estate rework (experiment→product), **three co-equal first-class bodies on a four-layer informational model**: **two-part vision + Body-2 strategy STRUCTURE authored 2026-06-20** (`VISION.md` full two-part; `docs/strategy/README.md` three-stream structure, provisional; EEF = convenor exemplar; root README surfaces vision+strategy at a glance). **Intent-graph vision RATIFIED 2026-06-21** ("all of it"; plan standard = node-schema #1; search/graph + internal-alignment settled). Two new `future/` plans authored (NOT executed): `repo-intent-graph` (staged; Stage 1 = smallest slice) + `deep-plan-estate-survey` brief; editorial pass applied. **V0 `plan` node-schema authored, owner-settled + survey-ready 2026-06-21** (the deep-survey lens; orthogonal axes, expiring-gate-not-paused, typed edges; DORA woven at all levels; link checker built+wired; the four owner-reserved governance calls signed off). **Deep survey (Stage 2) RUNNING** in a fresh session (Hobby wakes Halo; handoff in `.agent/reports/plan-estate-survey-2026-06-21/`) → refines V0→V1; Stage-1 build OWNER-GATED. | [record](threads/strategy-and-plan-estate-holistic-review.next-session.md) | claude-code / Opus 4.8 (1M) / Pinnace hunts Marsh (survey orchestrator) + Ganymede herds Penumbra (implementer / V1-fold + alignment) / n=2 owner-visible — Director seat DISSOLVED (chain Cutter→Vesuvius→Birch tracks Arbor, all retired); multi-window survey running / 2026-06-21 (prior seats: Drake hunts Beeswax, Hobby wakes Halo, Volcano lifts Gleam, …Plover wakes Sundog — full table in thread record) |
 
 ## Paused Threads
 
