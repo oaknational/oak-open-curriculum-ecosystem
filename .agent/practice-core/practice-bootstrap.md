@@ -9,7 +9,8 @@ fitness_line_length: 100
 # Practice Bootstrap
 
 This file completes the plasmid trinity. `practice.md` is the **what**,
-`practice-lineage.md` the **why**, and this file the **how**: annotated
+`practice-lineage.md` the **evolution record** (how the Practice branches,
+merges, and transplants across repos), and this file the **how**: annotated
 templates for every artefact type. Four companion files travel with the
 trinity: `README.md`, `index.md`, `CHANGELOG.md`, and `provenance.yml`.
 Templates use `{placeholders}` for project-specific content. The Practice uses
@@ -211,7 +212,13 @@ Keep it stable -- no mutable session state. Mutable state belongs in plans.
 
 ### principles.md (.agent/directives/)
 
-Encode the Principles from `practice-lineage.md` as imperative rules. Sections:
+Encode the universal engineering imperatives as the repo's own imperative
+rules — repo-specific cases of these broadly-important principles, framed for
+local tooling: TDD at all levels; pure functions first; fail fast with helpful
+errors (never silently); the Result pattern, never throw; no type shortcuts
+(no `as` except `as const`, no `any`, no `!`); strict and complete; validate at
+boundaries; no dead code; never disable checks; architectural excellence over
+expediency; apps thin, libraries own domain logic. Sections:
 **First Question**, **Strict and Complete**, **Core Rules** (code design,
 domain-specific, refactoring, tooling, code quality, types, testing summary,
 developer experience). Each rule is stated as a command, not a suggestion.
@@ -220,7 +227,7 @@ tone. Link to `testing-strategy.md` from the testing section.
 
 ### testing-strategy.md (.agent/directives/)
 
-Encode the Testing Philosophy from `practice-lineage.md` with local tooling.
+Encode the repo's testing philosophy with local tooling.
 Sections: **Tooling** (test runner), **Philosophy** (imperative rules), **Test
 Types** (unit: pure function, no mocks; integration: units as code, simple
 injected mocks -- naming convention adapted to local ecosystem), **What to
@@ -763,7 +770,7 @@ implement an invokable consolidation skill or workflow with this abstract shape:
      route by shape per
      [PDR-024](decision-records/PDR-024-vital-integration-surfaces.md)
      amendment 2026-04-29. Content appropriate for Practice Core itself
-     (Learned Principles, structural proposals, bootstrap improvements)
+     (structural proposals and bootstrap improvements)
      goes as Core proposals with user approval; portable governance and
      universal patterns become PDRs in `practice-core/decision-records/`;
      host-specific worked instances stay in the host's pattern memory

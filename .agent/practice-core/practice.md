@@ -125,7 +125,12 @@ Practice-level and their implementation details are host-level.
 The organisational patterns. Directives (`.agent/directives/`), plans
 (`.agent/plans/`), ADRs, sub-agent prompt architecture, quality gates,
 institutional memory (`.agent/memory/`), and collaboration state
-(`.agent/state/`). **Cross-agent standardisation**
+(`.agent/state/`). **Agent files are first-class infrastructure** — these
+directives, rules, skills, sub-agent prompts, and memory/continuity surfaces
+are executable agent code in markdown, not informal notes, and carry the same
+DRY, SOLID, and production-code rigour as any other source; drift, duplication,
+and dead references degrade behaviour exactly as they would in compiled code.
+**Cross-agent standardisation**
 (AGENTS.md, Agent Skills, MCP, A2A) is an evolving implementation direction to
 keep the Practice portable and platform-agnostic. This layer defines _what_ the
 Practice consists of.
@@ -452,8 +457,8 @@ The trinity files carry YAML frontmatter with a `provenance` pointer
 and the four fitness thresholds described in §Fitness Functions above.
 The provenance file always travels with the Core package.
 
-The mechanism is documented in [practice-lineage.md](practice-lineage.md), which serves as both
-the reference for how exchange works and the source template for outbound propagation. Portable
+The mechanism is documented in [practice-lineage.md](practice-lineage.md), the evolution record:
+how exchange, branching, and transplantation move the lineage forward across repos. Portable
 governance decisions and universal patterns travel as **Core content** in
 `practice-core/decision-records/` (the latter as PDRs with `pdr_kind: pattern`).
 The previous `practice-context/` ephemeral exchange surface was retired
@@ -483,11 +488,15 @@ is normally empty. When files arrive:
 
 ### Meta-Principles
 
-Principles about the Practice itself — how it evolves, travels, and stays coherent — are maintained
-as Learned Principles in
-[practice-lineage.md §Learned Principles](practice-lineage.md#learned-principles). They include
-self-containment, provenance chain design, separation of universal from domain-specific, and the
-distinction between rules and skills.
+Principles about the Practice itself — how it evolves, travels, and stays coherent — are recorded in
+their homes by intent: portable Practice-governance as PDRs in
+[`decision-records/`](decision-records/); concepts intrinsic to the Practice's structure here in
+`practice.md` (self-containment, the concept-level unit of exchange, the universal/domain-specific
+split); and, at the repo tier, the host's own engineering principles in `principles.md` as
+repo-specific cases that may be based on a portable PDR. Two carry directly. **If a behaviour must
+be automatic, it needs a rule, not just a skill**: a skill is invoked, a rule fires unprompted, so
+anything that must always happen is a rule. **Intent over mechanics**: a rule must convey what
+matters and what failure looks like, not just the verb — a vague rule is an escape hatch.
 
 ## The Self-Teaching Property
 

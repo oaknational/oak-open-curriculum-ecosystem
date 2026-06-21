@@ -16,8 +16,9 @@ health check, minimum estate definition, three-state audit, and acceptance
 criteria.
 
 **See also**: [practice-bootstrap.md](practice-bootstrap.md) for artefact
-templates, [practice-lineage.md](practice-lineage.md) §Validation for the
-portable validation checks.
+templates. This file is the home for verifying a hydrated or propagated
+Practice; [practice-lineage.md](practice-lineage.md) records how the Practice
+evolved to reach its current state.
 
 ## Bootstrap Checklist
 

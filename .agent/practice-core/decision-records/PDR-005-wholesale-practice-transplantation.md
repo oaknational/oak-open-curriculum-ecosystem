@@ -253,12 +253,11 @@ keeps the source's portability claims honest.
 Per the PDR-layer's standing graduation intent, the substance of this
 PDR migrates into the Core over time:
 
-- The portability gradient vocabulary graduates to
-  `practice-lineage.md § Learned Principles` and
-  `practice-bootstrap.md § The Artefact Model`.
-- The three-phase process graduates to `practice-lineage.md § Growing
-  a Practice` as a third chapter alongside cold-start and plasmid
-  integration.
+- The portability gradient vocabulary is defined here and applied in
+  `practice-bootstrap.md § Transplant Manifest`.
+- The three-phase process is recorded in
+  `practice-lineage.md § How the Practice Arrives in a New Repo` alongside
+  cold-start and plasmid integration.
 - The transplant manifest template graduates to
   `practice-bootstrap.md § Design-Space Explorations` as a named
   template variant.
@@ -341,7 +340,7 @@ evaluate row-by-row.
 ### Relationship to the generalisation discipline
 
 An applied Practice whose authoring follows the generalisation
-discipline (see `practice-lineage.md § Learned Principles`) carries
+discipline ([PDR-108](PDR-108-generalise-where-generalisation-does-not-cost-utility.md)) carries
 fewer hybrid and local-disguised-as-portable items, and therefore
 transplants more cheaply. Transplantation is both a forcing function
 for generalisation (items that don't survive context-testing get

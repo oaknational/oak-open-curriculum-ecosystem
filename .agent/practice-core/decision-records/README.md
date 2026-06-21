@@ -231,3 +231,6 @@ Practice-Core concept ↔ ADR map):
 | [PDR-104](PDR-104-best-effort-doctrine-authoring-in-consolidation.md) | Best-Effort Practice-Doctrine Authoring in Dedicated Consolidation Sessions | Accepted |
 | [PDR-105](PDR-105-reference-direction-invariants.md) | Reference-Direction Invariants — the Artefact Fundamentality Hierarchy | Accepted |
 | [PDR-107](PDR-107-directive-supersedes-and-reconciles-adr.md) | An Owner Directive Supersedes a Conflicting Accepted Record — and Reconciles It | Accepted |
+| [PDR-108](PDR-108-generalise-where-generalisation-does-not-cost-utility.md) | Generalise Where Generalisation Does Not Cost Utility | Accepted |
+| [PDR-109](PDR-109-culture-is-what-propagates-across-instances.md) | Culture Is What Propagates Across Instances — the Transmission of Disposition | Accepted |
+| [PDR-110](PDR-110-repo-state-enforcement-is-its-own-proof-layer.md) | Repo-State Enforcement Is Its Own Proof Layer | Accepted |

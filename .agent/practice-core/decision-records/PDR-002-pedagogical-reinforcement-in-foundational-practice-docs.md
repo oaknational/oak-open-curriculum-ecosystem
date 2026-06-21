@@ -123,3 +123,16 @@ PDR-003 (Sub-Agent Protection of Foundational Practice Docs).
 PDR-003 operates on the permissions dimension (who may edit);
 PDR-002 operates on the substance dimension (what the content
 should look like). Together they close the loop.
+
+**The boundary — reinforcement is not multi-framing.** This PDR
+protects the *same* concept appearing across *different* documents,
+each time in that document's local frame (one authoritative frame
+per document). It does NOT licence one document carrying two or more
+*authoritative* frames for one concept — a historical heading plus a
+new table plus per-item inline notes, or a "transitional dual-frame
+with sunset note". Multiple authoritative frames inside a single
+document are drift, not reinforcement: each frame acquires edits
+independently and they diverge. Once the decision is settled, collapse
+to a single authoritative frame within the document. Reinforcement is
+cross-document and single-framed; multi-framing is within-document and
+divergent.
