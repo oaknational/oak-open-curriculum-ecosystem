@@ -26,13 +26,21 @@ useful content or intent is lost — provably**. Four first-class *verified* out
 4. **No-loss audit** — per removed/archived/extracted item, the useful content + intent traced to where
    it now lives, checkably. **Ganymede is drafting the audit-output format.**
 
-**Instrument change (DONE, this session):** `survey-pass1.workflow.js` `HolisticFinding` now carries
-three per-plan substance fields, captured from **sub-batch 1b-04 onward**:
+**Instrument change (DONE, this session):** `survey-pass1.workflow.js` `HolisticFinding` is re-aimed to
+the **IDEA level** (owner correction 2026-06-21T12:53Z — a plan can hold good, speculative, AND bad ideas
+at once, so per-plan verdicts are too coarse and force the owner's two fears: residue or loss):
 
-- `substance_class`: `good | bad | speculative` (+ `substance_rationale`, file:line).
-- `content_quality`: `strong | adequate | weak | empty` (+ `content_quality_note`, file:line).
-- `salvage_value`: the no-loss INPUT — content+intent to preserve if removed/archived/extracted,
-  AND any embedded speculative section of an otherwise-good plan (so embedded ideas are never dropped).
+- `substance_class`: a per-plan **SUMMARY** for triage only — `good | mixed | bad | speculative`
+  (+ `substance_rationale`, file:line).
+- `content_quality`: `strong | adequate | weak | empty` (+ `content_quality_note`, file:line) — unchanged.
+- `salvage_value`: the **LOAD-BEARING idea-granular inventory** — `[{ idea, class: good|speculative|bad,
+  file_line }]` for EVERY constituent idea/intent, so consolidation extracts/re-homes every good +
+  speculative idea and the no-loss audit verifies the bad set holds nothing of value.
+
+NOTE: **1b-04 ran with the COARSE pre-correction fields** (substance_class `good/bad/speculative`,
+salvage_value a string) — it joins the back-fill set. The two-pass CONSOLIDATION shape (decompose → idea
+buckets → re-compose good into strategy-aligned plans) is restructure-side (Ganymede), **owner-confirmation
+PENDING**; the idea-granular CAPTURE is owner-corrected and safe to use now (needed regardless).
 
 **Division of labour (n=2 peer, no Director):** Pinnace/successor own the live instrument (Pass-1 fields,
 the `substance_class`→disposition mapping). Ganymede owns the Pass-2 effectiveness/adequacy spec, the
@@ -52,10 +60,11 @@ After 1b-04: the full **agentic-engineering-enhancements** collection (70 plans)
 
 ## Two obligations the re-aim creates
 
-1. **BACK-FILL the 59 old-schema plans** (1a + 1b-01/02/03) with the three substance fields, via a
-   **focused holistic-only pass** (the 3 fields ONLY — no conformance/specialist/verify redo), **before
-   Pass-3 synthesis** (Ganymede confirmed: keeps all 286 plans uniform-provenance; do NOT fold into
-   Pass-2, which is a different lens). Timing is the orchestrator's; the only constraint is before Pass-3.
+1. **BACK-FILL the idea-granular inventory across ALL 70 AEE plans** (1a + 1b-01/02/03 carry NO substance
+   fields; 1b-04 carries the COARSE pre-correction ones) via a **focused holistic-only pass** (the
+   idea-granular `salvage_value` + `substance_class` summary ONLY — no conformance/specialist/verify redo),
+   **before Pass-3 synthesis**, so every plan carries a uniform idea-inventory (Ganymede confirmed; do NOT
+   fold into Pass-2, a different lens). Future collections run idea-granular natively. Constraint: before Pass-3.
 2. **Remaining Pass-1**: ~216 plans across the **15 collections other than agentic-engineering-enhancements**
    (derive from `worklist-plans.tsv`), in **~35-plan atomic sub-batches, ONE per owner-reset window**.
    `product-development-governance` is **safe to survey** (Drake's `4bf5d49fd` settled the spec edits).

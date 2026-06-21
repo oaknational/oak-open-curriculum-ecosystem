@@ -29,11 +29,11 @@ const HOLISTIC_SCHEMA = {
     path: { type: 'string' },
     unreadable: { type: 'boolean' },
     purpose: { type: 'string' },
-    substance_class: { type: 'string', enum: ['good', 'bad', 'speculative'] },
+    substance_class: { type: 'string', enum: ['good', 'mixed', 'bad', 'speculative'] },
     substance_rationale: { type: 'string' },
     content_quality: { type: 'string', enum: ['strong', 'adequate', 'weak', 'empty'] },
     content_quality_note: { type: 'string' },
-    salvage_value: { type: 'string' },
+    salvage_value: { type: 'array', items: { type: 'object', additionalProperties: false, required: ['idea', 'class', 'file_line'], properties: { idea: { type: 'string' }, class: { type: 'string', enum: ['good', 'speculative', 'bad'] }, file_line: { type: 'string' } } } },
     egm: { type: 'object', additionalProperties: false, properties: { end: { type: 'boolean' }, mechanism: { type: 'boolean' }, means: { type: 'boolean' }, coherent: { type: 'boolean' }, note: { type: 'string' } } },
     lifecycle: { type: 'object', additionalProperties: false, properties: { folder_lane: { type: 'string' }, fm_status: { type: ['string', 'null'] }, agree: { type: 'boolean' }, note: { type: 'string' } } },
     authority: { type: 'object', additionalProperties: false, properties: { owns: { type: 'string' }, improperly_cited: { type: 'boolean' }, note: { type: 'string' } } },
@@ -94,7 +94,7 @@ ${DISCIPLINE}
 
 Return a HolisticFinding. The folder lane is in the path (current/active/future). Assess: purpose (one sentence); egm (end-goal / mechanism / means present + coherent); lifecycle (folder lane vs frontmatter status: do they agree?); authority (what it owns; improper citations); health (stale? superseded framing?); value (what it encodes — the re-org must preserve this); classification recommendation (keep / rewrite / archive-complete / extract-then-archive / rehome / new-for-gap / uncertain) with classification_evidence (file:line); specialist_signal (the ONE specialist a deeper read warrants by content: test/architecture/security/type/config/docs/assumptions, or none); and load_bearing_claims (each with file_line and high_stakes=true iff the claim asserts the plan is complete/superseded/orphaned/duplicate/dead — those get independently refuted).
 
-PLUS the owner's SUBSTANCE re-aim (judge the CONTENT, not just its form/conformance): substance_class — good (content effectively serves real intent → keep/remix), bad (wrong/obsolete/contradicted/superseded-in-substance/harmful → remove), or speculative (exploratory/unproven/aspirational → isolate) — with substance_rationale citing file:line; content_quality — strong / adequate / weak / empty — is what is IN the plan actually good, versus merely present and V0-conformant — with content_quality_note citing file:line; and salvage_value — the specific useful content and intent that MUST be preserved if this plan is removed, archived, or extracted (the no-loss audit input), AND any embedded speculative section within an otherwise-good plan that should route to the isolated speculative home so it is never silently dropped; empty string only for a clean keep with nothing to isolate.\``
+PLUS the owner's SUBSTANCE re-aim, curated at the IDEA level (a single plan can hold good, speculative, AND bad ideas at once, so per-plan verdicts are too coarse): substance_class — a per-plan SUMMARY for triage only: good | mixed | bad | speculative — with substance_rationale citing file:line; content_quality — strong | adequate | weak | empty — is what is IN the plan good, versus merely present and V0-conformant — with content_quality_note citing file:line; and salvage_value — the LOAD-BEARING idea-granular inventory: a list of EVERY constituent idea or intent in the plan, each as { idea: a one-line statement, class: good | speculative | bad, file_line }, so the consolidation can extract and re-home every good and speculative idea and the no-loss audit can verify the bad set holds nothing of value. Use an empty list only for a genuinely empty plan.\``
 
 const conformancePrompt = (plan) => `You are the CONFORMANCE reader in a deep plan-estate survey; your lens is the V0 plan node-schema. Read BOTH files FIRST-HAND with the Read tool: first the lens ${V0}, then the plan ${plan}.
 
@@ -162,7 +162,7 @@ return {
     substance_rationale: (r.holistic && r.holistic.substance_rationale) || '',
     content_quality: r.holistic && r.holistic.content_quality,
     content_quality_note: (r.holistic && r.holistic.content_quality_note) || '',
-    salvage_value: (r.holistic && r.holistic.salvage_value) || '',
+    salvage_value: (r.holistic && r.holistic.salvage_value) || [],
     conformance: r.conformance && r.conformance.conformance,
     v0_kind: r.conformance ? r.conformance.v0_kind : null,
     v0_disposition: r.conformance ? r.conformance.v0_disposition : null,

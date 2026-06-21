@@ -26,13 +26,14 @@ increments from this ledger after the next reset.
 
 ## ⚑ SUBSTANCE RE-AIM (owner-ratified, 2026-06-21)
 
-The survey is re-aimed from form toward SUBSTANCE: per-choice effectiveness/adequacy, per-plan
-content-quality, the good/bad/speculative trichotomy, and a provable no-loss audit. The instrument now
-captures three per-plan fields (`substance_class` / `content_quality` / `salvage_value`) from sub-batch
-**1b-04 onward**. OBLIGATION: the 59 old-schema plans (1a + 1b-01/02/03) need a focused holistic-only
-BACK-FILL of these three fields **before Pass-3 synthesis**. Full state, division with Ganymede (Pass-2
-effectiveness spec + no-loss audit format are theirs), and routing: see
-[`05-orchestration-state-and-successor-handoff.md`](./05-orchestration-state-and-successor-handoff.md).
+The survey is re-aimed from form toward SUBSTANCE: per-choice effectiveness/adequacy, content-quality, the
+good/bad/speculative trichotomy, and a provable no-loss audit. Owner correction (12:53Z): curate at the
+**IDEA level**, not the plan. The instrument now captures `substance_class` (per-plan summary:
+good/mixed/bad/speculative), `content_quality`, and `salvage_value` as an **idea-granular inventory**
+(`[{idea, class, file_line}]`). 1b-04 ran with the COARSE fields; 1a/1b-01..03 carry none. OBLIGATION: a
+focused holistic-only **BACK-FILL of the idea-granular inventory across ALL 70 AEE plans** before Pass-3.
+Two-pass consolidation is restructure-side (Ganymede), owner-confirmation pending. Full state + division +
+routing: [`05-orchestration-state-and-successor-handoff.md`](./05-orchestration-state-and-successor-handoff.md).
 
 ## Plan universe (Phase 0, re-derived first-hand)
 
