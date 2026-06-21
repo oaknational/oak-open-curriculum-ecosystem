@@ -60,6 +60,7 @@ without proportional value.
 
 | Rule                                                                       | Classification | Trigger / Loading Signal                                                                         |
 | -------------------------------------------------------------------------- | -------------- | ------------------------------------------------------------------------------------------------ |
+| `.agent/rules/agent-experience-review-lens.md`                             | always-on      | —                                                                                                |
 | `.agent/rules/agent-state-observable.md`                                   | always-on      | —                                                                                                |
 | `.agent/rules/agents-default-no-gender.md`                                 | always-on      | —                                                                                                |
 | `.agent/rules/apply-architectural-principles.md`                           | always-on      | —                                                                                                |

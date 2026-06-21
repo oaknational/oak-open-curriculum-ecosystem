@@ -234,3 +234,4 @@ Practice-Core concept ↔ ADR map):
 | [PDR-108](PDR-108-generalise-where-generalisation-does-not-cost-utility.md) | Generalise Where Generalisation Does Not Cost Utility | Accepted |
 | [PDR-109](PDR-109-culture-is-what-propagates-across-instances.md) | Culture Is What Propagates Across Instances — the Transmission of Disposition | Accepted |
 | [PDR-110](PDR-110-repo-state-enforcement-is-its-own-proof-layer.md) | Repo-State Enforcement Is Its Own Proof Layer | Accepted |
+| [PDR-111](PDR-111-agent-experience-is-first-class.md) | Agent Experience Is a First-Class Practice Optimisation Principle | Accepted |

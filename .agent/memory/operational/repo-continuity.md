@@ -147,6 +147,18 @@ surface.
   controls push.
   Stale decision-thread / sidebar / handoff surfaces under `.agent/state/collaboration/` remain
   from retired sessions — clearing them is a conservation-gated curator-pass, deferred.
+- **Agent Experience (AX) made first-class (2026-06-21, Nova wakes Genesis)**: owner-directed AX
+  pass over the 82-entry [`frictions-register.md`](../../plans/agent-tooling/frictions-register.md).
+  Landed (gate-green, committed — SHA in thread record): the
+  [cause-class report](../../reports/agent-experience-cause-class-analysis-2026-06-21.md) (82
+  frictions → 8 cause-classes; the drain-gap; the #1 cure is **already homed** in
+  `agent-tools-cli-ergonomics.plan.md`); **PDR-111** (AX is a first-class Practice principle —
+  portable, host adoption in the bridge index); the always-on `agent-experience-review-lens` rule;
+  a `principles.md` standing-concern line; and the umbrella
+  [`agent-experience-improvement.plan.md`](../../plans/agent-tooling/current/agent-experience-improvement.plan.md)
+  (DRIVES the homed cli-ergonomics + watcher plans; OWNS the structural drain-fix validator,
+  F-41 path-safety, gate-coverage, disposition ledger). Two `future/` briefs (corpus survey; F-75).
+  **Next safe step** below (§Agent Experience). Owner controls push. Detail: `agentic` thread record top.
 - **Plan-estate relocation (2026-06-20, owner-directed)**: the controlling plan + the merged imported
   analysis docs moved off the planning root into a new `.agent/plans/product-development-governance/`
   collection — controlling plan at the top (authority), the 6 imports in `suggestions/` (subordinate,
@@ -170,7 +182,7 @@ each thread record; this table is the repo-level index.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Zephyrous Buffeting Falcon / skills-lane-relocated-to-educator-end-users / 2026-06-08 (prior identities: thread record) |
-| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude-code / Opus 4.8 (1M) / Ferret seeks Tunnel / dedicated-knowledge-curation (2026-06-20/21 buffer drain; F-75; graduated PDR-107 + culture Active Principle + README-index doc clause) / 2026-06-21 (prior seats: Finch binds Halo, Drake lifts Obsidian, Siren guards Reef, Tulip spins Xylem; full history in thread record) |
+| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude-code / Opus 4.8 (1M) / Nova wakes Genesis / AX-first-class + cause-class report + umbrella plan / 2026-06-21 (prior seats: Ferret seeks Tunnel (dedicated curation; PDR-107/108/109/110), Finch binds Halo, Drake lifts Obsidian, Siren guards Reef, Tulip spins Xylem; full history in thread record) |
 | `eslint-no-throw-result-migration` | Migrate every throw to Result (ADR-088); drive the ~1000 warnings to zero; promote the rule. In execution on `docs/planning-and-validation`; cheap WS2 done, residue is design-laden (tier map in record) | [record](threads/eslint-no-throw-result-migration.next-session.md) | claude / Opus 4.8 (1M) / Siren mends Rudder / execution — observability+graph-core+logger landed (`93beffcfe`,`304b68f8d`,`61bdbc3e4`) / 2026-06-19 (prior: Merlin spins Cirrus `1556b9191`; Vanilla weaves Undergrowth, plan-author) |
 | `statusline-enhancements` | Claude Code statusline: Oak-mark, session-shape indicators, logo swap; lane in two `current/` plans (session-state, logo-modularisation). Live detail + the `feat/comms-research` divergence to reconcile: thread record | [record][statusline] | claude-code / Opus 4.8 / Vole calls Hollow / live-logo-swap-and-plan-harden / 2026-06-16 (prior identities: thread record) |
 | `agent-naming` | PDR-027 display-name derivation: versioned schema registry, session-hook identity surfaces, wordlist eras (v2 landed; v3 + era-pinning cure queued) | [record][agent-naming] | claude / Opus 4.8 / Squall hunts Troposphere / thread-open + v3-plan-author / 2026-06-13 (prior identities: thread record) |
@@ -223,6 +235,25 @@ is the owner-ordered prerequisite for v3 activation. Phases 2 (C wordlist
 curation, owner taste review BLOCKING) and 3 (v3 registry entry + activation)
 follow. Orientation: read the thread record, then the plan, then re-grep the
 `OAK_AGENT_IDENTITY_OVERRIDE` consumer set (plan-body first-principles check).
+
+### Agent Experience (AX) Improvement — implement the highest-impact item
+
+Umbrella plan
+[`agent-experience-improvement.plan.md`](../../plans/agent-tooling/current/agent-experience-improvement.plan.md)
+(`current/`, QUEUED), evidence
+[report](../../reports/agent-experience-cause-class-analysis-2026-06-21.md), doctrine PDR-111.
+**Next safe step**: implement the highest-impact item. Two defensible entry points (owner sequences):
+
+1. **Highest breadth** — the CLI-ergonomics conformance guard. Execute
+   [`agent-tools-cli-ergonomics.plan.md`](../../plans/agent-tooling/current/agent-tools-cli-ergonomics.plan.md)
+   from **WS0** (convention audit + ratification gate) → WS6 (the PDR-055 cl.10 conformance guard).
+   Retires the ~19-friction Class A. Already ratified `READY FOR EXECUTION`.
+2. **Highest safety, smallest** — umbrella **WS-3 (F-41 path-safety)**: a relative path from a
+   stale/worktree cwd silently writes to the WRONG registry behind a green proof line. Reuse
+   `resolveRepoRoot()` in `agent-tools/src/core/repo-root.ts`. Independent; lands fast.
+
+The umbrella's own spine (WS-4 drain-fix validator + WS-6 disposition ledger) is the systemic fix.
+Recommended start: WS-3 (safety) in parallel with WS-1 (breadth), per the umbrella's sequencing.
 
 ### Agentic Mechanisms Discovery
 

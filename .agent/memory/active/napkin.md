@@ -248,3 +248,37 @@ The plan-estate substance gate has four arms (conformance, traceability, no-loss
 ## Value-over-ceremony recurred despite its home — passive guidance lost at the action moment (2026-06-21, Saffron holds Sepal)
 
 Owner corrected me twice this session toward substance over coordination ceremony: "we don't delete state files, we process them" (correctness), then explicitly "the value is in planning the current and future stages... not in comms ceremony." I had over-indexed on coordination — welcomes, opening/continuing seam channels, handoff sequencing, acknowledgement posts. The memories `useful work over ceremony` and `comms ceremony minimal` ALREADY EXIST and I did it anyway: recurrence-despite-home (PDR-098) — the passive guidance lost at the action moment to the pull of "be a good collaborator." The action-moment tell: composing a welcome / ack / seam entry when no value delivery depends on it landing now. Firing gate to install: **before any coordination post, ask "does a value delivery depend on this landing now?" — if not, skip it.** This is recurrence evidence for the doctrine-traction lane (the action-time-structural-interrupt design space); the right cure is an action-time interrupt, not another passive memory. Sibling: [[passive-guidance-loses-to-artefact-gravity]].
+
+## A host-doc cross-linking reflex bled into a Practice-Core PDR — fire the portability screen BEFORE any link under practice-core/ (2026-06-21, Nova wakes Genesis)
+
+Owner correction mid-handoff: PDR-111 (authored this session) **linked out to a repo report**
+(`../../reports/...`) and carried host-specific prose ("the 82-entry agent-tools register", "this
+repo's `agent-tools` CLI") — violating `practice-core-portability` (the single permitted outgoing
+link from `.agent/practice-core/` is the bridge index; repo specifics belong in ADRs / the host
+bridge, never a PDR). Root by metacognition: I had spent the session **wiring discoverability** —
+making the report ↔ umbrella-plan ↔ PDR cross-reference each other — and carried that cross-linking
+reflex straight INTO the Core doc without firing the portability screen. Artefact-gravity / fluency:
+a host-doc convention (link everything for discoverability) overrode a passively-held Core rule at the
+authoring moment. **Recurrence** of `feedback_practice_core_portability_strict` despite its dedicated
+rule — first-class evidence for the rule's own named gap: there is **no write-time scanner for
+host-path leakage inside `practice-core/`** yet (rule §Enforcement: scanner is "the next reinforcing
+layer", unbuilt). Cure applied: PDR-111 rewritten fully portable; host adoption recorded in
+`practice-index.md` (the bridge). Firing gate: **authoring anything under `.agent/practice-core/`
+fires the portability screen before adding ANY link or host reference.** Route as recurrence evidence
+to the practice-core host-path-leakage scanner (PDR-038 author-time-enforcement family). Sibling:
+[[passive-guidance-loses-to-artefact-gravity]].
+
+## Verify a structural cure isn't ALREADY doctrine + homed before planning it (2026-06-21, Nova wakes Genesis)
+
+Asked to plan the highest-impact agent-tooling improvements, I ranked a CLI-ergonomics conformance
+guard #1 and nearly authored a plan to build it. The metacognition reframe + a first-hand check caught
+that it was **already doctrine (PDR-055 cl.7–10) AND already homed** in a `READY FOR EXECUTION` plan
+(`agent-tools-cli-ergonomics.plan.md`, WS6). Re-planning would have fragmented the estate and
+re-ratified settled work. Cure: before proposing a structural cure for a problem class, **check it is
+not already homed (doctrine + plan), not just absent from the surface I was pointed at** — survey the
+PDR/ADR + plan estate. The umbrella plan then *drove* the homed plans and *owned* only genuinely-unhomed
+work. Instance of [[feedback_check_workspace_packages_before_proposing]] /
+[[feedback_consolidate_estate_decouple_execution]] at plan-authoring time. Also this session: an Explore
+sub-agent fabricated "F-41 is addressed" (false vs register line 1266) and a Plan sub-agent gave wrong
+status counts (vs the real 61 `open`) — both caught by first-hand read; reinforces
+[[feedback_first_hand_means_me_not_subagents]].

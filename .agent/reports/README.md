@@ -78,6 +78,13 @@ research notes or investigation logs.
   — team operations and experience report for the full contiguous 38-agent /
   seven-Director session (2026-06-10→11); substrate-under-load findings and
   tooling considerations
+- [agent-experience-cause-class-analysis-2026-06-21.md](./agent-experience-cause-class-analysis-2026-06-21.md)
+  — cause-class synthesis of the 82-entry agent-tooling friction register: the
+  eight structural classes the frictions collapse into, the three AX layers, the
+  leverage ranking (and the finding that the top cure is already homed), the
+  drain-gap diagnosis, and next steps; evidence companion to
+  [PDR-111](../practice-core/decision-records/PDR-111-agent-experience-is-first-class.md)
+  and [`agent-experience-improvement.plan.md`](../plans/agent-tooling/current/agent-experience-improvement.plan.md)
 
 ## Related Surfaces
 

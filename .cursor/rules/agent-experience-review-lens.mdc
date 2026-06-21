@@ -1,0 +1,6 @@
+---
+description: Weigh agent-experience (AX) impact when designing or reviewing agent-facing substrate — CLIs, watchers, comms/claims/state surfaces, gates, hooks, generated agent artefacts.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/agent-experience-review-lens.md`.

@@ -332,6 +332,7 @@ example in this repo:
 | [`evidence-before-classification.md`](memory/active/patterns/evidence-before-classification.md) | PDR-013 (host adoption) | Classify only after evidence-gathering, not at first read |
 | [`circular-test-justification.md`](memory/active/patterns/circular-test-justification.md) | PDR-021 (host adoption) | Tests must not be the only justification for the production code they exercise |
 | [`test-claim-assertion-parity.md`](memory/active/patterns/test-claim-assertion-parity.md) | PDR-021 (host adoption) | Test description and assertion must measure the same thing |
+| [`agent-experience-review-lens.md`](rules/agent-experience-review-lens.md) | PDR-111 (host adoption) | Weigh agent-experience impact when designing or reviewing agent-facing substrate (CLIs, watchers, comms/claims/state, gates, hooks); cures prefer structural class-retirement |
 
 ## Artefact Directories
 

@@ -36,8 +36,10 @@ is constitutively the owner's (for example product or feature scope):
 5. **Optimise for user value.**
 
 These resolve *questions*. They sit alongside standing concerns that are never
-traded away — excellent developer experience and the highest levels of software
-engineering excellence.
+traded away — excellent developer experience, excellent **agent experience** (the
+agent-facing substrate is a product whose users are agents; see
+[PDR-111](../practice-core/decision-records/PDR-111-agent-experience-is-first-class.md)),
+and the highest levels of software engineering excellence.
 
 ## First Question
 
