@@ -14,6 +14,15 @@ Account budget is now **shared with Oyster's concurrent WS-3**, so pacing revert
 ~one-35-plan-window default (sole-mode "fire until `unreadable`" suspended). Each increment is
 conserved+committed the instant its Workflow call returns.
 
+**Window 2 wound down (clean) at ~59 plans** — observability (31, incl. the OBS-01 re-fire) +
+sdk-and-mcp-enhancements (28), to **Pass-1 228/286 (6 collections)**. Held at the sdk-and-mcp collection
+boundary (NOT pushed into the ~63-plan depletion zone) to leave account-budget headroom for Oyster's
+live WS-3 and the owner's next reset. **Next safe step: the 10 remaining collections (~58 plans) in
+~35-plan sub-batches, one per owner-reset window** — start with `sector-engagement` (12) or fold the
+small singletons; then the 70-AEE idea-granular back-fill BEFORE Pass-3. Shared-checkout commit coupling
+active: my docs commits run the full turbo gate over Oyster's working tree, so commit during their
+`tree-green` windows (interim protocol agreed; structural cure = separate git worktrees, flagged to owner).
+
 Recorded lesson (one wasted attempt, no findings lost): a *fresh session* is NOT a *fresh window* —
 the session limit is account-level, shared across the rotating cast. The first 1b attempt (12 plans,
 same already-spent window as Hobby's 1a) hit the limit and returned all-`unreadable` (HALT-don't-
@@ -74,6 +83,7 @@ scope; not surveyed.) Source: `worklist-plans.tsv`.
 | obs-03 | observability (`future/`, plans 25–31 of 31) | 7 | Cosmos calls Infinity | COMPLETE (5 keep / 1 archive-complete / 1 rehome; substance 7 good; content 6 strong / 1 adequate; conformance 7 major-drift; 87 ideas: 70 good / 17 speculative / 0 bad; 1 locked-contradiction; 7 high-stakes verdicts: 5 survive / 2 refuted) | `pass1-observability-03.json` |
 | sdk-01 | sdk-and-mcp-enhancements (`active/`+root+`current/`, plans 1–12 of 28) | 12 | Cosmos calls Infinity | COMPLETE (10 keep / 1 archive-complete / 1 rewrite; substance 11 good / 1 mixed; content 11 strong / 1 adequate; conformance 12 major-drift; 152 ideas: 124 good / 25 speculative / 3 bad; 2 locked-contradictions; 10 high-stakes verdicts: 9 survive / 1 refuted) | `pass1-sdk-and-mcp-enhancements-01.json` |
 | sdk-02 | sdk-and-mcp-enhancements (`current/`+`future/`, plans 13–24 of 28) | 12 | Cosmos calls Infinity | COMPLETE (8 keep / 4 archive-complete; substance 12 good; content 12 strong; conformance 11 major-drift / 1 no-fm; 159 ideas: 143 good / 16 speculative / 0 bad; 0 locked-contradictions; 14 high-stakes verdicts: 13 survive / 1 refuted) | `pass1-sdk-and-mcp-enhancements-02.json` |
+| sdk-03 | sdk-and-mcp-enhancements (`future/`, plans 25–28 of 28) | 4 | Cosmos calls Infinity | COMPLETE (3 keep / 1 rewrite; substance 4 good; content 3 strong / 1 adequate; conformance 2 major-drift / 2 no-fm; 43 ideas: 36 good / 7 speculative / 0 bad; 0 locked-contradictions; 4 high-stakes verdicts: 4 survive) | `pass1-sdk-and-mcp-enhancements-03.json` |
 
 After 1b: the full **agentic-engineering-enhancements** collection (70 plans) is Pass-1 complete.
 
@@ -94,16 +104,20 @@ bad, 15 locked-contradictions, 52 high-stakes verdicts: 44 survive / 7 refuted /
 After obs-03: the full **observability** collection (31 plans) is Pass-1 complete (Cosmos calls Infinity,
 3 increments obs-01..03 — obs-01 re-fired after the window-1 depletion + owner reset — 0 unreadable, 403
 ideas inventoried: 338 good / 60 speculative / 5 bad, 6 locked-contradictions, 27 high-stakes verdicts:
-24 survive / 2 refuted / 1 uncertain). **Pass-1 coverage so far: 200 / 286 plans (5 collections).** 11
-collections / ~86 plans remain — see the linear successor plan
-[`07-sole-successor-survey-plan.md`](./07-sole-successor-survey-plan.md).
+24 survive / 2 refuted / 1 uncertain). **Pass-1 coverage at that point: 200 / 286 plans (5 collections).**
 
-### Remaining Pass-1 collections (~86 plans, ~35-plan atomic sub-batches, one per owner-reset window)
+After sdk-03: the full **sdk-and-mcp-enhancements** collection (28 plans) is Pass-1 complete (Cosmos calls
+Infinity, 3 increments sdk-01..03, 0 unreadable, 354 ideas inventoried: 303 good / 48 speculative / 3
+bad, 2 locked-contradictions, 28 high-stakes verdicts: 26 survive / 2 refuted). **Pass-1 coverage so
+far: 228 / 286 plans (6 collections).** 10 collections / ~58 plans remain — see the linear successor
+plan [`07-sole-successor-survey-plan.md`](./07-sole-successor-survey-plan.md).
 
-The 11 collections other than the five now complete (`agentic-engineering-enhancements`,
-`architecture-and-infrastructure`, `product-development-governance`, `agent-tooling`, `observability`),
-derived from
-`worklist-plans.tsv` (col `collection`): `sdk-and-mcp-enhancements` (28),
+### Remaining Pass-1 collections (~58 plans, ~35-plan atomic sub-batches, one per owner-reset window)
+
+The 10 collections other than the six now complete (`agentic-engineering-enhancements`,
+`architecture-and-infrastructure`, `product-development-governance`, `agent-tooling`, `observability`,
+`sdk-and-mcp-enhancements`), derived from
+`worklist-plans.tsv` (col `collection`):
 `sector-engagement` (12), `semantic-search` (11), `connecting-oak-resources` (10), `discovery` (9),
 `user-experience` (7), `developer-experience` (4), `exploring-open-education-resources` (2),
 `security-and-privacy` (1), `school-data-search` (1), `curriculum-mcp-path-to-ga` (1).

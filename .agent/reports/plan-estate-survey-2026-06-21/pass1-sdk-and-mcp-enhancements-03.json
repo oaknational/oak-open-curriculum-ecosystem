@@ -1,0 +1,650 @@
+{
+  "batch_size": 4,
+  "plans_returned": 4,
+  "unreadable": [],
+  "null_holistic": [],
+  "results": [
+    {
+      "plan": ".agent/plans/sdk-and-mcp-enhancements/future/post-merge-tidy-up.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan holds 21 distinct actionable items with exact code coordinates, all still marked pending — nothing indicates work is done.",
+          "file_line": "post-merge-tidy-up.plan.md:4-43"
+        },
+        {
+          "claim": "The flat-to-nested elimination item is architecturally load-bearing and has no other home in the estate.",
+          "file_line": "post-merge-tidy-up.plan.md:140-153"
+        },
+        {
+          "claim": "The ADR item for error handling is explicitly flagged as a durable architectural pattern for all future upstream API error handling.",
+          "file_line": "post-merge-tidy-up.plan.md:64-72"
+        },
+        {
+          "claim": "Folder is 'future'; status is 'Not started' — plan has not been promoted or archived, so keep is appropriate pending merge-status verification.",
+          "file_line": "post-merge-tidy-up.plan.md:44-50"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is a well-curated, source-cited backlog of real technical debt and follow-ups, not speculative or invented. Every item has a traceable origin (WS1 review, ESLint audit, error handling session). The flat-to-nested item (lines 140-153) demonstrates architectural thinking, not just housekeeping. The ADR item (lines 58-72) correctly identifies a missing durable record for a pattern already in use. The M1 gate residuals (lines 102-108) are product/ops commitments, not wishlist items.",
+      "content_quality": "strong",
+      "content_quality_note": "Each item carries enough context to act on without re-reading source sessions: file paths, counts, named types (UndocumentedResponseError, transformFlatToNestedArgs), and the architectural reasoning for the most significant item (lines 140-153). The provenance section (lines 163-170) gives traceability. The M1 gate grouping (lines 100-113) correctly separates blocking from deferred items. The only weakness is missing sequencing and ownership signals.",
+      "salvage_value": [
+        {
+          "idea": "Open upstream issue on oaknational/oak-openapi requesting error responses in OpenAPI spec metadata so SDK codegen can produce proper error handling.",
+          "class": "good",
+          "file_line": "post-merge-tidy-up.plan.md:58-63"
+        },
+        {
+          "idea": "Author ADR documenting UndocumentedResponseError, three-way error classification, and the SDK-classifies/app-logs observability boundary as a durable architectural pattern.",
+          "class": "good",
+          "file_line": "post-merge-tidy-up.plan.md:64-72"
+        },
+        {
+          "idea": "Sweep and replace 231 pre-existing no-console violations with logger calls following the new ESLint rule.",
+          "class": "good",
+          "file_line": "post-merge-tidy-up.plan.md:74-76"
+        },
+        {
+          "idea": "Fix resource pattern tests to use direct source function comparison rather than JSON re-parsing with Zod.",
+          "class": "good",
+          "file_line": "post-merge-tidy-up.plan.md:79-81"
+        },
+        {
+          "idea": "Migrate 3 pre-existing as-casts in widget-metadata.e2e.test.ts to the Zod validation pattern.",
+          "class": "good",
+          "file_line": "post-merge-tidy-up.plan.md:85-87"
+        },
+        {
+          "idea": "Evaluate and break the latent type-only cycle: tool-guidance-types to universal-tools/types to definitions.",
+          "class": "speculative",
+          "file_line": "post-merge-tidy-up.plan.md:89-92"
+        },
+        {
+          "idea": "Evaluate deduplicating domainModel.workflows and toolGuidance.workflows in the combined get-curriculum-model payload.",
+          "class": "speculative",
+          "file_line": "post-merge-tidy-up.plan.md:94-97"
+        },
+        {
+          "idea": "Add E2E resources/read test for curriculum://model to fully lock the contract.",
+          "class": "good",
+          "file_line": "post-merge-tidy-up.plan.md:99-101"
+        },
+        {
+          "idea": "Complete M1 gates: G5 invite-only alpha experience contract, G6 Clerk production migration, G8 release communications.",
+          "class": "good",
+          "file_line": "post-merge-tidy-up.plan.md:103-108"
+        },
+        {
+          "idea": "Export PromptArgs from SDK public API and remove inline duplication in register-prompts.ts.",
+          "class": "good",
+          "file_line": "post-merge-tidy-up.plan.md:114-117"
+        },
+        {
+          "idea": "Verify explore-topic is a registered tool name as referenced in the explore-curriculum prompt messages.",
+          "class": "good",
+          "file_line": "post-merge-tidy-up.plan.md:119-122"
+        },
+        {
+          "idea": "Evaluate adding a fifth MCP prompt for lesson adaptation post-alpha.",
+          "class": "speculative",
+          "file_line": "post-merge-tidy-up.plan.md:124-126"
+        },
+        {
+          "idea": "Fix 4 REFACTOR-tagged no-restricted-properties disables at specific file:line coordinates.",
+          "class": "good",
+          "file_line": "post-merge-tidy-up.plan.md:128-133"
+        },
+        {
+          "idea": "Apply ISP refactor pattern to eliminate 12 test fake as-casts across 5 test helper files.",
+          "class": "good",
+          "file_line": "post-merge-tidy-up.plan.md:135-138"
+        },
+        {
+          "idea": "Extract 3 max-lines search CLI modules by responsibility: index-oak-helpers, index-batch-helpers, cache-wrapper.",
+          "class": "good",
+          "file_line": "post-merge-tidy-up.plan.md:139-141"
+        },
+        {
+          "idea": "Eliminate transformFlatToNestedArgs by making the SDK invoke layer accept flat args directly, removing a whole layer of generated code and the type-widening bugs it causes.",
+          "class": "good",
+          "file_line": "post-merge-tidy-up.plan.md:143-153"
+        },
+        {
+          "idea": "Defer M1-S007 prerequisite sub-graph fetching to a later milestone.",
+          "class": "speculative",
+          "file_line": "post-merge-tidy-up.plan.md:157-159"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "Not started — these items are deferred until after merge to `main`.",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "id absent — LOCKED required for all plans",
+          "file_line": "post-merge-tidy-up.plan.md:1-45 (frontmatter block)"
+        },
+        {
+          "issue": "node_type absent — LOCKED required for all plans; discriminator field",
+          "file_line": "post-merge-tidy-up.plan.md:1-45 (frontmatter block)"
+        },
+        {
+          "issue": "kind absent — LOCKED required for all plans; should be executable (plan carries todos)",
+          "file_line": "post-merge-tidy-up.plan.md:1-45 (frontmatter block)"
+        },
+        {
+          "issue": "last_updated absent from frontmatter — LOCKED required for all plans; value appears only in body prose",
+          "file_line": "post-merge-tidy-up.plan.md:49 (body: **Last Updated**: 2026-03-01)"
+        },
+        {
+          "issue": "serves_strategic_choice absent — required for executable plans (or explicit pending sentinel)",
+          "file_line": "post-merge-tidy-up.plan.md:1-45 (frontmatter block)"
+        },
+        {
+          "issue": "isProject: false present — V0 §2.5 explicitly drops this field (subsumed by projects_to edge)",
+          "file_line": "post-merge-tidy-up.plan.md:44"
+        },
+        {
+          "issue": "status expressed as prose in body rather than mapped to V0 orthogonal axes — maps to kind: executable + gate or execution backlog, but neither is declared",
+          "file_line": "post-merge-tidy-up.plan.md:50"
+        },
+        {
+          "issue": "No V0 typed edges declared in frontmatter (serves_strategic_choice, derives_from, thread, depends_on all absent)",
+          "file_line": "post-merge-tidy-up.plan.md:1-45 (frontmatter block)"
+        }
+      ],
+      "unclassified_keys": [
+        "isProject"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "Item 20 (eliminate-flat-to-nested) identifies a two-schema-layer architecture where every generated tool carries a `transformFlatToNestedArgs` bridge function. The plan correctly names this as entropy — it introduces type-widening bugs (the `z.union` → `z.preprocess` migration cited as a consequence) and spreads generated code that must be maintained. The architectural question of whether the HTTP client or the SDK invoke layer owns param splitting is deferred with no owner decision recorded. This is a structural boundary decision that should be ADR-gated, not left as a medium-priority evaluate item.",
+          "file_line": "post-merge-tidy-up.plan.md:142-153"
+        },
+        {
+          "severity": "medium",
+          "claim": "Item 7 (workflow-duplication): `domainModel.workflows` and `toolGuidance.workflows` both carry workflow data in the combined `get-curriculum-model` payload. Carrying duplicate data through the MCP boundary multiplies payload size and risks the two copies diverging silently. The plan says 'evaluate whether to deduplicate' — this is an architectural boundary question (which layer owns the workflow shape) that warrants a decision, not an open-ended evaluation.",
+          "file_line": "post-merge-tidy-up.plan.md:95-97"
+        },
+        {
+          "severity": "medium",
+          "claim": "Item 6 (type-cycle): a type-only cycle `tool-guidance-types` → `universal-tools/types` → `definitions` exists and is acknowledged. The plan notes no runtime impact because types are erased, but a latent cycle in the module dependency graph is an architectural smell: it constrains future refactoring and can become a runtime cycle if any party adds a value import. The plan defers resolution to 'consider breaking if value imports are ever added' — a reactive posture when the cycle should be broken proactively.",
+          "file_line": "post-merge-tidy-up.plan.md:89-91"
+        },
+        {
+          "severity": "medium",
+          "claim": "Item 2 (adr-error-handling): the three-way error classification (`UPSTREAM_SERVER_ERROR`, `CONTENT_NOT_AVAILABLE`, `UPSTREAM_API_ERROR`), the SDK-classifies-but-does-not-log principle, and the app-layer observability contract are described as a 'durable architectural pattern that will apply to all future upstream API error handling', yet the ADR that should codify this decision is still pending. Shipping a durable cross-cutting pattern without a ratified ADR means the pattern is invisible to future contributors and cannot be cited as an authority.",
+          "file_line": "post-merge-tidy-up.plan.md:62-72"
+        },
+        {
+          "severity": "low",
+          "claim": "Item 1 (openapi-issue): all endpoints have `errorResponses: []` in the upstream OpenAPI spec. The SDK-codegen cannot generate error handling at compile time because the upstream spec lacks error response metadata. This is an upstream dependency gap, not a local architectural flaw, but it is the root cause of the UndocumentedResponseError pattern and the pending ADR. Tracking it as a tidy-up item rather than a dependency risk means it has no owner deadline or escalation path.",
+          "file_line": "post-merge-tidy-up.plan.md:58-62"
+        },
+        {
+          "severity": "low",
+          "claim": "Item 4 (resource-tests): tests for `prior-knowledge-graph-resource` and `thread-progressions-resource` use JSON re-parsing with Zod instead of direct source function comparison. The plan labels this an 'architectural fix', which is correct — test strategy should match the layer under test. Using Zod re-parsing in unit tests conflates serialisation correctness with function output correctness and hides type errors.",
+          "file_line": "post-merge-tidy-up.plan.md:83-85"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": [
+        {
+          "claim": "Status is 'Not started' and all todos are 'pending'.",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "post-merge-tidy-up.plan.md:50 (\"**Status**: Not started — these items are deferred until after merge to `main`.\") and frontmatter status fields at lines 7,10,13,16,19,22,25,28,31,34,37,40,43 — all 13 read `status: pending` with no completed/in_progress value anywhere."
+        },
+        {
+          "claim": "M1 gates G5, G6, G8 are listed as pending with owner/ops accountability. (cited at post-merge-tidy-up.plan.md:102-108)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "post-merge-tidy-up.plan.md:102 \"**G5**: Accept invite-only alpha experience contract (product owner).\"; :103 \"**G6**: Clerk production migration (engineering/ops).\"; :104 \"**G8**: Release communications (product owner).\"; pending status from frontmatter todo m1-gates status: pending (:30) and doc header \"Status: Not started\" (:50)"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/sdk-and-mcp-enhancements/future/retire-curriculum-sdk-api-md.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Decision is owner-ratified and execution has not started; the plan is the sole durable record of scope discovered during consolidation drain",
+          "file_line": "retire-curriculum-sdk-api-md.plan.md:11-15"
+        },
+        {
+          "claim": "Execution scope is specific and non-trivial — 135 files, named generator scripts, pointer targets — not reconstructable without re-investigation",
+          "file_line": "retire-curriculum-sdk-api-md.plan.md:43-55"
+        },
+        {
+          "claim": "Promotion trigger is defined and open ('next sdk-codegen / docs-pipeline session, or owner direction')",
+          "file_line": "retire-curriculum-sdk-api-md.plan.md:65"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every constituent idea is grounded in first-hand discovery evidence: the broken generator entrypoint (line 30), the dangling turbo output (line 36-37), the structural diff on regen (line 32-33), the stale upstream descriptions (line 34). The scope list is precise and actionable. No speculative or bad ideas present.",
+      "content_quality": "strong",
+      "content_quality_note": "Plan is terse and dense: five distinct failure-mode observations (lines 27-37), an explicit file-level execution scope with named scripts and line references (lines 43-55), a concrete verification criterion (lines 59-61), and a promotion trigger (line 65). Nothing is padded or vague.",
+      "salvage_value": [
+        {
+          "idea": "Remove the 135-file committed typedoc output tree from packages/sdks/oak-curriculum-sdk/docs/api-md/ — derivable on demand, drifts by construction",
+          "class": "good",
+          "file_line": "retire-curriculum-sdk-api-md.plan.md:43-44"
+        },
+        {
+          "idea": "Drop the dangling **/docs/api-md/** output glob from turbo.json (line approx 46) — the script never writes it",
+          "class": "good",
+          "file_line": "retire-curriculum-sdk-api-md.plan.md:44-45"
+        },
+        {
+          "idea": "Fix the stale typedoc.json entrypoint (deleted docs/_typedoc_src/... path) so docs:api no longer exits 2",
+          "class": "good",
+          "file_line": "retire-curriculum-sdk-api-md.plan.md:29-31"
+        },
+        {
+          "idea": "Decide keep-as-on-demand vs retire for the docs:api* scripts and oak-sdk-codegen generation scripts, after reading the generator first-hand",
+          "class": "good",
+          "file_line": "retire-curriculum-sdk-api-md.plan.md:47-51"
+        },
+        {
+          "idea": "Repoint the weak doc pointer in packages/sdks/oak-curriculum-sdk/docs/mcp/README.md to the generation command rather than the committed tree",
+          "class": "good",
+          "file_line": "retire-curriculum-sdk-api-md.plan.md:52-53"
+        },
+        {
+          "idea": "Update docs/docs-pipeline.md to reflect the retired committed tree",
+          "class": "good",
+          "file_line": "retire-curriculum-sdk-api-md.plan.md:53"
+        },
+        {
+          "idea": "Clean up ignore-config refs in packages/core/oak-eslint/src/shared.ts and apps/oak-search-cli/package.json if the api-md path is removed",
+          "class": "good",
+          "file_line": "retire-curriculum-sdk-api-md.plan.md:54-55"
+        },
+        {
+          "idea": "Verification gate: rg 'api-md' over live surfaces returns only intended references after the removal",
+          "class": "good",
+          "file_line": "retire-curriculum-sdk-api-md.plan.md:61"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "decided",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "id missing — LOCKED required field for all plan nodes",
+          "file_line": "retire-curriculum-sdk-api-md.plan.md:1-7 (frontmatter block, field absent)"
+        },
+        {
+          "issue": "node_type missing — LOCKED required field for all plan nodes (literal \"plan\")",
+          "file_line": "retire-curriculum-sdk-api-md.plan.md:1-7 (frontmatter block, field absent)"
+        },
+        {
+          "issue": "overview missing — LOCKED required field for all plan nodes",
+          "file_line": "retire-curriculum-sdk-api-md.plan.md:1-7 (frontmatter block, field absent)"
+        },
+        {
+          "issue": "kind missing — LOCKED required field for all plan nodes; replaces readiness sense of status",
+          "file_line": "retire-curriculum-sdk-api-md.plan.md:1-7 (frontmatter block, field absent)"
+        },
+        {
+          "issue": "status: decided present — status is explicitly dropped by V0 (split into kind/disposition/gate/projected execution axis); value 'decided' does not appear in V0 §3.5 migration map",
+          "file_line": "retire-curriculum-sdk-api-md.plan.md:5"
+        },
+        {
+          "issue": "collection present — explicitly dropped by V0 (folder location is the projection; metadata does not duplicate it)",
+          "file_line": "retire-curriculum-sdk-api-md.plan.md:3"
+        },
+        {
+          "issue": "lane present — explicitly dropped by V0 (same entry as collection in §2.5)",
+          "file_line": "retire-curriculum-sdk-api-md.plan.md:4"
+        },
+        {
+          "issue": "serves_strategic_choice edge absent — required for executable plans, recommended for strategic; no V0 typed edges declared in frontmatter",
+          "file_line": "retire-curriculum-sdk-api-md.plan.md:1-7 (frontmatter block, field absent)"
+        },
+        {
+          "issue": "promotion_trigger absent — LOCKED required field for strategic plans; body contains a 'Promotion trigger' section indicating kind is strategic, but the frontmatter field is missing",
+          "file_line": "retire-curriculum-sdk-api-md.plan.md:64-65 (body section present; frontmatter field absent)"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan defers the keep-vs-retire decision on the generator scripts (typedoc.json, docs:api variants, oak-sdk-codegen generators) to execution time ('decide keep-as-on-demand vs retire, having read them'). The correct architectural decision — whether on-demand generation is a first-class workflow or entirely removed — should be owner-ratified before execution begins, not discovered mid-deletion. A mid-execution pivot from 'keep-as-on-demand' to 'full retire' would require re-scoping the turbo.json change and the ignore-config cleanup in the same session, which risks an incomplete boundary.",
+          "file_line": "retire-curriculum-sdk-api-md.plan.md:47-51"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan notes that typedoc.json references a deleted entrypoint and that a bare docs:api run exits 2, meaning 'derivable on demand does not currently hold without a generator fix'. The execution scope lists fixing the stale entrypoint as conditional ('if the script is kept'), but does not require proving the on-demand path is green before the committed tree is removed. If the generator is retired instead, the verification criterion ('rg api-md returns only intended references') is sufficient; however, if the generator is kept, a green docs:api run should be an explicit verification step.",
+          "file_line": "retire-curriculum-sdk-api-md.plan.md:29-31,57-62"
+        },
+        {
+          "severity": "low",
+          "claim": "The dangling turbo doc-gen output glob ('**/docs/api-md/**') is called out correctly as a config review finding and the plan targets turbo.json line ~46 for removal. The 'line ~46' approximation is acceptable for a future plan, but the executor should re-verify the line before editing given turbo.json is a shared infra file touched across workspaces.",
+          "file_line": "retire-curriculum-sdk-api-md.plan.md:45-46"
+        },
+        {
+          "severity": "info",
+          "claim": "The ESLint shared config (packages/core/oak-eslint/src/shared.ts) and apps/oak-search-cli/package.json are listed as ignore-config refs to clean up if the path is removed. This is a cross-workspace boundary touch; the plan correctly identifies them but does not flag that the ESLint config change will cause a lint gate re-evaluation across every consuming workspace. This is manageable but should be an explicit sequencing note in the execution session.",
+          "file_line": "retire-curriculum-sdk-api-md.plan.md:54-55"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": [
+        {
+          "claim": "No named consumer reads the committed markdown was found at decision time",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "retire-curriculum-sdk-api-md.plan.md:21-23; rg over live surfaces yields only writers/config/pointers (turbo.json:46 output glob; generate-markdown-docs.ts:33,108,122 fs.writeFile; oak-eslint/src/shared.ts:85 ignore-list; docs-pipeline.md/mcp/README.md human pointers). The sole reader of api-md/index.md is verify-docs.ts:108,129-130, whose header (lines 1-12) declares it verifies generated artefacts — it is the generation pipeline (plan line 51 names it in-scope), not a downstream consumer, and it is wired into no package script or turbo task (rg \"verify-docs\" in package.json/turbo.json returns nothing). No runtime/product code reads the tree as content."
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/sdk-and-mcp-enhancements/future/upstream-spec-change-automation.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan is NOT STARTED and correctly parked in future/ with an explicit promotion trigger; content is non-trivial and not superseded.",
+          "file_line": "file:3 (status), file:155-166 (promotion trigger)"
+        },
+        {
+          "claim": "The 'What Already Works' section encodes first-hand compile-time invariant findings that the consolidation must not lose.",
+          "file_line": "file:26-48"
+        },
+        {
+          "claim": "No other plan in this lane was identified as owning this automation scope.",
+          "file_line": "file:1 (plan title)"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is grounded in two real alignment incidents (file:16-18), correctly identifies all four manual-step gaps (file:51-64), preserves an evidence-based owner directive (file:109-111), and decomposes into independently shippable phases each with a stated right-tool choice. No speculative or bad ideas are present; every idea traces to a verified gap or a first-hand invariant.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan is internally consistent, cites real PRs and sessions, names the prose-only-drift filter problem precisely (file:83-86), distinguishes classification as advisory vs correctness-gate (file:148-150), and includes an explicit implementation-detail note (file:168-171) preventing confusing reference context with execution commitment. The level of specificity is appropriate for a future/strategic brief without over-specifying execution details that belong at promotion time.",
+      "salvage_value": [
+        {
+          "idea": "Scheduled CI job detects upstream spec changes by fetching live spec and comparing info.version plus normalised diff",
+          "class": "good",
+          "file_line": "file:79-86"
+        },
+        {
+          "idea": "Prose-only deploys (info.version moves but normalised diff is empty) must be filtered before signalling structural change",
+          "class": "good",
+          "file_line": "file:83-86"
+        },
+        {
+          "idea": "Auto-regenerate on structural detection: CI runs sdk-codegen in online mode bypassing turbo cache, runs gate chain, opens PR",
+          "class": "good",
+          "file_line": "file:88-92"
+        },
+        {
+          "idea": "Breaking-change classification: diff-classifier labels spec changes as additive vs consumer-breaking (path/param rename, required-ness tightened, response type narrowed)",
+          "class": "good",
+          "file_line": "file:93-96"
+        },
+        {
+          "idea": "Bot-authored PR carries classification label and drafts changelog/migration note for consumer-breaking changes",
+          "class": "good",
+          "file_line": "file:93-96"
+        },
+        {
+          "idea": "Phase 4 wires tsc, codegen idempotency, served-surface check, and correction-layer tripwires as branch-protection required checks on the auto-PR",
+          "class": "good",
+          "file_line": "file:97-102"
+        },
+        {
+          "idea": "Non-goal: auto-merge while API is pre-GA; human approval is the merge gate",
+          "class": "good",
+          "file_line": "file:106-108"
+        },
+        {
+          "idea": "Non-goal: new vitest tests for spec->parameter invariant (owner directive)",
+          "class": "good",
+          "file_line": "file:109-111"
+        },
+        {
+          "idea": "Four phases are independently shippable; Phases 1 and 3 are useful in isolation",
+          "class": "good",
+          "file_line": "file:118-121"
+        },
+        {
+          "idea": "oak-openapi checkout in CI enables git log <cached-sha>..<live-sha> source-level reading; minimum shape without it is GET /changelog/latest plus normalised diff",
+          "class": "speculative",
+          "file_line": "file:125-127"
+        },
+        {
+          "idea": "Prefer GitHub-native scheduled workflow (schedule: trigger + gh pr create / maintained action) over bespoke orchestrator at promotion",
+          "class": "good",
+          "file_line": "file:163-166"
+        },
+        {
+          "idea": "Promotion trigger: owner prioritises the lane OR a spec change is missed because detection was manual",
+          "class": "good",
+          "file_line": "file:155-159"
+        }
+      ],
+      "conformance": "no-frontmatter",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "NOT STARTED (strategic brief)",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "No YAML frontmatter block at all — the file opens with a markdown heading. All V0 required fields (id, node_type, name, overview, kind, last_updated) are absent.",
+          "file_line": "upstream-spec-change-automation.plan.md:1"
+        },
+        {
+          "issue": "status is encoded as inline prose '**Status**: NOT STARTED (strategic brief)' — not a frontmatter field. V0 drops `status` entirely and replaces it with kind/disposition/gate axes.",
+          "file_line": "upstream-spec-change-automation.plan.md:3"
+        },
+        {
+          "issue": "No serves_strategic_choice edge declared. V0 §2.3 (line 146) states this is recommended for strategic plans and required for executable plans.",
+          "file_line": "upstream-spec-change-automation.plan.md:1"
+        },
+        {
+          "issue": "promotion_trigger is encoded as a body section ('## Promotion Trigger Into current/') rather than a frontmatter field. V0 §2.4 (line 157) requires it as a frontmatter field for strategic plans.",
+          "file_line": "upstream-spec-change-automation.plan.md:154"
+        },
+        {
+          "issue": "No typed edges (derives_from, depends_on, thread) declared in frontmatter. Prose at lines 120-126 describes dependencies and prerequisites but none are expressed as V0 edge fields.",
+          "file_line": "upstream-spec-change-automation.plan.md:120"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "Phase 4 wires existing compile-time and idempotency layers as branch-protection required checks, which is architecturally sound: the correctness contract lives in tsc and codegen idempotency, not in duplicated runtime assertions. The plan explicitly rules out new vitest tests for the spec-to-parameter invariant (lines 108-110), consistent with the documented owner directive from 2026-06-18.",
+          "file_line": "upstream-spec-change-automation.plan.md:96-103"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan defers all execution-surface decisions (CI surface, classifier shape, PR-bot identity) to promotion time and explicitly mandates a build-vs-buy evaluation before writing custom wiring (line 165). This is correct architectural hygiene for a strategic brief that is NOT STARTED.",
+          "file_line": "upstream-spec-change-automation.plan.md:161-166"
+        },
+        {
+          "severity": "low",
+          "claim": "Phase 1 detection relies on fetching 'https://open-api.thenational.academy/api/v0/swagger.json' directly from a scheduled CI job, but the plan acknowledges in Risks that upstream auth and CI network policy are unknown and deferred to promotion (line 153). The detection script is therefore unverified against the actual CI network boundary. This is acceptable for a future/strategic brief but should be the first resolved prerequisite at promotion time.",
+          "file_line": "upstream-spec-change-automation.plan.md:79-85"
+        },
+        {
+          "severity": "low",
+          "claim": "The 'beneficial prerequisite' for Phase 2 (an oak-openapi checkout available to CI for git-log source reading) has a minimum shippable fallback of GET /changelog/latest plus the normalised diff. The plan does not document whether GET /changelog/latest is stable across the upstream API's own versioning, creating a latent dependency on a second upstream surface that is unvalidated. This should be grounded at promotion.",
+          "file_line": "upstream-spec-change-automation.plan.md:124-127"
+        },
+        {
+          "severity": "medium",
+          "claim": "Phase 3 breaking-change classification (additive vs consumer-breaking) operates on 'normalised spec diff' but the normalisation algorithm is undefined in the plan. The correctness of the classifier depends entirely on that algorithm, yet it is entirely deferred with no architectural constraints stated (e.g. which spec fields constitute 'structural', how required-ness tightening is detected). For a plan that treats classification as advisory with the human reviewer as backstop this is acceptable now, but the absence of any classifier boundary constraints is a design risk that should be documented at promotion.",
+          "file_line": "upstream-spec-change-automation.plan.md:93-95"
+        },
+        {
+          "severity": "info",
+          "claim": "The promotion trigger is dual: owner priority OR a missed spec change (line 156-159). The second trigger is event-driven and unobservable before it fires, meaning the automation may only be promoted reactively after a gap occurs. This is an explicit, documented trade-off and is architecturally coherent for a pre-GA context where manual runbook remains the supported path.",
+          "file_line": "upstream-spec-change-automation.plan.md:155-161"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/sdk-and-mcp-enhancements/future/ws2-ws3-pedagogical-review-checkpoint.plan.md",
+      "classification": "rewrite",
+      "classification_evidence": [
+        {
+          "claim": "WS1 is already at archive/completed per the relative path in the Related Plans section, meaning promotion trigger 1 has fired",
+          "file_line": "ws2-ws3-pedagogical-review-checkpoint.plan.md:81"
+        },
+        {
+          "claim": "Promotion trigger condition 2 (2 weeks of production use) is almost certainly elapsed given the 2026-03-01 date and current date of 2026-06-21",
+          "file_line": "ws2-ws3-pedagogical-review-checkpoint.plan.md:72-73"
+        },
+        {
+          "claim": "No evidence the four evaluation criteria have ever been applied — plan remains in future despite triggers firing",
+          "file_line": "ws2-ws3-pedagogical-review-checkpoint.plan.md:47-55"
+        },
+        {
+          "claim": "Status remains Future with no progress notation despite approximately 4 months having elapsed since last update",
+          "file_line": "ws2-ws3-pedagogical-review-checkpoint.plan.md:4-5"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan makes a sound YAGNI call: defer structured glossary work until evidence shows a gap (lines 24-26). The category separation between agent-context and search-synonym infrastructure (lines 30-43) prevents a real conflation error. The evaluation criteria (lines 47-55) are concrete and testable. No speculative or bad ideas are present — the only issue is lifecycle drift, not substance.",
+      "content_quality": "adequate",
+      "content_quality_note": "The evaluation criteria at lines 47-55 are well-formed and operationally useful. The possible outcomes at lines 59-65 are typed and actionable. However, the plan contains no evidence of any review having started, no baseline data, and no owner assignment for conducting the evaluation. It is structurally sound but remains at the level of intent rather than progress.",
+      "salvage_value": [
+        {
+          "idea": "Defer structured glossary (WS2) until empirical evidence shows agent term-handling gaps — do not build speculatively",
+          "class": "good",
+          "file_line": "ws2-ws3-pedagogical-review-checkpoint.plan.md:24-26"
+        },
+        {
+          "idea": "Conceptual boundary: agent-context enrichment (get-curriculum-model) is categorically distinct from Elasticsearch synonym infrastructure",
+          "class": "good",
+          "file_line": "ws2-ws3-pedagogical-review-checkpoint.plan.md:30-43"
+        },
+        {
+          "idea": "Four testable evaluation criteria: term preservation, filter mapping, pedagogical ambiguity, gap identification",
+          "class": "good",
+          "file_line": "ws2-ws3-pedagogical-review-checkpoint.plan.md:47-55"
+        },
+        {
+          "idea": "Typed outcome set: sufficient (archive), targeted additions (small edits), structured glossary needed (new evidence-based plan)",
+          "class": "good",
+          "file_line": "ws2-ws3-pedagogical-review-checkpoint.plan.md:59-65"
+        },
+        {
+          "idea": "Promotion gate tied to WS1 deployment plus 2 weeks of production use before evaluation — conditions now met",
+          "class": "speculative",
+          "file_line": "ws2-ws3-pedagogical-review-checkpoint.plan.md:70-76"
+        },
+        {
+          "idea": "Original WS2 proposal (embed ~50 glossary terms as structured data) was deferred and not implemented",
+          "class": "speculative",
+          "file_line": "ws2-ws3-pedagogical-review-checkpoint.plan.md:12-13"
+        }
+      ],
+      "conformance": "no-frontmatter",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "Future (review checkpoint after WS1 completion and usage)",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "No YAML frontmatter block present — the file opens with a Markdown heading on line 1; lines 2-4 are bold-paragraph prose, not YAML fields. All V0 required fields (id, node_type, name, overview, kind, last_updated) are absent.",
+          "file_line": "file:1-4"
+        },
+        {
+          "issue": "status_raw is body prose ('**Status**: Future (review checkpoint after WS1 completion and usage)'), not a frontmatter field. Cannot map to V0 axes via §3.5 because there is no frontmatter to migrate.",
+          "file_line": "file:3"
+        },
+        {
+          "issue": "No serves_strategic_choice edge declared. Executable plans require it; strategic plans recommend it. No frontmatter, so neither required nor recommended form is satisfied.",
+          "file_line": "file:1-85"
+        },
+        {
+          "issue": "promotion_trigger expressed as a body section ('## Promotion Trigger', lines 69-75) rather than a frontmatter field. V0 §2.4 requires it as a frontmatter field on strategic plans.",
+          "file_line": "file:69-75"
+        },
+        {
+          "issue": "No thread edge declared. V0 §2.3 marks thread recommended for all plans; absent here.",
+          "file_line": "file:1-85"
+        },
+        {
+          "issue": "Related plans listed as Markdown links in a body section (lines 80-84) rather than as a frontmatter related list. V0 §2.4 specifies related as a frontmatter list.",
+          "file_line": "file:80-84"
+        },
+        {
+          "issue": "last_updated present only as bold body prose (line 2: '**Last Updated**: 2026-03-01'), not as a frontmatter field. V0 §2.4 requires last_updated as a frontmatter ISO date.",
+          "file_line": "file:2"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "The promotion trigger assumes WS1 completion as a hard precondition (line 72), but the related plan link at line 82 points to `../archive/completed/ws1-get-curriculum-model.plan.md`, indicating WS1 is already archived as completed. If that is correct, precondition 1 is already satisfied, meaning the checkpoint's 'future' status and deferral rationale rest on an outdated assumption about WS1 being incomplete.",
+          "file_line": "ws2-ws3-pedagogical-review-checkpoint.plan.md:71-83"
+        },
+        {
+          "severity": "medium",
+          "claim": "Trigger condition 2 (line 73) assumes 'at least 2 weeks of production use' is a meaningful proxy for sufficient signal. This is an unvalidated heuristic: two weeks of low-traffic or non-representative agent use would not produce reliable evidence, and two weeks of high-volume use might already have produced strong evidence. The plan offers no fallback if usage volume is ambiguous.",
+          "file_line": "ws2-ws3-pedagogical-review-checkpoint.plan.md:73"
+        },
+        {
+          "severity": "medium",
+          "claim": "Trigger condition 3 (line 74) gates activation on 'feedback or observation suggests term ambiguity remains a problem', but the plan defines no mechanism for collecting or routing that feedback. The assumption that ambiguity signals will surface passively and reach whoever owns this checkpoint is ungrounded.",
+          "file_line": "ws2-ws3-pedagogical-review-checkpoint.plan.md:74"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan asserts WS1 'already provides substantial pedagogical context' (line 15) and lists six capabilities. This is stated as settled fact but is sourced from the same planning event that retired WS2/WS3; no empirical evidence of actual agent behaviour is cited. The claim may be correct, but it is an assumption, not an observation.",
+          "file_line": "ws2-ws3-pedagogical-review-checkpoint.plan.md:15-23"
+        },
+        {
+          "severity": "low",
+          "claim": "The 'Last Updated' date is 2026-03-01 (line 2). At the current date of 2026-06-21 that is nearly four months of staleness. If WS1 completed and production use started near that date, the two-week window in trigger condition 2 would have been satisfied months ago, making the entire checkpoint overdue for evaluation rather than genuinely future.",
+          "file_line": "ws2-ws3-pedagogical-review-checkpoint.plan.md:2"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly separates agent-context and search-expansion concerns in the table at lines 38-41, which is a well-grounded structural assumption. No issue surfaced here.",
+          "file_line": "ws2-ws3-pedagogical-review-checkpoint.plan.md:38-41"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": [
+        {
+          "claim": "The checkpoint should be evaluated when WS1 is complete and deployed — the relative link implies WS1 is already archived as completed (cited at ws2-ws3-pedagogical-review-checkpoint.plan.md:71-72)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "ws2-ws3-pedagogical-review-checkpoint.plan.md:73 (\"1. WS1 is complete and deployed (including the data gap fixes)\") and :81 link \"../archive/completed/ws1-get-curriculum-model.plan.md\", which resolves to an existing file whose todos are all status: completed"
+        }
+      ]
+    }
+  ]
+}
