@@ -106,12 +106,15 @@ surface.
 - **Collaboration-state lifecycle**: `.agent/state/` files are live signal
   sources, not long-term documentation. Outside explicit owner-directed research
   windows, process useful substance into memory/docs/plans and clear stale state.
-- **Agentic state (2026-06-21, single-agent)**: this session (Plover wakes Sundog) is the only active
-  agent (owner-confirmed sole; all other claims/state stale). `active-claims.json` is empty; the commit
-  queue is empty; no stale session crons (crons are per-session in-memory and died with their sessions).
-  Stale decision-thread / sidebar / handoff surfaces under `.agent/state/collaboration/` remain from
-  retired sessions — clearing them is a conservation-gated curator-pass (conserve substance first),
-  deferred, not a blind delete.
+- **Agentic state (2026-06-21, two sessions)**: Ferret seeks Tunnel ran the dedicated
+  knowledge-curation pass (commit `358a1636a` + handoff; NOT pushed). A **live parallel session,
+  Cutter**, is doing the intent-graph `plan` node-schema work on the strategy thread — it holds
+  the live claim `0c73f7d0` (strategy thread, area `plan`; identity-less row, no `agent_name`/
+  heartbeat — an identity-registration friction, but live: it has dirty edits to the strategy
+  thread record, `repo-intent-graph.plan.md`, a new `plan-node-schema.v0.md`, and a fresh napkin
+  entry). Ferret staged by explicit pathspec to avoid sweeping Cutter's WIP. Commit queue empty.
+  Stale decision-thread / sidebar / handoff surfaces under `.agent/state/collaboration/` remain
+  from retired sessions — clearing them is a conservation-gated curator-pass, deferred.
 - **Plan-estate relocation (2026-06-20, owner-directed)**: the controlling plan + the merged imported
   analysis docs moved off the planning root into a new `.agent/plans/product-development-governance/`
   collection — controlling plan at the top (authority), the 6 imports in `suggestions/` (subordinate,
@@ -135,7 +138,7 @@ each thread record; this table is the repo-level index.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Zephyrous Buffeting Falcon / skills-lane-relocated-to-educator-end-users / 2026-06-08 (prior identities: thread record) |
-| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 (1M) / Finch binds Halo / Closure & Role-Routing fitness doctrine designed + captured / 2026-06-20 (prior: Drake lifts Obsidian, Siren guards Reef, Tulip spins Xylem; full history in thread record) |
+| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude-code / Opus 4.8 (1M) / Ferret seeks Tunnel / dedicated-knowledge-curation (2026-06-20/21 buffer drain; 2 lessons → distilled; F-75; 4 pending-graduations candidates) / 2026-06-21 (prior seats: Finch binds Halo, Drake lifts Obsidian, Siren guards Reef, Tulip spins Xylem; full history in thread record) |
 | `eslint-no-throw-result-migration` | Migrate every throw to Result (ADR-088); drive the ~1000 warnings to zero; promote the rule. In execution on `docs/planning-and-validation`; cheap WS2 done, residue is design-laden (tier map in record) | [record](threads/eslint-no-throw-result-migration.next-session.md) | claude / Opus 4.8 (1M) / Siren mends Rudder / execution — observability+graph-core+logger landed (`93beffcfe`,`304b68f8d`,`61bdbc3e4`) / 2026-06-19 (prior: Merlin spins Cirrus `1556b9191`; Vanilla weaves Undergrowth, plan-author) |
 | `statusline-enhancements` | Claude Code statusline: Oak-mark, session-shape indicators, logo swap; lane in two `current/` plans (session-state, logo-modularisation). Live detail + the `feat/comms-research` divergence to reconcile: thread record | [record][statusline] | claude-code / Opus 4.8 / Vole calls Hollow / live-logo-swap-and-plan-harden / 2026-06-16 (prior identities: thread record) |
 | `agent-naming` | PDR-027 display-name derivation: versioned schema registry, session-hook identity surfaces, wordlist eras (v2 landed; v3 + era-pinning cure queued) | [record][agent-naming] | claude / Opus 4.8 / Squall hunts Troposphere / thread-open + v3-plan-author / 2026-06-13 (prior identities: thread record) |
