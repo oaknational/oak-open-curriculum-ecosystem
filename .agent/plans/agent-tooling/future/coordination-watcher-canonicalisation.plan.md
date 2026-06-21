@@ -1,7 +1,8 @@
 ---
 name: "Coordination Watcher Canonicalisation"
 overview: "Move the canonical watcher definition out of `.agent/reference/` and into code-adjacent docs; introduce an executable `coord how-to-start` CLI that emits the canonical invocation parameterised by identity, so the SKILL stops carrying a fragile example; extend the watcher from comms-events-only to multi-surface coverage (comms, active-claims, conversations, escalations, handoffs); rehome the substantive Practice-doctrine content (identity discipline, anti-patterns) to its right surfaces."
-status: future
+status: promoted
+promoted_to: "../current/coordination-watcher-canonicalisation.plan.md"
 type: developer-experience
 specialist_reviewer: "assumptions-expert, architecture-expert-betty, architecture-expert-fred, docs-adr-expert"
 sibling_plans:
@@ -55,9 +56,9 @@ todos:
 
 # Coordination Watcher Canonicalisation
 
-**Last Updated**: 2026-05-22 (Shaded Whispering Dusk session — plan authored from a metacognition pass after a worked-instance defect).
-**Status**: 🔵 FUTURE — captured for sequencing; not promoted to `current/`.
-**Activation trigger**: third-instance seen-file/watcher misconfiguration in a team session OR owner-direct promotion OR substrate growth that adds a fourth coordination surface (e.g. ADR-182 handoffs/ lands and the watcher remains comms-only).
+**Last Updated**: 2026-06-21 (promoted). Authored 2026-05-22 (Shaded Whispering Dusk) from a metacognition pass after a worked-instance defect.
+**Status**: 🟢 PROMOTED 2026-06-21 → [`../current/coordination-watcher-canonicalisation.plan.md`](../current/coordination-watcher-canonicalisation.plan.md) (owner-directed; extended with the co-equal-channel-type dimension — general comms and ARC/ArcAngel as co-equal channel TYPES). This brief remains the strategic source; the executable `current/` plan supersedes it for execution.
+**Activation trigger** (FIRED 2026-06-21, both counts): third-instance seen-file/watcher misconfiguration OR owner-direct promotion. The owner directed the promotion and named the co-equal-channel-type requirement; fresh worked instances F-82 (canonical-comms filter `^[` swallowed ~10 events silently) and F-81 (ARC `tail -F` re-dump + self-fire) are the third/fourth instances of the same drift shape.
 
 ## Context
 
