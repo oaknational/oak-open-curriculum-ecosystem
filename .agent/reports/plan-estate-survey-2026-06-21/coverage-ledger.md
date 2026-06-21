@@ -6,18 +6,20 @@
 `<opened 21:01Z>`) picked up the sole survey lane from Cosmos calls Infinity (who closed out cleanly
 20:52Z; claim `3a5e8798` archived) per doc 08 §10. Grounded first-hand on doc 08 + ledger + instrument
 + worklist TSV + git + registry; coverage re-derived from scratch = **228/286 (6 collections), 20
-conserved JSONs reconcile**. FOUR clean increments this window (42 plans): **sector-engagement (12)**
+conserved JSONs reconcile**. FIVE clean increments this window (58 plans, at the proven-safe ~59 hold
+point, under the ~63 depletion line — 0 unreadable, no account-window depletion): **sector-engagement (12)**
 `2b306a202`, **semantic-search (11)** `9f6b5cf03`, **connecting-oak-resources (10)** `3b1e35134`,
-**discovery (9)** — 0 unreadable across all four, every spot-audit passed first-hand (the adversarial gate
-caught a genuine stale-plan drift in `search-contract-followup` and a false-completion claim in `graph-stack`,
-both verified in the codebase). → **Pass-1 now 270/286 (10 collections)**. Peer **Oyster weaves Surf**
-(`d16a4a`) STOOD DOWN — WS-3 F-41 complete (`4fd640089`), claim closed, singleton whole-repo `pnpm check`
-GREEN at `f8fa33cad` (consumed; not re-run per check-singleton). **Genuinely sole** on lane + budget;
-commit-gate coupling cleared. Watcher armed pipe-less; heartbeat OFF (consumer-absent). **Next safe step:
-the 6 remaining collections / ~16 plans COMPLETE Pass-1** — `user-experience` (7) + `developer-experience`
-(4) + the 5 singletons (`exploring-open-education-resources` 2, `security-and-privacy` 1, `school-data-search`
-1, `curriculum-mcp-path-to-ga` 1), fold into ~1–2 increments; then the 70-AEE idea-granular back-fill BEFORE
-Pass-3 → Pass-2 → Pass-3 → dated outputs + no-loss audit. Owner resets the budget window; owner controls push.
+**discovery (9)** `37d03d307`, **final-6 (16: user-experience + developer-experience + 4 singletons)**.
+Every spot-audit passed first-hand; the Opus adversarial gate caught three real false-completion / stale
+claims (`search-contract-followup`, `graph-stack` WS4.5, `devx-strictness-convergence` Object.assign),
+each confirmed first-hand. → **▶ PASS-1 COMPLETE: 286/286 (all 16 collections)**, 2,935 ideas (AEE
+undercount pending back-fill), 65 locked-contradictions, 240 high-stakes verdicts (210 survive / 25 refuted
+/ 5 uncertain). Peer **Oyster weaves Surf** (`d16a4a`) STOOD DOWN — WS-3 F-41 complete (`4fd640089`),
+singleton whole-repo `pnpm check` GREEN at `f8fa33cad` (consumed; not re-run per check-singleton).
+Cinder ran genuinely sole on lane + budget for the back half. Watcher armed pipe-less; heartbeat OFF.
+**Next step: the 70-AEE idea-granular back-fill (doc 08 §7) BEFORE Pass-3** → Pass-2 (cross-cutting +
+Saffron Spec-1 effectiveness widening) → Pass-3 (synthesis + completeness-critic, loop-until-dry) → dated
+outputs + independent no-loss audit. Owner resets the budget window; owner controls push.
 
 ---
 
@@ -107,6 +109,7 @@ scope; not surveyed.) Source: `worklist-plans.tsv`.
 | sdk-02 | sdk-and-mcp-enhancements (`current/`+`future/`, plans 13–24 of 28) | 12 | Cosmos calls Infinity | COMPLETE (8 keep / 4 archive-complete; substance 12 good; content 12 strong; conformance 11 major-drift / 1 no-fm; 159 ideas: 143 good / 16 speculative / 0 bad; 0 locked-contradictions; 14 high-stakes verdicts: 13 survive / 1 refuted) | `pass1-sdk-and-mcp-enhancements-02.json` |
 | sdk-03 | sdk-and-mcp-enhancements (`future/`, plans 25–28 of 28) | 4 | Cosmos calls Infinity | COMPLETE (3 keep / 1 rewrite; substance 4 good; content 3 strong / 1 adequate; conformance 2 major-drift / 2 no-fm; 43 ideas: 36 good / 7 speculative / 0 bad; 0 locked-contradictions; 4 high-stakes verdicts: 4 survive) | `pass1-sdk-and-mcp-enhancements-03.json` |
 | se-01 | sector-engagement (full collection: `current/` + `eef/` + `future/` + `knowledge-graph-adoption/`) | 12 | Cinder holds Warmth | COMPLETE (8 keep / 4 archive-complete; substance 12 good; content 9 strong / 3 adequate; conformance 12 major-drift; 138 ideas: 125 good / 11 speculative / 2 bad; 5 locked-contradictions; 10 high-stakes verdicts: 10 survive; spot-audit passed first-hand on eef-d5-execution + eef-outcome-evaluation-infrastructure) | `pass1-sector-engagement-01.json` |
+| final-6 | user-experience (7) + developer-experience (4) + exploring-open-education-resources (2) + security-and-privacy (1) + school-data-search (1) + curriculum-mcp-path-to-ga (1) — the six remaining collections folded | 16 | Cinder holds Warmth | COMPLETE — Pass-1 FINAL increment (15 keep / 1 archive-complete; substance 16 good; content 15 strong / 1 adequate; conformance 14 major-drift / 2 no-frontmatter; 232 ideas: 208 good / 24 speculative / 0 bad; 2 locked-contradictions; 11 high-stakes verdicts: 10 survive / 1 refuted; spot-audit passed first-hand). **High-value adversarial catch:** `devx-strictness-convergence` line 314 claims "`Object.assign` scan now returns **0**" — verifier REFUTED; live `rg "Object\.assign\(" apps packages` = 17 matches / 8 files (orchestrator confirmed first-hand); false-completion claim, both signals conserved. Locked-contradictions: `education-skills-mcp-surface` (todos on a `future/` strategic plan, V0 §2.4) + `plugin-package-creation` (todos in body not frontmatter — V1 placement re-ratification candidate). Per-collection completion: all six collections Pass-1 complete. | `pass1-remaining-six-collections-01.json` |
 | d-01 | discovery (full: `current/` + `future/`) | 9 | Cinder holds Warmth | COMPLETE (9 keep; substance 9 good; content 8 strong / 1 adequate; conformance 9 major-drift; 118 ideas: 101 good / 17 speculative / 0 bad; 0 locked-contradictions; 0 high-stakes verdicts — a young forward-design collection: every plan a well-scoped `future/`-tracking keep with an unfired promotion trigger, none complete/dead, so no high-stakes claims raised; spot-audit passed first-hand on dns-aid-discovery + web-bot-auth, ideas + promotion-trigger logic grounded at cited lines [minor: 2 `status`-field line cites point one field off, substance correct]) | `pass1-discovery-01.json` |
 | co-01 | connecting-oak-resources (full: `external-oak-references/` + `knowledge-graph-integration/` active+current+future) | 10 | Cinder holds Warmth | COMPLETE (9 keep / 1 rewrite; substance 10 good; content 9 strong / 1 adequate; conformance 10 major-drift; 145 ideas: 118 good / 23 speculative / 4 bad; 5 locked-contradictions; 12 high-stakes verdicts: 9 survive / 2 refuted / 1 uncertain; spot-audit passed first-hand). **High-value adversarial catch:** `graph-stack.plan.md` holistic claimed "WS4.5 status: completed, landed via PR #114 @77fcf746" — verifier REFUTED via `git show 77fcf746:…/eef-strands/index.ts` = `export {}` placeholder stub only (ls-tree confirms one file); false-completion claim, both signals conserved. **Recurring V1 signal — indefinite-hold cluster (3 plans):** `cross-source-journeys`, `nc-knowledge-taxonomy-surface`, `oak-kg-threads-surface` each carry the open-ended hold status value V0 §3.4 LOCKED forbids (verbatim status values + line cites conserved in the JSON) — each maps to a `gate`(+`expires`) or a `depends_on` blocking edge; owner re-ratification candidates. Plus a `gated-executable` hybrid (promotion_trigger + todos coexist, V0 §2.4) = additive-`kind` candidate; and graph-stack durable `status: active` (V0 §3.2) flagging a practical projected-only-model gap before Linear `projects_to` is live. | `pass1-connecting-oak-resources-01.json` |
 | ss-01 | semantic-search (full collection: `current/` + `future/`) | 11 | Cinder holds Warmth | COMPLETE (9 keep / 1 archive-complete / 1 rewrite; substance 11 good; content 10 strong / 1 adequate; conformance 11 major-drift; 145 ideas: 134 good / 11 speculative / 0 bad; 2 locked-contradictions; 9 high-stakes verdicts: 7 survive / 2 refuted; spot-audit passed first-hand — refutation evidence verified). **Pass-2 reconciliation item:** holistic classified `search-contract-followup` as `rewrite` on its self-reported `pending` todos, but the adversarial verifier REFUTED "no task completed" — the work LANDED via the archived `pre-reingest-remediation.execution.plan.md` (COMPLETE 2026-03-23; Task-1 test at `search-field-integrity.integration.test.ts:122-132`, Task-2 doc at `INDEXING.md:158`). Stale-plan-vs-reality drift; likely `archive-complete`. Both signals conserved, not averaged. | `pass1-semantic-search-01.json` |
@@ -159,22 +162,41 @@ point: 261 / 286 plans (9 collections).**
 After d-01: the full **discovery** collection (9 plans) is Pass-1 complete (Cinder holds Warmth, 1
 increment, 0 unreadable, 118 ideas inventoried: 101 good / 17 speculative / 0 bad, 0 locked-contradictions,
 0 high-stakes verdicts — a forward-design collection of well-scoped `future/`-tracking keeps with unfired
-promotion triggers; spot-audit passed first-hand). **Pass-1 coverage so far: 270 / 286 plans (10
-collections).** 6 collections / ~16 plans remain — see the linear successor plan
-[`08-next-session-execution-plan.md`](./08-next-session-execution-plan.md).
+promotion triggers; spot-audit passed first-hand). **Pass-1 coverage at that point: 270 / 286 plans (10
+collections).**
 
-### Remaining Pass-1 collections (~16 plans, fold into ~1–2 increments to COMPLETE Pass-1)
+After final-6: the six remaining collections (user-experience, developer-experience,
+exploring-open-education-resources, security-and-privacy, school-data-search, curriculum-mcp-path-to-ga)
+are Pass-1 complete (Cinder holds Warmth, 1 folded increment, 0 unreadable). **▶ PASS-1 COMPLETE —
+286 / 286 plans, all 16 collections.**
 
-The 6 collections other than the ten now complete (`agentic-engineering-enhancements`,
+**Pass-1 grand totals (re-derived first-hand across all 25 conserved `pass1-*.json`):** 286 plans, **0
+unreadable across the entire pass** (0 fabricated findings — HALT-don't-fabricate held through 2 account
+windows + the window-1 depletion). Classification: 229 keep / 43 archive-complete / 8 rewrite / 4 rehome
+/ 2 extract-then-archive. Ideas inventoried: **2,935** (2,560 good / 352 speculative / 23 bad) — *with the
+known undercount: AEE batches 1a / 1b-01..03 carry no `salvage_value`, which is exactly what the 70-AEE
+idea-granular back-fill (next step) closes.* **65 locked-contradictions** accumulated (owner
+re-ratification candidates, surfaced at Pass-3, never suppressed). High-stakes adversarial verdicts: **240
+total — 210 survive / 25 refuted / 5 uncertain** (~10% refuted; the Opus adversarial gate caught real
+false-completion / stale-plan claims, several confirmed first-hand by the orchestrator — e.g.
+`graph-stack` WS4.5 placeholder-not-landed, `search-contract-followup` work-actually-done, and
+`devx-strictness-convergence` Object.assign-0-vs-17).
+
+**Next step: the 70-AEE idea-granular back-fill BEFORE Pass-3** (a holistic-only pass over all 70
+agentic-engineering-enhancements plans capturing `salvage_value` + `substance_class` + `content_quality`
+only — makes the idea-inventory uniform across all 286 for the no-loss audit), then Pass-2 (cross-cutting +
+Saffron Spec-1 effectiveness widening) → Pass-3 (synthesis + completeness-critic, loop-until-dry) → the
+dated outputs + the independent no-loss audit. See [`08-next-session-execution-plan.md`](./08-next-session-execution-plan.md) §7.
+
+### Remaining Pass-1 collections — NONE. Pass-1 COMPLETE (16/16 collections, 286/286 plans).
+
+All 16 collections are Pass-1 complete (`agentic-engineering-enhancements`,
 `architecture-and-infrastructure`, `product-development-governance`, `agent-tooling`, `observability`,
 `sdk-and-mcp-enhancements`, `sector-engagement`, `semantic-search`, `connecting-oak-resources`,
-`discovery`), derived from `worklist-plans.tsv` (col `collection`):
-`user-experience` (7), `developer-experience` (4), `exploring-open-education-resources` (2),
-`security-and-privacy` (1), `school-data-search` (1), `curriculum-mcp-path-to-ga` (1).
-The four singletons (`exploring-open-education-resources` 2, `security-and-privacy` 1, `school-data-search` 1,
-`curriculum-mcp-path-to-ga` 1 = 5 plans) fold into one neighbouring increment per doc 08 §3. These 16 plans
-complete Pass-1 (286/286); then the 70-AEE idea-granular back-fill BEFORE Pass-3.
-Each future sub-batch appends a row above and conserves its own `pass1-<collection>-<range>.json`.
+`discovery`, `user-experience`, `developer-experience`, `exploring-open-education-resources`,
+`security-and-privacy`, `school-data-search`, `curriculum-mcp-path-to-ga`). 25 conserved
+`pass1-*.json` hold the full per-plan findings. **Next: the 70-AEE idea-granular back-fill (doc 08 §7),
+then Pass-2 → Pass-3 → dated outputs + no-loss audit.**
 
 ## Pass 2 — cross-cutting relational passes (NOT STARTED)
 
