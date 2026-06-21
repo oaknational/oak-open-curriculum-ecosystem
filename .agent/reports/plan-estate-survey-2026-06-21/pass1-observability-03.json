@@ -1,0 +1,1269 @@
+{
+  "batch_size": 7,
+  "plans_returned": 7,
+  "unreadable": [],
+  "null_holistic": [],
+  "results": [
+    {
+      "plan": ".agent/plans/observability/future/observability-plan-consolidation-and-rationalisation.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "The consolidation session is still pending; this memo is the only artefact that holds the full knot map.",
+          "file_line": "10-14"
+        },
+        {
+          "claim": "The 7 decision questions define the session agenda and have not been answered anywhere in the plan estate.",
+          "file_line": "209-229"
+        },
+        {
+          "claim": "Plan explicitly scopes itself as a substrate that produces input for a future session, not a decision-maker.",
+          "file_line": "3-9"
+        },
+        {
+          "claim": "No other plan in the inventory claims to own this cross-estate dependency analysis.",
+          "file_line": "59-98"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan does exactly what a substrate memo should: it maps a complex multi-plan estate, identifies concrete dependency knots with named blockers, produces actionable archive candidates, and frames seven crisp decision questions. There is no speculative or bad content; every section is grounded in named artefacts and traceable blockers. The candidate split for maximisation-mcp (lines 151-163) is well-reasoned and proportionate.",
+      "content_quality": "strong",
+      "content_quality_note": "The inventory table at lines 59-98 is complete and structured. The five knots at lines 109-188 each name the specific plans involved and propose a resolution candidate. The seven decision questions at lines 209-229 are crisp and owner-actionable. Pre-session preparation steps (lines 233-245) are concrete and executable without owner decisions. The plan avoids vagueness and does not pad.",
+      "salvage_value": [
+        {
+          "idea": "18-plan inventory table with status, lines, and primary scope for every observability plan in the estate",
+          "class": "good",
+          "file_line": "59-98"
+        },
+        {
+          "idea": "Knot 1: observability-events-workspace (blocked on Exploration 4) gates four downstream plans; named blocker for each",
+          "class": "good",
+          "file_line": "109-122"
+        },
+        {
+          "idea": "Knot 2: Explorations 3, 4, 6, 8 gate workstreams; none tracked in a single place; resolution is a single exploration-status page",
+          "class": "good",
+          "file_line": "125-139"
+        },
+        {
+          "idea": "Knot 3: maximisation-mcp at 3275 lines is past navigable size; candidate four-way split (emission lanes / operational hardening / build-pipeline / statuspage-SLO cluster)",
+          "class": "good",
+          "file_line": "141-163"
+        },
+        {
+          "idea": "Knot 4: search-CLI Sentry authority split between search-observability.plan.md and maximisation-mcp L-4b; resolution is to declare search-observability the authority",
+          "class": "good",
+          "file_line": "165-177"
+        },
+        {
+          "idea": "Knot 5: two release-identifier-shaped plans (sentry-release-identifier-single-source-of-truth and mcp-local-startup-release-boundary) both touch the resolver; may need merge or scope confirmation",
+          "class": "good",
+          "file_line": "179-188"
+        },
+        {
+          "idea": "Archive candidate: future/sentry-observability-maximisation.plan.md predates the -mcp split and is probably superseded",
+          "class": "good",
+          "file_line": "197-198"
+        },
+        {
+          "idea": "Archive candidate: current/sentry-preview-validation-and-quality-triage.plan.md is closed 2026-04-26 and should move to archive/completed/",
+          "class": "good",
+          "file_line": "199-201"
+        },
+        {
+          "idea": "Archive candidate: active/gate-recovery-cadence.plan.md may be complete; verify then archive",
+          "class": "good",
+          "file_line": "202-203"
+        },
+        {
+          "idea": "Seven concrete owner-decision questions scoped to a 60-90 minute focused session",
+          "class": "good",
+          "file_line": "209-229"
+        },
+        {
+          "idea": "Pre-session legwork items executable without owner decisions: fitness measurements, gating-condition tags on future/ plans, TODO status verification",
+          "class": "good",
+          "file_line": "233-245"
+        },
+        {
+          "idea": "Possible merge candidate: customer-facing-status-page.plan.md and statuspage-integration.plan.md may overlap",
+          "class": "speculative",
+          "file_line": "96"
+        },
+        {
+          "idea": "Wave-tracker hygiene: ensure high-level-observability-plan.md status notes match per-plan bodies after the session",
+          "class": "good",
+          "file_line": "228-229"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": null,
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "🔵 SUBSTRATE (body prose, line 19)",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing LOCKED-required field `id` (stable kebab slug, graph identity)",
+          "file_line": "plan.md:1-15 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing LOCKED-required field `node_type` (must be literal \"plan\")",
+          "file_line": "plan.md:1-15 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing LOCKED-required field `kind` (enum `strategic | executable`); plan carries `todos` implying `executable` but `kind` is not declared",
+          "file_line": "plan.md:1-15 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing LOCKED-required field `last_updated` (ISO date)",
+          "file_line": "plan.md:1-15 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "`serves_strategic_choice` absent; plan carries `todos` so it reads as executable, for which this field is required (must be a strategic-choice ID or `\"pending\"` sentinel)",
+          "file_line": "plan.md:10-13 (todos present) / frontmatter absent"
+        },
+        {
+          "issue": "`isProject: false` is an explicitly V0-dropped key (§2.5: \"Dropped — `plan` ≈ Linear Project is universal\")",
+          "file_line": "plan.md:14"
+        },
+        {
+          "issue": "`status` appears only as body prose (\"🔵 SUBSTRATE\") — not a frontmatter field; value does not appear in V0 §3.5 migration map and is not mappable to `kind` / `disposition` / `gate`",
+          "file_line": "plan.md:19"
+        }
+      ],
+      "unclassified_keys": [
+        "isProject"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "The umbrella plan at active/sentry-observability-maximisation-mcp.plan.md is identified as 3275 lines with 30+ lanes. A plan that no single agent can hold in working memory is an architectural liability: it cannot be reviewed coherently, creates blind-spot risk on dependency chains between lanes, and causes the scope-creep documented here (L-IMM, L-OPS added additively). The split candidate in Knot 3 is the correct structural resolution but is deferred to a session that has no scheduled date.",
+          "file_line": "observability-plan-consolidation-and-rationalisation.plan.md:42-45, 145-162"
+        },
+        {
+          "severity": "high",
+          "claim": "Four explorations (3, 4, 6, 8) gate multiple downstream plan workstreams but their status is recorded as 'unknown' with no single tracking surface. This is an architectural dependency-management failure: four plans are blocked by a signal that does not exist in any machine-readable or queryable location. The wave tracker (high-level-observability-plan.md) is referenced as a possible home but verification is deferred.",
+          "file_line": "observability-plan-consolidation-and-rationalisation.plan.md:125-139"
+        },
+        {
+          "severity": "high",
+          "claim": "The events workspace (current/observability-events-workspace.plan.md) is the single architectural keystone that gates four downstream plans (security-observability, multi-sink-vendor-independence-conformance, search-observability, and sentry-observability-maximisation-mcp L-3). A blocked keystone with unknown unblocking schedule constitutes a single point of failure for the entire typed-event-schema architectural layer. No mitigation path or interim interface contract is offered.",
+          "file_line": "observability-plan-consolidation-and-rationalisation.plan.md:109-123"
+        },
+        {
+          "severity": "medium",
+          "claim": "Two release-identifier-shaped plans exist (current/sentry-release-identifier-single-source-of-truth.plan.md and active/mcp-local-startup-release-boundary.plan.md) that both touch the resolver. The architectural concern is that two plans defining release-resolution behaviour without a declared authority creates a risk of divergent implementations entering the codebase. The resolution candidate (confirm separate scope or archive the smaller) is not decided here.",
+          "file_line": "observability-plan-consolidation-and-rationalisation.plan.md:179-188"
+        },
+        {
+          "severity": "medium",
+          "claim": "Search-CLI Sentry wiring is split across three architectural locations: current/search-observability.plan.md (Layer 1-3 scope), active/sentry-observability-maximisation-mcp.plan.md L-4b (prerequisite metrics adapter), and future/cross-system-correlated-tracing.plan.md (trace propagation extension). No single plan is declared the authority. The resolution candidate is stated but not executed, leaving cross-reference discipline undefined until the consolidation session.",
+          "file_line": "observability-plan-consolidation-and-rationalisation.plan.md:163-177"
+        },
+        {
+          "severity": "medium",
+          "claim": "This memo is itself a substrate plan with a single pending TODO (consolidation-session) and no scheduled execution date or owner assignment on that TODO. The memo's own stated job is to produce input for a future session; but without a trigger or scheduling signal, it risks remaining a perpetually-deferred meta-plan. The architectural risk is that the dependency knots it documents continue to compound while the session waits.",
+          "file_line": "observability-plan-consolidation-and-rationalisation.plan.md:10-14, 246-249"
+        },
+        {
+          "severity": "low",
+          "claim": "Two future status-page plans (future/customer-facing-status-page.plan.md and future/statuspage-integration.plan.md) are flagged as possible merge candidates but neither plan is read here to confirm scope overlap. The consolidation session will need to do this work first-hand; noting it as low severity since both are future/gated plans with no active downstream dependency.",
+          "file_line": "observability-plan-consolidation-and-rationalisation.plan.md:96, 225-226"
+        },
+        {
+          "severity": "info",
+          "claim": "The pre-session preparation section identifies three legwork items (fitness measurements, gating-condition tags on future plans, TODO status verification) that are structurally sound and low-risk. These could be executed by a subagent as an autonomous preparation step without requiring the owner-directed consolidation session, which would improve the quality of the session's inputs.",
+          "file_line": "observability-plan-consolidation-and-rationalisation.plan.md:233-248"
+        }
+      ],
+      "load_bearing_claims_count": 7,
+      "high_stakes_verdicts": [
+        {
+          "claim": "future/sentry-observability-maximisation.plan.md is almost certainly superseded by active/sentry-observability-maximisation-mcp.plan.md",
+          "verdict": "refuted",
+          "confidence": "high",
+          "evidence": "active/sentry-observability-maximisation-mcp.plan.md:11 declares `strategic_plan: \"../future/sentry-observability-maximisation.plan.md\"` (child points UP to the future plan); future/sentry-observability-maximisation.plan.md:20 is `status: strategic` (live), :31-32 names the -mcp plan as \"this plan's MCP-branch executable lane\", :14 carries its own `supersedes:` list (it IS a live successor). Memo claim at lines 196-198 + table line 84."
+        },
+        {
+          "claim": "current/sentry-preview-validation-and-quality-triage.plan.md is closed 2026-04-26 and should rotate to archive/completed/",
+          "verdict": "refuted",
+          "confidence": "high",
+          "evidence": "current/sentry-preview-validation-and-quality-triage.plan.md:34-35 \"Last Updated: 2026-04-27\"; \"Status: 🔴 PARTIAL — Phases 1-2 pending; Phases 3-5 superseded\"; front-matter lines 12-17,27-29 show phase-1-preview-baseline / phase-2-sentry-validation / phase-6-handoff status: pending"
+        },
+        {
+          "claim": "active/gate-recovery-cadence.plan.md Phase 2 closed for current branch state — verify completion; archive if done",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": ".agent/plans/observability/active/gate-recovery-cadence.plan.md:28,34 — body self-declares \"Status: Completed execution plan. All execution todos are completed\" and \"This plan no longer holds an authority role and is archivable on the next consolidation pass\"; frontmatter todos all status: completed (lines 11-23); status header line 47 \"complete for the current branch state\"."
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/observability/future/pr-93-sonar-oak-eslint-claim-overlap.plan.md",
+      "classification": "archive-complete",
+      "classification_evidence": [
+        {
+          "claim": "Frontmatter status is 'completed'",
+          "file_line": "pr-93-sonar-oak-eslint-claim-overlap.plan.md:3"
+        },
+        {
+          "claim": "Completion evidence: owner authorised 2026-05-05; new_violations=0 confirmed",
+          "file_line": "pr-93-sonar-oak-eslint-claim-overlap.plan.md:11-13"
+        },
+        {
+          "claim": "No code change was made; Sonar re-query confirmed resolution",
+          "file_line": "pr-93-sonar-oak-eslint-claim-overlap.plan.md:57-59"
+        },
+        {
+          "claim": "File sits in 'future' folder despite completed status — misclassified lane",
+          "file_line": "pr-93-sonar-oak-eslint-claim-overlap.plan.md:1"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan encodes a clean, owner-authorised decision with verifiable evidence (new_violations=0, line 13) and clear non-goals that protect adjacent work. There is no speculative or bad content; all content serves the completed disposition.",
+      "content_quality": "strong",
+      "content_quality_note": "Scope is precisely bounded (two files, lines 37-39), Sonar issue keys are cited with full IDs (lines 44-49), rationale is stated explicitly (lines 51-53), and validation is outcome-based (new_violations=0, line 58-59). Nothing is vague or asserted without grounding.",
+      "salvage_value": [
+        {
+          "idea": "Three Sonar typescript:S1135 findings in oak-eslint are correctly classified as false positives because they are gate-documentation fixtures, not real outstanding work.",
+          "class": "good",
+          "file_line": "pr-93-sonar-oak-eslint-claim-overlap.plan.md:51-53"
+        },
+        {
+          "idea": "Sonar issue keys AZ3z3KojDfG0f886A-h6, AZ3z3Ko0DfG0f886A-h8, AZ3z3Ko0DfG0f886A-h7 are permanently marked false positive with owner authorisation.",
+          "class": "good",
+          "file_line": "pr-93-sonar-oak-eslint-claim-overlap.plan.md:44-49"
+        },
+        {
+          "idea": "The strict ESLint config and no-real-io-in-tests rule are explicitly out of scope for this work — they were deliberately left untouched.",
+          "class": "good",
+          "file_line": "pr-93-sonar-oak-eslint-claim-overlap.plan.md:63-66"
+        },
+        {
+          "idea": "Paused claim by a named agent on the strict.unit.test.ts file must be coordinated before further edits — the coordination gate is a live constraint.",
+          "class": "speculative",
+          "file_line": "pr-93-sonar-oak-eslint-claim-overlap.plan.md:66"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": null,
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [
+        "depends_on"
+      ],
+      "status_raw": "completed",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, required for all plans)",
+          "file_line": "plan:1-14 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `node_type: \"plan\"` (LOCKED, required for all plans)",
+          "file_line": "plan:1-14 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED, required for all plans; `status: completed` suggests terminal, but kind cannot be inferred without it)",
+          "file_line": "plan:1-14 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `last_updated` (LOCKED, required for all plans; last-updated is in body prose only)",
+          "file_line": "plan:19 (body only: '**Last Updated**: 2026-05-05')"
+        },
+        {
+          "issue": "`status: completed` is the explicitly dropped emergent key (V0 §2.5); should be replaced by `disposition: done` per §3.5 migration map",
+          "file_line": "plan:3"
+        },
+        {
+          "issue": "`disposition` field absent despite plan being terminal (status maps to `disposition: done`); terminal plans require `disposition` (V0 §2.2)",
+          "file_line": "plan:1-14 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "`depends_on` entry is a bare string path, not the required `{ plan, kind: blocking | beneficial }` typed object shape (V0 §4 LOCKED shape)",
+          "file_line": "plan:8-9"
+        },
+        {
+          "issue": "`completion_evidence` is not a V0-classified field; content belongs in the plan body or as a `validated_by` edge target, not a frontmatter prose key",
+          "file_line": "plan:10-13"
+        },
+        {
+          "issue": "`serves_strategic_choice` absent; required for executable plans; if plan is `kind: executable` this is a mandatory omission (V0 §2.3)",
+          "file_line": "plan:1-14 (frontmatter block — field absent)"
+        }
+      ],
+      "unclassified_keys": [
+        "status",
+        "completion_evidence"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "none",
+      "specialist_kind": "second-angle",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan carries status=completed but lives under the future/ directory, which is typically reserved for plans not yet started. A completed plan in future/ violates directory semantics and will mislead estate surveys that route by directory tier.",
+          "file_line": "pr-93-sonar-oak-eslint-claim-overlap.plan.md:3"
+        },
+        {
+          "severity": "low",
+          "claim": "The depends_on pointer references '../current/pr-93-sonar-quality-gate-resolution.plan.md'. If that parent plan has itself moved (e.g., graduated to past/ or completed/), this relative path will be a dead reference. No first-hand check of the parent path was performed in this read, but the cross-directory relative link is fragile in a tiered estate.",
+          "file_line": "pr-93-sonar-oak-eslint-claim-overlap.plan.md:9"
+        },
+        {
+          "severity": "low",
+          "claim": "The non-goal clause 'No edits while Silvered's paused claim remains fresh unless explicitly coordinated' references a live agent claim by name. If that agent's session has ended or the claim lapsed, the clause is stale and could unnecessarily block readers from acting on the scope files.",
+          "file_line": "pr-93-sonar-oak-eslint-claim-overlap.plan.md:64-66"
+        },
+        {
+          "severity": "info",
+          "claim": "Validation confirms new_violations=0 after disposition but notes a residual 'duplicated-lines density' quality-gate failure at line 59. This failure is not addressed in any non-goal or scope clause here, suggesting it belongs to the parent plan. Worth confirming the parent plan explicitly owns it to avoid it falling through the estate.",
+          "file_line": "pr-93-sonar-oak-eslint-claim-overlap.plan.md:57-59"
+        }
+      ],
+      "load_bearing_claims_count": 3,
+      "high_stakes_verdicts": [
+        {
+          "claim": "Owner authorised false-positive disposition on 2026-05-05; Sonar PR 93 re-query reported new_violations=0 after the three issue keys were marked false positive. (cited at pr-93-sonar-oak-eslint-claim-overlap.plan.md:11-13)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": ".agent/state/collaboration/shared-comms-log.md (entry 2026-05-05T21:03:33Z, added by commit cebbca83f): \"marked the three remaining PR 93 oak-eslint Sonar S1135 findings false positive in Sonar... Re-query shows new_violations=0, hotspots=0\"; corroborated by parent plan pr-93-sonar-quality-gate-resolution.plan.md:42-45 (owner direction 2026-05-05) and :109-119 (new_violations=0 at branch sync b929a022); and owner-authored commit cebbca83f dated Tue May 5 2026 (\"Record owner-directed Sonar disposition for the three oak-eslint S1135 findings... open issues and hotspots are zero\")."
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/observability/future/second-backend-evaluation.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Status is strategic-brief — deferred until promotion triggers fire; not complete or superseded",
+          "file_line": "second-backend-evaluation.plan.md:3-4"
+        },
+        {
+          "claim": "Promotion triggers are well-formed recordable-artefact conditions; no trigger has visibly fired (warehouse choice and identity ruling are still 'Open')",
+          "file_line": "second-backend-evaluation.plan.md:88-92"
+        },
+        {
+          "claim": "Plan cross-references active current plans and explorations that are still live (observability-events-workspace, multi-sink-vendor-independence-conformance)",
+          "file_line": "second-backend-evaluation.plan.md:114-116"
+        },
+        {
+          "claim": "Self-identifies as superseding the old framing, not as itself superseded",
+          "file_line": "second-backend-evaluation.plan.md:33"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every section encodes owner-confirmed decisions with evidence citations, named open questions with designated owners, and trigger conditions that are recordable (not hypothetical). The decision table at lines 84-93 distinguishes settled from open at the correct granularity. No speculative sink candidates are promoted without a named-gap gating trigger (lines 314-321). The correlation-key contract at line 93 adds concrete implementation shape. No filler or padding detected.",
+      "content_quality": "strong",
+      "content_quality_note": "Promotion triggers at lines 268-309 require recordable artefacts rather than judgement calls — this is the key quality discriminator. The risk table at lines 254-261 names concrete mitigations, not generic hedges. The non-goals section at lines 144-154 is precise and eliminates scope creep risk for each adapter. The architectural diagram at lines 97-109 is minimal but sufficient to convey the fan-out shape.",
+      "salvage_value": [
+        {
+          "idea": "Three-sink architecture with Sentry (now), warehouse (public-beta), PostHog (post-beta) as the named roadmap",
+          "class": "good",
+          "file_line": "second-backend-evaluation.plan.md:1-26"
+        },
+        {
+          "idea": "Warehouse-first hard-blocker sequencing constraint, owner-confirmed 2026-04-19",
+          "class": "good",
+          "file_line": "second-backend-evaluation.plan.md:88-89"
+        },
+        {
+          "idea": "PostHog vendor settled via existing Oak-org usage; only adoption timing remains open",
+          "class": "good",
+          "file_line": "second-backend-evaluation.plan.md:56-65"
+        },
+        {
+          "idea": "Per-sink promotion triggers defined as recordable-artefact conditions (not hypothetical checks)",
+          "class": "good",
+          "file_line": "second-backend-evaluation.plan.md:263-321"
+        },
+        {
+          "idea": "Clerk ID projects to PostHog+Sentry only; warehouse and Elasticsearch receive correlation+categorical fields only (operating posture)",
+          "class": "good",
+          "file_line": "second-backend-evaluation.plan.md:92"
+        },
+        {
+          "idea": "Correlation-key contract: correlation_id (within-invocation join) + traceparent (W3C cross-system) + Sentry trace_id (engineering drill-down)",
+          "class": "good",
+          "file_line": "second-backend-evaluation.plan.md:93"
+        },
+        {
+          "idea": "ADR-162 sink-cardinality-agnostic clause enables future fourth sinks without reopening this brief",
+          "class": "good",
+          "file_line": "second-backend-evaluation.plan.md:78-81"
+        },
+        {
+          "idea": "Alternative-engineering-sink contingency: original Datadog/Honeycomb/NewRelic/Grafana/self-hosted-OTel set preserved behind a named-Sentry-gap trigger",
+          "class": "good",
+          "file_line": "second-backend-evaluation.plan.md:70-74"
+        },
+        {
+          "idea": "Each adapter package shape: consumes observability-events schemas, composes redaction via @oaknational/observability, emits via vendor SDK, registers at composition root only",
+          "class": "good",
+          "file_line": "second-backend-evaluation.plan.md:325-338"
+        },
+        {
+          "idea": "PostHog feature-flag implication: if PostHog lands before a flag consumer, the feature-flag-provider-selection candidate set shifts",
+          "class": "speculative",
+          "file_line": "second-backend-evaluation.plan.md:217-221"
+        },
+        {
+          "idea": "Cost and operational complexity per sink tracked via a separate cost-and-capacity-telemetry future plan",
+          "class": "good",
+          "file_line": "second-backend-evaluation.plan.md:216-217"
+        },
+        {
+          "idea": "Conformance test expands its allowlist and emission-persistence assertions as each new sink lands (continuous gate expansion)",
+          "class": "good",
+          "file_line": "second-backend-evaluation.plan.md:114-116"
+        },
+        {
+          "idea": "Cross-sink concerns (correlation keys, identity envelope, schema versioning) owned at events-workspace level, not per adapter",
+          "class": "good",
+          "file_line": "second-backend-evaluation.plan.md:341-347"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "strategic-brief",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED §2.1): no stable kebab-slug graph identity declared in frontmatter.",
+          "file_line": "second-backend-evaluation.plan.md:1-27 (absent from frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `node_type: \"plan\"` (LOCKED §2.1): registry discriminator absent.",
+          "file_line": "second-backend-evaluation.plan.md:1-27 (absent from frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED §3.1): `status: strategic-brief` maps to `kind: strategic` per §3.5 migration map but `kind` is not declared.",
+          "file_line": "second-backend-evaluation.plan.md:1-27 (absent from frontmatter block)"
+        },
+        {
+          "issue": "Dropped field `status: strategic-brief` present (§2.5): `status` is explicitly dropped in V0; state must be expressed via `kind` / `disposition` / `gate`.",
+          "file_line": "second-backend-evaluation.plan.md:3"
+        },
+        {
+          "issue": "Reconciled key `foundational_adr` present instead of `derives_from` edge (§2.5 explicitly: `foundational_adr` (17) → `derives_from`). Should be `derives_from: [\"docs/architecture/architectural-decisions/162-observability-first.md\"]`.",
+          "file_line": "second-backend-evaluation.plan.md:16"
+        },
+        {
+          "issue": "`promotion_triggers` is a multi-key YAML object (three sub-keys: warehouse_adapter, posthog_adapter, alternative_engineering_sink) instead of V0's `promotion_trigger` single string (LOCKED §2.4). Field name differs and shape is incompatible with the Zod schema.",
+          "file_line": "second-backend-evaluation.plan.md:23-27"
+        },
+        {
+          "issue": "`last_updated` absent from frontmatter; the ISO date appears only in the body (line 31). V0 §2.4 requires `last_updated` as a frontmatter field (LOCKED).",
+          "file_line": "second-backend-evaluation.plan.md:31 (body only; absent from frontmatter lines 1-27)"
+        },
+        {
+          "issue": "No `serves_strategic_choice` edge declared (required for executable plans; recommended for strategic). Absent from frontmatter.",
+          "file_line": "second-backend-evaluation.plan.md:1-27 (absent from frontmatter block)"
+        },
+        {
+          "issue": "Unclassified key `informing_explorations` present (lines 17-22): not a V0 field; closest candidates are `derives_from` (if authority-bearing) or `related` (if untyped see-also). Survey signal: estate uses a distinct 'informing explorations' concept.",
+          "file_line": "second-backend-evaluation.plan.md:17-22"
+        }
+      ],
+      "unclassified_keys": [
+        "informing_explorations",
+        "promotion_triggers"
+      ],
+      "locked_contradictions": [
+        {
+          "item": "promotion_triggers as a structured per-sink keyed object contradicts V0 LOCKED §2.4 which specifies `promotion_trigger` as a single string. The estate shows that a strategic plan with multiple parallel promotion paths (warehouse, PostHog, contingency) cannot be faithfully expressed as one string without loss of structure. This is estate evidence the survey should surface as a SURVEY-MAY-ADD-VALUES or schema-shape refinement candidate at V1 — the estate's multi-trigger pattern is real and pre-dates V0.",
+          "evidence": "Frontmatter has `promotion_triggers:` with three distinct keyed sub-conditions (warehouse_adapter, posthog_adapter, alternative_engineering_sink), each with independent observable conditions. Body §Promotion Triggers (lines 263-321) elaborates each independently with 'when triggered' instructions. A single string cannot carry this without collapsing semantically distinct promotion paths.",
+          "file_line": "second-backend-evaluation.plan.md:23-27"
+        }
+      ],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "The plan's adapter shape (lines 326-338) places each sink in packages/libs/<vendor>-exporter/ and composes redaction primitives from @oaknational/observability. This is architecturally clean: emit-site code is fully isolated from sink selection, and composition root wiring (ADR-078) is the only coupling point. No architectural gap found here.",
+          "file_line": "326-338"
+        },
+        {
+          "severity": "info",
+          "claim": "The three-layer correlation envelope (correlation_id + traceparent + Sentry trace_id) with per-sink projection is well-specified. Roles are cleanly separated: within-invocation join, cross-system join, and engineering drill-down respectively. This is consistent with the ADR-143 coherent structured fan-out shape.",
+          "file_line": "93"
+        },
+        {
+          "severity": "low",
+          "claim": "The identity envelope operating posture (line 92) — Clerk ID projects to PostHog + Sentry only; warehouse and Elasticsearch receive correlation + categorical fields only — is stated as a pending formal ruling but already expressed as a settled operating posture. If the formal ruling from Exploration 10 diverges (e.g. permits warehouse identity or restricts PostHog), the adapter projection designs authored against this posture will require revision before landing. The plan correctly notes the ruling is open, but the posture's specificity risks being treated as settled during adapter authoring.",
+          "file_line": "92"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan references a downstream dependency on current/observability-events-workspace.plan.md (lines 167-169, 177-178) as the schema input all adapters consume, but does not specify a schema-versioning or deprecation contract. Cross-sink schema versioning is listed as a cross-sink concern (lines 340-344) owned at the events-workspace level, but no versioning strategy (e.g. additive-only, version field, breaking-change gate) is named. This is an architectural gap that may cause adapter-landing conflicts if schema evolves between Sink 2 and Sink 3 authoring windows.",
+          "file_line": "340-344"
+        },
+        {
+          "severity": "low",
+          "claim": "The alternative-engineering-sink contingency (lines 73-74, 311-321) names Grafana+Loki+Tempo and self-hosted OTel as candidates but does not name an architectural pattern for how a self-hosted OTel collector would compose into the existing adapter model. A self-hosted collector sitting between the emission site and the adapter would invert the current direct-to-vendor-SDK adapter shape. This is not a blocker at strategic-brief status but is an architectural assumption worth recording before the contingency fires.",
+          "file_line": "73-74"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan's cardinality framing (lines 76-81) explicitly states 'three is the current roadmap cardinality, not an architectural ceiling' and correctly grounds this in ADR-162's sink-agnostic vendor-independence clause. This is sound: the adapter pattern composes without re-opening the brief.",
+          "file_line": "76-81"
+        },
+        {
+          "severity": "info",
+          "claim": "The promotion trigger conditions (lines 268-309) are each expressed as recordable events against named artefacts, not subjective judgements. This is good architectural governance: it prevents premature promotion and makes the plan's state machine observable.",
+          "file_line": "268-309"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly scopes out dashboard/query/curated-view authoring on top of the warehouse (line 148) and PostHog product configuration (line 150). These are genuine non-goals that would otherwise inflate the adapter scope into application-layer concerns.",
+          "file_line": "148-151"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": [
+        {
+          "claim": "L-12-prereq CLOSED 2026-04-19; redaction primitives folded into @oaknational/observability, not a new workspace (cited at second-backend-evaluation.plan.md:162-165)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "second-backend-evaluation.plan.md:162-166 states \"CLOSED 2026-04-19 via the observability-primitives-consolidation lane (primitives folded into @oaknational/observability rather than extracted to a new workspace...)\"; corroborated first-hand by sentry-observability-maximisation-mcp.plan.md:813-823 (same CLOSED date, same fold, \"telemetry-redaction-core does not exist\") and by ground-truth: commit e09918a87 \"refactor(observability): fold redaction primitives; delete telemetry-redaction-core\", archived plan present at architecture-and-infrastructure/archive/completed/observability-primitives-consolidation.plan.md, packages/core/observability/src/redaction.ts exists while packages/core/telemetry-redaction-core/ does not."
+        },
+        {
+          "claim": "Plan is not yet complete or superseded; both warehouse vendor and identity-envelope ruling are still Open decisions",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "second-backend-evaluation.plan.md:91 (\"| Warehouse vendor (Sink 2) | **Open** |\") and :92 (\"| Identity envelope per sink | **Open** |\"); status confirmed at :3 (status: strategic-brief), :31 (\"Strategic (not yet executable)\"), and :33 (this plan supersedes the prior brief, i.e. it is the superseder not superseded). Cross-checked: docs/explorations/2026-04-19-data-warehouse-selection.md:4 and 2026-04-19-redaction-policy-clerk-identity-downstream.md:4 are both status: active with no recorded final vendor/identity decision."
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/observability/future/security-observability-phase-2.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Status is 'strategic-brief' with a promotion trigger; plan is deliberately pre-executable and correctly placed in future/",
+          "file_line": "security-observability-phase-2.plan.md:3"
+        },
+        {
+          "claim": "Promotion trigger is testable and named, making the plan self-advancing without a rewrite",
+          "file_line": "security-observability-phase-2.plan.md:13"
+        },
+        {
+          "claim": "Non-goals list and out-of-scope items are concrete and prevent scope drift — worth preserving",
+          "file_line": "security-observability-phase-2.plan.md:49-55"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan correctly scopes a future extension without over-specifying implementation before exploration results are in. Trigger conditions are testable. Non-goals are concrete. The three-way promotion trigger (either exploration OR incident) prevents indefinite gating. File: lines 9-13, 49-105.",
+      "content_quality": "strong",
+      "content_quality_note": "Every section carries substantive content: problem framing with a specific prior baseline (line 26-30), domain boundaries with concrete non-goals (lines 49-55), sequencing with resolvable exploration paths (lines 60-62), testable success signals (lines 80-84), named risks with mitigations (lines 87-93), and a conditional implementation sketch tied to trigger type (lines 109-116). The only weak reference is the session-report citation at line 123 (no resolvable path).",
+      "salvage_value": [
+        {
+          "idea": "Cloudflare transport-layer event ingestion correlated with app events via a shared correlation_id field",
+          "class": "good",
+          "file_line": "security-observability-phase-2.plan.md:40-41"
+        },
+        {
+          "idea": "Static analysis integration: SonarCloud project + GitHub Action; baseline scan; findings routed through reviewer discipline",
+          "class": "good",
+          "file_line": "security-observability-phase-2.plan.md:42-44"
+        },
+        {
+          "idea": "GitHub Advanced Security gap closure as a distinct deliverable from SonarCloud",
+          "class": "good",
+          "file_line": "security-observability-phase-2.plan.md:43"
+        },
+        {
+          "idea": "Additional app-level security events for privilege changes and session-lifecycle anomalies",
+          "class": "speculative",
+          "file_line": "security-observability-phase-2.plan.md:44-45"
+        },
+        {
+          "idea": "Alert-rule refinement for security axis deferred out of MVP scope into Phase 2",
+          "class": "good",
+          "file_line": "security-observability-phase-2.plan.md:46-47"
+        },
+        {
+          "idea": "Non-goal: CSP/SRI rollout belongs in a separate plan",
+          "class": "good",
+          "file_line": "security-observability-phase-2.plan.md:51-52"
+        },
+        {
+          "idea": "Non-goal: supply-chain attack detection is a separate plan",
+          "class": "good",
+          "file_line": "security-observability-phase-2.plan.md:53"
+        },
+        {
+          "idea": "Non-goal: vulnerability management via git-leaks and Dependabot is already covered",
+          "class": "good",
+          "file_line": "security-observability-phase-2.plan.md:54"
+        },
+        {
+          "idea": "Three-way promotion trigger (either exploration conclusion OR first security incident) prevents indefinite gating",
+          "class": "good",
+          "file_line": "security-observability-phase-2.plan.md:57-67"
+        },
+        {
+          "idea": "Promotion trigger is testable: an exploration document must contain a named Recommendation or Conclusion section",
+          "class": "good",
+          "file_line": "security-observability-phase-2.plan.md:97-100"
+        },
+        {
+          "idea": "On Cloudflare trigger: use cloudflare_event schema in events workspace with correlation on correlation_id",
+          "class": "speculative",
+          "file_line": "security-observability-phase-2.plan.md:111-112"
+        },
+        {
+          "idea": "Cloudflare data volume may require sampling at ingest, with full retention via Cloudflare's own product",
+          "class": "good",
+          "file_line": "security-observability-phase-2.plan.md:87-89"
+        },
+        {
+          "idea": "If exploration outputs conclude 'no, not worth it', the plan archives with rationale recorded",
+          "class": "good",
+          "file_line": "security-observability-phase-2.plan.md:91-93"
+        },
+        {
+          "idea": "Feature-flag provider selection may have security-event analytics that integrates into Phase 2",
+          "class": "speculative",
+          "file_line": "security-observability-phase-2.plan.md:72-73"
+        },
+        {
+          "idea": "Second-backend evaluation may be the natural sink for Cloudflare ingest",
+          "class": "speculative",
+          "file_line": "security-observability-phase-2.plan.md:74-75"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "strategic-brief",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Field `id` is absent — LOCKED required for all plan nodes (§2.1).",
+          "file_line": "security-observability-phase-2.plan.md:1-14 (frontmatter block)"
+        },
+        {
+          "issue": "Field `node_type` is absent — LOCKED required for all plan nodes (§2.1).",
+          "file_line": "security-observability-phase-2.plan.md:1-14 (frontmatter block)"
+        },
+        {
+          "issue": "Field `kind` is absent — LOCKED required for all plan nodes (§3.1). Readiness is expressed only via the dropped `status: strategic-brief` key (line 3).",
+          "file_line": "security-observability-phase-2.plan.md:3"
+        },
+        {
+          "issue": "Field `last_updated` is absent from frontmatter — LOCKED required for all (§2.4). An inline date appears only in the body (line 19).",
+          "file_line": "security-observability-phase-2.plan.md:19"
+        },
+        {
+          "issue": "Key `status: strategic-brief` is explicitly dropped by V0 §2.5; it should be replaced by `kind: strategic` (migration map §3.5, row 1).",
+          "file_line": "security-observability-phase-2.plan.md:3"
+        },
+        {
+          "issue": "Key `foundational_adr` is explicitly reconciled → `derives_from` by V0 §2.5; the V0 field `derives_from` is absent. ADR-162 reference should migrate to `derives_from: [\"docs/architecture/architectural-decisions/162-observability-first.md\"]`.",
+          "file_line": "security-observability-phase-2.plan.md:12"
+        },
+        {
+          "issue": "No V0 typed edge fields are declared in frontmatter (`serves_strategic_choice`, `derives_from`, `depends_on`, `thread`, etc. all absent).",
+          "file_line": "security-observability-phase-2.plan.md:1-14 (frontmatter block)"
+        }
+      ],
+      "unclassified_keys": [
+        "status",
+        "foundational_adr"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "security",
+      "specialist_kind": "security",
+      "specialist_findings": [
+        {
+          "severity": "low",
+          "claim": "The plan scopes in Cloudflare webhook or batch ingest (line 111) but defers schema design and auth model for that ingest path to promotion time. An unauthenticated or weakly-authenticated ingest endpoint receiving Cloudflare events is a spoofing vector; the implementation sketch should at minimum flag that the ingest endpoint must validate a shared secret or Cloudflare webhook signature before any data is trusted.",
+          "file_line": "security-observability-phase-2.plan.md:111"
+        },
+        {
+          "severity": "low",
+          "claim": "Correlation on a bare `correlation_id` (line 111) with no mention of how that ID is generated or validated creates a correlation-hijacking risk: a caller that can predict or observe a correlation_id could inject a Cloudflare-flavoured event into the app-layer trace. The sketch should note that the correlation key must be unguessable (cryptographically random) and validated at ingest.",
+          "file_line": "security-observability-phase-2.plan.md:111"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan notes Cloudflare data volume may require sampling (line 88-89) but does not flag that sampling security events — as opposed to general telemetry — may selectively drop low-frequency attack patterns (slow-and-low credential stuffing, targeted probing). A security-specific sampling exception or a separate high-priority queue for security-tagged events should be noted as a design consideration at promotion.",
+          "file_line": "security-observability-phase-2.plan.md:88"
+        },
+        {
+          "severity": "info",
+          "claim": "Static analysis via SonarCloud is listed in scope (line 42-44) but the plan's non-goals explicitly exclude supply-chain attack detection (line 53), which SonarCloud's dependency analysis surface partially covers. The boundary should be re-examined at promotion to avoid a gap where SonarCloud is configured but its supply-chain findings are administratively ignored.",
+          "file_line": "security-observability-phase-2.plan.md:42-44,53"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan references ADR-158 (multi-layer security; Cloudflare is the transport layer) at line 123 but does not cite whether ADR-158 already specifies an approved ingest authentication pattern. If it does, the implementation sketch should inherit rather than re-derive that pattern; if it does not, ADR-158 may need an amendment at promotion time.",
+          "file_line": "security-observability-phase-2.plan.md:123"
+        }
+      ],
+      "load_bearing_claims_count": 3,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/observability/future/sentry-observability-maximisation.plan.md",
+      "classification": "rehome",
+      "classification_evidence": [
+        {
+          "claim": "Filed in /future/ but status=strategic and already directing an active MCP-branch executable plan",
+          "file_line": "line 20 (status: strategic) and line 31 (active/sentry-observability-maximisation-mcp.plan.md)"
+        },
+        {
+          "claim": "L-15 Input Framing section records owner-settled framings from 2026-04-19, indicating this plan is live reference material, not a future proposal",
+          "file_line": "lines 273-315"
+        },
+        {
+          "claim": "Promotion trigger section defines a live contract between this plan and the active MCP branch",
+          "file_line": "lines 319-326"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every section delivers concrete value: the problem statement (lines 47-67) names two specific prior errors and their root causes; the loop taxonomy (lines 156-186) is a precise 23-row reference that closes the scope ambiguity; the L-EH and L-DOC tracks (lines 192-225) are shaped with acceptance criteria; the risk table (lines 247-256) includes mitigations and one self-updated superseded entry; the L-15 framings (lines 273-315) record five owner-settled architectural decisions. No padding or filler detected.",
+      "content_quality": "strong",
+      "content_quality_note": "The product-loop taxonomy table (lines 156-186) is unusually precise for a strategic plan — capture mechanism, correlation identifier, and Sentry surface are all specified per loop. The sequencing assumptions (lines 139-153) include dependency ordering rationale, not just order. The risk table (lines 247-256) pairs likelihood/impact with concrete mitigations and self-maintains (superseded row). The L-15 Input Framing section (lines 273-315) records owner-direction with explicit discretion scope. This is substantially above V0-conformant boilerplate.",
+      "salvage_value": [
+        {
+          "idea": "Product-loop taxonomy: 23 named loops each with capture / correlation / Sentry surface columns as the unit of value",
+          "class": "good",
+          "file_line": "lines 156-186"
+        },
+        {
+          "idea": "L-EH cross-cutting track: Result<T,E> mandate plus preserve-caught-error ESLint built-in (v9.35.0+) plus prefer-result-pattern custom rule, with incremental workspace rollout",
+          "class": "good",
+          "file_line": "lines 192-213"
+        },
+        {
+          "idea": "L-DOC cross-cutting track: documentation inventory + write-missing + TSDoc per loop, acceptance criterion is discoverability without grepping",
+          "class": "good",
+          "file_line": "lines 215-225"
+        },
+        {
+          "idea": "Sequencing contract: ADR-143 §6 amendment must land with first new fan-out (metrics), not before",
+          "class": "good",
+          "file_line": "lines 143-145"
+        },
+        {
+          "idea": "Sequencing contract: createSentryDelegates extraction must precede any new adapter method so both consumers pick up changes in one change",
+          "class": "good",
+          "file_line": "lines 147-150"
+        },
+        {
+          "idea": "Three-sink architecture framing: Sentry (today) / data warehouse (public beta) / PostHog (post-public-beta, gated on a named question)",
+          "class": "good",
+          "file_line": "lines 283-288"
+        },
+        {
+          "idea": "MVP usage question is Sentry-addressable via wrapMcpServerWithSentry traces + tool-call distribution, PostHog deferred to public beta",
+          "class": "good",
+          "file_line": "lines 289-293"
+        },
+        {
+          "idea": "Redaction-core extraction (L-12-prereq) is independent of PostHog adoption — it is a long-term architectural excellence commitment regardless of sink decision",
+          "class": "good",
+          "file_line": "lines 294-299"
+        },
+        {
+          "idea": "Clerk identity downstream is an explicit policy question owned by Exploration 10, ADR-160 closure rule applies uniformly",
+          "class": "good",
+          "file_line": "lines 300-308"
+        },
+        {
+          "idea": "Existing Oak-org PostHog usage is a signal weighting in Sink 3 evaluation, not a pre-commitment",
+          "class": "good",
+          "file_line": "lines 309-311"
+        },
+        {
+          "idea": "Success signal 6: Search-CLI plan reuse of L-1..L-13 track shapes as a rework signal if MCP lanes are too MCP-specific",
+          "class": "good",
+          "file_line": "lines 237-240"
+        },
+        {
+          "idea": "Dynamic sampling via tracesSampler must land before profiling to avoid double-sampling happy-path traffic",
+          "class": "good",
+          "file_line": "lines 150-152"
+        },
+        {
+          "idea": "Cardinality drift risk: naming convention TSDoc + lint suggestion + closed-set attribute tests for acceptance metrics",
+          "class": "good",
+          "file_line": "lines 249-250"
+        },
+        {
+          "idea": "Trace propagation to third-party hosts requires security review before any non-Oak allowlist addition",
+          "class": "good",
+          "file_line": "lines 254-255"
+        },
+        {
+          "idea": "Alert fatigue mitigation: define each alert with SLO-style intent, severity, routing, and dedupe in runbook before enabling",
+          "class": "good",
+          "file_line": "lines 255-256"
+        },
+        {
+          "idea": "AI instrumentation (anthropicAIIntegration etc.) installed but API shape deferred until first real LLM consumer",
+          "class": "speculative",
+          "file_line": "lines 92-94 and lines 268-271"
+        },
+        {
+          "idea": "Bundler-plugin source maps: evaluate @sentry/esbuild-plugin for tsup and @sentry/vite-plugin for widget as replacements for shell script",
+          "class": "speculative",
+          "file_line": "lines 98-100 and lines 259-261"
+        },
+        {
+          "idea": "Feature-flag context scaffolding via featureFlagsIntegration — provider TBD",
+          "class": "speculative",
+          "file_line": "lines 90-91 and lines 262-264"
+        },
+        {
+          "idea": "@sentry/browser vs @sentry/react for MCP App widget — decided at L-12 based on bundle-size measurement",
+          "class": "speculative",
+          "file_line": "lines 265-267"
+        },
+        {
+          "idea": "captureFeedback pipeline as a product loop",
+          "class": "speculative",
+          "file_line": "lines 89 and line 179"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [
+        "supersedes",
+        "depends_on"
+      ],
+      "status_raw": "strategic",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` — V0 §2.1 requires a stable kebab slug for every plan",
+          "file_line": "sentry-observability-maximisation.plan.md:1-21 (frontmatter block, `id` absent)"
+        },
+        {
+          "issue": "Missing required field `node_type: plan` — V0 §2.1 LOCKED discriminator, required for all plans",
+          "file_line": "sentry-observability-maximisation.plan.md:1-21 (frontmatter block, `node_type` absent)"
+        },
+        {
+          "issue": "Missing required field `last_updated` — V0 §2.4 LOCKED, required for all plans",
+          "file_line": "sentry-observability-maximisation.plan.md:1-21 (frontmatter block, `last_updated` absent)"
+        },
+        {
+          "issue": "Uses dropped key `status: strategic` — V0 §2.2/§2.5 drops `status`; readiness must be `kind: strategic`",
+          "file_line": "sentry-observability-maximisation.plan.md:20"
+        },
+        {
+          "issue": "Missing required field `kind` — V0 §2.2 LOCKED, required for all plans (replaces `status`)",
+          "file_line": "sentry-observability-maximisation.plan.md:1-21 (frontmatter block, `kind` absent)"
+        },
+        {
+          "issue": "`depends_on` carries a bare string (file reference), not the required `{ plan, kind: blocking|beneficial }` object shape — V0 §2.3/§4 LOCKED",
+          "file_line": "sentry-observability-maximisation.plan.md:12-13"
+        },
+        {
+          "issue": "Missing `serves_strategic_choice` — V0 §2.3 recommends this for strategic plans; given the plan is substantive and non-stub, absence is a conformance gap",
+          "file_line": "sentry-observability-maximisation.plan.md:1-21 (frontmatter block, `serves_strategic_choice` absent)"
+        },
+        {
+          "issue": "Uses unclassified key `source_references` — V0 §2.5 does not classify this key; it appears to be an authority/traceability relationship that should use `derives_from`",
+          "file_line": "sentry-observability-maximisation.plan.md:17-19"
+        },
+        {
+          "issue": "Missing `promotion_trigger` as a structured frontmatter field — the plan is `kind: strategic` (inferrable from `status: strategic`) and carries promotion trigger logic only in the body prose, not as the required frontmatter field V0 §2.4 mandates",
+          "file_line": "sentry-observability-maximisation.plan.md:318-326 (body, Promotion Trigger section)"
+        },
+        {
+          "issue": "Uses SURVEY-MAY-ADD-EDGES key `parent_plan` — V0 §2.5 classifies this as deferred; the key is used here as a live authority pointer, which contradicts V0's explicit deferral",
+          "file_line": "sentry-observability-maximisation.plan.md:11"
+        }
+      ],
+      "unclassified_keys": [
+        "parent_plan",
+        "source_references"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "ADR-143 §6 lists a closed set of fan-out hooks, and the plan acknowledges that any new hook (e.g. beforeSendMetric) creates a footgun until §6 is generalised, but the sequencing constraint (item 3) only requires the amendment to land 'with the first new fan-out' — there is no gate preventing a future lane from adding a fan-out hook before the ADR amendment lands. The plan relies on author discipline rather than a structural gate.",
+          "file_line": "sentry-observability-maximisation.plan.md:57-62 and :143-148"
+        },
+        {
+          "severity": "high",
+          "claim": "createSentryDelegates extraction is sequenced as item 4 (before any new adapter method), but this is a prose constraint in a strategic brief with no enforcement mechanism. If a per-branch executable lane adds a method before the extraction PR merges, the duplication footprint grows silently. The constraint needs to be lifted into the executable lane's acceptance criteria as a blocking pre-condition.",
+          "file_line": "sentry-observability-maximisation.plan.md:97-98 and :148-150"
+        },
+        {
+          "severity": "medium",
+          "claim": "The three-sink architecture (Sentry / data warehouse / PostHog) is recorded in the L-15 Input Framing section as a settled framing, but the ownership is delegated to a separate plan (future/second-backend-evaluation.plan.md). There is no explicit contract between this plan and that plan on the shared redaction-core interface shape. If the redaction-core extraction (L-12-prereq) defines an interface and the second-backend plan assumes a different shape, divergence is silent until integration.",
+          "file_line": "sentry-observability-maximisation.plan.md:283-300"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan defers the AI instrumentation adapter surface shape until 'the first real consumer' (Open Question 4). This is reasonable for new tooling, but the four integration wrappers (anthropicAIIntegration, vercelAIIntegration, langChainIntegration, langGraphIntegration) are listed as 'installed but unused'. Installing dependencies whose surface is explicitly undefined creates a configuration-drift risk: SDK defaults for these integrations may capture data that has not passed the ADR-143 redaction review.",
+          "file_line": "sentry-observability-maximisation.plan.md:92-94 and :265-270"
+        },
+        {
+          "severity": "medium",
+          "claim": "The widget browser Sentry lane (L-12 / @sentry/browser) uses a shared trace_id with the server side to link traces. The plan records the transport mechanism for that shared trace_id as unresolved (Open Question 3 addresses package choice, not propagation mechanism). Without a defined W3C traceparent injection point in the widget's server-rendered HTML or API responses, the cross-boundary trace linkage is architecturally aspirational rather than designed.",
+          "file_line": "sentry-observability-maximisation.plan.md:183 and :262-268"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan lists sentry-cli as the release/deploy linkage mechanism and records it as the last step in the MCP branch. However, ADR-159 governs per-workspace vendor CLI ownership. It is not confirmed in this strategic brief that sentry-cli is declared in the correct workspace's vendor manifest, or that CI runs it with the right workspace scope. This is a configuration hygiene gap rather than a design flaw.",
+          "file_line": "sentry-observability-maximisation.plan.md:77-78 and :124-126"
+        },
+        {
+          "severity": "low",
+          "claim": "Success signal 6 ('the Search-CLI executable plan can re-use L-1..L-13 track shapes with minimal edits') is a desirable reuse indicator but is not measurable as written. 'Minimal edits' is subjective. A concrete reuse criterion (e.g. fewer than N lane definitions copied verbatim, or a shared lane-template file exists) would make this a verifiable gate rather than a judgement call.",
+          "file_line": "sentry-observability-maximisation.plan.md:236-239"
+        },
+        {
+          "severity": "info",
+          "claim": "The product-loop taxonomy table is well-structured and covers the full Sentry capability envelope. The correlation-identifier column is consistent with ADR-143's redaction model. No architectural gaps in the table itself.",
+          "file_line": "sentry-observability-maximisation.plan.md:157-186"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/observability/future/slo-and-error-budget.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Status is 'strategic-brief', not yet executable, gated on a testable promotion trigger",
+          "file_line": "slo-and-error-budget.plan.md:6-11"
+        },
+        {
+          "claim": "Promotion trigger is explicit and data-conditional, not time-based — plan remains valid until that condition is met",
+          "file_line": "slo-and-error-budget.plan.md:85-93"
+        },
+        {
+          "claim": "Scope is tightly bounded; sibling plans own adjacent domains",
+          "file_line": "slo-and-error-budget.plan.md:44-46"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every section earns its place. The data-gate rationale (line 22-28) is well-reasoned and anti-speculative. The four critical journeys (line 99-101) map to real user-visible surfaces. The burn-rate mitigation design (lines 78-79) reflects standard SRE practice. The theatrical-SLO risk (lines 81-83) with named-runbook mitigation is unusually mature for a strategic brief.",
+      "content_quality": "strong",
+      "content_quality_note": "Non-goals are precisely bounded (lines 44-46). Risks name mitigations, not just concerns (lines 75-83). Promotion trigger is testable, not aspirational (lines 86-89). Implementation sketch is appropriately provisional, labelled 'finalised at promotion' (line 95). No filler or ceremony.",
+      "salvage_value": [
+        {
+          "idea": "Defer SLO codification until ≥30 days of post-launch production data exists — pre-launch SLOs are guesswork",
+          "class": "good",
+          "file_line": "slo-and-error-budget.plan.md:22-28"
+        },
+        {
+          "idea": "Four critical user journeys: tool invocation success rate, search latency, auth success rate, widget-session-outcome success rate",
+          "class": "good",
+          "file_line": "slo-and-error-budget.plan.md:35-38"
+        },
+        {
+          "idea": "Multi-window burn-rate alert design: 2%/5% fast burn and 10% slow burn windows",
+          "class": "good",
+          "file_line": "slo-and-error-budget.plan.md:39,78-79"
+        },
+        {
+          "idea": "30-day rolling error-budget window (vs calendar-month) as the chosen refresh model",
+          "class": "good",
+          "file_line": "slo-and-error-budget.plan.md:37,101"
+        },
+        {
+          "idea": "Initial SLOs labelled 'pre-steady-state, will recalibrate at 90 days' to avoid false precision",
+          "class": "good",
+          "file_line": "slo-and-error-budget.plan.md:75-77"
+        },
+        {
+          "idea": "Weekly review of alert outcomes in first 60 days post-promotion to tune burn-rate windows",
+          "class": "good",
+          "file_line": "slo-and-error-budget.plan.md:79-80"
+        },
+        {
+          "idea": "Each SLO must have a named runbook and named owner at promotion time — guards against theatrical SLO syndrome",
+          "class": "good",
+          "file_line": "slo-and-error-budget.plan.md:81-83"
+        },
+        {
+          "idea": "SLO storage as Sentry alert rules plus a code-tracked SLO document (dual representation)",
+          "class": "speculative",
+          "file_line": "slo-and-error-budget.plan.md:97-98"
+        },
+        {
+          "idea": "Alert channels start in #sentry-alert-testing, split to per-severity channels once volume justifies",
+          "class": "speculative",
+          "file_line": "slo-and-error-budget.plan.md:102-103"
+        },
+        {
+          "idea": "Promotion authoring protocol: baseline distribution analysis is the first step before writing SLO targets",
+          "class": "good",
+          "file_line": "slo-and-error-budget.plan.md:88-93"
+        },
+        {
+          "idea": "External-facing status communication explicitly excluded — owned by customer-facing-status-page.plan.md",
+          "class": "good",
+          "file_line": "slo-and-error-budget.plan.md:44-45"
+        },
+        {
+          "idea": "SLA contractual commitments excluded as a business decision requiring a separate artefact",
+          "class": "good",
+          "file_line": "slo-and-error-budget.plan.md:45-46"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "strategic-brief",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `node_type` (literal \"plan\") — LOCKED, required for all plans (V0 §2.1)",
+          "file_line": "slo-and-error-budget.plan.md:1 (frontmatter block, field absent)"
+        },
+        {
+          "issue": "Missing required field `id` (stable kebab slug) — LOCKED, required for all plans (V0 §2.1)",
+          "file_line": "slo-and-error-budget.plan.md:1 (frontmatter block, field absent)"
+        },
+        {
+          "issue": "Missing required field `kind` — LOCKED, required for all plans; `status: strategic-brief` maps to `kind: strategic` via §3.5 migration map but the field itself is absent (V0 §2.2)",
+          "file_line": "slo-and-error-budget.plan.md:3"
+        },
+        {
+          "issue": "Field `status: strategic-brief` present — Dropped by V0 §2.5; must be replaced by `kind` / `disposition` / `gate` axes (V0 §2.5, schema line 168)",
+          "file_line": "slo-and-error-budget.plan.md:3"
+        },
+        {
+          "issue": "Missing required field `last_updated` (ISO date) — LOCKED, required for all plans (V0 §2.4); date appears only in body prose at line 16, not in frontmatter",
+          "file_line": "slo-and-error-budget.plan.md:1 (frontmatter block, field absent)"
+        },
+        {
+          "issue": "Field `foundational_adr` present — Dropped as standalone key by V0 §2.5 (line 171); must be reconciled into `derives_from` typed edge pointing at ADR-162",
+          "file_line": "slo-and-error-budget.plan.md:9"
+        }
+      ],
+      "unclassified_keys": [
+        "foundational_adr"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The promotion trigger assumes 'owner-managed uptime-monitor history' exists and is queryable after launch, but no plan or ADR is cited as guaranteeing this infrastructure will be in place. If the uptime monitor is not yet provisioned, the 30-day clock cannot start.",
+          "file_line": "slo-and-error-budget.plan.md:50-53"
+        },
+        {
+          "severity": "medium",
+          "claim": "`tool_invoked` outcome-class distribution is assumed to be emitted from an 'events workspace' post-launch, but no dependency link cites the plan or ADR that actually ships this instrumentation. If `tool_invoked` is not yet emitted, a core SLO input is missing at promotion time.",
+          "file_line": "slo-and-error-budget.plan.md:54-55"
+        },
+        {
+          "severity": "medium",
+          "claim": "Widget-session-outcome baseline is assumed to be available from 'accessibility + usability axes', but no plan reference establishes that this data surface exists or is on a delivery path. The assumption may be speculative.",
+          "file_line": "slo-and-error-budget.plan.md:57-58"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan assumes 'each SLO has a named runbook and owner' will be resolved at promotion authoring time, but no mechanism is proposed for ensuring ownership is actually assigned. The risk (line 81-83) names this as a mitigation, yet the mitigation itself rests on an unverified future authoring step.",
+          "file_line": "slo-and-error-budget.plan.md:81-83"
+        },
+        {
+          "severity": "low",
+          "claim": "Auth-failure baseline is assumed to be available 'per security-observability', but no concrete plan file or ADR is cited that would deliver this. If the security-observability surface is not yet defined, this prerequisite is unanchored.",
+          "file_line": "slo-and-error-budget.plan.md:56"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly defers SLO codification until baseline data exists and is explicit that pre-launch targets would be guesswork. This is a sound assumption discipline: the strategic-brief status and promotion trigger are well-matched to the uncertainty.",
+          "file_line": "slo-and-error-budget.plan.md:22-28"
+        },
+        {
+          "severity": "info",
+          "claim": "The 'pre-steady-state, will recalibrate at 90 days' mitigation is stated as intent but no mechanism (cron, plan review, owner action) is proposed to trigger the recalibration. It is an assumption that the 90-day review will happen without a concrete actor or trigger.",
+          "file_line": "slo-and-error-budget.plan.md:76-78"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": [
+        {
+          "claim": "Plan is not complete/superseded — explicitly marked strategic-brief awaiting data gate",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "slo-and-error-budget.plan.md:3 (status: strategic-brief), :15 (🔵 Strategic, not yet executable), :17 (Promotion trigger ≥30 days baseline post-launch); corroborated by observability-plan-consolidation-and-rationalisation.plan.md:95 (\"Keep as future; gate is alpha distributions\") and high-level-observability-plan.md:227 (gate ≥30 days post-launch baseline)"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/observability/future/statuspage-integration.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Deferred for MVP per owner direction — not yet executable",
+          "file_line": "statuspage-integration.plan.md:6-8"
+        },
+        {
+          "claim": "Promotion trigger is explicit and testable; plan is not orphaned",
+          "file_line": "statuspage-integration.plan.md:10-11"
+        },
+        {
+          "claim": "Folder lane 'future' matches status 'strategic-brief'; no misfiling",
+          "file_line": "statuspage-integration.plan.md:2-3"
+        },
+        {
+          "claim": "Non-trivial implementation sketch and risk mitigations present — not an empty stub",
+          "file_line": "statuspage-integration.plan.md:90-97"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan correctly scopes a deferred concern, encodes the owner deferral rationale with a session reference (line 28), names a testable promotion trigger (lines 82-85), and provides genuinely useful risk mitigations (lines 72-78). No speculative scope creep; non-goals are tightly drawn (lines 42-47).",
+      "content_quality": "adequate",
+      "content_quality_note": "Content is appropriate for a strategic brief. The implementation sketch (lines 90-97) is intentionally deferred-detail. The component taxonomy question (line 38) is unresolved by design. The session report citation at line 102 is a soft reference that will not survive without the session artefact; the ADR-162 anchor is the load-bearing permanent reference. Overall the plan does what a strategic brief should do.",
+      "salvage_value": [
+        {
+          "idea": "Automated Statuspage incident creation on probe failure with conservative threshold (two consecutive failures over 10 min)",
+          "class": "good",
+          "file_line": "statuspage-integration.plan.md:66-68, 72-73"
+        },
+        {
+          "idea": "Auto-close Statuspage incident on resolution",
+          "class": "good",
+          "file_line": "statuspage-integration.plan.md:67"
+        },
+        {
+          "idea": "Planned maintenance window communication without manual toil",
+          "class": "good",
+          "file_line": "statuspage-integration.plan.md:39, 68"
+        },
+        {
+          "idea": "Component taxonomy question: per axis vs per capability vs per environment — decision deferred to promotion",
+          "class": "speculative",
+          "file_line": "statuspage-integration.plan.md:38"
+        },
+        {
+          "idea": "Statuspage API rate-limit mitigation via batch/debounce in integration layer",
+          "class": "good",
+          "file_line": "statuspage-integration.plan.md:74-75"
+        },
+        {
+          "idea": "Multi-region probe disagreement deferred until multi-region probes exist in uptime layer",
+          "class": "good",
+          "file_line": "statuspage-integration.plan.md:76-78"
+        },
+        {
+          "idea": "Sentry alert-to-Statuspage incident wiring for specific alert categories only (not all alerts become public incidents)",
+          "class": "good",
+          "file_line": "statuspage-integration.plan.md:95"
+        },
+        {
+          "idea": "Statuspage API client in a new library workspace or existing integration surface",
+          "class": "speculative",
+          "file_line": "statuspage-integration.plan.md:93"
+        },
+        {
+          "idea": "Sequencing dependency: this plan is a prerequisite for customer-facing-status-page.plan.md",
+          "class": "good",
+          "file_line": "statuspage-integration.plan.md:62-63"
+        },
+        {
+          "idea": "SLO burn-rate alerts feed 'degraded performance' Statuspage states",
+          "class": "speculative",
+          "file_line": "statuspage-integration.plan.md:59-60"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "strategic-brief",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED; V0 §2.1 — required for all plan nodes)",
+          "file_line": "statuspage-integration.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `node_type: \"plan\"` (LOCKED; V0 §2.1 — required for all plan nodes)",
+          "file_line": "statuspage-integration.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED; V0 §2.2 — replaces `status`; correct value is `strategic` per §3.5 migration map)",
+          "file_line": "statuspage-integration.plan.md:1"
+        },
+        {
+          "issue": "Dropped key `status: strategic-brief` present (V0 §2.5 — explicitly dropped; content maps cleanly to `kind: strategic` via §3.5)",
+          "file_line": "statuspage-integration.plan.md:3"
+        },
+        {
+          "issue": "Dropped key `foundational_adr` present (V0 §2.5 — reconciled to `derives_from` edge; value `docs/architecture/architectural-decisions/162-observability-first.md` should move to `derives_from` list)",
+          "file_line": "statuspage-integration.plan.md:9"
+        },
+        {
+          "issue": "Missing field `last_updated` from frontmatter (LOCKED; V0 §2.4); value appears only in body prose at line 16 (`2026-04-23`)",
+          "file_line": "statuspage-integration.plan.md:16"
+        },
+        {
+          "issue": "No typed edge fields declared in frontmatter (`derives_from`, `serves_strategic_choice`, `depends_on`, `thread` all absent); `foundational_adr` at line 9 is the un-reconciled emergent form of `derives_from`",
+          "file_line": "statuspage-integration.plan.md:9"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan assumes Oak's existing Atlassian Statuspage account will remain available and be the right provider indefinitely, citing only current adoption ('Statuspage is already adopted at Oak') without checking contractual status, renewal dates, or whether organisational licensing covers this project's usage.",
+          "file_line": ".agent/plans/observability/future/statuspage-integration.plan.md:45"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan assumes an owner-managed uptime monitor already exists and supplies a probe signal against /healthz, treating this as a settled dependency. If that monitor is itself deferred or not yet built, the foundational input to the entire integration is absent. The plan does not cite where that monitor is defined or its current status.",
+          "file_line": ".agent/plans/observability/future/statuspage-integration.plan.md:56-58"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan assumes the promotion trigger ('owner posts a message declaring readiness') is an unambiguous testable event, but the backup condition ('a B2B customer asks for SLAs') implies a different driver with different timing and scope implications. These are not equivalent triggers and conflating them leaves the promotion gate underspecified.",
+          "file_line": ".agent/plans/observability/future/statuspage-integration.plan.md:83-86"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan references 'direction-setting session §3.4' as the authority for deferral but does not cite a reachable artefact path or ADR. If that session record is not findable, the deferral rationale cannot be verified at promotion time.",
+          "file_line": ".agent/plans/observability/future/statuspage-integration.plan.md:27-28"
+        },
+        {
+          "severity": "low",
+          "claim": "The component hierarchy question ('per axis? per capability? per environment?') is listed as in-scope but left entirely open. The plan assumes this decision will be made at promotion without flagging what information is needed to make it, which may stall promotion unnecessarily.",
+          "file_line": ".agent/plans/observability/future/statuspage-integration.plan.md:38"
+        },
+        {
+          "severity": "info",
+          "claim": "The implementation sketch assumes a 'new library workspace or existing integration surface' without surveying whether an existing workspace is suitable. This is appropriate for a strategic brief but will need a workspace survey before the plan can be promoted.",
+          "file_line": ".agent/plans/observability/future/statuspage-integration.plan.md:93"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": []
+    }
+  ]
+}

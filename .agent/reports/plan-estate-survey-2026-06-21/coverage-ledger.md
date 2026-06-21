@@ -71,6 +71,7 @@ scope; not surveyed.) Source: `worklist-plans.tsv`.
 | obs-01 (1st attempt) | observability (`active/`+`current/`, plans 1–12 of 31) | 12 | Cosmos calls Infinity | SESSION-LIMITED, 0 findings — account window 1 spent at ~63 plans this session; all 24 holistic/conformance subagents hit the limit; HALT-don't-fabricate held, 0 fabricated; superseded by the re-fire below after owner reset | — |
 | obs-01 | observability (`active/`+`current/`, plans 1–12 of 31) | 12 | Cosmos calls Infinity | COMPLETE (re-fired after owner reset; 9 keep / 3 archive-complete; substance 12 good / content 12 strong; conformance 12 major-drift; 163 ideas: 136 good / 26 speculative / 1 bad; 4 locked-contradictions; 11 high-stakes verdicts: 10 survive / 1 uncertain) | `pass1-observability-01.json` |
 | obs-02 | observability (`current/`+`future/`, plans 13–24 of 31) | 12 | Cosmos calls Infinity | COMPLETE (11 keep / 1 archive-complete; substance 12 good; content 10 strong / 2 adequate; conformance 12 major-drift; 153 ideas: 132 good / 17 speculative / 4 bad; 1 locked-contradiction; 9 high-stakes verdicts: 9 survive) | `pass1-observability-02.json` |
+| obs-03 | observability (`future/`, plans 25–31 of 31) | 7 | Cosmos calls Infinity | COMPLETE (5 keep / 1 archive-complete / 1 rehome; substance 7 good; content 6 strong / 1 adequate; conformance 7 major-drift; 87 ideas: 70 good / 17 speculative / 0 bad; 1 locked-contradiction; 7 high-stakes verdicts: 5 survive / 2 refuted) | `pass1-observability-03.json` |
 
 After 1b: the full **agentic-engineering-enhancements** collection (70 plans) is Pass-1 complete.
 
@@ -86,14 +87,21 @@ small SAFE warm-up that also probed and confirmed account budget for this owner-
 After at-05: the full **agent-tooling** collection (59 plans) is Pass-1 complete (Cosmos calls Infinity,
 5 conservable increments at-01..05, 0 unreadable, 809 ideas inventoried: 706 good / 97 speculative / 6
 bad, 15 locked-contradictions, 52 high-stakes verdicts: 44 survive / 7 refuted / 1 uncertain).
-**Pass-1 coverage so far: 169 / 286 plans (4 collections).** 12 collections / ~117 plans remain — see
-the linear successor plan [`07-sole-successor-survey-plan.md`](./07-sole-successor-survey-plan.md).
+**Pass-1 coverage at that point: 169 / 286 plans (4 collections).**
 
-### Remaining Pass-1 collections (~117 plans, ~35-plan atomic sub-batches, one per owner-reset window)
+After obs-03: the full **observability** collection (31 plans) is Pass-1 complete (Cosmos calls Infinity,
+3 increments obs-01..03 — obs-01 re-fired after the window-1 depletion + owner reset — 0 unreadable, 403
+ideas inventoried: 338 good / 60 speculative / 5 bad, 6 locked-contradictions, 27 high-stakes verdicts:
+24 survive / 2 refuted / 1 uncertain). **Pass-1 coverage so far: 200 / 286 plans (5 collections).** 11
+collections / ~86 plans remain — see the linear successor plan
+[`07-sole-successor-survey-plan.md`](./07-sole-successor-survey-plan.md).
 
-The 12 collections other than the four now complete (`agentic-engineering-enhancements`,
-`architecture-and-infrastructure`, `product-development-governance`, `agent-tooling`), derived from
-`worklist-plans.tsv` (col `collection`): `observability` (31), `sdk-and-mcp-enhancements` (28),
+### Remaining Pass-1 collections (~86 plans, ~35-plan atomic sub-batches, one per owner-reset window)
+
+The 11 collections other than the five now complete (`agentic-engineering-enhancements`,
+`architecture-and-infrastructure`, `product-development-governance`, `agent-tooling`, `observability`),
+derived from
+`worklist-plans.tsv` (col `collection`): `sdk-and-mcp-enhancements` (28),
 `sector-engagement` (12), `semantic-search` (11), `connecting-oak-resources` (10), `discovery` (9),
 `user-experience` (7), `developer-experience` (4), `exploring-open-education-resources` (2),
 `security-and-privacy` (1), `school-data-search` (1), `curriculum-mcp-path-to-ga` (1).
