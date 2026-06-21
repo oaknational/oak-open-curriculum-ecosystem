@@ -1,13 +1,18 @@
 # Deep Plan-Estate Survey — Coverage Ledger (living)
 
-## ▶ WINDOW STATE (live, 2026-06-21 ~17:10 UTC)
+## ▶ WINDOW STATE (live, 2026-06-21 ~19:15 UTC)
 
-**Survey RUNNING — account budget CONFIRMED for this owner-reset window.** Cosmos calls Infinity
-(`9888f9`), the SOLE survey orchestrator (successor to Anvil lifts Solder; claim `3a5e8798`), fired the
-`product-development-governance` probe increment (4 plans) which returned 4/4 readable — confirming the
-window has compute. Continuing Pass-1 in conservable ~8–12-plan increments (next: `agent-tooling`),
-each conserved+committed the instant its Workflow call returns (the "do not lose intermediate results"
-constraint — conservation granularity kept smaller than the session-death loss-event granularity).
+**Survey RUNNING (window 2) — n=2 team.** Cosmos calls Infinity (`9888f9`, orchestrator claim
+`3a5e8798`) holds the survey lane; **Oyster weaves Surf** (`d16a4a`, claim `93c58529`) joined on WS-3
+(F-41 path-safety, `agent-tools/**`) — boundaries verified first-hand as fully disjoint, no contention.
+**Window 1** (this session, ~17:07–19:1xZ) ran 6 clean increments — PDG (4) + agent-tooling (59), to
+**Pass-1 169/286** — then **spent at ~63 plans**: the 7th increment (observability OBS-01, 12 plans)
+hit the account session limit mid-batch and returned **all-12 `unreadable` / 0 findings** (24
+holistic+conformance subagents all `session-limit`; **HALT-don't-fabricate held — 0 fabricated
+findings**, nothing conserved). Owner reset → **window 2 open**; OBS-01 **re-fired**, returned 12/12.
+Account budget is now **shared with Oyster's concurrent WS-3**, so pacing reverts to the considerate
+~one-35-plan-window default (sole-mode "fire until `unreadable`" suspended). Each increment is
+conserved+committed the instant its Workflow call returns.
 
 Recorded lesson (one wasted attempt, no findings lost): a *fresh session* is NOT a *fresh window* —
 the session limit is account-level, shared across the rotating cast. The first 1b attempt (12 plans,
@@ -63,6 +68,8 @@ scope; not surveyed.) Source: `worklist-plans.tsv`.
 | at-03 | agent-tooling (`current/`+`future/`, plans 25–36 of 59) | 12 | Cosmos calls Infinity | COMPLETE (8 keep / 3 archive-complete / 1 rewrite; substance 11 good / 1 mixed; content 12 strong; conformance 11 major-drift / 1 no-fm; 175 ideas: 141 good / 34 speculative / 0 bad; 3 locked-contradictions; 14 high-stakes verdicts: 12 survive / 2 refuted) | `pass1-agent-tooling-03.json` |
 | at-04 | agent-tooling (`future/`, plans 37–48 of 59) | 12 | Cosmos calls Infinity | COMPLETE (11 keep / 1 rehome; substance 12 good; content 11 strong / 1 adequate; conformance 7 major-drift / 5 no-fm; 160 ideas: 146 good / 14 speculative / 0 bad; 4 locked-contradictions; 7 high-stakes verdicts: 7 survive) | `pass1-agent-tooling-04.json` |
 | at-05 | agent-tooling (`future/`, plans 49–59 of 59) | 11 | Cosmos calls Infinity | COMPLETE (9 keep / 1 archive-complete / 1 rehome; substance 11 good; content 11 strong; conformance 7 major-drift / 4 no-fm; 126 ideas: 107 good / 19 speculative / 0 bad; 2 locked-contradictions; 10 high-stakes verdicts: 9 survive / 1 refuted) | `pass1-agent-tooling-05.json` |
+| obs-01 (1st attempt) | observability (`active/`+`current/`, plans 1–12 of 31) | 12 | Cosmos calls Infinity | SESSION-LIMITED, 0 findings — account window 1 spent at ~63 plans this session; all 24 holistic/conformance subagents hit the limit; HALT-don't-fabricate held, 0 fabricated; superseded by the re-fire below after owner reset | — |
+| obs-01 | observability (`active/`+`current/`, plans 1–12 of 31) | 12 | Cosmos calls Infinity | COMPLETE (re-fired after owner reset; 9 keep / 3 archive-complete; substance 12 good / content 12 strong; conformance 12 major-drift; 163 ideas: 136 good / 26 speculative / 1 bad; 4 locked-contradictions; 11 high-stakes verdicts: 10 survive / 1 uncertain) | `pass1-observability-01.json` |
 
 After 1b: the full **agentic-engineering-enhancements** collection (70 plans) is Pass-1 complete.
 
