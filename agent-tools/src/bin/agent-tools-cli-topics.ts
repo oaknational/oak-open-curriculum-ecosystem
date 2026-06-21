@@ -1,7 +1,6 @@
-import { execFileSync } from 'node:child_process';
-
 import { runBranchTouchedFilesCli } from '../branch-touched-files/cli.js';
 import { runCodexExecCli } from '../codex-exec/cli.js';
+import { resolveCoordinationHome } from '../collaboration-state/coordination-home.js';
 import { parseCommitQueueArgs, runCommitQueueCli } from '../commit-queue/index.js';
 import { runContextCostCli } from '../context-cost/cli.js';
 import type { AgentToolsCliInput, AgentToolsCliResult } from './agent-tools-cli-types.js';
@@ -29,7 +28,7 @@ export async function runCommitQueueTopic(
   try {
     const exitCode = await runCommitQueueCli({
       ...parseCommitQueueArgs(args),
-      repoRoot: input.repoRoot ?? resolveRepoRoot(input.cwd),
+      repoRoot: input.repoRoot ?? resolveCoordinationHome(input.cwd),
       readRegistry: input.readCommitQueueRegistry,
       stdout,
     });
@@ -90,12 +89,4 @@ export async function runCodexExecTopic(
     stderr,
   });
   return { exitCode, stdout: stdout.text(), stderr: stderr.text() };
-}
-
-function resolveRepoRoot(cwd: string): string {
-  return execFileSync('git', ['rev-parse', '--show-toplevel'], {
-    cwd,
-    encoding: 'utf8',
-    stdio: ['ignore', 'pipe', 'pipe'],
-  }).trim();
 }
