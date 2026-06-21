@@ -54,8 +54,15 @@ scope; not surveyed.) Source: `worklist-plans.tsv`.
 | 1b-04 | agentic-engineering-enhancements (`future/`) | 11 | Pinnace hunts Marsh | COMPLETE (committed `e87ab281f`; COARSE substance fields — joins the back-fill set) | `pass1-agentic-engineering-batch1b-04.json` |
 | arch-01 | architecture-and-infrastructure (`active/`+`current/`, plans 1–12 of 36) | 12 | Anvil lifts Solder | COMPLETE (8 keep / 3 archive-complete / 1 rewrite; substance 12 good / content 12 strong; conformance 12 major-drift; 174 ideas inventoried; 4 locked-contradictions; 15 high-stakes verdicts: 14 survive / 1 refuted) | `pass1-architecture-and-infrastructure-01.json` |
 | arch-02 | architecture-and-infrastructure (`current/`+`future/`, plans 13–24 of 36) | 12 | Anvil lifts Solder | COMPLETE (12 keep; substance 12 good / content 12 strong; conformance 11 major-drift / 1 no-fm; 175 ideas inventoried; 7 locked-contradictions; 5 high-stakes verdicts: 2 survive / 3 refuted) | `pass1-architecture-and-infrastructure-02.json` |
+| arch-03 | architecture-and-infrastructure (`future/`+root, plans 25–36 of 36) | 12 | Anvil lifts Solder | COMPLETE (11 keep / 1 archive-complete; substance 12 good / content 12 strong; conformance 10 major-drift / 2 no-fm; 153 ideas inventoried; 3 locked-contradictions; 8 high-stakes verdicts: 7 survive / 1 uncertain) | `pass1-architecture-and-infrastructure-03.json` |
 
 After 1b: the full **agentic-engineering-enhancements** collection (70 plans) is Pass-1 complete.
+
+After arch-03: the full **architecture-and-infrastructure** collection (36 plans) is Pass-1 complete
+(Anvil lifts Solder, 3 conservable increments, 0 unreadable, 502 ideas inventoried, 14
+locked-contradictions). **Pass-1 coverage so far: 106 / 286 plans (2 collections).** 14 collections /
+~180 plans remain — see the linear successor plan
+[`07-sole-successor-survey-plan.md`](./07-sole-successor-survey-plan.md).
 
 ### Remaining Pass-1 collections (~216 plans, ~35-plan atomic sub-batches, one per owner-reset window)
 
