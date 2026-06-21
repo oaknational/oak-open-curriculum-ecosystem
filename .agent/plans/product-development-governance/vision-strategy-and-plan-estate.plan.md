@@ -380,12 +380,18 @@ links the corpus.
 
 Not an addendum — **core to the success of the whole repo and project**, and likely
 ~80% of the thread's work. A new estate organised around the settled strategy and
-vision, value-preserving. The owner-stated scope:
+vision, value-preserving — and, above all, an **effective body of planning that *will
+achieve* the intended strategic outcomes**, not merely aligned to them (owner, 2026-06-21).
+The owner-stated scope:
 
-- **All work clearly supports the strategy.** Every surviving plan traces to a
-  strategic choice.
-- **Organised around the strategy and vision** — a new structure; **thread/plan
-  boundaries will change** (expected and required).
+- **All work clearly supports the strategy, and the strategy is fully served.** Every
+  surviving plan traces to a strategic choice (alignment); AND every strategic choice has
+  *adequate serving plans* to achieve it — identified gaps are **closed with authored new
+  plans**, not deferred as discussions (completeness/effectiveness).
+- **Organised on the `stream → thread → plan` hierarchy** — a new structure with **threads
+  as a co-equal intermediate layer**, not merely plan-boundaries-that-shift: the restructure
+  **defines the new thread set** from the strategy, sites every plan in a thread, and maps
+  threads to streams/goals. Thread and plan boundaries will change (expected and required).
 - **Easy to navigate, easy to understand, highly structured.**
 - **Read every plan.** Extract its permanent documentation to its durable home
   (ADRs/docs).
@@ -418,8 +424,13 @@ It also resolves the **permanent home** of the governance file and related plans
 (`high-level-plan.md`, the strategy corpus, `curriculum-mcp-path-to-ga/`) and removes
 the survey-flagged ungated collection.
 
-**Acceptance (outcome-level):** a new structure applied; every plan traces to a
-strategic choice and is reachable through the index chain; every plan read and its
+**Acceptance (outcome-level):** a new structure applied on the `stream → thread → plan`
+hierarchy (a directory tree for humans + frontmatter typed edges for agents — both, two
+co-equal audiences); **the new thread set is defined and every plan sits in a thread that
+maps to a stream/goal**; every plan traces to a strategic choice and is reachable through
+the index chain; **every strategic choice has adequate serving plans and every identified
+gap is closed with an authored new plan** — the corpus is an *effective* plan-of-action that
+achieves the outcomes, not merely an aligned one; every plan read and its
 permanent documentation extracted; complete plans archived; partial plans' completed
 work extracted and archived; survivors rewritten to the common standard; this plan
 and related plans have a decided home; the ungated collection no longer exists; every
@@ -478,8 +489,10 @@ any **major** upstream change is **surfaced and flagged to the owner, never supp
 (strategy) is authored before the plan standard and the deep survey: although the
 read+extract slice is informationally independent, both prerequisites' *traceability*
 elements need the strategy's strategic-choice shape. **Body 2 is now signed off (2026-06-20), so
-the plan standard, the fresh survey, and the read+extract slice are all startable** — the
-structure-dependent restructure still waits on the search/graph-reuse decision (see Non-Goals).
+the plan standard, the fresh survey, and the read+extract slice are all startable.** The
+search/graph-reuse question that once gated the structure-dependent restructure is **resolved**
+(a false dichotomy — Owner Decision 20); the restructure's only remaining gate is informational
+(the settled strategy + the fresh survey's inventory).
 
 **Traceability is bidirectional.** plans→strategy validates that every surviving plan
 serves a strategic choice (→ vision element → Oak goal). strategy→plans *produces the
@@ -526,13 +539,21 @@ unenforced reachability invariant already prove the failure mode.
 lane the owner delegated "you decide what excellent looks like"; product-level items stay with
 the owner / Oak):**
 
-1. **Traceability spine — metadata, not physical re-foldering.** The trace is a *graph*
-   (plan → choice → stream → goal; threads serve goals selectively), which a single folder tree
-   cannot express, and PDR-018 rejects moves-for-symmetry — so the spine is the
-   `serves_strategic_choice` frontmatter field plus a generated strategy→plans index over
-   ownership-based collections, not a stream-shaped re-folder. **Principle settled; the concrete
-   collection layout is decided against the fresh survey** (Anchor B's inventory), never leaned
-   on before the estate is read.
+1. **Dual structure — a directory hierarchy AND frontmatter edges, for two co-equal audiences**
+   (owner, reaffirmed 2026-06-21; specified early — it was never either/or). The estate is
+   organised **both** ways:
+   - **Directory hierarchy `stream → thread → plan` — for HUMAN navigation.** Plans live under
+     their thread, threads under their stream; the tree itself expresses the strategy's shape so
+     a person can navigate it.
+   - **Frontmatter typed edges — for AGENT navigation.** `serves_strategic_choice`, `thread`, and
+     the wider graph carry the relationships a single tree cannot (plan → choice → stream → goal;
+     threads serve goals selectively), plus a generated strategy→plans index.
+
+   The graph carries what the tree can't; the tree gives humans the stream/thread structure.
+   PDR-018's reject-moves-for-symmetry does **not** bar this — a stream/thread hierarchy is
+   purposeful dual-audience navigation, not cosmetic symmetry. **The exact directory layout and
+   the thread set are decided against the fresh survey** (Anchor B's inventory), never leaned on
+   before the estate is read.
 2. **Granularity — per-stream choices (owner-set), made decomposition-ready.** The registry
    carries `APP-*`/`TOOLS-*`/`FRAME-*`, with optional `SDK-*`/`SEARCH-*`/`GRAPH-*`/`EEF-*`
    sub-IDs; a plan resolves to the finest *published* ID. Sub-IDs are additive granularity along

@@ -215,8 +215,15 @@ prerequisite.)
 ### Stage 3 — restructure (consumes Stage 2)
 
 The controlling plan's Body-3 estate restructure: rewrite survivors to node-schema #1, assign
-`serves_strategic_choice`, archive-complete with recorded disposition, derive new boundaries.
-Promote the `plan` node-type from observe to warn, then (separate later decision) to enforce.
+`serves_strategic_choice`, archive-complete with recorded disposition, and **build the
+`stream → thread → plan` structure for two co-equal audiences** — a directory hierarchy (human
+navigation) plus the frontmatter typed edges (agent navigation). **Threads are a co-equal
+intermediate layer defined here**, not deferred: this stage defines the new thread set from the
+strategy and introduces the `thread` node-type with its `thread → stream` / `thread → goal` edges
+(pulled forward from Stage 5+ — the restructure cannot site plans in threads without them).
+It also **closes strategy-coverage gaps with authored new plans** (effectiveness), not merely
+aligning the survivors. Promote the `plan` node-type from observe to warn, then (separate later
+decision) to enforce.
 
 ### Stage 4 — Actuation: the evidence-ingestion layer (turns structure into a system)
 
@@ -236,8 +243,10 @@ complexity / duplication; GitHub → the change axis and the `realized_by` join;
 
 ### Stage 5+ — grow the graph (each gated on a live consumer)
 
-Add node-types one at a time (report, ADR, thread, continuity, archive, strategy, product,
-product-increment, …), each observe → warn → enforce. Build external-edge **projection**
+Add the remaining node-types one at a time (report, ADR, continuity, archive, strategy, product,
+product-increment, …), each observe → warn → enforce. (`plan` lands at Stage 1; **`thread` is
+pulled forward to Stage 3** — it is a co-equal structural layer of the restructure, not a later
+addition.) Build external-edge **projection**
 only when the consumer is live: Linear/GitHub when the team and its delivery surface form;
 Figma when the designer arrives; the observability edges as those surfaces mature. Generated
 graph surfaces/visualisations last. The `external-pointer-surface-integration` plan becomes a
