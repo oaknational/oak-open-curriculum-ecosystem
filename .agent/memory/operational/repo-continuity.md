@@ -190,7 +190,7 @@ each thread record; this table is the repo-level index.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Zephyrous Buffeting Falcon / skills-lane-relocated-to-educator-end-users / 2026-06-08 (prior identities: thread record) |
-| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude-code / Opus 4.8 (1M) / Nova wakes Genesis / AX-first-class + cause-class report + umbrella plan / 2026-06-21 (prior seats: Ferret seeks Tunnel (dedicated curation; PDR-107/108/109/110), Finch binds Halo, Drake lifts Obsidian, Siren guards Reef, Tulip spins Xylem; full history in thread record) |
+| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 (1M) / Oyster weaves Surf / WS-3 F-41 path-safety LANDED (git-resolved coordination home; proper-question lesson) / 2026-06-21 (prior seats: Nova wakes Genesis (AX-first-class + umbrella plan), Ferret seeks Tunnel (dedicated curation; PDR-107/108/109/110), Finch binds Halo, Drake lifts Obsidian, Siren guards Reef, Tulip spins Xylem; full history in thread record) |
 | `eslint-no-throw-result-migration` | Migrate every throw to Result (ADR-088); drive the ~1000 warnings to zero; promote the rule. In execution on `docs/planning-and-validation`; cheap WS2 done, residue is design-laden (tier map in record) | [record](threads/eslint-no-throw-result-migration.next-session.md) | claude / Opus 4.8 (1M) / Siren mends Rudder / execution — observability+graph-core+logger landed (`93beffcfe`,`304b68f8d`,`61bdbc3e4`) / 2026-06-19 (prior: Merlin spins Cirrus `1556b9191`; Vanilla weaves Undergrowth, plan-author) |
 | `statusline-enhancements` | Claude Code statusline: Oak-mark, session-shape indicators, logo swap; lane in two `current/` plans (session-state, logo-modularisation). Live detail + the `feat/comms-research` divergence to reconcile: thread record | [record][statusline] | claude-code / Opus 4.8 / Vole calls Hollow / live-logo-swap-and-plan-harden / 2026-06-16 (prior identities: thread record) |
 | `agent-naming` | PDR-027 display-name derivation: versioned schema registry, session-hook identity surfaces, wordlist eras (v2 landed; v3 + era-pinning cure queued) | [record][agent-naming] | claude / Opus 4.8 / Squall hunts Troposphere / thread-open + v3-plan-author / 2026-06-13 (prior identities: thread record) |
@@ -244,21 +244,31 @@ curation, owner taste review BLOCKING) and 3 (v3 registry entry + activation)
 follow. Orientation: read the thread record, then the plan, then re-grep the
 `OAK_AGENT_IDENTITY_OVERRIDE` consumer set (plan-body first-principles check).
 
-### Agent Experience (AX) Improvement — implement the highest-impact item
+### Agent Experience (AX) Improvement — WS-3 F-41 LANDED; next highest-impact item
 
 Umbrella plan
 [`agent-experience-improvement.plan.md`](../../plans/agent-tooling/current/agent-experience-improvement.plan.md)
-(`current/`, QUEUED), evidence
+(`current/`), evidence
 [report](../../reports/agent-experience-cause-class-analysis-2026-06-21.md), doctrine PDR-111.
-**Next safe step**: implement the highest-impact item. Two defensible entry points (owner sequences):
+
+**WS-3 (F-41 path-safety) is DONE** (2026-06-21, Oyster weaves Surf): `resolveCoordinationHome` resolves the
+**primary checkout** via `git worktree list`, so any worktree seat shares one coordination home — commits
+`b5408291d` + `c90150ffa` + `4fd640089` (closing F-41 across comms AND commit-queue defaults), gate-green,
+NOT pushed (owner controls push; 2 code-fix + 2 docs commits await safe remote integration). B2 (the CLI-tail
+default-via-home migration) deferred → [`future/coordination-home-explicit-targeting-migration.plan.md`](../../plans/agent-tooling/future/coordination-home-explicit-targeting-migration.plan.md).
+
+**Next safe step**: the next highest-impact AX item. Two defensible entry points (owner sequences):
 
 1. **Highest breadth** — the CLI-ergonomics conformance guard. Execute
    [`agent-tools-cli-ergonomics.plan.md`](../../plans/agent-tooling/current/agent-tools-cli-ergonomics.plan.md)
    from **WS0** (convention audit + ratification gate) → WS6 (the PDR-055 cl.10 conformance guard).
    Retires the ~19-friction Class A. Already ratified `READY FOR EXECUTION`.
-2. **Highest safety, smallest** — umbrella **WS-3 (F-41 path-safety)**: a relative path from a
-   stale/worktree cwd silently writes to the WRONG registry behind a green proof line. Reuse
-   `resolveRepoRoot()` in `agent-tools/src/core/repo-root.ts`. Independent; lands fast.
+2. **Highest leverage / systemic** — the umbrella's own spine: **WS-4** (the `frictions-register` drain
+   validator that recomputes integrity against fs/git + a generated routing index) → **WS-6** (disposition
+   ledger routing all 82 frictions). This is the structural drain-fix.
+
+Recommended start: **WS-1** (the conformance guard — single highest-count cure, already ratified); open
+**WS-4** when a dedicated lane is available.
 
 The umbrella's own spine (WS-4 drain-fix validator + WS-6 disposition ledger) is the systemic fix.
 Recommended start: WS-3 (safety) in parallel with WS-1 (breadth), per the umbrella's sequencing.

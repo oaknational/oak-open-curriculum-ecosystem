@@ -16,6 +16,43 @@ feedback-mechanism arc, taxonomy work) is retained in git and in the
 work brief and the recent identity stretch, per
 [`continuity-practice.md` §Disposition](../../../directives/continuity-practice.md).
 
+## WS-3 F-41 path-safety LANDED + the proper-question lesson (2026-06-21, Oyster weaves Surf)
+
+Executed umbrella **WS-3 (F-41 path-safety)**. Landed (gate-green; unpushed — owner controls push):
+
+- **b5408291d** — B1 consolidation: deleted TWO duplicate silent `findCollaborationRepoRoot` finders
+  (`cli-comms-send`, `tui/config`) plus the bare `process.cwd()` fallback (`cli-comms-validate`) into one
+  `resolveCoordinationHome`; reviewed by code-expert, architecture-expert-fred, test-expert.
+- **c90150ffa** — the CORE fix. The coordination home is the **primary checkout**, resolved via
+  `git worktree list --porcelain` (first entry), so an agent in ANY linked worktree resolves the ONE shared
+  home — the real F-41 fix (a worktree seat was writing to / locked out of its own local registry), proven
+  end-to-end from a real linked worktree. Reverted the needless `resolveRootFromDir` extraction.
+- **4fd640089** — a closeout adversarial scan (architecture-expert-wilma) caught the commit-queue TOPIC still
+  defaulting via `git rev-parse --show-toplevel` (linked worktree, not primary) — the exact commit-queue case
+  the F-41 register names; routed through `resolveCoordinationHome`. **F-41 now closed across comms AND
+  commit-queue defaults.**
+- Docs: `5326dc02f`, `01275ed31`.
+
+**B2 DEFERRED** (owner) → [`future/coordination-home-explicit-targeting-migration.plan.md`](../../../plans/agent-tooling/future/coordination-home-explicit-targeting-migration.plan.md):
+the explicit-path write commands (claims/comms-inbox/watch/commit-queue) still `required(...)` their path
+options, so from a linked worktree a relative path resolves against cwd (the wrong copy). Cure: default those
+via `resolveCoordinationHome` when omitted, then migrate the estate's relative-path invocations (watcher rule,
+commit skill, start-right, ~a dozen tests) to OMIT — one coordinated change.
+
+**THE LESSON** (napkin + per-user memory): the plan handed a *solution* ("shared resolver; refuse relative
+paths"); I executed it (full TDD + 3 reviews + commit + a deferred-migration brief) on a **mis-posed
+question**. The owner re-posed it — *"find the primary checkout on a machine so worktrees share one comms
+location"* — and the proper question forced the answer instantly (`git worktree list`), dissolving most of the
+work. *No good solution without the proper question; with the proper question you already have the answer.*
+Operationalisation candidate (PDR-shaped): a **forced-answer test** extending
+`scope-from-goal-before-approach` and the generative-metacognition trigger. Sibling lesson: never assume
+one checkout or a particular machine (many-checkout/many-machine is the default for coordination/path work).
+
+**NEXT SAFE STEP**: F-41 is done. Next highest-impact AX item — execute
+[`agent-tools-cli-ergonomics.plan.md`](../../../plans/agent-tooling/current/agent-tools-cli-ergonomics.plan.md)
+from WS0 (retires the ~19-friction Class A), OR the umbrella's own spine **WS-4** (the `frictions-register`
+drain validator). Owner controls push; the F-41 code commits + docs await safe remote integration.
+
 ## Agent Experience (AX) made first-class + umbrella plan (2026-06-21, Nova wakes Genesis)
 
 Reviewed the promoted `coordination-watcher-canonicalisation` plan (sound; 4 findings
@@ -655,6 +692,7 @@ passes) is in git history and the [`curator-passes/`](../curator-passes/) ledger
 | `Drake lifts Obsidian` | `claude` | `Opus 4.8 (1M)` | `9258d7` | `PDR-105 burndown COMPLETE (Siren guards Reef successor): Tranche A doctrine cures d8ec8867c (de-links + PDR-011/ADR-150/PDR-027/PDR-058 + no-moving-targets:135 reconciliation; docs-adr APPROVED); Tranche B 774a49e5e (tracks/workstreams deleted + PDR-049/050 manifest reconciled + §Notes past-tense; owner-authorised); Tranche C 563487f79 (validate-reference-direction report-only→blocking + .agent/analysis/ ephemeral; code/test-expert APPROVE; probe-proven); validator now BLOCKING at 0; backticked-detection deliberately rejected; NOT pushed` | 2026-06-19 | 2026-06-19 |
 | `Finch binds Halo` | `claude` | `Opus 4.8 (1M)` | `b0831c` | `four-files lane RESOLVED → jointly designed the Closure & Role-Routing fitness doctrine with the owner; committed the findings record + backbone plan (547d889c9); committed Kayak's strategy + compliance lanes (453896d64, d1387b81f) at owner direction; merged the 8 remote planning-cluster commits; prior 2026-06-19: dedicated-consolidation drain (detail in git + the findings record). NOT pushed` | 2026-06-19 | 2026-06-20 |
 | `Ferret seeks Tunnel` | `claude-code` | `Opus 4.8 (1M)` | `77bfae` | `dedicated-knowledge-curation: drained the 2026-06-20/21 capture window bottom-up (napkin rotated; decision-locus + cause-classes lessons → distilled; F-75 peer-heartbeat-silence recovered from comms; fluency-cluster + education=pupils recurrence → action-time t2 inventory); promoted-and-assessed PDR-107 + README-index doc clause + culture Active Principle (docs-adr-assessed), rejected the pupils guard; commits 358a1636a + handoff; then restored practice-lineage to the evolution record (855→283; evacuated Learned Principles + what/how duplicates by intent; PDR-108/109/110 + PDR-002/024; reviewer-folded first-hand; 18 staged + gate-clean, commit handed to Director Vesuvius calls Quench — knip-blocked on peer WIP); NOT pushed` | 2026-06-21 | 2026-06-21 |
+| `Oyster weaves Surf` | `claude` | `Opus 4.8 (1M)` | `d16a4a` | `WS-3 F-41 path-safety LANDED: resolveCoordinationHome resolves the PRIMARY checkout via \`git worktree list\` (b5408291d consolidation + c90150ffa core fix + 4fd640089 commit-queue topic), closing F-41 across comms AND commit-queue defaults; B2 deferred (git-resolved-home reframe); carried the proper-question-forces-the-answer lesson (forced-answer-test PDR candidate) + no-single-checkout-assumption; 3 code + 2 docs commits gate-green, NOT pushed (await safe remote integration)` | 2026-06-21 | 2026-06-21 |
 
 ## Cross-Plan and Cross-Thread Links
 
