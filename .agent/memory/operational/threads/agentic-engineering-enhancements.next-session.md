@@ -36,12 +36,21 @@ pending-graduations drained to 0. The load-bearing session lesson (in the napkin
 organising axis is the knowledge flow walked bottom-up, never the fitness zones. The four
 prose-width-hard records remain WS4's (below) — not reflowed; practice-lineage is now over its
 line hard-limit from the culture promotion (preserved learning → graduate actives upward, never
-compress). **NEXT SAFE STEP (owner-authorised this session, to run after a context compaction):**
-execute the graduation pass per
+compress). **EXECUTED 2026-06-21 (Ferret seeks Tunnel) — became a clarity-of-purpose restructure under three
+owner reframes** (lineage is a git-like evolution record, not a principles store; PDRs are portable
+while `principles.md` holds repo-cases; critical-assessment-of-subagents is standing universal
+doctrine). `practice-lineage.md` restored to the evolution record (855 → 283 lines); §Learned
+Principles + the what-it-is/how-to-apply duplicate sections evacuated by intent (no tombstones,
+home-before-remove); **PDR-108/109/110** authored portable, **PDR-002/024** amended; every inbound
+reference repointed (0 broken); docs-adr-expert assessed, findings re-read first-hand and folded.
+**State: LANDED by the Director, Vesuvius calls Quench** — 18 files committed as `e30b987c0`
+(owner-directed; full-tree knip green after the peer's markdown-links validator was wired, comms
+`90a0f532`); this continuity handoff is the paired second commit. **NOT pushed** (owner controls
+push). **NEXT SAFE STEP:** thread is at rest pending the next consolidation/curation pass. Detail:
+the plan brief +
 [`current/practice-lineage-principle-graduation.plan.md`](../../../plans/agentic-engineering-enhancements/current/practice-lineage-principle-graduation.plan.md)
-— that plan is the durable brief carrying the steps, the governing constraints (promote-and-assess,
-route-by-intent, no-tombstones, conservation-over-fitness, PDR-003), and the live Cutter
-parallel-session state (stage by explicit pathspec; nothing pushed).
+(archive once landed). Window at handoff: Cutter, Ferret, Volcano retired; Drake hunts Beeswax
+(implementer) and Vesuvius calls Quench (Director) live; a fresh survey-orchestrator session incoming.
 
 ## Dedicated consolidation — buffers at rest (2026-06-19, Finch binds Halo)
 
@@ -611,7 +620,7 @@ passes) is in git history and the [`curator-passes/`](../curator-passes/) ledger
 | `Siren guards Reef` | `claude` | `Opus 4.8 (1M)` | `e0eb7f` | `PDR-105 burndown COMPLETED 145→0 (Tulip successor): portability 55 (7ac5fe657) + durability 90 (6893962c2), pure de-link, 3 docs-adr passes APPROVED, gate green, NOT pushed; Task-2 tracks/workstreams operational surfaces retired (uncommitted) + 7 self-made tombstones fixed; handed to Drake lifts Obsidian — blocking remaining: PDR-011/ADR-150 foundational edits, dir deletion, validator warn→error escalation, ADR-026/093 coverage gaps, PDR-058:359 + register-identity stale-link tombstones` | 2026-06-19 | 2026-06-19 |
 | `Drake lifts Obsidian` | `claude` | `Opus 4.8 (1M)` | `9258d7` | `PDR-105 burndown COMPLETE (Siren guards Reef successor): Tranche A doctrine cures d8ec8867c (de-links + PDR-011/ADR-150/PDR-027/PDR-058 + no-moving-targets:135 reconciliation; docs-adr APPROVED); Tranche B 774a49e5e (tracks/workstreams deleted + PDR-049/050 manifest reconciled + §Notes past-tense; owner-authorised); Tranche C 563487f79 (validate-reference-direction report-only→blocking + .agent/analysis/ ephemeral; code/test-expert APPROVE; probe-proven); validator now BLOCKING at 0; backticked-detection deliberately rejected; NOT pushed` | 2026-06-19 | 2026-06-19 |
 | `Finch binds Halo` | `claude` | `Opus 4.8 (1M)` | `b0831c` | `four-files lane RESOLVED → jointly designed the Closure & Role-Routing fitness doctrine with the owner; committed the findings record + backbone plan (547d889c9); committed Kayak's strategy + compliance lanes (453896d64, d1387b81f) at owner direction; merged the 8 remote planning-cluster commits; prior 2026-06-19: dedicated-consolidation drain (detail in git + the findings record). NOT pushed` | 2026-06-19 | 2026-06-20 |
-| `Ferret seeks Tunnel` | `claude-code` | `Opus 4.8 (1M)` | `77bfae` | `dedicated-knowledge-curation: drained the 2026-06-20/21 capture window bottom-up (napkin rotated; decision-locus + cause-classes lessons → distilled; F-75 peer-heartbeat-silence recovered from comms; fluency-cluster + education=pupils recurrence → action-time t2 inventory); promoted-and-assessed PDR-107 + README-index doc clause + culture Active Principle (docs-adr-assessed), rejected the pupils guard; commits 358a1636a + handoff; gate green, NOT pushed` | 2026-06-21 | 2026-06-21 |
+| `Ferret seeks Tunnel` | `claude-code` | `Opus 4.8 (1M)` | `77bfae` | `dedicated-knowledge-curation: drained the 2026-06-20/21 capture window bottom-up (napkin rotated; decision-locus + cause-classes lessons → distilled; F-75 peer-heartbeat-silence recovered from comms; fluency-cluster + education=pupils recurrence → action-time t2 inventory); promoted-and-assessed PDR-107 + README-index doc clause + culture Active Principle (docs-adr-assessed), rejected the pupils guard; commits 358a1636a + handoff; then restored practice-lineage to the evolution record (855→283; evacuated Learned Principles + what/how duplicates by intent; PDR-108/109/110 + PDR-002/024; reviewer-folded first-hand; 18 staged + gate-clean, commit handed to Director Vesuvius calls Quench — knip-blocked on peer WIP); NOT pushed` | 2026-06-21 | 2026-06-21 |
 
 ## Cross-Plan and Cross-Thread Links
 
