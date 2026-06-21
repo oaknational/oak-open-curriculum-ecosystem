@@ -282,3 +282,19 @@ work. Instance of [[feedback_check_workspace_packages_before_proposing]] /
 sub-agent fabricated "F-41 is addressed" (false vs register line 1266) and a Plan sub-agent gave wrong
 status counts (vs the real 61 `open`) — both caught by first-hand read; reinforces
 [[feedback_first_hand_means_me_not_subagents]].
+
+## Many-checkout/many-machine is the DEFAULT for coordination-state/path work (2026-06-21, Oyster weaves Surf)
+
+Executing WS-3 F-41 path-safety, I framed a design option as "non-breaking for the *current
+single-checkout reality*" and filed multi-checkout under "future" — while citing ADR-197, which exists
+*entirely* for the many-checkout (worktree-team) topology. Owner correction: **never assume one checkout,
+and never assume the checkout is on any particular machine.** Single-checkout is the degenerate case, not
+the baseline. Consequence for design: walking up from `cwd` to a `.agent/state/collaboration` sentinel
+resolves the **local** checkout's home, which in a many-checkout world is the WRONG registry; a bare
+relative path has the same defect. The robust target is an explicit absolute coordination-home path
+(ADR-197 `--repo-root` at session open), never cwd-relative, never a machine-local path in a versioned
+file ([[no-machine-local-paths]]). This is also why WS-3 B2 ("refuse bare-relative") is a repo-wide
+invocation-contract migration (watcher rule + commit skill + start-right + ~dozen tests all pass relative
+paths today), deferred to `future/coordination-home-explicit-targeting-migration.plan.md`. The fluent
+"currently we run one checkout" was the tripwire to re-ground, not a licence. See per-user memory
+`no-single-checkout-or-machine-assumption`.

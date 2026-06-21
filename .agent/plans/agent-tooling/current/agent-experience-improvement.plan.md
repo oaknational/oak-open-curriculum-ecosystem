@@ -22,17 +22,18 @@ driven_plans:
 deferred_plans:
   - "../future/peer-heartbeat-silence-alerting.plan.md"
   - "../future/agent-frustration-corpus-survey.plan.md"
+  - "../future/coordination-home-explicit-targeting-migration.plan.md"
 specialist_reviewer: "assumptions-expert, architecture-expert-fred, test-expert, docs-adr-expert"
 last_updated: 2026-06-21
 isProject: false
 todos:
   # WS-3 — F-41 path-safety (OWN, safety-critical, independent)
   - id: ws3-b1-shared-resolver
-    content: "WS-3 B1: introduce one shared `resolveCoordinationHome(cwd, {exists})` in agent-tools that walks to the `.agent/state/collaboration` sentinel, built on `core/repo-root.ts resolveRepoRoot`. Replace the per-command root-finder in `cli-comms-send.ts` (and any sibling copy found at B1 time). TDD: unit tests cover the worktree / stale-cwd case; a test asserts exactly one root-finder remains."
-    status: pending
+    content: "WS-3 B1: introduce one shared `resolveCoordinationHome(cwd, {exists})` in agent-tools that walks to the `.agent/state/collaboration` sentinel, built on `core/repo-root.ts resolveRepoRoot`. Replace the per-command root-finder in `cli-comms-send.ts` (and any sibling copy found at B1 time). TDD: unit tests cover the worktree / stale-cwd case; a test asserts exactly one root-finder remains. LANDED commit b5408291d: shared `resolveCoordinationHome` + `resolveRootFromDir` walk primitive; consolidated TWO duplicate finders (`cli-comms-send`, `tui/config`) plus the bare `process.cwd()` fallback (`cli-comms-validate`); silent cwd-fallback replaced by a loud throw; consolidation guard (integration) + behavioural unit tests; full agent-tools gate green; reviewed by code-expert, architecture-expert-fred, test-expert."
+    status: completed
   - id: ws3-b2-refuse-relative-writes
-    content: "WS-3 B2: refuse bare relative paths LOUDLY on write commands (`claims open/close/heartbeat`, `comms inbox/watch`, `commit-queue`), resolving the coordination home via B1's helper. Per-site Red→Green (independent once B1 lands). TDD per site: a write from a nested/worktree cwd with a bare relative path is refused with a specific error; a correct invocation lands in the repo-root-anchored registry regardless of cwd."
-    status: pending
+    content: "WS-3 B2: DEFERRED 2026-06-21 (owner decision) to ../future/coordination-home-explicit-targeting-migration.plan.md. Surfaced as a repo-wide invocation-contract migration, NOT a small per-command edit: refusing bare-relative paths breaks the relative-path invocations baked into the canonical watcher rule, the commit skill, start-right, ~a dozen tests, and every live agent's watcher (verified first-hand). Re-scoped from the many-checkout/many-machine default: explicit coordination-home targeting (ADR-197 absolute --repo-root) + bare-relative refusal + default-via-B1, landed as ONE coordinated change (code + doctrine + tests + live re-arm) when a session can absorb it without bricking an active multi-agent window."
+    status: deferred
     depends_on: [ws3-b1-shared-resolver]
   # WS-4 — structural drain-fix validator (OWN, the spine)
   - id: ws4-a1-parser
@@ -114,7 +115,7 @@ blocking commit gate).
 |----|------|-------|-----------|------|
 | WS-1 | DRIVE | CLI ergonomics + discoverability | A (~19) | `agent-tools-cli-ergonomics.plan.md` |
 | WS-2 | DRIVE | Watcher liveness + canonicalisation | C | `comms-watch-hang-hardening` + `coordination-watcher-canonicalisation` |
-| WS-3 | OWN | F-41 path-safety (safety-critical) | D (F-41) | this plan |
+| WS-3 | OWN | F-41 path-safety (safety-critical) | D (F-41) | B1 landed (b5408291d); B2 deferred → `../future/coordination-home-explicit-targeting-migration.plan.md` |
 | WS-4 | OWN | Structural drain-fix validator + index | meta/drain | this plan |
 | WS-5 | OWN | Gate-coverage | E (F-54/F-57) | this plan |
 | WS-6 | OWN | Disposition ledger (all 82 → a decision) | all | this plan |
