@@ -298,3 +298,35 @@ invocation-contract migration (watcher rule + commit skill + start-right + ~doze
 paths today), deferred to `future/coordination-home-explicit-targeting-migration.plan.md`. The fluent
 "currently we run one checkout" was the tripwire to re-ground, not a licence. See per-user memory
 `no-single-checkout-or-machine-assumption`.
+
+## Shared-checkout commit-gate coupling and the survey budget-window model (2026-06-21, Cosmos calls Infinity)
+
+Two survey-orchestration learnings from running the Pass-1 fan-out as an n=2 peer of Oyster weaves Surf
+(disjoint files, same checkout):
+
+**Shared-checkout commit-gate coupling** — the complement to Oyster's path-resolution entry above. When
+two agents share ONE checkout, my docs-only survey commits run the full `.husky/pre-commit` turbo gate
+(`build type-check lint test`), and **turbo hashes the working tree** — so a peer's *uncommitted*
+`agent-tools/**` edits bust the cache and re-run their workspace gate on MY commit. A peer mid-TDD-RED
+blocks my unrelated docs commit. Explicit-pathspec staging keeps CONTENT separate (never `git add -A`),
+but the GATE couples through the working tree. Interim cure: commit during the peer's broadcast
+`tree-green` windows; if blocked, STOP, hold the conserved artefact on disk, retry at next tree-green —
+never bypass the gate (owner-gated). **Structural cure: separate `git worktrees` per concurrent agent**
+— the [[project_multi_developer_transition]] direction; same "one checkout assumed" root as Oyster's
+path-resolution defect above. `candidate:` PDR/pattern — multi-agent shared-checkout commit-gate
+coupling and its worktree cure (pairs with Oyster's path-resolution facet for one doctrine).
+
+**Survey budget-window model.** The account-level compute budget is shared across the rotating cast; a
+fresh session is NOT a fresh window. A window holds ~35–63 plans of survey fan-out before abrupt
+depletion (window 1 depleted at ~63). Depletion is detected ONLY by the all-`unreadable` plus
+`session limit` failures signal — no advance warning — so small (~12-plan) increments bound the wasted
+fire, and the instrument returns null findings (never fabricated; HALT held under a real wall). With a
+concurrent peer on the same budget, pace to the considerate ~35/window and leave headroom; owner resets
+the window. Durable home: `08-next-session-execution-plan.md` §4.1/§8 and `coverage-ledger.md`.
+
+**Bash gotchas in this harness:** (1) shell **cwd persists between calls** — a `cd` into a subdir once
+broke a later pathspec commit; stay at repo root. (2) zsh does NOT expand a glob held in a shell variable
+— use the glob **inline** on the jq command line. (3) long `comms append --body` strings with em-dashes
+hit `Exit status 2`; use `--body-file`. (4) the hook policy **substring-matches comms-event bodies** — a
+body merely *describing* a gate-bypass flag was blocked as if it were one (false positive; reword the
+prose). Instance of [[hook-policy-substring-discipline]].
