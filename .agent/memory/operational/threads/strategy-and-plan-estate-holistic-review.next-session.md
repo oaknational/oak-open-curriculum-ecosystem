@@ -24,6 +24,17 @@ foundation; its report + raw data live in
 [`.agent/reports/archive/plan-estate-survey-2026-06-15/`](../../../reports/archive/plan-estate-survey-2026-06-15/README.md)
 (archived 2026-06-18; a fresh survey is a Body-3 prerequisite).
 
+## Where We Are (2026-06-21, Pinnace hunts Marsh — survey orchestrator; AEE 70/70 Pass-1 complete; substance re-aim implemented; handed to Aardvark turns Whisper)
+
+Picked up survey orchestration from Hobby wakes Halo (PDR-063 handoff). n=2 owner-visible, no Director.
+
+- **`agentic-engineering-enhancements`: 70/70 Pass-1 COMPLETE** (1a + 1b-01..04), conserved + committed (`fc108b684`, `e87ab281f`). Tallies in `coverage-ledger.md`.
+- **Owner substance re-aim implemented, validated, committed.** The survey instrument (`survey-pass1.workflow.js`) now captures `substance_class` (per-plan summary `good|mixed|bad|speculative`), `content_quality`, and an **idea-granular `salvage_value` inventory** (`[{idea, class, file_line}]`) — the owner's 12:53Z idea-level correction (`7496f7387`). The two-pass consolidation shape is ratified + encoded in Body-3/V0 by Ganymede (`14877e8d0`).
+- **Detailed survey state + successor handoff:** [`05-orchestration-state-and-successor-handoff.md`](../../../reports/plan-estate-survey-2026-06-21/05-orchestration-state-and-successor-handoff.md) (committed; supersedes 04) + `coverage-ledger.md`.
+- **Remaining (multi-window):** the 15 other collections (~35-plan atomic sub-batches, one per owner-reset window; `product-development-governance` safe per `4bf5d49fd`); the all-70-AEE idea-granular **back-fill before Pass-3**; Pass-2 (Ganymede's effectiveness spec) → Pass-3 synthesis → the dated outputs + no-loss audit.
+- **Grounding lessons (for the next orchestrator):** a *fresh session ≠ a fresh window* (the session limit is account-level, shared across the rotating cast); conserve+commit each increment (working-tree ≠ recorded-in-repo). Both encoded in `05`.
+- **Next safe step:** **Aardvark turns Whisper** (3c3b32, pre-positioned successor) continues at the next owner-reset window per the `05` handoff. Claim `f0055992` relinquished at retirement. Owner controls push (branch ahead, unpushed).
+
 ## Where We Are (2026-06-21, Director seat DISSOLVED → n=2 owner-visible; Birch tracks Arbor retired)
 
 The owner dissolved the Director role: the window is now **two agents, owner-visible**, and there is **no Director unless the owner re-establishes one**. Shape going forward (PDR-082 n=2 owner-visible / the consumer-absent exemption — chat-visibility makes the async-coordination consumer absent):
@@ -808,3 +819,4 @@ new-boundary work is informationally gated on the strategy. Full scope: the plan
 | Drake hunts Beeswax | claude-code | claude-opus-4-8[1m] | 89a5e2 | implementer pickup of Cutter's boundary; settled + encoded the four owner-gated V0 governance calls (enum baselines, folder collapse, 30-day gate-expiry); survey HOLD-then-lift; continuity refresh (repo-continuity + this record) | 2026-06-21 | 2026-06-21 |
 | Vesuvius calls Quench | claude-code | claude-opus-4-8 | 92cefc | Director (coordinator) — received role from Cutter (PDR-064 Moment 2), rotated to Birch tracks Arbor; commit-warden landed 9 commits (Ferret / Volcano / Cutter / Drake handoffs + decision-lenses + frictions); wrote the ordered decision lenses into principles.md; opened ArcAngel with Drake; directed the multi-window survey launch | 2026-06-21 | 2026-06-21 |
 | Birch tracks Arbor | claude-code | claude-opus-4-8 | 6c2090 | Director (coordinator) — successor to Vesuvius calls Quench (PDR-064 Moment 2); coordinated two clean role rotations (Drake→Ganymede, Hobby→Pinnace), folded both into continuity, set+confirmed the orchestrator pickup gate, corrected survey-output routing; **Director seat DISSOLVED to n=2 owner-visible on owner direction — retired, seat empty unless owner re-establishes** | 2026-06-21 | 2026-06-21 |
+| Pinnace hunts Marsh | claude-code | claude-opus-4-8[1m] | 868a9b | survey orchestrator (successor to Hobby wakes Halo, PDR-063); ran Pass-1 to AEE 70/70 complete; implemented + validated + committed the owner substance re-aim (substance_class summary, content_quality, idea-granular salvage_value inventory); folded the owner's idea-level correction; conserved + committed all findings + scaffold; handed to Aardvark turns Whisper | 2026-06-21 | 2026-06-21 |
