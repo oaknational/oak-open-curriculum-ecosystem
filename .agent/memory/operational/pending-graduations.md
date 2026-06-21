@@ -86,3 +86,28 @@ link is folded into PDR-104 itself. New capture appends below.*
   Lenses) + answer-is-forced + LTAE first; a question reaches the owner ONLY when all lenses
   genuinely fail to resolve it or it is constitutively the owner's. Codifies the lenses' escalation
   boundary as an active gate, not a passively-held intention (passive-guidance-loses-to-artefact-gravity).
+
+- **Falsifiable-judgment quality gate (decompose the judgment against the source, don't trust a holistic verdict)**
+
+  ```text
+  captured: 2026-06-21 | source: napkin (Saffron holds Sepal) + restructure-substance-specs.md Spec 1 | target: PDR with pdr_kind: pattern (falsifiable-judgment-gate) | trigger: SECOND instance of the shape in another gate/review → ready to synthesise the general form (one instance now: the substance-gate effectiveness arm) | size: small | status: pending
+  ```
+
+  A quality gate's judgment-heavy arm is its theater-risk locus: where conformance/traceability/no-loss
+  have concrete mechanisms, a "does X plausibly achieve Y" arm can pass by hand-waving. Cure: decompose the
+  judgment against a FIXED checklist of dimensions Y's source visibly contains, so under-decomposition is
+  falsifiable by the source (not reviewer taste) and the verdict is unrenderable without the source-anchored
+  coverage × soundness map. One instance so far (the effectiveness arm); needs a second to synthesise the
+  PDR-pattern general form.
+
+- **State-tier process-and-archive-move convention (extend ADR-199 rotation to non-comms collaboration state)**
+
+  ```text
+  captured: 2026-06-21 | source: archive/README.md + .agent/state/collaboration/.gitignore + napkin (Saffron holds Sepal) | target: ADR-199 amendment (or a sibling ADR) generalising archive-move to conversations/sidebars/handoffs | trigger: SECOND state-archive-move pass, OR the memory-vs-state local-split lands → DUE | size: small | status: pending
+  ```
+
+  Owner doctrine (2026-06-21): stale collaboration state is PROCESSED (substance verified-conserved into
+  canonical homes), then ARCHIVE-MOVED to an untracked archive, NEVER git-rm'd. This session built the
+  convention for conversations/sidebars/handoffs (untracked `archive/`, tracked README, gitignored contents)
+  mirroring ADR-199's comms-event rotation. Currently a one-instance local convention; graduate to an ADR
+  (amendment or sibling) when a second pass or the planned memory-vs-state split makes it general.
