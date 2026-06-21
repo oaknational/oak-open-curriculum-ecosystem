@@ -1,0 +1,2119 @@
+{
+  "batch_size": 12,
+  "plans_returned": 12,
+  "unreadable": [],
+  "null_holistic": [],
+  "results": [
+    {
+      "plan": ".agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "WS3 is actively in closeout (Phase 6a); PR #76 merge is the next concrete gate — the plan is live, not archivable",
+          "file_line": "line 184"
+        },
+        {
+          "claim": "WS4 (user-search UI) is pending, so the umbrella plan has unresolved open scope",
+          "file_line": "line 27"
+        },
+        {
+          "claim": "Exit criteria list five blocking conditions, none of which are fully satisfied",
+          "file_line": "lines 196-205"
+        },
+        {
+          "claim": "The auth-hardening gate rule is a standing blocking constraint that must remain reachable",
+          "file_line": "lines 150-155"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every section does real work: the governing-constraints block (lines 68-74) is a binding decision record, not boilerplate; the search-split contract (lines 52-56) is a named architectural boundary; the auth-closure gate rule (lines 150-155) prevents premature sign-off on auth risk. Progress ledger (lines 171-188) is granular enough to navigate from. No speculative or bad ideas identified — the plan is tightly scoped to an ongoing migration and delegates implementation to the WS3 child plan correctly.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan is concise and load-bearing throughout. Governing constraints (lines 68-74) are explicit and cite ADR-141. Exit criteria (lines 196-205) are enumerated and verifiable. The execution order table (lines 171-188) is phase-granular with status markers. The auth-closure gate language (lines 150-155) is precise: 'must not be marked complete until'. No filler sections detected.",
+      "salvage_value": [
+        {
+          "idea": "Three-way search surface split: search (model/agent), user-search (user-first MCP App), user-search-query (app-only helper) — each with a defined purpose",
+          "class": "good",
+          "file_line": "lines 52-56"
+        },
+        {
+          "idea": "Governing constraint: no compatibility layers, shims, or bridge code anywhere in the migration",
+          "class": "good",
+          "file_line": "line 69"
+        },
+        {
+          "idea": "Governing constraint: schema-first and generator-first are non-negotiable — apps stay thin, canonical contracts live in SDK/codegen",
+          "class": "good",
+          "file_line": "lines 70-73"
+        },
+        {
+          "idea": "Auth-hardening closure gate rule: migration closure is blocked until auth-safety-correction and auth-boundary-type-safety plans are both complete or explicitly superseded",
+          "class": "good",
+          "file_line": "lines 150-155"
+        },
+        {
+          "idea": "WS3 + WS4 execute as one child plan to avoid splitting a tightly coupled UI delivery",
+          "class": "good",
+          "file_line": "lines 113-128"
+        },
+        {
+          "idea": "mcp-expert upgrade is tracked outside this collection (agentic-engineering-enhancements) because it is reviewer-capability infra, not product delivery",
+          "class": "good",
+          "file_line": "lines 157-165"
+        },
+        {
+          "idea": "Completed workstream receipts (WS1, WS2, runtime boundary simplification) are archived at named paths — the umbrella retains the completion record without owning the detail",
+          "class": "good",
+          "file_line": "lines 77-110"
+        },
+        {
+          "idea": "Phase 6a active closeout state: local docs, gates, contamination check, Vercel/bootstrap remediation green; push + preview recheck remaining before PR #76",
+          "class": "good",
+          "file_line": "lines 130-133"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [
+        "supersedes"
+      ],
+      "status_raw": "ACTIVE (body prose, line 32; not a frontmatter field)",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required LOCKED field `id` — every plan node requires a stable kebab slug identity (§2.1)",
+          "file_line": "mcp-app-extension-migration.plan.md:1 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required LOCKED field `node_type` — discriminator literal `\"plan\"` absent (§2.1)",
+          "file_line": "mcp-app-extension-migration.plan.md:1 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required LOCKED field `kind` — plan carries `todos`, implying `executable`, but axis is not declared (§2.2, §3.1)",
+          "file_line": "mcp-app-extension-migration.plan.md:1 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required LOCKED field `last_updated` in frontmatter — ISO date present only in body prose (§2.4)",
+          "file_line": "mcp-app-extension-migration.plan.md:33 (body only; absent from frontmatter)"
+        },
+        {
+          "issue": "Missing required field `serves_strategic_choice` — required for executable plans; no value or `\"pending\"` sentinel present (§2.3, §4)",
+          "file_line": "mcp-app-extension-migration.plan.md:1 (frontmatter block)"
+        },
+        {
+          "issue": "Todo `status: in-progress` is not a valid V0 per-todo status value; V0 §2.4 permits only `pending | completed`",
+          "file_line": "mcp-app-extension-migration.plan.md:24"
+        },
+        {
+          "issue": "`status: ACTIVE` survives in body prose rather than being expressed via the orthogonal axes (kind/disposition/gate); V0 §2.5 drops `status` explicitly — body prose reuse perpetuates the replaced concept",
+          "file_line": "mcp-app-extension-migration.plan.md:32"
+        }
+      ],
+      "unclassified_keys": [
+        "source_research",
+        "skills"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "The plan enforces a clean separation between model-facing search (`search`), user-facing search (`user-search`), and app-only helper (`user-search-query`). This three-way split is clearly governed and non-negotiable per the umbrella, which is architecturally sound for keeping agent and UI contracts decoupled.",
+          "file_line": "mcp-app-extension-migration.plan.md:50-57"
+        },
+        {
+          "severity": "info",
+          "claim": "Governing constraints (lines 59-74) explicitly ban compatibility layers, shims, and bridge code, enforce schema-first/generator-first, and mandate thin apps with canonical contracts in SDK/codegen. These are sound architectural constraints that align with replace-dont-bridge doctrine.",
+          "file_line": "mcp-app-extension-migration.plan.md:59-74"
+        },
+        {
+          "severity": "low",
+          "claim": "The execution order table (lines 170-189) shows Phase 6a as 'active closeout (local recovery + closeout commits + gates green; push/preview pending)' and Phase 5 as pending post-merge, but Phase 5 (user-search view) is listed before Phase 6b in sequence while the numbering implies 5 < 6. This ordering anomaly — Phase 6a preceding Phase 5 — is architecturally intentional (gate-then-feature) but is not explained inline and could mislead a reader or subagent into reordering the phases.",
+          "file_line": "mcp-app-extension-migration.plan.md:184-187"
+        },
+        {
+          "severity": "medium",
+          "claim": "Exit criterion 4 (lines 197-203) gates closure on two auth plans already marked completed in the archive path cited (`../archive/completed/auth-safety-correction.plan.md`, `../archive/completed/auth-boundary-type-safety.plan.md`). If both plans are already complete, criterion 4 is vacuously satisfied and provides no architectural protection. The plan does not verify their actual completed state; it only points to archive paths. A subagent acting on this plan has no signal to distinguish 'archived-and-verified' from 'archived-and-abandoned'.",
+          "file_line": "mcp-app-extension-migration.plan.md:197-203"
+        },
+        {
+          "severity": "low",
+          "claim": "The specialist-capability dependency (lines 155-166) tracks `mcp-expert` upgrade work in a separate collection and explicitly marks it non-blocking for WS3/WS4 closure. The architectural concern is that if the reviewer-capability infrastructure (ADR-129 triplet hardening) is not complete at merge time, the review quality gate for the migrated product surface is degraded. The plan does not surface what review-quality degradation is accepted as a consequence of this non-blocking designation.",
+          "file_line": "mcp-app-extension-migration.plan.md:155-166"
+        },
+        {
+          "severity": "info",
+          "claim": "The umbrella delegates all active implementation detail to the WS3 child plan (`ws3-widget-clean-break-rebuild.plan.md`). The umbrella itself holds only governing constraints, completed-foundation records, cross-plan dependencies, and exit criteria. This is a well-formed two-level plan structure with correct altitude separation.",
+          "file_line": "mcp-app-extension-migration.plan.md:115-118"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": [
+        {
+          "claim": "WS3/WS4 migration closure must not be marked complete until auth-safety-correction and auth-boundary-type-safety plans are complete (or explicitly superseded)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": ".agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md:150-154 (\"Explicit rule:\" / \"WS3/WS4 migration closure must not be marked complete until both plans are complete (or explicitly superseded by accepted architecture).\"), corroborated by Exit Criteria lines 198-201 and execution-order line 188"
+        },
+        {
+          "claim": "Both auth-hardening closure gate plans are cited as already archived/completed",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "mcp-app-extension-migration.plan.md:142,144 cite both plans at `../archive/completed/auth-safety-correction.plan.md` and `../archive/completed/auth-boundary-type-safety.plan.md`; both files resolve at those archive/completed paths and every todo is status: completed (8/8 and 5/5, no incomplete statuses)"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/sdk-and-mcp-enhancements/active/schema-resilience-and-response-architecture.plan.md",
+      "classification": "rewrite",
+      "classification_evidence": [
+        {
+          "claim": "Section 1 retains strip-assuming implementation detail formally superseded by the OQ1 settlement",
+          "file_line": "155-201"
+        },
+        {
+          "claim": "Execution priority flowchart still lists 'Schema strictness migration' as step 1 despite that being settled/closed",
+          "file_line": "333,345"
+        },
+        {
+          "claim": "Last Updated date predates the OQ1 settlement by ~7 weeks, making the header misleading",
+          "file_line": "28"
+        },
+        {
+          "claim": "Three pending todos with substantive open implementation work confirm the plan is active but needs its body aligned to the settled decision",
+          "file_line": "10-21"
+        }
+      ],
+      "substance_class": "mixed",
+      "substance_rationale": "The settled decision record and drift-monitoring architecture are good and durable. The superseded Section 1 body (lines 155-201) is bad as live guidance — it describes an implementation path for .strip() that was explicitly rejected. The additionalContext flag (Section 3, lines 281-317) and health endpoint design (Section 2, lines 204-278) are good substantive design. The Vercel deploy-hook idea (lines 254-275) is speculative but well-labelled.",
+      "content_quality": "adequate",
+      "content_quality_note": "The OQ1 decision record is strong and well-reasoned (lines 97-138). The health endpoint design is concrete (lines 226-251). The additionalContext wire-format example is good (lines 297-307). Weaknesses: superseded Section 1 misleads; execution flowchart is not updated to reflect the settled state (line 333); nine assumptions (A1-A9, lines 55-92) are all still open with no disposition recorded — several are moot given the .strict() settlement.",
+      "salvage_value": [
+        {
+          "idea": ".strict() retained everywhere — strip/passthrough both rejected — owner-settled decision record",
+          "class": "good",
+          "file_line": "8,97-110"
+        },
+        {
+          "idea": "Schema staleness (not strictness) framed as the 2026-04-13 root cause — diagnostic reframe",
+          "class": "good",
+          "file_line": "8,104"
+        },
+        {
+          "idea": "Extra-field validation failures should be classified as 'suspected upstream schema drift' (named, not generic) and fire observability loudly",
+          "class": "good",
+          "file_line": "11-12"
+        },
+        {
+          "idea": "Schema drift health endpoint (GET /health/schema-drift) — deep-diffs live swagger against baked-in schema-cache at runtime",
+          "class": "good",
+          "file_line": "13-14,226-251"
+        },
+        {
+          "idea": "Health endpoint uses deep-diff not version-string-only comparison, closing the version-parity gap in schema-cache.ts",
+          "class": "good",
+          "file_line": "238-245"
+        },
+        {
+          "idea": "Sentry cron monitor on the health endpoint with consecutive-check deduplication to avoid transient false positives",
+          "class": "good",
+          "file_line": "248-252"
+        },
+        {
+          "idea": "additionalContext request flag via _meta on tools/call — controls oakContextHint, summary, envelope shape",
+          "class": "good",
+          "file_line": "17-18,281-317"
+        },
+        {
+          "idea": "structuredContent shape stays stable (widget consumers); only content array is affected by additionalContext flag",
+          "class": "good",
+          "file_line": "312-314"
+        },
+        {
+          "idea": "Vercel deploy hook for automatic rebuild on drift detection — auto-rebuild without human review risk flagged",
+          "class": "speculative",
+          "file_line": "254-275"
+        },
+        {
+          "idea": "Layer 3 runtime field inventory (log stripped field counts)",
+          "class": "speculative",
+          "file_line": "279-280"
+        },
+        {
+          "idea": "Section 1 strip-assuming implementation detail (.strictObjects false, post-processing in zod-v3-to-v4-transform.ts)",
+          "class": "bad",
+          "file_line": "155-201"
+        },
+        {
+          "idea": "Option C (keep .strict() but catch-and-retry without it) — explicitly rejected as overly complex",
+          "class": "bad",
+          "file_line": "132-135"
+        },
+        {
+          "idea": "Execution priority flowchart as presented — step 1 labels settled migration as open work",
+          "class": "bad",
+          "file_line": "332-350"
+        },
+        {
+          "idea": "Assumptions A3, A6, A8 — moot or partially moot given .strict() settlement but still open in the document",
+          "class": "speculative",
+          "file_line": "64-68,80-87"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": null,
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": null,
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` — the node's stable graph identity slug is absent from frontmatter",
+          "file_line": "schema-resilience-and-response-architecture.plan.md:1-22 (entire frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `node_type` — V0 §2.1 requires literal `\"plan\"` as the registry discriminator",
+          "file_line": "schema-resilience-and-response-architecture.plan.md:1-22"
+        },
+        {
+          "issue": "Missing required field `kind` — V0 §2.2 / §3.1 requires `strategic | executable`; plan carries `todos` so it is `executable` but the field is absent",
+          "file_line": "schema-resilience-and-response-architecture.plan.md:1-22"
+        },
+        {
+          "issue": "Missing required field `serves_strategic_choice` — V0 §2.3 / §4 marks this required for executable plans (or explicit `\"pending\"` sentinel)",
+          "file_line": "schema-resilience-and-response-architecture.plan.md:1-22"
+        },
+        {
+          "issue": "Missing required field `last_updated` — V0 §2.4 marks this required for all plans; the ISO date appears only in body prose at line 28, not in frontmatter",
+          "file_line": "schema-resilience-and-response-architecture.plan.md:28"
+        },
+        {
+          "issue": "Owner-stop / pending-decision state encoded as body prose (`**Status**: PENDING — open questions require owner decisions`) rather than the structured `gate` field — V0 §3.4 / §3.5 migration map maps this pattern to `gate: { awaiting: owner-decision, clears_when: ..., expires: ... }`; the gate is absent from frontmatter",
+          "file_line": "schema-resilience-and-response-architecture.plan.md:27"
+        },
+        {
+          "issue": "Dropped key `isProject: false` present in frontmatter — V0 §2.5 explicitly drops `isProject` (it is subsumed by the `projects_to` edge)",
+          "file_line": "schema-resilience-and-response-architecture.plan.md:5"
+        },
+        {
+          "issue": "No V0 typed edges declared in frontmatter — `derives_from`, `depends_on`, `thread`, and `serves_strategic_choice` are all absent; body cross-references to sibling plans (`schema-change-minimal-adaptation.plan.md`, `upstream-api-reference-metadata.plan.md`) are informal prose links, not typed edge declarations",
+          "file_line": "schema-resilience-and-response-architecture.plan.md:1-22"
+        }
+      ],
+      "unclassified_keys": [
+        "specialist_reviewer",
+        "isProject"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The execution-priority flowchart (lines 332-349) still shows 'Schema strictness migration' as the root node and immediate step, but the OQ1 settlement (lines 8-9, 96-110) has fully closed that work: .strict() stands everywhere and no migration occurs. The Mermaid diagram is stale decision-space archaeology presented as an active execution plan. A reader following the diagram would start work that is already settled and superseded.",
+          "file_line": "schema-resilience-and-response-architecture.plan.md:332-349"
+        },
+        {
+          "severity": "medium",
+          "claim": "The schema-drift health endpoint (GET /health/schema-drift) fetches the live upstream Swagger JSON on every invocation (lines 232-242). No caching, rate-limit guard, or circuit-breaker is specified. Assumption A9 (line 88) notes the endpoint could be rate-limited, but the design section does not resolve this — it defers to 'a fallback or cached comparison strategy' without specifying one. A runtime fetch from a deployed server to an external upstream on each health probe is an unbounded-load pattern and an availability dependency that should be bounded at design time.",
+          "file_line": "schema-resilience-and-response-architecture.plan.md:232-244"
+        },
+        {
+          "severity": "low",
+          "claim": "The diagnostic extra-field classifier (implement-schema-policy todo, lines 10-12) is described as 'the generated classifier names it as suspected upstream schema drift'. It is not specified where in the stack this classifier lives — whether at the Zod parse boundary, in validation-logger.ts, or in a new discriminated-error type. Without an architectural home, the pending implementation is underspecified and risks being placed at a layer that cannot see the structure of the Zod error.",
+          "file_line": "schema-resilience-and-response-architecture.plan.md:10-12"
+        },
+        {
+          "severity": "low",
+          "claim": "The _meta.additionalContext flag design (lines 296-316) assumes assumption A4 — that the MCP SDK passes _meta from tools/call through to server-side handlers — but marks A4 as unverified risk (lines 68-71). If A4 fails, the design says the fallback is HTTP headers. This is a transport-shape branch that changes the API surface exposed to third-party consumers and should be verified before the additionalContext todo moves to implementation.",
+          "file_line": "schema-resilience-and-response-architecture.plan.md:68-71"
+        },
+        {
+          "severity": "info",
+          "claim": "Section 1 (lines 153-204) is explicitly labelled 'SUPERSEDED' but retains full implementation detail including concrete file references and code changes. The preserved content is noted as 'decision-record evidence only'. Architecturally this is fine as a closed decision record, but the section's file/line references (generate-zod-schemas.ts, zod-v3-to-v4-transform.ts) are live paths that may confuse a future reader scanning for what to implement versus what was considered and rejected.",
+          "file_line": "schema-resilience-and-response-architecture.plan.md:153-204"
+        },
+        {
+          "severity": "info",
+          "claim": "Layer 2b (Vercel deploy webhook, lines 254-276) is correctly flagged 'not yet committed' and its auto-rebuild risk is acknowledged. The architectural concern — auto-rebuild on upstream schema change could introduce regressions if the upstream makes breaking changes — is correctly identified and deferred. No action needed; recorded as observed sound reasoning.",
+          "file_line": "schema-resilience-and-response-architecture.plan.md:254-276"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": [
+        {
+          "claim": "Section 1 is superseded — strip-assuming implementation steps are decision-record evidence only",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": ".agent/plans/sdk-and-mcp-enhancements/active/schema-resilience-and-response-architecture.plan.md:155-159 (SUPERSEDED banner: \"no strictness migration happens — .strict() stands. This section's strip-assuming impact analysis is preserved as decision-record evidence only\"); corroborated by OQ1 settlement L96-110 (\"SETTLED 2026-06-03... Decision: neither — .strict() is retained everywhere\") and frontmatter todos L8-11 (strict-or-strip completed; implement-schema-policy redirected to diagnostic drift classification)."
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/sdk-and-mcp-enhancements/active/upstream-api-reference-metadata.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "All seven todos are status:pending — execution has not started",
+          "file_line": "lines 8-27"
+        },
+        {
+          "claim": "Status line confirms design-complete, pending implementation",
+          "file_line": "line 32"
+        },
+        {
+          "claim": "Concrete type interfaces, worked example, and five-file change plan are fully specified and actionable",
+          "file_line": "lines 64-169"
+        },
+        {
+          "claim": "Folder lane (active) matches pending-but-ready-to-execute state",
+          "file_line": "line 1 (path), line 32"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every section delivers concrete, actionable content: the problem is real (developer cross-reference friction, line 36-47), the design is precise (dual-surface emission with typed interfaces, lines 49-83), the implementation path is fully specified (five files, exact signature changes, lines 109-169), and the scope guards prevent misapplication (lines 173-183). Pre-implementation findings F1-F6 demonstrate rigorous forward-looking quality thinking rather than wishful design.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan holds a complete worked example with real enum values (lines 86-105), exact TypeScript interfaces ready for copy-paste (lines 64-83), a data-flow diagram (lines 159-169), and concrete exit criteria (lines 259-267). It is not merely V0-conformant — it contains information that cannot be trivially recovered from the source files without reading the plan first.",
+      "salvage_value": [
+        {
+          "idea": "Dual-surface emission: upstreamApi in both _meta (MCP clients) and top-level descriptor (SDK consumers)",
+          "class": "good",
+          "file_line": "lines 54-60"
+        },
+        {
+          "idea": "UpstreamApiParameter and UpstreamApiReference TypeScript interfaces as specified",
+          "class": "good",
+          "file_line": "lines 64-83"
+        },
+        {
+          "idea": "Scope boundary: generated-only tools receive upstreamApi; aggregated/hand-written tools explicitly excluded",
+          "class": "good",
+          "file_line": "lines 173-175"
+        },
+        {
+          "idea": "No response schema duplication — reference toolOutputJsonSchema already on descriptor",
+          "class": "good",
+          "file_line": "lines 176-178"
+        },
+        {
+          "idea": "Base URL sourced from servers[0].url in OpenAPI schema, not hardcoded",
+          "class": "good",
+          "file_line": "lines 181-183"
+        },
+        {
+          "idea": "Parameter names use original OpenAPI names for direct API callers, not MCP-normalised names",
+          "class": "good",
+          "file_line": "lines 179-180"
+        },
+        {
+          "idea": "Five-file change plan with exact function-signature threading (mcp-tool-generator → generate-tool-file → emit-index)",
+          "class": "good",
+          "file_line": "lines 109-169"
+        },
+        {
+          "idea": "F1: _meta payload size concern for tools with many enum values; mitigation of omitting enum from _meta version",
+          "class": "speculative",
+          "file_line": "lines 195-201"
+        },
+        {
+          "idea": "F2: default field typed as unknown — consider string|number|boolean union to satisfy unknown-is-type-destruction rule",
+          "class": "speculative",
+          "file_line": "lines 202-207"
+        },
+        {
+          "idea": "F3: document parameter name divergence (MCP normalised vs OpenAPI original) in TSDoc",
+          "class": "good",
+          "file_line": "lines 208-215"
+        },
+        {
+          "idea": "F4: acknowledge path/method redundancy between top-level descriptor fields and upstreamApi object in TSDoc",
+          "class": "good",
+          "file_line": "lines 217-224"
+        },
+        {
+          "idea": "F5: verify servers[0].url is correct single-server assumption; consider renaming to productionBaseUrl for clarity",
+          "class": "speculative",
+          "file_line": "lines 225-231"
+        },
+        {
+          "idea": "F6: verify all downstream consumers handle absent upstreamApi (field is optional) — especially listUniversalTools and MCP registration path",
+          "class": "good",
+          "file_line": "lines 232-241"
+        },
+        {
+          "idea": "F7 (deferred): append brief API reference line to tool description text for LLM visibility — separate session per owner decision",
+          "class": "speculative",
+          "file_line": "lines 243-249"
+        },
+        {
+          "idea": "Worked concrete example for get-key-stages-subject-lessons with real enum values and parameter shapes",
+          "class": "good",
+          "file_line": "lines 86-105"
+        },
+        {
+          "idea": "Size estimate: ~80 lines new code, ~24 generated files updated, ~30 lines test updates, no new dependencies",
+          "class": "good",
+          "file_line": "lines 253-256"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "PENDING — design complete, ready for implementation",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, required for all plan nodes)",
+          "file_line": "upstream-api-reference-metadata.plan.md:1–28 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `node_type` (LOCKED literal `plan`, required for all)",
+          "file_line": "upstream-api-reference-metadata.plan.md:1–28 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED, required for all; inferred `executable` from todos and body prose but not declared)",
+          "file_line": "upstream-api-reference-metadata.plan.md:1–28 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `last_updated` (LOCKED, required for all); ISO date present only in body prose at line 33, not in frontmatter",
+          "file_line": "upstream-api-reference-metadata.plan.md:33"
+        },
+        {
+          "issue": "Missing required edge `serves_strategic_choice` (LOCKED, required for executable plans; no value or `pending` sentinel present)",
+          "file_line": "upstream-api-reference-metadata.plan.md:1–28 (frontmatter block)"
+        },
+        {
+          "issue": "`isProject: false` is an explicitly dropped field per V0 §2.5; it must be removed",
+          "file_line": "upstream-api-reference-metadata.plan.md:5"
+        },
+        {
+          "issue": "`status:` replaced by orthogonal axes; body-prose status `PENDING — design complete, ready for implementation` (line 32) is not a frontmatter axis — maps to `kind: executable` + no `disposition` + Linear execution `backlog` per §3.5, but none of those axes are present in frontmatter",
+          "file_line": "upstream-api-reference-metadata.plan.md:32"
+        }
+      ],
+      "unclassified_keys": [
+        "isProject"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan threads baseUrl, pathParamMetadata, and queryParamMetadata as explicit positional arguments through mcp-tool-generator.ts → generate-tool-file.ts → emit-index.ts. This parameter-threading approach creates a brittle call chain: each intermediate function signature must be updated whenever the upstream metadata shape grows (e.g. if F7's description enrichment is implemented, or if multi-server support is added per F5). A context object or a dedicated UpstreamApiContext record would isolate callers from future shape changes, consistent with the closed-shape design principle.",
+          "file_line": "upstream-api-reference-metadata.plan.md:125-141"
+        },
+        {
+          "severity": "medium",
+          "claim": "F4 acknowledges that upstreamApi.path and upstreamApi.method duplicate top-level descriptor fields. These fields exist on the descriptor because the codegen pipeline already carries them; the duplication is not incidental but structural. No plan todo or exit criterion tracks resolving this duplication in the top-level descriptor (e.g. deprecating the now-redundant top-level fields). Leaving two representations of the same data in the same public surface risks divergence if the codegen path is later forked.",
+          "file_line": "upstream-api-reference-metadata.plan.md:218-225"
+        },
+        {
+          "severity": "low",
+          "claim": "servers[0].url is consumed without validating that the OpenAPI schema contains at least one server entry. The fallback is an empty string (baseUrl: ''). An empty baseUrl silently produces a malformed url field (e.g. '/key-stages/{keyStage}/...'). Exit criterion 2 asserts url is a 'full URL template', but there is no plan todo or test to guard against a missing-servers schema at codegen time.",
+          "file_line": "upstream-api-reference-metadata.plan.md:124-125"
+        },
+        {
+          "severity": "low",
+          "claim": "The scope boundary states aggregated/hand-written tools must NOT receive upstreamApi (line 173-175) and exit criterion 4 asserts this. However, no plan todo item covers adding a test or static assertion that confirms the absent field on aggregated tools. F6 asks for verification that consumer code handles the absent case but the verification step is not scheduled as a todo.",
+          "file_line": "upstream-api-reference-metadata.plan.md:173-175"
+        },
+        {
+          "severity": "info",
+          "claim": "The dual-emission design (_meta and top-level) correctly avoids response-schema duplication and is a clean separation of MCP-client-visible vs SDK-consumer metadata. The optional field on both ToolMeta and ToolDescriptor appropriately accommodates the aggregated-tool exclusion without requiring type branching.",
+          "file_line": "upstream-api-reference-metadata.plan.md:54-60"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": [
+        {
+          "claim": "Status: PENDING — design complete, ready for implementation",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": ".agent/plans/sdk-and-mcp-enhancements/active/upstream-api-reference-metadata.plan.md:32 (\"**Status**: PENDING — design complete, ready for implementation\"); refuted-attempts: repo-wide grep for upstreamApi/UpstreamApiReference/UpstreamApiParameter in packages/**/*.ts returns ZERO hits (implementation not landed, consistent with PENDING); all 5 referenced source files (mcp-protocol-types.ts, generate-tool-descriptor-file.ts, mcp-tool-generator.ts, generate-tool-file.ts, emit-index.ts) EXIST (not orphaned); plan resides in active/ with no done/superseded twin (find returns only the active path)"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/sdk-and-mcp-enhancements/active/workspace_topology_exploration.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "All 11 todos are pending; no todo is marked complete or cancelled",
+          "file_line": "workspace_topology_exploration.plan.md:6-37"
+        },
+        {
+          "claim": "Phase 2 function-level analysis and Phase 4 migration execution are explicitly deferred to a dedicated session",
+          "file_line": "workspace_topology_exploration.plan.md:43"
+        },
+        {
+          "claim": "Open questions section (9 items) requires tooling output before they can be resolved",
+          "file_line": "workspace_topology_exploration.plan.md:489-498"
+        },
+        {
+          "claim": "The tier model and import direction law have no ADR record yet; the plan is the only authoritative artefact",
+          "file_line": "workspace_topology_exploration.plan.md:24"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The entire plan is grounded in first-hand import evidence: specific file counts (2 codegen files, 50+ runtime files for result; 15 codegen files for logger), specific function names traced to specific callers, and package.json dependency verification. The tier model emerges from the evidence rather than being imposed on it. The Framework/Consumer decomposition is a principled architectural pattern applied consistently. The single weak idea (env defensible-for-future-extensibility at line 180) is clearly flagged as speculative. No bad ideas are present.",
+      "content_quality": "strong",
+      "content_quality_note": "The function-level import analysis at lines 119-185 is exceptionally specific — naming files, export symbols, and usage patterns. The terminology disambiguation at lines 53-59 resolves a systemic misclassification vector. The architectural tensions section (lines 444-484) frames root causes rather than symptoms. The gap analysis at lines 632-641 is honest about unknowns. Phase 2-4 analysis plan (lines 519-575) is concrete and tool-specific. Content quality is well above V0-conformant boilerplate.",
+      "salvage_value": [
+        {
+          "idea": "Four-tier model (primitives / infrastructure / codegen-time / runtime) with import direction law",
+          "class": "good",
+          "file_line": "workspace_topology_exploration.plan.md:284-305"
+        },
+        {
+          "idea": "Codegen-time vs runtime terminology disambiguation (avoid 'build time' without qualification)",
+          "class": "good",
+          "file_line": "workspace_topology_exploration.plan.md:53-59"
+        },
+        {
+          "idea": "result is a genuine primitive: zero deps, used by codegen and runtime — keep in core",
+          "class": "good",
+          "file_line": "workspace_topology_exploration.plan.md:121-132"
+        },
+        {
+          "idea": "observability is genuinely shared via a single export (getActiveSpanContextSnapshot) — keep in core",
+          "class": "good",
+          "file_line": "workspace_topology_exploration.plan.md:133-145"
+        },
+        {
+          "idea": "type-helpers apparent codegen usage is a classification artifact of mixed workspace; it is runtime-only",
+          "class": "good",
+          "file_line": "workspace_topology_exploration.plan.md:147-159"
+        },
+        {
+          "idea": "logger has 15+ genuine codegen-file imports and must be reclassified from libs/ to core/",
+          "class": "good",
+          "file_line": "workspace_topology_exploration.plan.md:162-176"
+        },
+        {
+          "idea": "Logger package decomposition: generic UnifiedLogger framework (Tier 1) vs Vercel-specific buildResourceAttributes and Express middleware (Tier 2b)",
+          "class": "good",
+          "file_line": "workspace_topology_exploration.plan.md:459-468"
+        },
+        {
+          "idea": "sdk-codegen serves as a runtime distribution hub via barrel re-exports — this is false coupling masking real architecture",
+          "class": "good",
+          "file_line": "workspace_topology_exploration.plan.md:445-455"
+        },
+        {
+          "idea": "Synonym builder functions (buildElasticsearchSynonyms etc.) process static data at runtime and should be converted to codegen-time generators producing committed constants",
+          "class": "good",
+          "file_line": "workspace_topology_exploration.plan.md:192-212"
+        },
+        {
+          "idea": "openapi-zod-client-adapter is misplaced in core/; used exclusively by codegen and should move to codegen tier when ADR-108 Step 3 executes",
+          "class": "good",
+          "file_line": "workspace_topology_exploration.plan.md:257-260"
+        },
+        {
+          "idea": "Framework/Consumer decomposition principle: ask whether a non-Oak, non-Vercel consumer could use the component unchanged",
+          "class": "good",
+          "file_line": "workspace_topology_exploration.plan.md:462-468"
+        },
+        {
+          "idea": "Tooling (oak-eslint, agent-tools) is orthogonal to product tiers and must not be classified within the tier model",
+          "class": "good",
+          "file_line": "workspace_topology_exploration.plan.md:481-484"
+        },
+        {
+          "idea": "design-tokens-core / oak-design-tokens pair already correctly applies Framework/Consumer decomposition and belongs in Tier 1 infrastructure",
+          "class": "good",
+          "file_line": "workspace_topology_exploration.plan.md:473-479"
+        },
+        {
+          "idea": "Widget stays in app workspace (one widget); dedicated mcp-app-ui-codegen workspace triggered by arrival of second widget",
+          "class": "good",
+          "file_line": "workspace_topology_exploration.plan.md:591-597"
+        },
+        {
+          "idea": "ESLint boundary rules need extension from SDK-to-SDK to cross-tier enforcement",
+          "class": "good",
+          "file_line": "workspace_topology_exploration.plan.md:27-28"
+        },
+        {
+          "idea": "knip + dependency-cruiser as the primary analysis instruments for Phase 2",
+          "class": "good",
+          "file_line": "workspace_topology_exploration.plan.md:63-68"
+        },
+        {
+          "idea": "env has zero codegen imports; keeping it in core is 'defensible for future extensibility' — not evidenced as necessary",
+          "class": "speculative",
+          "file_line": "workspace_topology_exploration.plan.md:179-181"
+        },
+        {
+          "idea": "env-resolution may need to serve remote GA codegen for .env file resolution — open question",
+          "class": "speculative",
+          "file_line": "workspace_topology_exploration.plan.md:492"
+        },
+        {
+          "idea": "observability redaction rules may be Oak-specific rather than generic — open question requiring function-level trace",
+          "class": "speculative",
+          "file_line": "workspace_topology_exploration.plan.md:470"
+        },
+        {
+          "idea": "oak-search-cli mixed lifecycle: ingestion commands could be extracted to codegen tier — open question",
+          "class": "speculative",
+          "file_line": "workspace_topology_exploration.plan.md:495"
+        },
+        {
+          "idea": "Option A (four product roots), Option B (three roots with primitives inside infrastructure), Option C (three roots with explicit primitives) physical structure options",
+          "class": "speculative",
+          "file_line": "workspace_topology_exploration.plan.md:374-438"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": null,
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": null,
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing LOCKED required field `id` (stable kebab slug; graph identity — V0 §2.1)",
+          "file_line": "workspace_topology_exploration.plan.md:1-38 (absent from frontmatter)"
+        },
+        {
+          "issue": "Missing LOCKED required field `node_type` (must be literal \"plan\"; registry discriminator — V0 §2.1)",
+          "file_line": "workspace_topology_exploration.plan.md:1-38 (absent from frontmatter)"
+        },
+        {
+          "issue": "Missing LOCKED required field `kind` (enum strategic|executable; replaces readiness senses of status — V0 §2.2, §3.1)",
+          "file_line": "workspace_topology_exploration.plan.md:1-38 (absent from frontmatter)"
+        },
+        {
+          "issue": "Missing LOCKED required field `last_updated` (ISO date — V0 §2.4)",
+          "file_line": "workspace_topology_exploration.plan.md:1-38 (absent from frontmatter)"
+        },
+        {
+          "issue": "Missing LOCKED required field `serves_strategic_choice` (required for executable plans; recommended for strategic — V0 §2.3, §4)",
+          "file_line": "workspace_topology_exploration.plan.md:1-38 (absent from frontmatter)"
+        },
+        {
+          "issue": "`isProject: false` is an explicitly-dropped key (V0 §2.5: 'Dropped — plan ≈ Linear Project is universal; the projection is the projects_to edge, not a boolean')",
+          "file_line": "workspace_topology_exploration.plan.md:38"
+        },
+        {
+          "issue": "No `status` field in frontmatter; plan state is expressed only as body prose ('Status: Strategic exploration plan — execute in a dedicated session'), which is not a durable frontmatter axis and cannot be machine-read or graph-projected",
+          "file_line": "workspace_topology_exploration.plan.md:43"
+        },
+        {
+          "issue": "No typed edges declared in frontmatter (serves_strategic_choice, derives_from, thread, depends_on all absent); body cites ADR-041, ADR-108 and cross-references two sibling plans, but none are expressed as V0 typed edges",
+          "file_line": "workspace_topology_exploration.plan.md:44-45"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [
+        {
+          "item": "todos present on a plan the body labels 'Strategic exploration plan'. V0 §2.4 (LOCKED): todos are 'Forbidden on strategic plans'. V0 §3.1 (LOCKED): the kind discriminator determines the union — executable carries todos, strategic carries promotion_trigger. The coexistence of 11 todos in frontmatter and 'Strategic exploration plan' prose in the body contradicts the LOCKED discriminated-union invariant: either kind=strategic (todos must be absent) or kind=executable (serves_strategic_choice is required and promotion_trigger must be absent). The plan cannot satisfy both simultaneously under V0.",
+          "evidence": "Frontmatter todos list at lines 5-37; body prose 'Strategic exploration plan' at line 43",
+          "file_line": "workspace_topology_exploration.plan.md:5-37 (todos) and line 43 (body status prose)"
+        }
+      ],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "The four-tier model defines Tier 1 Infrastructure as 'depends on Tier 0 only', but the plan maps `logger` (Tier 1) as depending on `observability` (also Tier 1). This is a lateral peer dependency within the same tier, which the model's import direction law does not permit or explicitly allow. A T1-to-T1 import is neither upward nor downward; the DAG at line 355 shows this edge (logger ← sentry-node, logger ← sdk-codegen, but observability ← logger). The classification test at line 306 says 'Tier 1 depends on Tier 0' with no provision for intra-tier edges. The model is either incomplete (needs an intra-tier policy) or `logger` should be Tier 1b and `observability` Tier 1a.",
+          "file_line": "workspace_topology_exploration.plan.md:306-312"
+        },
+        {
+          "severity": "high",
+          "claim": "`oak-search-cli` is simultaneously classified as Tier 3 Apps (line 344) and acknowledged as a mixed-lifecycle entity with codegen-time ingestion commands (line 345, line 495). The plan defers resolution to open question 6 but the tier model requires every package to have a single tier assignment. A mixed-lifecycle Tier 3 app that runs codegen steps is an architectural violation of the tier model's own rules: Apps are defined as 'Thin entry points. Never imported by anything' and 'Tier 3 depends on everything below', yet the ingestion portion would need to be co-resident with Tier 2a artefacts. This ambiguity must be resolved (extract ingestion into Tier 2a, or formally define mixed-lifecycle apps as a permitted Tier 3 sub-pattern) before migration execution can proceed safely.",
+          "file_line": "workspace_topology_exploration.plan.md:344-346"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan proposes `oak-generated-types` as a new Tier 2b package (Option A physical structure, line 393) to hold committed codegen output, but no todo item in the frontmatter creates or designs this package. The `synonym-codegen-conversion` and `function-level-caller-trace` todos reference converting functions and tracing callers, but nothing captures the design and creation of the output distribution package itself. If migration-execution (todo id: migration-execution, line 29) proceeds without this package being spec'd, runtime consumers will have nowhere to import committed types from.",
+          "file_line": "workspace_topology_exploration.plan.md:29-31 and 393"
+        },
+        {
+          "severity": "medium",
+          "claim": "The import direction law at line 304 states '2b imports 2a committed output via public subpath exports, never 2a internal codegen scripts'. However the plan does not describe any enforcement mechanism that distinguishes a subpath export from an internal path at lint or CI time. The ESLint boundary extension todo (id: eslint-tier-enforcement, line 27) only references extending boundary rules for 'import direction law across all workspace categories'. Subpath export vs internal path is a finer-grained constraint that standard eslint-plugin-import boundaries do not enforce natively. The plan should call out that dependency-cruiser rules or custom eslint rules need to gate on the resolved subpath, not just the package name.",
+          "file_line": "workspace_topology_exploration.plan.md:304-305 and 27-28"
+        },
+        {
+          "severity": "medium",
+          "claim": "`env` has zero workspace deps (passes the Primitive test structurally) but reads `process.env` (which triggers the Infrastructure test for environmental needs). The plan classifies it as Tier 1 Infrastructure with a decomposition question open (line 325, line 490). However the plan simultaneously says 'keeping it in core is defensible for future extensibility' (line 181) and leaves it unresolved across both the body and the open questions. This inconsistency means `env` has two contradictory tier assignments in the same document (core/primitives by structural analysis, infrastructure by operational character). If ESLint tier enforcement rules are generated before this is settled, they will encode a wrong boundary.",
+          "file_line": "workspace_topology_exploration.plan.md:181 and 325"
+        },
+        {
+          "severity": "low",
+          "claim": "Tension 1 (barrel re-exports, line 444) identifies `oak-sdk-codegen` as a runtime distribution hub and proposes separating the codegen engine from output distribution. The corresponding todo (`synonym-codegen-conversion`, line 18) and `function-level-caller-trace` (line 14) cover individual functions but do not include a todo for the broader subpath audit described at line 534: 'Map every public subpath of @oaknational/sdk-codegen'. If that audit is not a tracked todo, the barrel re-export problem may be only partially addressed by the synonym conversion, leaving undiscovered re-export coupling in place after migration.",
+          "file_line": "workspace_topology_exploration.plan.md:534-540 and frontmatter todos lines 1-37"
+        },
+        {
+          "severity": "low",
+          "claim": "The physical structure options (A, B, C — lines 373-438) defer the layout decision to Phase 2 analysis. The plan correctly states 'the principles and direction rules are the same regardless of physical layout' (line 437). However the cross-reference to `doc-architecture-phase-a-immediate.plan.md` (line 45) requires C4 diagrams to reflect the tier model, and those diagrams likely need the physical structure settled before they can be correct. The dependency between the physical structure decision and the Phase A architecture docs is not captured as a sequencing constraint in either this plan or its cross-referenced plan.",
+          "file_line": "workspace_topology_exploration.plan.md:45-46"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan explicitly scopes ADR-108 decomposition as 'future, unchanged' (line 221) and states the lifecycle violations are smaller than initially assessed. This is a well-grounded downward revision of scope backed by function-level evidence (lines 150-159, 214-239). The plan is consistent with ADR-041 and ADR-108 being historical records that inform but do not constrain (line 47). No re-ratification concern: the evidence supports the scope reduction.",
+          "file_line": "workspace_topology_exploration.plan.md:47 and 221-239"
+        }
+      ],
+      "load_bearing_claims_count": 8,
+      "high_stakes_verdicts": [
+        {
+          "claim": "Plan A (embed-widget) is COMPLETE per ADR-156; widget topology question is resolved",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "workspace_topology_exploration.plan.md:644-650 (\"Plan A ... is COMPLETE (ADR-156)\" + \"No topology restructure is needed before implementing A\"); corroborated by embed-widget-html-at-build-time.plan.md:22 (\"Status: COMPLETE (all phases executed, all gates green, ADR-156 created)\") in archive/completed/, all four phase todos status:complete (lines 4-16); and docs/architecture/architectural-decisions/156-embed-widget-html-at-build-time.md:3 (\"Status: Accepted\", 2026-04-10)"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-5-interactive-user-search-view.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "All todos are pending; plan is unstarted and the prerequisite phases are confirmed complete — this plan is ready to execute.",
+          "file_line": "ws3-phase-5-interactive-user-search-view.plan.md:8-20"
+        },
+        {
+          "claim": "Pre-phase blockers (lines 27-43) are specific, actionable, and architecturally cross-cutting — they belong here as the execution gate.",
+          "file_line": "ws3-phase-5-interactive-user-search-view.plan.md:23-43"
+        },
+        {
+          "claim": "Acceptance evidence (lines 79-88) is concrete and testable, giving a clear done signal.",
+          "file_line": "ws3-phase-5-interactive-user-search-view.plan.md:79-88"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan enforces a coherent set of boundary constraints (MCP-only data flow, single tool UI surface, no second styling layer, no compat-bridge state) that are architecturally load-bearing for the WS3 clean-break rebuild. The pre-phase blocker section (lines 23-43) surfaces real cross-cutting issues rather than local housekeeping. Tasks and acceptance criteria are concrete and testable (lines 61-88).",
+      "content_quality": "strong",
+      "content_quality_note": "Tasks are specific and implementation-directed (lines 61-75); acceptance criteria map 1-to-1 to the architectural constraints asserted in the overview and blockers (lines 79-88); required inputs cite concrete completed artefacts with path references (lines 46-54). No vague language or placeholder sections.",
+      "salvage_value": [
+        {
+          "idea": "Remove search tool from WIDGET_TOOL_NAMES and strip its _meta.ui.resourceUri so only user-search renders the interactive widget.",
+          "class": "good",
+          "file_line": "ws3-phase-5-interactive-user-search-view.plan.md:27-32"
+        },
+        {
+          "idea": "Consolidate to a single user-facing search tool (user-search); search stays agent-only without _meta.ui.",
+          "class": "good",
+          "file_line": "ws3-phase-5-interactive-user-search-view.plan.md:34-39"
+        },
+        {
+          "idea": "Write RED tests for search submission and all UI states (loading, error, empty, result) before implementing.",
+          "class": "good",
+          "file_line": "ws3-phase-5-interactive-user-search-view.plan.md:61-62"
+        },
+        {
+          "idea": "Write RED tests for helper-tool behaviour and selection-to-model-context sync.",
+          "class": "good",
+          "file_line": "ws3-phase-5-interactive-user-search-view.plan.md:62"
+        },
+        {
+          "idea": "Implement user-search view exclusively via app.callServerTool(), not direct HTTP.",
+          "class": "good",
+          "file_line": "ws3-phase-5-interactive-user-search-view.plan.md:63"
+        },
+        {
+          "idea": "Keep user-search-query as app-only helper with visibility controlled by metadata, not hardcoded logic.",
+          "class": "good",
+          "file_line": "ws3-phase-5-interactive-user-search-view.plan.md:64"
+        },
+        {
+          "idea": "Reuse Phase 4 shared token package; prohibit a second local styling layer inside Phase 5.",
+          "class": "good",
+          "file_line": "ws3-phase-5-interactive-user-search-view.plan.md:65"
+        },
+        {
+          "idea": "Enforce MCP-only iframe data flow; no direct iframe HTTP fetch for business data.",
+          "class": "good",
+          "file_line": "ws3-phase-5-interactive-user-search-view.plan.md:66"
+        },
+        {
+          "idea": "Validate result shape at component boundary before render.",
+          "class": "good",
+          "file_line": "ws3-phase-5-interactive-user-search-view.plan.md:67"
+        },
+        {
+          "idea": "Handle graceful error states if app.callServerTool() rejects or times out.",
+          "class": "good",
+          "file_line": "ws3-phase-5-interactive-user-search-view.plan.md:69-70"
+        },
+        {
+          "idea": "Handle cancellation on app teardown so pending tool calls don't leave UI in inconsistent state.",
+          "class": "good",
+          "file_line": "ws3-phase-5-interactive-user-search-view.plan.md:71-72"
+        },
+        {
+          "idea": "Apply result-size awareness: paginate or truncate large search results before rendering (MCP message size is host-dependent).",
+          "class": "good",
+          "file_line": "ws3-phase-5-interactive-user-search-view.plan.md:73-74"
+        },
+        {
+          "idea": "Maintain UI state entirely in local React app with no compatibility-bridge state model.",
+          "class": "good",
+          "file_line": "ws3-phase-5-interactive-user-search-view.plan.md:82"
+        },
+        {
+          "idea": "Model context updates should occur only when the model needs explicit selection context — not on every interaction.",
+          "class": "good",
+          "file_line": "ws3-phase-5-interactive-user-search-view.plan.md:81"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [
+        "parent_plan"
+      ],
+      "status_raw": "PENDING — Phase 4.5 prerequisite complete; the earlier PR #76 blocker is cleared (merged 2026-04-10)",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, §2.1). No stable kebab slug present in frontmatter.",
+          "file_line": "ws3-phase-5-interactive-user-search-view.plan.md:1-16"
+        },
+        {
+          "issue": "Missing required field `node_type: \"plan\"` (LOCKED, §2.1). The registry discriminator is absent.",
+          "file_line": "ws3-phase-5-interactive-user-search-view.plan.md:1-16"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED, §2.2). Cannot determine readiness axis (strategic vs executable) from frontmatter; inferred executable from presence of `todos`.",
+          "file_line": "ws3-phase-5-interactive-user-search-view.plan.md:1-16"
+        },
+        {
+          "issue": "Missing required field `last_updated` (LOCKED, §2.4). Date appears only in the prose body (line 22), not in frontmatter.",
+          "file_line": "ws3-phase-5-interactive-user-search-view.plan.md:22"
+        },
+        {
+          "issue": "Missing required edge `serves_strategic_choice` (LOCKED, §2.3). Executable plans require this field; `\"pending\"` sentinel is acceptable but neither is present.",
+          "file_line": "ws3-phase-5-interactive-user-search-view.plan.md:1-16"
+        },
+        {
+          "issue": "`isProject: false` present (line 5). This key is explicitly dropped in V0 §2.5 (subsumed by `projects_to`); its presence is a conformance violation.",
+          "file_line": "ws3-phase-5-interactive-user-search-view.plan.md:5"
+        },
+        {
+          "issue": "`status:` appears in prose body as a whole-line narrative string (line 21): \"PENDING — Phase 4.5 prerequisite complete…\". V0 §3.5 explicitly maps prose-valued `status` to the axes; prose moves to the body, axes carry state. While it is in the body rather than frontmatter, this confirms no axis-based state is captured in frontmatter at all.",
+          "file_line": "ws3-phase-5-interactive-user-search-view.plan.md:21"
+        },
+        {
+          "issue": "`parent_plan: \"ws3-widget-clean-break-rebuild.plan.md\"` (line 3) is used as an edge. V0 §2.5 marks `parent_plan` as SURVEY-MAY-ADD-EDGES — it is not in the V0 canonical edge set. Its presence is unclassified by V0 (not a conformance error per se, but noted as a survey candidate key).",
+          "file_line": "ws3-phase-5-interactive-user-search-view.plan.md:3"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "Two overlapping tool registrations (search with _meta.ui and user-search) are acknowledged as a pre-phase blocker but left unresolved before Phase 5 tasks begin. This is a dual-registration architectural hazard: both tools are model-visible with widget UI metadata, creating ambiguity in model tool selection and MCP App routing. The plan identifies the fix (lines 27-43) but does not enforce resolution as a hard gate before any implementation task in the Tasks section (lines 60-76). A partial fix — removing _meta.ui from search but leaving user-search unvalidated — risks shipping an inconsistent surface.",
+          "file_line": "ws3-phase-5-interactive-user-search-view.plan.md:27-43"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan mandates MCP-only iframe data flow (Task 6, line 67) and validates result shape at the component boundary (Task 7, line 68), but the acceptance evidence (lines 78-88) contains no criterion that verifies no direct HTTP fetch path exists. The architectural constraint is stated in Tasks but lacks a corresponding acceptance gate, meaning the constraint could be violated without failing acceptance.",
+          "file_line": "ws3-phase-5-interactive-user-search-view.plan.md:67-68"
+        },
+        {
+          "severity": "medium",
+          "claim": "MCP message size is called out as host-dependent (line 73) and the mitigation is paginate-or-truncate, but no concrete size budget or pagination protocol is specified. This leaves an open architectural decision embedded inside a task comment rather than resolved as a named interface contract. A downstream phase touching result rendering could re-introduce an incompatible shape.",
+          "file_line": "ws3-phase-5-interactive-user-search-view.plan.md:73-74"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan cross-references meta-oak-namespace-cleanup.plan.md as a co-requisite (lines 41-43) but uses the path prefix current/ while the active/ directory holds this plan. If that plan has since moved or been archived the cross-reference silently breaks; no verification step is specified.",
+          "file_line": "ws3-phase-5-interactive-user-search-view.plan.md:41-43"
+        },
+        {
+          "severity": "low",
+          "claim": "Task 3 (line 63) names app.callServerTool() as the implementation primitive but does not specify the tool call timeout contract or how the cancellation in Task 8 (line 71) integrates with the SDK's teardown lifecycle. Teardown cancellation is architecturally non-trivial in MCP Apps and the plan defers its shape entirely to implementation.",
+          "file_line": "ws3-phase-5-interactive-user-search-view.plan.md:63-72"
+        },
+        {
+          "severity": "info",
+          "claim": "Acceptance criterion 3 (line 81) — model context updates only when model needs explicit selection context — is correct in intent but under-specified. No observable test or boundary condition is given for what constitutes an explicit selection context trigger, making the criterion difficult to audit in automated tests.",
+          "file_line": "ws3-phase-5-interactive-user-search-view.plan.md:81"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/sdk-and-mcp-enhancements/aggregated-tool-result-type-remediation.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "All four todos are pending — no work has started, the plan is actionable as-is",
+          "file_line": "aggregated-tool-result-type-remediation.plan.md:9-21"
+        },
+        {
+          "claim": "The architectural constraint (open to new tool classes) is correctly framed and not yet implemented",
+          "file_line": "aggregated-tool-result-type-remediation.plan.md:42-44"
+        },
+        {
+          "claim": "The plan resolves a named debt note in the MCP app README, giving it a concrete downstream artefact to close",
+          "file_line": "aggregated-tool-result-type-remediation.plan.md:75-77"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every constituent idea is sound. The taxonomy rename is necessary (line 28-31), the extensibility constraint is architecturally correct (line 42-44), and the result-type unification removes a real structural bypass (line 37-39). No speculative or aspirational padding; the acceptance criteria are concrete and verifiable (lines 70-77).",
+      "content_quality": "strong",
+      "content_quality_note": "The plan is concise and evidence-grounded. It names the exact symbols to rename (line 52-53), the exact tools affected (line 36), the exact bypass being closed (line 37-39), and links to the upstream debt note (line 75-77). The two-phase sequencing is logical: taxonomy first prevents naming confusion during the migration. No vague aspirations or missing rationale.",
+      "salvage_value": [
+        {
+          "idea": "Rename AggregatedToolName and AGGREGATED_TOOL_DEFS to reflect 'composed' or 'custom' semantics, updating all references across types, code, tests, docs, and README",
+          "class": "good",
+          "file_line": "aggregated-tool-result-type-remediation.plan.md:52-55"
+        },
+        {
+          "idea": "Design the type system so new tool classes (from other API specs, third-party services, submodules, or unimagined categories) can plug in via a common contract without modifying core registration infrastructure",
+          "class": "good",
+          "file_line": "aggregated-tool-result-type-remediation.plan.md:42-44, 57-59"
+        },
+        {
+          "idea": "Migrate composed tools (search, browse, fetch flows, orientation, graph tools, download-asset, user-search) from Promise<CallToolResult> to ToolExecutionResult so all tools share the same error handling, logging, and type safety",
+          "class": "good",
+          "file_line": "aggregated-tool-result-type-remediation.plan.md:36-39, 62-64"
+        },
+        {
+          "idea": "Verify E2E parity and type safety are preserved after migration — existing E2E tests as the gate",
+          "class": "good",
+          "file_line": "aggregated-tool-result-type-remediation.plan.md:73"
+        },
+        {
+          "idea": "Resolve the debt note recorded in the MCP app README Architecture Notes section as the explicit close signal for this plan",
+          "class": "good",
+          "file_line": "aggregated-tool-result-type-remediation.plan.md:75-77"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": null,
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (kebab slug; required for all plans)",
+          "file_line": "plan:1-22"
+        },
+        {
+          "issue": "Missing required field `node_type` (literal \"plan\"; required for all plans)",
+          "file_line": "plan:1-22"
+        },
+        {
+          "issue": "Missing required field `kind` (enum strategic|executable; required for all plans)",
+          "file_line": "plan:1-22"
+        },
+        {
+          "issue": "Missing required field `last_updated` (ISO date; required for all plans)",
+          "file_line": "plan:1-22"
+        },
+        {
+          "issue": "Missing required field `serves_strategic_choice` (required for executable plans; plan carries todos making it effectively executable)",
+          "file_line": "plan:1-22"
+        },
+        {
+          "issue": "Present dropped key `isProject: false` — V0 §2.5 explicitly drops this key as subsumed by `projects_to`",
+          "file_line": "plan:21"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "type",
+      "specialist_kind": "type",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "The plan's Phase 2 goal (composed tools adopt ToolExecutionResult) is not reflected in the current type boundary. The AggregatedHandler type alias in executor.ts is defined as (input, deps) => Promise<CallToolResult>, not Promise<ToolExecutionResult>. Every aggregated execution function (runSearchSdkTool, runBrowseTool, runExploreTool, runFetchTool, etc.) returns Promise<CallToolResult> directly. This is the concrete gap the plan must close, and no existing wrapper or transitional type bridges it.",
+          "file_line": "packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/executor.ts:162-165"
+        },
+        {
+          "severity": "medium",
+          "claim": "AggregatedToolName is a hand-maintained explicit union in types.ts, deliberately decoupled from keyof typeof AGGREGATED_TOOL_DEFS to break a circular dependency. The README's Architecture Notes incorrectly states 'The AggregatedToolName type derives from keyof typeof AGGREGATED_TOOL_DEFS' — the actual design is the reverse: the map is constrained by the union via a satisfies guard. The plan's rename phase must handle this union manually; the satisfies guard in definitions.ts is the only compile-time consistency enforcer. Any rename that touches only definitions.ts without also updating the union in types.ts will silently compile until the satisfies check fires.",
+          "file_line": "packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/types.ts:70-89"
+        },
+        {
+          "severity": "medium",
+          "claim": "The onToolExecution callback in ToolExecutorFactoryConfig is typed as (name: unknown, result: ToolExecutionResult) => void, which is correct for generated tools. However, aggregated tools bypass the createDefaultRequestExecutor path entirely — they are dispatched by executeAggregatedTool in the executor and return CallToolResult without ever invoking onToolExecution. Phase 2 must define how onToolExecution fires for composed tools post-migration, or the auth-capture instrumentation (ADR-054) will silently have no coverage over them.",
+          "file_line": "apps/oak-curriculum-mcp-streamable-http/src/tool-executor-factory.ts:62"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan states composed tools 'currently return Promise<CallToolResult> directly'. This is accurate for the MCP-facing handler in executor.ts, but aggregated-fetch/execution.ts line 202 already returns Promise<ToolExecutionResult> for an internal sub-function (fetchSingleItem). The boundary between the ToolExecutionResult-returning internals and the CallToolResult-returning public surface is not called out in the plan, which may cause implementors to over-migrate (touching internal helpers that are already typed correctly) or under-migrate (missing the public-facing adapter layer).",
+          "file_line": "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-fetch/execution.ts:202"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan's open-extension principle ('architecture should not assume exactly two classes') has no corresponding type-level affordance proposed. The current AggregatedToolName union and AGGREGATED_HANDLERS map are closed by construction. A discriminated union or a protocol-based approach (e.g. a ToolClass interface that any executor implements) would be needed for the type system to be genuinely open to new classes without core changes. The plan defers the exact mechanism to implementation; this is acceptable but implementors should be aware there is no existing extension point to build on.",
+          "file_line": "packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/executor.ts:167-182"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/sdk-and-mcp-enhancements/current/canonical-url-enforcement.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Status QUEUED with all todos pending — active work not yet started",
+          "file_line": "canonical-url-enforcement.plan.md:29-30"
+        },
+        {
+          "claim": "Concrete WS breakdown with test specs and file-level change targets — executable as written",
+          "file_line": "canonical-url-enforcement.plan.md:114-233"
+        },
+        {
+          "claim": "Non-goals section encodes explicit scope boundaries that prevent drift",
+          "file_line": "canonical-url-enforcement.plan.md:101-110"
+        },
+        {
+          "claim": "Risk table identifies real failure modes with mitigations — not boilerplate",
+          "file_line": "canonical-url-enforcement.plan.md:288-295"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is grounded in an existing, tested predecessor layer (line 40-50), identifies a real gap (lines 51-67), specifies concrete file-level changes (lines 162-225), and encodes non-trivial design decisions (graceful degradation, performance, scope exclusions). No speculative or aspirational content that lacks a home in the codebase.",
+      "content_quality": "strong",
+      "content_quality_note": "Test specifications in WS1 are precise and give RED criteria (lines 119-155). Implementation section names exact files, function signatures, and parameter additions (lines 162-225). Risk table maps concrete risks to concrete mitigations (lines 288-295). The current-vs-target flow diagrams (lines 70-84) make the before/after unambiguous. This is above V0-conformant — it encodes architectural judgment, not just structure.",
+      "salvage_value": [
+        {
+          "idea": "Promote runSitemapValidation to accept a strict: boolean param — return error Result when strict and invalidCount > 0, ok-with-report otherwise",
+          "class": "good",
+          "file_line": "canonical-url-enforcement.plan.md:177-181"
+        },
+        {
+          "idea": "Read --strict-urls CLI flag or SDK_CODEGEN_STRICT_URLS env var in codegen.ts; default strict in CI (process.env.CI === 'true'), warn in local dev",
+          "class": "good",
+          "file_line": "canonical-url-enforcement.plan.md:183-189"
+        },
+        {
+          "idea": "Export validateUrl, loadSitemapReference, validateGeneratedUrls from sdk-codegen public barrel so search-cli can import them",
+          "class": "good",
+          "file_line": "canonical-url-enforcement.plan.md:162-170"
+        },
+        {
+          "idea": "Thread optional teacherPaths: readonly string[] through document builders; validate before writing to ES document",
+          "class": "good",
+          "file_line": "canonical-url-enforcement.plan.md:196-224"
+        },
+        {
+          "idea": "Load sitemap reference once at ingestion start in run-versioned-ingest.ts; pass teacherPaths array through — avoid per-URL I/O",
+          "class": "good",
+          "file_line": "canonical-url-enforcement.plan.md:205-211"
+        },
+        {
+          "idea": "Graceful degradation: if reference file not found, log warning and skip validation rather than fail",
+          "class": "good",
+          "file_line": "canonical-url-enforcement.plan.md:208-210"
+        },
+        {
+          "idea": "Explicit non-goal: no validation_status field in ES documents — reject bad URLs entirely rather than storing them with a bad flag",
+          "class": "good",
+          "file_line": "canonical-url-enforcement.plan.md:103-104"
+        },
+        {
+          "idea": "Explicit non-goal: no runtime URL validation in MCP tool responses (too slow, requires network or reference map at runtime)",
+          "class": "good",
+          "file_line": "canonical-url-enforcement.plan.md:105-106"
+        },
+        {
+          "idea": "Explicit non-goal: no lesson-URL validation — sitemap does not contain /teachers/lessons/{slug} paths (ADR-132 gap)",
+          "class": "good",
+          "file_line": "canonical-url-enforcement.plan.md:108-110"
+        },
+        {
+          "idea": "Future enhancement: sitemap scanner should extract subject-to-key-stage mappings to enable data-driven subject URL generation and eliminate urlForSubject heuristic",
+          "class": "speculative",
+          "file_line": "canonical-url-enforcement.plan.md:330-333"
+        },
+        {
+          "idea": "Future enhancement: subject response augmentation middleware should extract key stage from request path rather than response body keyStages array",
+          "class": "speculative",
+          "file_line": "canonical-url-enforcement.plan.md:334-336"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "QUEUED",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required LOCKED field `id` — every plan node requires a stable kebab slug for graph identity (V0 §2.1)",
+          "file_line": "canonical-url-enforcement.plan.md:1-24 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required LOCKED field `node_type: \"plan\"` — the registry discriminator required for all plans (V0 §2.1)",
+          "file_line": "canonical-url-enforcement.plan.md:1-24 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required LOCKED field `kind` — executable/strategic axis required for all plans; plan carries `todos` and body reads `QUEUED` so kind is inferrable as `executable`, but the field is absent (V0 §2.2, §3.1)",
+          "file_line": "canonical-url-enforcement.plan.md:1-24 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required LOCKED field `last_updated` — required for all plans; ISO date appears only in body prose as `**Last Updated**: 2026-04-01` (plan line 29), not in frontmatter (V0 §2.4)",
+          "file_line": "canonical-url-enforcement.plan.md:29 (body only)"
+        },
+        {
+          "issue": "Missing required field `serves_strategic_choice` — required for executable plans; must resolve to a published strategic-choice ID or carry `\"pending\"` sentinel (V0 §2.3, §4)",
+          "file_line": "canonical-url-enforcement.plan.md:1-24 (frontmatter block)"
+        },
+        {
+          "issue": "Present field `isProject: false` is explicitly V0-dropped — subsumed by `projects_to` edge; its presence is a direct nonconformance (V0 §2.5)",
+          "file_line": "canonical-url-enforcement.plan.md:23"
+        },
+        {
+          "issue": "No V0 typed edge fields declared in frontmatter (`derives_from`, `depends_on`, `thread`, etc.) — blocking dependency on predecessor plan and ADR-132/ADR-145 alignment are expressed only in body prose (V0 §2.3, §4)",
+          "file_line": "canonical-url-enforcement.plan.md:1-24 (frontmatter block)"
+        },
+        {
+          "issue": "Body carries `**Status**: QUEUED` as free prose (line 29) — V0 replaces status prose with orthogonal frontmatter axes; prose status in body is residual drift even though it is not a frontmatter field (V0 §2.2, §3.5)",
+          "file_line": "canonical-url-enforcement.plan.md:29"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "WS2.1 proposes exporting validateUrl, loadSitemapReference, and validateGeneratedUrls from sdk-codegen's public barrel so that oak-search-cli can import them. This creates a cross-package dependency from an application workspace (oak-search-cli) into an SDK-codegen package. Codegen packages are conventionally a build-time tool, not a runtime/ingest-time library; coupling the live ingestion pipeline to sdk-codegen's public API means sdk-codegen's interface must remain stable for ingestion correctness, blurring the build-tool/runtime boundary. The plan acknowledges this risk in the risk table but treats it as mitigated by 'pure functions with no side effects' (line 171). That mitigates correctness risk, not boundary-discipline risk: the import graph now runs app -> sdk-codegen, which is the reverse of the intended generator-first flow (generator produces, apps consume generated artefacts, not the generator itself).",
+          "file_line": "canonical-url-enforcement.plan.md:168-172"
+        },
+        {
+          "severity": "medium",
+          "claim": "The sitemap reference map is described as 7.5 MB loaded once at ingestion start and passed as a teacherPaths array through to every document builder (lines 207-209, 217-219, 292). Passing a 7.5 MB array by reference through every builder call is architectural threading: the reference becomes an implicit ambient dependency for all builders rather than a bounded collaborator injected at a single seam. If a builder is ever called outside the ingestion harness context (e.g. in tests, in a future reuse path, or in a streaming ingest where the reference may refresh), callers must reconstruct or supply the full array. A context or registry pattern at the harness boundary would isolate the reference lifetime from individual builder signatures.",
+          "file_line": "canonical-url-enforcement.plan.md:207-219"
+        },
+        {
+          "severity": "low",
+          "claim": "WS2.3 specifies that when the sitemap reference file is not found, ingestion proceeds without validation (graceful degradation, line 208-210). The risk table (line 290) covers 'reference map stale' but the graceful-degradation path means a misconfigured or missing reference map silently produces unvalidated output in CI if the path variable is wrong. The plan's CI default is strict (line 189) but that strictness applies only when the map exists and URLs fail, not when the map is absent. An absent map in CI should arguably be a hard failure rather than a silent skip, or at minimum the distinction should be an explicit architectural decision documented in ADR-132.",
+          "file_line": "canonical-url-enforcement.plan.md:208-210"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan references ADR-145 twice (lines 59, 62) for the relocation of canonical-url-generator.ts to oak-url-convenience.ts, and ADR-132 as the live target for outcome propagation (lines 248, 309). The predecessor plan's outcomes are described as living in ADR-047 and sdk-codegen README (line 321). Three separate ADRs are load-bearing for understanding the full URL architecture. The plan does not cross-link or summarise which ADR governs which decision boundary, making it hard to verify that the proposed exports and strictness defaults are consistent with already-locked ADR decisions.",
+          "file_line": "canonical-url-enforcement.plan.md:59-66 and 309-310"
+        },
+        {
+          "severity": "info",
+          "claim": "The non-goals section explicitly excludes runtime URL validation in MCP tool responses (line 107-108), citing speed and runtime reference-map availability. This is architecturally sound given the binary-search-over-sitemap approach, and the reasoning is stated. No action required, but the WS5 adversarial reviewer (architecture-expert-wilma, line 282) should verify that MCP tool response paths cannot indirectly surface invalid URLs that passed through a non-strict ingestion run.",
+          "file_line": "canonical-url-enforcement.plan.md:107-108"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": [
+        {
+          "claim": "Predecessor plan (WS1-WS5 of canonical-url-validation-integration.plan.md) is COMPLETE and deleted; outcomes live in ADR-047 and sdk-codegen README (cited at canonical-url-enforcement.plan.md:317-321)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "canonical-url-enforcement.plan.md:317,321 (claim text verbatim); git commit 0ecbb9013 shows \"D .agent/plans/sdk-and-mcp-enhancements/active/canonical-url-validation-integration.plan.md\" and it is absent from the working tree (deleted confirmed); docs/architecture/architectural-decisions/047-canonical-url-generation-at-codegen-time.md:1,25 (ADR-047 exists, records canonical URL generation); docs/architecture/architectural-decisions/132-sitemap-scanner-for-canonical-url-validation.md:1 (validation layer, Accepted); packages/sdks/oak-sdk-codegen/README.md:87-103 (scan:sitemap, canonical-url-map.json, runSitemapValidation documented)"
+        },
+        {
+          "claim": "url-generation-cleanup.plan.md is COMPLETE and retired generateOakUrl (cited at canonical-url-enforcement.plan.md:325-326)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": ".agent/plans/sdk-and-mcp-enhancements/archive/completed/url-generation-cleanup.plan.md:26 (Status: COMPLETE) and frontmatter todos all status: completed; corroborated in live code — packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/routing/url-helpers.ts:88 exports only generateOakUrlWithContext (no bare generateOakUrl); the only `generateOakUrl(` references estate-wide are absence-assertions in generate-url-helpers.unit.test.ts:135,138; migration target apps/oak-search-cli/src/lib/index-oak-helpers.ts:6,75 now uses generateSubjectProgrammesUrl"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/sdk-and-mcp-enhancements/current/clerk-mcp-tools-and-ext-apps-bumps.plan.md",
+      "classification": "archive-complete",
+      "classification_evidence": [
+        {
+          "claim": "Status field reads 'COMPLETE — awaiting archive'",
+          "file_line": "line 26"
+        },
+        {
+          "claim": "All five todos have status: completed",
+          "file_line": "lines 8-19"
+        },
+        {
+          "claim": "Completion Note dated 2026-06-02 confirms all dependency targets landed and all quality gates passed",
+          "file_line": "lines 35-52"
+        },
+        {
+          "claim": "Plan explicitly states 'This file now remains only as the historical execution record'",
+          "file_line": "lines 48-52"
+        },
+        {
+          "claim": "Folder lane is current/ but plan is functionally done — lifecycle mismatch confirms archive is the correct move",
+          "file_line": "line 26 vs folder path"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every phase is executed and validated; the completion note at lines 35-52 gives concrete version evidence with a named gate suite. The pre-flight grep strategy (lines 269-281) and the canary-test discipline (lines 392-435) encode reusable patterns. Forward candidates are specific, falsifiable, and cross-linked. No speculative or bad ideas — scope is tightly bounded and all YAGNI non-goals are explicit (lines 229-236).",
+      "content_quality": "strong",
+      "content_quality_note": "Changelog analysis at lines 77-172 is detailed and codebase-grep-confirmed, not just summarised from external docs. Reviewer scheduling is phase-aligned with explicit rationale per reviewer role (lines 210-225, 449-455). Risk table at lines 595-601 is specific and mitigation-cited. The completion note at lines 35-52 names the actual post-bump versions and the gate suite, not just 'done'. The forward candidates carry falsifiable promotion triggers (lines 487-490, 515, 539-541).",
+      "salvage_value": [
+        {
+          "idea": "Pre-flight invariant grep set for Clerk/MCP auth surface (requireAuth, clockSkewInMs, protectedResourceHandlerClerk, deprecated server.tool/prompt/resource) — reusable template for future bumps",
+          "class": "good",
+          "file_line": "lines 269-281"
+        },
+        {
+          "idea": "Canary-test-first discipline: run the version-bump-reminder conformance test before full quality gates when bumping @clerk/mcp-tools, with explicit stop-and-document failure branch",
+          "class": "good",
+          "file_line": "lines 391-435"
+        },
+        {
+          "idea": "Manifest specifier rationale: caret on 0.x allows only 0.5.x patch/minor, next minor (0.6.0) re-triggers a deliberate bump micro-plan",
+          "class": "good",
+          "file_line": "lines 363-372"
+        },
+        {
+          "idea": "@clerk/mcp-tools 0.4.0 breaking-change surface (protectedResourceHandlerClerk must-be-called) documented with codebase grep confirmation — historical record for future reviewers",
+          "class": "good",
+          "file_line": "lines 96-111"
+        },
+        {
+          "idea": "AppOptions.strict adoption candidate with promotion trigger: next non-trivial widget change or first observed handshake-ordering bug in development",
+          "class": "good",
+          "file_line": "lines 472-499"
+        },
+        {
+          "idea": "ext-apps 1.7.0 capability inventory: App.registerTool/sendToolListChanged, App.createSamplingMessage, allowUnsafeEval default change — with shared promotion trigger",
+          "class": "good",
+          "file_line": "lines 505-521"
+        },
+        {
+          "idea": "MCP SDK 2.0 evaluation axes: Standard Schema alignment with schema-first cardinal rule, unknown-tool rejection contract change, first-party Express adapter, zod peer-dep drop",
+          "class": "good",
+          "file_line": "lines 524-543"
+        },
+        {
+          "idea": "MCP SDK 2.0 promotion trigger at alpha→beta transition (was alpha.2 as of 2026-04-01) — may have already fired, needs verification before archiving",
+          "class": "speculative",
+          "file_line": "lines 539-541"
+        },
+        {
+          "idea": "Reviewer-pair warm-up rationale: cheap dependency-bump plans keep clerk-expert and mcp-expert invocation discipline calibrated",
+          "class": "good",
+          "file_line": "lines 686-688"
+        },
+        {
+          "idea": "CSP-strict-by-default improvement from allowUnsafeEval: false in ext-apps 1.7.0 — free security improvement on widget adoption",
+          "class": "good",
+          "file_line": "lines 128-130"
+        },
+        {
+          "idea": "React StrictMode useApp cleanup fix in ext-apps 1.7.0 eliminating zombie PostMessageTransport listener under dev double-invoke",
+          "class": "good",
+          "file_line": "lines 135-137"
+        },
+        {
+          "idea": "Phase 3 forward candidates captured into named destination plans (active/mcp-app-extension-migration and future/mcp-protocol-adoption-roadmap) — re-org must verify those destinations received the captures",
+          "class": "good",
+          "file_line": "lines 658-661"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": "done",
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "COMPLETE — awaiting archive",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (V0 §2.1, LOCKED — required for all plans; the node's graph identity)",
+          "file_line": "clerk-mcp-tools-and-ext-apps-bumps.plan.md:1-21 (frontmatter block, field absent)"
+        },
+        {
+          "issue": "Missing required field `node_type` (V0 §2.1, LOCKED — must be literal string \"plan\")",
+          "file_line": "clerk-mcp-tools-and-ext-apps-bumps.plan.md:1-21 (frontmatter block, field absent)"
+        },
+        {
+          "issue": "Missing required field `kind` (V0 §2.2/§3.1, model LOCKED — must be `strategic` or `executable`; folder location `current/` implies `executable` but axis is unset)",
+          "file_line": "clerk-mcp-tools-and-ext-apps-bumps.plan.md:1-21 (frontmatter block, field absent)"
+        },
+        {
+          "issue": "Missing `disposition` for a plan in a terminal state — body line 27 reads `COMPLETE — awaiting archive`, which maps to `disposition: done` via V0 §3.5 migration map (LOCKED model)",
+          "file_line": "clerk-mcp-tools-and-ext-apps-bumps.plan.md:27"
+        },
+        {
+          "issue": "Missing `serves_strategic_choice` — required for executable plans (V0 §2.3/§4, LOCKED shape)",
+          "file_line": "clerk-mcp-tools-and-ext-apps-bumps.plan.md:1-21 (frontmatter block, field absent)"
+        },
+        {
+          "issue": "Missing `last_updated` — required for all plans (V0 §2.4, LOCKED); value exists as body prose `**Last Updated**: 2026-06-02` but is not in frontmatter",
+          "file_line": "clerk-mcp-tools-and-ext-apps-bumps.plan.md:25"
+        },
+        {
+          "issue": "Status expressed as body prose (`**Status**: COMPLETE — awaiting archive`) instead of the orthogonal V0 axes (`disposition`, `kind`); §3.5 migration map absorbs this value but it is not transcribed onto any frontmatter axis",
+          "file_line": "clerk-mcp-tools-and-ext-apps-bumps.plan.md:27"
+        },
+        {
+          "issue": "Dropped field `isProject: false` present in frontmatter — V0 §2.5 explicitly drops this key (107/250 census; subsumed by `projects_to` edge)",
+          "file_line": "clerk-mcp-tools-and-ext-apps-bumps.plan.md:20"
+        },
+        {
+          "issue": "Related plan references expressed as body prose hyperlinks only — no typed edge declarations (`depends_on`, `thread`, `derives_from`) in frontmatter as required by V0 §2.3/§4",
+          "file_line": "clerk-mcp-tools-and-ext-apps-bumps.plan.md:658-663"
+        }
+      ],
+      "unclassified_keys": [
+        "isProject"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "Plan is COMPLETE (status: COMPLETE — awaiting archive, all todos marked completed). All assumptions were execution-time assumptions that have already resolved. No live assumption risk remains.",
+          "file_line": "clerk-mcp-tools-and-ext-apps-bumps.plan.md:26-27"
+        },
+        {
+          "severity": "info",
+          "claim": "Changelog verification assumed URLs were stable and content was authoritative at 2026-04-23 fetch time. This assumption was appropriate for a point-in-time dependency bump; the plan is now complete so staleness carries no residual risk.",
+          "file_line": "clerk-mcp-tools-and-ext-apps-bumps.plan.md:68-75"
+        },
+        {
+          "severity": "low",
+          "claim": "Phase 3 forward-candidate promotion trigger for AppOptions.strict and ext-apps 1.7.0 capabilities is 'next non-trivial widget change' — this is vague and not independently falsifiable. 'Non-trivial' has no operationalised threshold. The trigger is shared verbatim by Tasks 3.1 and 3.2 without differentiation, which means neither trigger can be independently evaluated as fired-or-not.",
+          "file_line": "clerk-mcp-tools-and-ext-apps-bumps.plan.md:487-515"
+        },
+        {
+          "severity": "low",
+          "claim": "MCP SDK 2.0 promotion trigger ('when alpha leaves for beta') assumes the SDK project follows a conventional alpha→beta→stable progression. The plan cites 2.0.0-alpha.2 as of 2026-04-01 but no monitoring mechanism is specified beyond 'the existing reviewer-grounding loop'. That loop's cadence is not defined here, so the trigger relies on an undocumented discovery pathway.",
+          "file_line": "clerk-mcp-tools-and-ext-apps-bumps.plan.md:539-543"
+        },
+        {
+          "severity": "info",
+          "claim": "Caret-on-0.x assumption for @clerk/mcp-tools is explicitly grounded: caret at 0.5.x only allows 0.5.x patch releases, not 0.6.0+. The stated assumption that Clerk observes breaking-change discipline at the 0.minor boundary is reasonable given the 0.3.1→0.4.0→0.5.0 changelog evidence cited.",
+          "file_line": "clerk-mcp-tools-and-ext-apps-bumps.plan.md:366-372"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan assumes grep-based negative proofs (no usage of requireAuth, clockSkewInMs, protectedResourceHandlerClerk, deprecated .tool/.prompt/.resource) are sufficient to establish no breaking-change impact. These are deterministic grep checks on known import paths, not runtime-shaped assumptions; the methodology is sound.",
+          "file_line": "clerk-mcp-tools-and-ext-apps-bumps.plan.md:253-283"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": [
+        {
+          "claim": "All four packages are now updated: @clerk/express ^2.1.22, @clerk/backend ^3.4.14, @clerk/mcp-tools ^0.5.0, @modelcontextprotocol/ext-apps ^1.7.3 — pnpm -r outdated is clean (cited at lines 39-43)",
+          "verdict": "refuted",
+          "confidence": "high",
+          "evidence": "apps/oak-curriculum-mcp-streamable-http/package.json:36-40 (live manifest: @clerk/backend ^3.8.0, @clerk/express ^2.1.28, @clerk/mcp-tools ^0.5.0, @modelcontextprotocol/ext-apps ^1.7.4) vs plan lines 38-43; live `pnpm outdated` shows @clerk/backend 3.8.0→3.8.2 and @clerk/express 2.1.28→2.1.30 still outstanding"
+        },
+        {
+          "claim": "This file now remains only as the historical execution record and forward-note source",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": ".agent/plans/sdk-and-mcp-enhancements/current/clerk-mcp-tools-and-ext-apps-bumps.plan.md:48-50 (verbatim self-description); corroborated by all-completed todos (lines 7,10,13,16,19), Status \"COMPLETE — awaiting archive\" (line 26), live manifest apps/oak-curriculum-mcp-streamable-http/package.json:36-41 showing @clerk/mcp-tools ^0.5.0 plus later refreshes (targets landed); and the forward-note role confirmed sole-home because the named Phase 3 capture targets do NOT contain the notes — active/mcp-app-extension-migration.plan.md (read full, no AppOptions.strict / ext-apps 1.7 / registerTool subsection) and future/mcp-protocol-adoption-roadmap.plan.md (read full, no MCP SDK 2.0 / Standard Schema subsection; covers unrelated R1-R4)"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/sdk-and-mcp-enhancements/current/download-asset-user-only-url.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "All five todos are pending, status is NOT STARTED, plan is actionable and self-contained",
+          "file_line": "download-asset-user-only-url.plan.md:5-19,25"
+        },
+        {
+          "claim": "Concrete file paths, bash validation commands, and acceptance criteria are present at each phase",
+          "file_line": "download-asset-user-only-url.plan.md:196-520"
+        },
+        {
+          "claim": "No completion signals, no duplicate found; cross-plan dependency explicitly managed rather than absorbed",
+          "file_line": "download-asset-user-only-url.plan.md:369-385"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every phase contains deterministic validation, targeted file paths, and acceptance criteria that can be checked mechanically. The security constraint (agents must never see downloadable asset content) is stated as absolute at line 61-63, and the plan correctly bounds its scope to the URL-placement boundary rather than inventing broader changes. Non-goals at lines 117-121 actively prevent scope creep. The one area of mild speculation is Task 1.3 (lines 296-322), which branches on whether _meta.ui.resourceUri already exists — but this is correctly framed as conditional investigation, not assumption.",
+      "content_quality": "strong",
+      "content_quality_note": "Phase-by-phase structure with red/green TDD discipline (lines 231-288), exact target response shape in TypeScript (lines 82-110), deterministic bash commands at every task, cross-plan dependency explicitly identified (lines 369-385), reviewer scheduling by phase (lines 179-187), and a seven-point definition of done (lines 128-147). The non-goals section (lines 117-121) is particularly tight. Content is well above V0-conformant boilerplate.",
+      "salvage_value": [
+        {
+          "idea": "Route signed download URLs exclusively through _meta.assetDownload.downloadUrl, absent from content and structuredContent",
+          "class": "good",
+          "file_line": "download-asset-user-only-url.plan.md:67-76"
+        },
+        {
+          "idea": "Exact agent-facing sentence hardcoded: 'Any download URLs are strictly for users; agents must never open them.'",
+          "class": "good",
+          "file_line": "download-asset-user-only-url.plan.md:69-71,87-90"
+        },
+        {
+          "idea": "Dedicated response builder for download-asset, bypassing the shared formatToolResponse formatter",
+          "class": "good",
+          "file_line": "download-asset-user-only-url.plan.md:157-159,260-267"
+        },
+        {
+          "idea": "TDD red/green discipline: failing tests asserting URL absence must exist before implementation changes",
+          "class": "good",
+          "file_line": "download-asset-user-only-url.plan.md:231-255"
+        },
+        {
+          "idea": "Recursive check of all model-visible string fields for signed URL, proxy path, sig=, exp= query params",
+          "class": "good",
+          "file_line": "download-asset-user-only-url.plan.md:245-248"
+        },
+        {
+          "idea": "Non-goal: do not add a generic hidden-data mode to formatToolResponse until a second consumer needs it",
+          "class": "good",
+          "file_line": "download-asset-user-only-url.plan.md:120-121"
+        },
+        {
+          "idea": "Non-goal: do not alter the asset proxy signing algorithm, TTL, or upstream fetch route",
+          "class": "good",
+          "file_line": "download-asset-user-only-url.plan.md:119"
+        },
+        {
+          "idea": "Absolute design constraint requiring future ADR or explicit ADR amendment before relaxation",
+          "class": "good",
+          "file_line": "download-asset-user-only-url.plan.md:61-64"
+        },
+        {
+          "idea": "Cross-plan coordination obligation: output-schemas-for-mcp-tools.plan.md must be updated or supersession recorded before resuming output-schema work",
+          "class": "good",
+          "file_line": "download-asset-user-only-url.plan.md:369-385"
+        },
+        {
+          "idea": "Text-only host trade-off explicitly documented: status confirmation available, URL not deliverable",
+          "class": "good",
+          "file_line": "download-asset-user-only-url.plan.md:75,308-310"
+        },
+        {
+          "idea": "ADR-126 bidirectional disposition note: clickable-link narrative superseded in part",
+          "class": "good",
+          "file_line": "download-asset-user-only-url.plan.md:409-411"
+        },
+        {
+          "idea": "Reviewer scheduling by phase (mcp-expert pre-execution, test+security during, code+docs+release post)",
+          "class": "good",
+          "file_line": "download-asset-user-only-url.plan.md:179-187"
+        },
+        {
+          "idea": "Task 1.3 conditional branch: if _meta.ui.resourceUri already present, test existing path; otherwise wire minimal App resource",
+          "class": "speculative",
+          "file_line": "download-asset-user-only-url.plan.md:296-302"
+        },
+        {
+          "idea": "ADR number reservation as 173 with explicit caveat that availability must be confirmed at implementation time",
+          "class": "speculative",
+          "file_line": "download-asset-user-only-url.plan.md:396-397"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "NOT STARTED (body prose, line 25; not a frontmatter field)",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "id absent — required for all plans; V0 §2.1 mandates a stable kebab-slug identity field on every plan node",
+          "file_line": "plan.md:1-20 (frontmatter block); schema §2.1 line 116"
+        },
+        {
+          "issue": "node_type absent — required for all plans; V0 §2.1 mandates literal 'plan' as the registry discriminator",
+          "file_line": "plan.md:1-20 (frontmatter block); schema §2.1 line 117"
+        },
+        {
+          "issue": "kind absent — required for all plans; V0 §3.1 mandates enum 'strategic | executable'; plan carries todos so maps to executable",
+          "file_line": "plan.md:1-20 (frontmatter block); schema §3.1 lines 131-132, §2.2 line 131"
+        },
+        {
+          "issue": "last_updated absent from frontmatter — required for all plans per V0 §2.4; appears only as body prose ('Last Updated: 2026-05-06') at plan line 24",
+          "file_line": "plan.md:24 (body); schema §2.4 line 159"
+        },
+        {
+          "issue": "serves_strategic_choice absent — required for executable plans (or explicit 'pending' sentinel) per V0 §2.3; plan has todos indicating executable kind",
+          "file_line": "plan.md:1-20 (frontmatter block); schema §2.3 line 145"
+        },
+        {
+          "issue": "status: NOT STARTED in body is the emergent dropped pattern V0 §2.5 replaces with kind/disposition/gate axes; the free-text body field perpetuates the drift V0 exists to kill",
+          "file_line": "plan.md:25; schema §2.5 line 168"
+        },
+        {
+          "issue": "No typed edges declared in frontmatter (serves_strategic_choice, derives_from, thread, depends_on) despite body referencing multiple ADRs (ADR-126, ADR-141, ADR-123) and a related plan (output-schemas-for-mcp-tools.plan.md)",
+          "file_line": "plan.md:566-576 (References section); schema §2.3 lines 143-150, §4 lines 313-322"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "security",
+      "specialist_kind": "security",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "_meta confidentiality relies on MCP spec convention, not an access-control mechanism. The plan states _meta is 'not intended to be added to model context' (own word: 'intended'). Any MCP host that forwards _meta to the model defeats the boundary silently, with no server-side rejection. The plan has no mitigation for non-conforming hosts.",
+          "file_line": "download-asset-user-only-url.plan.md:43-44"
+        },
+        {
+          "severity": "medium",
+          "claim": "Signed URL TTL and revocability are explicitly non-goals (the plan will not alter the signing algorithm, TTL, or proxy route). If a signed URL leaks via a future host surfacing _meta, a log, or prompt injection, it remains valid for its full TTL with no described revocation path.",
+          "file_line": "download-asset-user-only-url.plan.md:119"
+        },
+        {
+          "severity": "low",
+          "claim": "The agent-facing sentence 'Any download URLs are strictly for users; agents must never open them.' is a prompt-level instruction in the content field, not an access-control enforcement. It is bypassable by prompt injection or a sufficiently authoritative user turn that instructs the model to ignore it.",
+          "file_line": "download-asset-user-only-url.plan.md:69-71"
+        },
+        {
+          "severity": "low",
+          "claim": "Tests assert URL absence from model-visible fields (Task 1.1) but do not verify that the proxy rejects a request bearing a valid signed URL initiated by a model. Proxy-level enforcement is described as 'existing' and not strengthened by this plan, so the proxy confidence layer is untested by this plan's scope.",
+          "file_line": "download-asset-user-only-url.plan.md:243-245"
+        },
+        {
+          "severity": "low",
+          "claim": "No audit logging for signed URL generation or consumption is described. If a URL in _meta is forwarded to or used by a model, there is no detection or alerting path named in the plan.",
+          "file_line": "download-asset-user-only-url.plan.md:74-75"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan's governance control is strong: any future relaxation of the agent-content visibility rule requires a new ADR or an explicit amendment to the existing one. This is a sound forward-change gate.",
+          "file_line": "download-asset-user-only-url.plan.md:63-64"
+        },
+        {
+          "severity": "info",
+          "claim": "Phase 0 Task 0.1 criterion 6 explicitly prohibits accessing asset bytes during verification, which is correct hygiene and consistent with the non-goal of not fetching or inspecting asset content.",
+          "file_line": "download-asset-user-only-url.plan.md:207"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": [
+        {
+          "claim": "Status is NOT STARTED with all todos pending",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "download-asset-user-only-url.plan.md:25 \"**Status**: NOT STARTED\"; all five todos status: pending at lines 7,10,12,16,19; corroborated — execution.ts:85-87 still calls formatToolResponse({data:{downloadUrl...}}) (pre-plan/current shape, no _meta.assetDownload); ADR-173 slot is graph-stack-topology not the asset-content-visibility ADR; the exact agent-facing sentence absent from packages/ and apps/"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/sdk-and-mcp-enhancements/current/http-mcp-test-suite-improvements.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "All seven cycles are pending with full acceptance criteria; plan is unstarted and represents live, unconsumed work",
+          "file_line": "9-68 (todos block, all status: pending)"
+        },
+        {
+          "claim": "Cycle 7 (appId removal) is architectural scope beyond test-quality and still pending",
+          "file_line": "53-60, 336-357"
+        },
+        {
+          "claim": "Phase-final security-expert confirmation is a bounded, uncompleted contractual step",
+          "file_line": "61-68, 362-370"
+        },
+        {
+          "claim": "Source material cites specific commits and agent IDs grounding the plan in real prior work",
+          "file_line": "448-458"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every cycle is grounded in a specific, named diagnosis (file name or line range cited, root cause articulated). The appId cycle (7) correctly identifies a test-shaped artefact polluting product code and provides a concrete removal path. The security confirmation (phase-final) is a bounded contractual check, not speculative. The non-goals section actively prevents scope creep. No cycle is filler. All ideas trace back to the 2026-05-21 test-expert and code-expert reviews (line 450-454).",
+      "content_quality": "strong",
+      "content_quality_note": "Each cycle has a named subject, a root-cause explanation, concrete acceptance criteria, and a reviewer assignment. The solution architecture section cites the directive verbatim (lines 197-206) and derives the proportionality strategy from it clearly. Risk table is brief and honest — cycle 6 acknowledges its own \"no\" verdict as a valid outcome (line 326-329). First-principles check at lines 463-469 is concise and correct.",
+      "salvage_value": [
+        {
+          "idea": "Replace toBeLessThan(400)/toBeLessThan(500) in built-server.e2e.test.ts with concrete status + SSE envelope assertions",
+          "class": "good",
+          "file_line": "9-13, 101-108, 241-252"
+        },
+        {
+          "idea": "Delete audit-shaped per-tool 401 duplicates in auth-enforcement.e2e.test.ts §All Tools Require HTTP Auth — contract already proven at Discovery Methods block",
+          "class": "good",
+          "file_line": "15-21, 109-117, 254-267"
+        },
+        {
+          "idea": "Push correlation-header coverage from full-app e2e down to src/correlation/middleware.integration.test.ts on a thin Express mount",
+          "class": "good",
+          "file_line": "23-29, 119-134, 269-283"
+        },
+        {
+          "idea": "Push enum-validation and validation-failure proofs from full-app e2e down to the Zod validator layer",
+          "class": "good",
+          "file_line": "31-36, 119-134, 285-297"
+        },
+        {
+          "idea": "Push auth-bypass and auth-enforcement core assertions to middleware-level integration tests; keep one full-app e2e per composition side",
+          "class": "good",
+          "file_line": "37-43, 119-134, 299-309"
+        },
+        {
+          "idea": "Make an explicit recorded verdict on whether an out-of-process E2E (spawning the built binary) is worth adding for the HTTP MCP server",
+          "class": "good",
+          "file_line": "44-52, 135-145, 311-330"
+        },
+        {
+          "idea": "Remove the appId concept entirely from ~15 product-code call sites in apps/oak-curriculum-mcp-streamable-http/src/; replace with correlation-id for per-request diagnostic identity",
+          "class": "good",
+          "file_line": "53-60, 146-156, 336-357"
+        },
+        {
+          "idea": "Obtain a security-expert recorded verdict that repeated wrapMcpServerWithSentry calls under SENTRY_MODE=off do not accumulate global Sentry handler state",
+          "class": "good",
+          "file_line": "61-68, 157-165, 362-370"
+        },
+        {
+          "idea": "Cycle 7 may warrant an ADR note that per-app diagnostic identity is provided by correlation-id rather than a separate counter",
+          "class": "speculative",
+          "file_line": "437-442"
+        },
+        {
+          "idea": "Pre-execution assumptions-expert ratification for proportionality decisions on cycles 3-5 before any code change",
+          "class": "good",
+          "file_line": "381-390"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": null,
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "🟡 PLANNING",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (V0 §2.1 LOCKED, required for all plans — the node's graph identity; never renumbered or reused once published)",
+          "file_line": "http-mcp-test-suite-improvements.plan.md:1-68 (frontmatter block, field absent)"
+        },
+        {
+          "issue": "Missing required field `node_type` (V0 §2.1 LOCKED literal `\"plan\"`, required for all — the registry discriminator)",
+          "file_line": "http-mcp-test-suite-improvements.plan.md:1-68 (frontmatter block, field absent)"
+        },
+        {
+          "issue": "Missing required field `kind` (V0 §3.1 LOCKED enum `strategic|executable`, required for all — the honest name for the readiness jump)",
+          "file_line": "http-mcp-test-suite-improvements.plan.md:1-68 (frontmatter block, field absent)"
+        },
+        {
+          "issue": "Missing required field `serves_strategic_choice` (V0 §2.3 LOCKED shape — required for executable plans; plan carries `todos` implying executable; must carry a strategic-choice ID or `\"pending\"` sentinel)",
+          "file_line": "http-mcp-test-suite-improvements.plan.md:1-68 (frontmatter block, field absent)"
+        },
+        {
+          "issue": "Missing required field `last_updated` (V0 §2.4 LOCKED, required for all) — date appears only in body prose, not as a frontmatter field",
+          "file_line": "http-mcp-test-suite-improvements.plan.md:73 (body prose: `**Last Updated**: 2026-05-21`)"
+        },
+        {
+          "issue": "Emergent `status:` value `🟡 PLANNING` present in body prose — V0 §2.5 explicitly drops `status` in favour of the orthogonal `kind`/`disposition`/`gate` axes; body prose is not a valid carrier for state under V0",
+          "file_line": "http-mcp-test-suite-improvements.plan.md:74 (`**Status**: 🟡 PLANNING`)"
+        },
+        {
+          "issue": "No typed edges declared in frontmatter (`serves_strategic_choice`, `thread`, `derives_from`, `depends_on` all absent) — V0 §2.3 requires `serves_strategic_choice` for executable plans and recommends `thread`",
+          "file_line": "http-mcp-test-suite-improvements.plan.md:1-68 (frontmatter block, all edge fields absent)"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [
+        {
+          "item": "LOCKED: `todos` is forbidden on `strategic` plans (V0 §2.4); `🟡 PLANNING` maps by §3.5 migration map to `kind: strategic` + `gate: owner-decision`. The plan simultaneously carries eight `todos` (executable structure) and a body-prose status that maps to `strategic`. If `kind` were resolved as `strategic` to honour the §3.5 migration map, the presence of `todos` violates the LOCKED prohibition at §2.4. If `kind` is resolved as `executable` to honour the `todos`, the body-prose `🟡 PLANNING` / gate signal is discarded. The `kind` field is absent, leaving the contradiction latent but unresolvable by the validator without an owner decision.",
+          "evidence": "todos present at frontmatter lines 8-68 (8 todo items); body prose `**Status**: 🟡 PLANNING` at line 74; V0 §3.5 maps `🟡 PLANNING` → `kind: strategic` + `gate: owner-decision`; V0 §2.4 states `todos` is forbidden on `strategic` plans.",
+          "file_line": "http-mcp-test-suite-improvements.plan.md:8-68 (todos) and line 74 (status)"
+        }
+      ],
+      "specialist_signal": "test",
+      "specialist_kind": "test",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "Cycle 3 plans to add assertions to src/correlation/middleware.integration.test.ts but does not verify this file exists before authoring — if the file must be created, the cycle underestimates scope and the acceptance criterion ('suite green') could mask a test that was never wired into the test runner.",
+          "file_line": "http-mcp-test-suite-improvements.plan.md:275-283"
+        },
+        {
+          "severity": "medium",
+          "claim": "Cycles 4 and 5 name source e2e files (validation-failure.e2e.test.ts, enum-validation-failure.e2e.test.ts, string-args-normalisation.e2e.test.ts, auth-bypass.e2e.test.ts, auth-enforcement.e2e.test.ts) but give no line-range or describe-block anchors. If those files have changed since 2026-05-21 the cycle author has no ground truth for what to delete vs retain, risking accidental coverage loss.",
+          "file_line": "http-mcp-test-suite-improvements.plan.md:286-308"
+        },
+        {
+          "severity": "low",
+          "claim": "Cycle 2 cites auth-enforcement.e2e.test.ts at 'approximately lines 466-505 at 2026-05-21' — a stale line reference qualified by an authoring date is not a reliable anchor for execution; the cycle should re-derive the describe-block boundary at execution time rather than trusting the historical offset.",
+          "file_line": "http-mcp-test-suite-improvements.plan.md:258-259"
+        },
+        {
+          "severity": "low",
+          "claim": "Cycle 7 removes appId from ~15 call sites but the acceptance criterion only checks that no module-level counter remains and that the suite is green — it does not require verifying that bootstrap log lines still emit distinguishable identifiers in tests that construct multiple apps concurrently, which is the stated substitute for the deleted concept.",
+          "file_line": "http-mcp-test-suite-improvements.plan.md:340-358"
+        },
+        {
+          "severity": "low",
+          "claim": "Cycle 6 may produce a new out-of-process E2E file but the acceptance criterion 'if landing a test, suite green' gives no guidance on what a minimal passing out-of-process test must assert, leaving open whether a single no-op round-trip would satisfy the criterion or whether a meaningful protocol exchange is required.",
+          "file_line": "http-mcp-test-suite-improvements.plan.md:311-329"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly grounds all pushdown decisions in the testing-strategy.md directive (prove once at the lowest faithful level) and the non-goals section explicitly rules out the three common escape hatches (hoisting to beforeAll, adding a new test category, concurrency narrowing) — the test discipline is sound.",
+          "file_line": "http-mcp-test-suite-improvements.plan.md:195-236"
+        },
+        {
+          "severity": "info",
+          "claim": "The quality gate strategy correctly runs focused workspace gates after each cycle and the root pnpm check at plan close — gate sequencing is proportionate and follows repo convention.",
+          "file_line": "http-mcp-test-suite-improvements.plan.md:168-187"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/sdk-and-mcp-enhancements/current/mcp-prompt-grouping-taxonomy.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "WS1 spec grounding is substantively complete with first-hand verified findings; the plan is actively progressing",
+          "file_line": "mcp-prompt-grouping-taxonomy.plan.md:6-7"
+        },
+        {
+          "claim": "Status QUEUED/DRAFT with taxonomy ratification as owner gate — plan is queued not abandoned",
+          "file_line": "mcp-prompt-grouping-taxonomy.plan.md:4"
+        },
+        {
+          "claim": "Four-workstream chain is coherent and unambiguous; no completed WS has been archived, indicating active use",
+          "file_line": "mcp-prompt-grouping-taxonomy.plan.md:6-20"
+        },
+        {
+          "claim": "Blocking gap is well-defined and bounded: client-rendering evidence for at least Cursor and Claude Code",
+          "file_line": "mcp-prompt-grouping-taxonomy.plan.md:7"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan's core content is grounded, non-speculative, and directly actionable. WS1 is first-hand verified (lines 30-88) against owner-supplied spec sources. The motivating defect (planning-moment conflation, line 93-96) is a real observed instance. The spec finding (no native group field, lines 35-38) is a hard constraint correctly identified. The audience-separation reframe (lines 46-52) is a substantive architectural insight with named downstream implications. The only speculative elements are the WS4 gap candidates (interactive lesson building, completions), which are correctly scoped as candidates for owner ratification rather than committed scope.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan demonstrates first-hand spec verification, explicit design tensions (user-controlled model vs assistant-audience content, line 43-45), named risks with mitigations (lines 139-143), precise acceptance criteria with proof contracts (lines 122-127), and non-goals that tightly bound scope (lines 129-135). The WS1 findings section (lines 30-88) is notably dense and evidenced. The one gap — client-rendering evidence for WS1 REMAINING (line 7) — is explicitly flagged as the blocking item, not papered over.",
+      "salvage_value": [
+        {
+          "idea": "No native tag/group/category field exists on MCP Prompt objects in the 2025-11-25 spec; grouping must use description, title prefix, naming convention, or icons.",
+          "class": "good",
+          "file_line": "mcp-prompt-grouping-taxonomy.plan.md:35-38"
+        },
+        {
+          "idea": "Prompt-message content blocks support annotations.audience ('user'/'assistant') + priority + lastModified; prompt definitions cannot be audience-labelled directly.",
+          "class": "good",
+          "file_line": "mcp-prompt-grouping-taxonomy.plan.md:39-42"
+        },
+        {
+          "idea": "Agent-facing prompt content cuts against the spec's user-controlled (slash-command) interaction model; this is a design tension, not a free choice.",
+          "class": "good",
+          "file_line": "mcp-prompt-grouping-taxonomy.plan.md:43-45"
+        },
+        {
+          "idea": "A prompt whose substance is assistant-audience procedural instruction is functionally a skill, reframing taxonomy from menu tidiness to audience separation and bridging the MCP prompt estate to oak-skills.",
+          "class": "good",
+          "file_line": "mcp-prompt-grouping-taxonomy.plan.md:46-52"
+        },
+        {
+          "idea": "Two-axis taxonomy design: job-to-be-done (curriculum planning / lesson planning / resource adaptation) AND audience (user-facing workflow vs assistant-audience procedural).",
+          "class": "good",
+          "file_line": "mcp-prompt-grouping-taxonomy.plan.md:10"
+        },
+        {
+          "idea": "Planning-moment distinction must be named explicitly: term-ahead sequence planning vs just-in-time anchored next-step — the motivating conflation instance.",
+          "class": "good",
+          "file_line": "mcp-prompt-grouping-taxonomy.plan.md:10, 93-96"
+        },
+        {
+          "idea": "Spec-valid is not user-visible: no vehicle should be ratified without observed client rendering evidence (the get-eef-evidence invisibility lesson applied to grouping).",
+          "class": "good",
+          "file_line": "mcp-prompt-grouping-taxonomy.plan.md:100-103"
+        },
+        {
+          "idea": "Elicitation capability (elicitation/create): form mode collects flat structured input with string/number/boolean and single/multi-select enums with display titles and defaults under a three-action contract.",
+          "class": "good",
+          "file_line": "mcp-prompt-grouping-taxonomy.plan.md:66-70"
+        },
+        {
+          "idea": "Elicitation enum shapes map directly onto lesson-building choices (subject, key stage, misconception focus, resource selection) and compose with completions.",
+          "class": "good",
+          "file_line": "mcp-prompt-grouping-taxonomy.plan.md:70-72"
+        },
+        {
+          "idea": "Sampling (sampling/createMessage): server-orchestrated LLM generation through the client's model including tool use via sampling.tools; human-in-the-loop review required at each gate.",
+          "class": "good",
+          "file_line": "mcp-prompt-grouping-taxonomy.plan.md:73-77"
+        },
+        {
+          "idea": "Completions capability (completion/complete with ref/prompt + context.arguments) supports typed argument autocompletion including context-dependent narrowing; Oak's subject/key-stage enums are a natural fit.",
+          "class": "good",
+          "file_line": "mcp-prompt-grouping-taxonomy.plan.md:55-57"
+        },
+        {
+          "idea": "WS4 candidate: interactive lesson building — elicitation gathers teacher choices step-by-step; sampling with Oak curriculum tools drafts and refines content; every step passes the three-action gate.",
+          "class": "speculative",
+          "file_line": "mcp-prompt-grouping-taxonomy.plan.md:78-82"
+        },
+        {
+          "idea": "WS4 candidate: guided term-ahead sequence-planning workflow — data support exists today, no guided prompt yet.",
+          "class": "speculative",
+          "file_line": "mcp-prompt-grouping-taxonomy.plan.md:18"
+        },
+        {
+          "idea": "WS4 candidate: assistant-audience skill-channel prompts as a MCP-native skill delivery channel bridging to the oak-skills estate.",
+          "class": "speculative",
+          "file_line": "mcp-prompt-grouping-taxonomy.plan.md:18-19"
+        },
+        {
+          "idea": "Sampling support is historically the sparsest of all client capabilities; elicitation client declarations must be verified before committing the interactive lesson building candidate.",
+          "class": "good",
+          "file_line": "mcp-prompt-grouping-taxonomy.plan.md:82-84"
+        },
+        {
+          "idea": "prompts/list is cursor-paginated; irrelevant at seven prompts but noted for scale honesty.",
+          "class": "good",
+          "file_line": "mcp-prompt-grouping-taxonomy.plan.md:58-59"
+        },
+        {
+          "idea": "The mcp-server-dev plugin (installed 2026-06-12, user scope) carries live MCP-development skills upstream from anthropics/claude-plugins-official.",
+          "class": "good",
+          "file_line": "mcp-prompt-grouping-taxonomy.plan.md:85-87"
+        },
+        {
+          "idea": "ADR-123's prompt table should receive a group column as part of WS3 documentation alignment.",
+          "class": "good",
+          "file_line": "mcp-prompt-grouping-taxonomy.plan.md:14, 126"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "QUEUED — DRAFT FOR OWNER REVIEW; taxonomy ratification is the owner gate",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (V0 §2.1, LOCKED, required for all plans)",
+          "file_line": "plan.md:1-22 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `node_type: \"plan\"` (V0 §2.1, LOCKED, required for all plans)",
+          "file_line": "plan.md:1-22 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `kind` (V0 §2.2, LOCKED, required for all plans; inferred executable from presence of todos, but field must be explicit)",
+          "file_line": "plan.md:1-22 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `last_updated` (V0 §2.4, LOCKED, required for all plans)",
+          "file_line": "plan.md:1-22 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "`status` present as a composite prose value — V0 §2.5 explicitly drops `status`, splitting it into `kind`, `disposition`, and `gate`; the value encodes a gate signal that requires `gate: { awaiting: owner-decision, clears_when: ..., expires: ... }` per V0 §3.4",
+          "file_line": "plan.md:4"
+        },
+        {
+          "issue": "`isProject: false` retained — V0 §2.5 explicitly drops `isProject` (subsumed by `projects_to` edge)",
+          "file_line": "plan.md:21"
+        },
+        {
+          "issue": "`depends_on` appears as a per-todo inline sub-field (e.g. `depends_on: [ws1-spec-grounding]`) rather than a top-level frontmatter edge of shape `list of { plan, kind: blocking | beneficial }` as specified by V0 §2.3 and §4 (LOCKED shape)",
+          "file_line": "plan.md:12 (ws2 todo), plan.md:16 (ws3 todo)"
+        },
+        {
+          "issue": "No `serves_strategic_choice` field — required for executable plans per V0 §2.3 (may carry `\"pending\"` sentinel; its absence is non-conforming for an executable plan)",
+          "file_line": "plan.md:1-22 (frontmatter block — field absent)"
+        }
+      ],
+      "unclassified_keys": [
+        "isProject"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "WS1 (spec grounding) is marked pending but its findings section is already written and appears complete for the spec side. The todo text says 'REMAINING: client-rendering evidence', yet the status field says 'pending' rather than 'in-progress' or a split sub-task. This ambiguity means the workstream's actual completion state is unobservable; an executor arriving at WS1 cannot tell what work remains without reading both the frontmatter todo text and the body section simultaneously.",
+          "file_line": "mcp-prompt-grouping-taxonomy.plan.md:6-7"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan names ADR-123 as the target for the prompt-table group-column update (WS3 acceptance criterion) but does not verify that ADR-123 exists or that its prompt table is the authoritative location. If ADR-123 does not exist or is at a different identifier, WS3 has an unresolvable dependency. The plan should cite the ADR file path or note it as a prerequisite artefact to create.",
+          "file_line": "mcp-prompt-grouping-taxonomy.plan.md:14,126"
+        },
+        {
+          "severity": "low",
+          "claim": "The audience-separation axis (teacher-facing workflow vs assistant-audience procedural skill) identified in WS1 has architectural implications that extend beyond taxonomy labelling: if any of the seven live prompts are already substantively assistant-audience, they may belong in the oak-skills estate rather than as MCP prompts. The plan routes this to WS4 as a gap candidate, but WS3 applies the taxonomy before WS4 surfaces that question to the owner. An executor could apply grouping to prompts that should instead be migrated, locking in a vehicle that may need reverting.",
+          "file_line": "mcp-prompt-grouping-taxonomy.plan.md:10,18-19,48-51"
+        },
+        {
+          "severity": "low",
+          "claim": "WS3 acceptance criterion requires 'live listing verified against two clients' (Cursor + Claude Code named in ws1 acceptance row) but the client-rendering evidence gate in WS1 is still pending. WS3 depends_on ws2 only; the explicit WS1 rendering-evidence gate is a logical prerequisite of WS3 that is not captured in the depends_on chain. If WS2 is ratified before WS1's rendering evidence is gathered, WS3 could begin and apply a vehicle that proves invisible in the target clients.",
+          "file_line": "mcp-prompt-grouping-taxonomy.plan.md:12-16,124-125"
+        },
+        {
+          "severity": "info",
+          "claim": "The completions capability (completion/complete with ref/prompt and context-dependent argument narrowing) is recorded as a WS4 candidate. Its architectural fit with the taxonomy vehicle is sound — completions operate at the argument level, not the prompt-group level, so there is no coupling conflict. No finding; noted for the executor's situational awareness.",
+          "file_line": "mcp-prompt-grouping-taxonomy.plan.md:54-57"
+        },
+        {
+          "severity": "info",
+          "claim": "Sampling and elicitation are flagged as CLIENT capabilities with the design tension correctly identified (sampling support is historically sparse). The plan correctly defers interactive lesson building to WS4 rather than scoping it here. Architecture is sound at this altitude.",
+          "file_line": "mcp-prompt-grouping-taxonomy.plan.md:63-84"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/sdk-and-mcp-enhancements/current/meta-oak-namespace-cleanup.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan has clear, bounded, unstarted scope with no evidence of duplication or supersession",
+          "file_line": "meta-oak-namespace-cleanup.plan.md:23"
+        },
+        {
+          "claim": "Extracted from a closed plan but not itself closed — its scope was intentionally separated",
+          "file_line": "meta-oak-namespace-cleanup.plan.md:95-103"
+        },
+        {
+          "claim": "All four todos remain pending; the folder lane (current) is correct for unstarted work",
+          "file_line": "meta-oak-namespace-cleanup.plan.md:4-16"
+        },
+        {
+          "claim": "The related plan reference (mcp-app-extension-migration.plan.md) is context, not supersession",
+          "file_line": "meta-oak-namespace-cleanup.plan.md:402-403"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan's core idea — remove a dead _meta mirror and replace it with genuinely useful namespaced metadata using an existing constant — is well-evidenced (line 33-36 establishes the dead-field case; line 49 pins the constant constraint). The implementation sequence is schema-first and correct. The non-goals list (line 88-94) is accurate and disciplined. The only weak element is the buildToolMeta() factory suggestion (lines 95-103), which is speculative but clearly scoped as a consideration, not a commitment.",
+      "content_quality": "strong",
+      "content_quality_note": "Every phase has: a foundation check-in anchor, specific file paths with line number guidance, before/after code shapes, acceptance criteria with checkboxes, and deterministic bash validation commands. The testing strategy (lines 355-365) correctly distinguishes update-not-delete. The success criteria (lines 369-393) are wire-level observable. The plan is unusually complete for an unstarted plan.",
+      "salvage_value": [
+        {
+          "idea": "Remove _meta.securitySchemes from all generated and aggregated tool definitions — it is non-standard, unconsumed, and wastes ~50 bytes per tool on the wire",
+          "class": "good",
+          "file_line": "meta-oak-namespace-cleanup.plan.md:29-36"
+        },
+        {
+          "idea": "Replace with oak-www ('https://www.thenational.academy') for host discoverability and branding",
+          "class": "good",
+          "file_line": "meta-oak-namespace-cleanup.plan.md:46-47"
+        },
+        {
+          "idea": "Replace with oak-guidance keyed to OAK_CONTEXT_HINT constant so every tool carries the prerequisite reminder even if host does not read server instructions",
+          "class": "good",
+          "file_line": "meta-oak-namespace-cleanup.plan.md:48-49"
+        },
+        {
+          "idea": "Update ToolMeta type first (schema-first), then regenerate codegen, then update consumers — correct sequencing",
+          "class": "good",
+          "file_line": "meta-oak-namespace-cleanup.plan.md:81-86"
+        },
+        {
+          "idea": "Explicit non-goals boundary: top-level securitySchemes stays (it is functional), _meta.ui stays, _meta.attribution stays",
+          "class": "good",
+          "file_line": "meta-oak-namespace-cleanup.plan.md:88-94"
+        },
+        {
+          "idea": "Introduce a buildToolMeta() factory that derives _meta from tool name, naturally fits this scope since both address _meta architecture",
+          "class": "speculative",
+          "file_line": "meta-oak-namespace-cleanup.plan.md:95-103"
+        },
+        {
+          "idea": "The emit-index.ts WIDGET_TOOL_NAMES.has(toolName) check for generated tools is dead code — clean up or document",
+          "class": "speculative",
+          "file_line": "meta-oak-namespace-cleanup.plan.md:101-103"
+        },
+        {
+          "idea": "Future: add oak-guidance variant per tool category (different guidance for progression vs discovery tools)",
+          "class": "speculative",
+          "file_line": "meta-oak-namespace-cleanup.plan.md:454-455"
+        },
+        {
+          "idea": "Future: remove search from widget tool allowlist — separate concern raised in audit",
+          "class": "speculative",
+          "file_line": "meta-oak-namespace-cleanup.plan.md:452-453"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "🔴 NOT STARTED",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing LOCKED-required field `id` (kebab slug, stable graph identity)",
+          "file_line": "meta-oak-namespace-cleanup.plan.md:1 (frontmatter opens at line 1; field absent throughout)"
+        },
+        {
+          "issue": "Missing LOCKED-required field `node_type` (must be literal \"plan\")",
+          "file_line": "meta-oak-namespace-cleanup.plan.md:1 (frontmatter opens at line 1; field absent throughout)"
+        },
+        {
+          "issue": "Missing LOCKED-required field `kind` (enum `strategic | executable`); plan carries `todos` so kind must be `executable`",
+          "file_line": "meta-oak-namespace-cleanup.plan.md:1 (frontmatter opens at line 1; field absent throughout)"
+        },
+        {
+          "issue": "Missing LOCKED-required field `last_updated` (ISO date); date is encoded only as body prose at line 22",
+          "file_line": "meta-oak-namespace-cleanup.plan.md:22"
+        },
+        {
+          "issue": "Missing LOCKED-required (for executable) field `serves_strategic_choice`; no strategic-choice ID or `\"pending\"` sentinel declared",
+          "file_line": "meta-oak-namespace-cleanup.plan.md:1 (frontmatter opens at line 1; field absent throughout)"
+        },
+        {
+          "issue": "Execution status encoded as body prose `**Status**: 🔴 NOT STARTED` rather than projected via Linear (`projects_to` edge); V0 §3.2 LOCKED: execution status is not a durable repo field",
+          "file_line": "meta-oak-namespace-cleanup.plan.md:22"
+        },
+        {
+          "issue": "ADR-141 referenced in body (lines 51, 284, 345, 351) but not declared as a frontmatter `derives_from` edge; V0 §2.3 requires authority/traceability relationships use typed edges, not body prose",
+          "file_line": "meta-oak-namespace-cleanup.plan.md:51"
+        },
+        {
+          "issue": "Related plan `mcp-app-extension-migration.plan.md` listed in body Dependencies section but not declared as a `depends_on` or `related` frontmatter edge; V0 §2.3/§2.4 requires typed frontmatter edges for all relationships",
+          "file_line": "meta-oak-namespace-cleanup.plan.md:402"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "type",
+      "specialist_kind": "type",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "Task 1.1 makes 'oak-www' and 'oak-guidance' optional on ToolMeta (lines 158-160), but Task 2.2 and the Success Criteria at line 391 require every tool to carry both fields on the wire. Optional typing does not enforce the invariant the plan asserts — a tool could satisfy the type with neither field present. The fields should be required (non-optional) on ToolMeta, or a discriminated union / branded builder should enforce presence at construction time.",
+          "file_line": "meta-oak-namespace-cleanup.plan.md:158-160"
+        },
+        {
+          "severity": "medium",
+          "claim": "The codegen emitter snippet (lines 183-186) emits 'oak-guidance': OAK_CONTEXT_HINT as a bare identifier reference inside a string-concatenation code-generation path. Whether OAK_CONTEXT_HINT is in scope inside the generated file depends on an import being emitted — the plan acknowledges this at line 190 but leaves it unresolved ('Alternatively, the literal text can be emitted inline'). The type of the emitted expression is therefore indeterminate at plan time: it could be a string literal, a const reference, or a broken identifier. This ambiguity must be resolved before Phase 1 begins, otherwise the generated files will not type-check.",
+          "file_line": "meta-oak-namespace-cleanup.plan.md:183-192"
+        },
+        {
+          "severity": "low",
+          "claim": "Task 2.1 introduces OAK_WWW as a new export (line 235) while the References section at line 433 already lists OAK_WWW as existing in prerequisite-guidance.ts. If OAK_WWW already exists, Task 2.1 creates a duplicate export and a potential type-widening conflict if both definitions survive. The plan should confirm the constant's current existence in Phase 0 and either reuse or replace — not create alongside.",
+          "file_line": "meta-oak-namespace-cleanup.plan.md:231-238"
+        },
+        {
+          "severity": "low",
+          "claim": "Task 2.3 updates AggregatedToolDefShape (line 283) to reflect the new _meta shape, but the plan does not specify whether the interface's _meta property type is a named type (ToolMeta) or a structural inline type. If it is structural, the Task 1.1 ToolMeta change does not automatically propagate to AggregatedToolDefShape, meaning two independently maintained structural types can drift. The plan should confirm AggregatedToolDefShape._meta is typed as ToolMeta (the single source of truth) so Task 2.3 reduces to removing any inline overrides.",
+          "file_line": "meta-oak-namespace-cleanup.plan.md:283-284"
+        },
+        {
+          "severity": "info",
+          "claim": "The quoted-key property names 'oak-www' and 'oak-guidance' are valid TypeScript but require bracket-notation access everywhere (x._meta['oak-www']). The test pattern at line 312 already uses bracket notation, which is correct. No type issue, but reviewers should confirm that no downstream consumers use dot-notation (x._meta.oak-www) which is a parse error.",
+          "file_line": "meta-oak-namespace-cleanup.plan.md:312"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    }
+  ]
+}
