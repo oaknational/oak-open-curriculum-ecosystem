@@ -1,11 +1,13 @@
 # Deep Plan-Estate Survey — Coverage Ledger (living)
 
-## ▶ WINDOW STATE (live, 2026-06-21 ~12:20 UTC)
+## ▶ WINDOW STATE (live, 2026-06-21 ~17:10 UTC)
 
-**Survey RUNNING — compute available (owner reset the window ~12:18 UTC).** Sub-batch 1b is being
-executed by Pinnace hunts Marsh in conservable ~4–8-plan increments, each written to the report dir
-the instant its Workflow call returns (the "do not lose intermediate results" constraint —
-conservation granularity kept smaller than the session-death loss-event granularity).
+**Survey RUNNING — account budget CONFIRMED for this owner-reset window.** Cosmos calls Infinity
+(`9888f9`), the SOLE survey orchestrator (successor to Anvil lifts Solder; claim `3a5e8798`), fired the
+`product-development-governance` probe increment (4 plans) which returned 4/4 readable — confirming the
+window has compute. Continuing Pass-1 in conservable ~8–12-plan increments (next: `agent-tooling`),
+each conserved+committed the instant its Workflow call returns (the "do not lose intermediate results"
+constraint — conservation granularity kept smaller than the session-death loss-event granularity).
 
 Recorded lesson (one wasted attempt, no findings lost): a *fresh session* is NOT a *fresh window* —
 the session limit is account-level, shared across the rotating cast. The first 1b attempt (12 plans,
@@ -55,19 +57,28 @@ scope; not surveyed.) Source: `worklist-plans.tsv`.
 | arch-01 | architecture-and-infrastructure (`active/`+`current/`, plans 1–12 of 36) | 12 | Anvil lifts Solder | COMPLETE (8 keep / 3 archive-complete / 1 rewrite; substance 12 good / content 12 strong; conformance 12 major-drift; 174 ideas inventoried; 4 locked-contradictions; 15 high-stakes verdicts: 14 survive / 1 refuted) | `pass1-architecture-and-infrastructure-01.json` |
 | arch-02 | architecture-and-infrastructure (`current/`+`future/`, plans 13–24 of 36) | 12 | Anvil lifts Solder | COMPLETE (12 keep; substance 12 good / content 12 strong; conformance 11 major-drift / 1 no-fm; 175 ideas inventoried; 7 locked-contradictions; 5 high-stakes verdicts: 2 survive / 3 refuted) | `pass1-architecture-and-infrastructure-02.json` |
 | arch-03 | architecture-and-infrastructure (`future/`+root, plans 25–36 of 36) | 12 | Anvil lifts Solder | COMPLETE (11 keep / 1 archive-complete; substance 12 good / content 12 strong; conformance 10 major-drift / 2 no-fm; 153 ideas inventoried; 3 locked-contradictions; 8 high-stakes verdicts: 7 survive / 1 uncertain) | `pass1-architecture-and-infrastructure-03.json` |
+| pdg-01 | product-development-governance (full: `future/`+`suggestions/`+root) | 4 | Cosmos calls Infinity | COMPLETE (4 keep; substance 4 good / content 4 strong; conformance 4 major-drift; 89 ideas inventoried: 79 good / 10 speculative / 0 bad; 0 locked-contradictions; 2 high-stakes verdicts: 2 survive) | `pass1-product-development-governance-01.json` |
 
 After 1b: the full **agentic-engineering-enhancements** collection (70 plans) is Pass-1 complete.
 
 After arch-03: the full **architecture-and-infrastructure** collection (36 plans) is Pass-1 complete
 (Anvil lifts Solder, 3 conservable increments, 0 unreadable, 502 ideas inventoried, 14
-locked-contradictions). **Pass-1 coverage so far: 106 / 286 plans (2 collections).** 14 collections /
-~180 plans remain — see the linear successor plan
-[`07-sole-successor-survey-plan.md`](./07-sole-successor-survey-plan.md).
+locked-contradictions). **Pass-1 coverage at that point: 106 / 286 plans (2 collections).**
 
-### Remaining Pass-1 collections (~216 plans, ~35-plan atomic sub-batches, one per owner-reset window)
+After pdg-01: the full **product-development-governance** collection (4 plans) is Pass-1 complete
+(Cosmos calls Infinity, 1 increment, 0 unreadable, 89 ideas inventoried, 0 locked-contradictions; the
+small SAFE warm-up that also probed and confirmed account budget for this owner-reset window).
+**Pass-1 coverage so far: 110 / 286 plans (3 collections).** 13 collections / ~176 plans remain — see
+the linear successor plan [`07-sole-successor-survey-plan.md`](./07-sole-successor-survey-plan.md).
 
-The 15 collections other than `agentic-engineering-enhancements`, derived from `worklist-plans.tsv`.
-`product-development-governance` is SAFE to survey (Drake's `4bf5d49fd` settled the spec edits).
+### Remaining Pass-1 collections (~176 plans, ~35-plan atomic sub-batches, one per owner-reset window)
+
+The 13 collections other than the three now complete (`agentic-engineering-enhancements`,
+`architecture-and-infrastructure`, `product-development-governance`), derived from `worklist-plans.tsv`
+(col `collection`): `agent-tooling` (59), `observability` (31), `sdk-and-mcp-enhancements` (28),
+`sector-engagement` (12), `semantic-search` (11), `connecting-oak-resources` (10), `discovery` (9),
+`user-experience` (7), `developer-experience` (4), `exploring-open-education-resources` (2),
+`security-and-privacy` (1), `school-data-search` (1), `curriculum-mcp-path-to-ga` (1).
 Each future sub-batch appends a row above and conserves its own `pass1-<collection>-<range>.json`.
 
 ## Pass 2 — cross-cutting relational passes (NOT STARTED)

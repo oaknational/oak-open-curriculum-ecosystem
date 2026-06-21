@@ -1,0 +1,987 @@
+{
+  "batch_size": 4,
+  "plans_returned": 4,
+  "unreadable": [],
+  "null_holistic": [],
+  "results": [
+    {
+      "plan": ".agent/plans/product-development-governance/future/deep-plan-estate-survey.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Decision-complete method brief with fixed method, fixed outputs, and explicit promotion trigger — not a draft needing rewrite",
+          "file_line": "file:22-27"
+        },
+        {
+          "claim": "Both blocking prerequisites are now satisfied (lens at line 165-168, registry at line 171), so the plan is live-ready; keeping it in future/ with a promotion to current/ is the correct next action",
+          "file_line": "file:162-172"
+        },
+        {
+          "claim": "The four structured outputs and acceptance criteria are fully specified, making this immediately executable once promoted",
+          "file_line": "file:150-193"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every idea in this plan is grounded in the owner's standing discipline (input-to-verify, adversarial verification, no unverified claims, file:line citations). The three-purpose non-collapse mandate (line 33-38) directly addresses the known failure mode of prior surveys. The loop-until-dry completeness critic (line 118-122) and coverage ledger (line 136-138) address the silent-truncation risk explicitly. The orchestration shape (line 125-138) is proportionate to the estate size. No speculative or bad ideas detected; all constituent ideas serve the stated end goal coherently.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan is fully specified across problem (line 29-38), EGM (line 40-53), scope (line 55-65), method with four named passes (line 67-122), orchestration (line 124-138), critical-analysis discipline (line 140-147), outputs (line 149-160), prerequisites with satisfaction status (line 162-173), boundaries (line 175-181), acceptance criteria (line 183-191), risks with mitigations (line 196-204), and promotion trigger (line 204-209). Content is evidence-grounded rather than aspirational; the risk table names concrete failure modes from prior survey experience. No gaps or under-specified sections.",
+      "salvage_value": [
+        {
+          "idea": "Three-purpose mandate that must not collapse: taxonomy grounding, restructure work-list, cross-cutting pattern discovery",
+          "class": "good",
+          "file_line": "file:33-38"
+        },
+        {
+          "idea": "Pass 0 discovery via four modalities (directory walk, glob, frontmatter presence, reachability from root index) with a coverage ledger logging every dropped surface",
+          "class": "good",
+          "file_line": "file:69-75"
+        },
+        {
+          "idea": "Per-document >=3-agent read floor: holistic reader always, specialist viewpoints routed by content signal, conformance reader as floor-filler",
+          "class": "good",
+          "file_line": "file:77-98"
+        },
+        {
+          "idea": "Adversarial verification gate: independent agent attempts to refute each load-bearing finding; default-refuted on uncertainty; no finding enters the record unverified",
+          "class": "good",
+          "file_line": "file:94-98"
+        },
+        {
+          "idea": "Specialist routing table keyed to content signals (test/architecture/security/type/config/docs/assumptions)",
+          "class": "good",
+          "file_line": "file:87-93"
+        },
+        {
+          "idea": "Five cross-cutting relational passes: across plans, across plan collections, plans-to-threads, plans-to-adjacent-doc-groups, each blind to the others until synthesis",
+          "class": "good",
+          "file_line": "file:101-114"
+        },
+        {
+          "idea": "Loop-until-dry completeness critic: aggregate, critique, loop until two consecutive critic rounds surface nothing new",
+          "class": "good",
+          "file_line": "file:117-122"
+        },
+        {
+          "idea": "Dynamic fan-out orchestration: pipeline per-doc (read→specialists→verify), parallel cross-cutting with a barrier, loop-until-dry for completeness",
+          "class": "good",
+          "file_line": "file:125-138"
+        },
+        {
+          "idea": "StructuredOutput schema per finding so aggregation is validated, not parsed from prose",
+          "class": "good",
+          "file_line": "file:135-136"
+        },
+        {
+          "idea": "Coverage ledger obligation: log every concurrency bound, sampling, or no-retry so silent truncation cannot read as full coverage",
+          "class": "good",
+          "file_line": "file:136-138"
+        },
+        {
+          "idea": "Four structured output types: conformance-and-traceability inventory, cross-cutting patterns, taxonomy grounding, coverage ledger — all in dated .agent/reports/ directory",
+          "class": "good",
+          "file_line": "file:150-160"
+        },
+        {
+          "idea": "plan-node-schema.v0.md as conformance lens: provisional by design, survey refines it, not a verdict",
+          "class": "good",
+          "file_line": "file:163-169"
+        },
+        {
+          "idea": "Promotion trigger with readiness review from assumptions-expert and docs-adr-expert before running",
+          "class": "good",
+          "file_line": "file:204-209"
+        },
+        {
+          "idea": "Reconcile divergent agent counts by re-deriving, never averaging",
+          "class": "good",
+          "file_line": "file:145-146"
+        },
+        {
+          "idea": "Observe-mode plan extractor as beneficial-not-blocking: adds mechanical-conformance pass but does not gate qualitative passes",
+          "class": "speculative",
+          "file_line": "file:172-173"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [
+        "thread"
+      ],
+      "status_raw": "future",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Uses `plan_id` instead of the LOCKED canonical `id` field (V0 §2.1: `plan_id` is the non-canonical emergent form; canonical is `id`).",
+          "file_line": "deep-plan-estate-survey.plan.md:2"
+        },
+        {
+          "issue": "Uses `title` instead of the LOCKED canonical `name` field (V0 §2.1: migrate `title` → `name`).",
+          "file_line": "deep-plan-estate-survey.plan.md:3"
+        },
+        {
+          "issue": "Uses `type: governance-delivery` (old free-label) instead of the LOCKED `node_type: \"plan\"` field (V0 §2.1, §2.5: `type` is dropped as free-label).",
+          "file_line": "deep-plan-estate-survey.plan.md:4"
+        },
+        {
+          "issue": "`status: future` is a dropped key (V0 §2.2, §2.5: `status` split into `kind`/`disposition`/`gate`/projected execution). The value maps to `kind: strategic` via §3.5 but the field itself must be removed.",
+          "file_line": "deep-plan-estate-survey.plan.md:5"
+        },
+        {
+          "issue": "`lifecycle: future` is a LOCKED-dropped key (V0 §2.5: dropped; folder + `kind` carry it).",
+          "file_line": "deep-plan-estate-survey.plan.md:6"
+        },
+        {
+          "issue": "`kind` field is absent (V0 §2.2, LOCKED: required for all plans; inferred as `strategic` from status migration map §3.5 but must be explicit).",
+          "file_line": "deep-plan-estate-survey.plan.md:1-18"
+        },
+        {
+          "issue": "`overview` field is absent (V0 §2.1, LOCKED: required one-line scope field for all plans).",
+          "file_line": "deep-plan-estate-survey.plan.md:1-18"
+        },
+        {
+          "issue": "`related` carries authority/traceability targets (plan-node-schema.v0.md, ADR-117, PDR-018) that should be on typed `derives_from` edges per V0 §2.4 (narrowed: `related` is untyped see-also only).",
+          "file_line": "deep-plan-estate-survey.plan.md:11-14"
+        }
+      ],
+      "unclassified_keys": [
+        "plan_id",
+        "title",
+        "type",
+        "lifecycle"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan asserts the estate has grown ~33% to ~550 non-archive docs (line 31), but this is an admitted estimate ('an estimate; Pass 0 measures the actual count', line 136). The scale assumption drives the concurrency-cap, loop-until-dry iteration budget, and session sizing for the dedicated run. If the actual count is substantially different the orchestration shape may be miscalibrated before promotion.",
+          "file_line": "deep-plan-estate-survey.plan.md:31 and 135-136"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan states the strategic-choice registry ('the 12 bets') is 'already signed off' (line 171) and marks it as blocking for the plans-to-choices traceability pass. This is an unverified inherited claim; the plan does not cite the registry artefact path or a commit/SHA. If the registry has since changed in scope or has open ratification items, the traceability pass can produce false-orphan classifications.",
+          "file_line": "deep-plan-estate-survey.plan.md:170-172"
+        },
+        {
+          "severity": "low",
+          "claim": "The promotion trigger (line 204-209) requires the plan node-schema lens and the strategic-choice registry, then defers finalising 'finding schemas, specialist routing table, workflow scripts, and report directory' to promotion time. This defers a significant proportion of the operationalisation assumptions to a future moment. If those artefacts require owner-level decisions (e.g. schema shape, concurrency cap), the promotion handoff may block on more than is signalled.",
+          "file_line": "deep-plan-estate-survey.plan.md:204-209"
+        },
+        {
+          "severity": "low",
+          "claim": "The floor of three reads per document (line 78-79) is stated as the minimum, but the specialist routing logic (lines 88-93) routes by content signal and tops up with conformance reader and assumptions-expert only when fewer than two specialists are routed. There is no explicit statement of what happens when a document genuinely produces zero specialist content signals — the floor could collapse to holistic + conformance reader (two, not three) before the top-up logic fires.",
+          "file_line": "deep-plan-estate-survey.plan.md:78-93"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan assumes dynamic multi-agent orchestration via the Workflow tool or platform equivalent (line 125-126) is available at promotion time. The parenthetical 'on Claude Code the Workflow tool, or the platform's equivalent multi-agent primitive' acknowledges uncertainty but does not require a pre-promotion availability check. If the Workflow tool is unavailable, the wall-clock advantage of pipelined fan-out collapses to a sequential single-agent run, which materially changes the survey timeline.",
+          "file_line": "deep-plan-estate-survey.plan.md:125-126"
+        },
+        {
+          "severity": "info",
+          "claim": "The loop-until-dry exit criterion (two consecutive critic rounds surface nothing new, line 121) is sound in principle but assumes the completeness critic itself has full coverage of what was dropped. If the critic's own scope is bounded by the same truncation risks flagged in the Risks table (line 199), the dry signal may be false. The plan does not require the critic to be a fresh agent blind to the prior round.",
+          "file_line": "deep-plan-estate-survey.plan.md:118-122"
+        }
+      ],
+      "load_bearing_claims_count": 7,
+      "high_stakes_verdicts": [
+        {
+          "claim": "The plan-node-schema.v0.md lens exists and is decision-complete, making the conformance-lens prerequisite already satisfied",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "plan-node-schema.v0.md:7-8 (\"Status: V0 — decision-complete as V0, explicitly pre-survey. Every decision below is stated definitely (no 'TBD', no 'decide at execution time')\") and §9 criterion 2 (v0.md:550-552); confirmed against deep-plan-estate-survey.plan.md:164-165 (\"a draft v0 lens suffices to start ... The lens exists: plan-node-schema.v0.md (V0, decision-complete, explicitly pre-survey)\")"
+        },
+        {
+          "claim": "The strategic-choice registry (12 bets) is already signed off, satisfying the second blocking prerequisite",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "deep-plan-estate-survey.plan.md:170-171 names the strategic-choice registry blocking for the plans↔choices traceability pass and states \"Already signed off (the 12 bets)\"; the governing plan vision-strategy-and-plan-estate.plan.md:717-719 (Owner Decision 16) confirms \"Per-stream how-we-win and won't-do — signed off (owner, 2026-06-20). The 12 bets (APP-1–4, TOOLS-1–4, FRAME-1–4) ... are the working strategy\"; the 12 choice IDs are published in docs/strategy/ (stream-mcp-app.md:31 APP-1, stream-engineering-tools.md:37 TOOLS-1, stream-agentic-framework.md:59 FRAME-1, README.md:54)."
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/product-development-governance/future/repo-intent-graph.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Owner-ratified strategic plan dated 2026-06-21 with clear staging, non-executable until promoted",
+          "file_line": "file:31-33"
+        },
+        {
+          "claim": "Explicit promotion trigger defined; Stage 1 not yet started",
+          "file_line": "file:537-542"
+        },
+        {
+          "claim": "Referenced as the design contract by deep-plan-estate-survey.plan.md (Stage 2 brief)",
+          "file_line": "file:208-212"
+        },
+        {
+          "claim": "plan-node-schema.v0.md (Stage 1 build artefact) already exists as a peer file",
+          "file_line": "file:134-141"
+        },
+        {
+          "claim": "Boundaries and non-goals are explicit; scope is cleanly bounded",
+          "file_line": "file:489-507"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every major section is grounded: the problem is stated with concrete evidence of drift (file:44-51), the six pillars are traceable to existing doctrine (ADR-117, ADR-179, PDR-018), the staging is incremental with explicit non-goals (file:489-507), the DORA integration is native not bolted-on (file:285-312), and the provenance of design inputs is held with appropriate scepticism (file:546-552). The plan identifies and names the gap between structure and a live system (file:441-475) rather than papering over it. No unsupported assertions or scope inflation detected.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan is substantively dense: the six pillars each carry a machine-enforceable invariant (file:80-110); the orthogonal-axes model (file:144-165) dissolves a real confusion with a typed, closed-enum solution; the DORA section (file:285-364) ties metrics to specific edges and node-types rather than gesturing at dashboards; the actuation layer (file:441-475) names what is not yet designed rather than eliding it. The acceptance criteria (file:509-523) are testable and staged. Risks (file:526-535) are concrete with real mitigations. This exceeds V0-conformance: the content would survive an architecture review at high confidence.",
+      "salvage_value": [
+        {
+          "idea": "Repository as strategy-bearing memory and intent system co-written by humans and agents",
+          "class": "good",
+          "file_line": "file:37-40"
+        },
+        {
+          "idea": "Concrete problem: emergent unvalidated frontmatter keys, dual status vocabularies, undefined isProject field, deprecated discovery pointer",
+          "class": "good",
+          "file_line": "file:44-51"
+        },
+        {
+          "idea": "Six-pillar design: one schema generated; graph-core substrate; authority as typed directional edges; dual legibility; intent-preservation invariant; external systems as typed edges only",
+          "class": "good",
+          "file_line": "file:80-110"
+        },
+        {
+          "idea": "Contract ratified whole before first node-type is built, then additively refined by survey — composable rather than retrofitted",
+          "class": "good",
+          "file_line": "file:112-122"
+        },
+        {
+          "idea": "Plan standard as node-schema #1 within the graph, not a standalone rubric",
+          "class": "good",
+          "file_line": "file:124-133"
+        },
+        {
+          "idea": "Plan state as four orthogonal axes: kind/readiness, execution status (Linear), terminal disposition, gate",
+          "class": "good",
+          "file_line": "file:144-165"
+        },
+        {
+          "idea": "Gate with mandatory absolute expires date; expired gate surfaced for forced decision (renew/resolve/dispose)",
+          "class": "good",
+          "file_line": "file:161-165"
+        },
+        {
+          "idea": "Linear mapping: strategic-choice ≈ Initiative, plan ≈ Project, workstream ≈ Issue — execution state not duplicated in repo",
+          "class": "good",
+          "file_line": "file:167-174"
+        },
+        {
+          "idea": "Folder collapse: current/active → one executable home; folders navigate, metadata governs",
+          "class": "good",
+          "file_line": "file:172-174"
+        },
+        {
+          "idea": "Stage 1 minimal slice: ratify contract, specify plan node-schema, build strategic-choice registry, observe-mode extractor only",
+          "class": "good",
+          "file_line": "file:182-199"
+        },
+        {
+          "idea": "thread node-type pulled forward to Stage 3 because restructure cannot proceed without it",
+          "class": "good",
+          "file_line": "file:221-224"
+        },
+        {
+          "idea": "Stage 4 actuation layer: connectors from Vercel/Sentry/Sonar/GitHub/PostHog, event/scheduled triggers, validated write-back",
+          "class": "good",
+          "file_line": "file:229-245"
+        },
+        {
+          "idea": "Stage 5+ node-types gated on a live consumer — no cathedral building",
+          "class": "good",
+          "file_line": "file:246-254"
+        },
+        {
+          "idea": "Intent graph as FRAME stream flagship artefact, releasable by construction via generic substrate layering",
+          "class": "good",
+          "file_line": "file:257-265"
+        },
+        {
+          "idea": "Schema-first as second domain: document-type schemas are the single source of truth, indexes generated, validation strict",
+          "class": "good",
+          "file_line": "file:277-283"
+        },
+        {
+          "idea": "DORA metrics native to graph: throughput (lead time, deploy frequency, FDRT) and instability (change fail rate, rework rate) as typed-graph projections",
+          "class": "good",
+          "file_line": "file:285-312"
+        },
+        {
+          "idea": "Planned-vs-rework attribution via plan.serves_strategic_choice + kind + disposition joined to commits — no painful reconstruction",
+          "class": "good",
+          "file_line": "file:334-341"
+        },
+        {
+          "idea": "Seven DORA AI capabilities map to existing repo properties — graph positioned to instrument capabilities → outcomes loop",
+          "class": "speculative",
+          "file_line": "file:344-355"
+        },
+        {
+          "idea": "User-value loop: strategic-choice carries user-value hypothesis; validated_by edge returns usage/EEF evidence; missing evidence surfaced as drift",
+          "class": "good",
+          "file_line": "file:370-393"
+        },
+        {
+          "idea": "Continuous measurement gap map: substrate health, per-change quality, delivery performance, output accuracy, user value, cost, AICM capability presence",
+          "class": "good",
+          "file_line": "file:396-411"
+        },
+        {
+          "idea": "Multi-developer transition as design constraint: author-agnostic graph, versioned in-repo substrate as continuity, graceful degradation across agent density",
+          "class": "good",
+          "file_line": "file:415-435"
+        },
+        {
+          "idea": "Actuation layer explicitly named as the load-bearing still-to-be-designed work that separates structure from live system",
+          "class": "good",
+          "file_line": "file:441-475"
+        },
+        {
+          "idea": "graph-core/graph-project dependency is beneficial not blocking; thin frontmatter extractor as minimum shippable Stage 1",
+          "class": "good",
+          "file_line": "file:479-483"
+        },
+        {
+          "idea": "No-PII invariant: external identifiers in gitignored local config only",
+          "class": "good",
+          "file_line": "file:107-109"
+        },
+        {
+          "idea": "ChatGPT-synthesis suggestions held as input-to-verify, reconciled at graph-work start",
+          "class": "good",
+          "file_line": "file:546-552"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [
+        "thread",
+        "related"
+      ],
+      "status_raw": "future",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Required field `id` absent; emergent `plan_id: repo-intent-graph` present instead. V0 §2.1 (LOCKED): canonical field is `id`, replacing `plan_id`.",
+          "file_line": "repo-intent-graph.plan.md:2"
+        },
+        {
+          "issue": "Required field `node_type` absent. V0 §2.1 (LOCKED): `node_type: plan` required for all nodes.",
+          "file_line": "repo-intent-graph.plan.md:1"
+        },
+        {
+          "issue": "Required field `name` absent; `title:` present instead. V0 §2.1 (LOCKED): migrate `title` → `name`.",
+          "file_line": "repo-intent-graph.plan.md:3"
+        },
+        {
+          "issue": "Required field `overview` absent. V0 §2.1 (LOCKED): one-line scope field required for all plans.",
+          "file_line": "repo-intent-graph.plan.md:1"
+        },
+        {
+          "issue": "Required field `kind` absent. V0 §3.1 (LOCKED): `kind: strategic | executable` required for all plans; inferred value is `strategic` from `status: future`.",
+          "file_line": "repo-intent-graph.plan.md:1"
+        },
+        {
+          "issue": "Dropped key `status: future` present. V0 §2.5 (LOCKED): `status` is replaced by the orthogonal axes (`kind`, `disposition`, `gate`, Linear-projected execution).",
+          "file_line": "repo-intent-graph.plan.md:5"
+        },
+        {
+          "issue": "Dropped key `lifecycle: future` present. V0 §2.5 (LOCKED): `lifecycle` is dropped; folder location + `kind` carry it.",
+          "file_line": "repo-intent-graph.plan.md:6"
+        },
+        {
+          "issue": "Dropped key `type: governance-delivery` present. V0 §2.5 (LOCKED): `type` free-label dropped; replaced by `node_type` + `kind`.",
+          "file_line": "repo-intent-graph.plan.md:4"
+        },
+        {
+          "issue": "Dropped key `plan_id` present instead of `id`. V0 §2.1 (LOCKED): `id` is the canonical graph identity field.",
+          "file_line": "repo-intent-graph.plan.md:2"
+        },
+        {
+          "issue": "No `serves_strategic_choice` edge declared. V0 §2.3 (LOCKED shape): recommended for `strategic` plans; the body identifies FRAME-1/2/3 as the serving choices (plan body line ~261), but the edge is not wired in frontmatter.",
+          "file_line": "repo-intent-graph.plan.md:1"
+        }
+      ],
+      "unclassified_keys": [
+        "design_inputs"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "The plan explicitly builds on graph-core and graph-project as the substrate (Pillar 2) and references ADR-179 as the transport-agnostic authority. The architectural dependency is declared as 'beneficial, not blocking' for Stage 1, which is appropriate given graph-core already exists. No parallel graph stack is introduced.",
+          "file_line": "repo-intent-graph.plan.md:82-88 (Pillar 2), 479-483 (Dependencies)"
+        },
+        {
+          "severity": "info",
+          "claim": "The schema-first pillar (Pillar 1) consciously extends the repo's Cardinal Rule — upstream OpenAPI spec as single schema source — into a second domain (document-type schemas). The plan is explicit that it applies the principle by analogy, not by extending or restating the Cardinal Rule itself. This is a clean architectural boundary.",
+          "file_line": "repo-intent-graph.plan.md:277-282"
+        },
+        {
+          "severity": "low",
+          "claim": "Stage 3 pulls the 'thread' node-type forward from a later stage because the restructure cannot site plans in threads without it. This is architecturally sound reasoning but creates an implicit multi-type build within Stage 3 (plan + thread node-schemas). The plan acknowledges this promotion but the Stage 3 acceptance criteria (lines 519-522) does not explicitly reference thread-node conformance as a deliverable. If thread-schema is under-specified at Stage 1 promotion, Stage 3 may encounter a blocking gap.",
+          "file_line": "repo-intent-graph.plan.md:216-223 (Stage 3), 519-522 (Stage 3 acceptance criteria)"
+        },
+        {
+          "severity": "low",
+          "claim": "The evidence-ingestion actuation layer (Stage 4) names five external sources — Vercel, Sentry, Sonar, GitHub, PostHog — but explicitly defers all connector technology, orchestration, and write-back validation decisions to promotion time. For an architecture where 'the actuation layer is the load-bearing, still-to-be-designed work', deferring technology selection risks the rest of the graph contract being shaped by assumptions that the later connector choices may not support. The risk table names this indirectly but does not flag connector-technology pre-constraints as a design risk.",
+          "file_line": "repo-intent-graph.plan.md:441-476 (actuation layer), 527-535 (risks table)"
+        },
+        {
+          "severity": "low",
+          "claim": "The authority model (Pillar 3) specifies that 'no continuity record is citable as scope authority' as a graph invariant. This is a strong machine-checked assertion. However, the plan does not describe where or how this invariant is enforced — whether by the observe-mode extractor (Stage 1.4), a separate validator, or a later warn/enforce escalation stage. Without an enforcement home, the invariant is a principle, not a structural property.",
+          "file_line": "repo-intent-graph.plan.md:89-94 (Pillar 3), 194-198 (Stage 1.4 observe-only)"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan commits the node-type set, edge vocabulary, authority model, and external-edge vocabulary as a v1 contract to be ratified before any build, but explicitly states the concrete taxonomy is 'survey-gated' (Stage 2). This creates a sequencing ambiguity: Stage 1.1 ratifies the shape, Stage 2 refines the taxonomy, but Stage 1.3 (the strategic-choice registry) and Stage 1.4 (the extractor) must implement parts of the schema before the survey refines it. If Stage 2 causes additive changes to edge types used in Stage 1.3/1.4, those deliverables need rework. The plan calls Stage 2 refinement 'additive' but does not formally constrain what counts as additive vs. breaking for already-built Stage 1 components.",
+          "file_line": "repo-intent-graph.plan.md:117-122 (contract section), 184-199 (Stage 1 steps), 205-213 (Stage 2)"
+        },
+        {
+          "severity": "medium",
+          "claim": "The DORA attribution mechanism depends on every change tracing to a plan serving a strategic choice to be classified as 'planned' versus 'rework'. This requires complete and correct serves_strategic_choice wiring across all plans. The plan acknowledges the estate currently has unvalidated frontmatter and convention-only relationships. Until Stage 3 completes the restructure, the rework-attribution traversal will produce unreliable results — a structural gap between the architectural design intent and what the graph can actually compute from the real estate, for an extended period spanning Stages 1-3.",
+          "file_line": "repo-intent-graph.plan.md:336-343 (attribution), 44-52 (current estate drift)"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan explicitly reserves validated_by and cost/accuracy evidence edges in node-schema #1's vocabulary and cross-references plan-node-schema.v0.md section 5.5. This is sound forward-design: the edge vocabulary is reserved in the contract before the actuation layer is built, avoiding retrofit. The boundary between 'reserved in v0' and 'built in Stage 4' is explicit.",
+          "file_line": "repo-intent-graph.plan.md:437-439"
+        },
+        {
+          "severity": "info",
+          "claim": "The no-PII constraint (Pillar 6, Boundaries) is architecturally concrete: external identifiers live only in gitignored local config. This is a structural boundary, not a policy statement, and it is consistent across the plan. No architecture smell here.",
+          "file_line": "repo-intent-graph.plan.md:105-109 (Pillar 6), 502"
+        }
+      ],
+      "load_bearing_claims_count": 10,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/product-development-governance/suggestions/governed-repo-document-graph.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Phase 0 states: this document is Phase 0 — it preserves the model and prevents future sessions from having to reconstruct the useful concepts from chat context.",
+          "file_line": "file:453-455"
+        },
+        {
+          "claim": "Acceptance criteria are concrete and completable, not aspirational placeholders.",
+          "file_line": "file:556-567"
+        },
+        {
+          "claim": "Provenance section flags synthesis origin honestly and defers repo-state verification to future agents — appropriate epistemic hygiene, not a blocker.",
+          "file_line": "file:77-91"
+        },
+        {
+          "claim": "Folder lane is suggestions but content depth and phased delivery strategy match an active future plan, not an unformed suggestion.",
+          "file_line": "file:3-4, file:449-519"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The document type registry (file:211-228), relationship registry (file:296-313), graph invariants (file:362-383), and repo/Linear boundary model (file:144-175) are all well-reasoned, mutually consistent, and grounded in existing repo infrastructure. The phased delivery strategy explicitly avoids big-bang migration (file:509-519). The one weak patch is that eight open questions (file:542-553) remain unresolved, but they are correctly staged as Phase 1 decisions rather than treated as settled.",
+      "content_quality": "strong",
+      "content_quality_note": "Every major section includes worked examples with YAML shapes (file:234-274, file:319-355), a complete CLI command surface (file:435-447), and concrete graph invariants with precise failure conditions (file:362-383). The non-goals section (file:525-538) is unusually complete and disciplined. The provenance section (file:77-91) models the epistemic status of the document correctly rather than overclaiming.",
+      "salvage_value": [
+        {
+          "idea": "Repo is the canonical system for durable intent; Linear is the execution projection only — the repo/Linear authority boundary.",
+          "class": "good",
+          "file_line": "file:144-175"
+        },
+        {
+          "idea": "Every durable item of intent is a typed node; every durable relationship is a typed edge; every claim of structure is deterministically checked by agent-tools.",
+          "class": "good",
+          "file_line": "file:58-65"
+        },
+        {
+          "idea": "12-entry governed document type model (vision, strategy, thread, strategic_index, plan, product, product_increment, report, decision_record, runbook, evidence_record, continuity_record, archive_record).",
+          "class": "good",
+          "file_line": "file:211-228"
+        },
+        {
+          "idea": "15-entry typed relationship registry with allowed source/target types, direction, cardinality, and transitivity (derives_from, supports, implements, depends_on, blocks, evidenced_by, supersedes, superseded_by, archives, primary_thread, related_threads, belongs_to_product, belongs_to_product_increment, projects_to_linear, summarises_linear).",
+          "class": "good",
+          "file_line": "file:296-313"
+        },
+        {
+          "idea": "Full frontmatter schema model with common fields (id, title, doc_type, status, lifecycle, last_updated, thread, relationships) and a worked plan-specific example.",
+          "class": "good",
+          "file_line": "file:229-274"
+        },
+        {
+          "idea": "Graph invariants covering: strategy trace for active plans, vision trace for strategy, product trace for product increments, archived-document-as-live-dependency detection, missing-node edge detection, folder/frontmatter lifecycle contradiction detection.",
+          "class": "good",
+          "file_line": "file:362-383"
+        },
+        {
+          "idea": "PR review lanes derived from PR #213 stress test: strategy/authority surface, plan-estate governance, evidence archive, generated code, runtime behaviour, agent-practice doctrine, repo/Linear projection, migration/disposition integrity.",
+          "class": "good",
+          "file_line": "file:387-401"
+        },
+        {
+          "idea": "Phased delivery: observe-mode first (no CI failure), then warn-on-new-drift, then enforce ratified classes — avoiding big-bang estate migration.",
+          "class": "good",
+          "file_line": "file:449-519"
+        },
+        {
+          "idea": "Dependency direction: agent-tools -> agent-graphs/practice-graph -> graph substrate; do not create a parallel graph/tooling stack.",
+          "class": "good",
+          "file_line": "file:418-427"
+        },
+        {
+          "idea": "Proposed agent-tools CLI command surface: repo-graph scan, validate, report, trace (up/down), explain, linear-export --dry-run.",
+          "class": "good",
+          "file_line": "file:435-447"
+        },
+        {
+          "idea": "Progressive migration strategy: apply schema to new/actively edited docs first, observe historic drift, migrate high-value active plans, then broaden enforcement.",
+          "class": "good",
+          "file_line": "file:509-519"
+        },
+        {
+          "idea": "Disposition rule: every moved, removed, renamed, or archived document must carry a recorded disposition (re-housed, extracted, superseded, archived, or deleted with rationale); removal without disposition is a defect.",
+          "class": "good",
+          "file_line": "file:521-523"
+        },
+        {
+          "idea": "Informational dependence is not execution order: downstream layers need upstream information but do not impose temporal freeze; safe-without-final-strategy work may proceed if marked explicitly.",
+          "class": "good",
+          "file_line": "file:168-179"
+        },
+        {
+          "idea": "Many-to-many is expected and must be represented explicitly rather than flattened to false 1:1 mappings.",
+          "class": "good",
+          "file_line": "file:181-188"
+        },
+        {
+          "idea": "Folder paths are navigation, not the complete model: canonical relationship model belongs in typed metadata and validated graph edges.",
+          "class": "good",
+          "file_line": "file:190-196"
+        },
+        {
+          "idea": "Open question: what schema language is authoritative for frontmatter (JSON Schema, Zod, TypeScript types, or generated combination)?",
+          "class": "speculative",
+          "file_line": "file:543-544"
+        },
+        {
+          "idea": "Open question: how much of existing graph-core vocabulary should be reused immediately versus starting with a plain repo-frontmatter graph and converging later?",
+          "class": "speculative",
+          "file_line": "file:546-548"
+        },
+        {
+          "idea": "Open question: should review lanes become part of PR template/frontmatter, a CI check, or an agent-tools advisory report first?",
+          "class": "speculative",
+          "file_line": "file:550-551"
+        },
+        {
+          "idea": "Open question: how should the model represent local-only or private reference material that informs strategy but must not be quoted or linked in the repo?",
+          "class": "speculative",
+          "file_line": "file:552-553"
+        },
+        {
+          "idea": "Relationship shape examples encoded as YAML meta-schema (relationship_types with from/to/cardinality/direction/transitive fields).",
+          "class": "good",
+          "file_line": "file:318-355"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": null,
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [
+        "thread",
+        "related"
+      ],
+      "status_raw": "future",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Uses 'plan_id' instead of V0-canonical 'id'. V0 §2.1 (LOCKED) names 'id' as canonical and explicitly replaces emergent 'plan_id' (11 instances).",
+          "file_line": "governed-repo-document-graph.plan.md:2"
+        },
+        {
+          "issue": "Uses 'title' instead of V0-canonical 'name'. V0 §2.1 (LOCKED) mandates migrating emergent 'title' (14 instances) to 'name'.",
+          "file_line": "governed-repo-document-graph.plan.md:3"
+        },
+        {
+          "issue": "'type: governance-delivery' present. V0 §2.5 explicitly drops 'type' as a free-label (49 census), replaced by 'node_type' + 'kind'.",
+          "file_line": "governed-repo-document-graph.plan.md:4"
+        },
+        {
+          "issue": "'status: future' present. V0 §2.2 drops 'status' entirely, replacing it with the orthogonal axes 'kind' / 'disposition' / 'gate'.",
+          "file_line": "governed-repo-document-graph.plan.md:5"
+        },
+        {
+          "issue": "'lifecycle: future' present. V0 §2.5 explicitly drops 'lifecycle' (14 instances); folder + 'kind' carry it.",
+          "file_line": "governed-repo-document-graph.plan.md:6"
+        },
+        {
+          "issue": "'node_type: \"plan\"' absent. V0 §2.1 (LOCKED) requires this as the registry discriminator on all plans.",
+          "file_line": "governed-repo-document-graph.plan.md:1-43"
+        },
+        {
+          "issue": "'kind' field absent. V0 §2.2 (model LOCKED) requires 'kind: strategic | executable' on all plans.",
+          "file_line": "governed-repo-document-graph.plan.md:1-43"
+        },
+        {
+          "issue": "'overview' absent. V0 §2.1 (LOCKED) requires a one-line scope string; 'summary' (line 22) is not the V0 field.",
+          "file_line": "governed-repo-document-graph.plan.md:1-43"
+        },
+        {
+          "issue": "'serves_strategic_choice' absent. V0 §2.3 (LOCKED shape) requires this for executable plans or explicit 'pending' sentinel; the presence of 'todos' implies executable kind.",
+          "file_line": "governed-repo-document-graph.plan.md:1-43"
+        },
+        {
+          "issue": "'todos' present but 'kind' absent. V0 §2.4 (LOCKED) forbids 'todos' on 'strategic' plans; 'status: future' maps to strategic via §3.5 migration map, creating an internal contradiction between the two emergent fields.",
+          "file_line": "governed-repo-document-graph.plan.md:5 and 24-43"
+        }
+      ],
+      "unclassified_keys": [
+        "source_threads",
+        "summary"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "The plan's dependency direction 'agent-tools -> agent-graphs/practice-graph -> graph substrate' (lines 418-422) is stated as an existing ADR-179 decision, but it is sourced from a sibling future-status plan ('agent-graphs-workspace-organisation.plan.md') not from ADR-179 itself. ADR-179 only records that CLI surfacing belongs in agent-tools. Treating a future-lifecycle suggestion plan as a ratified architectural direction risks building on an unratified dependency model.",
+          "file_line": "governed-repo-document-graph.plan.md:418-425"
+        },
+        {
+          "severity": "high",
+          "claim": "Open question 4 (line 550) asks how much of existing graph-core vocabulary to reuse, yet the plan simultaneously instructs 'Do not create a parallel graph/tooling stack' (line 425) and lists non-goal 'Do not create graph substrate code that depends on agent-tools' (line 532). These constraints together leave the integration path architecturally unresolved: the plan cannot rule out a parallel stack while also deferring the answer to whether to reuse graph-core. This is a structural contradiction in the proposed architecture, not merely an open question.",
+          "file_line": "governed-repo-document-graph.plan.md:425,532-534,550"
+        },
+        {
+          "severity": "medium",
+          "claim": "The relationship schema YAML examples (lines 319-355) include a 'value_stream' and 'strategic_choice' as valid edge targets (e.g. supports.to includes 'value_stream', 'strategic_choice'), but neither 'value_stream' nor 'strategic_choice' appears in the document type model table (lines 213-228). If these are real node types they must be in the type registry; if they are properties of strategy documents, the edge targets are mistyped. Either way the schema examples are internally inconsistent with the type model.",
+          "file_line": "governed-repo-document-graph.plan.md:339-342,213-228"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan defers the schema language decision to open question 2 (line 543: JSON Schema, Zod, TypeScript types, or generated combination) while also specifying a 7-phase delivery timeline and Phase 2 schema definitions. Choosing the schema authority mechanism is load-bearing for validator implementation (Phases 3-5) and for graph-core vocabulary reuse (open question 4). Proceeding to Phase 2 without resolving this creates a risk of authored schemas in a format that does not match the eventual enforcement toolchain.",
+          "file_line": "governed-repo-document-graph.plan.md:462-474,543"
+        },
+        {
+          "severity": "medium",
+          "claim": "The provenance section (lines 72-88) explicitly states this document is a synthesis from a ChatGPT project discussion and 'is not itself an implementation proof'. The plan is status:future and lifecycle:future with no acceptance-criteria completion evidence. However the same document asserts specific CLI command shapes (lines 432-442), frontmatter field names (lines 247-274), cardinality rules, and invariants as if ratified. These should be clearly marked as proposals pending owner ratification, not standing design decisions.",
+          "file_line": "governed-repo-document-graph.plan.md:72-77,432-442"
+        },
+        {
+          "severity": "low",
+          "claim": "The 'blocks' relationship (line 303) is defined as 'Reverse dependency used for graph traversal and reports' — i.e. a derived inverse of 'depends_on'. If both directions are stored as explicit edges, validators must enforce bidirectional consistency. The plan does not address this invariant, which is a graph-integrity concern that should appear in the graph invariants section (lines 362-383) or be clarified as a computed virtual edge.",
+          "file_line": "governed-repo-document-graph.plan.md:303,362-383"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan's 'folder paths are navigation, not the complete model' principle (line 192) is architecturally sound, but the acceptance criteria (lines 556-567) do not include any test of folder-vs-frontmatter lifecycle consistency. The graph invariants section includes a folder/frontmatter contradiction check (line 383), but there is no acceptance criterion that gates completion on this being mechanically enforced rather than advisory.",
+          "file_line": "governed-repo-document-graph.plan.md:383,556-567"
+        },
+        {
+          "severity": "info",
+          "claim": "The CLI surface (lines 432-442) specifies a 'linear-export --dry-run' subcommand. Phase 6 (Linear projection, line 489) is correctly sequenced after graph model stabilisation. No architectural concern; the dry-run guard is appropriate for an unratified Linear sync contract.",
+          "file_line": "governed-repo-document-graph.plan.md:432-442,489-492"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/product-development-governance/vision-strategy-and-plan-estate.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan is the active controlling document for the thread; explicitly owns scope authority over the thread record (which is continuity, not scope)",
+          "file_line": "line 38-44"
+        },
+        {
+          "claim": "Contains 22 enumerated owner decisions not duplicated elsewhere, with rationale and sign-off dates",
+          "file_line": "lines 682-758"
+        },
+        {
+          "claim": "Explicitly states its own future: becomes a thin controlling/index plan once Body 3 spawns its own executable plan — a planned self-reduction, not abandonment",
+          "file_line": "lines 423-427"
+        },
+        {
+          "claim": "Body 2 signed off 2026-06-20; plan standard and fresh survey startable — plan is actively gating live work",
+          "file_line": "lines 513-519"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan encodes high-value governance design with consistent internal logic. Owner decisions are enumerated with dates and rationale. The informational-dependence model is a first-principles derivation, not a template fill. The Body 3 approach — idea-level curation vs plan-level relabelling, two-pass consolidation, independent no-loss audit — addresses a real structural failure mode (lines 826-827: \"theatre — form without substance\"). The only open items are correctly deferred to Oak (measure targets, line 731-732) or survey-gated (directory layout, lines 597-600). No bad ideas found at the idea level; several speculative (owner-open) items correctly labelled as such.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan is dense, well-evidenced, and self-correcting: it records corrections (pupil contamination, line 177-180; \"at most minor\" retraction, lines 155-156), distinguishes settled from open items, and names failure modes explicitly in the Risks table (lines 817-832). The over-structuring guard section (lines 675-678) demonstrates active self-discipline. The Proof Contract (lines 800-813) is concrete and deterministic. Weakest element: the Body 3 section is large enough to warrant its own executable plan (acknowledged and planned at lines 423-427) — the plan is aware of its own load and has designed the handoff.",
+      "salvage_value": [
+        {
+          "idea": "Informational-dependence model: Oak strategy → vision → strategy → planning, with coherence/traceability as the discipline (not execution order)",
+          "class": "good",
+          "file_line": "lines 51-69"
+        },
+        {
+          "idea": "Axis-separation doctrine: importance, work-volume, dependency-direction, and informational-need are four distinct axes; collapsing them to a priority scalar is an error",
+          "class": "good",
+          "file_line": "lines 73-88"
+        },
+        {
+          "idea": "Three value streams as a system, not three independent tracks: FRAME builds APP and TOOLS; TOOLS is the foundation APP stands on; APP proves the foundation and reaches teachers",
+          "class": "good",
+          "file_line": "lines 113-122"
+        },
+        {
+          "idea": "Schools is a deliberate, explicit non-goal for this repo — not served by default, only re-opened by an explicit future owner decision",
+          "class": "good",
+          "file_line": "lines 103-107"
+        },
+        {
+          "idea": "Amplifier-not-replacement ethic at two levels (teacher + our teams); pupils are not a level; stated confidently, not defensively",
+          "class": "good",
+          "file_line": "lines 325-333"
+        },
+        {
+          "idea": "Two co-equal, complementary delivery channels: the web and AI assistants; AI has a place in both; this repo delivers the AI-assistant channel",
+          "class": "good",
+          "file_line": "lines 317-322"
+        },
+        {
+          "idea": "Measures are an Oak input (analytics/research grounds the targets); never agent-invented; surface as owner checkpoint where signal is unknown",
+          "class": "good",
+          "file_line": "lines 266-272"
+        },
+        {
+          "idea": "Release channel is not unilateral: proper app-like packaging requires vendor collaboration; vendors (ChatGPT, Claude, Gemini) aware and agreed",
+          "class": "good",
+          "file_line": "lines 355-365"
+        },
+        {
+          "idea": "Marketing gated on TPC-risk mitigation; TPC relates to lesson-level content served by the API",
+          "class": "good",
+          "file_line": "lines 367-369"
+        },
+        {
+          "idea": "Strategic-choice-ID contract: stable (no renumbering/reuse), additive (new IDs only), resolvable (every plan traces to exactly one choice)",
+          "class": "good",
+          "file_line": "lines 528-536"
+        },
+        {
+          "idea": "Machine-readable choice registry as validator source of truth; strategy README is a projection of it (generated-from-source, cannot drift)",
+          "class": "good",
+          "file_line": "lines 538-548"
+        },
+        {
+          "idea": "Two-pass idea-level consolidation: Pass 1 decomposes/sorts (good/speculative/bad buckets); Pass 2 re-composes good bucket into strategy-aligned plans",
+          "class": "good",
+          "file_line": "lines 557-573"
+        },
+        {
+          "idea": "No-loss audit as an independent adversarial proof by a dedicated parallel session that owns no restructure edits",
+          "class": "good",
+          "file_line": "lines 450-457"
+        },
+        {
+          "idea": "Idea-level trichotomy with three fixed-destination buckets: good → live estate; speculative → .agent/speculative/; bad → archive-with-disposition",
+          "class": "good",
+          "file_line": "lines 613-622"
+        },
+        {
+          "idea": "Dual structure: directory hierarchy (stream→thread→plan) for human navigation AND frontmatter typed edges for agent navigation; co-equal audiences",
+          "class": "good",
+          "file_line": "lines 586-601"
+        },
+        {
+          "idea": "As-touched rubric migration (not big-bang): survivors reach standard as each plan is processed; new plans conform from creation via validator",
+          "class": "good",
+          "file_line": "lines 606-611"
+        },
+        {
+          "idea": "Validator wired into CI (warn-first then blocking) for reachability + frontmatter conformance + traceability — structural cure, not optional polish",
+          "class": "good",
+          "file_line": "lines 576-581"
+        },
+        {
+          "idea": "Substance gate beyond form-conformance: reviewer confirms content is good (not merely present), corpus effectively implements each strategic choice (not merely aligned)",
+          "class": "good",
+          "file_line": "lines 443-451"
+        },
+        {
+          "idea": "Vision review tripwires: seven named conditions that trigger a re-review of VISION.md, including a standing tripwire for any session on any thread",
+          "class": "good",
+          "file_line": "lines 156-175"
+        },
+        {
+          "idea": "Curriculum ownership is external: this repo is a delivery mechanism and build toolset, not the curriculum owner",
+          "class": "good",
+          "file_line": "lines 323-325"
+        },
+        {
+          "idea": "Teacher-as-safety-layer: the critically-aware expert teacher handles content appropriately; sharpens ADR-194; no app-level child-safety controls implied",
+          "class": "good",
+          "file_line": "lines 297-301"
+        },
+        {
+          "idea": "AI-host framing is positive (not defensive): teachers already use AI hosts; Oak brings rigour to that behaviour; raises quality of existing behaviour, not a new risk vector",
+          "class": "good",
+          "file_line": "lines 293-297"
+        },
+        {
+          "idea": "Cost efficiency is not critical and must not dominate architectural-excellence decisions; funding is out of scope",
+          "class": "good",
+          "file_line": "lines 291-294"
+        },
+        {
+          "idea": "Open educational data beyond Oak's is aligned with the ecosystem goal — not a boundary breach",
+          "class": "good",
+          "file_line": "lines 331-333"
+        },
+        {
+          "idea": "Python SDK to follow TypeScript SDK (future, named)",
+          "class": "speculative",
+          "file_line": "line 333"
+        },
+        {
+          "idea": "Response-moderation service: in future, a service the AI host can vet its responses against — named as a future capability",
+          "class": "speculative",
+          "file_line": "lines 295-297"
+        },
+        {
+          "idea": "Lesson-level data-availability (missing materialised view) and MCP-app go-to-market/school support are open discussion items with no owner yet",
+          "class": "speculative",
+          "file_line": "lines 345-348"
+        },
+        {
+          "idea": "Proposed .agent/speculative/ as the isolated home for speculative ideas outside the planning estate, distinct from future/",
+          "class": "speculative",
+          "file_line": "lines 615-617"
+        },
+        {
+          "idea": "Six-pillar repo intent graph vision: one schema generated, built on generic graph substrate, dual legibility, authority as typed edges, intent preservation, external systems as typed edges",
+          "class": "good",
+          "file_line": "lines 748-756"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [
+        "thread"
+      ],
+      "status_raw": "active",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Key `plan_id` used instead of required `id` (LOCKED). V0 §2.1: `id` is canonical; `plan_id` is the emergent variant being migrated away.",
+          "file_line": "vision-strategy-and-plan-estate.plan.md:2"
+        },
+        {
+          "issue": "Key `title` used instead of required `name` (LOCKED). V0 §2.1: `name` is canonical; `title` (14 occurrences in estate) migrates to `name`.",
+          "file_line": "vision-strategy-and-plan-estate.plan.md:3"
+        },
+        {
+          "issue": "`node_type: plan` absent. LOCKED required field on all plans. V0 §2.1.",
+          "file_line": "vision-strategy-and-plan-estate.plan.md:1-34"
+        },
+        {
+          "issue": "`overview` absent. LOCKED required field on all plans (one-line scope). V0 §2.1.",
+          "file_line": "vision-strategy-and-plan-estate.plan.md:1-34"
+        },
+        {
+          "issue": "`kind` absent. LOCKED required field. `status: active` maps via §3.5 to `kind: executable`; the field itself must be present.",
+          "file_line": "vision-strategy-and-plan-estate.plan.md:1-34"
+        },
+        {
+          "issue": "`serves_strategic_choice` absent. Required for executable plans (invariant 1, V0 §4). Plan maps to `kind: executable` (status active); must carry the field or the `\"pending\"` sentinel.",
+          "file_line": "vision-strategy-and-plan-estate.plan.md:1-34"
+        },
+        {
+          "issue": "`type: governance-execution` present. V0 §2.5 drops `type` as a free-label; replaced by `node_type` + `kind`.",
+          "file_line": "vision-strategy-and-plan-estate.plan.md:4"
+        },
+        {
+          "issue": "`status: active` present. V0 §2.5 drops `status`; replaced by `kind` / `disposition` / `gate` / projected execution axis.",
+          "file_line": "vision-strategy-and-plan-estate.plan.md:5"
+        },
+        {
+          "issue": "`lifecycle: active` present. V0 §2.5 drops `lifecycle`; folder + `kind` carry it.",
+          "file_line": "vision-strategy-and-plan-estate.plan.md:6"
+        },
+        {
+          "issue": "Todo `status: in_progress` is not a V0 per-todo status value. V0 §2.4 permits only `pending | completed`.",
+          "file_line": "vision-strategy-and-plan-estate.plan.md:24"
+        },
+        {
+          "issue": "Todo `status: blocked` is not a V0 per-todo status value. V0 §2.4 permits only `pending | completed`. A blocked todo's block should be expressed as a `gate` or `depends_on` on the parent plan.",
+          "file_line": "vision-strategy-and-plan-estate.plan.md:27"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "The vendor distribution assumption is load-bearing but unverified in-plan. Line 362 states the AI vendors 'are aware and have agreed to support that packaging' — this is a single-point dependency on an external commitment with no fallback path and no reference to a written agreement, timeline, or named counterpart. The plan treats this as de-risked; it is not, because vendor priorities shift and verbal alignment is not a contract.",
+          "file_line": ".agent/plans/product-development-governance/vision-strategy-and-plan-estate.plan.md:360-365"
+        },
+        {
+          "severity": "high",
+          "claim": "The TPC-risk mitigation gate is named as a marketing blocker (line 369) but the plan never defines what 'sufficient mitigation' looks like, who decides it, or on what timeline. The plan treats TPC risk as a known concept (attributed to the owner's term), but the acceptance criteria for clearance are absent. If TPC mitigation stalls, marketing is indefinitely blocked with no observable exit.",
+          "file_line": ".agent/plans/product-development-governance/vision-strategy-and-plan-estate.plan.md:367-370"
+        },
+        {
+          "severity": "high",
+          "claim": "The lesson-level data-availability gate (the API's missing materialised view) and the MCP-app go-to-market / school support are both explicitly listed as 'discussion — no owner yet' (line 348). These are release-readiness blockers for the MCP app stream but have no owner, no plan, and no resolution path. The assumption that they will be resolved before K3 is implicit and untested.",
+          "file_line": ".agent/plans/product-development-governance/vision-strategy-and-plan-estate.plan.md:347-349"
+        },
+        {
+          "severity": "medium",
+          "claim": "The strategy measures are explicitly deferred to 'Oak analytics/research experts' (lines 309-310, 268-271), with agent-invented targets prohibited. However, the plan does not record whether Oak analytics/research capacity has been confirmed, who the named contact is, or when the grounding conversation is scheduled. The assumption that Oak will provide grounded targets in time to inform the strategy corpus before the estate restructure reads the strategy is untested.",
+          "file_line": ".agent/plans/product-development-governance/vision-strategy-and-plan-estate.plan.md:307-310"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan assumes the no-loss audit agent is a 'dedicated primary agent running a full parallel session' (line 451) that is independent of the restructuring agent. No allocation, resourcing, or assignment mechanism for this agent is named. The assumption that a suitably independent agent will be available and correctly briefed at the moment Body 3 execution begins is implicit.",
+          "file_line": ".agent/plans/product-development-governance/vision-strategy-and-plan-estate.plan.md:450-457"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan assumes that idea-level trichotomy classification (good / speculative / bad) is a reliable, judgment-stable operation across ~550 documents (line 499). The approach is described as 'judgment-heavy throughout' (line 572) but no calibration mechanism, inter-agent agreement check, or owner-review gate on the classification pass is specified. The tacit assumption is that individual agent judgment at idea-granularity is consistent enough to be the input to an irreversible restructure.",
+          "file_line": ".agent/plans/product-development-governance/vision-strategy-and-plan-estate.plan.md:495-503"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan assumes the ICO Children's Code / target-audience decision (vision tripwire 5, lines 168-171) will come from a ruling that is externally driven, but neither names who is responsible for obtaining the ruling nor specifies the compliance lane's timeline. The assumption that this external compliance gate will resolve before K2 needs re-ratification is implicit and untracked within this plan.",
+          "file_line": ".agent/plans/product-development-governance/vision-strategy-and-plan-estate.plan.md:168-171"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan states the two-part vision was authored 'ahead of the settled strategy (PDR-018)' and introduces tripwires to catch upstream revision needs (lines 155-156). Vision tripwires 4 (team formation, Linear/Figma/designer arrival) and 6 (repo-as-intent-substrate thesis accepted/rejected) are not assigned a timeline or owner and have no mechanism to fire automatically. The assumption is that agents or the owner will remember to check them as conditions change.",
+          "file_line": ".agent/plans/product-development-governance/vision-strategy-and-plan-estate.plan.md:163-175"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan's over-structuring guard ('could it be simpler?', line 677) is a stated principle but has no external reviewer applying it. The guard is evaluated by the same agent producing the structure, which is a weak assumption about self-assessment reliability for a large, complex governance document.",
+          "file_line": ".agent/plans/product-development-governance/vision-strategy-and-plan-estate.plan.md:676-679"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan records the estate count as 'grown ~33% to ~550 non-archive docs' since the June 2026-06-15 survey (line 505) and explicitly treats the survey figures as stale. The assumption that the fresh survey will be practically tractable at ~550+ documents for a full idea-granular substance inventory is not stress-tested; if growth continues, the survey scope may need bounding before execution.",
+          "file_line": ".agent/plans/product-development-governance/vision-strategy-and-plan-estate.plan.md:504-507"
+        }
+      ],
+      "load_bearing_claims_count": 8,
+      "high_stakes_verdicts": []
+    }
+  ]
+}
