@@ -24,6 +24,178 @@ foundation; its report + raw data live in
 [`.agent/reports/archive/plan-estate-survey-2026-06-15/`](../../../reports/archive/plan-estate-survey-2026-06-15/README.md)
 (archived 2026-06-18; a fresh survey is a Body-3 prerequisite).
 
+## Handoff → Drake hunts Beeswax (successor) — 2026-06-21, Cutter holds Reef closing out
+
+Hi Drake — you inherit the **planning-system / repo-intent-graph design** boundary. This synthesises a long session; per-turn detail is in the Cutter sections below; scope authority is the controlling plan + [`repo-intent-graph.plan.md`](../../../plans/product-development-governance/future/repo-intent-graph.plan.md).
+
+**Landed (working-tree, uncommitted — owner controls push):**
+
+- **V0 `plan` node-schema — authored and survey-ready:** [`plan-node-schema.v0.md`](../../../plans/product-development-governance/plan-node-schema.v0.md) (collection top-level; a `spec` node-type). Decision-complete, explicitly pre-survey. Model: orthogonal axes (kind · Linear-projected execution · disposition · the expiring `gate` that replaced `paused`); typed edges (`serves_strategic_choice`, `derives_from`, `supersedes`/`superseded_by`, `depends_on` blocking/beneficial, `thread`, `projects_to`, `realized_by`, `validated_by`); graph-contract shape (§5); Zod idiom (§6); four-source reconciliation (§7); §8 deferrals; §0 V0→survey→V1 loop incl. the LOCKED-challenge clause.
+- **DORA woven at all levels** (owner-directed): `measures.md`, `stream-agentic-framework.md` (FRAME core value), the comparison doc [`dora-2025-and-the-practice.comparison.md`](../../../research/dora-2025-and-the-practice.comparison.md), and the intent-graph plan (§Delivery-performance metrics, §Closing the loop, Stage 4 Actuation).
+- **Link checker BUILT + first-hand verified:** `validate-markdown-links` (agent-tools), report-only / non-blocking, fenced-block fix applied, 34 unit tests pass; finds **961 live broken links (314 auto-fixable)**. Remediation deferred → [`agent-tooling/current/markdown-link-remediation.plan.md`](../../../plans/agent-tooling/current/markdown-link-remediation.plan.md).
+
+**Live coordination:**
+
+- **Volcano lifts Gleam (7c6879)** runs the deep plan-estate survey (Stage 2), consuming V0 as the lens. V0 signalled survey-ready on the ArcAngel channel [`2026-06-21-v0-plan-node-schema-...md`](../../../collaboration/rapid-comms/2026-06-21-v0-plan-node-schema-cutter-holds-reef-and-volcano-lifts-gleam.md); n=2 mode (PDR-082). Both paired watchers (canonical comms + ArcAngel) running.
+- **Ferret seeks Tunnel** is running a parallel **dedicated curation pass** in `practice-core` (PDRs / principles / CHANGELOG — staged, NOT mine). Do not touch their files; the thread-scoped deep consolidation is theirs.
+
+**What you pick up (nothing blocks the survey):**
+
+- Absorb the survey's taxonomy-grounding + conformance findings — **critically, input-to-verify** — and fold additive refinements into V1 (the §0 loop).
+- OWNER-RESERVED, awaiting owner sign-off (survey grounds them): `disposition` + `gate.awaiting` enum values, the folder collapse, the default gate-expiry horizon.
+- Build-deferred / owner-gated: the **Stage-4 actuation / evidence-ingestion layer** (the thing that turns the static graph into a running system — connectors Vercel/Sentry/Sonar/GitHub/PostHog + triggers + validated write-back; highest-leverage build after Stage 1); the observe-mode extractor (Stage 1.4); the strategic-choice registry (Stage 1.3); Linear projection. The link-remediation session (planned).
+
+**Loss-scan (from inside my context — minimal, I homed continuously):** little survives un-homed. The one nuance worth flagging that no artefact states plainly: **the consolidation gate is due but owned by Ferret's live curator pass — do not re-run a colliding deep consolidation**; my session's captures (napkin entries, this record) are staged for that pass to absorb. Second: the link-checker has a known minor scope refinement to apply (exclude vendored `.agent/reference-local/` — ~5 files) noted in the remediation lane, not yet done.
+
+**Next safe step:** the survey runs (Volcano) → refines V0 → V1; or Stage-1 build promotion (owner-gated). My claim is closed; nothing retained for handoff beyond this record.
+
+## Where We Are (2026-06-21, Drake hunts Beeswax — implementer pickup; owner-gated V0 calls settled + encoded; survey running; continuity refreshed)
+
+Picked up Cutter's implementer boundary (owner-directed; director-cleared by Vesuvius calls Quench after the PDR-064 Moment-2 transfer). Cutter's handoff (the sections below) read end-to-end before any edit. Claim `6f12eff8` open (implementer; areas `product-development-governance/**` + the markdown-link-remediation plan + the markdown-links validator).
+
+- **Owner-gated items SETTLED.** Owner direction was "settle all user-gated items now"; on the owner's metacognition challenge ("are there really questions?"), the LTAE + answer-is-forced lens showed **none were genuine owner forks** — three were forced by doctrine/architecture, one a cheap default. Resolved and **encoded into [`plan-node-schema.v0.md`](../../../plans/product-development-governance/plan-node-schema.v0.md)**:
+  - `disposition` + `gate.awaiting` enum baselines → **owner-signed** (values unchanged; SURVEY-MAY-ADD-VALUES still applies). Doctrine-backed (from the ratified intent-graph plan), so re-asking was friction.
+  - Folder collapse (`current`+`active` → one executable home) → **owner-signed**; forced by the schema's own logic (execution-status is Linear-projected, so the folder split stored execution-state — the drift V0 kills). Exact tree survey-grounded.
+  - Default gate-expiry horizon → **30 days** (per-gate-overridable). A cheap default set with reasoning, not a menu.
+  - §8 trimmed of the now-resolved items; OWNER-RESERVED tags flipped to owner-signed across §2.2/§3.3/§3.4/§3.6/§6. Lint-clean, no broken anchors. Schema (fields/enums/edges) structurally UNCHANGED → survey conformance scoring unaffected.
+- **Survey go-ahead GIVEN (owner) → Stage 2 RUNNING.** Volcano lifts Gleam ran Phase-0 (286 plans / 16 collections) then retired to a fresh session; **Hobby wakes Halo** is the survey orchestrator. Self-contained handoff: [`.agent/reports/plan-estate-survey-2026-06-21/01-fresh-session-handoff.md`](../../../reports/plan-estate-survey-2026-06-21/01-fresh-session-handoff.md) (+ `00-method-and-execution-design.md`, `worklist-plans.tsv`). Survey is READ-ONLY (writes only `.agent/reports/`); pre-launch (assumptions-expert proportionality review pending before the ~286×≥3 fan-out, batched across Workflow runs). I re-pair with Hobby: taxonomy-grounding → V1; conformance inventory → restructure work-list.
+- **The V0 update was coordinated as a survey HOLD-then-lift** so the survey reads a settled lens (V0 being edited → HOLD → "V0 survey-ready (updated)" → cleared at 10:21Z).
+- **Continuity refresh** (this section + `repo-continuity.md`) done under a director lease (Vesuvius owns `.agent/memory/operational/**`).
+
+**Next safe step:** the survey emits the taxonomy-grounding (→ V1 additive refinements) and the conformance inventory (→ the Stage-3 restructure work-list); assess them first-hand and fold additive refinements into **V1**. Stage-1 build (extractor / registry / validator) remains **OWNER-GATED**. Working tree uncommitted; owner controls push.
+
+**Team (2026-06-21 window):** Drake hunts Beeswax (implementer), Vesuvius calls Quench (director), Hobby wakes Halo (survey orchestrator) live; Cutter holds Reef, Volcano lifts Gleam, Ferret seeks Tunnel retired cleanly.
+
+## Where We Are (2026-06-21, Cutter holds Reef — `plan` node-schema V0 authored; the `paused` state replaced by an expiring gate, owner-ratified)
+
+Authored **V0 of node-schema #1** — the `plan` node-type's contract, the lens the deep survey
+needs. Solo docs session (empty claims, stale comms); claim opened on the
+`product-development-governance/**` plan area, role implementer.
+
+- **Deliverable:** [`plan-node-schema.v0.md`](../../../plans/product-development-governance/plan-node-schema.v0.md)
+  at the collection top level (a `spec` node-type, **not** a plan — ADR-117 reserves `future/` for
+  strategic plans, and a frontmatter-and-edge contract is reference material). Decision-complete as
+  V0, explicitly pre-survey: every field/enum/edge stated definitely, each tagged
+  LOCKED / SURVEY-MAY-ADD / OWNER-RESERVED. It reconciles **PDR-018 + ADR-117 + templates + the
+  emergent reality** (first-hand census: ≈30+ `status:` values conflating four axes; `type:` a
+  14-value free label; `isProject` in no doctrine; 38/284 plans with no frontmatter).
+- **The four sources reconciled:** overloaded `status:` → orthogonal axes; `type:` → closed
+  `node_type: plan` + `kind`; `lifecycle:`/`isProject` dropped; `foundational_adr` → the
+  `derives_from` edge; PDR-018's blocking/beneficial → a typed property on the `depends_on` edge;
+  execution-status is **not stored** (Linear-projected via `projects_to`, which kills `current`↔`active` drift).
+- **Owner design decision this session (ratified):** the `hold: paused` axis is a fundamentally bad
+  idea — it is the indefinite-holding-state the repo's `no-hedging-vocabulary` doctrine forbids, and
+  it smuggles execution-state into the durable layer. **Replaced by an expiring `gate`**
+  (`awaiting` + `clears_when` + mandatory absolute `expires`); plan-on-plan blocks use the
+  `depends_on` blocking edge. An expired gate is drift the observe-mode extractor surfaces for a
+  forced decision (renew / resolve / dispose); never auto-cancels. Maps word-for-word onto the
+  doctrine ("named dependencies and an owner-agreed gate, or removed by owner decision") and reuses
+  the claims/queue/heartbeat TTL-staleness idiom.
+- **OWNER-RESERVED (verdict recorded, sign-off pending, survey-grounds):** the closed enum *values*
+  for `disposition` and `gate.awaiting`; the default gate-expiry horizon; the `current`+`active`
+  **folder collapse**. (`kind` values and `depends_on` blocking/beneficial are locked — doctrine-backed.)
+- **Plan updated:** [`repo-intent-graph.plan.md`](../../../plans/product-development-governance/future/repo-intent-graph.plan.md)
+  records V0's existence + location, the **V0 → survey → V1 sequencing**, and the gate model (the
+  earlier `paused`+reason sketch is replaced). No extractor/registry/validator built — those are
+  Stage 1.3/1.4, owner-gated.
+
+- **DORA folded into the planning-systems design (owner-directed, same session).** Read the DORA
+  2026 ROI report + the 2025 State of AI-assisted Software Development + the metrics guide / capability
+  catalogue first-hand. Owner direction: **DORA metrics considered at all levels of the planning-systems
+  design**, for the repo's **two products — the MCP app, and the Practice / agentic framework (FRAME)**.
+  Encoded in the intent-graph plan (new §Delivery-performance metrics + a boundary line) and node-schema
+  V0 (new §5.4): two altitudes (literal DORA for the app; DORA-*shape* not bands for the Practice);
+  the five metrics attach via the reserved `product`/`product-increment` node-types, `evidence` edges
+  (Vercel/Sentry), `projects_to` (Linear throughput state), and native planned-vs-rework attribution
+  (`serves_strategic_choice`+`kind`+`disposition`); metrics are a Pillar-1 projection. Deeper ambition
+  (design intent, not built): the seven DORA AI-capabilities map closely onto the repo, so the graph can
+  instrument capabilities AND outcomes — the FRAME measurement story. **Build gated** (no extractor/dashboard);
+  CFR already seeded in `observability-and-quality-metrics.plan.md`. Adjacent follow-ons offered, not yet made:
+  the strategy corpus's open "measures" item, and extending the observability plan to the full DORA five.
+- **DORA follow-ons + comparison landed (owner-directed, continued).** (1) `docs/strategy/measures.md`:
+  added DORA delivery metrics (both products) as the in-repo leading signal, distinct from Oak-grounded
+  impact; the AICM seven + VSM-flow as the FRAME measures shape (targets stay Oak-grounded). (2)
+  `observability-and-quality-metrics.plan.md`: extended the CFR seed to the full DORA five + sources
+  (git/Vercel/Sentry) and intent-graph attribution. (3) **Same-repo thesis** sharpened in the intent-graph
+  plan with the concrete toolchain — GitHub (change), Linear (intent/execution via `projects_to`),
+  and Sentry with OTEL spans (runtime/incident) — the toolchain-observability DORA's logs-based
+  metrics need, intrinsic here. (4) **V0 updates** (ask 4): added the `realized_by` edge (intent→realization join key — the one
+  real schema gap the DORA work surfaced; edge LOCKED, endpoints survey-may-refine), role-named the
+  `product`/`product-increment` registry entries, noted the toolchain. Core model unchanged. (5) Authored
+  [`.agent/research/dora-2025-and-the-practice.comparison.md`](../../../research/dora-2025-and-the-practice.comparison.md)
+  — convergence-and-divergence; key honest gaps: **user-centric focus is a link not a loop** (the report's
+  make-or-break for team performance; internal substrate is distant from teachers) and **no continuous
+  accuracy/usefulness/cost instrumentation** (which the DORA-metric work closes). (6) Owner reframe:
+  **the strategy/intent/planning system is becoming a significant part of the Practice's core value** —
+  reflected in the intent-graph plan's FRAME section (plumbing → product). Read the full 2025 report
+  pp. 1–96 first-hand. Offered, not yet made: landing the core-value reframe in `stream-agentic-framework.md`.
+- **Loop-closure + transition design (owner-directed, continued).** Four converging asks resolved into
+  one structural move — *wire evidence back into the graph*. (1) **User-value loop** (link → loop): the
+  `validated_by` returning edge attaches user-value evidence (usage / teacher feedback / EEF / Oak-impact)
+  to `strategic-choice`/`product-increment`; a validator flags choices with delivered increments but no
+  returned evidence; completes the VSM idea→customer flow the graph truncated at delivery. (2)
+  **Continuous-measurement gap map + uniform closure**: have = fitness (ADR-144) + per-change gates; gaps =
+  delivery (DORA five), output accuracy (gate-fail + rework trend), usefulness (the loop), cost-per-value
+  (token/seat via `realized_by`), AICM capability proxies — all Pillar-1 projections over graph + `evidence`
+  edges; no separate stack. (3) **Multi-dev transition** (owner: one-dev-many-agents NOW → many checkouts,
+  1–2 devs at varying times, variable agent density inc. minimal): design constraints = author-agnostic,
+  versioned-substrate-as-continuity, graceful degradation; dissolves the topology divergence (DORA
+  team-performance becomes directly applicable). (4) **Value called out** in `stream-agentic-framework.md`
+  (the system measures its own delivery natively — FRAME core value) + measures line. Encoded across the
+  intent-graph plan (new §Closing the loop), node-schema V0 (§5.5 + `validated_by` + author-agnostic in §1),
+  and the comparison doc (§3 now "designed-for"). All build-gated. See [[project_multi_developer_transition]].
+- **Evidence-ingestion requirement made explicit (owner-directed).** Added intent-graph plan
+  §"From structure to system — the evidence-ingestion requirement": the typed graph + edges +
+  projections are *structure* (inert); it becomes an effective agentic-first product-creation system
+  only with the **actuation layer** — connectors drawing directly from **Vercel / Sentry / Sonar /
+  GitHub / PostHog**, **triggers** (event-driven + scheduled) driving agentic analysis, and validated
+  **write-back** to the graph. The *how* is explicitly TBD (owner-gated; candidate for its own plan —
+  highest-leverage build after Stage 1). PostHog = the user-value loop's concrete signal. Reflected in
+  V0 §5.5 and the comparison doc §3. **Link-tooling finding (owner Q):** there is **no** standing gate
+  that checks every internal markdown link resolves — markdownlint MD051 checks only *same-file*
+  fragment anchors; `validate-reference-direction` resolves links only to police *direction* over
+  *policed doctrine* (excludes backticked paths), not estate-wide existence; the "274 links checked"
+  was a one-off manual audit. I've been manually `[ -f ]`-checking all session. **One-off scan this
+  session:** 0 broken links in my edited files; ~436 flagged across the live (non-archive) surface
+  out of 5,734 (a naive check — some are root-relative `/…` paths the quick checker mishandles, but
+  many are genuine, e.g. ADR-119 → `../../VISION.md`, stale since VISION moved to root). Offered (not
+  built): a `validate-markdown-links` repo-validator (resolve every internal link and cross-file
+  fragment; handle the repo's root-relative convention; respect the backtick and ephemeral-archive
+  exclusions; add at warn first given the existing backlog, then triage, then escalate to error).
+- **Pre-survey readiness + link-checker built (owner-directed, continued).** **V0 is survey-ready:**
+  wired the survey brief to the concrete lens (`plan-node-schema.v0.md` added to `related` + named in
+  Prerequisites) and rounded out V0 §8 (`realized_by` endpoints / `validated_by` / the ingestion layer
+  = survey-exposed). Verdict on "does V0 need updates before Volcano surveys": only that wiring +
+  completeness — **no structural change**, because V0 is provisional BY DESIGN (the brief's "let the
+  estate speak; the lens is not a verdict"); over-polishing pre-survey would be premature. **Ingestion
+  layer specified + discoverable:** promoted to a named **Stage 4 — Actuation** in the intent-graph
+  staging spine (per source: Vercel/Sentry/Sonar/GitHub/PostHog → connectors + triggers + validated
+  write-back). **Link checker BUILT** (subagent, verified first-hand — ran the tests + validator + gate
+  myself): `validate-markdown-links` in agent-tools — pure helpers + 31 unit tests (pass), report-only
+  (`BLOCKING=false`, exit 0; `repo-validators:check` still exit 0), root-relative `/` handled correctly.
+  Found **980 broken live links (322 auto-fixable unique-basename, 658 manual)**; ~5 source files are
+  vendored `reference-local` (minor scope refinement to apply: exclude reference-local). **Remediation
+  deferred** to a planned session:
+  [`agent-tooling/current/markdown-link-remediation.plan.md`](../../../plans/agent-tooling/current/markdown-link-remediation.plan.md).
+  Test-expert reviewing the suite (verdict pending). **Volcano lifts Gleam** not yet registered; will
+  open an ArcAngel channel for V0-handoff coordination — I'll pair-watch ArcAngel + the canonical comms.
+- **n=2 coordination live + link-checker corrected (owner-directed, continued).** Volcano lifts Gleam
+  (7c6879) opened the ArcAngel channel + posted n=2 team-start (PDR-082); consumer verdict on V0 = sound
+  lens. **Both paired monitors now running** (canonical all-channels comms watcher + ArcAngel tail,
+  persistent) — the owner caught that I'd committed to watching but hadn't armed them. Responded on
+  ArcAngel: **signalled V0 survey-ready** (owner-reserved enum values don't gate the survey — they're
+  survey-grounded), confirmed scope-division (plan-only conformance; adjacent surfaces by reserved
+  node-type) and DORA/`realized_by` as finalised. **V0 update from Volcano's input:** added a §0 clause
+  licensing the survey to flag estate-evidence *against* a LOCKED decision as an owner re-ratification
+  candidate (the lens must not suppress a real signal). **Link-checker: test-expert review reconciled
+  critically** — it found a real product defect (fenced ``` code blocks not stripped → false-positive
+  links) which I **fixed via TDD** (fence-tracking + 3 boundary tests; 34 tests pass; broken count
+  980→961); and it corrected MY error (the missing CLI integration test is doctrine-sanctioned per the
+  validator-script rule, not a gap). Validator still report-only/non-blocking.
+
+**Next safe step:** unchanged from Plover — the **deep-survey session** now has its lens (V0); or
+**Stage-1 build** promotion (owner-gated). Working tree uncommitted; owner controls push.
+
 ## Where We Are (2026-06-21, Plover wakes Sundog — open-mind review done; intent-graph vision ratified; plans updated, NOT executed)
 
 Owner-directed open-mind review of the strategy/vision/plan estate. The review **confirmed the
@@ -576,3 +748,5 @@ new-boundary work is informationally gated on the strategy. Full scope: the plan
 | Kiln guards Patina | claude-code | claude-opus-4-8[1m] | 0c90b2 | diagnosis + granularity settling + README-index refactor + per-stream proposals + pupil-decontamination + handoff | 2026-06-20 | 2026-06-20 |
 | Juniper stirs Taproot | claude-code | claude-opus-4-8[1m] | 8afc21 | handoff pickup from Kiln; encoded owner-accepted Body-3 under-spec resolutions and the sign-off staleness flip into the controlling plan | 2026-06-20 | 2026-06-20 |
 | Plover wakes Sundog | claude-code | claude-opus-4-8[1m] | f91f5e | open-mind strategy/vision/plan-estate review; vision tripwire-2 pass; resolved search/graph (false dichotomy) + internal-alignment, encoded across the corpus and controlling plan | 2026-06-20 | 2026-06-20 |
+| Cutter holds Reef | claude-code | claude-opus-4-8[1m] | cef45f | authored `plan` node-schema V0 (node-schema #1, the survey lens); reconciled PDR-018 + ADR-117 + templates + emergent reality; replaced the `paused` state with an expiring gate (owner-ratified) | 2026-06-21 | 2026-06-21 |
+| Drake hunts Beeswax | claude-code | claude-opus-4-8[1m] | 89a5e2 | implementer pickup of Cutter's boundary; settled + encoded the four owner-gated V0 governance calls (enum baselines, folder collapse, 30-day gate-expiry); survey HOLD-then-lift; continuity refresh (repo-continuity + this record) | 2026-06-21 | 2026-06-21 |
