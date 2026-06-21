@@ -222,3 +222,12 @@ Practice-Core concept ↔ ADR map):
 | [PDR-095](PDR-095-collaboration-is-multi-dimensional.md) | Collaboration Is Multi-Dimensional — A Coordination Registry Measures One Axis, Not the Whole | Accepted |
 | [PDR-096](PDR-096-atomic-propagation-across-reader-surfaces.md) | Atomic Propagation of a Change Across Its Reader Surfaces | Accepted |
 | [PDR-097](PDR-097-disposition-category-grouping-in-health-reports.md) | Disposition-Category Grouping in Substrate Health Reports | Accepted |
+| [PDR-098](PDR-098-doctrine-traction-firing-detection-response.md) | Doctrine Traction — the Firing × Detection × Response Decomposition | Accepted |
+| [PDR-099](PDR-099-change-rate-governor-is-a-reflection-trigger.md) | A Self-Modifying Practice's Change-Rate Governor Is a Reflection-Trigger | Accepted |
+| [PDR-100](PDR-100-decision-debt-as-a-first-class-pillar.md) | Decision-Debt as a First-Class Pillar | Accepted |
+| [PDR-101](PDR-101-graduation-requires-quorum.md) | A Doctrine-Minting Graduation Requires a Review Quorum | Accepted |
+| [PDR-102](PDR-102-editorial-voice-optional-host-defined-scope-bounded.md) | Editorial Voice Is an Optional, Host-Defined, Scope-Bounded Concern | Accepted |
+| [PDR-103](PDR-103-scope-from-goal-before-approach.md) | Scope From the Goal Before Approach — an Active Boundary Gate | Accepted |
+| [PDR-104](PDR-104-best-effort-doctrine-authoring-in-consolidation.md) | Best-Effort Practice-Doctrine Authoring in Dedicated Consolidation Sessions | Accepted |
+| [PDR-105](PDR-105-reference-direction-invariants.md) | Reference-Direction Invariants — the Artefact Fundamentality Hierarchy | Accepted |
+| [PDR-107](PDR-107-directive-supersedes-and-reconciles-adr.md) | An Owner Directive Supersedes a Conflicting Accepted Record — and Reconciles It | Accepted |
