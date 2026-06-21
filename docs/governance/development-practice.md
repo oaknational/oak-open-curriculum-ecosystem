@@ -253,6 +253,11 @@ the current understanding.
   formatting/link hygiene.
 - NEVER compress docs to meet line limits — split files by
   responsibility instead.
+- A README is a stable index/summary; detailed content lives in
+  separate file(s) it links to. When a README accretes detail,
+  split the detail into a sibling file and leave the README as the
+  index. (Owner convention, 2026-06-20; first applied in the
+  `docs/strategy/` README-index refactor.)
 - When moving plan artefacts, grep for old paths in `*.ts`,
   `*.mjs`, `*.json`, not just `*.md` — test configs and CLI
   defaults hardcode plan paths.

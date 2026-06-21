@@ -24,13 +24,20 @@ product-vs-engineering decision locus; "an indiscriminate-rule warning count is 
 cause-classes"); frictions F-75 (peer heartbeat-silence) recovered from a comms event that
 never reached the register; the 2026-06-20/21 fluency-cluster + the `education=pupils` prior
 recurrence routed to the action-time t2 inventory; commit `358a1636a`, gate green, NOT pushed.
-**Pending-graduations now carries four candidates** (decision-debt for the owner): the
-README-index doc-architecture convention (third-consumer trigger) + three surfaced PDR/Core
-candidates — directive-vs-Accepted-ADR precedence, the `education=pupils` authoring guard's
-home, and "culture as transmission of disposition" (experience-nominated). The load-bearing
-session lesson (now in the napkin): conservation's organising axis is the knowledge flow
-walked bottom-up, never the fitness zones. The four prose-width-hard records remain WS4's
-(below) — not reflowed.
+**Graduations were promoted-and-assessed** (owner correction: we do not gate graduations on
+approval — promote and assess): the README-index doc-architecture convention →
+`development-practice.md` §Documentation Practice; directive-vs-Accepted-ADR precedence →
+**PDR-107**; "culture as transmission of disposition" → practice-lineage §Active Principles —
+all docs-adr-expert-assessed sound-as-homed (routed by intent: PDR vs governance-doc vs Core
+principle).
+The `education=pupils` guard was **rejected**: a removed incorrect concept is not enshrined as a
+celebrated guard (its general lesson lives as pathogen evidence in the action-time t2 inventory).
+pending-graduations drained to 0. The load-bearing session lesson (in the napkin): conservation's
+organising axis is the knowledge flow walked bottom-up, never the fitness zones. The four
+prose-width-hard records remain WS4's (below) — not reflowed; practice-lineage is now over its
+line hard-limit from the culture promotion (preserved learning → a tightening pass: graduate a
+mature
+active principle to an axiom or split; never compress).
 
 ## Dedicated consolidation — buffers at rest (2026-06-19, Finch binds Halo)
 
@@ -600,7 +607,7 @@ passes) is in git history and the [`curator-passes/`](../curator-passes/) ledger
 | `Siren guards Reef` | `claude` | `Opus 4.8 (1M)` | `e0eb7f` | `PDR-105 burndown COMPLETED 145→0 (Tulip successor): portability 55 (7ac5fe657) + durability 90 (6893962c2), pure de-link, 3 docs-adr passes APPROVED, gate green, NOT pushed; Task-2 tracks/workstreams operational surfaces retired (uncommitted) + 7 self-made tombstones fixed; handed to Drake lifts Obsidian — blocking remaining: PDR-011/ADR-150 foundational edits, dir deletion, validator warn→error escalation, ADR-026/093 coverage gaps, PDR-058:359 + register-identity stale-link tombstones` | 2026-06-19 | 2026-06-19 |
 | `Drake lifts Obsidian` | `claude` | `Opus 4.8 (1M)` | `9258d7` | `PDR-105 burndown COMPLETE (Siren guards Reef successor): Tranche A doctrine cures d8ec8867c (de-links + PDR-011/ADR-150/PDR-027/PDR-058 + no-moving-targets:135 reconciliation; docs-adr APPROVED); Tranche B 774a49e5e (tracks/workstreams deleted + PDR-049/050 manifest reconciled + §Notes past-tense; owner-authorised); Tranche C 563487f79 (validate-reference-direction report-only→blocking + .agent/analysis/ ephemeral; code/test-expert APPROVE; probe-proven); validator now BLOCKING at 0; backticked-detection deliberately rejected; NOT pushed` | 2026-06-19 | 2026-06-19 |
 | `Finch binds Halo` | `claude` | `Opus 4.8 (1M)` | `b0831c` | `four-files lane RESOLVED → jointly designed the Closure & Role-Routing fitness doctrine with the owner; committed the findings record + backbone plan (547d889c9); committed Kayak's strategy + compliance lanes (453896d64, d1387b81f) at owner direction; merged the 8 remote planning-cluster commits; prior 2026-06-19: dedicated-consolidation drain (detail in git + the findings record). NOT pushed` | 2026-06-19 | 2026-06-20 |
-| `Ferret seeks Tunnel` | `claude-code` | `Opus 4.8 (1M)` | `77bfae` | `dedicated-knowledge-curation: drained the 2026-06-20/21 capture window bottom-up (napkin rotated; decision-locus + cause-classes lessons → distilled; F-75 peer-heartbeat-silence recovered from comms; fluency-cluster + education=pupils recurrence → action-time t2 inventory); registered 4 pending-graduations candidates; commit 358a1636a + handoff; gate green, NOT pushed` | 2026-06-21 | 2026-06-21 |
+| `Ferret seeks Tunnel` | `claude-code` | `Opus 4.8 (1M)` | `77bfae` | `dedicated-knowledge-curation: drained the 2026-06-20/21 capture window bottom-up (napkin rotated; decision-locus + cause-classes lessons → distilled; F-75 peer-heartbeat-silence recovered from comms; fluency-cluster + education=pupils recurrence → action-time t2 inventory); promoted-and-assessed PDR-107 + README-index doc clause + culture Active Principle (docs-adr-assessed), rejected the pupils guard; commits 358a1636a + handoff; gate green, NOT pushed` | 2026-06-21 | 2026-06-21 |
 
 ## Cross-Plan and Cross-Thread Links
 

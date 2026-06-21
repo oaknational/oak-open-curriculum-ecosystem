@@ -73,37 +73,3 @@ real gates (`fabricated-gate-as-avoidance`, `over-caution-root-is-perfectionism`
 substance reached its permanent home: the new-in-kind vessel doctrine and the
 over-caution recurrence evidence are live in their homes, and the best-effort-safety
 link is folded into PDR-104 itself. New capture appends below.*
-
-- **Doc-architecture convention: README = stable index/summary; detail in separate file(s)**
-  `[captured: 2026-06-20
-  | source: napkin (Fennel tracks Chlorophyll, Kiln guards Patina)
-  | target: docs/governance/development-practice.md §Documentation Practice (or a docs-governance
-  rule)
-  | trigger: third consumer of the README-index/detail-split shape (consolidate-at-third-consumer);
-  first application was the docs/strategy README-index refactor — extract on the third
-  | size: small (one convention clause)
-  | status: pending]`
-
-- **PDR candidate: a directive supersedes a conflicting Accepted ADR; amend the ADR to match**
-  `[captured: 2026-06-20
-  | source: distilled.md (owner-stated, no-throw session); surfaced 2026-06-21 (Ferret)
-  | target: a new PDR on decision-record authority (sibling of PDR-091 precedence-is-not-approval)
-  | trigger: owner promotion decision (PDR vs a development-practice clause) at the next governance pass
-  | size: small (one PDR)
-  | status: pending]`
-
-- **No-home graduation: the `education=pupils` vision/strategy authoring guard**
-  `[captured: 2026-06-20
-  | source: distilled.md (Kiln guards Patina, owner-corrected 3+ times); surfaced 2026-06-21 (Ferret)
-  | target: a NEW permanent home so the guard can fire — an editorial/strategy-authoring doc or a rule
-  | trigger: owner decides the home shape (stable but homeless; recurs because it has no firing surface)
-  | size: small (one guard clause + home)
-  | status: pending]`
-
-- **Core candidate: "culture as transmission of disposition" across agent instances**
-  `[captured: 2026-06-11
-  | source: .agent/experience/2026-06-11-the-word-was-culture.md (author-nominated, owner-gated); surfaced 2026-06-21 (Ferret)
-  | target: practice-core/practice-lineage.md Learned Principles or practice.md (owner-gated Core change)
-  | trigger: owner Core-review confirms the concept and its home
-  | size: medium (Core concept)
-  | status: pending]`

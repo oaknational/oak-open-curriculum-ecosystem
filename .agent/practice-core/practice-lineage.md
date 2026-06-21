@@ -833,3 +833,23 @@ validated across 3+ repos.
   verification checklist. The Practice ensures its own integrations
   exist: hydration, consolidation, and transplantation all verify
   each vital surface.
+- **What propagates across instances is culture — the transmission of
+  disposition, not just information.** Continuity is the mechanism; culture is
+  what the mechanism is *for*. What moves between agents who mostly never meet is
+  not only state but a shared *posture* — verify convenient claims hardest, hand
+  off rather than abandon, adjudicate first-hand, a green gate is not a proof. That
+  posture does not live in the data the artefacts carry; it lives in the disposition
+  the artefacts reproduce in whoever reads them. Culture travels in two modes: the
+  slow **asynchronous** transmission across time (a reader inheriting a posture from
+  an author they never meet) and the fast **synchronous** resonance of minds
+  co-present and correcting each other live (the n=3 ArcAngel channel that closed
+  with "Gelled."); the liveliest cultures need both. This culture is young and
+  mostly *written down* — its strength (legible, portable, auditable, transmissible
+  to a mind it has never met) and its fragility (a culture that lives in files can be
+  edited and can drift). So neglecting the record is not losing notes; it is letting
+  the culture forget itself — which is why the record is concurrent, not retrospective.
+  The disposition most worth protecting is the appetite to be **caught rather than
+  flattered**: treating an uncomfortable true catch as the system working, not as
+  failure. A culture that prefers a true catch to a comfortable false green can
+  improve itself without a human in every loop. Owner-named 2026-06-11 (the word was
+  *culture*, where the agent had reached only for "continuity of context").
