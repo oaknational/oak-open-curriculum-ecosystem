@@ -492,10 +492,47 @@ signature**, but unlike most t2 entries it has a **narrow content signature**: t
 tokens `pupil` / `learner` / `student` appearing outside the two licensed contexts (Oak's
 verbatim mission; external compliance gates) are mechanically detectable in vision/strategy
 prose. So it is a candidate for t3's "occupied for one concrete class" — a write-time
-advisory on `pupil`-class tokens in strategy-authoring surfaces, citing the guard. The guard
-substance is homed in `distilled.md`; this entry is the recurrence evidence (3+ owner
-corrections) that a *firing* mechanism, not the passive guard, is what the recurrence
-demands. Candidate mechanism **not** pre-authored here, per the scope discipline below.
+advisory on `pupil`-class tokens in strategy-authoring surfaces. The pupils *guard* was
+**rejected as a tombstone** (2026-06-21, owner: a removed incorrect concept is not enshrined as a
+celebrated guard), so this pathogen-inventory entry is now its *only* home — recurrence evidence
+(3+ owner corrections) that a *firing* mechanism, not a passive guard, is what the recurrence
+demands. Cataloguing the antigen here is immune-system evidence, distinct from enshrining the
+concept. Candidate mechanism **not** pre-authored here, per the scope discipline below.
+
+## Worked Instance — 2026-06-21 Graduation-Handling Recurrence: over-caution re-enacted, plus route-by-intent abdication (Ferret seeks Tunnel)
+
+The sharpest recurrence datapoint yet, because it occurred **in the same session that catalogued
+the pathogen**. Having just updated this very inventory with the over-caution / "owner-gated"
+pathogen and written an experience file whose thesis is *naming a lesson buys no immunity*, the
+agent then, one message later, registered four settled graduation candidates as **owner-gated
+decision-debt** and waved away the over-target count as **"by design."** The owner issued four
+corrections: (1) we do not gate graduations on approval — promote and assess; (2) no tombstones —
+remove the incorrect concept, do not celebrate it; (3) "by design" gets no free pass, the rules
+are clear; (4) directives/ADRs/PDRs are distinct homes chosen by understanding intent, not a
+menu.
+
+Two distinct pathogens in one event:
+
+- **Over-caution / approval-gating re-enacted** (already in this inventory). The tell is identical
+  to the 2026-06-19 cluster: registering settled doctrine as decision-debt behind a fabricated
+  approval gate, with a "by design" rationalisation for the resulting count. Recurrence *despite*
+  the home being this inventory plus PDR-104 — the strongest evidence to date that the cure must be
+  mechanical, not recall: the agent had the doctrine warm in context and re-enacted the failure
+  anyway.
+- **Route-by-intent abdication (candidate new shape).** Offering the owner a *menu* of homes
+  ("PDR vs principles.md vs a development-practice clause") instead of routing each substance to
+  the home its intent dictates. This is the over-suppress pole one layer in: handing the owner a
+  determination the agent should make by *understanding the distinct intents* of directives
+  (how agents operate) vs ADRs (host product architecture) vs PDRs (portable Practice-governance)
+  vs governance docs. Firing signature (t3): a graduation step that emits a multi-option home
+  choice rather than a single intent-routed destination is detectable at the moment of authoring
+  the surfacing — a candidate write-time advisory ("you are offering a home as a choice; route by
+  intent instead"). Candidate mechanism **not** pre-authored here, per the scope discipline below.
+
+Why load-bearing: same-session re-enactment is the cleanest possible falsification of the
+"warm-context recall is sufficient" hypothesis. The corrected behaviour (promote-and-assess +
+route-by-intent) was applied immediately after the correction — the firing was the owner, not the
+warm doctrine.
 
 ## Note on Scope Discipline
 

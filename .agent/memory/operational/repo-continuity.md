@@ -106,9 +106,15 @@ surface.
 - **Collaboration-state lifecycle**: `.agent/state/` files are live signal
   sources, not long-term documentation. Outside explicit owner-directed research
   windows, process useful substance into memory/docs/plans and clear stale state.
-- **Agentic state (2026-06-21, two sessions)**: Ferret seeks Tunnel ran the dedicated
-  knowledge-curation pass (commit `358a1636a` + handoff; NOT pushed). A **live parallel session,
-  Cutter**, is doing the intent-graph `plan` node-schema work on the strategy thread — it holds
+- **Agentic state (2026-06-21, two sessions)**: Ferret seeks Tunnel ran a dedicated
+  knowledge-curation pass + handoff, then promoted three graduations (PDR-107; the culture Active
+  Principle; the README-index doc convention) and backfilled the PDR index (multiple commits on
+  `docs/planning-and-validation`, **NOT pushed** — `git log` is authoritative; re-verify via `@{u}`).
+  **LIVE NEXT TASK (owner-authorised, to run after a context compaction):** the practice-lineage
+  Active-Principles graduation pass — durable brief at
+  [`current/practice-lineage-principle-graduation.plan.md`](../../plans/agentic-engineering-enhancements/current/practice-lineage-principle-graduation.plan.md).
+  A **live parallel session, Cutter**, is doing the intent-graph `plan` node-schema work on the
+  strategy thread — it holds
   the live claim `0c73f7d0` (strategy thread, area `plan`; identity-less row, no `agent_name`/
   heartbeat — an identity-registration friction, but live: it has dirty edits to the strategy
   thread record, `repo-intent-graph.plan.md`, a new `plan-node-schema.v0.md`, and a fresh napkin

@@ -35,9 +35,13 @@ celebrated guard (its general lesson lives as pathogen evidence in the action-ti
 pending-graduations drained to 0. The load-bearing session lesson (in the napkin): conservation's
 organising axis is the knowledge flow walked bottom-up, never the fitness zones. The four
 prose-width-hard records remain WS4's (below) — not reflowed; practice-lineage is now over its
-line hard-limit from the culture promotion (preserved learning → a tightening pass: graduate a
-mature
-active principle to an axiom or split; never compress).
+line hard-limit from the culture promotion (preserved learning → graduate actives upward, never
+compress). **NEXT SAFE STEP (owner-authorised this session, to run after a context compaction):**
+execute the graduation pass per
+[`current/practice-lineage-principle-graduation.plan.md`](../../../plans/agentic-engineering-enhancements/current/practice-lineage-principle-graduation.plan.md)
+— that plan is the durable brief carrying the steps, the governing constraints (promote-and-assess,
+route-by-intent, no-tombstones, conservation-over-fitness, PDR-003), and the live Cutter
+parallel-session state (stage by explicit pathspec; nothing pushed).
 
 ## Dedicated consolidation — buffers at rest (2026-06-19, Finch binds Halo)
 
