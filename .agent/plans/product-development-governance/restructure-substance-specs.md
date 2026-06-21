@@ -29,8 +29,8 @@ specs are authored on the consolidation / V1-fold side (this lane) and consumed 
 - **Spec 3 (trichotomy → disposition defaults)** governs both the survey's classification output
   and the restructure's dispositions.
 
-Status is **draft** — design-only, survey-gated and owner-gated for execution. One owner
-decision is open (the effectiveness-arm reviewer); see §Open Questions.
+Status is **draft** — design-only, survey-gated and owner-gated for execution. The one owner
+decision (the effectiveness-arm reviewer) is now settled; see §Resolved decisions.
 
 ## Spec 1 — Per-choice effectiveness / adequacy (Pass-2)
 
