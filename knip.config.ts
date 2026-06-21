@@ -71,6 +71,7 @@ const config: KnipConfig = {
         'src/validators/collaboration-state/validate-collaboration-state.ts',
         'src/validators/stale-script-invocations/validate-no-stale-script-invocations.ts',
         'src/validators/lifecycle-scripts/validate-lifecycle-scripts.ts',
+        'src/validators/markdown-links/validate-markdown-links.ts',
         'src/validators/pretooluse-guard-routing/validate-pretooluse-guard-routing.ts',
         'src/validators/policy-reappraisal/validate-policy-reappraisal.ts',
         'src/validators/reference-direction/validate-reference-direction.ts',

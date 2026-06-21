@@ -41,6 +41,7 @@
     "validate-pretooluse-guard-routing": "cd .. && pnpm exec tsx agent-tools/src/validators/pretooluse-guard-routing/validate-pretooluse-guard-routing.ts",
     "validate-policy-reappraisal": "cd .. && pnpm exec tsx agent-tools/src/validators/policy-reappraisal/validate-policy-reappraisal.ts",
     "validate-reference-direction": "cd .. && pnpm exec tsx agent-tools/src/validators/reference-direction/validate-reference-direction.ts",
+    "validate-markdown-links": "cd .. && pnpm exec tsx agent-tools/src/validators/markdown-links/validate-markdown-links.ts",
     "validate-portability": "cd .. && pnpm exec tsx agent-tools/src/validators/portability/validate-portability.ts",
     "validate-portability:fix": "cd .. && pnpm exec tsx agent-tools/src/validators/portability/validate-portability.ts --fix",
     "validate-practice-fitness": "cd .. && pnpm exec tsx agent-tools/src/practice-fitness/validate-practice-fitness.ts",
