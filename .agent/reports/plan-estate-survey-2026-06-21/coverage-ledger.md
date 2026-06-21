@@ -24,6 +24,16 @@ increments from this ledger after the next reset.
 > intermediate results" constraint — conservation granularity is kept smaller than the
 > session-death loss-event granularity).
 
+## ⚑ SUBSTANCE RE-AIM (owner-ratified, 2026-06-21)
+
+The survey is re-aimed from form toward SUBSTANCE: per-choice effectiveness/adequacy, per-plan
+content-quality, the good/bad/speculative trichotomy, and a provable no-loss audit. The instrument now
+captures three per-plan fields (`substance_class` / `content_quality` / `salvage_value`) from sub-batch
+**1b-04 onward**. OBLIGATION: the 59 old-schema plans (1a + 1b-01/02/03) need a focused holistic-only
+BACK-FILL of these three fields **before Pass-3 synthesis**. Full state, division with Ganymede (Pass-2
+effectiveness spec + no-loss audit format are theirs), and routing: see
+[`05-orchestration-state-and-successor-handoff.md`](./05-orchestration-state-and-successor-handoff.md).
+
 ## Plan universe (Phase 0, re-derived first-hand)
 
 286 non-archive `*.plan.md` across 16 collections. Lanes: `current/` 145, `future/` 121,
@@ -38,9 +48,9 @@ scope; not surveyed.) Source: `worklist-plans.tsv`.
 | 1a | agentic-engineering-enhancements (`active/` + first `current/`) | 35 | Hobby wakes Halo | COMPLETE | `pass1-agentic-engineering-batch1a.json` |
 | 1b (1st attempt) | agentic-engineering-enhancements | 12 | Pinnace hunts Marsh | SESSION-LIMITED, 0 findings (HALT held, no fabrication; same already-spent window) — superseded by the increments below | — |
 | 1b-01 | agentic-engineering-enhancements (`current/`) | 4 | Pinnace hunts Marsh | COMPLETE (3 keep / 1 archive-complete; 3 major-drift / 1 no-fm; 4 high-stakes all survive; 1 locked-contradiction) | `pass1-agentic-engineering-batch1b-01.json` |
-| 1b-02 | agentic-engineering-enhancements (`current/`+`future/`) | 8 | Pinnace hunts Marsh | IN FLIGHT (`wf_5a404e97-8e0`) | `pass1-agentic-engineering-batch1b-02.json` (pending) |
-| 1b-03 | agentic-engineering-enhancements (`future/`) | 12 | Pinnace hunts Marsh | PENDING | `pass1-agentic-engineering-batch1b-03.json` |
-| 1b-04 | agentic-engineering-enhancements (`future/`) | 11 | Pinnace hunts Marsh | PENDING | `pass1-agentic-engineering-batch1b-04.json` |
+| 1b-02 | agentic-engineering-enhancements (`current/`+`future/`) | 8 | Pinnace hunts Marsh | COMPLETE (8 keep; 6 major-drift / 2 no-fm; 5 high-stakes all survive; 4 locked-contradictions) | `pass1-agentic-engineering-batch1b-02.json` |
+| 1b-03 | agentic-engineering-enhancements (`future/`) | 12 | Pinnace hunts Marsh | COMPLETE (11 keep / 1 archive-complete; 10 no-fm / 2 major-drift; 5 high-stakes 4 survive / 1 refuted; 2 locked-contradictions) | `pass1-agentic-engineering-batch1b-03.json` |
+| 1b-04 | agentic-engineering-enhancements (`future/`) | 11 | Pinnace hunts Marsh | IN FLIGHT (`wf_b26adee8-ec9`) — FIRST run with the substance fields | `pass1-agentic-engineering-batch1b-04.json` (pending) |
 
 After 1b: the full **agentic-engineering-enhancements** collection (70 plans) is Pass-1 complete.
 
