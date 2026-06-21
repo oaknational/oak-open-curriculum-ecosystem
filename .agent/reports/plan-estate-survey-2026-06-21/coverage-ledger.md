@@ -22,6 +22,9 @@ live WS-3 and the owner's next reset. **Next safe step: the 10 remaining collect
 small singletons; then the 70-AEE idea-granular back-fill BEFORE Pass-3. Shared-checkout commit coupling
 active: my docs commits run the full turbo gate over Oyster's working tree, so commit during their
 `tree-green` windows (interim protocol agreed; structural cure = separate git worktrees, flagged to owner).
+**Full next-session runbook: [`08-next-session-execution-plan.md`](./08-next-session-execution-plan.md)**
+(linear loop, owner-intervention points, sub-agent critical-assessment exhortations); it cross-links up to
+the parent method brief and the controlling plan.
 
 Recorded lesson (one wasted attempt, no findings lost): a *fresh session* is NOT a *fresh window* —
 the session limit is account-level, shared across the rotating cast. The first 1b attempt (12 plans,
