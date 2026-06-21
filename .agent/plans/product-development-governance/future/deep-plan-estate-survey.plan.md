@@ -8,6 +8,7 @@ thread: strategy-and-plan-estate-holistic-review
 last_updated: 2026-06-21
 related:
   - ./repo-intent-graph.plan.md
+  - ../plan-node-schema.v0.md
   - ../vision-strategy-and-plan-estate.plan.md
   - ../../../../docs/architecture/architectural-decisions/117-plan-templates-and-components.md
   - ../../../practice-core/decision-records/PDR-018-planning-discipline.md
@@ -160,9 +161,12 @@ Authored under a dated `.agent/reports/` survey directory; nothing presupposed:
 ## Prerequisites
 
 - **The `plan` node-schema as the conformance lens** — `blocking` for the conformance dimension;
-  a draft v0 lens suffices to start (the survey refines it). Minimum shippable shape without the
-  final schema: run the holistic + specialist + relational passes against a draft lens and mark
-  conformance findings provisional.
+  a draft v0 lens suffices to start (the survey refines it). **The lens exists:**
+  [`plan-node-schema.v0.md`](../plan-node-schema.v0.md) (V0, decision-complete, explicitly
+  pre-survey). It is provisional **by design** — its §0 defines the V0 → survey → V1 loop, and its
+  §8 names what is deferred for the survey to refine. Run the holistic + specialist + relational
+  passes against it and feed conformance findings back as additive refinements; do not treat the
+  lens as a verdict.
 - **The strategic-choice registry** — `blocking` for the plans↔choices traceability pass (the
   resolution target). Already signed off (the 12 bets).
 - **The observe-mode plan extractor** — `beneficial`, not `blocking`: it adds a deterministic

@@ -131,6 +131,16 @@ Conceiving it this way means it never has to be reconciled with a graph later. I
 by **Stage 1** and consumed by the controlling plan's **Body 3** as its Anchor B (the conformance
 standard) and Anchor A (the registry the `serves_strategic_choice` edge resolves against).
 
+**V0 of node-schema #1 is authored (docs):**
+[`plan-node-schema.v0.md`](../plan-node-schema.v0.md) — decision-complete as V0, explicitly
+pre-survey. It is the **lens the Stage-2 survey reads the estate against**: a falsifiable,
+complete, checkable shape (every field, enum, and edge stated definitely, each tagged with its
+refinement-exposure: LOCKED / SURVEY-MAY-ADD / OWNER-RESERVED). The build half of Stage 1.2 (the
+Zod schema) is authored at promotion, not by V0. **The sequencing is V0 → survey → V1**: V0 is
+the survey's input; the survey (Stage 2) additively refines V0 against the real estate; the
+result is ratified as V1 at the close of Stage 2. V0 carries no extractor, registry, or
+validator (those are Stage 1.3/1.4, promoted separately).
+
 ### Plan state — orthogonal axes, not one overloaded lane (owner-shaped 2026-06-21)
 
 The `future`/`current`/`active` lanes have confused because they collapse two distinct questions
@@ -147,8 +157,12 @@ execution / evidence state"):
   the `current`↔`active` confusion and the drift of a hand-edited "in-progress".
 - **Terminal disposition** (durable, repo): `done` · `superseded` (replaced, names a successor) ·
   `extracted-and-archived` (partial value mined) · `cancelled` (won't-do, no successor).
-- **Hold** (durable, repo, orthogonal): `paused` + reason (`awaiting-feedback`,
-  `awaiting-dependency`, `owner-gated`).
+- **Gate** (durable, repo, orthogonal — an *expiring* block, never an open holding state): a
+  plan blocked on another plan uses a `depends_on` blocking edge (clears when the target is `done`);
+  a plan blocked on an owner/external decision carries a `gate` with `awaiting` + `clears_when` + a
+  **mandatory absolute `expires` date**. An expired gate is drift the extractor surfaces for a forced
+  decision (renew / resolve / dispose); it never auto-cancels. This satisfies the repo's
+  no-indefinite-holding-state doctrine and reuses the claims/queue/heartbeat TTL-staleness idiom.
 
 **Linear mapping:** a plan maps to a Linear **project** (a goal-bearing body with constituent
 issues), not a single epic-issue — strategic choice ≈ Initiative, plan ≈ Project, workstream/cycle
@@ -204,7 +218,23 @@ The controlling plan's Body-3 estate restructure: rewrite survivors to node-sche
 `serves_strategic_choice`, archive-complete with recorded disposition, derive new boundaries.
 Promote the `plan` node-type from observe to warn, then (separate later decision) to enforce.
 
-### Stage 4+ — grow the graph (each gated on a live consumer)
+### Stage 4 — Actuation: the evidence-ingestion layer (turns structure into a system)
+
+The structure built in Stages 1–3 is inert without live evidence. This stage builds the
+**actuation layer** specified in [§From structure to system](#from-structure-to-system--the-evidence-ingestion-requirement-the-part-that-makes-it-real):
+connectors drawing directly from **Vercel / Sentry (incl. OTEL spans) / Sonar / GitHub / PostHog**,
+**triggers** (event-driven and scheduled) that drive **agentic analysis**, and **validated
+write-back** of evidence edges and refreshed projections to the graph. This closes every loop
+(delivery metrics, the `validated_by` user-value loop, cost/accuracy) and is what makes the
+difference between *documenting* intent and *running* an effective agentic-first product-creation
+system. **Required and specified; not built yet** — the *how* (connector technology, orchestration,
+write-back validation) finalises at promotion to `current/`; it is a strong candidate for its own
+executable plan and is arguably the highest-leverage build after Stage 1. Per source: Vercel →
+deployment frequency / lead time / FDRT; Sentry → change fail rate / incidents; Sonar → quality /
+complexity / duplication; GitHub → the change axis and the `realized_by` join; PostHog → the
+`validated_by` user-value signal.
+
+### Stage 5+ — grow the graph (each gated on a live consumer)
 
 Add node-types one at a time (report, ADR, thread, continuity, archive, strategy, product,
 product-increment, …), each observe → warn → enforce. Build external-edge **projection**
@@ -225,6 +255,14 @@ releasable as the open exemplar the strategy promises; releasability falls out o
 layering, it is not a separate choice. The bar is therefore the **exemplar standard** — built
 so other teams adopt it — not internal sufficiency.
 
+The strategy, intent, and planning system this graph governs is **becoming a significant part of
+the core value of the Practice itself** (owner, 2026-06-21) — not internal tooling that supports
+the real work, but a substantive part of what the FRAME stream delivers. The same-repo unity that
+makes delivery metrics native (see §Delivery-performance metrics) is one face of that value: a
+system where intent, work, output, and the evidence that value was delivered all live in one
+traversable substrate is itself the artefact other teams would adopt. This reframes the intent
+graph from plumbing to product.
+
 ## Schema-first, a second domain
 
 The repo's Cardinal Rule (types flow from one schema, generated, strict, no hand-drift) names
@@ -233,6 +271,199 @@ confirmed (2026-06-21) that the **same discipline applies here as a second schem
 the document-type schemas are the single source of truth, indexes are generated, validation is
 strict. This plan applies the principle by analogy — it does not restate or extend the
 Cardinal Rule itself.
+
+## Delivery-performance metrics (DORA) — a first-class design consumer
+
+Owner-directed: the DORA software-delivery-performance metrics are considered at **every level**
+of this design — node-types, edges, projections, and strategy alignment — for the repo's **two
+products: the MCP app, and the Practice / agentic-engineering framework itself** (the FRAME
+flagship). The graph is designed so these metrics *fall out as projections*, never a bolted-on
+dashboard.
+
+**Why this is native here, not a bolt-on — the same-repo advantage.** Vision, strategy, intent,
+planning, work, and output all live in **one versioned, typed substrate**. That is not merely a
+convenience. DORA's own metrics-frameworks guidance is that logs-based delivery metrics give
+continuously-measured, standardized data at scale *but require sufficient observability into the
+development toolchain* — usually the **hardest precondition to meet**, because in a conventional
+estate the intent lives in one tool (docs/tickets), the work in another (git), and the output in a
+third (deploys/incidents), and the joins must be reconstructed after the fact. Here that
+observability is **intrinsic** — and concrete: the repo already integrates the developer toolchain
+across all three axes — **GitHub** (the change axis: commits, PRs), **Linear** (the intent /
+execution-status axis, via the `projects_to` edge), and **Sentry with OpenTelemetry spans** (the
+runtime / incident axis, span-IDs correlating logs to traces). Those external systems are the
+typed nodes the `evidence` and `projects_to` edges point at, so every strategic choice, plan,
+commit, deployment, and incident is reachable in one graph, and the critical delivery metrics —
+including the planned-vs-rework attribution everyone else reconstructs painfully — are a traversal
+away. The architectural
+claim is therefore stronger than "it's convenient to co-locate": **we are building the system around
+value delivery as the organizing axis**, so that surfacing the metrics that prove value is being
+delivered is a structural property of the substrate, not a later instrumentation project. This is
+the FRAME stream's differentiator made concrete, and the deepest reason the intent graph earns its
+keep.
+
+**The five metrics** (DORA 2025, verbatim): *throughput* — lead time for changes (committed →
+deployed in production), deployment frequency, failed deployment recovery time; *instability* —
+change fail rate (deployments requiring immediate intervention), deployment rework rate (unplanned
+deployments resulting from a production incident).
+
+**Two altitudes, both first-class:**
+
+- **The MCP app** — DORA in its literal, validated sense; "production" is the deployed app, and the
+  calibrated performance bands apply.
+- **The Practice / agentic framework** — DORA-*shaped* metrics over the repo's own delivery (a
+  landed, gate-green commit as the unit; intent→landed-change as lead time; the remediation share as
+  rework). This is the FRAME stream measuring itself. Borrow the metrics' *shape*, not DORA's
+  calibrated bands — applying them to the meta-process is a novel use, not a validated one.
+
+**Where the metrics attach (all levels), reusing the contract — no new primitives:**
+
+- **Node-types** — the reserved `product` and `product-increment` node-types are the
+  deployment/release units DORA counts; each `product-increment` is one shipped change.
+- **Edges** — `projects_to` (→ Linear) carries live execution status (the throughput state);
+  `evidence`-family edges from `product-increment` to external deployment/incident nodes
+  (Vercel deploy, Sentry incident) are the raw DORA event sources (Pillar 6 — services report
+  back, outward-only).
+- **Attribution (the unique contribution)** — the instability metrics need every change classified
+  planned-vs-rework. The `plan` node's `serves_strategic_choice` + `kind` + `disposition`, joined to
+  commits, give this **natively**: a change tracing to a plan serving a strategic choice is planned;
+  an incident-driven fix with no serving plan is rework. This is the classification conventional
+  setups reconstruct painfully; here it is a graph traversal — the payoff of knowledge living with
+  the code.
+- **Projection** — the metrics are a generated read-model (Pillar 1) over the typed graph + evidence
+  edges, never hand-maintained; drift is a validator failure.
+
+**The deeper design ambition (design intent, survey/build-gated — not a built claim).** The seven
+DORA AI capabilities the 2025 research names — clear & communicated AI stance, healthy data
+ecosystems, AI-accessible internal data, strong version control practices, working in small batches,
+user-centric focus, quality internal platforms — map closely onto what this planning system already
+encodes or builds: the intent graph **is** AI-accessible internal data and a healthy data ecosystem;
+TDD-cycle-as-landing **is** working in small batches and strong version control; the directives
+**are** the communicated AI stance; agent-tools and the validators **are** the quality internal
+platform. So the graph is positioned to instrument not only DORA's *outcome* metrics but the
+*capabilities* that drive them (Figure 45's AI-Adoption × capabilities → outcomes), closing DORA's
+capabilities→metrics→value loop natively, for both products. We have measured nothing yet; this is
+the FRAME stream's measurement story, held as ambition.
+
+**Build gating.** No metric extractor, evidence-edge wiring, or dashboard is built here. Today lead
+time / deployment frequency / change fail rate / FDRT are derivable from git, Vercel, and Sentry
+(Sentry foundation in progress — ADR-162 Observability-First and
+[`what-the-system-emits-today`](../../observability/what-the-system-emits-today.md)); rework-rate and
+full intent-attribution need the intent-graph extractor (Stage 1.4) plus the Linear projection (the
+`external-pointer-surface-integration` plan). The metric surfaces' home is the observability estate
+([`observability-and-quality-metrics.plan.md`](../../architecture-and-infrastructure/future/observability-and-quality-metrics.plan.md),
+whose `quality-metrics` todo already names change fail rate). This section makes DORA a design
+constraint on the graph; the build is owner-gated and staged.
+
+## Closing the loop — continuous measurement, user value, and the multi-developer transition
+
+Three things the DORA work surfaced converge on **one** structural move: wiring evidence back
+into the graph. The intent graph already records intent flowing *down* (choice → plan → work →
+output); the loop closes when evidence flows *back up* (output → was-it-correct → was-it-used →
+did-it-serve-the-user), as typed edges, so the questions that matter are graph traversals rather
+than reconstructions.
+
+### The user-value loop — from a link to a loop
+
+Today the graph instruments intent → strategic-choice (a traceability **link**); user value is
+*asserted*, not *returned*. DORA finds user-centric focus is the strongest moderator of AI's
+effect on team performance — its absence can actively harm teams — so this is the highest-value
+gap. The structural cure (not a doc-patch):
+
+1. each `strategic-choice` carries a **user-value hypothesis** (what user outcome it claims);
+2. user-value evidence **returns** as a typed `validated_by` edge (`evidence` family) onto the
+   `strategic-choice` / `product-increment` — usage signals, teacher feedback, the EEF evidence
+   corpus, Oak-grounded impact;
+3. a validator surfaces any choice with delivered increments but **no returned user-value
+   evidence** as drift — making the loop's absence visible, exactly as the expiring `gate` makes
+   indefinite holding visible.
+
+This completes the **value stream the graph otherwise truncates at delivery** (the VSM idea →
+customer flow): the customer-feedback end becomes typed evidence, not an external afterthought.
+The *hypothesis content* is owner/strategy-shaped; the *loop structure* is the cure. It also
+re-anchors an internal, agent-built substrate to the teacher it ultimately serves — the structural
+answer to "how does an internal system stay user-centric."
+
+### Continuous measurement — the gap map and a uniform closure
+
+| Axis | Have today | Gap → closure |
+| --- | --- | --- |
+| Substrate / Practice health | Fitness four-zone (ADR-144) | — (have it) |
+| Per-change quality | Quality gates (point-in-time) | aggregate the trend (gate-failure rate over time) |
+| Delivery performance | — | the DORA five — extractor over the graph + GitHub/Linear/Sentry evidence |
+| Output accuracy | per-change reviewers | gate-failure + **rework-attribution** trend (rework rate ≈ inverse accuracy) |
+| Usefulness / user value | — | the user-value loop above (`validated_by`) |
+| Cost per delivered value | seat-cost *awareness* | token/seat telemetry attributed to increments via `realized_by` |
+| Capability presence (AICM) | — | graph-derived proxies (batch size, commit cadence, graph coverage, gate health) |
+
+The closure is **uniform**: every one of these is a Pillar-1 generated projection over the typed
+graph plus an `evidence`-family edge (deployment, incident, gate-result, cost, user-value). There
+is **no separate metrics stack** — the intent graph, fed by returning evidence, *is* the
+continuous-measurement substrate. This is what closes the report's "constantly measured for
+accuracy, usefulness, and **cost**" gap that value-contingency asserts but does not yet instrument.
+
+### The multi-developer transition (the motivation)
+
+This repo is one-developer-many-agents **today**, but it is transitioning to **many checkouts —
+one or two developers at different times, each with many agents, sometimes one agent, sometimes a
+developer with minimal agentic support by preference**. That transition is part of the motivation
+for this work, and it imposes design constraints the graph must honour, by construction:
+
+- **Author-agnostic.** No node or edge assumes a particular author. A change is attributed through
+  edges and external identity, working identically whether made by a developer, many agents, one
+  agent, or none. (Attribution across shared toolchain auth is a known hazard — the comms/identity
+  stream is the provenance.)
+- **The versioned in-repo substrate is the continuity mechanism.** With developers and agents
+  arriving and leaving across checkouts, the graph — not any session — carries the shared intent;
+  everyone reads the same versioned truth.
+- **Graceful degradation across agent density.** Dual legibility (Pillar 4) means a
+  minimal-agentic developer is served as well as a heavy-agentic one: humans never read YAML to
+  understand intent; agents never parse prose to traverse it.
+
+The transition also **resolves the topology divergence** noted against the DORA research: as the
+repo moves toward many-devs-plus-agents, DORA's *team-performance* construct becomes **directly**
+applicable rather than a single-owner reinterpretation — and the author-agnostic, returning-evidence
+graph is precisely the substrate that lets delivery be measured coherently across a fluid cast.
+
+**Build-gated.** None of this is built here. It is the design intent the contract must serve, so
+the later, owner-gated build composes in rather than retrofits. The `validated_by` edge and the
+cost/accuracy evidence edges are reserved in node-schema #1's vocabulary
+([plan-node-schema.v0.md §5.5](../plan-node-schema.v0.md#55-closing-the-loop--returning-evidence-and-the-multi-developer-transition)).
+
+## From structure to system — the evidence-ingestion requirement (the part that makes it real)
+
+Everything above — the typed graph, the evidence edges, the projections, the closed loop — is
+**structure**. A structure is inert. It becomes **a highly effective, agentic-first digital
+product-creation system** only when evidence is **drawn directly from the sources, analysed, and
+written back** — continuously. This requirement is stated here **explicitly and up front**, even
+though the *how* is deliberately not yet decided: naming it is what keeps a very nice strategy and
+planning structure honest about the work that turns it into a working system. Without this layer
+the design is elegant and inert; with it, every loop above actually closes.
+
+Three capabilities are **required** (the *how* — connector technology, orchestration, analysis
+design, write-back validation — is explicitly **NOT decided here**; it is a later, owner-gated
+stage and a strong candidate for its own plan, arguably the highest-leverage build after Stage 1):
+
+1. **Tooling / connectors** that draw evidence **directly from the sources**, each feeding specific
+   edges and metrics:
+   - **Vercel** — deploys → deployment frequency, change lead time, failed deployment recovery;
+   - **Sentry** (incl. OpenTelemetry spans) — incidents / errors → change fail rate, FDRT;
+   - **Sonar** — code quality, duplication, complexity → quality-trend evidence;
+   - **GitHub** — commits / PRs / reviews → the change axis, the `realized_by` join;
+   - **PostHog** — product analytics → usage and user behaviour, **the primary signal for the
+     `validated_by` user-value loop** (this is where the loop's evidence actually comes from).
+2. **Triggers** that cause ingestion **and the subsequent analysis** — event-driven (a deploy
+   lands, an incident opens, a PR merges) and/or scheduled. The analysis is **agentic**: an agent
+   reads the evidence, computes the metric or attribution, and decides the graph update.
+3. **Write-back** — appropriate, **validated** updates to the repo (new evidence edges/nodes,
+   refreshed projections, surfaced drift), respecting the graph contract (typed, author-agnostic)
+   and the no-PII rule (external IDs in gitignored config only; services report back, never hold
+   authority — Pillar 6).
+
+This is the **actuation layer**. The strategy/intent/planning structure plus this ingestion
+machinery is what makes the difference between *documenting* intent and *running* an effective
+agentic-first product-creation system. It is build-gated like the rest — but it is **the** thing
+that makes the system real, and the design should not let the elegance of the static structure
+obscure that the live ingestion machinery is the load-bearing, still-to-be-designed work.
 
 ## Dependencies and sequencing
 
@@ -256,6 +487,9 @@ Cardinal Rule itself.
   for the specifics.
 - **No external-service projection until the consumer is live.** Forward-design the edge
   vocabulary; build projection only when GitHub/Linear/Figma/observability surfaces are real.
+- **DORA-metric derivation is designed-for, not built here.** The graph is shaped so the metrics
+  fall out as projections (see §Delivery-performance metrics); the extractor and dashboard are a
+  later, owner-gated build, not Stage 1.
 - **No PII in version control, ever.** External identifiers live in gitignored local config.
 - **Not a replacement for the controlling plan.** This plan owns the graph mechanism; the
   controlling plan governs the vision/strategy/plan-estate thread and the Body-3 restructure

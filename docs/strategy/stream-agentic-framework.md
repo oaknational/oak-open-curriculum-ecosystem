@@ -2,7 +2,7 @@
 title: 'Strategy — Stream: the agentic framework (ecosystem, and our own transformation)'
 type: strategy
 status: active
-last_updated: 2026-06-20
+last_updated: 2026-06-21
 derives_from:
   - VISION.md
 governed_by:
@@ -42,6 +42,14 @@ A few load-bearing shapes the strategy builds on:
 - **The team learns, then disperses the capability.** How agent-first capability spreads
   across Oak — who learns it first, and how it propagates — is named as a proposed bet
   below (FRAME-4); the rollout/adoption model is yours to shape.
+- **The system measures its own delivery — natively.** Because vision, strategy, intent,
+  work, and output all live in one substrate, the framework can surface its own
+  delivery-performance evidence — the industry-standard DORA delivery metrics — as a
+  property of the structure rather than a separate instrumentation project. The hardest
+  precondition for measuring delivery (observability across the whole toolchain) is met here
+  by construction: the repo integrates change (GitHub), execution (Linear), and runtime
+  (Sentry with OpenTelemetry) into one graph. A framework that can _prove_ it delivers value,
+  not just claim it, is part of this stream's core value — not a side-benefit.
 
 ## How we win
 
@@ -69,7 +77,9 @@ The bets, grounded in the diagnosis (pace without trading rigour away) — owner
 ## Measures — proposed candidate (Oak grounds)
 
 Internal delivery uplift and external adoption of the framework — the candidate signals are
-ours to propose, the targets Oak's to ground. See the [measures checkpoint](measures.md).
+ours to propose, the targets Oak's to ground. Delivery performance (the DORA metrics) is a
+_leading_ signal we derive in-repo; impact on Oak's goals is the _lagging_ signal Oak grounds.
+See the [measures checkpoint](measures.md).
 
 > **Settled (owner, 2026-06-20):** the internal transformation's alignment is direct — **Oak
 > getting better at delivering Oak's goals.** Internal improvement in how we build and curate

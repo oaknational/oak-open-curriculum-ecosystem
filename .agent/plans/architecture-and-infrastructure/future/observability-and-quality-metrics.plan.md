@@ -13,7 +13,7 @@ todos:
     content: "Converge on enforced structured logging, redaction, and trace-correlation standards"
     status: pending
   - id: quality-metrics
-    content: "Implement tracking for duplication rate, complexity trends, and change failure rate"
+    content: "Implement tracking for duplication rate and complexity trends, and the full DORA software-delivery set — deployment frequency, change lead time, failed deployment recovery time, change fail rate, deployment rework rate — sourced from git + Vercel + Sentry, with planned-vs-rework attribution from the repo intent graph"
     status: pending
   - id: alerting
     content: "Define alerting thresholds and notification channels for production services"
@@ -95,6 +95,29 @@ complete.
 - change-failure and complexity trend tracking
 - duplication and quality-regression signals
 - quality and support dashboards
+
+### DORA software-delivery metrics (the full five)
+
+Owner-directed (DORA metrics at all levels of the planning-systems design). Beyond
+the `change-failure` seed above, this lane tracks the **full DORA five** —
+deployment frequency, change lead time, failed deployment recovery time, change
+fail rate, deployment rework rate — for the two products: the **MCP app** (literal
+DORA) and the **Practice / agentic framework** (DORA-shaped; the metric shape, not
+the calibrated bands).
+
+- **Sources.** Change lead time, deployment frequency, change fail rate, and
+  failed deployment recovery time are derivable from git, Vercel deploys, and
+  Sentry incidents (the Sentry/OTel foundation above is the prerequisite). Deployment
+  rework rate and full planned-vs-rework attribution come from the **repo intent
+  graph** (`serves_strategic_choice` + `kind` + `disposition` joined to commits) —
+  the same-repo unity makes the attribution a graph traversal, not a log
+  reconstruction.
+- **Surface.** A generated projection (no hand-maintained dashboard), emitted per
+  the [`what-the-system-emits-today`](../../observability/what-the-system-emits-today.md) matrix.
+- **Sequencing.** Extends the `change-failure` seed; gated on the Sentry/OTel
+  foundation and (for rework-rate / attribution) on the intent-graph extractor and
+  the Linear projection. Design authority:
+  [repo intent graph plan — Delivery-performance metrics](../../product-development-governance/future/repo-intent-graph.plan.md).
 
 ## Current State (verified 2026-04-16)
 
