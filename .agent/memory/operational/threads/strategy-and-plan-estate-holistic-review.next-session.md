@@ -40,6 +40,13 @@ The V1-fold / Stage-3-restructure lane rotated **Ganymede herds Penumbra (74cb92
 
 **Standing:** n=2 owner-visible (Pinnace orchestrator + Saffron V1-fold; no Director — heartbeat off, canonical + ARC watchers paired). Owner controls push (branch ahead ~71, none pushed). The orchestrator seat is itself rotating Pinnace → **Aardvark turns Whisper** (3c3b32, standby successor); the durable post-handoff coordination seam is **Saffron ↔ Aardvark** (V1-fold ↔ orchestration), with a preemptive ARC channel already open.
 
+**Settled corpus-design decisions — do not re-litigate** (folded from the Kiln guards Patina retirement loss-scan before clearing that stale handoff; these protect the Body-3 restructure from re-opening settled questions):
+
+- **Reachability is safe for the restructure:** no anchor-deep links into the `docs/strategy/` corpus exist anywhere in the estate — every consumer (root READMEs, `VISION.md`, `high-level-plan.md`, the controlling plan) links the README, not its sections. A Body-3 restructure can move strategy sections freely **provided the README stays the entry point**.
+- **Strategy detail files use strategic-lineage frontmatter** (`title` / `type` / `status` / `derives_from` / `governed_by`), NOT `fitness_*` and NOT `boundary` / `authority` — a leadership strategy corpus wants lineage and role, not size-budgets. Match it when re-composing or extending the corpus.
+- **Rejected alternatives (settled, do not rebuild):** (a) a `streams/` subdirectory — rejected as cosmetic balance masking a content gap (balance is a content problem, not a layout one); (b) splitting alignment from streams — combined into `alignment-and-streams.md` per the over-structuring guard; (c) the `serves_strategic_choice` ID-contract home is the controlling plan (the authority), explicitly NOT `suggestions/governed-repo-document-graph.plan.md` (a subordinate `status: future` input — making it the contract home is a category error).
+- **The owner's stream-file edits are sign-off (final substance), not drafts** — do not "tidy" them.
+
 ## Where We Are (2026-06-21, Pinnace hunts Marsh — survey orchestrator; AEE 70/70 Pass-1 complete; substance re-aim implemented; handed to Aardvark turns Whisper)
 
 Picked up survey orchestration from Hobby wakes Halo (PDR-063 handoff). n=2 owner-visible, no Director.
