@@ -457,16 +457,17 @@ describe('claim CLI reports', () => {
   });
 
   it('builds comms send defaults from the repo root', () => {
-    expect(commsSendDefaults(options({ 'repo-root': '/repo' }), nowIso, 'event-one')).toStrictEqual(
-      {
-        'comms-dir': '/repo/.agent/state/collaboration/comms',
-        active: '/repo/.agent/state/collaboration/active-claims.json',
-        now: nowIso,
-        'created-at': nowIso,
-        'event-id': 'event-one',
-        output: '/repo/.agent/state/collaboration/shared-comms-log.md',
-      },
-    );
+    // `--repo-root` short-circuits cwd resolution, so the cwd arg is unused here.
+    expect(
+      commsSendDefaults(options({ 'repo-root': '/repo' }), nowIso, 'event-one', '/unused-cwd'),
+    ).toStrictEqual({
+      'comms-dir': '/repo/.agent/state/collaboration/comms',
+      active: '/repo/.agent/state/collaboration/active-claims.json',
+      now: nowIso,
+      'created-at': nowIso,
+      'event-id': 'event-one',
+      output: '/repo/.agent/state/collaboration/shared-comms-log.md',
+    });
   });
 
   it('formats comms send output from resolved write paths', () => {

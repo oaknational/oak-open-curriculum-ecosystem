@@ -1,10 +1,10 @@
 import { randomUUID } from 'node:crypto';
-import { existsSync } from 'node:fs';
-import { dirname, join, parse } from 'node:path';
+import { join } from 'node:path';
 
 import { appendComms, renderComms } from './cli-comms-commands.js';
 import { optional, required, type Options } from './cli-options.js';
 import { type CliRuntime } from './cli-runtime.js';
+import { resolveCoordinationHome } from './coordination-home.js';
 import { type CollaborationStateEnvironment } from './types.js';
 
 const DEFAULT_COMMS_DIR = '.agent/state/collaboration/comms';
@@ -22,7 +22,7 @@ export async function sendComms(
 ): Promise<string> {
   const nowIso = optional(options, 'now') ?? new Date().toISOString();
   const eventId = optional(options, 'event-id') ?? randomUUID();
-  const defaults = commsSendDefaults(options, nowIso, eventId);
+  const defaults = commsSendDefaults(options, nowIso, eventId, process.cwd());
   const resolvedOptions = withDefaults(options, defaults);
   await appendComms(resolvedOptions, env, runtime);
   await renderComms(resolvedOptions, env, runtime);
@@ -37,8 +37,9 @@ export function commsSendDefaults(
   options: Options,
   nowIso: string,
   eventId: string,
+  cwd: string,
 ): Readonly<Record<string, string>> {
-  const repoRoot = collaborationRepoRoot(options);
+  const repoRoot = collaborationRepoRoot(options, cwd);
   return {
     'comms-dir': join(repoRoot, DEFAULT_COMMS_DIR),
     now: nowIso,
@@ -49,8 +50,8 @@ export function commsSendDefaults(
   };
 }
 
-function collaborationRepoRoot(options: Options): string {
-  return optional(options, 'repo-root') ?? findCollaborationRepoRoot(process.cwd());
+function collaborationRepoRoot(options: Options, cwd: string): string {
+  return optional(options, 'repo-root') ?? resolveCoordinationHome(cwd);
 }
 
 export function formatCommsSendResult(options: Options, eventId: string): string {
@@ -70,20 +71,6 @@ function commsSendResult(
     event_path: join(required(options, 'comms-dir'), `${eventId}.json`),
     shared_log_path: required(options, 'output'),
   };
-}
-
-function findCollaborationRepoRoot(start: string): string {
-  let current = start;
-  const root = parse(start).root;
-  while (true) {
-    if (existsSync(join(current, '.agent', 'state', 'collaboration'))) {
-      return current;
-    }
-    if (current === root) {
-      return start;
-    }
-    current = dirname(current);
-  }
 }
 
 function withDefaults(options: Options, defaults: Readonly<Record<string, string>>): Options {
