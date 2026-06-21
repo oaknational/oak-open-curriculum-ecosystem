@@ -73,3 +73,13 @@ real gates (`fabricated-gate-as-avoidance`, `over-caution-root-is-perfectionism`
 substance reached its permanent home: the new-in-kind vessel doctrine and the
 over-caution recurrence evidence are live in their homes, and the best-effort-safety
 link is folded into PDR-104 itself. New capture appends below.*
+
+- **Doc-architecture convention: README = stable index/summary; detail in separate file(s)**
+  `[captured: 2026-06-20
+  | source: napkin (Fennel tracks Chlorophyll, Kiln guards Patina)
+  | target: docs/governance/development-practice.md §Documentation Practice (or a docs-governance
+  rule)
+  | trigger: third consumer of the README-index/detail-split shape (consolidate-at-third-consumer);
+  first application was the docs/strategy README-index refactor — extract on the third
+  | size: small (one convention clause)
+  | status: pending]`

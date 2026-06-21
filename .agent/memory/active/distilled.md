@@ -53,17 +53,46 @@ totals as an independent checksum. Single-instance debugging tactic (2026-06-19,
 mends Rudder); staged for a second instance to confirm the general shape before
 graduating to a pattern. Sibling: [`tool-output-framing-bias`](patterns/tool-output-framing-bias.md).
 
-## "Education = pupils" is a contaminating prior; this repo's subjects are teachers, the ecosystem, and our teams
+## "Education = pupils" is a contaminating prior; the subjects are teachers, ecosystem, our teams
 
 Across the vision/strategy work, pupils were repeatedly elevated to a strategy *component* (an
-amplifier "three levels (pupil ← teacher ← our teams)", a vision "for pupils" boundary) despite the
-owner's standing "this isn't about pupils." The owner named the mechanism: the semantic prior
-education=students overrides explicit direction — fluency-is-a-warning at its deepest, recurring even
-in a file written minutes earlier. **Guard:** this repo's subjects are teachers (the app), the
-ecosystem (tools/framework), and our own teams (the transformation). Pupils legitimately appear ONLY in
-(a) Oak's mission quoted verbatim (Oak's end, reached *through* teachers) and (b) external compliance
-gates where law forces naming child-access (Children's Code, safeguarding, the "nothing is aimed at
-pupils" audience boundary). Everywhere else treat "pupil" / "learner" / "student" as a tripwire to
-delete or reframe to the teacher. Source: 2026-06-20 (Kiln guards Patina), owner correction.
-Graduation candidate: a vision/strategy authoring guard (home TBD — possibly `editorial-tone.md` or a
-strategy-authoring note). Sibling: [[passive-guidance-loses-to-artefact-gravity]].
+amplifier "three levels (pupil ← teacher ← our teams)", a vision "for pupils" boundary) despite
+the owner's standing "this isn't about pupils." The owner named the mechanism: the semantic prior
+education=students overrides explicit direction — fluency-is-a-warning at its deepest, recurring
+even in a file written minutes earlier. **Guard:** this repo's subjects are teachers (the app), the
+ecosystem (tools/framework), and our own teams (the transformation). Pupils legitimately appear
+ONLY in (a) Oak's mission quoted verbatim (Oak's end, reached *through* teachers) and (b) external
+compliance gates where law forces naming child-access (Children's Code, safeguarding, the "nothing
+is aimed at pupils" audience boundary). Everywhere else treat "pupil" / "learner" / "student" as a
+tripwire to delete or reframe to the teacher. Source: 2026-06-20 (Kiln guards Patina), owner
+correction. Graduation candidate: a vision/strategy authoring guard (home TBD — possibly
+`editorial-tone.md` or a strategy-authoring note). Sibling:
+[[passive-guidance-loses-to-artefact-gravity]].
+
+## An indiscriminate-rule warning count is a set of cause-classes, not N independent problems
+
+When a broad/indiscriminate lint or analysis rule reports a large count (e.g. ~1000
+no-throw warnings), the count is NOT N independent problems — it is a handful of
+cause-classes (code-type × cause × meta-cause). Lead with the holistic landscape, not
+piecemeal per-site next-steps; distrust per-site classifications (they proved unreliable —
+mislabels happen). The remediation reshape that follows is investigation-first (survey the
+cause-classes) rather than convert-all. Single-instance lesson (2026-06-19, Siren mends
+Rudder, no-throw remediation; the owner had to drag the landscape out before the reshape);
+staged for a second instance before graduating to a pattern. Sibling:
+[`tool-output-framing-bias`](patterns/tool-output-framing-bias.md) and the parsing-interleaved
+entry above (both: the shape of the aggregate misleads).
+
+## Decision locus: product strategy is the owner's; engineering/architecture is collaborative
+
+Calibrated by the owner across the strategy sessions (2026-06-20). Two loci, distinct:
+**product-level** strategy (diagnosis / how-we-win / measures / feature shaping) is the
+owner's — input and questions stay valuable, but I do not decide; **engineering strategy /
+architecture / technical approach** is **collaborative, case-by-case** — propose, reason,
+push for long-term excellence, never go passive. The failure mode **oscillates**:
+over-claim (deciding product strategy from partial grounding) ↔ over-suppress (marking
+owner-owned substance "deferred" and doing zero analysis — abdication, not deference). The
+stable point is neither pole: it is the **read-gate** (gate every substantive claim on
+"have I read the source this rests on?") plus **locus-awareness**, never silence. Source:
+2026-06-20 (Kayak seeks Coral, owner re-calibration). Refines `user-collaboration.md`
+§Risk-and-Decisions; sibling: [[passive-guidance-loses-to-artefact-gravity]],
+[[feedback_ground_convenient_claims]].

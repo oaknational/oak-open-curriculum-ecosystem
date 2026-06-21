@@ -463,6 +463,40 @@ purely-semantic conservation-first case, so they sharpen t3's "occupied for one
 concrete class" question. Candidate mechanisms are **not** pre-authored here, per the
 scope discipline below.
 
+## Worked Instance — 2026-06-20/21 Strategy-Thread Cluster: fluency-from-partial-grounding, plus a content-specific semantic pathogen
+
+A further recurrence cluster across the vision/strategy/plan-estate sessions (Kayak,
+Fennel, Kiln, Juniper, Plover — five seats, one thread), confirming the t2 recurrence
+*rate* continues and adding one **content-specific** pathogen with no general firing
+handle.
+
+**Recurrence of the inventoried fluency / read-gate pathogen.** Every correction this
+period reduced to the same generator the inventory already names: *moving from partial
+grounding to a confident framing, the smoother the arrival the less it was grounded.*
+Instances — a structural "lean" recorded before reading the estate; an "effort-is-inverted"
+opening thesis (a 7-agent workflow refuted it); a "balanced residual" re-manufactured one
+layer down after a false dichotomy was correctly dissolved; a present-tense paragraph in a
+dated section read as a harmless "snapshot"; a "the owner is live-editing" situational claim
+built on before confirming. The cure that *did* fire each time was the read-gate at
+write/review time — confirming the inventory's thesis that the firing must ride a mechanical
+moment, not recall. The **over-claim↔over-suppress oscillation** (over-claiming product
+strategy; then over-suppressing by marking owner-owned substance "deferred" with zero
+analysis) is the same pathogen's two poles — its durable calibration is now homed in
+`distilled.md` (decision-locus), so this is recurrence evidence here, not a new home.
+
+**Content-specific pathogen — the `education=students` semantic prior (sharpens t2/t3).**
+The strongest new datapoint: across multiple sessions, pupils were repeatedly elevated to a
+strategy *component* despite the owner's standing "this isn't about pupils" — recurring even
+in a file written an hour earlier. This is a semantic pathogen with **no general surface
+signature**, but unlike most t2 entries it has a **narrow content signature**: the literal
+tokens `pupil` / `learner` / `student` appearing outside the two licensed contexts (Oak's
+verbatim mission; external compliance gates) are mechanically detectable in vision/strategy
+prose. So it is a candidate for t3's "occupied for one concrete class" — a write-time
+advisory on `pupil`-class tokens in strategy-authoring surfaces, citing the guard. The guard
+substance is homed in `distilled.md`; this entry is the recurrence evidence (3+ owner
+corrections) that a *firing* mechanism, not the passive guard, is what the recurrence
+demands. Candidate mechanism **not** pre-authored here, per the scope discipline below.
+
 ## Note on Scope Discipline
 
 This is a strategic design-space plan. It contains no executable workstreams or

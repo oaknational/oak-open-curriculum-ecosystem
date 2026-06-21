@@ -39,9 +39,15 @@ emit a prominent signal without re-introducing a gate. Out of scope for the deci
 **Owning artefact:** ADR-144 (§Exit code semantics); relates to `consolidate-docs` /
 `session-handoff` cadence.
 
-**Status:** open. **Resolution trigger:** the next fitness/cadence design pass, or a second
-instance of a report-only fitness signal going unread. Surfaced by assumptions-expert during
-the 2026-06-16 report-only review.
+**Status:** open. **Resolution path (named 2026-06-21):** the consolidation skills already *run*
+`practice:fitness:informational` (cadence anchor exists); the open half — ensuring the signal is
+*read and acted on* — now has a concrete candidate home in the action-time design plan's
+"make the fitness report self-frame" worked instance (the conservation-first / chase-numbers
+pathogen). **Resolution trigger:** the next fitness/cadence design pass adopts (or rejects) that
+self-framing mechanism, or a second instance of a report-only fitness signal going unread.
+Deferral-honesty: the design (which surface owns the read-discipline, and the report-self-framing
+shape) is not yet decided; falsifiable by a second unread-report instance. Surfaced by
+assumptions-expert during the 2026-06-16 report-only review.
 
 ## Q-002 — The nature of the strategy layer and the vision→strategy→planning flow
 
@@ -73,25 +79,26 @@ outcome recorded in the controlling plan
 
 ## Q-003 — Is the app's data-availability gate a missing materialised view, or TPC-filter assurance?
 
-**Question:** The MCP-app launch-readiness names a "lesson-level data-availability" gate as "the missing
-materialised view the API needs" (stream-mcp-app.md release-readiness hand-offs; controlling plan Body 2).
-The owner (2026-06-21) framed the same area as the **third-party-content (TPC) filter not yet proven** for
-public release — the open-data subset (TPC removed) the Open Curriculum API serves. Are these the same gate
-(the MV *is* the proven-open filter), two facets of one gate, or two distinct gates?
+**Question:** The MCP-app launch-readiness names a "lesson-level data-availability" gate as "the
+missing materialised view the API needs" (stream-mcp-app.md release-readiness hand-offs; controlling
+plan Body 2). The owner (2026-06-21) framed the same area as the **third-party-content (TPC) filter
+not yet proven** for public release — the open-data subset (TPC removed) the Open Curriculum API
+serves. Are these the same gate (the MV *is* the proven-open filter), two facets of one gate, or two
+distinct gates?
 
-**Why it shapes future work:** it is a production-release blocker for the app stream and the marketing gate
-(TPC-risk mitigation). Whether the work is "build a missing MV", "prove the existing filter", or both changes
-the hand-off owner and the acceptance criteria.
+**Why it shapes future work:** it is a production-release blocker for the app stream and the
+marketing gate (TPC-risk mitigation). Whether the work is "build a missing MV", "prove the existing
+filter", or both changes the hand-off owner and the acceptance criteria.
 
-**Why not cheaply answerable now:** needs the data/API team's first-hand knowledge of the actual data
-infrastructure; an agent must not assert the data shape from docs.
+**Why not cheaply answerable now:** needs the data/API team's first-hand knowledge of the actual
+data infrastructure; an agent must not assert the data shape from docs.
 
-**Owning artefact:** [`stream-mcp-app.md`](../../../docs/strategy/stream-mcp-app.md) §release-readiness
-hand-offs; controlling plan §Body 2; the launch-readiness framework.
+**Owning artefact:** [`stream-mcp-app.md`](../../../docs/strategy/stream-mcp-app.md)
+§release-readiness hand-offs; controlling plan §Body 2; the launch-readiness framework.
 
-**Status:** RESOLVED (2026-06-21, owner). Same conceptual area — surfacing the lesson-level TPC data in the
-database (upstream, **not our scope**) and an appropriate materialised view are the *mechanisms* that enable
-access to the safely-filtered (TPC-removed) data via the upstream Oak Open Curriculum API. The "missing
-materialised view" and the "TPC filter not yet proven" describe one gate: the safely-filtered open-data
-availability the app depends on. Surfaced by Plover wakes Sundog's first-hand context-loss scan; resolved by
-owner direction.
+**Status:** RESOLVED (2026-06-21, owner). Same conceptual area — surfacing the lesson-level TPC data
+in the database (upstream, **not our scope**) and an appropriate materialised view are the
+*mechanisms* that enable access to the safely-filtered (TPC-removed) data via the upstream Oak Open
+Curriculum API. The "missing materialised view" and the "TPC filter not yet proven" describe one
+gate: the safely-filtered open-data availability the app depends on. Surfaced by Plover wakes
+Sundog's first-hand context-loss scan; resolved by owner direction.

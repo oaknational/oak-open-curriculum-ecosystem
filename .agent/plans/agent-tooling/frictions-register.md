@@ -1791,6 +1791,26 @@ below is a cross-reference index, not a second source of truth.
 - **Status**: open.
 - **Owner direction status**: standing (owner 2026-06-19, as F-70).
 
+### F-75 — No standard surface alerts on PEER heartbeat-silence (silently-retired-peer detection)
+
+- **Source**: comms event `9e3b5b01` FRICTION 4 residual (Snapper binds Coral, `0beea7`,
+  2026-06-15); surfaced for folding but never reached the register (claim contention at capture).
+- **Surface**: `agent-tools collaboration-state comms watch`; the liveness-heartbeat substrate
+  (`liveness-heartbeat-cron`, `ping-before-escalate`).
+- **Observed**: `comms watch` emits a line per *event*, not on *absence*. There is no standard
+  mechanism that fires when a PEER's heartbeat goes silent, so detecting a silently-retired peer
+  (heartbeat stops, no explicit close) currently needs a manual re-check or a bespoke poll loop —
+  the exact gap that tempted a fork (correctly recorded, not forked, per `use-built-agent-tools-cli`).
+- **Expected**: An optional, standard "alert on peer heartbeat-staleness" surface — e.g. a
+  `comms watch --alert-stale-peers` mode (or a `claims`/heartbeat-aware monitor) that emits when a
+  tracked peer's most-recent heartbeat exceeds a staleness multiple of its interval.
+- **Candidate cure**: Add a staleness-watch affordance over the heartbeat stream; it interacts with
+  F-44 (freshness must read the heartbeat stream to be correct) — both want `claims`/`comms` to
+  treat the latest heartbeat event as the liveness source of truth.
+- **Target surface**: `agent-tools/src/collaboration-state/` comms-watch / heartbeat read path.
+- **Status**: open.
+- **Owner direction status**: standing (agent-observed tooling friction is first-class user feedback).
+
 ---
 
 ## Mitigated / Addressed Frictions
