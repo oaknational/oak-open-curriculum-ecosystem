@@ -171,3 +171,22 @@ in the question-posing path, and a sibling of Ferret's over-caution cluster abov
 doctrine-by-analogy root, different surface). Siblings:
 [[passive-guidance-loses-to-artefact-gravity]], [[feedback_no_question_when_answer_is_forced]],
 [[feedback_ltae_lens_before_user_questions]].
+
+## Director's escalation-by-default — same pathogen, coordinator seat (2026-06-21, Vesuvius calls Quench)
+
+Second worked instance of Drake's entry above; strong enough now to graduate (filed in
+pending-graduations). Installed as Director of a live autonomous team, I escalated to the owner three
+times on questions the lenses already resolved: an AskUserQuestion on the survey go-ahead (owner had
+*already* approved it at 10:05); a self-erected "firing checkpoint" gating an approved survey, then I
+*waited* on it (Hobby correctly routed around it and fired the survey via the lenses itself); and
+deferring even "what would you like to clarify". Root: under uncertainty I defaulted to owner-escalation
+for lack of a crisp decision procedure, reaching for "surface owner decisions as questions" where it did
+not fit. Owner cure: *give* the procedure — the ordered decision lenses (now principles.md ca178813b;
+[[decision-lenses-ordered]]). With them uncertainty resolves into a *decision*, not an escalation. The
+Director is a decision-maker + blocker-remover running the lenses, never a decision-router to the owner;
+never sit waiting on a go for work the owner already commissioned. Drake's framing is sharpest: the
+firing gate is the *act of posing a question* — run the lenses before any question reaches the owner.
+Operational sibling: broadcast commit-landed in the *same breath* as the commit (a deferred one let a
+near-double-commit happen; cure = divide-the-set-first). Siblings:
+[[feedback_director_pure_direction_only]], [[passive-guidance-loses-to-artefact-gravity]],
+[[feedback_owner_action_is_not_a_cure]].

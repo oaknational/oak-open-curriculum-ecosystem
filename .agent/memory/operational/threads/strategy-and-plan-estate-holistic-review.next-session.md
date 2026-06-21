@@ -24,6 +24,31 @@ foundation; its report + raw data live in
 [`.agent/reports/archive/plan-estate-survey-2026-06-15/`](../../../reports/archive/plan-estate-survey-2026-06-15/README.md)
 (archived 2026-06-18; a fresh survey is a Body-3 prerequisite).
 
+## Where We Are (2026-06-21, Vesuvius calls Quench — Director window; rotated to Birch tracks Arbor)
+
+Directed this multi-agent window: received the role from Cutter holds Reef (PDR-064 Moment 2),
+rotated it on to **Birch tracks Arbor** (pre-positioning `25a3caae` → Birch's Moment-2 acknowledgement,
+both on comms — Birch holds authority now, no gap). Light-coordination + commit-warden role; no
+product code.
+
+- **Survey is a MULTI-WINDOW operation.** Hobby wakes Halo's Pass-1 batch-1 (70 plans / 281 agents /
+  ~7.5M tokens) hit the session limit mid-run (holistic + conformance done for 69/70; specialist +
+  verify mostly failed). Owner-directed restart: resized to **~35-plan ATOMIC sub-batches**,
+  full-rerun-per-sub-batch, paced across windows by limit resets (full survey ≈ 30M tokens). Outputs →
+  `.agent/reports/plan-estate-survey-2026-06-21/`. Taxonomy-grounding → V1 (Drake folds, input-to-verify);
+  conformance inventory → the Stage-3 restructure work-list. Re-pair Hobby ↔ Drake on outputs.
+- **Decision lenses landed in `principles.md`** (commit `ca178813b`): LTAE → strict →
+  simpler-without-compromise → simpler-if-system-changed → optimise-for-user-value, + standing concerns
+  (DX, SWE excellence). The team's decision substrate; escalate to owner only on genuine lens-failure or
+  constitutively-owner (product/feature) scope.
+- **Commits landed this session, all by the Director as warden, NONE pushed (owner controls push):**
+  Ferret's practice-lineage `e30b987c0` + continuity `3275d1268`; Volcano's survey seed `ed0295f1a`;
+  Cutter's V0 docs `62ec1f9c9`; Drake's V0 settlement `13d01d55b` + orphan A `d594b63d3` + C `4984dd5da`;
+  decision lenses `ca178813b`; frictions F-76..F-80 `1a022dd02`; this continuity bundle. Every commit
+  passed the full pre-commit gate (green).
+- **Next safe step:** survey completes across windows → taxonomy-grounding + conformance inventory →
+  Drake folds V1 (first-hand) → V1 ratification + Stage-1 build (both OWNER-GATED).
+
 ## Handoff → Drake hunts Beeswax (successor) — 2026-06-21, Cutter holds Reef closing out
 
 Hi Drake — you inherit the **planning-system / repo-intent-graph design** boundary. This synthesises a long session; per-turn detail is in the Cutter sections below; scope authority is the controlling plan + [`repo-intent-graph.plan.md`](../../../plans/product-development-governance/future/repo-intent-graph.plan.md).
@@ -750,3 +775,5 @@ new-boundary work is informationally gated on the strategy. Full scope: the plan
 | Plover wakes Sundog | claude-code | claude-opus-4-8[1m] | f91f5e | open-mind strategy/vision/plan-estate review; vision tripwire-2 pass; resolved search/graph (false dichotomy) + internal-alignment, encoded across the corpus and controlling plan | 2026-06-20 | 2026-06-20 |
 | Cutter holds Reef | claude-code | claude-opus-4-8[1m] | cef45f | authored `plan` node-schema V0 (node-schema #1, the survey lens); reconciled PDR-018 + ADR-117 + templates + emergent reality; replaced the `paused` state with an expiring gate (owner-ratified) | 2026-06-21 | 2026-06-21 |
 | Drake hunts Beeswax | claude-code | claude-opus-4-8[1m] | 89a5e2 | implementer pickup of Cutter's boundary; settled + encoded the four owner-gated V0 governance calls (enum baselines, folder collapse, 30-day gate-expiry); survey HOLD-then-lift; continuity refresh (repo-continuity + this record) | 2026-06-21 | 2026-06-21 |
+| Vesuvius calls Quench | claude-code | claude-opus-4-8 | 92cefc | Director (coordinator) — received role from Cutter (PDR-064 Moment 2), rotated to Birch tracks Arbor; commit-warden landed 9 commits (Ferret / Volcano / Cutter / Drake handoffs + decision-lenses + frictions); wrote the ordered decision lenses into principles.md; opened ArcAngel with Drake; directed the multi-window survey launch | 2026-06-21 | 2026-06-21 |
+| Birch tracks Arbor | claude-code | claude-opus-4-8 | 6c2090 | Director (coordinator) — successor to Vesuvius calls Quench (PDR-064 Moment 2); holds the V0→survey→V1 routing, multi-window survey coordination, commit-warden | 2026-06-21 | 2026-06-21 |
