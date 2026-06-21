@@ -62,6 +62,7 @@ scope; not surveyed.) Source: `worklist-plans.tsv`.
 | at-02 | agent-tooling (`current/`, plans 13–24 of 59) | 12 | Cosmos calls Infinity | COMPLETE (9 keep / 2 archive-complete / 1 rewrite; substance 12 good; content 11 strong / 1 adequate; conformance 12 major-drift; 189 ideas: 163 good / 20 speculative / 6 bad; 5 locked-contradictions; 12 high-stakes verdicts: 8 survive / 3 refuted / 1 uncertain) | `pass1-agent-tooling-02.json` |
 | at-03 | agent-tooling (`current/`+`future/`, plans 25–36 of 59) | 12 | Cosmos calls Infinity | COMPLETE (8 keep / 3 archive-complete / 1 rewrite; substance 11 good / 1 mixed; content 12 strong; conformance 11 major-drift / 1 no-fm; 175 ideas: 141 good / 34 speculative / 0 bad; 3 locked-contradictions; 14 high-stakes verdicts: 12 survive / 2 refuted) | `pass1-agent-tooling-03.json` |
 | at-04 | agent-tooling (`future/`, plans 37–48 of 59) | 12 | Cosmos calls Infinity | COMPLETE (11 keep / 1 rehome; substance 12 good; content 11 strong / 1 adequate; conformance 7 major-drift / 5 no-fm; 160 ideas: 146 good / 14 speculative / 0 bad; 4 locked-contradictions; 7 high-stakes verdicts: 7 survive) | `pass1-agent-tooling-04.json` |
+| at-05 | agent-tooling (`future/`, plans 49–59 of 59) | 11 | Cosmos calls Infinity | COMPLETE (9 keep / 1 archive-complete / 1 rehome; substance 11 good; content 11 strong; conformance 7 major-drift / 4 no-fm; 126 ideas: 107 good / 19 speculative / 0 bad; 2 locked-contradictions; 10 high-stakes verdicts: 9 survive / 1 refuted) | `pass1-agent-tooling-05.json` |
 
 After 1b: the full **agentic-engineering-enhancements** collection (70 plans) is Pass-1 complete.
 
@@ -72,14 +73,19 @@ locked-contradictions). **Pass-1 coverage at that point: 106 / 286 plans (2 coll
 After pdg-01: the full **product-development-governance** collection (4 plans) is Pass-1 complete
 (Cosmos calls Infinity, 1 increment, 0 unreadable, 89 ideas inventoried, 0 locked-contradictions; the
 small SAFE warm-up that also probed and confirmed account budget for this owner-reset window).
-**Pass-1 coverage so far: 110 / 286 plans (3 collections).** 13 collections / ~176 plans remain — see
+**Pass-1 coverage at that point: 110 / 286 plans (3 collections).**
+
+After at-05: the full **agent-tooling** collection (59 plans) is Pass-1 complete (Cosmos calls Infinity,
+5 conservable increments at-01..05, 0 unreadable, 809 ideas inventoried: 706 good / 97 speculative / 6
+bad, 15 locked-contradictions, 52 high-stakes verdicts: 44 survive / 7 refuted / 1 uncertain).
+**Pass-1 coverage so far: 169 / 286 plans (4 collections).** 12 collections / ~117 plans remain — see
 the linear successor plan [`07-sole-successor-survey-plan.md`](./07-sole-successor-survey-plan.md).
 
-### Remaining Pass-1 collections (~176 plans, ~35-plan atomic sub-batches, one per owner-reset window)
+### Remaining Pass-1 collections (~117 plans, ~35-plan atomic sub-batches, one per owner-reset window)
 
-The 13 collections other than the three now complete (`agentic-engineering-enhancements`,
-`architecture-and-infrastructure`, `product-development-governance`), derived from `worklist-plans.tsv`
-(col `collection`): `agent-tooling` (59), `observability` (31), `sdk-and-mcp-enhancements` (28),
+The 12 collections other than the four now complete (`agentic-engineering-enhancements`,
+`architecture-and-infrastructure`, `product-development-governance`, `agent-tooling`), derived from
+`worklist-plans.tsv` (col `collection`): `observability` (31), `sdk-and-mcp-enhancements` (28),
 `sector-engagement` (12), `semantic-search` (11), `connecting-oak-resources` (10), `discovery` (9),
 `user-experience` (7), `developer-experience` (4), `exploring-open-education-resources` (2),
 `security-and-privacy` (1), `school-data-search` (1), `curriculum-mcp-path-to-ga` (1).

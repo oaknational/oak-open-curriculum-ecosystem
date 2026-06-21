@@ -1,0 +1,1922 @@
+{
+  "batch_size": 11,
+  "plans_returned": 11,
+  "unreadable": [],
+  "null_holistic": [],
+  "results": [
+    {
+      "plan": ".agent/plans/agent-tooling/future/cross-vendor-session-sidecars.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Status is NOT STARTED and the plan is in future/, matching folder semantics; promotion triggers are defined and not yet met",
+          "file_line": "cross-vendor-session-sidecars.plan.md:3"
+        },
+        {
+          "claim": "Promotion trigger list is concrete and unsatisfied — no implementation exists yet",
+          "file_line": "cross-vendor-session-sidecars.plan.md:231-243"
+        },
+        {
+          "claim": "The plan explicitly defers execution decisions to promotion time, confirming it is a legitimate future-lane document",
+          "file_line": "cross-vendor-session-sidecars.plan.md:152-155"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every section earns its place. The problem statement at lines 25-43 names three concrete recurring harms. The solution design at lines 59-155 is scoped and deferral-honest. The risks table at lines 220-227 is non-generic; each row names a real failure mode and a directional mitigation. The promotion triggers at lines 231-243 are measurable. No padding, no speculative scope inflation.",
+      "content_quality": "strong",
+      "content_quality_note": "The sidecar document model (lines 82-99) names fields and namespace boundaries with enough precision to be implementable. The CLI surface (lines 126-133) is enumerated. The render-vs-store distinction (lines 134-136) is a non-obvious architectural insight stated clearly. The non-goals list (lines 168-176) is tight and prevents scope creep. The plan is V0-conformant but also substantively good beyond conformance.",
+      "salvage_value": [
+        {
+          "idea": "Canonical session identity schema with workspace_key derived from git root",
+          "class": "good",
+          "file_line": "cross-vendor-session-sidecars.plan.md:61-78"
+        },
+        {
+          "idea": "Namespace-partitioned sidecar document model as the multi-writer safety boundary",
+          "class": "good",
+          "file_line": "cross-vendor-session-sidecars.plan.md:82-99"
+        },
+        {
+          "idea": "Three-adapter taxonomy: hook adapter, launch wrapper, history importer — thin translation layers only, no bespoke storage",
+          "class": "good",
+          "file_line": "cross-vendor-session-sidecars.plan.md:105-115"
+        },
+        {
+          "idea": "Local SQLite as default storage to handle concurrent writes without custom file-locking",
+          "class": "good",
+          "file_line": "cross-vendor-session-sidecars.plan.md:122-124"
+        },
+        {
+          "idea": "sidecar render as a derived view of the store, not the authoritative state",
+          "class": "good",
+          "file_line": "cross-vendor-session-sidecars.plan.md:134-136"
+        },
+        {
+          "idea": "Operating defaults: local-first, no secrets/PII, deterministic namespace patch semantics, explicit provenance, retention controls",
+          "class": "good",
+          "file_line": "cross-vendor-session-sidecars.plan.md:139-149"
+        },
+        {
+          "idea": "Representative use cases: repo/workspace labels, active plan refs, workflow checkpoints, human annotations, handoff artefact links, compact session summaries, importer reconciliation state",
+          "class": "good",
+          "file_line": "cross-vendor-session-sidecars.plan.md:48-55"
+        },
+        {
+          "idea": "Adapter generation (adapter-generation plan) is adjacent enabling work, not a prerequisite — sidecar contract must exist first",
+          "class": "good",
+          "file_line": "cross-vendor-session-sidecars.plan.md:193-196"
+        },
+        {
+          "idea": "Concrete promotion triggers gating future-to-current: use case specificity, multi-vendor ownership accepted, storage boundary accepted, adapter scope explicit, executable slices defined",
+          "class": "good",
+          "file_line": "cross-vendor-session-sidecars.plan.md:231-243"
+        },
+        {
+          "idea": "Risk: sidecar store becoming an opaque memory blob — mitigation via namespaces, provenance, and retention policy",
+          "class": "good",
+          "file_line": "cross-vendor-session-sidecars.plan.md:224"
+        },
+        {
+          "idea": "Risk: sensitive data leaking into general session metadata — keep secrets/PII out of v1 scope and enforce explicitly",
+          "class": "good",
+          "file_line": "cross-vendor-session-sidecars.plan.md:225"
+        }
+      ],
+      "conformance": "no-frontmatter",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "NOT STARTED",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "No YAML frontmatter block present; the entire V0 field contract (id, node_type, name, overview, kind, serves_strategic_choice, last_updated, promotion_trigger) is absent.",
+          "file_line": "cross-vendor-session-sidecars.plan.md:1"
+        },
+        {
+          "issue": "Status expressed as inline bold prose '**Status**: NOT STARTED' rather than a structured frontmatter field; V0 drops raw status in favour of kind/disposition/gate axes.",
+          "file_line": "cross-vendor-session-sidecars.plan.md:3"
+        },
+        {
+          "issue": "'**Domain**: Agentic Engineering Enhancements' is inline prose, not a recognised V0 field; domain metadata has no V0 home (not collection/lane which are dropped, not a typed edge).",
+          "file_line": "cross-vendor-session-sidecars.plan.md:4"
+        },
+        {
+          "issue": "'**Parent**: ADR-125' is an inline prose link; V0 maps ADR references to the derives_from typed edge in frontmatter, not prose body.",
+          "file_line": "cross-vendor-session-sidecars.plan.md:5"
+        },
+        {
+          "issue": "'**Related**: …' lists three plan refs as inline prose; V0 provides the related field (untyped see-also) and typed depends_on/thread edges in frontmatter — none present.",
+          "file_line": "cross-vendor-session-sidecars.plan.md:6"
+        },
+        {
+          "issue": "Promotion trigger present in body section (lines 230-243) satisfies V0 §2.4 substance requirement for strategic plans but is not in frontmatter as the promotion_trigger field.",
+          "file_line": "cross-vendor-session-sidecars.plan.md:230"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "SQLite is designated as default storage (line 122) but the plan defers all schema shape and retention defaults to promotion time (line 153-155). This creates a risk: promotion teams will inherit an implicit SQLite-shaped contract even though the plan explicitly calls SQLite provisional. The storage interface boundary should be articulated at the `future/` stage so that the CLI surface (lines 126-133) is not inadvertently SQLite-shaped at promotion.",
+          "file_line": "cross-vendor-session-sidecars.plan.md:122-133"
+        },
+        {
+          "severity": "medium",
+          "claim": "The namespace boundary is described as the multi-writer safety boundary (line 95) but no write-ordering or conflict-resolution contract is defined. Concurrent hook-adapter, launch-wrapper, and importer writes to the same namespace (e.g. `workflow`) could produce last-write-wins corruption. The risk table at line 220 names vendor reconciliation but does not name intra-namespace write ordering. This gap should be flagged as a first-class design concern before promotion.",
+          "file_line": "cross-vendor-session-sidecars.plan.md:95-100"
+        },
+        {
+          "severity": "low",
+          "claim": "The `sidecar render` command is positioned as producing derived prompt injection (lines 134-136), but no rendering contract or schema-version compatibility guarantee is stated. If the sidecar schema is versioned (field `schema_version`, line 85) and the renderer is unversioned, a schema migration will silently break prompt injection for all vendors simultaneously. The render surface needs explicit versioning alignment with the sidecar document model.",
+          "file_line": "cross-vendor-session-sidecars.plan.md:85-88"
+        },
+        {
+          "severity": "low",
+          "claim": "The three adapter shapes (hook, launch-wrapper, history-importer, lines 108-116) are structurally sound and closed-shape, but no adapter registration or discovery mechanism is named. Promotion will need to resolve how the CLI contract knows which adapter is active for a given vendor session without inventing bespoke per-vendor logic at that point.",
+          "file_line": "cross-vendor-session-sidecars.plan.md:108-116"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly subordinates itself to ADR-125 (line 5) and explicitly defers to that ADR for portability rationale. The portability clarification section (lines 8-21) is architecturally sound and prevents scope creep. The non-goals list (lines 168-176) is well-bounded and consistent with local-first principles.",
+          "file_line": "cross-vendor-session-sidecars.plan.md:5-21"
+        },
+        {
+          "severity": "info",
+          "claim": "Promotion trigger criterion 4 (line 239-240) requires explicit adapter scope per vendor before promotion. This is a correct architectural gate; no gap here. The plan is appropriately staged for `future/` status.",
+          "file_line": "cross-vendor-session-sidecars.plan.md:239-240"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": [
+        {
+          "claim": "Execution decisions (schema shape, reconciliation order, retention defaults) are finalised only during promotion to current/ or active/",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "cross-vendor-session-sidecars.plan.md:152-155 — \"Any implementation detail recorded here is reference context only. Execution decisions such as schema shape, reconciliation order, retention defaults, and performance constraints are finalised only during promotion to `current/` or `active/`.\""
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/future/cspell-quality-gate.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Status is Future (not started) — work has not begun; the plan is not stale or complete.",
+          "file_line": "cspell-quality-gate.plan.md:2"
+        },
+        {
+          "claim": "Promotion trigger is explicitly deferred to owner prioritisation or the next qualifying event, confirming the plan is legitimately in the future lane.",
+          "file_line": "cspell-quality-gate.plan.md:77"
+        },
+        {
+          "claim": "No blocking prerequisites; the plan is independent and ready to be picked up at any time.",
+          "file_line": "cspell-quality-gate.plan.md:59"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "All five means are coherent, ordered, and non-redundant (lines 40-49). The non-goals section explicitly rules out the two most common failure modes for spelling gates (grammar scope creep and bulk-add silencing, lines 54-55). The acceptance criteria are testable (zero findings + probe test, lines 64-66). No speculative or bad ideas are embedded.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan is concise, evidence-grounded (specific typo examples with discovery context at lines 21-22), and carries a clear escalation posture. The risk register (lines 70-73) directly maps to mitigations already described in the mechanism. Acceptance criteria are precise and verifiable (lines 63-66). Nothing is left vague that should be concrete at this stage; promotion-time decisions are correctly deferred (line 73).",
+      "salvage_value": [
+        {
+          "idea": "cSpell must be a blocking quality gate, not merely an editor advisory signal.",
+          "class": "good",
+          "file_line": "cspell-quality-gate.plan.md:12-14"
+        },
+        {
+          "idea": "A shared project dictionary removes repeated legitimate-vocabulary noise and preserves the signal.",
+          "class": "good",
+          "file_line": "cspell-quality-gate.plan.md:17-19"
+        },
+        {
+          "idea": "Each dictionary entry is a reviewed decision; bulk-adding to force green defeats the gate.",
+          "class": "good",
+          "file_line": "cspell-quality-gate.plan.md:54-55"
+        },
+        {
+          "idea": "Fix known real typos (bshelv, unagreed) at source as part of gate introduction.",
+          "class": "good",
+          "file_line": "cspell-quality-gate.plan.md:44-45"
+        },
+        {
+          "idea": "Warn-then-error escalation posture: start non-blocking to clear backlog, then escalate.",
+          "class": "good",
+          "file_line": "cspell-quality-gate.plan.md:35-36"
+        },
+        {
+          "idea": "Wire cspell into pnpm check aggregate and/or pre-commit chain.",
+          "class": "good",
+          "file_line": "cspell-quality-gate.plan.md:46-48"
+        },
+        {
+          "idea": "Coverage scope (file types, directories, generated artefacts) is a promotion-time decision.",
+          "class": "speculative",
+          "file_line": "cspell-quality-gate.plan.md:73"
+        },
+        {
+          "idea": "Doing the gate work alongside a documentation-quality pass amortises the vocabulary review.",
+          "class": "speculative",
+          "file_line": "cspell-quality-gate.plan.md:61"
+        }
+      ],
+      "conformance": "no-frontmatter",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "Future (not started)",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "No YAML frontmatter block at all. V0 §2 requires every plan to carry the canonical field set in frontmatter (id, node_type, name, overview, kind, last_updated at minimum). The plan opens directly with a Markdown heading.",
+          "file_line": ".agent/plans/agent-tooling/future/cspell-quality-gate.plan.md:1"
+        },
+        {
+          "issue": "Required field `id` absent — V0 §2.1 LOCKED, required for all plans.",
+          "file_line": ".agent/plans/agent-tooling/future/cspell-quality-gate.plan.md:1"
+        },
+        {
+          "issue": "Required field `node_type: plan` absent — V0 §2.1 LOCKED, required for all plans.",
+          "file_line": ".agent/plans/agent-tooling/future/cspell-quality-gate.plan.md:1"
+        },
+        {
+          "issue": "Required field `name` absent — V0 §2.1 LOCKED, required for all plans.",
+          "file_line": ".agent/plans/agent-tooling/future/cspell-quality-gate.plan.md:1"
+        },
+        {
+          "issue": "Required field `overview` absent — V0 §2.1 LOCKED, required for all plans.",
+          "file_line": ".agent/plans/agent-tooling/future/cspell-quality-gate.plan.md:1"
+        },
+        {
+          "issue": "Required field `kind` absent — V0 §3.1 LOCKED. Body signals strategic intent (promotion_trigger present at line 75-77); should be `kind: strategic`.",
+          "file_line": ".agent/plans/agent-tooling/future/cspell-quality-gate.plan.md:1"
+        },
+        {
+          "issue": "Required field `last_updated` absent — V0 §2.4 LOCKED, required for all plans.",
+          "file_line": ".agent/plans/agent-tooling/future/cspell-quality-gate.plan.md:1"
+        },
+        {
+          "issue": "Required field `promotion_trigger` absent from frontmatter — V0 §2.4 LOCKED for strategic plans. The body (lines 75-77) carries this content in prose rather than the mandatory frontmatter field.",
+          "file_line": ".agent/plans/agent-tooling/future/cspell-quality-gate.plan.md:75"
+        },
+        {
+          "issue": "Dropped field `status` used as freeform bold text in body ('**Status**: Future (not started)') — V0 §2.5 LOCKED-dropped: status is replaced by kind/disposition/gate axes in frontmatter, not retained as body prose.",
+          "file_line": ".agent/plans/agent-tooling/future/cspell-quality-gate.plan.md:3"
+        },
+        {
+          "issue": "Dropped field `collection` used as body prose ('**Collection**: agent-tooling') — V0 §2.5 LOCKED-dropped: folder location is the projection; metadata does not duplicate it.",
+          "file_line": ".agent/plans/agent-tooling/future/cspell-quality-gate.plan.md:4"
+        },
+        {
+          "issue": "`thread` edge declared in body prose rather than frontmatter — V0 §2.3 LOCKED shape requires typed edges in frontmatter.",
+          "file_line": ".agent/plans/agent-tooling/future/cspell-quality-gate.plan.md:5"
+        },
+        {
+          "issue": "`related` references declared in body prose rather than frontmatter — V0 §2.4 LOCKED requires `related` as a frontmatter list field.",
+          "file_line": ".agent/plans/agent-tooling/future/cspell-quality-gate.plan.md:6"
+        },
+        {
+          "issue": "`serves_strategic_choice` edge absent — V0 §2.3 LOCKED: recommended for strategic plans, required for executable. Cannot be assessed as pending without frontmatter.",
+          "file_line": ".agent/plans/agent-tooling/future/cspell-quality-gate.plan.md:1"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "config",
+      "specialist_kind": "config",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "Step 4 defers the critical config decision — which file-type globs and directory exclusions the cspell gate covers — to promotion time ('finalised at promotion'). Without a provisional scope, an implementing agent has no constraint and could silently over-scope (covering generated artefacts, node_modules, or vendored content) or under-scope (skipping .md docs where the known typos live). The plan should record at minimum a proposed default scope with a clear override policy.",
+          "file_line": ".agent/plans/agent-tooling/future/cspell-quality-gate.plan.md:47-49"
+        },
+        {
+          "severity": "medium",
+          "claim": "The gate-wiring target is ambiguous: 'pnpm check aggregate and/or the pre-commit chain'. These are architecturally distinct surfaces (CI aggregate script vs. local hook). Wiring to both requires a specific cspell invocation in two config locations (package.json script + .agent/hooks/policy.json or equivalent), but the plan records no decision on which chain is authoritative or how conflicts between them are handled. This deferred config decision is a build-breakage risk at promotion time.",
+          "file_line": ".agent/plans/agent-tooling/future/cspell-quality-gate.plan.md:47-49"
+        },
+        {
+          "severity": "low",
+          "claim": "No cspell config file location is named. The standard is a root-level cspell.config.json or .cspell.json, but the repo may already have one or use a project.json field. The plan assumes a project dictionary exists to be curated (line 42-44) but does not verify whether a cspell config already exists, which determines whether the first step is creation or extension.",
+          "file_line": ".agent/plans/agent-tooling/future/cspell-quality-gate.plan.md:42-44"
+        },
+        {
+          "severity": "low",
+          "claim": "The warn-then-error escalation analogy (lines 36, 49, 71) references the 'new-ESLint-rules-start-at-warn' pattern, but cspell's warn/error modes are configured differently from ESLint: cspell uses --no-must-find-files or exit-code suppression, not a severity field per rule. The plan does not specify the mechanism for the warn phase, which is a config implementation gap.",
+          "file_line": ".agent/plans/agent-tooling/future/cspell-quality-gate.plan.md:36,49"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly identifies .agent/hooks/policy.json as a surface containing the known typos (bshelv, unagreed), which is a config-adjacent file. Fixing those words is a concrete, low-risk first move that could be done before formal promotion and would validate the end-to-end fix workflow.",
+          "file_line": ".agent/plans/agent-tooling/future/cspell-quality-gate.plan.md:21-23"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/future/hook-policy-typescript-and-schema-unification.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Status is Future (not started) — work has not yet begun; correct lane",
+          "file_line": "file:2"
+        },
+        {
+          "claim": "Promotion trigger is well-defined with two concrete conditions plus an owner-prioritisation gate",
+          "file_line": "file:112-113"
+        },
+        {
+          "claim": "Central design question (loader consumption for build-free shim) is explicitly deferred to promotion",
+          "file_line": "file:108-112"
+        },
+        {
+          "claim": "No blocking prerequisites; self-contained scope",
+          "file_line": "file:95"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every constituent idea is grounded in a real incident (file:28-34), aligns with live doctrine (ADR-038 file:7, PDR-038 file:9), and targets a concrete structural weakness (file:14-27). The non-goals are precise (file:88-91). The open design question is correctly identified and deferred rather than prematurely resolved (file:108-109). No speculative or bad ideas are present.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan is unusually concrete for a future-lane document: it names the exact env var string (file:59-60), the exact workaround patterns and path scopes (file:79-84), the specific acceptance criteria including deliberately-wrong fixtures (file:100), and the no-persist validator mechanism (file:62-65). The central open question (build-free shim consumption) is named and correctly deferred (file:108-109). The promotion trigger is multi-conditioned and well-formed (file:112-113).",
+      "salvage_value": [
+        {
+          "idea": "Migrate policy.json to policy.ts exporting a const satisfies HookPolicy for author-time type checking",
+          "class": "good",
+          "file_line": "file:44-50"
+        },
+        {
+          "idea": "Use TypeScript satisfies rather than Zod because the policy is first-party trusted source",
+          "class": "good",
+          "file_line": "file:48-50"
+        },
+        {
+          "idea": "Unify all entry shapes to a single object form (id, concept, citation, reappraisal, patterns[])",
+          "class": "good",
+          "file_line": "file:51-57"
+        },
+        {
+          "idea": "Group repeated git-destruction entries by intent to eliminate DRY violations",
+          "class": "good",
+          "file_line": "file:53-57"
+        },
+        {
+          "idea": "Transient recovery env var DANGEROUSLY_DISABLE_FORBIDDEN_PHRASES__DO_NOT_USE_THIS scoped to phrase/content checks only, never dangerous-git guards",
+          "class": "good",
+          "file_line": "file:58-65"
+        },
+        {
+          "idea": "Repo-validator that fails CI/checks if the recovery env var appears in any tracked settings or env file",
+          "class": "good",
+          "file_line": "file:62-65"
+        },
+        {
+          "idea": "Carry forward the workaround/root-cause-avoidance content detection as an intent group with exact patterns and path scopes",
+          "class": "good",
+          "file_line": "file:79-84"
+        },
+        {
+          "idea": "Explicit non-goal: do NOT change the fail-closed guard contract — remove the cause, not the contract",
+          "class": "good",
+          "file_line": "file:88"
+        },
+        {
+          "idea": "Resolve at promotion time how the build-free shim consumes a typed const rather than a runtime JSON read",
+          "class": "good",
+          "file_line": "file:108-109"
+        },
+        {
+          "idea": "Add a deliberately-wrong fixture to acceptance criteria to prove tsc rejects invalid shapes",
+          "class": "good",
+          "file_line": "file:100"
+        }
+      ],
+      "conformance": "no-frontmatter",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "Future (not started)",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "No YAML frontmatter block — the file opens with a markdown heading at line 1; all metadata is rendered as inline bold prose (lines 3-10). V0 requires machine-readable frontmatter for id, node_type, name, overview, kind, last_updated, and all typed edges.",
+          "file_line": "hook-policy-typescript-and-schema-unification.plan.md:1"
+        },
+        {
+          "issue": "V0-required field `id` is absent (no frontmatter).",
+          "file_line": "hook-policy-typescript-and-schema-unification.plan.md:1"
+        },
+        {
+          "issue": "V0-required field `node_type` (literal 'plan') is absent (no frontmatter).",
+          "file_line": "hook-policy-typescript-and-schema-unification.plan.md:1"
+        },
+        {
+          "issue": "V0-required field `name` is absent (no frontmatter); the heading text is not a frontmatter `name` key.",
+          "file_line": "hook-policy-typescript-and-schema-unification.plan.md:1"
+        },
+        {
+          "issue": "V0-required field `overview` is absent (no frontmatter).",
+          "file_line": "hook-policy-typescript-and-schema-unification.plan.md:1"
+        },
+        {
+          "issue": "V0-required field `kind` is absent (no frontmatter); inferred `strategic` from inline `**Status**: Future (not started)` and presence of promotion_trigger section.",
+          "file_line": "hook-policy-typescript-and-schema-unification.plan.md:3"
+        },
+        {
+          "issue": "V0-required field `last_updated` is absent (no frontmatter).",
+          "file_line": "hook-policy-typescript-and-schema-unification.plan.md:1"
+        },
+        {
+          "issue": "Inline prose key `**Status**: Future (not started)` uses the V0-dropped `status` free-text field (§2.5 explicitly drops `status`). V0 requires `kind: strategic` in frontmatter instead.",
+          "file_line": "hook-policy-typescript-and-schema-unification.plan.md:3"
+        },
+        {
+          "issue": "Inline prose key `**Collection**: agent-tooling` uses the V0-dropped `collection` / `lane` field (§2.5 explicitly drops `collection`). Folder location is the V0-canonical projection.",
+          "file_line": "hook-policy-typescript-and-schema-unification.plan.md:4"
+        },
+        {
+          "issue": "Thread association (agentic-engineering-enhancements, line 5) and authority references (ADR-038, PDR-038, principles.md, hook-policy-substring-discipline, lines 6-10) are rendered as inline prose `**Thread**` and `**Related**`, not as typed frontmatter edges (`thread`, `derives_from`). V0 §2.3 requires these as machine-readable frontmatter fields.",
+          "file_line": "hook-policy-typescript-and-schema-unification.plan.md:5"
+        },
+        {
+          "issue": "V0 §2.3 requires `serves_strategic_choice` for executable plans (required) and recommends it for strategic plans. Field is absent — no frontmatter exists to carry it. Strategic plans may carry `\"pending\"` sentinel.",
+          "file_line": "hook-policy-typescript-and-schema-unification.plan.md:1"
+        }
+      ],
+      "unclassified_keys": [
+        "status",
+        "collection"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "The central design tension — the build-free shim at `.claude/hooks/run-pretooluse-guard.mjs` must consume policy without a dist build, yet the plan moves policy to a TS const that requires compilation — is explicitly deferred to promotion time (\"This is the central design question to resolve at promotion\"). This is not a risk to be resolved later; it is a structural contradiction that must be resolved before the plan can be validly executed. If the shim cannot reach the compiled output it has no policy to enforce, and the fail-closed contract breaks in the opposite direction (open on valid builds) or the shim falls back to a stale dist, introducing a policy-drift hazard.",
+          "file_line": "hook-policy-typescript-and-schema-unification.plan.md:108"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan places the transient bypass at the env-var level, checked before policy load (line 59), with a no-persist validator that fails when the var appears in any tracked settings or env file (line 63–65). The validator rule is correct but the enforcement boundary has a gap: the var can be set in a parent shell and inherited by any child process including CI runners — the no-persist check only catches file persistence, not ambient environment. The architectural intent (transient, one-operation only) is not structurally guaranteed by the proposed design.",
+          "file_line": "hook-policy-typescript-and-schema-unification.plan.md:59-65"
+        },
+        {
+          "severity": "medium",
+          "claim": "Step 2 of the Means section (line 72) defers the loader/shim consumption decision to promotion, but Steps 3 and 5 depend on the answer: if the shim must remain JSON-based for build-free access, the policy source-of-truth would be TS but the shim would consume a generated JSON artefact, introducing a dual-format synchronisation surface. If the shim instead imports the compiled JS, it is no longer build-free. Neither path is chosen at plan-author time, leaving the refactor scope and the test contract undefined for the most safety-critical path.",
+          "file_line": "hook-policy-typescript-and-schema-unification.plan.md:72-74"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan explicitly excludes Zod runtime validation on the grounds that the policy is a first-party trusted source (lines 48–50). This is architecturally sound given ADR-038's compile-time-embedding posture. No issue here, recorded for completeness.",
+          "file_line": "hook-policy-typescript-and-schema-unification.plan.md:48-50"
+        },
+        {
+          "severity": "low",
+          "claim": "The intent-group shape adds an `id` field per group (line 55) but the acceptance criteria (lines 100–104) do not include a uniqueness or registry check on `id` values. Duplicate `id`s within the policy would silently produce ambiguous reappraisal routing at runtime. A validator asserting id-uniqueness at type-check time (or a TS mapped-type keyed on the id literal) would close this.",
+          "file_line": "hook-policy-typescript-and-schema-unification.plan.md:55,100-104"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/future/hooks-portability.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Status is Future (not started) — no work has landed, the plan is a valid future intent with no completed phases to archive.",
+          "file_line": "hooks-portability.plan.md:2"
+        },
+        {
+          "claim": "Phase 0 research gate is explicitly required before any wiring — plan is still pre-execution and structurally sound.",
+          "file_line": "hooks-portability.plan.md:180-186"
+        },
+        {
+          "claim": "Plan self-correctly constrains its own scope: target-state sketches labelled as unverified, current wired state deferred to the matrix.",
+          "file_line": "hooks-portability.plan.md:10-13"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is disciplined throughout: it distinguishes current-state from target-state (lines 10-24), gates Phase 1 behind Phase 0 verification (lines 180-186), explicitly names the Codex SessionEnd gap (lines 170-172), and records honest non-goals (lines 228-230). The proposed stdin/stdout/exit-code contract (lines 68-72) is a concrete, testable design, not aspirational prose. No ideas are obviously bad; two are speculative (Node.js vs shell default, Claude Code prompt/agent hooks).",
+      "content_quality": "strong",
+      "content_quality_note": "The plan goes beyond V0 conformance: it provides a worked architecture with actual JSON config sketches (lines 85-147), a risk/mitigation table (lines 210-216), a candidate-hooks table with source directives (lines 157-163), and five grounded open questions (lines 167-175). The verification-first discipline in Phase 0 is particularly strong given the multi-platform surface.",
+      "salvage_value": [
+        {
+          "idea": "Extend ADR-125 three-layer model to hooks: canonical scripts in .agent/hooks/scripts/, thin platform configs in Layer 2.",
+          "class": "good",
+          "file_line": "hooks-portability.plan.md:49-62"
+        },
+        {
+          "idea": "Hook scripts use stdin JSON / stdout JSON / exit-code contract (0=allow, 2=block) and must be schema-tolerant across platforms.",
+          "class": "good",
+          "file_line": "hooks-portability.plan.md:68-72"
+        },
+        {
+          "idea": "Phase 0 verification-first gate: confirm real stdin/stdout schemas before any platform config is wired.",
+          "class": "good",
+          "file_line": "hooks-portability.plan.md:180-186"
+        },
+        {
+          "idea": "Auto-format-after-edit hook (PostToolUse Edit/Write -> pnpm prettier) as a high-value candidate.",
+          "class": "good",
+          "file_line": "hooks-portability.plan.md:159"
+        },
+        {
+          "idea": "Lint-after-edit hook (PostToolUse Edit/Write -> pnpm lint:fix) as a high-value candidate.",
+          "class": "good",
+          "file_line": "hooks-portability.plan.md:160"
+        },
+        {
+          "idea": "Block-destructive-commands hook (PreToolUse Bash -> reject rm -rf /, force-push main, --no-verify) as a high-value candidate.",
+          "class": "good",
+          "file_line": "hooks-portability.plan.md:161"
+        },
+        {
+          "idea": "Secrets scan hook (PreToolUse Write/Edit -> scan for API keys/tokens).",
+          "class": "good",
+          "file_line": "hooks-portability.plan.md:163"
+        },
+        {
+          "idea": "Session context injection hook (SessionStart -> inject git status, branch, recent changes).",
+          "class": "speculative",
+          "file_line": "hooks-portability.plan.md:162"
+        },
+        {
+          "idea": "Shared stdin normaliser utility (parse-hook-input.sh) to abstract minor schema differences between platforms.",
+          "class": "speculative",
+          "file_line": "hooks-portability.plan.md:73-74"
+        },
+        {
+          "idea": "Node.js vs shell as default script language — open question, no decision yet.",
+          "class": "speculative",
+          "file_line": "hooks-portability.plan.md:168-169"
+        },
+        {
+          "idea": "Claude Code prompt/agent hooks referencing canonical .agent/hooks/prompts/ templates for LLM-evaluated gates.",
+          "class": "speculative",
+          "file_line": "hooks-portability.plan.md:174-175"
+        },
+        {
+          "idea": "Explicit non-goal: no universal hook abstraction layer; thin-wrapper pattern is sufficient.",
+          "class": "good",
+          "file_line": "hooks-portability.plan.md:230"
+        },
+        {
+          "idea": "Explicit non-goal: do not wire Codex hooks before upstream SessionEnd parity is verified.",
+          "class": "good",
+          "file_line": "hooks-portability.plan.md:229"
+        },
+        {
+          "idea": "Platform-specific hook types (Claude Code prompt/agent hooks) stay in .claude/settings.json only, can reference .agent/directives/.",
+          "class": "good",
+          "file_line": "hooks-portability.plan.md:151-152"
+        },
+        {
+          "idea": "Reconcile any promotion proposal against cross-platform-agent-surface-matrix.md before wiring new activation surfaces.",
+          "class": "good",
+          "file_line": "hooks-portability.plan.md:183-184"
+        }
+      ],
+      "conformance": "no-frontmatter",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "Future (not started)",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "No YAML frontmatter block — all V0 required fields (id, node_type, name, overview, kind, last_updated) are absent",
+          "file_line": "hooks-portability.plan.md:1"
+        },
+        {
+          "issue": "Status expressed as body prose '**Status**: Future (not started)' rather than frontmatter kind axis",
+          "file_line": "hooks-portability.plan.md:3"
+        },
+        {
+          "issue": "Parent/derives_from relationship expressed as body prose '**Parent**: ADR-125' rather than derives_from frontmatter edge",
+          "file_line": "hooks-portability.plan.md:4"
+        },
+        {
+          "issue": "'**Related**: ADR-125' duplicates the parent reference in body prose; V0 narrows related to untyped see-also distinct from typed authority edges",
+          "file_line": "hooks-portability.plan.md:5"
+        },
+        {
+          "issue": "Phased work (Phases 0–3) and open questions appear in body prose rather than as conformant todos list or promotion_trigger field",
+          "file_line": "hooks-portability.plan.md:178"
+        },
+        {
+          "issue": "No serves_strategic_choice edge declared — required for executable plans, recommended for strategic; none present",
+          "file_line": "hooks-portability.plan.md:1"
+        },
+        {
+          "issue": "No id field — the node has no stable graph identity",
+          "file_line": "hooks-portability.plan.md:1"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan's Layer 2 configuration examples (Cursor, Gemini) are labelled as 'target-state sketches' and 'not evidence that those hook surfaces are currently wired', yet they appear as concrete JSON in the same section as the wired Claude Code config with no visual separation. A reader implementing Phase 2 could wire unverified schemas and silently break other platforms.",
+          "file_line": "hooks-portability.plan.md:78-147"
+        },
+        {
+          "severity": "medium",
+          "claim": "Open Question 1 (stdin schema normalisation, line 167) is architecturally load-bearing: the entire Layer 1 shared-script premise depends on whether scripts can be schema-tolerant or need a thin normaliser shim. This question must be resolved in Phase 0 before Phase 1 scripts are authored, but the phases do not enforce this gate — Phase 1 begins script implementation while Question 1 is still open.",
+          "file_line": "hooks-portability.plan.md:167-173, 189-197"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan titles the sixth artefact type as 'hooks' (line 9) and commits to updating ADR-125 to include it (Phase 0, line 188), but the Parent pointer already cites ADR-125. Until ADR-125 is amended, the plan's own foundational claim (hooks are a fifth/sixth type not yet in the model) has no persisted ADR home, making the dependency declaration at line 220 partially circular.",
+          "file_line": "hooks-portability.plan.md:9, 188, 220"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan names `.agent/hooks/scripts/` as platform-agnostic shell scripts that read JSON from stdin (line 66-71), then immediately opens Node.js as an alternative (Open Question 2, line 171). Committing to a runtime in Phase 0 is correct, but the architecture section should not describe an implementation contract (stdin/stdout/exit codes) for scripts whose runtime is undecided — the contract is incomplete until that question closes.",
+          "file_line": "hooks-portability.plan.md:66-71, 171-172"
+        },
+        {
+          "severity": "info",
+          "claim": "Claude Code prompt/agent hooks (line 151) are correctly separated as inherently platform-specific and excluded from the shared layer. The plan also correctly defers Codex SessionEnd parity to a Risks row. Both handling patterns are architecturally sound.",
+          "file_line": "hooks-portability.plan.md:149-152, 214-215"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly references the local support matrix (cross-platform-agent-surface-matrix.md) as the authoritative record of what is actually wired, and gates all new platform activation on fresh verification and matrix updates. This is consistent with verify-dont-trust doctrine.",
+          "file_line": "hooks-portability.plan.md:12-13, 181-182"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/future/intent-to-commit-and-session-counter.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Queue slice is complete and archived; only session_counter slice remains, which is explicitly future-only",
+          "file_line": "9-14"
+        },
+        {
+          "claim": "Promotion checklist confirms all queue-slice items checked; session_counter items unchecked — active residual work remains in this lane",
+          "file_line": "609-631"
+        },
+        {
+          "claim": "Plan sits in future/ lane, which is correct for the residual session_counter primitive awaiting explicit owner direction",
+          "file_line": "626-627"
+        },
+        {
+          "claim": "Promotion trigger for session_counter is explicit owner direction — no automatic trigger fires without that",
+          "file_line": "392-393"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is grounded in seven concrete observed incidents with commit SHAs (lines 76-133), produces a clear four-type clash taxonomy, and the completed queue slice has verifiable self-application proof (line 574). The remaining session_counter slice is cleanly scoped and deferred with principled reasoning (line 42-55). No speculative or bad ideas inflate the plan — the only speculative element is the session_counter primitive itself, which is explicitly marked as future-only and decoupled from the landed work.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan is unusually evidence-dense: seven observed incidents with commit SHAs (lines 76-133), a formal clash taxonomy (lines 135-138), a complete JSON schema design (lines 183-229), a step-by-step commit-skill protocol (lines 252-289), a risk/mitigation table (lines 459-468), and a non-goals list (lines 554-568). The promotion triggers are concrete and observable (lines 392-404). Open design questions are correctly deferred to reviewer dispatch rather than pre-resolved (lines 526-549). All checklist items are clearly binary (lines 609-631).",
+      "salvage_value": [
+        {
+          "idea": "Four-type commit-clash taxonomy (substitution A, disappearance B, accretion C, turn-race D) with evidence commit SHAs",
+          "class": "good",
+          "file_line": "89-133"
+        },
+        {
+          "idea": "Advisory FIFO commit_queue on active-claims.json root; array order is queue order; head is first fresh non-terminal entry",
+          "class": "good",
+          "file_line": "162-169"
+        },
+        {
+          "idea": "VERIFY OWNERSHIP step: compute git diff --cached, compare exactly against intent.files before git commit, abort on mismatch",
+          "class": "good",
+          "file_line": "273-278"
+        },
+        {
+          "idea": "intent_to_commit phase enum: queued, staging, pre_commit, abandoned — tracks commit window progress for peer visibility",
+          "class": "good",
+          "file_line": "225"
+        },
+        {
+          "idea": "staged_bundle_fingerprint: SHA-256 over git diff --cached --name-status plus full-index-binary for strict equality check",
+          "class": "good",
+          "file_line": "214-215"
+        },
+        {
+          "idea": "expires_at as explicit wall-clock stale-reporting timestamp; expiry does not auto-remove or auto-block",
+          "class": "good",
+          "file_line": "222-224"
+        },
+        {
+          "idea": "Consolidate-docs §7e intent-snapshot report: per-entry fresh/stale report against expires_at",
+          "class": "good",
+          "file_line": "316-323"
+        },
+        {
+          "idea": "Discovery contract at session-open: surface open queue entries alongside active-claim hits in start-right",
+          "class": "good",
+          "file_line": "328-337"
+        },
+        {
+          "idea": "Three discipline-aligned overlap options (proceed/wait/decision-thread) for pre-commit overlap detection",
+          "class": "good",
+          "file_line": "338-349"
+        },
+        {
+          "idea": "Self-application discipline: the commit that lands the protocol must use the protocol it installs",
+          "class": "good",
+          "file_line": "466-467"
+        },
+        {
+          "idea": "session_counter primitive as monotonically-incrementing TTL proxy, incremented atomically at session-open by start-right skills",
+          "class": "speculative",
+          "file_line": "291-309"
+        },
+        {
+          "idea": "session-counter.lock advisory lockfile as alternative to git index.lock coupling for atomic counter increment",
+          "class": "speculative",
+          "file_line": "302-303"
+        },
+        {
+          "idea": "Lossy counter increment accepted as advisory (benign consequence: TTL fires one session late)",
+          "class": "speculative",
+          "file_line": "461-462"
+        },
+        {
+          "idea": "Cross-platform increment idempotency: strict (each start-right = one session) vs lazy (dedupe by agent_id within 60s window)",
+          "class": "speculative",
+          "file_line": "546-549"
+        },
+        {
+          "idea": "Counter location choice: top-level on active-claims.json (cohesive) vs dedicated session-counter.json (trivial atomic scope)",
+          "class": "speculative",
+          "file_line": "529-532"
+        },
+        {
+          "idea": "Audit trail of completed intents: discard on commit vs preserve in closed-claims.archive.json",
+          "class": "speculative",
+          "file_line": "539-541"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": "extracted-and-archived",
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "✅ QUEUE SLICE COMPLETE; `session_counter` FUTURE-ONLY (2026-04-27)",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (V0 §2.1, LOCKED: required for all plan nodes)",
+          "file_line": "intent-to-commit-and-session-counter.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `node_type` (V0 §2.1, LOCKED: required for all plan nodes; must be literal \"plan\")",
+          "file_line": "intent-to-commit-and-session-counter.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `kind` (V0 §2.2, LOCKED: required for all plan nodes; inference is `strategic` from folder and promotion_trigger in body)",
+          "file_line": "intent-to-commit-and-session-counter.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `last_updated` (V0 §2.4, LOCKED: required for all plan nodes)",
+          "file_line": "intent-to-commit-and-session-counter.plan.md:1"
+        },
+        {
+          "issue": "Missing `disposition` despite body indicating the primary deliverable (queue slice) is complete and archived (body lines 9-10, 49-50, 609); V0 §3.3 requires `disposition` once a terminal state is reached — `extracted-and-archived` or `done` is the appropriate value",
+          "file_line": "intent-to-commit-and-session-counter.plan.md:9"
+        },
+        {
+          "issue": "Missing frontmatter `promotion_trigger` field; it exists in the body (lines 390-399) but V0 §2.4 (LOCKED) requires it as a frontmatter field on strategic plans",
+          "file_line": "intent-to-commit-and-session-counter.plan.md:390"
+        },
+        {
+          "issue": "No typed edge fields declared in frontmatter (`serves_strategic_choice`, `thread`, `depends_on`, `derives_from` all absent); parent and related relationships are body-prose only (lines 17-27), not V0 frontmatter edges",
+          "file_line": "intent-to-commit-and-session-counter.plan.md:17"
+        },
+        {
+          "issue": "Dropped key `isProject: false` present in frontmatter (V0 §2.5 explicitly drops `isProject`; replaced by `projects_to` edge)",
+          "file_line": "intent-to-commit-and-session-counter.plan.md:4"
+        },
+        {
+          "issue": "`status` carried as whole-paragraph body prose (lines 9-15); V0 §2.5 drops `status` and replaces it with orthogonal axes (`kind`/`disposition`/`gate`); prose state-description belongs on the axes, not in body narrative",
+          "file_line": "intent-to-commit-and-session-counter.plan.md:9"
+        }
+      ],
+      "unclassified_keys": [
+        "isProject"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan assumes advisory-only intents are sufficient to prevent clash types A/B/C/D, but the evidence at lines 87–133 demonstrates all four clash types occurred on a live branch while agents were operating in good faith and without a queue. The advisory queue reduces probability but does not eliminate the race window between VERIFY OWNERSHIP (step 6) and the `git commit` execution (step 8). An agent can pass the verify check and then have its staged set displaced before the lock is acquired. The plan notes this only obliquely ('catch any clash the queue missed') at line 139 without modelling the residual risk probability or defining a threshold at which advisory-only is no longer sufficient.",
+          "file_line": "intent-to-commit-and-session-counter.plan.md:138-153"
+        },
+        {
+          "severity": "medium",
+          "claim": "Section 3 (session-counter increment) describes an atomic read-modify-write using a separate `session-counter.lock` advisory lockfile as the mitigation for lost-update races, but then marks this as 'optional later' and defers it entirely. The assumption that 'lossy increment is benign' (line 461) is only valid if TTL never becomes load-bearing — yet the queue itself relies on `expires_at` for staleness detection. If session-counter lands without the lossy-is-ok assumption being re-evaluated, the TTL-based staleness logic could silently under-expire, leaving ghost intents in the queue.",
+          "file_line": "intent-to-commit-and-session-counter.plan.md:459-462"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan assumes that the active-claims registry JSON file is a safe shared-state surface for the commit queue, with 'each agent only writes their own claim's intent, so collision is rare' (line 463). This is a correctness argument grounded on behavioural discipline rather than a structural constraint. It holds only if all agents follow the commit skill exactly; a misbehaving or crashing agent writing a foreign claim's intent field can corrupt queue ordering silently. The plan does not describe a validation step that rejects a write touching another agent's claim_id.",
+          "file_line": "intent-to-commit-and-session-counter.plan.md:462-465"
+        },
+        {
+          "severity": "low",
+          "claim": "Open Design Question 6 (lines 546-549) considers cross-platform increment idempotency for a crash-and-restart within the same logical session and sets a default of 'strict' (every start-right increments). The assumption that this is a known-benign double-increment is never grounded against the TTL arithmetic: if a restarted agent increments the counter and all peers' TTLs are shorter than the inter-increment interval, they may observe their own intents as stale and re-queue unnecessarily. This is a design gap, not a fatal flaw, but no analysis is present.",
+          "file_line": "intent-to-commit-and-session-counter.plan.md:546-549"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan status at lines 9-15 correctly marks the queue slice COMPLETE (commit `5c39d1d4`, graduated to PDR-029 Family A Class A.3) and the session_counter as FUTURE-ONLY. The promotion trigger at lines 390-399 is clear and evidence-grounded. The plan is correctly housed in `future/` as a residual session-counter stub and does not require keep/rewrite/archive reconsideration on assumptions grounds alone.",
+          "file_line": "intent-to-commit-and-session-counter.plan.md:9-15"
+        }
+      ],
+      "load_bearing_claims_count": 7,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/future/joint-agent-decision-protocol.plan.md",
+      "classification": "rehome",
+      "classification_evidence": [
+        {
+          "claim": "Plan declares IMPLEMENTED status but lives in future/",
+          "file_line": "joint-agent-decision-protocol.plan.md:9"
+        },
+        {
+          "claim": "Promotion checklist is entirely unchecked, indicating the file move was never executed",
+          "file_line": "joint-agent-decision-protocol.plan.md:370-386"
+        },
+        {
+          "claim": "Parent reference targets current/ lane, where the implemented plan should live",
+          "file_line": "joint-agent-decision-protocol.plan.md:14"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan identifies a real, empirically observed failure mode (three-agent lock contention at lines 39-54), proposes a minimal schema extension with clear semantics, maintains the advisory-not-blocking constraint (line 97-98), and includes adversarial risk analysis (lines 249-256). The four-role vocabulary is principled and bounded. The non-goals section (lines 260-275) is precise. The self-application test (lines 312-328) provides a concrete correctness criterion. No speculative scope inflation detected.",
+      "content_quality": "strong",
+      "content_quality_note": "The phase-transition observation (lines 30-67) is grounded in named agents, specific timestamps, and a clash taxonomy rather than abstract reasoning. The schema extension (lines 104-123) is specific enough to implement. The risk table (lines 249-256) is non-trivial and includes async-deadlock and self-application paradox. The non-goals boundary (lines 260-275) prevents scope creep. Documentation propagation list (lines 280-295) is concrete and actionable. The only weakness is the mismatch between the claimed IMPLEMENTED status and the unexecuted promotion checklist, which leaves traceability incomplete.",
+      "salvage_value": [
+        {
+          "idea": "Two→three agent phase transition is an empirically observed breakpoint requiring a new coordination layer above signalling",
+          "class": "good",
+          "file_line": "joint-agent-decision-protocol.plan.md:30-67"
+        },
+        {
+          "idea": "Signalling surfaces (shared log, claims, decision threads) are one-directional and do not produce bilateral commitments",
+          "class": "good",
+          "file_line": "joint-agent-decision-protocol.plan.md:72-98"
+        },
+        {
+          "idea": "joint_decision schema entry kind: records agreed action, recording owner, and acting owner with two or more participant agent IDs",
+          "class": "good",
+          "file_line": "joint-agent-decision-protocol.plan.md:110-116"
+        },
+        {
+          "idea": "joint_decision_acknowledgement entry kind: peer confirmation from each participant that they accept their assigned role",
+          "class": "good",
+          "file_line": "joint-agent-decision-protocol.plan.md:116-117"
+        },
+        {
+          "idea": "Wall-clock ack_due_at timestamp with 24-hour default; overdue acknowledgements surface at consolidate-docs §7e",
+          "class": "good",
+          "file_line": "joint-agent-decision-protocol.plan.md:118-123"
+        },
+        {
+          "idea": "Four-role vocabulary: discusser, decider, recorder, actor — each explicitly assigned by name",
+          "class": "good",
+          "file_line": "joint-agent-decision-protocol.plan.md:126-136"
+        },
+        {
+          "idea": "Session-handoff close discipline: for every unfulfilled recorder/actor role, either complete this session or post a role_handoff entry",
+          "class": "good",
+          "file_line": "joint-agent-decision-protocol.plan.md:139-148"
+        },
+        {
+          "idea": "consolidate-docs §7e joint-decision snapshot: enumerate by status and surface overdue/malformed items to owner without auto-resolving",
+          "class": "good",
+          "file_line": "joint-agent-decision-protocol.plan.md:150-159"
+        },
+        {
+          "idea": "Sidebar (WS3B) is the canonical discussion surface; joint_decision is the commitment surface — they are complementary not redundant",
+          "class": "good",
+          "file_line": "joint-agent-decision-protocol.plan.md:161-167"
+        },
+        {
+          "idea": "Advisory-not-blocking constraint: joint_decision produces durable bilateral artefacts but does not prevent unilateral action",
+          "class": "good",
+          "file_line": "joint-agent-decision-protocol.plan.md:96-98"
+        },
+        {
+          "idea": "Self-application test: first real inter-agent joint_decision should complete the full propose→ack→decided→recorded→acted lifecycle",
+          "class": "good",
+          "file_line": "joint-agent-decision-protocol.plan.md:312-328"
+        },
+        {
+          "idea": "Risk: async deadlock if named participant never sees the proposal — mitigated by ack_due_at expiry surfacing to owner",
+          "class": "good",
+          "file_line": "joint-agent-decision-protocol.plan.md:253"
+        },
+        {
+          "idea": "Non-goal: no N>3 design speculation — scope bounded to observed 2→3 transition until evidence warrants extension",
+          "class": "good",
+          "file_line": "joint-agent-decision-protocol.plan.md:273-275"
+        },
+        {
+          "idea": "Documentation propagation list naming five specific operational surface files to update",
+          "class": "good",
+          "file_line": "joint-agent-decision-protocol.plan.md:280-295"
+        },
+        {
+          "idea": "Promotion checklist items are all unchecked despite IMPLEMENTED claim — file-move and parent/README updates may be genuinely incomplete",
+          "class": "speculative",
+          "file_line": "joint-agent-decision-protocol.plan.md:370-386"
+        },
+        {
+          "idea": "Practice Core / ADR propagation deferred unless owner requests a Practice Core release",
+          "class": "speculative",
+          "file_line": "joint-agent-decision-protocol.plan.md:293-295"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": null,
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "IMPLEMENTED 2026-04-26 (body prose, line 9)",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (V0 §2.1, LOCKED)",
+          "file_line": "joint-agent-decision-protocol.plan.md:1-5 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `node_type` (V0 §2.1, LOCKED — must be literal \"plan\")",
+          "file_line": "joint-agent-decision-protocol.plan.md:1-5 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `kind` (V0 §2.2, LOCKED — `strategic | executable`)",
+          "file_line": "joint-agent-decision-protocol.plan.md:1-5 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `last_updated` (V0 §2.4, LOCKED)",
+          "file_line": "joint-agent-decision-protocol.plan.md:1-5 (frontmatter block)"
+        },
+        {
+          "issue": "`isProject: false` is explicitly dropped by V0 §2.5 (subsumed by `projects_to`)",
+          "file_line": "joint-agent-decision-protocol.plan.md:5"
+        },
+        {
+          "issue": "Status carried as body prose (`**Status**: IMPLEMENTED 2026-04-26`) rather than frontmatter axes (`kind`, `disposition`); V0 §2.2 replaces all prose status with orthogonal axes",
+          "file_line": "joint-agent-decision-protocol.plan.md:9"
+        },
+        {
+          "issue": "`status:` value `IMPLEMENTED` does not appear in V0 §3.5 migration map; closest mapping would be `kind: executable` + `disposition: done` — no clean axis assignment possible without owner decision",
+          "file_line": "joint-agent-decision-protocol.plan.md:9"
+        },
+        {
+          "issue": "No `serves_strategic_choice` edge declared; required (or `\"pending\"` sentinel) for executable plans per V0 §2.3 (LOCKED)",
+          "file_line": "joint-agent-decision-protocol.plan.md:1-5 (frontmatter block)"
+        },
+        {
+          "issue": "`Promotion Checklist` section (lines 369-386) refers to moving from `future/` to `current/`, but V0 §3.6 (owner-signed) collapses `current/` and `active/` into one executable home — `current/` is not a stable target under V0",
+          "file_line": "joint-agent-decision-protocol.plan.md:369-386"
+        }
+      ],
+      "unclassified_keys": [
+        "isProject"
+      ],
+      "locked_contradictions": [
+        {
+          "item": "Plan claims IMPLEMENTED status (body prose line 9) yet is filed in `future/`. V0 §3.6 (owner-signed) states `future/` holds `kind: strategic` plans and terminal plans go to `archive/`. An implemented (done) plan in `future/` contradicts the folder-governs rule. This is estate evidence that either the folder-collapse restructure has not yet run, or `IMPLEMENTED` maps to something other than `disposition: done` (e.g. the plan remains executable and in-flight for further refinement). Owner re-ratification candidate: confirm whether `IMPLEMENTED` here means `disposition: done` → move to `archive/`, or whether it means the plan's initial implementation landed but the plan itself is still live-executable.",
+          "evidence": "Body line 9: `**Status**: IMPLEMENTED 2026-04-26`; V0 §3.6 folder table: `kind: strategic` → `future/`; any `disposition` terminal → `archive/`",
+          "file_line": "joint-agent-decision-protocol.plan.md:9 vs plan-node-schema.v0.md:296-300"
+        }
+      ],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan extends conversation.schema.json with two new entry kinds but does not specify the schema version bump strategy: the text says 'v1.1.0 or v2.0.0' (line 200). Given that joint_decision introduces new required fields (ack_due_at, recorder, actor, decider, participants) that are absent from existing records, a minor bump is structurally wrong — existing validators reading a v1.1.0 document would encounter unexpected required fields. The version choice is an architectural decision that needs resolution before the schema lands, not at implementation time.",
+          "file_line": "200"
+        },
+        {
+          "severity": "medium",
+          "claim": "joint_decision and joint_decision_acknowledgement are placed in conversation.schema.json (the decision-thread schema), but the sidebar (WS3B) is named as the canonical discussion surface. This splits the protocol across two schema domains: discussion state lives in sidebar records, commitment state lives in decision-thread records. There is no stated ownership rule for what happens when a sidebar closes without referencing a joint_decision, leaving an architectural seam between the two schemas that could produce inconsistent protocol state.",
+          "file_line": "110-116"
+        },
+        {
+          "severity": "low",
+          "claim": "The role-assignment vocabulary (discusser, decider, recorder, actor) is additive per line 131, but no cardinality constraints are specified. The adversarial failure mode 'two agents claim recorder for the same decision' is surfaced as a mid-cycle review question (line 233) but not resolved in the design. Without a constraint that recorder is a singleton per durable artefact, the schema permits conflicting recorder assignments and relies entirely on advisory discipline to prevent them.",
+          "file_line": "125-135"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan defers Practice Core / ADR propagation to a future consolidation pass (line 294-295). The role vocabulary and joint_decision lifecycle are operational primitives that belong in the Practice Core. Shipping the schema and directive without a corresponding ADR leaves no authoritative architectural record of the phase-transition rationale, the advisory-not-mechanical constraint, or the non-goals. If this plan is later archived or moved, that rationale evaporates from durable surfaces.",
+          "file_line": "294-295"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan explicitly bounds itself to the 2→3 agent phase transition and defers N>3 design (line 272-273). This is architecturally sound given the evidence-first doctrine. The advisory semantics, owner-as-tiebreaker constraint, and 'repo-owned Markdown/JSON remains canonical' non-goal (line 265) are clear and well-scoped. The separation from intent-to-commit (commit-window layer) is correctly maintained as a distinct complementary defence.",
+          "file_line": "260-274"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": [
+        {
+          "claim": "IMPLEMENTED 2026-04-26 as part of the owner-approved coordination architecture consolidation pass.",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "agent-tools/src/collaboration-state/schemas/conversation.schema.json:318-319 (joint_decision + joint_decision_acknowledgement entry kinds present); schema v1.1.0 comment at line 8; agent-collaboration.md:81-83; respect-active-agent-claims.md:28-29"
+        },
+        {
+          "claim": "Implementation updated the operational surfaces required for this pass (lists 5 specific files)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "joint-agent-decision-protocol.plan.md:280-291 — sentence \"Implementation updated the operational surfaces required for this pass:\" followed by exactly 5 numbered items (count confirmed via sed/grep = 5); joint_decision content verified present in 4 named surfaces (collaboration-state-conventions.md, start-right.md, start-right-thorough.md:55, agent-collaboration.md) and the two listed command files relocated to .agent/skills/session-handoff/SKILL-CANONICAL.md and .agent/skills/consolidate-docs/SKILL-CANONICAL.md (both carry joint_decision content)."
+        },
+        {
+          "claim": "Promotion checklist — all items unchecked, file never moved",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": ".agent/plans/agent-tooling/future/joint-agent-decision-protocol.plan.md:372-385 (all six promotion-checklist items render as \"- [ ]\" unchecked); file resides only at future/ — `find .agent/plans -iname '*joint-agent-decision*'` returns exactly that one path and current/joint-agent-decision-protocol.plan.md does not exist; `git log --follow --diff-filter=R` shows the only rename (da4288cdc) is the collection split, not a future/→current/ promotion."
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/future/relative-link-integrity-live-lanes-validator.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Status is FUTURE and plan is not executable until promoted; it is serving its correct lifecycle role as a parked brief",
+          "file_line": "line 11-12"
+        },
+        {
+          "claim": "Promotion trigger is defined, showing the plan has a concrete advancement path rather than being abandoned",
+          "file_line": "line 92-95"
+        },
+        {
+          "claim": "Plan explicitly links to pending-graduations.md as its durable home, confirming it is part of an active capture chain",
+          "file_line": "line 79-81"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "All constituent ideas are grounded in a concrete sweep finding (14 broken links, line 17), address a real gap (lines 18-20), and the implementation constraints (parser choice, lane topology, warning-first promotion) are non-trivial and well-reasoned. No speculative or unfounded ideas detected.",
+      "content_quality": "strong",
+      "content_quality_note": "Problem is quantified (14 broken links, line 17). Non-goals are explicit and boundary-setting (lines 56-61). Risks have named cures (lines 83-90). Acceptance criteria are discrete and testable (lines 72-81). Promotion trigger is concrete rather than vague (lines 92-95). The plan is well above V0 conformance minimum.",
+      "salvage_value": [
+        {
+          "idea": "Warning-first validator mode before fail-mode promotion, gated on a clean warning set",
+          "class": "good",
+          "file_line": "line 48-50"
+        },
+        {
+          "idea": "Explicit live-lane vs archive-lane include/exclude topology as a validator policy input",
+          "class": "good",
+          "file_line": "line 37-40, line 43-44"
+        },
+        {
+          "idea": "Prefer an existing Markdown parser already used in repo tooling over ad hoc regex",
+          "class": "good",
+          "file_line": "line 45"
+        },
+        {
+          "idea": "Report warnings with source path, link text, raw target, and resolved path for actionability",
+          "class": "good",
+          "file_line": "line 47"
+        },
+        {
+          "idea": "Anchor validation deferred until path validation is stable, to contain scope",
+          "class": "good",
+          "file_line": "line 87-88"
+        },
+        {
+          "idea": "Explicitly exclude external HTTP URL validation from scope",
+          "class": "good",
+          "file_line": "line 57"
+        },
+        {
+          "idea": "Explicitly exclude archive history and terminal evidence logs from validation scope",
+          "class": "good",
+          "file_line": "line 39-40, line 58"
+        },
+        {
+          "idea": "Link-integrity detection is a dedicated validator, not a broadening of markdownlint's role",
+          "class": "good",
+          "file_line": "line 60-61"
+        },
+        {
+          "idea": "Classify lane and link role explicitly rather than blanket-failing for historical or intentionally stale references",
+          "class": "good",
+          "file_line": "line 84-85"
+        },
+        {
+          "idea": "Promotion trigger on next broken live-lane relative link surviving existing gates acts as a real-world signal",
+          "class": "good",
+          "file_line": "line 94-95"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "future",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "id absent — required for all plans (LOCKED)",
+          "file_line": "relative-link-integrity-live-lanes-validator.plan.md:1-8 (frontmatter block)"
+        },
+        {
+          "issue": "node_type absent — required for all plans (LOCKED)",
+          "file_line": "relative-link-integrity-live-lanes-validator.plan.md:1-8 (frontmatter block)"
+        },
+        {
+          "issue": "kind absent — required for all plans (LOCKED); body at line 11 implies kind: strategic via status: future but the frontmatter field itself is missing",
+          "file_line": "relative-link-integrity-live-lanes-validator.plan.md:1-8 (frontmatter block)"
+        },
+        {
+          "issue": "status: future is a dropped key (V0 §2.5 — split into kind/disposition/gate/projected execution); replaces with kind: strategic per §3.5 migration map",
+          "file_line": "relative-link-integrity-live-lanes-validator.plan.md:4"
+        },
+        {
+          "issue": "type: agent-tooling is a dropped free-label key (V0 §2.5 — replaced by node_type + kind)",
+          "file_line": "relative-link-integrity-live-lanes-validator.plan.md:5"
+        },
+        {
+          "issue": "isProject: false is an explicitly dropped key (V0 §2.5)",
+          "file_line": "relative-link-integrity-live-lanes-validator.plan.md:8"
+        },
+        {
+          "issue": "promotion_trigger absent as frontmatter field — required for kind: strategic plans (V0 §2.4, LOCKED); prose equivalent exists in body at line 93 but not as a frontmatter field",
+          "file_line": "relative-link-integrity-live-lanes-validator.plan.md:93"
+        },
+        {
+          "issue": "serves_strategic_choice absent — recommended for strategic plans, required for executable; no strategic-choice ID or 'pending' sentinel declared (V0 §2.3)",
+          "file_line": "relative-link-integrity-live-lanes-validator.plan.md:1-8 (frontmatter block)"
+        },
+        {
+          "issue": "depends_on absent as typed frontmatter edges — three dependencies are described in body table at lines 64-68 (two blocking, one beneficial) but not expressed as V0 depends_on edge objects with kind: blocking|beneficial",
+          "file_line": "relative-link-integrity-live-lanes-validator.plan.md:64-68"
+        }
+      ],
+      "unclassified_keys": [
+        "status",
+        "type",
+        "isProject"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The validator's live-lane scope — the include/exclude set defining which `.agent` surfaces are 'live' — is described as a dependency but no owner-ratified topology document is cited. If that topology is not already a stable, versioned artefact, the validator's boundary is under-specified and the include/exclude policy will need to be authored as part of execution rather than discovered. This is a hidden design task that could expand scope at promotion time.",
+          "file_line": "relative-link-integrity-live-lanes-validator.plan.md:43-48 (Dependencies table) and lines 36-39 (Mechanism)"
+        },
+        {
+          "severity": "low",
+          "claim": "Parser choice is deferred to execution ('prefer an existing parser already used in repo tooling if available') with no verification that such a parser exists in the current workspace. If none exists, the fallback is ad hoc regex, which the plan explicitly warns against (line 46). A pre-promotion workspace check for an already-present Markdown AST parser would close this risk before it materialises as scope at execution time.",
+          "file_line": "relative-link-integrity-live-lanes-validator.plan.md:45-46 (Means) and lines 88-89 (Risks)"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan gates failure-mode promotion on 'a clean or intentionally exempt warning set' (line 50) but defines no durable exemption mechanism — no per-link or per-file suppression comment, no exemption registry. Without that, the failure-mode gate cannot be closed without either mass-deleting legitimate historical stale references or leaving the validator permanently in warning mode.",
+          "file_line": "relative-link-integrity-live-lanes-validator.plan.md:49-51 (Means) and lines 83-85 (Risks)"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly scopes out anchor validation as a later add-on (lines 87-88). This is architecturally sound given the risk of scope expansion, but the boundary should be recorded explicitly in the gate command's help text at implementation time to prevent future contributors from adding anchor checks inline without a plan.",
+          "file_line": "relative-link-integrity-live-lanes-validator.plan.md:86-88 (Risks)"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan does not address where the validator binary/command lives in the workspace package topology (a dedicated package, an existing agent-tools package, a root script). Given the repo's rules against workspace-to-root-script coupling and the no-checks-zone status of scripts/, this placement decision carries non-trivial constraints and should be surfaced at promotion rather than resolved ad hoc.",
+          "file_line": "relative-link-integrity-live-lanes-validator.plan.md:48-49 (Means — 'Wire the command into the repo's validator/gate surface')"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": [
+        {
+          "claim": "Execution decisions are finalised only during promotion to current or active; this future brief does not claim the validator already exists",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": ".agent/plans/agent-tooling/future/relative-link-integrity-live-lanes-validator.plan.md:98-100 (\"Execution decisions are finalised only during promotion to `current` or `active`. This future brief records the accepted structural lane ... without claiming the validator already exists.\"); corroborated by line 4 (status: future), line 12 (\"FUTURE strategic brief. Not executable until promoted to `current/`\"), and lines 55-56 (creates the detection lane, does not repair)."
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/future/routing-legacy-fallback-sunset.plan.md",
+      "classification": "archive-complete",
+      "classification_evidence": [
+        {
+          "claim": "Frontmatter status=complete, landed=2026-05-29 (commit d9225d5b)",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:3-4"
+        },
+        {
+          "claim": "Session 2 confirms all strategic acceptance criteria met and full pnpm check passes",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:363-385"
+        },
+        {
+          "claim": "File retained in future/ only as cross-link hub pending M4 supersession list from rightsizing plan",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:389-397"
+        },
+        {
+          "claim": "Verification gate clean: legacy-ref grep returns nothing; turbo 108/108 passes",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:383-385"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan correctly diagnoses a principles breach (lines 52-69), executes the strictly-correct fix (delete, not suppress), and fully delivers it (lines 363-385). The open-problems section (lines 136-165) is honest about what the sunset does not solve and correctly forwards those to the rightsizing plan rather than inventing scope. No speculative or bad ideas are present; the non-goals section (lines 118-127) explicitly names and refuses the wrong fixes.",
+      "content_quality": "strong",
+      "content_quality_note": "The problem framing is precise and grounded in principles.md citations (lines 54-65). Means steps are concrete and sequenced with explicit blocking dependencies (lines 198-206). Execution sections carry commit SHAs, file names, and test counts (lines 263-385). Acceptance criteria include a verifiable grep command (line 210). The disposition rationale is specific about which downstream plan owns the lifecycle decision (lines 389-397). No vague intent or placeholder content.",
+      "salvage_value": [
+        {
+          "idea": "Legacy-fallback scaffold calcified into permanent fixture — a principles breach (replace-dont-bridge, strict-and-complete, no compatibility layers)",
+          "class": "good",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:52-69"
+        },
+        {
+          "idea": "Correct cure is deletion of the legacy arm, not suppression, filtering, or a config gate",
+          "class": "good",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:118-127"
+        },
+        {
+          "idea": "Historical id-less comms events are immutable and should be excluded from routing scope rather than backfilled",
+          "class": "good",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:99-104"
+        },
+        {
+          "idea": "Fail-fast at boundary (id-less identity is an error, not a silent fallback) as the replacement discipline",
+          "class": "good",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:75-79"
+        },
+        {
+          "idea": "Executed sunset record: commit d9225d5b, 2026-05-29, all acceptance criteria met, gates green",
+          "class": "good",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:363-385"
+        },
+        {
+          "idea": "Collaboration substrate has grown by accretion (fences not generator) — open problem not yet solved",
+          "class": "speculative",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:138-145"
+        },
+        {
+          "idea": "Watcher + heartbeat ceremony is heavier than the 1-3-agent owner-present context warrants — open problem not yet solved",
+          "class": "speculative",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:146-153"
+        },
+        {
+          "idea": "Bridge-not-replace may be a recurring substrate pattern needing a settled discipline beyond principle statements",
+          "class": "speculative",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:154-158"
+        },
+        {
+          "idea": "This plan is a worked instance of replace-vs-migrate discipline for the rightsizing plan M3 to generalise",
+          "class": "good",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:395-397"
+        },
+        {
+          "idea": "Acceptance-criteria grep command as a reusable verification artifact for legacy-ref absence",
+          "class": "good",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:210-211"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": "done",
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "complete",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Uses `title` instead of V0-required `name` (V0 §2.1: 'Migrate emergent title: (14) → name')",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:2"
+        },
+        {
+          "issue": "Missing `node_type: plan` — required for all plans per V0 §2.1 (LOCKED)",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:1-14"
+        },
+        {
+          "issue": "Missing `id` field — required for all plans per V0 §2.1 (LOCKED)",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:1-14"
+        },
+        {
+          "issue": "Missing `overview` field — required for all plans per V0 §2.1 (LOCKED)",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:1-14"
+        },
+        {
+          "issue": "Uses emergent `status: complete` instead of V0 axes; `status` is explicitly dropped by V0 §2.5 — should become `disposition: done` + (no `kind` or `last_updated`)",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:3"
+        },
+        {
+          "issue": "Missing `kind` — required for all plans per V0 §2.2 (LOCKED). Body text and `promotion_trigger` section confirm this was a `kind: strategic` plan.",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:1-14"
+        },
+        {
+          "issue": "Missing `disposition: done` — plan body §Session 2 confirms full delivery ('The sunset is complete and committed'); terminal disposition must be declared per V0 §2.2 §3.3",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:363-365"
+        },
+        {
+          "issue": "`landed` is an unclassified housekeeping key not in V0 contract; delivery date belongs on `last_updated` per V0 §2.4 (LOCKED)",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:4"
+        },
+        {
+          "issue": "`lane` is explicitly dropped by V0 §2.5 ('Dropped — folder location is the projection; metadata does not duplicate it')",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:5"
+        },
+        {
+          "issue": "`collection` is explicitly dropped by V0 §2.5 ('Dropped — folder location is the projection; metadata does not duplicate it')",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:6"
+        },
+        {
+          "issue": "`created` is a housekeeping drift key; V0 §2.4 folds it into `last_updated` (LOCKED)",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:8"
+        },
+        {
+          "issue": "`author` is not a V0 frontmatter field (SURVEY-MAY-ADD-FIELDS territory at best; not declared); attribution is via edges and external identity per V0 §1 ('author-agnostic')",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:9"
+        },
+        {
+          "issue": "`source_incident` is a domain-extension key absent from V0 contract; may be treated as domain-specific metadata (cf. V0 §2.5 `graph_layer` note: 'validator ignores them in V0') but is unclassified",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:10"
+        },
+        {
+          "issue": "No `serves_strategic_choice` edge — required for executable plans, recommended for strategic; absent entirely",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:1-14"
+        },
+        {
+          "issue": "No `last_updated` field — required for all plans per V0 §2.4 (LOCKED)",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:1-14"
+        },
+        {
+          "issue": "No `promotion_trigger` — plan body contains a §'Promotion trigger into current/' section (file line 244) but this is in the body, not frontmatter as V0 §2.4 requires for `kind: strategic` plans (LOCKED)",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:244"
+        },
+        {
+          "issue": "File is in `future/` folder but the plan has reached a terminal disposition (`done`); V0 §3.6 folder-collapse rule states terminal plans belong in `archive/` (owner-signed decision)",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:389-397"
+        }
+      ],
+      "unclassified_keys": [
+        "title",
+        "status",
+        "landed",
+        "lane",
+        "collection",
+        "created",
+        "author",
+        "source_incident"
+      ],
+      "locked_contradictions": [
+        {
+          "item": "Plan retained in `future/` despite terminal `done` state — contradicts LOCKED V0 §3.6 folder-collapse verdict ('terminal plans belong in archive/'). Body explicitly defers final archival to a sibling plan's M4 supersession list.",
+          "evidence": "Body §Disposition (lines 389-397): 'This file is retained in future/ in place, not archived... Final archival disposition is deferred to that brief's M4 supersession list.' V0 §3.6 table: 'any / terminal (done/superseded/…) / archive/'",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:389-397"
+        }
+      ],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "Plan status is 'complete' and landed at commit d9225d5b (2026-05-29). The routing layer is settled: AgentRoutingKey collapsed to strict id-keyed shape, legacy arm deleted, fail-fast boundary enforced, all gates green. No architectural residue remains in the delivered scope.",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:3-4"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan intentionally remains in future/ rather than being archived because it is a cross-link hub for collaboration-substrate-coordination-rightsizing.plan.md. Archival is deferred to that brief's M4 supersession list (lines 389-397). This is a deliberate lifecycle hold, not a classification failure, but it means a 'complete' plan sits in the future/ lane, which may mislead the estate survey. Architecture risk: if M4 is delayed or the supersession list never executes, this plan persists indefinitely in a misleading location.",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:389-397"
+        },
+        {
+          "severity": "high",
+          "claim": "The three open problems named at lines 139-158 are architecturally material and unsettled: (1) the collaboration substrate has grown by accretion of fences while the generator stayed unchanged — a structural design debt with no known first-principles replacement yet; (2) the watcher/heartbeat ceremony is heavier than the actual 1-3-agent operating context, evidenced by the runaway itself; (3) no settled discipline for forcing scaffold sunsets to completion beyond principle statements. These are named and forwarded to collaboration-substrate-coordination-rightsizing.plan.md, which is the correct home, but the forwarding is only as strong as that brief's M4. If M4 stalls, these problems have no execution path.",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:139-165"
+        },
+        {
+          "severity": "low",
+          "claim": "PDR-076a's Phase 3 sunset criteria were never documented in the PDR itself — they existed only in code comments. The plan records them post-hoc via a sunset-execution note (line 378). The architecture lesson (scaffold sunset criteria must live in the PDR at authoring time, not only in code comments) is surfaced in the open-problems section but has not been codified as a standing rule or PDR clause that would prevent recurrence on future scaffolds.",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:228-229,378"
+        },
+        {
+          "severity": "low",
+          "claim": "sameAgentRoutingKey short-circuits to false when either side lacks an id (line 279), silently excluding un-migrated historical identities from group membership rather than erroring. This is the correct production decision (watcher coordination is live-only), but the architectural trade-off — silent exclusion vs fail-fast for historical backlog — is a deliberate boundary choice documented here and not in a PDR. Future readers may not find the rationale if the plan is eventually archived.",
+          "file_line": "routing-legacy-fallback-sunset.plan.md:278-279"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": [
+        {
+          "claim": "Status complete, landed 2026-05-29 at commit d9225d5b",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "Frontmatter routing-legacy-fallback-sunset.plan.md:3-4 (\"status: complete\" / \"landed: 2026-05-29 (commit d9225d5b)\"); commit d9225d5b confirmed first-hand via git show (Author Jim Cresswell, Fri May 29 2026, \"refactor(agent-tools): execute PDR-076a Phase 3 routing-legacy-fallback sunset\"); git diff-tree shows it touched the load-bearing agent-tools/src/collaboration-state/active-agent-routing.ts plus PDR-076a, register-identity-on-thread-join.md, use-agent-comms-log.md, and the 5 test files named in Sessions 1-2; verification grep for \"routing-legacy-fallback|legacyFallback|legacy-keyed|setLegacyFallbackWriter|kind: 'legacy'\" over agent-tools/src and tests returns nothing (acceptance criterion at lines 210,358 met)."
+        },
+        {
+          "claim": "All strategic acceptance criteria are met: grep clean, pnpm check passes, PDR-076a marked sunset-complete",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "agent-tools/src/collaboration-state/active-agent-routing.ts:20-23,33-37 (strict {agent_name,id} key, fail-fast routingKeyFor); PDR-076a-agent-identity-tuple-name-and-uuid.md:259-289 (Sunset execution note + criteria); register-identity-on-thread-join.md:180 (reconciled to (name,id) 2026-05-29); grep over agent-tools/src+tests exit 1 (no matches); pnpm --filter agent-tools type-check clean + test 1323 passed/0 failed; landing commit d9225d5b is ancestor of HEAD"
+        },
+        {
+          "claim": "File retained in future/ as cross-link hub pending M4 of collaboration-substrate-coordination-rightsizing.plan.md",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "routing-legacy-fallback-sunset.plan.md:389-394 (\"retained in `future/` in place, not archived... Final archival disposition is deferred to that brief's M4 supersession list\"); corroborated by collaboration-substrate-coordination-rightsizing.plan.md:15-17 (m4-supersession-list \"resolving the routing plan's parked 'one new plan vs cluster refactor' question\", status: pending) and :23 (brief status ACTIVE/M1-in-progress); both files physically present in future/ via ls."
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/future/rules-cross-platform-generator.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Status is explicitly 'future' and the brief is not yet executable — retaining as the durable pending-graduation lane is its stated purpose",
+          "file_line": "rules-cross-platform-generator.plan.md:11-12"
+        },
+        {
+          "claim": "Promotion trigger is well-defined (line 90-92), so the plan has a natural lifecycle path without needing re-homing",
+          "file_line": "rules-cross-platform-generator.plan.md:90-92"
+        },
+        {
+          "claim": "Acceptance criteria are concrete and independently verifiable, making the plan worth keeping as the implementation lane target",
+          "file_line": "rules-cross-platform-generator.plan.md:68-77"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The problem is real and evidenced (observed drift at line 19-20), the solution is minimal and non-invasive (generates files loaders already read, line 53-54), boundaries are clearly stated (lines 51-56), and the risks + mitigations are practical (lines 79-87). No speculative or bad ideas detected.",
+      "content_quality": "strong",
+      "content_quality_note": "Every V0 section is populated with specific, grounded content. End-goal is one crisp sentence (line 28). Risks name concrete cures (lines 80-87). Boundaries explicitly exclude adjacent concerns without hand-waving (lines 51-56). The only minor weakness is that the canonical metadata contract (line 41) is not yet specified, but that is correctly deferred to promotion.",
+      "salvage_value": [
+        {
+          "idea": "Make .agent/rules/* the single authored source for all rule forms — canonical-source principle",
+          "class": "good",
+          "file_line": "rules-cross-platform-generator.plan.md:25-26"
+        },
+        {
+          "idea": "Implement a generator in agent-tools that writes .claude, .cursor, .agents, and RULES_INDEX.md from canonical rules",
+          "class": "good",
+          "file_line": "rules-cross-platform-generator.plan.md:42-44"
+        },
+        {
+          "idea": "Add a check mode (CI/pre-commit) that fails on drift without rewriting — detect-only separation from generate",
+          "class": "good",
+          "file_line": "rules-cross-platform-generator.plan.md:45"
+        },
+        {
+          "idea": "Define explicit canonical rule metadata contract required by every generated form rather than per-platform exceptions",
+          "class": "good",
+          "file_line": "rules-cross-platform-generator.plan.md:41"
+        },
+        {
+          "idea": "Backfill existing rules incrementally or in one focused migration slice",
+          "class": "good",
+          "file_line": "rules-cross-platform-generator.plan.md:46"
+        },
+        {
+          "idea": "Update rule-authoring documentation to use the generator instead of hand mirroring",
+          "class": "good",
+          "file_line": "rules-cross-platform-generator.plan.md:47-48"
+        },
+        {
+          "idea": "Promote with a first check-only tranche if whole-estate backfill is too large for one slice",
+          "class": "good",
+          "file_line": "rules-cross-platform-generator.plan.md:86-87"
+        },
+        {
+          "idea": "Keep generator output deterministic to preserve concise review diffs",
+          "class": "good",
+          "file_line": "rules-cross-platform-generator.plan.md:84-85"
+        },
+        {
+          "idea": "Integrate drift check at portability:check / repo validators as a beneficial (non-blocking) dependency",
+          "class": "speculative",
+          "file_line": "rules-cross-platform-generator.plan.md:63"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "future",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (V0 §2.1, LOCKED — required for all plans)",
+          "file_line": ".agent/plans/agent-tooling/future/rules-cross-platform-generator.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `node_type: plan` (V0 §2.1, LOCKED — required for all plans)",
+          "file_line": ".agent/plans/agent-tooling/future/rules-cross-platform-generator.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `kind` (V0 §2.2, LOCKED — required for all plans; inferred as `strategic` from `status: future` via §3.5 but not declared)",
+          "file_line": ".agent/plans/agent-tooling/future/rules-cross-platform-generator.plan.md:4"
+        },
+        {
+          "issue": "Dropped field `status: future` present (V0 §2.5 — `status` is explicitly dropped; replaced by `kind` / `disposition` / `gate`)",
+          "file_line": ".agent/plans/agent-tooling/future/rules-cross-platform-generator.plan.md:4"
+        },
+        {
+          "issue": "Dropped field `type: agent-tooling` present (V0 §2.5 — `type` dropped as free-label; replaced by `node_type` + `kind`)",
+          "file_line": ".agent/plans/agent-tooling/future/rules-cross-platform-generator.plan.md:5"
+        },
+        {
+          "issue": "Dropped field `isProject: false` present (V0 §2.5 — explicitly dropped; subsumed by `projects_to` edge)",
+          "file_line": ".agent/plans/agent-tooling/future/rules-cross-platform-generator.plan.md:8"
+        },
+        {
+          "issue": "Missing required field `promotion_trigger` for `strategic` plans (V0 §2.4, LOCKED — body has a Promotion Trigger section but it is not in frontmatter)",
+          "file_line": ".agent/plans/agent-tooling/future/rules-cross-platform-generator.plan.md:88"
+        },
+        {
+          "issue": "No `serves_strategic_choice` edge in frontmatter (V0 §2.3 — recommended for strategic; required for executable; no sentinel `pending` declared)",
+          "file_line": ".agent/plans/agent-tooling/future/rules-cross-platform-generator.plan.md:1"
+        },
+        {
+          "issue": "Dependencies table in body (lines 60–65) is not expressed as V0 `depends_on` frontmatter edges with `kind: blocking | beneficial` (V0 §2.3, §4)",
+          "file_line": ".agent/plans/agent-tooling/future/rules-cross-platform-generator.plan.md:60"
+        }
+      ],
+      "unclassified_keys": [
+        "status",
+        "type",
+        "isProject"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The canonical metadata contract for generated forms is not defined in the plan body. Lines 35-38 describe the mechanism at abstraction level (read frontmatter, emit platform files) but the plan never specifies what frontmatter fields are required or optional. A generator implemented without a locked schema will produce ad-hoc metadata creep as each platform surfaces its own requirements, violating the single-source intent. The risk entry at line 80 acknowledges this but defers the cure to execution rather than requiring the contract to be drafted at plan-promotion time.",
+          "file_line": ".agent/plans/agent-tooling/future/rules-cross-platform-generator.plan.md:35-38"
+        },
+        {
+          "severity": "low",
+          "claim": "The dependency table (lines 60-64) lists `portability:check` as beneficial but does not note whether the generator command itself should be positioned inside or outside the existing `portability:check` gate. If the generator is a separate command, both the CI wiring and pre-commit hook targets will need explicit placement decisions at promotion time. Without this the drift-check (SAC item 2, line 71) may be implemented but never wired into the blocking gate chain.",
+          "file_line": ".agent/plans/agent-tooling/future/rules-cross-platform-generator.plan.md:63"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly confines itself to file-generation and does not touch loader mechanics or context-budget decisions (lines 53-55). The boundary is architecturally sound and keeps this plan composable with the context-budget work referenced in the same boundary clause.",
+          "file_line": ".agent/plans/agent-tooling/future/rules-cross-platform-generator.plan.md:53-55"
+        },
+        {
+          "severity": "info",
+          "claim": "Backfill strategy is acknowledged (line 47) with a migration-slice option at line 86. The incremental-or-batch optionality is appropriate for a future brief and does not need resolution before promotion.",
+          "file_line": ".agent/plans/agent-tooling/future/rules-cross-platform-generator.plan.md:47"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": [
+        {
+          "claim": "pending-graduations.md points here as the durable implementation lane for the triggered generator item (cited at rules-cross-platform-generator.plan.md:75-77)",
+          "verdict": "refuted",
+          "confidence": "high",
+          "evidence": "pending-graduations.md:69-113 (drained 2026-06-19; three live items, none generator-related; no pointer to this plan); plan lines 75-77 are AC5 (a target), not evidence of an existing pointer"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/future/skills-eval-harness.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "FUTURE strategic brief — not executable until promoted to current/",
+          "file_line": "skills-eval-harness.plan.md:11"
+        },
+        {
+          "claim": "Promotion trigger defined with three distinct conditions",
+          "file_line": "skills-eval-harness.plan.md:108-110"
+        },
+        {
+          "claim": "No blocking dependencies; can be built against skills as they are",
+          "file_line": "skills-eval-harness.plan.md:81-82"
+        },
+        {
+          "claim": "Content is coherent, actionable at promotion, and encodes a genuine gap (no evals exist)",
+          "file_line": "skills-eval-harness.plan.md:22-23"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan identifies a real, verifiable gap (zero evals for owned skills, file:22-23), proposes a proven external model as the mechanism (oak-skills evals.json pattern, file:33-36), scopes conservatively with a three-skill pilot (file:58-61), defers execution decisions appropriately to promotion (file:115-116), and articulates clear success signals (file:88-93). No speculative or bad ideas dominate; the build-vs-buy deferral is appropriately cautious rather than hand-wavy.",
+      "content_quality": "strong",
+      "content_quality_note": "All required plan sections are present and substantive. The problem statement (file:22-31) is precise and evidence-grounded (audit findings cited). The mechanism section (file:44-52) explains the eval model with enough detail to act on at promotion. Non-goals are clearly bounded (file:70-78). Risks include concrete mitigations (file:95-105). The only minor gap: the agentskills.io URLs (file:14-16) are external; they are plausible but unverified at read time — an assumptions review is warranted before promotion.",
+      "salvage_value": [
+        {
+          "idea": "Introduce trigger-rate evals for model-activated owned skills to objectively measure description quality",
+          "class": "good",
+          "file_line": "skills-eval-harness.plan.md:24-30"
+        },
+        {
+          "idea": "Introduce output-quality (with-skill vs no-skill baseline) evals for artefact-producing skills",
+          "class": "good",
+          "file_line": "skills-eval-harness.plan.md:31-36"
+        },
+        {
+          "idea": "Pilot on the three audit-flagged thin-description skills: gates, plan, metacognition",
+          "class": "good",
+          "file_line": "skills-eval-harness.plan.md:58-61"
+        },
+        {
+          "idea": "Build-vs-buy decision at promotion: port oak-skills runner vs build thin monorepo harness",
+          "class": "good",
+          "file_line": "skills-eval-harness.plan.md:56-57"
+        },
+        {
+          "idea": "Weight trigger evals for process/orchestration skills; scope quality evals only to artefact-producing skills",
+          "class": "good",
+          "file_line": "skills-eval-harness.plan.md:63-65"
+        },
+        {
+          "idea": "Run each query N times and threshold on rate to mitigate model nondeterminism",
+          "class": "good",
+          "file_line": "skills-eval-harness.plan.md:101-103"
+        },
+        {
+          "idea": "Re-run evals before and after oversized-core decomposition to prove no behaviour regressed",
+          "class": "good",
+          "file_line": "skills-eval-harness.plan.md:85-87"
+        },
+        {
+          "idea": "Record per-skill trigger rate and with/without-skill delta as a persistent regression baseline",
+          "class": "good",
+          "file_line": "skills-eval-harness.plan.md:66-67"
+        },
+        {
+          "idea": "Do not rewrite descriptions before the eval loop exists to measure the change",
+          "class": "good",
+          "file_line": "skills-eval-harness.plan.md:77-78"
+        },
+        {
+          "idea": "Defer all execution decisions (substrate, assertion design, runner shape) to promotion",
+          "class": "good",
+          "file_line": "skills-eval-harness.plan.md:113-116"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "future",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, required for all plans)",
+          "file_line": "skills-eval-harness.plan.md:1-8 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `node_type` (LOCKED literal `\"plan\"`, required for all plans)",
+          "file_line": "skills-eval-harness.plan.md:1-8 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED enum `strategic | executable`, required for all plans); inferred `strategic` from body line 14 and `status: future`",
+          "file_line": "skills-eval-harness.plan.md:1-8 (frontmatter block)"
+        },
+        {
+          "issue": "Missing `promotion_trigger` field (LOCKED, required for `strategic` plans); the condition exists in body prose but is absent from frontmatter",
+          "file_line": "skills-eval-harness.plan.md:108-110 (body section 'Promotion Trigger')"
+        },
+        {
+          "issue": "Dropped field `status: future` is present; V0 §2.5 explicitly drops `status` — its readiness sense maps to `kind: strategic` per §3.5 migration map",
+          "file_line": "skills-eval-harness.plan.md:4"
+        },
+        {
+          "issue": "Dropped field `type: agent-tooling` is present; V0 §2.5 explicitly drops `type` as free-label, replaced by `node_type` + `kind`",
+          "file_line": "skills-eval-harness.plan.md:5"
+        },
+        {
+          "issue": "Dropped field `isProject: false` is present; V0 §2.5 explicitly drops `isProject` (subsumed by `projects_to` edge)",
+          "file_line": "skills-eval-harness.plan.md:7"
+        },
+        {
+          "issue": "No V0 typed edges declared in frontmatter (`serves_strategic_choice` recommended for strategic plans; no `depends_on`, `thread`, or other edges present)",
+          "file_line": "skills-eval-harness.plan.md:1-8 (frontmatter block)"
+        }
+      ],
+      "unclassified_keys": [
+        "type",
+        "isProject"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "The plan cites agentskills.io URLs as authoritative guidance sources (lines 15-16: https://agentskills.io/skill-creation/optimizing-descriptions and https://agentskills.io/skill-creation/evaluating-skills). These are external vendor URLs whose availability, content stability, and licence terms are unverified in-repo. The mechanism and means sections (lines 43-66) inherit their validity from this source. If the URLs are dead, paywalled, or have changed content since the June 2026 audit, the design rationale is ungrounded.",
+          "file_line": "skills-eval-harness.plan.md:15-16"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan assumes the oak-skills repo (https://github.com/oaknational/oak-skills) exposes a reusable evals.json shape and runner that can be ported or adopted into the monorepo (lines 19, 56-57). The MEMORY.md entry 'oak-skills library' (project_private_skills_library.md) notes the repo is private and that integration is 'not directed'. No verification that the runner is extractable, that its licence permits reuse in this monorepo, or that it is maintained. The build-vs-buy step is deferred to promotion (line 57), but if the runner is not portable the substrate assumption underpins the entire Means section.",
+          "file_line": "skills-eval-harness.plan.md:56-57"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan assumes that model-activation of skills in this monorepo is governed by description text that a model routes against (lines 26-30, 43-50). This assumes the Claude Code harness routes skill activation purely by description similarity. If the harness uses explicit slash-command invocation or a fixed registry rather than LLM-based trigger matching, trigger evals as described would measure nothing meaningful. The triggering mechanism for .agent/skills/ skills is not verified in the plan.",
+          "file_line": "skills-eval-harness.plan.md:26-30"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan assumes that 'most monorepo skills are workflow-orchestration' and therefore trigger evals carry more value than quality evals (lines 63-65). This claim is stated as rationale for scope-limiting quality evals, but no skills inventory is cited. If a significant fraction of skills do produce inspectable artefacts, the scoping decision is wrong. The audit referenced at line 13 is attributed to the same session that produced this brief; it is not an independently verifiable document cited by path.",
+          "file_line": "skills-eval-harness.plan.md:63-65"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan assumes eval flakiness is mitigated by running each query N times and thresholding on rate (lines 101-103). The value of N is unspecified and deferred. For a future brief this is acceptable, but if N is later set too low the flakiness mitigation is illusory. This should be specified at promotion.",
+          "file_line": "skills-eval-harness.plan.md:101-103"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan assumes the three 'audit-flagged weak-description skills' (gates, plan, metacognition) remain weak-description at the time of promotion (line 59). The audit was conducted on 2026-06-14 (line 13). If description improvements are made independently before promotion, the pilot scope loses its rationale. There is no mechanism in the plan to re-verify the pilot target list at promotion.",
+          "file_line": "skills-eval-harness.plan.md:59"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly defers all execution decisions to promotion (lines 114-116) and self-identifies as a strategic brief. This is consistent with the plan's future status and the estate's promotion discipline.",
+          "file_line": "skills-eval-harness.plan.md:114-116"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/future/skills-oversized-core-decomposition.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan is explicitly parked as future pending a named, tracked blocking dependency (PDR-051 F-37), which is the correct lifecycle state — not an arbitrary deferral.",
+          "file_line": "skills-oversized-core-decomposition.plan.md:116-119"
+        },
+        {
+          "claim": "The four measured over-budget canonicals and their line counts are load-bearing data not recorded elsewhere in the plan estate as described here.",
+          "file_line": "skills-oversized-core-decomposition.plan.md:26-33"
+        },
+        {
+          "claim": "Promotion trigger is explicit and actionable, so the plan will self-advance when its gate clears — no intervention needed.",
+          "file_line": "skills-oversized-core-decomposition.plan.md:115-119"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan correctly identifies a real, measurable cost problem (context budget blown on every skill activation), names the concrete blocker that prevents execution (generator gap F-37, line 84-91), and defers appropriately rather than proposing a workaround. The convention-decision framing (shared/ vs references/, line 66-68) is a genuine architectural question that needs a single owner decision. No padding, no speculative scope, no bad ideas.",
+      "content_quality": "strong",
+      "content_quality_note": "Every section is evidence-grounded: line counts with measurement date (line 26-33), concrete template reference (line 53-56), explicit blocking dependency with PDR identifier (line 84-91), risk-with-mitigation pairs (line 105-113), and a crisp promotion trigger (line 115-119). The execution note at line 122-125 correctly defers implementation decisions to promotion time. No filler.",
+      "salvage_value": [
+        {
+          "idea": "Four specific over-budget canonicals identified by name and measured line count (start-right-team 802, consolidate-docs 793, session-handoff 714, commit 652)",
+          "class": "good",
+          "file_line": "skills-oversized-core-decomposition.plan.md:26-33"
+        },
+        {
+          "idea": "Progressive disclosure split: thin always-loaded body plus on-demand references/ files with explicit when-to-load triggers",
+          "class": "good",
+          "file_line": "skills-oversized-core-decomposition.plan.md:54-59"
+        },
+        {
+          "idea": "oak-accessibility/SKILL.md as concrete decomposition template",
+          "class": "good",
+          "file_line": "skills-oversized-core-decomposition.plan.md:53-56"
+        },
+        {
+          "idea": "Generator must support bytewise supporting-file copy before references/ can be added to canonicals (PDR-051 F-37 #4)",
+          "class": "good",
+          "file_line": "skills-oversized-core-decomposition.plan.md:84-91"
+        },
+        {
+          "idea": "shared/ vs references/ convention must be decided once at promotion and applied uniformly, not left inconsistent",
+          "class": "good",
+          "file_line": "skills-oversized-core-decomposition.plan.md:66-68"
+        },
+        {
+          "idea": "Minimum shippable shape without F-37 resolution: adopt references/ (spec name) and note shared/ reconciliation as follow-up",
+          "class": "good",
+          "file_line": "skills-oversized-core-decomposition.plan.md:93-94"
+        },
+        {
+          "idea": "Over-splitting risk: moving always-needed content behind a trigger the agent fails to fire silently degrades behaviour",
+          "class": "good",
+          "file_line": "skills-oversized-core-decomposition.plan.md:105-107"
+        },
+        {
+          "idea": "Explicit promotion trigger gated on F-37 closure or explicit waiver plus convention settlement",
+          "class": "good",
+          "file_line": "skills-oversized-core-decomposition.plan.md:115-119"
+        },
+        {
+          "idea": "Execution decisions (per-skill split boundaries, reference file names, convention choice) deferred to promotion time",
+          "class": "good",
+          "file_line": "skills-oversized-core-decomposition.plan.md:122-125"
+        },
+        {
+          "idea": "Skill evals are out of scope and owned by a separate brief (skills-eval-harness.plan.md)",
+          "class": "good",
+          "file_line": "skills-oversized-core-decomposition.plan.md:80"
+        },
+        {
+          "idea": "External citations to agentskills.io spec and best-practices are unpinned live URLs that could drift",
+          "class": "speculative",
+          "file_line": "skills-oversized-core-decomposition.plan.md:15-17"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "future",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "id absent — required for all plan nodes (LOCKED, V0 §2.1)",
+          "file_line": "file:1-8 (frontmatter block)"
+        },
+        {
+          "issue": "node_type absent — required for all plan nodes (LOCKED, V0 §2.1)",
+          "file_line": "file:1-8 (frontmatter block)"
+        },
+        {
+          "issue": "kind absent — required for all plan nodes (LOCKED, V0 §2.2); inferred value is 'strategic' from folder (future/) and body line 15",
+          "file_line": "file:1-8 (frontmatter block)"
+        },
+        {
+          "issue": "status: future present — V0 §2.5 explicitly drops 'status'; split into kind/disposition/gate axes",
+          "file_line": "file:4"
+        },
+        {
+          "issue": "type: agent-tooling present — V0 §2.5 drops 'type' as free-label; replaced by node_type + kind",
+          "file_line": "file:5"
+        },
+        {
+          "issue": "isProject: false present — V0 §2.5 explicitly drops isProject (subsumed by projects_to edge)",
+          "file_line": "file:7"
+        },
+        {
+          "issue": "promotion_trigger present in body only, not in frontmatter — V0 §2.4 (line 158) requires it as a frontmatter field for kind: strategic plans",
+          "file_line": "file:115-119 (body section)"
+        }
+      ],
+      "unclassified_keys": [
+        "type"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "The blocking dependency on the generator's bytewise supporting-file copy (PDR-051 §Required gap #4, F-37) is correctly named but the plan does not describe what verification gate would confirm that gap is closed before promotion. The promotion trigger at line 115-119 references the gap closure but provides no pointer to where F-37 live state is tracked, meaning a future promoter could miss whether the gap was closed or merely waived, silently violating the two-surface contract (PDR-051).",
+          "file_line": "skills-oversized-core-decomposition.plan.md:86-93,115-119"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan defers the shared/ vs references/ convention decision to promotion time (line 69, line 93-94, line 109-110). This is architecturally fragile: the convention affects the shared infrastructure used by start-right-quick, go, complex-merge, and start-right-thorough (line 66-68) which are not in scope for this plan. A promotion-time decision risks producing an inconsistent estate if those out-of-scope skills are not simultaneously migrated. The plan notes this as a risk but does not require a scope expansion decision or ADR before execution.",
+          "file_line": "skills-oversized-core-decomposition.plan.md:66-70,107-110,123-125"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan asserts the external oak-skills repo 'already demonstrates the target pattern' (line 39, 55-58) as architectural justification, but the source reference is a GitHub URL (line 17) with no pinned SHA or version. By the time this plan promotes, the referenced pattern could have changed. The architectural basis is not stable.",
+          "file_line": "skills-oversized-core-decomposition.plan.md:14-18,38-39,55-58"
+        },
+        {
+          "severity": "low",
+          "claim": "The success criterion 'per-activation token cost measurably reduced' (line 102) has no baseline measurement recorded in the plan. The audit lines are listed (line 26-33) but token counts are not. Without a baseline, the reduction criterion is unverifiable at acceptance time.",
+          "file_line": "skills-oversized-core-decomposition.plan.md:24-33,98-102"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly gates execution decisions (split boundaries, reference file names, TDD cycle structure) to promotion time (line 123-125). This is sound future-brief discipline and appropriate for the current lifecycle state.",
+          "file_line": "skills-oversized-core-decomposition.plan.md:123-125"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": [
+        {
+          "claim": "The plan cannot execute until PDR-051 supporting-file-copy gap (F-37 #4) is closed or explicitly waived — adding references/ before that gap silently violates the two-surface contract. (cited at skills-oversized-core-decomposition.plan.md:84-91)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "skills-oversized-core-decomposition.plan.md:84-91 (Blocking dependency text); corroborated by skills-standardisation-and-adapter-generator.plan.md:231 (gap ledger #4 'Bytewise supporting-file copy ... Not implemented ... Blocks ../future/skills-oversized-core-decomposition.plan.md'); frictions-register.md:1160-1184 (F-37 'no bytewise supporting-file copy'); generator.ts:54-214 (emits redirect stubs only, no references/assets copy logic); find .agent/skills -name references returns nothing"
+        }
+      ]
+    }
+  ]
+}
