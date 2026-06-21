@@ -64,3 +64,18 @@ stable point is neither pole: it is the **read-gate** (gate every substantive cl
 2026-06-20 (Kayak seeks Coral, owner re-calibration). Refines `user-collaboration.md`
 §Risk-and-Decisions; sibling: [[passive-guidance-loses-to-artefact-gravity]],
 [[feedback_ground_convenient_claims]].
+
+## For an intent-alignment check, source intent from the principal — records are a drift-prone projection
+
+When asked whether a big apparatus (plan, schema, survey, pipeline, restructure) will deliver
+the owner's *intent*, do not reconstruct "the intent" from the records and grade the apparatus
+against that. The records are a projection authored across many sessions each grounding on the
+last, so records and apparatus can be internally consistent yet *collectively adrift* from the
+principal — a circular check. Elicit the intent from the principal (what success looks like;
+the feared failure); treat records as hypothesis-to-verify against that source. A
+context-isolated reader can verify artefact *consistency*, never intent-*fidelity*. Reading
+records *feels* like grounding — that fluency is the tripwire to re-ground at the source. The
+same pathology can sit one level down in the apparatus (measuring the model, not the intent);
+pair every form/conformance acceptance with a substance gate. Source 2026-06-21 (Ganymede
+herds Penumbra); worked artefact: `vision-strategy-and-plan-estate.plan.md` Body-3 substance
+re-aim. Graduation candidate: PDR. Sibling: [[passive-guidance-loses-to-artefact-gravity]].
