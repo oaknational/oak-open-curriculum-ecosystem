@@ -557,5 +557,12 @@ V0 succeeds as a lens, not as a finished standard. It is accepted when:
    [deep-survey brief](./future/deep-plan-estate-survey.plan.md) can read the
    estate against V0 and emit additive refinements → V1.
 
+**Conformance is necessary, not sufficient.** This schema scores a plan's *shape*, not its
+*substance*: a fully-conformant plan can still be substantively poor or strategically
+ineffective. V0 is the form lens; the survey's substance signals (a content-quality verdict and the
+idea-level good/speculative/bad classification, with per-idea salvage) and the restructure's
+substance gate judge whether the content is good and the corpus is effective. 100% conformance is the scaffolding the substance work stands on,
+never the goal.
+
 When the Stage-2 survey closes, its additive refinements are folded in and the
 result is ratified as **V1**.

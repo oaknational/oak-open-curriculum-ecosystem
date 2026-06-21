@@ -408,11 +408,15 @@ rewrite-to-standard* depend on the strategy's structure and wait for Body 2. The
 **not** — it can proceed in parallel now (`estate-restructure-prep`), so the volume
 de-risks without the structure-dependent work jumping ahead of the strategy.
 
-**Value-preservation is mechanised:** every plan removed or moved carries a **recorded
-disposition** — `re-housed` (new lane), `extracted` (concept captured in a named live
-plan/doc), `superseded` (named successor), or `archived`. The disposition is a supersession
-mapping on the archived artefact or in the receiving archive's README (the consolidation
-discipline — never a standalone ledger). A removal without a recorded disposition is a defect.
+**Value-preservation is mechanised at the idea level:** the survey captures every plan's
+ideas at idea-granularity (good / speculative / bad, with provenance), and every idea
+removed, re-homed, or isolated carries a **recorded disposition** — `re-housed` (new lane),
+`extracted` (idea captured in a named live plan/doc), `superseded` (named successor),
+`isolated` (speculative, moved outside the estate), or `archived`. The disposition is a
+supersession mapping on the archived artefact or in the receiving archive's README (the
+consolidation discipline — never a standalone ledger). A removal without a recorded
+disposition is a defect, and the **no-loss audit** (see Acceptance) turns the dispositions
+into a verifiable proof that no good or speculative idea was lost.
 
 This body becomes its **own executable plan** (own home, workstreams, TDD-not-
 applicable proof contract) when it begins; this governance file scopes it until then. When that executable plan exists,
@@ -435,6 +439,16 @@ permanent documentation extracted; complete plans archived; partial plans' compl
 work extracted and archived; survivors rewritten to the common standard; this plan
 and related plans have a decided home; the ungated collection no longer exists; every
 removed/moved item has a recorded disposition (supersession mapping; zero unaccounted removals).
+**Form-conformance is necessary but not sufficient — the substance gate:** beyond
+traceability, reachability, schema-conformance, and recorded dispositions, a reviewer
+confirms with evidence that (a) every surviving plan's *content is good*, not merely present
+and conformant (the survey's content-quality verdict on each plan's ideas); (b) the corpus *effectively implements* each
+strategic choice — adequate serving plans that will achieve it, gaps closed with authored new
+plans (the Pass-2 effectiveness verdict), effective not merely aligned; and (c) the bad is
+genuinely gone from the live estate. A restructure that passes the form checks but fails this
+gate is not done. **No-loss is proven, not asserted:** a no-loss audit report verifies that
+every removed / archived / extracted / isolated idea's salvage value is conserved in a named
+live home — the accounting (every removal has a disposition) made *demonstrable*.
 
 ### Body 3 — Approach (the *how*) — recorded 2026-06-20
 
@@ -474,9 +488,13 @@ registry, validator, and observe→warn→enforce mechanics live in that plan, n
 1. **The plan standard (Anchor B).**
 2. **A fresh deep survey of every plan and plan-adjacent surface** — the 2026-06-15
    survey expanded from census/reachability into a **conformance-and-traceability
-   inventory**: per-plan standard-conformance, classification (keep / rewrite /
-   archive-complete / delete-with-disposition / rehome-concept / new-for-gap), and
-   traceability resolution. The inventory is the work-list the per-plan pass consumes.
+   inventory** (per-plan standard-conformance and traceability resolution) **plus an
+   idea-granular substance inventory** — each plan's constituent ideas classified
+   good / speculative / bad with `file:line` evidence and provenance, plus a per-plan
+   content-quality verdict. The two inventories are the work-list the **two-pass
+   consolidation** consumes: the conformance inventory scopes plan-level
+   rewrite-to-standard; the substance inventory drives the idea-level
+   decompose-and-re-compose.
    (2026-06-15 figures are stale — the estate has grown ~33% to ~550 non-archive docs;
    the qualitative debt is unchanged, re-verified 2026-06-20: the real survey figure was
    **149/355 unlinked**, 59 stale executables, 14 openers, 3 missing lane READMEs, a
@@ -523,10 +541,30 @@ reachability edges — not a typed-graph cathedral. The registry file and valida
 Body-3 execution**, gated on the plan standard and the fresh survey; this entry fixes their
 design, not their build.
 
-**The per-plan pass is judgment-heavy, not mechanical** — classification,
-concept-extraction (the value-loss risk; knowledge-preservation is absolute),
-rewrite-to-standard, traceability assignment — naturally a reviewed multi-agent pipeline
-over the deep-survey inventory.
+**The consolidation is two-pass, and the atomic unit is the IDEA, not the plan**
+(owner, 2026-06-21). A plan is a mixed container — one plan can hold a good idea, two bad
+ones, and a speculative aside — so classifying at the plan level structurally forces either
+residue (keep the plan, keep its bad ideas) or loss (bin the plan, lose its good idea). The
+restructure therefore curates at the idea level, in two passes over the deep-survey
+inventory:
+
+- **Pass 1 — decompose and sort.** Using the survey's idea-granular inventory (each plan's
+  constituent ideas classified `good | speculative | bad` with `file:line` evidence and
+  provenance), extract every idea into one of three buckets: **good** → extracted,
+  provenance-tracked, staged for re-composition; **speculative** → the isolated home
+  *outside* the planning estate; **bad** → removed via archive-with-disposition, with the
+  no-loss audit verifying the bad bucket holds no good or speculative idea.
+- **Pass 2 — re-compose.** Assemble the good bucket into new, strategy-aligned plans
+  organised `stream → thread → plan` by the strategic choice and visionary value each idea
+  serves; under-served choices get authored new plans (the *remix* — completeness, not merely
+  alignment). Every re-composed idea traces to its source (provenance), so Pass 2 authors a
+  new corpus without losing or distorting the ideas it carries.
+
+The seam (owner-confirmed): the **survey identifies** ideas read-only (its idea-inventory);
+the **consolidation extracts, sorts, and re-composes** (it owns the mutation). It is a
+reviewed multi-agent pipeline, judgment-heavy throughout — idea classification,
+idea-extraction (the value-loss risk; knowledge-preservation is absolute), re-composition,
+and traceability assignment.
 
 **Enforcement is the structural cure, not optional polish.** A validator (reachability +
 frontmatter conformance + traceability resolving to a real choice) wired into CI,
@@ -565,11 +603,17 @@ the owner / Oak):**
    standard as the per-plan pass processes them. New plans conform from creation (the validator
    blocks them); existing plans warn until the pass lands them, then global blocking (warn-first
    convention; the escalation to global blocking is a separate later decision).
-4. **Deletion bar — archive-by-default, reviewer-gated extraction.** Knowledge-preservation is
-   absolute: hard-delete is reserved for zero-value duplicates and empty shells; everything else
-   archives (with a recorded disposition) or extracts-then-archives. A reviewer confirms
-   value-capture **before** any archive/delete of a non-trivial plan — the value-loss gate on the
-   disposition mechanism above.
+4. **Idea-level trichotomy and the three buckets (owner, 2026-06-21).** Curation sorts
+   *ideas*, not plans, into three buckets with fixed homes: **good** → kept and remixed into the
+   re-composed corpus; **bad** → removed from the live estate via archive-with-disposition (out
+   of `.agent/plans/`'s live tree; recoverable record; not relabelled or rehomed within the
+   estate); **speculative** → preserved but isolated in a dedicated home *outside* the planning
+   estate (proposed `.agent/speculative/`, distinct from `future/`, which holds real
+   strategic-but-not-yet-executable plans). Embedded speculative *sections* of an otherwise-good
+   plan are extracted to that home, never silently dropped. Knowledge-preservation stays
+   absolute: a reviewer confirms value-capture **before** any removal of a non-trivial idea, and
+   the no-loss audit (above) proves every good and speculative idea reached a named live home.
+   Hard-delete is reserved for zero-value duplicates and empty shells.
 
 **Stays with the owner / Oak (not settled here):** the **strategy measures** (Oak
 analytics/research grounds the targets). (The search/graph question and the
@@ -773,6 +817,8 @@ acceptance is proven.
 | Strategy corpus authored in plain dev-doc voice | the editorial-tone directive applies to the strategy; "in the editorial voice" is an acceptance and proof condition |
 | The app silently re-acquires "first / more important" framing | the framing corrections are an explicit non-goal and a proof condition |
 | Restructure deletes value while "restructuring" | recorded disposition (supersession mapping per the consolidation discipline) — every removal carries one or it is a defect |
+| Restructure delivers theater — form without substance | the corpus becomes conformant, traceable, navigable, and fully dispositioned while content curation never happens and it only superficially implements the strategy. Mitigation: the substance gate (content-quality + per-choice effectiveness reviewer-confirmed; form-conformance necessary-not-sufficient); idea-level curation, not plan-level relabelling |
+| Re-composition (Pass 2) drifts from the source ideas | Pass 2 authors new plans from extracted ideas; mitigation: every re-composed idea traces to its source (provenance), the no-loss audit proves each good/speculative idea reached a named live home, and the substance gate confirms faithful carriage |
 | Over-structuring the approach itself | the could-it-be-simpler guard; collapse any layer that earns its keep only by symmetry |
 | New boundaries asserted before the strategy exists | the informational split — boundary work waits for Body 2; only read+extract+archive proceeds early |
 | Survey counts decay before Body 3 | re-verify counts before relying on them |
