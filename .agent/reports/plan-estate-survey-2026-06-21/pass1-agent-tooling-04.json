@@ -1,0 +1,2189 @@
+{
+  "batch_size": 12,
+  "plans_returned": 12,
+  "unreadable": [],
+  "null_holistic": [],
+  "results": [
+    {
+      "plan": ".agent/plans/agent-tooling/future/agent-classification-taxonomy.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Status is NOT STARTED with explicit promotion trigger criteria defined — plan is correctly parked in future/ pending sequencing prerequisites",
+          "file_line": "file:1-4, file:336-341"
+        },
+        {
+          "claim": "Adapter Generation plan is stated as a strongly recommended prerequisite before this plan executes (lines 302-303), and that plan is a sibling in the same future/ folder — sequencing is intact",
+          "file_line": "file:302-303"
+        },
+        {
+          "claim": "All seven workstreams are fully specified with task-level checklists — no workstream is partially complete, confirming NOT STARTED status",
+          "file_line": "file:194-298"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is well-grounded in ADR-135 (line 4), contains precise architectural analysis (platform sub-agent capability table, lines 49-54), makes the leaf-node constraint explicit and actionable (lines 58-65), distinguishes four separate axes (type, mode, tier, breadth) without conflating them (lines 141-164), and provides a ready-to-execute workstream breakdown with ordered dependencies (lines 299-312). The review depth selection matrix (lines 272-281) is particularly strong — concrete, actionable, and non-obvious.",
+      "content_quality": "strong",
+      "content_quality_note": "Plan demonstrates first-principles reasoning: platform capability constraints (lines 49-54) are derived from observed platform behaviour and directly shape the orchestration model. The dual-tier agent table (lines 129-136) is genuinely useful — not just a classification exercise but an operational guide. The remit-breadth vs review-depth disambiguation (lines 156-164) prevents a real conflation error present in surrounding docs. The escalation-recommendation contract (line 65) is precise and implementable.",
+      "salvage_value": [
+        {
+          "idea": "Three-tier agent model (Gateway / Fast / Deep Specialist) with each tier having distinct default reasoning weight",
+          "class": "good",
+          "file_line": "file:68-123"
+        },
+        {
+          "idea": "Fast-agent pattern as a generic category covering Sentinel, Scanner, Validator, Formatter subtypes with shared properties",
+          "class": "good",
+          "file_line": "file:78-99"
+        },
+        {
+          "idea": "Leaf-node orchestration constraint: reviewer/specialist sub-agents cannot invoke other sub-agents on any platform",
+          "class": "good",
+          "file_line": "file:58-60"
+        },
+        {
+          "idea": "Escalation-recommendation contract: leaf agents signal 'ESCALATION RECOMMENDED: <specialist-name> — <reason>' for out-of-scope concerns",
+          "class": "good",
+          "file_line": "file:63-65"
+        },
+        {
+          "idea": "Platform sub-agent capability table documenting cross-invocation support per platform (Claude Code, Cursor, Gemini CLI, Codex)",
+          "class": "good",
+          "file_line": "file:49-54"
+        },
+        {
+          "idea": "Dual-tier agent table: six agents (type-expert, docs-adr-expert, DevX, test-expert, TDD specialist, planning specialist) that operate in both sentinel and deep mode",
+          "class": "good",
+          "file_line": "file:129-136"
+        },
+        {
+          "idea": "Remit-breadth axis (broad-remit vs narrow-remit) as a dimension separate from review depth and mode",
+          "class": "good",
+          "file_line": "file:141-164"
+        },
+        {
+          "idea": "Review depth selection matrix: seven signal-to-depth mappings with rationale for when to invoke deep vs focused review",
+          "class": "good",
+          "file_line": "file:272-281"
+        },
+        {
+          "idea": "Canonical template specifies tier (deep/focused) not model; platform adapters map tiers to available models",
+          "class": "good",
+          "file_line": "file:266-268"
+        },
+        {
+          "idea": "Practice domain trio: practice.md (broad, gateway), practice-core.md (deep, Practice Core lifecycle), practice-applied.md (deep, repo operationalisation)",
+          "class": "good",
+          "file_line": "file:175-177"
+        },
+        {
+          "idea": "Fast-agent reporting template component with structured pass/fail and escalation-recommendation format",
+          "class": "good",
+          "file_line": "file:5, file:83-86"
+        },
+        {
+          "idea": "Specialist input contract component defining how specialists receive structured inputs",
+          "class": "good",
+          "file_line": "file:198-199"
+        },
+        {
+          "idea": "Mode components (explore.md, advise.md, review.md) as reusable canonical components",
+          "class": "good",
+          "file_line": "file:195-197"
+        },
+        {
+          "idea": "WS7 Practice Core integration as mandatory (not optional) workstream for all specialist improvements",
+          "class": "good",
+          "file_line": "file:289-298"
+        },
+        {
+          "idea": "Adapter Generation plan as strongly recommended prerequisite to reduce WS3 from manual rename of ~100 files to manifest update plus regeneration",
+          "class": "good",
+          "file_line": "file:302-304"
+        },
+        {
+          "idea": "review_depth frontmatter field (deep | focused | both) for agent templates",
+          "class": "good",
+          "file_line": "file:282"
+        },
+        {
+          "idea": "classification frontmatter field for all agent templates and platform wrappers",
+          "class": "good",
+          "file_line": "file:170"
+        },
+        {
+          "idea": "Drop -reviewer suffix from all agent names as part of rename",
+          "class": "good",
+          "file_line": "file:11, file:171"
+        },
+        {
+          "idea": "Cursor cross-vendor model selection for tier-to-model mapping documented in platform adapter",
+          "class": "speculative",
+          "file_line": "file:268"
+        },
+        {
+          "idea": "Sequencing constraint: this taxonomy work should wait until practice-and-process-structural-improvements, planning-specialist-capability, and agent-infrastructure-portability-remediation plans settle",
+          "class": "good",
+          "file_line": "file:29-43"
+        }
+      ],
+      "conformance": "no-frontmatter",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "NOT STARTED",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "No YAML frontmatter block present — entire metadata surface (id, node_type, name, overview, kind, last_updated, serves_strategic_choice) is absent. V0 §2 requires all these fields for every plan node.",
+          "file_line": "agent-classification-taxonomy.plan.md:1"
+        },
+        {
+          "issue": "V0-dropped field 'status' appears as inline body prose ('Status: NOT STARTED') rather than being replaced by the orthogonal axes (kind/disposition/gate). V0 §2.2 and §2.5 drop 'status' entirely.",
+          "file_line": "agent-classification-taxonomy.plan.md:3"
+        },
+        {
+          "issue": "V0-dropped field 'type'/'domain' appears as inline body prose ('Domain: Agentic Engineering Enhancements'). V0 §2.5 drops 'type' as a free-label.",
+          "file_line": "agent-classification-taxonomy.plan.md:5"
+        },
+        {
+          "issue": "typed edges (derives_from → ADR-135, depends_on → sibling plans, thread) are expressed as body prose and cross-references only — not declared as frontmatter edge fields. V0 §2.3 requires typed edge declarations in frontmatter.",
+          "file_line": "agent-classification-taxonomy.plan.md:4"
+        },
+        {
+          "issue": "serves_strategic_choice is absent (neither a published registry ID nor the 'pending' sentinel). V0 §2.3 requires this field for strategic plans (recommended) and executable plans (required).",
+          "file_line": "agent-classification-taxonomy.plan.md:1"
+        },
+        {
+          "issue": "Promotion trigger is present in body (lines 336–341, correct for strategic plans per V0 §2.4) but not as a frontmatter field — the body placement is acceptable but the frontmatter field itself is missing.",
+          "file_line": "agent-classification-taxonomy.plan.md:336"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "Two of the three sequencing dependency plans cited in 'Coordination With Current Expert-Expansion Plans' are at wrong relative paths. The plan links them as '../current/practice-and-process-structural-improvements.plan.md' and '../current/planning-specialist-capability.plan.md', but both files live under '.agent/plans/agentic-engineering-enhancements/current/', not '.agent/plans/agent-tooling/current/'. Broken dependency links undermine the stated sequencing safety, because an agent executing the plan cannot verify preconditions are met.",
+          "file_line": "agent-classification-taxonomy.plan.md:32-36"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan introduces a three-tier operational model (Gateway / Fast / Deep Specialist) with 'Sentinel / Scanner / Validator / Formatter' sub-types for Tier 2, but ADR-135 (the backing ADR) uses a four-value classification vocabulary: domain_expert, process_executor, specialist, and (implicitly) gateway-as-role-attribute. The plan's tier language is richer than ADR-135's classification vocabulary and the mapping between the two is never stated. 'Fast agent' types (Scanner, Validator, Formatter) do not appear in ADR-135's classification table. This leaves validation script authors without a canonical source of truth for which classification values are legal.",
+          "file_line": "agent-classification-taxonomy.plan.md:71-99"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan's 'Remit Breadth' section (lines 141-164) explicitly distinguishes 'broad/deep' in this plan from 'broad/deep' in ADR-135, noting ADR-135 uses the pair to describe knowledge coverage/concentration while this plan uses deep/focused for engagement depth. This is a correct distinction but it is documented only in the plan, not in ADR-135. If the plan executes and ADR-135 is not updated with this disambiguation, future readers of ADR-135 will encounter the same conflation the plan warns against.",
+          "file_line": "agent-classification-taxonomy.plan.md:157-164"
+        },
+        {
+          "severity": "info",
+          "claim": "The platform capability table (lines 49-55) correctly documents that Cursor sub-agent-to-sub-agent capability is 'Unclear / not documented'. This is an unresolved architectural unknown that affects WS3 (Platform Adapters) and WS6 depth selection: if Cursor sub-agents cannot invoke other sub-agents, the escalation-recommendation contract (leaf node model) must be verified to work within Cursor's Task tool semantics before WS3 proceeds. The risk register mentions platform-specific mode invocation but does not specifically flag the Cursor sub-agent chain gap.",
+          "file_line": "agent-classification-taxonomy.plan.md:49-55"
+        },
+        {
+          "severity": "info",
+          "claim": "WS5 (Documentation Propagation) is sequenced last and sweeps references including those added by WS6 and WS7. However, if WS3 (platform adapters) is executed by manifest regeneration (adapter-generation plan prerequisite), the adapter manifest itself becomes a durable cross-reference surface that WS5 must also sweep. This surface is not enumerated in the WS5 task list. The risk is low given the plan's prerequisite note, but the WS5 checklist should explicitly include the generated manifest.",
+          "file_line": "agent-classification-taxonomy.plan.md:239-249"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan is explicitly marked STRATEGIC / FUTURE with concrete promotion triggers; it is not complete and not an orphan.",
+          "file_line": "9"
+        },
+        {
+          "claim": "The five threads are separable and each identified with live evidence dated 2026-04-28; the brief encodes real session friction not yet addressed.",
+          "file_line": "58-113"
+        },
+        {
+          "claim": "Scope boundary added 2026-05-25 demonstrates the plan is actively maintained, not abandoned.",
+          "file_line": "48-57"
+        },
+        {
+          "claim": "Promotion trigger criteria are evidence-calibrated with explicit thresholds, making the plan actionable when the threshold is crossed.",
+          "file_line": "246-258"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every thread is grounded in a specific observed failure (lines 58-132 with session date and PR reference). The five threads are cleanly scoped, non-overlapping with cited sibling plans, and the minimal-primitive constraint (lines 144-155) shows disciplined design thinking. The risk table (lines 232-240) addresses real engineering tensions (scope-creep into decision threads, log pollution, misuse as a soft lock) with credible mitigations. The stance-staleness thread (lines 116-131) is an unusual insight: a behavioural doctrine gap rather than a code gap.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan's evidence section (lines 58-132) is unusually concrete: named session, named PR, named flag (`--help` rejection at line 65), named CLI dispatch key pattern (line 69), specific failure scenario with actor and timeline (lines 95-98). The promotion trigger section (lines 219-228) encodes observational thresholds rather than arbitrary dates, which is architecturally sound. The Notes for Promotion Session (lines 269-284) are a genuine pre-promotion checklist, not boilerplate. The scope boundary with the paired human-composer-tui plan (lines 48-57) is a clean, citable boundary decision.",
+      "salvage_value": [
+        {
+          "idea": "Fix --help flag rejection in cli-options.ts (currently treats any --token as a flag-value pair with no --help special case)",
+          "class": "good",
+          "file_line": "65-67"
+        },
+        {
+          "idea": "Improve dispatch usage line to enumerate actions and flags, not just topic groups",
+          "class": "good",
+          "file_line": "68-71"
+        },
+        {
+          "idea": "Make identity preflight env-driven when PRACTICE_AGENT_SESSION_ID_CLAUDE is set, removing redundant --platform/--model flags",
+          "class": "good",
+          "file_line": "72-75"
+        },
+        {
+          "idea": "Add bulk file claim shape (stdin, JSON --areas, or --files-from) to claims open for multi-file clusters",
+          "class": "good",
+          "file_line": "76-80"
+        },
+        {
+          "idea": "Add whoami action to CLI for one-line identity check without the full JSON preflight payload",
+          "class": "good",
+          "file_line": "81-83"
+        },
+        {
+          "idea": "Add in_response_to field (event_id reference) to comms event schema as a minor-version bump",
+          "class": "good",
+          "file_line": "89-93, 200-203"
+        },
+        {
+          "idea": "Add audience field (free-text thread or agent name) to comms event schema",
+          "class": "good",
+          "file_line": "89-93"
+        },
+        {
+          "idea": "Add optional response_required_by TTL field to comms event schema",
+          "class": "speculative",
+          "file_line": "89-93"
+        },
+        {
+          "idea": "Extend consolidate-docs surface to enumerate open cross-thread requests (events with audience + in_response_to without a matching reply)",
+          "class": "good",
+          "file_line": "150-152, 205-209"
+        },
+        {
+          "idea": "Standardise session-open liveness emission in start-right-quick and start-right-thorough skills as a baseline CLI invocation",
+          "class": "good",
+          "file_line": "104-113, 149, 210-213"
+        },
+        {
+          "idea": "Add claims overlap --files CLI query that surfaces exact overlap candidates and their claim_id before claim creation",
+          "class": "good",
+          "file_line": "134-140, 165-166"
+        },
+        {
+          "idea": "Encode stance-staleness mitigation as doctrine in agent-collaboration directive: any commitment-shaped stance re-fetches immediately before reporting",
+          "class": "good",
+          "file_line": "116-131, 153-155"
+        },
+        {
+          "idea": "Group consecutive same-author liveness events in the shared-comms-log render to reduce log clutter",
+          "class": "speculative",
+          "file_line": "237"
+        },
+        {
+          "idea": "Suppress liveness-only events older than 24h in the consolidate-docs view",
+          "class": "speculative",
+          "file_line": "237"
+        },
+        {
+          "idea": "Document overlap query as a coordination signal only, never a soft lock, with prescribed prose output",
+          "class": "good",
+          "file_line": "238"
+        },
+        {
+          "idea": "Recommend narrowest-slice-first promotion strategy: correlation primitive before CLI ergonomics because correlation failure is silent",
+          "class": "good",
+          "file_line": "258-263"
+        },
+        {
+          "idea": "Encode promotion trigger thresholds as observational evidence counts (second incident for most threads, first incident for overlap) rather than arbitrary dates",
+          "class": "good",
+          "file_line": "219-228"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "📋 STRATEGIC / FUTURE",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (kebab slug, stable) — required for all plan nodes",
+          "file_line": "agent-tooling/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `node_type: \"plan\"` — the registry discriminator required for all plan nodes",
+          "file_line": "agent-tooling/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `kind` — replaces readiness senses of `status:`; required for all plan nodes (LOCKED)",
+          "file_line": "agent-tooling/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `last_updated` (ISO date) — required for all plan nodes (LOCKED)",
+          "file_line": "agent-tooling/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md:1"
+        },
+        {
+          "issue": "`isProject: false` present — explicitly dropped in V0 §2.5 (subsumed by `projects_to` edge)",
+          "file_line": "agent-tooling/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md:5"
+        },
+        {
+          "issue": "Readiness/execution state expressed as in-body prose `**Status**: 📋 STRATEGIC / FUTURE` rather than frontmatter `kind:` field — V0 §2.2 and §3.5 replace `status:` with orthogonal axes",
+          "file_line": "agent-tooling/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md:9"
+        },
+        {
+          "issue": "No `serves_strategic_choice` edge declared — recommended for strategic plans, required for executable; absent from frontmatter entirely",
+          "file_line": "agent-tooling/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md:1"
+        }
+      ],
+      "unclassified_keys": [
+        "isProject"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan defers verification of the comms event schema path to promotion time ('if present (verify at promotion)' at line 203), but the schema is load-bearing for the correlation primitive design. If the schema does not exist at that path, the minor-version-bump assumption collapses and the primitive may require a more invasive change. The architectural assumption should be verified before the plan enters 'current/' execution.",
+          "file_line": "agent-coordination-cli-ergonomics-and-request-correlation.plan.md:203"
+        },
+        {
+          "severity": "low",
+          "claim": "The correlation primitive fields ('in_response_to', 'audience', optional 'response_required_by') are declared minimal and free-text at line 235, but the plan does not specify how the consolidate-docs open-requests view distinguishes a 'responded' request from an 'open' one — the only termination signal for an open request would have to come from 'in_response_to' on a reply event. That assumes reply events are reliably authored; if an agent closes a request via a comms event that does not carry 'in_response_to', the open-request index will accumulate stale entries. The indexing design at render time (line 208) does not address this staleness path.",
+          "file_line": "agent-coordination-cli-ergonomics-and-request-correlation.plan.md:208-209"
+        },
+        {
+          "severity": "low",
+          "claim": "Session-open liveness emission is described as depending on a 'stable hook to inject a CLI invocation' into start-right-quick and start-right-thorough (line 210). These are skill files, not a hook infrastructure with guaranteed ordering. If a future skill refactor restructures the session-open step, liveness emission could silently regress. The dependency on skill-internal structure rather than a named hook contract is an architectural fragility worth naming before promotion.",
+          "file_line": "agent-coordination-cli-ergonomics-and-request-correlation.plan.md:210-213"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly partitions CLI ergonomics from state-record taxonomy and write-safety (lines 180-189), with explicit cross-references to the owning plans. The five problem threads are each scoped and independently promotable (line 158). This decomposition is sound from an architectural separation-of-concerns standpoint and reduces the risk of scope creep into the domain-model plan.",
+          "file_line": "agent-coordination-cli-ergonomics-and-request-correlation.plan.md:158-189"
+        },
+        {
+          "severity": "info",
+          "claim": "The risk table (lines 235-242) correctly constrains 'audience' and 'in_response_to' as non-locking primitives with prose-only overlap output. This is consistent with the protocol's knowledge-and-communication stance and avoids introducing a mechanical-refusal pattern into the coordination substrate.",
+          "file_line": "agent-coordination-cli-ergonomics-and-request-correlation.plan.md:235-242"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": [
+        {
+          "claim": "The plan is a strategic brief; an executable plan in current/ is the correct promotion artefact, and this brief becomes a back-reference on promotion.",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md:289-294 (\"This is a strategic brief... Promotion... opens an executable plan in ../current/ and this brief becomes a back-reference, not a parallel source of truth\"); status line :9 (\"STRATEGIC / FUTURE\"); front-matter isProject:false :4; corroborated by .agent/plans/README.md:94-95,181 (future=Strategic, promote to current=Executable, \"A future/ plan cannot be treated as executable until promoted\")"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/future/agent-graphs-workspace-organisation.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan is explicitly doc-only and future-gated; no scaffold has been created yet",
+          "file_line": "line 20"
+        },
+        {
+          "claim": "Topology decision recorded at PR #102 closeout — not yet enacted, content still live",
+          "file_line": "line 41"
+        },
+        {
+          "claim": "All four todos remain pending; no completed work to archive",
+          "file_line": "lines 13-24"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan encodes a clear, actionable boundary decision (lines 43-56) with a concrete promotion trigger (lines 59-63) and explicit non-goals. No speculative or unfounded claims. The content is minimal but all of it earns its place.",
+      "content_quality": "strong",
+      "content_quality_note": "Boundary rules are precise and non-ambiguous (lines 52-55). Dependency diagram is explicit (lines 49-51). Promotion trigger is crisp and points to a named sibling plan (lines 59-60). Todos are well-scoped with a correct gate on the third item (line 20). No padding or vague aspirations.",
+      "salvage_value": [
+        {
+          "idea": "agent-graphs/ as a top-level workspace distinct from agent-tools/, packages/libs/, and packages/sdks/",
+          "class": "good",
+          "file_line": "lines 3-4, 36-37"
+        },
+        {
+          "idea": "One-way dependency direction: agent-tools -> agent-graphs/practice-graph -> graph substrate",
+          "class": "good",
+          "file_line": "lines 49-51"
+        },
+        {
+          "idea": "Hard exclusion: no CLI/stdio/MCP/memory/corpus-adapter code inside agent-graphs packages",
+          "class": "good",
+          "file_line": "lines 52-55"
+        },
+        {
+          "idea": "Scaffold agent-graphs/ only at pilot-promotion time, not speculatively",
+          "class": "good",
+          "file_line": "lines 20, 39, 59-63"
+        },
+        {
+          "idea": "Map workspace boundary against agent-tools/, packages/libs/, packages/sdks/ and record dependency direction and non-goals before scaffolding",
+          "class": "good",
+          "file_line": "lines 13-15"
+        },
+        {
+          "idea": "Update package-manager workspace globs and repo docs so agent-graphs/* packages build/test as first-class workspaces",
+          "class": "good",
+          "file_line": "lines 16-18"
+        },
+        {
+          "idea": "Document tooling adjacency: agent-tools/ owns command surfaces, agent-graphs/ owns practice-facing graph libraries",
+          "class": "good",
+          "file_line": "lines 22-24"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [
+        "thread",
+        "related_plans"
+      ],
+      "status_raw": "future",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, required for all plan nodes)",
+          "file_line": "agent-tooling/future/agent-graphs-workspace-organisation.plan.md:1-25 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `node_type` (LOCKED, required for all plan nodes; replaces free-label `type`)",
+          "file_line": "agent-tooling/future/agent-graphs-workspace-organisation.plan.md:1-25 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED, required for all plan nodes; `status: future` maps to `kind: strategic` but the field itself must be explicit)",
+          "file_line": "agent-tooling/future/agent-graphs-workspace-organisation.plan.md:1-25 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `last_updated` (LOCKED, required for all plan nodes)",
+          "file_line": "agent-tooling/future/agent-graphs-workspace-organisation.plan.md:1-25 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "`type: tooling-workspace-organisation` is a dropped free-label (V0 §2.5 drops `type` as free-label; replaced by `node_type` + `kind`)",
+          "file_line": "agent-tooling/future/agent-graphs-workspace-organisation.plan.md:4"
+        },
+        {
+          "issue": "`status: future` is a dropped field (V0 §2.2 drops `status`; the state it encodes maps to `kind: strategic` via §3.5 migration map)",
+          "file_line": "agent-tooling/future/agent-graphs-workspace-organisation.plan.md:5"
+        },
+        {
+          "issue": "`isProject: false` is explicitly dropped by V0 §2.5 (subsumed by `projects_to` edge)",
+          "file_line": "agent-tooling/future/agent-graphs-workspace-organisation.plan.md:11"
+        },
+        {
+          "issue": "`related_plans` key does not match V0's canonical `related` field name for the untyped see-also edge (V0 §2.4)",
+          "file_line": "agent-tooling/future/agent-graphs-workspace-organisation.plan.md:8"
+        },
+        {
+          "issue": "`todos` present on a plan whose `status: future` maps to `kind: strategic`; V0 §2.4 LOCKS todos as forbidden on strategic plans",
+          "file_line": "agent-tooling/future/agent-graphs-workspace-organisation.plan.md:12-25"
+        }
+      ],
+      "unclassified_keys": [
+        "graph_layer"
+      ],
+      "locked_contradictions": [
+        {
+          "item": "`todos` present on a strategic plan (LOCKED: todos forbidden on `kind: strategic`; permitted only on `kind: executable`)",
+          "evidence": "Plan carries `status: future` (maps to `kind: strategic` per V0 §3.5) and a body 'Promotion Trigger' section (plan:59) confirming pre-promotion intent, yet frontmatter contains four `todos` items. V0 §2.4 states `todos` is 'Forbidden on strategic plans' (LOCKED). Resolution candidates: reclassify as `kind: executable` (requires `serves_strategic_choice` and no `promotion_trigger` field) or remove `todos` to body prose and add `promotion_trigger` field.",
+          "file_line": "agent-tooling/future/agent-graphs-workspace-organisation.plan.md:12-25 (todos block); V0 §2.4 line ~157"
+        }
+      ],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "The one-way dependency arrow (agent-tools -> agent-graphs/practice-graph -> graph substrate) is stated as doctrine but no enforcement mechanism is named. Without workspace-boundary tooling (e.g. ESLint import rules, package.json peer-dep constraints, or a lint rule in CI), the boundary is advisory only and will erode over time.",
+          "file_line": ".agent/plans/agent-tooling/future/agent-graphs-workspace-organisation.plan.md:49-51"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan defers workspace glob updates and collection README surfaces to the promotion slice (todo: wire-workspace-globs), but the promotion trigger is keyed on a sibling plan reaching a state ('ready to create its workspace') that is not machine-readable. The handoff between plans carries no observable signal — a future executor has to manually poll the sibling plan's status. This is a coordination gap, not a blocker, but risks the organisation step being skipped or done late.",
+          "file_line": ".agent/plans/agent-tooling/future/agent-graphs-workspace-organisation.plan.md:59-63"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan forbids 'curriculum-specific corpus adapters' in agent-graphs/ but the named package is practice-graph/, which is tightly coupled to the practice domain. The non-goal boundary would benefit from a concrete example of what corpus adapter code looks like vs what practice-graph/ legitimately owns, to reduce classification ambiguity at scaffold time.",
+          "file_line": ".agent/plans/agent-tooling/future/agent-graphs-workspace-organisation.plan.md:53-56"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan is intentionally doc-only (status: future, no scaffold until pilot promotes). The boundary decisions recorded here are sound and consistent with the workspace pattern used by agent-tools/. No architectural contradictions detected against stated intent.",
+          "file_line": ".agent/plans/agent-tooling/future/agent-graphs-workspace-organisation.plan.md:39-40"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/future/agent-infrastructure-coherence-audit.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan is NOT STARTED and future-lane — not redundant with any current work and encodes a genuine identified debt pattern",
+          "file_line": "agent-infrastructure-coherence-audit.plan.md:3"
+        },
+        {
+          "claim": "Promotion trigger is explicit and conditional, so the plan is correctly parked until a real threshold is met",
+          "file_line": "agent-infrastructure-coherence-audit.plan.md:85-92"
+        },
+        {
+          "claim": "Relationship note acknowledges that adapter-generation plan could make areas 2 and 5 moot, meaning the scope is self-aware and will need re-triage at promotion",
+          "file_line": "agent-infrastructure-coherence-audit.plan.md:77-81"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is grounded in a concrete, already-resolved incident (Learning Loop Refinement distillation skill, line 7-10), names the generalised anti-pattern clearly, and the success signals at lines 67-72 are testable. The out-of-scope clause at lines 53-58 shows disciplined boundary-setting. The only substantive gap is missing execution means (no owner, no sequencing, no tooling approach), which is appropriate for a future/ plan but will need to be filled at promotion.",
+      "content_quality": "adequate",
+      "content_quality_note": "The audit area enumeration (lines 22-51) is well-structured and covers the estate dimensions coherently. Success signals (lines 65-72) are concrete. However the plan contains no execution design — no phasing, no assigned owner, no estimate of scope size, and no tooling approach — making it a well-scoped problem statement rather than an executable plan. That is acceptable for future/ but limits it to adequate rather than strong.",
+      "salvage_value": [
+        {
+          "idea": "Single-consumer passive skill is the canonical anti-pattern to eliminate; two-consumer-or-genuine-discovery-value is the correctness test",
+          "class": "good",
+          "file_line": "agent-infrastructure-coherence-audit.plan.md:22-25,67-69"
+        },
+        {
+          "idea": "Platform adapters must be audited for thin-wrapper compliance against ADR-125 (no workflow logic inside adapters)",
+          "class": "good",
+          "file_line": "agent-infrastructure-coherence-audit.plan.md:26-31,70"
+        },
+        {
+          "idea": "Command/skill boundary should follow a principled documented test: does anything else consume this protocol",
+          "class": "good",
+          "file_line": "agent-infrastructure-coherence-audit.plan.md:32-36"
+        },
+        {
+          "idea": "Passive skill classification should be audited for accuracy — skills classified passive that are actually command sub-steps are mislabelled",
+          "class": "good",
+          "file_line": "agent-infrastructure-coherence-audit.plan.md:37-40"
+        },
+        {
+          "idea": "Adapter parity gaps (present for some platforms, absent for others, or drifted from canonical sources) are a distinct audit dimension",
+          "class": "good",
+          "file_line": "agent-infrastructure-coherence-audit.plan.md:41-44"
+        },
+        {
+          "idea": "Cursor .mdc triggers exceeding 10-line content limit or containing policy that belongs in canonical directive are a rule/trigger hygiene concern",
+          "class": "good",
+          "file_line": "agent-infrastructure-coherence-audit.plan.md:45-48"
+        },
+        {
+          "idea": "ADR-135 agent renames may have left downstream command and skill naming incoherent and should be audited",
+          "class": "good",
+          "file_line": "agent-infrastructure-coherence-audit.plan.md:49-51"
+        },
+        {
+          "idea": "Out-of-scope protection for the three-layer model (ADR-125), agent taxonomy (ADR-135), Practice Core structural changes, and skill/command content quality",
+          "class": "good",
+          "file_line": "agent-infrastructure-coherence-audit.plan.md:53-58"
+        },
+        {
+          "idea": "Adapter generation plan (if it runs first) renders audit areas 2 and 5 moot — scope should be re-evaluated at promotion time",
+          "class": "speculative",
+          "file_line": "agent-infrastructure-coherence-audit.plan.md:75-80"
+        },
+        {
+          "idea": "Explicit three-condition promotion trigger that parks the plan until a real threshold is met rather than promoting on a schedule",
+          "class": "good",
+          "file_line": "agent-infrastructure-coherence-audit.plan.md:84-92"
+        }
+      ],
+      "conformance": "no-frontmatter",
+      "v0_kind": null,
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "NOT STARTED",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "No YAML frontmatter block present — all V0 required fields (id, node_type, name, overview, kind, last_updated) are absent; the file has no --- delimiters at all",
+          "file_line": "agent-infrastructure-coherence-audit.plan.md:1-93"
+        },
+        {
+          "issue": "**Status**: NOT STARTED is body prose, not a frontmatter field; V0 §2.5 drops 'status' entirely and replaces it with kind/disposition/gate/Linear-projected execution axis",
+          "file_line": "agent-infrastructure-coherence-audit.plan.md:3"
+        },
+        {
+          "issue": "**Domain**: Agentic Engineering Enhancements is a body-prose key with no V0 equivalent — unclassified and not in the dropped/deferred table",
+          "file_line": "agent-infrastructure-coherence-audit.plan.md:4"
+        },
+        {
+          "issue": "ADR references (ADR-125, ADR-135) are body prose only; V0 requires these as typed derives_from edge declarations in frontmatter",
+          "file_line": "agent-infrastructure-coherence-audit.plan.md:62-64"
+        },
+        {
+          "issue": "promotion_trigger is a body prose section; V0 §2.4 requires it as a frontmatter field on strategic plans",
+          "file_line": "agent-infrastructure-coherence-audit.plan.md:83-92"
+        },
+        {
+          "issue": "serves_strategic_choice edge absent; required for executable plans and recommended for strategic plans",
+          "file_line": "agent-infrastructure-coherence-audit.plan.md:1-93"
+        }
+      ],
+      "unclassified_keys": [
+        "Domain"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "Governing ADRs 125 and 135 both exist at the referenced paths and are in scope. The plan's architectural grounding is valid.",
+          "file_line": "agent-infrastructure-coherence-audit.plan.md:62-63"
+        },
+        {
+          "severity": "info",
+          "claim": "The adapter-generation.plan.md dependency is confirmed NOT STARTED (same status as this plan). The claim at lines 77-80 that adapter generation executing first would make audit areas 2 and 5 moot is architecturally sound — the plans are sequencing alternatives, not co-dependents.",
+          "file_line": "agent-infrastructure-coherence-audit.plan.md:77-80"
+        },
+        {
+          "severity": "low",
+          "claim": "The success signal at line 67 ('every skill has at least two independent consumers') is a hard threshold with no exception path for genuinely singleton guidance skills. The plan's own line 69 carves out 'passive skills with genuine discovery value', but this carve-out has no operationalisation criterion — an executor could accept any passive skill as meeting it, making the signal unverifiable.",
+          "file_line": "agent-infrastructure-coherence-audit.plan.md:67-70"
+        },
+        {
+          "severity": "low",
+          "claim": "The promotion trigger at lines 85-92 lists three OR-connected conditions, two of which (1 and 2) are subjective threshold judgements ('demonstrably unsustainable', 'no principled basis exists'). Without a quantified proxy — e.g. adapter count or a documented open skill/command boundary dispute — these conditions cannot be evaluated autonomously and will require owner interpretation at promotion time.",
+          "file_line": "agent-infrastructure-coherence-audit.plan.md:85-92"
+        },
+        {
+          "severity": "medium",
+          "claim": "Audit area 7 (lines 47-50) addresses naming coherence downstream of ADR-135, but agent-classification-taxonomy.plan.md is also NOT STARTED (confirmed in future/). If the taxonomy rename has not executed, area 7 cannot produce stable findings — auditing names against a not-yet-applied taxonomy will yield phantom gaps. The plan does not guard against this ordering risk.",
+          "file_line": "agent-infrastructure-coherence-audit.plan.md:47-50"
+        },
+        {
+          "severity": "info",
+          "claim": "Out-of-scope boundaries at lines 53-58 are well-drawn: the plan explicitly excludes changing the three-layer model (ADR-125), the taxonomy (ADR-135), Practice Core structure, and editorial quality. This prevents scope creep into governed territory.",
+          "file_line": "agent-infrastructure-coherence-audit.plan.md:53-58"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/future/canonical-first-skill-pack-ingestion-tooling.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Status is Future (not started) and folder lane is future — no execution has occurred; plan is a live strategic brief awaiting a promotion trigger",
+          "file_line": "line 2-7"
+        },
+        {
+          "claim": "Promotion gate explicitly requires reviews + open-decisions locked + build-vs-buy attestation before move to current/ — plan is not prematurely in current/",
+          "file_line": "lines 215-243"
+        },
+        {
+          "claim": "Phase 6 mitigation option 1 (script canonicalisation) was never built — the gap this plan addresses is confirmed open",
+          "file_line": "lines 14-15, 74-75"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every substantive section encodes real design constraints grounded in live artefacts (PDR-009, ADR-125, skills-lock.json, validate-portability.ts). The three drift risks (lines 76-85) are specific and falsifiable. The vendor-agnostic invariant (lines 31-53) is strong and validator-enforced by design. Open decisions have default proposals. No speculative scope-creep detected. Single weak area: build-vs-buy attestation is required at promotion (line 239) but not yet resolved — appropriately deferred rather than improperly omitted.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan goes beyond V0 conformance: it names the exact originating friction event with a date (line 178), specifies adversarial failure modes in the risk table (lines 200-211) with reviewer assignments per risk, provides a 9-step reference sketch with atomic write discipline (lines 269-283), and defines five independent promotion-success signals (lines 175-186). The scope boundary (lines 93-136) is tight and non-goals are individually justified.",
+      "salvage_value": [
+        {
+          "idea": "Vendor-agnostic-by-construction constraint with validator enforcement — no conditional branches on source identity in tool source",
+          "class": "good",
+          "file_line": "lines 31-53"
+        },
+        {
+          "idea": "Three-category drift-risk taxonomy for manual canonicalisation flows (step omission, vendored canonical drift, update conflict invisibility)",
+          "class": "good",
+          "file_line": "lines 76-85"
+        },
+        {
+          "idea": "Source-fetcher abstraction — single-file adapter wrapping an existing community installer so swap-out cost is isolated",
+          "class": "good",
+          "file_line": "lines 97-99, 203"
+        },
+        {
+          "idea": "Atomic stage-to-rename write pattern for canonical skill directory to prevent partial writes on network failure",
+          "class": "good",
+          "file_line": "lines 103, 209, 275-276"
+        },
+        {
+          "idea": "Dual-hash lock strategy: upstreamHash from source CLI + localHash (SHA-256) recomputed by validator on portability:check",
+          "class": "good",
+          "file_line": "lines 105, 257-261, 284-287"
+        },
+        {
+          "idea": "Namespace-collision handling via --prefix flag with refuse-on-collision default",
+          "class": "good",
+          "file_line": "lines 106, 204"
+        },
+        {
+          "idea": "forbid-and-overlay policy for local edits to vendored canonical in v1, with <n>-local-overrides sibling skill as overlay target",
+          "class": "good",
+          "file_line": "lines 132-133, 205, 250-251"
+        },
+        {
+          "idea": "Five independent promotion success signals (friction recurrence, cross-platform block, drift detected, fourth Layer-2 dir, owner-direct)",
+          "class": "good",
+          "file_line": "lines 175-186"
+        },
+        {
+          "idea": "Five blocking sub-agent reviewer assignments with specialist-specific concern scope per risk",
+          "class": "good",
+          "file_line": "lines 221-236"
+        },
+        {
+          "idea": "Selective import flags (--include, --exclude, --dry-run) for partial pack ingestion",
+          "class": "good",
+          "file_line": "line 107"
+        },
+        {
+          "idea": "Validator co-evolution: drift detection on vendored canonical via recomputed localHash and lock-presence reverse check",
+          "class": "good",
+          "file_line": "lines 108-109, 259-261"
+        },
+        {
+          "idea": "update and remove subcommands deferred to v2 after add is exercised against three or more source packs",
+          "class": "good",
+          "file_line": "lines 96, 263"
+        },
+        {
+          "idea": "Build-vs-buy attestation required at promotion: compare wrapping existing installer vs direct gh api/git clone vs contributing upstream",
+          "class": "good",
+          "file_line": "lines 239-242"
+        },
+        {
+          "idea": "Plugin dual-load risk: document uninstall step and consider a prefer field in lock to signal canonical-wins",
+          "class": "speculative",
+          "file_line": "line 206"
+        },
+        {
+          "idea": "Concurrent-agent write discipline: CLI must claim before writing using the existing git index/HEAD write window",
+          "class": "good",
+          "file_line": "line 211"
+        }
+      ],
+      "conformance": "no-frontmatter",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "Future (not started)",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "No YAML frontmatter block at all. The file opens with a Markdown H1 on line 1; state and metadata are expressed as inline bold prose (e.g. '**Status**: Future (not started)' on line 2, '**Domain**: Agentic Engineering Enhancements' on line 3). V0 §2 requires a YAML frontmatter block with at minimum id, node_type, name, overview, kind, and last_updated.",
+          "file_line": "canonical-first-skill-pack-ingestion-tooling.plan.md:1"
+        },
+        {
+          "issue": "Missing required field: id. No stable kebab slug declared anywhere in frontmatter (there is no frontmatter).",
+          "file_line": "canonical-first-skill-pack-ingestion-tooling.plan.md:1"
+        },
+        {
+          "issue": "Missing required field: node_type (literal 'plan'). V0 §2.1 LOCKED.",
+          "file_line": "canonical-first-skill-pack-ingestion-tooling.plan.md:1"
+        },
+        {
+          "issue": "Missing required field: name. V0 §2.1 LOCKED. The H1 title exists but is not a frontmatter name: field.",
+          "file_line": "canonical-first-skill-pack-ingestion-tooling.plan.md:1"
+        },
+        {
+          "issue": "Missing required field: overview (one-line scope). V0 §2.1 LOCKED.",
+          "file_line": "canonical-first-skill-pack-ingestion-tooling.plan.md:1"
+        },
+        {
+          "issue": "Missing required field: kind. The file folder (future/) and inline status 'Future (not started)' unambiguously map to kind: strategic under V0 §3.5, but the field is absent from frontmatter.",
+          "file_line": "canonical-first-skill-pack-ingestion-tooling.plan.md:2"
+        },
+        {
+          "issue": "Missing required field: last_updated (ISO date). V0 §2.4 LOCKED.",
+          "file_line": "canonical-first-skill-pack-ingestion-tooling.plan.md:1"
+        },
+        {
+          "issue": "Missing recommended/required field: serves_strategic_choice. For a strategic plan V0 §2.3 marks this as recommended; the plan carries no strategic choice ID or 'pending' sentinel.",
+          "file_line": "canonical-first-skill-pack-ingestion-tooling.plan.md:1"
+        },
+        {
+          "issue": "Missing required field: promotion_trigger. V0 §2.4 LOCKED for strategic plans. The plan body carries a §Promotion Trigger section (line 213) but this is body prose, not a frontmatter field.",
+          "file_line": "canonical-first-skill-pack-ingestion-tooling.plan.md:213"
+        },
+        {
+          "issue": "Authority edges (derives_from) expressed only as inline Related links (lines 11-12: ADR-125, PDR-009) rather than as typed frontmatter edge fields. V0 §2.3 and §2.5 reconcile foundational_adr -> derives_from.",
+          "file_line": "canonical-first-skill-pack-ingestion-tooling.plan.md:11"
+        },
+        {
+          "issue": "Dependency edges (depends_on) expressed only in body prose under §Dependencies and Sequencing Assumptions (lines 139-170) as 'Does not block on:' / 'Does block:' prose, not as typed frontmatter depends_on entries with blocking/beneficial classification.",
+          "file_line": "canonical-first-skill-pack-ingestion-tooling.plan.md:139"
+        },
+        {
+          "issue": "thread edge absent from frontmatter. V0 §2.3 marks thread as recommended.",
+          "file_line": "canonical-first-skill-pack-ingestion-tooling.plan.md:1"
+        },
+        {
+          "issue": "Dropped key 'lifecycle' is not present (acceptable), but the equivalent inline '**Domain**: Agentic Engineering Enhancements' on line 3 is a free-label that V0 §2.5 maps to dropped/out-of-contract (collection/lane/domain). No equivalent V0 field exists for domain; if retained it should be a domain-extension key outside the V0 contract.",
+          "file_line": "canonical-first-skill-pack-ingestion-tooling.plan.md:3"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The source-fetcher abstraction (line 97-99) is described as a 'thin wrapper around an existing community installer for fetching only', but the plan defers the source-fetcher dependency choice to an open decision (line 153-155). If the community installer is a network-accessible binary with its own update cadence, wrapping it introduces an invisible coupling: the adapter boundary is not sufficient to isolate API-surface drift because the installer may change its output layout (directory structure, manifest format) between invocations. The plan notes 'Pin version' as a mitigation (line 202) but does not specify a pinning mechanism or where the pin would live in the repo, leaving the adapter boundary weaker than it appears.",
+          "file_line": "97-99, 202-203"
+        },
+        {
+          "severity": "medium",
+          "claim": "The atomic write strategy (line 106, reference design step 6: 'stage to <dir>.tmp/, fsync, rename') protects against partial canonical writes within a single agent session but does not address the race condition with concurrent agent edits explicitly flagged in the risk table (line 211). The plan defers resolution to 'architecture-expert-wilma at promotion', which is correct for a future plan, but the proposed mitigation ('use the existing git index/HEAD write window discipline; CLI must claim before writing') relies on a claim-registration convention that is not guaranteed to be observed by all callers. There is no mention of a lock file, fsync on the parent directory, or any OS-level serialisation primitive beyond the rename. This is acceptable at the strategic-brief stage but the gap must be locked at promotion.",
+          "file_line": "104-106, 211"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan correctly defers `update` and `remove` to v2 (line 101, open decision 6), but does not record what happens when `add` is re-run for an already-ingested skill. The reference implementation (line 271) begins with `mkdir tmp/.skills-stage` with no guard on an existing canonical entry. If `add` is idempotent it should say so; if it is not, a re-run would silently overwrite the canonical copy and reset `localHash`, defeating drift detection. This is a boundary-contract gap between the CLI and the validator.",
+          "file_line": "101, 271-282"
+        },
+        {
+          "severity": "low",
+          "claim": "The validator co-evolution section (line 107-110) states that drift detection will re-compute `localHash` and reject drift. The plan also records both `upstreamHash` and `localHash` in the lock (open decision 1, lines 246-248). However, the validator co-evolution is listed as in-scope but its integration point with `scripts/validate-portability.ts` is not specified beyond 'lock-aware reverse checks'. If the validator is extended in-place it becomes the single file that must understand the new hash schema, the lock schema extension, and the vendored-canonical concept — a concentration of concerns that could make future schema evolution expensive. Worth flagging for the `architecture-expert-barney` dependency-graph review noted at promotion.",
+          "file_line": "107-110, 229, 259-261"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan's three-layer model (Layer 1 = `.agent/`, Layer 2 = platform adapter dirs) is consistently applied throughout. The vendor-agnostic intent (lines 32-50) is explicit and the validator-enforcement requirement on vendor-keyed conditionals is well-scoped. The architecture is coherent with ADR-125 and PDR-009 as cited. The `adapter-generation.plan.md` / `canonical-first-skill-pack-ingestion-tooling.plan.md` complementarity (line 18-19) correctly separates internally-authored from externally-authored skills without overlap, which is a sound boundary.",
+          "file_line": "32-50, 18-19, 123-127"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/future/claim-liveness-crash-reconciliation-and-session-forensics.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Activation trigger criteria are met by documented recurrence (4 instances as of 2026-05-29), suggesting this may be promotion-ready rather than purely future",
+          "file_line": "file:64-84"
+        },
+        {
+          "claim": "Encodes non-trivial architectural finding separating routing-sunset from crash-detection as independent cures — this finding must be preserved",
+          "file_line": "file:155-163"
+        },
+        {
+          "claim": "Recurrence-evidence-erasure observation about closed-claims.archive.json reset is a load-bearing substrate health insight that has no other home",
+          "file_line": "file:79-84"
+        },
+        {
+          "claim": "Cure-altitude note correctly names the false-positive risk of naive TTL-reap and specifies the correct shape — must not be lost",
+          "file_line": "file:86-92"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every constituent idea is grounded in a real incident with concrete session prefixes, timestamps, and code references (file:38-55). The EGM is complete and correctly decomposed. The plan explicitly interrogates the naive fix and rejects it with sound reasoning (file:86-92). The related candidate (file:190-198) is correctly scoped as out-of-plan. No speculative or poorly-grounded ideas are present.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan cites source file and function name for the staleness logic (file:44-45: agent-tools/src/collaboration-state/claims.ts, isClaimStale, default TTL 14400s), names exact session prefixes and timestamps for two incidents (file:38, 65), links to a concrete platform bug report (file:137), and cross-references all dependency plans with explicit scope notes. The cure-altitude analysis is architecturally precise (file:86-92). Risk section names a concrete rule to honour (no-machine-local-paths, file:181). Content density and grounding are above average for a strategic brief.",
+      "salvage_value": [
+        {
+          "idea": "Claim staleness is currently heartbeat-bound with manual-only heartbeat writes, creating up to full-TTL (14400s) blindness after a crash",
+          "class": "good",
+          "file_line": "file:38-48"
+        },
+        {
+          "idea": "M1: Bind claim liveness to an auto-heartbeat riding the watcher-liveness tick, and/or add a dead-owner detector",
+          "class": "good",
+          "file_line": "file:109-114"
+        },
+        {
+          "idea": "M2: On a dead-owner liveness signal, mark the claim orphaned and open a takeover path rather than waiting out the full TTL",
+          "class": "good",
+          "file_line": "file:115-119"
+        },
+        {
+          "idea": "M3: session inspect CLI that resolves agent name/prefix to transcript, enumerates sub-agents, extracts last error, and pattern-matches known failure signatures",
+          "class": "good",
+          "file_line": "file:120-124"
+        },
+        {
+          "idea": "Minimum shippable without the liveness-floor primitive: standalone dead-owner detector feeding existing archive-stale path plus M3 CLI",
+          "class": "good",
+          "file_line": "file:127-131"
+        },
+        {
+          "idea": "Session-open reap must be scoped to confirmed-dead claims above a liveness floor, not naive TTL-expiry, to avoid false-positive orphaning of live-but-paused agents",
+          "class": "good",
+          "file_line": "file:86-92"
+        },
+        {
+          "idea": "closed-claims.archive.json should retain a durable stale-closure record rather than being reset to an empty sink at each consolidation pass",
+          "class": "good",
+          "file_line": "file:79-84"
+        },
+        {
+          "idea": "Routing-legacy-fallback-sunset and crash-detection are independent cures with no shared mechanism",
+          "class": "good",
+          "file_line": "file:155-163"
+        },
+        {
+          "idea": "Forensics CLI must abstract session-store location away from Claude-Code-specific machine-local paths",
+          "class": "good",
+          "file_line": "file:178-181"
+        },
+        {
+          "idea": "Takeover should be reversible/re-claimable, not destructive, to guard against false-positive orphaning",
+          "class": "good",
+          "file_line": "file:183-184"
+        },
+        {
+          "idea": "Forensics over a live peer transcript must remain strictly read-only and must not mutate another agent's session files",
+          "class": "good",
+          "file_line": "file:185-186"
+        },
+        {
+          "idea": "Related candidate: sub-agents should write durable intermediate artefacts autonomously as they go, to survive parent crashes — promote separately on second instance",
+          "class": "speculative",
+          "file_line": "file:190-198"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "future-strategic",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Uses emergent 'status: future-strategic' (V0 §2.2/§2.5 drops 'status'; it is replaced by 'kind', 'disposition', 'gate'). Missing 'kind: strategic'.",
+          "file_line": "claim-liveness-crash-reconciliation-and-session-forensics.plan.md:6"
+        },
+        {
+          "issue": "Missing required field 'id' (V0 §2.1 — required for all plans, LOCKED).",
+          "file_line": "claim-liveness-crash-reconciliation-and-session-forensics.plan.md:1"
+        },
+        {
+          "issue": "Missing required field 'node_type: plan' (V0 §2.1 — required for all plans, LOCKED).",
+          "file_line": "claim-liveness-crash-reconciliation-and-session-forensics.plan.md:1"
+        },
+        {
+          "issue": "Missing required field 'last_updated' (V0 §2.4 — required for all plans, LOCKED; value is present in body at line 19 but not in frontmatter).",
+          "file_line": "claim-liveness-crash-reconciliation-and-session-forensics.plan.md:1"
+        },
+        {
+          "issue": "Missing 'promotion_trigger' (V0 §2.4 — required for 'strategic' kind, LOCKED; the activation trigger appears only in body prose at lines 23-25, not as a frontmatter field).",
+          "file_line": "claim-liveness-crash-reconciliation-and-session-forensics.plan.md:1"
+        },
+        {
+          "issue": "No typed edges declared in frontmatter: 'serves_strategic_choice', 'depends_on', 'thread', 'derives_from' are all absent despite the body naming three plan dependencies and a clear thread (V0 §2.3 — edges are declared in frontmatter, recommended or required for executable/strategic plans).",
+          "file_line": "claim-liveness-crash-reconciliation-and-session-forensics.plan.md:1"
+        },
+        {
+          "issue": "Missing recommended edge 'serves_strategic_choice' (V0 §2.3 — recommended for strategic plans, required for executable; LOCKED shape).",
+          "file_line": "claim-liveness-crash-reconciliation-and-session-forensics.plan.md:1"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [
+        {
+          "item": "todos present on a strategic-kind plan — forbidden by LOCKED V0 decision",
+          "evidence": "V0 §2.4 states 'todos … Forbidden on strategic plans' (LOCKED exposure). The plan carries three todos (m1, m2, m3) in frontmatter. The plan's own body treats these as strategic moves / pre-promotion milestones, not executable work items — the todos are serving as a pre-promotion checklist rather than TDD-cycle todos, which may signal a genuine estate pattern that V0's binary todos/promotion_trigger split does not accommodate. Owner re-ratification candidate: does the estate use todos on strategic plans as promotion-gate checklists, and should V0 carve out that case or harden the prohibition?",
+          "file_line": "claim-liveness-crash-reconciliation-and-session-forensics.plan.md:5-15"
+        }
+      ],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "M1 auto-heartbeat is described as a dependent consumer of the comms-watch-liveness-floor primitive, but the minimum-shippable path (standalone dead-owner detector) duplicates liveness-detection logic that the watcher primitive is being built to own. Two independent liveness-detection implementations in the same substrate create a divergence risk: they may apply different floor values, produce contradictory dead/alive verdicts, and require two maintenance paths. The plan should designate exactly one canonical liveness signal source and make all consumers read from it, even in the minimum-shippable fallback.",
+          "file_line": "claim-liveness-crash-reconciliation-and-session-forensics.plan.md:128-131"
+        },
+        {
+          "severity": "high",
+          "claim": "The forensics CLI (M3) is described as reading `~/.claude/projects/...` for transcript resolution. The plan cites the no-machine-local-paths rule as a risk but does not specify how the session-store location is abstracted. Without an explicit indirection layer (environment variable, config entry, or injected store interface) the machine-local path dependency will be encoded at implementation time. The architecture must name the abstraction boundary before promotion; a comment-level citation of the rule is not a design.",
+          "file_line": "claim-liveness-crash-reconciliation-and-session-forensics.plan.md:178-181"
+        },
+        {
+          "severity": "medium",
+          "claim": "The takeover protocol for M2 (orphaned-claim reclamation) specifies the claim must be reversible / re-claimable rather than destructive, but no state-machine for the orphaned->takeover->restored or orphaned->taken states is defined. Two concurrent peers racing to take over the same orphaned claim have no arbitration mechanism named in this plan or in the referenced collaboration-state domain model plan. At implementation time this will be an architecture gap requiring a decision; it should be named here so promotion can carry the design forward.",
+          "file_line": "claim-liveness-crash-reconciliation-and-session-forensics.plan.md:115-119"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan correctly identifies that closed-claims.archive.json was reset to an empty sink (erasing recurrence history), and states 'any cure should preserve a durable stale-closure record'. However, the means section does not assign ownership of the archive durability fix to any milestone. M1 and M2 address detection and reclamation; neither commits to fixing the archive reset behaviour. This leaves the recurrence-count evaporation problem named but unowned.",
+          "file_line": "claim-liveness-crash-reconciliation-and-session-forensics.plan.md:79-84"
+        },
+        {
+          "severity": "medium",
+          "claim": "The session-open reap scope is correctly constrained to confirmed-dead claims above a liveness floor, not bare TTL expiry. However, the plan defers the liveness-floor value to promotion time ('finalised only at promotion to current/'). The liveness floor is load-bearing for both false-positive orphaning risk and detection latency. Deferring it means promotion decisions about realistic gap calibration (long tool calls, deliberate idle) cannot be validated until after the plan is already activated. A provisional range should be anchored here to constrain the promotion decision.",
+          "file_line": "claim-liveness-crash-reconciliation-and-session-forensics.plan.md:87-92 and 201-206"
+        },
+        {
+          "severity": "low",
+          "claim": "M3 extends the CLI surface owned by the agent-coordination-cli-ergonomics-and-request-correlation plan. The dependency is classified as 'beneficial' rather than 'blocking', but if that plan's CLI surface changes its command namespace or argument conventions before M3 lands, M3's implementation will either conflict or require re-work. The dependency classification should be 'interface-coupling' with an explicit note that the CLI surface version must be pinned at promotion time.",
+          "file_line": "claim-liveness-crash-reconciliation-and-session-forensics.plan.md:152"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan's separation of the sub-agent incremental-artefact-writing candidate (line 190-198) from this plan's scope is architecturally sound and correctly deferred. The shared crash-resilience theme is noted without conflating the work items. No action required.",
+          "file_line": "claim-liveness-crash-reconciliation-and-session-forensics.plan.md:190-198"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/future/codex-session-identity-plumbing.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan is explicitly gated as future/strategic with defined promotion triggers; no execution has begun",
+          "file_line": "codex-session-identity-plumbing.plan.md:10-11"
+        },
+        {
+          "claim": "Promotion triggers are live conditions, not historical artefacts",
+          "file_line": "codex-session-identity-plumbing.plan.md:112-121"
+        },
+        {
+          "claim": "Dependency on write-safety plan landing first keeps this plan correctly sequenced in future lane",
+          "file_line": "codex-session-identity-plumbing.plan.md:57"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is tightly scoped, has clear non-goals (lines 48-54), an explicit sequencing dependency (line 57), and success signals that are behavioural and testable (lines 86-95). The risk register (lines 99-107) names real unknowns (Codex host surface instability, ambiguous historical rows, multi-session collision) with proportionate mitigations. No speculative padding detected.",
+      "content_quality": "strong",
+      "content_quality_note": "The candidate direction (lines 67-83) maps to testable deliverables with explicit test cases at line 79-83. The promotion trigger list (lines 112-121) is concrete and observable. The problem statement precisely names the gap between the write-safety fix and system-wide identity consistency (lines 15-29). Content is well-grounded, not merely V0-conformant.",
+      "salvage_value": [
+        {
+          "idea": "Extend agent-tools:agent-identity to emit the full PDR-027 identity block (agent_name, platform, model, session_id_prefix, seed_source) for Codex entry workflows",
+          "class": "good",
+          "file_line": "codex-session-identity-plumbing.plan.md:67-70"
+        },
+        {
+          "idea": "Add Codex-specific start-right guidance that invokes identity preflight for thread registration, not only shared-state writes",
+          "class": "good",
+          "file_line": "codex-session-identity-plumbing.plan.md:71-72"
+        },
+        {
+          "idea": "Validator/report command that finds live Codex/unknown entries, groups by evidence, and distinguishes safe repairs from historical rows",
+          "class": "good",
+          "file_line": "codex-session-identity-plumbing.plan.md:73-76"
+        },
+        {
+          "idea": "Wire derived identity into a verified Codex display surface as a convenience layer, keeping state identity authoritative",
+          "class": "speculative",
+          "file_line": "codex-session-identity-plumbing.plan.md:77-78"
+        },
+        {
+          "idea": "Tests for CODEX_THREAD_ID derivation, anonymous-identity rejection, historical-row reporting without rewrite, and graceful skip of unsupported surfaces",
+          "class": "good",
+          "file_line": "codex-session-identity-plumbing.plan.md:79-83"
+        },
+        {
+          "idea": "Use first six CODEX_THREAD_ID characters as session identity prefix to handle multiple Codex sessions on same date/branch",
+          "class": "good",
+          "file_line": "codex-session-identity-plumbing.plan.md:105-106"
+        },
+        {
+          "idea": "One derivation implementation, many consumers — architectural constraint preventing identity drift",
+          "class": "good",
+          "file_line": "codex-session-identity-plumbing.plan.md:107"
+        },
+        {
+          "idea": "Promotion gate: do not promote until write-safety plan lands, ensuring the preflight command exists before this work depends on it",
+          "class": "good",
+          "file_line": "codex-session-identity-plumbing.plan.md:57, 112-121"
+        }
+      ],
+      "conformance": "no-frontmatter",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "📋 STRATEGIC / FUTURE",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "No YAML frontmatter block present — the file opens directly with a markdown heading; all V0 required fields (id, node_type, name, overview, kind, last_updated, serves_strategic_choice, promotion_trigger) are absent as machine-readable fields",
+          "file_line": "codex-session-identity-plumbing.plan.md:1"
+        },
+        {
+          "issue": "Status expressed as inline bold prose '📋 STRATEGIC / FUTURE' (not a frontmatter kind/disposition/gate field); emoji prefix is an emergent pattern V0 replaces",
+          "file_line": "codex-session-identity-plumbing.plan.md:3"
+        },
+        {
+          "issue": "Domain metadata ('Agentic Engineering Enhancements') expressed as inline bold prose — V0 has no Domain field; closest mapping would be thread or serves_strategic_choice edge, neither present",
+          "file_line": "codex-session-identity-plumbing.plan.md:4"
+        },
+        {
+          "issue": "Parent references expressed as inline bold prose links — V0 requires depends_on (with blocking|beneficial kind) or derives_from as typed frontmatter edges; prose links are not machine-readable edges",
+          "file_line": "codex-session-identity-plumbing.plan.md:5-8"
+        },
+        {
+          "issue": "promotion_trigger present only as a body section heading ('## Promotion Trigger', line 110) with prose content — V0 requires it as a frontmatter string field on strategic plans",
+          "file_line": "codex-session-identity-plumbing.plan.md:110"
+        }
+      ],
+      "unclassified_keys": [
+        "Domain",
+        "Parent"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan identifies 'one derivation implementation, many consumers' as the collision-safety mitigation (line 108) but does not name where that single implementation lives. If promotion proceeds without pinning this to the existing agent-tools identity module by path, two implementations can silently diverge — exactly the risk the plan warns against.",
+          "file_line": "codex-session-identity-plumbing.plan.md:67-68,108"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan treats 'verified Codex display surface' (title/statusline/hook) as optional integration (lines 44-45, 82-84) but does not specify how 'verified' is established at promotion time. Without a concrete verification gate, the promotion trigger at line 118 can be met on condition 3 without any first-hand evidence, allowing undocumented host behaviour — which line 50 explicitly excludes — to be wired anyway.",
+          "file_line": "codex-session-identity-plumbing.plan.md:44-45,50,118-120"
+        },
+        {
+          "severity": "low",
+          "claim": "Candidate Direction step 1 calls for extending or wrapping 'agent-tools:agent-identity' (line 67) but the parent link at line 7 points to a different file path ('agent-tools/docs/agent-identity.md'). It is not confirmed at plan-authoring time whether this is a docs file or the implementation entry point. Promotion-time executors need the authoritative source path to avoid wrapping a docs file rather than the code module.",
+          "file_line": "codex-session-identity-plumbing.plan.md:7,67"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan anchors identity derivation entirely on CODEX_THREAD_ID (lines 35, 59) and the collision mitigation uses its first six characters as a session prefix (line 105). No analysis is present of the entropy or uniqueness properties of that prefix across concurrent sessions on the same branch and date, which is listed as a known risk but left unresolved for promotion-time.",
+          "file_line": "codex-session-identity-plumbing.plan.md:105-106,100-102"
+        },
+        {
+          "severity": "info",
+          "claim": "The sequencing assumption that the write-safety plan must land first (line 57) is sound. The parent link to collaboration-state-write-safety.plan.md (line 8) establishes a clear predecessor dependency. No architectural concern here, noted for completeness.",
+          "file_line": "codex-session-identity-plumbing.plan.md:57-58,8"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/future/collaboration-directive-decomposition.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Activation trigger is defined and not yet met; plan is correctly parked in future/ awaiting keystone M2 or owner prioritisation",
+          "file_line": "file:line 39-41"
+        },
+        {
+          "claim": "M1 is the non-destructive first move (no file moves), correctly staged before the destructive M3",
+          "file_line": "file:line 109-112 and file:line 19-28"
+        },
+        {
+          "claim": "Dependencies table distinguishes blocking (new-rule-vs-pdr-clause, present and stable) from beneficial, showing the plan can be de-risked without waiting for all dependencies",
+          "file_line": "file:line 162-165"
+        },
+        {
+          "claim": "No duplicate work detected: sibling plans own watcher-canonicalisation and liveness primitives; this plan owns only directive-layer-routing",
+          "file_line": "file:line 139-153"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan correctly diagnoses a structural problem (layer-blending directives that drift because they hold content of five different shapes in one prose surface), proposes a classifier-driven solution with enumerable deliverables, gates the destructive move behind completeness, names the genuinely-homeless residue with per-unit routing targets, and feeds a corrective signal back to the keystone. No speculative machinery is proposed; no bad ideas found. The non-goals section is tight and correctly scoped. Cited at file:line 46-68 (diagnosis), file:line 91-133 (EGM), file:line 139-153 (non-goals).",
+      "content_quality": "strong",
+      "content_quality_note": "The plan demonstrates first-hand decomposition analysis already done (file:line 113-114 \"First-hand decomposition already exists for both directives in this thread's analysis and seeds the table\"), pre-identifies the genuinely-homeless residue with specific routing targets (file:line 116-127), and surfaces a live corrective signal to the keystone (file:line 82-88). The risks section names concrete, distinct failure modes with mitigations rather than generic placeholders (file:line 190-211). Promotion criteria are specific and testable (file:line 173-188). No padding or placeholder content detected.",
+      "salvage_value": [
+        {
+          "idea": "Layer-blender diagnosis: prose directives that predate the PDR corpus hold content of five different shapes (PDR, rule, skill, executive-memory, pattern) in one surface and drift because they are hand-synced rather than derived.",
+          "class": "good",
+          "file_line": "file:line 46-68"
+        },
+        {
+          "idea": "Routing table as first deliverable before any file moves: enumerate every unit, classify by shape, map to target layer and existing home — the deliverable makes 'what excellent looks like' enumerable.",
+          "class": "good",
+          "file_line": "file:line 109-114 and file:line 19-21"
+        },
+        {
+          "idea": "Owner-signal-interpretation heuristics (read silence / reframe / pause) route to executive memory, not a rule or PDR, because they are interpretive context, not falsifiable contracts.",
+          "class": "good",
+          "file_line": "file:line 117-119"
+        },
+        {
+          "idea": "Threat model (trusted-agents / advisory / don't-harden-surface-to-owner) routes to a clause on PDR-056 because it bounds the protocol scope and names its own falsifier.",
+          "class": "good",
+          "file_line": "file:line 119-121"
+        },
+        {
+          "idea": "Coordination-surface discipline (ground each mechanism in observed need; widen audit before adding a surface) routes to a rule or a clause on consolidate-at-third-consumer because it fires at an authoring moment.",
+          "class": "good",
+          "file_line": "file:line 121-123"
+        },
+        {
+          "idea": "Agents-classify-risk / humans-accept-risk routes to principles.md or its own PDR if PDR-025 does not already imply it.",
+          "class": "good",
+          "file_line": "file:line 123-126"
+        },
+        {
+          "idea": "Corrective signal to keystone: graduating operating-context-mode into agent-collaboration.md re-commits the layer-blend; correct home is a PDR + firing rule, not the directive.",
+          "class": "good",
+          "file_line": "file:line 82-88 and file:line 183-185"
+        },
+        {
+          "idea": "M3 gates destruction behind M2 completeness: no unit deleted before its home exists.",
+          "class": "good",
+          "file_line": "file:line 169-170 and file:line 27-28"
+        },
+        {
+          "idea": "Owner Working Style in user-collaboration.md is owner-specific context in a nominally portable directive; its correct home (repo-local / per-user vs executive memory) may require an owner decision at M2.",
+          "class": "speculative",
+          "file_line": "file:line 204-207"
+        },
+        {
+          "idea": "Decomposition-becomes-ceremony risk: bias to deletion and existing homes; minting new homes is the exception, sized to unique substance not to unit count.",
+          "class": "good",
+          "file_line": "file:line 208-211"
+        },
+        {
+          "idea": "A unit fitting no existing layer signals an incomplete layer model — owner-facing escalation, not a silent new directive.",
+          "class": "good",
+          "file_line": "file:line 195-197"
+        },
+        {
+          "idea": "Both directives sit on grounding-reading orders; retiring them without updating start-right and onboarding flows would strand newcomers; M4 verifies both human and AI-agent paths.",
+          "class": "good",
+          "file_line": "file:line 198-201"
+        },
+        {
+          "idea": "Shippable without keystone M2 by classifying independently and rehoming only units not at risk of deletion; final reconciles against M2.",
+          "class": "good",
+          "file_line": "file:line 161-163"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "future",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED — required for all plan nodes; §2.1)",
+          "file_line": "collaboration-directive-decomposition.plan.md:1-33 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `node_type` (LOCKED literal `\"plan\"` — required for all plan nodes; §2.1)",
+          "file_line": "collaboration-directive-decomposition.plan.md:1-33 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED enum `strategic | executable` — required for all plan nodes; §3.1)",
+          "file_line": "collaboration-directive-decomposition.plan.md:1-33 (frontmatter block)"
+        },
+        {
+          "issue": "Field `status: future` present — explicitly dropped by V0; the readiness sense maps to `kind: strategic` (§2.2, §2.5, §3.5)",
+          "file_line": "collaboration-directive-decomposition.plan.md:4"
+        },
+        {
+          "issue": "Field `type: developer-experience` present — dropped as free-label by V0; replaced by `node_type` + `kind` (§2.5 line 169 of schema)",
+          "file_line": "collaboration-directive-decomposition.plan.md:5"
+        },
+        {
+          "issue": "Field `isProject: false` present — explicitly dropped by V0; `plan` ≈ Linear Project is universal and `projects_to` carries the projection (§2.5)",
+          "file_line": "collaboration-directive-decomposition.plan.md:16"
+        },
+        {
+          "issue": "Field `specialist_reviewer` present — SURVEY-MAY-ADD-FIELDS in V0; outside the V0 contract (§2.5)",
+          "file_line": "collaboration-directive-decomposition.plan.md:6"
+        },
+        {
+          "issue": "Field `todos` present but `kind` discriminator is absent — `todos` is forbidden on `strategic` plans and mandated only on `executable` plans; cannot be validated without `kind` (§2.4)",
+          "file_line": "collaboration-directive-decomposition.plan.md:17-32"
+        },
+        {
+          "issue": "Missing required edge `serves_strategic_choice` — required for executable plans, recommended for strategic; absent from frontmatter (§2.3, §4)",
+          "file_line": "collaboration-directive-decomposition.plan.md:1-33 (frontmatter block)"
+        },
+        {
+          "issue": "Activation trigger (gate condition: keystone M2) expressed only in body prose, not as a frontmatter `gate:` object with `awaiting`, `clears_when`, and `expires` (§3.4)",
+          "file_line": "collaboration-directive-decomposition.plan.md:38-40"
+        },
+        {
+          "issue": "Dependency relationships expressed only in a body markdown table, not as frontmatter `depends_on` edges with `kind: blocking | beneficial` (§2.3, §4)",
+          "file_line": "collaboration-directive-decomposition.plan.md:162-166"
+        },
+        {
+          "issue": "`sibling_plans` key is not a V0-classified edge family — not `depends_on`, `supersedes`, `related`, or any typed edge (§2.3, §2.5); closest V0 concept is `related` (untyped see-also) or `depends_on` (if dependency is real)",
+          "file_line": "collaboration-directive-decomposition.plan.md:7-10"
+        },
+        {
+          "issue": "`related_rules` key is not a V0-classified field — V0 has no `related_rules` field; rule associations are not part of the typed edge vocabulary (§2.3, §2.5)",
+          "file_line": "collaboration-directive-decomposition.plan.md:11-14"
+        }
+      ],
+      "unclassified_keys": [
+        "sibling_plans",
+        "related_rules"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan assumes the new-rule-vs-pdr-clause classifier produces unambiguous routing for every unit of doctrine in both directives. The 'Risks and Unknowns' section (line 194-196) acknowledges a unit could fit no existing layer, but the classifier itself is treated as producing deterministic outputs. If the classifier is under-specified for borderline shapes (e.g. heuristics that are partly decision and partly procedure), M1 could stall or produce contested table entries with no adjudication path short of owner escalation.",
+          "file_line": "line:99-104 (mechanism description), line:194-196 (risks)"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan assumes the 101-PDR corpus and existing rules corpus represent a stable, complete receiving set at M1 classification time. The 'Risks and Unknowns' section notes that M1's classification must be re-derived at promotion (line 192-193), but the text also relies on first-hand decomposition 'already existing for both directives in this thread's analysis' (line 113-114). If those in-thread decomposition seeds are lost before M1 executes (session boundary, context loss), M1 restarts from zero. The plan has no durable artefact that preserves the pre-classification analysis.",
+          "file_line": "line:113-114, line:192-193"
+        },
+        {
+          "severity": "high",
+          "claim": "The activation trigger (line 39-41) is either/or: keystone M2 ratification OR owner direct prioritisation. The plan assumes both paths lead to the same stable rehoming target set. However, if this plan activates via owner direct prioritisation before keystone M2 completes, M3 could rehome units that the keystone will subsequently delete — producing a distributed residue in canonical homes that then requires a second cleanup pass. The stated mitigation (line 162: 'Shippable without it by classifying independently and rehoming only units not at risk of deletion') requires predicting which units the keystone will delete, which is itself a contested classification exercise not bounded in this plan.",
+          "file_line": "line:39-41, line:162"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan names 'agents-classify-humans-accept-risk' (line 125-126) as genuinely homeless and tentatively routes it to principles.md or a new PDR if PDR-025 does not imply it. The assumption that a first-hand read of PDR-025 will resolve this is unstated; the plan does not record the PDR-025 scope or its known gaps, so M2 begins with an open question about whether minting is required. This is a bounded unknown but should be flagged as a pre-M2 research step, not assumed to resolve trivially.",
+          "file_line": "line:125-126"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan assumes 'owner-specific content' in user-collaboration.md (Owner Working Style) will resolve cleanly at M2 through an owner decision about portability (line 203-207). This is correct framing but the assumption that the owner will be available and willing to make this decision at promotion time is implicit. If the owner is not reachable at that moment, M2 cannot complete — there is no stated default or fallback disposition for owner-specific content.",
+          "file_line": "line:203-207"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly scopes its domain boundaries (lines 134-154) and the sequencing table (lines 160-166) accurately classifies all four dependencies. The blocking dependency (new-rule-vs-pdr-clause) is confirmed present and stable. These dependency assumptions are well-grounded.",
+          "file_line": "line:134-154, line:160-166"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/future/collaboration-state-domain-model-and-comms-reliability.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan explicitly retains itself as the broader domain-model reference for work not yet promoted",
+          "file_line": "file:17-22"
+        },
+        {
+          "claim": "Promotion trigger was satisfied for the write-safety slice but remaining scope (rolling archive, sidebar attention, full domain taxonomy, identity preflight) is not yet promoted",
+          "file_line": "file:320-325"
+        },
+        {
+          "claim": "Risks section flags live unresolved concerns: cross-platform atomicity, push-attention gaps, polling cadence, session-end hook uniformity",
+          "file_line": "file:289-316"
+        },
+        {
+          "claim": "Executable-plan notes for the next promoted slice are present and actionable",
+          "file_line": "file:339-361"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is grounded in live collision evidence (file:93-99, 100-111), carries concrete owner corrections (file:74-81, 105-111, 115-123), names specific mechanisms with tradeoffs (file:207-240), and explicitly avoids speculative scope creep by deferring SQLite until event files prove insufficient (file:238-240). The domain model taxonomy is well-bounded and the risks are honest about gaps (cross-platform atomicity, push-style attention, polling cadence). No bad ideas are embedded; one mildly speculative idea (push-style attention) is correctly flagged as requiring platform proof before adoption.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan contains: a priority-ordered problem statement (file:50-58), preserved live analysis with named counter-evidence (file:66-145), explicit in/out-of-scope boundaries (file:149-199), a candidate direction with mechanism-level detail (file:203-236), a dependency list (file:244-256), measurable success signals (file:259-286), a concrete risk inventory (file:289-316), a satisfied promotion trigger (file:319-321), and TDD-shaped executable notes for the next promotion (file:339-361). This is well above V0-conformant boilerplate.",
+      "salvage_value": [
+        {
+          "idea": "Treat shared-comms-log.md as a generated chronological read model over immutable per-entry event files rather than a directly-written shared log",
+          "class": "good",
+          "file_line": "file:207-213"
+        },
+        {
+          "idea": "One-file-per-event write with exclusive-create or temp-file-plus-rename to guarantee atomic event creation",
+          "class": "good",
+          "file_line": "file:207-210"
+        },
+        {
+          "idea": "Rolling archive policy: hot log carries recent context; older rendered history moves to dated archive files or is reproducible from immutable events",
+          "class": "good",
+          "file_line": "file:213-216"
+        },
+        {
+          "idea": "agent-tools command for append, render, and health checks, with portable Practice documentation so other repos can reimplement",
+          "class": "good",
+          "file_line": "file:215-217"
+        },
+        {
+          "idea": "Write-integrity contract defined per shared-state shape (claims, queue entries, conversations, sidebars, escalations, closure archives, generated read models), not only the comms log",
+          "class": "good",
+          "file_line": "file:219-224"
+        },
+        {
+          "idea": "Attention routing as an explicit domain concept with candidate low-effort signals (sidebar_open liveness hint, attention_requested event)",
+          "class": "good",
+          "file_line": "file:225-231"
+        },
+        {
+          "idea": "Session-close as first-class lifecycle event: claims close at session end, old claims not resumed by default, missed closures become stale/orphaned after TTL",
+          "class": "good",
+          "file_line": "file:115-123"
+        },
+        {
+          "idea": "UTC-Z timestamp discipline enforced by docs and validation; local-time-with-Z flagged as a validation error",
+          "class": "good",
+          "file_line": "file:111-113, 181-183"
+        },
+        {
+          "idea": "Identity preflight: every platform derives a stable display name and session prefix before opening claims, or fails into an explicit degraded mode",
+          "class": "good",
+          "file_line": "file:185-189"
+        },
+        {
+          "idea": "Active-participant verification: distinguish a live claim holder from a stale, ghost, or sub-agent-delegated claim",
+          "class": "good",
+          "file_line": "file:190-193"
+        },
+        {
+          "idea": "Portable Practice vs repo-local phenotype split: agent-tools is the TypeScript phenotype; PDR-035 and ADR-165 hold the boundary",
+          "class": "good",
+          "file_line": "file:132-135"
+        },
+        {
+          "idea": "TTLs per state type: short grace TTL for claims left open after known session close, separate from normal active-work freshness",
+          "class": "good",
+          "file_line": "file:172-174"
+        },
+        {
+          "idea": "Timestamp sanity checks that flag future-dated UTC values without mutating another agent's open state",
+          "class": "good",
+          "file_line": "file:181-183"
+        },
+        {
+          "idea": "Push-style attention (sidebar notification to a targeted agent) evaluated per platform; portable baseline assumes pull/poll plus clear check points until push is proven",
+          "class": "speculative",
+          "file_line": "file:226-231, 302-305"
+        },
+        {
+          "idea": "SQLite or another database as a later option if event files prove insufficient, deferred because binary diffs are poor for local Practice state",
+          "class": "speculative",
+          "file_line": "file:238-240"
+        },
+        {
+          "idea": "TDD-shaped promotion template: RED/GREEN/REFACTOR with concurrency simulation across every changed shared-state record type",
+          "class": "good",
+          "file_line": "file:340-356"
+        }
+      ],
+      "conformance": "no-frontmatter",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "📋 STRATEGIC / FUTURE — FIRST SLICE PROMOTED",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "No YAML frontmatter block at all; all metadata is inline body prose",
+          "file_line": "file:1-16"
+        },
+        {
+          "issue": "id field absent (no kebab slug anywhere)",
+          "file_line": "file:1"
+        },
+        {
+          "issue": "node_type field absent",
+          "file_line": "file:1"
+        },
+        {
+          "issue": "name present only as H1 body title, not as frontmatter field",
+          "file_line": "file:1"
+        },
+        {
+          "issue": "overview field absent",
+          "file_line": "file:1"
+        },
+        {
+          "issue": "kind absent from frontmatter; body prose implies strategic (line 17, line 2-3) but is not declared as a V0 axis field",
+          "file_line": "file:2-3"
+        },
+        {
+          "issue": "serves_strategic_choice absent (no strategic-choice ID cited anywhere)",
+          "file_line": "file:1"
+        },
+        {
+          "issue": "last_updated absent",
+          "file_line": "file:1"
+        },
+        {
+          "issue": "promotion_trigger absent from frontmatter; the body section 'Promotion Trigger Into current/' at line 319 is prose, not a V0 frontmatter field",
+          "file_line": "file:319"
+        },
+        {
+          "issue": "status_raw value '📋 STRATEGIC / FUTURE — FIRST SLICE PROMOTED' does not map cleanly via the §3.5 migration map: the '— FIRST SLICE PROMOTED' suffix is a prose annotation with no corresponding V0 axis (not kind, disposition, or gate)",
+          "file_line": "file:2-3"
+        },
+        {
+          "issue": "Parent and Domain prose links (lines 4-8) use dropped V0 patterns; Parent is neither derives_from nor depends_on typed edge; Domain duplicates folder location (dropped per §2.5 collection/lane)",
+          "file_line": "file:4-8"
+        },
+        {
+          "issue": "Related prose block (lines 9-16) uses untyped see-also links; V0 requires all authority/traceability relationships to use typed edges, not related",
+          "file_line": "file:9-16"
+        }
+      ],
+      "unclassified_keys": [
+        "Status (body prose, line 2)",
+        "Domain (body prose, line 4)",
+        "Parent (body prose, lines 5-8)",
+        "Related (body prose, lines 9-16)"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "The plan names 'temp-file-plus-rename' and 'exclusive create' as write-safety mechanisms but defers per-record protocol selection to promotion time. Until each shared-state shape (active-claims.json, conversations/, closure archives) has an assigned mechanism, agents designing against this contract have no normative guidance and will continue to diverge. The candidate direction lists mechanisms as a menu, not a decision.",
+          "file_line": "collaboration-state-domain-model-and-comms-reliability.plan.md:160-164"
+        },
+        {
+          "severity": "high",
+          "claim": "The domain model defines seven distinct state roles (discovery narrative, live ownership, commit intent, structured coordination, escalation, closure history, learning capture) but supplies no bounded-context diagram or ownership table. A reader cannot determine which files map to which role or which role owns which write protocol. The plan treats naming the roles as equivalent to defining the boundaries, which it is not.",
+          "file_line": "collaboration-state-domain-model-and-comms-reliability.plan.md:152-165"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan identifies that different agent platforms may have different filesystem atomicity guarantees and requires 'the portable contract to name required behaviour' but does not name it. The atomicity contract (e.g., whether POSIX rename atomicity is the baseline, whether Windows NTFS behaviour must be accounted for) is the load-bearing unknown for the entire write-safety architecture and remains open.",
+          "file_line": "collaboration-state-domain-model-and-comms-reliability.plan.md:302-305"
+        },
+        {
+          "severity": "medium",
+          "claim": "The generated read-model approach (materialise shared-comms-log.md from immutable events) introduces a rebuild discipline requirement acknowledged as a risk at line 293 but the plan names no invalidation trigger, rebuild cadence, or staleness signal. Agents that read the generated log without knowing its freshness guarantee will make coordination decisions on potentially stale state.",
+          "file_line": "collaboration-state-domain-model-and-comms-reliability.plan.md:208-215"
+        },
+        {
+          "severity": "medium",
+          "claim": "Session-close lifecycle semantics depend on native exit hooks that are explicitly unverified for Codex and 'must not delay the write-safety slice'. The TTL-fallback path is the default, but no TTL values or per-state-type TTL table is provided anywhere in the plan. The Risks section flags this at line 308 but the Candidate Direction at line 233 says 'use TTL/janitor cleanup' without specifying the numbers.",
+          "file_line": "collaboration-state-domain-model-and-comms-reliability.plan.md:233-236"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan acknowledges identity bootstrap differs sharply by platform and requires 'stable identity before state mutation', but does not specify how the portable Practice enforces this pre-condition before any write call. The degraded-mode path is named but its output format, log location, and downstream effect on claim creation are undefined. Without this, the identity-preflight gate cannot be validated.",
+          "file_line": "collaboration-state-domain-model-and-comms-reliability.plan.md:185-188"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan flags migration-of-contention (write clashes migrating from shared-comms-log.md to active-claims.json or conversation files) as a risk, but the success signals do not include a measurable criterion for 'no log jams elsewhere'. Without a measurable signal, promotion exit criteria cannot confirm the migration-of-contention risk has been addressed.",
+          "file_line": "collaboration-state-domain-model-and-comms-reliability.plan.md:295-300"
+        },
+        {
+          "severity": "low",
+          "claim": "The promoted executable slice (collaboration-state-write-safety.plan.md) is referenced but the future brief retains a duplicate 'Owner priority update' block dated 2026-04-28 at line 24 that still reads 'The next session should promote this strategic brief'. This stale directive is contradicted by the promotion trigger section at line 319 and creates ambiguity about whether promotion is complete or still pending.",
+          "file_line": "collaboration-state-domain-model-and-comms-reliability.plan.md:24-28"
+        },
+        {
+          "severity": "info",
+          "claim": "SQLite is explicitly deferred as a later option with a clear rationale (binary diffs, merge behaviour, text-first migration story). This is a well-reasoned architectural constraint that should survive into any promoted current slice to prevent premature escalation to a binary store.",
+          "file_line": "collaboration-state-domain-model-and-comms-reliability.plan.md:238-241"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": [
+        {
+          "claim": "The first executable slice is now promoted as ../current/collaboration-state-write-safety.plan.md",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "future/collaboration-state-domain-model-and-comms-reliability.plan.md:17-19 states the promotion verbatim; the target exists at current/collaboration-state-write-safety.plan.md (ls confirms 11933 bytes, dated May 25) and its own overview (line 3) self-describes as \"First executable slice ... promoted from the collaboration-state domain-model strategic brief\"."
+        },
+        {
+          "claim": "Promotion trigger satisfied 2026-04-28 by owner direction",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "collaboration-state-domain-model-and-comms-reliability.plan.md:320-321 (\"**Satisfied 2026-04-28 by owner direction:** resolving clashing writes to shared state is pressing, while hooks are a refinement...\"); corroborated by lines 24-28 (dated owner priority update directing promotion) and successor current/collaboration-state-write-safety.plan.md:3 (\"promoted from the collaboration-state domain-model strategic brief\")"
+        },
+        {
+          "claim": "Context limits have already interrupted this discussion multiple times; this strategic brief is the durable preservation point",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "collaboration-state-domain-model-and-comms-reliability.plan.md:143-145 — verbatim: \"Context limits have already interrupted this discussion multiple times, so this strategic brief is the durable preservation point for the analysis, intent, and open design questions.\" Corroborated by the \"Preserved Analysis From 2026-04-28\" section header (line 66) and lines 17-22 (\"This future brief remains the broader domain-model reference\")."
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/future/collaboration-substrate-coordination-rightsizing.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Active, all milestones pending, and the brief is still the named home for open problems routed from routing-legacy-fallback-sunset and the comms-corpus research",
+          "file_line": "line 3 (frontmatter status: active-strategic-exploration), line 23 (ACTIVE — M1 in progress)"
+        },
+        {
+          "claim": "Routed inputs from comms-corpus research (2026-06-13) arrived after plan creation, adding live M2/M4 inputs — plan is still accumulating scope and is not complete",
+          "file_line": "lines 197-243"
+        },
+        {
+          "claim": "Folder is future/ and frontmatter status is active-strategic-exploration — a legitimate pre-promotion exploration brief awaiting the activation trigger to move to current/",
+          "file_line": "lines 1-18, lines 161-167"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan diagnoses a real architectural failure mode (incident-driven accretion with no top-down model, lines 44-64), derives a coherent investigation strategy, holds firm non-negotiable invariants, and correctly re-scopes itself when the routing sunset landed ahead of M2 (lines 186-195). The comms-corpus inputs (lines 197-243) are evidence-grounded and properly bounded. No padding, no speculative features, no scope creep — the brief explicitly bars itself from adding coordination machinery (lines 110-114).",
+      "content_quality": "strong",
+      "content_quality_note": "The EGM section (lines 72-107) is precise and internally consistent. Domain boundaries and non-goals (lines 109-124) are crisply scoped. The activation record (lines 169-195) is self-correcting — it revises a stale framing rather than leaving a zombie. The SC1 routing correction (lines 232-235) demonstrates first-hand verification discipline. Risks section (lines 148-157) is honest and non-generic. The plan holds substantive design content, not just structural scaffolding.",
+      "salvage_value": [
+        {
+          "idea": "Architectural diagnosis: substrate grew by incident-driven accretion with no top-down model; the aggregate is over-built even though each layer looks locally justified",
+          "class": "good",
+          "file_line": "lines 44-50"
+        },
+        {
+          "idea": "Owner override patterns are evidence of the target design, not a workaround to be tolerated — the substrate should match minimal-ceremony by construction",
+          "class": "good",
+          "file_line": "lines 57-70"
+        },
+        {
+          "idea": "Four ratified invariants (advisory-not-mechanical, text-first, portable-first, owner-final) are inputs to derivation, not subjects of re-litigation",
+          "class": "good",
+          "file_line": "lines 95-99, lines 115-117"
+        },
+        {
+          "idea": "Replace-vs-migrate discipline plus sunset-forcing mechanism (M3) to prevent the bridging anti-pattern from recurring",
+          "class": "good",
+          "file_line": "lines 100-103, lines 62-64"
+        },
+        {
+          "idea": "The expected direction of the answer is less coordination machinery, not more; deletion is an acceptable and desired outcome",
+          "class": "good",
+          "file_line": "lines 77, 151-152"
+        },
+        {
+          "idea": "M1 inventory seeded by 2026-05-25 coordination-efficiency survey and PDR-082's partial per-layer derivation",
+          "class": "good",
+          "file_line": "lines 174-176"
+        },
+        {
+          "idea": "Routing sunset (d9225d5b) is a landed worked instance of the replace-vs-migrate discipline — M1 inventory input, not M2 output",
+          "class": "good",
+          "file_line": "lines 186-195"
+        },
+        {
+          "idea": "SC1: in_response_to/in_reply_to/audience/addressed_to linkage fields are 0 corpus-wide due to a tooling gap in the comms reply path, not a behaviour choice; enforce-or-remove verdict owned by M4",
+          "class": "good",
+          "file_line": "lines 222-235"
+        },
+        {
+          "idea": "Passive guidance loses to artefact gravity under pressure (corpus-scale evidence): M2 must weigh whether advisory-only layers lose at high-friction surfaces",
+          "class": "good",
+          "file_line": "lines 207-214"
+        },
+        {
+          "idea": "Ceremony ratchet: heartbeat share climbed to ~70-74% era-over-era — direct evidence that a low-friction layer's cost accretes until it dominates; keep/fold signal for the liveness layer",
+          "class": "good",
+          "file_line": "lines 238-240"
+        },
+        {
+          "idea": "Rotation verdict (PDR-094 + ADR-199) is settled and inherited — M4 does not re-derive it",
+          "class": "good",
+          "file_line": "lines 241-243"
+        },
+        {
+          "idea": "Risk: the re-ground itself becomes ceremony — keep M1/M2 lean; bias to deletion",
+          "class": "good",
+          "file_line": "lines 149-150"
+        },
+        {
+          "idea": "Risk: concurrent substrate work churns the target — M4 supersession list must be re-derived against the tree at promotion, not frozen at authoring",
+          "class": "good",
+          "file_line": "lines 153-155"
+        },
+        {
+          "idea": "Primary success signal: the resulting substrate is one the owner does not route around — minimal-ceremony is satisfied by construction",
+          "class": "good",
+          "file_line": "lines 142-144"
+        },
+        {
+          "idea": "Secondary success signal: the next incident adds no new layer because the model already covers it (or the model is amended deliberately, not accreted)",
+          "class": "good",
+          "file_line": "lines 144-146"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "active-strategic-exploration",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (V0 §2.1, LOCKED — required for all plans)",
+          "file_line": "collaboration-substrate-coordination-rightsizing.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `node_type` (V0 §2.1, LOCKED — required for all plans)",
+          "file_line": "collaboration-substrate-coordination-rightsizing.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `kind` (V0 §2.2, LOCKED — required for all plans; inferred `strategic` from `future/` folder and exploration framing, but not declared)",
+          "file_line": "collaboration-substrate-coordination-rightsizing.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `last_updated` (V0 §2.4, LOCKED — required for all plans; present in body prose only at line 22 as `**Last Updated**: 2026-05-29`, not in frontmatter)",
+          "file_line": "collaboration-substrate-coordination-rightsizing.plan.md:22"
+        },
+        {
+          "issue": "Missing required edge `serves_strategic_choice` (V0 §2.3, LOCKED shape — required for executable plans, recommended for strategic; not present in frontmatter at all)",
+          "file_line": "collaboration-substrate-coordination-rightsizing.plan.md:1"
+        },
+        {
+          "issue": "`status: active-strategic-exploration` is an explicitly dropped key (V0 §2.5 — `status` dropped, split into `kind`/`disposition`/`gate`/projected execution)",
+          "file_line": "collaboration-substrate-coordination-rightsizing.plan.md:4"
+        },
+        {
+          "issue": "`status` value `active-strategic-exploration` cannot map cleanly: `active` maps to `kind: executable, execution: in_progress` (V0 §3.5) while `strategic-exploration` maps to `kind: strategic` — the compound is self-contradictory across V0 axes",
+          "file_line": "collaboration-substrate-coordination-rightsizing.plan.md:4"
+        },
+        {
+          "issue": "`todos` present in frontmatter on a `strategic` plan (V0 §2.4, LOCKED — todos forbidden on strategic plans; plan is in `future/`, framed as an exploration brief, carries a Promotion section, not a TDD-cycle body)",
+          "file_line": "collaboration-substrate-coordination-rightsizing.plan.md:5"
+        },
+        {
+          "issue": "No V0 typed edges declared in frontmatter (`depends_on`, `thread`, `derives_from`, etc. are all absent); related plans are referenced only in body prose",
+          "file_line": "collaboration-substrate-coordination-rightsizing.plan.md:1"
+        },
+        {
+          "issue": "Activation trigger described in body prose (lines 30–33) rather than as a V0 `gate` object with `awaiting`, `clears_when`, and mandatory `expires` (V0 §3.4, LOCKED)",
+          "file_line": "collaboration-substrate-coordination-rightsizing.plan.md:30"
+        }
+      ],
+      "unclassified_keys": [
+        "status"
+      ],
+      "locked_contradictions": [
+        {
+          "item": "Execution status stored as durable frontmatter field (`status: active-strategic-exploration`) and reinforced by body prose (`🟢 ACTIVE — M1 in progress`), directly contradicting the LOCKED decision that execution status is NOT a durable frontmatter field (V0 §2.2, §3.2: 'Execution status is deliberately NOT a durable frontmatter field … LOCKED decision').",
+          "evidence": "Frontmatter line 4: `status: active-strategic-exploration`; body line 22: `**Status**: 🟢 ACTIVE — M1 in progress (owner dispatched the re-ground track 2026-05-29)`",
+          "file_line": "collaboration-substrate-coordination-rightsizing.plan.md:4"
+        },
+        {
+          "item": "`todos` present on a plan whose folder placement (`future/`), framing (exploration brief, investigation moves, no TDD cycles), and `promotion_trigger`-equivalent body section all indicate `kind: strategic`. V0 §2.4 LOCKS that `todos` are forbidden on strategic plans. The coexistence of M1–M4 `todos` with strategic framing may be estate evidence that V0's two-value `kind` enum (`strategic | executable`) lacks a mid-state (e.g. `in-investigation`), making this a potential SURVEY-MAY-ADD-VALUES candidate rather than a simple violation.",
+          "evidence": "Plan in `future/` folder (strategic per V0 §3.6); body explicitly states 'This is an exploration brief … not a build plan'; `todos` present in frontmatter lines 5–17 covering M1–M4 investigation moves.",
+          "file_line": "collaboration-substrate-coordination-rightsizing.plan.md:5"
+        }
+      ],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "The plan's activation trigger is multi-conditional (owner prioritises re-ground OR third accretion incident OR routing-legacy-fallback-sunset reaches promotion). The routing sunset is already executed (landed d9225d5b per line 188-195), which means one trigger arm is spent. The activation record confirms M1 was dispatched 2026-05-29 but the plan remains in future/ rather than current/. Per line 162-163, the lane move to current/ is deferred to M2. This deferral is architecturally sound: M2 is the first executable-output boundary and gating the lane move on it prevents a premature build-phase start.",
+          "file_line": "162-167"
+        },
+        {
+          "severity": "low",
+          "claim": "The M1 working artefact is referenced at line 28 as a sibling file (collaboration-substrate-coordination-rightsizing.m1-inventory.md) but its existence is not verified here. If M1 was dispatched on 2026-05-29 but the artefact does not yet exist, the activation record is ahead of the artefact. This is a traceability gap: the brief asserts M1 is 'in progress' (line 23) but the todo status for m1-characterise-context-and-inventory is still 'pending' (line 7), creating an internal inconsistency between the status line and the todo list.",
+          "file_line": "6-8, 23, 28"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan correctly scopes out build work ('Not a build plan', line 110) and requires M2 ratification before any downstream build/refactor/deletion plan is authored (lines 165-167). However the routing sunset execution (landed post-dispatch, per the 2026-05-29 activation record addendum, lines 184-195) demonstrates that direct execution can precede the ratification model. The plan absorbs this as a 'landed worked instance' (line 192) — a reasonable architectural decision — but it also exposes that the activation gate has no enforcement mechanism. A third accretion incident occurring before M2 completes could bypass the gate the same way. This is a structural gap in the exploration-before-build discipline the plan itself identifies as the anti-pattern to cure.",
+          "file_line": "112-113, 162-167, 184-195"
+        },
+        {
+          "severity": "low",
+          "claim": "The four ratified invariants (advisory-not-mechanical, text-first, portable-not-platform-native, owner-is-final) are held as fixed inputs at lines 97-98 and 115-117, but lines 157-158 acknowledge that if M2 finds one genuinely conflicts with the minimal design, the resolution is an owner-facing escalation. This is architecturally correct. However the plan does not name the escalation mechanism (AskUserQuestion, PDR, or comms-event), so a deriving agent faces an undefined path if invariant conflict surfaces. The gap is contained because it is in the Risks section, not a todo.",
+          "file_line": "97-98, 115-117, 157-158"
+        },
+        {
+          "severity": "info",
+          "claim": "The comms-corpus research inputs routed in at lines 197-243 are architecturally well-scoped: they are explicitly labelled 'inputs to the derivation, not pre-made verdicts' (line 205) and carry forward-routing corrections (SC1 homed at M4, not at comms-event-write-integrity per lines 232-235). The routing correction at lines 232-235 demonstrates live architectural discipline — a sibling plan's scope boundary is read first-hand before asserting a consumer relationship. This is a positive structural signal for the plan's hygiene.",
+          "file_line": "205, 232-235"
+        },
+        {
+          "severity": "info",
+          "claim": "The dependency table (lines 128-133) classifies all dependencies as 'beneficial' with 'shippable without' notes. This is correct for an exploration brief whose first move (M1) is a self-contained inventory task. The wider cluster listed in the dependency table (liveness-floor, domain-model, coordination-watcher-canonicalisation, write-safety, comms-watch-storage, multi-agent-protocol, sidebar-escalation, joint-decision) are M4 supersession targets, not blockers. The classification is architecturally accurate.",
+          "file_line": "128-133"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": [
+        {
+          "claim": "comms-event-write-integrity plan is complete and scope-frozen — no schema migration, no event-semantics change — so it does not own the authoring-affordance surface (cited at lines 232-235)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/agent-tooling/current/comms-event-write-integrity.plan.md:76 (\"No schema migration, no event-semantics change\"), :253 (Non-Goals: migrating schema / changing event semantics), :256 (comms list/show/watch non-goal, F-07); todos completed at :21,:25,:29,:33,:37"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/future/comms-watch-liveness-floor.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Activation trigger is explicit and unmet: graph-tooling pain or separate liveness-primitive driver required",
+          "file_line": "line 30"
+        },
+        {
+          "claim": "Status is decision-incomplete with three open owner questions (Q1-Q3) ungated",
+          "file_line": "lines 136-145"
+        },
+        {
+          "claim": "Corpus-routed evidence added 2026-06-13 is still unconsumed by implementation",
+          "file_line": "lines 149-170"
+        },
+        {
+          "claim": "All todos remain pending and no phases have started",
+          "file_line": "lines 6-23"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan isolates a precisely-scoped substrate gap (watcher-liveness != claim-liveness, lines 53-55), provides evidence-grounded acceptance criteria (A1-A7, lines 100-123), and carries corpus-routed signals (S3/S7/S8, lines 156-170) that materially sharpen implementation. No speculative scope bloat or bad ideas found. Every constituent idea maps to a concrete missing primitive or a real anti-pattern.",
+      "content_quality": "strong",
+      "content_quality_note": "Scope, non-goals, sibling boundaries, acceptance criteria, and open questions are all present and precise. The 2026-06-13 corpus evidence route (lines 149-170) adds material depth beyond V0 conformance. The honesty-reconciliation concern (lines 64-66, phase-3) is a real design problem, not padding.",
+      "salvage_value": [
+        {
+          "idea": "Watcher-liveness and claim-liveness are distinct freshness questions requiring separate primitives",
+          "class": "good",
+          "file_line": "lines 53-55"
+        },
+        {
+          "idea": "Standalone liveness-record schema under .agent/state/collaboration/ with agent_id (identity tuple), last_alive_at, and free-form source string (no enum)",
+          "class": "good",
+          "file_line": "lines 101-104"
+        },
+        {
+          "idea": "comms watch emits a liveness record with source: 'watcher' on each tick",
+          "class": "good",
+          "file_line": "lines 105-107"
+        },
+        {
+          "idea": "pnpm agent-tools:collaboration-state check writes a liveness record with source: 'check' and exits as a one-shot writer",
+          "class": "good",
+          "file_line": "lines 108-110"
+        },
+        {
+          "idea": "comms watch is a 500 ms poll loop masquerading as watch (anti-pattern); must move to fs-event-driven delivery or be relabelled honestly",
+          "class": "good",
+          "file_line": "lines 64-67"
+        },
+        {
+          "idea": "Honest relabelling option: comms poll with watch retained as a thin wrapper pending real fs-events",
+          "class": "good",
+          "file_line": "lines 115-117"
+        },
+        {
+          "idea": "Run /loop ~270s check experiment over a 30+ minute Claude Code session to validate host-scheduler reliability and measure reasoning-context disruption",
+          "class": "speculative",
+          "file_line": "lines 119-122"
+        },
+        {
+          "idea": "Liveness-record path convention: .agent/state/collaboration/liveness/<tuple-key>.json where tuple-key is a stable hash of the identity tuple",
+          "class": "good",
+          "file_line": "lines 143-145"
+        },
+        {
+          "idea": "Heartbeat measures scheduling not health; overnight turn-starvation stretched 4-min cadence to 20-40+ min while sessions stayed healthy; retirement thresholds misread starved-but-fine sessions",
+          "class": "good",
+          "file_line": "lines 157-160"
+        },
+        {
+          "idea": "Scheduling-aware cadence: cross-check ground truth (git/PR/registry) before any retirement judgement",
+          "class": "good",
+          "file_line": "lines 160-162"
+        },
+        {
+          "idea": "Heartbeat shutdown-race (S7): 3-6 s ACTIVE-beat tail at session end; final heartbeat-end discipline must fire on the close path",
+          "class": "good",
+          "file_line": "lines 163-165"
+        },
+        {
+          "idea": "Host-suspension gap (S8): loops emit ACTIVE beats during host suspension with no self-exit; cure is final heartbeat-end on the close path",
+          "class": "good",
+          "file_line": "lines 164-165"
+        },
+        {
+          "idea": "Derive heartbeat args from the registry at emit time rather than baking them into the loop at bootstrap; cheap consistency checks against active-claims.json",
+          "class": "good",
+          "file_line": "lines 168-170"
+        },
+        {
+          "idea": "Full-tuple self-echo exclusion unit test: same-name-different-platform peer is not self-excluded; same-tuple self-write is excluded",
+          "class": "good",
+          "file_line": "lines 111-113"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": null,
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "decision-incomplete",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Required field `id` is absent. V0 §2.1 LOCKED: `id` is required for all plans.",
+          "file_line": "comms-watch-liveness-floor.plan.md:1-24 (frontmatter block)"
+        },
+        {
+          "issue": "Required field `node_type` is absent. V0 §2.1 LOCKED: `node_type: plan` is required for all plans as the registry discriminator.",
+          "file_line": "comms-watch-liveness-floor.plan.md:1-24 (frontmatter block)"
+        },
+        {
+          "issue": "Required field `kind` is absent. V0 §3.1 LOCKED: `kind` (enum `strategic | executable`) is required for all plans.",
+          "file_line": "comms-watch-liveness-floor.plan.md:1-24 (frontmatter block)"
+        },
+        {
+          "issue": "`status: decision-incomplete` is present. V0 §2.5 explicitly drops `status` entirely — it is split into `kind`, `disposition`, `gate`, and the Linear-projected execution axis. The value `decision-incomplete` maps via §3.5 to `kind: strategic` + `gate: awaiting: owner-decision` (with `expires`).",
+          "file_line": "comms-watch-liveness-floor.plan.md:5"
+        },
+        {
+          "issue": "`gate` field is absent. Per V0 §3.5 migration map, `status: decision-incomplete` maps to `gate: { awaiting: owner-decision, clears_when: <string>, expires: <ISO date> }`. The gate is required and its `expires` is mandatory (§3.4 LOCKED).",
+          "file_line": "comms-watch-liveness-floor.plan.md:1-24 (frontmatter block)"
+        },
+        {
+          "issue": "`last_updated` is absent from frontmatter. V0 §2.4 LOCKED: required for all plans. The value appears in the body (line 28) as prose, not as the canonical frontmatter field.",
+          "file_line": "comms-watch-liveness-floor.plan.md:28"
+        },
+        {
+          "issue": "No V0 typed edges declared in frontmatter (`serves_strategic_choice`, `derives_from`, `thread`, `depends_on`, etc.). `serves_strategic_choice` is required for executable plans (§2.3) and recommended for strategic. `thread` is recommended for all plans (§2.3, §4).",
+          "file_line": "comms-watch-liveness-floor.plan.md:1-24 (frontmatter block)"
+        },
+        {
+          "issue": "`todos` is present (a LOCKED executable-only field per §2.4), but `status: decision-incomplete` maps to `kind: strategic` via §3.5. These conflict: `todos` is forbidden on `strategic` plans. The plan's kind is indeterminate without the required `kind` field, but the combination is internally inconsistent under V0.",
+          "file_line": "comms-watch-liveness-floor.plan.md:6-23"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan conflates two distinct liveness concerns — watcher-process liveness and claim-heartbeat freshness — then delegates the claim side to a sibling plan. This split is architecturally correct but it creates a temporal coupling risk: the liveness-record schema proposed here (A1, Q3) could be authored without knowing whether the sibling claim-liveness plan (claim-liveness-crash-reconciliation-and-session-forensics) will share or diverge the storage path and identity-key conventions. No coordination protocol between the two plans is specified.",
+          "file_line": "comms-watch-liveness-floor.plan.md:82-98"
+        },
+        {
+          "severity": "medium",
+          "claim": "Phase 3 (polling vs fs-event honesty reconciliation, A5) is architecturally under-resolved. The two options — true fs-event delivery vs honest relabelling — have significantly different dependency surfaces (chokidar or equivalent Node.js watcher vs. a CLI rename). Deferring this to an owner call (Q2) without a concrete evaluation of the fs-event delivery model on the target platforms leaves the implementation path undefined for Phase 2, which builds on the watch loop. Phase 2 could invest in a polling model that Phase 3 then replaces.",
+          "file_line": "comms-watch-liveness-floor.plan.md:64-67 and 113-116"
+        },
+        {
+          "severity": "low",
+          "claim": "The proposed liveness-record path convention (Q3: `.agent/state/collaboration/liveness/<tuple-key>.json` where tuple-key is a stable hash of the identity tuple) introduces a content-addressable keying scheme. This is sound, but the plan does not specify the hash function, input serialisation order, or collision-resistance requirements. Downstream plans or tests that need to construct or validate the path will have to infer these from the implementation.",
+          "file_line": "comms-watch-liveness-floor.plan.md:141-145"
+        },
+        {
+          "severity": "low",
+          "claim": "The routed corpus evidence (S3, S7, S8) introduces a scheduling-aware cadence recommendation and a heartbeat-shutdown-race concern. These are additive requirements on the liveness-record writer (e.g. final-beat discipline on close path, deriving args from registry at emit time). Neither is reflected in the Acceptance criteria (A1–A7) or the Validation section. If the corpus evidence is authoritative input, at least one acceptance criterion should capture the shutdown-race guard.",
+          "file_line": "comms-watch-liveness-floor.plan.md:148-170 versus 100-124"
+        },
+        {
+          "severity": "info",
+          "claim": "The `/loop ~270s` experiment (Phase 4, A6) is an empirical host-integration validation, not a design primitive. Recording it as a short evidence note under `.agent/plans/agent-tooling/current/` is appropriate for an experiment artifact but the plan does not specify what architectural conclusion is required before the liveness feature is considered production-viable. If the experiment reveals unacceptable reasoning-context disruption, no fallback host-scheduler design is scoped.",
+          "file_line": "comms-watch-liveness-floor.plan.md:18-20 and 119-123"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/future/coordination-watcher-canonicalisation.plan.md",
+      "classification": "rehome",
+      "classification_evidence": [
+        {
+          "claim": "Frontmatter status=promoted, promoted_to names the current/ copy as the live execution plan",
+          "file_line": "5"
+        },
+        {
+          "claim": "Body confirms PROMOTED 2026-06-21 and states the current/ plan supersedes for execution",
+          "file_line": "60"
+        },
+        {
+          "claim": "File lives in future/ which is the pre-promotion lane; post-promotion it is a strategic stub that belongs logically as an archived origin record, not a peer of unstarted future plans",
+          "file_line": "1"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every major idea is grounded in concrete worked instances (F-81, F-82, seen-file defect at line 73), the root-cause diagnosis is precise and verifiable, design principles encode real architectural judgement (executable-beats-convention at line 91, SKILL carries WHY not HOW at line 94), and acceptance criteria are testable. No speculative or vague content detected.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan carries first-hand defect evidence (lines 71-75), precise implementation pointers (cli-runtime.ts:130-142 at line 72, SKILL-CANONICAL.md:139 at line 72), a risk register with named cures (lines 107-109), falsifiable acceptance criteria (lines 98-103), explicit non-goals with named owner plans (lines 83-86), and a clear design-principle set (lines 90-94). Quality is well above V0-conformant minimum.",
+      "salvage_value": [
+        {
+          "idea": "The .agent/reference/ folder is for external materials only; Oak-internal canonical definitions must not live there",
+          "class": "good",
+          "file_line": "68-70"
+        },
+        {
+          "idea": "Executable CLI (coord how-to-start) emitting the canonical watcher invocation eliminates drift between SKILL example and implementation",
+          "class": "good",
+          "file_line": "91"
+        },
+        {
+          "idea": "The SKILL should carry the WHY (doctrinal stance, identity-tuple rationale) but delegate the HOW (exact invocation) to the CLI",
+          "class": "good",
+          "file_line": "94"
+        },
+        {
+          "idea": "Seen-file format is plain text one-event-id-per-line; the .json extension in SKILL-CANONICAL.md is a defect causing full historical backfill floods",
+          "class": "good",
+          "file_line": "72-75"
+        },
+        {
+          "idea": "Watcher scope should grow with substrate scope: comms, active-claims.json, conversations/, escalations/, handoffs/ — the /loop polyfill is a smell",
+          "class": "good",
+          "file_line": "78-80"
+        },
+        {
+          "idea": "Single CLI entry point (--surfaces flag) with internal per-surface composition is preferred over per-surface CLIs composing at host level",
+          "class": "good",
+          "file_line": "28"
+        },
+        {
+          "idea": "[CHANNEL][SURFACE] discriminator on emitted lines enables agent-side triage without parsing event bodies",
+          "class": "good",
+          "file_line": "32"
+        },
+        {
+          "idea": "Identity discipline and anti-patterns (self-echo) belong in a Practice rule or PDR-027 amendment, not inline in the SKILL",
+          "class": "good",
+          "file_line": "20"
+        },
+        {
+          "idea": "Tool spec content belongs in agent-tools/src/collaboration-state/README.md code-adjacent to implementation",
+          "class": "good",
+          "file_line": "36"
+        },
+        {
+          "idea": "ARC/ArcAngel as a co-equal channel TYPE alongside general comms (added at promotion, 2026-06-21)",
+          "class": "good",
+          "file_line": "60"
+        },
+        {
+          "idea": "Seen-file priming (idempotent, pre-watcher-start) should be part of coord how-to-start to avoid the missing-seen-file backfill flood",
+          "class": "good",
+          "file_line": "24"
+        },
+        {
+          "idea": "Potential collision between seen-file priming in coord how-to-start and the session-counter primitive in intent-to-commit-and-session-counter.plan.md",
+          "class": "speculative",
+          "file_line": "109"
+        },
+        {
+          "idea": "Adding multi-surface to existing comms watch may pressure unrelated code paths; internal composition via per-surface watchers is the proposed cure",
+          "class": "speculative",
+          "file_line": "107"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": null,
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "promoted",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, required for all plan nodes)",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:1-55 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `node_type` (LOCKED, required for all plan nodes)",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:1-55 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED) — readiness axis absent; plan cannot be classified as strategic or executable",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:1-55 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "`status: promoted` is an explicitly dropped field (V0 §2.5); `status` is replaced by `kind`/`disposition`/`gate`. Value `promoted` does not appear in the §3.5 migration map.",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:4"
+        },
+        {
+          "issue": "`type: developer-experience` is an explicitly dropped free-label field (V0 §2.5); replaced by `node_type` + `kind`.",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:6"
+        },
+        {
+          "issue": "`isProject: false` is an explicitly dropped field (V0 §2.5).",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:14"
+        },
+        {
+          "issue": "Plan body states 'PROMOTED 2026-06-21 → ../current/coordination-watcher-canonicalisation.plan.md'; this is a terminal state. V0 requires `disposition: superseded` (or `done`) and a `superseded_by` edge naming the successor. Neither is present.",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:60"
+        },
+        {
+          "issue": "`todos` present in a plan residing in `future/` (strategic lane per V0 §3.6 folder map). V0 §2.4: todos are forbidden on `strategic` plans. `kind` is absent so formal classification is blocked, but the folder placement indicates strategic.",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:15-54"
+        },
+        {
+          "issue": "No V0 typed edges declared in frontmatter (`serves_strategic_choice`, `derives_from`, `depends_on`, `thread`, etc. all absent). `sibling_plans` and `related_rules` use non-V0 edge keys.",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:8-12"
+        },
+        {
+          "issue": "`serves_strategic_choice` absent; executable plans require this field resolved or set to `pending` sentinel (V0 §2.3, authority invariant 1).",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:1-55 (frontmatter block — field absent)"
+        }
+      ],
+      "unclassified_keys": [
+        "promoted_to",
+        "sibling_plans",
+        "related_rules"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "Plan status is 'promoted' with promoted_to pointing at ../current/. Line 5 names the superseding current plan. This future/ copy is explicitly designated as the 'strategic source' while current/ handles execution (line 60). The architecture review should be directed at the current/ copy for execution-level concerns; this file is the intent record.",
+          "file_line": "5-6,60"
+        },
+        {
+          "severity": "medium",
+          "claim": "Phase 3 names two competing composition strategies — (a) single-process '--surfaces' flag on existing 'comms watch', vs (b) per-surface CLIs composing at host level — and defers the decision to plan execution time (line 28). For a plan already in 'promoted' state this is an open architectural decision that should have been resolved before promotion, or must be the first gate in Phase 3 with a recorded ADR before any implementation proceeds.",
+          "file_line": "28-29"
+        },
+        {
+          "severity": "medium",
+          "claim": "Phase 2 introduces 'coord how-to-start' under an ambiguous namespace: 'or under the existing collaboration-state namespace' (line 24). The command surface is load-bearing (Acceptance Criterion 1 at line 98 canonicalises the exact pnpm invocation). A CLI namespace decision deferred to implementation time risks the AC being misaligned with the delivered command path.",
+          "file_line": "24,98"
+        },
+        {
+          "severity": "low",
+          "claim": "The dependency graph (phases 0-9) is sound and acyclic: grounding -> home-decision -> (how-to-start CLI || multi-surface design) -> multi-surface impl -> content-migration -> skill-amendment + reference-clarification -> gates -> reviewers. However phase-4 depends on both phase-2 and phase-3 (line 34), creating a join that must both be complete before implementation. This is architecturally correct but means the two parallel tracks (phase 2 and phase 3) are not truly independent — they must converge before phase 4. Teams should not start phase 4 until both are closed.",
+          "file_line": "34"
+        },
+        {
+          "severity": "low",
+          "claim": "Principle 2 (line 92) — 'Executable beats authoritative-by-convention' — is sound and addresses the root defect well. However, the plan does not specify whether 'coord how-to-start' output is machine-parseable (structured) or human-readable prose. If downstream automation (e.g. a wrapper script or a skill) needs to parse the emitted invocation, an unstructured stdout contract will become a new drift surface of the same class as the markdown example being replaced.",
+          "file_line": "92,98"
+        },
+        {
+          "severity": "low",
+          "claim": "Risks section (line 107-110) identifies CLI cohesion drift and migration breakage but does not address the risk of the multi-surface watcher event ordering: if active-claims.json and comms/ events arrive concurrently, the '[CHANNEL][SURFACE]' discriminator (line 32) on the first line must be sufficient for an agent to triage without reading further context. The plan assumes triage is possible from the discriminator alone; this assumption is not validated by any AC or test contract.",
+          "file_line": "32,99,107-110"
+        },
+        {
+          "severity": "info",
+          "claim": "Non-Goals (lines 83-87) are well-scoped and clearly de-duplicate against sibling plans (comms-watch-liveness-floor, start-right-team-singleton-lane-remediation). The boundary between this plan's 'developer-surface layer' and the sibling's 'substrate-primitive layer' (line 113) is explicitly named. This layering is architecturally appropriate.",
+          "file_line": "83-87,113"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": [
+        {
+          "claim": "status: promoted; promoted_to: ../current/coordination-watcher-canonicalisation.plan.md (cited at 4-5)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": ".agent/plans/agent-tooling/future/coordination-watcher-canonicalisation.plan.md:4-5 (status/promoted_to) corroborated by existing successor .agent/plans/agent-tooling/current/coordination-watcher-canonicalisation.plan.md:1-10"
+        },
+        {
+          "claim": "PROMOTED 2026-06-21 → current/coordination-watcher-canonicalisation.plan.md (owner-directed); this brief remains the strategic source; the executable current/ plan supersedes it for execution",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "future brief: line 4 `status: promoted`, line 5 `promoted_to: \"../current/coordination-watcher-canonicalisation.plan.md\"`, line 60 verbatim \"🟢 PROMOTED 2026-06-21 → [`../current/...`] (owner-directed) ... This brief remains the strategic source; the executable `current/` plan supersedes it for execution.\" Corroborated by current/ plan front-matter `status: current`, `promoted_from: \"../future/coordination-watcher-canonicalisation.plan.md\"`, `promotion_evidence` citing owner-direct promotion (2026-06-21). Both files landed together in commit 7e112120f \"docs(tooling): promote watcher-canonicalisation plan with co-equal channels\"."
+        }
+      ]
+    }
+  ]
+}
