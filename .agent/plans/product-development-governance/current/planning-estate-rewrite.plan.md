@@ -19,7 +19,7 @@ todos:
     status: pending
     depends_on: [ws2-idea-schema-structure]
   - id: ws4-thin-slice-proof
-    content: "BUILD (the gate): prove the architecture end-to-end on a thin vertical slice — harvest a handful of ideas from a few docs → store as JSON-LD idea-nodes in graph-core → author ONE new plan referencing them by frontmatter edge → exercise BOTH drift mechanisms (deterministic frontmatter->store validator; semantic prose<->frontmatter review) + TWO evolution ops: supersede/redirect AND merge (the n:1 reference-rewrite WS6/WS7 depend on — graph-core has no merge; it is new). Acceptance: the loop runs end-to-end; the deterministic validator catches a deliberately-broken edge; the merge op rewrites referencing edges and the validator catches a deliberately-left-dangling inbound edge; both ops preserve history. GATE: do not proceed to ws6 until this passes."
+    content: "BUILD (the gate): prove the architecture end-to-end on a thin vertical slice — harvest a handful of ideas from a few docs → store as JSON-LD idea-nodes in graph-core → author ONE new plan referencing them by frontmatter edge → exercise BOTH drift mechanisms (deterministic frontmatter->store validator; semantic prose<->frontmatter reconciliation — the ADR-200 §8 workflow) + TWO evolution ops: supersede/redirect AND merge (the n:1 reference-rewrite WS6/WS7 depend on — graph-core has no merge; it is new). Acceptance: the loop runs end-to-end; the deterministic validator catches a deliberately-broken edge; the merge op rewrites referencing edges and the validator catches a deliberately-left-dangling inbound edge; both ops preserve history. GATE: do not proceed to ws6 until this passes."
     status: pending
     depends_on: [ws1-verify-graph-core-api, ws2-idea-schema-structure]
   - id: ws5-projection-types-and-dedup
@@ -72,7 +72,8 @@ Co-equal across three axes (ADR-200 §Goals): **no useful idea lost** — proven
 a fresh-context reviewer that did not perform the harvest; **per-choice effectiveness** (reviewer-confirmed,
 every strategic choice served by adequate plans, gaps closed by authored plans); **human-navigability** (a
 person can traverse vision → strategy → stream → thread → plan and understand the intent). Plus: the
-deterministic frontmatter↔store validator is green and the active prose↔frontmatter handoff gate is wired.
+deterministic frontmatter↔store validator is green and the prose↔frontmatter reconciliation workflow
+(ADR-200 §8) is wired.
 
 ## Prerequisites
 
@@ -146,7 +147,8 @@ The open design-steps were triaged through the decision lenses (`principles.md` 
   the residual genuinely-owner conflicts to the owner (batched, pre-analysed) — never dump the raw set.
 
 These are **directions to confirm** at each workstream, not closures; each workstream's own design or
-empirical pass ratifies or revises them (e.g. the WS6 survey-pattern-reuse warrant is verified at WS6).
+empirical pass ratifies or revises them (e.g. the WS6 survey-pattern-reuse warrant is verified at WS6). The
+owner affirmed this confirm-at-the-workstream approach as good agile practice (2026-06-22).
 
 ## Incremental delivery (the boundary — ADR-200 §Consequences)
 
