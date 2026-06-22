@@ -327,7 +327,7 @@ ADR-117; update the completed-plans index.
   - cycle-7 (eliminate `appId`) → **NOT carried**. It is a separable, low-severity
     code-quality + observability decision (the constant `oak.bootstrap.app_id` is a
     test-only product-code parameter, ~43 references); it is NOT test-estate work.
-    On archival, lift its finding to `.agent/plans/icebox/` so it is preserved, not
+    On archival, lift its finding to `.agent/plans/speculative/` so it is preserved, not
     executed here.
   - phase-final (security verdict on repeated `wrapMcpServerWithSentry` under Sentry
     off) → **carried** to the security-expert Readiness Reviewer below.
