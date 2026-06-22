@@ -102,3 +102,25 @@ in the database (upstream, **not our scope**) and an appropriate materialised vi
 Curriculum API. The "missing materialised view" and the "TPC filter not yet proven" describe one
 gate: the safely-filtered open-data availability the app depends on. Surfaced by Plover wakes
 Sundog's first-hand context-loss scan; resolved by owner direction.
+
+## Q-004 — A general convention for naming openly-licensed external sources?
+
+**Question:** The external-skills substrate study was source-neutralised by design (its AGENTS-side
+"vendor-literal clause" kept the source anonymous). The owner determined (2026-06-22) that for an
+openly-licensed public repo (`mattpocock/skills`, MIT) the anonymity "never had a real purpose" and
+directed dropping it. That decision was scoped to this source. Should the Practice carry a *general*
+convention — name openly-licensed external sources plainly with attribution; keep genuinely
+proprietary/unlicensed sources private — and if so, where does it live? (Not the general
+`plan-body-first-principles-check` vendor-literal clause, which governs token-drift, not source
+attribution.)
+
+**Why it shapes future work:** future external-substrate studies (ponytail is already the second)
+will each face the same naming decision; a settled convention prevents re-litigating it per source.
+
+**Why not cheaply answerable now:** it is an owner doctrine call about Practice-wide source-handling,
+not a fact to look up; low-urgency (does not block any current cycle).
+
+**Owning artefact:** [`external-skills-substrate-learning.plan.md`](../../plans/agentic-engineering-enhancements/future/external-skills-substrate-learning.plan.md)
+§Decisions; the two substrate studies in `research/agentic-engineering/operating-model-and-platforms/`.
+
+**Status:** open (2026-06-22, Perseus turns Horizon).
