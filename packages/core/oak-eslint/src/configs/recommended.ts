@@ -176,6 +176,16 @@ const oakRecommendedConfig: TSESLint.FlatConfig.Config = {
   rules: {
     '@oaknational/no-eslint-disable': 'error',
     '@oaknational/no-dynamic-import': 'error',
+    // Architectural boundary: application code must not READ the `.agent/`
+    // knowledge substrate at runtime (fs reads / `new URL` into `.agent/`).
+    // agent-tools/ (the substrate operator) is exempt inside the rule. The
+    // companion IMPORT boundary is enforced by the depcruise
+    // `no-import-from-agent-substrate` forbidden rule. Wired at `warn` per the
+    // new-ESLint-rule convention (the existing-violation surface is empty —
+    // the gap-ledger reader was deleted — so escalation to `error` is a
+    // separate, immediately-safe decision). Doctrine: owner 2026-06-22,
+    // .agent/directives/testing-strategy.md.
+    '@oaknational/no-agent-substrate-access': 'warn',
     // New rule (2026-06-14): bans `throw` in favour of the Result pattern
     // (ADR-088 / use-result-pattern). Wired at `warn` first per the
     // no-warning-toleration §"Scope and exceptions" rule-authoring nuance — the
@@ -218,7 +228,6 @@ const oakRecommendedConfig: TSESLint.FlatConfig.Config = {
           '**/agent-tools/tests/runtime-agent-index.integration.test.ts',
           '**/apps/oak-curriculum-mcp-streamable-http/e2e-tests/vercel-ignore-runtime.e2e.test.ts',
           '**/apps/oak-search-cli/src/lib/indexing/field-readback-audit-parse-ledger.integration.test.ts',
-          '**/apps/oak-search-cli/src/lib/indexing/task-0.0-gap-ledger.integration.test.ts',
           '**/packages/core/build-metadata/tests/git-sha.unit.test.ts',
           '**/packages/core/env/tests/root-package-version.unit.test.ts',
           '**/packages/core/observability/src/no-node-only-imports.unit.test.ts',

@@ -136,6 +136,17 @@ plan.
   the right tool: ESLint for boundary enforcement, Playwright for
   browser testing, vitest for runtime logic.
 
+- **No reading the `.agent/` knowledge substrate in tests** - Tests MUST
+  NOT read from `.agent/**/*` for any reason (owner doctrine 2026-06-22,
+  absolute). That tree is shared, mutable, relocatable knowledge, not test
+  fixtures, so a test that reads it is asserting configuration rather than
+  proving behaviour (see "Assert effects, not constants") and goes stale
+  when the substrate moves. Worked instance: a gap-ledger test
+  `readFileSync`-ed a plan JSON, asserted its `statuses` and finding
+  tuples, and silently broke when a plan-estate relocation moved the file.
+  If product code resolves `.agent/` paths, exercise it against a
+  `mkdtemp` fixture repo, never the live tree.
+
 ## Definitions
 
 ### System Architecture Components
