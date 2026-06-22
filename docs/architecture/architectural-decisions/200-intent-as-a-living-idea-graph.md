@@ -221,3 +221,11 @@ family-of-graphs future a set of instances rather than a rebuild.
   authoring tools depend on.
 - **`graph-core` exact API and gaps** — substrate confirmed (generic RDF/JSON-LD); the precise reuse
   surface and what the idea-graph SDK must add are verified first-hand at SDK-design time (§Sequence 2).
+- **JSON-LD vs JSONSchema reconciliation** — `graph-core` is RDF/JSON-LD; the idea-store is decided as
+  JSONSchema-validated JSON. How idea-node JSON maps into `graph-core`'s JSON-LD representation (native
+  JSON-LD documents vs plain JSON projected to RDF at load) is a design-step choice; the two are not in
+  conflict but the bridge must be specified.
+- **Harvest-source breadth** — the plan-corpus rewrite scans everything under `.agent/plans/`. Whether
+  the highest-altitude ideas in `VISION.md` and `docs/strategy/` are also harvested into the graph as
+  nodes, or remain stable anchoring projections that the new plans serve, is a design choice (the graph
+  spans all altitudes eventually; the question is what this rewrite's harvest ingests).

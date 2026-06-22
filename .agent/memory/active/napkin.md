@@ -389,3 +389,27 @@ complexity — I solved a non-problem, the exact invent-a-solution-without-the-q
 session was about, recurring in my own handoff. The pinned `0 behind / N ahead` counts were also a
 moving-target anti-pattern (drifted 124→125→126 within the session); continuity states "0 behind / fully
 integrated", never a volatile ahead-count. Sibling: [[no-moving-targets-in-permanent-docs]].
+
+## The minimise-change pull recurred ~6× in one session — the estate-scale instance of artefact-gravity (2026-06-22, Cinder holds Warmth)
+
+Designing the planning-estate rewrite (ADR-200), the owner corrected the *same* pull six times in one
+session, each a different surface: (1) labelling survey exclusions "correct by design" — sourced from an
+agent-authored method doc, not the principal; (2) `*.plan.md` as the definition of a "real plan"; (3)
+conformance/classification of *old* plans as a goal; (4) treating the idea-inventory as a thin attribute
+of plans rather than the fundamental substrate; (5) offering to *defer* a settleable foundational
+architecture decision as "downstream"; (6) framing the human-navigable documents as mechanically-derived
+projections rather than co-equal embodiments. The unifying pathogen: **under a detailed existing estate, I
+anchor to what exists and frame the work as incremental refinement of it — when the goal is a clean-break
+rewrite that treats the estate as raw material.** This is `passive-guidance-loses-to-artefact-gravity` at
+the scale of the whole estate; I hold the cures (`value-first; existing is malleable`,
+`existence-is-not-correctness-default-replace`, source-intent-from-the-principal) and they still lost,
+repeatedly, to the gravity of concrete artefacts. Two structural cures the owner *modelled* (not just
+stated): **move the scope boundary into the filesystem** (relocate the archive so `.agent/plans/` *is* the
+scope — no judgement, no confusion), and **settle every settleable foundation now** under the LTAE lens
+(don't defer). Firing gate for a successor: before treating any existing artefact as something to
+preserve/extend/classify, ask "is this raw material for a rewrite, or am I conserving it because it
+exists?" The anti-patterns are homed operationally in ADR-200 §Non-goals; this is the behavioural record
+of why they recur and how hard they pull. Six instances in one session is over-ripe PDR-098 evidence that
+the cure must be an action-time interrupt, not another passive memory. Siblings:
+[[passive-guidance-loses-to-artefact-gravity]], [[feedback_value_first_existing_is_malleable]],
+[[feedback_existence_is_not_correctness_default_replace]].
