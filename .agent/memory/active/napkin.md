@@ -279,6 +279,37 @@ the skill is the actuator. Same seam as canonical-body/thin-adapter and the orie
 the firing surface stays small, the depth lives behind it. Candidate pattern (held for a second
 instance). Sibling: [[passive-guidance-loses-to-artefact-gravity]].
 
+## Judge a new capability by its KIND's success criterion, not a borrowed one (2026-06-22, Orbit rides Horizon)
+
+Assessing the new `oak-reason` skill, I graded it "unproven" because it does not auto-fire under
+pressure — but that is the bar for a TRIPWIRE, not a TOOL. `oak-reason` is a tool you invoke (like a
+linter or a test suite); judging it by "does it fire without invocation" was a category error the
+owner corrected: an invocable antidote to rushed thinking is already a large win, and auto-firing is
+a separate future multiplier, not a precondition. Lesson: when evaluating a capability, first NAME
+ITS KIND (tool you invoke / tripwire that must auto-fire / rule / reference) and apply that kind's
+success criterion — borrowing another kind's bar systematically under- or over-rates it. (This is
+`oak-reason` move 1 — "name the kind of thing" — applied to evaluation.) Sibling:
+[[passive-guidance-loses-to-artefact-gravity]].
+
+## Identity-capture cuts both ways — skepticism of your own work is also a possession (2026-06-22, Orbit rides Horizon)
+
+Twice this session I had to guard against defending a position because it was MINE: (a) I
+ground-checked "the Practice memotype is portable" first-hand precisely because it conveniently
+supported agreeing with the owner; (b) evaluating `oak-reason` (which I authored), I over-defended my
+own SKEPTICISM, holding it to the wrong bar until the owner reframed it. "Hold the claim as a model,
+not a possession" usually reads as "don't over-defend your thesis" — the refinement: it applies
+equally to your DOUBT. When you built the thing AND when you are its loudest critic, name the
+falsifier out loud either way. Sibling: [[feedback_ground_convenient_claims]].
+
+## A windowed read of a file is not knowledge of its whole state (2026-06-22, Orbit rides Horizon)
+
+I asserted the napkin was "~250 lines, under the rotation threshold" at two consecutive closeouts —
+from a windowed read (offset+limit) that never saw the file's true 616-line size. The recurrence
+(twice) is the signal: `verify-dont-trust` was not firing at the specific moment of reading a file's
+size/completeness. Cure: never assert a whole-file property (size, line count, "is it all captured")
+from a partial read — run the cheap probe (`wc -l`, the fitness report) before the claim.
+`oak-reason`'s falsifier move caught it the second time. Sibling: [[verify-dont-trust]].
+
 ## A coordinator seat held past its pressure is artefact-gravity on the role itself (2026-06-21, Birch — Director session) — candidate
 
 Took the Director seat for a high-churn ~5-agent window (commit-warden contention, rotating cast — genuinely needed), ran two clean role rotations (Drake→Ganymede, Hobby→Pinnace), then the window settled to n=2 owner-visible (one surveying, one checking alignment). I noticed I was drifting into coordination *ceremony* (acknowledging clean self-managed pickups, confirming gates competent agents satisfied themselves) and corrected to "direct more quietly" — but stopped *one step short*: I never asked the first-principles question the owner then asked — *does n=2 owner-visible need a Director seat at all?* It does not. **Doctrine-by-analogy reached for:** "I'm the Director, so direct (lightly)." **The doctrine that should have fired:** `start-right-team` §6 (roles dissolve when their pressure disappears) + the coordinator-threshold (peer is default at ≤3). It existed; it didn't fire on my OWN seat — the role's gravity kept me in it. This is a doctrine-traction instance ([[passive-guidance-loses-to-artefact-gravity]]), NOT new doctrine: route as recurrence evidence to the action-time-structural-interrupt inventory, not a fresh rule. Cure captured in MEMORY: re-ask "does this shape need this seat?" at every team-size change, applied to your own role. Sibling: [[feedback_dissolve_role_when_pressure_clears]], [[feedback_useful_work_over_ceremony]].
