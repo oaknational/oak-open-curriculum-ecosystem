@@ -118,3 +118,33 @@ gates — a green gate is not evidence it works, most dangerously at the moment 
 itself, which no gate-green ever can. Worked instance; principle homed in distilled
 (verify-gate-fails-on-known-bad) and the bug+fix in F-84. Sibling: [[verify-dont-trust]],
 [[feedback_run_the_thing_dont_flag_the_gap]].
+
+## Relaying a subagent's verdict on a load-bearing claim without first-hand verification — the discipline losing at the REPORT moment (2026-06-22, Pelican stirs Buoy)
+
+Curating the strategy thread record (a 939-line no-loss deletion), I ran a docs-adr-expert no-loss
+audit, got "NO-LOSS CONFIRMED" with file:line citations, and **relayed it to the owner as the settled
+result**. Owner correction: "all sub-agent findings, report, claims and sources MUST be critically
+assessed before being accepted." The discipline is well-homed ([[feedback_first_hand_means_me_not_subagents]];
+[[feedback_validate_specialist_findings_before_acting]]; distilled "subagent agreement is not
+verification — two echoes of the same prior") and the session starter's own final line stated it — yet a
+fluent "the expert confirmed it" overrode the situational check at the **action moment of reporting**. The
+load-bearing claim of an irreversible-ish deletion is exactly the one to verify first-hand BEFORE it enters
+a report as "confirmed". Cure applied this turn: I then verified each load-bearing homing citation
+first-hand (coverage-ledger Pass-1 totals 286/2,935; principles.md decision lenses; launch-readiness
+K1-K3; the napkin archive's method lessons; repo-intent-graph DORA; the V0 paused->gate) — they held, but
+the point is that I CHECKED, not that they held. Firing gate: a subagent verdict on a load-bearing /
+irreversible / convenient claim is input-to-verify; ground its citations first-hand before relaying as
+confirmed. PDR-098 action-time-interrupt recurrence (the cure is a mechanical interrupt, not another
+passive memory). Sibling: [[passive-guidance-loses-to-artefact-gravity]], [[feedback_calibrate_verification_to_stakes]].
+
+## A shared continuity surface gets co-committed by a concurrent agent mid-edit — verify your edit survived (2026-06-22, Pelican stirs Buoy)
+
+Editing `repo-continuity.md` (a shared continuity surface) while a concurrent consolidation session
+(Petrel stirs Wingspan) was also active, the peer committed `repo-continuity.md` in its own
+explicit-pathspec commit, **sweeping in my uncommitted Current-State edit** (my later Active-Threads edits
+stayed working-tree-M). HEAD + the working tree shifted ~5 times across this session. My edits survived
+(verified first-hand by grep) and the OS-lock + semantic coexistence held — the multi-developer reality
+working as designed, not a failure. Sharpens F-83 (shared-checkout commit-gate coupling) /
+[[project_multi_developer_transition]]: on a shared churning branch, (1) re-ground HEAD + `git status`
+immediately before each mutation or commit, and (2) after a shared continuity surface may have been
+co-committed, grep first-hand to confirm your edit is present before relying on it.
