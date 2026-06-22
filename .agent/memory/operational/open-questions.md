@@ -47,7 +47,8 @@ pathogen). **Resolution trigger:** the next fitness/cadence design pass adopts (
 self-framing mechanism, or a second instance of a report-only fitness signal going unread.
 Deferral-honesty: the design (which surface owns the read-discipline, and the report-self-framing
 shape) is not yet decided; falsifiable by a second unread-report instance. Surfaced by
-assumptions-expert during the 2026-06-16 report-only review.
+assumptions-expert during the 2026-06-16 report-only review. (Q-001 is a member of the Q-006
+action-time-interrupt family — its read-discipline cure is the same firing mechanism.)
 
 ## Q-002 — The nature of the strategy layer and the vision→strategy→planning flow
 
@@ -124,4 +125,86 @@ source-handling, not a fact to look up; low-urgency (does not block any current 
 §Decisions; the two substrate studies in
 `research/agentic-engineering/operating-model-and-platforms/`.
 
-**Status:** open (2026-06-22, Perseus turns Horizon).
+**Status:** open (2026-06-22, Perseus turns Horizon). **Lens-resolved direction (2026-06-22, L1 + L3):**
+name openly-licensed sources plainly with attribution; keep genuinely proprietary/unlicensed sources
+private — a PDR clause the owner ratifies. **Resolution trigger:** the next external-substrate study, or
+owner ratification of the convention.
+
+## Q-005 — When does the worktree-per-agent transition land?
+
+**Question:** The repo runs one-dev-many-agents now, moving to many-checkouts / variable-agent-density.
+Concurrent agents on one shared checkout couple through the whole-tree pre-commit gate and the shared
+working tree (F-83); this session repeatedly hit it (a peer co-committed a file mid-edit, HEAD shifted ~5
+times). When does worktree-per-agent (one git worktree per concurrent agent) land?
+
+**Why it shapes future work:** L4 ("would it be simpler if the system changed?") decisively resolves the
+*direction* — worktrees dissolve the shared-checkout coupling rather than coordinating around it. Only the
+*timing* is open, and every future multi-agent window pays the coupling cost until it lands.
+
+**Why not cheaply answerable now:** infra work with its own design (worktree lifecycle; the shared
+coordination-home resolution, part-built via `resolveCoordinationHome` in WS-3 F-41); sequencing against
+the WS2/rewrite lane is the owner's prioritisation.
+
+**Owning artefact:** F-83 in [`frictions-register.md`](../../plans/agent-tooling/frictions-register.md);
+the multi-developer-transition direction (per-user memory; the WS-3 F-41 `resolveCoordinationHome` work).
+
+**Status:** open — direction lens-resolved (adopt worktrees); timing is owner prioritisation (2026-06-22,
+Pelican stirs Buoy).
+
+## Q-006 — The action-time-interrupt mechanism (PDR-098 empty quadrant)
+
+**Question:** "Passive guidance loses at the action moment" recurs across agents (~9+ worked instances,
+plus a fresh one this session — relaying a subagent verdict without first-hand verification). The cure must
+be a *mechanical* interrupt that fires at the action moment, not another passive memory (doctrine:
+`passive-guidance-loses-to-artefact-gravity`). What is the mechanism, and what surface owns it?
+
+**Why it shapes future work:** it is the highest-frequency meta-failure; every agent keeps re-paying it. L1
+plus the doctrine resolve the *direction* (a firing mechanism); the *design* (which surface, what trip
+conditions) is open.
+
+**Why not cheaply answerable now:** the mechanism is non-obvious (that is why it is the PDR-098 empty
+quadrant); prioritisation is the owner's.
+
+**Owning artefact:** [`action-time-structural-interrupt-design-space.plan.md`](../../plans/agentic-engineering-enhancements/future/action-time-structural-interrupt-design-space.plan.md).
+
+**Status:** open — direction lens-resolved; design + prioritisation open (2026-06-22, Pelican stirs Buoy).
+
+## Q-007 — Per-user `MEMORY.md` is over its index limit
+
+**Question:** The Claude per-user `MEMORY.md` index is over its size limit (~28.9KB); substance is safe
+(per-entry topic files + repo doctrine persist) but index pointers degrade at session-load. When does a
+dedicated per-user-memory drain run (graduate settled feedback whose substance is now homed in repo
+rules/PDRs, then trim the index)?
+
+**Why it shapes future work:** degraded index pointers mean session-open recall silently drops late-listed
+entries — the skill-load-budget failure mode applied to memory.
+
+**Why not cheaply answerable now:** a bounded maintenance pass (per-platform per-user memory), not a fact;
+low-urgency, owner-prioritised.
+
+**Owning artefact:** Claude per-user memory `MEMORY.md`; the `consolidate-docs` cross-platform memory step.
+
+**Status:** open — lens-resolved as maintenance; low-urgency prioritisation (2026-06-22, Pelican stirs Buoy).
+
+## Q-008 — The human-authoring workflow for the co-equal documents
+
+**Question:** ADR-200 makes the human-navigable documents a **co-equal** embodiment (§Non-goals forbids
+mechanically-derived stubs) and §7 says "the tools reconcile every edit back into the graph", with the §8
+prose↔frontmatter agent-gate catching drift at handoff. But the *proactive human* side is under-specified:
+when a human edits a document's prose, is there a human-facing tool that keeps its frontmatter↔graph edges
+consistent as they write, or does the human always pair with an agent and rely on the after-the-fact gate?
+
+**Why it shapes future work:** co-equal-human-embodiment is a first-class ADR-200 constraint. If the only
+path for graph-consistent human edits is agent-pairing, that is an acceptable answer — but it should be a
+*decided* one, because it shapes the authoring tooling WS5/WS7 build and the human's actual experience of
+the corpus.
+
+**Why not cheaply answerable now:** it has a product/UX dimension (the human authoring experience) that
+edges toward the owner, and it depends on the projection-type schemas (WS5) being designed first.
+
+**Owning artefact:** [ADR-200](../../../docs/architecture/architectural-decisions/200-intent-as-a-living-idea-graph.md)
+§2/§7/§8; the rewrite plan WS5 (projection-type schemas) and WS7 (co-authoring).
+
+**Status:** open — newly surfaced 2026-06-22 (Pelican stirs Buoy). Lens-resolves the *priority* (the human
+side must be first-class); the *mechanism* (human-facing tool vs agent-pairing) is an open design + UX
+question.

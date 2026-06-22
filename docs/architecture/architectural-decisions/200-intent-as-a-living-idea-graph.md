@@ -310,6 +310,9 @@ instances rather than a rebuild.
 - **Idea-store physical layout** — JSONSchema-validated JSON is decided; the on-disk shape (one file per
   node vs a consolidated store) and its directory home are a design-step choice that the validator and
   authoring tools depend on.
+  **Lens-resolved direction (2026-06-22, L1):** one JSON-LD file per node — history-preserving and
+  parallel-edit-safe; a consolidated store is a merge-conflict magnet in the multi-checkout reality. The
+  directory home and exact file shape are WS2's call.
 - **`graph-core` API + the JSON-LD↔JSONSchema bridge — RESOLVED by first-hand survey (2026-06-22).** The
   graph stack was surveyed first-hand. **Working today:** `graph-core` (RDF term/quad model, `DatasetCore`,
   DataFactory, JSON-LD 1.1 processor expand/compact/frame, RDFC-1.0 canonicalisation, 7-vocab registry, the
@@ -327,6 +330,11 @@ instances rather than a rebuild.
   `graph-core` has only dataset CRUD); the frontmatter↔store validator; the harvest pipeline. The idea-graph
   is a **new domain instance over the existing substrate**, parallel to `graph-corpus-sdk` and distinct from
   the curriculum `graph-stack.plan.md` lane.
+  **Lens-resolved direction (2026-06-22, L1 + `consolidate-at-third-consumer`):** build the new idea-graph
+  SDK as a clean parallel instance that _reuses_ `graph-core`'s generic substrate and owns only idea-domain
+  specifics; do **not** extract a shared domain-SDK abstraction across `graph-corpus-sdk` and the idea-graph
+  SDK now — the family-of-knowledge-graphs (§Future state) is the future third-consumer trigger for that, not
+  this build. `architecture-expert` confirms the boundary at WS2/WS4.
 - **Harvest-source breadth — RESOLVED (owner, 2026-06-22).** The harvest ingests `VISION.md` +
   `docs/strategy/` in addition to everything under `.agent/plans/` — the graph spans all altitudes
   (those are the highest-altitude idea-projections) and the no-loss audit is complete end-to-end.
@@ -342,11 +350,22 @@ instances rather than a rebuild.
 - **Idea identity minting** — how stable, IRI-able `id`s are assigned at harvest (slug / content-hash /
   sequential) so they survive re-harvest and map to RDF subject IRIs. Load-bearing for frontmatter
   references and for de-duplication.
+  **Lens-resolved direction (2026-06-22, L1):** a stable, opaque, content-decoupled `id` (content-hash
+  excluded — it churns on every statement edit; a slug rejected as the _primary_ id — it couples identity to
+  mutable text) plus a human-readable label carried as separate metadata; minting is idempotent across
+  re-harvest. WS2 fixes the algorithm.
 - **De-duplication / merge mechanism** — the same idea recurs across documents; how "same idea" is
   determined and merged (the `duplicates`/`same_as` edge plus a merge operation) is the analysis pass's
   core mechanism, currently undefined.
+  **Lens-resolved direction (2026-06-22, L1 + the no-loss invariant):** semantic judgement _proposes_
+  merges → a deterministic merge op with reference-rewrite _executes_ → the validator _verifies_ no edge is
+  left dangling; conservative, reviewer-confirmed, and history-preserving (a wrong merge silently loses a
+  distinct idea — a no-loss breach). WS5 designs the empirical same-idea heuristic.
 - **Projection-type schemas** — V0 covers `plan`; vision/strategy/stream/thread/high-level-plan each need
   their frontmatter-edge schema (or a unified projection-node schema). Named in §2, not yet designed.
+  **Lens-resolved direction (2026-06-22, L3):** prefer a single unified projection-node schema with a
+  `projection_type` discriminator, specialised only where a type genuinely diverges (closed-shape
+  optionality), over five parallel schemas. WS5.
 - **JSON-LD bridge constraints** (deepening the reconciliation open) — for the JSON store to consume
   cleanly into `graph-core`'s RDF: idea-node JSON carries a `@context`; `id`s are IRI-able; edge fields
   map to RDF predicates; **one** constraint source of truth (JSON Schema at authoring — no divergent

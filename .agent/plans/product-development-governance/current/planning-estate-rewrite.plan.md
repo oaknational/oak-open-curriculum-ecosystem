@@ -119,6 +119,35 @@ These are NOT "will be handled later" — each names who resolves it and in whic
 - **[WS3-RESOLVED] The value/domain/edge vocabularies + whether `scale` earns its place.** Discovered
   empirically in the broad-shallow pass — not pre-decided.
 
+## Lens-resolved directions for the open design-steps (2026-06-22)
+
+The open design-steps were triaged through the decision lenses (`principles.md` §Decision Lenses). The
+**architecture-level** directions live in
+[ADR-200 §Open](../../../../docs/architecture/architectural-decisions/200-intent-as-a-living-idea-graph.md#open)
+(id-minting, store layout, de-duplication, projection-type schemas, the idea-graph SDK boundary). The
+**execution-level** directions, by workstream:
+
+- **WS2 — SDK boundary (L1 + `consolidate-at-third-consumer`):** build the idea-graph SDK as a clean
+  parallel instance reusing `graph-core`'s generic substrate; do **not** extract a shared domain-SDK
+  abstraction now (the family-of-graphs is the future third-consumer trigger). `architecture-expert`
+  confirms the boundary (already in §Readiness reviewers).
+- **WS5 — de-duplication (L1 + the no-loss invariant):** semantic-proposes → deterministic-merge-with-
+  reference-rewrite → validator-verifies; conservative, reviewer-confirmed, history-preserving.
+  **Projection-type schemas (L3):** a unified projection-node schema with a `projection_type` discriminator,
+  specialised only where a type genuinely diverges.
+- **WS6 — harvest pipeline (L1):** reuse the proven Pass-1 survey mechanics (workflow-orchestrated,
+  conserve+commit per increment, HALT-don't-fabricate, budget-window-paced). **Pass-1 data (L1 + L2):**
+  re-harvest to the full schema — the thin Pass-1 idea data is a cross-check only, never the basis (cost
+  must not dominate architectural excellence — owner).
+- **WS7 — no-loss-audit independence (L2 + L1, the clean-room pattern):** the fresh-context auditor is
+  **harvest-naive** (a separate session/checkout that did not perform the harvest), reading re-read sources
+  against the graph; invertible provenance (node → source `file:line`) enables source-span enumeration.
+  **65 locked-contradictions (L1):** triage them through the decision lenses at synthesis and surface only
+  the residual genuinely-owner conflicts to the owner (batched, pre-analysed) — never dump the raw set.
+
+These are **directions to confirm** at each workstream, not closures; each workstream's own design or
+empirical pass ratifies or revises them (e.g. the WS6 survey-pattern-reuse warrant is verified at WS6).
+
 ## Incremental delivery (the boundary — ADR-200 §Consequences)
 
 Forward, genuinely-new high-value work proceeds **now** as V0 plans (unblocked) — they serve strategic
