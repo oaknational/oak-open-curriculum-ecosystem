@@ -161,6 +161,14 @@ project / validate) holds three invariants — each matching existing repo doctr
   frontmatter?"). It must be an active gate, not passive guidance — passive guidance reliably loses to
   artefact-gravity at the action moment. This is the same drift any metadata+body document already has;
   we name it and give it a cheap recurring check.
+  **Resolved into a reconciliation workflow (owner-ratified 2026-06-22):** because humans edit prose
+  freely, the semantic mechanism is not merely detection — it is an agent workflow (triggered by a skill
+  such as `session-handoff` or `plan`) that analyses the human-edited prose, extracts its ideas, matches
+  them against the idea-graph, decides per §7's history-preserving evolution ops (edit in place for a minor
+  wording fix, supersede for a semantic replacement, or mint a new node), updates the idea-graph and the
+  document's frontmatter edges to match the prose, after which the graph resumes as the source of truth.
+  This is the human-authoring side of the co-equal embodiment (§2) and actuates §7's "editing flows
+  reconcile into the graph"; the match step reuses the de-duplication / same-idea mechanism (§Open).
 
 ## Goals (what this architecture serves)
 
@@ -233,8 +241,9 @@ Every document under `.agent/plans/` is idea-harvested; the _document_ then rout
 ### The build (downstream, sequenced in §Sequence)
 
 A JSON Schema for idea-nodes; an idea-graph SDK over `graph-core`; the minimum evolution tooling the
-rewrite needs; the deterministic frontmatter↔store validator (joins `repo-validators`); the active
-prose↔frontmatter handoff gate; the harvest pipeline.
+rewrite needs; the deterministic frontmatter↔store validator (joins `repo-validators`); the
+prose↔frontmatter reconciliation workflow (the active handoff gate, sharpened to a reconciliation
+agent-workflow per §8); the harvest pipeline.
 
 ## Sequence
 

@@ -148,8 +148,9 @@ the WS2/rewrite lane is the owner's prioritisation.
 **Owning artefact:** F-83 in [`frictions-register.md`](../../plans/agent-tooling/frictions-register.md);
 the multi-developer-transition direction (per-user memory; the WS-3 F-41 `resolveCoordinationHome` work).
 
-**Status:** open — direction lens-resolved (adopt worktrees); timing is owner prioritisation (2026-06-22,
-Pelican stirs Buoy).
+**Status:** open — direction lens-resolved (adopt worktrees). **Trigger (owner, 2026-06-22 — automatic,
+out of owner ownership):** fires at the next n≥2 concurrent-agent window on a shared checkout, or a second
+recorded shared-checkout commit-coupling incident (F-83), whichever comes first.
 
 ## Q-006 — The action-time-interrupt mechanism (PDR-098 empty quadrant)
 
@@ -167,7 +168,11 @@ quadrant); prioritisation is the owner's.
 
 **Owning artefact:** [`action-time-structural-interrupt-design-space.plan.md`](../../plans/agentic-engineering-enhancements/future/action-time-structural-interrupt-design-space.plan.md).
 
-**Status:** open — direction lens-resolved; design + prioritisation open (2026-06-22, Pelican stirs Buoy).
+**Status:** open — direction lens-resolved. **Trigger (owner, 2026-06-22 — automatic, out of owner
+ownership):** the sequencing is off the owner; the firing surface is the consolidation pass, which walks
+this register first-hand. **Agent assessment (not owner-attributed):** the PDR-098 recurrence threshold is
+already met (~9+ instances plus a fresh one this session), so this is due at the next consolidation that
+has design capacity — not on an owner cue.
 
 ## Q-007 — Per-user `MEMORY.md` is over its index limit
 
@@ -184,7 +189,9 @@ low-urgency, owner-prioritised.
 
 **Owning artefact:** Claude per-user memory `MEMORY.md`; the `consolidate-docs` cross-platform memory step.
 
-**Status:** open — lens-resolved as maintenance; low-urgency prioritisation (2026-06-22, Pelican stirs Buoy).
+**Status:** open — lens-resolved as maintenance. **Trigger (owner, 2026-06-22 — automatic, out of owner
+ownership):** fires when the per-user `MEMORY.md` index exceeds its limit (it does), at the next
+consolidation pass (the `consolidate-docs` cross-platform-memory step owns it).
 
 ## Q-008 — The human-authoring workflow for the co-equal documents
 
@@ -199,12 +206,20 @@ path for graph-consistent human edits is agent-pairing, that is an acceptable an
 *decided* one, because it shapes the authoring tooling WS5/WS7 build and the human's actual experience of
 the corpus.
 
-**Why not cheaply answerable now:** it has a product/UX dimension (the human authoring experience) that
-edges toward the owner, and it depends on the projection-type schemas (WS5) being designed first.
+**Why not cheaply answerable (when open):** it had a product/UX dimension (the human authoring experience)
+that edged toward the owner. (Answered by owner direction — see Status. The WS5 / dedup dependency it noted
+applies to the *build*, not the now-decided *approach*.)
 
 **Owning artefact:** [ADR-200](../../../docs/architecture/architectural-decisions/200-intent-as-a-living-idea-graph.md)
 §2/§7/§8; the rewrite plan WS5 (projection-type schemas) and WS7 (co-authoring).
 
-**Status:** open — newly surfaced 2026-06-22 (Pelican stirs Buoy). Lens-resolves the *priority* (the human
-side must be first-class); the *mechanism* (human-facing tool vs agent-pairing) is an open design + UX
-question.
+**Status:** RESOLVED (owner, 2026-06-22) — the **approach** is decided: the owner chose the
+**agent-workflow-at-handoff** horn over a live as-you-type human tool. The mechanism is a **prose→graph
+reconciliation workflow**: a human edits prose freely; an agent workflow (triggered by a skill such as
+`session-handoff` or `plan`) semantically analyses the edited prose, extracts ideas, matches them against
+the idea-graph, decides per §7's history-preserving ops (edit / supersede / mint-new), updates the
+idea-graph and the document frontmatter to match the prose, after which the graph resumes as the source of
+truth. Homed in
+[ADR-200 §8](../../../docs/architecture/architectural-decisions/200-intent-as-a-living-idea-graph.md). The
+**build** is not yet detailed: its match step reuses the still-open de-duplication / same-idea mechanism
+(WS5) and it is wired at WS4's thin-slice proof — so the *approach* is resolved, the *build* is gated on WS5.

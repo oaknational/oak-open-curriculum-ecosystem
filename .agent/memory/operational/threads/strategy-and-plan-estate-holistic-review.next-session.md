@@ -36,7 +36,7 @@ and this section.
 - ADR-200/201 + the rewrite plan are committed (`e33a278f9`); the adopted `no-agent-substrate-access`
   eslint rule is committed (`a3ca73f1a`).
 - The dedicated **consolidation is done and committed** (Petrel stirs Wingspan): the napkin was rotated
-  (667→87 lines, archived verbatim), cross-session lessons graduated, and **PDR-113** (source intent from
+  (the 667-line content archived verbatim; a fresh napkin started), cross-session lessons graduated, and **PDR-113** (source intent from
   the principal, not the records) graduated — `9acde4d8` / `243c4cf8` / `deb697c6`. The
   napkin-rotation + graduation half of the consolidation is discharged.
 - This session (Pelican stirs Buoy) **curated this thread record** — conserve-and-delete of the finished
@@ -44,6 +44,11 @@ and this section.
   insight is homed in ADR-200/201, the controlling plan, the rewrite plan, and the survey archive; git
   retains the literal record), **fixed the rewrite plan's stale frozen-estate prerequisite**, and
   **reframed `repo-continuity.md`** to the ADR-200 reality.
+- This session also **triaged the open-question surface through the decision lenses** (owner-directed): the
+  design-direction verdicts are folded into ADR-200 §Open and the rewrite plan's "Lens-resolved directions"
+  subsection; **Q-008 is RESOLVED** (the human-authoring side = a prose→graph **reconciliation workflow**,
+  now in ADR-200 §8); and **Q-005/006/007 moved to automatic triggers, out of owner ownership** (owner
+  direction). The open-questions register is the durable home; nothing in the triage blocks WS2.
 
 **Next safe step: WS2** — author the idea-node JSON Schema **structure** and decide id-minting, per the
 rewrite plan (WS1 done; WS2 decision-complete; ADR-200 §5 structure, vocabularies left open as
