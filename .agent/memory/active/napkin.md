@@ -72,6 +72,23 @@ so the next pass need not re-decide:
 - **principles.md chars hard (+350)** and **development-practice.md lines hard (+3)**: marginal; the
   former has a named remediation lane (`principles-entrypoint-content-homing.plan.md`).
 
+## First-hand loss-scan at handoff (Petrel stirs Wingspan)
+
+Ran the 6e.2 loss-scan from inside my own context (not delegable). Two findings reached no
+durable surface before this:
+
+1. **The decision-debt count is a false-green (now F-84).** The fitness `Live decision-debt: 0`
+   reading is wrong — the item-count parser strips fenced blocks but the register's live entries
+   ARE fenced, so live items are invisible to the count. This is the highest-value catch: it means
+   the buffer's PRIMARY completion signal cannot be trusted. The real drain evidence is deciding
+   each item by reading the register directly (which is what this pass did), never the count.
+2. **The rule-refinement distilled entries were STAGED deliberately, not folded into their rules.**
+   verify-dont-trust-at-the-read-moment, hook-fires-while-authoring, and arm-in-the-same-breath are
+   siblings/refinements of existing rules; I staged them in distilled rather than editing 3 rules to
+   avoid rule-churn (the napkin's own repeated warning). A future consolidator can fold them into
+   `verify-dont-trust` / `hook-failures-are-questions` / the run-the-thing rule when a second instance
+   confirms the sharpening — this was a deliberate stage-not-fold call, not an oversight.
+
 ## Surfaced for the owner / next pass (Petrel stirs Wingspan)
 
 - **PDR candidate still staged in distilled**: "knowledge surfaces are curated suggestions to a judging

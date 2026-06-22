@@ -1926,6 +1926,20 @@ below is a cross-reference index, not a second source of truth.
 
 ---
 
+### F-84 — pending-graduations decision-debt count reads 0 regardless of live items (fenced entries are stripped before counting)
+
+- **Source**: Petrel stirs Wingspan, 2026-06-22 dedicated-consolidation first-hand loss-scan — observed the fitness report show `Live decision-debt: 0` while two `status: pending` items were live in the register.
+- **Surface**: `agent-tools/src/practice-fitness/item-count.ts` (`stripFencedBlocks` + `parseRegisterItems`) vs the entry format in `.agent/memory/operational/pending-graduations.md`.
+- **Observed** (regex read first-hand): the canonical entry format is **unambiguous** in the code — `INLINE_ENTRY = /` + "`" +`\[(captured:…)\]`+ "`" + `/g`, i.e. a **backtick-wrapped square-bracket inline block** `` `[captured: … | status: …]` `` placed in prose. The parser also calls `stripFencedBlocks` (removes ` ``` `/`~~~` fenced blocks by design, so a documented schema *example* is not miscounted). The register's live entries drifted to a **` ```text `-fenced, bare pipe-field** shape (no backtick-bracket wrapper; the convention its own header wrongly documents as "a fenced bracket"). These conform to *neither* matcher: they are stripped as fences AND lack the `` `[…]` `` wrapper. So they are invisible → decision-debt reads **0 while live items exist** — a **false-green** on the buffer's *primary* health signal and the `consolidate-until-done` completion gate. The non-conformance is **silent**: the only malformed-detector (`LEGACY_BLOCK_MARKER`) catches the OLD multi-bullet shape, not the fenced-pipe-field shape, so these entries raise no finding.
+- **Expected**: a non-conforming entry-shaped block raises a loud `malformed` finding (as the legacy shape does) instead of being silently uncounted; the documented entry format and the parser agree.
+- **Diagnosis (bug, not interpretation)**: the count of 0 is "correct" for zero *conforming* entries — the validator computes correctly, but the input does not conform and the non-conformance is silent. The only interpretive call ("which format is canonical?") is settled by the regex (inline `` `[…]` ``); the header is simply wrong, and making the validator count fenced blocks instead would reintroduce the schema-example miscount the fence-strip exists to prevent.
+- **Cure** (two parts): (1) **data/doc** — reformat the live entries to the canonical inline `` `[captured: … | status: …]` `` and fix the header instruction; this alone makes the count correct. (2) **TDD validator hardening** (the recurrence-proof, architecturally-right cure per `verify-gate-fails-on-known-bad` + metacognition §Cure-Shape): add malformed-detection for an entry-shaped block (carries `captured:` … `| status:`) that is fenced or otherwise not in canonical form — RED (a fenced entry yields no finding today) → GREEN (it yields a `malformed` finding), mirroring `LEGACY_BLOCK_MARKER`. Converts the silent false-green into a loud conformance failure.
+- **Target surface**: `agent-tools/src/practice-fitness/item-count.ts` (the malformed-detector); `.agent/memory/operational/pending-graduations.md` header + entry format; the `pending-graduations-schema-and-count-fitness` plan.
+- **Status**: ADDRESSED (2026-06-22) — `validateRegisterItems` now flags an entry-shaped block lacking the canonical `[…]` wrapper as `malformed` (commit `f056285fb`, TDD), so the silent miscount is a loud `⚠ non-conformant entries` report line; the two live register entries were reformatted to canonical wrapped-inline form, and the count now reads 2 (soft) — the true decision-debt — instead of a false 0. The recurrence-proof cure (the detector) and the data fix both landed.
+- **Owner direction status**: unsolicited (surfaced by the loss-scan; record-all-frictions standing).
+
+---
+
 ## Mitigated / Addressed Frictions
 
 - F-03 — addressed by current CLI validation ordering.

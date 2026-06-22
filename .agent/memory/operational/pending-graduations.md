@@ -62,9 +62,11 @@ live decision-debt when it is genuinely un-actionable now AND has no such home �
 a true rarity. If an item fits no category, that is a signal the category set is
 incomplete, not licence to let it age here.
 
-New capture appends below as inline-bracket entries — `- **<title>**` then a fenced
-bracket with pipe-separated `captured / source / target / trigger / size / status`
-fields (schema: `agent-tools/src/practice-fitness/item-count.ts`).
+New capture appends below as inline-bracket entries — `- **<title>**` then a
+backtick-wrapped inline `[…]` block (may wrap across lines) with pipe-separated
+`captured / source / target / trigger / size / status` fields
+(schema: `agent-tools/src/practice-fitness/item-count.ts`). The bracket must NOT be
+fenced — a fenced or unwrapped block is silently uncounted (it raises a malformed finding).
 
 *Register drained (2026-06-19 dedicated consolidation, Finch binds Halo). Every live
 candidate was decided this pass per PDR-104 best-effort authority — the "owner-gated"
@@ -74,27 +76,33 @@ substance reached its permanent home: the new-in-kind vessel doctrine and the
 over-caution recurrence evidence are live in their homes, and the best-effort-safety
 link is folded into PDR-104 itself. New capture appends below.*
 
-- **Falsifiable-judgment quality gate (decompose the judgment against the source, don't trust a holistic verdict)**
+- **Falsifiable-judgment quality gate (decompose the judgment against the source,
+  don't trust a holistic verdict)**
 
-  ```text
-  captured: 2026-06-21 | source: napkin (Saffron holds Sepal) + restructure-substance-specs.md Spec 1 | target: PDR with pdr_kind: pattern (falsifiable-judgment-gate) | trigger: SECOND instance of the shape in another gate/review → ready to synthesise the general form (one instance now: the substance-gate effectiveness arm) | size: small | status: pending
-  ```
+  `[captured: 2026-06-21 | source: napkin (Saffron holds Sepal) + restructure-substance-specs.md
+  Spec 1 | target: PDR with pdr_kind: pattern (falsifiable-judgment-gate) | trigger: SECOND
+  instance of the shape in another gate/review → ready to synthesise the general form (one
+  instance now: the substance-gate effectiveness arm) | size: small | status: pending]`
 
-  A quality gate's judgment-heavy arm is its theater-risk locus: where conformance/traceability/no-loss
-  have concrete mechanisms, a "does X plausibly achieve Y" arm can pass by hand-waving. Cure: decompose the
-  judgment against a FIXED checklist of dimensions Y's source visibly contains, so under-decomposition is
-  falsifiable by the source (not reviewer taste) and the verdict is unrenderable without the source-anchored
-  coverage × soundness map. One instance so far (the effectiveness arm); needs a second to synthesise the
-  PDR-pattern general form.
+  A quality gate's judgment-heavy arm is its theater-risk locus: where
+  conformance/traceability/no-loss have concrete mechanisms, a "does X plausibly achieve Y" arm
+  can pass by hand-waving. Cure: decompose the judgment against a FIXED checklist of dimensions
+  Y's source visibly contains, so under-decomposition is falsifiable by the source (not reviewer
+  taste) and the verdict is unrenderable without the source-anchored coverage × soundness map.
+  One instance so far (the effectiveness arm); needs a second to synthesise the PDR-pattern
+  general form.
 
-- **State-tier process-and-archive-move convention (extend ADR-199 rotation to non-comms collaboration state)**
+- **State-tier process-and-archive-move convention (extend ADR-199 rotation to
+  non-comms collaboration state)**
 
-  ```text
-  captured: 2026-06-21 | source: archive/README.md + .agent/state/collaboration/.gitignore + napkin (Saffron holds Sepal) | target: ADR-199 amendment (or a sibling ADR) generalising archive-move to conversations/sidebars/handoffs | trigger: SECOND state-archive-move pass, OR the memory-vs-state local-split lands → DUE | size: small | status: pending
-  ```
+  `[captured: 2026-06-21 | source: archive/README.md + .agent/state/collaboration/.gitignore +
+  napkin (Saffron holds Sepal) | target: ADR-199 amendment (or a sibling ADR) generalising
+  archive-move to conversations/sidebars/handoffs | trigger: SECOND state-archive-move pass, OR
+  the memory-vs-state local-split lands → DUE | size: small | status: pending]`
 
-  Owner doctrine (2026-06-21): stale collaboration state is PROCESSED (substance verified-conserved into
-  canonical homes), then ARCHIVE-MOVED to an untracked archive, NEVER git-rm'd. This session built the
-  convention for conversations/sidebars/handoffs (untracked `archive/`, tracked README, gitignored contents)
-  mirroring ADR-199's comms-event rotation. Currently a one-instance local convention; graduate to an ADR
-  (amendment or sibling) when a second pass or the planned memory-vs-state split makes it general.
+  Owner doctrine (2026-06-21): stale collaboration state is PROCESSED (substance
+  verified-conserved into canonical homes), then ARCHIVE-MOVED to an untracked archive, NEVER
+  git-rm'd. This session built the convention for conversations/sidebars/handoffs (untracked
+  `archive/`, tracked README, gitignored contents) mirroring ADR-199's comms-event rotation.
+  Currently a one-instance local convention; graduate to an ADR (amendment or sibling) when a
+  second pass or the planned memory-vs-state split makes it general.
