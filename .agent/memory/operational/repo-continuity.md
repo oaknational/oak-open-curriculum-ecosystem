@@ -49,7 +49,7 @@ surface.
   Editorial pass applied (TPC / MCP / GA / streams↔threads / MCP-doc links). **V0 `plan` node-schema
   authored, owner-settled, and survey-ready** — the four owner-reserved governance calls are signed off
   (the `disposition` + `gate.awaiting` enum baselines, the `current`+`active` folder collapse, and the
-  30-day default gate-expiry horizon). **Deep plan-estate survey (Stage 2) — Pass-1 in progress, multi-window.**
+  30-day default gate-expiry horizon). **Deep plan-estate work — REFRAMED 2026-06-22 ([ADR-200](../../../docs/architecture/architectural-decisions/200-intent-as-a-living-idea-graph.md)): a planning-estate REWRITE on a living idea-graph, not a survey-and-classify. The survey / Pass-1 / Stage-2 framing in the rest of this entry is SUPERSEDED (read ADR-200 + the thread record); the survey corpus is archived.**
   `agentic-engineering-enhancements` is **70/70 Pass-1 COMPLETE** (Pinnace hunts Marsh, successor to Hobby
   wakes Halo). The owner's **substance re-aim** is implemented + validated + committed in the instrument
   (idea-level: `substance_class` summary + `content_quality` + idea-granular `salvage_value`); two-pass

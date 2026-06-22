@@ -28,6 +28,14 @@ design_inputs:
 
 # Repo Intent Graph — the agentic-first memory and intent substrate
 
+**ARCHITECTURE REFINED (2026-06-22, [ADR-200](../../../../docs/architecture/architectural-decisions/200-intent-as-a-living-idea-graph.md)).**
+ADR-200 is now the authoritative architecture for the intent graph and the planning-estate rewrite:
+ideas are the fundamental node, the graph is the living authoritative source of truth, documents are the
+co-equal human-navigable embodiment connected by frontmatter edges, and the idea-graph is built as a
+domain instance over `graph-core`. Where this plan's "Stage 2 = survey" framing reads as a
+survey-and-classify pass, that is **superseded** — Stage 2 is the **idea-harvest** into the graph. Read
+ADR-200 first; this plan's vision stands, its survey-stage framing defers to ADR-200.
+
 > **Strategic plan (`future/`). Owner-ratified vision (2026-06-21); not yet executable.**
 > Execution decisions finalise only at promotion of a stage to `current/`. Do not start
 > the build from this file; promote Stage 1 first.

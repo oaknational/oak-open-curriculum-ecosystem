@@ -1,5 +1,14 @@
 # `plan` Node-Schema — V0 Specification
 
+**FRAMING UPDATE (2026-06-22, [ADR-200](../../../docs/architecture/architectural-decisions/200-intent-as-a-living-idea-graph.md)).**
+This schema's _structure_ stands and is reused — it is the **plan-layer projection schema**, the form the
+**new strategy-aligned plans are authored to** (the V0-bridge in ADR-200 §Consequences). What is
+**superseded** is the framing below of V0 as a "pre-survey hypothesis the survey tests against the estate"
+(the §0 V0 → survey → V1 conformance loop): there is **no survey-and-conform pass**. The work is a
+planning-estate rewrite on a living idea-graph; the "survey" is the **idea-harvest**, and V0 is the form
+plans take, not a rubric old plans are scored against. Read ADR-200 first; treat the §0 loop below as
+historical context, not the active method.
+
 > **Node-schema #1 of the repo intent graph.** This is the `plan` node-type's
 > contract: its frontmatter fields, its orthogonal state model, and its typed
 > edges — together with the **shape** of the graph contract it composes into.
@@ -8,8 +17,8 @@
 > decision below is stated definitely (no "TBD", no "decide at execution
 > time"). V0 is not a draft to be filled in later; it is a **falsifiable
 > hypothesis** the [deep plan-estate survey](./future/deep-plan-estate-survey.plan.md)
-> tests against the real estate. The survey grounds **V1** by *additively
-> refining* this contract where the estate proves it incomplete. See
+> tests against the real estate. The survey grounds **V1** by _additively
+> refining_ this contract where the estate proves it incomplete. See
 > [§0](#0-the-v0--survey--v1-contract).
 >
 > **Authority.** This spec is delivered by **Stage 1.2** of the
@@ -19,10 +28,10 @@
 > [PDR-018](../../practice-core/decision-records/PDR-018-planning-discipline.md),
 > [ADR-117](../../../docs/architecture/architectural-decisions/117-plan-templates-and-components.md),
 > the [plan templates](../templates/README.md), and the emergent frontmatter
-> reality. The human-facing governance calls (the closed enum *values* for the
+> reality. The human-facing governance calls (the closed enum _values_ for the
 > human-facing axes, the folder collapse, and the default gate-expiry horizon) are
 > **owner-signed**: V0 records the settled outcome for each below; the enum
-> *members* remain survey-may-add (additive only).
+> _members_ remain survey-may-add (additive only).
 >
 > **This doc is itself a `spec` node-type, not a `plan`** — node-schema #1 does
 > not self-govern this file. The `spec` node-type is reserved in the registry
@@ -39,21 +48,21 @@ survey has something exact to confirm or refute, and so the Stage-1 build has a
 contract to transcribe into Zod. A V0 that hedged every field would be useless
 as a lens; a V0 that pretended finality would misrepresent its pre-survey
 status. The resolution: **state every decision definitely, and annotate each
-with its refinement-exposure.** Honesty lives in marking *the axis along which
-V1 may grow*, not in leaving V0 vague.
+with its refinement-exposure.** Honesty lives in marking _the axis along which
+V1 may grow_, not in leaving V0 vague.
 
 Every decision in this spec carries one of four exposure tags:
 
 | Tag | Meaning | Who changes it, and how |
 | --- | --- | --- |
 | **LOCKED** | The model/shape. V1 will not change it without re-ratifying the six pillars. | Owner re-ratification only. |
-| **SURVEY-MAY-ADD-VALUES** | A closed enum whose *members* the survey may extend additively (never renumber/reuse). | The Stage-2 survey, additively. |
+| **SURVEY-MAY-ADD-VALUES** | A closed enum whose _members_ the survey may extend additively (never renumber/reuse). | The Stage-2 survey, additively. |
 | **SURVEY-MAY-ADD-FIELDS/EDGES** | The survey may prove a new field or edge is genuinely real in the estate. | The Stage-2 survey, additively. |
 | **OWNER-RESERVED** | A governance call the owner has reserved. V0 records its verdict and evidence; the owner signs off. | Owner sign-off (survey-grounded). |
 
 This mirrors the intent-graph plan's "**contract is v1 and additive**" rule and
 the strategic-choice IDs' stable/additive/resolvable discipline: a closed Zod
-enum the survey adds *members* to — never an open `string` that re-admits the
+enum the survey adds _members_ to — never an open `string` that re-admits the
 drift V0 exists to kill.
 
 **The loop:** V0 (this doc) → the survey reads the estate against V0 (the
@@ -66,14 +75,14 @@ re-ratifying the six pillars" — it does **not** mean the survey must conform t
 estate yields strong evidence against a LOCKED decision, the survey surfaces it as an **owner
 re-ratification candidate**, not a suppressed signal. The lens must never hide a real signal to
 protect its own model (warning-signals-are-verdicts; the survey brief's "let the estate speak").
-This is exactly the kind of finding the survey is *wanted* to produce.
+This is exactly the kind of finding the survey is _wanted_ to produce.
 
 ---
 
 ## 1. The `plan` node-type
 
-A **plan** is the node-type that carries *intended work and the durable intent
-behind it*: what user-impact outcome is sought (end goal), why the means produce
+A **plan** is the node-type that carries _intended work and the durable intent
+behind it_: what user-impact outcome is sought (end goal), why the means produce
 it (mechanism), and the work itself (means) — per PDR-018. It is the first
 node-type built because it also unlocks the plan-estate survey and restructure.
 
@@ -85,16 +94,16 @@ node-type built because it also unlocks the plan-estate survey and restructure.
   single agent, or a developer with minimal agentic support identically (the
   multi-developer transition;
   [§5.5](#55-closing-the-loop--returning-evidence-and-the-multi-developer-transition)).
-- **Authority role.** A plan is a *consumer* of authority, never a source of it.
+- **Authority role.** A plan is a _consumer_ of authority, never a source of it.
   It **traces upward** to a strategic choice (→ vision → Oak goal) via
   `serves_strategic_choice`, and **derives from** ADRs/strategy via
-  `derives_from`. A plan never holds an authority edge *into* strategy, vision,
+  `derives_from`. A plan never holds an authority edge _into_ strategy, vision,
   or an ADR; and a continuity record is never citable as a plan's scope
   authority (Pillar 3).
 - **Lifecycle.** A plan's durable state is carried by the orthogonal axes
   ([§3](#3-the-orthogonal-axes-state-model)); its live execution state is
-  *projected from Linear*, not stored. Its place in the folder tree *navigates*;
-  its metadata *governs*.
+  _projected from Linear_, not stored. Its place in the folder tree _navigates_;
+  its metadata _governs_.
 
 `plan` ≈ a Linear **Project** (a goal-bearing body with constituent issues), not
 a single epic-issue: strategic choice ≈ Initiative, plan ≈ Project,
@@ -107,7 +116,7 @@ workstream/cycle ≈ Issue/sub-issue (Pillar 6 mapping).
 The canonical field set for a `plan` node. "Required for" names when the field
 is mandatory; an executable plan is the strict case. Reconciliation notes show
 what emergent key each field replaces (counts are first-hand over 284
-non-archive `*.plan.md` files unless marked *census*).
+non-archive `*.plan.md` files unless marked _census_).
 
 ### 2.1 Identity and human-facing
 
@@ -121,17 +130,17 @@ non-archive `*.plan.md` files unless marked *census*).
 ### 2.2 State
 
 The overloaded emergent `status:` field (≈30 distinct first-hand values; 46
-*census* — conflating readiness, lane, execution, disposition, and blocking,
+_census_ — conflating readiness, lane, execution, disposition, and blocking,
 plus emoji and whole-paragraph prose) is **replaced** by three durable axes plus
 one projected axis. `lifecycle:` (14, redundant with folder + `kind`) and
-`isProject` (107 first-hand / 250 *census*, defined in no doctrine) are
+`isProject` (107 first-hand / 250 _census_, defined in no doctrine) are
 **dropped**.
 
 | Field | Type | Required for | Exposure | Reconciliation |
 | --- | --- | --- | --- | --- |
-| `kind` | enum `strategic \| executable` | all | model LOCKED; values LOCKED | The honest name for the `future`↔`current` *readiness* jump. **Replaces** the readiness senses of `status:` (`strategic-brief`, `strategic`, `future-strategic`, `exploration`, …). |
+| `kind` | enum `strategic \| executable` | all | model LOCKED; values LOCKED | The honest name for the `future`↔`current` _readiness_ jump. **Replaces** the readiness senses of `status:` (`strategic-brief`, `strategic`, `future-strategic`, `exploration`, …). |
 | `disposition` | enum (see [§3.3](#33-terminal-disposition)) | terminal plans only | model LOCKED; values owner-signed (SURVEY-MAY-ADD-VALUES) | **Replaces** the terminal senses of `status:` (`completed`, `complete`, `🟢 COMPLETE`, `superseded`, …). Absent until the plan reaches a terminal state. |
-| `gate` | object `{ awaiting, clears_when, expires }` or absent | optional, any | model LOCKED; `awaiting` values owner-signed (SURVEY-MAY-ADD-VALUES); default expiry 30 days | **Replaces** the blocked senses of `status:` (`DRAFT — pending owner approval`, owner-stop strings) — but as an *expiring* gate, never an open holding state. See [§3.4](#34-gate--an-expiring-block-not-a-holding-state). |
+| `gate` | object `{ awaiting, clears_when, expires }` or absent | optional, any | model LOCKED; `awaiting` values owner-signed (SURVEY-MAY-ADD-VALUES); default expiry 30 days | **Replaces** the blocked senses of `status:` (`DRAFT — pending owner approval`, owner-stop strings) — but as an _expiring_ gate, never an open holding state. See [§3.4](#34-gate--an-expiring-block-not-a-holding-state). |
 
 **Execution status is deliberately NOT a durable frontmatter field.** It is
 `backlog \| in_progress \| done`, owned by Linear and **projected** via the
@@ -154,24 +163,24 @@ mapping clean. (LOCKED decision; the value enum is Linear-owned.)
 
 | Field | Type | Required for | Exposure | Reconciliation |
 | --- | --- | --- | --- | --- |
-| `todos` | list of `{ id, content, status: pending \| completed }` | executable | LOCKED | Keep (ADR-117 §6; 750 *census*). Forbidden on `strategic` plans. |
-| `promotion_trigger` | `string` | strategic | LOCKED | Keep (ADR-117 §5; 15 *census*). The condition that promotes the plan to executable. Forbidden on `executable` plans. |
+| `todos` | list of `{ id, content, status: pending \| completed }` | executable | LOCKED | Keep (ADR-117 §6; 750 _census_). Forbidden on `strategic` plans. |
+| `promotion_trigger` | `string` | strategic | LOCKED | Keep (ADR-117 §5; 15 _census_). The condition that promotes the plan to executable. Forbidden on `executable` plans. |
 | `last_updated` | `string` (ISO date) | all | LOCKED | Keep (32 first-hand). **Folds in** emergent `created`/`date`/`branch` housekeeping drift. |
-| `related` | list of refs | optional | LOCKED | Keep, **but narrowed**: `related` is the *untyped, non-authoritative* "see also". All authority/traceability/dependency relationships use the typed edges above, never `related`. |
+| `related` | list of refs | optional | LOCKED | Keep, **but narrowed**: `related` is the _untyped, non-authoritative_ "see also". All authority/traceability/dependency relationships use the typed edges above, never `related`. |
 
 ### 2.5 Explicitly dropped or deferred emergent keys
 
 | Emergent key | Count | V0 disposition |
 | --- | --- | --- |
-| `status` | 386 *census* | **Dropped** — split into `kind` / `disposition` / `gate` / the projected execution axis. |
+| `status` | 386 _census_ | **Dropped** — split into `kind` / `disposition` / `gate` / the projected execution axis. |
 | `lifecycle` | 14 | **Dropped** — folder + `kind` carry it. |
-| `isProject` | 107 / 250 *census* | **Dropped** — `plan` ≈ Linear Project is universal; the projection is the `projects_to` edge, not a boolean. |
-| `type` | 49 *census* | **Dropped as free-label** — replaced by `node_type` + `kind`. |
-| `collection` / `lane` | 30 / 34 *census* | **Dropped** — folder location is the projection; metadata does not duplicate it. |
-| `foundational_adr` / `foundation_alignment` | 17 / 7 *census* | **Reconciled** → the `derives_from` edge (target: ADR). This is why `derives_from` scored 0 under its own name. |
-| `parent_plan` | 14 / 46 *census* | **SURVEY-MAY-ADD-EDGES** — the survey verifies whether genuine *containment* exists distinct from `depends_on`/`supersedes`. Not locked in V0 (a present key is not a graph identity). |
-| `specialist_reviewer(s)` | 43 / 5 *census* | **SURVEY-MAY-ADD-FIELDS** — review-provenance, not an edge to another node. The survey decides whether to formalise it as a field. |
-| `graph_layer` | 36 *census* | **Out of contract** — domain-specific metadata for graph-stack plans; not part of the general `plan` node-type. A plan MAY carry domain extension keys outside this contract; the validator ignores them in V0. |
+| `isProject` | 107 / 250 _census_ | **Dropped** — `plan` ≈ Linear Project is universal; the projection is the `projects_to` edge, not a boolean. |
+| `type` | 49 _census_ | **Dropped as free-label** — replaced by `node_type` + `kind`. |
+| `collection` / `lane` | 30 / 34 _census_ | **Dropped** — folder location is the projection; metadata does not duplicate it. |
+| `foundational_adr` / `foundation_alignment` | 17 / 7 _census_ | **Reconciled** → the `derives_from` edge (target: ADR). This is why `derives_from` scored 0 under its own name. |
+| `parent_plan` | 14 / 46 _census_ | **SURVEY-MAY-ADD-EDGES** — the survey verifies whether genuine _containment_ exists distinct from `depends_on`/`supersedes`. Not locked in V0 (a present key is not a graph identity). |
+| `specialist_reviewer(s)` | 43 / 5 _census_ | **SURVEY-MAY-ADD-FIELDS** — review-provenance, not an edge to another node. The survey decides whether to formalise it as a field. |
+| `graph_layer` | 36 _census_ | **Out of contract** — domain-specific metadata for graph-stack plans; not part of the general `plan` node-type. A plan MAY carry domain extension keys outside this contract; the validator ignores them in V0. |
 
 ---
 
@@ -202,7 +211,7 @@ backlog → in_progress → done
 
 Where `active` belonged. **Not a durable frontmatter field**: the repo projects
 to a Linear Project (the Pillar-6 `projects_to` edge) and Linear owns the live
-value. This removes the `current`↔`active` confusion *and* the drift of a
+value. This removes the `current`↔`active` confusion _and_ the drift of a
 hand-edited "in-progress" that no one updates.
 
 ### 3.3 Terminal disposition
@@ -219,17 +228,17 @@ cancelled               — won't-do; no successor (owner decision; recoverable 
 
 The model (a separate terminal axis) is LOCKED. The four value strings are
 **owner-signed**, taken directly from the ratified intent-graph plan; the closed
-enum *membership* remains survey-may-add (additive only).
+enum _membership_ remains survey-may-add (additive only).
 
 ### 3.4 Gate — an expiring block, not a holding state
 
 **Durable, repo · model LOCKED · `awaiting` values owner-signed (SURVEY-MAY-ADD-VALUES).**
 There is **no open-ended "paused" state.** The repo's own doctrine
 ([`no-hedging-vocabulary.md`](../../rules/no-hedging-vocabulary.md)) is explicit:
-work is either a live deliverable with *named dependencies and an owner-agreed
-gate*, or it is removed by owner decision — there is no indefinite holding
+work is either a live deliverable with _named dependencies and an owner-agreed
+gate_, or it is removed by owner decision — there is no indefinite holding
 state. A bare `paused` flag fails this twice: it has no intrinsic exit, and it
-encodes "no one is working on this right now" — which is *execution status*
+encodes "no one is working on this right now" — which is _execution status_
 (Linear-projected, [§3.2](#32-execution-status--live-linear-projected-not-stored-locked-decision-linear-owned-values)),
 not a durable repo fact.
 
@@ -253,7 +262,7 @@ gate:                       # absent ⇒ live, not gated
 The expiry is the structural cure for the indefinite state: a gate **cannot**
 outlive its `expires` date silently. The observe-mode extractor
 ([§5](#5-the-graph-contract-shape-it-composes-into) / Stage 1.4) reports any plan
-whose `gate.expires` has passed as drift — *"stale gate, decision required."*
+whose `gate.expires` has passed as drift — _"stale gate, decision required."_
 Expiry forces one of: **renew** the gate with a fresh `clears_when` and a new
 `expires`; **resolve** it (the decision arrived → remove the gate, the plan is
 live); or **dispose** the plan (`disposition: cancelled`). Expiry **never
@@ -278,10 +287,10 @@ The proof that the axes absorb the real chaos without loss:
 | `active` | `executable` | — | — | `in_progress` |
 | `completed`, `complete`, `🟢 COMPLETE` | (last known) | `done` | — | `done` |
 | `superseded`, `SUPERSEDED … by X` | (last known) | `superseded` (+ `superseded_by: X`) | — | — |
-| blocked on another plan | (last known) | — | — *(use `depends_on` blocking edge)* | — |
+| blocked on another plan | (last known) | — | — _(use `depends_on` blocking edge)_ | — |
 | `DRAFT — pending owner approval`, `🟡 PLANNING` | `strategic` | — | `gate: owner-decision` (+ `expires`) | — |
 | `decision-incomplete` | `strategic` | — | `gate: owner-decision` (+ `expires`) | — |
-| an owner-stop with no revisit date | — | `cancelled` *(the honest disposition; recoverable)* | — | — |
+| an owner-stop with no revisit date | — | `cancelled` _(the honest disposition; recoverable)_ | — | — |
 | whole-paragraph prose values | — | — | — | prose moves to the **body**; axes carry the state |
 
 ### 3.6 Folder collapse — `[owner-signed]`
@@ -307,7 +316,7 @@ Every relationship is a **typed, directional edge** in one of five families:
 **authority · traceability · dependency · evidence · projection**. V0 fully
 specifies the edges that touch the `plan` node; the rest of the vocabulary is
 shape-only ([§5](#5-the-graph-contract-shape-it-composes-into)). All edge
-*shapes* below are LOCKED; value spaces grow additively.
+_shapes_ below are LOCKED; value spaces grow additively.
 
 | Edge | Family | Source → Target | Direction | Cardinality | Required when | Reconciliation |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -315,11 +324,11 @@ shape-only ([§5](#5-the-graph-contract-shape-it-composes-into)). All edge
 | `derives_from` | authority | `plan` → ADR / strategy doc | up | 0..n | optional | Canonical for emergent `foundational_adr` (17) / `foundation_alignment` (7). |
 | `supersedes` | authority | `plan` → `plan` | lateral (this replaces that) | 0..n | optional | Keep (9). |
 | `superseded_by` | authority | `plan` → `plan` | lateral (inverse) | 0..1 | **required** when `disposition: superseded` | Keep (2); enforces the successor-named invariant. |
-| `depends_on` | dependency | `plan` → `plan` | up (needs) | 0..n, each tagged `blocking \| beneficial` | optional | Keep (12) **and reconcile with PDR-018**: the blocking/beneficial classification becomes a *typed property on the edge*, so a beneficial prerequisite can never silently gate. A `blocking` edge is the durable form of "blocked on another plan" — it clears when the target is `done`. |
+| `depends_on` | dependency | `plan` → `plan` | up (needs) | 0..n, each tagged `blocking \| beneficial` | optional | Keep (12) **and reconcile with PDR-018**: the blocking/beneficial classification becomes a _typed property on the edge_, so a beneficial prerequisite can never silently gate. A `blocking` edge is the durable form of "blocked on another plan" — it clears when the target is `done`. |
 | `thread` | traceability | `plan` → thread | up (serves) | 0..1 | recommended | Keep (27); PDR-027 thread association. |
 | `projects_to` | projection | `plan` → external Linear Project | outward (repo → service) | 0..1 | optional; **build deferred to a later stage** | New (Pillar 6). The plan≈Project mapping; carries the live execution status. Reserved in V0; the projection is built only when the Linear consumer is live. |
 | `realized_by` | evidence / traceability | `plan` (or `todo`) → `product-increment` / commit | down (intent → its realization) | 0..n | optional; target node-types are later stages | New (consumer-driven, surfaced by the DORA-derivation work — [§5.4](#54-delivery-performance-metrics-dora--a-consumer-this-contract-serves)). The join from intent to the commits/increments that realize it — the key that makes change-lead-time and planned-vs-rework attribution a graph traversal rather than a log reconstruction. **The edge is LOCKED; its exact endpoints (`plan` vs `todo`; commit vs `product-increment`) are SURVEY-MAY-REFINE.** |
-| `validated_by` | evidence | `strategic-choice` / `product-increment` → user-value evidence | up (evidence returns to intent) | 0..n | optional; closes the user-value loop | New (consumer-driven — [§5.5](#55-closing-the-loop--returning-evidence-and-the-multi-developer-transition)). The returning edge that turns user-centricity from a *link* into a *loop*: usage / teacher feedback / EEF evidence / Oak-grounded impact attached back to the choice or increment. Target node-types are later stages; **reserved in V0.** |
+| `validated_by` | evidence | `strategic-choice` / `product-increment` → user-value evidence | up (evidence returns to intent) | 0..n | optional; closes the user-value loop | New (consumer-driven — [§5.5](#55-closing-the-loop--returning-evidence-and-the-multi-developer-transition)). The returning edge that turns user-centricity from a _link_ into a _loop_: usage / teacher feedback / EEF evidence / Oak-grounded impact attached back to the choice or increment. Target node-types are later stages; **reserved in V0.** |
 
 **Authority invariants the `plan` node participates in** (Pillar 3 — these
 become machine checks at warn/enforce):
@@ -329,7 +338,7 @@ become machine checks at warn/enforce):
 2. No `archive/` (terminal) plan is the target of a live `depends_on` edge.
 3. No continuity record is citable as a plan's scope authority (a plan's
    authority edges point only at choices, ADRs, strategy, and other plans).
-4. Linear never holds an authority edge *into* intent — `projects_to` is
+4. Linear never holds an authority edge _into_ intent — `projects_to` is
    outward-only; the repo stays canonical.
 5. Every `gate` carries a future `expires`; a gate whose `expires` has passed is
    drift the extractor surfaces for decision ([§3.4](#34-gate--an-expiring-block-not-a-holding-state)).
@@ -391,7 +400,7 @@ primitives**:
   commits, classify each change as planned work or remediation by graph traversal.
 
 The metrics are a generated projection over this graph (§5.2 evidence edges +
-Pillar 1), built later and owner-gated; V0 only ensures the contract *serves* the
+Pillar 1), built later and owner-gated; V0 only ensures the contract _serves_ the
 derivation. Detail: the [repo intent graph plan §Delivery-performance metrics](./future/repo-intent-graph.plan.md).
 
 The **join key** from intent to its realization is the `realized_by` edge
@@ -411,13 +420,13 @@ reuse the `evidence` family and add no new mechanism:
 
 - **The user-value loop.** `validated_by` ([§4](#4-typed-edges)) returns user-value evidence
   (usage / teacher feedback / EEF evidence / Oak-grounded impact) to `strategic-choice` /
-  `product-increment`, turning user-centricity from a traceability *link* into a closed *loop*; a
+  `product-increment`, turning user-centricity from a traceability _link_ into a closed _loop_; a
   validator flags choices with delivered increments but no returned evidence. This completes the
   value stream the graph otherwise truncates at delivery.
 - **Continuous measurement.** Output accuracy (gate-failure + rework-attribution trend),
   cost-per-delivered-value (token / seat telemetry attributed via `realized_by`), and the DORA
   five are all Pillar-1 projections over the graph plus `evidence` edges — **no separate metrics
-  stack**. The intent graph, fed by returning evidence, *is* the continuous-measurement substrate.
+  stack**. The intent graph, fed by returning evidence, _is_ the continuous-measurement substrate.
 
 Detail and the continuous-measurement gap map:
 [repo intent graph plan — Closing the loop](./future/repo-intent-graph.plan.md).
@@ -506,7 +515,7 @@ Notes that bind the build: closed enums (never open `string`); `kind` is the
 discriminator; execution status is **absent** (projected from Linear, not a
 field); `gate.expires` is mandatory (no open holding state); `related` is
 untyped see-also, distinct from the typed edges. Refining an enum at V1 means
-*adding a member*, never widening to `string`.
+_adding a member_, never widening to `string`.
 
 ---
 
@@ -515,7 +524,7 @@ untyped see-also, distinct from the typed edges. Refining an enum at V1 means
 | Source | What it contributes to V0 | How V0 reconciles it |
 | --- | --- | --- |
 | **PDR-018** (planning discipline) | End-goal/mechanism/means; blocking-vs-beneficial prerequisites; DECISION-COMPLETE-is-readiness-gate; ambiguous-verb avoidance. | End-goal/mechanism/means stay in the **body** (not frontmatter). Blocking/beneficial becomes a **typed property on `depends_on`**. "Decision-complete as V0" honours the readiness gate: no "decide at execution time" — V0 states every field definitely and tags refinement-exposure instead. |
-| **ADR-117** (templates & hierarchy) | `name`/`overview`/`todos` for executable plans; the four-document hierarchy; `future`→`current`→`active`→`archive`; promotion process. | `name`/`overview`/`todos` kept and made canonical. The lane model is **re-expressed as orthogonal axes** + a folder collapse (Linear owns execution state). Hierarchy discipline is why this spec is a standalone doc the plan *references*. |
+| **ADR-117** (templates & hierarchy) | `name`/`overview`/`todos` for executable plans; the four-document hierarchy; `future`→`current`→`active`→`archive`; promotion process. | `name`/`overview`/`todos` kept and made canonical. The lane model is **re-expressed as orthogonal axes** + a folder collapse (Linear owns execution state). Hierarchy discipline is why this spec is a standalone doc the plan _references_. |
 | **Plan templates** | The live scaffolds; `isProject: false`; per-todo `status`. | `isProject` **dropped** (subsumed by `projects_to`). Per-todo `status` kept. Templates become a Stage-3 follow-on: regenerate them to emit node-schema-#1 frontmatter. |
 | **Emergent reality** (first-hand census) | The actual drift: ≈30+ `status:` values, 14 `type:` values, `lifecycle`, `parent_plan`, `foundational_adr`, `thread`, `depends_on`, `related`, 38/284 plans with no frontmatter at all. | The migration map ([§3.5](#35-migration-map--emergent-status-value--axes)) and the dropped/deferred table ([§2.5](#25-explicitly-dropped-or-deferred-emergent-keys)) absorb every observed key without loss: reconcile (`foundational_adr`→`derives_from`), replace (`status`→axes), drop (`isProject`/`lifecycle`/`collection`), or defer to survey (`parent_plan`/`specialist_reviewer`). |
 
@@ -557,8 +566,8 @@ V0 succeeds as a lens, not as a finished standard. It is accepted when:
    [deep-survey brief](./future/deep-plan-estate-survey.plan.md) can read the
    estate against V0 and emit additive refinements → V1.
 
-**Conformance is necessary, not sufficient.** This schema scores a plan's *shape*, not its
-*substance*: a fully-conformant plan can still be substantively poor or strategically
+**Conformance is necessary, not sufficient.** This schema scores a plan's _shape_, not its
+_substance_: a fully-conformant plan can still be substantively poor or strategically
 ineffective. V0 is the form lens; the survey's substance signals (a content-quality verdict and the
 idea-level good/speculative/bad classification, with per-idea salvage) and the restructure's
 substance gate judge whether the content is good and the corpus is effective. 100% conformance is the scaffolding the substance work stands on,
