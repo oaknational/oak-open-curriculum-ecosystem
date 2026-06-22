@@ -74,19 +74,6 @@ substance reached its permanent home: the new-in-kind vessel doctrine and the
 over-caution recurrence evidence are live in their homes, and the best-effort-safety
 link is folded into PDR-104 itself. New capture appends below.*
 
-- **Run-the-lenses-before-posing-a-question (the firing gate is the act of posing a question)**
-
-  ```text
-  captured: 2026-06-21 | source: napkin (Drake hunts Beeswax + Vesuvius calls Quench worked instances) | target: a rule (or PDR clause under PDR-029 question-posing layer) | trigger: SECOND instance observed this session (Drake's OWNER-RESERVED question-menu + Vesuvius's survey-checkpoint/escalation-by-default) → DUE | size: small | status: due
-  ```
-
-  Two seats, one root: under uncertainty agents default to owner-escalation, reaching for
-  "surface owner decisions as questions" where it does not fit. Cure = the act of posing a question
-  to the owner is itself the firing gate that runs the decision lenses (principles.md §Decision
-  Lenses) + answer-is-forced + LTAE first; a question reaches the owner ONLY when all lenses
-  genuinely fail to resolve it or it is constitutively the owner's. Codifies the lenses' escalation
-  boundary as an active gate, not a passively-held intention (passive-guidance-loses-to-artefact-gravity).
-
 - **Falsifiable-judgment quality gate (decompose the judgment against the source, don't trust a holistic verdict)**
 
   ```text

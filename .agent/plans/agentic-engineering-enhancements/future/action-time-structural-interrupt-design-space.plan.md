@@ -534,6 +534,54 @@ Why load-bearing: same-session re-enactment is the cleanest possible falsificati
 route-by-intent) was applied immediately after the correction — the firing was the owner, not the
 warm doctrine.
 
+## Worked Instance — 2026-06-22 Plan-Estate / Strategy Window: the rate is the finding, plus three fresh over-caution sub-shapes
+
+The densest recurrence window in the inventory to date, spanning the plan-estate rewrite,
+strategy, survey, and dedicated-consolidation sessions (Candle, Ferret, Cutter, Drake,
+Vesuvius, Pinnace, Ganymede, Saffron, Aardvark, Nova, Oyster, Cosmos, Cinder, Petrel,
+Perseus — fifteen-plus seats, one period). The window adds no new general firing handle; its
+value is the **recurrence rate** PDR-098 names as the unbuilt evidence base, now overwhelming:
+the same action-time pathogen family fired well over twenty times, every instance caught by
+the owner or a peer and **none** by the warm in-context doctrine. Three agents independently
+hit the firing-checkpoint shape (Drake's OWNER-RESERVED question-menu, Vesuvius's
+survey-checkpoint escalation-by-default, Pinnace's permission-to-execute-already-directed);
+Cinder hit the minimise-change pull six times and its leaving-not-acting twin three times in
+one session; Ferret hit the over-caution cluster four times. The same-week, same-session
+re-enactments — Ferret cataloguing the over-caution pathogen then re-enacting it; Cutter's
+"naming buys no immunity" experience file written the session the agent was caught three
+times — are the cleanest falsification yet of the "warm-context recall is sufficient"
+hypothesis. This window is decisive evidence for t6: the cure must carry a mechanical firing
+cadence, not another passive clause.
+
+Three fresh sub-shapes sharpen the t2 semantic-pathogen inventory:
+
+- **Inherited "owner-reserved" / "deferred" tag read as a verdict (Drake, 2026-06-21).** An
+  artefact tag recording that a *prior* agent deferred a call ("OWNER-RESERVED", "[OWNER
+  DECISION]", "superseded-marked", "carried-forward") exerts gravity as if it were the
+  verdict, pulling the reader to escalate rather than run the lenses on whether the call is
+  genuinely the owner's. Firing signature (t3): the literal tag is a partial surface
+  signature; the advisory cognitive content is "is this genuinely undecidable / constitutively
+  the owner's, or did someone merely stop short?"
+- **Claims block memory/state writes by false analogy to `respect-active-agent-claims`
+  (Perseus, 2026-06-22).** Under a peer's active claim the agent declines to write
+  `napkin.md` / `distilled.md` / `.agent/memory/**` — applying the code-clobbering-protection
+  rule to append/merge surfaces where claims are visibility-only and writes always proceed.
+  Owner corrected twice in one session; the contradicting doctrine
+  (`collaboration-is-not-claim-coordination`; the commit-skill visibility-signal note) was
+  held warm and lost. Firing signature: a *declined write* to a known append-surface under a
+  foreign claim is detectable.
+- **Coordinator/role seat held past its pressure (Birch, 2026-06-21).** Role gravity keeps an
+  agent in a Director/coordinator seat after the team shrinks to n≤2 owner-visible, drifting
+  into coordination ceremony; the dissolve-the-seat question (`start-right-team` §6; the
+  coordinator-threshold) does not fire on the agent's own role. Firing signature: a team-size
+  change is an observable event; the unfired check is "does this shape still need this seat?"
+
+Plus a fitness-pass extension of the existing Conservation-First worked instance: the
+"fitness report's critical→hard→soft grouping organised the consolidation pass" pathogen
+recurred (Ferret 2026-06-21, then again as Cutter's "the number organised me before I
+noticed" experience file) — the same chase-the-number generator, now a second-and-third
+instance, confirming the report-self-framing candidate mechanism's evidence base.
+
 ## Note on Scope Discipline
 
 This is a strategic design-space plan. It contains no executable workstreams or
