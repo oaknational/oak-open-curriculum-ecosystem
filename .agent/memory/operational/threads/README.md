@@ -2,7 +2,7 @@
 
 **Proposed 2026-04-21 during the memory-feedback-plan session.**
 Lightweight convention; not yet ratified as Practice doctrine. The
-formal PDR is a candidate for the next `jc-consolidate-docs` pass,
+formal PDR is a candidate for the next `oak-consolidate-docs` pass,
 bundled with the three-plane memory taxonomy portability decision
 (see [`repo-continuity.md § Deep consolidation status`](../repo-continuity.md)
 and the memory-feedback execution plan's Phase 6).
@@ -144,7 +144,7 @@ session-specific signal); the checklist handles the rest.
 The preferred opener is a pointer, not a state dump:
 
 ```text
-$jc-start-right-team continue <thread-slug> from
+$oak-start-right-team continue <thread-slug> from
 .agent/memory/operational/threads/<thread-slug>.next-session.md.
 Treat this opener as a hypothesis until live grounding confirms it.
 ```
@@ -236,7 +236,7 @@ are next touched — not a mass rewrite.)
   component §4 if the plan is multi-session; always a good
   default): *"What did I inherit here? Has it been ratified from
   first principles? Does its shape still fit?"* Invoke
-  `/jc-metacognition` against the plan if uncertain.
+  `/oak-metacognition` against the plan if uncertain.
 
 ### During the session
 

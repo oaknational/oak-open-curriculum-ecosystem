@@ -37,7 +37,7 @@ Before assessing release readiness, you MUST also read and internalise these dom
 | Document | Purpose |
 |----------|---------|
 | `.agent/directives/testing-strategy.md` | Test expectations and TDD/BDD discipline |
-| `.cursor/commands/jc-gates.md` | Quality gate sequence and pass criteria |
+| `.agent/skills/gates/SKILL-CANONICAL.md` | Quality gate sequence and pass criteria |
 | `.agent/sub-agents/components/principles/subagent-principles.md` | Scope and complexity guardrails |
 
 ## Core Philosophy

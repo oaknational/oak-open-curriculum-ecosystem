@@ -79,7 +79,7 @@ docs, READMEs) via the consolidation workflow.
 | `plans/` | Executable work plans with lifecycle management (`future/` → `current/` → `active/` → `archive/`) |
 | `milestones/` | Per-milestone summaries: audience, value delivered, and progression gates |
 | `prompts/` | Reusable prompt playbooks for common workflows |
-| `skills/` | Canonical skills (sole user-and-model-invokable workflow surface; `.agent/commands/` was retired per ADR-125 §2026-05-10). Each skill lives at `skills/<name>/SKILL-CANONICAL.md`; adapters at `.agents/skills/jc-*/SKILL.md` and `.claude/skills/jc-*/SKILL.md` are emitted by `pnpm agent-tools:skills-adapter-generate`. |
+| `skills/` | Canonical skills (sole user-and-model-invokable workflow surface; `.agent/commands/` was retired per ADR-125 §2026-05-10). Each skill lives at `skills/<name>/SKILL-CANONICAL.md`; adapters at `.agents/skills/oak-*/SKILL.md` and `.claude/skills/oak-*/SKILL.md` are emitted by `pnpm agent-tools:skills-adapter-generate`. |
 
 ### Knowledge and learning
 
