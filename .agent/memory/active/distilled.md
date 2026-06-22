@@ -35,7 +35,8 @@ interleaving and CR endings can misattribute lines, producing phantom aggregates
 emits, and **cross-check** per-file sums against the gate's authoritative per-workspace
 totals as an independent checksum. Single-instance debugging tactic (2026-06-19, Siren
 mends Rudder); staged for a second instance to confirm the general shape before
-graduating to a pattern. Sibling: [`tool-output-framing-bias`](patterns/tool-output-framing-bias.md).
+graduating to a pattern.
+Sibling: [`tool-output-framing-bias`](patterns/tool-output-framing-bias.md).
 
 ## An indiscriminate-rule warning count is a set of cause-classes, not N independent problems
 
@@ -65,7 +66,7 @@ stable point is neither pole: it is the **read-gate** (gate every substantive cl
 §Risk-and-Decisions; sibling: [[passive-guidance-loses-to-artefact-gravity]],
 [[feedback_ground_convenient_claims]].
 
-## For an intent-alignment check, source intent from the principal — records are a drift-prone projection
+## For an intent-alignment check, source intent from the principal, not the records
 
 When asked whether a big apparatus (plan, schema, survey, pipeline, restructure) will deliver
 the owner's *intent*, do not reconstruct "the intent" from the records and grade the apparatus
@@ -79,16 +80,6 @@ same pathology can sit one level down in the apparatus (measuring the model, not
 pair every form/conformance acceptance with a substance gate. Source 2026-06-21 (Ganymede
 herds Penumbra); worked artefact: `vision-strategy-and-plan-estate.plan.md` Body-3 substance
 re-aim. Graduation candidate: PDR. Sibling: [[passive-guidance-loses-to-artefact-gravity]].
-
-## Decision records state current truth, not a journey
-
-Fold a change into an ADR/PDR as its **current state** — rewrite the affected clauses to
-say what is true now. Do not add "previously X, now refines to Y" amendment narrative; git
-history is the provenance of the change. Applied 2026-06-22 (Orbit rides Horizon) folding the
-PDR-112 memotype clarification as current-state. Distinct from
-[[no-moving-targets-in-permanent-docs]] (that bans drifting *values*; this bans journey
-*narrative*). Graduation candidate: a rule operationalising ADR/PDR authoring conventions.
-Source: prior-session owner correction, promoted from the per-user buffer.
 
 ## Knowledge surfaces are curated suggestions to a judging agent, not control-flow
 
@@ -108,3 +99,103 @@ only the *what* (acceptance met) and *how* (mechanism). Partially homed in PDR-0
 execution knowledge) and the consolidate/handoff value-rationale step; this is the sharper
 standalone formulation. Source: prior-session owner correction, promoted from the per-user
 buffer.
+
+## verify-dont-trust fires at the moment of READING, not only the moment of asserting
+
+Three sibling read-moment failures, one window: (a) a windowed (offset+limit) read is not
+knowledge of a file's whole state — never assert a whole-file property (size, line count, "all
+captured") from a partial read; run the cheap probe (`wc -l`, the fitness report) first. (b)
+Before running any generator/codegen/build script to DIAGNOSE, read the script — a `clean`/
+`rm -rf` prelude on a command that may crash deletes tracked artefacts (a diagnostic
+`sdk-codegen` deleted ~100 tracked files this way). (c) A subagent AGREEING with your prior is
+not verification — you likely share training priors, so concord is two echoes; only the primary
+source, read first-hand, breaks the loop. Source 2026-06-22 (Orbit, Candle, Petrel). Siblings:
+[[verify-dont-trust]], [[feedback_first_hand_means_me_not_subagents]].
+
+## A committed/stated mechanism is not a running mechanism — actuate in the same breath
+
+"I'll watch X" / "I'll run the gate" / "the loop will close" arms nothing; a documented intent is
+inert until actuated. When you commit to running a mechanism, arm the actual mechanism in the
+same action — never let the STATEMENT stand in for the running process, never defer actuation to
+a future turn. Source 2026-06-21 (Cutter). Siblings:
+[[feedback_run_the_thing_dont_flag_the_gap]], [[feedback_proof_vs_delivery_trace_bridge]].
+
+## A policy/content hook firing while you author a design artefact names a concept, not a token
+
+When a content/policy hook fires while authoring a schema, contract, or doctrine, the matched
+token is a coordinate — before judging it an over-match, ask whether the artefact embodies the
+policed concept ANYWHERE, not only at the firing point; the cure is often structural, not a
+lexical patch. Relatedly, a gate that blocks a commit may be telling you the blocked thing is
+itself the defect — understand the block before bypassing; the clean fix can be removing what is
+blocked, not skipping the gate. Source 2026-06-21/22 (Cutter, Petrel). Sibling:
+[[feedback_hook_failures_are_questions]].
+
+## To author a host-free portable artefact, choose an author that has never seen the host
+
+The strongest guard for an artefact whose value depends on containing NO host concepts is not
+reviewing the output for leak — it is a Practice-naive author that CANNOT leak what it has never
+seen (the defect is dissolved at source). Caveat: a sub-agent launched from inside the repo
+auto-loads CLAUDE.md → all Practice rules and is contaminated before it writes — the clean room
+needs no repo context (a separate chat/checkout). Candidate pattern, one instance (2026-06-22
+Orbit, the working-with-agentic-ai primer). Sibling:
+[[feedback_ask_would_this_be_simpler_if_the_system_changed]].
+
+## Actuate a large valuable document with a thin firing skill, not by making the doc a skill
+
+To make a big reference (a ~1,400-line grammar of thinking) fire for agents, do NOT ship the
+document as a skill — that is passive guidance with a slash command, which artefact-gravity
+predicts will not fire. Cure: a thin, task-triggered skill carrying a small killer subset of
+firing QUESTIONS plus an impact test (the pass must change a framing/decision), pointing to the
+full document as a deep reference. Same canonical-body/thin-adapter seam as the orientation
+primer and oak-reason — firing surface small, depth behind it. Candidate pattern, 2+ instances
+(2026-06-22 Orbit). Sibling: [[passive-guidance-loses-to-artefact-gravity]].
+
+## Evaluation discipline: judge a capability by its KIND's criterion; doubt is a possession too
+
+When evaluating a capability, first NAME ITS KIND (tool you invoke / tripwire that must auto-fire
+/ rule / reference) and apply that kind's success criterion — judging an invocable tool by "does
+it fire unprompted" (a tripwire's bar) is a category error. And identity-capture cuts both ways:
+guard against over-defending a position because it is YOURS — equally when you built the thing
+and when you are its loudest critic, name the falsifier out loud either way. Source 2026-06-22
+(Orbit, evaluating oak-reason). Sibling: [[feedback_ground_convenient_claims]].
+
+## When external research flatters the repo, the value is in the divergence
+
+When authoritative external research agrees with what you built, the agreement is the LEAST
+informative output — it is convenient-claim comfort. Spend the effort on the divergence: where
+the Practice is genuinely ahead, and (more important) the gaps the research names that the repo
+has not closed. State the gaps as plainly as the wins. Source 2026-06-21 (Cutter, DORA-2025
+comparison). Sibling: [[feedback_ground_convenient_claims]].
+
+## Reversing a decision recorded in several places needs a whole-document sweep
+
+When you drop or reverse a decision a document records in multiple places, editing only the
+primary section leaves stale references elsewhere that now contradict the update — a
+self-contradicting artefact. After reversing a recorded decision, grep the WHOLE document for the
+old framing/term before treating the reversal as landed (an under-actuation facet — an edit that
+stops short of completeness). Source 2026-06-22 (Orbit).
+Sibling: [[no-tombstones-for-removed-ideas]].
+
+## A live peer's agent_name assigned to your fresh session is a collision to surface, not adopt
+
+Identity is name+UUID, but the team's coordination surfaces (comms-seen file, claims registry,
+statusline wing-detection) key on agent_name, NOT the UUID — so two live sessions sharing a name
+corrupt the seen-cursor, claim attribution, and wing-detection. When an owner-assigned name
+matches a LIVE registry/comms identity, STOP and surface before registering; take a distinct
+identity. Candidate rotating-cast name-collision doctrine, one instance (2026-06-21 Aardvark).
+Sibling: [[feedback_agent_identity_name_plus_uuid]].
+
+## Operational gotchas: conflict resolution, merge headers, harness shell, new validators
+
+- Resolve a take-ours merge conflict by a FORWARD write (`git show HEAD:<path> > <path>` or
+  Write), never `git checkout --ours` (blocked by the worktree-destruction guard, correctly); a
+  custom `Merge origin/...` header fails commitlint (only `Merge branch …` / `… into …` are
+  auto-ignored) — use a conventional `chore:` header. Verify a conflict's content subsumption
+  before resolving — "take ours" may lose nothing if local already migrated the other side.
+- Harness shell: cwd persists between Bash calls (stay at repo root); zsh does not expand a glob
+  held in a variable (inline it); long `--body` strings with em-dashes hit exit 2 (use
+  `--body-file`).
+- A new `agent-tools/src/validators/<x>.ts` MUST be registered as a knip entry point in
+  `knip.config.ts` (and avoid unused exported types) or full-tree knip goes RED and blocks
+  repo-wide commits. Source 2026-06-21/22 (Oyster, Cosmos, Cutter). Siblings:
+  [[hook-policy-substring-discipline]], the oak-complex-merge skill.

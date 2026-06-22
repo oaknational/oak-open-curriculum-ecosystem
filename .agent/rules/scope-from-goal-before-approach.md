@@ -51,6 +51,22 @@ Both are the same defect: a frame (the pointer's implied scope; an inherited gat
 accepted **fluently** and acted on before it is grounded against the goal. The fluent
 arrival is itself the trigger to scope (see `fluency-is-a-failure-vector`).
 
+## The Forced-Answer Test (solution-shaped pointers)
+
+A pointer often arrives already shaped as a **solution** — "introduce X", "add a guard",
+"refuse bare-relative paths", "fix it this way". A solution-shaped pointer hides its problem,
+and you can execute it faithfully — full TDD, reviews, a green commit — while answering a
+**mis-posed** question. Before building on one, restate the *problem* as a one-line question and
+check whether the answer is **forced**:
+
+- A **ripe** question has one obvious answer (as a precise schema forces the types). Build.
+- If you find yourself *designing, comparing options, or weighing trade-offs*, the question is
+  **unripe** — sharpen it (with the owner when the framing is theirs) before building. The
+  proper question usually makes the answer adjacent and dissolves most of the apparatus.
+
+Reviewers must check the solution's **frame**, not only its quality — a solution-framing makes
+every reviewer route *around* the simpler answer. (Source: 2026-06-21 WS-3 F-41, owner-taught.)
+
 ## Enforcement
 
 Active-by-artefact: the `GOAL · IN · OUT` output is observable (owner, reviewer,

@@ -149,8 +149,16 @@ Repeat this loop until the completion contract is met:
    record knowledge disposition without taking over file rotation, archival, or
    deletion; if a required platform surface is absent or inaccessible, record
    that as an explicit inventory disposition.
-2. **Choose the next real item.** Prefer critical, then hard, then soft, then
-   ready-empty verification. Within a buffer, work item by item.
+2. **Choose the next real item.** The organising axis is the **knowledge flow**
+   (sources → napkin → distilled → pending-graduations → permanent homes;
+   PDR-046's staircase, walked **bottom-up**), NOT the fitness report's
+   critical → hard → soft grouping. Process the lower layers first; pending
+   graduations and the upper buffers fill *as you climb*, so an empty top buffer
+   read before processing the layers below it is not "done" — it is unprocessed.
+   Letting the fitness signal organise the pass is the signal → goal inversion the
+   Conservation Invariant forbids (owner-corrected 2026-06-21). Fitness severity
+   may order work *within* the bottom-up flow; it is never the organising axis.
+   Within a buffer, work item by item.
 3. **Read before routing.** Understand the source item before editing. Do not
    infer disposition from filename, age, or fitness status.
 4. **Route substance.** Move knowledge to the correct durable home, update the
