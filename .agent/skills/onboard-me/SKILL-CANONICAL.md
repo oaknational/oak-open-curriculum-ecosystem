@@ -198,7 +198,13 @@ Exit → Completion.
 
 ### F — The Practice (working with agents)
 
-No detection needed. This branch answers four questions, each from its
+No detection needed. If the newcomer is new to working with agentic AI *in
+general* (not only new to this repo), suggest the portable
+`working-with-agentic-ai` primer first as a grounding prelude — it assumes no
+repo knowledge and hands back here — then continue. This is a suggestion to
+your judgement, not a gate.
+
+This branch answers four questions, each from its
 live doc, offered one at a time at the newcomer's pace:
 
 1. *What is the Practice?* — the README's Engineering Practice section

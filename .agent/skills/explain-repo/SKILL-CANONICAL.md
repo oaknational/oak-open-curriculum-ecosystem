@@ -68,7 +68,9 @@ synthesised from its source — not a transcript of the document:
 
 Then one closing line offering the depth paths: strategy and vision in depth
 (route into `VISION.md` and the progress report), or a guided, hands-on walk
-and setup (hand off to the `onboard-me` skill).
+and setup (hand off to the `onboard-me` skill). If they are also new to working
+with AI agents in general, add one line that a short `working-with-agentic-ai`
+primer exists to read first — a conditional aside, never a co-equal depth path.
 
 ## Handoff to onboard-me
 

@@ -4,31 +4,31 @@ overview: "Name the human-facing teaching surface as one family across a portabi
 todos:
   - id: ws0-doctrine
     content: "WS0: Author PDR-112 (portable teaching-surface pattern, Proposed) + amend ADR-125 (skills placement) + thin ADR-165 host-adoption touch + AGENT.md routing. No new standalone ADR. Owner-ratified; docs-adr-expert + assumptions-expert sign-off. Non-code proof."
-    status: pending
+    status: completed
     depends_on: []
   - id: ws1-primer
-    content: "WS1: Author the portable agentic-AI primer as skill `working-with-agentic-ai` (owned, content-bearing body) + generated adapters. Repo-agnostic body ending at the named hand-off edge. skills:check + portability:check green; body-portability validator proves no repo specifics (verified gap: real work)."
-    status: pending
+    content: "WS1: Author the portable agentic-AI primer as skill `working-with-agentic-ai` (owned, content-bearing body) + generated adapters. Repo-agnostic body ending at the named hand-off edge. skills:check + portability:check green; leakage judged by reading (no deterministic body-validator — owner-released) against phenotype + pedagogy filters (PDR-035; the Practice memotype is portable)."
+    status: completed
     depends_on: [ws0-doctrine]
   - id: ws2-surface-enhancements
     content: "WS2: Wire the family into existing surfaces — AGENT.md §Orientation Requests (name primer + family), onboard-me Branch F (redirect hand-off to/from primer), explain-repo (family depth-path), CONTRIBUTING §Working with AI Coding Agents (point at primer). No duplicated teaching content (router principle)."
-    status: pending
+    status: completed
     depends_on: [ws0-doctrine]   # routing text parallel-safe post-WS0; discovery-probe acceptance gates on ws1-primer
   - id: ws3-persona-coverage
     content: "WS3: Three-persona coverage check (new-to-agentic-AI / new-to-repo / hunting-specifics) via the onboarding register's persona-sim methodology. Disposition ledger: every persona gets a recorded coverage verdict. Any unserved reader → owner-gated new repo-side surface."
-    status: pending
+    status: completed
     depends_on: [ws1-primer, ws2-surface-enhancements]
   - id: ws4-quality-gates
     content: "WS4: Full quality-gate chain plus skills:check, portability:check, markdownlint on the integrated delivery."
-    status: pending
+    status: completed
     depends_on: [ws3-persona-coverage]
   - id: ws5-adversarial-review
     content: "WS5: Adversarial close review — docs-adr-expert, onboarding-expert, assumptions-expert, an architecture reviewer for the portability-seam boundary. Document findings."
-    status: pending
+    status: completed
     depends_on: [ws4-quality-gates]
   - id: ws6-propagation-consolidation
     content: "WS6: Propagate to the onboarding register + completed-plans on archive; run /oak-consolidate-docs."
-    status: pending
+    status: in_progress
     depends_on: [ws5-adversarial-review]
 isProject: false
 ---
@@ -36,7 +36,7 @@ isProject: false
 # Orientation and Agentic-AI Literacy — the teaching-surface family
 
 **Last Updated**: 2026-06-22
-**Status**: 🟡 PLANNING (queued; WS0 doctrine is owner-ratification-gated before WS1+)
+**Status**: 🟢 EXECUTING — WS0–WS5 complete; WS6 propagation done (2026-06-22). Remaining: session-close consolidation, archive, push (owner-gated).
 **Scope**: Establish the repo's human-facing teaching surface as one coherent family across a portability seam, add the missing portable agentic-AI primer as the lead-in, and enhance existing surfaces — without duplicating content or inventing unneeded new surfaces.
 
 ---
@@ -188,12 +188,13 @@ it: C1/A1/A3 → WS1; A2 → WS2; C1–C3 coverage → WS3.
 
 ## Cycle Dependencies and Parallelisation
 
-This plan is doctrine-and-documentation shaped: most landing units are documents
+This plan is doctrine-and-documentation shaped: all landing units are documents
 proven by non-code acceptance (reviewer sign-off, discovery probes, persona
-walk-throughs) per the proof contract. Code TDD cycles apply where code lands —
-specifically the WS1 portability validator that proves the primer body carries
-no repo specifics (a test + the validator product code in `agent-tools`, landed
-together in one commit).
+walk-throughs) per the proof contract. No code TDD cycle lands: the WS1
+body-portability validator was owner-released in favour of judgment-based leak
+review — a structural token validator cannot catch conceptual leak, and since
+PDR-035 makes the Practice memotype portable, a token screen would also mis-flag
+the very vocabulary the lead-in is allowed to use.
 
 Dependency shape:
 
@@ -222,7 +223,6 @@ Dependency shape:
   implementation drift (WS0, WS2).
 - `onboarding-expert` — first-contact quality of the primer and the wired family
   (WS1, WS2, WS3).
-- `test-expert`, `type-expert` — the WS1 portability validator cycle.
 - `architecture-expert-fred` or `architecture-expert-barney` — the portability
   seam boundary (WS5).
 
@@ -298,35 +298,34 @@ work with agentic AI, ending at the named hand-off edge.
   throughout; ends at the declared continuation edge).
 - Author the canonical skill body per PDR-051; regenerate adapters via the
   skills generator; `pnpm skills:check` clean.
-- First establish whether the existing `pnpm portability:check` / `pnpm
-  skills:check` already detect repo-specific content in a canonical body. Build
-  the guard below only if there is a genuine coverage gap — do not pre-emptively
-  author a validator the existing gates already cover.
-- Land a portability guard proving the primer body carries no repo-specific
-  references — *only if the step above confirms the gap* (the one code TDD cycle:
-  failing test naming a banned repo-specific token-class in the primer source,
-  then the validator product code in `agent-tools`, one commit, tree green).
+- Verify leakage by reading, against two filters: **phenotype** (repo-specific
+  implementation — files, tools, paths, schemas, hooks — and repo product/domain
+  subject matter must be absent; the Practice *memotype* and its vocabulary are
+  portable and permitted, PDR-035) and **pedagogy** (the Practice is invoked only
+  as a light, footing-appropriate example). No deterministic body-validator is
+  built: the owner released it, and a structural token check both misses
+  conceptual leak and would mis-flag the portable memotype the lead-in may use.
 
-**Acceptance** (non-code + value-proxy + the code cycle):
+**Acceptance** (non-code + value-proxy):
 
 1. The primer is invocable on a loader platform and readable on a non-loader
    platform via its canonical body.
 2. `pnpm skills:check` and `pnpm portability:check` green; exactly two adapter
    surfaces (PDR-051).
-3. The portability validator passes and fails correctly (test proves both).
+3. `skills:check` / `portability:check` green — structural skill gates (adapter
+   parity, `classification`, skill-permission wiring), not leak checks.
 4. A "new to agentic AI" persona walk-through (onboarding-expert) reaches the
-   hand-off edge with no repo knowledge assumed, AND screens the primer body for
-   host-*concept* leakage (e.g. "Practice", "claims", "threads", "plasmid"), not
-   only repo-name tokens — a token-clean body can still smuggle ecosystem
-   concepts, so the three-context test plus this screen are the real seam guard
-   (a structural token validator cannot catch conceptual leak).
+   hand-off edge with no repo knowledge assumed. Leakage is judged by reading
+   against the phenotype + pedagogy filters above — the Practice *memotype* is
+   portable and permitted (PDR-035), so it is *not* screened out; what must be
+   absent is repo phenotype (implementation specifics, product/domain subject
+   matter). The three-context read plus the persona walk are the seam guard.
 
 **Deterministic validation**:
 
 ```bash
 pnpm skills:check
 pnpm portability:check
-pnpm test --filter @oaknational/agent-tools
 ```
 
 ---
@@ -461,7 +460,7 @@ create a follow-up plan if BLOCKERs are found.
 
 | Risk | Mitigation |
 |------|------------|
-| Primer accretes repo specifics and stops being portable | WS1 portability validator gates the primer body; the hand-off edge is the only repo touch point |
+| Primer accretes repo specifics and stops being portable | WS1 leak review (judgment-based, against the phenotype + pedagogy filters; PDR-035) plus the onboarding-expert persona walk guard the primer body; the hand-off edge is the only repo touch point |
 | The family wiring duplicates teaching content | Router principle is a WS2 acceptance criterion; docs-adr-expert checks one-way content flow |
 | Over-building a new repo-side surface no reader needs | WS3 scope-gate plus owner confirmation; default is reuse/enhance |
 | Doctrine churn after artefacts are built | WS0 ratified before WS1+; downstream artefacts cite the ratified records |
@@ -476,16 +475,18 @@ create a follow-up plan if BLOCKERs are found.
 - **principles.md** — the First Question (could it be simpler?) drives the
   reuse-first, scope-gated-new posture; long-term architectural excellence over
   expediency.
-- **testing-strategy.md** — non-code deliverables use non-code proof per the
-  proof contract; the WS1 portability validator is a real test+product-code
-  cycle landed in one commit.
+- **testing-strategy.md** — all deliverables use non-code proof per the proof
+  contract; no code cycle lands. The WS1 body-portability validator was
+  owner-released in favour of judgment-based leak review (a token check cannot
+  catch conceptual leak and would mis-flag the portable Practice memotype;
+  PDR-035).
 - **schema-first-execution.md** — not directly engaged (no SDK or schema work);
   the skills generator (PDR-051) is the generated-surface authority for adapters.
 - **Plan-body first-principles check** — the *shape* clause fires at WS0 (the
   portability seam and router principle are the load-bearing structural claims,
   re-checked at authoring against PDR-035/051/009 and ADR-117/124/125); the
-  *landing-path* clause fires per workstream (doc landings with non-code proof
-  plus the WS1 code cycle); the *vendor-literal* clause is not engaged (no
+  *landing-path* clause fires per workstream (all doc landings with non-code
+  proof); the *vendor-literal* clause is not engaged (no
   third-party vendor integration).
 
 ---

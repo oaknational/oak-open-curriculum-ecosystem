@@ -60,6 +60,14 @@ Gemini CLI, Copilot, Windsurf) start with two additional surfaces:
 `/oak-onboard-me` — an interactive walkthrough that meets you where you
 are, detects your setup state, and guides one step at a time.
 
+**New to working with AI agents at all?** There is a short, portable
+`working-with-agentic-ai` primer that gives footing before any of this
+repository's specifics — read it first, then come back. Working here does not
+require the fullest agentic delegation: the Practice _enables_ directing a team
+of agents through a structured process, but human-led work with an assistant
+close to every change is equally supported. You choose the way of working by
+context.
+
 The team's skill and command vocabulary lives under
 [`.agent/skills/`](.agent/skills/) (canonical) with platform adapters under
 [`.claude/skills/`](.claude/skills/) and equivalents for other agents. Open

@@ -60,8 +60,14 @@ where the surface includes a **portable lead-in**, it is structured across a
   portable lead-in and the repo-bound members. (Placement and discovery-routing
   are a separate, expected phenotype coupling — to the host's canonical/adapter
   and routing surfaces, not to the members' bodies.)
-- **The seam is a hard boundary.** No host specifics in the portable lead-in's
-  body; no portable substance stranded inside a repo-bound lens.
+- **The seam is a hard boundary.** No host *phenotype* in the portable lead-in's
+  body — no repo-specific implementation (files, tools, paths, schemas, hooks)
+  and no repo product/domain subject matter (PDR-035 §Decision draws the
+  memotype/phenotype line). The Practice *memotype* — its concepts and
+  vocabulary — is portable substance and may be invoked in the lead-in as
+  co-portable illustration, because it travels with the lead-in (PDR-005); only
+  the host's phenotype lives behind the edge. No portable substance is stranded
+  inside a repo-bound lens.
 
 ## Rationale
 
@@ -110,10 +116,19 @@ un-named — accretion, duplication, and a lost portable asset.
   portable pattern.
 - The portable lead-in reaches another repo by transplantation or seeding
   (PDR-005); this pattern reaches it as a PDR with the Core plasmid.
+- Before a host seeds the lead-in, it wires at least one repo-bound
+  continuation behind the hand-off edge. The lead-in's forward promise — that a
+  structured continuation exists for the reader — must not dangle: a repo that
+  has adopted the Core but not yet authored a continuation lens is not yet ready
+  to seed the lead-in.
 
 ### Forbidden
 
-- Host specifics in the portable lead-in's body.
+- Host *phenotype* in the portable lead-in's body — repo-specific implementation
+  (files, tools, paths, schemas, hooks) or repo product/domain subject matter.
+  (The Practice memotype and its vocabulary are portable substance, not host
+  phenotype — PDR-035 — and may be invoked as illustration; the pedagogy of when
+  to invoke it is the lead-in's authoring concern, not a seam rule.)
 - Duplicating teaching content across lenses instead of routing between them.
 - Recording a lead-in's subject-matter generality ("every repo needs this
   topic") as portable doctrine — that is host phenotype.

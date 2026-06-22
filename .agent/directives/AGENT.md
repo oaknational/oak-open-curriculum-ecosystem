@@ -85,10 +85,19 @@ non-negotiable runtime and generator contract.
 
 ## Orientation Requests
 
-When someone asks you to **explain or introduce this repository**, route to
-the orientation skills rather than improvising — both are platform-agnostic
-and read the live docs at answer time:
+When someone asks you to **explain, introduce, or get started with this
+repository**, route to the orientation skills rather than improvising. They are
+one teaching-surface family across a portability seam (PDR-112): a portable
+lead-in primer plus two repo-bound lenses that read the live docs at answer
+time. Each owns a reader-intent and routes onward without re-teaching the
+others:
 
+- *"I'm new to working with AI agents", "teach me to work with agentic AI",
+  "what does working with an agent even mean"* → the
+  **`working-with-agentic-ai`** primer: a portable, host-free footing primer
+  that ends at a single hand-off edge into this repo's own walk. From its edge,
+  continue into `onboard-me`. Offer it only as a one-step-declinable prelude —
+  an experienced agentic-AI user skips straight to the lenses below.
 - *"Explain this repo", "tell me about this repo", "what is this", "give me an
   overview", "executive summary"* → the **`explain-repo`** skill: a direct,
   synthesised executive briefing, no setup and no interaction.
@@ -96,9 +105,13 @@ and read the live docs at answer time:
   contribute"* → the **`onboard-me`** skill: an interactive, paced
   walkthrough that detects machine state and guides hands-on setup.
 
-On a loader platform invoke the skill (`/oak-explain-repo`,
-`/oak-onboard-me`); on a non-loader platform read and follow the canonical
-`.agent/skills/<name>/SKILL-CANONICAL.md`.
+A fresh *"I'm new to agentic AI"* enters the primer first, then forwards into
+`onboard-me`; *"onboard me"* and *"explain this repo"* land on their lenses
+directly, with no primer detour.
+
+On a loader platform invoke the skill (`/oak-working-with-agentic-ai`,
+`/oak-explain-repo`, `/oak-onboard-me`); on a non-loader platform read and
+follow the canonical `.agent/skills/<name>/SKILL-CANONICAL.md`.
 
 ## Project Context
 

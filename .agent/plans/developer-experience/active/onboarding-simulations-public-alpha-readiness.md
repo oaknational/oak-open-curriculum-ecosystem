@@ -1316,6 +1316,14 @@ design; whether repo-scoped collaboration state under `.agent/state/`
 also becomes local-only is a separate decision gated on the comms
 research plan.
 
+**Family update (22 June 2026):** the orientation surfaces are now named as one
+teaching-surface family across a portability seam (PDR-112), with a portable
+agentic-AI-literacy lead-in — `working-with-agentic-ai` — added as the missing
+member for contributors new to working with agents in general. `onboard-me`
+Branch F now suggests it as a grounding prelude; the family routing lives in
+AGENT.md §Orientation Requests. See
+[`orientation-and-agentic-ai-literacy.plan.md`](../current/orientation-and-agentic-ai-literacy.plan.md).
+
 **First live run falsified the menu-shaped interaction (12 June 2026,
 owner walkthrough)**: the walker front-loaded prerequisite probes before
 greeting, rendered journey questions as forced-choice menus, and narrated
