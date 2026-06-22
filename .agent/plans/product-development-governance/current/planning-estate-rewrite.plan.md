@@ -81,8 +81,11 @@ deterministic frontmatter↔store validator is green and the active prose↔fron
 - **The strategy corpus (`docs/strategy/`) — the streams + strategic choices** — `blocking` for WS7
   (synthesis organises by them) and for resolving `serves_strategic_choice`. Present.
 - **ADR-200** — `blocking` (the architecture). Accepted.
-- **The frozen estate** — `beneficial`: the owner froze `.agent/plans/` until this completes, so the
-  harvest universe is stable. Minimum shape without it: re-derive the delta before each harvest pass.
+- **A stable harvest universe** — `beneficial`: the harvest scope (everything under `.agent/plans/`
+  after the archive relocation) shifts only **additively** as new forward V0-bridge plans land — the
+  estate is **not** frozen (ADR-200 §Scope: the count is re-derived at harvest, not frozen; §Consequences:
+  forward genuinely-new work is unblocked, the existing-estate rewrite WS6–WS7 is gated). Standing model:
+  re-derive the in-scope delta before each harvest pass (WS6).
 
 ## Non-goals (ADR-200 §Non-goals — the anti-patterns)
 
