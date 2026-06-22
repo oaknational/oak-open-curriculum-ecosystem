@@ -148,3 +148,29 @@ working as designed, not a failure. Sharpens F-83 (shared-checkout commit-gate c
 [[project_multi_developer_transition]]: on a shared churning branch, (1) re-ground HEAD + `git status`
 immediately before each mutation or commit, and (2) after a shared continuity surface may have been
 co-committed, grep first-hand to confirm your edit is present before relying on it.
+
+## Over-unification, the tombstone, and my process leaking into the artefact (2026-06-22, Skipper tracks Reef)
+
+A cross-effort synthesis session (Learning Commons KG, the ecosystem, the curriculum ontology, atomic
+concepts). The owner corrected the SAME reflex five times: I collapsed diversity into unity — "one
+identity spine / one SSOT / one true way / one giant graph." Root cause: I imported the planning-estate
+consolidation/SSOT doctrine by analogy into the curriculum-data estate, where the precondition fails —
+its SSOT IS the underlying curriculum data, and the graphs above it are plural derivations (diversity,
+not divergence). Category error: "they all use graphs" is a shared *method*, not a latent single
+*artefact* (no one graph, just the approach of using graphs — as many markdown docs are not one
+document). Then, one altitude down, the same disposition produced a **tombstone** in the copy ("isn't a
+single graph, doesn't need to be") and over-explaining that reused my own explaining-imagery — narrating
+my contemplative journey to an audience that never held the misconception. Through-line: **my process
+leaks into the artefact; state the positive understanding the reader needs, not my correction path.**
+Fluency was the tell — the tidy "one system" synthesis arrived smoothly, which was the tripwire to
+re-ground, not confirmation. Homed: per-user memory [[feedback_graphs_as_method_not_one_artefact]]; the
+committed synthesis report.
+
+## Mirror instance of the shared-checkout sweep (2026-06-22, Skipper tracks Reef)
+
+Confirms the entry above: committing my own report bundle by explicit pathspec, the pre-commit hook
+auto-staged TWO of the concurrent session's fresh working-tree edits (`repo-continuity.md`,
+`planning-estate-rewrite.plan.md`) into my commit B (`40d514fde`), so its message describes only 2 of 4
+files. The hook stages tracked modifications, so a clean pre-commit `git status` is the only guard
+against sweeping foreign WIP. Owner authorised "commit everything", so the swept work is legitimately
+landed; the imperfection is message-grouping, not correctness — history not rewritten.

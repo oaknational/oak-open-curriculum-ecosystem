@@ -318,6 +318,10 @@ this section; create a thread record when execution is scheduled.
    [spike](../../plans/security-and-privacy/future/native-mcp-sdk-auth-build-vs-buy.md).
 6. Upstream/SDK forks: endpoint-style cross-refs in MCP tool descriptions; Q-010 (repair vs
    retire the orphaned `oak-curriculum-sdk` typedoc estate).
+7. Curriculum graph estate — single-team proposal: whether to bring the Open Curriculum Ecosystem,
+   the Open Curriculum API, the Curriculum Ontology, and Atomic Concepts under one team for ~6 months.
+   See [`curriculum-graph-estate-synthesis-2026-06-22.md`](../../reports/curriculum-graph-estate-synthesis-2026-06-22.md);
+   an SLT brief is held local (reference-local, not version-controlled).
 
 ## Repo-Wide Invariants / Non-Goals
 
