@@ -117,10 +117,11 @@ attribution.)
 **Why it shapes future work:** future external-substrate studies (ponytail is already the second)
 will each face the same naming decision; a settled convention prevents re-litigating it per source.
 
-**Why not cheaply answerable now:** it is an owner doctrine call about Practice-wide source-handling,
-not a fact to look up; low-urgency (does not block any current cycle).
+**Why not cheaply answerable now:** it is an owner doctrine call about Practice-wide
+source-handling, not a fact to look up; low-urgency (does not block any current cycle).
 
 **Owning artefact:** [`external-skills-substrate-learning.plan.md`](../../plans/agentic-engineering-enhancements/future/external-skills-substrate-learning.plan.md)
-§Decisions; the two substrate studies in `research/agentic-engineering/operating-model-and-platforms/`.
+§Decisions; the two substrate studies in
+`research/agentic-engineering/operating-model-and-platforms/`.
 
 **Status:** open (2026-06-22, Perseus turns Horizon).

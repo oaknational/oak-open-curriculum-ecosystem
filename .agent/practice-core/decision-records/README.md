@@ -236,3 +236,4 @@ Practice-Core concept ↔ ADR map):
 | [PDR-110](PDR-110-repo-state-enforcement-is-its-own-proof-layer.md) | Repo-State Enforcement Is Its Own Proof Layer | Accepted |
 | [PDR-111](PDR-111-agent-experience-is-first-class.md) | Agent Experience Is a First-Class Practice Optimisation Principle | Accepted |
 | [PDR-112](PDR-112-teaching-surface-family-across-a-portability-seam.md) | The Teaching-Surface Family — Intent-Routed Lenses Across a Portability Seam | Accepted |
+| [PDR-113](PDR-113-source-intent-from-the-principal-not-the-records.md) | Source Intent From the Principal, Not the Records | Accepted |
