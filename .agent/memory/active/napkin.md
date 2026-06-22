@@ -255,6 +255,18 @@ after reversing a recorded decision, grep the WHOLE document for the old framing
 treating the reversal as landed. A sibling of the under-actuation pathogen (an edit that stops
 short of completeness). Sibling: [[no-tombstones-for-removed-ideas]].
 
+## Make a big doc FIRE: a thin firing skill over a deep reference, not a doc-as-skill (2026-06-22, Orbit rides Horizon)
+
+To actuate a large, valuable document (a 1,400-line grammar of thinking) for agents, do NOT make
+the document into a skill — that ships passive guidance with a slash command, which
+`passive-guidance-loses-to-artefact-gravity` predicts will not fire. The cure that worked: a
+**thin, task-triggered skill** carrying a small killer subset of firing *questions* plus an
+impact test (the pass must change a framing or decision, never fill a template), pointing to the
+**full document as a deep reference and yardstick** for complex work. The document is the depth;
+the skill is the actuator. Same seam as canonical-body/thin-adapter and the orientation primer —
+the firing surface stays small, the depth lives behind it. Candidate pattern (held for a second
+instance). Sibling: [[passive-guidance-loses-to-artefact-gravity]].
+
 ## A coordinator seat held past its pressure is artefact-gravity on the role itself (2026-06-21, Birch — Director session) — candidate
 
 Took the Director seat for a high-churn ~5-agent window (commit-warden contention, rotating cast — genuinely needed), ran two clean role rotations (Drake→Ganymede, Hobby→Pinnace), then the window settled to n=2 owner-visible (one surveying, one checking alignment). I noticed I was drifting into coordination *ceremony* (acknowledging clean self-managed pickups, confirming gates competent agents satisfied themselves) and corrected to "direct more quietly" — but stopped *one step short*: I never asked the first-principles question the owner then asked — *does n=2 owner-visible need a Director seat at all?* It does not. **Doctrine-by-analogy reached for:** "I'm the Director, so direct (lightly)." **The doctrine that should have fired:** `start-right-team` §6 (roles dissolve when their pressure disappears) + the coordinator-threshold (peer is default at ≤3). It existed; it didn't fire on my OWN seat — the role's gravity kept me in it. This is a doctrine-traction instance ([[passive-guidance-loses-to-artefact-gravity]]), NOT new doctrine: route as recurrence evidence to the action-time-structural-interrupt inventory, not a fresh rule. Cure captured in MEMORY: re-ask "does this shape need this seat?" at every team-size change, applied to your own role. Sibling: [[feedback_dissolve_role_when_pressure_clears]], [[feedback_useful_work_over_ceremony]].
