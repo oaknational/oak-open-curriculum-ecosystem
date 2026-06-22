@@ -266,6 +266,7 @@ A trigger file MUST NOT:
 7. **Generator-mandatory**: adapters are emitted by `agent-tools:skills-adapter-generate`. Manual edits forbidden by header comment in every emitted file; drift gate fails CI on divergence.
 8. **No compatibility aliases**: canonical IDs are stable; only the configurable owned-skill prefix is applied at adapter emission.
 9. **Classification**: every canonical `SKILL-CANONICAL.md` MUST include a `classification` field in its YAML frontmatter: `active` (invoked via slash) or `passive` (guidance consumed by workflows or linked from other artefacts).
+10. **Body portability**: a canonical skill body is either **portable** or **repo-bound**. A portable body carries its own content and contains no host specifics — neither repo names nor host _concepts_ ("Practice", "claims", "threads") — and travels between repos by transplantation or seeding (PDR-005), since skills are not Core-plasmid content. A repo-bound body reads the host corpus at runtime and is hydrated canonical content (ADR-165). Both use the identical placement and adapter surfaces above; portability is a body-content discipline the structural drift and wrapper gates cannot detect, so its guard is the PDR-108 three-context test plus a host-concept screen at authoring and review. The portable teaching-surface pattern is [PDR-112](../../../.agent/practice-core/decision-records/PDR-112-teaching-surface-family-across-a-portability-seam.md).
 
 ### Plan Template Contract
 
