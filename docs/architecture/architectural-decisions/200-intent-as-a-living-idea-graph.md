@@ -244,6 +244,12 @@ family-of-graphs future a set of instances rather than a rebuild.
 - **Harvest-source breadth — RESOLVED (owner, 2026-06-22).** The harvest ingests `VISION.md` +
   `docs/strategy/` in addition to everything under `.agent/plans/` — the graph spans all altitudes
   (those are the highest-altitude idea-projections) and the no-loss audit is complete end-to-end.
+  `VISION.md` + the strategy corpus are **already-authored documents that stand** (tweaks at most); the
+  harvest extracts their ideas, it does not re-author them.
+- **Authoring model — RESOLVED (owner, 2026-06-22).** The new `stream → thread → plan` corpus is
+  **co-authored (human + agent)** — the human owns higher-altitude shaping, agents draft plan-level
+  documents from the synthesised ideas. The rewrite is of the **plan** corpus under the standing
+  vision/strategy, not of vision/strategy themselves.
 - **Idea identity minting** — how stable, IRI-able `id`s are assigned at harvest (slug / content-hash /
   sequential) so they survive re-harvest and map to RDF subject IRIs. Load-bearing for frontmatter
   references and for de-duplication.

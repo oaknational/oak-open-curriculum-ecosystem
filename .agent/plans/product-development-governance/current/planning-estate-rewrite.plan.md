@@ -31,7 +31,7 @@ todos:
     status: pending
     depends_on: [ws3-broad-shallow-discovery, ws4-thin-slice-proof]
   - id: ws7-synthesise-and-rewrite
-    content: "GATED on ws6: analyse the idea-graph (cluster by strategic choice; surface duplications/contradictions/gaps) -> synthesise -> author the new stream->thread->plan corpus (under-served choices get authored plans) -> independent no-loss audit against the preserved graph -> route permanent knowledge to ADRs/PDRs/docs -> retire the old estate. Acceptance: no-loss audit GO; per-choice effectiveness reviewer-confirmed; human-navigability confirmed."
+    content: "GATED on ws6: analyse the idea-graph (cluster by strategic choice; surface duplications/contradictions/gaps) -> synthesise -> CO-AUTHOR (human + agent, owner-ratified 2026-06-22) the new stream->thread->plan corpus UNDER the existing vision+strategy (which stand, tweaks only — not re-authored); under-served choices get authored plans -> independent no-loss audit against the preserved graph -> route permanent knowledge to ADRs/PDRs/docs -> retire the old plan estate. Acceptance: no-loss audit GO; per-choice effectiveness reviewer-confirmed; human-navigability confirmed."
     status: pending
     depends_on: [ws6-deep-harvest]
 ---
@@ -95,8 +95,11 @@ These are NOT "will be handled later" — each names who resolves it and in whic
   `docs/strategy/` **in addition to** everything under `.agent/plans/` — the graph spans all altitudes
   and the no-loss audit is complete end-to-end. (`VISION.md` and the strategy corpus are the
   highest-altitude idea-projections; their ideas become high-altitude nodes.)
-- **[OWNER DECISION] Authoring model for the new corpus (WS7).** Are the new plans agent-authored,
-  human-authored, or co-authored? Affects resourcing + the human-navigability bar. Surfaced to the owner.
+- **[RESOLVED — owner, 2026-06-22] Authoring model.** Vision + strategy are **already authored and
+  stand** (at most minor tweaks) — the harvest extracts their ideas into the graph, but the documents
+  persist as the highest-altitude projections; they are NOT re-authored. The new `stream → thread → plan`
+  corpus is **co-authored (human + agent)**: the human owns the higher-altitude shaping, agents draft
+  plan-level documents from the synthesised ideas. WS7 is collaborative authoring, not agent-solo.
 - **[WS1-RESOLVED] `graph-core` exact API + the JSON→JSON-LD ingestion contract.** Reasoned (JSON-LD is
   the bridge; 5 constraints in ADR-200 §Open) but **unverified**. WS1 resolves it first-hand.
 - **[WS2-RESOLVED] Idea-store physical layout** (one file per node vs consolidated) and **id-minting
