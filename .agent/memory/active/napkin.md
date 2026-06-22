@@ -102,3 +102,19 @@ durable surface before this:
   dedicated per-user-memory drain (graduate settled feedback whose substance is now homed in repo
   rules/PDRs). Cross-platform surfaces (Codex/Cursor/Gemini) present but not ingested this pass — this
   was a repo-buffer drain, not a cross-platform-ingestion pass.
+
+## F-84 follow-through: a completion gate was silently lying, and only the loss-scan caught it (Petrel stirs Wingspan)
+
+The F-84 arc closed the full loop in one session: first-hand loss-scan → diagnose (read the regex,
+not the doc-comment) → TDD fix → honest register. The durable lesson, sharper than the loss-scan
+note: **the consolidation's own completion gate — the pending-graduations decision-debt count — read
+a healthy 0 while two live items existed**, and I had cited "decision-debt count green" as completion
+evidence in the consolidation closeout. A false signal. Only the first-hand loss-scan caught it (not
+the gate); a context-isolated reader would have seen the green 0 and agreed. The bug had also killed
+the dwell anti-starvation alarm (same parse failure), so a live item had NO surfacing at all. Two
+cross-session reinforcements: (1) `verify-gate-fails-on-known-bad` applies to your OWN completion
+gates — a green gate is not evidence it works, most dangerously at the moment you cite it as done;
+(2) the loss-scan is load-bearing precisely because it can catch a defect in the closeout MACHINERY
+itself, which no gate-green ever can. Worked instance; principle homed in distilled
+(verify-gate-fails-on-known-bad) and the bug+fix in F-84. Sibling: [[verify-dont-trust]],
+[[feedback_run_the_thing_dont_flag_the_gap]].
