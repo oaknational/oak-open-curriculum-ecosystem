@@ -39,7 +39,7 @@ surface.
   frontmatter edges. The prior survey / Pass-1 / classify-and-conform framing is **SUPERSEDED** (survey corpus
   archived under `reports/`; its data + method preserved there). **Progression GO.** Consolidation **done +
   committed** (Petrel stirs Wingspan: napkin rotated 667→87, PDR-113 graduated — `9acde4d8` / `243c4cf8` /
-  `deb697c6`). **Next safe step: WS2** — author the idea-node JSON Schema structure + decide id-minting (WS1
+  `deb697c6`). **Next safe step — the owner-directed TOP PRIORITY for the next session (2026-06-22), ahead of the standing OWNER ROADMAP and other lanes: WS2** — author the idea-node JSON Schema structure + decide id-minting (WS1
   graph-stack survey DONE, result in ADR-200 §Open; WS2 decision-complete; ADR-200 §5 structure, vocabularies
   open). The **WS4 thin-slice-proof is a HARD GATE** before the full harvest (WS6). V0 = the form new plans
   take; forward genuinely-new V0-bridge work is **unblocked** (the existing-estate rewrite WS6–WS7 is gated).
