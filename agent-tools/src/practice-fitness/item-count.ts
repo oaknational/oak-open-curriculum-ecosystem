@@ -192,10 +192,41 @@ function findingForItem(item: ParsedItem): ItemConformanceFinding | null {
 }
 
 /**
+ * A real entry's signature — `captured: … | … status: <known-enum>` — independent of the
+ * canonical `[…]` wrapper. The status is keyed to a KNOWN enum (live or terminal, built from the
+ * exported vocabularies) so a placeholder schema example (`status: <enum>`) is not matched.
+ */
+const KNOWN_STATUS_ALTERNATION = [...LIVE_ITEM_STATUSES, ...TERMINAL_ITEM_STATUSES].join('|');
+const ENTRY_SIGNATURE = new RegExp(
+  String.raw`captured:[\s\S]*?\bstatus:\s*(?:${KNOWN_STATUS_ALTERNATION})\b`,
+  'gi',
+);
+
+/**
+ * Detect entry-shaped blocks that carry a known status but lack the canonical `[…]` wrapper —
+ * fenced bare pipe-fields, or unwrapped prose. Canonical entries are removed first (via
+ * {@link INLINE_ENTRY}, which matches the wrapper even inside a fence), so a documented canonical
+ * example is never flagged. Any remaining entry signature is a real entry that drifted out of
+ * canonical form and would otherwise be **silently uncounted** — the false-green the decision-debt
+ * count showed (frictions F-84). Each such block is malformed: it must migrate to the inline
+ * `[…]` schema to be counted.
+ */
+function nonCanonicalEntryFindings(content: string): ItemConformanceFinding[] {
+  const withoutCanonical = content.replaceAll(INLINE_ENTRY, '');
+  return [...withoutCanonical.matchAll(ENTRY_SIGNATURE)].map(() => ({
+    kind: 'malformed',
+    detail:
+      'entry-shaped block with a known status is not in canonical inline `[…]` form (fenced or unwrapped) — it will not be counted; migrate to the `[captured: … | status: …]` schema',
+  }));
+}
+
+/**
  * Validate every entry against the schema: an inline entry missing a required
  * field is malformed; an `owner-gated` status is its own finding kind (the
- * migration must catch it); any other unknown status is rejected; and a legacy
- * block-format capture is malformed until migrated to the inline form.
+ * migration must catch it); any other unknown status is rejected; a legacy
+ * block-format capture is malformed until migrated; and an entry-shaped block
+ * that lacks the canonical `[…]` wrapper (fenced or unwrapped) is malformed —
+ * otherwise it is silently uncounted (F-84).
  */
 export function validateRegisterItems(content: string): ItemConformanceFinding[] {
   const itemFindings = parseRegisterItems(content)
@@ -213,5 +244,5 @@ export function validateRegisterItems(content: string): ItemConformanceFinding[]
       ]
     : [];
 
-  return [...itemFindings, ...legacyFindings];
+  return [...itemFindings, ...legacyFindings, ...nonCanonicalEntryFindings(content)];
 }

@@ -136,4 +136,40 @@ describe('validateRegisterItems', () => {
     expect(findings).toHaveLength(1);
     expect(findings[0].kind).toBe('malformed');
   });
+
+  it('flags a fenced bare-pipe entry with a known status as malformed (it is silently uncounted otherwise)', () => {
+    const fencedBare = [
+      '- **a candidate title**',
+      '',
+      '  ```text',
+      '  captured: 2026-06-21 | source: a napkin entry | target: a rule | trigger: a second instance | size: S | status: pending',
+      '  ```',
+    ].join('\n');
+    const findings = validateRegisterItems(fencedBare);
+    expect(findings).toHaveLength(1);
+    expect(findings[0].kind).toBe('malformed');
+  });
+
+  it('flags a bare unwrapped entry (no fence, no bracket) with a known status as malformed', () => {
+    const bare = [
+      '- **a candidate title**',
+      '  captured: 2026-06-21 | source: s | target: r | trigger: t | size: S | status: due',
+    ].join('\n');
+    const findings = validateRegisterItems(bare);
+    expect(findings).toHaveLength(1);
+    expect(findings[0].kind).toBe('malformed');
+  });
+
+  it('does not flag a fenced canonical bracket block — a documented example is not a malformed entry', () => {
+    const fencedCanonical = ['```text', ENTRY('pending'), '```'].join('\n');
+    expect(validateRegisterItems(fencedCanonical)).toEqual([]);
+  });
+
+  it('does not flag a bare block whose status is a placeholder, not a known enum', () => {
+    const placeholder = [
+      '- **schema example**',
+      '  captured: <date> | source: <text> | target: <text> | trigger: <text> | size: <S/M/L> | status: <enum>',
+    ].join('\n');
+    expect(validateRegisterItems(placeholder)).toEqual([]);
+  });
 });
