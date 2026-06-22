@@ -157,6 +157,15 @@ gains idea-node edges _additively_, no rework. V0 plans are the first instances 
 throwaway. The constraint (do not compromise the eventual graph form/function) is honoured because V0 _is_
 the plan-layer schema; V0 plans slot into the graph rather than fighting it.
 
+**The boundary (Q3, made explicit).** _Forward, genuinely-new work_ proceeds via V0-bridge plans
+(unblocked). _Rewriting the existing estate into the strategy-aligned corpus_ is gated on the idea-graph.
+The two cannot conflict: V0-bridge plans are new (they do not touch the old estate being harvested) and
+are graph-shaped (they slot in later). The one debt: each V0-bridge plan needs idea-node edges added when
+the graph lands — an additive upgrade, not rework — so V0-bridge is scoped to high-value work that
+genuinely cannot wait, to bound that backfill, never a licence to author the whole corpus ahead of the
+graph. Also: V0-bridge plans must not invent a competing plan-organising taxonomy the graph would have to
+fight; they serve strategic choices via frontmatter and nothing more.
+
 ### Plan triage framework (applied during the harvest, not pre-judged here)
 
 Every document under `.agent/plans/` is idea-harvested; the _document_ then routes to one of:
@@ -188,9 +197,16 @@ prose↔frontmatter handoff gate; the harvest pipeline.
 4. **Broad-shallow discovery pass** over the live corpus → ground the value/domain/edge vocabularies and
    whether `scale` earns its place → screen/enhance/normalise → close the V1 vocabularies → author the
    JSON Schema.
-5. **Deep harvest** to the schema → the preserved idea-graph (existing thin Pass-1 idea data is enriched,
+5. **Prove the architecture end-to-end on a thin vertical slice BEFORE the full harvest** — harvest a
+   handful of ideas from a few documents → store them as JSON-LD idea-nodes in `graph-core` → author one
+   new plan that references them by frontmatter edge → exercise both drift mechanisms (the deterministic
+   frontmatter↔store validator and the semantic prose↔frontmatter review) and an evolution operation
+   (supersede/redirect). Proceed to the full harvest only once the loop is proven. (Added in review: the
+   sequence previously jumped from design straight to the full harvest with no proof — the survey's own
+   lesson, placeholders-not-landed, says prove the bridge first.)
+6. **Deep harvest** to the schema → the preserved idea-graph (existing thin Pass-1 idea data is enriched,
    not discarded).
-6. Analyse the idea-graph → synthesise → **write the new `stream → thread → plan` corpus** → no-loss audit
+7. Analyse the idea-graph → synthesise → **write the new `stream → thread → plan` corpus** → no-loss audit
    against the preserved graph → route permanent knowledge → retire the old estate.
 
 In parallel and unblocked: high-value stream work proceeds as V0 plans (the bridge).
@@ -229,3 +245,16 @@ family-of-graphs future a set of instances rather than a rebuild.
   the highest-altitude ideas in `VISION.md` and `docs/strategy/` are also harvested into the graph as
   nodes, or remain stable anchoring projections that the new plans serve, is a design choice (the graph
   spans all altitudes eventually; the question is what this rewrite's harvest ingests).
+- **Idea identity minting** — how stable, IRI-able `id`s are assigned at harvest (slug / content-hash /
+  sequential) so they survive re-harvest and map to RDF subject IRIs. Load-bearing for frontmatter
+  references and for de-duplication.
+- **De-duplication / merge mechanism** — the same idea recurs across documents; how "same idea" is
+  determined and merged (the `duplicates`/`same_as` edge plus a merge operation) is the analysis pass's
+  core mechanism, currently undefined.
+- **Projection-type schemas** — V0 covers `plan`; vision/strategy/stream/thread/high-level-plan each need
+  their frontmatter-edge schema (or a unified projection-node schema). Named in §2, not yet designed.
+- **JSON-LD bridge constraints** (deepening the reconciliation open) — for the JSON store to consume
+  cleanly into `graph-core`'s RDF: idea-node JSON carries a `@context`; `id`s are IRI-able; edge fields
+  map to RDF predicates; **one** constraint source of truth (JSON Schema at authoring — no divergent
+  SHACL/RDFS); closed-world JSON-Schema governs authoring, open-world RDF governs query. Reasoned,
+  pending the §Sequence-2 API verification.

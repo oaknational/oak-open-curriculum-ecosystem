@@ -19,6 +19,13 @@ related:
 
 # Deep Plan-Estate Survey — multi-angle, critically-verified inventory and analysis
 
+**SUPERSEDED (2026-06-22) by [ADR-200](../../../../docs/architecture/architectural-decisions/200-intent-as-a-living-idea-graph.md).**
+This brief frames the work as a survey that "reads, classifies, and analyses only; does not restructure" —
+the framing ADR-200 explicitly replaces. The work is a **planning-estate rewrite on a living idea-graph**,
+not a survey-and-classify. Do not enter this thread through this brief; read ADR-200 first. Retained as a
+harvest source (its reusable method-ideas — multi-agent reads, adversarial verify, loop-until-dry — are
+extracted in the harvest), not as the active approach.
+
 > **Strategic brief for a separate, dedicated session (`future/`).** This is the decision-complete
 > method for Stage 2 of the [repo-intent-graph plan](./repo-intent-graph.plan.md): the fresh deep
 > survey that grounds the intent-graph contract, produces the restructure work-list, and surfaces
