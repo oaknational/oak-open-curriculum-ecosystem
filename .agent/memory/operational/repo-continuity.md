@@ -23,51 +23,27 @@ surface.
 - **Strategy / vision / plan-estate rework — LIVE primary lane** (thread
   [`strategy-and-plan-estate-holistic-review`](threads/strategy-and-plan-estate-holistic-review.next-session.md)).
   Controlling plan:
-  [`vision-strategy-and-plan-estate.plan.md`](../../plans/product-development-governance/vision-strategy-and-plan-estate.plan.md).
-  Model: four-layer informational dependence (Oak strategy → our vision → our strategy → our planning),
-  three co-equal first-class bodies. **Body 1 (vision) + Body 2 (strategy) authored; per-stream how-we-win / won't-do SIGNED OFF
-  (owner, 2026-06-20); Body-3 design under-specs resolved and encoded (Juniper stirs Taproot, `7a75081f5`).** `VISION.md` is the full two-part vision and now
-  leads with the **"deliver Oak's rigour at reach and at pace"** hook (owner-directed). `docs/strategy/` is now
-  a **README-index + 6 detail files** (diagnosis, alignment-and-streams, three `stream-*`, measures).
-  **Settled (owner):** diagnosis = _rigour at reach and at pace_; strategic-choice **granularity = per-stream**
-  (a plan → one choice → stream → goal; the ID _contract_ relocated to controlling-plan **Body 3** — governance
-  owns it, the strategy lists the choices). **Per-stream how-we-win / won't-do SIGNED OFF**
-  (`APP-`/`TOOLS-`/`FRAME-1…4`, owner 2026-06-20); measures remain Oak-grounded.
-  **Pupil decontamination (owner correction):** pupils are NOT a component of this work — the amplifier ethic is
-  **two levels** (the teacher; our own teams), the vision pupil-boundary is gone; pupils remain only in Oak's
-  verbatim mission and the external compliance gates (K2 / ICO Children's Code / safeguarding). EEF = the
-  ecosystem-convenor exemplar. Incoming materials = suggestions (graphs → thin slice; service-authority →
-  forward design). **Intent-graph vision RATIFIED (2026-06-21, Plover wakes Sundog — owner "all of it"):** the plan estate is one
-  corpus of a typed, agentic-first memory and intent graph (six pillars; one schema generated → indexes are
-  projections; on the generic graph substrate; dual human/agent legibility; authority as typed edges; intent
-  preservation; external systems as typed edges). The **plan standard = the `plan` node-schema (#1)**; search/graph
-  (a false dichotomy) + internal-alignment settled (controlling plan §Owner Decisions 20–22). Two new `future/`
-  plans authored (NOT executed): the
-  [`repo-intent-graph` plan](../../plans/product-development-governance/future/repo-intent-graph.plan.md) (staged;
-  Stage 1 = the smallest slice) and the
-  [`deep-plan-estate-survey` brief](../../plans/product-development-governance/future/deep-plan-estate-survey.plan.md).
-  Editorial pass applied (TPC / MCP / GA / streams↔threads / MCP-doc links). **V0 `plan` node-schema
-  authored, owner-settled, and survey-ready** — the four owner-reserved governance calls are signed off
-  (the `disposition` + `gate.awaiting` enum baselines, the `current`+`active` folder collapse, and the
-  30-day default gate-expiry horizon). **Deep plan-estate work — REFRAMED 2026-06-22 ([ADR-200](../../../docs/architecture/architectural-decisions/200-intent-as-a-living-idea-graph.md)): a planning-estate REWRITE on a living idea-graph, not a survey-and-classify. The survey / Pass-1 / Stage-2 framing in the rest of this entry is SUPERSEDED (read ADR-200 + the thread record); the survey corpus is archived.**
-  `agentic-engineering-enhancements` is **70/70 Pass-1 COMPLETE** (Pinnace hunts Marsh, successor to Hobby
-  wakes Halo). The owner's **substance re-aim** is implemented + validated + committed in the instrument
-  (idea-level: `substance_class` summary + `content_quality` + idea-granular `salvage_value`); two-pass
-  consolidation ratified in Body-3/V0 (`14877e8d0`). **Pass-1 coverage: 228/286 (6 collections)** — `agentic-engineering-enhancements` 70/70,
-  `architecture-and-infrastructure` 36/36, and (Cosmos calls Infinity, this session, across 2 owner-reset
-  budget windows) `product-development-governance` 4/4, `agent-tooling` 59/59, `observability` 31/31,
-  `sdk-and-mcp-enhancements` 28/28 — 0 fabricated findings (window-1 depletion returned null, not invented;
-  HALT held). The exhaustive next-session linear runbook:
-  [`plan-estate-survey-2026-06-21/08-next-session-execution-plan.md`](../../reports/plan-estate-survey-2026-06-21/08-next-session-execution-plan.md)
-  (committed `5388185e8`; supersedes `07` §5; carries owner-intervention points, sub-agent
-  critical-assessment exhortations, every skill invocation; cross-linked up to the parent brief + controlling
-  plan) + the living `coverage-ledger.md`. **Next safe step:** the next session is **SOLE** — ground on `08`,
-  open a fresh orchestrator claim, continue Pass-1 (10 collections / ~58 plans remain, start `sector-engagement`)
-  in ~12-plan increments, ~one ~35-plan sub-batch per owner-reset window, then the 70-AEE back-fill before
-  Pass-3 → Pass-2/3 → dated outputs + no-loss audit; V1 ratification + Stage-1 build still OWNER-GATED.
-  Owner resets the budget window; owner controls push. n=2 owner-visible this window (Oyster weaves Surf,
-  WS-3 path-safety on `agent-tools/**`, disjoint lane, winding down).
-  Detail: thread record (top section).
+  [`vision-strategy-and-plan-estate.plan.md`](../../plans/product-development-governance/vision-strategy-and-plan-estate.plan.md)
+  (Bodies 1–2 done — vision + strategy **stand**; Body 3 = the estate rewrite, now executed via ADR-200).
+  **Architecture converged + committed (2026-06-22):**
+  [`ADR-200`](../../../docs/architecture/architectural-decisions/200-intent-as-a-living-idea-graph.md)
+  (intent as a living idea-graph — **Accepted**) +
+  [`ADR-201`](../../../docs/architecture/architectural-decisions/201-external-systems-evidence-integration.md)
+  (external-evidence — **Proposed**, the full-value path, gated on the substrate; the substrate value stands
+  without it) + the executable
+  [`planning-estate-rewrite.plan.md`](../../plans/product-development-governance/current/planning-estate-rewrite.plan.md)
+  **COMMITTED** (`e33a278f9`); the adopted `no-agent-substrate-access` eslint rule committed (`a3ca73f1a`).
+  The deep plan-estate work is a **planning-estate REWRITE on a living idea-graph** — ideas are the
+  fundamental node; the graph is the authoritative machine-readable SSOT (JSON + JSON Schema on `graph-core`);
+  documents (vision/strategy/stream/thread/plan) are the **co-equal** human-navigable embodiment via
+  frontmatter edges. The prior survey / Pass-1 / classify-and-conform framing is **SUPERSEDED** (survey corpus
+  archived under `reports/`; its data + method preserved there). **Progression GO.** Consolidation **done +
+  committed** (Petrel stirs Wingspan: napkin rotated 667→87, PDR-113 graduated — `9acde4d8` / `243c4cf8` /
+  `deb697c6`). **Next safe step: WS2** — author the idea-node JSON Schema structure + decide id-minting (WS1
+  graph-stack survey DONE, result in ADR-200 §Open; WS2 decision-complete; ADR-200 §5 structure, vocabularies
+  open). The **WS4 thin-slice-proof is a HARD GATE** before the full harvest (WS6). V0 = the form new plans
+  take; forward genuinely-new V0-bridge work is **unblocked** (the existing-estate rewrite WS6–WS7 is gated).
+  Read ADR-200 + the thread record first. Owner controls push. Detail: thread record (top section).
 - **Onboarding-improvement arc — PR #199 OPEN, merge-once-green (`feat/onboarding-improvement`).**
   **Next:** owner re-walks `/oak-onboard-me` off-branch; B2/B3 risk-register seeding; the
   ask-the-repo search decision. (B1 awaits owner cost bands; B6 at the M2 gate.)
@@ -190,7 +166,7 @@ each thread record; this table is the repo-level index.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Zephyrous Buffeting Falcon / skills-lane-relocated-to-educator-end-users / 2026-06-08 (prior identities: thread record) |
-| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 (1M) / Perseus turns Horizon / substrate-source de-anon + ponytail fit-review landed (`9abcd7679`); thread next step UNCHANGED = WS-1 / 2026-06-22 (prior seats: Oyster weaves Surf (WS-3 F-41), Nova wakes Genesis (AX-first-class + umbrella plan), Ferret seeks Tunnel (dedicated curation; PDR-107/108/109/110), Finch binds Halo, Drake lifts Obsidian, Siren guards Reef, Tulip spins Xylem; full history in thread record) |
+| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 (1M) / Petrel stirs Wingspan / 2026-06-22 dedicated consolidation (napkin rotated 667→44; PDR-113; forced-answer + bottom-up + decision-records graduations; F-83) + the F-84 fix landed (decision-debt false-green: detector `f056285fb` + register reformat `ea633117a`); thread next step UNCHANGED = WS-1 / 2026-06-22 (prior seats: Perseus turns Horizon (substrate de-anon `9abcd7679`), Oyster weaves Surf (WS-3 F-41), Nova wakes Genesis, Ferret seeks Tunnel (PDR-107/108/109/110), Finch binds Halo, Drake lifts Obsidian, Siren guards Reef, Tulip spins Xylem; full history in thread record) |
 | `eslint-no-throw-result-migration` | Migrate every throw to Result (ADR-088); drive the ~1000 warnings to zero; promote the rule. In execution on `docs/planning-and-validation`; cheap WS2 done, residue is design-laden (tier map in record) | [record](threads/eslint-no-throw-result-migration.next-session.md) | claude / Opus 4.8 (1M) / Siren mends Rudder / execution — observability+graph-core+logger landed (`93beffcfe`,`304b68f8d`,`61bdbc3e4`) / 2026-06-19 (prior: Merlin spins Cirrus `1556b9191`; Vanilla weaves Undergrowth, plan-author) |
 | `statusline-enhancements` | Claude Code statusline: Oak-mark, session-shape indicators, logo swap; lane in two `current/` plans (session-state, logo-modularisation). Live detail + the `feat/comms-research` divergence to reconcile: thread record | [record][statusline] | claude-code / Opus 4.8 / Vole calls Hollow / live-logo-swap-and-plan-harden / 2026-06-16 (prior identities: thread record) |
 | `agent-naming` | PDR-027 display-name derivation: versioned schema registry, session-hook identity surfaces, wordlist eras (v2 landed; v3 + era-pinning cure queued) | [record][agent-naming] | claude / Opus 4.8 / Squall hunts Troposphere / thread-open + v3-plan-author / 2026-06-13 (prior identities: thread record) |
