@@ -79,6 +79,12 @@ it. We aim to be a useful exemplar: for agent-first delivery with excellence at 
 centre, applied across all of digital product and service work, and for bringing
 open educational data projects together to make a real difference.
 
+### Building capabilities
+
+We're building capabilities that outlast any single product. Representing knowledge
+as graphs is one of them — we apply it across domains, from Oak's curriculum to
+AI-enhanced development and the way we run our own work.
+
 ## How we achieve this
 
 - **Our strategy** — the [strategy corpus](docs/strategy/README.md): the diagnosis,

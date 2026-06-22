@@ -14,6 +14,10 @@ sector bodies, edtech, and the AI platforms now working in classrooms — open
 components, open data access, and an openly documented engineering practice
 to build on. Public goods, built in the open.
 
+**Building capabilities.** Representing knowledge as graphs is a strength we apply
+across domains — Oak's curriculum, the EEF evidence surface, AI-enhanced
+development, and how we run our own work.
+
 **Vision and strategy**: Start with [VISION.md](VISION.md) — the two-part vision (Oak's curriculum made AI-native for teachers and the ecosystem; and how we build and curate it, agent-first). Then the [strategy](docs/strategy/README.md) — the diagnosis, the three value streams, and how we'll know it's working. For the live delivery roadmap, see the [high-level plan](.agent/plans/high-level-plan.md).
 
 ---

@@ -44,6 +44,12 @@ value stream in its own right.
 | [Stream — the agentic framework](stream-agentic-framework.md)                  | the ecosystem and our own transformation; the amplifier ethic; the inward Practice                                 |
 | [Measures](measures.md)                                                        | how we'll know it's working (Oak-grounded)                                                                         |
 
+## Building capabilities
+
+Beneath the three streams, we're building capabilities that outlast any single product.
+Representing knowledge as graphs is one — applied across Oak's curriculum, the sector evidence we
+bring in, AI-enhanced development, and our own processes.
+
 ## Strategic choices (the traceability spine)
 
 Every plan in the estate traces to a **strategic choice** here, every choice to a vision
