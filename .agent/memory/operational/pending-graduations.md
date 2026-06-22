@@ -53,6 +53,14 @@ rejected, or become duplicate — every live item is decision-debt to decide.
 graduation or rejection; provenance and adaptation are the safety net for a
 wrong call.
 
+**Draining is decide-all-to-zero, and ordering does not cause starvation.** Each consolidation
+decides *every* decidable item — graduate, reject, or confirm duplicate — toward an empty
+register (`fitness_item_count_target: 0`, the target for every drainable buffer); an item stays
+only when a named constraint genuinely blocks deciding it now. The anti-starvation guard is the
+**dwell-time axis** (`fitness_item_dwell_*`, target 2 / soft 4 / hard 7 days): it surfaces the
+*oldest* undecided item's age and escalates it, so a long-lingering candidate grows louder until
+it forces attention — when a pass cannot reach everything, decide the oldest-and-loudest first.
+
 **Homing categories** when deciding an item: a settled lesson (an *answer*)
 graduates to doctrine (rule / PDR / ADR / pattern / governance doc); a tooling
 gap routes to the frictions register; an open *question* (a design decision with
