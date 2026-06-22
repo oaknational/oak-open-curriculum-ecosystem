@@ -137,13 +137,13 @@
   "devDependencies": {
     "@elastic/elasticsearch": "^9.4.2",
     "@oaknational/eslint-plugin-standards": "workspace:*",
-    "@types/node": "^25.9.2",
-    "eslint": "^10.4.1",
+    "@types/node": "^26.0.0",
+    "eslint": "^10.5.0",
     "tsup": "^8.5.1",
     "typedoc": "^0.28.19",
     "typedoc-plugin-markdown": "^4.12.0",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.8"
+    "vitest": "^4.1.9"
   },
   "publishConfig": {
     "access": "restricted"
