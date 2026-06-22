@@ -24,6 +24,52 @@ foundation; its report + raw data live in
 [`.agent/reports/archive/plan-estate-survey-2026-06-15/`](../../../reports/archive/plan-estate-survey-2026-06-15/README.md)
 (archived 2026-06-18; a fresh survey is a Body-3 prerequisite).
 
+## Where We Are (2026-06-22 EOD, Cinder holds Warmth — ADR-200/201 + plans COMMITTED; progression GO; next = thread-record curate-and-conserve → WS2)
+
+The architecture has **converged and is committed**. Read
+[`ADR-200`](../../../../docs/architecture/architectural-decisions/200-intent-as-a-living-idea-graph.md),
+[`ADR-201`](../../../../docs/architecture/architectural-decisions/201-external-systems-evidence-integration.md),
+and [`planning-estate-rewrite.plan.md`](../../../plans/product-development-governance/current/planning-estate-rewrite.plan.md)
+first. Landed this session (branch ahead, unpushed; owner controls push):
+
+- **`e33a278f9`** — ADR-200 gains a canonical **§Value** section (substrate value = the rewrite's
+  deliverable + the interim completion milestone; full value = needs external evidence), the
+  **living-vocabulary** note (V1 at discovery → V2 reassessment at the deep-harvest conclusion → living
+  thereafter), the **family-of-knowledge-graphs** future (code / operations / standards-compliance /
+  governance), and a **re-derived (not frozen) scope**. **ADR-201 (Proposed)** = external systems as typed
+  evidence edges (the full-value path) + its `future/` plan
+  [`external-evidence-integration.plan.md`](../../../plans/product-development-governance/future/external-evidence-integration.plan.md).
+  The plan gains **WS6 friction-log + new WS6b vocabulary-reassessment** (WS7 re-gated on ws6b).
+- **`a3ca73f1a`** — the `no-agent-substrate-access` eslint rule (a now-retired peer's work, adopted
+  owner-directed), F-1 (fs-binding-aware) + F1 (exemption test) fixed, committed gate-green.
+
+**Owner decisions ratified this session:** progression is **GO** (the substrate value is an adequate
+justification to build); **no-loss is TWO directions** — existing corpus → graph (harvest-recall, vs
+re-read sources) + graph → new corpus (re-expression) — plus the bad-pile re-screen, by a fresh-context
+auditor; the idea-graph's subject is **Oak's intent in this repo** (not org-wide); **streams stand
+top-down** (the corpus organises thread → plan under the given streams; it does not author them); the
+harvest spans `VISION.md` + `docs/strategy/`; vocabularies are **living** (V1 → V2-at-harvest).
+
+**Graph-stack reality (surveyed first-hand; homed in ADR-200 §Open):** WORKS = `graph-core` (term/quad,
+`DatasetCore`, JSON-LD processor, RDFC-1.0 canon, vocab registry, `GraphView` interface) +
+`graph-ingest/jsonld-compatible` + `turtle` + `graph-project` + `graph-corpus-sdk` (the instance model).
+STUB = 5 reserved `graph-ingest` strategies. UN-built (the idea-graph's genuine new work) = the idea-node
+schema + a new idea-graph SDK + evolution tooling (supersede / split / **merge**) + the frontmatter↔store
+validator + the harvest pipeline.
+
+**Next safe step (owner-sequenced):** (1) **thread-record CURATE-AND-CONSERVE** — conserve the survey-era
+sections' insight to their homes and organise this record for navigability; **TRIM NOTHING** (owner,
+2026-06-22 — the no-loss ethic applies to this record too). Then (2) **WS2** — idea-node schema structure +
+id-minting (WS1's graph-stack survey is DONE; result in ADR-200 §Open). A **dedicated consolidation pass is
+DUE** (napkin rotation — now over limit; graduation; Practice-Core review) — deferred to next session by
+the owner; this session ran `session-completion` capture only (the momentum/curation learnings are in the
+napkin, tagged `candidate:`).
+
+**The "Where We Are" sections below (2026-06-21 and earlier, survey-era) are SUPERSEDED in framing but
+CONSERVED** pending the curate-and-conserve pass — they hold survey findings and decisions to home, never
+to trim. The earlier "Pending (c) WS7 authoring model" is **RESOLVED** (vision + strategy stand; the new
+corpus is co-authored). Owner controls push.
+
 ## Where We Are (2026-06-22, Cinder holds Warmth — REFRAMED: planning-estate REWRITE on a living idea-graph; read ADR-200 FIRST)
 
 **READ [`ADR-200`](../../../../docs/architecture/architectural-decisions/200-intent-as-a-living-idea-graph.md)
