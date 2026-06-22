@@ -8,6 +8,18 @@ merge_class: append-only-narrative
 fitness_content_role: drainable-buffer
 ---
 
+> **⚠ ROTATION DUE — flagged 2026-06-22 (Orbit rides Horizon).** This napkin is **616 lines —
+> critical** (target 220; rotation threshold ~400). The next consolidation owes a full rotation
+> (`consolidate-docs` step 6): extract every behaviour-changing entry, merge into `distilled.md`
+> or graduate it to a permanent home, verify the home, then archive and start fresh. **Deferred**
+> from this session's closeout under a named constraint — a 616-line first-hand rotation done
+> without dropping lessons exceeds the safe remaining budget at the end of a marathon session, and
+> rushing it is precisely the failure napkin curation exists to prevent (knowledge-preservation
+> overrides fitness pressure). **Falsifiable:** the next `consolidate-docs` step 6 returns this
+> napkin under 400 lines with every behaviour-changing entry merged or graduated. Caught this
+> session by `oak-reason`'s falsifier probe — a prior partial read had wrongly assumed the napkin
+> was ~250 lines.
+
 ## Napkin rotated (2026-06-21 dedicated consolidation, Ferret seeks Tunnel)
 
 Rotated at a goal-gated drain-all-buffers session. The processed 2026-06-20/21 window
