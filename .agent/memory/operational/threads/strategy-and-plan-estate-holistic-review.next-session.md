@@ -61,13 +61,29 @@ owner-ratified; the filesystem boundary is the scope.**
   `coverage-ledger.md` remain. (My uncommitted survey edits + the thin delta JSON stay on disk; they are
   not the deliverable.)
 
-**Next safe step (ADR-200 §Sequence):** (1) ratify the goals into the controlling plan + reference ADR-200;
-(2) verify `graph-core`'s exact landed API; (3) lock the idea-node-schema *structure* + design the
-projection-type family; (4) broad-shallow discovery pass → close the value/domain/edge vocabularies →
-author the JSON Schema; (5) deep harvest → the idea-graph; (6) analyse → synthesise → write the new corpus
-→ no-loss audit. **In parallel and unblocked:** high-value stream work proceeds as **V0 plans** (the
-bridge — pre-idea-graph but graph-shaped, forward-compatible, upgraded additively when the graph lands).
-**Owner controls push; estate is FROZEN** until this work completes.
+**The executable plan is [`planning-estate-rewrite.plan.md`](../../../plans/product-development-governance/current/planning-estate-rewrite.plan.md)**
+(current/, V0-schema, executes ADR-200): WS1 verify `graph-core` API → WS2 idea-schema structure +
+id-minting → WS3 broad-shallow discovery → **WS4 thin-slice proof (hard gate)** → WS5 projection-types +
+dedup → WS6 deep harvest (incl. VISION.md + docs/strategy/, owner-ratified) → WS7 synthesise + rewrite.
+**Next safe step: WS1.** WS1–WS5 are decision-complete as tasks; WS6–WS7 honestly gated. **In parallel and
+unblocked:** high-value stream work proceeds as **V0 plans** (the bridge). **Owner controls push; estate is
+FROZEN.**
+
+**Pending (next session — owner-flagged 2026-06-22):**
+
+- **(a) Thread-record curation.** The older "Where We Are" sections below carry superseded survey/Pass-1
+  framing + dead links to the archived survey corpus. They are superseded-marked, but a live thread record
+  should be CURATED, not append-and-left (owner: "thread records, unless archived, are live"). Durable
+  substance is homed (architecture → ADR-200; settled corpus-design decisions → the "do-not-re-litigate"
+  block below + the controlling plan; session-by-session history → git + the archived corpus). Trim them to
+  the current reframe + the still-live settled-design block — **best done post-compression with fresh
+  context** (a rushed ~870-line trim in deep context risks the errors this guards against).
+- **(b) A dedicated consolidation pass is DUE.** Napkin rotation (the recurring minimise-change /
+  leaving-not-acting pull is ~9 instances this session — over-ripe for the action-time-interrupt mechanism,
+  PDR-098), distilled graduation, Practice-Core review. Deferred from this session: a deep consolidation
+  needs its own bounded pass + fresh context (the consolidate-docs skill itself says "do not rush").
+- **(c) Open owner-decision:** the WS7 authoring model (agent / human / co-authored for the new corpus) —
+  surfaced in the plan §Uncertainties, not yet answered.
 
 ## Where We Are (2026-06-21, Cinder holds Warmth — ▶ PASS-1 COMPLETE 286/286, all 16 collections; standing down at the Pass-1 boundary)
 
