@@ -241,10 +241,9 @@ family-of-graphs future a set of instances rather than a rebuild.
   JSONSchema-validated JSON. How idea-node JSON maps into `graph-core`'s JSON-LD representation (native
   JSON-LD documents vs plain JSON projected to RDF at load) is a design-step choice; the two are not in
   conflict but the bridge must be specified.
-- **Harvest-source breadth** — the plan-corpus rewrite scans everything under `.agent/plans/`. Whether
-  the highest-altitude ideas in `VISION.md` and `docs/strategy/` are also harvested into the graph as
-  nodes, or remain stable anchoring projections that the new plans serve, is a design choice (the graph
-  spans all altitudes eventually; the question is what this rewrite's harvest ingests).
+- **Harvest-source breadth — RESOLVED (owner, 2026-06-22).** The harvest ingests `VISION.md` +
+  `docs/strategy/` in addition to everything under `.agent/plans/` — the graph spans all altitudes
+  (those are the highest-altitude idea-projections) and the no-loss audit is complete end-to-end.
 - **Idea identity minting** — how stable, IRI-able `id`s are assigned at harvest (slug / content-hash /
   sequential) so they survive re-harvest and map to RDF subject IRIs. Load-bearing for frontmatter
   references and for de-duplication.

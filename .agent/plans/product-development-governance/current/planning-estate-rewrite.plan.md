@@ -27,7 +27,7 @@ todos:
     status: pending
     depends_on: [ws2-idea-schema-structure]
   - id: ws6-deep-harvest
-    content: "GATED on ws4 + ws3: deep harvest of all 570 live docs to the finalised schema -> the preserved idea-graph (the existing thin Pass-1 idea data is re-derived/enriched, not relied on). Acceptance: every doc harvested; every idea has provenance + class; coverage logged; the graph validates against the schema."
+    content: "GATED on ws4 + ws3: deep harvest of all 570 .agent/plans/ docs PLUS VISION.md + docs/strategy/ (owner-ratified 2026-06-22) to the finalised schema -> the preserved idea-graph spanning all altitudes (the existing thin Pass-1 idea data is re-derived/enriched, not relied on). Acceptance: every in-scope doc harvested; every idea has provenance + class; coverage logged; the graph validates against the schema."
     status: pending
     depends_on: [ws3-broad-shallow-discovery, ws4-thin-slice-proof]
   - id: ws7-synthesise-and-rewrite
@@ -91,10 +91,10 @@ this session and a successor must actively resist them.
 
 These are NOT "will be handled later" — each names who resolves it and in which workstream:
 
-- **[OWNER DECISION] Harvest-source breadth.** Does the harvest ingest only `.agent/plans/` (570 docs),
-  or also `VISION.md` + `docs/strategy/` (the highest-altitude ideas)? Recommended: ingest them too, so
-  the graph spans all altitudes and the no-loss audit is complete. **Blocks WS6 scope.** Surfaced to the
-  owner.
+- **[RESOLVED — owner, 2026-06-22] Harvest-source breadth.** The harvest ingests `VISION.md` +
+  `docs/strategy/` **in addition to** everything under `.agent/plans/` — the graph spans all altitudes
+  and the no-loss audit is complete end-to-end. (`VISION.md` and the strategy corpus are the
+  highest-altitude idea-projections; their ideas become high-altitude nodes.)
 - **[OWNER DECISION] Authoring model for the new corpus (WS7).** Are the new plans agent-authored,
   human-authored, or co-authored? Affects resourcing + the human-navigability bar. Surfaced to the owner.
 - **[WS1-RESOLVED] `graph-core` exact API + the JSON→JSON-LD ingestion contract.** Reasoned (JSON-LD is
