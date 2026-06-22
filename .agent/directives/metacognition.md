@@ -125,3 +125,22 @@ documentation**. Doc patches are once-cures; structural cures
 amortise across future agents. The action-to-impact bridge forces
 evaluating cures by whether they recur-proof, not whether they fix
 today's instance.
+
+## Hold the Ladder, Falsify the Claim
+
+Two inward checks drawn from the
+[grammar of thinking](../reference/grammar-of-thinking.md) — the depth behind these prompts:
+
+- **Keep the reliability ladder visible.** Observations become a story, the story becomes a
+  model, the model becomes identity, and identity resists correction. Before committing to a
+  conclusion, ask which rung you are actually standing on — observation, interpretation, model,
+  or judgement — and whether you have climbed faster than the evidence carries you.
+- **Hold the claim as a model, not a possession.** State the live belief as *"my current model is
+  X under conditions Z; here is what would change my mind."* The inward failure scan is the
+  catch: identity capture (defending a model because it is *yours*), abstraction drift (climbing
+  to language too high to test), and evidence theatre (gathering support for a decision already
+  made). Name the falsifier before you act on the belief.
+
+For structuring an *outward* problem, argument, or decision — rather than reflecting on your own
+thinking — use [`reason`](../skills/reason/SKILL-CANONICAL.md); this directive is the inward half
+of that pair.

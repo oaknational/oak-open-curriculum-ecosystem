@@ -40,6 +40,15 @@ and the plan architecture defined in
    (origin 2026-04-24), PDR-057 (apply-don't-ask doctrine), PDR-058
    (stop-inventing-optionality).
 
+   **Frame the problem, not the solution.** Before choosing a structure,
+   state the problem as gap + who it harms + mechanism (your causal
+   hypothesis) + constraints + what success looks like. A statement that
+   already names a solution ("we need X") has skipped the framing. For
+   complex plans, rewrites, or high-stakes work, read the
+   [grammar of thinking](../../reference/grammar-of-thinking.md) as the
+   yardstick, and use [`reason`](../reason/SKILL-CANONICAL.md) to structure
+   the framing before committing to plan shape.
+
 2. Read the directives:
    - `../../directives/principles.md`
    - `../../directives/testing-strategy.md`

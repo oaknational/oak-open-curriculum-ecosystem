@@ -264,6 +264,11 @@ Before diving in, pause and ask:
 These questions are **not** session-open-only: re-ask them at every task/pointer
 arrival and before declaring done, not just here.
 
+For analysis-, planning-, or decision-heavy work, [`reason`](../../reason/SKILL-CANONICAL.md)
+structures the thinking outward (the pair to `metacognition`'s inward reflection), and the
+[grammar of thinking](../../../reference/grammar-of-thinking.md) is the yardstick for complex
+rewrites and high-stakes planning.
+
 ## Commit
 
 **Commit** to excellence in systems architecture, software engineering,

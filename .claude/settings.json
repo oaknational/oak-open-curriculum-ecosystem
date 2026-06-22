@@ -17,6 +17,8 @@
       "Skill(oak-onboard-me:*)",
       "Skill(oak-working-with-agentic-ai)",
       "Skill(oak-working-with-agentic-ai:*)",
+      "Skill(oak-reason)",
+      "Skill(oak-reason:*)",
       "Skill(oak-explain-repo)",
       "Skill(oak-explain-repo:*)",
       "Skill(oak-plan)",
