@@ -24,6 +24,43 @@ PDR-104).
 
 New session observations append below.
 
+## A diagnostic codegen run deleted tracked files via its clean step (2026-06-22, Candle)
+
+Diagnosing a dependency-update build break, `pnpm type-check` reported only `sdk-codegen exited (1)`
+without the underlying stack trace, so I ran `pnpm run sdk-codegen` directly to see the error. That
+command's first step is `generate:clean` → `rm -rf src/types/generated`; codegen then crashed (the
+real bug) *before* regenerating, leaving ~100 tracked generated files deleted in the working tree.
+The investigative command itself caused the harm. This is the metacognition "descend into mechanism"
+warning made concrete: reaching for a terminal to investigate *why* before reading what the command
+does. Lesson: before running any generator/codegen/build script to diagnose, read the script — a
+`clean`/`rm -rf` prelude on a command that may crash will delete tracked artefacts. Prefer running
+the narrowest failing sub-step (here, the `generate:openapi` tsx call) over the full pipeline. The
+`git restore` I then reached for to recover was correctly blocked by `never-use-git-to-remove-work`;
+the owner restored the files themselves. Sibling: [[verify-dont-trust]].
+
+## One root cause, wide cascade: an unbounded transitive-dep float (2026-06-22, Candle)
+
+"Types broke all over the place" (43 Turbo tasks failing, ~40 implicit-`any`/`unknown`/`keyof-any`
+errors across four packages) was a *single* root cause cascading. The `js-yaml: '>=4.1.1'` workspace
+override is unbounded upward; the dependency update let it float to the freshly-published `js-yaml@5.0.0`,
+whose `types` export dropped `.merge`. `@redocly/openapi-core@1.34.15` (used by the OpenAPI type
+generation in `sdk-codegen`) calls `js_yaml_1.types.merge` and crashed at runtime. Because
+`@oaknational/sdk-codegen` couldn't generate/build, every consumer of its generated types lost its
+typed surface — `keyof typeof SUBJECT_TO_PARENT` (imported from `@oaknational/sdk-codegen/search`)
+degraded to `keyof any` = `string | number | symbol`, producing the TS2677; downstream consumers fell
+to implicit-`any`. The evidence-discipline win: the Turbo *ordering* (codegen fails first, consumers
+flood after) was the tell to isolate the head of the cascade rather than treat 40 errors as 40 bugs.
+Cure = bound the override below the breaking major. Latent secondary signal, not the cause here:
+`@types/node` bumped to `^26.0.0` while `engines.node` pins `24.x` — a version-skew reconciled this
+session by pinning `@types/node` to `^24.13.2` across all 24 package.json files (owner-directed:
+"pin to node 24 types given we are pinned to node 24"), lockfile synced.
+**Nuance for any future "bound the overrides" reflex:** the `>=` overrides (`js-cookie`, `qs`,
+`js-yaml`, …) are deliberate *security-floor* minimums (force at-least-patched transitive versions),
+NOT mistakes. The fix is to upper-bound only where a consumer with vendored old-API code (here
+redocly's js-yaml usage) is broken by a new major — not a blanket cap on every floor. One instance so
+far; needs a second before it is a sharp enough rule/validator to graduate (kept in napkin, not the
+register, for that reason).
+
 ## Conservation's organising axis is the knowledge flow, not the fitness zones (2026-06-21, Ferret)
 
 Owner correction mid-pass, and the load-bearing lesson of this consolidation. I opened the drain by
