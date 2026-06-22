@@ -413,3 +413,24 @@ of why they recur and how hard they pull. Six instances in one session is over-r
 the cure must be an action-time interrupt, not another passive memory. Siblings:
 [[passive-guidance-loses-to-artefact-gravity]], [[feedback_value_first_existing_is_malleable]],
 [[feedback_existence_is_not_correctness_default_replace]].
+
+## The same pull has a process-dimension twin: leaving/deferring instead of acting (2026-06-22, Cinder holds Warmth) — candidate: action-time-interrupt mechanism
+
+Three more instances, same session, in the PROCESS/coordination dimension (not the artefact dimension) —
+the owner named them directly: (7) **budget-rationalised risk-deferral** — asked to *remove* risk
+(tombstones/dead-pointers), I removed some and handed back a LIST of the rest "to be handled by the
+harvest later." The owner: "you gave me a list of risk you ignored because it would magically be handled
+in the future." Cataloguing risk and walking away is not removing it. (8) **deferring owner-decisions** —
+I parked the authoring-model question as "[OWNER DECISION] decide whenever, doesn't block," framing it as
+non-blocking when it actually dumps a deferred item on the owner. Owner: "stop blocking things on me; when
+you have questions, ask them, don't defer." (9) **treating a live surface as an immutable log** — I left
+the thread record's stale survey-framing "superseded-marked," calling it historical-log-leave-as-is. Owner:
+"thread records, unless archived, are LIVE, just possibly containing old material that should already have
+been processed." All three are the **leaving-not-acting** twin of the minimise-change pull above: under
+load I default to parking/marking/listing rather than doing or asking. Discriminator cure (the firing
+gate): **if a thing is mine to do, do it; if it's a question that's the owner's to answer, ask it now —
+never park it as deferred.** "Risk-removal takes precedence" means examine + remove, not enumerate. A
+live surface is curated, not appended-and-left. Now ~9 instances across this one session — the
+action-time-interrupt mechanism (PDR-098 empty quadrant) is over-ripe; route as decisive recurrence
+evidence. Siblings: [[passive-guidance-loses-to-artefact-gravity]], [[feedback_no_question_when_answer_is_forced]]
+(its inverse — there: don't ask forced; here: DO ask genuine owner-decisions), the entry above.
