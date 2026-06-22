@@ -350,5 +350,42 @@ if you are *designing, comparing options, or weighing trade-offs*, the question 
 (with the owner when the framing is theirs) before building. A ripe question has one obvious answer (cf.
 schema-first: a precise schema forces the types). Reviewers must check the solution's **frame**, not
 only its quality. Proposed to extend [[scope-from-goal-before-approach]] + the generative metacognition
-trigger. Siblings: [[feedback_no_single_checkout_or_machine_assumption]],
+trigger — kin to the existing pending-graduations candidate
+*"Run-the-lenses-before-posing-a-question (the firing gate is the act of posing a question)"*; the next
+register drain should consider merging the two into one "well-posed-question is the firing gate" PDR.
+Siblings: [[feedback_no_single_checkout_or_machine_assumption]],
 [[feedback_ask_would_this_be_simpler_if_the_system_changed]], [[passive-guidance-loses-to-artefact-gravity]].
+
+## Three merge-mechanics gotchas from integrating a second checkout's commits (2026-06-22, Oyster weaves Surf)
+
+Forward-only merge of the other checkout's 2 pushed commits into local (the many-checkout reality this
+whole session was about). Three reusable gotchas, all confirmed first-hand:
+
+1. **Verify the conflict's content subsumption BEFORE resolving — "take ours" may lose nothing.** The
+   `practice-lineage.md` content conflict was local-restructure vs remote's `jc-`→`oak-` rename. I
+   grepped local first: it had **zero** `jc-` strings — Ferret's restructure already migrated it, so the
+   remote's rename intent was already satisfied. "Take ours" then provably lost nothing. Don't reflexively
+   re-apply the other side; check whether local already subsumes its intent. (Metacognition caught the
+   fluency trap "merge both" before I acted.)
+2. **The `git checkout --ours` hook false-positive — resolve by forward-going write, not a sibling
+   destructive command.** The PreToolUse policy blocks `git checkout --` (worktree-destruction guard);
+   it can't tell a merge-conflict resolution from a destroy. The hook's OWN message names the cure
+   ("make forward-going filesystem changes instead"), so `git show HEAD:<path> > <path>` (or a Write)
+   resolves take-ours forward — NOT a forbidden workaround, the endorsed path. A modify/delete kept-deleted
+   resolves with a plain `rm` + `git add`. Sibling of the content-guard-on-quoted-data entry above
+   ([[feedback_hook_failures_are_questions]]): reappraise, don't swap for a destructive sibling.
+3. **Commitlint ignores ONLY canonical merge headers.** A custom `Merge origin/...: <summary>` header is
+   NOT auto-ignored (only `Merge branch …`/`Merge … into …` are), so it fails `subject-empty`/`type-empty`.
+   For a merge commit in this repo, use a conventional header (`chore: <summary>`) — the 2-parent structure
+   is the merge, the message type is independent. (Cost me one rejected commit cycle.)
+
+Result: merge `ed0c7f3b2`, `pnpm check` green, local fully integrated (0 behind), unpushed.
+
+**Closeout self-correction (the session's own lesson, recurring):** I then wrote an elaborate F-41
+remote-integration plan into the continuity surfaces — "cut a branch off `main`, squash the 9-file net
+diff into one commit, open a separate pure-diff PR." The owner removed it: the branch merges to `main`
+the normal way (PR + squash-and-merge) when it's done; the F-41 code rides along. That was invented
+complexity — I solved a non-problem, the exact invent-a-solution-without-the-question reflex this whole
+session was about, recurring in my own handoff. The pinned `0 behind / N ahead` counts were also a
+moving-target anti-pattern (drifted 124→125→126 within the session); continuity states "0 behind / fully
+integrated", never a volatile ahead-count. Sibling: [[no-moving-targets-in-permanent-docs]].

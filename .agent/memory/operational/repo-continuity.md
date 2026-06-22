@@ -190,7 +190,7 @@ each thread record; this table is the repo-level index.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Zephyrous Buffeting Falcon / skills-lane-relocated-to-educator-end-users / 2026-06-08 (prior identities: thread record) |
-| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 (1M) / Oyster weaves Surf / WS-3 F-41 path-safety LANDED (git-resolved coordination home; proper-question lesson) / 2026-06-21 (prior seats: Nova wakes Genesis (AX-first-class + umbrella plan), Ferret seeks Tunnel (dedicated curation; PDR-107/108/109/110), Finch binds Halo, Drake lifts Obsidian, Siren guards Reef, Tulip spins Xylem; full history in thread record) |
+| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 (1M) / Oyster weaves Surf / WS-3 F-41 LANDED + merged origin (explain-repo skill, oak- sweep); WS-1 set as next step / 2026-06-22 (prior seats: Nova wakes Genesis (AX-first-class + umbrella plan), Ferret seeks Tunnel (dedicated curation; PDR-107/108/109/110), Finch binds Halo, Drake lifts Obsidian, Siren guards Reef, Tulip spins Xylem; full history in thread record) |
 | `eslint-no-throw-result-migration` | Migrate every throw to Result (ADR-088); drive the ~1000 warnings to zero; promote the rule. In execution on `docs/planning-and-validation`; cheap WS2 done, residue is design-laden (tier map in record) | [record](threads/eslint-no-throw-result-migration.next-session.md) | claude / Opus 4.8 (1M) / Siren mends Rudder / execution — observability+graph-core+logger landed (`93beffcfe`,`304b68f8d`,`61bdbc3e4`) / 2026-06-19 (prior: Merlin spins Cirrus `1556b9191`; Vanilla weaves Undergrowth, plan-author) |
 | `statusline-enhancements` | Claude Code statusline: Oak-mark, session-shape indicators, logo swap; lane in two `current/` plans (session-state, logo-modularisation). Live detail + the `feat/comms-research` divergence to reconcile: thread record | [record][statusline] | claude-code / Opus 4.8 / Vole calls Hollow / live-logo-swap-and-plan-harden / 2026-06-16 (prior identities: thread record) |
 | `agent-naming` | PDR-027 display-name derivation: versioned schema registry, session-hook identity surfaces, wordlist eras (v2 landed; v3 + era-pinning cure queued) | [record][agent-naming] | claude / Opus 4.8 / Squall hunts Troposphere / thread-open + v3-plan-author / 2026-06-13 (prior identities: thread record) |
@@ -253,8 +253,11 @@ Umbrella plan
 
 **WS-3 (F-41 path-safety) is DONE** (2026-06-21, Oyster weaves Surf): `resolveCoordinationHome` resolves the
 **primary checkout** via `git worktree list`, so any worktree seat shares one coordination home — commits
-`b5408291d` + `c90150ffa` + `4fd640089` (closing F-41 across comms AND commit-queue defaults), gate-green,
-NOT pushed (owner controls push; 2 code-fix + 2 docs commits await safe remote integration). B2 (the CLI-tail
+`b5408291d` + `c90150ffa` + `4fd640089` (closing F-41 across comms AND commit-queue defaults), gate-green.
+A forward-only merge (`ed0c7f3b2`) then integrated the other checkout's 2 pushed commits (explain-repo
+skill + `jc-`→`oak-` sweep); local is **0 behind** (fully integrated), `pnpm check` green, NOT pushed
+(owner controls push; the branch merges to `main` the normal way — a PR with squash-and-merge — when its
+work is done). B2 (the CLI-tail
 default-via-home migration) deferred → [`future/coordination-home-explicit-targeting-migration.plan.md`](../../plans/agent-tooling/future/coordination-home-explicit-targeting-migration.plan.md).
 
 **Next safe step (owner-chosen 2026-06-22): WS-1 — the CLI-ergonomics conformance guard.** Execute

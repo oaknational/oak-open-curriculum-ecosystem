@@ -48,12 +48,21 @@ Operationalisation candidate (PDR-shaped): a **forced-answer test** extending
 `scope-from-goal-before-approach` and the generative-metacognition trigger. Sibling lesson: never assume
 one checkout or a particular machine (many-checkout/many-machine is the default for coordination/path work).
 
-**NEXT SAFE STEP (owner-chosen 2026-06-22): WS-1 — the CLI-ergonomics conformance guard.** Execute
-[`agent-tools-cli-ergonomics.plan.md`](../../../plans/agent-tooling/current/agent-tools-cli-ergonomics.plan.md)
-from **Phase 0** (convention-audit + scope-ratification gate) → WS6 (the PDR-055 cl.10 guard); retires the
-~19-friction Class A; driven plan is `READY FOR EXECUTION`. Subsequent (not next session): WS-4 drain
-validator → WS-6 ledger; WS-2 watcher hardening (firsthand drain-timeout deaths 2026-06-21); WS-3 B2 tail.
-Owner controls push; the F-41 code commits + docs await safe remote integration.
+**NEXT SAFE STEP (owner-chosen 2026-06-22): WS-1 — the CLI-ergonomics conformance guard.** Ground on the
+umbrella plan + [`agent-tools-cli-ergonomics.plan.md`](../../../plans/agent-tooling/current/agent-tools-cli-ergonomics.plan.md)
+(`READY FOR EXECUTION`). **FIRST ACTION = WS0 (Phase 0), the blocking ratification gate**: define the CLI
+ergonomics convention, audit EVERY command for conformance gaps, mine the friction evidence, inventory
+consumers for backward-compat, and pass the ranked-recommendation ratification gate. **WS0 BLOCKS WS1–WS6
+— do NOT start any implementation WS until WS0 ratifies** (owner-authority gate, PDR-100). **Cross-link to
+fold into WS0's audit:** this session landed `resolveCoordinationHome` (git-resolved primary checkout);
+that plan's **WS1 (default well-known state paths) intersects the deferred F-41 B2** — WS0 must account for
+the landed resolver so WS1's path-defaulting BUILDS ON it, not a parallel mechanism. Subsequent (not next
+session): WS-4 drain validator → WS-6 ledger; WS-2 watcher hardening (firsthand drain-timeout deaths
+2026-06-21); WS-3 B2 tail.
+
+**Push / integration:** all commits are unpushed (owner controls push). The branch merges to `main` the
+normal way — a PR with squash-and-merge — once the branch's work is finished; the F-41 code rides along
+with everything else. No special per-commit integration.
 
 ## Agent Experience (AX) made first-class + umbrella plan (2026-06-21, Nova wakes Genesis)
 
@@ -694,7 +703,7 @@ passes) is in git history and the [`curator-passes/`](../curator-passes/) ledger
 | `Drake lifts Obsidian` | `claude` | `Opus 4.8 (1M)` | `9258d7` | `PDR-105 burndown COMPLETE (Siren guards Reef successor): Tranche A doctrine cures d8ec8867c (de-links + PDR-011/ADR-150/PDR-027/PDR-058 + no-moving-targets:135 reconciliation; docs-adr APPROVED); Tranche B 774a49e5e (tracks/workstreams deleted + PDR-049/050 manifest reconciled + §Notes past-tense; owner-authorised); Tranche C 563487f79 (validate-reference-direction report-only→blocking + .agent/analysis/ ephemeral; code/test-expert APPROVE; probe-proven); validator now BLOCKING at 0; backticked-detection deliberately rejected; NOT pushed` | 2026-06-19 | 2026-06-19 |
 | `Finch binds Halo` | `claude` | `Opus 4.8 (1M)` | `b0831c` | `four-files lane RESOLVED → jointly designed the Closure & Role-Routing fitness doctrine with the owner; committed the findings record + backbone plan (547d889c9); committed Kayak's strategy + compliance lanes (453896d64, d1387b81f) at owner direction; merged the 8 remote planning-cluster commits; prior 2026-06-19: dedicated-consolidation drain (detail in git + the findings record). NOT pushed` | 2026-06-19 | 2026-06-20 |
 | `Ferret seeks Tunnel` | `claude-code` | `Opus 4.8 (1M)` | `77bfae` | `dedicated-knowledge-curation: drained the 2026-06-20/21 capture window bottom-up (napkin rotated; decision-locus + cause-classes lessons → distilled; F-75 peer-heartbeat-silence recovered from comms; fluency-cluster + education=pupils recurrence → action-time t2 inventory); promoted-and-assessed PDR-107 + README-index doc clause + culture Active Principle (docs-adr-assessed), rejected the pupils guard; commits 358a1636a + handoff; then restored practice-lineage to the evolution record (855→283; evacuated Learned Principles + what/how duplicates by intent; PDR-108/109/110 + PDR-002/024; reviewer-folded first-hand; 18 staged + gate-clean, commit handed to Director Vesuvius calls Quench — knip-blocked on peer WIP); NOT pushed` | 2026-06-21 | 2026-06-21 |
-| `Oyster weaves Surf` | `claude` | `Opus 4.8 (1M)` | `d16a4a` | `WS-3 F-41 path-safety LANDED: resolveCoordinationHome resolves the PRIMARY checkout via \`git worktree list\` (b5408291d consolidation + c90150ffa core fix + 4fd640089 commit-queue topic), closing F-41 across comms AND commit-queue defaults; B2 deferred (git-resolved-home reframe); carried the proper-question-forces-the-answer lesson (forced-answer-test PDR candidate) + no-single-checkout-assumption; 3 code + 2 docs commits gate-green, NOT pushed (await safe remote integration)` | 2026-06-21 | 2026-06-21 |
+| `Oyster weaves Surf` | `claude` | `Opus 4.8 (1M)` | `d16a4a` | `WS-3 F-41 path-safety LANDED: resolveCoordinationHome resolves the PRIMARY checkout via \`git worktree list\` (b5408291d consolidation + c90150ffa core fix + 4fd640089 commit-queue topic), closing F-41 across comms AND commit-queue defaults; B2 deferred (git-resolved-home reframe); carried the proper-question-forces-the-answer lesson (forced-answer-test PDR candidate) + no-single-checkout-assumption; 3 code + 3 docs commits + a forward-only merge (ed0c7f3b2) integrating the other checkout's 2 commits; WS-1 set as next step; gate-green, NOT pushed (await safe remote integration)` | 2026-06-21 | 2026-06-22 |
 
 ## Cross-Plan and Cross-Thread Links
 
