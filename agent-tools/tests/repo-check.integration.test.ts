@@ -118,7 +118,7 @@ describe('repo-check staged scanners', () => {
     expect(inheritedCalls).toStrictEqual([
       {
         command: 'pnpm',
-        args: ['exec', 'markdownlint', '--dot', 'docs/staged-clean.md'],
+        args: ['exec', 'markdownlint-cli2', '--no-globs', 'docs/staged-clean.md'],
       },
     ]);
     expect(inheritedCalls[0]?.args).not.toContain(ambientDirtyFile);
@@ -146,7 +146,7 @@ describe('repo-check staged scanners', () => {
     expect(inheritedCalls).toStrictEqual([
       {
         command: 'pnpm',
-        args: ['exec', 'markdownlint', '--dot', 'docs/staged-bad.md'],
+        args: ['exec', 'markdownlint-cli2', '--no-globs', 'docs/staged-bad.md'],
       },
     ]);
     expect(inheritedCalls[0]?.args).not.toContain(ambientDirtyFile);

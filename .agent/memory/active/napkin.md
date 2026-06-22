@@ -434,3 +434,28 @@ live surface is curated, not appended-and-left. Now ~9 instances across this one
 action-time-interrupt mechanism (PDR-098 empty quadrant) is over-ripe; route as decisive recurrence
 evidence. Siblings: [[passive-guidance-loses-to-artefact-gravity]], [[feedback_no_question_when_answer_is_forced]]
 (its inverse — there: don't ask forced; here: DO ask genuine owner-decisions), the entry above.
+
+## A gate can pass green by being silently switched off — verify it still FAILS on known-bad (2026-06-22, Petrel herds Altitude)
+
+Migrating the markdown gate to markdownlint-cli2, the faithful translation of `.markdownlintignore`'s
+`!README.md` re-include put a `!`-prefixed entry in the cli2 `ignores` array. cli2 v0.22.1 does NOT
+treat that as a re-include — it **silently zeroes the whole run to "0 error(s)"** (a false-green gate),
+so the naive translation would have shipped a markdown gate that passes EVERYTHING. Caught only because
+the spike seeded a known-bad file and checked the gate actually *reported* it (then a before/after
+linted-set diff, 1464==1464, proved scope). General lesson, broader than cli2: **a gate going green is
+not evidence it works; the real acceptance is that it still FAILS on a known-bad input.** A tool's
+ignore/negation/scope syntax is a place a gate can be silently disabled; the cure is the
+known-bad/equivalence probe, not the green tick. (Homed in canon: the `.markdownlint-cli2.jsonc`
+HARD-RULE comment + `no-warning-toleration.md` §Scope discipline.)
+candidate: pattern — "verify-gate-fails-on-known-bad". Sibling: [[feedback_run_the_thing_dont_flag_the_gap]].
+
+## Subagent agreement with my prior is not verification — it can be two echoes of the same stale prior (2026-06-22, Petrel herds Altitude)
+
+A vendor-fact subagent "confirmed" my pre-stated cli2 behaviours with fabricated "direct quotes" — one
+echoed my own example path back as a README quote, another invented a `--dot` sentence. The facts were
+roughly right, but the sourcing was invented, and agreement between me and the agent proved nothing: we
+likely share the same training-data priors, so concord is two echoes, not corroboration. Only the
+primary source (the live README, fetched myself) broke the loop. The fluency tell: a confirming result
+arrives smoothly *because* it matches what I already said. Reinforces
+[[feedback_first_hand_means_me_not_subagents]] — for load-bearing vendor facts read the primary source
+myself; triage subagent claims by load-bearingness rather than trusting (or re-doing) uniformly.

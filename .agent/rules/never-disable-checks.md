@@ -20,7 +20,7 @@ in many disguises:
   `error` when done."
 - "Add `eslint-disable` here so we can land the bigger refactor;
   we'll remove it in a follow-up."
-- "Add this path to `.markdownlintignore` for now."
+- "Add this path to `.markdownlint-cli2.jsonc` `ignores` for now."
 - "Skip this test until we figure out why it's flaky."
 - "`@ts-expect-error` until the type-flow upstream is fixed."
 - "Use `--no-verify` once to land this; the hook can pick it up
@@ -49,8 +49,8 @@ state.
   type error. Fix the type flow upstream — see
   [type-expert](../sub-agents/type-expert.md) and the schema-first
   doctrine.
-- **Adding a path to `.markdownlintignore`, `.eslintignore`, or any
-  ignore list** to dodge a finding. Per
+- **Adding a path to `.markdownlint-cli2.jsonc` `ignores`, `.eslintignore`,
+  or any ignore list** to dodge a finding. Per
   [`no-warning-toleration.md`](no-warning-toleration.md) §Scope
   discipline: narrowing the gate to dodge a warning is a doctrine
   violation. Expanding the gate is the normal way doctrine spreads.
