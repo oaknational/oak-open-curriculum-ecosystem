@@ -48,10 +48,12 @@ Operationalisation candidate (PDR-shaped): a **forced-answer test** extending
 `scope-from-goal-before-approach` and the generative-metacognition trigger. Sibling lesson: never assume
 one checkout or a particular machine (many-checkout/many-machine is the default for coordination/path work).
 
-**NEXT SAFE STEP**: F-41 is done. Next highest-impact AX item — execute
+**NEXT SAFE STEP (owner-chosen 2026-06-22): WS-1 — the CLI-ergonomics conformance guard.** Execute
 [`agent-tools-cli-ergonomics.plan.md`](../../../plans/agent-tooling/current/agent-tools-cli-ergonomics.plan.md)
-from WS0 (retires the ~19-friction Class A), OR the umbrella's own spine **WS-4** (the `frictions-register`
-drain validator). Owner controls push; the F-41 code commits + docs await safe remote integration.
+from **Phase 0** (convention-audit + scope-ratification gate) → WS6 (the PDR-055 cl.10 guard); retires the
+~19-friction Class A; driven plan is `READY FOR EXECUTION`. Subsequent (not next session): WS-4 drain
+validator → WS-6 ledger; WS-2 watcher hardening (firsthand drain-timeout deaths 2026-06-21); WS-3 B2 tail.
+Owner controls push; the F-41 code commits + docs await safe remote integration.
 
 ## Agent Experience (AX) made first-class + umbrella plan (2026-06-21, Nova wakes Genesis)
 

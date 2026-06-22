@@ -257,21 +257,16 @@ Umbrella plan
 NOT pushed (owner controls push; 2 code-fix + 2 docs commits await safe remote integration). B2 (the CLI-tail
 default-via-home migration) deferred → [`future/coordination-home-explicit-targeting-migration.plan.md`](../../plans/agent-tooling/future/coordination-home-explicit-targeting-migration.plan.md).
 
-**Next safe step**: the next highest-impact AX item. Two defensible entry points (owner sequences):
+**Next safe step (owner-chosen 2026-06-22): WS-1 — the CLI-ergonomics conformance guard.** Execute
+[`agent-tools-cli-ergonomics.plan.md`](../../plans/agent-tooling/current/agent-tools-cli-ergonomics.plan.md)
+from **Phase 0** (the convention-audit + scope-ratification gate) → WS6 (the PDR-055 cl.10 conformance
+guard). Retires the largest cause-class (~19 frictions, Class A); the driven plan is already
+`READY FOR EXECUTION`. The umbrella sequences it; the driven plan owns its own cycles.
 
-1. **Highest breadth** — the CLI-ergonomics conformance guard. Execute
-   [`agent-tools-cli-ergonomics.plan.md`](../../plans/agent-tooling/current/agent-tools-cli-ergonomics.plan.md)
-   from **WS0** (convention audit + ratification gate) → WS6 (the PDR-055 cl.10 conformance guard).
-   Retires the ~19-friction Class A. Already ratified `READY FOR EXECUTION`.
-2. **Highest leverage / systemic** — the umbrella's own spine: **WS-4** (the `frictions-register` drain
-   validator that recomputes integrity against fs/git + a generated routing index) → **WS-6** (disposition
-   ledger routing all 82 frictions). This is the structural drain-fix.
-
-Recommended start: **WS-1** (the conformance guard — single highest-count cure, already ratified); open
-**WS-4** when a dedicated lane is available.
-
-The umbrella's own spine (WS-4 drain-fix validator + WS-6 disposition ledger) is the systemic fix.
-Recommended start: WS-3 (safety) in parallel with WS-1 (breadth), per the umbrella's sequencing.
+Subsequent AX items (not this session): **WS-4** (the `frictions-register` drain validator that recomputes
+integrity against fs/git + a generated routing index → **WS-6** disposition ledger — the systemic spine);
+**WS-2** (watcher liveness + canonicalisation — firsthand `drain`-timeout watcher deaths observed
+2026-06-21); and **WS-3 B2** (the deferred F-41 CLI tail, reframed to the git-resolved home).
 
 ### Agentic Mechanisms Discovery
 
