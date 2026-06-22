@@ -1,6 +1,6 @@
 # ADR-200: Intent as a living idea-graph — graph-authoritative, dual human/machine embodiment, frontmatter as the connection
 
-- **Status:** Accepted (owner-ratified, 2026-06-22). Two open items noted in §Open.
+- **Status:** Accepted (owner-ratified, 2026-06-22). Open items and in-place resolutions recorded in §Open.
 - **Thread:** `strategy-and-plan-estate-holistic-review`.
 - **Supersedes/refines:** sharpens the architecture sketched in `repo-intent-graph.plan.md` and
   `plan-node-schema.v0.md` — those plans become consumers of this decision and cite it, not the reverse
@@ -21,6 +21,33 @@ reality. We had authored a `plan` node-schema (V0) while the more fundamental no
 schema at all. This effort is a **planning-estate rewrite**, not a survey-and-classify or a refactor: we
 harvest every valuable idea from the current estate (raw material), preserve them as a graph, and
 re-express them in a wholly new strategy-aligned corpus, losing no valuable idea.
+
+## Value — the final state (canonical; the other documents link here, they do not restate)
+
+The repo's intent becomes a **living knowledge-graph of ideas** — the ideas that express what this
+repository is for and why — with the human-navigable documents as their co-equal embodiment. This idea
+knowledge-graph is the **first** of a family of repo knowledge-graphs (§Future state). This section is the
+canonical statement of the value; `VISION.md`, the strategy corpus, and the governing plans link here
+rather than restate it.
+
+**Substrate value — what the rewrite itself delivers (the interim completion milestone).** When the idea
+knowledge-graph and the rewritten corpus land, the repo's intent is **recoverable** (a human-agent team can
+recover what the repo is for, how strategy becomes work, and where durable intent lives, from the records
+alone), **drift-free** (documents and graph cannot silently diverge — the two drift mechanisms, §8),
+**traceable** (every plan traces to a strategic choice → vision → Oak goal, machine-checked),
+**dual-legible** (humans navigate the prose corpus, agents traverse the graph, neither reads the other's
+form), and **conserved** (no valuable idea lost — the two-direction no-loss audit, §5; acceptance in
+§Goals). **This substrate value is complete and assessable on its own** — it is the milestone that marks
+"the substrate work is done," independent of any external-systems integration.
+
+**Full value — substrate plus external evidence.** The substrate then becomes a system that **proves it
+delivers value, not just claims it**: self-measuring delivery (the DORA metrics as a property of the
+structure), the user-value loop closed, and the FRAME stream's core value (an openly-shared,
+self-evidencing agent-first delivery framework). **This full value rests on extracting evidence from the
+state of external systems** (GitHub, Linear, Sentry/OpenTelemetry, and others) into the graph as typed
+edges — repo intent projects outward, services report back. That integration is a **separate architectural
+decision and executable plan** (both named in §Open) and is **not** part of the substrate work; the
+substrate value above stands without it.
 
 ## Decision
 
@@ -70,12 +97,35 @@ Locked structure (first cut; the JSON Schema is authored after the discovery pas
   strategic choice / higher-altitude idea).
 - **Provenance & lifecycle:** `provenance` (source doc + `file:line` + harvest pass) · `status`
   (harvested → analysed → homed → superseded/discarded) · `home` (the document that expresses it).
-  _Every good/speculative idea must reach a `home` — this, computed against the preserved graph, is the
-  no-loss guarantee._
+  _Every good/speculative idea must reach a `home`. This home-computation is the **re-expression check**
+  only (graph → new corpus); it is **not** the whole no-loss guarantee._
+
+**No-loss is two directional checks plus a bad-pile re-screen (owner-ratified, 2026-06-22),** because the
+preserved graph is the harvest's own output and cannot, alone, prove the harvest captured everything:
+
+- **Harvest-recall (existing corpus → idea-graph):** at audit time, re-read the source documents and
+  confirm every valuable source span is covered by ≥1 idea-node. The forward `provenance` pointer
+  (node → source `file:line`) must be complete/invertible so the audit can enumerate source spans and
+  find their nodes. This catches the larger, likelier loss — a valuable idea never extracted
+  (source → no node) — to which the home-computation is structurally blind.
+- **Re-expression (idea-graph → new corpus):** the `home`-computation above.
+- **Bad-pile re-screen:** `class: bad` is the one labelled exit from the no-loss net, so the audit
+  independently re-screens the `status: discarded` / `class: bad` set before the old estate is retired
+  (the nodes are retained — history-preserving — so this is a cheap query over `status: discarded`).
+
+Independence is **constructed, not asserted**: the audit is run by a **fresh-context reviewer that did not
+perform the harvest**, cross-checking re-read sources against the graph — mirroring how the
+prose↔frontmatter gate is specified as active-not-passive (§8).
 
 The value vocabulary, the `domain` vocabulary, the edge-type set, and the `scale` granularity are all
 `DISCOVERED` (V0-style: structure locked, vocabularies grounded in the corpus — see §Sequence broad-shallow
 pass — never authored a priori).
+
+These vocabularies are **living**, not frozen at discovery (§7): the broad-shallow pass closes a **V1**;
+the deep harvest is the highest-signal moment for a **V2 reassessment** — it logs where V1 caused friction
+(forced-misfit ideas, a missing facet/domain/edge, `scale` failing to distinguish) and additively refines
+the vocabularies against the full data — and they evolve thereafter like the rest of the graph. Structure
+stays locked; only vocabulary values extend.
 
 ### 6. Altitude is emergent (off the node); scale is a tentative node hint
 
@@ -117,8 +167,10 @@ project / validate) holds three invariants — each matching existing repo doctr
 Build and preserve the idea-graph as the primary asset, then project it into a **new, strategy-aligned,
 human-navigable plan corpus** (`stream → thread → plan`). The flow: **observe → analyse → understand →
 synthesise → write a whole new set of plans aligned with the strategy via the threads.** Acceptance is
-outcome-level and co-equal across three axes: (a) **no useful idea lost**, proven independently against
-the preserved graph; (b) **per-choice effectiveness** — the corpus effectively implements each strategic
+outcome-level and co-equal across three axes: (a) **no useful idea lost**, proven by the **two-direction
+audit** — harvest-recall (existing corpus → graph, against re-read sources) and re-expression (graph → new
+corpus) — plus an independent re-screen of the discarded/`bad` set, run by a fresh-context reviewer (§5,
+§8); (b) **per-choice effectiveness** — the corpus effectively implements each strategic
 choice (reviewer-confirmed, effective not merely aligned), every choice served by adequate plans, gaps
 closed by authored plans; (c) **human-navigability** — a person can traverse vision → strategy → stream →
 thread → plan → implementation and understand the whole intent. Valuable non-plan knowledge discovered en
@@ -200,8 +252,9 @@ prose↔frontmatter handoff gate; the harvest pipeline.
 5. **Prove the architecture end-to-end on a thin vertical slice BEFORE the full harvest** — harvest a
    handful of ideas from a few documents → store them as JSON-LD idea-nodes in `graph-core` → author one
    new plan that references them by frontmatter edge → exercise both drift mechanisms (the deterministic
-   frontmatter↔store validator and the semantic prose↔frontmatter review) and an evolution operation
-   (supersede/redirect). Proceed to the full harvest only once the loop is proven. (Added in review: the
+   frontmatter↔store validator and the semantic prose↔frontmatter review) and evolution operations
+   (supersede/redirect AND merge — the n:1 reference-rewrite the harvest and dedup depend on, new over
+   `graph-core`'s dataset CRUD). Proceed to the full harvest only once the loop is proven. (Added in review: the
    sequence previously jumped from design straight to the full harvest with no proof — the survey's own
    lesson, placeholders-not-landed, says prove the bridge first.)
 6. **Deep harvest** to the schema → the preserved idea-graph (existing thin Pass-1 idea data is enriched,
@@ -213,34 +266,67 @@ In parallel and unblocked: high-value stream work proceeds as V0 plans (the brid
 
 ## Scope (the live corpus)
 
-Everything under `.agent/plans/` after the archive relocation: **570 documents** (291 `*.plan.md` + 279
-other `.md`), all in scope for the harvest regardless of file form. Out of scope by location only: the
+The idea-graph's subject is **Oak's intent _as expressed in this repository_** — not Oak's
+organisation-wide intent, which is expressed in other ways and is **not our concern** (owner, 2026-06-22).
+Within the repo, the live corpus is everything under `.agent/plans/` after the archive relocation, in
+scope for the harvest regardless of file form. The exact count is **re-derived at harvest, not frozen**
+(≈573 docs / 294 `*.plan.md` as of 2026-06-22; the corpus shifts additively as new forward-plans land, so
+auditing recall against a stale snapshot would itself be a loss path). Out of scope by location only: the
 relocated archive (`.agent/plans-old-archive/`, harvested later) and `.cursor/plans/` (Cursor's ephemeral
 namespace). No method-doc "non-goal" overrides this; the filesystem boundary is the scope.
 
 ## Future state (owner intent; explicitly beyond this work's scope)
 
-The intent idea-graph is the **first** knowledge graph, not the only one. The architecture in this ADR is
-deliberately generic — the idea-graph is one domain instance over `graph-core` — so the same pattern
-extends, once the intent-graph is proven, implemented, and refined, to further knowledge graphs as they
-earn their place: a **governance** knowledge graph, an **operations** knowledge graph, and others. The end
-ambition: **the Practice and its expression through the agentic-engineering frameworks move into a
-graph-native form.** This is recorded as the owner's desired future state and the direction this
-architecture is chosen to enable. It is **out of scope for the current planning-estate rewrite and must not
-expand it.** The payoff is structural: building the intent-graph well on the generic substrate makes the
-family-of-graphs future a set of instances rather than a rebuild.
+The idea knowledge-graph (intent) is the **first** of a family of repo knowledge-graphs, not the only one.
+The architecture in this ADR is deliberately generic — the idea knowledge-graph is one domain instance over
+`graph-core` — so the same pattern extends, once the idea graph is proven, implemented, and refined, to
+further repo knowledge-graphs as each earns its place:
+
+- a **code** knowledge-graph — what the codebase is and how it is structured;
+- an **operations** knowledge-graph — how the running systems behave;
+- a **standards & compliance** knowledge-graph — the standards the work must meet and its compliance state;
+- a **governance** knowledge-graph — how decisions are made and how authority flows;
+- and knowledge-graphs for other aspects of repo and product life as each earns one.
+
+The end ambition: **the Practice and its expression through the agentic-engineering frameworks move into a
+graph-native form** — the repo as a family of interlinked knowledge-graphs over one substrate. This is
+recorded as the owner's desired future state and the direction this architecture is chosen to enable. It is
+**out of scope for the current planning-estate rewrite and must not expand it.** The payoff is structural:
+building the idea knowledge-graph well on the generic substrate makes the family-of-graphs future a set of
+instances rather than a rebuild.
 
 ## Open
 
+- **Full-value external-systems integration — separate proposed ADR + executable plan (named here per §Value).**
+  The full value (self-measuring delivery; the closed user-value loop) rests on extracting evidence from
+  external systems' state (GitHub, Linear, Sentry/OpenTelemetry, …) into the graph as typed edges. This is a
+  distinct architectural decision — a **proposed ADR** (capability modes read/summarise/annotate/mutate; the
+  direction invariant repo-intent-projects-outward / services-report-back; supervision; **no PII in version
+  control**) plus an **executable plan** spelling out the idea-graph ↔ external-evidence relationship. Both
+  are now authored — [ADR-201](201-external-systems-evidence-integration.md) (Proposed) and its executable
+  plan `.agent/plans/product-development-governance/future/external-evidence-integration.plan.md`. Until they
+  are ratified and executed, the substrate value (§Value) is the completion milestone and the full value is
+  explicitly downstream.
 - **Idea-store physical layout** — JSONSchema-validated JSON is decided; the on-disk shape (one file per
   node vs a consolidated store) and its directory home are a design-step choice that the validator and
   authoring tools depend on.
-- **`graph-core` exact API and gaps** — substrate confirmed (generic RDF/JSON-LD); the precise reuse
-  surface and what the idea-graph SDK must add are verified first-hand at SDK-design time (§Sequence 2).
-- **JSON-LD vs JSONSchema reconciliation** — `graph-core` is RDF/JSON-LD; the idea-store is decided as
-  JSONSchema-validated JSON. How idea-node JSON maps into `graph-core`'s JSON-LD representation (native
-  JSON-LD documents vs plain JSON projected to RDF at load) is a design-step choice; the two are not in
-  conflict but the bridge must be specified.
+- **`graph-core` API + the JSON-LD↔JSONSchema bridge — RESOLVED by first-hand survey (2026-06-22).** The
+  graph stack was surveyed first-hand. **Working today:** `graph-core` (RDF term/quad model, `DatasetCore`,
+  DataFactory, JSON-LD 1.1 processor expand/compact/frame, RDFC-1.0 canonicalisation, 7-vocab registry, the
+  `GraphView<TNode,TEdgeType>` query-interface contract); `graph-ingest`'s `jsonld-compatible`
+  (JSON-LD → RDF → `DatasetCore` + source-map) and `turtle` + `source-path` modes; `graph-project`
+  (RDF↔property-graph projection + adjacency); `graph-corpus-sdk` as the working domain-instance **model**
+  (curriculum/EEF; `eefStrandGraph` is a working `GraphView` instance built via `createGraphView`). **The JSON-LD bridge is therefore landed,
+  not open:** idea-nodes are JSON-LD (`@context`/`@id`/`@type`) ingested via `graph-ingest/jsonld-compatible`
+  into `graph-core`; the only residual is precise per-`@id` source-pointer resolution (flagged future-scope
+  in the impl), needed only for source-`file:line` provenance edges — root-pointer works now. **Reserved
+  stubs (`export {}`):** `graph-ingest`'s `strict-jsonld` / `plain-json-tree` / `custom-mapping` /
+  `node-edge-list` / `records`. **Genuinely UN-built — the idea-graph's real new work:** the idea-node JSON
+  Schema + id-minting + store layout; a **new idea-graph domain SDK** (sibling to `graph-corpus-sdk`); the
+  **evolution tooling** (`supersede` / `split` / `merge` / `redirect` with reference-rewrite + history —
+  `graph-core` has only dataset CRUD); the frontmatter↔store validator; the harvest pipeline. The idea-graph
+  is a **new domain instance over the existing substrate**, parallel to `graph-corpus-sdk` and distinct from
+  the curriculum `graph-stack.plan.md` lane.
 - **Harvest-source breadth — RESOLVED (owner, 2026-06-22).** The harvest ingests `VISION.md` +
   `docs/strategy/` in addition to everything under `.agent/plans/` — the graph spans all altitudes
   (those are the highest-altitude idea-projections) and the no-loss audit is complete end-to-end.
@@ -249,7 +335,10 @@ family-of-graphs future a set of instances rather than a rebuild.
 - **Authoring model — RESOLVED (owner, 2026-06-22).** The new `stream → thread → plan` corpus is
   **co-authored (human + agent)** — the human owns higher-altitude shaping, agents draft plan-level
   documents from the synthesised ideas. The rewrite is of the **plan** corpus under the standing
-  vision/strategy, not of vision/strategy themselves.
+  vision/strategy, not of vision/strategy themselves. The strategy's **three streams**
+  (`stream-mcp-app` / `stream-engineering-tools` / `stream-agentic-framework`) derive **top-down** from
+  vision/strategy and are **already specified** — the new corpus organises `thread → plan` _under_ the given
+  streams; it does **not** derive or author streams bottom-up from the plan corpus (owner, 2026-06-22).
 - **Idea identity minting** — how stable, IRI-able `id`s are assigned at harvest (slug / content-hash /
   sequential) so they survive re-harvest and map to RDF subject IRIs. Load-bearing for frontmatter
   references and for de-duplication.
@@ -261,5 +350,6 @@ family-of-graphs future a set of instances rather than a rebuild.
 - **JSON-LD bridge constraints** (deepening the reconciliation open) — for the JSON store to consume
   cleanly into `graph-core`'s RDF: idea-node JSON carries a `@context`; `id`s are IRI-able; edge fields
   map to RDF predicates; **one** constraint source of truth (JSON Schema at authoring — no divergent
-  SHACL/RDFS); closed-world JSON-Schema governs authoring, open-world RDF governs query. Reasoned,
-  pending the §Sequence-2 API verification.
+  SHACL/RDFS); closed-world JSON-Schema governs authoring, open-world RDF governs query. **Confirmed
+  against the landed `graph-ingest/jsonld-compatible` path (first-hand survey 2026-06-22); the §Sequence-2
+  verification is done.**

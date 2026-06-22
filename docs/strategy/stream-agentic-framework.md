@@ -49,7 +49,9 @@ A few load-bearing shapes the strategy builds on:
   precondition for measuring delivery (observability across the whole toolchain) is met here
   by construction: the repo integrates change (GitHub), execution (Linear), and runtime
   (Sentry with OpenTelemetry) into one graph. A framework that can _prove_ it delivers value,
-  not just claim it, is part of this stream's core value — not a side-benefit.
+  not just claim it, is part of this stream's core value — not a side-benefit. (The substrate that makes
+  this possible — the idea knowledge-graph — and the value it delivers are recorded canonically in
+  [ADR-200 §Value](../architecture/architectural-decisions/200-intent-as-a-living-idea-graph.md).)
 
 ## How we win
 

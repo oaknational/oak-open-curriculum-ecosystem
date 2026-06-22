@@ -344,6 +344,14 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   pre-archive-move check; the watcher-health justification is honestly a
   hypothesis, the windows hygiene targets; design Accepted 2026-06-13, execution
   deferred to WS7)
+- [ADR-200: Intent as a living idea knowledge-graph — graph-authoritative, dual embodiment, frontmatter connection](200-intent-as-a-living-idea-graph.md)
+  (ideas are the fundamental unit of intent; the idea knowledge-graph is the authoritative source of truth,
+  the human documents its co-equal embodiment connected by frontmatter typed-edges; built as a domain
+  instance over graph-core; two drift mechanisms; the planning-estate rewrite; Accepted 2026-06-22)
+- [ADR-201: External systems as evidence edges — integrating external state into the idea knowledge-graph](201-external-systems-evidence-integration.md)
+  (external systems are typed evidence edges and the graph stays canonical; direction invariant — intent
+  projects outward, services report back; capability modes + supervision + no-PII-in-VCS; unlocks the full
+  self-measuring-delivery value on top of the substrate; Proposed 2026-06-22, gated on the substrate)
 
 ## Key Architectural Decisions
 

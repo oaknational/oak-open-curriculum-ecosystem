@@ -8,18 +8,18 @@ derives_from:
 last_updated: 2026-06-22
 todos:
   - id: ws1-verify-graph-core-api
-    content: "RESEARCH: read graph-core (packages/core/graph-core) + graph-project landed API first-hand; document exactly what exists (dataset, graph-view, canon, jsonld, term, vocab — confirm the ingestion + traversal + JSON-LD @context surface) and what the idea-graph SDK must add. Output: a short capability+gap note. Acceptance: every claimed API is cited file:line; the JSON→JSON-LD ingestion path is named (or its absence is)."
-    status: pending
+    content: "RESEARCH — DONE 2026-06-22 (first-hand graph-stack survey; result recorded in ADR-200 §Open). WORKING substrate: graph-core (term/quad, DatasetCore, DataFactory, JSON-LD 1.1 processor, RDFC-1.0 canon, 7-vocab registry, GraphView interface); graph-ingest/jsonld-compatible + turtle + source-path; graph-project (RDF<->property-graph projection + adjacency); graph-corpus-sdk as the domain-instance model. JSON-LD bridge LANDED (jsonld-compatible). UN-built — the idea-graph's genuine new work: idea-node JSON Schema + id-minting + store layout; a new idea-graph domain SDK (sibling to graph-corpus-sdk); evolution tooling (supersede/split/merge/redirect with reference-rewrite + history — graph-core has only dataset CRUD); frontmatter<->store validator; harvest pipeline."
+    status: completed
   - id: ws2-idea-schema-structure
     content: "DECIDE+DESIGN: author the idea-node JSON Schema STRUCTURE (fields/edges per ADR-200 §5; vocabularies left open as $comment DISCOVERED) and decide id-minting (stable assigned, IRI-able, NOT content-derived). Output: idea-node.schema.json skeleton + an id-minting note. Acceptance: validates a hand-written sample idea-node; ids are stable across an edit to statement."
     status: pending
     depends_on: [ws1-verify-graph-core-api]
   - id: ws3-broad-shallow-discovery
-    content: "SURVEY: a broad-shallow pass over the 570-doc live corpus to ground the OPEN vocabularies (value facets, domain, edge-types) + test whether scale earns its place. Screen → enhance → normalise → close the V1 vocabularies → finalise the JSON Schema. Output: the closed vocabularies + the finalised schema. Acceptance: vocabularies derived from corpus evidence (not templated); every facet has >=N corpus instances; the coverage of the shallow pass is logged (no silent truncation)."
+    content: "SURVEY: a broad-shallow pass over the 570-doc live corpus to ground the OPEN vocabularies (value facets, domain, edge-types) + test whether scale earns its place. Screen → enhance → normalise → close the V1 vocabularies → finalise the JSON Schema. Output: the closed vocabularies + the finalised schema. Acceptance: vocabularies derived from corpus evidence (not templated); every retained facet meets a minimum-instance floor set from the observed WS3 distribution and recorded with the closed vocabularies (a facet appearing once is rejected as templating residue unless owner-ratified); the coverage of the shallow pass is logged (no silent truncation)."
     status: pending
     depends_on: [ws2-idea-schema-structure]
   - id: ws4-thin-slice-proof
-    content: "BUILD (the gate): prove the architecture end-to-end on a thin vertical slice — harvest a handful of ideas from a few docs → store as JSON-LD idea-nodes in graph-core → author ONE new plan referencing them by frontmatter edge → exercise BOTH drift mechanisms (deterministic frontmatter->store validator; semantic prose<->frontmatter review) + one evolution op (supersede/redirect). Acceptance: the loop runs end-to-end; the deterministic validator catches a deliberately-broken edge; the evolution op preserves history. GATE: do not proceed to ws6 until this passes."
+    content: "BUILD (the gate): prove the architecture end-to-end on a thin vertical slice — harvest a handful of ideas from a few docs → store as JSON-LD idea-nodes in graph-core → author ONE new plan referencing them by frontmatter edge → exercise BOTH drift mechanisms (deterministic frontmatter->store validator; semantic prose<->frontmatter review) + TWO evolution ops: supersede/redirect AND merge (the n:1 reference-rewrite WS6/WS7 depend on — graph-core has no merge; it is new). Acceptance: the loop runs end-to-end; the deterministic validator catches a deliberately-broken edge; the merge op rewrites referencing edges and the validator catches a deliberately-left-dangling inbound edge; both ops preserve history. GATE: do not proceed to ws6 until this passes."
     status: pending
     depends_on: [ws1-verify-graph-core-api, ws2-idea-schema-structure]
   - id: ws5-projection-types-and-dedup
@@ -27,13 +27,17 @@ todos:
     status: pending
     depends_on: [ws2-idea-schema-structure]
   - id: ws6-deep-harvest
-    content: "GATED on ws4 + ws3: deep harvest of all 570 .agent/plans/ docs PLUS VISION.md + docs/strategy/ (owner-ratified 2026-06-22) to the finalised schema -> the preserved idea-graph spanning all altitudes (the existing thin Pass-1 idea data is re-derived/enriched, not relied on). Acceptance: every in-scope doc harvested; every idea has provenance + class; coverage logged; the graph validates against the schema."
+    content: "GATED on ws4 + ws3: deep harvest of every .agent/plans/ doc (count re-derived at harvest, NOT frozen) PLUS VISION.md + docs/strategy/ (owner-ratified 2026-06-22) to the finalised schema -> the preserved idea-graph spanning all altitudes (the existing thin Pass-1 idea data is re-derived/enriched, not relied on). Acceptance: every in-scope doc harvested; every idea has provenance + class; coverage logged; the graph validates against the schema; vocabulary-friction logged as a first-class output (forced-misfit ideas, missing facets/domains/edges, scale-misfit) -> feeds ws6b."
     status: pending
     depends_on: [ws3-broad-shallow-discovery, ws4-thin-slice-proof]
-  - id: ws7-synthesise-and-rewrite
-    content: "GATED on ws6: analyse the idea-graph (cluster by strategic choice; surface duplications/contradictions/gaps) -> synthesise -> CO-AUTHOR (human + agent, owner-ratified 2026-06-22) the new stream->thread->plan corpus UNDER the existing vision+strategy (which stand, tweaks only — not re-authored); under-served choices get authored plans -> independent no-loss audit against the preserved graph -> route permanent knowledge to ADRs/PDRs/docs -> retire the old plan estate. Acceptance: no-loss audit GO; per-choice effectiveness reviewer-confirmed; human-navigability confirmed."
+  - id: ws6b-vocabulary-reassessment
+    content: "GATED on ws6: V2 vocabulary reassessment at the highest-signal moment (full data + logged friction). Consolidate ws6's friction log + the values the full harvest surfaced -> additively refine the value/domain/edge vocabularies (V1 -> V2; structure stays LOCKED per ADR-200 §5, only values extend) -> re-tag/re-validate the friction-affected nodes against V2. Acceptance: every logged friction item is dispositioned (absorbed into V2, or recorded out-of-vocabulary with reason); V2 is additive over V1 (no structural change); affected nodes re-validate against V2; ONE bounded pass (not a V2->V3 loop — further evolution is the living graph's normal operation per ADR-200 §7). Re-tag mechanics (sampled vs full; friction threshold) decided here from the observed friction volume."
     status: pending
     depends_on: [ws6-deep-harvest]
+  - id: ws7-synthesise-and-rewrite
+    content: "GATED on ws6b + ws5: analyse the idea-graph (cluster by strategic choice; surface duplications/contradictions/gaps) -> synthesise -> CO-AUTHOR (human + agent, owner-ratified 2026-06-22) the new stream->thread->plan corpus UNDER the existing vision+strategy (which stand, tweaks only — not re-authored); under-served choices get authored plans -> two-direction independent no-loss audit (harvest-recall vs re-read sources + re-expression vs the preserved graph + bad-pile re-screen), by a fresh-context reviewer that did not perform the harvest -> route permanent knowledge to ADRs/PDRs/docs -> retire the old plan estate. Acceptance: two-direction no-loss audit GO; per-choice effectiveness reviewer-confirmed; human-navigability confirmed."
+    status: pending
+    depends_on: [ws6b-vocabulary-reassessment, ws5-projection-types-and-dedup]
 ---
 
 # Planning-Estate Rewrite — execution plan (on the living idea-graph)
@@ -63,11 +67,12 @@ idea-node edges additively when the graph lands.
 
 ## Acceptance (outcome-level)
 
-Co-equal across three axes (ADR-200 §Goals): **no useful idea lost** (independent audit GO against the
-preserved graph); **per-choice effectiveness** (reviewer-confirmed, every strategic choice served by
-adequate plans, gaps closed by authored plans); **human-navigability** (a person can traverse
-vision → strategy → stream → thread → plan and understand the intent). Plus: the deterministic
-frontmatter↔store validator is green and the active prose↔frontmatter handoff gate is wired.
+Co-equal across three axes (ADR-200 §Goals): **no useful idea lost** — proven by the two-direction audit
+(harvest-recall against re-read sources + re-expression against the graph) plus a bad-pile re-screen, run by
+a fresh-context reviewer that did not perform the harvest; **per-choice effectiveness** (reviewer-confirmed,
+every strategic choice served by adequate plans, gaps closed by authored plans); **human-navigability** (a
+person can traverse vision → strategy → stream → thread → plan and understand the intent). Plus: the
+deterministic frontmatter↔store validator is green and the active prose↔frontmatter handoff gate is wired.
 
 ## Prerequisites
 
@@ -100,8 +105,11 @@ These are NOT "will be handled later" — each names who resolves it and in whic
   persist as the highest-altitude projections; they are NOT re-authored. The new `stream → thread → plan`
   corpus is **co-authored (human + agent)**: the human owns the higher-altitude shaping, agents draft
   plan-level documents from the synthesised ideas. WS7 is collaborative authoring, not agent-solo.
-- **[WS1-RESOLVED] `graph-core` exact API + the JSON→JSON-LD ingestion contract.** Reasoned (JSON-LD is
-  the bridge; 5 constraints in ADR-200 §Open) but **unverified**. WS1 resolves it first-hand.
+- **[RESOLVED — first-hand survey, 2026-06-22] `graph-core` API + the JSON→JSON-LD ingestion contract.**
+  Surveyed first-hand (ADR-200 §Open + WS1 above): the substrate (`graph-core`), ingestion
+  (`graph-ingest/jsonld-compatible` + `turtle`), and projection (`graph-project`) WORK; `graph-corpus-sdk`
+  is the instance model. The genuine new build is the idea-node schema + a new idea-graph SDK + evolution
+  tooling (supersede/split/merge) + the frontmatter↔store validator + the harvest pipeline.
 - **[WS2-RESOLVED] Idea-store physical layout** (one file per node vs consolidated) and **id-minting
   scheme**. Direction set (one JSON-LD file per node; stable assigned IRI-able id) but the exact shape is
   WS2's decision.

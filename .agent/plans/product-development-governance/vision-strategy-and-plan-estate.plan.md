@@ -8,6 +8,7 @@ thread: strategy-and-plan-estate-holistic-review
 last_updated: 2026-06-20
 related:
   - VISION.md
+  - docs/architecture/architectural-decisions/200-intent-as-a-living-idea-graph.md
   - .agent/plans/high-level-plan.md
   - .agent/plans/curriculum-mcp-path-to-ga/roadmap.md
   - .agent/plans/curriculum-mcp-path-to-ga/launch-readiness-framework.md

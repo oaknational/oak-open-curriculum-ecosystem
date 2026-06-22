@@ -34,7 +34,10 @@ ideas are the fundamental node, the graph is the living authoritative source of 
 co-equal human-navigable embodiment connected by frontmatter edges, and the idea-graph is built as a
 domain instance over `graph-core`. Where this plan's "Stage 2 = survey" framing reads as a
 survey-and-classify pass, that is **superseded** — Stage 2 is the **idea-harvest** into the graph. Read
-ADR-200 first; this plan's vision stands, its survey-stage framing defers to ADR-200.
+ADR-200 first; this plan's vision stands, its survey-stage framing defers to ADR-200. The **canonical
+statement of the value** this intent knowledge-graph delivers lives in
+[ADR-200 §Value](../../../../docs/architecture/architectural-decisions/200-intent-as-a-living-idea-graph.md) —
+recorded once there, not restated here.
 
 > **Strategic plan (`future/`). Owner-ratified vision (2026-06-21); not yet executable.**
 > Execution decisions finalise only at promotion of a stage to `current/`. Do not start
