@@ -50,3 +50,38 @@ Where the substance went:
   Petrel-Altitude "outstanding bundle" (landed `a3ca73f1a`).
 
 New session observations append below.
+
+## Residual fitness signals after the 2026-06-22 drain — reported, not chased (Petrel stirs Wingspan)
+
+All drainable buffers are healthy at rest (napkin, distilled soft, open-questions, pending-graduations
+decision-debt count 0). Five reference/doc surfaces remain worse-than-soft; each is a
+report-not-chase signal because chasing it would breach the Conservation Invariant — recorded here
+so the next pass need not re-decide:
+
+- **pending-graduations.md prose-width critical**: the long lines are the machine-parsed inline
+  brackets (schema: `agent-tools/src/practice-fitness/item-count.ts`); wrapping them risks breaking
+  the item-count parser. The *primary* signal for this buffer (decision-debt count) is green. This is
+  a metric-vs-format tension (prose-width mis-applied to bracket lines), not un-homed substance. A
+  real cure is a fitness-system exemption for fenced-bracket lines, not mangling the brackets.
+- **repo-continuity.md prose-width critical (76 lines)**: a LIVE, actively-rewritten reference surface
+  (the strategy thread is rewriting §Current State under ADR-200; its own `overflow_disposition` is
+  `leave-if-live`). Reflowing now is churn on content that thread is restructuring. Owned by that thread.
+- **thread records prose-width hard** (agentic-engineering-enhancements, retired/agent-collaboration-research,
+  statusline-enhancements): thread-owned live surfaces; the 7c audit does not mutate them. Surface to
+  the owning threads.
+- **principles.md chars hard (+350)** and **development-practice.md lines hard (+3)**: marginal; the
+  former has a named remediation lane (`principles-entrypoint-content-homing.plan.md`).
+
+## Surfaced for the owner / next pass (Petrel stirs Wingspan)
+
+- **PDR candidate still staged in distilled**: "knowledge surfaces are curated suggestions to a judging
+  agent, not control-flow" — PDR-shaped meta-principle, ripe; surfaced for owner weigh-in (the sibling
+  source-intent principle graduated to PDR-113 this pass).
+- **7c thread-register audit**: `agentic-mechanisms-discovery` is at the 14-day staleness boundary
+  (last 2026-06-08); `orientation-skills-family` and `reasoning-grammar` are COMPLETE-pending-push —
+  move to `threads/retired/` with a banner once the owner pushes.
+- **Claude per-user `MEMORY.md` over its index limit (~28.9KB)**: substance is safe (per-entry topic
+  files + repo doctrine persist), but index pointers degrade at session-load. Remediation lane: a
+  dedicated per-user-memory drain (graduate settled feedback whose substance is now homed in repo
+  rules/PDRs). Cross-platform surfaces (Codex/Cursor/Gemini) present but not ingested this pass — this
+  was a repo-buffer drain, not a cross-platform-ingestion pass.
