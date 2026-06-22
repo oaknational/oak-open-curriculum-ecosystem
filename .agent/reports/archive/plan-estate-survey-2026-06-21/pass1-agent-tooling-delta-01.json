@@ -1,0 +1,885 @@
+{
+  "batch_size": 5,
+  "plans_returned": 5,
+  "unreadable": [],
+  "null_holistic": [],
+  "results": [
+    {
+      "plan": ".agent/plans/agent-tooling/current/agent-experience-improvement.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "WS-4, WS-5, WS-6 todos all status:pending — substantial executable work remains",
+          "file_line": "lines 41-65"
+        },
+        {
+          "claim": "WS-3 B1 completed with named SHAs; B2 explicitly deferred with rationale — plan is actively maintained and current",
+          "file_line": "lines 32-36"
+        },
+        {
+          "claim": "Plan is the only home for the drain-fix validator design and the 82-entry disposition ledger — no duplicate plan cited",
+          "file_line": "lines 7-10, 120-121"
+        },
+        {
+          "claim": "Acceptance criteria and proof contract fully specified — execution-ready",
+          "file_line": "lines 149-170"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every workstream either lands a concrete mechanical artifact (validator, resolver, gate wiring, ledger) or drives a ratified sub-plan. The DRIVE/OWN split at lines 124-125 prevents scope duplication. The drain-fix design at lines 127-144 is grounded in the live register vocabulary (61 open entries cited at line 131) and in the recompute-not-record doctrine. No speculative or over-built ideas detected.",
+      "content_quality": "strong",
+      "content_quality_note": "Outcome-based acceptance criteria with independently-testable failure classes at lines 149-161; proof contract table at lines 163-170 maps each acceptance id to unit+integration evidence; risks at lines 189-197 are specific and each paired with a mitigation; non-goals at lines 182-187 are precise and rule out scope-creep attractors. Plan-body first-principles check at lines 199-209 is self-applied and substantive, not formulaic.",
+      "salvage_value": [
+        {
+          "idea": "Closed status enum (open/homed/deferred/landed/superseded) + adjacent Home:/Landed: fields as the register grammar WS-6 migrates to",
+          "class": "good",
+          "file_line": "lines 134-136"
+        },
+        {
+          "idea": "Frictions-register validator that recomputes four failure classes (no-home, dangling plan path, dangling commit SHA, drain-lag) against fs+git — WS-4 A1-A4",
+          "class": "good",
+          "file_line": "lines 39-52"
+        },
+        {
+          "idea": "Generated routing index (never hand-maintained); divergent committed copy fails the gate — WS-4 A3/A5",
+          "class": "good",
+          "file_line": "lines 47-48, 59-62"
+        },
+        {
+          "idea": "Report-first validator landing (exit 0+warn) escalating to blocking only after WS-6 greens the register — prevents bricked gate mid-migration",
+          "class": "good",
+          "file_line": "lines 51, 143-144"
+        },
+        {
+          "idea": "Single shared resolveCoordinationHome via git worktree list --porcelain (first entry = primary checkout) replacing per-command cwd-fallback finders — WS-3 B1 already landed",
+          "class": "good",
+          "file_line": "lines 32-33"
+        },
+        {
+          "idea": "WS-3 B2 deferral: default path options in explicit write commands via resolveCoordinationHome when omitted, migrate estate invocations as one coordinated change",
+          "class": "good",
+          "file_line": "lines 35-36"
+        },
+        {
+          "idea": "Gate-coverage guard test asserting portability:check, skills:check, and adapter-drift check are in the blocking path — WS-5",
+          "class": "good",
+          "file_line": "lines 63-66"
+        },
+        {
+          "idea": "Disposition ledger: one batch edit migrating all 82 entries to closed enum + Home:/Landed: fields, sized to ~10-12 cause-class clusters",
+          "class": "good",
+          "file_line": "lines 54-57"
+        },
+        {
+          "idea": "DRIVE/OWN split as a structural umbrella primitive: sequence ratified sub-plans without re-authoring their cycles",
+          "class": "good",
+          "file_line": "lines 67-72, 124-125"
+        },
+        {
+          "idea": "Drain-lag failure class: a homed entry whose cited plan is archived/COMPLETE while the friction is not landed — the staleness has a filesystem signature",
+          "class": "good",
+          "file_line": "lines 139-141"
+        },
+        {
+          "idea": "Injected fs/git probe functions (exists-seam pattern) for the validator — keeps pure functions unit-testable, integration smoke for the runner",
+          "class": "good",
+          "file_line": "lines 43-44"
+        },
+        {
+          "idea": "consolidate-at-third-consumer trigger for the drain-validator shape into a reusable register-integrity pattern",
+          "class": "speculative",
+          "file_line": "line 235"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "current",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, required for all plan nodes — V0 §2.1)",
+          "file_line": "agent-experience-improvement.plan.md:1-28 (frontmatter block; field absent)"
+        },
+        {
+          "issue": "Missing required field `node_type: \"plan\"` (LOCKED, required for all plan nodes — V0 §2.1)",
+          "file_line": "agent-experience-improvement.plan.md:1-28 (frontmatter block; field absent)"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED, required for all — V0 §2.2; inferred `executable` from todos + folder + body line 78)",
+          "file_line": "agent-experience-improvement.plan.md:1-28 (frontmatter block; field absent)"
+        },
+        {
+          "issue": "Dropped key `status: current` still present — V0 §2.5 explicitly drops `status`; the value maps to `kind: executable` + Linear `backlog` but the field must be removed",
+          "file_line": "agent-experience-improvement.plan.md:12"
+        },
+        {
+          "issue": "Dropped key `type: developer-experience` still present — V0 §2.5 drops `type` as free-label; replaced by `node_type` + `kind`",
+          "file_line": "agent-experience-improvement.plan.md:13"
+        },
+        {
+          "issue": "Dropped key `isProject: false` still present — V0 §2.5 explicitly drops `isProject`",
+          "file_line": "agent-experience-improvement.plan.md:29"
+        },
+        {
+          "issue": "Missing required edge `serves_strategic_choice` — LOCKED shape, required for executable plans (V0 §2.3); plan inferred executable; no strategic-choice ID or `\"pending\"` sentinel present",
+          "file_line": "agent-experience-improvement.plan.md:1-28 (frontmatter block; edge absent)"
+        },
+        {
+          "issue": "`derives_from` edge absent — V0 §2.3; plan cites PDR-111, PDR-055, PDR-098 as controlling_doctrine in an unclassified key rather than the canonical `derives_from` edge",
+          "file_line": "agent-experience-improvement.plan.md:14-17"
+        }
+      ],
+      "unclassified_keys": [
+        "controlling_doctrine",
+        "evidence_report",
+        "driven_plans",
+        "deferred_plans",
+        "specialist_reviewer"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "The shared coordination-home resolver boundary is well-designed: a single `resolveCoordinationHome` replacing all per-command silent cwd-fallback finders, resolved via `git worktree list --porcelain` (primary checkout), with the exact failure case (commit-queue TOPIC dispatcher still defaulting via `git rev-parse --show-toplevel`) already caught by an adversarial scan and fixed. The WS-3 B1 completed work demonstrates correct boundary identification and replace-don't-bridge execution.",
+          "file_line": "agent-experience-improvement.plan.md:31-33"
+        },
+        {
+          "severity": "info",
+          "claim": "The drain validator design (WS-4) correctly separates pure functions (A1 parser, A2 violations, A3 index builder) from the thin runner (A4) with injected filesystem/git probes — the `exists`-seam pattern mirrors `validate-reference-direction.ts`. Dependency direction (plan → register grammar; validator → filesystem/git, not vice versa) is sound.",
+          "file_line": "agent-experience-improvement.plan.md:39-53"
+        },
+        {
+          "severity": "low",
+          "claim": "WS-4 A2 injects filesystem/git probes as functions (`planExists`, `commitResolves`, `planArchived`), mirroring the `repo-root.ts` exists-seam pattern. However the plan does not name the seam contract boundary explicitly — specifically, whether `planArchived` checks the plan file's directory location (future/ vs current/) or a status field inside the file. If the gate is purely filesystem-path-based, a plan relocated without a status update silently passes or fails depending on probe implementation. This is a low-risk ambiguity worth resolving at A2 authoring time.",
+          "file_line": "agent-experience-improvement.plan.md:43-44"
+        },
+        {
+          "severity": "low",
+          "claim": "WS-4 A4 gates routing-index divergence by comparing a generated index against a committed copy. The plan does not specify where the committed copy lives or how the comparison is performed (byte-identical? semantic diff?). If byte-identical, non-semantic changes (e.g. trailing newline, sort order) will false-positive. The F-57 pattern reference (line 144) implies the same mechanism used there, but the analogy is not made explicit — worth confirming the exact comparison strategy at A4 authoring time.",
+          "file_line": "agent-experience-improvement.plan.md:47-48,144"
+        },
+        {
+          "severity": "low",
+          "claim": "WS-3 B2 (deferred) leaves the explicit-path write commands (`claims open/close/heartbeat`, `comms inbox/watch`, `commit-queue`) still `required(...)` their path options. The plan correctly records this as a deferred future plan and notes the commit-queue TOPIC default was already corrected. Architecturally, the interim state means the primary-checkout path remains safe (no regression) but a linked-worktree invocation that omits the path will fail loudly rather than resolve correctly. This is an acceptable interim posture, not a gap, but the deferred plan should be sequenced before any multi-worktree rollout.",
+          "file_line": "agent-experience-improvement.plan.md:34-37,118"
+        },
+        {
+          "severity": "info",
+          "claim": "The report-first → blocking escalation sequence for WS-4 (A4 lands exit-0 warn, A5 flips to blocking only after WS-6 greens the register) is architecturally correct: it avoids bricking the gate mid-migration, mirrors the reference-direction validator precedent, and ties the escalation gate to a verified postcondition (WS-6 clean pass). No gap here.",
+          "file_line": "agent-experience-improvement.plan.md:51,59-62,145-147"
+        },
+        {
+          "severity": "info",
+          "claim": "The DRIVE/OWN split is architecturally clean: the umbrella holds no duplicate cycles for driven plans (WS-1/WS-2), sequences them by reference only, and explicitly names non-goals to prevent scope absorption. The deferred workstreams (WS-7, B2) are correctly externalised to `../future/` plans with their own plan files.",
+          "file_line": "agent-experience-improvement.plan.md:19-26,68-73,182-187"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/current/coordination-watcher-canonicalisation.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Status current, queued not started — active executable plan with no work yet done",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:13,68"
+        },
+        {
+          "claim": "Promoted from future/ on owner-directed trigger with two fresh worked instances (F-82, F-81) as activation evidence",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:16,76-77"
+        },
+        {
+          "claim": "Pre-execution reviewer pass already absorbed with accepted findings pending application at next working pass",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:279-310"
+        },
+        {
+          "claim": "Addresses live frictions with first-hand confirmed root causes in current source",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:282-284"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every design choice traces to a first-hand-confirmed root cause (F-82 at line 282-284, F-81 at line 284-285). The architectural TYPE-vs-surface distinction at line 129-151 dissolves the structural gap that kept ARC second-class. The plan absorbed a pre-execution expert review and recorded accepted findings honestly, including one that weakens a design choice (WS3 cursor). No filler; no speculative scope invention; non-goals are correctly bounded with sibling-plan citations.",
+      "content_quality": "strong",
+      "content_quality_note": "Problem section (lines 80-105) is precise: failure mode, failure duration, root cause, and invisibility of failure all stated. Acceptance criteria (lines 180-200) are outcome-based and falsifiable with grep and integration-test probes. Risks (lines 235-247) name specific technical hazards with concrete cures. Foundation Alignment (lines 261-269) cites specific practice documents by section. The absorbed expert review (lines 279-310) is critically assessed and graded rather than accepted wholesale.",
+      "salvage_value": [
+        {
+          "idea": "F-82: canonical comms watch invocation hand-authored from rule snippets can drift silently from the emit format; 50-min zero-notification window with healthy heartbeat as worked instance",
+          "class": "good",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:83-93"
+        },
+        {
+          "idea": "F-81: raw tail -F with no byte-offset cursor re-dumps whole file on any non-append rewrite; no identity self-exclusion causes self-fire on own appends",
+          "class": "good",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:94-99"
+        },
+        {
+          "idea": "Both F-82 and F-81 share a root-cause shape: agent hand-authors a watch whose correctness depends on a format or file-write behaviour the tooling owns",
+          "class": "good",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:101-105"
+        },
+        {
+          "idea": "Generated invocations (CLI emits exact command) cannot drift from implementation — one codebase, co-varying",
+          "class": "good",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:114-116"
+        },
+        {
+          "idea": "TYPE-vs-surface distinction: canonical-comms and ARC are two channel TYPES; broadcast/group/directed/observed/lifecycle are SURFACES within canonical-comms only",
+          "class": "good",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:129-151"
+        },
+        {
+          "idea": "One-line-per-event emit removes the need for any agent-side filter; --verbose flag restores the body",
+          "class": "good",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:37-39"
+        },
+        {
+          "idea": "comms watch-command emitter: CLI emits the exact identity-derived canonical invocation — no hand-authored grep filter",
+          "class": "good",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:41-43"
+        },
+        {
+          "idea": "arc watch as a co-equal channel type with offset cursor, identity self-exclusion, one-line emit, fail-loud and heartbeat parity",
+          "class": "good",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:44-47"
+        },
+        {
+          "idea": "Paired watch-setup emitter (coord watch-setup) emits both watch commands together; pairing becomes structural rather than a discipline to remember",
+          "class": "speculative",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:49-51"
+        },
+        {
+          "idea": "WS3 byte-offset cursor under-specified for rewrite-then-append case; content-anchored cursor (last-consumed entry signature + offset) needed with re-validation on resume",
+          "class": "good",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:289-296"
+        },
+        {
+          "idea": "WS4 coord watch-setup is an over-build candidate; simpler alternative is comms watch-command emitting ARC-pairing reminder with arc watch-command as sibling — no separate coord namespace",
+          "class": "speculative",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:297-304"
+        },
+        {
+          "idea": "Rehome .agent/reference/comms-watch-mechanism.md out of reference/ (external materials only) to code-adjacent agent-tools/src/collaboration-state/README.md plus a Practice rule/PDR-027 amendment",
+          "class": "good",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:57-59"
+        },
+        {
+          "idea": ".agent/reference/ folder should carry a README.md stating it is for external materials only",
+          "class": "good",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:57"
+        },
+        {
+          "idea": "Canonical-surface expansion (active-claims, conversations, escalations, handoffs) explicitly deferred as non-goal and promotable separately",
+          "class": "good",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:218-222"
+        },
+        {
+          "idea": "WS3 split/interleaved append test: partial trailing content re-read, not skipped, to handle split appends safely",
+          "class": "good",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:45-47"
+        },
+        {
+          "idea": "comms-event-write-integrity.plan.md cited in Non-Goals but missing from frontmatter related_plans — metadata gap",
+          "class": "bad",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:305-307"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "current",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "id absent — LOCKED required field for all plan nodes",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:1 (frontmatter block has no id key)"
+        },
+        {
+          "issue": "node_type absent — LOCKED required field; replaces emergent free-label type:",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:1"
+        },
+        {
+          "issue": "kind absent — LOCKED field replacing status:; plan is executable by content (has todos, no promotion_trigger) but the axis is not declared",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:1"
+        },
+        {
+          "issue": "status: current present — V0 §2.5 explicitly drops this field; it is replaced by kind/disposition/gate and the Linear-projected execution axis",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:13"
+        },
+        {
+          "issue": "type: developer-experience present — V0 §2.5 drops free-label type:; replaced by node_type + kind",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:14"
+        },
+        {
+          "issue": "isProject: false present — V0 §2.5 explicitly drops isProject (107/250 census count cited); subsumed by projects_to edge",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:31"
+        },
+        {
+          "issue": "serves_strategic_choice absent — required for executable plans per V0 §2.3; no 'pending' sentinel either",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:1"
+        },
+        {
+          "issue": "top-level depends_on typed edge absent — V0 §2.3 defines depends_on as a top-level frontmatter edge list with {plan, kind: blocking|beneficial}; plan declares blocking/beneficial relationships only in body prose (Prerequisites section) not as a machine-readable edge",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:226-233"
+        },
+        {
+          "issue": "todo depends_on values are bare arrays of strings (e.g. [ws0-grounding]) not the V0 DependsOn {plan, kind} shape — however V0 §2.4 scopes todos as a kind-specific field and does not specify the internal depends_on sub-shape; minor structural mismatch to note",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:39"
+        },
+        {
+          "issue": "related_plans used instead of V0 related — V0 §2.4 specifies related as the untyped see-also key; related_plans is an unclassified variant not in the schema",
+          "file_line": "coordination-watcher-canonicalisation.plan.md:18"
+        }
+      ],
+      "unclassified_keys": [
+        "promoted_from",
+        "promotion_evidence",
+        "related_plans",
+        "related_rules",
+        "related_frictions"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "WS3 byte-offset cursor is broken for the rewrite-then-append case: a conservation copy rewrites bytes before the cursor so the offset resumes into different content. The plan acknowledges this at line 289-296 (assumptions-expert finding 1) and prescribes content-anchored cursor (last-consumed entry signature + offset), but the WS3 todo at line 45-46 still specifies only 'byte-OFFSET cursor' and has not been updated to reflect the accepted cure. There is a live inconsistency between the accepted fix and the workstream specification that will cause the implementer to build the wrong thing.",
+          "file_line": "45-46, 289-296"
+        },
+        {
+          "severity": "medium",
+          "claim": "WS4 command namespace introduces a third CLI namespace ('coord') solely to concatenate two existing commands. The assumptions-expert finding at lines 298-303 correctly identifies this as over-build and recommends dropping 'coord watch-setup' in favour of a reminder-line in 'comms watch-command'. However, the WS4 todo at lines 48-51 and the Acceptance Criteria at line 192-194 both still specify the separate 'coord' namespace. Shipping WS4 as written adds a command surface that has no architectural rationale beyond convenience grouping, and the namespace cohesion decision is deferred to the owner rather than resolved in the plan.",
+          "file_line": "48-51, 192-194, 298-303"
+        },
+        {
+          "severity": "medium",
+          "claim": "The abstraction model (one watch abstraction, two adapters) is correctly stated at lines 139-145 and 237-238, but the plan does not specify where the shared abstraction lives in the code. The two adapter entry points ('comms watch' and 'arc watch') are in different implied CLI sub-commands with no stated module boundary for the common interface. Without a named module home, the adapter cohesion drift risk at line 237 is real and unmitigated at design time; architecture-expert-betty's WS7 review is the only guard.",
+          "file_line": "139-145, 237-238"
+        },
+        {
+          "severity": "low",
+          "claim": "WS6 moves the canonical watcher contract from '.agent/reference/comms-watch-mechanism.md' to 'agent-tools/src/collaboration-state/README.md' (lines 57-58). Placing a watcher protocol specification in a README adjacent to implementation conflates code documentation with protocol specification. If the canonical home is 'code-adjacent', it couples the protocol definition to a single implementation file's directory, making future refactors of the collaboration-state module require moving the protocol doc. A Practice rule or ADR would be the more stable home for the protocol; the README should only describe the module structure.",
+          "file_line": "57-58"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan claims 'Blocking: none' at line 228 but then qualifies this at lines 229-231 with a 'Minimum shippable shape without it' path if comms-watch-hang-hardening is not landed. This is a soft prerequisite presented as a non-blocking dependency. If the hardening plan's shared helper is not extracted, WS3 must re-implement fail-loud and heartbeat using 'the same idiom', risking two implementations of the same primitive diverging. The architecture should name this as a soft-blocking constraint or explicitly scope the deduplication into WS3 with a note that it will be superseded by the hardening plan's extraction.",
+          "file_line": "228-231"
+        },
+        {
+          "severity": "info",
+          "claim": "'comms-event-write-integrity.plan.md' is cited in the Non-Goals section (line 222) but is absent from the 'related_plans' frontmatter (lines 19-22). The assumptions-expert finding at line 305 accepted this gap. The inconsistency is low risk but means tooling that derives the plan graph from frontmatter will miss one edge.",
+          "file_line": "19-22, 222, 305"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": [
+        {
+          "claim": "F-82 root cause confirmed first-hand at agent-tools/src/collaboration-state/comms-relevant-events.ts formatWatcherEventHeader ~line 181 (cited at coordination-watcher-canonicalisation.plan.md:282-284)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "agent-tools/src/collaboration-state/comms-relevant-events.ts:175-188 — exported `formatWatcherEventHeader(view, tags)`; line 179 `const viewToken = \\`[${view.toUpperCase()}]\\``; line 181 returns `--- NEW ${viewToken} EVENT ---` when tags empty/undefined. Matches plan cite at coordination-watcher-canonicalisation.plan.md:282-284 verbatim (path, function name, ~line 181, returned literal)."
+        },
+        {
+          "claim": "F-81 root cause confirmed first-hand at .agent/reference/arc-rapid-communication.md:241 (cited at coordination-watcher-canonicalisation.plan.md:284-285)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": ".agent/reference/arc-rapid-communication.md:240-243"
+        },
+        {
+          "claim": "WS3 byte-offset cursor is under-specified for rewrite-then-append case; content-anchored cursor cure accepted but not yet applied to plan todos",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "coordination-watcher-canonicalisation.plan.md:289-297 (finding #1: \"WS3 cursor is under-specified for the rewrite-then-append case (accept)\"; cure = \"content-anchored — (last-consumed entry signature + offset)\"); plus :44-46 WS3 todo still reads \"by byte-OFFSET cursor\" with TDD naming only \"whole-file rewrite → zero re-dump\" (no rewrite-then-append test); and :309-310 \"The WS todos above are left as authored; these revisions apply at the next working pass\""
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/future/agent-frustration-corpus-survey.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Status is future with a concrete promotion trigger; not abandoned or superseded",
+          "file_line": "9,99-103"
+        },
+        {
+          "claim": "Named as a next-step by the 2026-06-21 AX analysis — active strategic intent",
+          "file_line": "25"
+        },
+        {
+          "claim": "Companion plan (drain machinery) is the unblocking dependency; this plan is correctly queued pending that landing",
+          "file_line": "73-77"
+        },
+        {
+          "claim": "No overlap with any other plan is implied; the register intake vs drain split is clean",
+          "file_line": "33-35"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every substantive element is concrete and functional: the corpus inventory is a named table of actual paths (lines 51-59), domain boundaries exclude waste work (lines 63-68), success criteria are measurable (lines 81-87), risks have mitigations (lines 89-97), and the promotion gate is clearly stated (lines 99-103). No padding, no speculative scope creep.",
+      "content_quality": "strong",
+      "content_quality_note": "Corpus inventory table (lines 51-59) names exact paths and signal type per source. Success criteria (lines 81-87) give a coverage-note formula. Volume bounding heuristic (lines 90-92) is actionable. Sub-agent fabrication risk (lines 95-97) cites the actual memory feedback entry. The plan is concise and has no filler sections.",
+      "salvage_value": [
+        {
+          "idea": "Sweep ~93 archived napkin files for session-end friction instances, workarounds, and recurrence signals",
+          "class": "good",
+          "file_line": "54"
+        },
+        {
+          "idea": "Sweep live and archived comms corpus for tool-failure events and ordering/render pain",
+          "class": "good",
+          "file_line": "55"
+        },
+        {
+          "idea": "Sweep agentic-engineering WS1-6 research reports for failure-mode taxonomy and discoverability audit content",
+          "class": "good",
+          "file_line": "56"
+        },
+        {
+          "idea": "Sweep .agent/analysis/ and .agent/research/ for systemic gaps and integration friction",
+          "class": "good",
+          "file_line": "57"
+        },
+        {
+          "idea": "Sweep distilled.md and pending-graduations.md for staged friction candidates not yet routed",
+          "class": "good",
+          "file_line": "58"
+        },
+        {
+          "idea": "Sweep git log with grep for friction/fix/workaround signals representing migration debt",
+          "class": "good",
+          "file_line": "59"
+        },
+        {
+          "idea": "All survey output routes directly into the frictions register; no parallel frustration document",
+          "class": "good",
+          "file_line": "44-45,68-69"
+        },
+        {
+          "idea": "Deduplicate sweep candidates against the live register before routing; sizing to unique substance (ten napkin recurrences = one entry)",
+          "class": "good",
+          "file_line": "43-47"
+        },
+        {
+          "idea": "Tag each routed entry with a candidate cause-class (A-H per the report)",
+          "class": "good",
+          "file_line": "45,86"
+        },
+        {
+          "idea": "Volume-bound the sweep by cause-class saturation: stop a corpus when it stops producing net-new classes and log the stop",
+          "class": "good",
+          "file_line": "90-92"
+        },
+        {
+          "idea": "Record a short coverage note per corpus (N candidates found, M routed new, K deduped into existing, J out-of-scope)",
+          "class": "good",
+          "file_line": "84-87"
+        },
+        {
+          "idea": "Sub-agent sifting is permitted but findings require first-hand verification before routing, citing a prior fabrication incident",
+          "class": "good",
+          "file_line": "95-97"
+        },
+        {
+          "idea": "Promote from future to current only when companion plan drain machinery has landed (or on owner direction)",
+          "class": "good",
+          "file_line": "99-103"
+        },
+        {
+          "idea": "Note that the comms corpus is present-on-this-checkout only and record that limitation in the sweep",
+          "class": "good",
+          "file_line": "93-94"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "future",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, required for all plans)",
+          "file_line": "plan.md:1-20 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `node_type` (LOCKED literal `\"plan\"`, required for all plans)",
+          "file_line": "plan.md:1-20 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "`status: future` is a V0-dropped field (§2.5 — split into `kind`/`disposition`/`gate`/projected execution axis); should be replaced by `kind: strategic`",
+          "file_line": "plan.md:9"
+        },
+        {
+          "issue": "`type: developer-experience` is a V0-dropped free-label (§2.5 — replaced by `node_type` + `kind`)",
+          "file_line": "plan.md:10"
+        },
+        {
+          "issue": "`isProject: false` is a V0-dropped field (§2.5 — universal; projection is the `projects_to` edge)",
+          "file_line": "plan.md:19"
+        },
+        {
+          "issue": "`promotion_trigger` is required in frontmatter for `strategic` plans (§2.4, LOCKED) but appears only in the body prose (line 99); frontmatter field is absent",
+          "file_line": "plan.md:99-103 (body only)"
+        },
+        {
+          "issue": "`related_reports`, `related_plans`, `related_doctrine` are sub-typed variants of `related` not present in V0's field contract; typed authority/traceability relationships belong in V0 typed edges (`derives_from`, `depends_on`, `thread`), not informal sub-keys of `related`",
+          "file_line": "plan.md:11-17"
+        }
+      ],
+      "unclassified_keys": [
+        "type",
+        "related_reports",
+        "related_plans",
+        "related_doctrine"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan assumes the comms corpus sweep is safely bounded by what is on disk, but the risks section at line 100 notes 'present-on-this-checkout only' without naming any protocol for what to do when the on-disk slice is stale, partial, or from a peer agent's worktree. A survey that silently reads a stale slice and calls it complete could produce an incomplete intake that is treated as authoritative.",
+          "file_line": "agent-frustration-corpus-survey.plan.md:100"
+        },
+        {
+          "severity": "medium",
+          "claim": "The promotion trigger (lines 99-103) assumes the companion plan's drain machinery will land before this survey runs, but the dependency section (lines 72-77) explicitly makes that dependency non-blocking and describes a fallback shape. The two clauses are in tension: if the fallback is viable, the promotion trigger should not gate on the companion landing; if the companion landing is required for clean routing, the dependency should be marked blocking. The current text supports both readings simultaneously.",
+          "file_line": "agent-frustration-corpus-survey.plan.md:72-77,99-103"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan assumes cause-class saturation is a reliable corpus-stop signal (line 91-92), but the cause-class taxonomy lives in an external report (lines 12-13). If that report is revised or the taxonomy is extended mid-survey, the saturation criterion becomes undefined. No version pin or staleness check is specified.",
+          "file_line": "agent-frustration-corpus-survey.plan.md:12-13,91-92"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan assumes ~93 archived napkins exist at the stated path (line 54) as a known-fact without a verification step. If the archive has grown or been pruned since the plan was authored, the sizing assumption embedded in the volume risk (line 90) is wrong. A quick directory count before starting would ground this.",
+          "file_line": "agent-frustration-corpus-survey.plan.md:54,90"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly surfaces the first-hand verification requirement for sub-agent findings (lines 95-97) with a concrete prior-failure citation, which is a sound assumption management move. No gap here — noted as a positive signal for the classification.",
+          "file_line": "agent-frustration-corpus-survey.plan.md:95-97"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/future/coordination-home-explicit-targeting-migration.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Status is future, owner-deferred, queued for a session that can absorb the coordinated change",
+          "file_line": "coordination-home-explicit-targeting-migration.plan.md:12-13"
+        },
+        {
+          "claim": "Core mechanism is settled (landed predecessor cited: commits b5408291d + c90150ffa); only the CLI tail remains",
+          "file_line": "coordination-home-explicit-targeting-migration.plan.md:25,38-47"
+        },
+        {
+          "claim": "Two concrete moves defined with clear acceptance criteria and sequencing note — plan is actionable as written",
+          "file_line": "coordination-home-explicit-targeting-migration.plan.md:59-91"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan records a clear, narrowly-scoped outstanding problem (required path options on several CLI commands remain cwd-sensitive from linked worktrees), a settled mechanism for fixing it, concrete migration steps, and outcome-based acceptance criteria. No speculative or bad ideas detected. All content supports the stated goal.",
+      "content_quality": "strong",
+      "content_quality_note": "The brief is precise about what is solved (lines 38-47), what remains (lines 54-71), acceptance criteria are outcome-based not process-based (lines 79-85), and sequencing rationale is explicit (lines 89-91). The reframe note (lines 35-37) prevents future agents from re-introducing the discarded approach. No padding or vague language.",
+      "salvage_value": [
+        {
+          "idea": "Default path options on claims open/close/heartbeat, comms inbox, comms watch, and commit-queue via resolveCoordinationHome when omitted",
+          "class": "good",
+          "file_line": "coordination-home-explicit-targeting-migration.plan.md:59-64"
+        },
+        {
+          "idea": "Derive --seen-file path as <home>/.agent/state/collaboration/comms-seen/<codename>.json from the git-resolved home",
+          "class": "good",
+          "file_line": "coordination-home-explicit-targeting-migration.plan.md:63-64"
+        },
+        {
+          "idea": "Keep explicit absolute / --repo-root overrides honoured per PDR-055 clause 7 (escape hatch preserved)",
+          "class": "good",
+          "file_line": "coordination-home-explicit-targeting-migration.plan.md:64-65"
+        },
+        {
+          "idea": "Migrate watcher rule, commit skill, start-right, and ~a dozen tests to omit the defaultable paths",
+          "class": "good",
+          "file_line": "coordination-home-explicit-targeting-migration.plan.md:65-70"
+        },
+        {
+          "idea": "Refusing bare-relative outright is no longer necessary given the defaulting approach",
+          "class": "good",
+          "file_line": "coordination-home-explicit-targeting-migration.plan.md:72-75"
+        },
+        {
+          "idea": "Cross-machine coordination is explicitly out of scope — avoids scope creep",
+          "class": "good",
+          "file_line": "coordination-home-explicit-targeting-migration.plan.md:49-51"
+        },
+        {
+          "idea": "Land as one coordinated change to avoid a window where CLI is partially migrated",
+          "class": "good",
+          "file_line": "coordination-home-explicit-targeting-migration.plan.md:89-91"
+        },
+        {
+          "idea": "Acceptance gate: integration check from a real linked worktree (not just unit test)",
+          "class": "good",
+          "file_line": "coordination-home-explicit-targeting-migration.plan.md:80-82"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "future",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, required for all plan nodes)",
+          "file_line": "coordination-home-explicit-targeting-migration.plan.md:1-28 (absent from frontmatter)"
+        },
+        {
+          "issue": "Missing required field `node_type: plan` (LOCKED, required for all plan nodes)",
+          "file_line": "coordination-home-explicit-targeting-migration.plan.md:1-28 (absent from frontmatter)"
+        },
+        {
+          "issue": "`status: future` is a dropped V0 field; must be replaced by `kind: strategic` (LOCKED). V0 §2.2 line 131 and §2.5 line 165 explicitly drop `status`.",
+          "file_line": "coordination-home-explicit-targeting-migration.plan.md:13"
+        },
+        {
+          "issue": "`kind` field absent — LOCKED required for all plan nodes; inferred `strategic` from `status: future` but not declared",
+          "file_line": "coordination-home-explicit-targeting-migration.plan.md:1-28 (absent from frontmatter)"
+        },
+        {
+          "issue": "`promotion_trigger` absent — LOCKED required for `kind: strategic` plans (V0 §2.4)",
+          "file_line": "coordination-home-explicit-targeting-migration.plan.md:1-28 (absent from frontmatter)"
+        },
+        {
+          "issue": "`serves_strategic_choice` absent — recommended for strategic plans, required for executable (V0 §2.3)",
+          "file_line": "coordination-home-explicit-targeting-migration.plan.md:1-28 (absent from frontmatter)"
+        },
+        {
+          "issue": "`type: developer-experience` is a dropped V0 free-label field; replaced by `node_type` + `kind` (V0 §2.5 line 169)",
+          "file_line": "coordination-home-explicit-targeting-migration.plan.md:14"
+        },
+        {
+          "issue": "`isProject: false` is explicitly dropped in V0 (V0 §2.5 line 168); must be removed",
+          "file_line": "coordination-home-explicit-targeting-migration.plan.md:27"
+        },
+        {
+          "issue": "`related_plans` uses a non-V0 key; V0 §2.4 (line 161) narrows `related` to untyped see-also; plan-to-plan authority/dependency relationships require typed `depends_on` or `supersedes` edges",
+          "file_line": "coordination-home-explicit-targeting-migration.plan.md:17-18"
+        },
+        {
+          "issue": "`related_doctrine` uses a non-V0 key; ADR/strategy references belong in the typed `derives_from` edge (V0 §2.3 line 146 and §2.5 line 171)",
+          "file_line": "coordination-home-explicit-targeting-migration.plan.md:19-24"
+        }
+      ],
+      "unclassified_keys": [
+        "related_frictions",
+        "related_plans",
+        "related_doctrine",
+        "landed_predecessor"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "The git-resolved home mechanism (resolveCoordinationHome via `git worktree list --porcelain`) is architecturally sound: it is git-native, machine-local, worktree-aware, and bakes in no machine-local path. Alignment with ADR-197 (one checkout owns shared registry state) is correct — the primary worktree as registry anchor is the canonical single-source pattern.",
+          "file_line": "coordination-home-explicit-targeting-migration.plan.md:39-47"
+        },
+        {
+          "severity": "low",
+          "claim": "The `--seen-file` derivation is specified as `<home>/.agent/state/collaboration/comms-seen/<codename>.json`. This path is embedded in the plan prose rather than traced to a schema or ADR constant. If the state-directory layout changes (e.g. the planned `.agent/memory` vs `.agent/state` split), this derivation silently rots. The plan should cite or pin the authoritative layout source.",
+          "file_line": "coordination-home-explicit-targeting-migration.plan.md:64"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan lists `claims open/close/heartbeat`, `comms inbox`, `comms watch`, and `commit-queue` as the remaining `required(...)` callers. There is no exhaustive grep or tooling reference confirming this is the complete set. If additional callers exist the migration will be partial and the worktree-safety property will not hold end-to-end — violating the plan's own acceptance criterion.",
+          "file_line": "coordination-home-explicit-targeting-migration.plan.md:55-69"
+        },
+        {
+          "severity": "medium",
+          "claim": "The acceptance criterion for the worktree integration check ('proven by ... an integration check from a real linked worktree') has no specified fixture or CI harness. The resolver unit-test pattern alone does not exercise the full CLI dispatch path. Without a concrete linked-worktree integration test the acceptance criterion is untestable in automated gates, leaving the safety property unverified at merge time.",
+          "file_line": "coordination-home-explicit-targeting-migration.plan.md:80-85"
+        },
+        {
+          "severity": "info",
+          "claim": "The decision to keep explicit absolute / --repo-root overrides honoured (PDR-055 clause 7) correctly preserves the escape-hatch without breaking the defaulting contract. This is architecturally consistent with the closed-shape / override-only pattern in PDR-055.",
+          "file_line": "coordination-home-explicit-targeting-migration.plan.md:64"
+        },
+        {
+          "severity": "info",
+          "claim": "Cross-machine coordination is explicitly scoped out. This is the correct architectural boundary: the collaboration filesystem is not shared, so a network surface is a separate concern. The scope exclusion is clear and appropriate.",
+          "file_line": "coordination-home-explicit-targeting-migration.plan.md:49-51"
+        }
+      ],
+      "load_bearing_claims_count": 3,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/future/peer-heartbeat-silence-alerting.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Status future; no dependency blocked; promotion trigger is condition-gated and not met yet",
+          "file_line": "peer-heartbeat-silence-alerting.plan.md:9,85-87"
+        },
+        {
+          "claim": "Non-goals clearly exclude sibling plans' scope; no duplication with hang-hardening or F-44",
+          "file_line": "peer-heartbeat-silence-alerting.plan.md:54-57"
+        },
+        {
+          "claim": "Content is complete as a strategic brief — not a stub — with EGM, risks, dependencies, and acceptance criteria all present",
+          "file_line": "peer-heartbeat-silence-alerting.plan.md:39-83"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every section carries substantive content: the problem is grounded in a concrete failure mode (lines 32-37), the mechanism is specific (lines 44-46), risks name the exact failure modes (identity collision, threshold flood) at lines 78-82, and acceptance criteria are testable at lines 69-74. No speculative or bad ideas are mixed in.",
+      "content_quality": "strong",
+      "content_quality_note": "Acceptance criteria are independently verifiable (exactly one alert, no alert on explicit close, optional degradation) at lines 69-74. Risks name the concrete tuning problem with a concrete default (multiple of declared interval) at line 82. The minimum shippable shape without F-44 at lines 63-65 prevents blocking. This exceeds V0-conformance — it is a well-formed engineering brief.",
+      "salvage_value": [
+        {
+          "idea": "comms watch --alert-stale-peers mode emits a typed alert line when a peer's heartbeat exceeds a staleness multiple",
+          "class": "good",
+          "file_line": "peer-heartbeat-silence-alerting.plan.md:44-46"
+        },
+        {
+          "idea": "Alert must be exactly one per retirement event (not a per-poll flood)",
+          "class": "good",
+          "file_line": "peer-heartbeat-silence-alerting.plan.md:69-70"
+        },
+        {
+          "idea": "Explicit peer close must suppress the stale-peer alert",
+          "class": "good",
+          "file_line": "peer-heartbeat-silence-alerting.plan.md:71-72"
+        },
+        {
+          "idea": "Identity keying on name + session-id prefix (PDR-027) to prevent name-collision mis-attribution",
+          "class": "good",
+          "file_line": "peer-heartbeat-silence-alerting.plan.md:78-79"
+        },
+        {
+          "idea": "Default staleness threshold as a configurable multiple of the peer's declared interval, not a fixed value",
+          "class": "good",
+          "file_line": "peer-heartbeat-silence-alerting.plan.md:81-82"
+        },
+        {
+          "idea": "Minimum shippable shape as a standalone staleness poll over the heartbeat events directory, independent of F-44",
+          "class": "good",
+          "file_line": "peer-heartbeat-silence-alerting.plan.md:63-65"
+        },
+        {
+          "idea": "Affordance is optional and degrades to a documented manual re-check on platforms without background services",
+          "class": "good",
+          "file_line": "peer-heartbeat-silence-alerting.plan.md:73-74"
+        },
+        {
+          "idea": "Reuse the watcher fail-loud and heartbeat-parity guarantees already being delivered by comms-watch-hang-hardening",
+          "class": "good",
+          "file_line": "peer-heartbeat-silence-alerting.plan.md:48-49"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": null,
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "future",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing LOCKED required field `id` — every plan node requires a stable kebab slug graph identity",
+          "file_line": "peer-heartbeat-silence-alerting.plan.md:1 (frontmatter block, absent)"
+        },
+        {
+          "issue": "Missing LOCKED required field `node_type` — must be literal \"plan\"; discriminates the node in the registry",
+          "file_line": "peer-heartbeat-silence-alerting.plan.md:1 (frontmatter block, absent)"
+        },
+        {
+          "issue": "Missing LOCKED required field `kind` — `status: future` maps cleanly to `kind: strategic` (V0 §3.5 migration map) but the field is absent and `status` is a dropped key",
+          "file_line": "peer-heartbeat-silence-alerting.plan.md:9"
+        },
+        {
+          "issue": "`status: future` is a V0 DROPPED field (V0 §2.5); must be replaced by `kind: strategic` with no disposition or gate",
+          "file_line": "peer-heartbeat-silence-alerting.plan.md:9"
+        },
+        {
+          "issue": "`type: developer-experience` is a V0 DROPPED free-label (V0 §2.5); replaced by `node_type` + `kind`",
+          "file_line": "peer-heartbeat-silence-alerting.plan.md:10"
+        },
+        {
+          "issue": "`isProject: false` is a V0 DROPPED key (V0 §2.5, LOCKED decision); must be removed",
+          "file_line": "peer-heartbeat-silence-alerting.plan.md:21"
+        },
+        {
+          "issue": "Missing `promotion_trigger` frontmatter field — plan body carries a promotion trigger in prose (line 85) but V0 §2.4 requires it as a frontmatter field for `strategic` kind plans",
+          "file_line": "peer-heartbeat-silence-alerting.plan.md:85"
+        },
+        {
+          "issue": "`related_plans` approximates `depends_on` edges but is not a V0 typed edge; beneficial prerequisites must use `depends_on` with `kind: beneficial`",
+          "file_line": "peer-heartbeat-silence-alerting.plan.md:14-16"
+        },
+        {
+          "issue": "`related_doctrine` approximates `derives_from` edges but is not a V0 typed edge; ADR/doctrine traceability must use `derives_from`",
+          "file_line": "peer-heartbeat-silence-alerting.plan.md:17-19"
+        },
+        {
+          "issue": "No `serves_strategic_choice` edge declared — recommended for strategic plans; executable plans require it; absent with no `\"pending\"` sentinel",
+          "file_line": "peer-heartbeat-silence-alerting.plan.md:1 (frontmatter block, absent)"
+        }
+      ],
+      "unclassified_keys": [
+        "related_frictions",
+        "related_plans",
+        "related_doctrine"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan assumes exactly-once alert delivery ('produces exactly one alert, not a per-poll flood') is achievable for the staleness-watch affordance, but provides no mechanism for it. Without a committed-state record (e.g. a seen-stale flag keyed on peer+session-id), a poll-based implementation will naturally re-fire on every poll cycle after the threshold is crossed. The plan names the requirement but leaves the de-duplication mechanism unspecified, which is an assumption that implementation will solve it without further design.",
+          "file_line": "peer-heartbeat-silence-alerting.plan.md:69-71"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan assumes that a peer closing explicitly will produce no stale-peer alert ('A peer that closes explicitly produces no stale-peer alert'), but does not specify how the watch affordance distinguishes an explicit close from a lapse. The existing heartbeat substrate and comms-watch behaviour are not documented as carrying a typed 'close' event vs. heartbeat absence. If the underlying stream has no close-typed event, this criterion cannot be met without a substrate change — which the plan explicitly marks as out-of-scope ('Non-goal: a new heartbeat substrate').",
+          "file_line": "peer-heartbeat-silence-alerting.plan.md:71-74 and 57"
+        },
+        {
+          "severity": "low",
+          "claim": "The minimum-shippable path assumes a 'standalone staleness poll over the heartbeat events directory' is viable without F-44 or watcher hardening, but F-44 is described as fixing freshness-computation correctness by reading the heartbeat stream correctly. If the events directory layout or timestamps are unreliable before F-44, the standalone poll may produce false positives. The plan treats F-44 as 'beneficial' rather than load-bearing, which may understate the dependency.",
+          "file_line": "peer-heartbeat-silence-alerting.plan.md:61-65"
+        },
+        {
+          "severity": "low",
+          "claim": "Threshold tuning is flagged as a risk, with the default proposed as 'a multiple of the peer's declared interval'. This assumes each peer declares a heartbeat interval in a machine-readable form accessible to the watch affordance. If intervals are not uniformly declared or discoverable at watch time, the default rule cannot be applied and the threshold must be a fixed constant — a different design choice.",
+          "file_line": "peer-heartbeat-silence-alerting.plan.md:81-82"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly scopes the identity-keying requirement to name + session-id prefix (PDR-027) and treats name collision as a known risk. This is a well-grounded assumption that aligns with the stated doctrine.",
+          "file_line": "peer-heartbeat-silence-alerting.plan.md:78-80"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": []
+    }
+  ]
+}

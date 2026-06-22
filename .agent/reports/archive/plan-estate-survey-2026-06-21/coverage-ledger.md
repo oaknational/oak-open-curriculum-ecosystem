@@ -1,8 +1,33 @@
 # Deep Plan-Estate Survey — Coverage Ledger (living)
 
-## ▶ WINDOW STATE (live, 2026-06-21 ~21:10 UTC)
+## ▶ WINDOW STATE (live, 2026-06-22)
 
-**Survey RUNNING (window 3) — n=2.** **Cinder holds Warmth** (`2a2142`, orchestrator claim
+**Survey RESUMED (window 4) — sole; estate now FROZEN by owner until this work completes.** **Cinder
+holds Warmth** (`2a2142`, orchestrator claim `ff06c744`) resumed after a clean stand-down; owner declared
+the plan estate frozen, so the delta scan below is **definitive** (no recurring drift gate needed).
+**Phase A (estate-delta completeness gate):** definitive frozen-estate scan = live non-archive
+`*.plan.md` **291** vs frozen worklist **286** → **5 new `agent-tooling` plans, 0 removed** (authored
+2026-06-21 post-Pass-0). Worklist reconciled to 291 (agent-tooling now 64). **Phase B (full Pass-1 on the
+5 new plans):** `pass1-agent-tooling-delta-01.json` — 5/5 read, 0 unreadable, 5 keep, 58 ideas (54 good /
+3 speculative / 1 bad), 3 high-stakes verdicts all survive, spot-audit passed first-hand. → **▶ PASS-1
+COMPLETE over the full live estate: 291/291.**
+
+**Coverage audit (no silent truncation — see the Coverage-bounds section below).** Documented exclusions:
+archive (168), non-`*.plan.md` adjacents (~279, Pass-2 relational scope), `.cursor/plans/` (26 ephemeral),
+`templates/`, `compliance/` (collection scaffold, 0 plans), `notes/` + `upstream-feature-requests/`
+(not Oak plans). **Two owner-decision candidates that carry real ideas the survey never read** (both named
+with no-hedging-guard-blocked tokens — literal names in the session chat): (1) a deferred-ideas directory
+under `.agent/plans/` holding 13 idea-bearing docs; (2) a glob-missed observability plan,
+`observability/future/replace-sentry-mode-with-observability-sinks.plan.<guard-blocked-suffix>.md`.
+
+**Next: Phase C — the AEE idea-granular back-fill (all 70 — confirmed first-hand: even 1b-04 has empty
+`salvage_value`).** Owner indicated C will likely split across this session and the next. Awaiting owner
+steer on the two coverage candidates before fixing the back-fill's exact target set. Watcher armed
+pipe-less; heartbeat OFF. Owner resets the budget window; owner controls push.
+
+---
+
+**Survey RAN (window 3) — sole (Cinder).** **Cinder holds Warmth** (`2a2142`, orchestrator claim
 `<opened 21:01Z>`) picked up the sole survey lane from Cosmos calls Infinity (who closed out cleanly
 20:52Z; claim `3a5e8798` archived) per doc 08 §10. Grounded first-hand on doc 08 + ledger + instrument
 + worklist TSV + git + registry; coverage re-derived from scratch = **228/286 (6 collections), 20
@@ -110,6 +135,7 @@ scope; not surveyed.) Source: `worklist-plans.tsv`.
 | sdk-03 | sdk-and-mcp-enhancements (`future/`, plans 25–28 of 28) | 4 | Cosmos calls Infinity | COMPLETE (3 keep / 1 rewrite; substance 4 good; content 3 strong / 1 adequate; conformance 2 major-drift / 2 no-fm; 43 ideas: 36 good / 7 speculative / 0 bad; 0 locked-contradictions; 4 high-stakes verdicts: 4 survive) | `pass1-sdk-and-mcp-enhancements-03.json` |
 | se-01 | sector-engagement (full collection: `current/` + `eef/` + `future/` + `knowledge-graph-adoption/`) | 12 | Cinder holds Warmth | COMPLETE (8 keep / 4 archive-complete; substance 12 good; content 9 strong / 3 adequate; conformance 12 major-drift; 138 ideas: 125 good / 11 speculative / 2 bad; 5 locked-contradictions; 10 high-stakes verdicts: 10 survive; spot-audit passed first-hand on eef-d5-execution + eef-outcome-evaluation-infrastructure) | `pass1-sector-engagement-01.json` |
 | final-6 | user-experience (7) + developer-experience (4) + exploring-open-education-resources (2) + security-and-privacy (1) + school-data-search (1) + curriculum-mcp-path-to-ga (1) — the six remaining collections folded | 16 | Cinder holds Warmth | COMPLETE — Pass-1 FINAL increment (15 keep / 1 archive-complete; substance 16 good; content 15 strong / 1 adequate; conformance 14 major-drift / 2 no-frontmatter; 232 ideas: 208 good / 24 speculative / 0 bad; 2 locked-contradictions; 11 high-stakes verdicts: 10 survive / 1 refuted; spot-audit passed first-hand). **High-value adversarial catch:** `devx-strictness-convergence` line 314 claims "`Object.assign` scan now returns **0**" — verifier REFUTED; live `rg "Object\.assign\(" apps packages` = 17 matches / 8 files (orchestrator confirmed first-hand); false-completion claim, both signals conserved. Locked-contradictions: `education-skills-mcp-surface` (todos on a `future/` strategic plan, V0 §2.4) + `plugin-package-creation` (todos in body not frontmatter — V1 placement re-ratification candidate). Per-collection completion: all six collections Pass-1 complete. | `pass1-remaining-six-collections-01.json` |
+| delta-AT | agent-tooling delta — the 5 plans authored after Pass-0 froze the worklist (current: agent-experience-improvement, coordination-watcher-canonicalisation; future: agent-frustration-corpus-survey, coordination-home-explicit-targeting-migration, peer-heartbeat-silence-alerting) | 5 | Cinder holds Warmth | COMPLETE — Phase B full Pass-1 over the frozen-estate delta (5 keep; substance 5 good; content 5 strong; conformance 5 major-drift; 58 ideas: 54 good / 3 speculative / 1 bad; 0 locked-contradictions; 3 high-stakes verdicts: 3 survive; spot-audit passed first-hand on peer-heartbeat-silence-alerting + coordination-home-explicit-targeting-migration). Closes the new-plan coverage gap → live estate **291/291** fully Pass-1-surveyed. | `pass1-agent-tooling-delta-01.json` |
 | d-01 | discovery (full: `current/` + `future/`) | 9 | Cinder holds Warmth | COMPLETE (9 keep; substance 9 good; content 8 strong / 1 adequate; conformance 9 major-drift; 118 ideas: 101 good / 17 speculative / 0 bad; 0 locked-contradictions; 0 high-stakes verdicts — a young forward-design collection: every plan a well-scoped `future/`-tracking keep with an unfired promotion trigger, none complete/dead, so no high-stakes claims raised; spot-audit passed first-hand on dns-aid-discovery + web-bot-auth, ideas + promotion-trigger logic grounded at cited lines [minor: 2 `status`-field line cites point one field off, substance correct]) | `pass1-discovery-01.json` |
 | co-01 | connecting-oak-resources (full: `external-oak-references/` + `knowledge-graph-integration/` active+current+future) | 10 | Cinder holds Warmth | COMPLETE (9 keep / 1 rewrite; substance 10 good; content 9 strong / 1 adequate; conformance 10 major-drift; 145 ideas: 118 good / 23 speculative / 4 bad; 5 locked-contradictions; 12 high-stakes verdicts: 9 survive / 2 refuted / 1 uncertain; spot-audit passed first-hand). **High-value adversarial catch:** `graph-stack.plan.md` holistic claimed "WS4.5 status: completed, landed via PR #114 @77fcf746" — verifier REFUTED via `git show 77fcf746:…/eef-strands/index.ts` = `export {}` placeholder stub only (ls-tree confirms one file); false-completion claim, both signals conserved. **Recurring V1 signal — indefinite-hold cluster (3 plans):** `cross-source-journeys`, `nc-knowledge-taxonomy-surface`, `oak-kg-threads-surface` each carry the open-ended hold status value V0 §3.4 LOCKED forbids (verbatim status values + line cites conserved in the JSON) — each maps to a `gate`(+`expires`) or a `depends_on` blocking edge; owner re-ratification candidates. Plus a `gated-executable` hybrid (promotion_trigger + todos coexist, V0 §2.4) = additive-`kind` candidate; and graph-stack durable `status: active` (V0 §3.2) flagging a practical projected-only-model gap before Linear `projects_to` is live. | `pass1-connecting-oak-resources-01.json` |
 | ss-01 | semantic-search (full collection: `current/` + `future/`) | 11 | Cinder holds Warmth | COMPLETE (9 keep / 1 archive-complete / 1 rewrite; substance 11 good; content 10 strong / 1 adequate; conformance 11 major-drift; 145 ideas: 134 good / 11 speculative / 0 bad; 2 locked-contradictions; 9 high-stakes verdicts: 7 survive / 2 refuted; spot-audit passed first-hand — refutation evidence verified). **Pass-2 reconciliation item:** holistic classified `search-contract-followup` as `rewrite` on its self-reported `pending` todos, but the adversarial verifier REFUTED "no task completed" — the work LANDED via the archived `pre-reingest-remediation.execution.plan.md` (COMPLETE 2026-03-23; Task-1 test at `search-field-integrity.integration.test.ts:122-132`, Task-2 doc at `INDEXING.md:158`). Stale-plan-vs-reality drift; likely `archive-complete`. Both signals conserved, not averaged. | `pass1-semantic-search-01.json` |

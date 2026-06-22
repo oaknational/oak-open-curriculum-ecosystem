@@ -285,3 +285,8 @@ user-experience	current	y	current	executable	.agent/plans/user-experience/educat
 user-experience	current	y	ready-for-execution	<none>	.agent/plans/user-experience/educator-end-users/current/position-anchored-teaching-continuity.plan.md
 user-experience	future	y	future	strategic	.agent/plans/user-experience/educator-end-users/future/plugin-bundle-distribution.plan.md
 user-experience	current	y	<none>	<none>	.agent/plans/user-experience/engineering-end-users/current/search-sdk-github-release-asset-distribution.execution.plan.md
+agent-tooling	current	y	current	developer-experience	.agent/plans/agent-tooling/current/agent-experience-improvement.plan.md
+agent-tooling	current	y	current	developer-experience	.agent/plans/agent-tooling/current/coordination-watcher-canonicalisation.plan.md
+agent-tooling	future	y	future	developer-experience	.agent/plans/agent-tooling/future/agent-frustration-corpus-survey.plan.md
+agent-tooling	future	y	future	developer-experience	.agent/plans/agent-tooling/future/coordination-home-explicit-targeting-migration.plan.md
+agent-tooling	future	y	future	developer-experience	.agent/plans/agent-tooling/future/peer-heartbeat-silence-alerting.plan.md
