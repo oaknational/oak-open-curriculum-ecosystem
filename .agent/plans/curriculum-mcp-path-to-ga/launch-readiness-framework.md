@@ -40,7 +40,7 @@ exists today:
   MCP Apps standard, `@modelcontextprotocol/ext-apps`) whose centrepiece is a
   **first-class, user-first graphical search-and-exploration experience**
   (`user-search`) that makes Oak's hybrid semantic search legible and useful to
-  a teacher, delivered inside AI hosts (Claude, ChatGPT, Cursor) and built on
+  a teacher, delivered inside AI hosts (Claude, ChatGPT, Gemini) and built on
   the Oak design-token system.
 - "We don't fully own the surface" and "the conversational channel is also an
   entry point" are **design context** for that experience — they constrain
@@ -88,7 +88,7 @@ dimension below is read in their light.
   audience decision — teachers and curriculum leaders, with **nothing aimed at students** —
   is load-bearing for the **ICO Children's Code** applicability question in §B3; the two
   must be read together and the link must not be lost.
-- **K3 — Surface scope: the MCP app in ChatGPT and Claude — which means the app's
+- **K3 — Surface scope: the MCP app in ChatGPT and Claude and Gemini — which means the app's
   real dependency set must be GA-ready.** Declaring the app live asserts that
   every workspace it actually depends on (SDK/codegen, the curriculum data/API,
   the MCP server runtime, and search/graph and the React experience **as used**,
@@ -97,7 +97,7 @@ dimension below is read in their light.
   the repo; "whole-estate" readiness holds only at the **portfolio level** — each
   value stream reaches its own readiness. **Release channel (owner, 2026-06-20):** the MCP
   server can be made available unilaterally, but app-like packaging and promotion in
-  ChatGPT/Claude **require vendor collaboration** — the vendors are aware and have **agreed**
+  ChatGPT/Claude/Gemini **require vendor collaboration** — the vendors are aware and have **agreed**
   to support packaging and audience reach. The release and some promotion channels are an
   external-collaboration dependency, carried with the GTM/distribution hand-off (controlling
   plan §Body 2). Relatedly, **marketing is gated on sufficient TPC-risk mitigation** (the
