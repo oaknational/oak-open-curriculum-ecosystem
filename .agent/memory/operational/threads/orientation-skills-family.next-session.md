@@ -14,9 +14,10 @@ defined by PDR-112.
 
 ## Lane state
 
-- **Owning plan**: [`orientation-and-agentic-ai-literacy.plan.md`](../../../plans/developer-experience/current/orientation-and-agentic-ai-literacy.plan.md) (`current/`, executable).
-- **Current objective**: WS1–WS5 complete; WS6 propagation done. Remaining are
-  session-close, owner-gated steps: consolidation, plan archive, and push.
+- **Owning plan**: [`orientation-and-agentic-ai-literacy.plan.md`](../../../plans-old-archive/developer-experience/archive/completed/orientation-and-agentic-ai-literacy.plan.md) (archived to `plans-old-archive`, completed).
+- **Current objective**: WS1–WS6 complete; committed `5b3453d41`. Consolidation
+  (three watchlist lessons promoted to `distilled.md`) and plan archive done this
+  session. Only push remains (owner-gated); the thread may retire after push.
 - **Current state** (one commit pending at time of writing):
   - **WS1** — primer authored as the owned, host-free skill
     `working-with-agentic-ai`
@@ -74,10 +75,11 @@ continuation behind the edge (PDR-112 §Required). PDR-112 (the *pattern*)
 graduates into `practice-lineage.md` only after it hydrates across more than one
 repo (PDR-112 §Graduation intent) — single-instance now, so not graduated.
 
-- **Next safe step**: at session close — run `/oak-consolidate-docs` (graduate
-  the promotion watchlist if ripe), archive the plan to completed + index entry,
-  and push (owner-gated). The value-rationale (User Stories) is already conserved
-  in the primer body/description and PDR-112 Context.
-- **Promotion watchlist**: value-conveyance, knowledge-surfaces-are-curated,
-  decision-records-record-current-state (prior-session owner corrections, held in
-  per-user memory).
+- **Next safe step**: **push** (owner-gated) — branch `docs/planning-and-validation`
+  is ahead of origin by the orientation commit. After push, retire this thread
+  (add the retirement banner, drop from `repo-continuity.md § Active Threads`).
+- **Promotion watchlist**: DONE — value-conveyance, knowledge-surfaces-are-curated,
+  and decision-records-record-current-state were promoted from the per-user buffer
+  to `distilled.md` this session (2026-06-22), each flagged with its graduation
+  candidate target (rule / PDR-clause). A future first-hand consolidation graduates
+  them to rules/PDRs.

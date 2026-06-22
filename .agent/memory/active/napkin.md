@@ -228,6 +228,33 @@ near-double-commit happen; cure = divide-the-set-first). Siblings:
 [[feedback_director_pure_direction_only]], [[passive-guidance-loses-to-artefact-gravity]],
 [[feedback_owner_action_is_not_a_cure]].
 
+## Naive-author clean-room: prevent conceptual leak at the source, don't review for it (2026-06-22, Orbit rides Horizon)
+
+To author a genuinely portable / host-free artefact (one whose value depends on containing NO host
+concepts), the strongest guard is not reviewing the output for leak — it is choosing an author who
+has never seen the host. A Practice-naive agent **cannot** leak "Practice / claims / threads /
+plasmid" because it has never encountered them; the defect is dissolved at the source rather than
+caught after. Worked instance: the owner had a clean chat (no Oak repo loaded) write the
+`working-with-agentic-ai` primer body; I then skill-ified and reviewed. Critical caveat: a sub-agent
+launched from *inside* the repo auto-loads `CLAUDE.md → AGENT.md →` all Practice rules and is
+contaminated before it writes a word — the clean room must have no repo context (a separate chat /
+checkout). This is the "change the system so the problem can't exist" move over "try harder to
+catch it." Candidate pattern (single instance); needs a second portable-artefact authoring to
+graduate. Sibling: [[feedback_ask_would_this_be_simpler_if_the_system_changed]].
+
+## Reversing a decision recorded in multiple places needs a whole-document sweep, not a one-section edit (2026-06-22, Orbit rides Horizon)
+
+When you drop or reverse a decision that a document records in several places, editing only the
+primary section leaves stale references elsewhere that now contradict the update. Worked instance:
+the deterministic leak-validator was owner-released for judgment-based review; I updated the WS1
+acceptance + Work + cycle-deps, but left FIVE stale "the WS1 portability validator gates / the code
+cycle / test-expert+type-expert for the validator cycle" references in the Risk table, Foundation
+Alignment, Reviewer Scheduling, and the deterministic-validation block. Two WS5 reviewers
+(docs-adr-expert, assumptions-expert) independently caught it — a self-contradicting plan. Cure:
+after reversing a recorded decision, grep the WHOLE document for the old framing/term before
+treating the reversal as landed. A sibling of the under-actuation pathogen (an edit that stops
+short of completeness). Sibling: [[no-tombstones-for-removed-ideas]].
+
 ## A coordinator seat held past its pressure is artefact-gravity on the role itself (2026-06-21, Birch — Director session) — candidate
 
 Took the Director seat for a high-churn ~5-agent window (commit-warden contention, rotating cast — genuinely needed), ran two clean role rotations (Drake→Ganymede, Hobby→Pinnace), then the window settled to n=2 owner-visible (one surveying, one checking alignment). I noticed I was drifting into coordination *ceremony* (acknowledging clean self-managed pickups, confirming gates competent agents satisfied themselves) and corrected to "direct more quietly" — but stopped *one step short*: I never asked the first-principles question the owner then asked — *does n=2 owner-visible need a Director seat at all?* It does not. **Doctrine-by-analogy reached for:** "I'm the Director, so direct (lightly)." **The doctrine that should have fired:** `start-right-team` §6 (roles dissolve when their pressure disappears) + the coordinator-threshold (peer is default at ≤3). It existed; it didn't fire on my OWN seat — the role's gravity kept me in it. This is a doctrine-traction instance ([[passive-guidance-loses-to-artefact-gravity]]), NOT new doctrine: route as recurrence evidence to the action-time-structural-interrupt inventory, not a fresh rule. Cure captured in MEMORY: re-ask "does this shape need this seat?" at every team-size change, applied to your own role. Sibling: [[feedback_dissolve_role_when_pressure_clears]], [[feedback_useful_work_over_ceremony]].

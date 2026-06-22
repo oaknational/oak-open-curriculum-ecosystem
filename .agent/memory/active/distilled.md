@@ -79,3 +79,32 @@ same pathology can sit one level down in the apparatus (measuring the model, not
 pair every form/conformance acceptance with a substance gate. Source 2026-06-21 (Ganymede
 herds Penumbra); worked artefact: `vision-strategy-and-plan-estate.plan.md` Body-3 substance
 re-aim. Graduation candidate: PDR. Sibling: [[passive-guidance-loses-to-artefact-gravity]].
+
+## Decision records state current truth, not a journey
+
+Fold a change into an ADR/PDR as its **current state** — rewrite the affected clauses to
+say what is true now. Do not add "previously X, now refines to Y" amendment narrative; git
+history is the provenance of the change. Applied 2026-06-22 (Orbit rides Horizon) folding the
+PDR-112 memotype clarification as current-state. Distinct from
+[[no-moving-targets-in-permanent-docs]] (that bans drifting *values*; this bans journey
+*narrative*). Graduation candidate: a rule operationalising ADR/PDR authoring conventions.
+Source: prior-session owner correction, promoted from the per-user buffer.
+
+## Knowledge surfaces are curated suggestions to a judging agent, not control-flow
+
+A skill, register, or routing pointer is read by a judging agent that decides what serves the
+moment — it is guidance, not a branch the system must execute. So a skill suggesting another
+skill carries no loop/cycle risk, and a reviewer's *lens* (the frame it judges from) matters
+as much as its facts. Applied 2026-06-22 framing onboard-me Branch F's primer hand-off as
+"a suggestion to your judgement, not a gate". Graduation candidate: PDR clause or pattern.
+Source: prior-session owner correction, promoted from the per-user buffer.
+
+## Preserve the value-rationale (why-it-matters) at handoff, not only the what and how
+
+A plan's user stories carry *why it matters* — the most easily lost and most valuable layer.
+At completion and handoff, analyse each served story's disposition and conserve its *why*
+into the permanent home (skill description/body, ADR/PDR Context, README purpose lines), not
+only the *what* (acceptance met) and *how* (mechanism). Partially homed in PDR-011 (grounded
+execution knowledge) and the consolidate/handoff value-rationale step; this is the sharper
+standalone formulation. Source: prior-session owner correction, promoted from the per-user
+buffer.

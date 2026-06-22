@@ -1322,7 +1322,8 @@ agentic-AI-literacy lead-in — `working-with-agentic-ai` — added as the missi
 member for contributors new to working with agents in general. `onboard-me`
 Branch F now suggests it as a grounding prelude; the family routing lives in
 AGENT.md §Orientation Requests. See
-[`orientation-and-agentic-ai-literacy.plan.md`](../current/orientation-and-agentic-ai-literacy.plan.md).
+[`orientation-and-agentic-ai-literacy.plan.md`](../../../plans-old-archive/developer-experience/archive/completed/orientation-and-agentic-ai-literacy.plan.md)
+(completed, archived).
 
 **First live run falsified the menu-shaped interaction (12 June 2026,
 owner walkthrough)**: the walker front-loaded prerequisite probes before
