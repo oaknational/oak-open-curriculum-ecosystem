@@ -24,6 +24,51 @@ foundation; its report + raw data live in
 [`.agent/reports/archive/plan-estate-survey-2026-06-15/`](../../../reports/archive/plan-estate-survey-2026-06-15/README.md)
 (archived 2026-06-18; a fresh survey is a Body-3 prerequisite).
 
+## Where We Are (2026-06-22, Cinder holds Warmth — REFRAMED: planning-estate REWRITE on a living idea-graph; read ADR-200 FIRST)
+
+**READ [`ADR-200`](../../../../docs/architecture/architectural-decisions/200-intent-as-a-living-idea-graph.md)
+BEFORE ANYTHING ELSE in this thread.** It is the authoritative architecture, owner-ratified across this
+session. The earlier "survey / Pass-1 / classify-and-conform" framing in the sections below is
+**superseded** — the harvested idea data is kept, the framing is not. Do not re-enter this thread through
+the old framing.
+
+**The reframe (owner, 2026-06-22), in one breath:** this is a **planning-estate rewrite**, not a survey or
+refactor. **Ideas are the fundamental unit;** vision/strategy/streams/threads/plans are *projections* over
+a **living, authoritative idea-graph** (machine-readable JSON validated by a JSON Schema in the repo).
+Documents are the **co-equal human-navigable embodiment** (prose for humans + frontmatter typed-edges into
+the graph). The flow is **observe → analyse → understand → synthesise → write a whole new strategy-aligned
+plan corpus (`stream → thread → plan`)**, losing no valuable idea (proven against the preserved graph).
+The full idea-graph **will** be built; ADR-200 §Consequences holds the full decision, the goals, the
+sequence, and the build.
+
+**Anti-patterns to resist (these recurred and corrupted the framing this whole session — ADR-200 §Non-goals
+is the full list):** minimise-change; preserve-existing-plans / `*.plan.md`-as-"real-plans"; conformance or
+classification as a goal; sourcing scope from agent-authored method docs instead of the principal;
+deferring settleable foundations; templating vocabularies from arbitrary lists; treating the graph as
+derivable rather than co-equal with the human documents. **Default is inclusion; every exclusion is
+owner-ratified; the filesystem boundary is the scope.**
+
+**State landed this session:**
+
+- **Archive relocated out of the live corpus** → `.agent/plans-old-archive/` (commit `01a4b10c2`; 585
+  files; to be harvested later). The `speculative/` dir renamed into place (same commit, from a prior
+  hold-vocabulary name). **Live corpus = 570 docs under `.agent/plans/`** (291 `*.plan.md` + 279 other
+  `.md`), ALL in scope regardless of file form.
+- **ADR-200 authored** (this architecture). `graph-core` verified present + generic (RDF/JSON-LD substrate
+  at `packages/core/graph-core`); the idea-graph SDK/schema/tooling is the missing instance layer.
+- **Pass-1 survey data (291 plans, thin `salvage_value`) is KEPT** as raw harvest material but **superseded
+  in shape** by the rich idea-node schema — the deep harvest re-captures to the schema. Conserved JSONs +
+  `coverage-ledger.md` remain. (My uncommitted survey edits + the thin delta JSON stay on disk; they are
+  not the deliverable.)
+
+**Next safe step (ADR-200 §Sequence):** (1) ratify the goals into the controlling plan + reference ADR-200;
+(2) verify `graph-core`'s exact landed API; (3) lock the idea-node-schema *structure* + design the
+projection-type family; (4) broad-shallow discovery pass → close the value/domain/edge vocabularies →
+author the JSON Schema; (5) deep harvest → the idea-graph; (6) analyse → synthesise → write the new corpus
+→ no-loss audit. **In parallel and unblocked:** high-value stream work proceeds as **V0 plans** (the
+bridge — pre-idea-graph but graph-shaped, forward-compatible, upgraded additively when the graph lands).
+**Owner controls push; estate is FROZEN** until this work completes.
+
 ## Where We Are (2026-06-21, Cinder holds Warmth — ▶ PASS-1 COMPLETE 286/286, all 16 collections; standing down at the Pass-1 boundary)
 
 Picked up the sole survey lane from **Cosmos calls Infinity** (who closed out 20:52Z; claim `3a5e8798`
