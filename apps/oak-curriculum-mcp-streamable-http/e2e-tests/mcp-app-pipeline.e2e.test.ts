@@ -46,6 +46,7 @@ const ToolMetaSchema = z
 const ToolEntrySchema = z
   .object({
     name: z.string(),
+    description: z.string().optional(),
     inputSchema: z.object({}).loose().optional(),
     _meta: ToolMetaSchema.optional(),
   })
@@ -150,6 +151,23 @@ describe('MCP App Pipeline E2E', () => {
     // compare at the value level using vitest's deep equality.
     const wireInputSchema = tool.inputSchema;
     expect(wireInputSchema).toHaveProperty('properties.keyStage', expectedKeyStage);
+  });
+
+  it('large-payload tools carry the scope/page hint in their tools/list description', async () => {
+    const { app } = await createStubbedHttpApp();
+    const tools = await fetchToolsList(app);
+
+    const HINT = 'large payload at broad scope';
+
+    // Generated asset tool — hint baked at codegen time (WS1 cycle 1.1),
+    // composed onto the existing asset-download note.
+    const sequencesAssets = findToolOrFail(tools, 'get-sequences-assets');
+    expect(sequencesAssets.description).toContain(HINT);
+    expect(sequencesAssets.description).toContain('oakUrl'); // existing note survives (compose, not replace)
+
+    // Hand-authored aggregated tool — hint added to the description (WS1 cycle 1.2).
+    const browse = findToolOrFail(tools, 'browse-curriculum');
+    expect(browse.description).toContain(HINT);
   });
 
   it('resources/read for widget URI returns HTML with text/html;profile=mcp-app', async () => {
