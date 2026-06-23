@@ -54,6 +54,21 @@ at the `/mcp` URL and complete OAuth if prompted.
 visual review of the widget surface. To call **without** a host, see
 [Appendix B: calling with curl](#appendix-b-calling-with-curl).
 
+**Programmatic validation (MCPJam CLI).** Beyond the GUI host, the MCPJam CLI
+(`pnpm dlx @mcpjam/cli@latest …`; install and `login` per the repo README's
+Prerequisites section) drives this runbook from the terminal or CI:
+`protocol conformance` (MCP-spec conformance), `apps conformance` / `apps render`
+(MCP Apps / widget — §13), and `eval` (hosted, cross-LLM tool-behaviour evals —
+needs `mcpjam login`). It exposes the full response envelope, so the dual-shape
+`content[1]` block is directly checkable, and it enumerates prompts (§11) — both
+of which a `structuredContent`-only host cannot show. Caveats: `apps conformance`
+is server-side only (it does not prove host lifecycle, sandbox, or postMessage);
+and run `protocol conformance` against the **no-auth** build to exercise the
+Host/Origin checks, since an auth build rejects the probe at the auth layer and
+masks them. See `.agent/reports/evals-and-assurance-position-2026-06-23.md` for
+how conformance and evals fit the test / evaluate / assure picture, and the
+machine-level `mcp-inspector` skill for reading MCPJam output conservatively.
+
 ## How to use this runbook
 
 1. **Pick a target** and record it (URL or `localhost:3333`), plus the date and

@@ -66,6 +66,22 @@ surface.
   push). Thread [`user-search-not-exposed-until-built`](threads/user-search-not-exposed-until-built.next-session.md);
   plan ready to archive per ADR-117. (Coordinated on the shared tree with `Blazar rides Dawn`, who
   ran in parallel and has stood down.)
+- **MCPJam integration + curriculum-MCP validation — this session (2026-06-23, push-pending).** MCPJam is
+  wired as a stdio MCP server in [`.mcp.json`](../../../.mcp.json) and documented for contributors (README
+  Prerequisites: install + `login`; the machine-level `mcp-inspector` skill; the manual UAT runbook now
+  points to the MCPJam CLI for programmatic conformance/evals). A full MCPJam-driven validation of the
+  curriculum MCP **closed the three gaps the earlier manual UAT left** — §11 prompts, §13 `apps conformance`
+  (7/7 server-side), and the dual-shape `content[1]` block — in the
+  [2026-06-23 UAT addendum](../../../apps/oak-curriculum-mcp-streamable-http/docs/uat-reports/2026-06-23-local.md).
+  The one conformance finding (`localhost-host-rebinding-rejected`) was **settled from source → ADR-122
+  (rewritten) + ADR-158**: authed `/mcp` Host is validated in the auth layer (`getPRMUrl`→403), Origin is
+  deliberately permissive (Bearer is the boundary), the no-auth dev variant is an accepted dev-only residual;
+  a regression test pins the authed-`/mcp` Host→403 invariant. **Evals strand:** position report
+  `.agent/reports/evals-and-assurance-position-2026-06-23.md` (test/evaluate/assure; open questions for
+  ratification) + a **QUEUED, owner-directed** next-session pickup —
+  [`skill-evals-pilot-start-right-quick.plan.md`](../../plans/agentic-engineering-enhancements/current/skill-evals-pilot-start-right-quick.plan.md).
+  Landed across this session's commits; owner controls push (nothing pushed). Thread:
+  `agentic-engineering-enhancements` (evals).
 - **OWNER ROADMAP (owner direction 2026-06-12, sequenced "not all at once") — the forward agenda:**
   (1) organise the comms-research follow-ons; (2) naming v3 — DECISION-COMPLETE plan
   [`agent-naming-schema-v3.plan.md`](../../plans/agent-tooling/current/agent-naming-schema-v3.plan.md)
@@ -185,7 +201,7 @@ each thread record; this table is the repo-level index.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Zephyrous Buffeting Falcon / skills-lane-relocated-to-educator-end-users / 2026-06-08 (prior identities: thread record) |
-| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / Opus 4.8 (1M) / Petrel stirs Wingspan / 2026-06-22 dedicated consolidation (napkin rotated, 667-line content archived; PDR-113; forced-answer + bottom-up + decision-records graduations; F-83) + the F-84 fix landed (decision-debt false-green: detector `f056285fb` + register reformat `ea633117a`); thread next step UNCHANGED = WS-1 / 2026-06-22 (prior seats: Perseus turns Horizon (substrate de-anon `9abcd7679`), Oyster weaves Surf (WS-3 F-41), Nova wakes Genesis, Ferret seeks Tunnel (PDR-107/108/109/110), Finch binds Halo, Drake lifts Obsidian, Siren guards Reef, Tulip spins Xylem; full history in thread record) |
+| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude-code / Opus 4.8 / Magnolia spins Mulch / 2026-06-23 — MCPJam integration + curriculum-MCP validation + evals doctrine (position report + QUEUED skill-evals-pilot); host-rebinding settled → ADR-122/158 + Host→403 test (thread next step UNCHANGED = WS-1) ← claude / Opus 4.8 (1M) / Petrel stirs Wingspan / 2026-06-22 dedicated consolidation (napkin rotated, 667-line content archived; PDR-113; forced-answer + bottom-up + decision-records graduations; F-83) + the F-84 fix landed (decision-debt false-green: detector `f056285fb` + register reformat `ea633117a`); thread next step UNCHANGED = WS-1 / 2026-06-22 (prior seats: Perseus turns Horizon (substrate de-anon `9abcd7679`), Oyster weaves Surf (WS-3 F-41), Nova wakes Genesis, Ferret seeks Tunnel (PDR-107/108/109/110), Finch binds Halo, Drake lifts Obsidian, Siren guards Reef, Tulip spins Xylem; full history in thread record) |
 | `eslint-no-throw-result-migration` | Migrate every throw to Result (ADR-088); drive the ~1000 warnings to zero; promote the rule. In execution on `docs/planning-and-validation`; cheap WS2 done, residue is design-laden (tier map in record) | [record](threads/eslint-no-throw-result-migration.next-session.md) | claude / Opus 4.8 (1M) / Siren mends Rudder / execution — observability+graph-core+logger landed (`93beffcfe`,`304b68f8d`,`61bdbc3e4`) / 2026-06-19 (prior: Merlin spins Cirrus `1556b9191`; Vanilla weaves Undergrowth, plan-author) |
 | `statusline-enhancements` | Claude Code statusline: Oak-mark, session-shape indicators, logo swap; lane in two `current/` plans (session-state, logo-modularisation). Live detail + the `feat/comms-research` divergence to reconcile: thread record | [record][statusline] | claude-code / Opus 4.8 / Vole calls Hollow / live-logo-swap-and-plan-harden / 2026-06-16 (prior identities: thread record) |
 | `agent-naming` | PDR-027 display-name derivation: versioned schema registry, session-hook identity surfaces, wordlist eras (v2 landed; v3 + era-pinning cure queued) | [record][agent-naming] | claude / Opus 4.8 / Squall hunts Troposphere / thread-open + v3-plan-author / 2026-06-13 (prior identities: thread record) |

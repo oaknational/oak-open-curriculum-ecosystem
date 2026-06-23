@@ -287,3 +287,20 @@ Executed the orientation-lens unification (two lenses → one `/oak-explain`); d
   pointer to the superseding decision, keep the why): `sentry-observability-maximisation-mcp.plan.md`
   (L-8 correction), `agentic-engineering-enhancements/roadmap.md` (Phase 4 → ADR-125),
   `schema-resilience-and-response-architecture.plan.md` (OQ1 settlement). Banner-marked in-situ.
+
+## MCPJam host-header settle — trace ALL layers (2026-06-23, Magnolia spins Mulch)
+
+Settling the MCPJam `localhost-host-rebinding-rejected` finding:
+
+- **A security check can live outside the obviously-named middleware — trace EVERY layer before
+  concluding "X is unguarded."** I traced only `dnsRebindingProtection` (landing-page-only) and wrongly
+  concluded `/mcp` had no Host validation in any mode. The authed `/mcp` Host check is in the AUTH layer
+  (`getPRMUrl` in `mcpAuth`, `mcp-auth.ts:189`, before the auth-header check → 403). Only the no-auth dev
+  build lacks it.
+- **A black-box re-run can false-pass** — re-running `protocol conformance` against the auth build would
+  pass because auth 401s the probe regardless of Host; source was the decisive layer.
+- **Symmetric subagent skepticism**: security-expert corrected my first-hand claim → I verified its
+  correction first-hand before recording; docs-adr-expert's proposed ADR text had inherited my error →
+  caught before enshrining.
+- Recorded: ADR-122 (rewrite) + ADR-158; regression test in `auth-enforcement.e2e.test.ts`. Durable lesson
+  → distilled. (Napkin now over its line-limit — rotation due at consolidate-docs.)

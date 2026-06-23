@@ -192,3 +192,15 @@ Sibling: [[feedback_agent_identity_name_plus_uuid]].
   run (the owner walk) caught the orientation lens (and the agent's own answers) defaulting to walls of
   text. Source 2026-06-23 (Zenith, orientation-lens); encoded in the `explain` skill §Delivery grain.
   Siblings: [[present-verdicts-not-menus]].
+
+## To verify "is X guarded," trace EVERY layer; a black-box re-run can false-pass
+
+When verifying whether a behaviour (esp. a security check) is enforced, trace EVERY layer — the check
+may not live in the obviously-named middleware. Oak's authed `/mcp` Host validation is in the auth layer
+(`getPRMUrl`), NOT the `dnsRebindingProtection` middleware (landing-page-only); tracing only the named
+middleware wrongly concluded `/mcp` was unguarded. And re-running conformance against the auth build would
+have false-passed (auth 401s the probe regardless of Host) — source was the decisive layer. Symmetric
+skepticism: verify a subagent's *correction of your own finding* first-hand too, and check downstream
+subagents haven't inherited your error (a docs-adr draft had). Refines the evidence-discipline /
+verify-dont-trust line. Source 2026-06-23 (Magnolia, MCPJam host-header settle; ADR-122/158).
+Siblings: [[verify-dont-trust]].

@@ -708,11 +708,19 @@ passes) is in git history and the [`curator-passes/`](../curator-passes/) ledger
 
 | `Petrel stirs Wingspan` | `claude` | `Opus 4.8 (1M)` | `b8cd66` | `dedicated-knowledge-curation: napkin rotated 667→44 (critical→green); the 2026-06-22 action-time recurrence cluster routed to the design-space plan; graduated the forced-answer-test → scope-from-goal rule, bottom-up-flow → consolidate-until-done skill, decision-records-current-truth → no-tombstones, and PDR-113 (source-intent-from-the-principal); 9 new lessons → distilled (now soft); F-83 (whole-tree-gate coupling) + F-84 + test-estate-audit plan stub homed; run-the-lenses pending-graduation drained; first-hand loss-scan caught F-84 (the decision-debt count was a silent false-green) and the F-84 fix landed with TDD (detector f056285fb + register reformat ea633117a — count now honest at 2/soft, dwell anti-starvation alarm restored); register drain-semantics clarified (decide-all-to-zero + dwell, d0ba6ef41); 12 commits, gate-green, NOT pushed. Thread next step UNCHANGED = WS-1` | 2026-06-22 | 2026-06-22 |
 
+| `Magnolia spins Mulch` | `claude-code` | `Opus 4.8` | `5c3c64` | `MCPJam integration + curriculum-MCP validation (session home for the MCPJam thread; evals doctrine is the agentic-engineering tie-in): drove a full MCPJam-driven validation that closed the manual-UAT §11/§13/dual-shape gaps (UAT addendum 2026-06-23); settled the host-rebinding conformance finding FROM SOURCE → ADR-122 rewrite + ADR-158 (authed /mcp Host-validated in the auth layer via getPRMUrl→403; Origin deliberately permissive; no-auth dev = accepted residual) + a Host→403 regression test (auth-enforcement.e2e.test.ts); wired MCPJam (.mcp.json + README prereq + UAT-runbook programmatic pointer). Evals doctrine: authored the evals-and-assurance position report (test/evaluate/assure frame; 5 open questions for ratification) + the QUEUED skill-evals-pilot (start-right-quick). Lesson → distilled: trace ALL layers for a security check; a black-box re-run can false-pass; symmetric subagent skepticism. NOT pushed; thread next step UNCHANGED = WS-1` | 2026-06-23 | 2026-06-23 |
+
 ## Cross-Plan and Cross-Thread Links
 
 - **Live-work plans**:
   [`current/no-type-widening-enforcement.plan.md`](../../../plans/agentic-engineering-enhancements/current/no-type-widening-enforcement.plan.md),
   [`future/action-time-structural-interrupt-design-space.plan.md`](../../../plans/agentic-engineering-enhancements/future/action-time-structural-interrupt-design-space.plan.md).
+- **Evals lane (queued, owner-directed 2026-06-23)**:
+  [`current/skill-evals-pilot-start-right-quick.plan.md`](../../../plans/agentic-engineering-enhancements/current/skill-evals-pilot-start-right-quick.plan.md)
+  — pilot the in-repo skill `evals/` convention on the high-traffic `start-right-quick` grounding skill;
+  grounded by the position report `.agent/reports/evals-and-assurance-position-2026-06-23.md` (whose 5 open
+  questions — proportionality tiers, in-repo vs hosted eval home, the real-world signal, the Agentic-Quality
+  principle wording, the `validation-strategy.md` home — await owner ratification).
 - **Skills arc** (2026-06-14 audit, agent-tooling collection): owning plan
   [`agent-tooling/current/skills-standardisation-and-adapter-generator.plan.md`](../../../plans/agent-tooling/current/skills-standardisation-and-adapter-generator.plan.md)
   (§Reality Reconciliation gap ledger); enhancement briefs

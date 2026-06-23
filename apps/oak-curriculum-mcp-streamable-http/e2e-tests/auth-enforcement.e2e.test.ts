@@ -507,3 +507,32 @@ describe('All Tools Require HTTP Auth (noauth = no scope check, not no token)', 
     expect(wwwAuth).toContain('Bearer');
   });
 });
+
+describe('Host validation on /mcp (auth layer, before the auth challenge)', () => {
+  it('rejects a disallowed Host with 403, not a 401 auth challenge', async () => {
+    const res = await request(await createAuthApp())
+      .post('/mcp')
+      .set('Host', 'evil.example')
+      .set('Accept', 'application/json, text/event-stream')
+      .send({
+        jsonrpc: '2.0',
+        id: '1',
+        method: 'initialize',
+        params: {
+          protocolVersion: '2024-11-05',
+          capabilities: {},
+          clientInfo: { name: 'test', version: '1.0.0' },
+        },
+      });
+
+    // The Host allow-list check (getPRMUrl) runs first inside the auth
+    // middleware, so a disallowed Host is a 403 host rejection — NOT a 401 auth
+    // challenge. allowedHosts defaults to the loopback set, so 'evil.example' is
+    // rejected. A refactor that moved the authorization-header check ahead of
+    // the host check would turn this into a 401 with WWW-Authenticate and fail
+    // this test — which is exactly the regression this pins (see ADR-122/158).
+    expect(res.status).toBe(403);
+    expect(res.body).toHaveProperty('error', 'Forbidden');
+    expect(res.headers['www-authenticate']).toBeUndefined();
+  });
+});
