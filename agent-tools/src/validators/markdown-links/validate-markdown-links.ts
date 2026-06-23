@@ -87,7 +87,7 @@ function reportBrokenLinks(report: MarkdownLinkReport): void {
     for (const group of report.byFile) {
       writeLine(`    ${group.sourcePath}:`);
       for (const link of group.links) {
-        const fix = link.suggestedFix === null ? '(manual — no unique match)' : link.suggestedFix;
+        const fix = link.suggestedFix ?? '(manual — no unique match)';
         writeLine(`      L${String(link.line)}  ${link.writtenTarget}  ->  ${fix}`);
       }
     }

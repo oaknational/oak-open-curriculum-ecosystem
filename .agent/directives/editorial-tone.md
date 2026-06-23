@@ -9,8 +9,8 @@ last_updated: 2026-06-17
 
 Oak's editorial voice, for copy that carries Oak's name and is read to be
 oriented, persuaded, or informed about the work — as distinct from copy read to
-build the system precisely. This directive governs the second kind of writing;
-it must stay out of the first.
+build the system precisely. This directive governs the first kind of writing;
+it must stay out of the second.
 
 ## Where this applies — and where it must not
 

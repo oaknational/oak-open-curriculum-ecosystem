@@ -192,7 +192,7 @@ Run updated onboarding simulations against current repository state for:
 - [README.md](../../../README.md) (includes Quick Start)
 - [CONTRIBUTING.md](../../../CONTRIBUTING.md)
 - [docs/README.md](../../../docs/README.md)
-- [docs/VISION.md](../../../VISION.md)
+- [Vision](../../../../VISION.md)
 - [high-level-plan.md](../high-level-plan.md)
 - [user-experience/public-alpha-experience-contract.md](../user-experience/public-alpha-experience-contract.md)
 
@@ -917,7 +917,7 @@ Run onboarding simulations against the current repository state for
 
 - [README.md](../../../README.md) (restructured; Quick Start now lives here)
 - [CONTRIBUTING.md](../../../CONTRIBUTING.md) (updated)
-- [docs/VISION.md](../../../VISION.md) (updated)
+- [Vision](../../../../VISION.md) (updated)
 - [docs/governance/README.md](../../../docs/governance/README.md) (enhanced)
 - [.agent/README.md](../../README.md) (new)
 - [.agent/experience/HUMAN.md](../../experience/HUMAN.md) (new)

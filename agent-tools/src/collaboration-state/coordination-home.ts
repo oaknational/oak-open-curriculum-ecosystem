@@ -1,5 +1,7 @@
 import { execFileSync } from 'node:child_process';
 
+import { trustedGitEnv } from '../core/trusted-git.js';
+
 /** Runs a git subcommand from `cwd` and returns stdout; throws on non-zero exit. */
 export type GitRunner = (args: readonly string[], cwd: string) => string;
 
@@ -13,7 +15,9 @@ export interface ResolveCoordinationHomeOptions {
 }
 
 const defaultRunGit: GitRunner = (args, cwd) =>
-  execFileSync('git', [...args], { cwd, encoding: 'utf8' });
+  // Pin PATH to trusted system dirs so `git` cannot be shadowed via a writable
+  // PATH entry (the S4036 FIX, shared with branch-touched-files via core/trusted-git).
+  execFileSync('git', [...args], { cwd, encoding: 'utf8', env: trustedGitEnv() });
 
 /**
  * Resolve the coordination home: the **primary (main) checkout** for whatever

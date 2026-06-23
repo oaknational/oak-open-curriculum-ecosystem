@@ -26,11 +26,13 @@ function normalise(repoRelPath: string): string {
  * is to resolve thread identity → current location, localising lifecycle churn to one
  * surface.
  */
-const STABLE_INDEX_PATHS: readonly string[] = ['.agent/memory/operational/repo-continuity.md'];
+const STABLE_INDEX_PATHS: ReadonlySet<string> = new Set([
+  '.agent/memory/operational/repo-continuity.md',
+]);
 
 /** True when the source path is the sanctioned stable index. */
 export function isStableIndex(sourcePath: string): boolean {
-  return STABLE_INDEX_PATHS.includes(normalise(sourcePath));
+  return STABLE_INDEX_PATHS.has(normalise(sourcePath));
 }
 
 /**
@@ -41,11 +43,11 @@ export function isStableIndex(sourcePath: string): boolean {
  * a link to one file inside it is still a volatile per-item reference and stays flagged).
  *
  * Directory entries MUST carry a trailing slash in both this list and the markdown link
- * target: matching is exact (`Array.includes`), so a link written `dir` (no slash)
+ * target: matching is exact (`Set.has`), so a link written `dir` (no slash)
  * resolves without one, does not match, and is flagged — the correct conservative
  * outcome (a bare directory link is rare; the trailing-slash form is the convention).
  */
-const STABLE_ADDRESSED_STATE: readonly string[] = [
+const STABLE_ADDRESSED_STATE: ReadonlySet<string> = new Set([
   // Singleton registries and logs.
   '.agent/state/collaboration/active-claims.json',
   '.agent/state/collaboration/closed-claims.archive.json',
@@ -60,7 +62,7 @@ const STABLE_ADDRESSED_STATE: readonly string[] = [
   '.agent/state/collaboration/comms/',
   '.agent/state/collaboration/handoffs/',
   '.agent/memory/active/patterns/',
-];
+]);
 
 /**
  * True when an ephemeral target is a stable-addressed surface: an allowlisted singleton,
@@ -69,5 +71,5 @@ const STABLE_ADDRESSED_STATE: readonly string[] = [
  */
 export function isStableAddressedState(repoRelPath: string): boolean {
   const p = normalise(repoRelPath);
-  return STABLE_ADDRESSED_STATE.includes(p) || p.endsWith('.schema.json');
+  return STABLE_ADDRESSED_STATE.has(p) || p.endsWith('.schema.json');
 }

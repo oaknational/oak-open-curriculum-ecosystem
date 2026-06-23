@@ -2,6 +2,8 @@ import { execFileSync } from 'node:child_process';
 import type { ExecFileSyncOptionsWithStringEncoding } from 'node:child_process';
 import path from 'node:path';
 
+import { TRUSTED_GIT_PATH } from '../core/trusted-git.js';
+
 import { createBranchTouchedFileReport, type BranchTouchedFileReport } from './index.js';
 
 export type GitCommandExecutor = (
@@ -51,8 +53,6 @@ export function readBranchTouchedFileReport(
     files,
   });
 }
-
-const TRUSTED_GIT_PATH = '/usr/bin:/bin';
 
 export function readGitStdout(options: ReadGitStdoutOptions): string {
   const run = options.execFileSync ?? execFileSync;

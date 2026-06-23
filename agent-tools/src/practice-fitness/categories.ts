@@ -76,7 +76,7 @@ interface FitnessCategoryGroup {
 
 function bySeverityThenName(left: FitnessResult, right: FitnessResult): number {
   const severity = ZONE_RANK[right.overallZone] - ZONE_RANK[left.overallZone];
-  return severity !== 0 ? severity : left.filename.localeCompare(right.filename);
+  return severity === 0 ? left.filename.localeCompare(right.filename) : severity;
 }
 
 /**

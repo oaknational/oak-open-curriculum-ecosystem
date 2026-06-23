@@ -395,15 +395,65 @@ gate as the multicriteria block: policy amendment first, owner
 authorisation, then `sonar-project.properties` update. The architectural
 reason must be substantive — "the gate is failing" is not a reason.
 
-## Issue Classes (placeholder)
+## Issue Classes
 
-Issue-class policies will be added as they are codified. The same shape
+Issue-class policies are added as they are codified. The same shape
 applies: per-rule decision criteria, canonical rationale, FIX path. The
 default is `FIXED` via code change; `FALSE_POSITIVE` is the alternative
-when the defect described is genuinely not present at the site (typically
-zombie findings against stale main-branch analysis where the code has
-already been fixed; the durable cure is to push so SonarCloud
-re-analyses).
+when the defect described is genuinely not present at the site — either a
+zombie finding against stale main-branch analysis where the code has
+already been fixed (the durable cure is to push so SonarCloud re-analyses),
+or a rule that mis-fires on a shape that cannot exhibit the defect it
+describes.
+
+### S8786 — Super-linear regular expressions
+
+**Pattern**: Regex flagged by Sonar's runtime-complexity analyser as having
+super-linear (potentially catastrophic) backtracking. The Issue-form sibling
+of the [§S5852](#s5852--slow-regular-expressions) security hotspot: same
+underlying concern (a regex whose worst case is super-linear in input length),
+surfaced as a maintainability issue rather than a security hotspot.
+
+**Decision criteria**: FALSE_POSITIVE if and only if all hold:
+
+- Site runs at lint/validation time, codegen time, build time, or in a
+  data-pipeline / admin CLI — never inside a request handler.
+- Input is repo-internal or upstream-controlled: repo markdown, generated
+  TypeScript, the OpenAPI schema, curriculum bulk data, or equivalent —
+  never end-user request input.
+- The pattern is anchored or character-class-bounded such that the
+  super-linear behaviour the rule describes cannot be triggered by any
+  input shape (for example, an end-anchored match over a negated character
+  class, where the negated class and the following literal cannot overlap).
+
+When any criterion fails — most importantly when the regex is on a
+request-handler path — the disposition is **FIXED**, not FALSE_POSITIVE.
+
+**Canonical rationale**: "validation/build-time regex; repo-internal input;
+end-anchored over a negated character class so the flagged super-linear
+backtracking cannot occur; not a request-handler path".
+
+**FIX path**: when a flagged regex is on a request-handler path, rewrite it
+to linear constructs (negated character classes, anchored alternations,
+bounded quantifiers) or to plain string operations, per the rule's
+documented strategies.
+
+**Worked examples** (all in agent-tooling validators, repo-internal markdown
+input, end-anchored over negated classes — disposed FALSE_POSITIVE):
+
+- `agent-tools/src/validators/markdown-links/validate-markdown-links-helpers.ts`
+  — `/\s+"[^"]*"$/` strips a trailing markdown link title.
+- `agent-tools/src/validators/reference-direction/validate-reference-direction-helpers.ts`
+  — the same `/\s+"[^"]*"$/` title-strip.
+- `agent-tools/src/practice-fitness/item-count.ts` — `/[^\w-]+$/` strips a
+  trailing status annotation.
+
+**Delta from prior**: this is the first Issue class codified beyond the
+placeholder. It mirrors the established §S5852 hotspot class one-for-one in
+decision shape (build/validation-time + controlled input + anchored/bounded
+⇒ safe; request-handler ⇒ FIX), differing only in finding type (Issue vs
+hotspot) and therefore disposition verb (`FALSE_POSITIVE` vs `SAFE`). It
+does not relax any standard: a request-handler regex still fails the gate.
 
 ## Mechanical Encoding in `sonar-project.properties`
 
@@ -427,12 +477,13 @@ reduce cleanly to `(rule key × test-file path glob)`**:
 
 Their per-class decision criteria are fully decidable from the file path
 plus the rule key — no code-shape inspection is needed. The remaining
-documented rule classes (S5852, S4036, S2245, S1523, S4790, S5689) all
+documented rule classes (S5852, S8786, S4036, S2245, S1523, S4790, S5689) all
 require code-shape inspection to decide SAFE — for example, a
 `Math.random()` call in a non-test file may be either SAFE (jitter,
 correlation ID) or a real defect (token generation), and only the call
-site can tell. Mechanical encoding for those classes would relax
-standards; they stay in the human-review path.
+site can tell. The S8786 issue class is likewise code-shape-dependent
+(request-handler-vs-not cannot be read from the path). Mechanical encoding
+for these classes would relax standards; they stay in the human-review path.
 
 #### What Block 1 does NOT do
 

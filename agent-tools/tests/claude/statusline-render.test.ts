@@ -148,7 +148,7 @@ describe('renderStatusline with an Oak logo column', () => {
     for (const style of ['sextant', 'braille'] as const) {
       const lines = renderStatusline({ ...base, dir: 'repo' }, { logo: style }).split('\n');
       const ruleRow = lines[lines.length - 1].replaceAll(DIM, '').replaceAll(RESET, '');
-      expect([...ruleRow].length).toBe([...OAK_LOGO_ROWS[style][0]].length);
+      expect([...ruleRow]).toHaveLength([...OAK_LOGO_ROWS[style][0]].length);
     }
   });
 

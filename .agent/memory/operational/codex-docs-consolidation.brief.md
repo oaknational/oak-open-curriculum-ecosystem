@@ -14,7 +14,9 @@ $oak-consolidate-docs. Re-read
 dedicated-knowledge-curation.
 
 Core rule: fitness output is routing evidence only. Completion requires real
-item-level dispositions plus no hard/critical files. Do not archive, split,
+item-level dispositions — graduated, rejected, duplicate, stale-withdrawn, or a
+visible decision-debt entry with a named blocker (matching the goal line above) —
+plus no hard/critical files. Do not archive, split,
 shard, rename, pointer-replace, or move unprocessed content to make fitness
 improve. Archive relocation is allowed only after an item-level ledger proves
 every source item is graduated, rejected, duplicate, or stale-withdrawn.

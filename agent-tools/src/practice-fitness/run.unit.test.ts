@@ -6,7 +6,7 @@ import {
   FITNESS_MODE_STRICT,
   FITNESS_MODE_STRICT_HARD,
 } from './model.js';
-import { getMode, writePracticeFitnessReport } from './run.js';
+import { getMode, readFitnessFiles, writePracticeFitnessReport } from './run.js';
 
 describe('getMode', () => {
   it('parses informational and strict-hard flags', () => {
@@ -53,5 +53,25 @@ describe('writePracticeFitnessReport', () => {
     expect(report).toContain('.agent/healthy.md: within thresholds');
     expect(report).toContain('soft (1):');
     expect(report).toContain('.agent/soft.md: Lines: 2 above target 1 (limit 4)');
+  });
+});
+
+describe('readFitnessFiles', () => {
+  it('reads each fitness file from disk exactly once and threads its content', async () => {
+    // The fitness report and the decision-debt reading both derive from this one
+    // pass, so a file is never read twice (the doubled-IO regression guard).
+    const reads: string[] = [];
+    const reader = (absPath: string): Promise<string> => {
+      reads.push(absPath);
+      return Promise.resolve(`content of ${absPath}`);
+    };
+
+    const files = await readFitnessFiles('/repo', ['.agent/a.md', '.agent/b.md'], reader);
+
+    expect(reads).toEqual(['/repo/.agent/a.md', '/repo/.agent/b.md']);
+    expect(files).toEqual([
+      { relPath: '.agent/a.md', content: 'content of /repo/.agent/a.md' },
+      { relPath: '.agent/b.md', content: 'content of /repo/.agent/b.md' },
+    ]);
   });
 });

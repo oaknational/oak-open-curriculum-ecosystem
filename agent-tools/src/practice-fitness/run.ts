@@ -37,36 +37,51 @@ export function getMode(args: readonly string[]): FitnessMode {
   return FITNESS_MODE_STRICT;
 }
 
-async function readFitnessResults(
+/** A fitness file's repo-relative path paired with its content, read once. */
+interface FitnessFileContent {
+  readonly relPath: string;
+  readonly content: string;
+}
+
+/** Reads a UTF-8 file by absolute path. Injected in tests to prove single-read. */
+type FileReader = (absPath: string) => Promise<string>;
+
+const defaultReadFile: FileReader = (absPath) => fs.readFile(absPath, 'utf8');
+
+/**
+ * Read every fitness file from disk **exactly once**. Both the fitness report and
+ * the decision-debt reading derive from this single pass (see
+ * {@link deriveFitnessResults} and {@link deriveDecisionDebtReadings}), so a large
+ * estate is never read twice.
+ */
+export async function readFitnessFiles(
   repoRoot: string,
   fitnessFiles: readonly string[],
-): Promise<FitnessResult[]> {
+  readFile: FileReader = defaultReadFile,
+): Promise<FitnessFileContent[]> {
   return Promise.all(
-    fitnessFiles.map(async (relPath) =>
-      evaluateFitnessFile(relPath, await fs.readFile(path.join(repoRoot, relPath), 'utf8')),
-    ),
+    fitnessFiles.map(async (relPath) => ({
+      relPath,
+      content: await readFile(path.join(repoRoot, relPath)),
+    })),
   );
 }
 
-async function readDecisionDebtReadings(
-  repoRoot: string,
-  fitnessFiles: readonly string[],
+function deriveFitnessResults(files: readonly FitnessFileContent[]): FitnessResult[] {
+  return files.map(({ relPath, content }) => evaluateFitnessFile(relPath, content));
+}
+
+function deriveDecisionDebtReadings(
+  files: readonly FitnessFileContent[],
   now: Date,
-): Promise<DecisionDebtReading[]> {
-  const readings = await Promise.all(
-    fitnessFiles.map(async (relPath) => {
-      const content = await fs.readFile(path.join(repoRoot, relPath), 'utf8');
-      if (!isConceptCounted(content)) {
-        return null;
-      }
-      return {
-        filename: relPath,
-        result: evaluateDecisionDebt(content, now),
-        configFinding: decisionDebtConfigurationFinding(content),
-      };
-    }),
-  );
-  return readings.filter((reading): reading is DecisionDebtReading => reading != null);
+): DecisionDebtReading[] {
+  return files
+    .filter(({ content }) => isConceptCounted(content))
+    .map(({ relPath, content }) => ({
+      filename: relPath,
+      result: evaluateDecisionDebt(content, now),
+      configFinding: decisionDebtConfigurationFinding(content),
+    }));
 }
 
 function writeDecisionDebtSection(
@@ -162,8 +177,9 @@ export async function runPracticeFitnessCheck(
 ): Promise<number> {
   const mode = getMode(args);
   const fitnessFiles = await discoverFitnessFiles(repoRoot);
-  const results = await readFitnessResults(repoRoot, fitnessFiles);
-  const debtReadings = await readDecisionDebtReadings(repoRoot, fitnessFiles, now);
+  const files = await readFitnessFiles(repoRoot, fitnessFiles);
+  const results = deriveFitnessResults(files);
+  const debtReadings = deriveDecisionDebtReadings(files, now);
 
   writePracticeFitnessReport(io, mode, results);
   writeDecisionDebtSection(io, debtReadings);

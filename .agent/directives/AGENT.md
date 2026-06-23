@@ -72,6 +72,15 @@ the [ADR index][adr-index].
 
 **Would this be simpler if the system changed?**
 
+## Decision Lenses
+
+The First Principle and the two questions above are lenses #2–#4 of the canonical
+[Decision Lenses — Order of Resolution](./principles.md#decision-lenses--order-of-resolution)
+in `principles.md`. Lens #1 — **choose long-term architectural excellence at
+every decision point** — governs them all, and lens #5 is **optimise for user
+value**. Apply them in that order; the first that decisively resolves the
+question wins. `principles.md` is canonical for the full ordering.
+
 ## Oak Open Curriculum Cardinal Rule
 
 ALL static data structures, types, type guards, Zod schemas, Zod validators,
