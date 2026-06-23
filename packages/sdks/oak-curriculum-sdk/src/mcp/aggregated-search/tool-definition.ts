@@ -66,7 +66,9 @@ SCOPE LIMITATIONS:
 CROSS-TOOL WORKFLOWS:
 - For lesson planning: search(scope: 'lessons') → fetch(lesson:slug) for full details
 - For prerequisites: search(scope: 'threads') → get-prior-knowledge-graph with the found unit slugs for dependencies
-- For progressions: search(scope: 'threads') → get-thread-progressions for ordered units`,
+- For progressions: search(scope: 'threads') → get-thread-progressions for ordered units
+
+NOTE: This tool can return a large payload at broad scope and may exceed a host's per-result token limit. Broad scopes such as \`sequences\` are largest; pass \`size\` to cap results and \`from\` to page.`,
   securitySchemes: [{ type: 'oauth2', scopes: [...SCOPES_SUPPORTED] }] as const,
   annotations: {
     readOnlyHint: true,

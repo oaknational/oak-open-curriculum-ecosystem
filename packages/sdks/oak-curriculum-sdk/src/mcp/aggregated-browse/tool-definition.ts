@@ -44,7 +44,9 @@ NATURAL LANGUAGE MAPPING EXAMPLES:
 - "What subjects are available?" → no arguments (returns all facets)
 - "Show me KS2 science" → { subject: 'science', keyStage: 'ks2' }
 - "What's in the maths curriculum?" → { subject: 'maths' }
-- "What subjects are at Key Stage 3?" → { keyStage: 'ks3' }`,
+- "What subjects are at Key Stage 3?" → { keyStage: 'ks3' }
+
+NOTE: This tool can return a large payload at broad scope and may exceed a host's per-result token limit. Pass \`subject\` and/or \`keyStage\` to narrow; an unfiltered call returns the whole curriculum.`,
   securitySchemes: [{ type: 'oauth2', scopes: [...SCOPES_SUPPORTED] }] as const,
   annotations: {
     readOnlyHint: true,
