@@ -9,6 +9,8 @@
  */
 
 import { threadProgressionStats } from '@oaknational/graph-corpus-sdk/curriculum';
+import { KEY_STAGES } from '@oaknational/sdk-codegen/api-schema';
+import { KS4_SCIENCE_VARIANTS } from '@oaknational/sdk-codegen/search';
 import { conceptGraph } from '@oaknational/sdk-codegen/vocab';
 import { rawCurriculumSchemas } from '@oaknational/sdk-codegen/zod';
 import { toolGuidanceData } from './tool-guidance-data.js';
@@ -69,18 +71,66 @@ const curriculumSubjects = canonicalSubjectSlugs.map((slug) => {
     : { slug, name: meta.name, keyStages: meta.keyStages };
 });
 
+type CanonicalKeyStageSlug = (typeof KEY_STAGES)[number];
+
+/**
+ * Authored display metadata for each canonical key stage. As with subjects, the
+ * slug set is derived from the generated `KEY_STAGES` so it cannot drift; only
+ * the human-readable name, age range, year span, phase, and description are
+ * authored (these are not carried by a single generated source).
+ */
+const keyStageDisplayMetadata: Record<
+  CanonicalKeyStageSlug,
+  { name: string; ageRange: string; years: number[]; phase: string; description: string }
+> = {
+  ks1: {
+    name: 'Key Stage 1',
+    ageRange: '5-7',
+    years: [1, 2],
+    phase: 'primary',
+    description: 'Foundation stage covering basic literacy and numeracy',
+  },
+  ks2: {
+    name: 'Key Stage 2',
+    ageRange: '7-11',
+    years: [3, 4, 5, 6],
+    phase: 'primary',
+    description: 'Primary education building on KS1 foundations',
+  },
+  ks3: {
+    name: 'Key Stage 3',
+    ageRange: '11-14',
+    years: [7, 8, 9],
+    phase: 'secondary',
+    description: 'Lower secondary education',
+  },
+  ks4: {
+    name: 'Key Stage 4',
+    ageRange: '14-16',
+    years: [10, 11],
+    phase: 'secondary',
+    description: 'GCSE preparation years - has additional programme factors (tiers, exam boards)',
+  },
+};
+
+/** Key stages, derived from the canonical `KEY_STAGES` slug set with authored display metadata. */
+const curriculumKeyStages = KEY_STAGES.map((slug) => {
+  const meta = keyStageDisplayMetadata[slug];
+  return { slug, ...meta };
+});
+
 /**
  * Curriculum ontology data describing the Oak curriculum domain model.
  *
  * Includes key stages, subjects, entity hierarchy, threads, and tool usage guidance.
  */
 export const ontologyData = {
-  version: '0.1.0-poc',
-  generatedAt: '2025-11-27T00:00:00Z',
+  version: '0.2.0',
+  generatedAt: '2026-06-23T00:00:00Z',
   purpose:
     'This ontology describes the Oak National Academy curriculum domain model. It provides context for AI agents to understand the structure of UK education content, including key stages, subjects, entity hierarchies, threads, and tool usage guidance.',
   notice:
-    'This is a static POC. A future version will generate this data from the OpenAPI schema at compile time.',
+    'Partially schema-derived: the subject list, the key-stage list, and the KS4 examSubject variants are generated from the OpenAPI schema/SDK at build time and cannot drift from the live API. Display names, key-stage metadata, exam boards, tiers, and pathways are authored.',
   officialDocs: 'https://open-api.thenational.academy/docs/about-oaks-data/glossary',
   relatedResources: {
     threadProgressions:
@@ -90,41 +140,7 @@ export const ontologyData = {
   },
 
   curriculumStructure: {
-    keyStages: [
-      {
-        slug: 'ks1',
-        name: 'Key Stage 1',
-        ageRange: '5-7',
-        years: [1, 2],
-        phase: 'primary',
-        description: 'Foundation stage covering basic literacy and numeracy',
-      },
-      {
-        slug: 'ks2',
-        name: 'Key Stage 2',
-        ageRange: '7-11',
-        years: [3, 4, 5, 6],
-        phase: 'primary',
-        description: 'Primary education building on KS1 foundations',
-      },
-      {
-        slug: 'ks3',
-        name: 'Key Stage 3',
-        ageRange: '11-14',
-        years: [7, 8, 9],
-        phase: 'secondary',
-        description: 'Lower secondary education',
-      },
-      {
-        slug: 'ks4',
-        name: 'Key Stage 4',
-        ageRange: '14-16',
-        years: [10, 11],
-        phase: 'secondary',
-        description:
-          'GCSE preparation years - has additional programme factors (tiers, exam boards)',
-      },
-    ],
+    keyStages: curriculumKeyStages,
     phases: [
       {
         slug: 'primary',
@@ -222,11 +238,11 @@ export const ontologyData = {
         description: 'Categorisation based on exam paper difficulty level',
       },
       examBoard: {
-        values: ['aqa', 'ocr', 'edexcel', 'eduqas', 'edexcelb'],
+        values: ['aqa', 'edexcel', 'eduqas', 'ocr', 'wjec', 'edexcelb'],
         description: 'Official body that sets and grades qualifications',
       },
       examSubject: {
-        values: ['biology', 'chemistry', 'physics', 'combined-science'],
+        values: [...KS4_SCIENCE_VARIANTS],
         appliesTo: ['science'],
         description: 'Child subject within KS4 science with associated examination',
       },
