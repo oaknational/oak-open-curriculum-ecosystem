@@ -11,10 +11,11 @@ defined by PDR-112.
 | --- | --- | --- | --- | --- | --- | --- |
 | Bora lifts Downdraft | claude | claude-opus-4-8 | 5120ef | planner → implementer | 2026-06-22 | 2026-06-22 |
 | Orbit rides Horizon | claude | claude-opus-4-8 | ef8284 | implementer | 2026-06-22 | 2026-06-22 |
+| Skipper tracks Reef | claude-code | claude-opus-4-8[1m] | 87a7bb | planner — authored the orientation-lens unification plan (owner-directed); did not implement | 2026-06-23 | 2026-06-23 |
 
 ## Lane state
 
-- **Owning plan**: [`orientation-and-agentic-ai-literacy.plan.md`](../../../plans-old-archive/developer-experience/archive/completed/orientation-and-agentic-ai-literacy.plan.md) (archived to `plans-old-archive`, completed).
+- **Owning plan**: [`orientation-lens-unification.plan.md`](../../../plans/developer-experience/current/orientation-lens-unification.plan.md) (`current/`, queued — the family-unification work). Superseded predecessor: [`orientation-and-agentic-ai-literacy.plan.md`](../../../plans-old-archive/developer-experience/archive/completed/orientation-and-agentic-ai-literacy.plan.md) (the primer + seam build, completed).
 - **Current objective**: WS1–WS6 complete; committed `5b3453d41`. Consolidation
   (three watchlist lessons promoted to `distilled.md`) and plan archive done this
   session. Only push remains (owner-gated); the thread may retire after push.
@@ -75,9 +76,16 @@ continuation behind the edge (PDR-112 §Required). PDR-112 (the *pattern*)
 graduates into `practice-lineage.md` only after it hydrates across more than one
 repo (PDR-112 §Graduation intent) — single-instance now, so not graduated.
 
-- **Next safe step**: **push** (owner-gated) — branch `docs/planning-and-validation`
-  is ahead of origin by the orientation commit. After push, retire this thread
-  (add the retirement banner, drop from `repo-continuity.md § Active Threads`).
+- **REOPENED (owner-directed, 2026-06-23)**: the family is being unified — the two
+  repo-bound lenses (`explain-repo`, `onboard-me`) become ONE intent-discerning lens
+  with delivery mode (specific answer / area overview / guided tour) as a discerned
+  variable; setup stays distinct and go-ahead-gated; the `working-with-agentic-ai`
+  primer is unchanged; **PDR-112 is NOT amended** (host instantiation is phenotype,
+  recorded in a host ADR + AGENT.md). Design owner-confirmed.
+- **Next safe step**: execute
+  [`orientation-lens-unification.plan.md`](../../../plans/developer-experience/current/orientation-lens-unification.plan.md)
+  from **WS0** (re-ground first-hand + dispatch readiness reviewers). The prior
+  session's primer/seam commit (`5b3453d41`) remains push-pending (owner-gated).
 - **Promotion watchlist**: DONE — value-conveyance, knowledge-surfaces-are-curated,
   and decision-records-record-current-state were promoted from the per-user buffer
   to `distilled.md` this session (2026-06-22), each flagged with its graduation
