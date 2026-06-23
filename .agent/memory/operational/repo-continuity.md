@@ -80,6 +80,16 @@ surface.
   push). Thread [`user-search-not-exposed-until-built`](threads/user-search-not-exposed-until-built.next-session.md);
   plan ready to archive per ADR-117. (Coordinated on the shared tree with `Blazar rides Dawn`, who
   ran in parallel and has stood down.)
+- **PR #213 quality gates GREEN — this session (2026-06-23, Galleon binds Seabed, PUSHED `770d13d46`).**
+  Completed Foundry tracks Flicker's PR-213 CI-remediation arc. The 14 open CodeQL+Sonar findings split
+  into **7 genuine fixes** (committed `770d13d46`: synonym-miner `JSON.stringify` escaping + test; 5×
+  research-toolkit chmod `0o755`→`0o700`; `setupAuthRoutes` → options object, S107) **+ 7 merit-grounded
+  dismissals** now enacted (CodeQL #70/#72/#76/#77/#81/#98 false-positive; Sonar S4036 FALSE_POSITIVE).
+  CodeQL + SonarCloud + Vercel + CI all green; oak-preview MCP validated against the live preview build.
+  **For the next agent on this branch: do NOT re-flag the 7 dismissed false-positives** — rationale on the
+  dismissals + `sonar-disposition-policy.md` (rate-limiter DI-wired+test-pinned per ADR-078; build-time
+  validated schema cache; PATH pinned to `/usr/bin:/bin`). `.mcp.json.example` left uncommitted (owner's
+  oak-preview/oak-prod/mcpjam config; its `oak-preview` URL is branch-ephemeral — dies post-merge).
 - **MCPJam integration + curriculum-MCP validation — this session (2026-06-23, push-pending).** MCPJam is
   wired as a stdio MCP server in [`.mcp.json`](../../../.mcp.json) and documented for contributors (README
   Prerequisites: install + `login`; the machine-level `mcp-inspector` skill; the manual UAT runbook now

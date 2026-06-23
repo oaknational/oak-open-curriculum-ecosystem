@@ -193,6 +193,22 @@ Sibling: [[feedback_agent_identity_name_plus_uuid]].
   text. Source 2026-06-23 (Zenith, orientation-lens); encoded in the `explain` skill §Delivery grain.
   Siblings: [[present-verdicts-not-menus]].
 
+## A scanner finding's disposition is decided by the lenses, not precedent; fix-vs-dismiss is rarely an owner-fork
+
+When a static-analysis finding (CodeQL / Sonar) arrives, its disposition resolves to FIX (defect
+genuinely present) or FALSE_POSITIVE/SAFE (defect genuinely absent, verified first-hand) per
+`sonar-disposition-policy.md`. Two traps caught in one session: (a) **precedent is not correctness** —
+N prior dismissals of a rule do NOT make THIS site a false-positive (a 12×-dismissed
+`incomplete-sanitization` rule still flagged a real backslash-escaping bug here; the fix was genuine).
+(b) **A lens-resolvable disposition is not an owner-decision** — framing "fix vs harden vs dismiss" as an
+owner-fork when the decision lenses (LTAE first) decisively resolve it is analysis-passback; the lenses'
+own gate escalates to the owner only when all five fail or it is product/feature scope. The "harden"
+arm of one alleged fork was already implemented in the code I'd read. The outward-facing ACT of marking
+a dismissal still needs owner authorisation; the disposition *determination* does not. Source 2026-06-23
+(Galleon binds Seabed, PR 213 — 14 findings → 7 genuine fixes + 7 merit-grounded false-positives).
+Siblings: [[feedback_existence_is_not_correctness_default_replace]], [[feedback_no_responsibility_passback]],
+[[feedback_forced_verdict_resting_on_my_interpretation_is_a_question]].
+
 ## To verify "is X guarded," trace EVERY layer; a black-box re-run can false-pass
 
 When verifying whether a behaviour (esp. a security check) is enforced, trace EVERY layer — the check

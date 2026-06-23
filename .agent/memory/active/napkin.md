@@ -391,3 +391,28 @@ existence (`git cat-file`), never the alert baseline — owner disputed it. Dual
 *over*-corrected into over-checking when told to act. Cure: verify the actual state to the stakes
 AND obey the actual instruction — neither under-verify (sensor-off) nor tangent past the directive.
 Mechanism-not-recall (t6 evidence). Napkin 364→~390/300 — rotation due (`consolidate-docs`).
+
+## PR #213 driven to GREEN — completing Foundry's CI-remediation arc (Galleon binds Seabed, 2026-06-23)
+
+Continued the PR 213 CI-remediation arc Foundry tracks Flicker began (entry above). Drove the branch
+fully green: analysed all 14 open CodeQL+Sonar findings → **7 genuine FIXES + 7 merit-grounded
+FALSE_POSITIVE dismissals**. Commit `770d13d46` (synonym-miner `JSON.stringify` escaping + describing
+test; 5× research chmod `0o755`→`0o700`; `setupAuthRoutes` 8-param→options-object, S107), pushed.
+Then dismissed 6 CodeQL (rate-limit ×4 #70/#72/#81/#98 + http-to-file ×2 #76/#77) + Sonar S4036 — each
+verified-false **first-hand** (rate-limiter wired + test-pinned per ADR-078; build-time validated schema
+cache; PATH pinned to `/usr/bin:/bin`). PR green; oak-preview MCP validated (search/fetch return real
+data → the refactor works in the live deployment). Disposition discipline → distilled. Surprises:
+
+- **CodeQL re-keys an alert on a line shift.** My auth-routes refactor moved the rate-limit
+  registration line, so alert **#96 closed and #98 opened** at the new line — SAME finding, new number.
+  When reconciling pre/post-fix alert counts, a vanished+new pair at shifted lines in a refactored file
+  is a re-key, not a new finding. Verify by rule+path, not by number.
+- **oak-preview MCP token-expiry was transient.** One parallel call hit "requires re-authorization
+  (token expired)" while a sibling authed call (search) succeeded; the retry self-recovered. Client-side
+  OAuth lifecycle, not a deployment fault — don't read it as a preview-health failure.
+- **The disposition *determination* is lens-resolved, not an owner-fork** (existence ≠ correctness; a
+  12×-dismissed rule still flagged a real bug here); only the outward-facing *act* of marking needs
+  authorisation (asked + got it before enacting). Owner reminders this session: critically assess every
+  subagent claim (security-expert died on a 529 → covered its remit first-hand); the "alleged fork"
+  (http-to-file fix-vs-harden) dissolved under the decision lenses — its "harden" arm was already in the
+  code I'd read. Napkin now ~409/300 — **rotation overdue**, route at consolidate-docs.
