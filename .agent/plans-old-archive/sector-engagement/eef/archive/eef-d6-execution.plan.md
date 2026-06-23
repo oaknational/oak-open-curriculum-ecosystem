@@ -1,7 +1,7 @@
 ---
 title: "EEF D6 execution — MCP composition: EEF as the first graph tool on the new substrate (TDD cycles)"
-status: current
-lane: current
+status: completed
+lane: archive/completed
 type: executable
 thread: eef
 date: 2026-06-06

@@ -354,7 +354,7 @@ session narrative for each is in git history; this table is the durable identity
 ## Cross-Plan and Cross-Thread Links
 
 - **Controlling plan**:
-  [`eef-d6-execution.plan.md`](../../../plans/sector-engagement/eef/current/eef-d6-execution.plan.md);
+  [`eef-d6-execution.plan.md`](../../../../plans-old-archive/sector-engagement/eef/archive/eef-d6-execution.plan.md) (completed, archived);
   contracts: `eef-d3-mcp-contract.md`, `eef-d4-graph-capability-contract.md`,
   `eef-d5-execution.plan.md` (same `current/` directory).
 - **Parent thread**: [`sector-engagement.next-session.md`](sector-engagement.next-session.md).
