@@ -84,8 +84,10 @@ repo (PDR-112 §Graduation intent) — single-instance now, so not graduated.
   recorded in a host ADR + AGENT.md). Design owner-confirmed.
 - **Next safe step**: execute
   [`orientation-lens-unification.plan.md`](../../../plans/developer-experience/current/orientation-lens-unification.plan.md)
-  from **WS0** (re-ground first-hand + dispatch readiness reviewers). The prior
-  session's primer/seam commit (`5b3453d41`) remains push-pending (owner-gated).
+  from **WS0** (re-ground only — the readiness reviewers ran and were folded 2026-06-23;
+  the plan is **READY FOR EXECUTION**). WS0 confirms sub-decision 1 (lens name) with the
+  owner or takes its default (keep `onboard-me` canonical + alias `explain-repo`). The
+  prior session's primer/seam commit (`5b3453d41`) remains push-pending (owner-gated).
 - **Promotion watchlist**: DONE — value-conveyance, knowledge-surfaces-are-curated,
   and decision-records-record-current-state were promoted from the per-user buffer
   to `distilled.md` this session (2026-06-22), each flagged with its graduation

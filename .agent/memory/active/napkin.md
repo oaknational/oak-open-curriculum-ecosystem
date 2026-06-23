@@ -174,3 +174,20 @@ auto-staged TWO of the concurrent session's fresh working-tree edits (`repo-cont
 files. The hook stages tracked modifications, so a clean pre-commit `git status` is the only guard
 against sweeping foreign WIP. Owner authorised "commit everything", so the swept work is legitimately
 landed; the imperfection is message-grouping, not correctness — history not rewritten.
+
+## Reviewing my own plan: verify the specialists; "amends PDR-112" was an over-claim (2026-06-23, Skipper tracks Reef)
+
+Planning the orientation-lens unification, I told the owner the change "amends PDR-112" — then,
+reading PDR-112 first-hand to author the plan, found it does NOT: §Required scopes host instantiation
+(which lenses exist, the routing) to host ADRs + the entry point, so unifying two repo-bound lenses is
+host phenotype, not a pattern amendment. Same fluency-over-grounding reflex as the session's earlier
+over-claims — a governance claim asserted before reading the governance artefact. Cure already homed:
+verify-don't-trust on my OWN claims, hardest at the moment one arrives smoothly.
+
+Then, asked to "review your plan", I dispatched the three readiness reviewers AND verified their
+load-bearing citations first-hand before folding (owner's standing reminder: second-hand isn't good
+enough). They were accurate — yet the first-hand grep still caught a live reference they ALL missed
+(`project-context-preservation-gap-report.md`), which is why the plan's reconciliation became a
+**grep-gate, not their fixed file list**. Reusable: when specialists hand you an enumerated surface,
+prefer a generated/grep gate over the list — the list is a sample, the gate is the invariant.
+Verifying specialists is not distrust; it is the only thing that catches the gap the specialist shares.
