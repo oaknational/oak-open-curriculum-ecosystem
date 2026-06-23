@@ -590,7 +590,7 @@ ADR-034), **ADR-153** (the constant-type predicate), and the corrected
 the `.external-data.ts` suffix and the Sonar/ESLint duplication exclusion.
 
 The decontamination dispositions and the clean acceptance sweep are recorded in
-[`eef-d0-decontamination-ledger.md`](eef-d0-decontamination-ledger.md); the dated
+[`eef-d0-decontamination-ledger.md`](../../../../plans-old-archive/sector-engagement/eef/archive/eef-d0-decontamination-ledger.md); the dated
 execution record is in the `eef` thread record.
 
 **Proof:** `pnpm repo-validators:check` green; the decontamination ledger.
