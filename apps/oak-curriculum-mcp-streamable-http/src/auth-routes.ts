@@ -154,19 +154,39 @@ function registerAuthenticatedRoutes(
 }
 
 /**
+ * Dependencies for {@link setupAuthRoutes}, passed as a single options object.
+ *
+ * Bundling the dependencies into one object follows the house style for
+ * setup/registration functions with five or more dependencies (cf.
+ * `createMcpRouter`, `createOAuthProxyRoutes`) and keeps the call site
+ * self-documenting.
+ */
+export interface SetupAuthRoutesOptions {
+  readonly app: Express;
+  readonly mcpFactory: McpServerFactory;
+  readonly runtimeConfig: RuntimeConfig;
+  readonly log: Logger;
+  readonly allowedHosts: readonly string[];
+  readonly observability: HttpObservability;
+  readonly mcpRateLimiter: RequestHandler;
+  readonly mcpAuthClerkDeps?: CreateMcpAuthClerkDeps;
+}
+
+/**
  * Registers /mcp routes -- protected (auth enabled) or unprotected (bypass mode).
  * Called AFTER OAuth metadata endpoints and clerkMiddleware are installed.
  */
-export function setupAuthRoutes(
-  app: Express,
-  mcpFactory: McpServerFactory,
-  runtimeConfig: RuntimeConfig,
-  log: Logger,
-  allowedHosts: readonly string[],
-  observability: HttpObservability,
-  mcpRateLimiter: RequestHandler,
-  mcpAuthClerkDeps?: CreateMcpAuthClerkDeps,
-): void {
+export function setupAuthRoutes(options: SetupAuthRoutesOptions): void {
+  const {
+    app,
+    mcpFactory,
+    runtimeConfig,
+    log,
+    allowedHosts,
+    observability,
+    mcpRateLimiter,
+    mcpAuthClerkDeps,
+  } = options;
   const authLog = typeof log.child === 'function' ? log.child({ scope: 'auth' }) : log;
 
   if (runtimeConfig.dangerouslyDisableAuth) {

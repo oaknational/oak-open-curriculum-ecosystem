@@ -113,7 +113,7 @@ bash+= "  *) printf '%b\\n' $'"+esc(payload)+"' ;;\n"
 bash+= "esac\n"
 with open('renders/swirl_blink.sh','w') as f:
     f.write(bash)
-import os; os.chmod('renders/swirl_blink.sh',0o755)
+import os; os.chmod('renders/swirl_blink.sh',0o700)
 
 # ---- GIF preview of the two phases ----
 from PIL import Image, ImageDraw

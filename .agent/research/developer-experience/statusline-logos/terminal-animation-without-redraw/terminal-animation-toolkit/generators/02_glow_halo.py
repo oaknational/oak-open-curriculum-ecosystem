@@ -142,7 +142,7 @@ bash+="  off|static|none|reduce) printf '%b\\n' $'"+esc(payload_static)+"' ;;\n"
 bash+="  *) printf '%b\\n' $'"+esc(payload)+"' ;;\n"
 bash+="esac\n"
 open('renders/acorn_glow.sh','w').write(bash)
-import os; os.chmod('renders/acorn_glow.sh',0o755)
+import os; os.chmod('renders/acorn_glow.sh',0o700)
 
 # ---- GIF preview at dot resolution ----
 from PIL import Image, ImageDraw

@@ -135,7 +135,7 @@ b+="  off|static|none|reduce) printf '%b\\n' $'"+esc(payload_static)+"' ;;\n"
 b+="  *) printf '%b\\n' $'"+esc(payload)+"' ;;\n"
 b+="esac\n"
 open('renders/acorn_final.sh','w').write(b)
-import os;os.chmod('renders/acorn_final.sh',0o755)
+import os;os.chmod('renders/acorn_final.sh',0o700)
 from PIL import Image
 DOT=6
 def render(on):

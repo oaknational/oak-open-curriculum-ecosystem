@@ -138,16 +138,16 @@ function setupPostAuthPhases(deps: SetupPostAuthPhasesDeps): void {
     'setupAuthRoutes',
     appId,
     () => {
-      setupAuthRoutes(
+      setupAuthRoutes({
         app,
         mcpFactory,
-        options.runtimeConfig,
+        runtimeConfig: options.runtimeConfig,
         log,
         allowedHosts,
-        options.observability,
+        observability: options.observability,
         mcpRateLimiter,
-        options.mcpAuthClerkDeps,
-      );
+        mcpAuthClerkDeps: options.mcpAuthClerkDeps,
+      });
     },
     options.observability,
   );
