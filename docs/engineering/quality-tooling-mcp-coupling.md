@@ -155,7 +155,7 @@ mcp__sonarqube__analyze_code_snippet({ snippet, language })
 
 ### Anti-patterns
 
-- **`sonar.issue.ignore.multicriteria` rule-level block** in `sonar-project.properties`. Disables the rule for an entire path glob across all current and future code. Violates `principles.md` "NEVER disable any quality gates". Reverted in commit `dba01e7c` after Vining Bending Root's drift incident on 2026-04-27.
+- **`sonar.issue.ignore.multicriteria` rule-level block** (a sonar-scanner-CLI feature SonarCloud automatic analysis does not read). Disables the rule for an entire path glob across all current and future code. Violates `principles.md` "NEVER disable any quality gates". First reverted in commit `dba01e7c` after Vining Bending Root's drift incident on 2026-04-27; it later re-crept into a `sonar-project.properties` that automatic analysis never read, and that dead file has since been removed entirely. Dispositions are made per-site, server-side (see [Sonar Disposition Policy](../governance/sonar-disposition-policy.md)).
 - **Per-rule mass-mark via Sonar UI** without per-site investigation. Same shape as the `multicriteria` block — the disposition isn't grounded in the architectural tension at each site.
 - **"Stylistic" / "false positive" labels** without naming the architectural tension. Labels are shortcuts; describe the actual code-shape constraint instead.
 
