@@ -10,7 +10,64 @@
 
 import { threadProgressionStats } from '@oaknational/graph-corpus-sdk/curriculum';
 import { conceptGraph } from '@oaknational/sdk-codegen/vocab';
+import { rawCurriculumSchemas } from '@oaknational/sdk-codegen/zod';
 import { toolGuidanceData } from './tool-guidance-data.js';
+
+/**
+ * Canonical subject slugs, derived from the OpenAPI-generated
+ * `AllSubjectsResponseSchema` (the live `/subjects` response shape). Deriving
+ * the slug set here — rather than hand-maintaining it — is what stops the
+ * ontology subject list drifting from the API, the drift that motivated this
+ * change (a hand-typed 13-subject list against a live set of 17).
+ */
+const canonicalSubjectSlugs = rawCurriculumSchemas.AllSubjectsResponseSchema.element.options;
+
+type CanonicalSubjectSlug = (typeof canonicalSubjectSlugs)[number];
+
+/**
+ * Authored display metadata for each canonical subject. Slugs are NOT authored
+ * here — they are derived from {@link canonicalSubjectSlugs}; only the
+ * human-readable name and key-stage coverage are authored, because no single
+ * generated source carries those per subject (titles and per-subject key-stage
+ * coverage live only in the live `/subjects/{subject}` response). The values
+ * were confirmed first-hand against the live `/subjects/{subject}` and
+ * `/subjects/{subject}/key-stages` API. Typing the record by the
+ * schema-derived slug union makes a missing or unknown subject a compile error.
+ */
+const subjectDisplayMetadata: Record<
+  CanonicalSubjectSlug,
+  { name: string; keyStages: readonly string[]; hasExamSubjects?: boolean }
+> = {
+  maths: { name: 'Mathematics', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'] },
+  english: { name: 'English', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'] },
+  science: { name: 'Science', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'], hasExamSubjects: true },
+  history: { name: 'History', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'] },
+  geography: { name: 'Geography', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'] },
+  art: { name: 'Art', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'] },
+  music: { name: 'Music', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'] },
+  'physical-education': { name: 'Physical Education', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'] },
+  computing: { name: 'Computing', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'] },
+  'religious-education': { name: 'Religious Education', keyStages: ['ks1', 'ks2', 'ks3'] },
+  french: { name: 'French', keyStages: ['ks2', 'ks3', 'ks4'] },
+  spanish: { name: 'Spanish', keyStages: ['ks2', 'ks3', 'ks4'] },
+  german: { name: 'German', keyStages: ['ks3', 'ks4'] },
+  citizenship: { name: 'Citizenship', keyStages: ['ks3', 'ks4'] },
+  'design-technology': { name: 'Design and technology', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'] },
+  'rshe-pshe': { name: 'RSHE (PSHE)', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'] },
+  'cooking-nutrition': { name: 'Cooking and nutrition', keyStages: ['ks1', 'ks2', 'ks3'] },
+};
+
+/**
+ * The curriculum subjects, derived from the canonical slug set with authored
+ * display metadata attached. The slug set cannot drift from the API; only the
+ * names and key-stage coverage are authored.
+ */
+const curriculumSubjects = canonicalSubjectSlugs.map((slug) => {
+  const meta = subjectDisplayMetadata[slug];
+  return meta.hasExamSubjects
+    ? { slug, name: meta.name, keyStages: meta.keyStages, hasExamSubjects: meta.hasExamSubjects }
+    : { slug, name: meta.name, keyStages: meta.keyStages };
+});
 
 /**
  * Curriculum ontology data describing the Oak curriculum domain model.
@@ -82,34 +139,7 @@ export const ontologyData = {
         years: [7, 8, 9, 10, 11],
       },
     ],
-    subjects: [
-      { slug: 'maths', name: 'Mathematics', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'] },
-      { slug: 'english', name: 'English', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'] },
-      {
-        slug: 'science',
-        name: 'Science',
-        keyStages: ['ks1', 'ks2', 'ks3', 'ks4'],
-        hasExamSubjects: true,
-      },
-      { slug: 'history', name: 'History', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'] },
-      { slug: 'geography', name: 'Geography', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'] },
-      { slug: 'art', name: 'Art', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'] },
-      { slug: 'music', name: 'Music', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'] },
-      {
-        slug: 'physical-education',
-        name: 'Physical Education',
-        keyStages: ['ks1', 'ks2', 'ks3', 'ks4'],
-      },
-      { slug: 'computing', name: 'Computing', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'] },
-      {
-        slug: 'religious-education',
-        name: 'Religious Education',
-        keyStages: ['ks1', 'ks2', 'ks3'],
-      },
-      { slug: 'french', name: 'French', keyStages: ['ks2', 'ks3', 'ks4'] },
-      { slug: 'spanish', name: 'Spanish', keyStages: ['ks2', 'ks3', 'ks4'] },
-      { slug: 'german', name: 'German', keyStages: ['ks3', 'ks4'] },
-    ],
+    subjects: curriculumSubjects,
   },
 
   threads: {
