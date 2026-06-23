@@ -54,13 +54,6 @@ Companion follow-on plan outside this collection:
   **PENDING**. Add `upstreamApi` field to generated tool descriptors
   with full upstream API URL, parameters, and statuses. For users who
   discover tools via MCP then call the API directly.
-- [mcp-self-description-fidelity.plan.md](mcp-self-description-fidelity.plan.md) —
-  **✅ COMPLETE (2026-06-23), awaiting archive.** WS1 (large-payload scope
-  hints on the generated asset tools + hand-authored `browse`/`search`) and
-  WS2 (curriculum-model ontology subjects 13→17, key stages, and KS4
-  examSubject schema-derived; `wjec` fix; version 0.2.0) landed; docs homed;
-  gates green; adversarial review done. Knowledge fully homed — safe to move
-  to `archive/completed/` in the next curation pass.
 
 ## Exploration
 
