@@ -344,3 +344,21 @@ corrections worth carrying (both homed in per-user memory):
   over-applied it toward "never criticism"; owner: positive tone **composes with** unflinching
   architectural honesty for decisions, reconciled via "different goal → different architecture" — never
   soften a technical fact to stay positive. [[feedback_frame_product_findings_as_enablement]]
+
+## API-not-raw-CDN curriculum sourcing is a SAFETY rule (TPC filtering) — loss-scan: it lived only in per-user memory (2026-06-23, Perseus lifts Umbra)
+
+**candidate:** graduate to a curriculum-data-sourcing **safety** home — a clause on the existing
+data-sourcing invariant (`principles.md`) or a small rule; owner decides the home. (Distinct from
+schema-first, which is about TYPES; this is about safely fetching curriculum CONTENT/ASSETS.)
+
+Owner correction after I pulled four canonical chart PNGs straight from
+`cloudinary-res.thenational.academy` (URLs taken from a `get-lessons-quiz` payload): fine for that one
+instance, but **do not fetch from the raw CDN again without asking**. Route Oak curriculum content —
+images and assets included — through the **Oak Open Curriculum API / SDK**, which has **TPC (Third Party
+Content) filtering** guaranteeing content is safe and rights-cleared. The raw CDN is **unfiltered**; an
+API-returned URL does NOT make a raw-CDN fetch safe (the filtering lives at the API, not the asset).
+This is the safety rationale behind the standing repo invariant "curriculum data comes through the
+published Oak Open Curriculum HTTP API and generated SDK" — TPC, not just provenance. **Loss-scan note:**
+until this entry the rule lived only in per-user memory (Claude Code, this user) — not shared, not
+cross-platform, invisible to the incoming engineer and other-platform agents. Now repo-homed.
+Per-user mirror: [[feedback_source_curriculum_content_via_api_not_cdn]].
